@@ -14,11 +14,18 @@ class JsonEditor extends Component {
     }
   }
 
-  onChange = (newValue) => {
-    this.props.onChange(newValue);
+  onChange = (newContent) => {
+
+    var newData = {
+      name: this.state.data.name,
+      content: newContent
+    }
+
     this.setState({
-      data: newValue
+      data: newData
     });
+
+    this.props.onChange(newData);
   }
 
   componentWillReceiveProps(newProps) {
@@ -31,7 +38,7 @@ class JsonEditor extends Component {
 
     return (
       <Editor
-        value={this.state.data}
+        value={this.state.data.content}
         onValueChange={this.onChange}
         highlight={code => highlight(code, languages.js)}
         padding={10}

@@ -10,7 +10,7 @@ import React, {useEffect, useRef} from 'react';
 function ExtensionContainerWrapper(porps) {
 
     const iframeEl = useRef(null);
-    const {editorType, data, column, onChange} = porps;
+    const {data, column, onChange} = porps;
 
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
@@ -21,7 +21,7 @@ function ExtensionContainerWrapper(porps) {
     }, [])
 
     useEffect(() => {
-        iframeEl.current.contentWindow.postMessage({editorType, data})
+        iframeEl.current.contentWindow.postMessage(data)
     }, [porps.data])
 
     function receiveMessage(event) {
@@ -42,7 +42,7 @@ function ExtensionContainerWrapper(porps) {
     } 
 
     function postMessage() {
-        iframeEl.current.contentWindow.postMessage({editorType, data})
+        iframeEl.current.contentWindow.postMessage(data)
     }
 
     return (

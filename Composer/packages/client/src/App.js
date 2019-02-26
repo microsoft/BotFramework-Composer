@@ -6,7 +6,6 @@ import ExtensionContainerWrapper from './ExtensionContainerWrapper';
 function App() {
     const [files, setFiles] = useState([]);
     const [openFileIndex, setOpenFileIndex] = useState(-1);
-    const [editorType, setEditorType] = useState("");
     const [botStatus, setBotStatus] = useState("stopped"); 
     const openFileIndexRef = useRef();
     const filesRef = useRef();
@@ -29,29 +28,25 @@ function App() {
         filesRef.current = files;
     })
 
-    function handleValueChange(newValue) {
+    function handleValueChange(newFileObject) {
         const currentIndex = openFileIndexRef.current;
         const files = filesRef.current;
 
         let payload = {
             name: files[currentIndex].name,
-            content: newValue
+            content: newFileObject.content
         }
       
         let newFiles = files.slice();
-        newFiles[currentIndex].content = newValue;
+        newFiles[currentIndex].content = newFileObject.content;
         setFiles(newFiles)
 
         client.saveFile(payload)
     }
 
-    function getSuffix(fileName) {
-        return fileName.substring(fileName.lastIndexOf('.'));
-    }
 
-    function handleFileClick (file, index){
-        const suffix = getSuffix(file.name)
-        setEditorType(suffix);
+
+    function handleFileClick (file, index) {
         setOpenFileIndex(index);
     }
 
@@ -86,7 +81,7 @@ function App() {
             </aside>
             <main className="App-main">
                 {openFileIndex > -1? 
-                    <ExtensionContainerWrapper editorType={editorType} data={files[openFileIndex].content} onChange={handleValueChange}/> 
+                    <ExtensionContainerWrapper  data={files[openFileIndex]} onChange={handleValueChange}/> 
                     : 'Welcome'}
             </main>
         </Fragment>

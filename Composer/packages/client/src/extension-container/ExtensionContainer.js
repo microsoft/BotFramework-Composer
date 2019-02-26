@@ -18,12 +18,10 @@ import getEditor from './EditorMap';
 
 function ExtensionContainer() {
 
-    const [value, setValue] = useState(``);
-    const [type, setType] = useState('');
+    const [data, setData] = useState(null);
 
     const shellApi = new ShellApi();
-    let RealEditor = "";
-
+    
     useEffect(() => {
         window.addEventListener("message", receiveMessage, false);
         shellApi.loadSuccess();
@@ -34,20 +32,16 @@ function ExtensionContainer() {
 
     function receiveMessage(event) {
         if(event.source === window.parent) {
-            const data = event.data;
-            setType(data.editorType);
-            setValue(data.data);
+            setData(event.data);
         }
     } 
 
-    if(type !== "") {
-        RealEditor = getEditor(type)
-    }
+    let RealEditor = getEditor(data);
 
     return (
         <Fragment>
             {RealEditor === ''?''
-            :<RealEditor data={value} onChange={shellApi.saveValue} shellApi={shellApi}/>}
+            :<RealEditor data={data} onChange={shellApi.saveValue} shellApi={shellApi}/>}
         </Fragment>
     )
 }
