@@ -1,0 +1,31 @@
+{
+  "$type": "Microsoft.IntentDialog",
+  "$id": "intentDialog",
+  "recognizer": {
+    "$type": "Microsoft.LuisRecognizer",
+    "applicationId": "6bd8a3c0-2169-4e80-9226-601ba18e68e0",
+    "endpointKey": "95140545afd44a1997e2eaf47007fa7b",
+    "endpoint": "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/6bd8a3c0-2169-4e80-9226-601ba18e68e0?verbose=true&timezoneOffset=-360&subscription-key=95140545afd44a1997e2eaf47007fa7b&q="
+  },
+  "routes": {
+    "AddTask": { "$ref": "Dialogs\\Main\\AddTask.dialog" },
+    "DeleteTask": { "$ref": "Dialogs\\Main\\DeleteTask.dialog" },
+    "None": { "$ref": "#/dialogs/0" }
+  },
+  "dialogs": [
+    {
+      "$type": "Microsoft.SequenceDialog",
+      "$id": "Help",
+      "sequence": [
+        {
+          "$type": "Microsoft.SendActivityStep",
+          "activity": "Please try add task or delete task"
+        },
+        {
+          "$type": "Microsoft.EndDialog",
+          "property": "value"
+        }
+      ]
+    }
+  ]
+}

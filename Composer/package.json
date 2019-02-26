@@ -1,0 +1,14 @@
+{
+    "name": "composer-root",
+    "private": true,
+    "workspaces": [
+        "packages/client",
+        "packages/server",
+        "packages/extensions/*"
+    ],
+    "scripts": {
+        "client": "cd packages/client && yarn start",
+        "server": "cd packages/server && yarn start",
+        "start": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"" 
+    }
+}

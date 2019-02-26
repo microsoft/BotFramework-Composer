@@ -1,0 +1,114 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header{
+  position: relative;
+  line-height: 50px;
+  background: #393939;
+  font-size: 20px;
+  color: #fff;
+  height: 50px;
+} 
+
+.header-aside {
+  width: 200px;
+}
+
+
+.App-sidebar {
+  position: fixed;
+  width: 200px;
+  top: 50px;
+  bottom: 0;
+  background-color: green;
+  color: white;
+}
+
+.App-bot  {
+  position: fixed;
+  width: 400px;
+  top: 0;
+  height: 50px;
+  bottom: 0;
+  right: 0;
+  color: white;
+}
+
+.bot-button {
+  background: #393939;
+  color: white;
+  border: none;
+};
+
+.bot-message {
+  font-size: 18px;
+}
+
+.App-sidebar ul, .App-sidebar li {
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.App-main {
+  position: fixed;
+  left: 200px;
+  top:50px;
+  bottom: 0;
+  right: 0;
+  min-height: 80vh;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.frame-html
+{
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.frame-body
+{
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+
+.frame-root
+{
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.frame-content
+{
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
