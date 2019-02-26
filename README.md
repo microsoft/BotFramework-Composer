@@ -15,7 +15,10 @@ It provides
 
 ## Download and Install 
 
-* Follow the [instructions here](https://github.com/boydc2014/composer-prototype/tree/master/Composer) to download Composer source code, install and run on local Desktop 
+* Follow the [instructions here](https://github.com/boydc2014/composer-prototype/blob/master/Composer/README.md) to download Composer source code, install and run on local Desktop 
+
+## Architecture 
+* [Composer architecture design](https://github.com/boydc2014/composer-prototype/tree/master/Composer)
 
 ## Components 
 * [Composer Shell](https://github.com/boydc2014/composer-prototype/)
