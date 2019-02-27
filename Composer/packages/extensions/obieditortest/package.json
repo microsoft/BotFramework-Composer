@@ -1,0 +1,44 @@
+{
+  "name": "@composer-extensions/obieditortest",
+  "version": "1.0.0",
+  "description": "obieditortest React component",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "css",
+    "es",
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "nwb build-react-component --copy-files",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "prepublishOnly": "npm run build",
+    "start": "nwb serve-react-demo",
+    "test": "nwb test-react",
+    "test:coverage": "nwb test-react --coverage",
+    "test:watch": "nwb test-react --server"
+  },
+  "dependencies": {
+    "office-ui-fabric-react": "^6.138.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-jsonschema-form": "git+https://git@github.com/cwhitten/react-jsonschema-form.git",
+    "react-scripts": "2.1.3"
+  },
+  "peerDependencies": {
+    "react": "16.x"
+  },
+  "devDependencies": {
+    "nwb": "0.23.x",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
+  },
+  "author": "",
+  "homepage": "",
+  "license": "MIT",
+  "repository": "",
+  "keywords": [
+    "react-component"
+  ]
+}
