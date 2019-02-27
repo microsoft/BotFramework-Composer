@@ -1,6 +1,7 @@
 // this is currently hard-coded here
 
 import JsonEditor from '@composer-extensions/sample-json-editor'
+import FormEditor from '@composer-extensions/obieditortest'
 
 
 function getSuffix(fileName) {
@@ -24,6 +25,11 @@ function getSuffix(fileName) {
 //
 
 const EditorRegistration = [
+    {
+        when: (data) => getSuffix(data.name) === ".dialog",
+        pick: FormEditor
+    },
+
     {
         when: (data) => getSuffix(data.name) === ".lu",
         pick: JsonEditor
