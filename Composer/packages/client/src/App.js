@@ -6,9 +6,9 @@ import React, {
   useLayoutEffect,
   useCallback
 } from "react";
-import { Nav, INavLink } from "office-ui-fabric-react/lib/Nav";
 import { NavItem } from "./components/NavItem";
-import { CogTree } from "./components/CogTree";
+import { Tree } from "./components/Tree";
+import { Conversation } from "./components/Conversation";
 import "./App.css";
 import httpClient from "./utils/http";
 import ExtensionContainerWrapper from "./ExtensionContainerWrapper";
@@ -84,19 +84,39 @@ function App() {
           </span>
         </div>
       </header>
-      <div
-        style={{
-          width: "80px",
-          backgroundColor: "#eaeaea",
-          height: "99vh",
-          float: "left"
-        }}
-      >
-        <NavItem iconName="SplitObject" label="Design" />
-        <NavItem iconName="CollapseMenu" label="Content" />
-        <NavItem iconName="Settings" label="Settings" />
-      </div>
-      {/* <aside className="App-sidebar">
+      <div style={{ backgroundColor: "#f6f6f6", height: "100vh" }}>
+        <div
+          style={{
+            width: "80px",
+            backgroundColor: "#eaeaea",
+            height: "99vh",
+            float: "left"
+          }}
+        >
+          <NavItem iconName="SplitObject" label="Design" />
+          <NavItem iconName="CollapseMenu" label="Content" />
+          <NavItem iconName="Settings" label="Settings" />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            marginLeft: "80px",
+            zIndex: 2
+          }}
+        >
+          <div style={{ flex: 1, marginLeft: "30px", marginTop: "20px" }}>
+            <div>
+              <Tree variant="large" />
+              <div style={{ height: "20px" }} />
+              <Tree />
+            </div>
+          </div>
+          <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
+            <Conversation />
+          </div>
+        </div>
+
+        {/* <aside className="App-sidebar">
         <nav>
           <ul>
             {files.length > 0 &&
@@ -115,14 +135,15 @@ function App() {
           </ul>
         </nav>
       </aside> */}
-      <main className="App-main">
-        {openFileIndex > -1 && (
-          <ExtensionContainerWrapper
-            data={files[openFileIndex]}
-            onChange={handleValueChange}
-          />
-        )}
-      </main>
+        {/* <main className="App-main">
+          {openFileIndex > -1 && (
+            <ExtensionContainerWrapper
+              data={files[openFileIndex]}
+              onChange={handleValueChange}
+            />
+          )}
+        </main> */}
+      </div>
     </Fragment>
   );
 }
