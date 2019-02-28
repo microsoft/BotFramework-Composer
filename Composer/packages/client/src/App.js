@@ -84,12 +84,12 @@ function App() {
           </span>
         </div>
       </header>
-      <div style={{ backgroundColor: "#f6f6f6", height: "100vh" }}>
+      <div style={{ backgroundColor: "#f6f6f6", height: "calc(100vh - 50px)" }}>
         <div
           style={{
             width: "80px",
             backgroundColor: "#eaeaea",
-            height: "99vh",
+            height: "calc(99vh - 50px)",
             float: "left"
           }}
         >
@@ -99,7 +99,9 @@ function App() {
         </div>
         <div
           style={{
+            height: '100%',
             display: "flex",
+            overflow: 'auto',
             marginLeft: "80px",
             zIndex: 2
           }}
