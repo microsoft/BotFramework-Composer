@@ -2,26 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  position: relative;
-  line-height: 50px;
-  background: #001f52;
-  font-size: 20px;
-  color: #fff;
-  height: 50px;
-}
-
-.header-aside {
-  width: 200;
-  margin-left: 100px;
-}
-
 .App-sidebar {
   position: fixed;
   width: 200px;
@@ -29,26 +9,6 @@
   bottom: 0;
   background-color: green;
   color: white;
-}
-
-.App-bot {
-  position: fixed;
-  width: 400px;
-  top: 0;
-  height: 50px;
-  bottom: 0;
-  right: 0;
-  color: white;
-}
-
-.bot-button {
-  background: #393939;
-  color: white;
-  border: none;
-}
-
-.bot-message {
-  font-size: 18px;
 }
 
 .App-sidebar ul,
@@ -71,15 +31,6 @@
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .frame-html {
