@@ -5,5 +5,6 @@ import { container, top } from "./styles";
 export const Tree = props => (
   <div css={container(props.variant)}>
     <div css={top} />
+    {props.children}
   </div>
 );
