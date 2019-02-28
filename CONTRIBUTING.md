@@ -1,0 +1,11 @@
+### Guidelines for contributing to Composer
+
+- Nothing gets pushed to the `master` branch. Use github pull-request's to submit new code.
+- Use the "Description" field of the new Pull Request form to describe the change in detail. Assume reviewers are taking on a context switch to review your code and need a refresher on context. Reference & link to any pertinent tickets in project tracking software. This will also act as a paper trail of changes and it should be logical for one to use `git blame` to look up the commit and understand why the change was made.
+- Keep your pull-requests small and concise. If you are working on a substantially large change in lines of code, it is OK to open a pull-request that is a partial implementation; please make it clear in the description and keep the boundaries between diffs logical.
+- If the change includes non-trivial changes in UI, include a screenshot and tag a designer on the project. Be sure to show any border or layout changes clearly. Use your best judgement if you would like a designer to explicitly sign off on it, such as a deviation from the design artifacts.
+- If the change includes a non-trivial change in UX, include a gif demonstrating the interaction. Tag a designer and use your judgement if you would like explicit sign off from them on it.
+- At least one approver is required on a pull-request prior to merging it.
+- Programatic testing for each change is a requirement. Comprehensive unit tests for every change is not. _"Write tests, not too many, mostly integration"_. We should be using [Jest](https://jestjs.io/) & [react-testing-library](https://github.com/kentcdodds/react-testing-library) for this in the client. Code coverage benchmarks will be introduced and need to be met with each change (TBD).
+- Write code with Internationalization & Accessibility in mind. Every rendered string should be wrapped in an i18n API. Scrub through each UI change for keyboard-navigation and focus-indication. This will prevent most accessibility bugs.
+- Use `rebase` when merging changes into to the master branch. This can be done using the _“Squash and Merge”_ technique in the GitHub UI. Local branches will need to be updated using rebase as well. This will keep a clean commit history. Reach out to me if you need help understanding rebase.
