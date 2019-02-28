@@ -14,6 +14,7 @@ import httpClient from "./utils/http";
 import ExtensionContainerWrapper from "./ExtensionContainerWrapper";
 
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
+import { ProjectExplorer } from "./components/ProjectExplorer";
 
 initializeIcons(/* optional base url */);
 
@@ -108,7 +109,9 @@ function App() {
         >
           <div style={{ flex: 1, marginLeft: "30px", marginTop: "20px" }}>
             <div>
-              <Tree variant="large" />
+              <Tree variant="large">
+                <ProjectExplorer files={files} onClick={handleFileClick} />
+              </Tree>
               <div style={{ height: "20px" }} />
               <Tree />
             </div>
