@@ -4,7 +4,7 @@ export const container = variant => css`
   width: 325px;
   background-color: #ffffff;
   height: ${variant && variant === "large" ? "500px" : "350px"};
-  overflow: scroll;
+  overflow: auto;
 `;
 
 export const top = css`

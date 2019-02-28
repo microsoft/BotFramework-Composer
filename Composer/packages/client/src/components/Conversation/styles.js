@@ -4,7 +4,7 @@ export const container = css`
   max-width: 1190px;
   background-color: #ffffff;
   height: 870px;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 export const top = css`
