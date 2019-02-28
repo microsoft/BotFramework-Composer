@@ -66,6 +66,7 @@
   bottom: 0;
   right: 0;
   min-height: 80vh;
+  background-color: #f6f6f6;
 }
 
 .App-link {
