@@ -6,6 +6,8 @@ import React, {
   useLayoutEffect,
   useCallback
 } from "react";
+
+import { Header } from "./components/Header";
 import { NavItem } from "./components/NavItem";
 import { Tree } from "./components/Tree";
 import { Conversation } from "./components/Conversation";
@@ -15,6 +17,7 @@ import ExtensionContainerWrapper from "./ExtensionContainerWrapper";
 
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { ProjectExplorer } from "./components/ProjectExplorer";
+import { setPortalAttribute } from "@uifabric/utilities";
 
 initializeIcons(/* optional base url */);
 
@@ -77,7 +80,6 @@ function App() {
   }
 
   function handleFileClick(file, index) {
-    
     // keep a ref because we want to read that from outside
     setOpenFileIndex(index);
 
@@ -91,35 +93,18 @@ function App() {
         name: "window1",
         parent: "window0(shell)"
       }
-    ])
-
-    
+    ]);
   }
 
   console.log(editors);
 
   return (
     <Fragment>
-      <header className="App-header">
-        <div className="header-aside">Composer</div>
-        <div className="App-bot">
-          <button
-            className="bot-button"
-            onClick={() =>
-              client.toggleBot(botStatus, status => {
-                setBotStatus(status);
-              })
-            }
-          >
-            {botStatus === "running" ? "Stop Bot" : "Start Bot"}
-          </button>
-          <span className="bot-message">
-            {botStatus === "running"
-              ? "Bot is running at http://localhost:3979"
-              : ""}
-          </span>
-        </div>
-      </header>
+      <Header
+        client={client}
+        botStatus={botStatus}
+        setBotStatus={setBotStatus}
+      />
       <div style={{ backgroundColor: "#f6f6f6", height: "calc(100vh - 50px)" }}>
         <div
           style={{
@@ -135,9 +120,9 @@ function App() {
         </div>
         <div
           style={{
-            height: '100%',
+            height: "100%",
             display: "flex",
-            overflow: 'auto',
+            overflow: "auto",
             marginLeft: "80px",
             zIndex: 2
           }}
@@ -153,9 +138,16 @@ function App() {
           </div>
           <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
             <Conversation>
-              { editors.length > 0 && editors.map(item => {
-                 return ( <ExtensionContainerWrapper name={item.name} data={item.data} onChange={handleValueChange} /> )
-              })}
+              {editors.length > 0 &&
+                editors.map(item => {
+                  return (
+                    <ExtensionContainerWrapper
+                      name={item.name}
+                      data={item.data}
+                      onChange={handleValueChange}
+                    />
+                  );
+                })}
             </Conversation>
           </div>
         </div>
