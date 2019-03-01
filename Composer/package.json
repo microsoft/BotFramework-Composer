@@ -4,11 +4,13 @@
     "workspaces": [
         "packages/client",
         "packages/server",
+        "packages/extensions",
         "packages/extensions/*"
     ],
     "scripts": {
         "client": "cd packages/client && yarn start",
         "server": "cd packages/server && yarn start",
+        "build:extensions": "cd packages/extensions && yarn build:all",
         "start": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"" 
     }
 }
