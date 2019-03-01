@@ -7,18 +7,16 @@ Prerequisite:
 * node > 8.0
 * yarn         // npm install -g yarn
 
-In this folder
+Commands:
 ```
-1. Install dependencies
-  $ yarn install
-2. Build extensions under /packages/extensions folder
-  $ yarn build
-3. Start client and server at the same time
-  $ yarn start 
-4. Launch http://localhost:3000/. Best experience in Chrome 
+$ cd Composer // switch to Composer folder
+$ yarn install // install dependencies
+$ yarn build:extensions // build extensions
+$ yarn start // start client and server at the same time
 ```
+then go to http://localhost:3000/, best experienced in Chrome
 
-If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when executing `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
+If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ### Extensions
 Composer is built with an extension system, this project shows samples of the extension system
