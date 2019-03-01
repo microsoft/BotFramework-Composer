@@ -17,7 +17,7 @@ export const aside = css`
 
 export const bot = css`
   color: #eaeaea;
-  width: 500px;
+  width: 450px;
   position: absolute;
   right: 0;
 `;
@@ -25,6 +25,8 @@ export const bot = css`
 export const botButton = css`
   color: white;
   margin-top: 8px;
+  margin-right: 35px;
+  float: right;
 `;
 
 export const botMessage = css`
