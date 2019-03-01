@@ -12,5 +12,8 @@
         "server": "cd packages/server && yarn start",
         "build:extensions": "cd packages/extensions && yarn build:all",
         "start": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"" 
+    },
+    "devDependencies": {
+        "concurrently": "^4.1.0"
     }
 }
