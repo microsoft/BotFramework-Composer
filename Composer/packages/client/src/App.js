@@ -15,6 +15,7 @@ import "./App.css";
 import httpClient from "./utils/http";
 import ExtensionContainerWrapper from "./ExtensionContainerWrapper";
 
+import { DefaultButton, IButtonProps } from "office-ui-fabric-react/lib/Button";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { ProjectExplorer } from "./components/ProjectExplorer";
 import { setPortalAttribute } from "@uifabric/utilities";
@@ -38,6 +39,8 @@ function App() {
     }
     */
   ]);
+
+  const [data, setData] = useState(null);
 
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
@@ -83,20 +86,32 @@ function App() {
     // keep a ref because we want to read that from outside
     setOpenFileIndex(index);
 
-    var data = files[index];
+    setData(files[index]);
     // open or set editor
-    setEditors([
-      {
-        col: 1,
-        row: 1,
-        data: data,
-        name: "window1",
-        parent: "window0(shell)"
-      }
-    ]);
+    // setEditors([
+    //   {
+    //     col: 1,
+    //     row: 1,
+    //     data: data,
+    //     name: "window1",
+    //     parent: "window0(shell)"
+    //   }
+    // ]);
   }
 
-  console.log(editors);
+  const openNode = () => {
+    return data => {
+      setEditors([
+        {
+          col: 1,
+          row: 1,
+          data: data,
+          name: "window1",
+          parent: "window0(shell)"
+        }
+      ]);
+    };
+  };
 
   return (
     <Fragment>
@@ -138,12 +153,18 @@ function App() {
           </div>
           <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
             <Conversation>
+              {data && (
+                <DefaultButton
+                  text={JSON.parse(data.content).$type}
+                  onClick={openNode(data)}
+                />
+              )}
               {editors.length > 0 &&
                 editors.map(item => {
                   return (
                     <ExtensionContainerWrapper
                       name={item.name}
-                      data={item.data}
+                      data={data}
                       onChange={handleValueChange}
                     />
                   );

@@ -33,6 +33,11 @@ export const Header = props => (
       </ActionButton>
     </div>
     <div css={bot}>
+      <span css={botMessage}>
+        {props.botStatus === "running"
+          ? "Bot is running at http://localhost:3979"
+          : ""}
+      </span>
       <PrimaryButton
         css={botButton}
         text={props.botStatus === "running" ? "Stop" : "Start"}
@@ -42,11 +47,6 @@ export const Header = props => (
           })
         }
       />
-      <span css={botMessage}>
-        {props.botStatus === "running"
-          ? "Bot is running at http://localhost:3979"
-          : ""}
-      </span>
     </div>
   </header>
 );
