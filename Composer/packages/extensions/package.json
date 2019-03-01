@@ -1,0 +1,13 @@
+{
+  "name": "composer-extensions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:obieditortest": "cd obieditortest && yarn build",
+    "build:sample-json-editor": "cd sample-json-editor && yarn build",
+    "build:all": "concurrently --kill-others-on-fail \"yarn build:obieditortest\" \"yarn build:sample-json-editor\"" 
+  },
+  "author": "",
+  "license": "ISC"
+}
