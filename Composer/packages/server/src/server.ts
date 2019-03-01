@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -24,12 +23,6 @@ app.get('/', function (req: any, res: any, next: any) {
 app.use('/api/fileserver', new fileServer().getRouter());
 app.use('/api/launcher', new launcherServer().getRouter());
 
-=======
-import express from "express"
-
-const app = express();
-
->>>>>>> 315fa2b... basic ts setup
 app.listen(process.env.PORT || 5000, () => {
     console.log('Server running');
 });
