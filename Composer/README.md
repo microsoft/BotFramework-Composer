@@ -3,19 +3,22 @@ The web app that can edit bots in OBI format, and can use Bot Launcher to run bo
 
 ### Instructions
 
-prerequisite:
+Prerequisite:
 * node > 8.0
 * yarn         // npm install -g yarn
-* concurrently // npm install -g concurrently
 
-in this folder
-
+In this folder
 ```
-$ yarn install // install dependencies
-$ yarn start // start clien and server at the same time
+1. Install dependencies
+  $ yarn install
+2. Build extensions under /packages/extensions folder
+  $ yarn build
+3. Start client and server at the same time
+  $ yarn start 
+4. Launch http://localhost:3000/. Best experience in Chrome 
 ```
 
-then go to http://localhost:3000/, best experienced in Chrome 
+If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when executing `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ### Extensions
 Composer is built with an extension system, this project shows samples of the extension system
