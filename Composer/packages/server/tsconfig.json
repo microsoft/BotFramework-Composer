@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
+      "baseUrl": ".",
+      "paths": { "*": ["types/*"] },
+=======
+>>>>>>> 315fa2b... basic ts setup
     /* Basic Options */
     "target": "es6",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
     "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
@@ -63,6 +68,11 @@
     "**/*.test.ts"
   ],
   "include": [
+<<<<<<< HEAD
+    "src/**/*.ts",
+    "src/*.ts"
+=======
     "src/**/*.ts"
+>>>>>>> 315fa2b... basic ts setup
   ]
 }
