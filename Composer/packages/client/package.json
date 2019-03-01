@@ -4,8 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
-    "@composer-extensions/obieditortest": "*",
-    "@composer-extensions/sample-json-editor": "*",
+    "composer-extensions": "*",
     "@emotion/core": "^10.0.7",
     "@svgr/webpack": "4.1.0",
     "axios": "^0.18.0",

@@ -1,7 +1,7 @@
 // this is currently hard-coded here
 
-import JsonEditor from '@composer-extensions/sample-json-editor'
-import FormEditor from '@composer-extensions/obieditortest'
+import JsonEditor from 'composer-extensions/sample-json-editor'
+import FormEditor from 'composer-extensions/obieditortest'
 
 
 function getSuffix(fileName) {
