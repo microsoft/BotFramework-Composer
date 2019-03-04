@@ -26,7 +26,7 @@ All editors, 1st party or 3rd party, are loaded in the same way by the extension
 Non-editor extensions are not supported at this time, though the mechanisms for providing extensions will scale outside the dialog editor's.
 
 ### What's an extension? what's in it
-Each extension is a standalone React component package ([why React component](https://github.com/Microsoft/BotFramework-Composer/tree/master/Composer#why-react-componnet)) under Composer's `/packages/extensions` folder, which implements the extension `interface`.
+Each extension is a standalone React component package ([why React component](#why-react-component)) under Composer's `/packages/extensions` folder, which implements the extension `interface`.
 
 Composer is managed via yarn workspaces, producing such a folder layout. 
 ```
@@ -48,7 +48,7 @@ The extension interface defines the way how an extension comminutes to the host.
 In React world, interface means the props passed into a componennt. An extension will be passed ino 3 props:
 - data:any. which is the data to be edited by this editor.
 - onChange: (newData) => void. which is the callback enables an editor to save the edited data.
-- [shellApi](https://github.com/Microsoft/BotFramework-Composer/tree/master/Composer#shell-api). which is a set of apis providing other capabilities than data in\out. 
+- [shellApi](#shell-api). which is a set of apis providing other capabilities than data in\out. 
 
 The rendering code of an extesion will be sth like this:
 ```
@@ -69,7 +69,7 @@ Shell api is a set of apis that provides other important functionalities that en
   ```
   openSubEditor(location:string, data:any, onChange:(newData:any) => void)
   ```
-  This is the most important api that support a [multiple editors](https://github.com/Microsoft/BotFramework-Composer/tree/master/Composer#multiple-editors) scenario, which allows an editor to delegate some editing task to another editor, and listen the changes. 
+  This is the most important api that support a [multiple editors](#multiple-editors) scenario, which allows an editor to delegate some editing task to another editor, and listen the changes. 
 
   Note that, this api doesn't allow you to specify the type or the name of the sub editor. You only get to specify a data, the shell will use a centralized way to manage how editors are registered and picked up. See registration section in the below for more details.
 
