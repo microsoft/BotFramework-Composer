@@ -10,7 +10,7 @@ import config from '../config';
         const botconfig = config.botconfig;
         const botFilePath = botconfig.bot.path;
         const botFileDir = path.dirname(botFilePath);
-        const botFileName = botFilePath.substr(botFilePath.lastIndexOf('/' + 1));
+        const botFileName = botFilePath.substr(botFilePath.lastIndexOf('/') + 1);
         
         this.router.get("/",function(req: any,res: any,next: any){
             let fileList = [];
