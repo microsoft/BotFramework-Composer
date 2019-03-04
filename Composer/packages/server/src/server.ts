@@ -1,12 +1,11 @@
-import express from 'express';
-import path from 'path';
-import bodyParser from 'body-parser';
-import {fileServer} from './router/fileServer';
-import {launcherServer} from './router/launcherServer';
+import express,{Express} from "express";
+import bodyParser from "body-parser";
+import {fileServerRouter} from "./router/fileServer";
+import {launcherServerRouter} from "./router/launcherServer";
 
-const app = express();
+const app:Express = express();
 
-app.all('*',function(req: any,res: { header: { (arg0: string, arg1: string): void; (arg0: string, arg1: string): void; (arg0: string, arg1: string): void; }; },next: () => void){
+app.all("*",function(req: any,res:any,next: any){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -16,13 +15,13 @@ app.all('*',function(req: any,res: { header: { (arg0: string, arg1: string): voi
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', function (req: any, res: any, next: any) {
-    res.send('fortest')
+app.get("/", function (req: any, res: any) {
+    res.send("fortest");
   });
 
-app.use('/api/fileserver', new fileServer().getRouter());
-app.use('/api/launcher', new launcherServer().getRouter());
+app.use("/api/fileserver", fileServerRouter);
+app.use("/api/launcher", launcherServerRouter);
 
 app.listen(process.env.PORT || 5000, () => {
-    console.log('Server running');
+    console.log("Server running");
 });
