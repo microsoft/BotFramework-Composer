@@ -1,7 +1,10 @@
+import path from 'path';
+import { FileStorage } from './../storage/FileStorage';
 import express, { Router } from "express";
 import {getFiles,updateFile} from "../handlers/fileHandler";
 
 const router:Router = express.Router({});
+const storage: FileStorage = new FileStorage(path.resolve('storage.json'), (error) => {console.log(error)});
 
 router.get("/",function(req: any,res: any,next: any){
     let fileList:any[] = [];
@@ -21,6 +24,5 @@ router.put("/", function(req: any, res: any, next: any) {
         res.status(400).json({error: "save error"});
     }
 });
-
 
 export const fileServerRouter:Router = router;
