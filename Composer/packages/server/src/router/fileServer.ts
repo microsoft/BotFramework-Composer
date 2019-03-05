@@ -16,10 +16,7 @@ router.get("/",function(req: any,res: any,next: any){
 
 router.put("/", function(req: any, res: any, next: any) {
     try {
-        const updateResult:boolean = updateFile(req.body.name, req.body.content);
-        if(!updateResult) {
-            throw new Error();
-        }
+        updateFile(req.body.name, req.body.content);
     } catch (error) {
         res.status(400).json({error: "save error"});
     }
