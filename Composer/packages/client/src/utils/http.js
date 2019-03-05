@@ -13,6 +13,15 @@ class httpClient {
         });
     }
 
+    getFloderDir = (callback) => {
+        axios.get(baseUrl + 'fileserver/open')
+        .then((response) => {
+            callback(response.data)
+        }).catch(function(res){
+            console.log(res);
+        });
+    }
+
     saveFile = (payload) => {
         axios.put(baseUrl + 'fileserver', payload)
         .then(res => {
@@ -23,6 +32,15 @@ class httpClient {
             console.log("save failed");
         });
         console.log(payload);
+    }
+
+    openbotFile = (path, callback) => {
+        axios.get(baseUrl + `fileserver/openbotFile?path=${path}`)
+        .then((response) => {
+            callback(response.data)
+        }).catch(function(res){
+            console.log(res);
+        });
     }
 
     toggleBot = (status, callback) => {

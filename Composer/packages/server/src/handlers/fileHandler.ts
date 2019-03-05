@@ -2,6 +2,12 @@ import fs from "fs";
 import path from "path";
 import {config} from "../config";
 
+interface IDirectoryItem {
+    name:string,
+    path:string,
+    scheme:string,
+    children: IDirectoryItem[]
+}
 
 var botFilePath:string;
 var botFileDir:string;
@@ -47,4 +53,40 @@ export function updateFile(name:string, content:string, botProjFilePath:string =
 
     let realFilePath:string = path.join(botFileDir, name);
     fs.writeFileSync(realFilePath, content, {});
+}
+
+export function getFloderDir(folderPath: string): IDirectoryItem[] {
+    let directory:IDirectoryItem[] = [];
+    try {
+        directory = scanFolder(folderPath)
+    } catch(error) {
+        console.log(error)
+    }
+
+    return directory
+}
+
+function scanFolder(folderPath: string): IDirectoryItem[] {
+    const folderDir:IDirectoryItem[] = [];
+    const items = fs.readdirSync(folderPath);
+
+    items.forEach((item, index) => {
+        const itemPath = folderPath+'/'+item;
+        const isDirectory = fs.statSync(itemPath).isDirectory()
+        const directoryItem: IDirectoryItem = {
+            name: item,
+            path: itemPath,
+            scheme: 'file',
+            children: []
+        }
+
+        if(isDirectory) {
+            directoryItem.scheme = 'folder'
+            directoryItem.children = scanFolder(itemPath)
+        }
+
+        folderDir.push(directoryItem);
+    })
+
+    return folderDir
 }

@@ -1,4 +1,5 @@
 {
     "pickerWorkingDir": "../../../SampleBots",
-    "openedBotsList": []
+    "openedBotsList": [],
+    "lastActiveBot": "../../../SampleBots/SampleBot1/bot1.bot"
 }

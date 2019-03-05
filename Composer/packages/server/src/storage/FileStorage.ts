@@ -69,6 +69,7 @@ export class FileStorage {
         if(serializedFileInfo === this._lastFlushedSerializedFileInfo) {
             return ;
         }
+        this._lastFlushedSerializedFileInfo = serializedFileInfo;
 
         const fd = fs.openSync(this.path, 'w');
 

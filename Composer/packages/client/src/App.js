@@ -22,6 +22,13 @@ import { setPortalAttribute } from "@uifabric/utilities";
 
 initializeIcons(/* optional base url */);
 
+function StringEndWidth(str, endStr) {
+  if(!str || !endStr)
+    return false
+  let d = str.length - endStr.length;
+  return (d >= 0 && str.lastIndexOf(endStr) === d);
+}
+
 function App() {
   // central state for all editors\extensions
   // this would serve as the fundation of layout\data exchange\message routing
@@ -45,6 +52,7 @@ function App() {
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const [botStatus, setBotStatus] = useState("stopped");
+  const [botFileList, setBotFileList] = useState([]);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
 
@@ -99,6 +107,37 @@ function App() {
     // ]);
   }
 
+  function handleFileOpen(node) {
+
+    if(StringEndWidth(node.name, '.bot')) {
+      client.openbotFile(node.path,files => {
+        if (files.length > 0) {
+          setFiles(files);
+        }
+      })
+    }
+  }
+
+  function handleFileList(data) {
+    let botFiles = []
+    function getAllBotFile(node) {
+      if(node.scheme === "file" && StringEndWidth(node.name, '.bot')) {
+        botFiles.push(node)
+        return 
+      } else {
+        node.children.forEach((item)=>{
+          getAllBotFile(item)
+        })
+      }
+    }
+
+    data.forEach((item)=>{
+      getAllBotFile(item)
+    })
+    
+    return setBotFileList(botFiles)
+  }
+
   const openNode = () => {
     return data => {
       setEditors([
@@ -117,8 +156,11 @@ function App() {
     <Fragment>
       <Header
         client={client}
+        botFileList={botFileList}
         botStatus={botStatus}
         setBotStatus={setBotStatus}
+        setFolderTree={handleFileList}
+        onFileClick={handleFileOpen}
       />
       <div style={{ backgroundColor: "#f6f6f6", height: "calc(100vh - 50px)" }}>
         <div

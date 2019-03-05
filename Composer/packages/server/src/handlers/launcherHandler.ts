@@ -1,10 +1,8 @@
-import path from 'path';
-import { FileStorage } from './../storage/FileStorage';
 import {ConnectorFactory} from "../launcher-connectors/connectorFactory";
 import {ILauncherConnector} from "../launcher-connectors/interface";
 import {LauncherStatus} from "../launcher-connectors/launcherStatus";
+import setting from './../storage/SettingService';
 
-const setting: FileStorage = new FileStorage(path.resolve('settings.json'), (error) => {console.log(error)});
 var connector:ILauncherConnector = new ConnectorFactory().CreateConnector(setting.getItem("launcherConnector"));
 
 export function startServer():void {
