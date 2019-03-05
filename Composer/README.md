@@ -40,17 +40,17 @@ Composer is managed via yarn workspaces, producing such a folder layout.
       |- sample-json-edior // sample extension package
 ```
 
-All extensions under `/extensions` folder will be eventually packed into one `extensions` package, then the `client` package will depends on this `extensions` package. This will avoid add every extenion as a dependency to the `client` package. 
+All extensions under `/extensions` folder will be eventually packed into one `extensions` package, then the `client` package will depends on this `extensions` package. 
 
 ### Extension Interface
 The extension interface defines the way how an extension comminutes to the host. 
 
-In React world, interface means the props passed into a componennt. An extension will be passed ino 3 props:
+In React world, interface means the props passed into a component. An extension will be passed ino 3 props:
 - data:any. which is the data to be edited by this editor.
 - onChange: (newData) => void. which is the callback enables an editor to save the edited data.
 - [shellApi](#shell-api). which is a set of apis providing other capabilities than data in\out. 
 
-The rendering code of an extesion will be sth like this:
+The rendering code of an extension will be sth like this:
 ```
   import SomeEditor from 'someplace'
 
@@ -63,7 +63,7 @@ With this interface, it's pretty clear how data is in\out extension. Data is pas
 
 #### shell api
 
-Shell api is a set of apis that provides other important functionalities that enpower an extension of editing experience. including
+Shell api is a set of apis that provides other important functionalities that empower an extension to provide a more powerful and smooth editing experience. including
 
 * OpenSubEditor
   ```
@@ -100,7 +100,7 @@ Based on our scenario, we will use React as a start point, and host the extensio
 
 #### registration
 
-Inside the client pacakge, there is an `EditorMap` module to manage the mapping from `dialog asset type` => `registered editor`.
+Inside the client package, there is an `EditorMap` module to manage the mapping from `dialog asset type` => `registered editor`.
 
 The extension registration is done by modifying `/Composer/packages/client/src/extension-container/EditorMap.js` to add an entry in the registration table
 
