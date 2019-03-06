@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
     "start": "tsc && node build/server.js",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "@types/node": "^11.9.6",
     "jest": "^24.1.0",
     "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
