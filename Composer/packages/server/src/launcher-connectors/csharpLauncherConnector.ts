@@ -1,23 +1,22 @@
-import {LauncherConnector, LauncherStatus} from './interface';
+import {ILauncherConnector} from "./interface";
+import {LauncherStatus} from "./launcherStatus";
+import process from "child_process";
+import {config}  from "../config";
 
-import process from 'child_process';
-import composerConfig  from '../config';
-
-export class CSharpLauncherConnector implements LauncherConnector {
+export class CSharpLauncherConnector implements ILauncherConnector {
 
     private path: string;
     private command: string = "dotnet run";
     private child:any = null;
 
-    constructor(config: any) {
-        this.path = config.path;
+    constructor(pathConfig: any) {
+        this.path = pathConfig.path;
     }
 
     public status: LauncherStatus = LauncherStatus.Stopped;
 
     start = () => {
-        console.log('__dirname : ' + __dirname)
-        const cmd = `cd ${this.path} &&  ${this.command} --bot:provider=${composerConfig.botconfig.bot.provider} --bot:path=${composerConfig.botconfig.bot.path}`;
+        const cmd:string = `cd ${this.path} &&  ${this.command} --bot:provider=${config.bot.provider} --bot:path=${config.bot.path}`;
         console.log("Starting launcher with command " + cmd);
 
         this.child = process.exec(cmd, (error: any, stdout: any, stderr: any) => {
@@ -28,7 +27,7 @@ export class CSharpLauncherConnector implements LauncherConnector {
             console.log(`stdout: ${stdout}`);
             console.log(`stderr: ${stderr}`);
           });
-        
+
         this.status = LauncherStatus.Running;
         return true;
     }
@@ -36,7 +35,7 @@ export class CSharpLauncherConnector implements LauncherConnector {
     stop = () => {
         console.log(`Stopping launcher`);
 
-        // TODO: this not kill sub-process
+        // tODO: this not kill sub-process
         this.child.kill();
         this.status = LauncherStatus.Stopped;
         return true;
@@ -45,5 +44,4 @@ export class CSharpLauncherConnector implements LauncherConnector {
     inspect = () => {
         return true;
     }
-    
 }

@@ -1,0 +1,8 @@
+{
+    "services": [
+    ],
+    "files": [
+       "main.dialog"
+    ],
+    "entry": "main.dialog"
+}

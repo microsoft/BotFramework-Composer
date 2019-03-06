@@ -1,13 +1,8 @@
-// far from final versoin 
+import {LauncherStatus} from "./launcherStatus";
 
-export enum LauncherStatus {
-    Running,
-    Stopped
-}
-
-export interface LauncherConnector {
+export interface ILauncherConnector {
     status: LauncherStatus;
-    start(): Boolean;  // maybe start should return address
-    stop(): Boolean;
+    start(): boolean;  // maybe start should return address
+    stop(): boolean;
     inspect(): any;
 }
