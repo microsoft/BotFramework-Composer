@@ -88,30 +88,16 @@ function App() {
 
     setData(files[index]);
     // open or set editor
-    // setEditors([
-    //   {
-    //     col: 1,
-    //     row: 1,
-    //     data: data,
-    //     name: "window1",
-    //     parent: "window0(shell)"
-    //   }
-    // ]);
+    setEditors([
+      {
+        col: 1,
+        row: 1,
+        data: data,
+        name: "window1",
+        parent: "window0(shell)"
+      }
+    ]);
   }
-
-  const openNode = () => {
-    return data => {
-      setEditors([
-        {
-          col: 1,
-          row: 1,
-          data: data,
-          name: "window1",
-          parent: "window0(shell)"
-        }
-      ]);
-    };
-  };
 
   return (
     <Fragment>
@@ -153,12 +139,6 @@ function App() {
           </div>
           <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
             <Conversation>
-              {data && (
-                <DefaultButton
-                  text={JSON.parse(data.content).$type}
-                  onClick={openNode(data)}
-                />
-              )}
               {editors.length > 0 &&
                 editors.map(item => {
                   return (
