@@ -14,9 +14,14 @@ export default class extends Component {
     this.props.onChange(newData)
   }
 
-  onClick = (item) => {
-
+  onClick = (item, index) => {
+    this.props.shellApi.openSubEditor("right", item, (newData) => {
+      console.log("data get back from sub editor");
+      console.log(newData);
+    })
   }
+
+
 
   render() {
     const data = JSON.parse(this.props.data.content);

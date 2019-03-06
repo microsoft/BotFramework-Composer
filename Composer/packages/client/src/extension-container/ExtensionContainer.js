@@ -2,6 +2,7 @@ import React, {useState, useEffect, Fragment} from 'react';
 import './extensionContainer.css';
 import ShellApi from './ShellApi';
 import getEditor from './EditorMap';
+import messenger from './Messenger';
 
 /**
  * ExtensionContainer is a IFrame container to host any extension as React component
@@ -21,20 +22,16 @@ function ExtensionContainer() {
     const [data, setData] = useState(null);
 
     const shellApi = new ShellApi();
-    
+
     useEffect(() => {
-        window.addEventListener("message", receiveMessage, false);
-        shellApi.loadSuccess();
+        window.addEventListener("message", messenger.receiveMessage, false);
+        shellApi.getData().then(function(result) {
+            setData(result);
+        })
         return function removeListener() {
-            window.removeEventListener("message", receiveMessage, false);
+            window.removeEventListener("message", messenger.receiveMessage, false);
         }
     }, [])
-
-    function receiveMessage(event) {
-        if(event.source === window.parent) {
-            setData(event.data);
-        }
-    } 
 
     let RealEditor = getEditor(data);
 

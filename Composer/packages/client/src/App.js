@@ -13,7 +13,6 @@ import { Tree } from "./components/Tree";
 import { Conversation } from "./components/Conversation";
 import "./App.css";
 import httpClient from "./utils/http";
-import ExtensionContainerWrapper from "./ExtensionContainerWrapper";
 
 import { DefaultButton, IButtonProps } from "office-ui-fabric-react/lib/Button";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
@@ -58,6 +57,62 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if (openFileIndex < 0) {
+      return;
+    }
+
+    var data = files[openFileIndex];
+
+    setEditors([
+      {
+        col: 1,
+        row: 1,
+        data: data,
+        name: "window1",
+        parent: "window0(shell)"
+      }
+    ]);
+    // when open file index is changed, create or replace editor
+  }, openFileIndex);
+
+  useEffect(() => {
+    window.addEventListener("message", receiveMessage, false);
+
+    return function removeListener() {
+      window.removeEventListener("message", receiveMessage, false);
+    }
+  })
+
+
+
+  function getData() {
+    return filesRef.current[openFileIndexRef.current];
+  }
+
+  // Make this huge receive message here because this function reply on locate state
+  // Will move this out once we switch to a global state management solution
+
+  function receiveMessage(event) {
+
+    var message = event.data;
+
+    if (message.type && message.type == "api_call") 
+    {
+      switch (message.name) {
+        case 'getData': 
+          event.source.postMessage({
+            id: message.id,
+            type: 'api_result',
+            result: getData()
+          })
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   useLayoutEffect(() => {
     openFileIndexRef.current = openFileIndex;
   });
@@ -85,14 +140,12 @@ function App() {
   function handleFileClick(file, index) {
     // keep a ref because we want to read that from outside
     setOpenFileIndex(index);
-
     setData(files[index]);
-    // open or set editor
     setEditors([
       {
         col: 1,
         row: 1,
-        data: data,
+        data: files[index],
         name: "window1",
         parent: "window0(shell)"
       }
@@ -142,11 +195,11 @@ function App() {
               {editors.length > 0 &&
                 editors.map(item => {
                   return (
-                    <ExtensionContainerWrapper
+                    <iframe 
+                      key={item.name}
                       name={item.name}
-                      data={data}
-                      onChange={handleValueChange}
-                    />
+                      style={{height:'100%', width:'100%', border: "0px"}} 
+                      src='/extensionContainer.html'/>
                   );
                 })}
             </Conversation>
