@@ -37,7 +37,7 @@ export default class extends Component {
             {
               data.sequence.map((item, index) => {
                 return (
-                  <div key={index} onClick={this.onClick(item)}> step {index} </div>
+                  <div key={index} onClick={() => this.onClick(item, index)}> step {index} </div>
                 );
               })
             }

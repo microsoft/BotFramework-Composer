@@ -16,11 +16,11 @@ import getEditor from './EditorMap';
  *
  */
 
+const apiClient = new ApiClient();
+
 function ExtensionContainer() {
 
     const [data, setData] = useState(null);
-
-    const apiClient = new ApiClient();
 
     useEffect(() => {
         apiClient.connect();
@@ -32,6 +32,8 @@ function ExtensionContainer() {
         shellApi.getData().then(function(result) {
             setData(result);
         })
+
+        shellApi.openSubEditor("right", "happy")
         return () => {
             apiClient.disconnect();
         }
@@ -45,6 +47,10 @@ function ExtensionContainer() {
 
         saveData: (newData) => {
             return apiClient.apiCall('saveData', newData);
+        },
+
+        openSubEditor: (location, data, onChange) => {
+            return apiClient.apiCall('openSubEditor', {location: location, data: data});
         }
     }
 

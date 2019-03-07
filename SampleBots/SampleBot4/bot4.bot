@@ -4,5 +4,5 @@
     "files": [
        "main.dialog"
     ],
-    "entry": "maixn.dialog"
+    "entry": "main.dialog"
 }

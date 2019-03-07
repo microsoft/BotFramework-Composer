@@ -63,6 +63,7 @@ function App() {
 
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('openSubEditor', openSubEditor);
 
     return () => {
       apiClient.disconnect();
@@ -76,6 +77,11 @@ function App() {
   useLayoutEffect(() => {
     filesRef.current = files;
   });
+
+  function openSubEditor(args)
+  {
+    //;
+  }
 
   function getData() {
     return filesRef.current[openFileIndexRef.current];

@@ -1,6 +1,12 @@
 
 import Messenger from './Messenger'
 
+/**
+ * Contruct an API layer on top of messenger, enable call api, register api to be called
+ * 
+ * This is a layer shared by both Shell and ExtensionContainer
+ */
+
 class ApiClient {
 
     messenger = new Messenger();
