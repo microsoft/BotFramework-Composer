@@ -18,6 +18,7 @@ import { DefaultButton, IButtonProps } from "office-ui-fabric-react/lib/Button";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { ProjectExplorer } from "./components/ProjectExplorer";
 import { setPortalAttribute } from "@uifabric/utilities";
+import ApiClient from './messenger/ApiClient'
 
 initializeIcons(/* optional base url */);
 
@@ -47,6 +48,8 @@ function App() {
 
   const client = new httpClient();
 
+  const apiClient = new ApiClient();
+
   useEffect(() => {
     client.getFiles(files => {
       if (files.length > 0) {
@@ -56,41 +59,15 @@ function App() {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("message", receiveMessage, false);
-    return function removeListener() {
-      window.removeEventListener("message", receiveMessage, false);
+    apiClient.connect();
+
+    apiClient.registerApi('getData', getData);
+    apiClient.registerApi('saveData', handleValueChange);
+
+    return () => {
+      apiClient.disconnect();
     }
   })
-
-  function getData() {
-    return filesRef.current[openFileIndexRef.current];
-  }
-
-  // Make this huge receive message here because this function reply on locate state
-  // Will move this out once we switch to a global state management solution
-
-  const apiMap = {
-    "getData": getData,
-    "saveData": handleValueChange,
-  }
-
-  function receiveMessage(event) {
-    var message = event.data;
-
-    if (message.type && message.type == "api_call") 
-    {
-      var apiName = message.name;
-      if (apiName in apiMap) {
-        var result = apiMap[apiName](message.args);
-        event.source.postMessage({
-          id: message.id,
-          type: "api_result",
-          result: result
-        })
-      }
-      
-    }
-  }
 
   useLayoutEffect(() => {
     openFileIndexRef.current = openFileIndex;
@@ -99,6 +76,10 @@ function App() {
   useLayoutEffect(() => {
     filesRef.current = files;
   });
+
+  function getData() {
+    return filesRef.current[openFileIndexRef.current];
+  }
 
   function handleValueChange(newFileObject) {
     const currentIndex = openFileIndexRef.current;

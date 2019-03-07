@@ -1,8 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import './extensionContainer.css';
-import ShellApi from './ShellApi';
+import ApiClient from '../messenger/ApiClient';
 import getEditor from './EditorMap';
-import messenger from './Messenger';
 
 /**
  * ExtensionContainer is a IFrame container to host any extension as React component
@@ -21,24 +20,40 @@ function ExtensionContainer() {
 
     const [data, setData] = useState(null);
 
-    const shellApi = new ShellApi();
+    const apiClient = new ApiClient();
 
     useEffect(() => {
-        window.addEventListener("message", messenger.receiveMessage, false);
+        apiClient.connect();
+
+        apiClient.registerApi('reset', (data) => {
+            setData(data);
+        });
+
         shellApi.getData().then(function(result) {
             setData(result);
         })
-        return function removeListener() {
-            window.removeEventListener("message", messenger.receiveMessage, false);
+        return () => {
+            apiClient.disconnect();
         }
     }, [])
+
+
+    const shellApi = {
+        getData: () => {
+            return apiClient.apiCall('getData', {});
+        },
+
+        saveData: (newData) => {
+            return apiClient.apiCall('saveData', newData);
+        }
+    }
 
     let RealEditor = getEditor(data);
 
     return (
         <Fragment>
             {RealEditor === ''?''
-            :<RealEditor data={data} onChange={shellApi.saveValue} shellApi={shellApi}/>}
+            :<RealEditor data={data} onChange={shellApi.saveData} shellApi={shellApi}/>}
         </Fragment>
     )
 }
