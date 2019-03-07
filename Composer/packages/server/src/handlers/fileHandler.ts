@@ -48,3 +48,23 @@ export function updateFile(name:string, content:string, botProjFilePath:string =
     let realFilePath:string = path.join(botFileDir, name);
     fs.writeFileSync(realFilePath, content, {});
 }
+
+export function searchFilePath(folderPath:any, fileName: string): string{
+    const items = fs.readdirSync(folderPath);
+    let path = "";
+
+    for(let item of items) {
+        const itemPath = folderPath+'/'+item;
+        if(item === fileName) {
+            return itemPath
+        } else {
+            const isDirectory = fs.statSync(itemPath).isDirectory()
+ 
+            if(isDirectory && path === "") {
+                path = searchFilePath(itemPath, fileName)
+            }
+        }
+    }
+    console.log(path)
+    return path
+}
