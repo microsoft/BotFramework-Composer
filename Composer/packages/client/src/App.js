@@ -39,8 +39,6 @@ function App() {
     */
   ]);
 
-  const [data, setData] = useState(null);
-
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const [botStatus, setBotStatus] = useState("stopped");
@@ -58,33 +56,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (openFileIndex < 0) {
-      return;
-    }
-
-    var data = files[openFileIndex];
-
-    setEditors([
-      {
-        col: 1,
-        row: 1,
-        data: data,
-        name: "window1",
-        parent: "window0(shell)"
-      }
-    ]);
-    // when open file index is changed, create or replace editor
-  }, openFileIndex);
-
-  useEffect(() => {
     window.addEventListener("message", receiveMessage, false);
 
     return function removeListener() {
       window.removeEventListener("message", receiveMessage, false);
     }
   })
-
-
 
   function getData() {
     return filesRef.current[openFileIndexRef.current];
@@ -94,13 +71,13 @@ function App() {
   // Will move this out once we switch to a global state management solution
 
   function receiveMessage(event) {
-
     var message = event.data;
 
     if (message.type && message.type == "api_call") 
     {
       switch (message.name) {
         case 'getData': 
+          // reply result
           event.source.postMessage({
             id: message.id,
             type: 'api_result',
@@ -139,17 +116,36 @@ function App() {
 
   function handleFileClick(file, index) {
     // keep a ref because we want to read that from outside
+
+    if (index === openFileIndex) {
+      return;
+    }
+
     setOpenFileIndex(index);
-    setData(files[index]);
-    setEditors([
-      {
-        col: 1,
-        row: 1,
-        data: files[index],
-        name: "window1",
-        parent: "window0(shell)"
-      }
-    ]);
+
+    if (editors.length === 0) {
+      // open new editor
+      setEditors([
+        {
+          col: 1,
+          row: 1,
+          data: files[index],
+          name: "window1",
+          parent: "window0(shell)"
+        }
+      ]);
+    } else {
+      var newName = editors[0].name + ".1";
+      setEditors([
+        {
+          col: 1,
+          row: 1,
+          data: files[index],
+          name: newName,
+          parent: "window0(shell)"
+        }
+      ]);
+    }
   }
 
   return (

@@ -2,13 +2,10 @@
 import messenger from './Messenger'
 
 class ShellApi {
-    constructor() {
-        this.postMessage = window.parent.postMessage.bind(window.parent); 
-    }
 
+    // helper function for any api call to shell
     apiCall = (apiName, args) => {
-
-        this.postMessage({
+        messenger.postMessage({
             id: 'uuid',
             type: 'api_call',
             name: apiName,
@@ -26,15 +23,12 @@ class ShellApi {
         return this.apiCall('getData', {});
     }
 
-    loadSuccess = () => {
-        this.postMessage({
-            from: 'editor',
-            command: 'onLoad',
-        })
+    openSubEditor = (location, data, onChange) => {
+
     }
 
     saveValue = (data) => {
-        this.postMessage({
+        messenger.postMessage({
             from: 'editor',
             command: 'save',
             data: data

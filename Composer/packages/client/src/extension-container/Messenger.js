@@ -1,4 +1,7 @@
 class Messenger {
+    constructor() {
+        this.postMessage = window.parent.postMessage.bind(window.parent); 
+    }
 
     // id => callback
     subscribers = {};
