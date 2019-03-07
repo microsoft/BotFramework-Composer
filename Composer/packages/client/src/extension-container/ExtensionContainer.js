@@ -33,7 +33,6 @@ function ExtensionContainer() {
             setData(result);
         })
 
-        shellApi.openSubEditor("right", "happy")
         return () => {
             apiClient.disconnect();
         }

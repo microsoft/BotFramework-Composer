@@ -32,7 +32,7 @@ class Messenger {
 
         if (message.type && message.type === "api_call") {
             var callback = this.subscribers[message.name];
-            var result = callback(message.args);
+            var result = callback(message.args, event); // we pass args and the original event
             event.source.postMessage({
                 type: "api_result",
                 id: message.id,

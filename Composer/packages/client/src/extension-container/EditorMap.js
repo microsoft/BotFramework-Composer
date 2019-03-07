@@ -32,6 +32,11 @@ const EditorRegistration = [
     },
 
     {
+        when: (data) => data.$type, // any data has a $type handle to form editor
+        pick: FormEditor
+    },
+
+    {
         when: (data) => getSuffix(data.name) === ".lu",
         pick: JsonEditor
     },

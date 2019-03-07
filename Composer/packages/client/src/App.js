@@ -22,6 +22,9 @@ import ApiClient from './messenger/ApiClient'
 
 initializeIcons(/* optional base url */);
 
+// avoid recreate multiple times
+const apiClient = new ApiClient();
+
 function App() {
   // central state for all editors\extensions
   // this would serve as the fundation of layout\data exchange\message routing
@@ -47,8 +50,6 @@ function App() {
   const filesRef = useRef();
 
   const client = new httpClient();
-
-  const apiClient = new ApiClient();
 
   useEffect(() => {
     client.getFiles(files => {
@@ -80,11 +81,27 @@ function App() {
 
   function openSubEditor(args)
   {
-    //;
+    var data = args.data; // data to open;
+
+    setEditors([
+      editors[0],
+      {
+        col: 1,
+        row: 2,
+        data: data,
+        name: "window2",
+        parent: "window1"
+      }
+    ]);
+
+    return "window2";
   }
 
-  function getData() {
-    return filesRef.current[openFileIndexRef.current];
+  function getData(_, event) {
+    //return filesRef.current[openFileIndexRef.current];
+  
+    var targetEditor = editors.find(item => window.frames[item.name] == event.source);
+    return targetEditor.data;
   }
 
   function handleValueChange(newFileObject) {
@@ -112,29 +129,24 @@ function App() {
 
     setOpenFileIndex(index);
 
-    if (editors.length === 0) {
-      // open new editor
-      setEditors([
-        {
-          col: 1,
-          row: 1,
-          data: files[index],
-          name: "window1",
-          parent: "window0(shell)"
-        }
-      ]);
-    } else {
-      var newName = editors[0].name + ".1";
-      setEditors([
-        {
-          col: 1,
-          row: 1,
-          data: files[index],
-          name: newName,
-          parent: "window0(shell)"
-        }
-      ]);
+    if (editors.length >= 1) {
+      // reset the data in first window
+      var editorWindow = window.frames[editors[0].name];
+      apiClient.apiCallAt('reset', files[index], editorWindow);
     }
+
+    setEditors([
+      {
+        col: 1,
+        row: 1,
+        data: files[index],
+        name: "window1",
+        parent: "window0(shell)"
+      }
+    ]);
+    
+
+     
   }
 
   return (
@@ -177,6 +189,7 @@ function App() {
           </div>
           <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
             <Conversation>
+              <div style={{display: "flex", flexDirection: "row", height: "100%"}}>
               {editors.length > 0 &&
                 editors.map(item => {
                   return (
@@ -187,6 +200,7 @@ function App() {
                       src='/extensionContainer.html'/>
                   );
                 })}
+              </div>
             </Conversation>
           </div>
         </div>
