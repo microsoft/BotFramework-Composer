@@ -1,3 +1,6 @@
+/**
+ * Messenger in extension side, used to send\receive message
+ */
 class Messenger {
     constructor() {
         this.postMessage = window.parent.postMessage.bind(window.parent); 
@@ -11,9 +14,13 @@ class Messenger {
         
         if (message.type && message.type === "api_result") {
             var callback = this.subscribers[message.id];
-            callback(message.result, null);
-        }
 
+            if (!message.error) {
+                message.error = null;
+            }
+            callback(message.result, message.error);
+            delete this.subscribers[message.id];
+        }
     }
 
     subscribeOnce = function(messageId, callback) {

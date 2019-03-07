@@ -57,7 +57,6 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("message", receiveMessage, false);
-
     return function removeListener() {
       window.removeEventListener("message", receiveMessage, false);
     }
@@ -70,23 +69,26 @@ function App() {
   // Make this huge receive message here because this function reply on locate state
   // Will move this out once we switch to a global state management solution
 
+  const apiMap = {
+    "getData": getData,
+    "saveData": handleValueChange,
+  }
+
   function receiveMessage(event) {
     var message = event.data;
 
     if (message.type && message.type == "api_call") 
     {
-      switch (message.name) {
-        case 'getData': 
-          // reply result
-          event.source.postMessage({
-            id: message.id,
-            type: 'api_result',
-            result: getData()
-          })
-          break;
-        default:
-          break;
+      var apiName = message.name;
+      if (apiName in apiMap) {
+        var result = apiMap[apiName](message.args);
+        event.source.postMessage({
+          id: message.id,
+          type: "api_result",
+          result: result
+        })
       }
+      
     }
   }
 
