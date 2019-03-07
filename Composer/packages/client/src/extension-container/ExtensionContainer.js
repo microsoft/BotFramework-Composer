@@ -18,6 +18,8 @@ import getEditor from './EditorMap';
 
 const apiClient = new ApiClient();
 
+var subEditorCallbacks = {};
+
 function ExtensionContainer() {
 
     const [data, setData] = useState(null);
@@ -27,6 +29,13 @@ function ExtensionContainer() {
 
         apiClient.registerApi('reset', (data) => {
             setData(data);
+        });
+
+        apiClient.registerApi('saveFromChild', (args) => {
+            var callback = subEditorCallbacks[args.from];
+            if (callback) {
+                callback(args.data);
+            }
         });
 
         shellApi.getData().then(function(result) {
@@ -49,7 +58,10 @@ function ExtensionContainer() {
         },
 
         openSubEditor: (location, data, onChange) => {
-            return apiClient.apiCall('openSubEditor', {location: location, data: data});
+            apiClient.apiCall('openSubEditor', {location: location, data: data}).then(function(name) {
+                subEditorCallbacks[name] = onChange;
+                return name;
+            })
         }
     }
 

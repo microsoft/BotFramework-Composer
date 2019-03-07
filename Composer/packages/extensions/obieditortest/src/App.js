@@ -12,7 +12,7 @@ class App extends Component {
 
   onChange = (newValue) => {
   
-    this.props.onChange(newData.formData)
+    this.props.onChange(newValue.formData)
   }
 
   isRootId = id => {

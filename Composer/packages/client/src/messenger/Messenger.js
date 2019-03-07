@@ -23,10 +23,7 @@ class Messenger {
             if (!message.error) {
                 message.error = null;
             }
-            console.log(this.onceSubscribers);
-            console.log(this);
             callback(message.result, message.error);
-            console.log(`unsubscribed for ${message.id}`); 
             delete this.onceSubscribers[message.id];
         }
 
@@ -42,10 +39,7 @@ class Messenger {
     }
 
     subscribeOnce = (messageId, callback) => {
-        console.log(`subscribed for ${messageId}`); 
         this.onceSubscribers[messageId] = callback;
-        console.log(this.onceSubscribers);
-        console.log(this);
     }
 
     subscribe = (messageName, callback) => {

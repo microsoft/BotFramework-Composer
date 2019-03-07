@@ -104,7 +104,16 @@ function App() {
     return targetEditor.data;
   }
 
-  function handleValueChange(newFileObject) {
+  function handleValueChange(newFileObject, event) {
+
+    var targetEditor = editors.find(item => window.frames[item.name] == event.source);
+
+    if (targetEditor.parent != "window0") {
+      // forward the data change
+      apiClient.apiCallAt('saveFromChild', {data: newFileObject, from:targetEditor.name}, window.frames[targetEditor.parent]);
+      return ;
+    }
+
     const currentIndex = openFileIndexRef.current;
     const files = filesRef.current;
 
@@ -141,7 +150,7 @@ function App() {
         row: 1,
         data: files[index],
         name: "window1",
-        parent: "window0(shell)"
+        parent: "window0" // shell
       }
     ]);
     
