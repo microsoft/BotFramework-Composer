@@ -11,15 +11,8 @@ class App extends Component {
   }
 
   onChange = (newValue) => {
-    // call props onChange with respect to the data format recieved
-
-    var newData = {
-      name: this.props.data.name, // this editor should not change file name
-      content: JSON.stringify(newValue.formData)
-    }
-    console.log("new data from form editor");
-    console.log(newData);
-    this.props.onChange(newData)
+  
+    this.props.onChange(newValue.formData)
   }
 
   isRootId = id => {
@@ -78,7 +71,7 @@ class App extends Component {
           noValidate
           className="schemaForm"
           onChange={this.onChange}
-          formData={JSON.parse(this.props.data.content)}  // the props.data passed in will be a file object: {name: , content}
+          formData={this.props.data}  // the props.data passed in will be a file object: {name: , content}
           schema={schema3}
         />
       </div>
