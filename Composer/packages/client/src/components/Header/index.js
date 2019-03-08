@@ -12,7 +12,8 @@ import {
   bot,
   botButton,
   botMessage,
-  actionButton
+  actionButton,
+  fileInput
 } from "./styles";
 
 export const Header = props => (
@@ -29,6 +30,7 @@ export const Header = props => (
         css={actionButton}
         iconProps={{ iconName: "OpenFolderHorizontal", iconColor: "#ffffff" }}
       >
+        <input css={fileInput} type="file" accept=".bot, .botproj" onChange={(e)=>props.onFileOpen(e.target.files)}/>
         Open
       </ActionButton>
     </div>
