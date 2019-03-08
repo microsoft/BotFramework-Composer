@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import './extensionContainer.css';
-import ShellApi from './ShellApi';
+import ApiClient from '../messenger/ApiClient';
 import getEditor from './EditorMap';
 
 /**
@@ -16,32 +16,61 @@ import getEditor from './EditorMap';
  *
  */
 
+const apiClient = new ApiClient();
+
+var subEditorCallbacks = {};
+
 function ExtensionContainer() {
 
     const [data, setData] = useState(null);
 
-    const shellApi = new ShellApi();
-    
     useEffect(() => {
-        window.addEventListener("message", receiveMessage, false);
-        shellApi.loadSuccess();
-        return function removeListener() {
-            window.removeEventListener("message", receiveMessage, false);
+        apiClient.connect();
+
+        apiClient.registerApi('reset', (data) => {
+            setData(data);
+        });
+
+        apiClient.registerApi('saveFromChild', (args) => {
+            var callback = subEditorCallbacks[args.from];
+            if (callback) {
+                callback(args.data);
+            }
+        });
+
+        shellApi.getData().then(function(result) {
+            setData(result);
+        })
+
+        return () => {
+            apiClient.disconnect();
         }
     }, [])
 
-    function receiveMessage(event) {
-        if(event.source === window.parent) {
-            setData(event.data);
+
+    const shellApi = {
+        getData: () => {
+            return apiClient.apiCall('getData', {});
+        },
+
+        saveData: (newData) => {
+            return apiClient.apiCall('saveData', newData);
+        },
+
+        openSubEditor: (location, data, onChange) => {
+            apiClient.apiCall('openSubEditor', {location: location, data: data}).then(function(name) {
+                subEditorCallbacks[name] = onChange;
+                return name;
+            })
         }
-    } 
+    }
 
     let RealEditor = getEditor(data);
 
     return (
         <Fragment>
             {RealEditor === ''?''
-            :<RealEditor data={data} onChange={shellApi.saveValue} shellApi={shellApi}/>}
+            :<RealEditor data={data} onChange={shellApi.saveData} shellApi={shellApi}/>}
         </Fragment>
     )
 }

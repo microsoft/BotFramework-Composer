@@ -2,6 +2,7 @@
 
 import JsonEditor from 'composer-extensions/sample-json-editor'
 import FormEditor from 'composer-extensions/obieditortest'
+import VisualDesigner from 'composer-extensions/visual-designer'
 
 
 function getSuffix(fileName) {
@@ -26,7 +27,12 @@ function getSuffix(fileName) {
 
 const EditorRegistration = [
     {
-        when: (data) => getSuffix(data.name) === ".dialog",
+        when: (data) => data.name && (getSuffix(data.name) === ".dialog"),
+        pick: VisualDesigner
+    },
+
+    {
+        when: (data) => data.$type, // any data has a $type handle to form editor
         pick: FormEditor
     },
 
