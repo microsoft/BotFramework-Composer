@@ -38,6 +38,7 @@ router.get("/openbotFile", function(req: any, res: any, next: any) {
     }
     try {
         const pickerWorkingDir = storage.getItem<string>("pickerWorkingDir", "")
+        //the limitation of broswer which doens't allows to get the full path of the selected file.
         const path = searchFilePath(pickerWorkingDir, req.query.path);
         if(path === "") {
             res.status(400).json({error: "can not find the file"});

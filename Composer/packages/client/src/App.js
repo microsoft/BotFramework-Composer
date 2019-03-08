@@ -159,9 +159,8 @@ function App() {
   }
 
   function handleFileOpen(files) {
-    console.log(files)
     if(files.length > 0) {
-      var file = files[0];
+      const file = files[0];
       client.openbotFile(file.name, files => {
         if (files.length > 0) {
           setFiles(files);
