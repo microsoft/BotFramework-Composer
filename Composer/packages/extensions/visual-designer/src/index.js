@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { ObiVisualizer } from './components/obi-visualizer';
+import { DialogFlowEditor } from './components/dialog-flow-editor';
 
 export default class extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ export default class extends Component {
     return (
       <div>
         <div> Dialog Visual Designer2223 </div>
-        <ObiVisualizer></ObiVisualizer>
+        <DialogFlowEditor></DialogFlowEditor>
         <div> {data.$type} </div>
 
         {data.$type === 'Microsoft.SequenceDialog' ? (

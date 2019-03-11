@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 
 import './style.css';
 import { JsonBlock } from './components/json-block';
-import { ObiVisualizer } from '../../src/components/obi-visualizer';
+import { DialogFlowEditor } from '../../src/components/dialog-flow-editor';
 import { ObiTransformer } from '../../src/utils/obi-transformer';
 
 const defaultJsonData = {
@@ -42,7 +42,7 @@ class Demo extends Component {
             <code>{JSON.stringify(this.state.directedGraphSchema, null, '\t')}</code>
           </div>
           <div className="block block--right" style={{ width: 400, height: 600 }}>
-            <ObiVisualizer />
+            <DialogFlowEditor />
           </div>
         </div>
       </div>

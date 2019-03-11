@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dagreD3 from 'dagre-d3';
 import * as d3 from 'd3'
 
-export class ObiVisualizer extends Component {
+export class DialogFlowEditor extends Component {
     componentDidUpdate() {
         this.generateTree();
     }
@@ -59,16 +59,16 @@ export class ObiVisualizer extends Component {
 	}
 }
 
-ObiVisualizer.defaultProps = {
+DialogFlowEditor.defaultProps = {
 	width: 400,
 	height: 600,
 }
 
 // TODO: configure a babel transformer for in-class props validation.
-ObiVisualizer.propTypes = {
+DialogFlowEditor.propTypes = {
 	// TODO: define concrete schema for obi-nodes and obi-edges.
-	obiNodes: PropTypes.arrayOf(PropTypes.object),
-	obiEdges: PropTypes.arrayOf(PropTypes.object),
+	behaviouralNodes: PropTypes.arrayOf(PropTypes.object).isRequired,
+	pipelineEdges: PropTypes.arrayOf(PropTypes.object).isRequired,
 	width: PropTypes.number,
 	height: PropTypes.number,
 };
