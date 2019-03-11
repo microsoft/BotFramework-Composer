@@ -19,7 +19,7 @@
         }
     },
     "lint-staged": {
-        "packages/client/src/**/*.{ts,tsx,js,jsx}": [
+        "packages/**/*.{ts,tsx,js,jsx}": [
             "prettier --write",
             "git add"
         ]
