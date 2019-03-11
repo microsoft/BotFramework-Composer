@@ -31,6 +31,7 @@ class Demo extends Component {
   }
 
   render() {
+    const { nodes, edges } = this.state.directedGraphSchema;
     return (
       <div>
         <h1>visual-designer Demo</h1>
@@ -42,7 +43,7 @@ class Demo extends Component {
             <code>{JSON.stringify(this.state.directedGraphSchema, null, '\t')}</code>
           </div>
           <div className="block block--right" style={{ width: 400, height: 600 }}>
-            <DialogFlowEditor />
+            <DialogFlowEditor behaviouralNodes={nodes} pipelineEdges={edges} />
           </div>
         </div>
       </div>

@@ -20,18 +20,35 @@ export class DialogFlowEditor extends Component {
         );
 	}
 
+	setDialogNode(dagreGraph, node) {
+		dagreGraph.setNode(
+			node.id,
+			{ label: node.name }
+		);
+	}
+
+	setPipelineEdge(dagreGraph, edge) {
+		dagreGraph.setEdge(
+			edge.from,
+			edge.to,
+			{
+				arrowhead: edge.arrowhead,
+				label: edge.name,
+			}
+		);
+	}
+
 	generateTree() {
 		// Create a new directed graph
 		var g = new dagreD3.graphlib.Graph().setGraph({});
 
-		[ 'normal', 'vee', 'undirected' ].forEach(function(arrowhead) {
-			g.setNode(arrowhead + '1', { label: ' ' });
-			g.setNode(arrowhead + '2', { label: ' ' });
-			g.setEdge(arrowhead + '1', arrowhead + '2', {
-				arrowhead: arrowhead,
-				label: arrowhead
-			});
-		});
+		for (const node of this.props.behaviouralNodes) {
+			this.setDialogNode(g, node);
+		}
+
+		for (const edge of this.props.pipelineEdges) {
+			this.setPipelineEdge(g, edge);
+		}
 
 		var svg = d3.select('svg'),
 			inner = svg.select('g');
@@ -60,13 +77,15 @@ export class DialogFlowEditor extends Component {
 }
 
 DialogFlowEditor.defaultProps = {
+	behaviouralNodes: [],
+	pipelineEdges: [],
 	width: 400,
 	height: 600,
 }
 
 // TODO: configure a babel transformer for in-class props validation.
 DialogFlowEditor.propTypes = {
-	// TODO: define concrete schema for obi-nodes and obi-edges.
+	// TODO: define concrete schema for obi-nodes and obi-edges. (JSX required)
 	behaviouralNodes: PropTypes.arrayOf(PropTypes.object).isRequired,
 	pipelineEdges: PropTypes.arrayOf(PropTypes.object).isRequired,
 	width: PropTypes.number,
