@@ -11,18 +11,11 @@ module.exports = {
 	},
 	webpack: {
 		rules: {
-			'sass-css': {
-				modules: true,
-				localIdentName: '[hash:base64:5]'
-			}
-		},
-		extra: {
-			entry: './src/index',
-			resolve: {
-				extensions: [ '.ts', '.tsx', '.js', '.jsx' ]
-			},
-			module: {
-				rules: [ { test: /\.(tsx|ts)$/, loader: 'ts-loader' } ]
+			'sass': {
+				loader: 'sass-loader',
+				options: {
+					includePaths: [ './src' ]
+				}
 			}
 		}
 	}

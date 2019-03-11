@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './index.css';
+import './index.scss';
 import { SimpleGraph } from './SimpleGraph';
 
 export default class extends Component {
