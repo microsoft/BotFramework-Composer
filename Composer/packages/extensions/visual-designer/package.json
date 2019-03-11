@@ -29,6 +29,7 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "json-loader": "^0.5.7",
     "nwb": "0.23.x",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"

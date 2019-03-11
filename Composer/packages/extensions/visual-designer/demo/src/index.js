@@ -6,16 +6,14 @@ import { JsonBlock } from './components/json-block';
 import { DialogFlowEditor } from '../../src/components/dialog-flow-editor';
 import { ObiTransformer } from '../../src/utils/obi-transformer';
 
-const defaultJsonData = {
-  type: 'Microsoft.Botframework',
-};
+import * as obiExample from '../../ObiSamples/Planning 2 - WaitForInput/main.dialog';
 
 class Demo extends Component {
   obiTransformer = new ObiTransformer();
 
   state = {
-    obiJson: defaultJsonData,
-    directedGraphSchema: this.obiTransformer.toDirectedGraphSchema(defaultJsonData),
+    obiJson: obiExample,
+    directedGraphSchema: this.obiTransformer.toDirectedGraphSchema(obiExample),
   };
 
   constructor(props) {
@@ -38,7 +36,7 @@ class Demo extends Component {
         <div className="demo-container">
           <div className="block block--left">
             <p>Input your OBI json here.</p>
-            <JsonBlock defaultValue={defaultJsonData} onSubmit={this.onJsonChanged.bind(this)} />
+            <JsonBlock defaultValue={obiExample} onSubmit={this.onJsonChanged.bind(this)} />
           </div>
           <div className="block block--middle">
             <p>Preview your Directed Graph Schema here.</p>
