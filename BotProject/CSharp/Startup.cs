@@ -6,7 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Bot.Builder.AI.LanguageGeneration;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Composition.Resources;
 using Microsoft.Bot.Builder.Dialogs.Flow.Loader.Types;
 using Microsoft.Bot.Builder.Integration;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -21,6 +23,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
     {
         public Startup(IHostingEnvironment env)
         {
+            HostingEnvironment = env;
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -31,6 +34,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             RegisterTypes();
         }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
 
@@ -52,7 +56,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 ConversationDialogState = conversationState.CreateProperty<DialogState>("DialogState"),
                 ConversationState = conversationState,
-                RootDialogFile = botProject.path + rootDialog
+                UserState = userState,
+			    RootDialogFile = botProject.path + rootDialog
             };
 
             services.AddBot<IBot>(
@@ -67,6 +72,18 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                         await conversationState.ClearStateAsync(turnContext);
                         await conversationState.SaveChangesAsync(turnContext);
                     };
+
+                    //manage all bot resources
+                    var botResourceManager = new BotResourceManager()
+                        // add current folder, it's project file, packages, projects, etc.
+                        .AddProjectResources(HostingEnvironment.ContentRootPath)
+                        .AddFolderResources(botProject.path);
+
+                    // create LG 
+                    var lg = new LGLanguageGenerator(botResourceManager);
+                    options.Middleware.Add(new RegisterClassMiddleware<IBotResourceProvider>(botResourceManager));
+                    options.Middleware.Add(new RegisterClassMiddleware<ILanguageGenerator>(lg));
+                    options.Middleware.Add(new RegisterClassMiddleware<IMessageActivityGenerator>(new TextMessageActivityGenerator(lg)));
                     options.Middleware.Add(new AutoSaveStateMiddleware(conversationState));
                 });
         }
@@ -82,6 +99,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             app.UseDefaultFiles()
                 .UseStaticFiles()
                 .UseBotFramework();
+            app.UseExceptionHandler();
         }
 
         private void RegisterTypes()
