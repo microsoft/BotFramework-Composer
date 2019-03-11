@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 
 import httpClient from '../../utils/http';
 
-import { header, aside, bot, botButton, botMessage, actionButton, fileInput } from './styles';
+import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
 
 export const Header = props => (
   <header css={header}>
@@ -14,8 +14,13 @@ export const Header = props => (
       <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}>
         New
       </ActionButton>
-      <ActionButton css={actionButton} iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}>
-        <input css={fileInput} type="file" accept=".bot, .botproj" onChange={e => props.onFileOpen(e.target.files)} />
+      <ActionButton
+        css={actionButton}
+        iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
+        onClick={() => {
+          props.setModalStatus(true);
+        }}
+      >
         Open
       </ActionButton>
     </div>
@@ -39,4 +44,5 @@ Header.propTypes = {
   client: PropTypes.instanceOf(httpClient),
   onFileOpen: PropTypes.func,
   setBotStatus: PropTypes.func,
+  setModalStatus: PropTypes.func,
 };

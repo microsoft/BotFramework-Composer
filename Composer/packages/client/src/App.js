@@ -7,6 +7,7 @@ import { Tree } from './components/Tree';
 import { Conversation } from './components/Conversation';
 import './App.css';
 import httpClient from './utils/http';
+import { OpenFileModal } from './components/OpenFileModal';
 import { ProjectExplorer } from './components/ProjectExplorer';
 import ApiClient from './messenger/ApiClient';
 
@@ -36,6 +37,7 @@ function App() {
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const [botStatus, setBotStatus] = useState('stopped');
+  const [modalStatus, setModalStatus] = useState(false);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
 
@@ -160,7 +162,15 @@ function App() {
 
   return (
     <Fragment>
-      <Header client={client} botStatus={botStatus} setBotStatus={setBotStatus} onFileOpen={handleFileOpen} />
+      <Header
+        client={client}
+        botStatus={botStatus}
+        setBotStatus={setBotStatus}
+        onFileOpen={handleFileOpen}
+        modalStatus={modalStatus}
+        setModalStatus={setModalStatus}
+      />
+      <OpenFileModal modalStatus={modalStatus} setModalStatus={setModalStatus} />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
