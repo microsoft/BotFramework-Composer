@@ -1,24 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  Fragment,
-  useRef,
-  useLayoutEffect,
-  useCallback
-} from "react";
+import React, { useState, useEffect, Fragment, useRef, useLayoutEffect } from 'react';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
-import { Header } from "./components/Header";
-import { NavItem } from "./components/NavItem";
-import { Tree } from "./components/Tree";
-import { Conversation } from "./components/Conversation";
-import "./App.css";
-import httpClient from "./utils/http";
-
-import { DefaultButton, IButtonProps } from "office-ui-fabric-react/lib/Button";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
-import { ProjectExplorer } from "./components/ProjectExplorer";
-import { setPortalAttribute } from "@uifabric/utilities";
-import ApiClient from './messenger/ApiClient'
+import { Header } from './components/Header';
+import { NavItem } from './components/NavItem';
+import { Tree } from './components/Tree';
+import { Conversation } from './components/Conversation';
+import './App.css';
+import httpClient from './utils/http';
+import { ProjectExplorer } from './components/ProjectExplorer';
+import ApiClient from './messenger/ApiClient';
 
 initializeIcons(/* optional base url */);
 
@@ -45,7 +35,7 @@ function App() {
 
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
-  const [botStatus, setBotStatus] = useState("stopped");
+  const [botStatus, setBotStatus] = useState('stopped');
   const openFileIndexRef = useRef();
   const filesRef = useRef();
 
@@ -68,8 +58,8 @@ function App() {
 
     return () => {
       apiClient.disconnect();
-    }
-  })
+    };
+  });
 
   useLayoutEffect(() => {
     openFileIndexRef.current = openFileIndex;
@@ -79,8 +69,7 @@ function App() {
     filesRef.current = files;
   });
 
-  function openSubEditor(args)
-  {
+  function openSubEditor(args) {
     var data = args.data; // data to open;
 
     setEditors([
@@ -89,40 +78,43 @@ function App() {
         col: 1,
         row: 2,
         data: data,
-        name: "window2",
-        parent: "window1"
-      }
+        name: 'window2',
+        parent: 'window1',
+      },
     ]);
 
-    return "window2";
+    return 'window2';
   }
 
   function getData(_, event) {
     //return filesRef.current[openFileIndexRef.current];
-  
+
     var targetEditor = editors.find(item => window.frames[item.name] == event.source);
     return targetEditor.data;
   }
 
   function handleValueChange(newFileObject, event) {
-
     var targetEditor = editors.find(item => window.frames[item.name] == event.source);
 
-    if (targetEditor.parent != "window0") {
+    if (targetEditor.parent != 'window0') {
       // forward the data change
-      apiClient.apiCallAt('saveFromChild', {data: newFileObject, from:targetEditor.name}, window.frames[targetEditor.parent]);
-      return ;
+      apiClient.apiCallAt(
+        'saveFromChild',
+        { data: newFileObject, from: targetEditor.name },
+        window.frames[targetEditor.parent]
+      );
+      return;
     }
 
     const currentIndex = openFileIndexRef.current;
     const files = filesRef.current;
 
-    let payload = {
+    const payload = {
       name: files[currentIndex].name,
-      content: newFileObject.content
+      content: newFileObject.content,
     };
 
-    let newFiles = files.slice();
+    const newFiles = files.slice();
     newFiles[currentIndex].content = newFileObject.content;
     setFiles(newFiles);
 
@@ -149,41 +141,33 @@ function App() {
         col: 1,
         row: 1,
         data: files[index],
-        name: "window1",
-        parent: "window0" // shell
-      }
+        name: 'window1',
+        parent: 'window0', // shell
+      },
     ]);
-    
-
-     
   }
 
   function handleFileOpen(files) {
-    if(files.length > 0) {
+    if (files.length > 0) {
       const file = files[0];
       client.openbotFile(file.name, files => {
         if (files.length > 0) {
           setFiles(files);
         }
       });
-    } 
+    }
   }
 
   return (
     <Fragment>
-      <Header
-        client={client}
-        botStatus={botStatus}
-        setBotStatus={setBotStatus}
-        onFileOpen={handleFileOpen}
-      />
-      <div style={{ backgroundColor: "#f6f6f6", height: "calc(100vh - 50px)" }}>
+      <Header client={client} botStatus={botStatus} setBotStatus={setBotStatus} onFileOpen={handleFileOpen} />
+      <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
-            width: "80px",
-            backgroundColor: "#eaeaea",
-            height: "calc(99vh - 50px)",
-            float: "left"
+            width: '80px',
+            backgroundColor: '#eaeaea',
+            height: 'calc(99vh - 50px)',
+            float: 'left',
           }}
         >
           <NavItem iconName="SplitObject" label="Design" />
@@ -192,35 +176,36 @@ function App() {
         </div>
         <div
           style={{
-            height: "100%",
-            display: "flex",
-            overflow: "auto",
-            marginLeft: "80px",
-            zIndex: 2
+            height: '100%',
+            display: 'flex',
+            overflow: 'auto',
+            marginLeft: '80px',
+            zIndex: 2,
           }}
         >
-          <div style={{ flex: 1, marginLeft: "30px", marginTop: "20px" }}>
+          <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
             <div>
               <Tree variant="large">
                 <ProjectExplorer files={files} onClick={handleFileClick} />
               </Tree>
-              <div style={{ height: "20px" }} />
+              <div style={{ height: '20px' }} />
               <Tree />
             </div>
           </div>
-          <div style={{ flex: 4, marginTop: "20px", marginLeft: "20px" }}>
+          <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
             <Conversation>
-              <div style={{display: "flex", flexDirection: "row", height: "100%"}}>
-              {editors.length > 0 &&
-                editors.map(item => {
-                  return (
-                    <iframe 
-                      key={item.name}
-                      name={item.name}
-                      style={{height:'100%', width:'100%', border: "0px"}} 
-                      src='/extensionContainer.html'/>
-                  );
-                })}
+              <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+                {editors.length > 0 &&
+                  editors.map(item => {
+                    return (
+                      <iframe
+                        key={item.name}
+                        name={item.name}
+                        style={{ height: '100%', width: '100%', border: '0px' }}
+                        src="/extensionContainer.html"
+                      />
+                    );
+                  })}
               </div>
             </Conversation>
           </div>

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
-    "composer-extensions": "*",
+    "@babel/runtime": "^7.3.4",
     "@emotion/core": "^10.0.7",
     "@svgr/webpack": "4.1.0",
     "axios": "^0.18.0",
@@ -16,6 +16,7 @@
     "babel-preset-react-app": "^7.0.1",
     "bfj": "6.1.1",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "composer-extensions": "*",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
@@ -43,6 +44,7 @@
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.1",
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
@@ -141,6 +143,13 @@
     }
   },
   "devDependencies": {
-    "babel-plugin-emotion": "^10.0.7"
+    "babel-plugin-emotion": "^10.0.7",
+    "eslint": "^5.15.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-notice": "^0.7.8",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react-hooks": "^1.5.0",
+    "eslint-plugin-typescript": "^0.14.0"
   }
 }
