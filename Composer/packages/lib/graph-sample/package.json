@@ -14,13 +14,10 @@
     "@types/react": "16.8.7",
     "@types/react-dom": "16.8.2",
     "@uifabric/fluent-theme": "^0.16.0",
-    "node-sass": "^4.11.0",
     "nwb": "^0.23.0",
     "nwb-sass": "^0.9.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.5",
-    "ts-loader": "^5.3.3",
     "typescript": "3.3.3333"
   },
   "peerDependencies": {
