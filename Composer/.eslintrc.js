@@ -11,11 +11,10 @@ module.exports = {
     'no-dupe-class-members': 'off',
     'no-undef': 'off', // ts compiler catches this
     'prefer-const': 'error',
-  
+
     // plugin: import
     'import/first': 'error',
     'import/order': ['error', { 'newlines-between': 'always' }],
-  
   },
   overrides: [
     {
