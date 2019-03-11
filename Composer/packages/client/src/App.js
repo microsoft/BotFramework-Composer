@@ -158,12 +158,24 @@ function App() {
      
   }
 
+  function handleFileOpen(files) {
+    if(files.length > 0) {
+      const file = files[0];
+      client.openbotFile(file.name, files => {
+        if (files.length > 0) {
+          setFiles(files);
+        }
+      });
+    } 
+  }
+
   return (
     <Fragment>
       <Header
         client={client}
         botStatus={botStatus}
         setBotStatus={setBotStatus}
+        onFileOpen={handleFileOpen}
       />
       <div style={{ backgroundColor: "#f6f6f6", height: "calc(100vh - 50px)" }}>
         <div
