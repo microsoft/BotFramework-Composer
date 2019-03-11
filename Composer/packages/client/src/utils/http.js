@@ -25,6 +25,15 @@ class httpClient {
         console.log(payload);
     }
 
+    openbotFile = (path, callback) => {
+        axios.get(baseUrl + `fileserver/openbotFile?path=${path}`)
+        .then((response) => {
+            callback(response.data)
+        }).catch(function(res){
+            console.log(res);
+        });
+    }
+    
     toggleBot = (status, callback) => {
         if (status === 'stopped') {
             axios.get(baseUrl + 'launcher/start')
