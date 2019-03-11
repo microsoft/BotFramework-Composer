@@ -7,11 +7,11 @@ The only thing you need to config is appsetting.json, which have a bot setting t
     appsettings.json：
     "bot": {
       "provider": "localDisk",
-      "path": "../../Bots/SampleBot3/bot3.bot"
+      "path": "../../Bots/SampleBot3/bot3.botproj"
     }
 ```
 ```
-    bot3.bot, bot launcher got the rootDialog from "entry"
+    bot3.botproj, bot launcher got the rootDialog from "entry"
     {
         "services": [],
         "files": [
@@ -23,9 +23,17 @@ The only thing you need to config is appsetting.json, which have a bot setting t
 # functionalities
 1.  Build & run bot
 
-   -dotnet build
+    Restore packages
 
-   -dotnet run
+        You can restore the packages from this feed directly in vs nuget package manager: https://fuselabs.visualstudio.com/Composer/_packaging?_a=feed&feed=ComposableDialog
+
+        You can also add feed by:
+
+        nuget.exe sources Add -Name "ComposableDialog" -Source "https://fuselabs.pkgs.visualstudio.com/_packaging/ComposableDialog/nuget/v3/index.json"
+
+   dotnet build
+
+   dotnet run
 
    It will start a web server and listening at http://localhost:3979.
    

@@ -1,13 +1,12 @@
 // this is currently hard-coded here
 
-import JsonEditor from 'composer-extensions/sample-json-editor'
-import FormEditor from 'composer-extensions/obieditortest'
-
+import JsonEditor from 'composer-extensions/sample-json-editor';
+import FormEditor from 'composer-extensions/obieditortest';
+import VisualDesigner from 'composer-extensions/visual-designer';
 
 function getSuffix(fileName) {
-    return fileName.substring(fileName.lastIndexOf('.'));
+  return fileName.substring(fileName.lastIndexOf('.'));
 }
-
 
 // Editors are registered in such an registration table
 // Any editor is registered with a lamdba, testing when this kind of data is interested or not
@@ -25,30 +24,34 @@ function getSuffix(fileName) {
 //
 
 const EditorRegistration = [
-    {
-        when: (data) => getSuffix(data.name) === ".dialog",
-        pick: FormEditor
-    },
+  {
+    when: data => data.name && getSuffix(data.name) === '.dialog',
+    pick: VisualDesigner,
+  },
 
-    {
-        when: (data) => getSuffix(data.name) === ".lu",
-        pick: JsonEditor
-    },
+  {
+    when: data => data.$type, // any data has a $type handle to form editor
+    pick: FormEditor,
+  },
 
-    {
-        when: (data) => true,
-        pick: JsonEditor
-    }
-]
+  {
+    when: data => getSuffix(data.name) === '.lu',
+    pick: JsonEditor,
+  },
 
+  {
+    when: () => true,
+    pick: JsonEditor,
+  },
+];
 
-const getEditor = (data) => {
-    if (data == null) {
-        return "";
-    }
+const getEditor = data => {
+  if (data == null) {
+    return '';
+  }
 
-    // pick the first Editor that matches
-    return EditorRegistration.find(e => e.when(data)).pick;
-}
+  // pick the first Editor that matches
+  return EditorRegistration.find(e => e.when(data)).pick;
+};
 
-export default getEditor
+export default getEditor;

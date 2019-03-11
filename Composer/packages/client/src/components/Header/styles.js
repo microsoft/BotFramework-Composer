@@ -1,4 +1,4 @@
-import { css } from "@emotion/core";
+import { css } from '@emotion/core';
 
 export const header = css`
   position: relative;
@@ -39,4 +39,14 @@ export const actionButton = css`
   font-size: 16px;
   margin-top: 2px;
   margin-left: 15px;
+`;
+
+export const fileInput = css`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 `;
