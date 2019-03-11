@@ -18,10 +18,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react",
+    "outDir": "./dist"
   },
   "include": [
-    "src"
+    "src",
+    "demo/src"
+  ],
+  "exclude": [
+    "node_modules",
   ]
 }
