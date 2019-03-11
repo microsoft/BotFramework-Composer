@@ -1,4 +1,4 @@
 export enum LauncherStatus {
-    Running,
-    Stopped
+  Running,
+  Stopped,
 }
