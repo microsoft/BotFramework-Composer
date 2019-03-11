@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 
 import './style.css';
+import { JsonBlock } from './components/json-block';
 import { ObiVisualizer } from '../../src/components/obi-visualizer';
 
 const defaultJsonData = {
@@ -20,20 +21,8 @@ class Demo extends Component {
     super(props);
   }
 
-  editingJson(e) {
-    this.setState({
-      userInput: e.target.value,
-    });
-  }
-
-  submitInputJson() {
-    this.setState(prevState => ({
-      demoJson: JSON.parse(prevState.userInput),
-    }));
-  }
-
-  resetJson() {
-    this.setState(this.defaultState);
+  onJsonChanged(json) {
+    console.log('json changed:', json);
   }
 
   render() {
@@ -42,15 +31,7 @@ class Demo extends Component {
         <h1>visual-designer Demo</h1>
         <div className="demo-container">
           <div className="block block--left">
-            <textarea
-              style={{ width: 400, height: 500 }}
-              value={this.state.userInput}
-              onChange={this.editingJson.bind(this)}
-            />
-            <div>
-              <button onClick={this.submitInputJson.bind(this)}>Submit</button>
-              <button onClick={this.resetJson.bind(this)}>Reset</button>
-            </div>
+            <JsonBlock defaultValue={defaultJsonData} onSubmit={this.onJsonChanged} />
           </div>
           <div className="block block--middle">Transformed node schema.</div>
           <div className="block block--right" style={{ width: 400, height: 600 }}>
