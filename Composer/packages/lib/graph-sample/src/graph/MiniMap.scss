@@ -1,0 +1,23 @@
+@import "../variables";
+
+.mini-map {
+  position: relative;
+  overflow: hidden;
+
+  .canvas {
+    position: relative;
+    border: 1px solid $color-less-dark-grey;
+    background-color: rgba($color: $color-component-background, $alpha: 0.85);
+    overflow: hidden;
+
+    .content {
+      position: absolute;
+    }
+
+    .viewport {
+      position: absolute;
+      border: 1px solid $color-hi-contrast-border;
+      cursor: move;
+    }
+  }
+}
