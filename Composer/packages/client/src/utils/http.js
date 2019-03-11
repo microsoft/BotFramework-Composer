@@ -3,54 +3,60 @@ import axios from 'axios';
 const baseUrl = 'http://localhost:5000/api/';
 
 class httpClient {
+  getFiles = (callback, onError) => {
+    axios
+      .get(baseUrl + 'fileserver')
+      .then(response => {
+        callback(response.data);
+      })
+      .catch(function(res) {
+        onError(res);
+      });
+  };
 
-    getFiles = (callback) => {
-        axios.get(baseUrl + 'fileserver')
-        .then((response) => {
-            callback(response.data)
-        }).catch(function(res){
-            console.log(res);
-        });
-    }
+  saveFile = (payload, callback, onError) => {
+    axios
+      .put(baseUrl + 'fileserver', payload)
+      .then(res => {
+        callback(res);
+      })
+      .catch(err => {
+        onError(err);
+      });
+  };
 
-    saveFile = (payload) => {
-        axios.put(baseUrl + 'fileserver', payload)
-        .then(res => {
-            console.log("save success");
+  openbotFile = (path, callback, onError) => {
+    axios
+      .get(baseUrl + `fileserver/openbotFile?path=${path}`)
+      .then(response => {
+        callback(response.data);
+      })
+      .catch(function(res) {
+        onError(res);
+      });
+  };
+
+  toggleBot = (status, callback, onError) => {
+    if (status === 'stopped') {
+      axios
+        .get(baseUrl + 'launcher/start')
+        .then(() => {
+          callback('running');
         })
-        .catch(err => {
-            console.log(err);
-            console.log("save failed");
+        .catch(function(res) {
+          onError(res);
         });
-        console.log(payload);
-    }
-
-    openbotFile = (path, callback) => {
-        axios.get(baseUrl + `fileserver/openbotFile?path=${path}`)
-        .then((response) => {
-            callback(response.data)
-        }).catch(function(res){
-            console.log(res);
+    } else {
+      axios
+        .get(baseUrl + 'launcher/stop')
+        .then(() => {
+          callback('stopped');
+        })
+        .catch(function(res, onError) {
+          onError(res);
         });
     }
-    
-    toggleBot = (status, callback) => {
-        if (status === 'stopped') {
-            axios.get(baseUrl + 'launcher/start')
-            .then((response) => {
-                callback('running');
-            }).catch(function(res){
-                console.log(res);
-            });
-          } else {
-            axios.get(baseUrl + 'launcher/stop')
-            .then((response) => {
-                callback('stopped');
-            }).catch(function(res){
-                console.log(res);
-            });
-        }
-    }
+  };
 }
 
-export default httpClient
+export default httpClient;

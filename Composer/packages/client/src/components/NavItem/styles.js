@@ -1,4 +1,4 @@
-import { css } from "@emotion/core";
+import { css } from '@emotion/core';
 
 export const outer = css`
   font-size: 30px;

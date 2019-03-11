@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-hooks'],
   settings: {
     react: {
-    version: 'detect',
+      version: 'detect',
     },
   },
   parserOptions: {

@@ -1,10 +1,16 @@
 /** @jsx jsx **/
-import { jsx } from "@emotion/core";
-import { container, top } from "./styles";
+import { jsx } from '@emotion/core';
+import { PropTypes } from 'prop-types';
 
-export const Conversation = (props) => (
+import { container, top } from './styles';
+
+export const Conversation = props => (
   <div css={container}>
     <div css={top} />
     {props.children}
   </div>
 );
+
+Conversation.propTypes = {
+  children: PropTypes.element,
+};
