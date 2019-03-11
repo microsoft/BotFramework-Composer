@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
+// A simple zero-dependency json editor supports both controlled mode and uncontrolled mode.
 export class JsonBlock extends Component {
 
     state = {

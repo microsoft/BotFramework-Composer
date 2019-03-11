@@ -37,13 +37,16 @@ class Demo extends Component {
         <h1>visual-designer Demo</h1>
         <div className="demo-container">
           <div className="block block--left">
+            <p>Input your OBI json here.</p>
             <JsonBlock defaultValue={defaultJsonData} onSubmit={this.onJsonChanged.bind(this)} />
           </div>
           <div className="block block--middle">
+            <p>Preview your Directed Graph Schema here.</p>
             <code>{JSON.stringify(this.state.directedGraphSchema, null, '\t')}</code>
           </div>
-          <div className="block block--right" style={{ width: 400, height: 600 }}>
-            <DialogFlowEditor behaviouralNodes={nodes} pipelineEdges={edges} />
+          <div className="block block--right">
+            <p>Here is your visualized dialog flow.</p>
+            <DialogFlowEditor behaviouralNodes={nodes} pipelineEdges={edges} width={400} height={500} />
           </div>
         </div>
       </div>
