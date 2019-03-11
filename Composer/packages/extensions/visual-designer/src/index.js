@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 
+import { ObiVisualizer } from './components/obi-visualizer';
+
 export default class extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +37,8 @@ export default class extends Component {
 
     return (
       <div>
-        <div> Dialog Visual Designer </div>
+        <div> Dialog Visual Designer2223 </div>
+        <ObiVisualizer></ObiVisualizer>
         <div> {data.$type} </div>
 
         {data.$type === 'Microsoft.SequenceDialog' ? (
