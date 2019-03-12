@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -19,12 +19,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-native",
+    "outDir": "dist"
   },
   "include": [
     "src/**/*.tsx",
     "src/**/*.ts",
-    "demo/src/**/*.tsx",
-    "demo/src/**/*.ts",
   ],
   "exclude": [
     "node_modules",

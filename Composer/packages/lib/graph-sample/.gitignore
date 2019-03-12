@@ -27,8 +27,3 @@ yarn-error.log*
 /es
 /lib
 /umd
-
-src/**/*.js
-src/**/*.jsx
-demo/**/*.js
-demo/**/*.jsx
