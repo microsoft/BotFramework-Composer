@@ -2,31 +2,34 @@
 import { jsx } from '@emotion/core';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment } from 'react';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
-import './styles.css';
 import { PropTypes } from 'prop-types';
+
+import { header, body } from './styles';
 
 function toggleModal(props) {
   props.setModalStatus(!props.modalStatus);
 }
 
 export const OpenFileModal = props => (
-  <Modal
-    titleAriaId={getId('title')}
-    subtitleAriaId={getId('subText')}
-    isOpen={props.modalStatus}
-    onDismiss={() => toggleModal(props)}
-    isModeless={true}
-    containerClassName="ms-modal-container"
-  >
-    <div className="ms-modal-header">
-      <span id="modal">Open Bot</span>
-    </div>
-    <div id="modal-content" className="ms-modal-body">
-      <p>Please select the bot.</p>
-      <DefaultButton onClick={() => toggleModal(props)} text="Close" />
-    </div>
-  </Modal>
+  <Fragment>
+    <Modal
+      titleAriaId={getId('title')}
+      subtitleAriaId={getId('subText')}
+      isOpen={props.modalStatus}
+      onDismiss={() => toggleModal(props)}
+      isModeless={true}
+    >
+      <div css={header}>
+        <span id="modal">Open Bot</span>
+      </div>
+      <div id="modal-content" css={body}>
+        <p>Please select the bot.</p>
+        <DefaultButton onClick={() => toggleModal(props)} text="Close" />
+      </div>
+    </Modal>
+  </Fragment>
 );
 
 OpenFileModal.propTypes = {
