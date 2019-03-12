@@ -1,7 +1,6 @@
 import { css } from '@emotion/core';
 
 export const header = css`
-  width: 70vw;
   -webkit-box-flex: 1;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
@@ -17,8 +16,7 @@ export const header = css`
   font-weight: 100;
   font-weight: 600;
   padding: 0 28px;
-  min-height: 40px;
-  min-width: 300px;
+  min-height: 50px;
 `;
 
 export const body = css`
@@ -26,5 +24,14 @@ export const body = css`
   -ms-flex: 4 4 auto;
   flex: 4 4 auto;
   padding: 5px 28px;
-  overflow-y: hidden;
+  overflow: hidden;
+`;
+
+export const content = css`
+  width: 500px;
+  height: 100vh;
+`;
+
+export const root = css`
+  justify-content: end;
 `;

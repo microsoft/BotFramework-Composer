@@ -167,7 +167,6 @@ function App() {
         botStatus={botStatus}
         setBotStatus={setBotStatus}
         onFileOpen={handleFileOpen}
-        modalStatus={modalStatus}
         setModalStatus={setModalStatus}
       />
       <OpenFileModal modalStatus={modalStatus} setModalStatus={setModalStatus} />
