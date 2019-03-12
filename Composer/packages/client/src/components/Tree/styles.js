@@ -1,11 +1,25 @@
 import { css } from '@emotion/core';
 
-export const container = variant => css`
-  width: 325px;
-  background-color: #ffffff;
-  height: ${variant && variant === 'large' ? '500px' : '350px'};
-  overflow: auto;
-`;
+export const container = variant => {
+  let height = '350px';
+  switch (variant) {
+    case 'large':
+      height = '500px';
+      break;
+    case 'largest':
+      height = '870px';
+      break;
+    default:
+      break;
+  }
+
+  return css`
+    width: 325px;
+    background-color: #ffffff;
+    height: ${height};
+    overflow: auto;
+  `;
+};
 
 export const top = css`
   width: 100%;
