@@ -27,7 +27,7 @@ function copyAssets() {
 }
 
 /**
- * Compile '*.scss' files to '*.css' files.
+ * Compile '*.scss' files to '*.css' files, then output them to given destination.
  */
 function writeCss(targetFolder) {
   return gulp.src(`${sourceDir}/**/*.scss`)
@@ -36,6 +36,7 @@ function writeCss(targetFolder) {
 }
 
 /**
+ * TSX / TS -> js files (ES6)
  * Used in demo, enable native React component debugging.
  */
 function toES6() {
@@ -51,7 +52,7 @@ function toES6() {
 
 
 /**
- * TSX / TS -> ES6 module
+ * TSX / TS -> ES2015 grammar & ES module
  */
 function toES2015() {
   const tsProject = ts.createProject('tsconfig.json');
@@ -67,7 +68,7 @@ function toES2015() {
 }
 
 /**
- * TSX / TS -> ES2015 module
+ * TSX / TS -> ES2015 grammar & CommonJS module
  */
 function toCommonJS() {
   const tsProject = ts.createProject('tsconfig.json');
