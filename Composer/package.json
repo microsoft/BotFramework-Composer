@@ -5,7 +5,9 @@
         "packages/client",
         "packages/server",
         "packages/extensions",
-        "packages/extensions/*"
+        "packages/extensions/*",
+        "packages/lib",
+        "packages/lib/*"
     ],
     "scripts": {
         "client": "cd packages/client && yarn start",
