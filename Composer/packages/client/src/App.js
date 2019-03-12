@@ -37,7 +37,7 @@ function App() {
   const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const [botStatus, setBotStatus] = useState('stopped');
-  const [modalStatus, setModalStatus] = useState(false);
+  const [panelStatus, setPanelStatus] = useState(false);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
 
@@ -167,9 +167,9 @@ function App() {
         botStatus={botStatus}
         setBotStatus={setBotStatus}
         onFileOpen={handleFileOpen}
-        setModalStatus={setModalStatus}
+        setPanelStatus={setPanelStatus}
       />
-      <OpenFileModal modalStatus={modalStatus} setModalStatus={setModalStatus} />
+      <OpenFileModal panelStatus={panelStatus} setPanelStatus={setPanelStatus} />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{

@@ -18,7 +18,7 @@ export const Header = props => (
         css={actionButton}
         iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
         onClick={() => {
-          props.setModalStatus(true);
+          props.setPanelStatus(true);
         }}
       >
         Open
@@ -44,5 +44,5 @@ Header.propTypes = {
   client: PropTypes.instanceOf(httpClient),
   onFileOpen: PropTypes.func,
   setBotStatus: PropTypes.func,
-  setModalStatus: PropTypes.func,
+  setPanelStatus: PropTypes.func,
 };

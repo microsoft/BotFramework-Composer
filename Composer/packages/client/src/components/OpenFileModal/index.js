@@ -1,33 +1,38 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Fragment } from 'react';
+import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { PropTypes } from 'prop-types';
 
-import { header, body, content, root } from './styles';
+import { container, body } from './styles';
 
 function toggleModal(props) {
-  props.setModalStatus(!props.modalStatus);
+  props.setPanelStatus(!props.panelStatus);
 }
 
 export const OpenFileModal = props => (
   <Fragment>
-    <Modal isOpen={props.modalStatus} onDismiss={() => toggleModal(props)} isModeless={true} css={root}>
-      <div css={content}>
-        <div css={header}>
-          <span>Open Bot</span>
-        </div>
+    <div>
+      <Panel
+        isOpen={props.panelStatus}
+        onDismiss={() => toggleModal(props)}
+        type={PanelType.customNear}
+        css={container}
+        headerText="Open Bot"
+        isModeless={true}
+        isBlocking={false}
+      >
         <div css={body}>
           <p>Please select the bot.</p>
           <DefaultButton onClick={() => toggleModal(props)} text="Close" />
         </div>
-      </div>
-    </Modal>
+      </Panel>
+    </div>
   </Fragment>
 );
 
 OpenFileModal.propTypes = {
-  modalStatus: PropTypes.boolean,
-  setModalStatus: PropTypes.func,
+  panelStatus: PropTypes.boolean,
+  setPanelStatus: PropTypes.func,
 };
