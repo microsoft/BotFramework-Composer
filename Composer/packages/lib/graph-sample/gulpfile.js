@@ -6,15 +6,16 @@ const replace = require('gulp-replace');
 const del = require('del');
 
 const sourceDir = './src';
-const targetDir = './dist';
-const es5Dir = './lib';
-const es6Dir = './es';
+const demoDir = './dist';
+const commonjsDir = './lib';
+const esDir = './es';
 
-/**
- * Clean all contents under 'dist/' folder.
- */
-function clean() {
-  return del([targetDir, es5Dir, es6Dir]);
+function cleanDemo() {
+  return del([demoDir]);
+}
+
+function cleanBuild() {
+  return del([commonjsDir, esDir]);
 }
 
 /**
@@ -22,7 +23,7 @@ function clean() {
  */
 function copyAssets() {
   return gulp.src(`${sourceDir}/**/!(*.ts|*.tsx)`)
-    .pipe(gulp.dest(targetDir));
+    .pipe(gulp.dest(demoDir));
 }
 
 /**
@@ -45,7 +46,7 @@ function toES6() {
   return tsProject.src()
     .pipe(tsProject())
     .js
-    .pipe(gulp.dest(targetDir));
+    .pipe(gulp.dest(demoDir));
 }
 
 
@@ -62,7 +63,7 @@ function toES2015() {
     .pipe(replace(/(import.+\.)scss(\'|\")/g, '$1css$2'))
     .pipe(tsProject())
     .js
-    .pipe(gulp.dest(es6Dir));
+    .pipe(gulp.dest(esDir));
 }
 
 /**
@@ -77,17 +78,16 @@ function toCommonJS() {
     .pipe(replace(/(import.+\.)scss(\'|\")/g, '$1css$2'))
     .pipe(tsProject())
     .js
-    .pipe(gulp.dest(es5Dir));
+    .pipe(gulp.dest(commonjsDir));
 }
 
-const esmodule = gulp.parallel(toES2015, function prepareES6Css() { return writeCss(es6Dir) });
-const jsmodule = gulp.parallel(toCommonJS, function prepareES5Css() { return writeCss(es5Dir) });
+const esmodule = gulp.parallel(toES2015, function prepareES6Css() { return writeCss(esDir) });
+const jsmodule = gulp.parallel(toCommonJS, function prepareES5Css() { return writeCss(commonjsDir) });
 
-const buildDemo = gulp.series(clean, gulp.parallel(toES6, copyAssets));
-const buildApp = gulp.series(clean, gulp.parallel(esmodule, jsmodule));
+const buildDemo = gulp.series(cleanDemo, gulp.parallel(toES6, copyAssets));
+const buildApp = gulp.series(cleanBuild, gulp.parallel(esmodule, jsmodule));
 
 exports['build:demo'] = buildDemo;
 exports['build:app'] = buildApp;
-exports.clean = clean;
 exports.lib = jsmodule;
 exports.es = esmodule;
