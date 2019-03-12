@@ -16,7 +16,6 @@
     "@uifabric/fluent-theme": "^0.16.0",
     "del": "^4.0.0",
     "gulp": "^4.0.0",
-    "gulp-babel": "^8.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-typescript": "^5.0.0",
