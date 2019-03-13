@@ -2,9 +2,12 @@
 API server for composer app
 
 ## API spec
-This is a mimimal API spec to suppport manage multiple storage providers. 
 
-### storage
+### FileSystem API
+FileSystem api allows you to management multiple storages and perform file-based on top of them.  
+
+
+#### storage
 
 `storage` is a top-level resource which follows the common pattern of a REST api. 
 
@@ -33,7 +36,7 @@ by default return
 `DELETE /storages` delete storage
 
 
-### blob
+#### blob
 blobs is a sub-resouce of storage, but it's not refered by ID, it's refer by path, because we are building a unified file api interface, not targeting a specific clound storage (which always have id for any item).  
 
 `GET /storages/{storageId}/blobs/{path}` list dir or get file
@@ -69,7 +72,9 @@ GET /storage/default/c:/bots/a.bot
 }
 ```
 
-### project
+### ProjectManagement API
+
+ProjectManagement api allows you to controlled current project status. open\close project, get project related resources etc. 
 
 `GET /projects/opened`
 
