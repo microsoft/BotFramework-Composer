@@ -2,16 +2,15 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
-import { NavLink } from 'react-router-dom';
 
 import { outer, icon, label } from './styles';
+import { NavLink } from './../NavLink';
 
 export const NavItem = props => (
   <NavLink
     to={props.to}
-    exact={true}
     style={{ display: 'block', textDecoration: 'none' }}
-    activeStyle={{ outline: '2px solid', color: '#0083cb99' }}
+    activestyle={{ display: 'block', textDecoration: 'none', outline: '2px solid', color: '#0083cb99' }}
   >
     <div css={outer}>
       <div css={icon}>
