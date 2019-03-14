@@ -34,7 +34,7 @@ export function App() {
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
-            width: '80px',
+            width: '50px',
             backgroundColor: '#eaeaea',
             height: 'calc(99vh - 50px)',
             float: 'left',
