@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
 import httpClient from './utils/http';
+import { HeaderBar } from './components/HeaderBar/index';
 
 initializeIcons(/* optional base url */);
 
@@ -29,6 +30,7 @@ export function App() {
   return (
     <Fragment>
       <Header client={client} botStatus={botStatus} setBotStatus={setBotStatus} onFileOpen={handleFileOpen} />
+      <HeaderBar client={client} onFileOpen={handleFileOpen} />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
