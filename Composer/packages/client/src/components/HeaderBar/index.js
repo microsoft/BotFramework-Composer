@@ -3,8 +3,6 @@ import { jsx } from '@emotion/core';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 
-import httpClient from '../../utils/http';
-
 import { header, actionButton, fileInput } from './styles';
 
 export const HeaderBar = props => (
@@ -22,6 +20,5 @@ export const HeaderBar = props => (
 );
 
 HeaderBar.propTypes = {
-  client: PropTypes.instanceOf(httpClient),
   onFileOpen: PropTypes.func,
 };
