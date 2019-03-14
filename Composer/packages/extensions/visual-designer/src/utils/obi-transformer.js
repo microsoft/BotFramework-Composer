@@ -1,8 +1,19 @@
 export class ObiTransformer {
-    toDirectedGraphSchema(obiJson) {
-        return {
-            nodes: [{id: 1, name: 'root'}, {id: 2, name: 'child'}],
-            edges: [{from: 1, to: 2, name: 'goto', arrowhead: 'normal'}]
-        }
+  toDirectedGraphSchema(obiJson) {
+    try {
+      const rules = obiJson['rules'];
+      const results = rules.map((x, index) => ({
+        id: `Rule ${index} - ${x['$type']}`,
+        value: x['$type'],
+        neighborIds: [],
+      }));
+
+      for (let i = 0; i < results.length - 1; i++) {
+        results[i].neighborIds.push(results[i + 1].id);
+      }
+      return results;
+    } catch (e) {
+      return [];
     }
+  }
 }
