@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Graph } from '../../graph/Graph';
 import { GraphEdge } from '../../graph/GraphSchemas';
-import { GraphNode } from '../../graph/Node';
+import { GraphNode, Node } from '../../graph/Node';
 import './SimpleGraph.scss';
-import { Color, ItemRenderer, SimpleItem } from './SimpleItem';
+import { Color, SimpleItem } from './SimpleItem';
 
 interface SimpleGraphState {
   items: SimpleItem[];
@@ -86,12 +86,26 @@ export class SimpleGraph extends React.Component<GraphPropsType, SimpleGraphStat
   };
 
   private getGraphNodes(items: SimpleItem[]): Array<GraphNode<SimpleItem>> {
+    // Must use a class style React compnent rather than a function component.
+    const ExampleContent: React.ComponentClass<any> = class ExampleContent extends React.Component {
+      render() {
+        return <div className="simple-item-content blue">This is content: {this.props['nodeId']}</div>;
+      }
+    };
+
+    const ExampleFooter: React.ComponentClass<any> = class ExampleFooter extends React.Component {
+      render() {
+        return <div>I'm a footer of{this.props['nodeId']}</div>;
+      }
+    };
+
     return items.map(
       (item): GraphNode<SimpleItem> => {
         return {
           id: item.id,
-          renderer: ItemRenderer,
-          miniRenderer: ItemRenderer,
+          renderer: Node(ExampleContent),
+          footerRenderer: ExampleFooter as any,
+          miniRenderer: Node(ExampleContent),
           contentProps: {
             nodeId: item.id,
             data: item,
