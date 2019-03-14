@@ -1,24 +1,19 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
+import { Icon } from 'office-ui-fabric-react';
 
 import httpClient from '../../utils/http';
 
-import { header, aside, bot, botButton, botMessage, actionButton, fileInput } from './styles';
+import { header, waffle, aside, bot, botButton, botMessage } from './styles';
 
 export const Header = props => (
   <header css={header}>
-    <div css={aside}>Composer</div>
-    <div css={actionButton}>
-      <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}>
-        New
-      </ActionButton>
-      <ActionButton css={actionButton} iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}>
-        <input css={fileInput} type="file" accept=".bot, .botproj" onChange={e => props.onFileOpen(e.target.files)} />
-        Open
-      </ActionButton>
+    <div css={waffle}>
+      <Icon iconName="WaffleOffice365" />
     </div>
+    <div css={aside}>COMPOSER</div>
     <div css={bot}>
       <span css={botMessage}>{props.botStatus === 'running' ? 'Bot is running at http://localhost:3979' : ''}</span>
       <PrimaryButton
@@ -37,6 +32,5 @@ export const Header = props => (
 Header.propTypes = {
   botStatus: PropTypes.string,
   client: PropTypes.instanceOf(httpClient),
-  onFileOpen: PropTypes.func,
   setBotStatus: PropTypes.func,
 };

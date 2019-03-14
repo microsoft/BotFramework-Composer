@@ -1,4 +1,6 @@
-import React, { useState, useEffect, Fragment, useRef, useLayoutEffect, useContext } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useEffect, Fragment, useRef, useLayoutEffect, useContext } from 'react';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -6,6 +8,7 @@ import httpClient from './../../utils/http';
 import { ProjectExplorer } from './../../components/ProjectExplorer';
 import ApiClient from './../../messenger/ApiClient';
 import { AppContext } from './../../App';
+import { container, treeContainer, division, conversationContainer, extension } from './styles';
 
 // avoid recreate multiple times
 const apiClient = new ApiClient();
@@ -150,33 +153,23 @@ function DesignPage() {
 
   return (
     <Fragment>
-      <div />
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
-          <div>
-            <Tree variant="large">
-              <ProjectExplorer files={files} onClick={handleFileClick} />
-            </Tree>
-            <div style={{ height: '20px' }} />
-            <Tree />
-          </div>
+      <div css={container}>
+        <div css={treeContainer}>
+          <Tree style={{ flex: '1.2 1.2 auto' }}>
+            <ProjectExplorer files={files} onClick={handleFileClick} />
+          </Tree>
+          <div css={division} />
+          <Tree style={{ flex: '1 1 auto' }} />
         </div>
-        <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
-          <Conversation>
-            <div style={{ display: 'flex', flexDirection: 'row', height: '860px' }}>
-              {editors.length > 0 &&
-                editors.map(item => {
-                  return (
-                    <iframe
-                      key={item.name}
-                      name={item.name}
-                      style={{ height: '100%', width: '100%', border: '0px' }}
-                      src="/extensionContainer.html"
-                    />
-                  );
-                })}
-            </div>
-          </Conversation>
+        <div css={conversationContainer}>
+          {editors.length > 0 &&
+            editors.map(item => {
+              return (
+                <Conversation key={item.name} style={{ flex: 1, marginRight: '15px' }}>
+                  <iframe key={item.name} name={item.name} css={extension} src="/extensionContainer.html" />
+                </Conversation>
+              );
+            })}
         </div>
       </div>
     </Fragment>
