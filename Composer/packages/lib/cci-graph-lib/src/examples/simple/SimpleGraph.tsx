@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Graph } from './graph/Graph';
-import { GraphEdge } from './graph/GraphSchemas';
-import { GraphNode } from './graph/Node';
+import { Graph } from '../../graph/Graph';
+import { GraphEdge } from '../../graph/GraphSchemas';
+import { GraphNode } from '../../graph/Node';
 import './SimpleGraph.scss';
 import { Color, ItemRenderer, SimpleItem } from './SimpleItem';
 
