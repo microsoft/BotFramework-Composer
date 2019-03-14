@@ -63,26 +63,24 @@ const getType = data => {
 };
 
 export const FormEditor = props => {
+  const type = getType(props.data);
   const [dialogSchema, setDialogSchema] = useState({
     definitions: { ...masterSchema.definitions },
-    ...masterSchema.definitions[getType(props.data)],
+    ...masterSchema.definitions[type],
   });
-  const [currentType, setCurrentType] = useState(getType(props.data));
-  const [dialogUiSchema] = useState({ ...uiSchema[getType(props.data)] });
+  const [dialogUiSchema] = useState({ ...uiSchema[type] });
 
   const onChange = newValue => {
     props.onChange(newValue.formData);
   };
 
   useEffect(() => {
-    if (currentType !== getType(props.data)) {
-      setDialogSchema({
-        definitions: { ...masterSchema.definitions },
-        ...masterSchema.definitions[getType(props.data)],
-      });
-      setCurrentType(getType(props.data));
-    }
-  });
+    const type = getType(props.data);
+    setDialogSchema({
+      ...dialogSchema,
+      ...masterSchema.definitions[type],
+    });
+  }, [type]);
 
   return (
     <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
