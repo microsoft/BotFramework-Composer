@@ -2,15 +2,18 @@
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 
-import { container, top } from './styles';
+import { container } from './styles';
 
-export const Conversation = props => (
-  <div css={container}>
-    <div css={top} />
-    {props.children}
-  </div>
-);
+export const Conversation = props => {
+  const { style, children } = props;
+  return (
+    <div css={container} style={style ? style : null}>
+      {children}
+    </div>
+  );
+};
 
 Conversation.propTypes = {
+  style: PropTypes.object,
   children: PropTypes.element,
 };

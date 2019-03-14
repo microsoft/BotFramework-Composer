@@ -10,9 +10,13 @@ export const header = css`
   display: flex;
 `;
 
+export const waffle = css`
+  margin-left: 20px;
+`;
+
 export const aside = css`
   width: 200;
-  margin-left: 100px;
+  margin-left: 20px;
 `;
 
 export const bot = css`

@@ -6,15 +6,11 @@ import { Conversation } from './../../components/Conversation/index';
 export const SettingPage = () => {
   return (
     <Fragment>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
-          <Tree variant="largest">
-            <div>Setting</div>
-          </Tree>
-        </div>
-        <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
-          <Conversation />
-        </div>
+      <div style={{ display: 'flex', height: '100%' }}>
+        <Tree>
+          <div>Setting</div>
+        </Tree>
+        <Conversation style={{ flex: 1, marginLeft: '15px', marginRight: '15px' }} />
       </div>
     </Fragment>
   );
