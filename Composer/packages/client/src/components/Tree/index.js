@@ -2,16 +2,15 @@
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 
-import { container, top } from './styles';
+import { container } from './styles';
 
 export const Tree = props => (
-  <div css={container(props.variant)}>
-    <div css={top} />
+  <div css={container} style={props.style ? props.style : null}>
     {props.children}
   </div>
 );
 
 Tree.propTypes = {
-  variant: PropTypes.string,
+  style: PropTypes.object,
   children: PropTypes.element,
 };

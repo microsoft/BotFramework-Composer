@@ -11,7 +11,7 @@ export const header = css`
 `;
 
 export const waffle = css`
-  margin-left: 15px;
+  margin-left: 20px;
 `;
 
 export const aside = css`

@@ -12,7 +12,7 @@ export const header = css`
 
 export const actionButton = css`
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 5px;
   line-height: 40px;
 `;
 

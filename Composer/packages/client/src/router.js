@@ -7,7 +7,7 @@ import { SettingPage } from './pages/setting';
 import { ContentPage } from './pages/content/index';
 
 const Routes = () => (
-  <Router>
+  <Router style={{ height: '100%' }}>
     <DesignPage path="/" />
     <ContentPage path="/content" />
     <SettingPage path="/setting" />
