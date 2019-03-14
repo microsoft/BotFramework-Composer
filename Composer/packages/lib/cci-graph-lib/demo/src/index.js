@@ -4,6 +4,24 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { SimpleGraph } from '../../dist/examples/simple/SimpleGraph';
 
+// Must use a class style React compnent rather than a function component.
+class ExampleContent extends React.Component {
+  render() {
+    const { data } = this.props;
+    return (
+      <div className={`simple-item-content ${data.value}`} onClick={() => data.onClick(data.id)}>
+        This is content: {JSON.stringify(data)}
+      </div>
+    );
+  }
+}
+
+class ExampleFooter extends React.Component {
+  render() {
+    return <div>I'm a footer of {this.props['nodeId']}</div>;
+  }
+}
+
 const demoItems = [
   {
     id: 'node_0',
@@ -31,5 +49,10 @@ const demoItems = [
     neighborIds: [],
   },
 ];
+
+demoItems.forEach(item => {
+  item.contentRenderer = ExampleContent;
+  item.footRenderer = ExampleFooter;
+});
 
 ReactDOM.render(<SimpleGraph items={demoItems} />, document.querySelector('#demo'));

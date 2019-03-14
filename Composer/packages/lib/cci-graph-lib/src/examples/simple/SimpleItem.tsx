@@ -15,6 +15,15 @@ export interface SimpleItem {
   onClick?: (id: string) => void;
 }
 
+export interface DirectedGraphItem {
+  id: string;
+  value: string;
+  neighborIds: string[];
+  contentRenderer: React.ComponentClass<any>;
+  footerRenderer: React.ComponentClass<any>;
+  onClick?: (id: string) => void;
+}
+
 class SimpleItemNodeContent extends NodeContent<SimpleItem> {
   public render(): React.ReactNode {
     const { id, value, onClick } = this.props.data;
