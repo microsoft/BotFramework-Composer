@@ -1,11 +1,14 @@
 import React from 'react';
 import JSONFrom from 'react-jsonschema-form';
+import { initializeIcons } from '@uifabric/icons';
 
 import * as widgets from './widgets';
 import * as fields from './fields';
 import FieldTemplate from './FieldTemplate';
 
 import './styles.scss';
+
+initializeIcons();
 
 export default function Form(props) {
   const { formData, schema, uiSchema, onChange, ...rest } = props;
