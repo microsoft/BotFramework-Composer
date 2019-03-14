@@ -40,9 +40,9 @@ export function App() {
             float: 'left',
           }}
         >
-          <NavItem to="/" iconName="SplitObject" label="Design" />
-          <NavItem to="/content" iconName="CollapseMenu" label="Content" />
-          <NavItem to="/setting" iconName="Settings" label="Settings" />
+          <NavItem to="/" iconName="EditNote" label="Design" />
+          <NavItem to="/content" iconName="Code" label="Content" />
+          <NavItem to="/setting" iconName="CollapseMenu" label="Settings" />
         </div>
         <div
           style={{
