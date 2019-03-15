@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Form from './Form';
 import { masterSchema } from './appschema';
@@ -63,16 +63,24 @@ const getType = data => {
 };
 
 export const FormEditor = props => {
-  const [dialogSchema] = useState({
+  const type = getType(props.data);
+  const [dialogSchema, setDialogSchema] = useState({
     definitions: { ...masterSchema.definitions },
-    ...masterSchema.definitions[getType(props.data)],
+    ...masterSchema.definitions[type],
   });
-
-  const [dialogUiSchema] = useState({ ...uiSchema[getType(props.data)] });
+  const [dialogUiSchema] = useState({ ...uiSchema[type] });
 
   const onChange = newValue => {
     props.onChange(newValue.formData);
   };
+
+  useEffect(() => {
+    const type = getType(props.data);
+    setDialogSchema({
+      ...dialogSchema,
+      ...masterSchema.definitions[type],
+    });
+  }, [type]);
 
   return (
     <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
