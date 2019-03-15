@@ -35,7 +35,7 @@ export class ObiEditor extends Component {
           items={directedGraphItems}
           width={width}
           height={height}
-          onNodeClick={() => this.bubbleNodeClickEvent()}
+          onNodeClick={payload => this.bubbleNodeClickEvent(payload)}
         />
       </div>
     );
