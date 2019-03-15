@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.css';
-import { SimpleGraph } from '../../dist/examples/simple/SimpleGraph';
+import { SimpleGraph } from '../../src/examples/simple/SimpleGraph';
 
 // Must use a class style React compnent rather than a function component.
-class ExampleContent extends React.Component {
+class ExampleContent extends React.Component<any> {
   render() {
     const { data } = this.props;
     return (
@@ -22,7 +22,7 @@ class ExampleFooter extends React.Component {
   }
 }
 
-const demoItems = [
+const demoItems: any[] = [
   {
     id: 'node_0',
     value: 'green',
