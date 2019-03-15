@@ -22,7 +22,6 @@ export class ObiEditor extends Component {
 
     return (
       <div className="obi-editor-container">
-        <p>Here is your visualized dialog flow.</p>
         <DialogFlowEditor
           items={directedGraphItems}
           width={width}
