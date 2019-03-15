@@ -38,7 +38,7 @@ export default class extends Component {
     return (
       <div>
         <div> Dialog Visual Designer </div>
-        <ObiEditor data={data} onClickDialog={() => this.onClick(item)} />
+        <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
       </div>
     );
   }
