@@ -1,10 +1,12 @@
+import { PAYLOAD_KEY } from './constant';
+
 export class ObiTransformer {
   toDirectedGraphSchema(obiJson) {
     try {
       const rules = obiJson['rules'];
       const results = rules.map((x, index) => ({
         id: index,
-        json: x,
+        [PAYLOAD_KEY]: x,
         neighborIds: [],
       }));
 

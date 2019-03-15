@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { PAYLOAD_KEY } from '../../utils/constant';
+
 const nodeStyle = {
   width: 200,
   height: 100,
@@ -12,9 +14,11 @@ const nodeStyle = {
 export class DialogNode extends Component {
   render() {
     const { data } = this.props;
+    const dialogPayload = data[PAYLOAD_KEY];
+
     return (
-      <div style={nodeStyle} onClick={() => data.onClick(data.json)}>
-        {JSON.stringify(data.json)}
+      <div style={nodeStyle} onClick={() => data.onClick(dialogPayload)}>
+        {JSON.stringify(dialogPayload)}
       </div>
     );
   }
