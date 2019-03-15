@@ -48,7 +48,7 @@ class Demo extends Component {
               data={obiJson}
               width={400}
               height={500}
-              onNodeClick={nodeContent => {
+              onClickDialog={nodeContent => {
                 console.log('Clicked node:', nodeContent);
               }}
             />

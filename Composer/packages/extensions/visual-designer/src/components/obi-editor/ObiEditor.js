@@ -21,8 +21,8 @@ export class ObiEditor extends Component {
     }
   }
 
-  onNodeClicked(nodeContent) {
-    console.log('Node clicked:', nodeContent);
+  onClickNode(nodeContent) {
+    this.props.onClickDialog(nodeContent);
   }
 
   render() {
@@ -41,6 +41,7 @@ ObiEditor.defaultProps = {
   data: {},
   width: 400,
   height: 500,
+  onClickDialog: () => {},
 };
 
 ObiEditor.propTypes = {
@@ -48,4 +49,5 @@ ObiEditor.propTypes = {
   data: PropTypes.object,
   width: PropTypes.number,
   height: PropTypes.number,
+  onClickDialog: PropTypes.func,
 };
