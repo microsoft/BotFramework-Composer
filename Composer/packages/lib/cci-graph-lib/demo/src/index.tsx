@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './index.css';
+import './index.scss';
 import { DirectedGraph } from '../../src/examples/directed/DirectedGraph';
-import { DirectedGraphItem } from '../../src/examples/directed/DirectedGraphItem';
 
 // Must use a class style React compnent rather than a function component.
 class ExampleContent extends React.Component<any> {
