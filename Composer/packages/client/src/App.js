@@ -5,8 +5,6 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
 import httpClient from './utils/http';
-import { HeaderBar } from './components/HeaderBar/index';
-import { BotButton } from './components/BotButton/index';
 
 initializeIcons(/* optional base url */);
 
@@ -31,30 +29,28 @@ export function App() {
   return (
     <Fragment>
       <Header client={client} botStatus={botStatus} setBotStatus={setBotStatus} onFileOpen={handleFileOpen} />
-      <HeaderBar client={client} onFileOpen={handleFileOpen} />
-      <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 90px)' }}>
+      <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
-            width: '50px',
+            width: '80px',
             backgroundColor: '#eaeaea',
-            height: 'calc(100vh - 90px)',
+            height: 'calc(99vh - 50px)',
             float: 'left',
           }}
         >
-          <NavItem to="/" iconName="EditNote" label="Design" />
-          <NavItem to="/content" iconName="Code" label="Content" />
-          <NavItem to="/setting" iconName="CollapseMenu" label="Settings" />
-          <BotButton style={{ position: 'fixed', bottom: '15px', left: '10px' }} />
+          <NavItem to="/" iconName="SplitObject" label="Design" />
+          <NavItem to="/content" iconName="CollapseMenu" label="Content" />
+          <NavItem to="/setting" iconName="Settings" label="Settings" />
         </div>
         <div
           style={{
             height: '100%',
             overflow: 'auto',
-            marginLeft: '50px',
+            marginLeft: '80px',
             zIndex: 2,
           }}
         >
-          <AppContext.Provider value={files} style={{ height: '100%' }}>
+          <AppContext.Provider value={files}>
             <Routes />
           </AppContext.Provider>
         </div>
