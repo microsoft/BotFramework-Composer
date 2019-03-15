@@ -1,6 +1,8 @@
 .graph-container {
+    width: 100vw;
+    height: 100vh;
+    border: none;
     display: flex;
-    border: 2px solid gray;
   
     .graph {
       flex: 1;
