@@ -6,7 +6,7 @@ import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 import { ObiTransformer } from '../../src/utils/obi-transformer';
 
-import * as obiExample from '../../ObiSamples/Planning 5 - WelcomeRule/main.dialog';
+import * as obiExample from './sample.dialog';
 
 class Demo extends Component {
   obiTransformer = new ObiTransformer();
