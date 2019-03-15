@@ -1,2 +1,2 @@
 export { Graph } from './graph/Graph';
-export { SimpleGraph } from './examples/simple/SimpleGraph';
+export { DirectedGraph } from './examples/directed/DirectedGraph';

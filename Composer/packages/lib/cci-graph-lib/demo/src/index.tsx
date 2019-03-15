@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.css';
-import { SimpleGraph } from '../../src/examples/simple/SimpleGraph';
+import { DirectedGraph } from '../../src/examples/directed/DirectedGraph';
+import { DirectedGraphItem } from '../../src/examples/directed/DirectedGraphItem';
 
 // Must use a class style React compnent rather than a function component.
 class ExampleContent extends React.Component<any> {
@@ -21,6 +22,10 @@ class ExampleFooter extends React.Component {
     return <div>I'm a footer of {this.props['nodeId']}</div>;
   }
 }
+
+const reportNodeId = (nodeId: string) => {
+  console.log(`Node ${nodeId} clicked.`);
+};
 
 const demoItems: any[] = [
   {
@@ -53,6 +58,7 @@ const demoItems: any[] = [
 demoItems.forEach(item => {
   item.contentRenderer = ExampleContent;
   item.footRenderer = ExampleFooter;
+  item.onClick = reportNodeId;
 });
 
-ReactDOM.render(<SimpleGraph items={demoItems} width={600} height={700} />, document.querySelector('#demo'));
+ReactDOM.render(<DirectedGraph items={demoItems} width={600} height={700} />, document.querySelector('#demo'));
