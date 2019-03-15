@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment, useRef, useLayoutEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
@@ -7,7 +8,7 @@ import { Tree } from './components/Tree';
 import { Conversation } from './components/Conversation';
 import './App.css';
 import httpClient from './utils/http';
-import { OpenFileModal } from './components/OpenFileModal';
+import { OpenBot } from './components/OpenBot';
 import { ProjectExplorer } from './components/ProjectExplorer';
 import ApiClient from './messenger/ApiClient';
 
@@ -38,6 +39,7 @@ function App() {
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const [botStatus, setBotStatus] = useState('stopped');
   const [panelStatus, setPanelStatus] = useState(false);
+  const [isSelected, onSelectChange] = useState(false);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
 
@@ -160,6 +162,18 @@ function App() {
     }
   }
 
+  function getFileSelection(selection) {
+    return new Selection({
+      onSelectionChanged: () => {
+        if (isSelected) {
+          // eslint-disable-next-line no-console
+          console.log(selection.getSelection()[0].name);
+          onItemInvoked(selection.getSelection()[0]);
+        }
+      },
+    });
+  }
+
   return (
     <Fragment>
       <Header
@@ -169,7 +183,13 @@ function App() {
         onFileOpen={handleFileOpen}
         setPanelStatus={setPanelStatus}
       />
-      <OpenFileModal panelStatus={panelStatus} setPanelStatus={setPanelStatus} />
+      <OpenBot
+        panelStatus={panelStatus}
+        setPanelStatus={setPanelStatus}
+        isSelected={isSelected}
+        onSelectChange={onSelectChange}
+        selection={() => getFileSelection()}
+      />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
