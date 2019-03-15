@@ -21,7 +21,7 @@ export class ObiEditor extends Component {
     }
   }
 
-  onClickNode(nodeContent) {
+  bubbleNodeClickEvent(nodeContent) {
     this.props.onClickDialog(nodeContent);
   }
 
@@ -31,7 +31,12 @@ export class ObiEditor extends Component {
     return (
       <div className="obi-editor-container">
         <p>Here is your visualized dialog flow.</p>
-        <DialogFlowEditor items={directedGraphItems} width={width} height={height} onNodeClick={this.onClickNode} />
+        <DialogFlowEditor
+          items={directedGraphItems}
+          width={width}
+          height={height}
+          onNodeClick={() => this.bubbleNodeClickEvent()}
+        />
       </div>
     );
   }
