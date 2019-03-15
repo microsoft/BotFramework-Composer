@@ -1,10 +1,22 @@
 import { css } from '@emotion/core';
 
-export const link = css`
-  display: block;
-  text-decoration: none;
-  height: 35px;
-  text-align: center;
-  line-height: 35px;
-  color: #0083cb;
+export const outer = css`
+  font-size: 30px;
+  color: #4f4f4f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 0 0;
+  cursor: pointer;
+  &:hover {
+    color: #0083cb;
+  }
+`;
+
+export const icon = css`
+  font-size: 25px;
+`;
+
+export const label = css`
+  font-size: 13px;
 `;
