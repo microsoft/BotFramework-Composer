@@ -55,4 +55,4 @@ demoItems.forEach(item => {
   item.footRenderer = ExampleFooter;
 });
 
-ReactDOM.render(<SimpleGraph items={demoItems} />, document.querySelector('#demo'));
+ReactDOM.render(<SimpleGraph items={demoItems} width={600} height={700} />, document.querySelector('#demo'));
