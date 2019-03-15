@@ -13,7 +13,7 @@ export class DialogNode extends Component {
   render() {
     const { data } = this.props;
     return (
-      <div style={nodeStyle} onClick={() => data.onClick(data)}>
+      <div style={nodeStyle} onClick={() => data.onClick(data.json)}>
         {JSON.stringify(data.json)}
       </div>
     );
