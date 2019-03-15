@@ -19,43 +19,6 @@ interface DirectedGraphPropsType {
 
 const EMPTY_ONCLICK_EVENT = () => {};
 
-// TODO: extract node transformer.
-function getGraphNodes(items: DirectedGraphItem[]): Array<GraphNode<DirectedGraphItem>> {
-  return items.map(
-    (item): GraphNode<DirectedGraphItem> => {
-      return {
-        id: item.id,
-        renderer: Node(item.contentRenderer),
-        footerRenderer: item.footerRenderer,
-        miniRenderer: Node(item.contentRenderer),
-        contentProps: {
-          nodeId: item.id,
-          data: {
-            ...item,
-            onClick: item.onClick || EMPTY_ONCLICK_EVENT,
-          },
-        },
-      };
-    }
-  );
-}
-
-function getGraphEdges(items: DirectedGraphItem[]): GraphEdge[] {
-  const edges: GraphEdge[] = [];
-
-  for (const item of items) {
-    for (const neighborId of item.neighborIds) {
-      edges.push({
-        sourceNodeId: item.id,
-        targetNodeId: neighborId,
-        localEdgeId: 'local',
-      });
-    }
-  }
-
-  return edges;
-}
-
 export class DirectedGraph extends React.Component<DirectedGraphPropsType, DirectedGraphState> {
   static defaultProps = {
     width: 600,
@@ -68,19 +31,12 @@ export class DirectedGraph extends React.Component<DirectedGraphPropsType, Direc
     prevItems: undefined,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.items !== state.prevItems) {
-      return {
-        nodes: getGraphNodes(props.items),
-        edges: getGraphEdges(props.items),
-      };
-    }
-  }
-
   public render(): React.ReactNode {
-    const { nodes, edges } = this.state;
+    const { width, height, items } = this.props;
+    const { nodes, edges } = this.computeGraphElements(items);
+
     return (
-      <div className="graph-container" style={{ width: this.props.width, height: this.props.height }}>
+      <div className="graph-container" style={{ width: width, height: height }}>
         <Graph
           nodeList={nodes}
           edgeList={edges}
@@ -100,5 +56,47 @@ export class DirectedGraph extends React.Component<DirectedGraphPropsType, Direc
         />
       </div>
     );
+  }
+
+  private computeGraphElements(items: DirectedGraphItem[]) {
+    return {
+      nodes: this.getGraphNodes(items),
+      edges: this.getGraphEdges(items),
+    };
+  }
+
+  private getGraphNodes(items: DirectedGraphItem[]): Array<GraphNode<DirectedGraphItem>> {
+    return items.map(
+      (item): GraphNode<DirectedGraphItem> => {
+        return {
+          id: item.id,
+          renderer: Node(item.contentRenderer),
+          footerRenderer: item.footerRenderer,
+          miniRenderer: Node(item.contentRenderer),
+          contentProps: {
+            nodeId: item.id,
+            data: {
+              ...item,
+              onClick: item.onClick || EMPTY_ONCLICK_EVENT,
+            },
+          },
+        };
+      }
+    );
+  }
+
+  private getGraphEdges(items: DirectedGraphItem[]): GraphEdge[] {
+    const edges: GraphEdge[] = [];
+
+    for (const item of items) {
+      for (const neighborId of item.neighborIds) {
+        edges.push({
+          sourceNodeId: item.id,
+          targetNodeId: neighborId,
+          localEdgeId: 'local',
+        });
+      }
+    }
+    return edges;
   }
 }
