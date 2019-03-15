@@ -12,22 +12,14 @@ export class ObiEditor extends Component {
     prevObiJson: undefined,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.data !== state.prevObiJson) {
-      return {
-        directedGraphItems: obiTransformer.toDirectedGraphSchema(props.data),
-        prevObiJson: props.data,
-      };
-    }
-  }
-
   bubbleNodeClickEvent(nodeContent) {
     this.props.onClickDialog(nodeContent);
   }
 
   render() {
-    const { directedGraphItems } = this.state;
-    const { width, height } = this.props;
+    const { width, height, data } = this.props;
+    const directedGraphItems = obiTransformer.toDirectedGraphSchema(data);
+
     return (
       <div className="obi-editor-container">
         <p>Here is your visualized dialog flow.</p>
