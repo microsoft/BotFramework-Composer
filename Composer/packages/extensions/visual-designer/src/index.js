@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { DialogFlowEditor } from './components/dialog-flow-editor';
+import { DialogFlowEditor } from './components/dialog-flow-editor/DialogFlowEditor';
 
 export default class extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ export default class extends Component {
     return (
       <div>
         <div> Dialog Visual Designer2223 </div>
-        <DialogFlowEditor></DialogFlowEditor>
+        <DialogFlowEditor />
         <div> {data.$type} </div>
 
         {data.$type === 'Microsoft.SequenceDialog' ? (

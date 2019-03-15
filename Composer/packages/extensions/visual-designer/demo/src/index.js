@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 
 import './style.css';
 import { JsonBlock } from './components/json-block';
-import { DialogFlowEditor } from '../../src/components/dialog-flow-editor';
+import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 import { ObiTransformer } from '../../src/utils/obi-transformer';
 
 import * as obiExample from '../../ObiSamples/Planning 5 - WelcomeRule/main.dialog';
@@ -24,12 +24,13 @@ class Demo extends Component {
     console.log('json changed:', json);
     const dgSchema = this.obiTransformer.toDirectedGraphSchema(json);
     this.setState({
+      obiJson: json,
       directedGraphSchema: dgSchema,
     });
   }
 
   render() {
-    const graphItems = this.state.directedGraphSchema;
+    const { obiJson, directedGraphSchema } = this.state;
     return (
       <div>
         <h1>visual-designer Demo</h1>
@@ -40,11 +41,17 @@ class Demo extends Component {
           </div>
           <div className="block block--middle">
             <p>Preview your Directed Graph Schema here.</p>
-            <code>{JSON.stringify(graphItems, null, '\t')}</code>
+            <code>{JSON.stringify(directedGraphSchema, null, '\t')}</code>
           </div>
           <div className="block block--right">
-            <p>Here is your visualized dialog flow.</p>
-            <DialogFlowEditor items={graphItems} width={400} height={500} />
+            <ObiEditor
+              data={obiJson}
+              width={400}
+              height={500}
+              onNodeClick={nodeContent => {
+                console.log('Clicked node:', nodeContent);
+              }}
+            />
           </div>
         </div>
       </div>

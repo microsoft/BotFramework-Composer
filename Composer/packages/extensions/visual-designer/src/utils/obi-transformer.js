@@ -3,8 +3,8 @@ export class ObiTransformer {
     try {
       const rules = obiJson['rules'];
       const results = rules.map((x, index) => ({
-        id: `Rule ${index} - ${x['$type']}`,
-        value: x['$type'],
+        id: index,
+        json: x,
         neighborIds: [],
       }));
 
