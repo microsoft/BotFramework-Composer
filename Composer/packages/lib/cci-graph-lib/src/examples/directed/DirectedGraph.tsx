@@ -36,7 +36,7 @@ export class DirectedGraph extends React.Component<DirectedGraphPropsType, Direc
     const { nodes, edges } = this.computeGraphElements(items);
 
     return (
-      <div className="graph-container" style={{ width: width, height: height }}>
+      <div className="graph-container">
         <Graph
           nodeList={nodes}
           edgeList={edges}

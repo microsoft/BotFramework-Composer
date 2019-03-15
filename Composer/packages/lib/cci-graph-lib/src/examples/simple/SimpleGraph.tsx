@@ -41,7 +41,7 @@ export class SimpleGraph extends React.Component<GraphPropsType, SimpleGraphStat
     const edges = this.getGraphEdges(this.state.items);
 
     return (
-      <div className="graph-container" style={{ width: this.props.width, height: this.props.height }}>
+      <div className="graph-container">
         <Graph
           nodeList={nodes}
           edgeList={edges}
