@@ -64,37 +64,6 @@ router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: a
   }
 });
 
-// match relative path
-// router.get('/storages/:storageId/*', function (req: any, res: any, next: any) {
-//   let storageId = req.params.storageId as string;
-//   let folderTree = {
-//     folders: [] as string[],
-//     files: [] as string[]
-//   };
-//   try {
-//     let storagesList = storage.getItem<Array<IStorageInterface>>('linkedStorages');
-
-//     if (storageId === 'default' && storagesList) {
-//       // return local folder tree, will do lazy load later
-//       let currentStorage = storagesList.find((item) => {
-//         return item.id === storageId;
-//       });
-//       if (currentStorage && currentStorage.path !== '') {
-//         getFolderTree(`${currentStorage.path}/${req.params[0]}`, folderTree);
-//         res.status(200).json(folderTree);
-//         return;
-//       } else {
-//         res.status(400).json({ error: 'get storages files error' });
-//         return;
-//       }
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: 'get storages files error' });
-//     return;
-//   }
-// });
-
-
 router.get("/projects/opened", function (req: any, res: any, next: any) {
   if(currentOpenBot!==null){
     res.status(200).json(currentOpenBot);
