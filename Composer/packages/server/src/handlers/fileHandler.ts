@@ -5,6 +5,10 @@ import { config } from '../config';
 var botFilePath: string;
 var botFileDir: string;
 var botFileName: string;
+class FolderTree {
+  folders = [] as string[];
+  files = [] as string[]
+};
 
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
@@ -67,3 +71,24 @@ export function searchFilePath(folderPath: any, fileName: string): string {
   console.log(path);
   return path;
 }
+
+export function getFolderTree(folderPath: string, folderTree: FolderTree) {
+  if (fs.statSync(folderPath).isFile()) {
+    folderTree.files.push(folderPath);
+    return folderTree;
+  }
+
+  let items = fs.readdirSync(folderPath);
+
+  for (let item of items) {
+    let itemPath = `${folderPath}/${item}`;
+    if (fs.statSync(itemPath).isDirectory()) {
+      folderTree.folders.push(itemPath);
+      getFolderTree(itemPath, folderTree);
+    } else if (fs.statSync(itemPath).isFile()) {
+      folderTree.files.push(itemPath);
+    }
+  }
+  return folderTree;
+}
+

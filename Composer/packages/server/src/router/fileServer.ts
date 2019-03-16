@@ -1,11 +1,50 @@
 import express, { Router } from 'express';
-import { getFiles, updateFile, searchFilePath } from '../handlers/fileHandler';
+import { getFiles, updateFile, searchFilePath, getFolderTree } from '../handlers/fileHandler';
 import setting from '../storage/SettingService';
 import storage from '../storage/StorageService';
+import { IStorageInterface } from '../storage/IStorageInterface';
 
 const router: Router = express.Router({});
 
-router.get('/', function(req: any, res: any, next: any) {
+router.get('/storages', function (req: any, res: any, next: any) {
+  try {
+    let storagesList = storage.getItem<Array<object>>('linkedStorages');
+    res.status(200).json(storagesList);
+  } catch (error) {
+    res.status(400).json({ error: 'get storages list error' });
+  }
+});
+
+router.get('/storages/:storageId/*', function (req: any, res: any, next: any) {
+  let storageId = req.params.storageId as string;
+  let folderTree = {
+    folders: [] as string[],
+    files: [] as string[]
+  };
+  try {
+    let storagesList = storage.getItem<Array<IStorageInterface>>('linkedStorages');
+
+    if (storageId === 'default' && storagesList) {
+      // return local folder tree, will do lazy load later
+      let currentStorage = storagesList.find((item) => {
+        return item.id === storageId;
+      });
+      if (currentStorage && currentStorage.path !== '') {
+        getFolderTree(`${currentStorage.path}/${req.params[0]}`, folderTree);
+        res.status(200).json(folderTree);
+        return;
+      } else {
+        res.status(400).json({ error: 'get storages files error' });
+        return;
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: 'get storages files error' });
+    return;
+  }
+});
+
+router.get('/', function (req: any, res: any, next: any) {
   let fileList: any[] = [];
   const openLastActiveBot = setting.getItem<string>('openLastActiveBot');
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
@@ -20,7 +59,7 @@ router.get('/', function(req: any, res: any, next: any) {
   }
 });
 
-router.put('/', function(req: any, res: any, next: any) {
+router.put('/', function (req: any, res: any, next: any) {
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
@@ -30,7 +69,7 @@ router.put('/', function(req: any, res: any, next: any) {
   }
 });
 
-router.get('/openbotFile', function(req: any, res: any, next: any) {
+router.get('/openbotFile', function (req: any, res: any, next: any) {
   let fileList: any[] = [];
   if (!req.query.path) {
     res.status(400).json({ error: 'no path' });
