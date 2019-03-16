@@ -1,9 +1,9 @@
 import express, { Router } from 'express';
-import { getFiles, updateFile, searchFilePath, getFolderTree } from '../handlers/fileHandler';
+import { getFiles, updateFile, searchFilePath, getFolderTree, FolderTree } from '../handlers/fileHandler';
 import setting from '../storage/SettingService';
 import storage from '../storage/StorageService';
 import { IStorageInterface } from '../storage/IStorageInterface';
-
+import fs, { stat } from "fs";
 const router: Router = express.Router({});
 
 router.get('/storages', function (req: any, res: any, next: any) {
@@ -15,26 +15,40 @@ router.get('/storages', function (req: any, res: any, next: any) {
   }
 });
 
-router.get('/storages/:storageId/*', function (req: any, res: any, next: any) {
+// match absolute path
+router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: any) {
   let storageId = req.params.storageId as string;
-  let folderTree = {
-    folders: [] as string[],
-    files: [] as string[]
+  let path = req.params[0] ? `${req.params.blob}/${req.params[0]}` : req.params.blob;
+  let folderTree: FolderTree = {
+    folders: [],
+    files: []
   };
+  let result;
   try {
-    let storagesList = storage.getItem<Array<IStorageInterface>>('linkedStorages');
-
-    if (storageId === 'default' && storagesList) {
+    if (storageId === 'default') {
       // return local folder tree, will do lazy load later
-      let currentStorage = storagesList.find((item) => {
-        return item.id === storageId;
-      });
-      if (currentStorage && currentStorage.path !== '') {
-        getFolderTree(`${currentStorage.path}/${req.params[0]}`, folderTree);
-        res.status(200).json(folderTree);
-        return;
+      if (req.params.blob) {
+        // if path is a file, then read file and return entry
+        fs.stat(path, (err, stat) => {
+          if (err) {
+            throw err;
+          }
+          else if (stat.isFile()) {
+            result = getFiles(path);
+            res.status(200).json(result);
+          } else if (stat.isDirectory()) {
+            getFolderTree(path, folderTree);
+            result = {
+              name: req.params[0],
+              parent:req.params.blob,
+              folderTree: folderTree
+            }
+            res.status(200).json(result);
+            return;
+          }
+        })
       } else {
-        res.status(400).json({ error: 'get storages files error' });
+        res.status(400).json({ error: 'no path' });
         return;
       }
     }
@@ -42,6 +56,41 @@ router.get('/storages/:storageId/*', function (req: any, res: any, next: any) {
     res.status(400).json({ error: 'get storages files error' });
     return;
   }
+});
+
+// match relative path
+// router.get('/storages/:storageId/*', function (req: any, res: any, next: any) {
+//   let storageId = req.params.storageId as string;
+//   let folderTree = {
+//     folders: [] as string[],
+//     files: [] as string[]
+//   };
+//   try {
+//     let storagesList = storage.getItem<Array<IStorageInterface>>('linkedStorages');
+
+//     if (storageId === 'default' && storagesList) {
+//       // return local folder tree, will do lazy load later
+//       let currentStorage = storagesList.find((item) => {
+//         return item.id === storageId;
+//       });
+//       if (currentStorage && currentStorage.path !== '') {
+//         getFolderTree(`${currentStorage.path}/${req.params[0]}`, folderTree);
+//         res.status(200).json(folderTree);
+//         return;
+//       } else {
+//         res.status(400).json({ error: 'get storages files error' });
+//         return;
+//       }
+//     }
+//   } catch (error) {
+//     res.status(400).json({ error: 'get storages files error' });
+//     return;
+//   }
+// });
+
+
+router.get("/projects/opened", function (req: any, res: any, next: any) {
+
 });
 
 router.get('/', function (req: any, res: any, next: any) {

@@ -1,15 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config';
+import { file } from '@babel/types';
 
 var botFilePath: string;
 var botFileDir: string;
 var botFileName: string;
-class FolderTree {
-  folders = [] as string[];
-  files = [] as string[]
+export interface FolderTree {
+  folders: Folder[],
+  files: File[]
 };
-
+interface File {
+  name: string,
+  lastModified: number,
+  size: number,
+  parent: string
+}
+interface Folder {
+  name: string,
+  parent: string,
+}
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
   botFileDir = path.dirname(botFilePath);
@@ -72,9 +82,16 @@ export function searchFilePath(folderPath: any, fileName: string): string {
   return path;
 }
 
-export function getFolderTree(folderPath: string, folderTree: FolderTree) {
-  if (fs.statSync(folderPath).isFile()) {
-    folderTree.files.push(folderPath);
+export const getFolderTree = (folderPath: string, folderTree: FolderTree) => {
+  let lastName = folderPath.substr(folderPath.lastIndexOf('/') + 1);
+  let fileStat = fs.statSync(folderPath);
+  if (fileStat.isFile()) {
+    folderTree.files.push({
+      name: lastName,
+      parent: path.dirname(folderPath),
+      size: fileStat.size,
+      lastModified: fileStat.mtimeMs
+    } as File);
     return folderTree;
   }
 
@@ -82,13 +99,69 @@ export function getFolderTree(folderPath: string, folderTree: FolderTree) {
 
   for (let item of items) {
     let itemPath = `${folderPath}/${item}`;
-    if (fs.statSync(itemPath).isDirectory()) {
-      folderTree.folders.push(itemPath);
+    let tempStat = fs.statSync(itemPath);
+
+    if (tempStat.isDirectory()) {
+      folderTree.folders.push({
+        name: item,
+        parent: lastName
+      } as Folder);
       getFolderTree(itemPath, folderTree);
-    } else if (fs.statSync(itemPath).isFile()) {
-      folderTree.files.push(itemPath);
+    } else if (tempStat.isFile()) {
+      folderTree.files.push({
+        name: item,
+        parent: lastName,
+        size: tempStat.size,
+        lastModified: tempStat.mtimeMs
+      } as File);
     }
   }
   return folderTree;
 }
+
+
+// export function getFolderTree(folderPath: string, folderTree: FolderTree) {
+//   let lastName = folderPath.substr(folderPath.lastIndexOf('/') + 1);
+//   fs.stat(folderPath, (err, stat) => {
+//     if (err) {
+//       throw err;
+//     }
+//     if (stat.isFile()) {
+//       folderTree.files.push({
+//         name: lastName,
+//         parent: path.dirname(folderPath),
+//         size: stat.size,
+//         lastModified: stat.mtimeMs
+//       } as File);
+//       return folderTree;
+//     } else {
+//       let items = fs.readdirSync(folderPath);
+
+//       for (let item of items) {
+//         let itemPath = `${folderPath}/${item}`;
+//         fs.stat(itemPath, (err, stat) => {
+//           if (err) {
+//             throw err;
+//           }
+//           if (stat.isDirectory()) {
+//             folderTree.folders.push({
+//               name: item,
+//               parent: lastName
+//             } as Folder);
+//             getFolderTree(itemPath, folderTree);
+//           } else if (stat.isFile()) {
+//             folderTree.files.push({
+//               name: item,
+//               parent: lastName,
+//               size: stat.size,
+//               lastModified: stat.mtimeMs
+//             } as File);
+//           }
+//           return folderTree;
+//         });
+//       }
+//     }
+
+//   });
+// }
 
