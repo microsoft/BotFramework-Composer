@@ -1,0 +1,28 @@
+.FormContainer {
+  flex: 1;
+
+  /**
+   * There is currently a bug in chrome where flex/grid display
+   * on fieldset does not work. :(
+  */
+  fieldset {
+    border: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+
+    & > p {
+      margin: 0;
+    }
+
+    & fieldset {
+      padding: 0;
+    }
+
+    // provide default span of 4 for all children
+    & > * {
+      grid-column: auto / span 4;
+    }
+  }
+}

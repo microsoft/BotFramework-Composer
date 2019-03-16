@@ -1,10 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config';
+import { file } from '@babel/types';
 
 var botFilePath: string;
 var botFileDir: string;
 var botFileName: string;
+export interface FolderTree {
+  folders: Folder[],
+  files: File[]
+};
+interface File {
+  name: string,
+  lastModified: number,
+  size: number,
+  parent: string
+}
+interface Folder {
+  name: string,
+  parent: string,
+}
 
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
@@ -67,3 +82,44 @@ export function searchFilePath(folderPath: any, fileName: string): string {
   console.log(path);
   return path;
 }
+
+export const getFolderTree = (folderPath: string, folderTree: FolderTree) => {
+  let lastName = folderPath.substr(folderPath.lastIndexOf('/') + 1);
+  let allPath = path.dirname(folderPath);
+
+  let fileStat = fs.statSync(folderPath);
+  if (fileStat.isFile()) {
+    folderTree.files.push({
+      name: lastName,
+      parent: allPath.substr(allPath.lastIndexOf('/') + 1),
+      size: fileStat.size,
+      lastModified: fileStat.mtimeMs
+    } as File);
+    return folderTree;
+  }
+
+  let items = fs.readdirSync(folderPath);
+
+  for (let item of items) {
+    let itemPath = `${folderPath}/${item}`;
+    let tempStat = fs.statSync(itemPath);
+
+    if (tempStat.isDirectory()) {
+      folderTree.folders.push({
+        name: item,
+        parent: lastName
+      } as Folder);
+      getFolderTree(itemPath, folderTree);
+    } else if (tempStat.isFile()) {
+      folderTree.files.push({
+        name: item,
+        parent: lastName,
+        size: tempStat.size,
+        lastModified: tempStat.mtimeMs
+      } as File);
+    }
+  }
+  return folderTree;
+}
+
+

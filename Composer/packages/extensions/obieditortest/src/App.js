@@ -1,70 +1,99 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import Form from './Form';
+import { masterSchema } from './appschema';
+
 import './App.css';
-import Form from 'react-jsonschema-form';
 
-import schema3 from './appschema.json';
+const hideMetaData = {
+  $ref: {
+    'ui:widget': 'hidden',
+  },
+  $id: {
+    'ui:widget': 'hidden',
+  },
+  $type: {
+    'ui:widget': 'hidden',
+  },
+};
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const uiSchema = {
+  'Microsoft.TextPrompt': {
+    ...hideMetaData,
+    property: {
+      'ui:options': {
+        span: 2,
+      },
+    },
+    pattern: {
+      'ui:options': {
+        span: 2,
+      },
+    },
+  },
+  'Microsoft.SendActivityTemplateStep': {
+    ...hideMetaData,
+  },
+  'Microsoft.IntegerPrompt': {
+    ...hideMetaData,
+    minValue: {
+      'ui:options': {
+        span: 2,
+      },
+    },
+    maxValue: {
+      'ui:options': {
+        span: 2,
+      },
+    },
+  },
+  'Microsoft.EndDialog': {
+    ...hideMetaData,
+  },
+};
+
+const getType = data => {
+  if (data.dialog) {
+    if (data.dialog.$type) {
+      return data.dialog.$type;
+    }
+  } else {
+    return data.$type;
   }
+};
 
-  onChange = newValue => {
-    this.props.onChange(newValue.formData);
+export const FormEditor = props => {
+  const type = getType(props.data);
+  const [dialogSchema, setDialogSchema] = useState({
+    definitions: { ...masterSchema.definitions },
+    ...masterSchema.definitions[type],
+  });
+  const [dialogUiSchema] = useState({ ...uiSchema[type] });
+
+  const onChange = newValue => {
+    props.onChange(newValue.formData);
   };
 
-  isRootId = id => {
-    return id.indexOf('root') !== -1;
-  };
+  useEffect(() => {
+    const type = getType(props.data);
+    setDialogSchema({
+      ...dialogSchema,
+      ...masterSchema.definitions[type],
+    });
+  }, [type]);
 
-  isUnecessaryLabel = label => {
-    return label.indexOf('Microsoft.') === -1 && label.indexOf('Dialog') === -1 && label.indexOf('sequence') === -1;
-  };
+  return (
+    <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
+      <Form
+        noValidate
+        className="schemaForm"
+        onChange={onChange}
+        formData={props.data.dialog}
+        schema={dialogSchema}
+        uiSchema={dialogUiSchema}
+      />
+    </div>
+  );
+};
 
-  fieldTemplate = props => {
-    const { id, classNames, label, required, children } = props;
-
-    return (
-      <React.Fragment>
-        {this.isRootId(id) && (
-          <div className={classNames}>
-            {children.map(c => {
-              if (c && c.props && (c.props.name === '$type' || c.props.name === '$ref' || c.props.name === '$id')) {
-                return null;
-              }
-              return c;
-            })}
-          </div>
-        )}
-        {!this.isRootId(id) && (
-          <div className={classNames}>
-            {this.isUnecessaryLabel(label) && (
-              <label htmlFor={id}>
-                {label}
-                {required ? '*' : null}
-              </label>
-            )}
-            {children}
-          </div>
-        )}
-      </React.Fragment>
-    );
-  };
-
-  render() {
-    return (
-      <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
-        <Form
-          FieldTemplate={this.fieldTemplate}
-          noValidate
-          className="schemaForm"
-          onChange={this.onChange}
-          formData={this.props.data} // the props.data passed in will be a file object: {name: , content}
-          schema={schema3}
-        />
-      </div>
-    );
-  }
-}
-
-export default App;
+export default FormEditor;

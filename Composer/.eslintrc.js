@@ -11,6 +11,7 @@ module.exports = {
     'no-dupe-class-members': 'off',
     'no-undef': 'off', // ts compiler catches this
     'prefer-const': 'error',
+    'no-console': 'warn',
 
     // plugin: import
     'import/first': 'error',
