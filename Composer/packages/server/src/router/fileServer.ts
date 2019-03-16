@@ -5,7 +5,7 @@ import storage from '../storage/StorageService';
 import { IStorageInterface } from '../storage/IStorageInterface';
 import fs, { stat } from "fs";
 const router: Router = express.Router({});
-
+let currentOpenBot:object|null = null; // for cache
 router.get('/storages', function (req: any, res: any, next: any) {
   try {
     let storagesList = storage.getItem<Array<object>>('linkedStorages');
@@ -18,7 +18,7 @@ router.get('/storages', function (req: any, res: any, next: any) {
 // match absolute path
 router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: any) {
   let storageId = req.params.storageId as string;
-  let path = req.params[0] ? `${req.params.blob}/${req.params[0]}` : req.params.blob;
+  let path: string = req.params[0] ? `${req.params.blob}/${req.params[0]}` : req.params.blob;
   let folderTree: FolderTree = {
     folders: [],
     files: []
@@ -36,11 +36,17 @@ router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: a
           else if (stat.isFile()) {
             result = getFiles(path);
             res.status(200).json(result);
+            // save to cache
+            currentOpenBot = {
+              storageId: storageId,
+              path: path
+            }
+            return;
           } else if (stat.isDirectory()) {
             getFolderTree(path, folderTree);
             result = {
-              name: req.params[0],
-              parent:req.params.blob,
+              name: path.substr(path.lastIndexOf('/')+1),
+              parent: path.substr(0, path.lastIndexOf('/')),
               folderTree: folderTree
             }
             res.status(200).json(result);
@@ -90,7 +96,11 @@ router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: a
 
 
 router.get("/projects/opened", function (req: any, res: any, next: any) {
-
+  if(currentOpenBot!==null){
+    res.status(200).json(currentOpenBot);
+  } else {
+    res.status(400).json({ error: 'no project open' });
+  }
 });
 
 router.get('/', function (req: any, res: any, next: any) {

@@ -20,6 +20,7 @@ interface Folder {
   name: string,
   parent: string,
 }
+
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
   botFileDir = path.dirname(botFilePath);
@@ -84,11 +85,13 @@ export function searchFilePath(folderPath: any, fileName: string): string {
 
 export const getFolderTree = (folderPath: string, folderTree: FolderTree) => {
   let lastName = folderPath.substr(folderPath.lastIndexOf('/') + 1);
+  let allPath = path.dirname(folderPath);
+
   let fileStat = fs.statSync(folderPath);
   if (fileStat.isFile()) {
     folderTree.files.push({
       name: lastName,
-      parent: path.dirname(folderPath),
+      parent: allPath.substr(allPath.lastIndexOf('/') + 1),
       size: fileStat.size,
       lastModified: fileStat.mtimeMs
     } as File);
@@ -119,49 +122,4 @@ export const getFolderTree = (folderPath: string, folderTree: FolderTree) => {
   return folderTree;
 }
 
-
-// export function getFolderTree(folderPath: string, folderTree: FolderTree) {
-//   let lastName = folderPath.substr(folderPath.lastIndexOf('/') + 1);
-//   fs.stat(folderPath, (err, stat) => {
-//     if (err) {
-//       throw err;
-//     }
-//     if (stat.isFile()) {
-//       folderTree.files.push({
-//         name: lastName,
-//         parent: path.dirname(folderPath),
-//         size: stat.size,
-//         lastModified: stat.mtimeMs
-//       } as File);
-//       return folderTree;
-//     } else {
-//       let items = fs.readdirSync(folderPath);
-
-//       for (let item of items) {
-//         let itemPath = `${folderPath}/${item}`;
-//         fs.stat(itemPath, (err, stat) => {
-//           if (err) {
-//             throw err;
-//           }
-//           if (stat.isDirectory()) {
-//             folderTree.folders.push({
-//               name: item,
-//               parent: lastName
-//             } as Folder);
-//             getFolderTree(itemPath, folderTree);
-//           } else if (stat.isFile()) {
-//             folderTree.files.push({
-//               name: item,
-//               parent: lastName,
-//               size: stat.size,
-//               lastModified: stat.mtimeMs
-//             } as File);
-//           }
-//           return folderTree;
-//         });
-//       }
-//     }
-
-//   });
-// }
 
