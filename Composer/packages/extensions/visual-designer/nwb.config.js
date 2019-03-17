@@ -4,4 +4,11 @@ module.exports = {
     esModules: true,
     umd: false,
   },
+  webpack: {
+    extra: {
+      module: {
+        rules: [{ test: /\.dialog/, loader: 'json-loader' }],
+      },
+    },
+  },
 };

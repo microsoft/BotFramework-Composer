@@ -1,6 +1,9 @@
 {
     "name": "composer-root",
     "private": true,
+    "resolutions": {
+        "@types/react": "^16.8.0"
+    },
     "workspaces": [
         "packages/client",
         "packages/server",
