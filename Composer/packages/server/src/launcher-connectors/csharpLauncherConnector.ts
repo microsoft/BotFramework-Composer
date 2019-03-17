@@ -2,11 +2,11 @@ import { ILauncherConnector } from './interface';
 import { LauncherStatus } from './launcherStatus';
 import process from 'child_process';
 import { config } from '../config';
+import * as request from 'request';
 
 export class CSharpLauncherConnector implements ILauncherConnector {
   private path: string;
   private command: string = 'dotnet run';
-  private child: any = null;
 
   constructor(pathConfig: any) {
     this.path = pathConfig.path;
@@ -20,13 +20,15 @@ export class CSharpLauncherConnector implements ILauncherConnector {
     }`;
     console.log('Starting launcher with command ' + cmd);
 
-    this.child = process.exec(cmd, (error: any, stdout: any, stderr: any) => {
+    process.exec(cmd, (error: any, stdout: any, stderr: any) => {
       if (error) {
         console.error(`error: ${error}`);
         return;
       }
       console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+      }
     });
 
     this.status = LauncherStatus.Running;
@@ -36,8 +38,11 @@ export class CSharpLauncherConnector implements ILauncherConnector {
   stop = () => {
     console.log(`Stopping launcher`);
 
-    // tODO: this not kill sub-process
-    this.child.kill();
+    let host: string = 'http://localhost:3979/';
+    let endpoint = host + 'api/command';
+
+    request.post(endpoint);
+
     this.status = LauncherStatus.Stopped;
     return true;
   };
