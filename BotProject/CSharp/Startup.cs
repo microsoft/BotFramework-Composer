@@ -86,6 +86,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                     options.Middleware.Add(new RegisterClassMiddleware<IMessageActivityGenerator>(new TextMessageActivityGenerator(lg)));
                     options.Middleware.Add(new AutoSaveStateMiddleware(conversationState));
                 });
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +102,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 .UseStaticFiles()
                 .UseBotFramework();
             app.UseExceptionHandler();
+
+            app.UseMvc();
         }
 
         private void RegisterTypes()
