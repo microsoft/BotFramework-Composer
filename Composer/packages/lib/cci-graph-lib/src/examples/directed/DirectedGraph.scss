@@ -1,0 +1,11 @@
+.graph-container {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    display: flex;
+  
+    .graph {
+      flex: 1;
+      display: flex;
+    }
+}

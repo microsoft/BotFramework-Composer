@@ -1,0 +1,12 @@
+{
+    "name": "composer-libs",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "build:cci-graph-lib": "cd cci-graph-lib && yarn build",
+      "build:all": "concurrently --kill-others-on-fail \"yarn build:cci-graph-lib\"" 
+    },
+    "author": "",
+    "license": "ISC"
+  }

@@ -1,4 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+
+import { ObiEditor } from './components/obi-editor/ObiEditor';
 
 export default class extends Component {
   constructor(props) {
@@ -34,26 +36,8 @@ export default class extends Component {
     const data = JSON.parse(this.props.data.content);
 
     return (
-      <div>
-        <div> Dialog Visual Designer </div>
-        <div> {data.$type} </div>
-
-        {data.$type === 'Microsoft.SequenceDialog' ? (
-          <Fragment>
-            {data.sequence.map((item, index) => {
-              return (
-                <div key={index} onClick={() => this.onClick(item, index)}>
-                  {' '}
-                  step {index} {item && this.getLabel(item)}
-                </div>
-              );
-            })}
-          </Fragment>
-        ) : (
-          <Fragment>
-            <div>click here</div>
-          </Fragment>
-        )}
+      <div className="visualdesinger-container">
+        <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
       </div>
     );
   }

@@ -11,7 +11,7 @@ Commands:
 ```
 $ cd Composer // switch to Composer folder
 $ yarn install // install dependencies
-$ yarn build:extensions // build extensions
+$ yarn build // build extensions and libs
 $ yarn start // start client and server at the same time
 ```
 then go to http://localhost:3000/, best experienced in Chrome
