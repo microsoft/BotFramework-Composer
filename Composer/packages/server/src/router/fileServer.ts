@@ -4,6 +4,7 @@ import setting from '../storage/SettingService';
 import storage from '../storage/StorageService';
 import { IStorageInterface } from '../storage/IStorageInterface';
 import fs, { stat } from "fs";
+
 const router: Router = express.Router({});
 let currentOpenBot:object|null = null; // for cache
 router.get('/storages', function (req: any, res: any, next: any) {
@@ -34,7 +35,8 @@ router.get('/storages/:storageId/:blob/*', function (req: any, res: any, next: a
             throw err;
           }
           else if (stat.isFile()) {
-            result = getFiles(path);
+            result = fs.readFileSync(path, 'utf-8');
+            result = JSON.parse(result);
             res.status(200).json(result);
             // save to cache
             currentOpenBot = {
@@ -71,6 +73,18 @@ router.get("/projects/opened", function (req: any, res: any, next: any) {
     res.status(400).json({ error: 'no project open' });
   }
 });
+
+router.post("/projects/opened", function (req: any, res: any, next: any){
+
+  if(req.body.path){
+    let result = getFiles(req.body.path);
+    console.log(req.body.path);
+    res.status(200).json(result);
+  }else {
+    res.status(400).json({ error: 'no path' });
+  }
+})
+
 
 router.get('/', function (req: any, res: any, next: any) {
   let fileList: any[] = [];
