@@ -94,6 +94,9 @@ check if there is a opened projects, return path and storage if any, sample resp
 
 `POST api/fileserver/projects/opened`
 open a bot project
+
+sample
+```
 request body:
 {
     path: "absolute path"
@@ -108,6 +111,8 @@ response:
     ……
   }
 ]
+```
+
 `GET api/fileserver/projects/opened/files`
 
 resolved all files inside this project`
