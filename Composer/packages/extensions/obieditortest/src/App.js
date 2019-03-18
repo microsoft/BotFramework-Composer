@@ -92,7 +92,9 @@ export const FormEditor = props => {
         formData={props.data.dialog || props.data}
         schema={dialogSchema}
         uiSchema={dialogUiSchema}
-      />
+      >
+        <button style={{ display: 'none' }} />
+      </Form>
     </div>
   );
 };
