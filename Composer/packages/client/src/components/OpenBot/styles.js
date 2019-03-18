@@ -1,45 +1,7 @@
 import { css } from '@emotion/core';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-
-export const classNames = mergeStyleSets({
-  fileIconHeaderIcon: {
-    padding: 0,
-    fontSize: '16px',
-  },
-  fileIconCell: {
-    textAlign: 'center',
-    selectors: {
-      '&:before': {
-        content: '.',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        height: '100%',
-        width: '0px',
-        visibility: 'hidden',
-      },
-    },
-  },
-  fileIconImg: {
-    verticalAlign: 'middle',
-    maxHeight: '16px',
-    maxWidth: '16px',
-  },
-  controlWrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  exampleToggle: {
-    display: 'inline-block',
-    marginBottom: '10px',
-    marginRight: '30px',
-  },
-  selectionDetails: {
-    marginBottom: '20px',
-  },
-});
 
 export const container = css`
-  width: 800px;
+  width: 1000px;
 `;
 
 export const body = css`
@@ -89,7 +51,8 @@ export const linkStyle = css`
 `;
 
 export const panelContent = css`
-  padding-left: 20px;
-  padding-top: 20px;
-  width: 400px;
+  padding-top: 50px;
+  width: 810px;
+  height: 100vh;
+  display: flex;
 `;

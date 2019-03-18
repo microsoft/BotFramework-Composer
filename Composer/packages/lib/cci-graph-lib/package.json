@@ -1,0 +1,52 @@
+{
+  "name": "cci-graph-lib",
+  "version": "0.1.0",
+  "private": true,
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "dependencies": {
+    "dagre": "^0.8.4",
+    "office-ui-fabric-react": "^6.152.0"
+  },
+  "devDependencies": {
+    "@types/dagre": "^0.7.41",
+    "@types/jest": "24.0.9",
+    "@types/node": "11.10.5",
+    "@types/react": "16.8.7",
+    "@types/react-dom": "16.8.2",
+    "@uifabric/fluent-theme": "^0.16.0",
+    "del": "^4.0.0",
+    "gulp": "^4.0.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-typescript": "^5.0.0",
+    "node-sass": "^4.11.0",
+    "nwb": "^0.23.0",
+    "nwb-sass": "^0.9.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "typescript": "3.3.3333"
+  },
+  "peerDependencies": {
+    "react": "16.x",
+    "react-dom": "16.x"
+  },
+  "scripts": {
+    "start": "gulp build:demo && nwb serve-react-demo",
+    "build": "gulp build:app",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "prepublishOnly": "npm run build",
+    "test": "nwb test-react",
+    "test:coverage": "nwb test-react --coverage",
+    "test:watch": "nwb test-react --server"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

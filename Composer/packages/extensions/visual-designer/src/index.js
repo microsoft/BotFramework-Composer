@@ -13,11 +13,21 @@ export default class extends Component {
     this.props.onChange(newData);
   };
 
-  onClick = (item, index) => {
+  onClick = item => {
     this.props.shellApi.openSubEditor('right', item, newData => {
       console.log('data get back from sub editor');
       console.log(newData);
     });
+  };
+
+  getLabel = item => {
+    if (item && item.dialog) {
+      if (item.dialog.$type) {
+        return item.dialog.$type;
+      }
+    } else {
+      return item.$type;
+    }
   };
 
   render() {
@@ -34,7 +44,7 @@ export default class extends Component {
               return (
                 <div key={index} onClick={() => this.onClick(item, index)}>
                   {' '}
-                  step {index}{' '}
+                  step {index} {item && this.getLabel(item)}
                 </div>
               );
             })}
