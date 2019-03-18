@@ -1,4 +1,6 @@
 import React, { useState, useEffect, Fragment, useRef, useLayoutEffect, useContext } from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -6,13 +8,14 @@ import httpClient from './../../utils/http';
 import { ProjectExplorer } from './../../components/ProjectExplorer';
 import ApiClient from './../../messenger/ApiClient';
 import { AppContext } from './../../App';
+import * as action from './../../redux/action/files';
 
 // avoid recreate multiple times
 const apiClient = new ApiClient();
 
 const client = new httpClient();
 
-function DesignPage() {
+function BasicView(props) {
   // central state for all editors\extensions
   // this would serve as the fundation of layout\data exchange\message routing
   const [editors, setEditors] = useState([
@@ -30,18 +33,14 @@ function DesignPage() {
     */
   ]);
 
-  const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
   const newOpenFiles = useContext(AppContext);
+  const { getFilesFromServer, files } = props;
 
   useEffect(() => {
-    client.getFiles(files => {
-      if (files.length > 0) {
-        setFiles(files);
-      }
-    });
+    getFilesFromServer();
   }, []);
 
   useEffect(() => {
@@ -197,5 +196,22 @@ function DesignPage() {
     </Fragment>
   );
 }
+
+BasicView.propTypes = {
+  getFilesFromServer: PropTypes.func,
+  files: PropTypes.array,
+};
+
+//connect component to redux store
+const DesignPage = connect(
+  state => {
+    const filesStorage = state['filesStorage'];
+    const files = filesStorage.get('files').toArray();
+    return {
+      files,
+    };
+  },
+  action
+)(BasicView);
 
 export default DesignPage;
