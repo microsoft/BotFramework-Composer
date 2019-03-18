@@ -16,9 +16,9 @@ router.get('/', function (req: any, res: any, next: any) {
 });
 
 // match absolute path
-router.get('/:storageId/blobs/*', function (req: any, res: any, next: any) {
+router.get('/:storageId/blobs/:blob(*)', function (req: any, res: any, next: any) {
     let storageId = req.params.storageId as string;
-    let path: string = req.params[0];
+    let path: string = req.params.blob;
     let result;
     try {
         if (storageId === 'default') {
