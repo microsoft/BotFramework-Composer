@@ -15,7 +15,9 @@
     "scripts": {
         "client": "cd packages/client && yarn start",
         "server": "cd packages/server && yarn start",
+        "build:lib": "cd packages/lib && yarn build:all",
         "build:extensions": "cd packages/extensions && yarn build:all",
+        "build": "yarn build:lib && yarn build:extensions",
         "start": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"" 
     },
     "husky": {
