@@ -11,17 +11,19 @@ FileSystem api allows you to management multiple storages and perform file-based
 
 `storage` is a top-level resource which follows the common pattern of a REST api. 
 
-`GET /storages` list storages
+`GET api/fileserver/storages` list storages
 
 by default return 
 ```
 {
     id: "default"
     name: "This pc",
+    type: "LocalDrive",
+    path: "storage path"
 }
 ```
 
-`POST /storages` create storage
+`POST api/fileserver/storages` create storage
 
 ```
 {
@@ -33,50 +35,54 @@ by default return
 }
 ```
 
-`DELETE /storages` delete storage
+`DELETE api/fileserver/storages` delete storage
 
 
 #### blob
 blobs is a sub-resouce of storage, but it's not refered by ID, it's refer by path, because we are building a unified file api interface, not targeting a specific clound storage (which always have id for any item).  
 
-`GET /storages/{storageId}/blobs/{path}` list dir or get file
+`GET api/fileserver/storages/{storageId}/blobs/{path}` list dir or get file
 
 this `path` is an absolute path for now
 
 Sample 
 ```
-GET /storage/default/c:/bots
+GET api/fileserver/storage/default/c:/bots
 
 {
-    name: "bots"
-    type: "dir",
+    name: "bots",
     parent: "c:/",
-    items: [
+    foolderTree: 
+    {
+        folders:[
         {
-            name: "config"
-            type: "dir",
-        }
-        {
+            name: "config",
+            parent: "bots",
+        }],
+        files:[{
             name: "a.png"
-            type: "file",
+            parent: "bots",
             lastModified: 201231290, // ms since epoch
             size: 20kb
-        }
-    ]
+        }]
+    }
 }
 
-GET /storage/default/c:/bots/a.bot 
+GET api/fileserver/storage/default/c:/bots/a.bot 
 
 {
-    entry: "main.dialog"
+   entry: "main.dialog"
+   ……
 }
+
+
 ```
 
 ### ProjectManagement API
 
 ProjectManagement api allows you to controlled current project status. open\close project, get project related resources etc. 
 
-`GET /projects/opened`
+`GET api/fileserver/projects/opened`
 
 check if there is a opened projects, return path and storage if any, sample response
 ``` 
@@ -86,10 +92,22 @@ check if there is a opened projects, return path and storage if any, sample resp
 }
 ```
 
-`PUT /projects/opened`
-
+`POST api/fileserver/projects/opened`
 open a bot project
+request body:
+{
+    path: "absolute path"
+}
 
-`GET /projects/opened/files`
+response:
+[{
+    name: "",
+    content:"",
+    path:""
+  },{
+    ……
+  }
+]
+`GET api/fileserver/projects/opened/files`
 
 resolved all files inside this project`
