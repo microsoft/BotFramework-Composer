@@ -20,7 +20,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 {
                     config.AddCommandLine(args);
                 })
-                .UseUrls("http://localhost:3979")
                 .UseStartup<Startup>()
                 .Build();
     }
