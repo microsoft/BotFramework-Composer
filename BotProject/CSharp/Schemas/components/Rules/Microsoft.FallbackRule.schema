@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$role": "unionType(Microsoft.IRule)",
+  "title": "Fallback Rule",
+  "description": "Fallback Rule will be triggered when no other rules being triggered",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "steps": {
+      "type": "array",
+      "description": "steps to execute",
+      "items": {
+        "$type": "Microsoft.IDialog"
+      }
+    }
+  },
+  "required": [
+    "steps"
+  ]
+}

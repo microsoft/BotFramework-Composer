@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$role": "unionType(Microsoft.IDialog)",
+    "title": "Goto Dialog",
+    "description": "Step which goes to another dialog.",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "dialogId": {
+            "$type":"Microsoft.IDialog",
+            "title": "Dialog",
+            "description": "This is the dialog to call."
+        },
+        "options": {
+            "type": "object",
+            "additionalProperties": true,
+            "title": "Options",
+            "description": "Options to pass to the dialog."
+        }
+    }
+}
