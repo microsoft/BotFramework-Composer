@@ -11,7 +11,7 @@ FileSystem api allows you to management multiple storages and perform file-based
 
 `storage` is a top-level resource which follows the common pattern of a REST api. 
 
-`GET api/fileserver/storages` list storages
+`GET api/storages` list storages
 
 by default return 
 ```
@@ -23,7 +23,7 @@ by default return
 }
 ```
 
-`POST api/fileserver/storages` create storage
+`POST api/storages` create storage
 
 ```
 {
@@ -35,19 +35,19 @@ by default return
 }
 ```
 
-`DELETE api/fileserver/storages` delete storage
+`DELETE api/storages` delete storage
 
 
 #### blob
 blobs is a sub-resouce of storage, but it's not refered by ID, it's refer by path, because we are building a unified file api interface, not targeting a specific clound storage (which always have id for any item).  
 
-`GET api/fileserver/storages/{storageId}/blobs/{path}` list dir or get file
+`GET api/storages/{storageId}/blobs/{path}` list dir or get file
 
 this `path` is an absolute path for now
 
 Sample 
 ```
-GET api/fileserver/storage/default/c:/bots
+GET api/storage/default/c:/bots
 
 {
     name: "bots",
@@ -68,7 +68,7 @@ GET api/fileserver/storage/default/c:/bots
     }
 }
 
-GET api/fileserver/storage/default/c:/bots/a.bot 
+GET api/storage/default/c:/bots/a.bot 
 
 {
    entry: "main.dialog"
@@ -82,7 +82,7 @@ GET api/fileserver/storage/default/c:/bots/a.bot
 
 ProjectManagement api allows you to controlled current project status. open\close project, get project related resources etc. 
 
-`GET api/fileserver/projects/opened`
+`GET api/projects/opened`
 
 check if there is a opened projects, return path and storage if any, sample response
 ``` 
@@ -92,7 +92,7 @@ check if there is a opened projects, return path and storage if any, sample resp
 }
 ```
 
-`POST api/fileserver/projects/opened`
+`POST api/projects/opened`
 open a bot project
 
 sample
@@ -113,6 +113,6 @@ response:
 ]
 ```
 
-`GET api/fileserver/projects/opened/files`
+`GET api/projects/opened/files`
 
 resolved all files inside this project`
