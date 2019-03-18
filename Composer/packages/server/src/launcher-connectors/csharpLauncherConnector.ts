@@ -1,13 +1,12 @@
 import { ILauncherConnector } from './interface';
 import { LauncherStatus } from './launcherStatus';
-import process from 'child_process';
+import childprocess from 'child_process';
 import { config } from '../config';
-import * as request from 'request';
 
 export class CSharpLauncherConnector implements ILauncherConnector {
   private path: string;
-  private command: string = 'dotnet run';
 
+  private child: childprocess.ChildProcess | undefined;
   constructor(pathConfig: any) {
     this.path = pathConfig.path;
   }
@@ -15,20 +14,34 @@ export class CSharpLauncherConnector implements ILauncherConnector {
   public status: LauncherStatus = LauncherStatus.Stopped;
 
   start = () => {
-    const cmd: string = `cd ${this.path} &&  ${this.command} --bot:provider=${config.bot.provider} --bot:path=${
-      config.bot.path
-    }`;
-    console.log('Starting launcher with command ' + cmd);
+    console.log('Starting launcher');
+    this.child = childprocess.spawn(
+      'dotnet',
+      [
+        `bin/Debug/netcoreapp2.0/BotProject.dll`,
+        `--bot:provider=${config.bot.provider}`,
+        `--bot:path=${config.bot.path}`,
+      ],
+      {
+        detached: true,
+        cwd: `${this.path}`,
+      }
+    );
 
-    process.exec(cmd, (error: any, stdout: any, stderr: any) => {
-      if (error) {
-        console.error(`error: ${error}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      if (stderr) {
-        console.log(`stderr: ${stderr}`);
-      }
+    if (this.child.stdout !== null) {
+      this.child.stdout.on('data', (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+    }
+
+    if (this.child.stderr !== null) {
+      this.child.stderr.on('data', (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+    }
+
+    this.child.on('error', (err: any) => {
+      console.log(`stderr: ${err}`);
     });
 
     this.status = LauncherStatus.Running;
@@ -37,12 +50,9 @@ export class CSharpLauncherConnector implements ILauncherConnector {
 
   stop = () => {
     console.log(`Stopping launcher`);
-
-    let host: string = 'http://localhost:3979/';
-    let endpoint = host + 'api/command';
-
-    request.post(endpoint);
-
+    if (this.child !== undefined) {
+      this.child.kill();
+    }
     this.status = LauncherStatus.Stopped;
     return true;
   };
