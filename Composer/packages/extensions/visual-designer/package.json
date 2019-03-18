@@ -11,7 +11,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
+    "build": "nwb build-react-component --copy-files",
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
@@ -19,11 +19,18 @@
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cci-graph-lib": "*",
+    "d3": "^5.9.1",
+    "dagre": "^0.8.4",
+    "dagre-d3": "^0.6.3",
+    "prop-types": "^15.7.2"
+  },
   "peerDependencies": {
     "react": "16.x"
   },
   "devDependencies": {
+    "json-loader": "^0.5.7",
     "nwb": "0.23.x",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"

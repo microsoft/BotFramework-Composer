@@ -1,22 +1,11 @@
 {
     "recentAccessedBots": [
-        {
-            "storageId": "default",
-            "path": "/SampleBot4/bot4.bot"
-        }
     ],
     "linkedStorages": [
         {
             "id": "default",
             "name": "This PC",
-            "type": "LocalDrive",
-            "path": "../../../SampleBots"
-        },
-        {
-            "id": "02",
-            "name": "One Drive",
-            "type": "OneDrive",
-            "path": "D:/Note/OneDrive - Microsoft"
+            "type": "LocalDrive"
         }
     ],
     "lastActiveBot": "../../../SampleBots/SampleBot4/bot4.bot",
