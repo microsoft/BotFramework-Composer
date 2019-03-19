@@ -3,10 +3,10 @@ import { jsx } from '@emotion/core';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 
-import { header, aside, bot, botButton, botMessage, actionButton, fileInput } from './styles';
+import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
 
 export const Header = props => {
-  const { botStatus, onFileOpen, setBotStatus } = props;
+  const { botStatus, setBotStatus } = props;
   return (
     <header css={header}>
       <div css={aside}>Composer</div>
@@ -14,8 +14,13 @@ export const Header = props => {
         <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}>
           New
         </ActionButton>
-        <ActionButton css={actionButton} iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}>
-          <input css={fileInput} type="file" accept=".bot, .botproj" onChange={e => onFileOpen(e.target.files)} />
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
+          onClick={() => {
+            props.setPanelStatus(true);
+          }}
+        >
           Open
         </ActionButton>
       </div>
@@ -33,6 +38,6 @@ export const Header = props => {
 
 Header.propTypes = {
   botStatus: PropTypes.string,
-  onFileOpen: PropTypes.func,
   setBotStatus: PropTypes.func,
+  setPanelStatus: PropTypes.func,
 };
