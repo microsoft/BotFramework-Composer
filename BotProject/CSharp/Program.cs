@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -16,20 +17,25 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         public static IWebHost BuildWebHost(string[] args)
         {
-            var configFromCli = new ConfigurationBuilder()
-                            .AddCommandLine(args)
-                            .Build();
+            var commandLineConfig = new ConfigurationBuilder()
+                        .AddCommandLine(args)
+                        .Build();
 
-            return
-                WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddCommandLine(args);
-                })
-                .UseConfiguration(configFromCli)
-                .UseStartup<Startup>()
-                .Build();
+            return WebHost.CreateDefaultBuilder(args)
+                    .ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        var env = hostingContext.HostingEnvironment;
+
+                        config.SetBasePath(Directory.GetCurrentDirectory());
+                        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                        config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                        config.AddEnvironmentVariables();
+                        config.AddCommandLine(args);
+                    })
+                    .UseConfiguration(commandLineConfig)
+                    .UseStartup<Startup>()
+                    .Build();
         }
-        
+
     }
 }
