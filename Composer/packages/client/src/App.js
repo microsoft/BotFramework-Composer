@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useState, useLayoutEffect, useRef } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
@@ -170,10 +170,14 @@ export function App() {
     'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
   ).split(' ');
   let loremIndex = 0;
-  const allData = _generateDocuments();
+  const allData = _getFileInfoList();
 
-  const [leftSelectedIndex, setSourceIndex] = useState(0);
-  const [rightItem, setRightItem] = useState(allData[leftSelectedIndex].value);
+  const [fileItems, setFileItems] = useState(allData[0].value);
+  const fileItemsRef = useRef();
+
+  useLayoutEffect(() => {
+    fileItemsRef.current = fileItems;
+  }, [fileItems]);
 
   function _lorem(wordCount) {
     const startIndex = loremIndex + wordCount > LOREM_IPSUM.length ? 0 : loremIndex;
@@ -181,13 +185,13 @@ export function App() {
     return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
   }
 
-  function _generateDocuments() {
+  function _getFileInfoList() {
     const items1 = [];
     const items2 = [];
     for (let i = 0; i < 10; i++) {
       const randomDate = _randomDate(new Date(2012, 0, 1), new Date());
-      const randomFileSize = _randomFileSize();
-      const randomFileType = _randomFileIcon();
+      const randomFileSize = _getFileSize();
+      const randomFileType = _getFileIcon();
       let fileName = _lorem(2);
       fileName = fileName.charAt(0).toUpperCase() + fileName.slice(1).concat(`.${randomFileType.docType}`);
       let userName = _lorem(2);
@@ -208,8 +212,8 @@ export function App() {
       });
       for (let i = 11; i < 100; i++) {
         const randomDate = _randomDate(new Date(2012, 0, 1), new Date());
-        const randomFileSize = _randomFileSize();
-        const randomFileType = _randomFileIcon();
+        const randomFileSize = _getFileSize();
+        const randomFileType = _getFileIcon();
         let fileName = _lorem(2);
         fileName = `${fileName}.${randomFileType.docType}`;
         let userName = _lorem(2);
@@ -242,7 +246,7 @@ export function App() {
     };
   }
 
-  function _randomFileIcon() {
+  function _getFileIcon() {
     const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
     return {
       docType,
@@ -250,7 +254,7 @@ export function App() {
     };
   }
 
-  function _randomFileSize() {
+  function _getFileSize() {
     const fileSize = Math.floor(Math.random() * 100) + 30;
     return {
       value: `${fileSize} KB`,
@@ -258,9 +262,8 @@ export function App() {
     };
   }
 
-  // todo: implement sort column here.
   function _onColumnClick(ev, column) {
-    const items = rightItem;
+    const items = fileItemsRef.current;
     const newColumns = columns.slice();
     const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
     newColumns.forEach(newCol => {
@@ -274,7 +277,7 @@ export function App() {
     });
     const newItems = _copyAndSort(items, currColumn.fieldName, currColumn.isSortedDescending);
     setColumns(newColumns);
-    setRightItem(newItems);
+    setFileItems(newItems);
   }
 
   function _copyAndSort(items, columnKey, isSortedDescending) {
@@ -294,11 +297,10 @@ export function App() {
       <OpenBot
         panelStatus={panelStatus}
         setPanelStatus={setPanelStatus}
-        items={rightItem}
+        items={fileItems}
         columns={columns}
         setSourceIndex={key => {
-          setSourceIndex(key);
-          setRightItem(allData[key].value);
+          setFileItems(allData[key].value);
         }}
       />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>

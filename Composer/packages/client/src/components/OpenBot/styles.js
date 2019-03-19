@@ -73,7 +73,6 @@ export const title = css`
 
 export const navLinks = mergeStyleSets({
   actionNavLink: {
-    displayName: 'testStyle',
     backgroundColor: '#2b579a',
     color: 'white',
     fontSize: '16px',
@@ -97,7 +96,7 @@ export const navLinks = mergeStyleSets({
     width: '200px',
     selectors: {
       '&:after': {
-        border: '0px  !important',
+        border: '0px !important',
       },
     },
   },

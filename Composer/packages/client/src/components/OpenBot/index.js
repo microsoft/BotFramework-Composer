@@ -39,9 +39,7 @@ function getPathItems() {
     { text: 'Files', key: 'Files', onClick: onItemClicked },
     { text: 'This is folder 1', key: 'f1', onClick: onItemClicked },
     { text: 'This is folder 2', key: 'f2', onClick: onItemClicked },
-    { text: 'This is folder 3', key: 'f3', onClick: onItemClicked },
-    { text: 'This is folder 4', key: 'f4', onClick: onItemClicked },
-    { text: 'This is folder 5', key: 'f5', onClick: onItemClicked, isCurrentItem: true },
+    { text: 'This is folder 3', key: 'f3', onClick: onItemClicked, isCurrentItem: true },
   ];
 }
 
@@ -58,10 +56,6 @@ function getSourceGroup(props) {
       ],
     },
   ];
-}
-
-function getCustomDivider() {
-  return <span style={{ cursor: 'pointer' }}>/</span>;
 }
 
 // this empty div tag used to replace the default panel header.
@@ -121,7 +115,7 @@ export const OpenBot = props => (
               />
             </div>
             <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '1px' }}>
-              <Breadcrumb items={getPathItems()} dividerAs={getCustomDivider} ariaLabel={'File path'} />
+              <Breadcrumb items={getPathItems()} ariaLabel={'File path'} maxDisplayedItems={'1'} />
               <div css={detailListContainer}>
                 <DetailList items={props.items} columns={props.columns} />
               </div>
