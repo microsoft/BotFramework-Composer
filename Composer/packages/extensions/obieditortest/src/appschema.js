@@ -658,11 +658,11 @@ export const masterSchema = {
         'Definition of Microsoft.IDialog which will include types with a $role:unionType(Microsoft.IDialog).',
       $role: 'unionType',
       oneOf: [
-        {
-          title: 'Microsoft.CallDialog',
-          description: 'Step which calls another dialog.',
-          $ref: '#/definitions/Microsoft.CallDialog',
-        },
+        // {
+        //   title: 'Microsoft.CallDialog',
+        //   description: 'Step which calls another dialog.',
+        //   $ref: '#/definitions/Microsoft.CallDialog',
+        // },
         {
           title: 'Microsoft.CancelDialog',
           description: 'This is a step which cancels the current dialog, returning no result',
