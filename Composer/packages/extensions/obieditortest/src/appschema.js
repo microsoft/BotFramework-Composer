@@ -657,6 +657,7 @@ export const masterSchema = {
       description:
         'Definition of Microsoft.IDialog which will include types with a $role:unionType(Microsoft.IDialog).',
       $role: 'unionType',
+      type: 'object',
       oneOf: [
         // {
         //   title: 'Microsoft.CallDialog',
