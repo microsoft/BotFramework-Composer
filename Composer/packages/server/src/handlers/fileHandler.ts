@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { config } from '../config';
 
 var botFilePath: string;
 var botFileDir: string;
@@ -11,8 +10,6 @@ function getAllConfig(botProjFilePath: string): void {
   botFileDir = path.dirname(botFilePath);
   botFileName = botFilePath.substr(botFilePath.lastIndexOf('/') + 1);
 }
-
-getAllConfig(config.bot.path);
 
 export function getFiles(botProjFilePath: string = ''): any[] {
   if (botProjFilePath) {
