@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config';
-import { file } from '@babel/types';
 
 var botFilePath: string;
 var botFileDir: string;
@@ -68,6 +67,3 @@ export function searchFilePath(folderPath: any, fileName: string): string {
   console.log(path);
   return path;
 }
-
-
-
