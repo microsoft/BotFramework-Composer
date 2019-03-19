@@ -64,6 +64,7 @@ const getType = data => {
 
 export const FormEditor = props => {
   const type = getType(props.data);
+
   const [dialogSchema, setDialogSchema] = useState({
     definitions: { ...masterSchema.definitions },
     ...masterSchema.definitions[type],
@@ -88,10 +89,12 @@ export const FormEditor = props => {
         noValidate
         className="schemaForm"
         onChange={onChange}
-        formData={props.data.dialog}
+        formData={props.data.dialog || props.data}
         schema={dialogSchema}
         uiSchema={dialogUiSchema}
-      />
+      >
+        <button style={{ display: 'none' }} />
+      </Form>
     </div>
   );
 };
