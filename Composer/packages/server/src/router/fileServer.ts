@@ -3,10 +3,9 @@ import { getFiles, updateFile, searchFilePath } from '../handlers/fileHandler';
 import setting from '../storage/SettingService';
 import storage from '../storage/StorageService';
 
-
 const router: Router = express.Router({});
 
-router.get('/', function (req: any, res: any, next: any) {
+router.get('/', function(req: any, res: any, next: any) {
   let fileList: any[] = [];
   const openLastActiveBot = setting.getItem<string>('openLastActiveBot');
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
@@ -21,7 +20,7 @@ router.get('/', function (req: any, res: any, next: any) {
   }
 });
 
-router.put('/', function (req: any, res: any, next: any) {
+router.put('/', function(req: any, res: any, next: any) {
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
@@ -31,7 +30,7 @@ router.put('/', function (req: any, res: any, next: any) {
   }
 });
 
-router.get('/openbotFile', function (req: any, res: any, next: any) {
+router.get('/openbotFile', function(req: any, res: any, next: any) {
   let fileList: any[] = [];
   if (!req.query.path) {
     res.status(400).json({ error: 'no path' });
