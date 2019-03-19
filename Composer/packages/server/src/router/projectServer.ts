@@ -3,34 +3,42 @@ import { getFiles } from "../handlers/fileHandler";
 import storage from "../storage/StorageService";
 
 const router: Router = express.Router({});
+let openBot: any | undefined;
 
 // read from memory
 router.get("/opened", function (req: any, res: any, next: any) {
-    let openBot = storage.getItem<object>("openBot");
     if (openBot) {
         res.status(200).json(openBot);
     } else {
-        res.status(400).json({ error: 'no project open' });
+        res.status(404).json({ error: 'no project open' });
     }
 });
 
-router.post("/opened", function (req: any, res: any, next: any) {
-    if (req.body.path && req.body.storageId === "default") {
-        // load local project
-        let result = getFiles(req.body.path);
-        res.status(200).json(result);
-        // update recent open bot
-        let recentOpenBots: any = storage.getItem<string>('recentAccessedBots');
-        recentOpenBots = recentOpenBots ? JSON.parse(recentOpenBots) : [] as object[];
-        let openBot = {
-            storageId: req.body.storageId,
-            path: req.body.path
-        };
+// update memory
+router.put("/opened", function (req: any, res: any, next: any) {
+    // check whether the data is completed
+    if (req.body.path && req.body.storageId) {
+        openBot = req.body;
+
+        // update recent open bot list
+        let recentOpenBots = storage.getItem<string>('recentAccessedBots',"[]");
+        recentOpenBots = JSON.parse(recentOpenBots);
         recentOpenBots.push(openBot);
-        storage.setItem("openBot", openBot);
         storage.setItem('recentAccessedBots', JSON.stringify(recentOpenBots));
+
+        res.status(200).json({result:"update opened project successfully"});
     } else {
-        res.status(400).json({ error: 'no path' });
+        res.status(400).json({ error: 'please give the project path and storageId' });
+    }
+});
+
+router.get("/opened/files", function (req: any, res: any, next: any) {
+    if (openBot) {
+        // load local project
+        let result = getFiles(openBot.path);
+        res.status(200).json(result);
+    } else {
+        res.status(400).json({ error: "haven't open a project" });
     }
 });
 

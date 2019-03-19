@@ -1,14 +1,14 @@
 import express, { Router } from 'express';
 import storage from "../storage/StorageService";
 import { IStorageInterface } from "../modal/IStorageInterface";
-import fs, { stat } from "fs";
+import fs from "fs";
 
 const router: Router = express.Router({});
 
 router.get('/', function (req: any, res: any, next: any) {
     try {
-        let storagesList = storage.getItem<string>('linkedStorages');
-        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        let storagesList = storage.getItem<string>('linkedStorages', "[]");
+        storagesList = JSON.parse(storagesList);
         res.status(200).json(storagesList);
     } catch (error) {
         res.status(400).json({ error: 'get storages list error' });
@@ -17,10 +17,11 @@ router.get('/', function (req: any, res: any, next: any) {
 
 router.post('/', function (req: any, res: any, next: any) {
     try {
-        let storagesList: any = storage.getItem<string>('linkedStorages');
-        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        let storagesList = storage.getItem<string>('linkedStorages', "[]");
+        storagesList = JSON.parse(storagesList);
         let temp = req.body;
-        temp.id = `randomGenerated ${storagesList.length}`;
+        // generated random string as id
+        temp.id = Math.random().toString(36);
         storagesList.push(temp);
         storage.setItem('linkedStorages', JSON.stringify(storagesList));
         res.status(200).json({ result: "create storage done" });
@@ -31,8 +32,8 @@ router.post('/', function (req: any, res: any, next: any) {
 
 router.delete('/', function (req: any, res: any, next: any) {
     try {
-        let storagesList: any = storage.getItem<string>('linkedStorages');
-        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        let storagesList: any = storage.getItem<string>('linkedStorages', "[]");
+        storagesList = JSON.parse(storagesList);
         if (storagesList && req.body.storageId) {
             let index = storagesList.findIndex((storage: IStorageInterface) => storage.id === req.body.storageId);
             if (index >= 0) {
@@ -50,40 +51,30 @@ router.delete('/', function (req: any, res: any, next: any) {
 router.get('/:storageId/blobs/:path(*)', function (req: any, res: any, next: any) {
     let storageId: string = req.params.storageId;
     let path: string = req.params.path;
-    let result: object;
     if (!path) {
         res.status(400).json({ error: 'no path' });
         return;
     }
-    try {
-        fs.stat(path, (err, stat) => {
-            if (err) {
-                throw err;
-            }
-            if (stat.isFile()) {
-                result = JSON.parse(fs.readFileSync(path, 'utf-8'));
-                // save to cache
-                storage.setItem("openBot", {
-                    storageId: storageId,
-                    path: path
-                });
+    let result: any;
+    fs.stat(path, (err, stat) => {
+        if (err) {
+            res.status(404).json(err);
+            return;
+        }
 
-            } else if (stat.isDirectory()) {
-                let folderTree = getFolderTree(path);
-                result = {
-                    name: path.substr(path.lastIndexOf('/') + 1),
-                    path: path,
-                    children: folderTree
-                }
-
+        if (stat.isFile()) {
+            result = fs.readFileSync(path, 'utf-8');
+            result = JSON.parse(result);
+        } else if (stat.isDirectory()) {
+            let folderTree = getFolderTree(path);
+            result = {
+                name: path.substr(path.lastIndexOf('/') + 1),
+                path: path,
+                children: folderTree
             }
-            res.status(200).json(result);
-        });
-    }
-    catch (error) {
-        res.status(400).json({ error: 'get storages files error' });
-        return;
-    }
+        }
+        res.status(200).json(result);
+    });
 });
 
 // get current layer files list
