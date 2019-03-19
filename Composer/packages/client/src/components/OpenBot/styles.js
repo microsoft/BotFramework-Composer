@@ -60,6 +60,8 @@ export const panelContent = css`
 
 export const detailListContainer = css`
   padding-top: 20px;
+  height: calc(100vh - 155px);
+  overflow-x: hidden;
 `;
 
 export const title = css`
