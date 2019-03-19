@@ -1,7 +1,7 @@
 {
   "$schema": "../../Schemas/app.schema",
   "$type": "Microsoft.RuleDialog",
-  "$id":  "root",
+  "$id":  "AddToDoDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
@@ -10,22 +10,33 @@
       "$type": "Microsoft.FallbackRule",
       "steps": [
         {
+          "$type": "Microsoft.SaveEntity",
+          "entityName": "title",
+          "property": "user.todo"
+        },
+        {
           "$type": "Microsoft.IfProperty",
-          "expression": "user.name == null",
+          "expression": "user.todo == null",
           "ifTrue": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "Hello, I'm Zoidberg. What is your name?"
+              "activity": "OK, please enter the title of your todo."
             },
             {
               "$type": "Microsoft.WaitForInput",
-              "property": "user.name"
+              "property": "user.todo"
             }
           ]
         },
         {
+          "$type": "Microsoft.ChangeList",
+          "changeType": "0",
+          "listProperty": "user.todos",
+          "itemProperty": "user.todo"
+        },
+        {
           "$type": "Microsoft.SendActivity",
-          "activity": "Hello {user.name}, nice to talk to you!"
+          "activity": "Successfully added a todo named \"{user.todo}\""
         }
       ]
     }

@@ -1,7 +1,7 @@
 {
   "$schema": "../../Schemas/app.schema",
   "$type": "Microsoft.RuleDialog",
-  "$id":  "root",
+  "$id":  "ShowToDoDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
@@ -11,22 +11,22 @@
       "steps": [
         {
           "$type": "Microsoft.IfProperty",
-          "expression": "user.name == null",
+          "expression": "user.todos == null",
           "ifTrue": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "Hello, I'm Zoidberg. What is your name?"
-            },
+              "activity": "You have no todos."
+            }
+          ],
+          "ifFalse": [
             {
-              "$type": "Microsoft.WaitForInput",
-              "property": "user.name"
+              "$type": "Microsoft.SendList",
+              "listProperty": "user.todos",
+              "messageTemplate": "Here are your todos: "
             }
           ]
-        },
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "Hello {user.name}, nice to talk to you!"
         }
+       
       ]
     }
   ]   

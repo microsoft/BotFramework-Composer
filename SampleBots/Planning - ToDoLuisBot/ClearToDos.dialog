@@ -1,7 +1,7 @@
 {
   "$schema": "../../Schemas/app.schema",
   "$type": "Microsoft.RuleDialog",
-  "$id":  "root",
+  "$id":  "ClearToDoDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
@@ -10,8 +10,13 @@
       "$type": "Microsoft.FallbackRule",
       "steps": [
         {
+          "$type": "Microsoft.ChangeList",
+          "changeType": "4",
+          "listProperty": "user.todos"
+        },
+        {
           "$type": "Microsoft.SendActivity",
-          "activity": "Hello planning!"
+          "activity": "Successfully clear the todo list."
         }
       ]
     }
