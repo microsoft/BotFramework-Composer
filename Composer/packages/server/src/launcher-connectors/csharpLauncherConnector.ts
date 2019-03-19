@@ -15,14 +15,20 @@ export class CSharpLauncherConnector implements ILauncherConnector {
 
   start = () => {
     console.log('Starting launcher');
+
     console.log(
-      'with command ' +
+      'command: ' +
         `$dotnet bin/Debug/netcoreapp2.0/BotProject.dll` +
         `--bot:path="${storage.getItem<string>('lastActiveBot')}"`
     );
     this.child = childprocess.spawn(
       'dotnet',
-      [`bin/Debug/netcoreapp2.0/BotProject.dll`, `--bot:path="${storage.getItem<string>('lastActiveBot')}"`],
+      [
+        `bin/Debug/netcoreapp2.0/BotProject.dll`,
+        `--bot:path="${storage.getItem<string>('lastActiveBot')}"`,
+        '--urls',
+        `http://localhost:3979`,
+      ],
       {
         detached: true,
         cwd: `${this.path}`,

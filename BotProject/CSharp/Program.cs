@@ -14,13 +14,22 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var configFromCli = new ConfigurationBuilder()
+                            .AddCommandLine(args)
+                            .Build();
+
+            return
+                WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddCommandLine(args);
                 })
+                .UseConfiguration(configFromCli)
                 .UseStartup<Startup>()
                 .Build();
+        }
+        
     }
 }
