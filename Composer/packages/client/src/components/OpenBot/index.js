@@ -10,7 +10,19 @@ import { PropTypes } from 'prop-types';
 
 import DetailList from '../DetailList';
 
-import { container, body, navHeader, navBody, panelNav, panelContent, iconContainer, icon, navLinks } from './styles';
+import {
+  container,
+  body,
+  navHeader,
+  navBody,
+  panelNav,
+  panelContent,
+  iconContainer,
+  icon,
+  navLinks,
+  detailListContainer,
+  title,
+} from './styles';
 
 function togglePanel(props) {
   props.setPanelStatus(!props.panelStatus);
@@ -96,19 +108,24 @@ export const OpenBot = props => (
           </div>
         </div>
         <div css={panelContent}>
-          <div style={{ paddingTop: '10px' }}>
-            <Nav
-              groups={getSourceGroup(props)}
-              initialSelectedKey={'0'}
-              css={navBody}
-              styles={{
-                link: navLinks.sourceNavLink,
-              }}
-            />
-          </div>
-          <div style={{ width: '100%' }}>
-            <Breadcrumb items={getPathItems()} dividerAs={getCustomDivider} ariaLabel={'File path'} />
-            <DetailList items={props.items} columns={props.columns} />
+          <div css={title}>Open</div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ paddingTop: '10px' }}>
+              <Nav
+                groups={getSourceGroup(props)}
+                initialSelectedKey={'0'}
+                css={navBody}
+                styles={{
+                  link: navLinks.sourceNavLink,
+                }}
+              />
+            </div>
+            <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '1px' }}>
+              <Breadcrumb items={getPathItems()} dividerAs={getCustomDivider} ariaLabel={'File path'} />
+              <div css={detailListContainer}>
+                <DetailList items={props.items} columns={props.columns} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

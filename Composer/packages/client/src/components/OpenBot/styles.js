@@ -52,10 +52,21 @@ export const linkStyle = css`
 `;
 
 export const panelContent = css`
-  padding-top: 50px;
   width: 810px;
   height: 100vh;
   display: flex;
+  flex-direction: column;
+`;
+
+export const detailListContainer = css`
+  padding-top: 20px;
+`;
+
+export const title = css`
+  padding: 37px 30px 2px 30px;
+  font-size: 34px;
+  color: #2b579a !important;
+  font-weight: lighter;
 `;
 
 export const navLinks = mergeStyleSets({
@@ -73,7 +84,7 @@ export const navLinks = mergeStyleSets({
       },
       '&:after': {
         border: '0px !important',
-        backgroundColor: '#366ec2 !important',
+        backgroundColor: '#1e3c6b !important',
         z: '-1',
       },
     },
