@@ -1,14 +1,45 @@
 import express, { Router } from 'express';
-import { globalCache } from "../modal/Cache";
-import  storage from "../storage/StorageService";
-
+import storage from "../storage/StorageService";
+import { IStorageInterface } from "../modal/IStorageInterface";
 import fs, { stat } from "fs";
 
 const router: Router = express.Router({});
 
 router.get('/', function (req: any, res: any, next: any) {
     try {
-        let storagesList = storage.getItem<Array<object>>('linkedStorages');
+        let storagesList = storage.getItem<string>('linkedStorages');
+        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        res.status(200).json(storagesList);
+    } catch (error) {
+        res.status(400).json({ error: 'get storages list error' });
+    }
+});
+
+router.post('/', function (req: any, res: any, next: any) {
+    try {
+        let storagesList: any = storage.getItem<string>('linkedStorages');
+        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        let temp = req.body;
+        temp.id = `randomGenerated ${storagesList.length}`;
+        storagesList.push(temp);
+        storage.setItem('linkedStorages', JSON.stringify(storagesList));
+        res.status(200).json({ result: "create storage done" });
+    } catch (err) {
+        res.status(400).json({ error: 'create storage error' });
+    }
+});
+
+router.delete('/', function (req: any, res: any, next: any) {
+    try {
+        let storagesList: any = storage.getItem<string>('linkedStorages');
+        storagesList = storagesList ? JSON.parse(storagesList) : ([] as object[]);
+        if (storagesList && req.body.storageId) {
+            let index = storagesList.findIndex((storage: IStorageInterface) => storage.id === req.body.storageId);
+            if (index >= 0) {
+                storagesList.splice(index, 1);
+                storage.setItem('linkedStorages', JSON.stringify(storagesList));
+            }
+        }
         res.status(200).json(storagesList);
     } catch (error) {
         res.status(400).json({ error: 'get storages list error' });
@@ -16,46 +47,40 @@ router.get('/', function (req: any, res: any, next: any) {
 });
 
 // match absolute path
-router.get('/:storageId/blobs/:blob(*)', function (req: any, res: any, next: any) {
-    let storageId = req.params.storageId as string;
-    let path: string = req.params.blob;
-    let result;
+router.get('/:storageId/blobs/:path(*)', function (req: any, res: any, next: any) {
+    let storageId: string = req.params.storageId;
+    let path: string = req.params.path;
+    let result: object;
+    if (!path) {
+        res.status(400).json({ error: 'no path' });
+        return;
+    }
     try {
-        if (storageId === 'default') {
-            // return local folder tree, will do lazy load later
-            if (path) {
-                // if path is a file, then read file and return entry
-                fs.stat(path, (err, stat) => {
-                    if (err) {
-                        throw err;
-                    }
-                    else if (stat.isFile()) {
-                        result = fs.readFileSync(path, 'utf-8');
-                        result = JSON.parse(result);
-                        res.status(200).json(result);
-                        // save to cache
-                        globalCache.openBot = {
-                            storageId: storageId,
-                            path: path
-                        }
-                        return;
-                    } else if (stat.isDirectory()) {
-                        let folderTree = getFolderTree(path);
-                        result = {
-                            name: path.substr(path.lastIndexOf('/') + 1),
-                            path: path,
-                            children: folderTree
-                        }
-                        res.status(200).json(result);
-                        return;
-                    }
-                })
-            } else {
-                res.status(400).json({ error: 'no path' });
-                return;
+        fs.stat(path, (err, stat) => {
+            if (err) {
+                throw err;
             }
-        }
-    } catch (error) {
+            if (stat.isFile()) {
+                result = JSON.parse(fs.readFileSync(path, 'utf-8'));
+                // save to cache
+                storage.setItem("openBot", {
+                    storageId: storageId,
+                    path: path
+                });
+
+            } else if (stat.isDirectory()) {
+                let folderTree = getFolderTree(path);
+                result = {
+                    name: path.substr(path.lastIndexOf('/') + 1),
+                    path: path,
+                    children: folderTree
+                }
+
+            }
+            res.status(200).json(result);
+        });
+    }
+    catch (error) {
         res.status(400).json({ error: 'get storages files error' });
         return;
     }

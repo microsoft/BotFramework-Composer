@@ -1,13 +1,6 @@
 {
-    "recentAccessedBots": [
-    ],
-    "linkedStorages": [
-        {
-            "id": "default",
-            "name": "This PC",
-            "type": "LocalDrive"
-        }
-    ],
+    "recentAccessedBots": "[]",
+    "linkedStorages": "[{\"name\":\"This PC\",\"type\":\"LocalDrive\",\"id\":\"default\"}]",
     "lastActiveBot": "../../../SampleBots/SampleBot4/bot4.bot",
     "pickerWorkingDir": "../../../SampleBots"
 }
