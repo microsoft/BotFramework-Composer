@@ -6,6 +6,8 @@ import httpClient from './../../utils/http';
 import { ProjectExplorer } from './../../components/ProjectExplorer';
 import ApiClient from './../../messenger/ApiClient';
 import { AppContext } from './../../App';
+import { Store } from './../../store/index';
+import { fetchFiles, updateFiles } from './../../store/action';
 
 // avoid recreate multiple times
 const apiClient = new ApiClient();
@@ -30,23 +32,21 @@ function DesignPage() {
     */
   ]);
 
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [openFileIndex, setOpenFileIndex] = useState(-1);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
   const newOpenFiles = useContext(AppContext);
+  const { state, dispatch } = useContext(Store);
+  const files = state.get('files').toJS();
 
   useEffect(() => {
-    client.getFiles(files => {
-      if (files.length > 0) {
-        setFiles(files);
-      }
-    });
+    fetchFiles(dispatch);
   }, []);
 
   useEffect(() => {
     if (newOpenFiles.length > 0) {
-      setFiles(newOpenFiles);
+      updateFiles(newOpenFiles, dispatch);
     }
   }, [newOpenFiles]);
 
@@ -132,7 +132,7 @@ function DesignPage() {
 
     const newFiles = files.slice();
     newFiles[currentIndex].content = newFileObject.content;
-    setFiles(newFiles);
+    updateFiles(newFiles, dispatch);
 
     client.saveFile(payload);
   }

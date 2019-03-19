@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
 import httpClient from './utils/http';
+import { StoreProvider } from './store';
 
 initializeIcons(/* optional base url */);
 
@@ -50,9 +51,11 @@ export function App() {
             zIndex: 2,
           }}
         >
-          <AppContext.Provider value={files}>
-            <Routes />
-          </AppContext.Provider>
+          <StoreProvider>
+            <AppContext.Provider value={files}>
+              <Routes />
+            </AppContext.Provider>
+          </StoreProvider>
         </div>
       </div>
     </Fragment>
