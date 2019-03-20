@@ -17,9 +17,39 @@ export async function fetchFiles(dispatch) {
   }
 }
 
-export function updateFiles(payload, dispatch) {
+export async function fetchFilesByOpen(fileName, dispatch) {
+  try {
+    const response = await axios.get(`${BASEURL}/fileserver/openbotFile?path=${fileName}`);
+    dispatch({
+      type: ActionTypes.FILES_GET_SUCCESS,
+      payload: response,
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.FILES_GET_FAILURE,
+      payload: err,
+    });
+  }
+}
+
+export async function updateFile(payload, dispatch) {
+  try {
+    await axios.put(`${BASEURL}/fileserver`, payload);
+    dispatch({
+      type: ActionTypes.FILES_UPDATE,
+      payload,
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.FILES_UPDATE_FAILURE,
+      payload: err,
+    });
+  }
+}
+
+export function setOpenFileIndex(index, dispatch) {
   dispatch({
-    type: ActionTypes.FILES_UPDATE,
-    payload,
+    type: ActionTypes.OPEN_FILE_INDEX_SET,
+    index,
   });
 }

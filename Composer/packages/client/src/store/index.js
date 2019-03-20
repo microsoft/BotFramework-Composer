@@ -1,14 +1,16 @@
 import React, { useReducer } from 'react';
-import { Map, List } from 'immutable';
 import PropTypes from 'prop-types';
 
 import { reducer } from './reducer';
 
 export const Store = React.createContext();
 
-const initialState = Map({
-  files: List(),
-});
+const initialState = {
+  files: [],
+  editors: [],
+  botStatus: 'stopped',
+  openFileIndex: '-1',
+};
 
 export function StoreProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
