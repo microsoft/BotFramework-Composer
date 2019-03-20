@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from 'office-ui-fabric-react';
 
-export function TextWidget(props) {
-  const { label, onChange, readonly, value, schema, placeholder, ...rest } = props;
+export function TextareaWidget(props) {
+  const { label, onChange, readonly, value, ...rest } = props;
   const { description, examples = [] } = schema || {};
 
   let placeholderText = placeholder;
@@ -17,6 +17,7 @@ export function TextWidget(props) {
       {...rest}
       description={description}
       label={label}
+      multiline
       onChange={e => onChange(e.target.value)}
       placeholder={placeholderText}
       readOnly={readonly}
@@ -25,7 +26,7 @@ export function TextWidget(props) {
   );
 }
 
-TextWidget.propTypes = {
+TextareaWidget.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,

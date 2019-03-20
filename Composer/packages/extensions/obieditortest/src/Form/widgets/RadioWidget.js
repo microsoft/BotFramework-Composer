@@ -1,29 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown } from 'office-ui-fabric-react';
+import { ChoiceGroup } from 'office-ui-fabric-react';
 
-export function SelectWidget(props) {
+export function RadioWidget(props) {
   const { label, onChange, value, options, ...rest } = props;
 
-  const handleChange = (e, option) => {
-    onChange(option.key);
-  };
+  const choices = (options.enumOptions || []).map(o => ({
+    key: o.value,
+    text: o.label,
+  }));
 
   return (
-    <Dropdown
+    <ChoiceGroup
       {...rest}
       label={label}
-      onChange={handleChange}
-      options={options.enumOptions.map(o => ({
-        key: o.value,
-        text: o.label,
-      }))}
+      onChange={(e, option) => onChange(option.key)}
+      options={choices}
       selectedKey={value}
     />
   );
 }
 
-SelectWidget.propTypes = {
+RadioWidget.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
   options: PropTypes.shape({
@@ -34,5 +32,6 @@ SelectWidget.propTypes = {
       })
     ),
   }),
+  placeholder: PropTypes.string,
   value: PropTypes.any,
 };
