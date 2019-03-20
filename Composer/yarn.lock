@@ -1515,6 +1515,18 @@
     office-ui-fabric-react ">=6.157.0 <7.0.0"
     tslib "^1.7.1"
 
+"@uifabric/fluent-theme@^0.16.2":
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/@uifabric/fluent-theme/-/fluent-theme-0.16.2.tgz#ba151591feabea8a8d836ff006cf9209c6e46304"
+  integrity sha512-juiypPnB3BFLqj8rPF2I2u5wR0+32j6vlt4Wke/x1NajLMmc4+Q+ZzuRxvcoNBRAnutrplg05Efy9G3azA7QIA==
+  dependencies:
+    "@uifabric/merge-styles" ">=6.16.1 <7.0.0"
+    "@uifabric/set-version" ">=1.1.3 <2.0.0"
+    "@uifabric/styling" ">=6.45.0 <7.0.0"
+    "@uifabric/variants" ">=6.14.0 <7.0.0"
+    office-ui-fabric-react ">=6.157.0 <7.0.0"
+    tslib "^1.7.1"
+
 "@uifabric/foundation@>=0.7.2 <1.0.0":
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/@uifabric/foundation/-/foundation-0.7.2.tgz#e364b40dfc39632b7d52c4c63898f7844481d946"
