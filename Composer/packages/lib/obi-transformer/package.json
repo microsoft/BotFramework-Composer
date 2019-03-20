@@ -1,0 +1,28 @@
+{
+	"name": "obi-transformer",
+	"version": "1.0.0",
+	"description": "Transform OBI schema to directed graph schema",
+	"main": "lib/index.js",
+	"module": "es/index.js",
+	"scripts": {
+		"build": "gulp build",
+		"start": "webpack-dev-server"
+	},
+	"author": "zeye",
+	"devDependencies": {
+		"@types/node": "^11.11.4",
+		"awesome-typescript-loader": "^5.2.1",
+		"clean-webpack-plugin": "^2.0.1",
+		"del": "^4.0.0",
+		"gulp": "^4.0.0",
+		"gulp-typescript": "^5.0.1",
+		"html-webpack-plugin": "^3.2.0",
+		"react": "^16.8.4",
+		"react-dom": "^16.8.4",
+		"typescript": "3.3.3333",
+		"cci-graph-lib": "*",
+		"webpack-cli": "^3.3.0",
+		"webpack-dev-server": "^3.2.1"
+	},
+	"license": "MIT"
+}

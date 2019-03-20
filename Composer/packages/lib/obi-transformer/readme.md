@@ -1,0 +1,1 @@
+OBI Transfromer is a pure function lib for generating 'visual-designer' supported directed graph schema from native OBI json.
