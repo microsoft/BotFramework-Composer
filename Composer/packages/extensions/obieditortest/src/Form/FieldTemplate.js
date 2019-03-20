@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import get from 'lodash.get';
 
 /**
@@ -22,3 +23,11 @@ export default function FieldTemplate(props) {
 
   return <div style={style}>{children}</div>;
 }
+
+FieldTemplate.propTypes = {
+  children: PropTypes.node,
+  uiSchema: PropTypes.shape({
+    'ui:options': PropTypes.object,
+    'ui:widget': PropTypes.oneOf([PropTypes.string, PropTypes.func]),
+  }),
+};
