@@ -81,7 +81,7 @@ export const FormEditor = props => {
     definitions: { ...masterSchema.definitions },
     ...masterSchema.definitions[type],
   });
-  const [dialogUiSchema] = useState({ ...uiSchema[type] });
+  const [dialogUiSchema, setDialogUiSchema] = useState({ ...uiSchema[type] });
 
   const onChange = newValue => {
     props.onChange(newValue.formData);
@@ -90,9 +90,10 @@ export const FormEditor = props => {
   useEffect(() => {
     const type = getType(props.data);
     setDialogSchema({
-      ...dialogSchema,
+      definitions: { ...masterSchema.definitions },
       ...masterSchema.definitions[type],
     });
+    setDialogUiSchema({ ...uiSchema[type] });
   }, [type]);
 
   return (
