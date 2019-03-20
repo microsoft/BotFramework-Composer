@@ -7,7 +7,7 @@ const router: Router = express.Router({});
 
 router.get('/', function(req: any, res: any, next: any) {
   let fileList: any[] = [];
-  const openLastActiveBot = setting.getItem<string>('openLastActiveBot');
+  const openLastActiveBot = setting.getItem<boolean>('openLastActiveBot');
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {

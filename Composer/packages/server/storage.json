@@ -1,5 +1,5 @@
 {
-    "recentAccessedBots": "[]",
+    "recentAccessedBots": "[{\"storageId\":\"default\",\"path\":\"D:/wenyluo/BotFrameWork/COMPOSER/BotFramework-Composer/SampleBots/SampleBot4/bot4.bot\"},{\"storageId\":\"default\",\"path\":\"D:/wenyluo/BotFrameWork/COMPOSER/BotFramework-Composer/SampleBots/Sample5-WelcomeRule/bot.botproj\"}]",
     "linkedStorages": "[{\"name\":\"This PC\",\"type\":\"LocalDrive\",\"id\":\"default\"}]",
     "lastActiveBot": "../../../SampleBots/SampleBot4/bot4.bot",
     "pickerWorkingDir": "../../../SampleBots"
