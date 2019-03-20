@@ -55,13 +55,14 @@ export const panelContent = css`
   width: 810px;
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 export const detailListContainer = css`
   padding-top: 20px;
   height: calc(100vh - 155px);
   overflow-x: hidden;
+  width: 640px;
 `;
 
 export const title = css`

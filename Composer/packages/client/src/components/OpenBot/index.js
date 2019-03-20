@@ -75,8 +75,8 @@ export function OpenBot(props) {
 
   // for detail file list in open panel
   // cloumns title
-  const [tableColums, setTableColumns] = useState(_generateTableColumns());
-  function _generateTableColumns() {
+  const [tableColums, setTableColumns] = useState(generateTableColumns());
+  function generateTableColumns() {
     return [
       {
         key: 'column1',
@@ -89,7 +89,7 @@ export function OpenBot(props) {
         fieldName: 'name',
         minWidth: 16,
         maxWidth: 16,
-        onColumnClick: _onColumnClick,
+        onColumnClick: onColumnClick,
         // eslint-disable-next-line react/display-name
         onRender: item => {
           return <img src={item.iconName} className={detailListClass.fileIconImg} alt={item.fileType + ' file icon'} />;
@@ -107,7 +107,7 @@ export function OpenBot(props) {
         isSortedDescending: false,
         sortAscendingAriaLabel: 'Sorted A to Z',
         sortDescendingAriaLabel: 'Sorted Z to A',
-        onColumnClick: _onColumnClick,
+        onColumnClick: onColumnClick,
         data: 'string',
         isPadded: true,
       },
@@ -118,7 +118,7 @@ export function OpenBot(props) {
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
-        onColumnClick: _onColumnClick,
+        onColumnClick: onColumnClick,
         data: 'number',
         // eslint-disable-next-line react/display-name
         onRender: item => {
@@ -135,7 +135,7 @@ export function OpenBot(props) {
         isResizable: true,
         isCollapsible: true,
         data: 'string',
-        onColumnClick: _onColumnClick,
+        onColumnClick: onColumnClick,
         // eslint-disable-next-line react/display-name
         onRender: item => {
           return <span>{item.modifiedBy}</span>;
@@ -151,7 +151,7 @@ export function OpenBot(props) {
         isResizable: true,
         isCollapsible: true,
         data: 'number',
-        onColumnClick: _onColumnClick,
+        onColumnClick: onColumnClick,
         // eslint-disable-next-line react/display-name
         onRender: item => {
           return <span>{item.fileSize}</span>;
@@ -184,7 +184,7 @@ export function OpenBot(props) {
     'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
   ).split(' ');
   let loremIndex = 0;
-  const fileInfoList = _getFileInfoList();
+  const fileInfoList = getFileInfoList();
 
   const [fileInfos, setFileInfos] = useState(fileInfoList[0].value);
   const fileItemsRef = useRef();
@@ -197,22 +197,22 @@ export function OpenBot(props) {
     setFileInfos(fileInfoList[item.key].value);
   }
 
-  function _lorem(wordCount) {
+  function lorem(wordCount) {
     const startIndex = loremIndex + wordCount > LOREM_IPSUM.length ? 0 : loremIndex;
     loremIndex = startIndex + wordCount;
     return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
   }
 
-  function _getFileInfoList() {
+  function getFileInfoList() {
     const items1 = [];
     const items2 = [];
     for (let i = 0; i < 10; i++) {
-      const randomDate = _randomDate(new Date(2012, 0, 1), new Date());
-      const randomFileSize = _getFileSize();
-      const randomFileType = _getFileIcon();
-      let fileName = _lorem(2);
+      const randomDate = getFileEditDate(new Date(2012, 0, 1), new Date());
+      const randomFileSize = getFileSize();
+      const randomFileType = getFileIcon();
+      let fileName = lorem(2);
       fileName = fileName.charAt(0).toUpperCase() + fileName.slice(1).concat(`.${randomFileType.docType}`);
-      let userName = _lorem(2);
+      let userName = lorem(2);
       userName = userName
         .split(' ')
         .map(name => name.charAt(0).toUpperCase() + name.slice(1))
@@ -229,12 +229,12 @@ export function OpenBot(props) {
         fileSizeRaw: randomFileSize.rawSize,
       });
       for (let i = 11; i < 100; i++) {
-        const randomDate = _randomDate(new Date(2012, 0, 1), new Date());
-        const randomFileSize = _getFileSize();
-        const randomFileType = _getFileIcon();
-        let fileName = _lorem(2);
+        const randomDate = getFileEditDate(new Date(2012, 0, 1), new Date());
+        const randomFileSize = getFileSize();
+        const randomFileType = getFileIcon();
+        let fileName = lorem(2);
         fileName = `${fileName}.${randomFileType.docType}`;
-        let userName = _lorem(2);
+        let userName = lorem(2);
         userName = userName
           .split(' ')
           .map(name => name.charAt(0).toUpperCase() + name.slice(1))
@@ -256,7 +256,7 @@ export function OpenBot(props) {
     return [{ name: 'recent', value: items1 }, { name: 'local', value: items2 }];
   }
 
-  function _randomDate(start, end) {
+  function getFileEditDate(start, end) {
     const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     return {
       value: date.valueOf(),
@@ -264,7 +264,7 @@ export function OpenBot(props) {
     };
   }
 
-  function _getFileIcon() {
+  function getFileIcon() {
     const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
     return {
       docType,
@@ -272,7 +272,7 @@ export function OpenBot(props) {
     };
   }
 
-  function _getFileSize() {
+  function getFileSize() {
     const fileSize = Math.floor(Math.random() * 100) + 30;
     return {
       value: `${fileSize} KB`,
@@ -280,7 +280,7 @@ export function OpenBot(props) {
     };
   }
 
-  function _onColumnClick(event, column) {
+  function onColumnClick(event, column) {
     const items = fileItemsRef.current;
     const newColumns = tableColums.slice();
     const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
@@ -293,14 +293,83 @@ export function OpenBot(props) {
         newCol.isSortedDescending = true;
       }
     });
-    const newItems = _copyAndSort(items, currColumn.fieldName, currColumn.isSortedDescending);
+    const newItems = copyAndSort(items, currColumn.fieldName, currColumn.isSortedDescending);
     setTableColumns(newColumns);
     setFileInfos(newItems);
   }
 
-  function _copyAndSort(items, columnKey, isSortedDescending) {
+  function copyAndSort(items, columnKey, isSortedDescending) {
     const key = columnKey;
     return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+  }
+
+  function getLeftNav() {
+    return (
+      <div css={panelNav}>
+        <div css={navHeader} onClick={() => togglePanel(props)}>
+          <div css={iconContainer}>
+            <Icon iconName="Back" css={icon} text="Close" />
+          </div>
+        </div>
+        <div>
+          <Nav
+            groups={[
+              {
+                links: [{ name: 'Open', key: 'open', onClick: onPathSelected }],
+              },
+            ]}
+            initialSelectedKey={'open'}
+            css={navBody}
+            styles={{
+              link: navLinks.actionNavLink,
+              linkText: navLinks.linkText,
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  function getSourceSelector() {
+    return (
+      <Fragment>
+        <div>
+          <div css={title}>Open</div>
+          <div style={{ paddingTop: '10px' }}>
+            <Nav
+              groups={getStorageSource()}
+              initialSelectedKey={'0'}
+              css={navBody}
+              styles={{
+                link: navLinks.sourceNavLink,
+              }}
+            />
+          </div>
+        </div>
+      </Fragment>
+    );
+  }
+
+  function getFileSelector() {
+    return (
+      <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '90px' }}>
+        <Breadcrumb items={getCurrentPath()} ariaLabel={'File path'} maxDisplayedItems={'1'} />
+        <DetailsList
+          items={fileInfos}
+          compact={false}
+          columns={tableColums}
+          setKey="set"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+          selection={selection}
+          selectionMode={SelectionMode.none}
+          selectionPreservedOnEmptyClick={true}
+          onItemInvoked={onItemInvoked}
+          enterModalSelectionOnTouch={true}
+          css={detailListContainer}
+        />
+      </div>
+    );
   }
 
   return (
@@ -315,60 +384,10 @@ export function OpenBot(props) {
         onRenderNavigation={onRenderNavigationContent}
       >
         <div css={body}>
-          <div css={panelNav}>
-            <div css={navHeader} onClick={() => togglePanel(props)}>
-              <div css={iconContainer}>
-                <Icon iconName="Back" css={icon} text="Close" />
-              </div>
-            </div>
-            <div>
-              <Nav
-                groups={[
-                  {
-                    links: [{ name: 'Open', key: 'open', onClick: onPathSelected }],
-                  },
-                ]}
-                initialSelectedKey={'open'}
-                css={navBody}
-                styles={{
-                  link: navLinks.actionNavLink,
-                  linkText: navLinks.linkText,
-                }}
-              />
-            </div>
-          </div>
+          {getLeftNav()}
           <div css={panelContent}>
-            <div css={title}>Open</div>
-            <div style={{ display: 'flex' }}>
-              <div style={{ paddingTop: '10px' }}>
-                <Nav
-                  groups={getStorageSource()}
-                  initialSelectedKey={'0'}
-                  css={navBody}
-                  styles={{
-                    link: navLinks.sourceNavLink,
-                  }}
-                />
-              </div>
-              <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '1px' }}>
-                <Breadcrumb items={getCurrentPath()} ariaLabel={'File path'} maxDisplayedItems={'1'} />
-                <div css={detailListContainer}>
-                  <DetailsList
-                    items={fileInfos}
-                    compact={false}
-                    columns={tableColums}
-                    setKey="set"
-                    layoutMode={DetailsListLayoutMode.justified}
-                    isHeaderVisible={true}
-                    selection={selection}
-                    selectionMode={SelectionMode.none}
-                    selectionPreservedOnEmptyClick={true}
-                    onItemInvoked={onItemInvoked}
-                    enterModalSelectionOnTouch={true}
-                  />
-                </div>
-              </div>
-            </div>
+            {getSourceSelector()}
+            {getFileSelector()}
           </div>
         </div>
       </Panel>
