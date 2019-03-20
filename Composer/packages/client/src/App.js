@@ -39,9 +39,9 @@ export function App() {
             float: 'left',
           }}
         >
-          <NavItem to="/" iconName="SplitObject" label="Design" />
-          <NavItem to="/content" iconName="CollapseMenu" label="Content" />
-          <NavItem to="/setting" iconName="Settings" label="Settings" />
+          <NavItem to="/" exact={true} iconName="SplitObject" label="Design" />
+          <NavItem to="content" iconName="CollapseMenu" label="Content" />
+          <NavItem to="setting" iconName="Settings" label="Settings" />
         </div>
         <div
           style={{

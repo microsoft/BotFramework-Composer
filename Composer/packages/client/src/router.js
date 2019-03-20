@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import { Router, Redirect } from '@reach/router';
 
 import { NotFound } from './components/NotFound';
 import DesignPage from './pages/design';
@@ -9,8 +9,9 @@ import { ContentPage } from './pages/content/index';
 const Routes = () => (
   <Router>
     <DesignPage path="/" />
-    <ContentPage path="/content" />
-    <SettingPage path="/setting" />
+    <ContentPage path="content" />
+    <Redirect from="setting" to="setting/dialog-settings" noThrow />
+    <SettingPage path="setting/*" />
     <NotFound default />
   </Router>
 );

@@ -2,7 +2,6 @@ import { css } from '@emotion/core';
 
 export const outer = css`
   font-size: 30px;
-  color: #4f4f4f;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -9,8 +9,9 @@ import { NavLink } from './../NavLink';
 export const NavItem = props => (
   <NavLink
     to={props.to}
-    style={{ display: 'block', textDecoration: 'none' }}
-    activestyle={{ display: 'block', textDecoration: 'none', outline: '2px solid', color: '#0083cb99' }}
+    exact={props.exact}
+    style={{ display: 'block', textDecoration: 'none', color: '#4f4f4f' }}
+    activestyle={{ color: '#0083cb' }}
   >
     <div css={outer}>
       <div css={icon}>
@@ -25,4 +26,5 @@ NavItem.propTypes = {
   to: PropTypes.string,
   iconName: PropTypes.string,
   label: PropTypes.string,
+  exact: PropTypes.bool,
 };
