@@ -28,11 +28,12 @@ function DesignPage() {
 
   const openFileIndexRef = useRef();
   const filesRef = useRef();
-  const { state, dispatch } = useContext(Store);
+  const { state, bindActions } = useContext(Store);
   const { files, openFileIndex, editors } = state;
 
+  const actions = bindActions({ fetchFiles, updateFile, setOpenFileIndex, addEditor });
   useEffect(() => {
-    fetchFiles(dispatch);
+    actions.fetchFiles();
   }, []);
 
   useEffect(() => {
@@ -56,16 +57,13 @@ function DesignPage() {
   });
 
   function createSecondEditor(data) {
-    addEditor(
-      {
-        col: 1,
-        row: 2,
-        data: data,
-        name: 'window2',
-        parent: 'window1',
-      },
-      dispatch
-    );
+    actions.addEditor({
+      col: 1,
+      row: 2,
+      data: data,
+      name: 'window2',
+      parent: 'window1',
+    });
   }
 
   function resetSecondEditor(data) {
@@ -114,7 +112,7 @@ function DesignPage() {
       content: newFileObject.content,
     };
 
-    updateFile(payload, dispatch);
+    actions.updateFile(payload);
   }
 
   function handleFileClick(file, index) {
@@ -124,7 +122,7 @@ function DesignPage() {
       return;
     }
 
-    setOpenFileIndex(index, dispatch);
+    actions.setOpenFileIndex(index);
 
     if (editors.length >= 1) {
       // reset the data in first window
@@ -132,16 +130,13 @@ function DesignPage() {
       apiClient.apiCallAt('reset', files[index], editorWindow);
     }
 
-    addEditor(
-      {
-        col: 1,
-        row: 1,
-        data: files[index],
-        name: 'window1',
-        parent: 'window0', // shell
-      },
-      dispatch
-    );
+    actions.addEditor({
+      col: 1,
+      row: 1,
+      data: files[index],
+      name: 'window1',
+      parent: 'window0', // shell
+    });
   }
 
   return (

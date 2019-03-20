@@ -5,19 +5,19 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
 import { Store } from './store/index';
-import { fetchFilesByOpen } from './store/action';
-import { toggleBot } from './store/action/bot';
+import { fetchFilesByOpen, toggleBot } from './store/action';
 
 initializeIcons(/* optional base url */);
 
 export function App() {
-  const { state, dispatch } = useContext(Store);
+  const { state, bindActions } = useContext(Store);
   const { botStatus } = state;
+  const actions = bindActions({ fetchFilesByOpen, toggleBot });
 
   function handleFileOpen(files) {
     if (files.length > 0) {
       const file = files[0];
-      fetchFilesByOpen(file.name, dispatch);
+      actions.fetchFilesByOpen(file.name);
     }
   }
 
@@ -26,7 +26,7 @@ export function App() {
       <Header
         botStatus={botStatus}
         setBotStatus={status => {
-          toggleBot(status, dispatch);
+          actions.toggleBot(status);
         }}
         onFileOpen={handleFileOpen}
       />
