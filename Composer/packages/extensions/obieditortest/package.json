@@ -14,7 +14,7 @@
     "build": "nwb build-react-component --copy-files",
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
-    "start": "nwb serve-react-demo",
+    "start": "nwb serve-react-demo --port 3001",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
     "test:watch": "nwb test-react --server"
@@ -31,9 +31,11 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "codemirror": "^5.44.0",
     "nwb": "0.23.x",
     "nwb-sass": "^0.9.0",
     "react": "^16.8.3",
+    "react-codemirror2": "^5.1.0",
     "react-dom": "^16.8.3"
   },
   "author": "",
