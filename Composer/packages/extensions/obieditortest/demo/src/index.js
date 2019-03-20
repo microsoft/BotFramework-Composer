@@ -27,13 +27,7 @@ const cmOptions = {
 };
 
 const defaultData = {
-  $type: 'Microsoft.WelcomeRule',
-  steps: [
-    {
-      $type: 'Microsoft.SendActivity',
-      activity: 'Hi! I\'m a ToDo bot. Say "add a todo named first one" to get started.',
-    },
-  ],
+  $type: 'Microsoft.TextPrompt',
 };
 
 function Demo() {
