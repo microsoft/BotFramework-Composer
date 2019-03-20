@@ -53,6 +53,15 @@ const uiSchema = {
   'Microsoft.EndDialog': {
     ...hideMetaData,
   },
+  'Microsoft.DateTimePrompt': {
+    ...hideMetaData,
+    minValue: {
+      'ui:widget': 'datetime',
+    },
+    maxValue: {
+      'ui:widget': 'datetime',
+    },
+  },
 };
 
 const getType = data => {
