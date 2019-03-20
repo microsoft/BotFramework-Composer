@@ -2,9 +2,11 @@ import producer from 'immer';
 
 const createReducer = handlers => {
   return (state, action) => {
-    if (handlers.hasOwnProperty(action.type)) {
+    const { type, payload } = action;
+
+    if (handlers.hasOwnProperty(type)) {
       return producer(state, nextState => {
-        handlers[action.type](nextState, action);
+        handlers[type](nextState, payload);
       });
     } else {
       return state;

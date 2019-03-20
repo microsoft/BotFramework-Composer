@@ -5,14 +5,12 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
 import { Store } from './store/index';
-import { fetchFilesByOpen, toggleBot } from './store/action';
 
 initializeIcons(/* optional base url */);
 
 export function App() {
-  const { state, bindActions } = useContext(Store);
+  const { state, actions } = useContext(Store);
   const { botStatus } = state;
-  const actions = bindActions({ fetchFilesByOpen, toggleBot });
 
   function handleFileOpen(files) {
     if (files.length > 0) {

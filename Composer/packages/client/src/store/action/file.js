@@ -7,49 +7,55 @@ export async function fetchFiles(dispatch) {
     const response = await axios.get(`${BASEURL}/fileserver`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
-      payload: response,
+      payload: { response },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.FILES_GET_FAILURE,
-      payload: err,
+      payload: null,
+      error: err,
     });
   }
 }
 
-export async function fetchFilesByOpen(fileName, dispatch) {
+export async function fetchFilesByOpen(dispatch, fileName) {
   try {
     const response = await axios.get(`${BASEURL}/fileserver/openbotFile?path=${fileName}`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
-      payload: response,
+      payload: { response },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.FILES_GET_FAILURE,
-      payload: err,
+      payload: null,
+      error: err,
     });
   }
 }
 
-export async function updateFile(payload, dispatch) {
+export async function updateFile(dispatch, { name, content }) {
   try {
     await axios.put(`${BASEURL}/fileserver`, payload);
     dispatch({
       type: ActionTypes.FILES_UPDATE,
-      payload,
+      payload: {
+        name,
+        content,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.FILES_UPDATE_FAILURE,
-      payload: err,
+      payload: null,
+      error: err,
     });
   }
 }
 
-export function setOpenFileIndex(index, dispatch) {
+export function setOpenFileIndex(dispatch, index) {
   dispatch({
     type: ActionTypes.OPEN_FILE_INDEX_SET,
-    index,
+    payload: { index },
   });
 }

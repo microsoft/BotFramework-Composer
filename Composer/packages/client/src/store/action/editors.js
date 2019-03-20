@@ -1,8 +1,8 @@
 import { ActionTypes } from './../../constants/index';
 
-export function addEditor(editor, dispatch) {
+export function addEditor(dispatch, editor) {
   dispatch({
     type: ActionTypes.EDITOR_ADD,
-    editor,
+    payload: { editor },
   });
 }
