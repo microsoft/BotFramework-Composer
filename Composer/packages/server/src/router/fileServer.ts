@@ -25,6 +25,7 @@ router.put('/', function(req: any, res: any, next: any) {
 
   try {
     updateFile(req.body.name, req.body.content, lastActiveBot);
+    res.send('OK');
   } catch (error) {
     res.status(400).json({ error: 'save error' });
   }
