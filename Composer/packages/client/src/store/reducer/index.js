@@ -1,28 +1,28 @@
 import createReducer from './createReducer';
 import { ActionTypes } from './../../constants/index';
 
-const getFilesSuccess = (state, action) => {
-  return (state.files = action.payload.data);
+const getFilesSuccess = (state, { response }) => {
+  return (state.files = response.data);
 };
 
-const updateFiles = (state, action) => {
+const updateFiles = (state, payload) => {
   state.files = state.files.map(file => {
-    if (file.name === action.payload.name) return action.payload;
+    if (file.name === payload.name) return payload;
     return file;
   });
   return state;
 };
 
-const setBotStatus = (state, action) => {
-  return (state.botStatus = action.status);
+const setBotStatus = (state, { status }) => {
+  return (state.botStatus = status);
 };
 
-const setOpenFileIndex = (state, action) => {
-  return (state.openFileIndex = action.index);
+const setOpenFileIndex = (state, { index }) => {
+  return (state.openFileIndex = index);
 };
 
-const addEditor = (state, action) => {
-  state.editors.push(action.editor);
+const addEditor = (state, { editor }) => {
+  state.editors.push(editor);
   return state;
 };
 

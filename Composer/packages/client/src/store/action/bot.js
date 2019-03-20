@@ -8,12 +8,15 @@ export async function toggleBot(dispatch, status) {
     await axios.get(`${BASEURL}/${path}`);
     dispatch({
       type: ActionTypes.BOT_STATUS_SET,
-      status: status === 'stopped' ? 'running' : 'stopped',
+      payload: {
+        status: status === 'stopped' ? 'running' : 'stopped',
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.BOT_STATUS_SET_FAILURE,
-      payload: err,
+      payload: null,
+      error: err,
     });
   }
 }
