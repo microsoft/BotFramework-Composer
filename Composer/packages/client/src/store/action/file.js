@@ -17,7 +17,7 @@ export async function fetchFiles(dispatch) {
   }
 }
 
-export async function fetchFilesByOpen(fileName, dispatch) {
+export async function fetchFilesByOpen(dispatch, fileName) {
   try {
     const response = await axios.get(`${BASEURL}/fileserver/openbotFile?path=${fileName}`);
     dispatch({
@@ -32,7 +32,7 @@ export async function fetchFilesByOpen(fileName, dispatch) {
   }
 }
 
-export async function updateFile(payload, dispatch) {
+export async function updateFile(dispatch, payload) {
   try {
     await axios.put(`${BASEURL}/fileserver`, payload);
     dispatch({
@@ -47,7 +47,7 @@ export async function updateFile(payload, dispatch) {
   }
 }
 
-export function setOpenFileIndex(index, dispatch) {
+export function setOpenFileIndex(dispatch, index) {
   dispatch({
     type: ActionTypes.OPEN_FILE_INDEX_SET,
     index,

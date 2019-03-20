@@ -5,7 +5,6 @@ import { Conversation } from './../../components/Conversation';
 import { ProjectExplorer } from './../../components/ProjectExplorer';
 import ApiClient from './../../messenger/ApiClient';
 import { Store } from './../../store/index';
-import { fetchFiles, updateFile, setOpenFileIndex, addEditor } from './../../store/action';
 
 // avoid recreate multiple times
 const apiClient = new ApiClient();
@@ -28,10 +27,9 @@ function DesignPage() {
 
   const openFileIndexRef = useRef();
   const filesRef = useRef();
-  const { state, bindActions } = useContext(Store);
+  const { state, actions } = useContext(Store);
   const { files, openFileIndex, editors } = state;
 
-  const actions = bindActions({ fetchFiles, updateFile, setOpenFileIndex, addEditor });
   useEffect(() => {
     actions.fetchFiles();
   }, []);
