@@ -1,11 +1,11 @@
 import { AnalyzerDefinition } from './types/Analyzer';
 import { TraceableData } from './types/TraceableData';
-import { AnalyzerResult } from './types/AnalyzerResult';
+import { TraceableAnalyzerResult } from './types/AnalyzerResult';
 
 export class TraceableAnalyzer<InpuSchema> {
-  private analyzer: AnalyzerDefinition<InpuSchema, TraceableData<any>, AnalyzerResult>;
+  private analyzer: AnalyzerDefinition<InpuSchema, TraceableData<any>, TraceableAnalyzerResult>;
 
-  constructor(transformDefinition: AnalyzerDefinition<InpuSchema, TraceableData<any>, AnalyzerResult>) {
+  constructor(transformDefinition: AnalyzerDefinition<InpuSchema, TraceableData<any>, TraceableAnalyzerResult>) {
     this.analyzer = transformDefinition;
   }
 
@@ -41,7 +41,7 @@ export class TraceableAnalyzer<InpuSchema> {
     return result;
   }
 
-  private executeTransformation(input: InpuSchema): AnalyzerResult {
+  private executeTransformation(input: InpuSchema): TraceableAnalyzerResult {
     const { execution: executionDefinition } = this.analyzer;
 
     // Generate to be transformed keys from transformDefinition.

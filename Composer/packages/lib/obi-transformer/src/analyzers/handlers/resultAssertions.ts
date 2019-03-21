@@ -1,4 +1,4 @@
-import { AnalyzerResult } from '../types/AnalyzerResult';
+import { TraceableAnalyzerResult } from '../types/AnalyzerResult';
 
 export const isTracable = (x: any) => {
   if (x.path && x.data) {
@@ -7,12 +7,13 @@ export const isTracable = (x: any) => {
   return false;
 };
 
-export function validateRuleDialogComponents(input: AnalyzerResult): boolean {
-  let rulesInTotal = 0;
+export function validateRuleDialogComponents(input: TraceableAnalyzerResult): boolean {
+  let recognizerCnt = input['recognizer'].length;
+  let welcomeCnt = input['welcome'].length;
+  let fallbackCnt = input['fallback'].length;
+  let intentCnt = input['intent'].length;
 
-  if (input.welcome) rulesInTotal++;
-  if (input.fallback) rulesInTotal++;
-  if (input.rules) rulesInTotal += input.rules.length;
-
-  return rulesInTotal > 0;
+  if (recognizerCnt !== 1) return false;
+  if (welcomeCnt + fallbackCnt + intentCnt === 0) return false;
+  return true;
 }

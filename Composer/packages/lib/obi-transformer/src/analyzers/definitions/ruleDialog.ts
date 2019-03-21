@@ -17,9 +17,13 @@ import {
 import { TraceableData } from '../types/TraceableData';
 import { AnalyzerDefinition } from '../types/Analyzer';
 import { ObiSchema } from '../../models/obi/ObiSchema';
-import { AnalyzerResult } from '../types/AnalyzerResult';
+import { TraceableAnalyzerResult } from '../types/AnalyzerResult';
 
-export const ruleDialogAnalyzerDefinition: AnalyzerDefinition<ObiSchema, TraceableData<any>, AnalyzerResult> = {
+export const ruleDialogAnalyzerDefinition: AnalyzerDefinition<
+  ObiSchema,
+  TraceableData<any>,
+  TraceableAnalyzerResult
+> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   execution: {
