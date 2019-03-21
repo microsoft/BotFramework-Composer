@@ -13,7 +13,6 @@ export const obiRuleToGraphProcess: TransformerImpl<ObiRule> = (
   return {
     id: input.path,
     type: GraphNodeTypes.Process,
-    neighborIds: [],
     payload: input.data,
   } as DirectedGraphNode<string, ObiRule>;
 };
@@ -24,7 +23,6 @@ export const obiRecognizerToGraphDecision: TransformerImpl<ObiRecognizer> = (
   return {
     id: input.path,
     type: GraphNodeTypes.Decision,
-    neighborIds: [],
     payload: input.data,
   } as DirectedGraphNode<string, ObiRecognizer>;
 };
@@ -35,7 +33,6 @@ export const obiWelcomeRuleToGraphTerminator: TransformerImpl<ObiRule> = (
   return {
     id: input.path,
     type: GraphNodeTypes.Terminator,
-    neighborIds: [],
     payload: input.data,
   } as DirectedGraphNode<string, ObiRule>;
 };
@@ -46,7 +43,6 @@ export const obiStorageToGraphIsolated: TransformerImpl<ObiStorage> = (
   return {
     id: input.path,
     type: GraphNodeTypes.Isolated,
-    neighborIds: [],
     payload: input.data,
   } as DirectedGraphNode<string, ObiStorage>;
 };
