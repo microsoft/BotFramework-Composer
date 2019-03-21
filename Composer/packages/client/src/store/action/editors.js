@@ -6,3 +6,10 @@ export function addEditor(dispatch, editor) {
     payload: { editor },
   });
 }
+
+export function setEditor(dispatch, editor) {
+  dispatch({
+    type: ActionTypes.EDITOR_SET,
+    payload: { editor },
+  });
+}

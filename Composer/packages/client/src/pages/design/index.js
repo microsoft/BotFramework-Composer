@@ -128,7 +128,7 @@ function DesignPage() {
       apiClient.apiCallAt('reset', files[index], editorWindow);
     }
 
-    actions.addEditor({
+    actions.setEditor({
       col: 1,
       row: 1,
       data: files[index],
