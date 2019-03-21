@@ -1,9 +1,9 @@
-import { ObiRule } from '../../models/obi/ObiRule';
-import { DirectedGraphNode } from '../../models/graph/DirectedGraphNode';
-import { GraphNodeTypes } from '../../models/graph/types/NodeTypes';
-import { ObiRecognizer } from '../../models/obi/ObiRecognizer';
-import { ObiStorage } from '../../models/obi/ObiStorage';
-import { TraceableData } from '../../analyzers/types/TraceableData';
+import { ObiRule } from '../../../../models/obi/ObiRule';
+import { DirectedGraphNode } from '../../../../models/graph/DirectedGraphNode';
+import { GraphNodeTypes } from '../../../../models/graph/types/NodeTypes';
+import { ObiRecognizer } from '../../../../models/obi/ObiRecognizer';
+import { ObiStorage } from '../../../../models/obi/ObiStorage';
+import { TraceableData } from '../../../../analyzers/types/TraceableData';
 
 export type TransformerImpl<T> = (input: TraceableData<T>) => DirectedGraphNode<string, T>;
 

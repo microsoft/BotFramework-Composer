@@ -1,5 +1,6 @@
-import { shouldBeRuleDialog } from './handlers/obiAssertions';
-import { validateRuleDialogComponents, isTracable } from './handlers/resultAssertions';
+import { shouldBeRuleDialog } from './handlers/analyzer/before';
+import { validateRuleDialogComponents } from './handlers/analyzer/after';
+import { isTracable } from './handlers/analyzer/validate';
 import {
   selectStorage,
   selectRecognizer,
@@ -7,17 +8,13 @@ import {
   selectFallback,
   selectPlainRules,
   selectIntent,
-} from './handlers/selectors';
+} from './handlers/analyzer/select';
 import { TraceableData } from '../../analyzers/types/TraceableData';
 import { AnalyzerDefinition } from '../../analyzers/types/Analyzer';
 import { ObiSchema } from '../../models/obi/ObiSchema';
 import { TraceableAnalyzerResult } from '../../analyzers/types/AnalyzerResult';
 
-export const ruleDialogAnalyzerDefinition: AnalyzerDefinition<
-  ObiSchema,
-  TraceableData<any>,
-  TraceableAnalyzerResult
-> = {
+export const ruleDialogAnalyzerPolicy: AnalyzerDefinition<ObiSchema, TraceableData<any>, TraceableAnalyzerResult> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   execution: {

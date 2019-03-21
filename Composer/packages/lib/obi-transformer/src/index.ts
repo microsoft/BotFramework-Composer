@@ -1,24 +1,27 @@
-import { DirectedGraphNode } from './models/graph/DirectedGraphNode';
 import { ObiSchema } from './models/obi/ObiSchema';
-import { GraphNodeTypes } from './models/graph/types/NodeTypes';
 
-type NumberIndexedNode = DirectedGraphNode<number, any>;
+import { ObiRuleDialogPolicies } from './policies/ObiRuleDialog';
+import { TraceableAnalyzer } from './analyzers/TraceableAnalyzer';
+import { TraceableConnector } from './connectors/TraceableConnector';
+import { TraceableTransformer } from './transformers/TraceableTransformer';
+import { flatten } from './utils/flatten';
 
-export class ObiTransformer {
-  public toDirectedGraphSchema(obiJson: ObiSchema): NumberIndexedNode[] {
-    const { rules } = obiJson;
-    const nodes = rules.map((rule, index) => {
-      return {
-        id: index,
-        type: GraphNodeTypes.Process,
-        payload: rule,
-        neighborIds: [],
-      } as NumberIndexedNode;
-    });
+const { analyzerPolicy, connectorPolicy, transformerPolicy } = ObiRuleDialogPolicies;
 
-    for (let i = 0; i < nodes.length - 1; i++) {
-      nodes[i].neighborIds.push(nodes[i + 1].id);
-    }
-    return nodes;
-  }
+const analyzer = new TraceableAnalyzer(analyzerPolicy);
+const connector = new TraceableConnector(connectorPolicy);
+const transformer = new TraceableTransformer(transformerPolicy);
+
+export function transform(obiJson: ObiSchema) {
+  const traceableData = analyzer.analyze(obiJson);
+
+  const edges = connector.buildConnection(traceableData);
+
+  const nodeGroups = transformer.transform(traceableData);
+  const nodes = flatten(Object.values(nodeGroups));
+
+  return {
+    nodes,
+    edges,
+  };
 }
