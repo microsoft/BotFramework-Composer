@@ -1,4 +1,4 @@
-import { RuleDialogComponents } from '../types/RuleDialogComponents';
+import { AnalyzerResult } from '../types/AnalyzerResult';
 
 export const isTracable = (x: any) => {
   if (x.path && x.data) {
@@ -7,7 +7,7 @@ export const isTracable = (x: any) => {
   return false;
 };
 
-export function validateRuleDialogComponents(input: RuleDialogComponents): boolean {
+export function validateRuleDialogComponents(input: AnalyzerResult): boolean {
   let rulesInTotal = 0;
 
   if (input.welcome) rulesInTotal++;

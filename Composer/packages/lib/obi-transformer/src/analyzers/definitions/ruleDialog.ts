@@ -1,18 +1,25 @@
-import { shouldBeRuleDialog } from './handlers/obiAssertions';
-import { validateRuleDialogComponents, isTracable } from './handlers/resultAssertions';
-import { selectStorage, selectRecognizer, selectWelcome, selectFallback, selectPlainRules } from './handlers/selectors';
+import { shouldBeRuleDialog } from '../handlers/obiAssertions';
+import { validateRuleDialogComponents, isTracable } from '../handlers/resultAssertions';
+import {
+  selectStorage,
+  selectRecognizer,
+  selectWelcome,
+  selectFallback,
+  selectPlainRules,
+  selectIntent,
+} from '../handlers/selectors';
 import {
   obiStorageToGraphIsolated,
   obiRecognizerToGraphDecision,
   obiWelcomeRuleToGraphTerminator,
   obiRuleToGraphProcess,
-} from './handlers/transformers';
-import { TraceableData } from './types/TraceableData';
-import { AnalyzerDefinition } from './types/Analyzer';
-import { ObiSchema } from '../models/obi/ObiSchema';
-import { RuleDialogComponents } from './types/RuleDialogComponents';
+} from '../handlers/transformers';
+import { TraceableData } from '../types/TraceableData';
+import { AnalyzerDefinition } from '../types/Analyzer';
+import { ObiSchema } from '../../models/obi/ObiSchema';
+import { AnalyzerResult } from '../types/AnalyzerResult';
 
-export const ruleDialogAnalyzer: AnalyzerDefinition<ObiSchema, TraceableData<any>, RuleDialogComponents> = {
+export const ruleDialogAnalyzerDefinition: AnalyzerDefinition<ObiSchema, TraceableData<any>, AnalyzerResult> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   execution: {
@@ -36,7 +43,12 @@ export const ruleDialogAnalyzer: AnalyzerDefinition<ObiSchema, TraceableData<any
       validate: isTracable,
       transform: obiRuleToGraphProcess,
     },
-    rules: {
+    intent: {
+      select: selectIntent,
+      validate: isTracable,
+      transform: obiRuleToGraphProcess,
+    },
+    unclassified: {
       select: selectPlainRules,
       validate: isTracable,
       transform: obiRuleToGraphProcess,

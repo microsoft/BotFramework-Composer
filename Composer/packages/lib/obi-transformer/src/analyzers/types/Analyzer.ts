@@ -2,6 +2,9 @@ export type AnalyzerTransformationProcess<InputSchema, IntermediaSchema> = {
   select: (input: InputSchema) => IntermediaSchema[];
   validate: (x: IntermediaSchema) => boolean;
   transform: (x: IntermediaSchema) => any;
+  options?: {
+    required: boolean;
+  };
 };
 
 export type AnalyzerTransformationCollection<InputSchema, IntermediaSchema> = {

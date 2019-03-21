@@ -1,7 +1,6 @@
 import { AnalyzerDefinition } from './types/Analyzer';
 import { TraceableData } from './types/TraceableData';
-
-type AnalyzerResult = { [feature: string]: any[] };
+import { AnalyzerResult } from './types/AnalyzerResult';
 
 export class TraceableAnalyzer<InpuSchema> {
   private analyzer: AnalyzerDefinition<InpuSchema, TraceableData<any>, AnalyzerResult>;

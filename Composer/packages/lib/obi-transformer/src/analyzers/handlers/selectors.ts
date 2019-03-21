@@ -7,6 +7,19 @@ import { TraceableData } from '../types/TraceableData';
 
 export type SelectorImpl = (obi: ObiSchema) => TraceableData<any>[];
 
+const traceableFilter = (arr: any[], pathPrefix: string, judge: (x: any) => boolean) => {
+  const filtered = [];
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+    if (false === judge(element)) continue;
+    filtered.push({
+      data: element,
+      path: `${pathPrefix}[${i}]`,
+    });
+  }
+  return filtered;
+};
+
 export const selectStorage = (obi: ObiSchema): TraceableData<ObiStorage>[] => {
   return [
     {
@@ -26,34 +39,20 @@ export const selectRecognizer = (obi: ObiSchema): TraceableData<ObiRecognizer>[]
 };
 
 export const selectWelcome = (obi: ObiSchema): TraceableData<ObiRule>[] => {
-  const index = obi.rules.findIndex(x => x.$type === RuleTypes.Welcome);
-  return [
-    {
-      data: obi.rules[index],
-      path: `$.rules[${index}]`,
-    },
-  ];
+  return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Welcome);
 };
 
 export const selectFallback = (obi: ObiSchema): TraceableData<ObiRule>[] => {
-  const index = obi.rules.findIndex(x => x.$type === RuleTypes.Fallback);
-  return [
-    {
-      data: obi.rules[index],
-      path: `$.rules[${index}]`,
-    },
-  ];
+  return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Fallback);
+};
+
+export const selectIntent = (obi: ObiSchema): TraceableData<ObiRule>[] => {
+  return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Intent);
 };
 
 export const selectPlainRules = (obi: ObiSchema): TraceableData<ObiRule>[] => {
-  return obi.rules
-    .map((rule, index) => ({
-      data: rule,
-      path: `$.rules[${index}]`,
-    }))
-    .filter(
-      x =>
-        // Not in special rules
-        ![RuleTypes.Welcome, RuleTypes.Fallback].some(specialType => specialType === x.data.$type)
-    );
+  const notSpecialRules = x =>
+    ![RuleTypes.Welcome, RuleTypes.Fallback, RuleTypes.Intent].some(specialType => specialType === x.$type);
+
+  return traceableFilter(obi.rules, '$.rules', notSpecialRules);
 };

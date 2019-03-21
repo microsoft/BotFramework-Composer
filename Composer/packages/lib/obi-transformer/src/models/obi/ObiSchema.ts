@@ -5,7 +5,7 @@ import { ObiStorage } from './ObiStorage';
 
 export class ObiSchema {
   $schema: string;
-  $types: DialogTypes;
+  $type: DialogTypes;
   $id: string;
 
   storage: ObiStorage;
