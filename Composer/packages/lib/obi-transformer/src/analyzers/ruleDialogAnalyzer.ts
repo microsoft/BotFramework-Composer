@@ -1,48 +1,45 @@
 import { shouldBeRuleDialog } from './handlers/obiAssertions';
 import { validateRuleDialogComponents, isTracable } from './handlers/resultAssertions';
-import {
-  selectStorage,
-  selectRecognizer,
-  selectWelcome,
-  selectFallback,
-  selectPlainRules,
-} from './handlers/traceableSelector';
+import { selectStorage, selectRecognizer, selectWelcome, selectFallback, selectPlainRules } from './handlers/selectors';
 import {
   obiStorageToGraphIsolated,
   obiRecognizerToGraphDecision,
   obiWelcomeRuleToGraphTerminator,
   obiRuleToGraphProcess,
 } from './handlers/transformers';
-import { iteratively } from './handlers/utils';
+import { TraceableData } from './types/TraceableData';
+import { Analyzer } from './types/Analyzer';
+import { ObiSchema } from '../models/obi/ObiSchema';
+import { RuleDialogComponents } from './types/RuleDialogComponents';
 
-export const ruleDialogAnalyzer = {
+export const ruleDialogAnalyzer: Analyzer<ObiSchema, TraceableData<any>, RuleDialogComponents> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   transform: {
     storage: {
       select: selectStorage,
       validate: isTracable,
-      transform: [obiStorageToGraphIsolated],
+      transform: obiStorageToGraphIsolated,
     },
     recognizer: {
       select: selectRecognizer,
       validate: isTracable,
-      transform: [obiRecognizerToGraphDecision],
+      transform: obiRecognizerToGraphDecision,
     },
     welcome: {
       select: selectWelcome,
       validate: isTracable,
-      transform: [obiWelcomeRuleToGraphTerminator],
+      transform: obiWelcomeRuleToGraphTerminator,
     },
     fallback: {
       select: selectFallback,
       validate: isTracable,
-      transform: [obiRuleToGraphProcess],
+      transform: obiRuleToGraphProcess,
     },
     rules: {
       select: selectPlainRules,
-      validate: [Array.isArray, arr => !iteratively(isTracable)(arr).some(isPassed => isPassed === false)],
-      transform: [iteratively(obiRuleToGraphProcess)],
+      validate: isTracable,
+      transform: obiRuleToGraphProcess,
     },
   },
 };

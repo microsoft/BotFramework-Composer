@@ -3,53 +3,50 @@ import { DirectedGraphNode } from '../../models/graph/DirectedGraphNode';
 import { GraphNodeTypes } from '../../models/graph/types/NodeTypes';
 import { ObiRecognizer } from '../../models/obi/ObiRecognizer';
 import { ObiStorage } from '../../models/obi/ObiStorage';
+import { TraceableData } from '../types/TraceableData';
 
-export type TransformerImpl = (data: any, assignedId: string) => DirectedGraphNode<string, any>;
+export type TransformerImpl<T> = (input: TraceableData<T>) => DirectedGraphNode<string, T>;
 
-export const obiRuleToGraphProcess: TransformerImpl = (
-  rule: ObiRule,
-  assignedId: string
+export const obiRuleToGraphProcess: TransformerImpl<ObiRule> = (
+  input: TraceableData<ObiRule>
 ): DirectedGraphNode<string, ObiRule> => {
   return {
-    id: assignedId,
+    id: input.path,
     type: GraphNodeTypes.Process,
     neighborIds: [],
-    payload: rule,
+    payload: input.data,
   } as DirectedGraphNode<string, ObiRule>;
 };
 
-export const obiRecognizerToGraphDecision: TransformerImpl = (
-  recognizer: ObiRecognizer,
-  assignedId: string
+export const obiRecognizerToGraphDecision: TransformerImpl<ObiRecognizer> = (
+  input: TraceableData<ObiRecognizer>
 ): DirectedGraphNode<string, ObiRecognizer> => {
   return {
-    id: assignedId,
+    id: input.path,
     type: GraphNodeTypes.Decision,
     neighborIds: [],
-    payload: recognizer,
+    payload: input.data,
   } as DirectedGraphNode<string, ObiRecognizer>;
 };
 
-export const obiWelcomeRuleToGraphTerminator: TransformerImpl = (
-  welcome: ObiRule,
-  assignedId: string
+export const obiWelcomeRuleToGraphTerminator: TransformerImpl<ObiRule> = (
+  input: TraceableData<ObiRule>
 ): DirectedGraphNode<string, ObiRule> => {
   return {
-    id: assignedId,
+    id: input.path,
     type: GraphNodeTypes.Terminator,
     neighborIds: [],
-    payload: welcome,
+    payload: input.data,
   } as DirectedGraphNode<string, ObiRule>;
 };
 
-export const obiStorageToGraphIsolated: TransformerImpl = (
-  storage: ObiStorage,
-  assignedId: string
+export const obiStorageToGraphIsolated: TransformerImpl<ObiStorage> = (
+  input: TraceableData<ObiStorage>
 ): DirectedGraphNode<string, ObiStorage> => {
   return {
-    id: assignedId,
+    id: input.path,
     type: GraphNodeTypes.Isolated,
     neighborIds: [],
-    payload: storage,
+    payload: input.data,
   } as DirectedGraphNode<string, ObiStorage>;
 };
