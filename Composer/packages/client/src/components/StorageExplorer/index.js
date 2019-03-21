@@ -8,6 +8,8 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { PropTypes } from 'prop-types';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
+import { storageApi } from '../../utils/storage';
+
 import {
   container,
   body,
@@ -23,7 +25,9 @@ import {
   detailListClass,
 } from './styles';
 
-export function OpenBot(props) {
+const storageClient = new storageApi();
+
+export function StorageExplorer(props) {
   function togglePanel(props) {
     props.setPanelStatus(!props.panelStatus);
   }
@@ -54,12 +58,15 @@ export function OpenBot(props) {
   }
 
   function getStorageSource() {
+    let scourceLinks = [];
+    storageClient.getStorage((storages, index) => {
+      scourceLinks = storages.forEach(storage => {
+        return { name: storage.name, key: index, onClick: onNavClicked };
+      });
+    });
     return [
       {
-        links: [
-          { name: 'Recent', key: '0', onClick: onNavClicked },
-          { name: 'This PC', key: '1', onClick: onNavClicked },
-        ],
+        links: scourceLinks,
       },
     ];
   }
@@ -184,9 +191,9 @@ export function OpenBot(props) {
     'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
   ).split(' ');
   let loremIndex = 0;
-  const fileInfoList = getFileInfoList();
+  const folderItems = getFolderItems();
 
-  const [fileInfos, setFileInfos] = useState(fileInfoList[0].value);
+  const [fileInfos, setFileInfos] = useState(folderItems[0].value);
   const fileItemsRef = useRef();
 
   useLayoutEffect(() => {
@@ -194,7 +201,7 @@ export function OpenBot(props) {
   }, [fileInfos]);
 
   function onNavClicked(event, item) {
-    setFileInfos(fileInfoList[item.key].value);
+    setFileInfos(folderItems[item.key].value);
   }
 
   function lorem(wordCount) {
@@ -203,7 +210,7 @@ export function OpenBot(props) {
     return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
   }
 
-  function getFileInfoList() {
+  function getFolderItems() {
     const items1 = [];
     const items2 = [];
     for (let i = 0; i < 10; i++) {
@@ -395,7 +402,7 @@ export function OpenBot(props) {
   );
 }
 
-OpenBot.propTypes = {
+StorageExplorer.propTypes = {
   panelStatus: PropTypes.bool,
   setPanelStatus: PropTypes.func,
   items: PropTypes.array,

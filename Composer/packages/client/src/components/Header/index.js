@@ -18,7 +18,7 @@ export const Header = props => {
           css={actionButton}
           iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
           onClick={() => {
-            props.setPanelStatus(true);
+            props.openStorageExplorer(true);
           }}
         >
           Open
@@ -39,5 +39,5 @@ export const Header = props => {
 Header.propTypes = {
   botStatus: PropTypes.string,
   setBotStatus: PropTypes.func,
-  setPanelStatus: PropTypes.func,
+  openStorageExplorer: PropTypes.func,
 };
