@@ -1,46 +1,64 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { DirectedGraph } from 'cci-graph-lib';
+import './style.css';
 
-import { ObiTransformer } from '../../src/transformer';
+import dagre from 'dagre';
+
+import { transform } from '../../src';
 import * as sampleJson from './sample.json';
 
-const transformer = new ObiTransformer();
-const PAYLOAD_KEY = 'json';
-const demoItems = transformer.toDirectedGraphSchema(sampleJson, PAYLOAD_KEY);
+declare var dagreD3;
+declare var d3;
+declare var window;
 
+const { nodes, edges } = transform(sampleJson as any);
+
+/**
+ * This demo shows how to consume a transformed OBI json to a directed graph via the DagreD3 library.
+ */
 class Demo extends Component {
-  render() {
-    const items = demoItems.map(x => ({
-      ...x,
-      contentRenderer: Node,
-      footerRenderer: null,
-    }));
-    return (
-      <div>
-        <p>Hello</p>
-        <DirectedGraph items={items} />
-      </div>
-    );
+  componentDidMount() {
+    this.mountD3();
   }
-}
 
-class Node extends Component {
+  mountD3() {
+    const g = new dagre.graphlib.Graph().setGraph({}).setDefaultEdgeLabel(() => ({}));
+    const render = new dagreD3.render();
+
+    nodes.forEach(node => {
+      g.setNode(node.id, { label: node.payload['$type'] });
+    });
+
+    g.nodes().forEach(v => {
+      const node = g.node(v);
+      node.rx = node.ry = 5;
+    });
+
+    edges.forEach(edge => {
+      g.setEdge(edge.from, edge.to, { label: edge.why });
+    });
+
+    // Create the renderer
+    var renderD3 = new dagreD3.render();
+
+    // Set up an SVG group so that we can translate the final graph.
+    var svg = d3.select('svg'),
+      svgGroup = svg.append('g');
+
+    // Run the renderer. This is what draws the final graph.
+    renderD3(d3.select('svg g'), g);
+
+    // Center the graph
+    var xCenterOffset = (svg.attr('width') - g.graph().width) / 2;
+    svgGroup.attr('transform', 'translate(' + xCenterOffset + ', 20)');
+    svg.attr('height', g.graph().height + 40);
+  }
+
   render() {
-    const data = this.props['data'][PAYLOAD_KEY];
     return (
-      <div
-        style={{
-          width: 200,
-          height: 100,
-          border: '1px solid black',
-          overflow: 'hidden',
-          overflowWrap: 'break-word',
-        }}
-      >
-        <div>Type: {data['$type']}</div>
-        <div>Steps: {data['steps'] ? data['steps'].length : 0}</div>
-      </div>
+      <svg id="nodeTree" ref="nodeTree" width="960" height="600">
+        <g ref="nodeTreeGroup" />
+      </svg>
     );
   }
 }
