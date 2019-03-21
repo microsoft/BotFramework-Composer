@@ -15,10 +15,10 @@ export const yieldWelcomeConnections: YieldHandler = (welcomeElements, root) => 
 // 'Intent's should be connected to the only 'recognizer' by their intent names.
 export const yieldIntentConnections: YieldHandler = (intentElements, root) => {
   const edges: ConnectorEdge[] = [];
+  const recognizer = root['recognizer'][0];
 
   for (const intent of intentElements) {
     const intentKey = intent.data['intent'];
-    const recognizer = root['recognizer'][0];
     const connection = recognizer.data['rules'][intentKey];
 
     if (connection) {
