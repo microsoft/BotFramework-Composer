@@ -8,14 +8,14 @@ import {
   obiRuleToGraphProcess,
 } from './handlers/transformers';
 import { TraceableData } from './types/TraceableData';
-import { Analyzer } from './types/Analyzer';
+import { AnalyzerDefinition } from './types/Analyzer';
 import { ObiSchema } from '../models/obi/ObiSchema';
 import { RuleDialogComponents } from './types/RuleDialogComponents';
 
-export const ruleDialogAnalyzer: Analyzer<ObiSchema, TraceableData<any>, RuleDialogComponents> = {
+export const ruleDialogAnalyzer: AnalyzerDefinition<ObiSchema, TraceableData<any>, RuleDialogComponents> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
-  transform: {
+  execution: {
     storage: {
       select: selectStorage,
       validate: isTracable,

@@ -8,8 +8,8 @@ export type AnalyzerTransformationCollection<InputSchema, IntermediaSchema> = {
   [feature: string]: AnalyzerTransformationProcess<InputSchema, IntermediaSchema>;
 };
 
-export type Analyzer<InputSchema, IntermediaSchema, ResultSchema> = {
+export type AnalyzerDefinition<InputSchema, IntermediaSchema, ResultSchema> = {
   before: ((input: InputSchema) => boolean)[];
   after: ((result: ResultSchema) => boolean)[];
-  transform: AnalyzerTransformationCollection<InputSchema, IntermediaSchema>;
+  execution: AnalyzerTransformationCollection<InputSchema, IntermediaSchema>;
 };
