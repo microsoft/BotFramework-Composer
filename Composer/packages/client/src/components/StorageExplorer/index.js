@@ -1,14 +1,14 @@
+/* eslint-disable no-unused-vars */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Fragment, useState, useRef, useLayoutEffect } from 'react';
+import { useEffect, Fragment, useState, useRef, useLayoutEffect, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { PropTypes } from 'prop-types';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 
-import { storageApi } from '../../utils/storage';
+import { Store } from '../../store/index';
 
 import {
   container,
@@ -25,63 +25,31 @@ import {
   detailListClass,
 } from './styles';
 
-const storageClient = new storageApi();
-
-export function StorageExplorer(props) {
-  function togglePanel(props) {
-    props.setPanelStatus(!props.panelStatus);
-  }
-
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      onItemInvoked(selection.getSelection()[0]);
-    },
-  });
-
-  function onItemInvoked(item) {
-    alert(`Item invoked: ${item.name}`);
-  }
-
-  function onPathSelected(event, item) {
-    // todo: implement the state change.
-    // eslint-disable-next-line no-console
-    console.log(`Breadcrumb item with key "${item.key}" has been clicked.`);
-  }
-
-  function getCurrentPath() {
-    return [
-      { text: 'Files', key: 'Files', onClick: onPathSelected },
-      { text: 'This is folder 1', key: 'f1', onClick: onPathSelected },
-      { text: 'This is folder 2', key: 'f2', onClick: onPathSelected },
-      { text: 'This is folder 3', key: 'f3', onClick: onPathSelected, isCurrentItem: true },
-    ];
-  }
-
-  function getStorageSource() {
-    let scourceLinks = [];
-    storageClient.getStorage((storages, index) => {
-      scourceLinks = storages.forEach(storage => {
-        return { name: storage.name, key: index, onClick: onNavClicked };
-      });
-    });
-    return [
-      {
-        links: scourceLinks,
-      },
-    ];
-  }
-
-  // this empty div tag used to replace the default panel header.
-  function onRenderNavigationContent() {
-    return (
-      <Fragment>
-        <div style={{ height: '0px' }} />
-      </Fragment>
-    );
-  }
+export function StorageExplorer() {
+  const storagesRef = useRef();
+  const storageFilesRef = useRef();
+  const currentPathRef = useRef();
+  const { state, actions } = useContext(Store);
+  const { storages, currentStorage, currentStorageFiles, storageExplorerStatus } = state;
+  const FILE_ICONS = [
+    { name: 'accdb' },
+    { name: 'csv' },
+    { name: 'docx' },
+    { name: 'dotx' },
+    { name: 'mpt' },
+    { name: 'odt' },
+    { name: 'one' },
+    { name: 'onepkg' },
+    { name: 'onetoc' },
+    { name: 'pptx' },
+    { name: 'pub' },
+    { name: 'vsdx' },
+    { name: 'xls' },
+    { name: 'xlsx' },
+    { name: 'xsn' },
+  ];
 
   // for detail file list in open panel
-  // cloumns title
   const [tableColums, setTableColumns] = useState(generateTableColumns());
   function generateTableColumns() {
     return [
@@ -167,128 +135,94 @@ export function StorageExplorer(props) {
     ];
   }
 
-  const FILE_ICONS = [
-    { name: 'accdb' },
-    { name: 'csv' },
-    { name: 'docx' },
-    { name: 'dotx' },
-    { name: 'mpt' },
-    { name: 'odt' },
-    { name: 'one' },
-    { name: 'onepkg' },
-    { name: 'onetoc' },
-    { name: 'pptx' },
-    { name: 'pub' },
-    { name: 'vsdx' },
-    { name: 'xls' },
-    { name: 'xlsx' },
-    { name: 'xsn' },
-  ];
-  const LOREM_IPSUM = (
-    'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut ' +
-    'labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut ' +
-    'aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore ' +
-    'eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt '
-  ).split(' ');
-  let loremIndex = 0;
-  const folderItems = getFolderItems();
+  const selection = new Selection({
+    onSelectionChanged: () => {
+      onItemInvoked(selection.getSelection()[0]);
+    },
+  });
 
-  const [fileInfos, setFileInfos] = useState(folderItems[0].value);
-  const fileItemsRef = useRef();
+  useEffect(() => {
+    actions.fetchStorages();
+  }, []);
+
+  // todo: result pass from api result to ui acceptable format may need move to reducer.
+  useLayoutEffect(() => {
+    const links = [];
+    storages.forEach(storage => {
+      links.push({
+        name: storage.name,
+        key: storage.id,
+        onClick: onNavClicked,
+      });
+    });
+    storagesRef.current = [
+      {
+        links: links,
+      },
+    ];
+  }, [storages]);
 
   useLayoutEffect(() => {
-    fileItemsRef.current = fileInfos;
-  }, [fileInfos]);
+    if (currentStorage.path) {
+      const pathItems = currentStorage.path.split('/');
+      let folderPath = '';
+      pathItems.forEach(item => {
+        folderPath += `${item}/`;
+        return { text: item, key: folderPath, onClick: onPathChange };
+      });
+      currentPathRef.current = pathItems;
+    }
+  }, [currentStorage]);
+
+  useLayoutEffect(() => {
+    storageFilesRef.current = currentStorageFiles;
+  }, [currentStorageFiles]);
+
+  function toggleExplorer() {
+    status === 'closed' ? 'opened' : 'closed';
+    actions.setStorageExplorerStatus(status);
+  }
+
+  // this empty div tag used to replace the default panel header.
+  function onRenderNavigationContent() {
+    return (
+      <Fragment>
+        <div style={{ height: '0px' }} />
+      </Fragment>
+    );
+  }
 
   function onNavClicked(event, item) {
-    setFileInfos(folderItems[item.key].value);
+    const selectedStorage = storages.find(storage => storage.id === item.key);
+    actions.fetchFolderItemsByPath(selectedStorage);
   }
 
-  function lorem(wordCount) {
-    const startIndex = loremIndex + wordCount > LOREM_IPSUM.length ? 0 : loremIndex;
-    loremIndex = startIndex + wordCount;
-    return LOREM_IPSUM.slice(startIndex, loremIndex).join(' ');
-  }
+  // function getFileEditDate(start, end) {
+  //   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  //   return {
+  //     value: date.valueOf(),
+  //     dateFormatted: date.toLocaleDateString(),
+  //   };
+  // }
 
-  function getFolderItems() {
-    const items1 = [];
-    const items2 = [];
-    for (let i = 0; i < 10; i++) {
-      const randomDate = getFileEditDate(new Date(2012, 0, 1), new Date());
-      const randomFileSize = getFileSize();
-      const randomFileType = getFileIcon();
-      let fileName = lorem(2);
-      fileName = fileName.charAt(0).toUpperCase() + fileName.slice(1).concat(`.${randomFileType.docType}`);
-      let userName = lorem(2);
-      userName = userName
-        .split(' ')
-        .map(name => name.charAt(0).toUpperCase() + name.slice(1))
-        .join(' ');
-      items1.push({
-        name: fileName,
-        value: fileName,
-        iconName: randomFileType.url,
-        fileType: randomFileType.docType,
-        modifiedBy: userName,
-        dateModified: randomDate.dateFormatted,
-        dateModifiedValue: randomDate.value,
-        fileSize: randomFileSize.value,
-        fileSizeRaw: randomFileSize.rawSize,
-      });
-      for (let i = 11; i < 100; i++) {
-        const randomDate = getFileEditDate(new Date(2012, 0, 1), new Date());
-        const randomFileSize = getFileSize();
-        const randomFileType = getFileIcon();
-        let fileName = lorem(2);
-        fileName = `${fileName}.${randomFileType.docType}`;
-        let userName = lorem(2);
-        userName = userName
-          .split(' ')
-          .map(name => name.charAt(0).toUpperCase() + name.slice(1))
-          .join(' ');
-        items2.push({
-          name: fileName,
-          value: fileName,
-          iconName: randomFileType.url,
-          fileType: randomFileType.docType,
-          modifiedBy: userName,
-          dateModified: randomDate.dateFormatted,
-          dateModifiedValue: randomDate.value,
-          fileSize: randomFileSize.value,
-          fileSizeRaw: randomFileSize.rawSize,
-        });
-      }
-    }
+  // function getFileIcon() {
+  //   const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
+  //   return {
+  //     docType,
+  //     url: `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${docType}_16x1.svg`,
+  //   };
+  // }
 
-    return [{ name: 'recent', value: items1 }, { name: 'local', value: items2 }];
-  }
-
-  function getFileEditDate(start, end) {
-    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    return {
-      value: date.valueOf(),
-      dateFormatted: date.toLocaleDateString(),
-    };
-  }
-
-  function getFileIcon() {
-    const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
-    return {
-      docType,
-      url: `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${docType}_16x1.svg`,
-    };
-  }
-
-  function getFileSize() {
-    const fileSize = Math.floor(Math.random() * 100) + 30;
-    return {
-      value: `${fileSize} KB`,
-      rawSize: fileSize,
-    };
-  }
+  // function getFileSize() {
+  //   const fileSize = Math.floor(Math.random() * 100) + 30;
+  //   return {
+  //     value: `${fileSize} KB`,
+  //     rawSize: fileSize,
+  //   };
+  // }
 
   function onColumnClick(event, column) {
-    const items = fileItemsRef.current;
+    const items = storageFilesRef.current;
     const newColumns = tableColums.slice();
     const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
     newColumns.forEach(newCol => {
@@ -310,10 +244,19 @@ export function StorageExplorer(props) {
     return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
   }
 
+  function onItemInvoked(item) {
+    alert(`Item invoked: ${item.name}`);
+  }
+
+  function onPathChange(event, item) {
+    // todo: implement the state change.
+    alert(`"${item.key}" has been clicked.`);
+  }
+
   function getLeftNav() {
     return (
       <div css={panelNav}>
-        <div css={navHeader} onClick={() => togglePanel(props)}>
+        <div css={navHeader} onClick={() => toggleExplorer()}>
           <div css={iconContainer}>
             <Icon iconName="Back" css={icon} text="Close" />
           </div>
@@ -322,7 +265,7 @@ export function StorageExplorer(props) {
           <Nav
             groups={[
               {
-                links: [{ name: 'Open', key: 'open', onClick: onPathSelected }],
+                links: [{ name: 'Open', key: 'open', onClick: onPathChange }],
               },
             ]}
             initialSelectedKey={'open'}
@@ -344,8 +287,8 @@ export function StorageExplorer(props) {
           <div css={title}>Open</div>
           <div style={{ paddingTop: '10px' }}>
             <Nav
-              groups={getStorageSource()}
-              initialSelectedKey={'0'}
+              groups={storagesRef.current}
+              initialSelectedKey={currentStorage.id}
               css={navBody}
               styles={{
                 link: navLinks.sourceNavLink,
@@ -360,9 +303,9 @@ export function StorageExplorer(props) {
   function getFileSelector() {
     return (
       <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '90px' }}>
-        <Breadcrumb items={getCurrentPath()} ariaLabel={'File path'} maxDisplayedItems={'1'} />
+        <Breadcrumb items={currentPathRef.current} ariaLabel={'File path'} maxDisplayedItems={'1'} />
         <DetailsList
-          items={fileInfos}
+          items={currentStorageFiles}
           compact={false}
           columns={tableColums}
           setKey="set"
@@ -382,7 +325,7 @@ export function StorageExplorer(props) {
   return (
     <Fragment>
       <Panel
-        isOpen={props.panelStatus}
+        isOpen={storageExplorerStatus === 'opened'}
         type={PanelType.customNear}
         css={container}
         isModeless={true}
@@ -401,10 +344,3 @@ export function StorageExplorer(props) {
     </Fragment>
   );
 }
-
-StorageExplorer.propTypes = {
-  panelStatus: PropTypes.bool,
-  setPanelStatus: PropTypes.func,
-  items: PropTypes.array,
-  columns: PropTypes.array,
-};

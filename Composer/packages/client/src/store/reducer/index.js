@@ -42,7 +42,19 @@ const setEditor = (state, { editor }) => {
 };
 
 const getStoragesSuccess = (state, { response }) => {
-  return (state.files = response.data);
+  return (state.storages = response.data);
+};
+
+const setStorageExplorerStatus = (state, { status }) => {
+  return (state.storageExplorerStatus = status);
+};
+
+const getStorageFileSuccess = (state, { status }) => {
+  return (state.currentStorageFiles = status);
+};
+
+const loadingStorageFiles = (state, { storage }) => {
+  return (state.currentStorage = storage);
 };
 
 export const reducer = createReducer({
@@ -52,5 +64,8 @@ export const reducer = createReducer({
   [ActionTypes.OPEN_FILE_INDEX_SET]: setOpenFileIndex,
   [ActionTypes.EDITOR_ADD]: addEditor,
   [ActionTypes.EDITOR_SET]: setEditor,
+  [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
+  [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
+  [ActionTypes.STORAGEFILE_LOADING]: loadingStorageFiles,
 });

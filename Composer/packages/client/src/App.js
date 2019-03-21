@@ -28,9 +28,11 @@ export function App() {
           actions.toggleBot(status);
         }}
         onFileOpen={handleFileOpen}
-        openStorageExplorer={setPanelStatus}
+        openStorageExplorer={() => {
+          actions.setStorageExplorerStatus('opened');
+        }}
       />
-      <StorageExplorer panelStatus={panelStatus} setPanelStatus={setPanelStatus} />
+      <StorageExplorer />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{

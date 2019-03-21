@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
 
 export const Header = props => {
-  const { botStatus, setBotStatus } = props;
+  const { botStatus, setBotStatus, openStorageExplorer } = props;
   return (
     <header css={header}>
       <div css={aside}>Composer</div>
@@ -17,9 +17,7 @@ export const Header = props => {
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
-          onClick={() => {
-            props.openStorageExplorer(true);
-          }}
+          onClick={() => openStorageExplorer()}
         >
           Open
         </ActionButton>

@@ -10,8 +10,16 @@ export const Store = React.createContext();
 const initialState = {
   files: [],
   editors: [],
+  storages: [],
+  currentStorageFiles: [],
   botStatus: 'stopped',
+<<<<<<< HEAD
   openFileIndex: -1,
+=======
+  openFileIndex: '-1',
+  storageExplorerStatus: 'closed',
+  currentStorage: { id: 'default' },
+>>>>>>> add settings for storage explorer status
 };
 
 export function StoreProvider(props) {

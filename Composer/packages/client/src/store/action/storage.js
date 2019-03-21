@@ -2,6 +2,13 @@ import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
+export async function setStorageExplorerStatus(dispatch, status) {
+  dispatch({
+    type: ActionTypes.STORAGEEXPLORER_STATUS_SET,
+    payload: { status },
+  });
+}
+
 export async function fetchStorages(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
@@ -35,16 +42,20 @@ export async function fetchStorageByName(dispatch, fileName) {
   }
 }
 
-export async function fetchFolderItemsByPath(dispatch, path, storageId) {
+export async function fetchFolderItemsByPath(dispatch, storage) {
   try {
-    const response = await axios.get(`${BASEURL}/storages/${storageId}/blobs/${path}`);
     dispatch({
-      type: ActionTypes.STORAGE_GET_SUCCESS,
+      type: ActionTypes.STORAGEFILE_LOADING,
+      payload: { storage },
+    });
+    const response = await axios.get(`${BASEURL}/storages/${storage.id}/blobs/${storage.path}`);
+    dispatch({
+      type: ActionTypes.STORAGEFILE_GET_SUCCESS,
       payload: { response },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.STORAGE_GET_FAILURE,
+      type: ActionTypes.STORAGEFILE_GET_FAILURE,
       payload: null,
       error: err,
     });
