@@ -13,11 +13,6 @@ describe('test storage server all method', () => {
     expect(result[0].name).toBe('test');
   });
 
-  test('test get a file in one storage', () => {
-    let result = storageHandler.getFolderTree(__dirname);
-    expect(result.length).toBeGreaterThan(0);
-  });
-
   test('test get folder in one storage', () => {
     let result = storageHandler.getFolderTree(__dirname);
     expect(result.length).toBeGreaterThan(0);
