@@ -3,15 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.2.2",
-    "@babel/runtime": "^7.3.4",
     "@emotion/core": "^10.0.7",
     "@reach/router": "^1.2.1",
     "@svgr/webpack": "4.1.0",
     "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
-    "babel-jest": "23.6.0",
     "babel-loader": "8.0.5",
     "babel-plugin-named-asset-import": "^0.3.1",
     "babel-preset-react-app": "^7.0.1",
@@ -34,10 +31,6 @@
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
     "immer": "^2.1.4",
-    "jest": "23.6.0",
-    "jest-pnp-resolver": "1.0.2",
-    "jest-resolve": "23.6.0",
-    "jest-watch-typeahead": "^0.2.1",
     "mini-css-extract-plugin": "0.5.0",
     "office-ui-fabric-react": "^6.146.1",
     "optimize-css-assets-webpack-plugin": "5.0.1",
@@ -50,7 +43,7 @@
     "react": "^16.8.1",
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
-    "react-dom": "^16.8.1",
+    "react-dom": "16.8.2",
     "react-frame-component": "^4.0.2",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
@@ -62,65 +55,6 @@
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
-  },
-  "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "resolver": "jest-pnp-resolver",
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "C:\\Users\\donglei\\code\\composer-prototype\\Composer-experimental\\node_modules\\jest-watch-typeahead\\filename.js",
-      "C:\\Users\\donglei\\code\\composer-prototype\\Composer-experimental\\node_modules\\jest-watch-typeahead\\testname.js"
-    ]
   },
   "babel": {
     "presets": [
@@ -144,7 +78,29 @@
       }
     }
   },
+  "scripts": {
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "jest"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.4",
+    "@babel/plugin-proposal-class-properties": "7.3.4",
+    "@babel/plugin-transform-runtime": "7.4.0",
+    "@babel/preset-env": "7.3.0",
+    "@babel/preset-react": "7.0.0",
+    "@babel/runtime": "7.3.4",
+    "babel-jest": "24.0.0",
     "babel-plugin-emotion": "^10.0.7",
     "eslint": "^5.15.1",
     "eslint-config-prettier": "^4.1.0",
@@ -152,6 +108,8 @@
     "eslint-plugin-notice": "^0.7.8",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react-hooks": "^1.5.0",
-    "eslint-plugin-typescript": "^0.14.0"
+    "eslint-plugin-typescript": "^0.14.0",
+    "jest": "24.0.0",
+    "react-testing-library": "^6.0.1"
   }
 }

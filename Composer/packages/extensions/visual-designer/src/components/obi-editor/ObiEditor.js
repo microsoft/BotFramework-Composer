@@ -21,7 +21,7 @@ export class ObiEditor extends Component {
     const directedGraphItems = obiTransformer.toDirectedGraphSchema(data);
 
     return (
-      <div className="obi-editor-container">
+      <div className="obi-editor-container" data-testid="obi-editor-container">
         <DialogFlowEditor
           items={directedGraphItems}
           width={width}

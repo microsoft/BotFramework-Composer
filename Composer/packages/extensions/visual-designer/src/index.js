@@ -36,7 +36,7 @@ export default class extends Component {
     const data = JSON.parse(this.props.data.content);
 
     return (
-      <div className="visualdesinger-container">
+      <div className="visualdesigner-container" data-testid="visualdesigner-container">
         <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
       </div>
     );
