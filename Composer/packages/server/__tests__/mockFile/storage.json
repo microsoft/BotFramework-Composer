@@ -1,0 +1,6 @@
+{
+    "recentAccessedBots": "[{\"test1\", \"test2\"}]",
+    "linkedStorages": "[{\"name\":\"test\",\"type\":\"LocalDrive\",\"id\":\"test\"}]",
+    "lastActiveBot": "../../../SampleBots/SampleBot4/bot4.bot",
+    "pickerWorkingDir": "../../../SampleBots"
+}

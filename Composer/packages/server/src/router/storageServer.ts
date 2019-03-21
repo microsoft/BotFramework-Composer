@@ -2,16 +2,16 @@ import express, { Router } from 'express';
 import storage from '../storage/StorageService';
 import { IStorageInterface } from '../modal/IStorageInterface';
 import fs from 'fs';
+import { FileStorage } from '../storage/FileStorage';
 
 const router: Router = express.Router({});
 
 router.get('/', function(req: any, res: any, next: any) {
   try {
-    let storagesList = storage.getItem<string>('linkedStorages', '[]');
-    storagesList = JSON.parse(storagesList);
+    let storagesList = storageHandler.getStorage(storage);
     res.status(200).json(storagesList);
   } catch (error) {
-    res.status(400).json({ error: 'get storages list error' });
+    res.status(400).json({ error: 'get storages error' });
   }
 });
 
@@ -34,7 +34,7 @@ router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any)
       result = fs.readFileSync(path, 'utf-8');
       result = JSON.parse(result);
     } else if (stat.isDirectory()) {
-      let folderTree = getFolderTree(path);
+      let folderTree = storageHandler.getFolderTree(path);
       result = {
         name: path.substr(path.lastIndexOf('/') + 1),
         path: path,
@@ -45,32 +45,44 @@ router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any)
   });
 });
 
-// get current layer files list
-const getFolderTree = (folderPath: string) => {
-  let folderTree = [] as object[];
-  let items = fs.readdirSync(folderPath);
-
-  for (let item of items) {
-    let itemPath = `${folderPath}/${item}`;
-    let tempStat = fs.statSync(itemPath);
-
-    if (tempStat.isDirectory()) {
-      folderTree.push({
-        name: item,
-        type: 'folder',
-        path: itemPath,
-      });
-    } else if (tempStat.isFile()) {
-      folderTree.push({
-        name: item,
-        size: tempStat.size,
-        type: 'file',
-        lastModified: tempStat.mtimeMs,
-        path: itemPath,
-      });
-    }
-  }
-  return folderTree;
-};
-
 export const storagesServerRouter: Router = router;
+
+// decouple all handlers for easy testing
+export const storageHandler = {
+  getStorage: (_storage: FileStorage) => {
+    try {
+      let storagesList = _storage.getItem<string>('linkedStorages', '[]');
+      storagesList = JSON.parse(storagesList);
+      return storagesList;
+    } catch (error) {
+      return error;
+    }
+  },
+  // get current layer files list
+  getFolderTree: (folderPath: string) => {
+    let folderTree = [] as object[];
+    let items = fs.readdirSync(folderPath);
+
+    for (let item of items) {
+      let itemPath = `${folderPath}/${item}`;
+      let tempStat = fs.statSync(itemPath);
+
+      if (tempStat.isDirectory()) {
+        folderTree.push({
+          name: item,
+          type: 'folder',
+          path: itemPath,
+        });
+      } else if (tempStat.isFile()) {
+        folderTree.push({
+          name: item,
+          size: tempStat.size,
+          type: 'file',
+          lastModified: tempStat.mtimeMs,
+          path: itemPath,
+        });
+      }
+    }
+    return folderTree;
+  },
+};
