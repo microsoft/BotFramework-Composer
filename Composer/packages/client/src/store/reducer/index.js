@@ -41,6 +41,10 @@ const setEditor = (state, { editor }) => {
   return state;
 };
 
+const getStoragesSuccess = (state, { response }) => {
+  return (state.files = response.data);
+};
+
 export const reducer = createReducer({
   [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
   [ActionTypes.FILES_UPDATE]: updateFiles,
@@ -48,4 +52,5 @@ export const reducer = createReducer({
   [ActionTypes.OPEN_FILE_INDEX_SET]: setOpenFileIndex,
   [ActionTypes.EDITOR_ADD]: addEditor,
   [ActionTypes.EDITOR_SET]: setEditor,
+  [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
 });
