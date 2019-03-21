@@ -1,5 +1,3 @@
-import { TraceableAnalyzerResult } from '../types/AnalyzerResult';
-
 export const isTracable = (x: any) => {
   if (x.path && x.data) {
     return true;
@@ -7,7 +5,7 @@ export const isTracable = (x: any) => {
   return false;
 };
 
-export function validateRuleDialogComponents(input: TraceableAnalyzerResult): boolean {
+export function validateRuleDialogComponents(input): boolean {
   let recognizerCnt = input['recognizer'].length;
   let welcomeCnt = input['welcome'].length;
   let fallbackCnt = input['fallback'].length;
