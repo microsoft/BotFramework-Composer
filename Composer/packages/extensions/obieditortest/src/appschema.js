@@ -304,14 +304,14 @@ export const masterSchema = {
           examples: ['value.birthday'],
         },
         minValue: {
-          type: 'integer',
+          type: 'string',
           title: 'Mininum value',
           description:
             'The minimum value that is acceptable.  If the value is less then this then the TooSmallReponse and RetryPrompt will be sent.',
           examples: ['1900-01-01'],
         },
         maxValue: {
-          type: 'integer',
+          type: 'string',
           title: 'Maximum value',
           description:
             'The maximum value that is acceptable.  If the value is greater then this then the TooLargeResponse and RetryPrompt will be sent.',
@@ -651,6 +651,7 @@ export const masterSchema = {
       description:
         'Definition of Microsoft.IActivityTemplate which will be expanded by components that $implements it.',
       $role: 'unionType',
+      type: 'string',
     },
     'Microsoft.IDialog': {
       title: 'Microsoft IDialog',
@@ -844,48 +845,31 @@ export const masterSchema = {
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        ifTrue: {
-          oneOf: [
-            {
-              $type: 'Microsoft.IDialogStep',
-              $ref: '#/definitions/Microsoft.IDialogStep',
-            },
-            {
-              type: 'array',
-              items: {
-                $type: 'Microsoft.IDialogStep',
-                $ref: '#/definitions/Microsoft.IDialogStep',
-              },
-              title: 'array',
-            },
-          ],
-          title: 'If True',
-          description: 'Step to execute if expression is true.',
-        },
-        ifFalse: {
-          oneOf: [
-            {
-              $type: 'Microsoft.IDialogStep',
-              $ref: '#/definitions/Microsoft.IDialogStep',
-            },
-            {
-              type: 'array',
-              items: {
-                $type: 'Microsoft.IDialogStep',
-                $ref: '#/definitions/Microsoft.IDialogStep',
-              },
-              title: 'array',
-            },
-          ],
-          title: 'If False',
-          description: 'Step to execute if expression is false.',
-        },
         expression: {
           $type: 'Microsoft.IExpression',
           title: 'Condition',
           description: 'Expression to evaluate.',
           examples: ['user.age > 3'],
           $ref: '#/definitions/Microsoft.IExpression',
+          type: 'string',
+        },
+        ifTrue: {
+          type: 'array',
+          items: {
+            $type: 'Microsoft.IDialogStep',
+            $ref: '#/definitions/Microsoft.IDialogStep',
+          },
+          title: 'If True',
+          description: 'Step to execute if expression is true.',
+        },
+        ifFalse: {
+          type: 'array',
+          items: {
+            $type: 'Microsoft.IDialogStep',
+            $ref: '#/definitions/Microsoft.IDialogStep',
+          },
+          title: 'If False',
+          description: 'Step to execute if expression is false.',
         },
       },
       patternProperties: {
