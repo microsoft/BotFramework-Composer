@@ -3,7 +3,6 @@ import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { mergedSchema } from '../../src/schema/appschema';
 import Example from '../../src';
 
 import 'codemirror/mode/javascript/javascript';
