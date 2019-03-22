@@ -1,13 +1,12 @@
 import { ILauncherConnector } from './interface';
 import { LauncherStatus } from './launcherStatus';
-import process from 'child_process';
-import { config } from '../config';
+import childprocess from 'child_process';
+import storage from '../storage/StorageService';
 
 export class CSharpLauncherConnector implements ILauncherConnector {
   private path: string;
-  private command: string = 'dotnet run';
-  private child: any = null;
 
+  private child: childprocess.ChildProcess | undefined;
   constructor(pathConfig: any) {
     this.path = pathConfig.path;
   }
@@ -15,18 +14,42 @@ export class CSharpLauncherConnector implements ILauncherConnector {
   public status: LauncherStatus = LauncherStatus.Stopped;
 
   start = () => {
-    const cmd: string = `cd ${this.path} &&  ${this.command} --bot:provider=${config.bot.provider} --bot:path=${
-      config.bot.path
-    }`;
-    console.log('Starting launcher with command ' + cmd);
+    console.log('Starting launcher');
 
-    this.child = process.exec(cmd, (error: any, stdout: any, stderr: any) => {
-      if (error) {
-        console.error(`error: ${error}`);
-        return;
+    //should get real relatively path of CSharp bot project
+    const botPath: string | undefined = storage.getItem<string>('lastActiveBot');
+    var realBotPath: string | undefined;
+    if (botPath !== undefined) {
+      realBotPath = botPath.substr(botPath.indexOf('/') + 1);
+    }
+
+    console.log('command: ' + `$dotnet bin/Debug/netcoreapp2.0/BotProject.dll ` + `--bot:path=${realBotPath}`);
+
+    childprocess.spawnSync('dotnet', [`build`], { cwd: `${this.path}` });
+
+    this.child = childprocess.spawn(
+      'dotnet',
+      [`bin/Debug/netcoreapp2.0/BotProject.dll`, `--bot:path=${realBotPath}`, '--urls', `http://localhost:3979`],
+      {
+        detached: true,
+        cwd: `${this.path}`,
       }
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
+    );
+
+    if (this.child.stdout !== null) {
+      this.child.stdout.on('data', (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+    }
+
+    if (this.child.stderr !== null) {
+      this.child.stderr.on('data', (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+    }
+
+    this.child.on('error', (err: any) => {
+      console.log(`stderr: ${err}`);
     });
 
     this.status = LauncherStatus.Running;
@@ -35,9 +58,9 @@ export class CSharpLauncherConnector implements ILauncherConnector {
 
   stop = () => {
     console.log(`Stopping launcher`);
-
-    // tODO: this not kill sub-process
-    this.child.kill();
+    if (this.child !== undefined) {
+      this.child.kill();
+    }
     this.status = LauncherStatus.Stopped;
     return true;
   };

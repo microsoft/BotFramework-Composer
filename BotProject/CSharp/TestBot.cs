@@ -6,8 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Dialogs.Flow.Loader;
-using Microsoft.Bot.Builder.Planning;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
+using Microsoft.Bot.Builder.Dialogs.Rules;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 
@@ -22,7 +22,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         public TestBot(TestBotAccessors accessors)
         {
             // create the DialogSet from accessor
-            rootDialog = CognitiveLoader.Load<IDialog>(File.ReadAllText(accessors.RootDialogFile));
+            rootDialog = DeclarativeTypeLoader.Load<IDialog>(File.ReadAllText(accessors.RootDialogFile));
             //rootDialog = CognitiveLoader.Load<IDialog>(File.ReadAllText(@"Samples\Planning 6 - DoSteps\main.dialog"));
             _dialogs = new DialogSet(accessors.ConversationDialogState);
             _dialogs.Add(rootDialog);
@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (rootDialog is PlanningDialog planningDialog)
+            if (rootDialog is RuleDialog planningDialog)
             {
                 await planningDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
             }

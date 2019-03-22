@@ -4,13 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node build/server.js",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "start": "tsc -p tsconfig.build.json && node build/server.js",
+    "test": "yarn typecheck && jest",
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.4",
+    "@babel/plugin-proposal-class-properties": "7.3.4",
+    "@babel/preset-env": "7.3.0",
+    "@babel/preset-typescript": "^7.3.3",
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
     "@types/debug": "^4.1.2",
@@ -19,8 +24,9 @@
     "@types/jest": "^24.0.9",
     "@types/morgan": "^1.7.35",
     "@types/node": "^11.9.6",
-    "jest": "^24.1.0",
-    "ts-jest": "^24.0.0",
+    "babel-jest": "24.0.0",
+    "jest": "24.0.0",
+    "react-testing-library": "^6.0.1",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
   },

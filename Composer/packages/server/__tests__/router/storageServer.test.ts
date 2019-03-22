@@ -9,6 +9,7 @@ describe('test storage server all method', () => {
 
   test('GET /api/storages handler', () => {
     let result = storageHandler.getStorage(mockStorage);
+    expect(result).toBeInstanceOf(Array);
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].name).toBe('test');
   });

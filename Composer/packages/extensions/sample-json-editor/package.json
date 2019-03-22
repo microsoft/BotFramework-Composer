@@ -15,9 +15,7 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
-    "test": "nwb test-react",
-    "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server"
+    "test": "jest"
   },
   "dependencies": {
     "prismjs": "^1.15.0",
@@ -27,9 +25,18 @@
     "react": "16.x"
   },
   "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.4",
+    "@babel/plugin-proposal-class-properties": "7.3.4",
+    "@babel/plugin-transform-runtime": "7.4.0",
+    "@babel/preset-env": "7.3.0",
+    "@babel/preset-react": "7.0.0",
+    "babel-jest": "24.0.0",
+    "jest": "24.0.0",
     "nwb": "0.23.x",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "16.8.2",
+    "react-testing-library": "^6.0.1"
   },
   "author": "",
   "homepage": "",

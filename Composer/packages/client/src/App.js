@@ -1,34 +1,33 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import Routes from './router';
-import httpClient from './utils/http';
+import { Store } from './store/index';
 
 initializeIcons(/* optional base url */);
 
-const client = new httpClient();
-export const AppContext = React.createContext(null);
-
 export function App() {
-  const [botStatus, setBotStatus] = useState('stopped');
-  const [files, setFiles] = useState([]);
+  const { state, actions } = useContext(Store);
+  const { botStatus } = state;
 
   function handleFileOpen(files) {
     if (files.length > 0) {
       const file = files[0];
-      client.openbotFile(file.name, files => {
-        if (files.length > 0) {
-          setFiles(files);
-        }
-      });
+      actions.fetchFilesByOpen(file.name);
     }
   }
 
   return (
     <Fragment>
-      <Header client={client} botStatus={botStatus} setBotStatus={setBotStatus} onFileOpen={handleFileOpen} />
+      <Header
+        botStatus={botStatus}
+        setBotStatus={status => {
+          actions.toggleBot(status);
+        }}
+        onFileOpen={handleFileOpen}
+      />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
@@ -50,9 +49,7 @@ export function App() {
             zIndex: 2,
           }}
         >
-          <AppContext.Provider value={files}>
-            <Routes />
-          </AppContext.Provider>
+          <Routes />
         </div>
       </div>
     </Fragment>

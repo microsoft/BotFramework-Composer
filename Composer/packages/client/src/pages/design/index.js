@@ -1,22 +1,18 @@
-import React, { useState, useEffect, Fragment, useRef, useLayoutEffect, useContext } from 'react';
+import React, { useEffect, Fragment, useRef, useLayoutEffect, useContext } from 'react';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
-import httpClient from './../../utils/http';
 import { ProjectExplorer } from './../../components/ProjectExplorer';
 import ApiClient from './../../messenger/ApiClient';
-import { AppContext } from './../../App';
+import { Store } from './../../store/index';
 
 // avoid recreate multiple times
 const apiClient = new ApiClient();
 
-const client = new httpClient();
-
 function DesignPage() {
   // central state for all editors\extensions
   // this would serve as the fundation of layout\data exchange\message routing
-  const [editors, setEditors] = useState([
-    /*
+  /* editor item
     {
       col: 1,
       row: 1,
@@ -27,28 +23,16 @@ function DesignPage() {
       name: "window1",
       parent: "window0(shell)"
     }
-    */
-  ]);
+  */
 
-  const [files, setFiles] = useState([]);
-  const [openFileIndex, setOpenFileIndex] = useState(-1);
   const openFileIndexRef = useRef();
   const filesRef = useRef();
-  const newOpenFiles = useContext(AppContext);
+  const { state, actions } = useContext(Store);
+  const { files, openFileIndex, editors } = state;
 
   useEffect(() => {
-    client.getFiles(files => {
-      if (files.length > 0) {
-        setFiles(files);
-      }
-    });
+    actions.fetchFiles();
   }, []);
-
-  useEffect(() => {
-    if (newOpenFiles.length > 0) {
-      setFiles(newOpenFiles);
-    }
-  }, [newOpenFiles]);
 
   useEffect(() => {
     apiClient.connect();
@@ -71,16 +55,13 @@ function DesignPage() {
   });
 
   function createSecondEditor(data) {
-    setEditors([
-      editors[0],
-      {
-        col: 1,
-        row: 2,
-        data: data,
-        name: 'window2',
-        parent: 'window1',
-      },
-    ]);
+    actions.addEditor({
+      col: 1,
+      row: 2,
+      data: data,
+      name: 'window2',
+      parent: 'window1',
+    });
   }
 
   function resetSecondEditor(data) {
@@ -124,17 +105,12 @@ function DesignPage() {
 
     const currentIndex = openFileIndexRef.current;
     const files = filesRef.current;
-
     const payload = {
       name: files[currentIndex].name,
       content: newFileObject.content,
     };
 
-    const newFiles = files.slice();
-    newFiles[currentIndex].content = newFileObject.content;
-    setFiles(newFiles);
-
-    client.saveFile(payload);
+    actions.updateFile(payload);
   }
 
   function handleFileClick(file, index) {
@@ -144,7 +120,7 @@ function DesignPage() {
       return;
     }
 
-    setOpenFileIndex(index);
+    actions.setOpenFileIndex(index);
 
     if (editors.length >= 1) {
       // reset the data in first window
@@ -152,15 +128,13 @@ function DesignPage() {
       apiClient.apiCallAt('reset', files[index], editorWindow);
     }
 
-    setEditors([
-      {
-        col: 1,
-        row: 1,
-        data: files[index],
-        name: 'window1',
-        parent: 'window0', // shell
-      },
-    ]);
+    actions.setEditor({
+      col: 1,
+      row: 1,
+      data: files[index],
+      name: 'window1',
+      parent: 'window0', // shell
+    });
   }
 
   return (

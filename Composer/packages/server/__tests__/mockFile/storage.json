@@ -1,6 +1,7 @@
 {
-    "recentAccessedBots": "[{\"test1\", \"test2\"}]",
-    "linkedStorages": "[{\"name\":\"test\",\"type\":\"LocalDrive\",\"id\":\"test\"}]",
-    "lastActiveBot": "../../../SampleBots/SampleBot4/bot4.bot",
-    "pickerWorkingDir": "../../../SampleBots"
+    "linkedStorages": "[{\"name\":\"test\",\"type\":\"LocalDrive\",\"id\":\"default\",\"path\":\"../../../\"}]",
+    "pickerWorkingDir": "../../../SampleBots",
+    "openedBotsList": [],
+    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj",
+    "recentAccessedBots": "[{\"path\":\"testPath\",\"storageId\":\"default\"},{\"path\":\"testPath\",\"storageId\":\"default\"},{\"path\":\"testPath\",\"storageId\":\"default\"},{\"path\":\"testPath\",\"storageId\":\"default\"}]"
 }

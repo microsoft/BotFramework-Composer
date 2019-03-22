@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Customizer } from 'office-ui-fabric-react';
+import { FluentCustomizations } from '@uifabric/fluent-theme';
 
 import Form from './Form';
 import { masterSchema } from './appschema';
@@ -50,6 +53,15 @@ const uiSchema = {
   'Microsoft.EndDialog': {
     ...hideMetaData,
   },
+  'Microsoft.DateTimePrompt': {
+    ...hideMetaData,
+    minValue: {
+      'ui:widget': 'datetime',
+    },
+    maxValue: {
+      'ui:widget': 'datetime',
+    },
+  },
 };
 
 const getType = data => {
@@ -64,11 +76,12 @@ const getType = data => {
 
 export const FormEditor = props => {
   const type = getType(props.data);
+
   const [dialogSchema, setDialogSchema] = useState({
     definitions: { ...masterSchema.definitions },
     ...masterSchema.definitions[type],
   });
-  const [dialogUiSchema] = useState({ ...uiSchema[type] });
+  const [dialogUiSchema, setDialogUiSchema] = useState({ ...uiSchema[type] });
 
   const onChange = newValue => {
     props.onChange(newValue.formData);
@@ -77,23 +90,33 @@ export const FormEditor = props => {
   useEffect(() => {
     const type = getType(props.data);
     setDialogSchema({
-      ...dialogSchema,
+      definitions: { ...masterSchema.definitions },
       ...masterSchema.definitions[type],
     });
+    setDialogUiSchema({ ...uiSchema[type] });
   }, [type]);
 
   return (
-    <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
-      <Form
-        noValidate
-        className="schemaForm"
-        onChange={onChange}
-        formData={props.data.dialog}
-        schema={dialogSchema}
-        uiSchema={dialogUiSchema}
-      />
-    </div>
+    <Customizer {...FluentCustomizations}>
+      <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
+        <Form
+          noValidate
+          className="schemaForm"
+          onChange={onChange}
+          formData={props.data.dialog || props.data}
+          schema={dialogSchema}
+          uiSchema={dialogUiSchema}
+        >
+          <button style={{ display: 'none' }} />
+        </Form>
+      </div>
+    </Customizer>
   );
+};
+
+FormEditor.propTypes = {
+  data: PropTypes.shape({ data: PropTypes.any }),
+  onChange: PropTypes.func,
 };
 
 export default FormEditor;

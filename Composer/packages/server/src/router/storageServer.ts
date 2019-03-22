@@ -1,8 +1,8 @@
 import express, { Router } from 'express';
 import storage from '../storage/StorageService';
-import { IStorageInterface } from '../modal/IStorageInterface';
 import fs from 'fs';
 import { FileStorage } from '../storage/FileStorage';
+import path from 'path';
 
 const router: Router = express.Router({});
 
@@ -17,27 +17,27 @@ router.get('/', function(req: any, res: any, next: any) {
 
 // match absolute path
 router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any) {
-  let storageId: string = req.params.storageId;
-  let path: string = req.params.path;
-  if (!path) {
+  let reqPath: string = req.params.path;
+  if (!reqPath) {
     res.status(400).json({ error: 'no path' });
     return;
   }
   let result: any;
-  fs.stat(path, (err, stat) => {
+  fs.stat(reqPath, (err, stat) => {
     if (err) {
       res.status(404).json(err);
       return;
     }
-
+    reqPath = path.normalize(reqPath);
     if (stat.isFile()) {
-      result = fs.readFileSync(path, 'utf-8');
+      result = fs.readFileSync(reqPath, 'utf-8');
       result = JSON.parse(result);
     } else if (stat.isDirectory()) {
-      let folderTree = storageHandler.getFolderTree(path);
+      let folderTree = storageHandler.getFolderTree(reqPath);
+
       result = {
-        name: path.substr(path.lastIndexOf('/') + 1),
-        path: path,
+        name: path.basename(reqPath),
+        path: path.dirname(reqPath),
         children: folderTree,
       };
     }
@@ -53,6 +53,13 @@ export const storageHandler = {
     try {
       let storagesList = _storage.getItem<string>('linkedStorages', '[]');
       storagesList = JSON.parse(storagesList);
+      // deal with relative path
+      for (let item of storagesList) {
+        if (item.type === 'LocalDrive') {
+          item.path = path.resolve(item.path);
+          item.path = path.normalize(item.path);
+        }
+      }
       return storagesList;
     } catch (error) {
       return error;
@@ -64,7 +71,7 @@ export const storageHandler = {
     let items = fs.readdirSync(folderPath);
 
     for (let item of items) {
-      let itemPath = `${folderPath}/${item}`;
+      let itemPath = path.join(folderPath, item);
       let tempStat = fs.statSync(itemPath);
 
       if (tempStat.isDirectory()) {
