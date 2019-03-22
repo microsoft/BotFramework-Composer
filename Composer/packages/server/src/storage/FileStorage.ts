@@ -32,7 +32,7 @@ export class FileStorage {
     return {};
   }
 
-  getItem<T>(key: string, defaultValue?: T): T | undefined {
+  getItem<T>(key: string, defaultValue?: T): T | any {
     const res = this.fileInfo[key];
 
     if (typeof res === 'undefined') {
