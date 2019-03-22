@@ -13,6 +13,7 @@
 		"@types/node": "^11.11.4",
 		"awesome-typescript-loader": "^5.2.1",
 		"clean-webpack-plugin": "^2.0.1",
+		"css-loader": "^2.1.1",
 		"dagre": "^0.8.4",
 		"del": "^4.0.0",
 		"gulp": "^4.0.0",
