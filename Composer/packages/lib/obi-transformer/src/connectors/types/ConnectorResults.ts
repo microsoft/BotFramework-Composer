@@ -1,4 +1,4 @@
-import { TraceableData } from '../../analyzers/types/TraceableData';
+import { TraceableData } from '../../types/TraceableData';
 
 export class ConnectorEdge {
   from: string;

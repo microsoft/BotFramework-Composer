@@ -1,15 +1,15 @@
-import { TraceableData } from '../../analyzers/types/TraceableData';
-import { TraceableAnalyzerResult } from '../../analyzers/types/AnalyzerResult';
-import { ConnectorEdge } from './ConnectorEdge';
+import { TraceableData } from '../../types/TraceableData';
+import { TraceableSelectionResult } from '../../analyzers/types/SelectionResult';
+import { ConnectorEdge } from './ConnectorResults';
 
-export type WhenHandler = (self: TraceableData<any>[], root: TraceableAnalyzerResult) => boolean;
-export type YieldHandler = (self: TraceableData<any>[], root: TraceableAnalyzerResult) => ConnectorEdge[];
+export type WhenHandler = (self: TraceableData<any>[], root: TraceableSelectionResult) => boolean;
+export type YieldHandler = (self: TraceableData<any>[], root: TraceableSelectionResult) => ConnectorEdge[];
 
-export type ConnectionPolicy = {
+export type ConnectorUnit = {
   when: WhenHandler;
   buildConnections: YieldHandler;
 };
 
-export type ConnectionPolicyCollection = {
-  [feature: string]: ConnectionPolicy;
+export type ConnectorPolicy = {
+  [feature: string]: ConnectorUnit;
 };

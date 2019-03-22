@@ -1,5 +1,5 @@
 import { YieldHandler } from '../../../../connectors/types/ConnectionPolicy';
-import { ConnectorEdge } from '../../../../connectors/types/ConnectorEdge';
+import { ConnectorEdge } from '../../../../connectors/types/ConnectorResults';
 
 // Welcome should be connected to the only 'recognizer' directly.
 export const yieldWelcomeConnections: YieldHandler = (welcomeElements, root) => {

@@ -1,11 +1,11 @@
-import { ConnectionPolicyCollection } from './types/ConnectionPolicy';
-import { TraceableAnalyzerResult } from '../analyzers/types/AnalyzerResult';
-import { ConnectorEdge } from './types/ConnectorEdge';
+import { ConnectorPolicy } from './types/ConnectionPolicy';
+import { TraceableSelectionResult } from '../analyzers/types/SelectionResult';
+import { ConnectorEdge } from './types/ConnectorResults';
 
 export class TraceableConnector {
-  constructor(private connectorPolicy: ConnectionPolicyCollection) {}
+  constructor(private connectorPolicy: ConnectorPolicy) {}
 
-  public buildConnection(input: TraceableAnalyzerResult): ConnectorEdge[] {
+  public buildConnection(input: TraceableSelectionResult): ConnectorEdge[] {
     const topics = Object.keys(this.connectorPolicy);
     const connectionGroups: ConnectorEdge[][] = [];
 

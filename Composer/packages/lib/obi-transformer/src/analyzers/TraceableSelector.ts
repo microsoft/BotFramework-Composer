@@ -1,20 +1,20 @@
-import { AnalyzerDefinition } from './types/Analyzer';
-import { TraceableData } from './types/TraceableData';
-import { TraceableAnalyzerResult } from './types/AnalyzerResult';
+import { SelectorPolicy } from './types/SelectorPolicy';
+import { TraceableData } from '../types/TraceableData';
+import { TraceableSelectionResult } from './types/SelectionResult';
 
-export class TraceableAnalyzer<InputSchema> {
-  private analyzer: AnalyzerDefinition<InputSchema, TraceableData<any>, TraceableAnalyzerResult>;
+export class TraceableSelector<InputSchema> {
+  private policy: SelectorPolicy<InputSchema, TraceableData<any>, TraceableSelectionResult>;
 
-  constructor(transformDefinition: AnalyzerDefinition<InputSchema, TraceableData<any>, TraceableAnalyzerResult>) {
-    const { before, execution, after } = transformDefinition;
+  constructor(selectorPolicy: SelectorPolicy<InputSchema, TraceableData<any>, TraceableSelectionResult>) {
+    const { before, execution, after } = selectorPolicy;
     if (!execution) {
       throw new TypeError(`Analyzer constructor failed: missing [execution] filed.`);
     }
 
-    this.analyzer = transformDefinition;
+    this.policy = selectorPolicy;
   }
 
-  public analyze(input: InputSchema) {
+  public select(input: InputSchema) {
     // Before
     this.executeBeforeValidation(input);
 
@@ -27,8 +27,8 @@ export class TraceableAnalyzer<InputSchema> {
   }
 
   private executeBeforeValidation(input: InputSchema): void {
-    const { before } = this.analyzer;
-    // Validate input schema before executing transformation.
+    const { before } = this.policy;
+    // Validate input schema before executing selection.
     if (Array.isArray(before)) {
       for (let i = 0; i < before.length; i++) {
         const validated = before[i](input);
@@ -39,10 +39,10 @@ export class TraceableAnalyzer<InputSchema> {
     }
   }
 
-  private executeSelection(input: InputSchema): TraceableAnalyzerResult {
-    const { execution: executionDefinition } = this.analyzer;
+  private executeSelection(input: InputSchema): TraceableSelectionResult {
+    const { execution: executionDefinition } = this.policy;
 
-    // Generate to be transformed keys from transformDefinition.
+    // Generate to be selected keys from selectionPolicy.
     const features = Object.keys(executionDefinition);
 
     // Generate selected elements to traceable representations.
@@ -53,13 +53,13 @@ export class TraceableAnalyzer<InputSchema> {
       try {
         selectedElements = select(input);
       } catch (e) {
-        throw new TypeError(`Transformation failed: [select] failed at field [${currentTopic}]. Reason: ${e.message}`);
+        throw new TypeError(`Selection failed: [select] failed at field [${currentTopic}]. Reason: ${e.message}`);
       }
 
       // Validate the selection result.
       selectedElements.forEach((x, index) => {
         if (!validate(x)) {
-          throw new TypeError(`Transformation failed: [validate] failed at data [${currentTopic}][${index}].`);
+          throw new TypeError(`Selection failed: [validate] failed at data [${currentTopic}][${index}].`);
         }
       });
 
@@ -71,9 +71,9 @@ export class TraceableAnalyzer<InputSchema> {
     return traceableResult;
   }
 
-  private executeAfterValidation(result: TraceableAnalyzerResult): void {
-    const { after } = this.analyzer;
-    // Validate transformed result after executing transformation.
+  private executeAfterValidation(result: TraceableSelectionResult): void {
+    const { after } = this.policy;
+    // Validate selected result after executing selection.
     if (Array.isArray(after)) {
       for (let i = 0; i < after.length; i++) {
         const valdiated = after[i](result);

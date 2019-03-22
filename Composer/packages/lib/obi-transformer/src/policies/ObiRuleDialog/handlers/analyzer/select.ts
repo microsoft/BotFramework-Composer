@@ -3,7 +3,7 @@ import { RuleTypes } from '../../../../models/obi/types/RuleTypes';
 import { ObiStorage } from '../../../../models/obi/ObiStorage';
 import { ObiRecognizer } from '../../../../models/obi/ObiRecognizer';
 import { ObiRule } from '../../../../models/obi/ObiRule';
-import { TraceableData } from '../../../../analyzers/types/TraceableData';
+import { TraceableData } from '../../../../types/TraceableData';
 
 export type SelectorImpl = (obi: ObiSchema) => TraceableData<any>[];
 

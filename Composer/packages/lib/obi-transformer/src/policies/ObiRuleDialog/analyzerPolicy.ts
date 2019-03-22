@@ -9,12 +9,12 @@ import {
   selectPlainRules,
   selectIntent,
 } from './handlers/analyzer/select';
-import { TraceableData } from '../../analyzers/types/TraceableData';
-import { AnalyzerDefinition } from '../../analyzers/types/Analyzer';
+import { TraceableData } from '../../types/TraceableData';
+import { SelectorPolicy } from '../../analyzers/types/SelectorPolicy';
 import { ObiSchema } from '../../models/obi/ObiSchema';
-import { TraceableAnalyzerResult } from '../../analyzers/types/AnalyzerResult';
+import { TraceableSelectionResult } from '../../analyzers/types/SelectionResult';
 
-export const ruleDialogAnalyzerPolicy: AnalyzerDefinition<ObiSchema, TraceableData<any>, TraceableAnalyzerResult> = {
+export const ruleDialogAnalyzerPolicy: SelectorPolicy<ObiSchema, TraceableData<any>, TraceableSelectionResult> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   execution: {
