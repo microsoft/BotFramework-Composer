@@ -21,7 +21,7 @@ module.exports = {
     '!**/style.js',
     '!**/styles.js',
   ],
-  coverageReporters: ['json', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'lcov', 'text-summary', 'cobertura'],
   coverageThreshold: {
     global: {
       statements: 20,
