@@ -24,7 +24,7 @@ module.exports = {
   coverageReporters: ['json', 'lcov', 'text-summary', 'cobertura'],
   coverageThreshold: {
     global: {
-      statements: 20,
+      statements: 25,
     },
   },
   moduleNameMapper: {
