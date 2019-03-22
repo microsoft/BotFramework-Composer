@@ -1,3 +1,7 @@
+import { ObiSchema } from '../../models/obi/ObiSchema';
+import { TraceableSelectionResult } from './SelectionResult';
+import { TraceableData } from '../../types/TraceableData';
+
 export type SelectorUnit<InputSchema, IntermediaSchema> = {
   select: (input: InputSchema) => IntermediaSchema[];
   validate: (x: IntermediaSchema) => boolean;
@@ -15,3 +19,5 @@ export type SelectorPolicy<InputSchema, IntermediaSchema, ResultSchema> = {
   after: ((result: ResultSchema) => boolean)[];
   execution: SelectorUnitCollection<InputSchema, IntermediaSchema>;
 };
+
+export type TraceableSelectorPolicy = SelectorPolicy<ObiSchema, TraceableData<any>, TraceableSelectionResult>;

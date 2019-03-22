@@ -1,9 +1,9 @@
-import { TransformerPolicyCollection } from './types/TransformerPolicy';
+import { TransformerPolicy } from './types/TransformerPolicy';
 import { TraceableSelectionResult, SelectionResult } from '../selectors/types/SelectionResult';
 import { DirectedGraphNode } from '../models/graph/DirectedGraphNode';
 
 export class TraceableTransformer {
-  constructor(private transformerPolicy: TransformerPolicyCollection) {}
+  constructor(private transformerPolicy: TransformerPolicy) {}
 
   transform(input: TraceableSelectionResult): SelectionResult<DirectedGraphNode<string, any>> {
     const topics = Object.keys(this.transformerPolicy);
