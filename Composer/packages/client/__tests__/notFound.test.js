@@ -10,6 +10,6 @@ describe('<NotFound />', () => {
     const { getByText } = render(<NotFound />);
 
     await waitForElement(() => getByText(/The page you are looking for can't be found./));
-    await waitForElement(() => getByText(/404/));
+    await waitForElement(() => getByText(/404123/));
   });
 });
