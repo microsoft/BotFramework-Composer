@@ -1,7 +1,7 @@
 import { ObiSchema } from './models/obi/ObiSchema';
 
 import { ObiRuleDialogPolicies } from './policies/ObiRuleDialog';
-import { TraceableSelector } from './analyzers/TraceableSelector';
+import { TraceableSelector } from './selectors/TraceableSelector';
 import { TraceableConnector } from './connectors/TraceableConnector';
 import { TraceableTransformer } from './transformers/TraceableTransformer';
 import { flatten } from './utils/flatten';

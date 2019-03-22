@@ -1,5 +1,5 @@
 import { TraceableData } from '../../types/TraceableData';
-import { TraceableSelectionResult } from '../../analyzers/types/SelectionResult';
+import { TraceableSelectionResult } from '../../selectors/types/SelectionResult';
 import { ConnectorEdge } from './ConnectorResults';
 
 export type WhenHandler = (self: TraceableData<any>[], root: TraceableSelectionResult) => boolean;

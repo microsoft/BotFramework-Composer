@@ -1,5 +1,5 @@
 import { TransformerPolicyCollection } from './types/TransformerPolicy';
-import { TraceableSelectionResult, SelectionResult } from '../analyzers/types/SelectionResult';
+import { TraceableSelectionResult, SelectionResult } from '../selectors/types/SelectionResult';
 import { DirectedGraphNode } from '../models/graph/DirectedGraphNode';
 
 export class TraceableTransformer {

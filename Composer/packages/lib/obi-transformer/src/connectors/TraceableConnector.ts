@@ -1,5 +1,5 @@
 import { ConnectorPolicy } from './types/ConnectionPolicy';
-import { TraceableSelectionResult } from '../analyzers/types/SelectionResult';
+import { TraceableSelectionResult } from '../selectors/types/SelectionResult';
 import { ConnectorEdge } from './types/ConnectorResults';
 
 export class TraceableConnector {

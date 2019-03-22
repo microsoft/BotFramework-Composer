@@ -10,9 +10,9 @@ import {
   selectIntent,
 } from './handlers/analyzer/select';
 import { TraceableData } from '../../types/TraceableData';
-import { SelectorPolicy } from '../../analyzers/types/SelectorPolicy';
+import { SelectorPolicy } from '../../selectors/types/SelectorPolicy';
 import { ObiSchema } from '../../models/obi/ObiSchema';
-import { TraceableSelectionResult } from '../../analyzers/types/SelectionResult';
+import { TraceableSelectionResult } from '../../selectors/types/SelectionResult';
 
 export const ruleDialogAnalyzerPolicy: SelectorPolicy<ObiSchema, TraceableData<any>, TraceableSelectionResult> = {
   before: [shouldBeRuleDialog],
