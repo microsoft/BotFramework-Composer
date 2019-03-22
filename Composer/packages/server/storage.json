@@ -1,5 +1,6 @@
 {
-  "pickerWorkingDir": "../../../SampleBots",
-  "openedBotsList": [],
-  "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj"
+    "linkedStorages": "[{\"name\":\"This PC\",\"type\":\"LocalDrive\",\"id\":\"default\",\"path\":\"../../../SampleBots\"}]",
+    "pickerWorkingDir": "../../../SampleBots",
+    "openedBotsList": [],
+    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj"
 }
