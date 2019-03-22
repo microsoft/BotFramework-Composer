@@ -5,65 +5,10 @@ import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 
 import Form from './Form';
-import { masterSchema } from './appschema';
+import { uiSchema } from './schema/uischema';
+import { mergedSchema } from './schema/appschema';
 
 import './App.css';
-
-const hideMetaData = {
-  $ref: {
-    'ui:widget': 'hidden',
-  },
-  $id: {
-    'ui:widget': 'hidden',
-  },
-  $type: {
-    'ui:widget': 'hidden',
-  },
-};
-
-const uiSchema = {
-  'Microsoft.TextPrompt': {
-    ...hideMetaData,
-    property: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-    pattern: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-  },
-  'Microsoft.SendActivityTemplateStep': {
-    ...hideMetaData,
-  },
-  'Microsoft.IntegerPrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-    maxValue: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-  },
-  'Microsoft.EndDialog': {
-    ...hideMetaData,
-  },
-  'Microsoft.DateTimePrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:widget': 'datetime',
-    },
-    maxValue: {
-      'ui:widget': 'datetime',
-    },
-  },
-};
 
 const getType = data => {
   if (data.dialog) {
@@ -80,8 +25,8 @@ export const FormEditor = props => {
   const type = getType(data);
 
   const dialogSchema = {
-    definitions: { ...masterSchema.definitions },
-    ...masterSchema.definitions[type],
+    definitions: { ...mergedSchema.definitions },
+    ...mergedSchema.definitions[type],
   };
 
   const dialogUiSchema = {
@@ -155,6 +100,12 @@ export const FormEditor = props => {
 
 FormEditor.propTypes = {
   data: PropTypes.shape({ data: PropTypes.any }),
+  memory: PropTypes.shape({
+    user: PropTypes.any,
+    conversation: PropTypes.any,
+    turn: PropTypes.any,
+    dialog: PropTypes.any,
+  }),
   onChange: PropTypes.func,
 };
 

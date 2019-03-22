@@ -1,4 +1,4 @@
-export const masterSchema = {
+export const mergedSchema = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
   $id: 'app.schema',
