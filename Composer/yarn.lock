@@ -1583,7 +1583,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.7":
+"@types/react@*", "@types/react@^16.8.7":
   version "16.8.8"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.8.tgz#4b60a469fd2469f7aa6eaa0f8cfbc51f6d76e662"
   integrity sha512-xwEvyet96u7WnB96kqY0yY7qxx/pEpU51QeACkKFtrgjjXITQn0oO1iwPEraXVgh10ZFPix7gs1R4OJXF7P5sg==
@@ -1637,18 +1637,6 @@
   integrity sha512-WsVzTPshvCSbHThUduGGxbmnwcpkgSctHGHTqzWyFg4lYAuV5qXlyFPOsP3OWqCINfmg/8VXP+zJaa4OxEsBQQ==
 
 "@uifabric/fluent-theme@^0.16.0", "@uifabric/fluent-theme@^0.16.2":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@uifabric/fluent-theme/-/fluent-theme-0.16.2.tgz#ba151591feabea8a8d836ff006cf9209c6e46304"
-  integrity sha512-juiypPnB3BFLqj8rPF2I2u5wR0+32j6vlt4Wke/x1NajLMmc4+Q+ZzuRxvcoNBRAnutrplg05Efy9G3azA7QIA==
-  dependencies:
-    "@uifabric/merge-styles" ">=6.16.1 <7.0.0"
-    "@uifabric/set-version" ">=1.1.3 <2.0.0"
-    "@uifabric/styling" ">=6.45.0 <7.0.0"
-    "@uifabric/variants" ">=6.14.0 <7.0.0"
-    office-ui-fabric-react ">=6.157.0 <7.0.0"
-    tslib "^1.7.1"
-
-"@uifabric/fluent-theme@^0.16.2":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@uifabric/fluent-theme/-/fluent-theme-0.16.2.tgz#ba151591feabea8a8d836ff006cf9209c6e46304"
   integrity sha512-juiypPnB3BFLqj8rPF2I2u5wR0+32j6vlt4Wke/x1NajLMmc4+Q+ZzuRxvcoNBRAnutrplg05Efy9G3azA7QIA==
@@ -6824,10 +6812,10 @@ eslint-plugin-prettier@^3.0.1:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-react-hooks@^1.5.0:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.5.1.tgz#3c601326914ee0e1fedd709115db4940bdbbed4a"
-  integrity sha512-i3dIrmZ+Ssrm0LrbbtuGcRf7EEpe1FaMuL8XnnpZO0X4tk3dZNzevWxD0/7nMAFa5yZQfNnYkfEP0MmwLvbdHw==
+eslint-plugin-react-hooks@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.6.0.tgz#348efcda8fb426399ac7b8609607c7b4025a6f5f"
+  integrity sha512-lHBVRIaz5ibnIgNG07JNiAuBUeKhEf8l4etNx5vfAEwqQ5tcuK3jV9yjmopPgQDagQb7HwIuQVsE3IVcGrRnag==
 
 eslint-plugin-react@7.11.1:
   version "7.11.1"

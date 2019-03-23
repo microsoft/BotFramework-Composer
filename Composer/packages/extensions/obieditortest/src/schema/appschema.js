@@ -1,3 +1,30 @@
+export const dialogGroups = {
+  'Input/Prompt Dialogs': [
+    'Microsoft.TextPrompt',
+    'Microsoft.DateTimePrompt',
+    'Microsoft.FloatPrompt',
+    'Microsoft.IntegerPrompt',
+  ],
+  'Dialog Steps': [
+    'Microsoft.CallDialog',
+    'Microsoft.GotoDialog',
+    'Microsoft.EndDialog',
+    'Microsoft.CancelDialog',
+    'Microsoft.SendActivity',
+    'Microsoft.IfProperty',
+    'Microsoft.HttpRequest',
+  ],
+  Rules: [
+    'Microsoft.BeginDialogRule',
+    'Microsoft.EventRule',
+    'Microsoft.IntentRule',
+    'Microsoft.WelcomeRule',
+    'Microsoft.DefaultRule',
+  ],
+  Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.RegexRecognizer'],
+  Other: ['Microsoft.AdaptiveDialog'],
+};
+
 export const mergedSchema = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
