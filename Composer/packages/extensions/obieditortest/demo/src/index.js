@@ -88,6 +88,7 @@ function Demo() {
       'Microsoft.CancelDialog',
       'Microsoft.SendActivity',
       'Microsoft.IfProperty',
+      'Microsoft.HttpRequest',
     ],
     Rules: [
       'Microsoft.BeginDialogRule',
@@ -108,7 +109,7 @@ function Demo() {
       dialogGroups[elem].forEach(dialog => {
         options.push({ key: dialog, text: dialog });
       });
-      options.push({ key: 'divider_2', text: '-', itemType: DropdownMenuItemType.Divider });
+      options.push({ key: `${elem}_divider`, text: '-', itemType: DropdownMenuItemType.Divider });
     }
 
     return options;
