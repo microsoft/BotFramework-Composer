@@ -5,7 +5,7 @@ import './style.css';
 import dagre from 'dagre';
 
 import { transform } from '../../src';
-import * as sampleJson from './sample.json';
+import * as sampleJson from './sample-input.json';
 
 declare var dagreD3;
 declare var d3;
