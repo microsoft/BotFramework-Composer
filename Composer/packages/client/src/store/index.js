@@ -10,8 +10,11 @@ export const Store = React.createContext();
 const initialState = {
   files: [],
   editors: [],
+  storages: [],
+  currentStorageFiles: [],
   botStatus: 'stopped',
   openFileIndex: -1,
+  storageExplorerStatus: 'closed',
 };
 
 export function StoreProvider(props) {

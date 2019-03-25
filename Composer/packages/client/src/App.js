@@ -3,6 +3,7 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
+import { StorageExplorer } from './components/StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
 
@@ -12,11 +13,9 @@ export function App() {
   const { state, actions } = useContext(Store);
   const { botStatus } = state;
 
-  function handleFileOpen(files) {
-    if (files.length > 0) {
-      const file = files[0];
-      actions.fetchFilesByOpen(file.name);
-    }
+  function handleFileOpen(id, path) {
+    actions.openBotProject(id, path);
+    actions.initProjectState();
   }
 
   return (
@@ -26,8 +25,11 @@ export function App() {
         setBotStatus={status => {
           actions.toggleBot(status);
         }}
-        onFileOpen={handleFileOpen}
+        openStorageExplorer={() => {
+          actions.setStorageExplorerStatus('opened');
+        }}
       />
+      <StorageExplorer onFileOpen={handleFileOpen} />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{
