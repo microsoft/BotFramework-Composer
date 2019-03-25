@@ -3,7 +3,7 @@
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { useEffect, Fragment, useContext } from 'react';
+import { useEffect, Fragment, useState, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -26,11 +26,12 @@ import {
   detailListClass,
 } from './styles';
 
-let currentStorageIndex = 0;
-let pathNavItems;
 export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
   const { storages, currentStorageFiles, storageExplorerStatus } = state;
+  const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
+  const [pathNavItems, setPathNavItems] = useState();
+
   const SUPPORTED_ICON = [
     'accdb',
     'csv',
@@ -145,7 +146,7 @@ export function StorageExplorer(props) {
   }, []);
 
   function onStorageSourceChange(index) {
-    currentStorageIndex = index;
+    setCurrentStorageIndex(index);
     updateCurrentPath(storages[currentStorageIndex].id, storages[currentStorageIndex].path);
   }
 
@@ -177,11 +178,11 @@ export function StorageExplorer(props) {
 
       // todo: make sure the separator is the same and working.
       const pathItems = path.split('\\');
-      const tempPath = [];
+      const newPathItems = [];
       for (let i = 0; i < pathItems.length; i++) {
         const item = pathItems[i];
         const currentPath = getCurrentPath(pathItems, '\\', 0, i);
-        tempPath.push({
+        newPathItems.push({
           text: item,
           key: currentPath,
           onClick: () => {
@@ -189,7 +190,7 @@ export function StorageExplorer(props) {
           },
         });
       }
-      pathNavItems = tempPath;
+      setPathNavItems(newPathItems);
     }
   }
 

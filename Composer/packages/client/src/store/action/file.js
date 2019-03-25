@@ -18,7 +18,7 @@ export async function fetchFiles(dispatch) {
   }
 }
 
-export async function fetchFilesByOpen(dispatch, storageId, absolutePath) {
+export async function openBotProject(dispatch, storageId, absolutePath) {
   try {
     const data = {
       storageId: storageId,

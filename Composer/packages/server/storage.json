@@ -2,6 +2,5 @@
     "linkedStorages": "[{\"name\":\"This PC\",\"type\":\"LocalDrive\",\"id\":\"default\",\"path\":\"../../../SampleBots\"}]",
     "pickerWorkingDir": "../../../SampleBots",
     "openedBotsList": [],
-    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj",
-    "recentAccessedBots": "[{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Planning - ToDoBot\\\\bot.botproj\"},{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Planning - ToDoBot\\\\bot.botproj\"},{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Sample1-Fallback\\\\bot.botproj\"},{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Planning - ToDoBot\\\\bot.botproj\"},{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Planning - ToDoBot\\\\bot.botproj\"},{\"storageId\":\"default\",\"path\":\"C:\\\\Users\\\\tiyou.FAREAST\\\\Desktop\\\\BotFramework-Composer\\\\SampleBots\\\\Sample3-IfProperty\\\\bot.botproj\"}]"
+    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj"
 }
