@@ -1,7 +1,6 @@
-import { AfterHandler } from '../../../../selectors/types/SelectorPolicy';
-import { TraceableData } from '../../../../types/TraceableData';
+import { TraceableAfterHandler } from '../../../../selectors/types/SelectorPolicy';
 
-export const validateRuleDialogComponents: AfterHandler<TraceableData<any>> = (input): boolean => {
+export const validateRuleDialogComponents: TraceableAfterHandler<any> = (input): boolean => {
   const recognizerCnt = input['recognizer'].length;
   const welcomeCnt = input['welcome'].length;
   const fallbackCnt = input['fallback'].length;

@@ -1,10 +1,10 @@
 import { StringIndexedCollection } from '../../types/StringIndexedCollection';
 import { TraceableData } from '../../types/TraceableData';
 
-export type BeforeHandler<InputType> = (input: InputType) => boolean;
-export type AfterHandler<OutputType> = (result: StringIndexedCollection<OutputType[]>) => boolean;
+type BeforeHandler<InputType> = (input: InputType) => boolean;
+type AfterHandler<OutputType> = (result: StringIndexedCollection<OutputType[]>) => boolean;
 
-export type SelectorUnit<InputType, OutputType> = {
+type SelectorUnit<InputType, OutputType> = {
   select: (input: InputType) => OutputType[];
   validate: (x: OutputType) => boolean;
   options?: {
@@ -12,10 +12,16 @@ export type SelectorUnit<InputType, OutputType> = {
   };
 };
 
-export type SelectorPolicy<InputType, OutputType> = {
+type SelectorPolicy<InputType, OutputType> = {
   before: BeforeHandler<InputType>[];
   after: AfterHandler<OutputType>[];
   execution: StringIndexedCollection<SelectorUnit<InputType, OutputType>>;
 };
+
+/**
+ * Traceable selector types definition.
+ */
+export type TraceableBeforeHandler<InputSchema> = BeforeHandler<InputSchema>;
+export type TraceableAfterHandler<PayloadType> = AfterHandler<TraceableData<PayloadType>>;
 
 export type TraceableSelectorPolicy<InputSchema, PayloadType> = SelectorPolicy<InputSchema, TraceableData<PayloadType>>;

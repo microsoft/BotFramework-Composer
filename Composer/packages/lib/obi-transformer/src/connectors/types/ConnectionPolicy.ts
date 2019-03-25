@@ -3,21 +3,19 @@ import { TraceableSelectionResult } from '../../selectors/types/SelectionResult'
 import { ConnectorEdge } from './ConnectorResults';
 import { StringIndexedCollection } from '../../types/StringIndexedCollection';
 
-export type JudgeConnectionHandler<InternalData, ExternalData> = (
-  internal: InternalData,
-  external: ExternalData
-) => boolean;
-export type YieldConnectionshandler<InternalData, ExternalData, ConnectionType> = (
+type JudgeConnectionHandler<InternalData, ExternalData> = (internal: InternalData, external: ExternalData) => boolean;
+
+type YieldConnectionshandler<InternalData, ExternalData, ConnectionType> = (
   internal: InternalData,
   external: ExternalData
 ) => ConnectionType[];
 
-export type ConnectorUnit<InternalData, ExternalData, ConnectionType> = {
+type ConnectorUnit<InternalData, ExternalData, ConnectionType> = {
   when: JudgeConnectionHandler<InternalData, ExternalData>;
   buildConnections: YieldConnectionshandler<InternalData, ExternalData, ConnectionType>;
 };
 
-export type ConnectorPolicy<InternalData, ExternalData, ConnectionType> = StringIndexedCollection<
+type ConnectorPolicy<InternalData, ExternalData, ConnectionType> = StringIndexedCollection<
   ConnectorUnit<InternalData, ExternalData, ConnectionType>
 >;
 
