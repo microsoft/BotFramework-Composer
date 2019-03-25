@@ -14,14 +14,12 @@ describe('<Header />', () => {
     await waitForElement(() => getByText(/Open/));
   });
 
-  it('should open a file', async () => {
-    const mockFileOpen = jest.fn(() => null);
-    const { getByText } = render(<Header onFileOpen={mockFileOpen} />);
-
+  it('should open storage explorer', async () => {
+    const mockOpenStorageExplorer = jest.fn(() => null);
+    const { getByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
     const openButton = await waitForElement(() => getByText(/Open/));
-    const input = openButton.querySelector('input');
-    fireEvent.change(input, { target: { files: ['file0', 'file1', 'file2'] } });
-    expect(mockFileOpen).toHaveBeenCalledWith(['file0', 'file1', 'file2']);
+    fireEvent.click(openButton);
+    expect(mockOpenStorageExplorer).toHaveBeenCalled();
   });
 
   it('should set bot status', async () => {
