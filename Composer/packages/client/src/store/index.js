@@ -11,7 +11,7 @@ const initialState = {
   files: [],
   editors: [],
   botStatus: 'stopped',
-  openFileIndex: '-1',
+  openFileIndex: -1,
 };
 
 export function StoreProvider(props) {

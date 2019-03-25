@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useRef, useLayoutEffect, useContext } from 
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
-import { ProjectExplorer } from './../../components/ProjectExplorer';
+import { ProjectTree } from './../../components/ProjectTree';
 import ApiClient from './../../messenger/ApiClient';
 import { Store } from './../../store/index';
 
@@ -113,7 +113,7 @@ function DesignPage() {
     actions.updateFile(payload);
   }
 
-  function handleFileClick(file, index) {
+  function handleFileClick(index) {
     // keep a ref because we want to read that from outside
 
     if (index === openFileIndex) {
@@ -144,7 +144,10 @@ function DesignPage() {
         <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
           <div>
             <Tree variant="large">
-              <ProjectExplorer files={files} onClick={handleFileClick} />
+              <div style={{ padding: '10px', color: '#4f4f4f' }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Dialogs</div>
+                <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
+              </div>
             </Tree>
             <div style={{ height: '20px' }} />
             <Tree />
