@@ -3,10 +3,12 @@ import { TraceableData } from '../../types/TraceableData';
 
 type BeforeHandler<InputType> = (input: InputType) => boolean;
 type AfterHandler<OutputType> = (result: StringIndexedCollection<OutputType[]>) => boolean;
+type SelectionHandler<InputType, OutputType> = (input: InputType) => OutputType[];
+type ValidationHandler<OutputType> = (output: OutputType) => boolean;
 
 type SelectorUnit<InputType, OutputType> = {
-  select: (input: InputType) => OutputType[];
-  validate: (x: OutputType) => boolean;
+  select: SelectionHandler<InputType, OutputType>;
+  validate: ValidationHandler<OutputType>;
   options?: {
     required: boolean;
   };
@@ -23,5 +25,10 @@ type SelectorPolicy<InputType, OutputType> = {
  */
 export type TraceableBeforeHandler<InputSchema> = BeforeHandler<InputSchema>;
 export type TraceableAfterHandler<PayloadType> = AfterHandler<TraceableData<PayloadType>>;
+export type TraceableSelectionHandler<InputSchema, PayloadType> = SelectionHandler<
+  InputSchema,
+  TraceableData<PayloadType>
+>;
+export type TraceableValidationHandler<PayloadType> = ValidationHandler<TraceableData<PayloadType>>;
 
 export type TraceableSelectorPolicy<InputSchema, PayloadType> = SelectorPolicy<InputSchema, TraceableData<PayloadType>>;
