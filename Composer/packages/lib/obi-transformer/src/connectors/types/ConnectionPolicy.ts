@@ -27,10 +27,10 @@ export type TraceableWhenHandler<PayloadType> = JudgeConnectionHandler<
   TraceableSelectionResult<PayloadType>
 >;
 
-export type TraceableYieldHandler<PayloadType> = YieldConnectionshandler<
-  TraceableData<PayloadType>[],
-  TraceableSelectionResult<PayloadType>,
-  ConnectorEdge<TraceableData<PayloadType>>
+export type TraceableYieldHandler<InputPayloadType, ConnectionPayloadType> = YieldConnectionshandler<
+  TraceableData<InputPayloadType>[],
+  TraceableSelectionResult<InputPayloadType>,
+  ConnectorEdge<TraceableData<ConnectionPayloadType>>
 >;
 
 export type TraceableConnectorUnit<PayloadType> = ConnectorUnit<
@@ -39,8 +39,8 @@ export type TraceableConnectorUnit<PayloadType> = ConnectorUnit<
   ConnectorEdge<TraceableData<PayloadType>>
 >;
 
-export type TraceableConnectorPolicy<PayloadType> = ConnectorPolicy<
-  TraceableData<PayloadType>[],
-  TraceableSelectionResult<PayloadType>,
-  ConnectorEdge<TraceableData<PayloadType>>
+export type TraceableConnectorPolicy<InputPayloadType, ConnectionPayloadType> = ConnectorPolicy<
+  TraceableData<InputPayloadType>[],
+  TraceableSelectionResult<InputPayloadType>,
+  ConnectorEdge<TraceableData<ConnectionPayloadType>>
 >;

@@ -6,7 +6,7 @@ import { yieldIntentConnections, yieldWelcomeConnections } from './handlers/conn
  * This policy example contains a implicit restriction:
  *  Fields other than 'welcome' and 'intent' shoudn't yield connections.
  */
-export const ruleDialogConnectorPolicy: TraceableConnectorPolicy<any> = {
+export const ruleDialogConnectorPolicy: TraceableConnectorPolicy<any, any> = {
   welcome: {
     when: shouldWelcomeFireConnection,
     buildConnections: yieldWelcomeConnections,

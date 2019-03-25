@@ -1,10 +1,9 @@
 import { TraceableSelectorPolicy } from '../selectors/types/SelectorPolicy';
-import { TraceableData } from './TraceableData';
 import { TraceableConnectorPolicy } from '../connectors/types/ConnectionPolicy';
 import { TraceableTransformerPolicy } from '../transformers/types/TransformerPolicy';
 
-export type TraceablePolicy<InputSchema, TracedType> = {
-  selectorPolicy: TraceableSelectorPolicy<InputSchema, TraceableData<TracedType>>;
-  connectorPolicy: TraceableConnectorPolicy<TracedType>;
-  transformerPolicy: TraceableTransformerPolicy<TracedType>;
+export type TraceablePolicy<InputSchema, NodePayloadType, EdgePayloadType> = {
+  selectorPolicy: TraceableSelectorPolicy<InputSchema, NodePayloadType>;
+  connectorPolicy: TraceableConnectorPolicy<NodePayloadType, EdgePayloadType>;
+  transformerPolicy: TraceableTransformerPolicy<NodePayloadType>;
 };

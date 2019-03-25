@@ -3,7 +3,7 @@ import { ConnectorEdge } from '../../../../connectors/types/ConnectorResults';
 import { TraceableData } from '../../../../types/TraceableData';
 
 // Welcome should be connected to the only 'recognizer' directly.
-export const yieldWelcomeConnections: TraceableYieldHandler<null> = (welcomeElements, root) => {
+export const yieldWelcomeConnections: TraceableYieldHandler<any, null> = (welcomeElements, root) => {
   return [
     {
       from: welcomeElements[0].path,
@@ -14,7 +14,7 @@ export const yieldWelcomeConnections: TraceableYieldHandler<null> = (welcomeElem
 };
 
 // 'Intent's should be connected to the only 'recognizer' by their intent names.
-export const yieldIntentConnections: TraceableYieldHandler<any> = (intentElements, root) => {
+export const yieldIntentConnections: TraceableYieldHandler<any, TraceableData<any>> = (intentElements, root) => {
   const edges: ConnectorEdge<TraceableData<any>>[] = [];
   const recognizer = root['recognizer'][0];
 

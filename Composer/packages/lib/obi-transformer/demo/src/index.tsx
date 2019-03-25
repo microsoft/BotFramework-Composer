@@ -4,14 +4,14 @@ import './style.css';
 
 import dagre from 'dagre';
 
-import { transform } from '../../src';
+import { ObiTransformer, defaultPolicy } from '../../src';
 import * as sampleJson from './sample-input.json';
 
 declare var dagreD3;
 declare var d3;
 declare var window;
 
-const { nodes, edges } = transform(sampleJson as any);
+const { nodes, edges } = new ObiTransformer(defaultPolicy).transform(sampleJson as any);
 
 /**
  * This demo shows how to consume a transformed OBI json to a directed graph via the DagreD3 library.

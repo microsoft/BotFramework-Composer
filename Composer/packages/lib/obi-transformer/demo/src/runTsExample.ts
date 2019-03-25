@@ -1,5 +1,5 @@
-import { transform } from '../../src';
+import { ObiTransformer, defaultPolicy } from '../../src';
 
 const obiJson = require('./sample-input.json');
-let result = transform(obiJson);
+let result = new ObiTransformer(defaultPolicy).transform(obiJson);
 console.log(JSON.stringify(result, null, ' '.repeat(2)));
