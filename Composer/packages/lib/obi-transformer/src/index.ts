@@ -3,6 +3,8 @@ import { TraceableSelector } from './selectors/TraceableSelector';
 import { TraceableConnector } from './connectors/TraceableConnector';
 import { TraceableTransformer } from './transformers/TraceableTransformer';
 import { TraceablePolicy } from './types/TraceablePolicy';
+import { DirectedGraphNode } from './types/DirectedGraphNode';
+import { ConnectorEdge } from './connectors/types/ConnectorResults';
 
 export class ObiTransformer<InputSchema, NodePayloadType, EdgePayloadType> {
   private selector: TraceableSelector<InputSchema, NodePayloadType>;
@@ -20,7 +22,12 @@ export class ObiTransformer<InputSchema, NodePayloadType, EdgePayloadType> {
     this.edgeTransformer = undefined;
   }
 
-  transform(obiInput: InputSchema) {
+  transform(
+    obiInput: InputSchema
+  ): {
+    nodes: DirectedGraphNode<string, NodePayloadType>[];
+    edges: ConnectorEdge<EdgePayloadType>[];
+  } {
     const traceableSelections = this.selector.select(obiInput);
 
     // Build nodes.
@@ -29,8 +36,9 @@ export class ObiTransformer<InputSchema, NodePayloadType, EdgePayloadType> {
     const nodes = [].concat(...nodeGroups);
 
     // Build edges.
-    const connections = this.connector.buildConnection(traceableSelections);
-    const edges = connections;
+    const connectionsCollection = this.connector.buildConnections(traceableSelections);
+    const connectionGroups = Object.values(connectionsCollection);
+    const edges = [].concat(...connectionGroups);
 
     return {
       nodes,
