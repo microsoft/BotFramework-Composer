@@ -4,16 +4,17 @@ import { render } from 'react-dom';
 import './style.css';
 import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
-import { ObiTransformer } from '../../src/utils/obi-transformer';
 
 import * as obiExample from './sample.dialog';
+import { applyTransformer } from '../../src/transformers/applyTransformer';
+import { RuleDialogTransformer } from '../../src/transformers/RuleDialogTransformer';
 
 class Demo extends Component {
-  obiTransformer = new ObiTransformer();
+  transform = input => applyTransformer(input, RuleDialogTransformer);
 
   state = {
     obiJson: obiExample,
-    directedGraphSchema: this.obiTransformer.toDirectedGraphSchema(obiExample),
+    directedGraphSchema: this.transform(obiExample),
   };
 
   constructor(props) {
@@ -22,10 +23,9 @@ class Demo extends Component {
 
   onJsonChanged(json) {
     console.log('json changed:', json);
-    const dgSchema = this.obiTransformer.toDirectedGraphSchema(json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: dgSchema,
+      directedGraphSchema: this.transform(json),
     });
   }
 
@@ -37,7 +37,7 @@ class Demo extends Component {
         <div className="demo-container">
           <div className="block block--left">
             <p>Input your OBI json here.</p>
-            <JsonBlock defaultValue={obiExample} onSubmit={this.onJsonChanged.bind(this)} />
+            <JsonBlock defaultValue={obiJson} onSubmit={this.onJsonChanged.bind(this)} />
           </div>
           <div className="block block--middle">
             <p>Preview your Directed Graph Schema here.</p>
