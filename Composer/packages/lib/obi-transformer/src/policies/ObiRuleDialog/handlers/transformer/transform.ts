@@ -4,8 +4,7 @@ import { GraphNodeTypes } from '../../../../types/GraphNodeTypes';
 import { ObiRecognizer } from '../../../types/obi-elements/ObiRecognizer';
 import { ObiStorage } from '../../../types/obi-elements/ObiStorage';
 import { TraceableData } from '../../../../types/TraceableData';
-
-export type TransformerImpl<T> = (input: TraceableData<T>) => DirectedGraphNode<string, T>;
+import { TransformerImpl } from '../../../../transformers/types/TransformerPolicy';
 
 export const obiRuleToGraphProcess: TransformerImpl<ObiRule> = (
   input: TraceableData<ObiRule>
