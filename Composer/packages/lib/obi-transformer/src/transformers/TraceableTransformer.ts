@@ -1,6 +1,6 @@
 import { TransformerPolicy } from './types/TransformerPolicy';
 import { TraceableSelectionResult, SelectionResult } from '../selectors/types/SelectionResult';
-import { DirectedGraphNode } from '../models/graph/DirectedGraphNode';
+import { DirectedGraphNode } from '../types/DirectedGraphNode';
 
 export class TraceableTransformer {
   constructor(private transformerPolicy: TransformerPolicy) {}

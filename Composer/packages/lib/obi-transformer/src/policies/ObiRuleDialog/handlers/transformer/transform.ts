@@ -1,6 +1,6 @@
 import { ObiRule } from '../../../../models/obi/ObiRule';
-import { DirectedGraphNode } from '../../../../models/graph/DirectedGraphNode';
-import { GraphNodeTypes } from '../../../../models/graph/types/NodeTypes';
+import { DirectedGraphNode } from '../../../../types/DirectedGraphNode';
+import { GraphNodeTypes } from '../../../../types/GraphNodeTypes';
 import { ObiRecognizer } from '../../../../models/obi/ObiRecognizer';
 import { ObiStorage } from '../../../../models/obi/ObiStorage';
 import { TraceableData } from '../../../../types/TraceableData';

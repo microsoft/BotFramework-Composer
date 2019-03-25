@@ -1,4 +1,4 @@
-import { GraphNodeTypes } from './types/NodeTypes';
+import { GraphNodeTypes } from './GraphNodeTypes';
 
 export class DirectedGraphNode<IdType, PayloadType> {
   id: IdType;
