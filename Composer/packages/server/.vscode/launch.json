@@ -14,6 +14,21 @@
         "${workspaceFolder}/src/server.ts"
       ],
       "restart":true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "protocol": "inspector",
+      "name": "Jest Debug",
+      "program": "${workspaceRoot}/../../node_modules/jest/bin/jest",
+      "stopOnEntry": false,
+      "args": ["--runInBand", "--env=jsdom", "${fileBasename}"],
+      "runtimeArgs": [
+          "--inspect-brk"
+       ],
+       "cwd": "${workspaceRoot}",
+       "sourceMaps": true,
+       "console": "integratedTerminal"
     }
   ]
 }

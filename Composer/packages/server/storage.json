@@ -1,6 +1,24 @@
 {
-    "linkedStorages": "[{\"name\":\"This PC\",\"type\":\"LocalDrive\",\"id\":\"default\",\"path\":\"../../../SampleBots\"}]",
+    "linkedStorages": [
+        {
+            "name": "This PC",
+            "type": "LocalDrive",
+            "id": "default",
+            "path": "..\\..\\..\\SampleBots"
+        }
+    ],
     "pickerWorkingDir": "../../../SampleBots",
-    "openedBotsList": [],
-    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj"
+    "lastActiveBot": "../../../SampleBots/Planning - ToDoLuisBot/bot.botproj",
+    "recentAccessedBots": [
+        {
+            "storageId": "default",
+            "path": "..\\..\\..\\SampleBots\\Planning - ToDoBot\\bot.botproj",
+            "lastAccessTime": 1553504447822
+        },
+        {
+            "storageId": "default",
+            "path": "..\\..\\..\\SampleBots\\Planning - ToDoLuisBot\\bot.botproj",
+            "lastAccessTime": 1553504484157
+        }
+    ]
 }

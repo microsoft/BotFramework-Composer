@@ -4,6 +4,8 @@ import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
 import path from 'path';
+import produce from 'immer';
+
 const router: Router = express.Router({});
 let openBot: any | undefined;
 
@@ -49,17 +51,40 @@ export const projectHandler = {
   updateOpenBot: (body: any, storage: FileStorage) => {
     body.path = path.normalize(body.path);
     // update recent open bot list
-    let recentOpenBots = storage.getItem<string>('recentAccessedBots', '[]');
-    recentOpenBots = JSON.parse(recentOpenBots);
-    recentOpenBots.push(body);
-    storage.setItem('recentAccessedBots', JSON.stringify(recentOpenBots));
+    let recentOpenBots: Array<object> = storage.getItem('recentAccessedBots', []);
+
+    // if this openBot in List, update position
+    let index = recentOpenBots.findIndex((value: any) => {
+      return path.resolve(value.path) === body.path;
+    });
+    const rootPath = process.cwd();
+    if (index >= 0) {
+      recentOpenBots = produce(recentOpenBots, draft => {
+        draft.splice(index, 1);
+        let item: any;
+        item = Object.assign({}, body);
+        item.path = path.relative(rootPath, body.path);
+        item.lastAccessTime = Date.now();
+        draft.push(item);
+      });
+    } else {
+      recentOpenBots = produce(recentOpenBots, draft => {
+        let item;
+        item = Object.assign({}, body);
+        item.path = path.relative(rootPath, body.path);
+        item.lastAccessTime = Date.now();
+        draft.push(item);
+      });
+    }
+    storage.setItem('recentAccessedBots', recentOpenBots);
     return body;
   },
   checkOpenBotInStorage: (storage: FileStorage, setting: FileStorage) => {
     const openLastActiveBot = setting.getItem<boolean>('openLastActiveBot', false);
-    let recentOpenBots = storage.getItem<string>('recentAccessedBots', '[]');
-    recentOpenBots = JSON.parse(recentOpenBots);
+    let recentOpenBots = storage.getItem('recentAccessedBots', []);
     if (openLastActiveBot && recentOpenBots.length > 0) {
+      // deal with relative path
+      recentOpenBots[recentOpenBots.length - 1].path = path.resolve(recentOpenBots[recentOpenBots.length - 1].path);
       return recentOpenBots[recentOpenBots.length - 1];
     } else {
       return null;

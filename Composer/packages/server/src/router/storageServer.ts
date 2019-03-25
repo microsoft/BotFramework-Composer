@@ -3,7 +3,7 @@ import storage from '../storage/StorageService';
 import fs from 'fs';
 import { FileStorage } from '../storage/FileStorage';
 import path from 'path';
-
+// import produce from "immer";
 const router: Router = express.Router({});
 
 router.get('/', function(req: any, res: any, next: any) {
@@ -51,8 +51,7 @@ export const storagesServerRouter: Router = router;
 export const storageHandler = {
   getStorage: (_storage: FileStorage) => {
     try {
-      let storagesList = _storage.getItem<string>('linkedStorages', '[]');
-      storagesList = JSON.parse(storagesList);
+      let storagesList = _storage.getItem('linkedStorages', []);
       // deal with relative path
       for (let item of storagesList) {
         if (item.type === 'LocalDrive') {
