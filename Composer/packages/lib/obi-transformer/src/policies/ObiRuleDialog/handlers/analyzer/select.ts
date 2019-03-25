@@ -8,16 +8,9 @@ import { TraceableData } from '../../../../types/TraceableData';
 export type SelectorImpl = (obi: ObiSchema) => TraceableData<any>[];
 
 const traceableFilter = (arr: any[], pathPrefix: string, judge: (x: any) => boolean) => {
-  const filtered = [];
-  for (let i = 0; i < arr.length; i++) {
-    const element = arr[i];
-    if (!judge(element)) continue;
-    filtered.push({
-      data: element,
-      path: `${pathPrefix}[${i}]`,
-    });
-  }
-  return filtered;
+  return arr
+    .map((element, i) => (judge(element) ? { data: element, path: `${pathPrefix}[${i}]` } : null))
+    .filter(x => x);
 };
 
 export const selectStorage = (obi: ObiSchema): TraceableData<ObiStorage>[] => {
