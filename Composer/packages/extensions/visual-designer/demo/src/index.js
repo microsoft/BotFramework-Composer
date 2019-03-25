@@ -37,7 +37,7 @@ class Demo extends Component {
         <div className="demo-container">
           <div className="block block--left">
             <p>Input your OBI json here.</p>
-            <JsonBlock defaultValue={obiJson} onSubmit={this.onJsonChanged.bind(this)} />
+            <JsonBlock defaultValue={obiExample} onSubmit={this.onJsonChanged.bind(this)} />
           </div>
           <div className="block block--middle">
             <p>Preview your Directed Graph Schema here.</p>
