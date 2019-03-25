@@ -68,14 +68,12 @@ export const RuleDialogTransformer = {
 
     // Connect 'IntentRule' after 'recognizer'
     if (intents && intents.length) {
-      const recognizerIntents = Object.keys(recognizers[0][PAYLOAD_KEY].rules);
-
-      for (const intentName of recognizerIntents) {
-        const targetRule = intents.find(intentNode => intentNode[PAYLOAD_KEY].intent === intentName);
-
-        if (!targetRule) continue;
-        else edges.push({ from: recognizers[0].id, to: targetRule.id });
-      }
+      intents.forEach(intentRule => {
+        edges.push({
+          from: recognizers[0].id,
+          to: intentRule.id,
+        });
+      });
     }
 
     // Connect 'FallbackRule' after 'recognizer'
