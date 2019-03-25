@@ -1,31 +1,34 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { PropTypes } from 'prop-types';
 
 import { folderItem } from './styles';
 
 export const Folder = props => {
-  const { opened, folder, onFolderClick, onFolderRightClick } = props;
-  let iconName = opened ? 'FabricOpenFolderHorizontal' : 'FabricFolder';
+  const { activeNode, folder, onFolderClick, onFolderRightClick } = props;
 
-  if (folder.scheme === 'file') {
-    iconName = 'TextDocument';
+  function splitFileName(text) {
+    const pattern = /\.{1}[a-zA-Z]{1,}$/;
+    let temp = text;
+    if (pattern.exec(text) !== null) {
+      temp = text.slice(0, pattern.exec(text).index);
+    }
+
+    return temp.charAt(0).toUpperCase() + temp.slice(1);
   }
 
   return (
-    <div css={folderItem}>
-      <Icon iconName={iconName} className="ms-IconExample" />
+    <div css={folderItem(activeNode == folder.id)}>
       <span onClick={() => onFolderClick(folder)} onContextMenu={onFolderRightClick}>
-        {folder.name}
+        {splitFileName(folder.name)}
       </span>
     </div>
   );
 };
 
 Folder.propTypes = {
-  opened: PropTypes.bool,
   folder: PropTypes.object,
+  activeNode: PropTypes.number,
   onFolderClick: PropTypes.func,
   onFolderRightClick: PropTypes.func,
 };

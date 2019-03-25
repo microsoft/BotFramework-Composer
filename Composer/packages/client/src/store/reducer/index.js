@@ -2,12 +2,22 @@ import createReducer from './createReducer';
 import { ActionTypes } from './../../constants/index';
 
 const getFilesSuccess = (state, { response }) => {
-  return (state.files = response.data);
+  const pattern = /\.{1}[a-zA-Z]{1,}$/;
+  const invalidFile = ['.bot', '.botproj'];
+
+  state.files = response.data.reduce((files, value) => {
+    const extension = pattern.exec(value.name)[0];
+    if (invalidFile.indexOf(extension) === -1) {
+      files.push({ id: files.length, ...value });
+    }
+    return files;
+  }, []);
+  return state;
 };
 
 const updateFiles = (state, payload) => {
-  state.files = state.files.map(file => {
-    if (file.name === payload.name) return payload;
+  state.files = state.files.map((file, index) => {
+    if (file.name === payload.name) return { id: index, ...payload };
     return file;
   });
   return state;

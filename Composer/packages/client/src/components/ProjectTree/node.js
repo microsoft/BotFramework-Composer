@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { PropTypes } from 'prop-types';
 
 import { Folder } from './folder';
-import { openul, closeul, nodeItem } from './styles';
+import { childrenUl, nodeItem } from './styles';
 
 export const Node = props => {
   const [opened, setOpened] = useState(false);
-  const { node, activeNode, onSelect } = props;
+  const { node, files, activeNode, onSelect } = props;
 
   function handleRightClick(e) {
     e.preventDefault();
@@ -18,26 +18,27 @@ export const Node = props => {
     <li css={nodeItem}>
       <Folder
         folder={node}
-        opened={opened}
+        activeNode={activeNode}
+        opened={true}
         onFolderClick={node => {
           setOpened(!opened);
-          onSelect(node);
+          onSelect(node.id);
         }}
         onFolderRightClick={handleRightClick}
       />
-      {node.scheme == 'folder' && (
-        <ul css={opened ? openul : closeul}>
-          {node.children.map((child, key) => {
-            return <Node key={key} node={child} activeNode={activeNode} onSelect={onSelect} />;
-          })}
-        </ul>
-      )}
+      <ul css={childrenUl(true)}>
+        {files.map(item => {
+          if (item.parent && item.parent === node.name)
+            return <Node key={item.id} node={item} files={files} activeNode={activeNode} onSelect={onSelect} />;
+        })}
+      </ul>
     </li>
   );
 };
 
 Node.propTypes = {
+  files: PropTypes.array,
   node: PropTypes.object,
-  activeNode: PropTypes.object,
+  activeNode: PropTypes.number,
   onSelect: PropTypes.func,
 };

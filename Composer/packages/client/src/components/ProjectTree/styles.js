@@ -1,16 +1,30 @@
 import { css } from '@emotion/core';
 
-export const openul = css`
-  display: inherit;
+export const container = css`
+  list-style: none;
+  padding: 0;
+  margin: 0;
 `;
 
-export const closeul = css`
-  display: none;
-`;
+export const childrenUl = isOpen => {
+  return css`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: ${isOpen ? 'inherit' : 'none'};
+  `;
+};
 
-export const folderItem = css`
-  cursor: default;
-`;
+export const folderItem = active => {
+  return css`
+    cursor: default;
+    color: ${active ? '#0083cb' : '#4f4f4f'};
+    font-weight: ${active ? 'bold' : 'normal'};
+    &:hover {
+      font-weight: bold;
+    }
+  `;
+};
 
 export const nodeItem = css`
   padding-left: 15px;
