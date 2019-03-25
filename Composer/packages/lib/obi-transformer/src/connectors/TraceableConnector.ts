@@ -7,7 +7,7 @@ export class TraceableConnector {
 
   public buildConnection(input: TraceableSelectionResult): ConnectorEdge[] {
     const topics = Object.keys(this.connectorPolicy);
-    const connectionGroups: ConnectorEdge[][] = [];
+    let resultConnections: ConnectorEdge[] = [];
 
     for (const key of topics) {
       const { when, buildConnections } = this.connectorPolicy[key];
@@ -16,12 +16,10 @@ export class TraceableConnector {
       const connectable = when(elements, input);
       if (!connectable) continue;
 
-      const connections = buildConnections(elements, input);
-      connectionGroups.push(connections);
+      const newConnections = buildConnections(elements, input);
+      resultConnections = resultConnections.concat(newConnections);
     }
 
-    return connectionGroups.reduce((accumulated, currGroup) => {
-      return [...accumulated, ...currGroup];
-    }, []);
+    return resultConnections;
   }
 }
