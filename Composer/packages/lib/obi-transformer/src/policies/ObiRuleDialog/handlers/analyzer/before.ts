@@ -1,5 +1,5 @@
-import { ObiRuleDialog } from '../../../../models/obi/ObiRuleDialog';
-import { DialogTypes } from '../../../../models/obi/types/DialogTypes';
+import { ObiRuleDialog } from '../../../types/obi-dialogs/ObiRuleDialog';
+import { DialogTypes } from '../../../types/obi-enums/ObiDialogTypes';
 
 export function shouldBeRuleDialog(obi: ObiRuleDialog): boolean {
   return obi.$type === DialogTypes.RuleDialog;

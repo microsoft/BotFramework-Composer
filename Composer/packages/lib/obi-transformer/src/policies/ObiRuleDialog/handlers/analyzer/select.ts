@@ -1,8 +1,8 @@
-import { ObiRuleDialog } from '../../../../models/obi/ObiRuleDialog';
-import { RuleTypes } from '../../../../models/obi/types/RuleTypes';
-import { ObiStorage } from '../../../../models/obi/ObiStorage';
-import { ObiRecognizer } from '../../../../models/obi/ObiRecognizer';
-import { ObiRule } from '../../../../models/obi/ObiRule';
+import { ObiRuleDialog } from '../../../types/obi-dialogs/ObiRuleDialog';
+import { RuleTypes } from '../../../types/obi-enums/ObiRuleTypes';
+import { ObiStorage } from '../../../types/obi-elements/ObiStorage';
+import { ObiRecognizer } from '../../../types/obi-elements/ObiRecognizer';
+import { ObiRule } from '../../../types/obi-elements/ObiRule';
 import { TraceableData } from '../../../../types/TraceableData';
 
 export type SelectorImpl = (obi: ObiRuleDialog) => TraceableData<any>[];

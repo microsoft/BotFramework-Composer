@@ -1,4 +1,4 @@
-import { ObiRuleDialog } from './models/obi/ObiRuleDialog';
+import { ObiRuleDialog } from './policies/types/obi-dialogs/ObiRuleDialog';
 
 import { ObiRuleDialogPolicies } from './policies/ObiRuleDialog';
 import { TraceableSelector } from './selectors/TraceableSelector';

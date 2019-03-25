@@ -10,7 +10,7 @@ import {
   selectIntent,
 } from './handlers/analyzer/select';
 import { TraceableSelectorPolicy } from '../../selectors/types/SelectorPolicy';
-import { ObiRuleDialog } from '../../models/obi/ObiRuleDialog';
+import { ObiRuleDialog } from '../types/obi-dialogs/ObiRuleDialog';
 
 export const ruleDialogAnalyzerPolicy: TraceableSelectorPolicy<ObiRuleDialog> = {
   before: [shouldBeRuleDialog],

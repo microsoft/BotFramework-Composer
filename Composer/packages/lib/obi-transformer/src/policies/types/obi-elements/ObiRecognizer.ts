@@ -1,4 +1,4 @@
-import { RecognizerTypes } from './types/RecognizerTypes';
+import { RecognizerTypes } from '../obi-enums/ObiRecognizerTypes';
 
 export class ObiRecognizer {
   $type: RecognizerTypes;

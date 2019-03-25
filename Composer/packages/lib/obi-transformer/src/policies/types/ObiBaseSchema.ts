@@ -1,4 +1,4 @@
-import { DialogTypes } from './types/DialogTypes';
+import { DialogTypes } from './obi-enums/ObiDialogTypes';
 
 export class ObiBaseSchema {
   $schema: string;
