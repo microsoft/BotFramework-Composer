@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 
 import Example from '../../src';
+import { dialogGroups } from '../../src/schema/appschema';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
@@ -41,21 +42,22 @@ const defaultMemory = {
 };
 
 function Demo() {
-  const [editorData, setEditorData] = useState(JSON.stringify(defaultData, null, 2));
+  const [dirtyFormData, setDirtyFormData] = useState(null);
   const [memoryData, setMemoryData] = useState(JSON.stringify(defaultMemory, null, 2));
-
   const [formData, setFormData] = useState(defaultData);
   const [memoryFormData, setMemoryFormData] = useState(defaultMemory);
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
 
-  const updateEditorData = (editor, data, value) => {
+  const updateFormData = (editor, data, value) => {
     try {
       const parsed = JSON.parse(value);
       setFormData(parsed);
+      setDirtyFormData(null);
       setValid(true);
     } catch (err) {
+      setDirtyFormData(value);
       setValid(false);
     }
   };
@@ -70,36 +72,6 @@ function Demo() {
     }
   };
 
-  useEffect(() => {
-    setEditorData(JSON.stringify(formData, null, 2));
-  }, [formData]);
-
-  const dialogGroups = {
-    'Input/Prompt Dialogs': [
-      'Microsoft.TextPrompt',
-      'Microsoft.DateTimePrompt',
-      'Microsoft.FloatPrompt',
-      'Microsoft.IntegerPrompt',
-    ],
-    'Dialog Steps': [
-      'Microsoft.CallDialog',
-      'Microsoft.GotoDialog',
-      'Microsoft.EndDialog',
-      'Microsoft.CancelDialog',
-      'Microsoft.SendActivity',
-      'Microsoft.IfProperty',
-    ],
-    Rules: [
-      'Microsoft.BeginDialogRule',
-      'Microsoft.EventRule',
-      'Microsoft.IntentRule',
-      'Microsoft.WelcomeRule',
-      'Microsoft.DefaultRule',
-    ],
-    Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.RegexRecognizer'],
-    Other: ['Microsoft.AdaptiveDialog'],
-  };
-
   const buildDialogOptions = () => {
     const options = [];
 
@@ -108,7 +80,7 @@ function Demo() {
       dialogGroups[elem].forEach(dialog => {
         options.push({ key: dialog, text: dialog });
       });
-      options.push({ key: 'divider_2', text: '-', itemType: DropdownMenuItemType.Divider });
+      options.push({ key: `${elem}_divider`, text: '-', itemType: DropdownMenuItemType.Divider });
     }
 
     return options;
@@ -131,12 +103,10 @@ function Demo() {
         />
         <div style={{ fontSize: '20px', paddingLeft: '10px' }}>Data</div>
         <CodeMirror
-          value={editorData}
+          value={dirtyFormData || JSON.stringify(formData, null, 2)}
           options={cmOptions}
-          onBeforeChange={(editor, data, value) => {
-            setEditorData(value);
-          }}
-          onChange={updateEditorData}
+          onBeforeChange={updateFormData}
+          onChange={updateFormData}
           autoCursor
           className={isValid ? '' : 'CodeMirror--error'}
         />
