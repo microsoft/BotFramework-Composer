@@ -12,3 +12,13 @@ Typically, the transformation from 'OBI schema' to 'directed graph schema' (cons
 `Connect` is the stage where we define connections between data and data (nodes to nodes). Based on the selection result produced by a `selector`, a `connector` will generate edges based on some user-defined policies.
 
 `Tranform` is the stage where selected data segments are mapped to the required format (usually a graph node object) based on the output of `Select` stage.
+
+### Examples
+
+1. Run the command-line example:
+
+    `ts-node demo/src/runTsExample.ts`
+
+2. Run the visualization demo:
+
+    `npm start` or `yarn start`
