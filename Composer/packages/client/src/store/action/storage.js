@@ -16,6 +16,7 @@ export async function fetchStorages(dispatch) {
       type: ActionTypes.STORAGE_GET_SUCCESS,
       payload: { response },
     });
+    return response.data;
   } catch (err) {
     dispatch({
       type: ActionTypes.STORAGE_GET_FAILURE,
@@ -42,13 +43,9 @@ export async function fetchStorageByName(dispatch, fileName) {
   }
 }
 
-export async function fetchFolderItemsByPath(dispatch, storage) {
+export async function fetchFolderItemsByPath(dispatch, id, path) {
   try {
-    dispatch({
-      type: ActionTypes.STORAGEFILE_LOADING,
-      payload: { storage },
-    });
-    const response = await axios.get(`${BASEURL}/storages/${storage.id}/blobs/${storage.path}`);
+    const response = await axios.get(`${BASEURL}/storages/${id}/blobs/${path}`);
     dispatch({
       type: ActionTypes.STORAGEFILE_GET_SUCCESS,
       payload: { response },

@@ -13,11 +13,8 @@ export function App() {
   const { state, actions } = useContext(Store);
   const { botStatus } = state;
 
-  function handleFileOpen(files) {
-    if (files.length > 0) {
-      const file = files[0];
-      actions.fetchFilesByOpen(file.name);
-    }
+  function handleFileOpen(id, path) {
+    actions.fetchFilesByOpen(id, path);
   }
 
   return (
@@ -27,12 +24,11 @@ export function App() {
         setBotStatus={status => {
           actions.toggleBot(status);
         }}
-        onFileOpen={handleFileOpen}
         openStorageExplorer={() => {
           actions.setStorageExplorerStatus('opened');
         }}
       />
-      <StorageExplorer />
+      <StorageExplorer onFileOpen={handleFileOpen} />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{

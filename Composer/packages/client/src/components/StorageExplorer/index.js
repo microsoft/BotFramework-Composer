@@ -1,12 +1,13 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { useEffect, Fragment, useState, useRef, useLayoutEffect, useContext } from 'react';
+import { useEffect, Fragment, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { PropTypes } from 'prop-types';
 
 import { Store } from '../../store/index';
 
@@ -25,158 +26,187 @@ import {
   detailListClass,
 } from './styles';
 
-export function StorageExplorer() {
-  const storagesRef = useRef();
-  const storageFilesRef = useRef();
-  const currentPathRef = useRef();
+let currentStorageIndex = 0;
+let pathNavItems;
+export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
-  const { storages, currentStorage, currentStorageFiles, storageExplorerStatus } = state;
-  const FILE_ICONS = [
-    { name: 'accdb' },
-    { name: 'csv' },
-    { name: 'docx' },
-    { name: 'dotx' },
-    { name: 'mpt' },
-    { name: 'odt' },
-    { name: 'one' },
-    { name: 'onepkg' },
-    { name: 'onetoc' },
-    { name: 'pptx' },
-    { name: 'pub' },
-    { name: 'vsdx' },
-    { name: 'xls' },
-    { name: 'xlsx' },
-    { name: 'xsn' },
+  const { storages, currentStorageFiles, storageExplorerStatus } = state;
+  const SUPPORTED_ICON = [
+    'accdb',
+    'csv',
+    'docx',
+    'dotx',
+    'mpt',
+    'odt',
+    'one',
+    'onepkg',
+    'onetoc',
+    'pptx',
+    'pub',
+    'vsdx',
+    'xls',
+    'xlsx',
+    'xsn',
   ];
 
   // for detail file list in open panel
-  const [tableColums, setTableColumns] = useState(generateTableColumns());
-  function generateTableColumns() {
-    return [
-      {
-        key: 'column1',
-        name: 'File Type',
-        className: detailListClass.fileIconCell,
-        iconClassName: detailListClass.fileIconHeaderIcon,
-        ariaLabel: 'Column operations for File type, Press to sort on File type',
-        iconName: 'Page',
-        isIconOnly: true,
-        fieldName: 'name',
-        minWidth: 16,
-        maxWidth: 16,
-        onColumnClick: onColumnClick,
-        // eslint-disable-next-line react/display-name
-        onRender: item => {
-          return <img src={item.iconName} className={detailListClass.fileIconImg} alt={item.fileType + ' file icon'} />;
-        },
+  const tableColums = [
+    {
+      key: 'column1',
+      name: 'File Type',
+      className: detailListClass.fileIconCell,
+      iconClassName: detailListClass.fileIconHeaderIcon,
+      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      iconName: 'Page',
+      isIconOnly: true,
+      fieldName: 'name',
+      minWidth: 16,
+      maxWidth: 16,
+      onRender: item => {
+        const iconName = item.iconName;
+        if (iconName === 'folder') {
+          return <Icon style={{ fontSize: '16px' }} iconName="Folder" />;
+        } else if (iconName === 'unknow') {
+          return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
+        }
+        const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
+        return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
       },
-      {
-        key: 'column2',
-        name: 'Name',
-        fieldName: 'name',
-        minWidth: 150,
-        maxWidth: 350,
-        isRowHeader: true,
-        isResizable: true,
-        isSorted: true,
-        isSortedDescending: false,
-        sortAscendingAriaLabel: 'Sorted A to Z',
-        sortDescendingAriaLabel: 'Sorted Z to A',
-        onColumnClick: onColumnClick,
-        data: 'string',
-        isPadded: true,
+    },
+    {
+      key: 'column2',
+      name: 'Name',
+      fieldName: 'name',
+      minWidth: 150,
+      maxWidth: 350,
+      isRowHeader: true,
+      isResizable: true,
+      isSorted: true,
+      isSortedDescending: false,
+      sortAscendingAriaLabel: 'Sorted A to Z',
+      sortDescendingAriaLabel: 'Sorted Z to A',
+      data: 'string',
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: 'Date Modified',
+      fieldName: 'dateModifiedValue',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      data: 'number',
+      onRender: item => {
+        return <span>{item.dateModified}</span>;
       },
-      {
-        key: 'column3',
-        name: 'Date Modified',
-        fieldName: 'dateModifiedValue',
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        onColumnClick: onColumnClick,
-        data: 'number',
-        // eslint-disable-next-line react/display-name
-        onRender: item => {
-          return <span>{item.dateModified}</span>;
-        },
-        isPadded: true,
+      isPadded: true,
+    },
+    {
+      key: 'column4',
+      name: 'File Size',
+      fieldName: 'fileSizeRaw',
+      minWidth: 70,
+      maxWidth: 90,
+      isResizable: true,
+      isCollapsible: true,
+      data: 'number',
+      onRender: item => {
+        return <span>{item.fileSize}</span>;
       },
-      {
-        key: 'column4',
-        name: 'Modified By',
-        fieldName: 'modifiedBy',
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        isCollapsible: true,
-        data: 'string',
-        onColumnClick: onColumnClick,
-        // eslint-disable-next-line react/display-name
-        onRender: item => {
-          return <span>{item.modifiedBy}</span>;
-        },
-        isPadded: true,
-      },
-      {
-        key: 'column5',
-        name: 'File Size',
-        fieldName: 'fileSizeRaw',
-        minWidth: 70,
-        maxWidth: 90,
-        isResizable: true,
-        isCollapsible: true,
-        data: 'number',
-        onColumnClick: onColumnClick,
-        // eslint-disable-next-line react/display-name
-        onRender: item => {
-          return <span>{item.fileSize}</span>;
-        },
-      },
-    ];
-  }
+    },
+  ];
 
   const selection = new Selection({
     onSelectionChanged: () => {
-      onItemInvoked(selection.getSelection()[0]);
+      const file = selection.getSelection()[0];
+      // todo: fix issue here, some time file is undefine.
+      if (file) {
+        const type = file.fileType;
+        const storageId = storages[currentStorageIndex].id;
+        const path = file.filePath;
+        if (type === 'folder') {
+          updateCurrentPath(storageId, path);
+        } else {
+          actions.setStorageExplorerStatus('closed');
+          props.onFileOpen(storageId, path);
+        }
+      }
     },
   });
 
+  async function init() {
+    const res = await actions.fetchStorages();
+    updateCurrentPath(res[currentStorageIndex].id, res[currentStorageIndex].path);
+  }
+
+  // fetch storages first then fetch the folder info under it.
   useEffect(() => {
-    actions.fetchStorages();
+    init();
   }, []);
 
-  // todo: result pass from api result to ui acceptable format may need move to reducer.
-  useLayoutEffect(() => {
-    const links = [];
-    storages.forEach(storage => {
-      links.push({
-        name: storage.name,
-        key: storage.id,
-        onClick: onNavClicked,
+  function onStorageSourceChange(index) {
+    currentStorageIndex = index;
+    updateCurrentPath(storages[currentStorageIndex].id, storages[currentStorageIndex].path);
+  }
+
+  // todo: result parse from api result to ui acceptable format may need move to reducer.
+  const links = [];
+  storages.forEach((storage, index) => {
+    links.push({
+      name: storage.name,
+      key: storage.id,
+      onClick: () => onStorageSourceChange(index),
+    });
+  });
+  const storageGroup = [
+    {
+      links: links,
+    },
+  ];
+
+  function getCurrentPath(array, seperator, start, end) {
+    if (!start) start = 0;
+    if (!end) end = array.length - 1;
+    end++;
+    return array.slice(start, end).join(seperator);
+  }
+
+  function updateCurrentPath(storageId, path) {
+    if (storageId && path) {
+      actions.fetchFolderItemsByPath(storageId, path);
+
+      // todo: make sure the separator is the same and working.
+      const pathItems = path.split('\\');
+      const tempPath = [];
+      for (let i = 0; i < pathItems.length; i++) {
+        const item = pathItems[i];
+        const currentPath = getCurrentPath(pathItems, '\\', 0, i);
+        tempPath.push({
+          text: item,
+          key: currentPath,
+          onClick: () => {
+            updateCurrentPath(storageId, currentPath);
+          },
+        });
+      }
+      pathNavItems = tempPath;
+    }
+  }
+
+  const storageFiles = [];
+  if (currentStorageFiles.children) {
+    currentStorageFiles.children.forEach(file => {
+      storageFiles.push({
+        name: file.name,
+        value: file.name,
+        fileType: file.type,
+        iconName: getIconName(file),
+        dateModified: getFileEditDate(file),
+        fileSize: file.size,
+        filePath: file.path,
       });
     });
-    storagesRef.current = [
-      {
-        links: links,
-      },
-    ];
-  }, [storages]);
-
-  useLayoutEffect(() => {
-    if (currentStorage.path) {
-      const pathItems = currentStorage.path.split('/');
-      let folderPath = '';
-      pathItems.forEach(item => {
-        folderPath += `${item}/`;
-        return { text: item, key: folderPath, onClick: onPathChange };
-      });
-      currentPathRef.current = pathItems;
-    }
-  }, [currentStorage]);
-
-  useLayoutEffect(() => {
-    storageFilesRef.current = currentStorageFiles;
-  }, [currentStorageFiles]);
+  }
 
   function toggleExplorer() {
     status === 'closed' ? 'opened' : 'closed';
@@ -192,65 +222,28 @@ export function StorageExplorer() {
     );
   }
 
-  function onNavClicked(event, item) {
-    const selectedStorage = storages.find(storage => storage.id === item.key);
-    actions.fetchFolderItemsByPath(selectedStorage);
+  function getFileEditDate(file) {
+    if (file.type === 'file') {
+      return new Date(file.lastModified).toLocaleDateString();
+    }
+
+    return undefined;
   }
 
-  // function getFileEditDate(start, end) {
-  //   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  //   return {
-  //     value: date.valueOf(),
-  //     dateFormatted: date.toLocaleDateString(),
-  //   };
-  // }
-
-  // function getFileIcon() {
-  //   const docType = FILE_ICONS[Math.floor(Math.random() * FILE_ICONS.length)].name;
-  //   return {
-  //     docType,
-  //     url: `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${docType}_16x1.svg`,
-  //   };
-  // }
-
-  // function getFileSize() {
-  //   const fileSize = Math.floor(Math.random() * 100) + 30;
-  //   return {
-  //     value: `${fileSize} KB`,
-  //     rawSize: fileSize,
-  //   };
-  // }
-
-  function onColumnClick(event, column) {
-    const items = storageFilesRef.current;
-    const newColumns = tableColums.slice();
-    const currColumn = newColumns.filter(currCol => column.key === currCol.key)[0];
-    newColumns.forEach(newCol => {
-      if (newCol === currColumn) {
-        currColumn.isSortedDescending = !currColumn.isSortedDescending;
-        currColumn.isSorted = true;
-      } else {
-        newCol.isSorted = false;
-        newCol.isSortedDescending = true;
+  // todo: icon file is fixed for now, need to be updated when get it from designer.
+  function getIconName(file) {
+    const path = file.path;
+    let docType = file.type;
+    if (docType === 'folder') {
+      return docType;
+    } else {
+      docType = path.substring(path.lastIndexOf('.') + 1, path.length);
+      if (SUPPORTED_ICON.includes(docType)) {
+        return docType;
       }
-    });
-    const newItems = copyAndSort(items, currColumn.fieldName, currColumn.isSortedDescending);
-    setTableColumns(newColumns);
-    setFileInfos(newItems);
-  }
 
-  function copyAndSort(items, columnKey, isSortedDescending) {
-    const key = columnKey;
-    return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-  }
-
-  function onItemInvoked(item) {
-    alert(`Item invoked: ${item.name}`);
-  }
-
-  function onPathChange(event, item) {
-    // todo: implement the state change.
-    alert(`"${item.key}" has been clicked.`);
+      return 'unknow';
+    }
   }
 
   function getLeftNav() {
@@ -265,7 +258,7 @@ export function StorageExplorer() {
           <Nav
             groups={[
               {
-                links: [{ name: 'Open', key: 'open', onClick: onPathChange }],
+                links: [{ name: 'Open', key: 'open' }],
               },
             ]}
             initialSelectedKey={'open'}
@@ -287,8 +280,8 @@ export function StorageExplorer() {
           <div css={title}>Open</div>
           <div style={{ paddingTop: '10px' }}>
             <Nav
-              groups={storagesRef.current}
-              initialSelectedKey={currentStorage.id}
+              groups={storageGroup}
+              initialSelectedKey={storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default'}
               css={navBody}
               styles={{
                 link: navLinks.sourceNavLink,
@@ -303,9 +296,9 @@ export function StorageExplorer() {
   function getFileSelector() {
     return (
       <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '90px' }}>
-        <Breadcrumb items={currentPathRef.current} ariaLabel={'File path'} maxDisplayedItems={'1'} />
+        <Breadcrumb items={pathNavItems} ariaLabel={'File path'} maxDisplayedItems={'1'} />
         <DetailsList
-          items={currentStorageFiles}
+          items={storageFiles}
           compact={false}
           columns={tableColums}
           setKey="set"
@@ -314,7 +307,6 @@ export function StorageExplorer() {
           selection={selection}
           selectionMode={SelectionMode.none}
           selectionPreservedOnEmptyClick={true}
-          onItemInvoked={onItemInvoked}
           enterModalSelectionOnTouch={true}
           css={detailListContainer}
         />
@@ -344,3 +336,7 @@ export function StorageExplorer() {
     </Fragment>
   );
 }
+
+StorageExplorer.propTypes = {
+  onFileOpen: PropTypes.func,
+};

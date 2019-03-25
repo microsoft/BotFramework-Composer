@@ -49,8 +49,8 @@ const setStorageExplorerStatus = (state, { status }) => {
   return (state.storageExplorerStatus = status);
 };
 
-const getStorageFileSuccess = (state, { status }) => {
-  return (state.currentStorageFiles = status);
+const getStorageFileSuccess = (state, { response }) => {
+  return (state.currentStorageFiles = response.data);
 };
 
 const loadingStorageFiles = (state, { storage }) => {
