@@ -1,13 +1,18 @@
 import createReducer from './createReducer';
 import { ActionTypes } from './../../constants/index';
+const pattern = /\.{1}[a-zA-Z]{1,}$/;
+const projectFiles = ['.bot', '.botproj'];
+
+const initProjectState = state => {
+  state.openFileIndex = -1;
+  state.editors = [];
+  return state;
+};
 
 const getFilesSuccess = (state, { response }) => {
-  const pattern = /\.{1}[a-zA-Z]{1,}$/;
-  const invalidFile = ['.bot', '.botproj'];
-
   state.files = response.data.reduce((files, value) => {
     const extension = pattern.exec(value.name)[0];
-    if (invalidFile.indexOf(extension) === -1) {
+    if (projectFiles.indexOf(extension) === -1) {
       files.push({ id: files.length, ...value });
     }
     return files;
@@ -50,14 +55,24 @@ const setStorageExplorerStatus = (state, { status }) => {
 };
 
 const getStorageFileSuccess = (state, { response }) => {
-  return (state.currentStorageFiles = response.data);
-};
+  state.currentStorageFiles = response.data.children.reduce((files, file) => {
+    if (file.type === 'folder') {
+      files.push(file);
+    } else {
+      const path = file.path;
+      const extension = path.substring(path.lastIndexOf('.'), path.length);
+      if (projectFiles.indexOf(extension) >= 0) {
+        files.push(file);
+      }
+    }
 
-const loadingStorageFiles = (state, { storage }) => {
-  return (state.currentStorage = storage);
+    return files;
+  }, []);
+  return state;
 };
 
 export const reducer = createReducer({
+  [ActionTypes.PROJECT_STATE_INIT]: initProjectState,
   [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
   [ActionTypes.FILES_UPDATE]: updateFiles,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
@@ -67,5 +82,4 @@ export const reducer = createReducer({
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
-  [ActionTypes.STORAGEFILE_LOADING]: loadingStorageFiles,
 });

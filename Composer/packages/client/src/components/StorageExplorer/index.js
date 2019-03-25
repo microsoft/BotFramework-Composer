@@ -195,8 +195,8 @@ export function StorageExplorer(props) {
   }
 
   const storageFiles = [];
-  if (currentStorageFiles.children) {
-    currentStorageFiles.children.forEach(file => {
+  if (currentStorageFiles) {
+    currentStorageFiles.forEach(file => {
       storageFiles.push({
         name: file.name,
         value: file.name,
