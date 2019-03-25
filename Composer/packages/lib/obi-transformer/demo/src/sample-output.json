@@ -1,137 +1,137 @@
 {
-	"nodes": [
-		{
-			"id": "$.rules[0]",
-			"type": "terminator",
-			"payload": {
-				"$type": "Microsoft.WelcomeRule",
-				"steps": [
-					{
-						"$type": "Microsoft.SendActivity",
-						"activity": "Hi! I'm a ToDo bot. Say \"add a todo named first one\" to get started."
-					}
-				]
-			}
-		},
-		{
-			"id": "$.rules[1]",
-			"type": "process",
-			"payload": {
-				"$type": "Microsoft.IntentRule",
-				"intent": "AddIntent",
-				"steps": [
-					{
-						"$type": "Microsoft.CallDialog",
-						"dialog": {
-							"$ref": "Samples/Planning - ToDoBot/AddToDo.dialog"
-						}
-					}
-				]
-			}
-		},
-		{
-			"id": "$.rules[2]",
-			"type": "process",
-			"payload": {
-				"$type": "Microsoft.IntentRule",
-				"intent": "DeleteIntent",
-				"steps": [
-					{
-						"$type": "Microsoft.CallDialog",
-						"dialog": {
-							"$ref": "Samples/Planning - ToDoBot/DeleteToDo.dialog"
-						}
-					}
-				]
-			}
-		},
-		{
-			"id": "$.rules[3]",
-			"type": "process",
-			"payload": {
-				"$type": "Microsoft.IntentRule",
-				"intent": "ClearIntent",
-				"steps": [
-					{
-						"$type": "Microsoft.CallDialog",
-						"dialog": {
-							"$ref": "Samples/Planning - ToDoBot/ClearToDos.dialog"
-						}
-					}
-				]
-			}
-		},
-		{
-			"id": "$.rules[4]",
-			"type": "process",
-			"payload": {
-				"$type": "Microsoft.IntentRule",
-				"intent": "ShowIntent",
-				"steps": [
-					{
-						"$type": "Microsoft.CallDialog",
-						"dialog": {
-							"$ref": "Samples/Planning - ToDoBot/ShowToDos.dialog"
-						}
-					}
-				]
-			}
-		},
-		{
-			"id": "$.recognizer",
-			"type": "decision",
-			"payload": {
-				"$type": "Microsoft.RegexRecognizer",
-				"rules": {
-					"AddIntent": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-					"DeleteIntent": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-					"ShowIntent": "(?:show|see|view) .*(?:to-do|todo|task)",
-					"ClearIntent": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
-				}
-			}
-		}
-	],
-	"edges": [
-		{
-			"from": "$.rules[0]",
-			"to": "$.recognizer",
-			"why": "WelcomeJump"
-		},
-		{
-			"from": "$.recognizer",
-			"to": "$.rules[1]",
-			"why": "IntentJump",
-			"payload": {
-				"path": "$.recognizer.rules.AddIntent",
-				"data": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
-			}
-		},
-		{
-			"from": "$.recognizer",
-			"to": "$.rules[2]",
-			"why": "IntentJump",
-			"payload": {
-				"path": "$.recognizer.rules.DeleteIntent",
-				"data": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
-			}
-		},
-		{
-			"from": "$.recognizer",
-			"to": "$.rules[3]",
-			"why": "IntentJump",
-			"payload": {
-				"path": "$.recognizer.rules.ClearIntent",
-				"data": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
-			}
-		},
-		{
-			"from": "$.recognizer",
-			"to": "$.rules[4]",
-			"why": "IntentJump",
-			"payload": {
-				"path": "$.recognizer.rules.ShowIntent",
-				"data": "(?:show|see|view) .*(?:to-do|todo|task)"
-			}
-		}
-	]
+  "nodes": [
+    {
+      "id": "$.rules[0]",
+      "type": "terminator",
+      "payload": {
+        "$type": "Microsoft.WelcomeRule",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first one\" to get started."
+          }
+        ]
+      }
+    },
+    {
+      "id": "$.rules[1]",
+      "type": "process",
+      "payload": {
+        "$type": "Microsoft.IntentRule",
+        "intent": "AddIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.CallDialog",
+            "dialog": {
+              "$ref": "Samples/Planning - ToDoBot/AddToDo.dialog"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "$.rules[2]",
+      "type": "process",
+      "payload": {
+        "$type": "Microsoft.IntentRule",
+        "intent": "DeleteIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.CallDialog",
+            "dialog": {
+              "$ref": "Samples/Planning - ToDoBot/DeleteToDo.dialog"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "$.rules[3]",
+      "type": "process",
+      "payload": {
+        "$type": "Microsoft.IntentRule",
+        "intent": "ClearIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.CallDialog",
+            "dialog": {
+              "$ref": "Samples/Planning - ToDoBot/ClearToDos.dialog"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "$.rules[4]",
+      "type": "process",
+      "payload": {
+        "$type": "Microsoft.IntentRule",
+        "intent": "ShowIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.CallDialog",
+            "dialog": {
+              "$ref": "Samples/Planning - ToDoBot/ShowToDos.dialog"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "$.recognizer",
+      "type": "decision",
+      "payload": {
+        "$type": "Microsoft.RegexRecognizer",
+        "rules": {
+          "AddIntent": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+          "DeleteIntent": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+          "ShowIntent": "(?:show|see|view) .*(?:to-do|todo|task)",
+          "ClearIntent": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "$.rules[0]",
+      "to": "$.recognizer",
+      "why": "WelcomeJump"
+    },
+    {
+      "from": "$.recognizer",
+      "to": "$.rules[1]",
+      "why": "IntentJump",
+      "payload": {
+        "path": "$.recognizer.rules.AddIntent",
+        "data": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      }
+    },
+    {
+      "from": "$.recognizer",
+      "to": "$.rules[2]",
+      "why": "IntentJump",
+      "payload": {
+        "path": "$.recognizer.rules.DeleteIntent",
+        "data": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      }
+    },
+    {
+      "from": "$.recognizer",
+      "to": "$.rules[3]",
+      "why": "IntentJump",
+      "payload": {
+        "path": "$.recognizer.rules.ClearIntent",
+        "data": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
+      }
+    },
+    {
+      "from": "$.recognizer",
+      "to": "$.rules[4]",
+      "why": "IntentJump",
+      "payload": {
+        "path": "$.recognizer.rules.ShowIntent",
+        "data": "(?:show|see|view) .*(?:to-do|todo|task)"
+      }
+    }
+  ]
 }

@@ -14,7 +14,7 @@ export class TraceableConnector {
       const elements = input[key];
 
       const connectable = when(elements, input);
-      if (false === connectable) continue;
+      if (!connectable) continue;
 
       const connections = buildConnections(elements, input);
       connectionGroups.push(connections);

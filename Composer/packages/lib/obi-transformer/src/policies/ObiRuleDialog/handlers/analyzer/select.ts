@@ -11,7 +11,7 @@ const traceableFilter = (arr: any[], pathPrefix: string, judge: (x: any) => bool
   const filtered = [];
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i];
-    if (false === judge(element)) continue;
+    if (!judge(element)) continue;
     filtered.push({
       data: element,
       path: `${pathPrefix}[${i}]`,

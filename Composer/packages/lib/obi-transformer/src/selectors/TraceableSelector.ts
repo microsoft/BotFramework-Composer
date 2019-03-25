@@ -32,7 +32,7 @@ export class TraceableSelector<InputSchema> {
     if (Array.isArray(before)) {
       for (let i = 0; i < before.length; i++) {
         const validated = before[i](input);
-        if (false === validated) {
+        if (!validated) {
           throw new TypeError(`Validation failed: [before][${i}].`);
         }
       }
@@ -77,7 +77,7 @@ export class TraceableSelector<InputSchema> {
     if (Array.isArray(after)) {
       for (let i = 0; i < after.length; i++) {
         const valdiated = after[i](result);
-        if (false === valdiated) {
+        if (!valdiated) {
           throw new TypeError(`Validation failed: [after][${i}]`);
         }
       }
