@@ -2,41 +2,6 @@ import { ObiTypes } from './constants/ObiTypes';
 import { NodeTypes } from './constants/NodeTypes';
 import { PAYLOAD_KEY } from '../utils/constant';
 
-const selectRecognizers = input => [
-  {
-    id: `$.recognizer`,
-    type: NodeTypes.Decision,
-    [PAYLOAD_KEY]: input['recognizer'],
-  },
-];
-
-const selectWelcomes = input =>
-  input.rules
-    .map((rule, index) =>
-      rule.$type === ObiTypes.rules.WelcomeRule
-        ? { id: `$.rules[${index}]`, type: NodeTypes.Process, [PAYLOAD_KEY]: rule }
-        : null
-    )
-    .filter(x => x);
-
-const selectFallbacks = input =>
-  input.rules
-    .map((rule, index) =>
-      rule.$type === ObiTypes.rules.FallbackRule
-        ? { id: `$.rules[${index}]`, type: NodeTypes.Process, [PAYLOAD_KEY]: rule }
-        : null
-    )
-    .filter(x => x);
-
-const selectIntents = input =>
-  input.rules
-    .map((rule, index) =>
-      rule.$type === ObiTypes.rules.IntentRule
-        ? { id: `$.rules[${index}]`, type: NodeTypes.Process, [PAYLOAD_KEY]: rule }
-        : null
-    )
-    .filter(x => x);
-
 export const RuleDialogTransformer = {
   // When input schema is a ObiRuleDialog.
   when: input => input && input.$type === ObiTypes.dialogs.ObiRuleDialog,
@@ -107,3 +72,40 @@ export const RuleDialogTransformer = {
     return Object.values(nodeById);
   },
 };
+
+/**
+ * Helpers
+ */
+
+class TraceableNode {
+  constructor(id, type, payload) {
+    this.id = id;
+    this.type = type;
+    this[PAYLOAD_KEY] = payload;
+  }
+}
+
+const selectRecognizers = input => [new TraceableNode(`$.recognizer`, NodeTypes.Decision, input['recognizer'])];
+
+const selectWelcomes = input =>
+  input.rules
+    .map((rule, index) =>
+      rule.$type === ObiTypes.rules.WelcomeRule ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
+    )
+    .filter(x => x);
+
+const selectFallbacks = input =>
+  input.rules
+    .map((rule, index) =>
+      rule.$type === ObiTypes.rules.FallbackRule
+        ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule)
+        : null
+    )
+    .filter(x => x);
+
+const selectIntents = input =>
+  input.rules
+    .map((rule, index) =>
+      rule.$type === ObiTypes.rules.IntentRule ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
+    )
+    .filter(x => x);
