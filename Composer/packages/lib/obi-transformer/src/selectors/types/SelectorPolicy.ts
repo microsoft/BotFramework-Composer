@@ -1,4 +1,3 @@
-import { ObiSchema } from '../../models/obi/ObiSchema';
 import { TraceableSelectionResult } from './SelectionResult';
 import { TraceableData } from '../../types/TraceableData';
 
@@ -20,4 +19,8 @@ export type SelectorPolicy<InputSchema, IntermediaSchema, ResultSchema> = {
   execution: SelectorUnitCollection<InputSchema, IntermediaSchema>;
 };
 
-export type TraceableSelectorPolicy = SelectorPolicy<ObiSchema, TraceableData<any>, TraceableSelectionResult>;
+export type TraceableSelectorPolicy<InputSchema> = SelectorPolicy<
+  InputSchema,
+  TraceableData<any>,
+  TraceableSelectionResult
+>;

@@ -1,11 +1,11 @@
-import { ObiSchema } from '../../../../models/obi/ObiSchema';
+import { ObiRuleDialog } from '../../../../models/obi/ObiRuleDialog';
 import { RuleTypes } from '../../../../models/obi/types/RuleTypes';
 import { ObiStorage } from '../../../../models/obi/ObiStorage';
 import { ObiRecognizer } from '../../../../models/obi/ObiRecognizer';
 import { ObiRule } from '../../../../models/obi/ObiRule';
 import { TraceableData } from '../../../../types/TraceableData';
 
-export type SelectorImpl = (obi: ObiSchema) => TraceableData<any>[];
+export type SelectorImpl = (obi: ObiRuleDialog) => TraceableData<any>[];
 
 const traceableFilter = (arr: any[], pathPrefix: string, judge: (x: any) => boolean) => {
   return arr
@@ -13,7 +13,7 @@ const traceableFilter = (arr: any[], pathPrefix: string, judge: (x: any) => bool
     .filter(x => x);
 };
 
-export const selectStorage = (obi: ObiSchema): TraceableData<ObiStorage>[] => {
+export const selectStorage = (obi: ObiRuleDialog): TraceableData<ObiStorage>[] => {
   return [
     {
       data: obi.storage,
@@ -22,7 +22,7 @@ export const selectStorage = (obi: ObiSchema): TraceableData<ObiStorage>[] => {
   ];
 };
 
-export const selectRecognizer = (obi: ObiSchema): TraceableData<ObiRecognizer>[] => {
+export const selectRecognizer = (obi: ObiRuleDialog): TraceableData<ObiRecognizer>[] => {
   return [
     {
       data: obi.recognizer,
@@ -31,19 +31,19 @@ export const selectRecognizer = (obi: ObiSchema): TraceableData<ObiRecognizer>[]
   ];
 };
 
-export const selectWelcome = (obi: ObiSchema): TraceableData<ObiRule>[] => {
+export const selectWelcome = (obi: ObiRuleDialog): TraceableData<ObiRule>[] => {
   return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Welcome);
 };
 
-export const selectFallback = (obi: ObiSchema): TraceableData<ObiRule>[] => {
+export const selectFallback = (obi: ObiRuleDialog): TraceableData<ObiRule>[] => {
   return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Fallback);
 };
 
-export const selectIntent = (obi: ObiSchema): TraceableData<ObiRule>[] => {
+export const selectIntent = (obi: ObiRuleDialog): TraceableData<ObiRule>[] => {
   return traceableFilter(obi.rules, '$.rules', x => x.$type === RuleTypes.Intent);
 };
 
-export const selectPlainRules = (obi: ObiSchema): TraceableData<ObiRule>[] => {
+export const selectPlainRules = (obi: ObiRuleDialog): TraceableData<ObiRule>[] => {
   const notSpecialRules = x =>
     ![RuleTypes.Welcome, RuleTypes.Fallback, RuleTypes.Intent].some(specialType => specialType === x.$type);
 

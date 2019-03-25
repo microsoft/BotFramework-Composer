@@ -1,4 +1,4 @@
-import { ObiSchema } from './models/obi/ObiSchema';
+import { ObiRuleDialog } from './models/obi/ObiRuleDialog';
 
 import { ObiRuleDialogPolicies } from './policies/ObiRuleDialog';
 import { TraceableSelector } from './selectors/TraceableSelector';
@@ -9,11 +9,11 @@ import { ConnectorEdge } from './connectors/types/ConnectorResults';
 
 const { analyzerPolicy, connectorPolicy, transformerPolicy } = ObiRuleDialogPolicies;
 
-const analyzer = new TraceableSelector(analyzerPolicy);
+const analyzer = new TraceableSelector<ObiRuleDialog>(analyzerPolicy);
 const connector = new TraceableConnector(connectorPolicy);
 const transformer = new TraceableTransformer(transformerPolicy);
 
-export function transform(obiJson: ObiSchema) {
+export function transform(obiJson: ObiRuleDialog) {
   const traceableData = analyzer.select(obiJson);
 
   const nodesCollection: { [key: string]: DirectedGraphNode<string, any>[] } = transformer.transform(traceableData);

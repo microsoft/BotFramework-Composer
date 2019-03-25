@@ -1,13 +1,9 @@
-import { DialogTypes } from './types/DialogTypes';
 import { ObiRule } from './ObiRule';
 import { ObiRecognizer } from './ObiRecognizer';
 import { ObiStorage } from './ObiStorage';
+import { ObiBaseSchema } from './ObiBaseSchema';
 
-export class ObiSchema {
-  $schema: string;
-  $type: DialogTypes;
-  $id: string;
-
+export class ObiRuleDialog extends ObiBaseSchema {
   storage: ObiStorage;
   recognizer: ObiRecognizer;
 
