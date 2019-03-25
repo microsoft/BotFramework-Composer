@@ -6,9 +6,10 @@ import { ObiStorage } from '../../../types/obi-elements/ObiStorage';
 import { TraceableData } from '../../../../types/TraceableData';
 import { TransformerImpl } from '../../../../transformers/types/TransformerPolicy';
 
-export const obiRuleToGraphProcess: TransformerImpl<ObiRule> = (
-  input: TraceableData<ObiRule>
-): DirectedGraphNode<string, ObiRule> => {
+export const obiRuleToGraphProcess: TransformerImpl<
+  TraceableData<ObiRule>,
+  DirectedGraphNode<string, ObiRule>
+> = input => {
   return {
     id: input.path,
     type: GraphNodeTypes.Process,
@@ -16,9 +17,10 @@ export const obiRuleToGraphProcess: TransformerImpl<ObiRule> = (
   } as DirectedGraphNode<string, ObiRule>;
 };
 
-export const obiRecognizerToGraphDecision: TransformerImpl<ObiRecognizer> = (
-  input: TraceableData<ObiRecognizer>
-): DirectedGraphNode<string, ObiRecognizer> => {
+export const obiRecognizerToGraphDecision: TransformerImpl<
+  TraceableData<ObiRecognizer>,
+  DirectedGraphNode<string, ObiRecognizer>
+> = input => {
   return {
     id: input.path,
     type: GraphNodeTypes.Decision,
@@ -26,9 +28,10 @@ export const obiRecognizerToGraphDecision: TransformerImpl<ObiRecognizer> = (
   } as DirectedGraphNode<string, ObiRecognizer>;
 };
 
-export const obiWelcomeRuleToGraphTerminator: TransformerImpl<ObiRule> = (
-  input: TraceableData<ObiRule>
-): DirectedGraphNode<string, ObiRule> => {
+export const obiWelcomeRuleToGraphTerminator: TransformerImpl<
+  TraceableData<ObiRule>,
+  DirectedGraphNode<string, ObiRule>
+> = input => {
   return {
     id: input.path,
     type: GraphNodeTypes.Terminator,
@@ -36,9 +39,10 @@ export const obiWelcomeRuleToGraphTerminator: TransformerImpl<ObiRule> = (
   } as DirectedGraphNode<string, ObiRule>;
 };
 
-export const obiStorageToGraphIsolated: TransformerImpl<ObiStorage> = (
-  input: TraceableData<ObiStorage>
-): DirectedGraphNode<string, ObiStorage> => {
+export const obiStorageToGraphIsolated: TransformerImpl<
+  TraceableData<ObiStorage>,
+  DirectedGraphNode<string, ObiStorage>
+> = input => {
   return {
     id: input.path,
     type: GraphNodeTypes.Isolated,

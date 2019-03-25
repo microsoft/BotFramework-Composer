@@ -12,7 +12,7 @@ import {
 import { TraceableSelectorPolicy } from '../../selectors/types/SelectorPolicy';
 import { ObiRuleDialog } from '../types/obi-dialogs/ObiRuleDialog';
 
-export const ruleDialogAnalyzerPolicy: TraceableSelectorPolicy<ObiRuleDialog> = {
+export const ruleDialogAnalyzerPolicy: TraceableSelectorPolicy<ObiRuleDialog, any> = {
   before: [shouldBeRuleDialog],
   after: [validateRuleDialogComponents],
   execution: {

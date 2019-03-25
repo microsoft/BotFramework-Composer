@@ -1,11 +1,10 @@
-import { SelectorPolicy } from './types/SelectorPolicy';
-import { TraceableData } from '../types/TraceableData';
+import { TraceableSelectorPolicy } from './types/SelectorPolicy';
 import { TraceableSelectionResult } from './types/SelectionResult';
 
-export class TraceableSelector<InputSchema> {
-  private policy: SelectorPolicy<InputSchema, TraceableData<any>, TraceableSelectionResult>;
+export class TraceableSelector<InputSchema, PayloadType> {
+  private policy: TraceableSelectorPolicy<InputSchema, PayloadType>;
 
-  constructor(selectorPolicy: SelectorPolicy<InputSchema, TraceableData<any>, TraceableSelectionResult>) {
+  constructor(selectorPolicy: TraceableSelectorPolicy<InputSchema, PayloadType>) {
     const { before, execution, after } = selectorPolicy;
     if (!execution) {
       throw new TypeError(`Analyzer constructor failed: missing [execution] filed.`);
@@ -14,7 +13,7 @@ export class TraceableSelector<InputSchema> {
     this.policy = selectorPolicy;
   }
 
-  public select(input: InputSchema) {
+  public select(input: InputSchema): TraceableSelectionResult<PayloadType> {
     // Before
     this.executeBeforeValidation(input);
 
@@ -39,7 +38,7 @@ export class TraceableSelector<InputSchema> {
     }
   }
 
-  private executeSelection(input: InputSchema): TraceableSelectionResult {
+  private executeSelection(input: InputSchema): TraceableSelectionResult<PayloadType> {
     const { execution: executionDefinition } = this.policy;
 
     // Generate to be selected keys from selectionPolicy.
@@ -71,7 +70,7 @@ export class TraceableSelector<InputSchema> {
     return traceableResult;
   }
 
-  private executeAfterValidation(result: TraceableSelectionResult): void {
+  private executeAfterValidation(result: TraceableSelectionResult<PayloadType>): void {
     const { after } = this.policy;
     // Validate selected result after executing selection.
     if (Array.isArray(after)) {

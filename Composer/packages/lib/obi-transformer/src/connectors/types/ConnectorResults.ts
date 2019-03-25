@@ -1,8 +1,6 @@
-import { TraceableData } from '../../types/TraceableData';
-
-export class ConnectorEdge {
+export class ConnectorEdge<DataType> {
   from: string;
   to: string;
   why?: any;
-  payload?: TraceableData<any>;
+  payload?: DataType;
 }

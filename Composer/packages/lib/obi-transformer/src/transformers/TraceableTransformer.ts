@@ -1,11 +1,18 @@
-import { TransformerPolicy } from './types/TransformerPolicy';
-import { TraceableSelectionResult, SelectionResult } from '../selectors/types/SelectionResult';
+import { TraceableTransformerPolicy } from './types/TransformerPolicy';
+import { TraceableSelectionResult } from '../selectors/types/SelectionResult';
 import { DirectedGraphNode } from '../types/DirectedGraphNode';
+import { StringIndexedCollection } from '../types/StringIndexedCollection';
 
-export class TraceableTransformer {
-  constructor(private transformerPolicy: TransformerPolicy) {}
+/**
+ * Convert upriver result from 'selector' with type 'TraceableData' to directed graph nodes.
+ * Specify the 'PayloadType' to instantiate output schema.
+ */
+export class TraceableTransformer<PayloadType> {
+  constructor(private transformerPolicy: TraceableTransformerPolicy<PayloadType>) {}
 
-  transform(input: TraceableSelectionResult): SelectionResult<DirectedGraphNode<string, any>> {
+  transform(
+    input: TraceableSelectionResult<PayloadType>
+  ): StringIndexedCollection<DirectedGraphNode<string, PayloadType>[]> {
     const topics = Object.keys(this.transformerPolicy);
 
     return topics.reduce((acc, key) => {

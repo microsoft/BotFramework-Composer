@@ -1,26 +1,21 @@
-import { TraceableSelectionResult } from './SelectionResult';
+import { StringIndexedCollection } from '../../types/StringIndexedCollection';
 import { TraceableData } from '../../types/TraceableData';
 
-export type SelectorUnit<InputSchema, IntermediaSchema> = {
-  select: (input: InputSchema) => IntermediaSchema[];
-  validate: (x: IntermediaSchema) => boolean;
+export type BeforeHandler<InputType> = (input: InputType) => boolean;
+export type AfterHandler<OutputType> = (result: StringIndexedCollection<OutputType[]>) => boolean;
+
+export type SelectorUnit<InputType, OutputType> = {
+  select: (input: InputType) => OutputType[];
+  validate: (x: OutputType) => boolean;
   options?: {
     required: boolean;
   };
 };
 
-export type SelectorUnitCollection<InputSchema, IntermediaSchema> = {
-  [feature: string]: SelectorUnit<InputSchema, IntermediaSchema>;
+export type SelectorPolicy<InputType, OutputType> = {
+  before: BeforeHandler<InputType>[];
+  after: AfterHandler<OutputType>[];
+  execution: StringIndexedCollection<SelectorUnit<InputType, OutputType>>;
 };
 
-export type SelectorPolicy<InputSchema, IntermediaSchema, ResultSchema> = {
-  before: ((input: InputSchema) => boolean)[];
-  after: ((result: ResultSchema) => boolean)[];
-  execution: SelectorUnitCollection<InputSchema, IntermediaSchema>;
-};
-
-export type TraceableSelectorPolicy<InputSchema> = SelectorPolicy<
-  InputSchema,
-  TraceableData<any>,
-  TraceableSelectionResult
->;
+export type TraceableSelectorPolicy<InputSchema, PayloadType> = SelectorPolicy<InputSchema, TraceableData<PayloadType>>;

@@ -1,11 +1,11 @@
-import { WhenHandler } from '../../../../connectors/types/ConnectionPolicy';
+import { TraceableWhenHandler } from '../../../../connectors/types/ConnectionPolicy';
 
 // Welcome should be connected to the only 'recognizer' directly.
-export const shouldWelcomeFireConnection: WhenHandler = (welcomeElements, root) => {
+export const shouldWelcomeFireConnection: TraceableWhenHandler<any> = (welcomeElements, root) => {
   return welcomeElements.length === 1 && root['recognizer'].length === 1;
 };
 
 // 'Intent's should be connected to the only 'recognizer' by their intent names.
-export const shouldIntentFireConnection: WhenHandler = (intentElements, root) => {
+export const shouldIntentFireConnection: TraceableWhenHandler<any> = (intentElements, root) => {
   return intentElements.length > 0 && root['recognizer'].length === 1;
 };
