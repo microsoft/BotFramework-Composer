@@ -10,5 +10,8 @@ function chooseTransformer(input) {
 
 export function autoTransform(input) {
   const chosenTransformer = chooseTransformer(input);
-  return applyTransformer(input, chosenTransformer);
+  if (chosenTransformer) {
+    return applyTransformer(input, chosenTransformer);
+  }
+  return [];
 }
