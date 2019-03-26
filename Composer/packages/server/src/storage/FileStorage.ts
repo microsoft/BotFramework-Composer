@@ -7,8 +7,12 @@ interface IFileInfo {
 export class FileStorage {
   private _fileInfo: IFileInfo;
   private _lastFlushedSerializedFileInfo: string | null = null;
+  private path: string;
+  private onError: (error: Error) => void;
 
-  constructor(private path: string, private onError: (error: Error) => void) {
+  constructor(path: string, onError: (error: Error) => void) {
+    this.path = path;
+    this.onError = onError;
     this._fileInfo = this.loadSync();
   }
 

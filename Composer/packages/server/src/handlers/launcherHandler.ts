@@ -1,6 +1,7 @@
 import { ConnectorFactory } from '../launcher-connectors/connectorFactory';
 import { ILauncherConnector } from '../launcher-connectors/interface';
 import { LauncherStatus } from '../launcher-connectors/launcherStatus';
+
 import settings from './../storage/SettingService';
 
 var connector: ILauncherConnector = new ConnectorFactory().CreateConnector(settings.getItem('launcherConnector'));
