@@ -1,6 +1,7 @@
 import { ObiTypes } from './constants/ObiTypes';
 import { NodeTypes } from './constants/NodeTypes';
 import { IndexedNode } from './IndexedNode';
+import { mergeNodesIntoEdges } from './helpers/mergeNodesIntoEdges';
 
 export const RuleDialogTransformer = {
   // When input schema is a ObiRuleDialog.
@@ -52,24 +53,8 @@ export const RuleDialogTransformer = {
     return edges;
   },
   output: (nodeCollection, edges) => {
-    const nodeList = [].concat(...Object.values(nodeCollection));
-    const nodeById = nodeList.reduce(
-      (accumulated, currentNode) => ({
-        ...accumulated,
-        [currentNode.id]: {
-          ...currentNode,
-          neighborIds: [],
-        },
-      }),
-      {}
-    );
-
-    edges.forEach(edge => {
-      const { from, to } = edge;
-      nodeById[from].neighborIds.push(to);
-    });
-
-    return Object.values(nodeById);
+    const nodes = [].concat(...Object.values(nodeCollection));
+    return mergeNodesIntoEdges(nodes, edges);
   },
 };
 
