@@ -12,13 +12,13 @@
     "recentAccessedBots": [
         {
             "storageId": "default",
-            "path": "..\\..\\..\\SampleBots\\Planning - ToDoBot\\bot.botproj",
-            "lastAccessTime": 1553504447822
+            "path": "..\\..\\..\\SampleBots\\Planning - ToDoLuisBot\\bot.botproj",
+            "lastAccessTime": 1553581626801
         },
         {
             "storageId": "default",
-            "path": "..\\..\\..\\SampleBots\\Planning - ToDoLuisBot\\bot.botproj",
-            "lastAccessTime": 1553504484157
+            "path": "..\\..\\..\\SampleBots\\Planning - ToDoBot\\bot.botproj",
+            "lastAccessTime": 1553583636938
         }
     ]
 }

@@ -8,7 +8,7 @@ var botFileName: string;
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
   botFileDir = path.dirname(botFilePath);
-  botFileName = botFilePath.substr(botFilePath.lastIndexOf('/') + 1);
+  botFileName = path.basename(botFilePath);
 }
 
 export function getFiles(botProjFilePath: string = ''): any[] {

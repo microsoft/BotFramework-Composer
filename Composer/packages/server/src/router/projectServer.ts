@@ -5,9 +5,10 @@ import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
 import path from 'path';
 import produce from 'immer';
+import fs from 'fs';
 
 const router: Router = express.Router({});
-let openBot: any | undefined;
+let openBot: any | undefined = null;
 
 // read from memory
 router.get('/opened', function(req: any, res: any, next: any) {
@@ -28,8 +29,24 @@ router.get('/opened', function(req: any, res: any, next: any) {
 router.put('/opened', function(req: any, res: any, next: any) {
   // check whether the data is completed
   if (req.body.path && req.body.storageId) {
-    openBot = projectHandler.updateOpenBot(req.body, storage);
-    res.status(200).json({ result: 'update opened project successfully' });
+    // path must be a .bot/.botproj file path
+    if (path.extname(req.body.path) !== '.bot' && path.extname(req.body.path) !== '.botproj') {
+      res
+        .status(400)
+        .json({ error: 'path error. can not accept this type of file, please give .bot or .botproj file' });
+      return;
+    }
+    // check if the path is correct
+    if (!fs.existsSync(req.body.path)) {
+      res.status(404).json({ error: 'file not found' });
+      return;
+    }
+    try {
+      openBot = projectHandler.updateOpenBot(req.body, storage);
+      res.status(200).json({ result: 'update opened project successfully' });
+    } catch (error) {
+      res.status(400).json(error);
+    }
   } else {
     res.status(400).json({ error: 'please give the project path and storageId' });
   }
@@ -38,8 +55,12 @@ router.put('/opened', function(req: any, res: any, next: any) {
 router.get('/opened/files', function(req: any, res: any, next: any) {
   if (openBot) {
     // load local project
-    let result = getFiles(openBot.path);
-    res.status(200).json(result);
+    try {
+      let result = getFiles(openBot.path);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json(error);
+    }
   } else {
     res.status(400).json({ error: "haven't open a project" });
   }

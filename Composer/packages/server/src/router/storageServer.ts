@@ -37,7 +37,7 @@ router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any)
 
       result = {
         name: path.basename(reqPath),
-        path: path.dirname(reqPath),
+        parent: path.dirname(reqPath),
         children: folderTree,
       };
     }

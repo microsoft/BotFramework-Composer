@@ -11,9 +11,9 @@
     "lastActiveBot": "../../../../SampleBots/Planning - ToDoLuisBot/bot.botproj",
     "recentAccessedBots": [
         {
-            "path": "testPath",
+            "path": "testPath.bot",
             "storageId": "default",
-            "lastAccessTime": 1553506881269
+            "lastAccessTime": 1553579549397
         }
     ]
 }

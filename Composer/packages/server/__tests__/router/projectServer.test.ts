@@ -13,14 +13,14 @@ describe('test project server all method', () => {
   test('GET /api/projects handler', () => {
     let result = projectHandler.checkOpenBotInStorage(mockStorage, mockSetting);
     expect(result).not.toBeUndefined();
-    expect(result.path).toBe(path.resolve('testPath'));
+    expect(result.path).toBe(path.resolve('testPath.bot'));
     expect(result.storageId).toBe('default');
   });
 
   test('PUT /api/projects handler', () => {
     let openBot;
     let mockBody = {
-      path: path.resolve('testPath'),
+      path: path.resolve('testPath.bot'),
       storageId: 'default',
       lastAccessTime: Date.now(),
     };
