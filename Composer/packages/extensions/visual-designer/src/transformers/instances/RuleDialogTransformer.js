@@ -3,6 +3,19 @@ import { NodeTypes } from '../constants/NodeTypes';
 import { IndexedNode } from '../helpers/IndexedNode';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 
+/**
+ * When input schema is detected as a RuleDialog of OBI;
+ * select its
+ *  recognizers from 'recognizer' field (should only exist one recognizer),
+ *  welcomes by filtering WelcomRule out of its 'rules' (should only exist one welcome node),
+ *  intents by filtering IntentRule out of its 'rules',
+ *  fallbacks by filtering FallbackRule out of its 'rules' (should only exist one welcome node);
+ * then
+ *  connect 'welcome' to 'recognizer',
+ *  connect 'recognizer' to all 'intents',
+ *  connect 'recognizer' to 'fallback';
+ * output a DirectedGraph prop.
+ */
 export const RuleDialogTransformer = {
   // When input schema is a ObiRuleDialog.
   when: input => input && input.$type === ObiTypes.dialogs.ObiRuleDialog,

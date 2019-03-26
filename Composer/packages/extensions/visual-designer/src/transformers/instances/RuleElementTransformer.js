@@ -3,6 +3,12 @@ import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { ActionTypes } from '../constants/ActionTypes';
 
+/**
+ * When input is detected as a 'rule' element of OBI schema;
+ * select its 'steps' and create a virtual root node with type 'Start' (indicates returning to parent level);
+ * then connect these nodes sequentially;
+ * output a DirectedGraph prop.
+ */
 export const RuleElementTransformer = {
   when: input => input && input.$type && input.$type.match(/.+Rule$/),
   selectNodes: input => ({
