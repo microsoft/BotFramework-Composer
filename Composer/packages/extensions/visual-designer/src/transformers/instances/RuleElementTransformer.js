@@ -1,6 +1,7 @@
 import { IndexedNode } from '../helpers/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
+import { ActionTypes } from '../constants/ActionTypes';
 
 export const RuleElementTransformer = {
   when: input => input && input.$type && input.$type.match(/.+Rule$/),
@@ -8,7 +9,7 @@ export const RuleElementTransformer = {
     steps: input.steps
       ? input.steps.map((step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, step))
       : [],
-    parents: [new IndexedNode('..', NodeTypes.Start, null)],
+    parents: [new IndexedNode('..', NodeTypes.Start, { $type: ActionTypes.Navigation })],
   }),
   buildEdges: nodeCollection => {
     const { steps, parents } = nodeCollection;
@@ -24,7 +25,7 @@ export const RuleElementTransformer = {
     return edges;
   },
   output: (nodeCollection, edges) => {
-    const nodes = [].concat(...Object.keys(nodeCollection));
+    const nodes = [].concat(...Object.values(nodeCollection));
     return mergeNodesIntoEdges(nodes, edges);
   },
 };

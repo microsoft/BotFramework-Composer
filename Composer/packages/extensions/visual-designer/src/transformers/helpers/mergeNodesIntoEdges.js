@@ -19,7 +19,7 @@ export function mergeNodesIntoEdges(nodes, edges) {
 
   edges.forEach(edge => {
     const { from, to } = edge;
-    nodeById[from].neighborIds.push(to);
+    nodeById[from][CHILDREN_KEY].push(to);
   });
   return Object.values(nodeById);
 }
