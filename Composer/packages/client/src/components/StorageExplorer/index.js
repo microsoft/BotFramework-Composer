@@ -16,23 +16,23 @@ import {
   container,
   body,
   navHeader,
-  navBody,
-  panelNav,
+  leftNav,
   panelContent,
-  iconContainer,
-  icon,
-  navLinks,
+  backIcon,
+  navLinkClass,
   detailListContainer,
   title,
   detailListClass,
+  fileSelectorContainer,
 } from './styles';
 
 export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
   const { storages, currentStorageFiles, storageExplorerStatus } = state;
   const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
-  const [pathNavItems, setPathNavItems] = useState();
+  const [currentPath, setCurrentPath] = useState('');
 
+  const currentStorageId = storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default';
   // for detail file list in open panel
   const tableColums = [
     {
@@ -110,7 +110,7 @@ export function StorageExplorer(props) {
         const storageId = storages[currentStorageIndex].id;
         const path = file.filePath;
         if (type === FileTypes.FOLDER) {
-          updateCurrentPath(storageId, path);
+          updateCurrentPath(path, storageId);
         } else {
           actions.setStorageExplorerStatus('closed');
           props.onFileOpen(storageId, path);
@@ -121,7 +121,7 @@ export function StorageExplorer(props) {
 
   async function init() {
     const res = await actions.fetchStorages();
-    updateCurrentPath(res[currentStorageIndex].id, res[currentStorageIndex].path);
+    updateCurrentPath(res[currentStorageIndex].path, res[currentStorageIndex].id);
   }
 
   // fetch storages first then fetch the folder info under it.
@@ -131,7 +131,7 @@ export function StorageExplorer(props) {
 
   function onStorageSourceChange(index) {
     setCurrentStorageIndex(index);
-    updateCurrentPath(storages[currentStorageIndex].id, storages[currentStorageIndex].path);
+    updateCurrentPath(storages[currentStorageIndex].path, storages[currentStorageIndex].id);
   }
 
   // todo: result parse from api result to ui acceptable format may need move to reducer.
@@ -149,32 +149,36 @@ export function StorageExplorer(props) {
     },
   ];
 
-  function getCurrentPath(array, seperator, start, end) {
+  function getNavItemPath(array, seperator, start, end) {
     if (!start) start = 0;
     if (!end) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
   }
 
-  function updateCurrentPath(storageId, path) {
+  function getPathNavItems(path, storageId) {
+    // todo: make sure the separator is the same and working.
+    const pathItems = path.split('\\');
+    const newPathItems = [];
+    for (let i = 0; i < pathItems.length; i++) {
+      const item = pathItems[i];
+      const currentPath = getNavItemPath(pathItems, '\\', 0, i);
+      newPathItems.push({
+        text: item,
+        key: currentPath,
+        onClick: () => {
+          updateCurrentPath(currentPath, storageId);
+        },
+      });
+    }
+    return newPathItems;
+  }
+
+  function updateCurrentPath(path, storageId) {
     if (storageId && path) {
       actions.fetchFolderItemsByPath(storageId, path);
-
-      // todo: make sure the separator is the same and working.
-      const pathItems = path.split('\\');
-      const newPathItems = [];
-      for (let i = 0; i < pathItems.length; i++) {
-        const item = pathItems[i];
-        const currentPath = getCurrentPath(pathItems, '\\', 0, i);
-        newPathItems.push({
-          text: item,
-          key: currentPath,
-          onClick: () => {
-            updateCurrentPath(storageId, currentPath);
-          },
-        });
-      }
-      setPathNavItems(newPathItems);
+      setCurrentPath(path);
+      // setPathNavItems(newPathItems);
     }
   }
 
@@ -221,7 +225,7 @@ export function StorageExplorer(props) {
       return new Date(file.lastModified).toLocaleDateString();
     }
 
-    return undefined;
+    return '';
   }
 
   // todo: icon file is fixed for now, need to be updated when get it from designer.
@@ -242,11 +246,9 @@ export function StorageExplorer(props) {
 
   function getLeftNav() {
     return (
-      <div css={panelNav}>
+      <div css={leftNav}>
         <div css={navHeader} onClick={() => toggleExplorer()}>
-          <div css={iconContainer}>
-            <Icon iconName="Back" css={icon} text="Close" />
-          </div>
+          <Icon iconName="Back" css={backIcon} text="Close" />
         </div>
         <div>
           <Nav
@@ -256,10 +258,9 @@ export function StorageExplorer(props) {
               },
             ]}
             initialSelectedKey={'open'}
-            css={navBody}
             styles={{
-              link: navLinks.actionNavLink,
-              linkText: navLinks.linkText,
+              link: navLinkClass.actionNav,
+              linkText: navLinkClass.linkText,
             }}
           />
         </div>
@@ -275,10 +276,9 @@ export function StorageExplorer(props) {
           <div style={{ paddingTop: '10px' }}>
             <Nav
               groups={storageGroup}
-              initialSelectedKey={storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default'}
-              css={navBody}
+              initialSelectedKey={currentStorageId}
               styles={{
-                link: navLinks.sourceNavLink,
+                link: navLinkClass.storageNav,
               }}
             />
           </div>
@@ -289,13 +289,17 @@ export function StorageExplorer(props) {
 
   function getFileSelector() {
     return (
-      <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '90px' }}>
-        <Breadcrumb items={pathNavItems} ariaLabel={'File path'} maxDisplayedItems={'1'} />
+      <div css={fileSelectorContainer}>
+        <Breadcrumb
+          items={getPathNavItems(currentPath, currentStorageId)}
+          ariaLabel={'File path'}
+          maxDisplayedItems={'1'}
+        />
         <DetailsList
           items={storageFiles}
           compact={false}
           columns={tableColums}
-          setKey={currentStorageFiles}
+          setKey={currentPath}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           selection={selection}
