@@ -23,7 +23,7 @@ export class DialogNode extends Component {
         return payload.dialog.$type.split('Microsoft.')[1];
       }
     }
-    return payload.$type.split('Microsoft.')[1];
+    return payload.$type.split('.')[1];
   };
 
   getSubLabel = payload => {
@@ -44,7 +44,7 @@ export class DialogNode extends Component {
 
   render() {
     const { data } = this.props;
-    const dialogPayload = data[PAYLOAD_KEY];
+    const dialogPayload = data[PAYLOAD_KEY] || {};
 
     return (
       <div style={nodeStyle} onClick={() => data.onClick(dialogPayload)}>

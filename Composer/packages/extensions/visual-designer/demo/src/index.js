@@ -6,11 +6,11 @@ import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 
 import * as obiExample from './sample.dialog';
-import { applyTransformer } from '../../src/transformers/helpers/applyTransformer';
 import { RuleDialogTransformer } from '../../src/transformers/instances/RuleDialogTransformer';
+import { autoTransform } from '../../src/transformers/autoTransform';
 
 class Demo extends Component {
-  transform = input => applyTransformer(input, RuleDialogTransformer);
+  transform = input => autoTransform(input);
 
   state = {
     obiJson: obiExample,
