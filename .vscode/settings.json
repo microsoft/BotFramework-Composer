@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.dialog": "json",
+    "*.botproj": "json",
+    "*.schema": "json"
+  }
+}
