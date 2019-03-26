@@ -10,11 +10,9 @@ import { RuleDialogTransformer } from '../../src/transformers/instances/RuleDial
 import { autoTransform } from '../../src/transformers/autoTransform';
 
 class Demo extends Component {
-  transform = input => autoTransform(input);
-
   state = {
     obiJson: obiExample,
-    directedGraphSchema: this.transform(obiExample),
+    directedGraphSchema: autoTransform(obiExample),
   };
 
   constructor(props) {
@@ -25,7 +23,7 @@ class Demo extends Component {
     console.log('json changed:', json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: this.transform(json),
+      directedGraphSchema: autoTransform(json),
     });
   }
 
