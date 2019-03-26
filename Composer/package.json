@@ -7,7 +7,9 @@
   "workspaces": [
     "packages/client",
     "packages/server",
+    "packages/extensions",
     "packages/extensions/*",
+    "packages/lib",
     "packages/lib/*"
   ],
   "scripts": {
