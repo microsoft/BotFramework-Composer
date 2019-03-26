@@ -1,6 +1,6 @@
 import { ObiTypes } from './constants/ObiTypes';
 import { NodeTypes } from './constants/NodeTypes';
-import { PAYLOAD_KEY } from '../utils/constant';
+import { IndexedNode } from './IndexedNode';
 
 export const RuleDialogTransformer = {
   // When input schema is a ObiRuleDialog.
@@ -77,20 +77,12 @@ export const RuleDialogTransformer = {
  * Helpers
  */
 
-class TraceableNode {
-  constructor(id, type, payload) {
-    this.id = id;
-    this.type = type;
-    this[PAYLOAD_KEY] = payload;
-  }
-}
-
-const selectRecognizers = input => [new TraceableNode(`$.recognizer`, NodeTypes.Decision, input['recognizer'])];
+const selectRecognizers = input => [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input['recognizer'])];
 
 const createRuleTypeSelector = targetRuleType => input =>
   input.rules
     .map((rule, index) =>
-      rule.$type === targetRuleType ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
+      rule.$type === targetRuleType ? new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
     )
     .filter(x => x);
 
