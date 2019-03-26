@@ -21,7 +21,7 @@ export async function toggleBot(dispatch, status) {
   }
 }
 
-export function initProjectState(dispatch) {
+export function closeCurrentProject(dispatch) {
   dispatch({
     type: ActionTypes.PROJECT_STATE_INIT,
   });

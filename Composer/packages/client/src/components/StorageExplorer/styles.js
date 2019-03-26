@@ -52,7 +52,7 @@ export const linkStyle = css`
 `;
 
 export const panelContent = css`
-  width: 810px;
+  width: 825px;
   height: 100vh;
   display: flex;
   flex-direction: row;

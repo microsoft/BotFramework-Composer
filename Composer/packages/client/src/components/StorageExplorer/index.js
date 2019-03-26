@@ -9,6 +9,7 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { PropTypes } from 'prop-types';
 
+import { FileTypes, SupportedFileTypes } from '../../constants/index';
 import { Store } from '../../store/index';
 
 import {
@@ -32,24 +33,6 @@ export function StorageExplorer(props) {
   const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
   const [pathNavItems, setPathNavItems] = useState();
 
-  const SUPPORTED_ICON = [
-    'accdb',
-    'csv',
-    'docx',
-    'dotx',
-    'mpt',
-    'odt',
-    'one',
-    'onepkg',
-    'onetoc',
-    'pptx',
-    'pub',
-    'vsdx',
-    'xls',
-    'xlsx',
-    'xsn',
-  ];
-
   // for detail file list in open panel
   const tableColums = [
     {
@@ -65,9 +48,9 @@ export function StorageExplorer(props) {
       maxWidth: 16,
       onRender: item => {
         const iconName = item.iconName;
-        if (iconName === 'folder') {
+        if (iconName === FileTypes.FOLDER) {
           return <Icon style={{ fontSize: '16px' }} iconName="Folder" />;
-        } else if (iconName === 'unknow') {
+        } else if (iconName === FileTypes.UNKNOW) {
           return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
         }
         const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
@@ -120,12 +103,13 @@ export function StorageExplorer(props) {
   const selection = new Selection({
     onSelectionChanged: () => {
       const file = selection.getSelection()[0];
-      // todo: fix issue here, some time file is undefine.
+      // selected item will be cleaned when folder path changed
+      // file will be undefine when no item selected.
       if (file) {
         const type = file.fileType;
         const storageId = storages[currentStorageIndex].id;
         const path = file.filePath;
-        if (type === 'folder') {
+        if (type === FileTypes.FOLDER) {
           updateCurrentPath(storageId, path);
         } else {
           actions.setStorageExplorerStatus('closed');
@@ -194,6 +178,15 @@ export function StorageExplorer(props) {
     }
   }
 
+  function formatBytes(bytes, decimals) {
+    if (bytes == 0) return '0 Bytes';
+    var k = 1024,
+      dm = decimals <= 0 ? 0 : decimals || 2,
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
   const storageFiles = [];
   if (currentStorageFiles) {
     currentStorageFiles.forEach(file => {
@@ -203,7 +196,7 @@ export function StorageExplorer(props) {
         fileType: file.type,
         iconName: getIconName(file),
         dateModified: getFileEditDate(file),
-        fileSize: file.size,
+        fileSize: file.size ? formatBytes(file.size) : '',
         filePath: file.path,
       });
     });
@@ -224,7 +217,7 @@ export function StorageExplorer(props) {
   }
 
   function getFileEditDate(file) {
-    if (file.type === 'file') {
+    if (file.type === FileTypes.FILE) {
       return new Date(file.lastModified).toLocaleDateString();
     }
 
@@ -235,15 +228,15 @@ export function StorageExplorer(props) {
   function getIconName(file) {
     const path = file.path;
     let docType = file.type;
-    if (docType === 'folder') {
+    if (docType === FileTypes.FOLDER) {
       return docType;
     } else {
       docType = path.substring(path.lastIndexOf('.') + 1, path.length);
-      if (SUPPORTED_ICON.includes(docType)) {
+      if (SupportedFileTypes.includes(docType)) {
         return docType;
       }
 
-      return 'unknow';
+      return FileTypes.UNKNOW;
     }
   }
 
@@ -302,7 +295,7 @@ export function StorageExplorer(props) {
           items={storageFiles}
           compact={false}
           columns={tableColums}
-          setKey="set"
+          setKey={currentStorageFiles}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           selection={selection}
