@@ -87,25 +87,13 @@ class TraceableNode {
 
 const selectRecognizers = input => [new TraceableNode(`$.recognizer`, NodeTypes.Decision, input['recognizer'])];
 
-const selectWelcomes = input =>
+const createRuleTypeSelector = targetRuleType => input =>
   input.rules
     .map((rule, index) =>
-      rule.$type === ObiTypes.rules.WelcomeRule ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
+      rule.$type === targetRuleType ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
     )
     .filter(x => x);
 
-const selectFallbacks = input =>
-  input.rules
-    .map((rule, index) =>
-      rule.$type === ObiTypes.rules.FallbackRule
-        ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule)
-        : null
-    )
-    .filter(x => x);
-
-const selectIntents = input =>
-  input.rules
-    .map((rule, index) =>
-      rule.$type === ObiTypes.rules.IntentRule ? new TraceableNode(`$.rules[${index}]`, NodeTypes.Process, rule) : null
-    )
-    .filter(x => x);
+const selectWelcomes = createRuleTypeSelector(ObiTypes.rules.WelcomeRule);
+const selectFallbacks = createRuleTypeSelector(ObiTypes.rules.FallbackRule);
+const selectIntents = createRuleTypeSelector(ObiTypes.rules.IntentRule);
