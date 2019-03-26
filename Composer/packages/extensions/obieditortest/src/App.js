@@ -47,7 +47,7 @@ export const FormEditor = props => {
     return [
       { key: scope, text: scope.toUpperCase(), itemType: DropdownMenuItemType.Header },
       ...options,
-      { key: 'divider_2', text: '-', itemType: DropdownMenuItemType.Divider },
+      { key: `${scope}_divider`, text: '-', itemType: DropdownMenuItemType.Divider },
     ];
   };
 

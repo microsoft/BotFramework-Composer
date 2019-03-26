@@ -20,3 +20,9 @@ export async function toggleBot(dispatch, status) {
     });
   }
 }
+
+export function initProjectState(dispatch) {
+  dispatch({
+    type: ActionTypes.PROJECT_STATE_INIT,
+  });
+}
