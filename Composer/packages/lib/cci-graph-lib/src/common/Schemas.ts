@@ -11,14 +11,12 @@
 // person.parents.push(p);            /* Compiler error */
 //
 // If you need to make changes to a R<T> variable, make a copy of it with mutable() or mutableArray().
-export type R<T> =
-    T extends any[] ? ImmutableArray<T[number]> :
-    T extends object ? ImmutableObject<T> :
-    T;
+export type R<T> = T extends any[] ? ImmutableArray<T[number]> : T extends object ? ImmutableObject<T> : T;
 
-export interface ImmutableArray<T> extends ReadonlyArray<R<T>> { }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ImmutableArray<T> extends ReadonlyArray<R<T>> {}
 
 export type ImmutableObject<T> = {
-    // tslint:disable-next-line: ban-types
-    readonly [P in keyof T]: T[P] extends Function ? T[P] : R<T[P]>;
+  readonly // tslint:disable-next-line: ban-types
+  [P in keyof T]: T[P] extends Function ? T[P] : R<T[P]>
 };
