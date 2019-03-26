@@ -25,6 +25,86 @@ export const dialogGroups = {
   Other: ['Microsoft.AdaptiveDialog'],
 };
 
+const IDialogNoCall = {
+  'Microsoft.IDialogNoCall': {
+    title: 'Microsoft IDialog',
+    description: 'Definition of Microsoft.IDialog which will include types with a $role:unionType(Microsoft.IDialog).',
+    $role: 'unionType',
+    oneOf: [
+      {
+        title: 'Microsoft.CancelDialog',
+        description: 'This is a step which cancels the current dialog, returning no result',
+        $ref: '#/definitions/Microsoft.CancelDialog',
+      },
+      {
+        title: 'Microsoft.ChangeList',
+        description: 'This is a step which add/remove/clear items to/from a list',
+        $ref: '#/definitions/Microsoft.ChangeList',
+      },
+      {
+        title: 'Microsoft.DateTimePrompt',
+        description: 'This represents a dialog which gathers a DateTime in a specified range',
+        $ref: '#/definitions/Microsoft.DateTimePrompt',
+      },
+      {
+        title: 'Microsoft.EndDialog',
+        description: 'This is a step which ends the current dialog, returning the result',
+        $ref: '#/definitions/Microsoft.EndDialog',
+      },
+      {
+        title: 'Microsoft.FloatPrompt',
+        description: 'This represents a dialog which gathers a number in a specified range',
+        $ref: '#/definitions/Microsoft.FloatPrompt',
+      },
+      {
+        title: 'Microsoft.GotoDialog',
+        description: 'Step which goes to another dialog.',
+        $ref: '#/definitions/Microsoft.GotoDialog',
+      },
+      {
+        title: 'Microsoft.IfProperty',
+        description: 'Step which conditionally decides which step to execute next.',
+        $ref: '#/definitions/Microsoft.IfProperty',
+      },
+      {
+        title: 'Microsoft.IntegerPrompt',
+        description: 'This represents a dialog which gathers a number in a specified range',
+        $ref: '#/definitions/Microsoft.IntegerPrompt',
+      },
+      {
+        title: 'Microsoft.RuleDialog',
+        description: 'This represents a dialog can add rules and execute rules',
+        $ref: '#/definitions/Microsoft.RuleDialog',
+      },
+      {
+        title: 'Microsoft.SaveEntity',
+        description: 'This is a step which save an recognized entity to storage',
+        $ref: '#/definitions/Microsoft.SaveEntity',
+      },
+      {
+        title: 'Microsoft.SendActivity',
+        description: 'This is a step which sends an activity to the user',
+        $ref: '#/definitions/Microsoft.SendActivity',
+      },
+      {
+        title: 'Microsoft.SendList',
+        description: 'This is a step which sends an list to the user',
+        $ref: '#/definitions/Microsoft.SendList',
+      },
+      {
+        title: 'Microsoft.TextPrompt',
+        description: 'This represents a dialog which gathers a text from the user',
+        $ref: '#/definitions/Microsoft.TextPrompt',
+      },
+      {
+        title: 'Microsoft.WaitForInput',
+        description: 'Step which accepts an input from user.',
+        $ref: '#/definitions/Microsoft.WaitForInput',
+      },
+    ],
+  },
+};
+
 export const mergedSchema = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
@@ -34,34 +114,19 @@ export const mergedSchema = {
   description: 'These are all of the types that can be created by the loader.',
   oneOf: [
     {
-      title: 'Microsoft.AdaptiveDialog',
-      description: 'Configures a data driven dialog via a collection of steps/dialogs.',
-      $ref: '#/definitions/Microsoft.AdaptiveDialog',
-    },
-    {
-      title: 'Microsoft.BeginDialogRule',
-      description: 'Defines a sequence of steps to do when the BeginDialog event fires',
-      $ref: '#/definitions/Microsoft.BeginDialogRule',
-    },
-    {
       title: 'Microsoft.CallDialog',
       description: 'Step which calls another dialog.',
       $ref: '#/definitions/Microsoft.CallDialog',
     },
     {
       title: 'Microsoft.CancelDialog',
-      description: 'Command to cancel the current dialog, trigging a cancelation event',
+      description: 'This is a step which cancels the current dialog, returning no result',
       $ref: '#/definitions/Microsoft.CancelDialog',
     },
     {
       title: 'Microsoft.ChangeList',
-      description: 'This is a step which allows you to modify a collection in memory',
+      description: 'This is a step which add/remove/clear items to/from a list',
       $ref: '#/definitions/Microsoft.ChangeList',
-    },
-    {
-      title: 'Microsoft.ClearProperty',
-      description: 'This is a step which allows you to remove a property from',
-      $ref: '#/definitions/Microsoft.ClearProperty',
     },
     {
       title: 'Microsoft.DateTimePrompt',
@@ -69,19 +134,19 @@ export const mergedSchema = {
       $ref: '#/definitions/Microsoft.DateTimePrompt',
     },
     {
-      title: 'Microsoft.DefaultRule',
-      description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
-      $ref: '#/definitions/Microsoft.DefaultRule',
-    },
-    {
       title: 'Microsoft.EndDialog',
-      description: 'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+      description: 'This is a step which ends the current dialog, returning the result',
       $ref: '#/definitions/Microsoft.EndDialog',
     },
     {
       title: 'Microsoft.EventRule',
-      description: 'Defines a rule for an event which is triggered by some sourcy',
+      description: 'Event Rule will be triggered when a event happen',
       $ref: '#/definitions/Microsoft.EventRule',
+    },
+    {
+      title: 'Microsoft.FallbackRule',
+      description: 'Fallback Rule will be triggered when no other rules being triggered',
+      $ref: '#/definitions/Microsoft.FallbackRule',
     },
     {
       title: 'Microsoft.FloatPrompt',
@@ -90,13 +155,8 @@ export const mergedSchema = {
     },
     {
       title: 'Microsoft.GotoDialog',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      description: 'Step which goes to another dialog.',
       $ref: '#/definitions/Microsoft.GotoDialog',
-    },
-    {
-      title: 'Microsoft.HttpRequest',
-      description: 'This is a step which replaces the current dialog with the target dialog',
-      $ref: '#/definitions/Microsoft.HttpRequest',
     },
     {
       title: 'Microsoft.IfProperty',
@@ -105,7 +165,7 @@ export const mergedSchema = {
     },
     {
       title: 'Microsoft.IfPropertyRule',
-      description: '',
+      description: 'IfPropertyRule will be triggered when the conditionals are true',
       $ref: '#/definitions/Microsoft.IfPropertyRule',
     },
     {
@@ -115,7 +175,7 @@ export const mergedSchema = {
     },
     {
       title: 'Microsoft.IntentRule',
-      description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+      description: 'Intent Rule, which will be triggered when the intent is matched.',
       $ref: '#/definitions/Microsoft.IntentRule',
     },
     {
@@ -129,23 +189,23 @@ export const mergedSchema = {
       $ref: '#/definitions/Microsoft.QnaMakerRecognizer',
     },
     {
+      title: 'Microsoft.RePlacePlanRule',
+      description: 'Similar as intent Rule, but the dialog stack will be clean up when it is triggered.',
+      $ref: '#/definitions/Microsoft.RePlacePlanRule',
+    },
+    {
       title: 'Microsoft.RegexRecognizer',
-      description: 'Recognizer which uses regex expressions to generate intents and entities.',
+      description: 'Example regular expression recognizer.',
       $ref: '#/definitions/Microsoft.RegexRecognizer',
     },
     {
-      title: 'Microsoft.ReplacePlanRule',
-      description: 'Defines a sequence of steps to take when a plan has been replaced with a new plan',
-      $ref: '#/definitions/Microsoft.ReplacePlanRule',
-    },
-    {
-      title: 'Microsoft.Rule',
-      description: 'Defines a rule for an event which is triggered by some sourcy',
-      $ref: '#/definitions/Microsoft.Rule',
+      title: 'Microsoft.RuleDialog',
+      description: 'This represents a dialog can add rules and execute rules',
+      $ref: '#/definitions/Microsoft.RuleDialog',
     },
     {
       title: 'Microsoft.SaveEntity',
-      description: 'This is a step which allows you to save a memory property as an entity',
+      description: 'This is a step which save an recognized entity to storage',
       $ref: '#/definitions/Microsoft.SaveEntity',
     },
     {
@@ -155,7 +215,7 @@ export const mergedSchema = {
     },
     {
       title: 'Microsoft.SendList',
-      description: 'TEMPORARY, THIS SHOULD BE REPLACED WITH LG TEMPLATE',
+      description: 'This is a step which sends an list to the user',
       $ref: '#/definitions/Microsoft.SendList',
     },
     {
@@ -164,144 +224,23 @@ export const mergedSchema = {
       $ref: '#/definitions/Microsoft.TextPrompt',
     },
     {
+      title: 'Microsoft.UtteranceRecognizeRule',
+      description: 'Utterance Recognize will be triggered when the utterance is recognized as intents or entities',
+      $ref: '#/definitions/Microsoft.UtteranceRecognizeRule',
+    },
+    {
       title: 'Microsoft.WaitForInput',
-      description: 'Dialog command to wait for input from the user.',
+      description: 'Step which accepts an input from user.',
       $ref: '#/definitions/Microsoft.WaitForInput',
     },
     {
       title: 'Microsoft.WelcomeRule',
-      description: 'Defines a sequence of steps to take if the user is a new user',
+      description: 'Welcome Rule will be triggered when user start conversation or update conversation',
       $ref: '#/definitions/Microsoft.WelcomeRule',
     },
   ],
   definitions: {
-    'Microsoft.AdaptiveDialog': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'Adaptive Dialog',
-      description: 'Configures a data driven dialog via a collection of steps/dialogs.',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.AdaptiveDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        rules: {
-          type: 'array',
-          description: 'Array of rules to use to evaluate conversation',
-          items: {
-            $type: 'Microsoft.IRule',
-            $ref: '#/definitions/Microsoft.IRule',
-          },
-        },
-        recognizer: {
-          $type: 'Microsoft.IRecognizer',
-          $ref: '#/definitions/Microsoft.IRecognizer',
-        },
-      },
-      required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['rules'],
-        },
-      ],
-    },
-    'Microsoft.BeginDialogRule': {
-      title: 'BeginDialogRule Rule',
-      description: 'Defines a sequence of steps to do when the BeginDialog event fires',
-      required: ['$type'],
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.BeginDialogRule',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        events: {
-          type: 'array',
-          description: 'Events to trigger this rule for',
-          items: {
-            type: 'string',
-          },
-        },
-        expression: {
-          type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
-        },
-        steps: {
-          type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
-          items: {
-            $type: 'Microsoft.IDialog',
-            $ref: '#/definitions/Microsoft.IDialog',
-          },
-        },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
-      },
-      $role: 'unionType(Microsoft.IRule)',
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['steps'],
-        },
-      ],
-    },
+    ...IDialogNoCall,
     'Microsoft.CallDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Call Dialog',
@@ -311,29 +250,29 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.CallDialog',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         dialog: {
+          type: 'object',
           $type: 'Microsoft.IDialog',
           title: 'Dialog',
           description: 'This is the dialog to call.',
-          $ref: '#/definitions/Microsoft.IDialog',
+          $ref: '#/definitions/Microsoft.IDialogNoCall',
         },
         options: {
           type: 'object',
@@ -343,9 +282,11 @@ export const mergedSchema = {
         },
         property: {
           type: 'string',
+          $type: 'Microsoft.IExpression',
           title: 'Property',
           description: 'The property to bind to the dialog and store the result in',
           examples: ['user.name'],
+          $ref: '#/definitions/Microsoft.IExpression',
         },
       },
       patternProperties: {
@@ -358,27 +299,26 @@ export const mergedSchema = {
     'Microsoft.CancelDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Cancel Dialog',
-      description: 'Command to cancel the current dialog, trigging a cancelation event',
+      description: 'This is a step which cancels the current dialog, returning no result',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.CancelDialog',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
@@ -392,114 +332,57 @@ export const mergedSchema = {
     },
     'Microsoft.ChangeList': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Change List Step',
-      description: 'This is a step which allows you to modify a collection in memory',
+      title: 'Change List',
+      description: 'This is a step which add/remove/clear items to/from a list',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.ChangeList',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        changeType: {
-          type: 'string',
-          title: 'Change Type',
-          description: 'The list operation to perform',
-          enum: ['Push', 'Pop', 'Take', 'Remove', 'Clear'],
         },
         listProperty: {
           type: 'string',
+          $type: 'Microsoft.IExpression',
           title: 'List Property',
-          description: 'Memory expression of the list to manipulate.',
+          description: 'Expression which is the list property.',
+          $ref: '#/definitions/Microsoft.IExpression',
         },
         itemProperty: {
           type: 'string',
-          title: 'List Property',
-          description: 'Memory expression for the item',
+          $type: 'Microsoft.IExpression',
+          title: 'Item Property',
+          description: 'Expression which is the item property.',
+          $ref: '#/definitions/Microsoft.IExpression',
+        },
+        changeType: {
+          type: 'string',
+          title: 'Change List type',
+          description: 'push/pop/take/remove/clear',
+          enum: ['push', 'pop', 'take', 'remove', 'clear'],
         },
       },
-      required: ['$type'],
       patternProperties: {
         '^\\$': {
           type: 'string',
         },
       },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['changeType', 'listProperty'],
-        },
-      ],
-    },
-    'Microsoft.ClearProperty': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'ClearProperty Step',
-      description: 'This is a step which allows you to remove a property from',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ClearProperty',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        property: {
-          type: 'string',
-          title: 'Property',
-          description: 'The Memory property path to clear',
-        },
-      },
       required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['property'],
-        },
-      ],
     },
     'Microsoft.DateTimePrompt': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -510,21 +393,20 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.DateTimePrompt',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
@@ -548,6 +430,7 @@ export const mergedSchema = {
           examples: ['2100-01-01'],
         },
         initialPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
           description: 'The message to send to start.',
@@ -555,6 +438,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         retryPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Retry Prompt',
           description: 'The message to send to prompt again.',
@@ -562,6 +446,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         noMatchResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'No match',
           description: 'The message to send to when no date was recognized.',
@@ -569,6 +454,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooSmallResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too small',
           description: 'The message to send to when the recognized number was less then the MinValue. ',
@@ -576,6 +462,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooLargeResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too large',
           description: 'The message to send to when the recognized number was greater then the MinValue.',
@@ -590,60 +477,144 @@ export const mergedSchema = {
       },
       required: ['$type'],
     },
-    'Microsoft.DefaultRule': {
-      title: 'Default Rule',
-      description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
-      required: ['$type'],
+    'Microsoft.EndDialog': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'End Dialog',
+      description: 'This is a step which ends the current dialog, returning the result',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DefaultRule',
+          const: 'Microsoft.EndDialog',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
+        property: {
+          type: 'string',
+          $type: 'Microsoft.IExpression',
+          title: 'Property',
+          description: 'The property from dialog memory to return as the result',
+          examples: ['user.name'],
+          $ref: '#/definitions/Microsoft.IExpression',
+        },
+      },
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.EventRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'Event Rule',
+      description: 'Event Rule will be triggered when a event happen',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.EventRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        steps: {
+          type: 'array',
+          description: 'steps to execute',
+          items: {
+            type: 'object',
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
         events: {
           type: 'array',
-          description: 'Events to trigger this rule for',
+          description: 'event to be triggered',
           items: {
             type: 'string',
           },
         },
-        expression: {
+      },
+      required: ['$type'],
+      patternProperties: {
+        '^\\$': {
           type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
+        },
+      },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['steps', 'events'],
+        },
+      ],
+    },
+    'Microsoft.FallbackRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'Fallback Rule',
+      description: 'Fallback Rule will be triggered when no other rules being triggered',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.FallbackRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          description: 'steps to execute',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
       },
-      $role: 'unionType(Microsoft.IRule)',
+      required: ['$type'],
       patternProperties: {
         '^\\$': {
           type: 'string',
@@ -660,116 +631,6 @@ export const mergedSchema = {
         },
       ],
     },
-    'Microsoft.EndDialog': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'End Dialog',
-      description: 'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EndDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        property: {
-          title: 'Property',
-          description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
-          examples: ['dialog.name'],
-        },
-      },
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      required: ['$type'],
-    },
-    'Microsoft.EventRule': {
-      title: 'Event Rule',
-      description: 'Defines a rule for an event which is triggered by some sourcy',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EventRule',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        events: {
-          type: 'array',
-          description: 'Events to trigger this rule for',
-          items: {
-            type: 'string',
-          },
-        },
-        expression: {
-          type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
-        },
-        steps: {
-          type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
-          items: {
-            $type: 'Microsoft.IDialog',
-            $ref: '#/definitions/Microsoft.IDialog',
-          },
-        },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
-      },
-      required: ['$type'],
-      $role: 'unionType(Microsoft.IRule)',
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['events', 'steps'],
-        },
-      ],
-    },
     'Microsoft.FloatPrompt': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Float  prompt',
@@ -779,21 +640,20 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.FloatPrompt',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
@@ -817,6 +677,7 @@ export const mergedSchema = {
           examples: ['120'],
         },
         initialPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
           description: 'The message to send to start.',
@@ -824,6 +685,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         retryPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Retry Prompt',
           description: 'The message to send to prompt again.',
@@ -831,6 +693,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         noMatchResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'No match',
           description: 'The message to send to when no number was recognized.',
@@ -838,6 +701,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooSmallResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too small',
           description: 'The message to send to when the recognized number was less then the MinValue. ',
@@ -845,6 +709,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooLargeResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too large',
           description: 'The message to send to when the recognized number was greater then the MinValue.',
@@ -861,36 +726,34 @@ export const mergedSchema = {
     },
     'Microsoft.GotoDialog': {
       $role: 'unionType(Microsoft.IDialog)',
-      type: 'object',
       title: 'Goto Dialog',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      description: 'Step which goes to another dialog.',
+      type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.GotoDialog',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        dialog: {
-          $type: 'Microsoft.IDialog',
+        dialogId: {
+          type: 'string',
           title: 'Dialog',
-          description: 'This is the dialog to switch to.',
-          $ref: '#/definitions/Microsoft.IDialog',
+          description: 'This is the dialog to call.',
         },
         options: {
           type: 'object',
@@ -898,11 +761,6 @@ export const mergedSchema = {
           description: 'Options to pass to the dialog.',
           additionalProperties: true,
         },
-        property: {
-          title: 'Property',
-          description: 'The property to bind to the dialog and store the result in',
-          examples: ['user.name'],
-        },
       },
       patternProperties: {
         '^\\$': {
@@ -910,105 +768,19 @@ export const mergedSchema = {
         },
       },
       required: ['$type'],
-    },
-    'Microsoft.HttpRequest': {
-      $role: 'unionType(Microsoft.IDialog)',
-      type: 'object',
-      title: 'Goto Dialog',
-      description: 'This is a step which replaces the current dialog with the target dialog',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.HttpRequest',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        method: {
-          type: 'string',
-          title: 'Method',
-          description: 'The HTTP method to use',
-          enum: ['GET', 'POST'],
-          examples: ['GET', 'POST'],
-        },
-        url: {
-          type: 'string',
-          title: 'Url',
-          description: 'The url to call (supports data binding)',
-          examples: ['https://contoso.com'],
-        },
-        body: {
-          type: 'object',
-          title: 'Body',
-          description: 'The body to send in the HTTP call  (supports data binding)',
-          additionalProperties: true,
-        },
-        property: {
-          type: 'string',
-          title: 'Property',
-          description: 'The property to store the result of the HTTP call in (as object or string)',
-          examples: ['dialog.contosodata'],
-        },
-        header: {
-          type: 'object',
-          additionProperties: true,
-          title: 'Http headers',
-          description: 'Http headers to include with the HTTP request (supports data binding)',
-        },
-      },
-      required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['url', 'entity'],
-        },
-      ],
     },
     'Microsoft.IActivityTemplate': {
       title: 'Microsoft ActivityTemplate',
-      description: 'Union of components which implement the IActivityTemplate interface',
+      description:
+        'Definition of Microsoft.IActivityTemplate which will be expanded by components that $implements it.',
       $role: 'unionType',
-      oneOf: [
-        {
-          type: 'string',
-          title: 'string',
-        },
-      ],
     },
     'Microsoft.IDialog': {
       title: 'Microsoft IDialog',
-      description: 'Union of components which implement the IDialog interface',
+      description:
+        'Definition of Microsoft.IDialog which will include types with a $role:unionType(Microsoft.IDialog).',
       $role: 'unionType',
-      type: 'object',
       oneOf: [
-        {
-          title: 'Microsoft.AdaptiveDialog',
-          description: 'Configures a data driven dialog via a collection of steps/dialogs.',
-          $ref: '#/definitions/Microsoft.AdaptiveDialog',
-        },
         {
           title: 'Microsoft.CallDialog',
           description: 'Step which calls another dialog.',
@@ -1016,18 +788,13 @@ export const mergedSchema = {
         },
         {
           title: 'Microsoft.CancelDialog',
-          description: 'Command to cancel the current dialog, trigging a cancelation event',
+          description: 'This is a step which cancels the current dialog, returning no result',
           $ref: '#/definitions/Microsoft.CancelDialog',
         },
         {
           title: 'Microsoft.ChangeList',
-          description: 'This is a step which allows you to modify a collection in memory',
+          description: 'This is a step which add/remove/clear items to/from a list',
           $ref: '#/definitions/Microsoft.ChangeList',
-        },
-        {
-          title: 'Microsoft.ClearProperty',
-          description: 'This is a step which allows you to remove a property from',
-          $ref: '#/definitions/Microsoft.ClearProperty',
         },
         {
           title: 'Microsoft.DateTimePrompt',
@@ -1036,8 +803,7 @@ export const mergedSchema = {
         },
         {
           title: 'Microsoft.EndDialog',
-          description:
-            'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+          description: 'This is a step which ends the current dialog, returning the result',
           $ref: '#/definitions/Microsoft.EndDialog',
         },
         {
@@ -1047,13 +813,8 @@ export const mergedSchema = {
         },
         {
           title: 'Microsoft.GotoDialog',
-          description: 'This is a step which replaces the current dialog with the target dialog',
+          description: 'Step which goes to another dialog.',
           $ref: '#/definitions/Microsoft.GotoDialog',
-        },
-        {
-          title: 'Microsoft.HttpRequest',
-          description: 'This is a step which replaces the current dialog with the target dialog',
-          $ref: '#/definitions/Microsoft.HttpRequest',
         },
         {
           title: 'Microsoft.IfProperty',
@@ -1066,8 +827,13 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IntegerPrompt',
         },
         {
+          title: 'Microsoft.RuleDialog',
+          description: 'This represents a dialog can add rules and execute rules',
+          $ref: '#/definitions/Microsoft.RuleDialog',
+        },
+        {
           title: 'Microsoft.SaveEntity',
-          description: 'This is a step which allows you to save a memory property as an entity',
+          description: 'This is a step which save an recognized entity to storage',
           $ref: '#/definitions/Microsoft.SaveEntity',
         },
         {
@@ -1077,7 +843,7 @@ export const mergedSchema = {
         },
         {
           title: 'Microsoft.SendList',
-          description: 'TEMPORARY, THIS SHOULD BE REPLACED WITH LG TEMPLATE',
+          description: 'This is a step which sends an list to the user',
           $ref: '#/definitions/Microsoft.SendList',
         },
         {
@@ -1087,145 +853,142 @@ export const mergedSchema = {
         },
         {
           title: 'Microsoft.WaitForInput',
-          description: 'Dialog command to wait for input from the user.',
+          description: 'Step which accepts an input from user.',
           $ref: '#/definitions/Microsoft.WaitForInput',
-        },
-        {
-          type: 'string',
-          title: 'string',
         },
       ],
     },
-    'Microsoft.IExpression': {
-      title: 'Microsoft IExpression',
-      description: 'Union of components which implement the IExpression interface',
+    'Microsoft.IDialogStep': {
+      title: 'Microsoft IDialogStep',
+      description:
+        'Definition of Microsoft.IDialogStep which include types with a $role:unionType(Microsoft.IDialogStep).',
       $role: 'unionType',
-      oneOf: [
-        {
-          type: 'string',
-          title: 'string',
-        },
-      ],
+    },
+    'Microsoft.IExpression': {
+      title: 'Microsoft IActivityTemplate',
+      description: 'Definition of Microsoft.IExpression which will be expanded by components that $implements it.',
+      $role: 'unionType',
     },
     'Microsoft.IRecognizer': {
       title: 'Microsoft IRecognizer',
-      description: 'Union of components which implement the IRecognizer interface',
+      description:
+        'Definition of Microsoft.IRecognizer which will include types with a $role:unionType(Microsoft.IRecognizer).',
       $role: 'unionType',
       oneOf: [
         {
+          type: 'object',
           title: 'Microsoft.LuisRecognizer',
           description: 'LUIS recognizer.',
           $ref: '#/definitions/Microsoft.LuisRecognizer',
         },
         {
+          type: 'object',
           title: 'Microsoft.QnaMakerRecognizer',
           description: 'This represents a configuration of the QNAMaker as a recognizer',
           $ref: '#/definitions/Microsoft.QnaMakerRecognizer',
         },
         {
+          type: 'object',
           title: 'Microsoft.RegexRecognizer',
-          description: 'Recognizer which uses regex expressions to generate intents and entities.',
+          description: 'Example regular expression recognizer.',
           $ref: '#/definitions/Microsoft.RegexRecognizer',
         },
       ],
     },
     'Microsoft.IRule': {
       title: 'Microsoft IRule',
-      description: 'Union of components which implement the IRule interface',
+      description: 'Definition of Microsoft.IRule which will include types with a $role:unionType(Microsoft.IRule).',
       $role: 'unionType',
-      type: 'object',
       oneOf: [
         {
-          title: 'Microsoft.BeginDialogRule',
-          description: 'Defines a sequence of steps to do when the BeginDialog event fires',
-          $ref: '#/definitions/Microsoft.BeginDialogRule',
-        },
-        {
-          title: 'Microsoft.DefaultRule',
-          description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
-          $ref: '#/definitions/Microsoft.DefaultRule',
-        },
-        {
+          type: 'object',
           title: 'Microsoft.EventRule',
-          description: 'Defines a rule for an event which is triggered by some sourcy',
+          description: 'Event Rule will be triggered when a event happen',
           $ref: '#/definitions/Microsoft.EventRule',
         },
         {
+          type: 'object',
+          title: 'Microsoft.FallbackRule',
+          description: 'Fallback Rule will be triggered when no other rules being triggered',
+          $ref: '#/definitions/Microsoft.FallbackRule',
+        },
+        {
+          type: 'object',
           title: 'Microsoft.IfPropertyRule',
-          description: '',
+          description: 'IfPropertyRule will be triggered when the conditionals are true',
           $ref: '#/definitions/Microsoft.IfPropertyRule',
         },
         {
+          type: 'object',
           title: 'Microsoft.IntentRule',
-          description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+          description: 'Intent Rule, which will be triggered when the intent is matched.',
           $ref: '#/definitions/Microsoft.IntentRule',
         },
         {
-          title: 'Microsoft.ReplacePlanRule',
-          description: 'Defines a sequence of steps to take when a plan has been replaced with a new plan',
-          $ref: '#/definitions/Microsoft.ReplacePlanRule',
+          type: 'object',
+          title: 'Microsoft.RePlacePlanRule',
+          description: 'Similar as intent Rule, but the dialog stack will be clean up when it is triggered.',
+          $ref: '#/definitions/Microsoft.RePlacePlanRule',
         },
         {
-          title: 'Microsoft.Rule',
-          description: 'Defines a rule for an event which is triggered by some sourcy',
-          $ref: '#/definitions/Microsoft.Rule',
+          type: 'object',
+          title: 'Microsoft.UtteranceRecognizeRule',
+          description: 'Utterance Recognize will be triggered when the utterance is recognized as intents or entities',
+          $ref: '#/definitions/Microsoft.UtteranceRecognizeRule',
         },
         {
+          type: 'object',
           title: 'Microsoft.WelcomeRule',
-          description: 'Defines a sequence of steps to take if the user is a new user',
+          description: 'Welcome Rule will be triggered when user start conversation or update conversation',
           $ref: '#/definitions/Microsoft.WelcomeRule',
         },
       ],
     },
-    'Microsoft.ITextTemplate': {
-      title: 'Microsoft TextTemplate',
-      description: 'Union of components which implement the ITextTemplate interface',
+    'Microsoft.IStorage': {
+      title: 'Microsoft IStorage',
+      description:
+        'Definition of Microsoft.IStorage which will include types with a $role:unionType(Microsoft.IStorage).',
       $role: 'unionType',
-      oneOf: [
-        {
-          type: 'string',
-          title: 'string',
-        },
-      ],
     },
     'Microsoft.IfProperty': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'If Step',
+      title: 'If Property Step',
       description: 'Step which conditionally decides which step to execute next.',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.IfProperty',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         ifTrue: {
           oneOf: [
             {
-              $type: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
+              type: 'object',
+              $type: 'Microsoft.IDialogStep',
+              $ref: '#/definitions/Microsoft.IDialogStep',
             },
             {
               type: 'array',
               items: {
-                $type: 'Microsoft.IDialog',
-                $ref: '#/definitions/Microsoft.IDialog',
+                type: 'object',
+                $type: 'Microsoft.IDialogStep',
+                $ref: '#/definitions/Microsoft.IDialogStep',
               },
               title: 'array',
             },
@@ -1236,14 +999,16 @@ export const mergedSchema = {
         ifFalse: {
           oneOf: [
             {
-              $type: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
+              type: 'object',
+              $type: 'Microsoft.IDialogStep',
+              $ref: '#/definitions/Microsoft.IDialogStep',
             },
             {
               type: 'array',
               items: {
-                $type: 'Microsoft.IDialog',
-                $ref: '#/definitions/Microsoft.IDialog',
+                type: 'object',
+                $type: 'Microsoft.IDialogStep',
+                $ref: '#/definitions/Microsoft.IDialogStep',
               },
               title: 'array',
             },
@@ -1252,6 +1017,7 @@ export const mergedSchema = {
           description: 'Step to execute if expression is false.',
         },
         expression: {
+          type: 'string',
           $type: 'Microsoft.IExpression',
           title: 'Condition',
           description: 'Expression to evaluate.',
@@ -1259,72 +1025,56 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IExpression',
         },
       },
-      required: ['$type'],
       patternProperties: {
         '^\\$': {
           type: 'string',
         },
       },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['expression', 'ifTrue'],
-        },
-      ],
+      required: ['$type'],
     },
     'Microsoft.IfPropertyRule': {
       $role: 'unionType(Microsoft.IRule)',
-      title: '',
-      description: '',
+      title: 'If Property Rule',
+      description: 'IfPropertyRule will be triggered when the conditionals are true',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.IfPropertyRule',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        conditionals: {
+        steps: {
           type: 'array',
+          description: 'steps to execute',
           items: {
-            type: 'object',
-            expression: {
-              $type: 'Microsoft.IExpression',
-              $ref: '#/definitions/Microsoft.IExpression',
-            },
-            rules: {
-              type: 'array',
-              items: {
-                $type: 'Microsoft.IRule',
-                $ref: '#/definitions/Microsoft.IRule',
-              },
-            },
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        else: {
+        conditionals: {
           type: 'array',
+          description: 'conditions',
           items: {
-            $type: 'Microsoft.IRule',
-            $ref: '#/definitions/Microsoft.IRule',
+            type: 'string',
+            $type: 'Microsoft.IExpression',
+            title: 'Condition',
+            description: 'Expression to evaluate.',
+            $ref: '#/definitions/Microsoft.IExpression',
           },
         },
       },
@@ -1341,7 +1091,7 @@ export const mergedSchema = {
         },
         {
           title: 'Type',
-          required: ['conditionals'],
+          required: ['steps', 'conditionals'],
         },
       ],
     },
@@ -1354,21 +1104,20 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.IntegerPrompt',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
@@ -1392,6 +1141,7 @@ export const mergedSchema = {
           examples: ['120'],
         },
         initialPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
           description: 'The message to send to start.',
@@ -1399,6 +1149,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         retryPrompt: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Retry Prompt',
           description: 'The message to send to prompt again.',
@@ -1406,6 +1157,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         noMatchResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'No match',
           description: 'The message to send to when no number was recognized.',
@@ -1413,6 +1165,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooSmallResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too small',
           description: 'The message to send to when the recognized number was less then the MinValue. ',
@@ -1420,6 +1173,7 @@ export const mergedSchema = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         tooLargeResponse: {
+          type: 'string',
           $type: 'Microsoft.IActivityTemplate',
           title: 'Too large',
           description: 'The message to send to when the recognized number was greater then the MinValue.',
@@ -1437,64 +1191,50 @@ export const mergedSchema = {
     'Microsoft.IntentRule': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'Intent Rule',
-      description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+      description: 'Intent Rule, which will be triggered when the intent is matched.',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.IntentRule',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         intent: {
           type: 'string',
-          title: 'Intent',
-          description: 'Intent name to trigger on',
+          description: 'This is the intent to be triggered.',
+          examples: ['JokeIntent'],
         },
         entities: {
           type: 'array',
-          title: 'Entities',
-          description: 'The entities required to trigger this rule',
-        },
-        events: {
-          type: 'array',
-          description: 'Events to trigger this rule for',
+          title: 'The entities to be triggered.',
           items: {
             type: 'string',
+            description: 'The entities',
           },
-        },
-        expression: {
-          type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          description: 'steps to execute',
           items: {
+            type: 'object',
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
         },
       },
       required: ['$type'],
@@ -1523,32 +1263,37 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.LuisRecognizer',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        applicationId: {
-          type: 'string',
-        },
-        endpoint: {
-          type: 'string',
-        },
-        endpointKey: {
-          type: 'string',
+        application: {
+          type: 'object',
+          required: ['applicationId', 'endpoint', 'endpointKey'],
+          properties: {
+            applicationId: {
+              type: 'string',
+            },
+            endpoint: {
+              type: 'string',
+            },
+            endpointKey: {
+              type: 'string',
+            },
+          },
         },
         priority: {
           type: 'string',
@@ -1567,7 +1312,7 @@ export const mergedSchema = {
         },
         {
           title: 'Type',
-          required: ['applicationId', 'endpoint', 'endpointKey'],
+          required: ['applicationId'],
         },
       ],
     },
@@ -1580,21 +1325,20 @@ export const mergedSchema = {
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.QnaMakerRecognizer',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
@@ -1626,43 +1370,55 @@ export const mergedSchema = {
         },
       ],
     },
-    'Microsoft.RegexRecognizer': {
-      $role: 'unionType(Microsoft.IRecognizer)',
-      title: 'Regex Recognizer',
-      description: 'Recognizer which uses regex expressions to generate intents and entities.',
+    'Microsoft.RePlacePlanRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'Replace Plan Rule',
+      description: 'Similar as intent Rule, but the dialog stack will be clean up when it is triggered.',
       type: 'object',
+      additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.RegexRecognizer',
+          const: 'Microsoft.RePlacePlanRule',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        intents: {
-          type: 'object',
-          title: 'RegEx patterns to intents',
-          description: 'Pattern->Intents mappings',
-          additionalProperties: {
+        intent: {
+          type: 'string',
+          description: 'This is the intent to be triggered.',
+          examples: ['JokeIntent'],
+        },
+        entities: {
+          type: 'array',
+          title: 'The entities to be triggered.',
+          items: {
             type: 'string',
+            description: 'The entities',
+          },
+        },
+        steps: {
+          type: 'array',
+          description: 'steps to execute',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
           },
         },
       },
       required: ['$type'],
-      additionalProperties: false,
       patternProperties: {
         '^\\$': {
           type: 'string',
@@ -1675,64 +1431,369 @@ export const mergedSchema = {
         },
         {
           title: 'Type',
-          required: ['intents'],
+          required: ['intent', 'steps'],
         },
       ],
     },
-    'Microsoft.ReplacePlanRule': {
-      $role: 'unionType(Microsoft.IRule)',
-      title: 'ReplacePlan Rule',
-      description: 'Defines a sequence of steps to take when a plan has been replaced with a new plan',
+    'Microsoft.RegexRecognizer': {
+      $role: 'unionType(Microsoft.IRecognizer)',
+      title: 'Regular Expression Recognizer',
+      description: 'Example regular expression recognizer.',
       type: 'object',
       additionalProperties: false,
-      required: ['$type'],
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ReplacePlanRule',
+          const: 'Microsoft.RegexRecognizer',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        events: {
+        pattern: {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['pattern'],
+        },
+      ],
+    },
+    'Microsoft.RuleDialog': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Rule Dialog',
+      description: 'This represents a dialog can add rules and execute rules',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.RuleDialog',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        storage: {
+          type: 'object',
+          $type: 'Microsoft.IStorage',
+          description: 'The memory storage',
+          examples: ['Microsoft.MemoryStorage'],
+          $ref: '#/definitions/Microsoft.IStorage',
+        },
+        recognizer: {
+          type: 'object',
+          $type: 'Microsoft.IRecognizer',
+          description: 'The recognizers',
+          $ref: '#/definitions/Microsoft.IRecognizer',
+        },
+        rules: {
           type: 'array',
-          description: 'Events to trigger this rule for',
+          title: 'The rules',
           items: {
-            type: 'string',
+            type: 'object',
+            $type: 'Microsoft.IRule',
+            description: 'The rules',
+            $ref: '#/definitions/Microsoft.IRule',
           },
         },
-        expression: {
+      },
+      patternProperties: {
+        '^\\$': {
           type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.SaveEntity': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Save Entity',
+      description: 'This is a step which save an recognized entity to storage',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.SaveEntity',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        property: {
+          type: 'string',
+          $type: 'Microsoft.IExpression',
+          title: 'Property',
+          description: 'Expression which is the property to set.',
+          $ref: '#/definitions/Microsoft.IExpression',
+        },
+        entityName: {
+          type: 'string',
+          $type: 'Microsoft.IExpression',
+          title: 'Value',
+          description: 'Expression which is the value to use.',
+          $ref: '#/definitions/Microsoft.IExpression',
+        },
+      },
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.SendActivity': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Send Activity Step',
+      description: 'This is a step which sends an activity to the user',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.SendActivity',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        activity: {
+          type: 'string',
+          description: 'This text sent to user.',
+        },
+      },
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.SendList': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Send List Step',
+      description: 'This is a step which sends an list to the user',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.SendList',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        listProperty: {
+          type: 'string',
+          $type: 'Microsoft.IExpression',
+          title: 'List Property',
+          description: 'Expression which is the list property.',
+          $ref: '#/definitions/Microsoft.IExpression',
+        },
+        messageTemplate: {
+          type: 'string',
+          title: 'message Template',
+          description: 'message that will be shown before the list.',
+        },
+        itemTemplate: {
+          type: 'string',
+          title: 'item Template',
+          description: 'message that will be shown before the items.',
+        },
+      },
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.TextPrompt': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Text prompt',
+      description: 'This represents a dialog which gathers a text from the user',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.TextPrompt',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        property: {
+          type: 'string',
+          description: 'This is the property to set the result.',
+          examples: ['value.name'],
+        },
+        pattern: {
+          type: 'string',
+          title: 'Pattern',
+          description: 'A regular expression pattern which must match',
+          examples: ['\\w{3,30}'],
+        },
+        initialPrompt: {
+          type: 'string',
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Initial Prompt',
+          description: 'The message to send to start.',
+          examples: ['What is your name?'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        retryPrompt: {
+          type: 'string',
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Retry Prompt',
+          description: 'The message to send to prompt again.',
+          examples: ["Let's try again. What is your name?"],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        noMatchResponse: {
+          type: 'string',
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'No match',
+          description: "The message to send to when the input didn't match.",
+          examples: ["That doesn't match the pattern requirements.", 'A valid phone number looks like xxx-xxx-xxxx.'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+      },
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      required: ['$type'],
+    },
+    'Microsoft.UtteranceRecognizeRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'Utterance Recognize Rule',
+      description: 'Utterance Recognize will be triggered when the utterance is recognized as intents or entities',
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        $type: {
+          title: '$type',
+          description: 'Schema definition for $type added by cogSchema.',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.UtteranceRecognizeRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Schema deifnition for $copy added by cogSchema.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Schema definition for $id added by cogSchema.',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        intent: {
+          type: 'string',
+          description: 'This is the intent to be triggered.',
+          examples: ['JokeIntent'],
+        },
+        entities: {
+          type: 'array',
+          title: 'The entities to be triggered.',
+          items: {
+            type: 'string',
+            description: 'The entities',
+          },
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          description: 'steps to execute',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
       },
+      required: ['$type'],
       patternProperties: {
         '^\\$': {
           type: 'string',
@@ -1749,323 +1810,38 @@ export const mergedSchema = {
         },
       ],
     },
-    'Microsoft.Rule': {
-      $role: 'unionType(Microsoft.IRule)',
-      title: 'Event Rule',
-      description: 'Defines a rule for an event which is triggered by some sourcy',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.Rule',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        expression: {
-          type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
-        },
-        steps: {
-          type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
-          items: {
-            $type: 'Microsoft.IDialog',
-            $ref: '#/definitions/Microsoft.IDialog',
-          },
-        },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
-      },
-      required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['events', 'steps'],
-        },
-      ],
-    },
-    'Microsoft.SaveEntity': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'SaveEntity Step',
-      description: 'This is a step which allows you to save a memory property as an entity',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SaveEntity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        entity: {
-          type: 'string',
-          title: 'Entity',
-          description: 'name of the entity to save',
-        },
-        property: {
-          type: 'string',
-          title: 'Property',
-          description: 'Memory expression of the property to save as an entity.',
-        },
-      },
-      required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['property', 'entity'],
-        },
-      ],
-    },
-    'Microsoft.SendActivity': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'Send Activity Step',
-      description: 'This is a step which sends an activity to the user',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SendActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        activity: {
-          $type: 'Microsoft.IActivityTemplate',
-          title: 'Activity',
-          description: 'Activity to send to the user',
-          $ref: '#/definitions/Microsoft.IActivityTemplate',
-        },
-      },
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      required: ['$type'],
-    },
-    'Microsoft.SendList': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'SendList Step',
-      description: 'TEMPORARY, THIS SHOULD BE REPLACED WITH LG TEMPLATE',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SendList',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        listProperty: {
-          type: 'string',
-          title: 'List Property',
-          description: 'Memory expression of the list to manipulate.',
-        },
-        messageTemplate: {
-          type: 'string',
-          title: 'List Property',
-          description: 'Memory expression for the item',
-        },
-        itemTemplate: {
-          type: 'string',
-          title: 'List Property',
-          description: 'Memory expression for the item',
-        },
-      },
-      required: ['$type'],
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['listProperty', 'messageTemplate', 'itemTemplate'],
-        },
-      ],
-    },
-    'Microsoft.TextPrompt': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'Text prompt',
-      description: 'This represents a dialog which gathers a text from the user',
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.TextPrompt',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        property: {
-          type: 'string',
-          description: 'This is the property to set the result.',
-          examples: ['value.name'],
-        },
-        pattern: {
-          type: 'string',
-          title: 'Pattern',
-          description: 'A regular expression pattern which must match',
-          examples: ['\\w{3,30}'],
-        },
-        initialPrompt: {
-          $type: 'Microsoft.IActivityTemplate',
-          title: 'Initial Prompt',
-          description: 'The message to send to start.',
-          examples: ['What is your name?'],
-          $ref: '#/definitions/Microsoft.IActivityTemplate',
-        },
-        retryPrompt: {
-          $type: 'Microsoft.IActivityTemplate',
-          title: 'Retry Prompt',
-          description: 'The message to send to prompt again.',
-          examples: ["Let's try again. What is your name?"],
-          $ref: '#/definitions/Microsoft.IActivityTemplate',
-        },
-        noMatchResponse: {
-          $type: 'Microsoft.IActivityTemplate',
-          title: 'No match',
-          description: "The message to send to when the input didn't match.",
-          examples: ["That doesn't match the pattern requirements.", 'A valid phone number looks like xxx-xxx-xxxx.'],
-          $ref: '#/definitions/Microsoft.IActivityTemplate',
-        },
-      },
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-      required: ['$type'],
-    },
     'Microsoft.WaitForInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Wait for input from the user',
-      description: 'Dialog command to wait for input from the user.',
+      title: 'Wait for Input Step',
+      description: 'Step which accepts an input from user.',
       type: 'object',
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.WaitForInput',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
-        property: {
-          type: 'string',
-          description: 'This is the property to set the result.',
-          examples: ['value.name'],
-        },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        property: {
+          type: 'string',
+          $type: 'Microsoft.IExpression',
+          title: 'Property',
+          description: 'property which saves the input into.',
+          $ref: '#/definitions/Microsoft.IExpression',
         },
       },
       patternProperties: {
@@ -2078,57 +1854,40 @@ export const mergedSchema = {
     'Microsoft.WelcomeRule': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'Welcome Rule',
-      description: 'Defines a sequence of steps to take if the user is a new user',
+      description: 'Welcome Rule will be triggered when user start conversation or update conversation',
       type: 'object',
-      required: ['$type'],
       additionalProperties: false,
       properties: {
         $type: {
           title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          description: 'Schema definition for $type added by cogSchema.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.WelcomeRule',
         },
         $copy: {
           title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
+          description: 'Schema deifnition for $copy added by cogSchema.',
           type: 'string',
           pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
         },
         $id: {
           title: '$id',
-          description: 'Inline id for reuse of an inline definition',
+          description: 'Schema definition for $id added by cogSchema.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
-        events: {
-          type: 'array',
-          description: 'Events to trigger this rule for',
-          items: {
-            type: 'string',
-          },
-        },
-        expression: {
-          type: 'string',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
-        },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          description: 'steps to execute',
           items: {
+            type: 'object',
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        changeType: {
-          type: 'string',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
-        },
       },
+      required: ['$type'],
       patternProperties: {
         '^\\$': {
           type: 'string',
