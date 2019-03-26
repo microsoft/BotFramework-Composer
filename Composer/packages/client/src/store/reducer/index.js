@@ -71,6 +71,10 @@ const getStorageFileSuccess = (state, { response }) => {
   return state;
 };
 
+const resetVisualEditor = (state, { isReset }) => {
+  return (state.resetVisualEditor = isReset);
+};
+
 export const reducer = createReducer({
   [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
   [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
@@ -82,4 +86,5 @@ export const reducer = createReducer({
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
+  [ActionTypes.EDITOR_RESET_VISUAL]: resetVisualEditor,
 });

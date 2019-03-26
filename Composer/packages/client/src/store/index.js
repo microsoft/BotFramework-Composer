@@ -15,6 +15,7 @@ const initialState = {
   botStatus: 'stopped',
   openFileIndex: -1,
   storageExplorerStatus: 'closed',
+  resetVisualEditor: false,
 };
 
 export function StoreProvider(props) {
