@@ -23,7 +23,7 @@ function DesignPage() {
     actions.setOpenFileIndex(index);
 
     if (editors.length >= 1) {
-      actions.resetVisualDesigner(ture);
+      actions.resetVisualDesigner(true);
     }
 
     actions.setEditor({
