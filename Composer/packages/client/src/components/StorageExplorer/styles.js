@@ -16,7 +16,7 @@ export const body = css`
   left: 0;
 `;
 
-export const panelNav = css`
+export const leftNav = css`
   width: 150px;
   height: 100vh;
   background: #2b579a;
@@ -29,30 +29,20 @@ export const navHeader = css`
   cursor: pointer;
 `;
 
-export const iconContainer = css`
+export const backIcon = css`
+  font-size: 30px;
   margin-top: 40px;
   padding-left: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 120px;
   &:hover {
     background-color: #366ec2;
   }
 `;
 
-export const icon = css`
-  font-size: 30px;
-`;
-
-export const navBody = css`
-  width: 100%;
-`;
-
-export const linkStyle = css`
-  width: 100%;
-`;
-
 export const panelContent = css`
-  width: 810px;
+  width: 825px;
   height: 100vh;
   display: flex;
   flex-direction: row;
@@ -72,8 +62,14 @@ export const title = css`
   font-weight: lighter;
 `;
 
-export const navLinks = mergeStyleSets({
-  actionNavLink: {
+export const fileSelectorContainer = css`
+  padding-left: 5px;
+  padding-top: 90px;
+  width: 100%;
+`;
+
+export const navLinkClass = mergeStyleSets({
+  actionNav: {
     backgroundColor: '#2b579a',
     color: 'white',
     fontSize: '16px',
@@ -91,7 +87,7 @@ export const navLinks = mergeStyleSets({
       },
     },
   },
-  sourceNavLink: {
+  storageNav: {
     color: 'black',
     fontSize: '16px',
     width: '200px',
