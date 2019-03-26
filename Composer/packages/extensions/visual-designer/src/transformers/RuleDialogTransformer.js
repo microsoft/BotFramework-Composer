@@ -15,8 +15,8 @@ export const RuleDialogTransformer = {
     };
   },
   // Then connect specific elements: welcome -> reconizer -> intent.
-  buildEdges: nodes => {
-    const { recognizers, welcomes, fallbacks, intents } = nodes;
+  buildEdges: nodeCollection => {
+    const { recognizers, welcomes, fallbacks, intents } = nodeCollection;
 
     // ObiRuleDialog must has at least one recognizer.
     if (!recognizers || !recognizers[0]) return [];
@@ -51,8 +51,8 @@ export const RuleDialogTransformer = {
 
     return edges;
   },
-  output: (nodes, edges) => {
-    const nodeList = [].concat(...Object.values(nodes));
+  output: (nodeCollection, edges) => {
+    const nodeList = [].concat(...Object.values(nodeCollection));
     const nodeById = nodeList.reduce(
       (accumulated, currentNode) => ({
         ...accumulated,
