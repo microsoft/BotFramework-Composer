@@ -6,8 +6,8 @@ import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 
 import * as obiExample from './sample.dialog';
-import { applyTransformer } from '../../src/transformers/applyTransformer';
-import { RuleDialogTransformer } from '../../src/transformers/RuleDialogTransformer';
+import { applyTransformer } from '../../src/transformers/helpers/applyTransformer';
+import { RuleDialogTransformer } from '../../src/transformers/instances/RuleDialogTransformer';
 
 class Demo extends Component {
   transform = input => applyTransformer(input, RuleDialogTransformer);

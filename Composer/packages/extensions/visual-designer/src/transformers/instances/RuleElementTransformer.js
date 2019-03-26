@@ -1,6 +1,6 @@
-import { IndexedNode } from './IndexedNode';
-import { NodeTypes } from './constants/NodeTypes';
-import { mergeNodesIntoEdges } from './helpers/mergeNodesIntoEdges';
+import { IndexedNode } from '../helpers/IndexedNode';
+import { NodeTypes } from '../constants/NodeTypes';
+import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 
 export const RuleElementTransformer = {
   when: input => input && input.$type && input.$type.match(/.+Rule$/),

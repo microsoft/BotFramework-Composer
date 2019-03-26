@@ -1,4 +1,4 @@
-import { PAYLOAD_KEY } from '../utils/constant';
+import { PAYLOAD_KEY } from '../../utils/constant';
 
 export class IndexedNode {
   constructor(id, type, payload) {

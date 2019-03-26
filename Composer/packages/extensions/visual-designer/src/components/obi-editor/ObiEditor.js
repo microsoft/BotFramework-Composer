@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { DialogFlowEditor } from '../dialog-flow-editor/DialogFlowEditor';
-import { applyTransformer } from '../../transformers/applyTransformer';
-import { RuleDialogTransformer } from '../../transformers/RuleDialogTransformer';
+import { applyTransformer } from '../../transformers/helpers/applyTransformer';
+import { RuleDialogTransformer } from '../../transformers/instances/RuleDialogTransformer';
 
 const transform = input => applyTransformer(input, RuleDialogTransformer);
 

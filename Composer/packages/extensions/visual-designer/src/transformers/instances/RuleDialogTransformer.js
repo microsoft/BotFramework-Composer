@@ -1,7 +1,7 @@
-import { ObiTypes } from './constants/ObiTypes';
-import { NodeTypes } from './constants/NodeTypes';
-import { IndexedNode } from './IndexedNode';
-import { mergeNodesIntoEdges } from './helpers/mergeNodesIntoEdges';
+import { ObiTypes } from '../constants/ObiTypes';
+import { NodeTypes } from '../constants/NodeTypes';
+import { IndexedNode } from '../helpers/IndexedNode';
+import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 
 export const RuleDialogTransformer = {
   // When input schema is a ObiRuleDialog.
