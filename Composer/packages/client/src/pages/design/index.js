@@ -3,7 +3,6 @@ import React, { useEffect, Fragment, useContext } from 'react';
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
-import ApiClient from './../../messenger/ApiClient';
 import { Store } from './../../store/index';
 
 function DesignPage() {

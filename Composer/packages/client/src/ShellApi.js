@@ -23,12 +23,14 @@ export function ShellApi() {
     return () => {
       apiClient.disconnect();
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (editors.length >= 1 && resetVisualEditor) {
       var editorWindow = window.frames[editors[0].name];
       apiClient.apiCallAt('reset', files[index], editorWindow);
+
+      actions.resetVisualEditor(false); // clear the flag
     }
   }, [resetVisualEditor]);
 
