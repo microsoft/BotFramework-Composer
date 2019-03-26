@@ -18,9 +18,14 @@ export async function fetchFiles(dispatch) {
   }
 }
 
-export async function fetchFilesByOpen(dispatch, fileName) {
+export async function openBotProject(dispatch, storageId, absolutePath) {
   try {
-    const response = await axios.get(`${BASEURL}/fileserver/openbotFile?path=${fileName}`);
+    const data = {
+      storageId: storageId,
+      path: absolutePath,
+    };
+    await axios.put(`${BASEURL}/projects/opened`, data);
+    const response = await axios.get(`${BASEURL}/projects/opened/files`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },
