@@ -16,10 +16,6 @@ function DesignPage() {
   const { files, openFileIndex, navPath, focusPath } = state;
 
   function handleFileClick(index) {
-    if (index === openFileIndex) {
-      return;
-    }
-
     actions.setOpenFileIndex(index);
     actions.navTo(getDialogName(files[index]));
   }

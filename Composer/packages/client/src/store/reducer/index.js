@@ -96,7 +96,9 @@ const navigateTo = (state, { path }) => {
 };
 
 const navigateDown = (state, { subPath }) => {
-  return (state.navPath = state.navPath + subPath);
+  state.resetVisualEditor = true;
+  state.navPath = state.navPath + subPath;
+  return state;
 };
 
 const focusTo = (state, { subPath }) => {
