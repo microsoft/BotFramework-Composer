@@ -15,7 +15,7 @@ class ApiClient {
   apiCallAt = (apiName, args, endpoint) => {
     // generate a message ID each time
     // TODO: make this id absolute unique if necessary
-    var mid = new Date().valueOf();
+    const mid = new Date().valueOf();
 
     this.messenger.postMessage(
       {

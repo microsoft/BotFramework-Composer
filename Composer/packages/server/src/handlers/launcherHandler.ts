@@ -4,7 +4,7 @@ import { LauncherStatus } from '../launcher-connectors/launcherStatus';
 
 import settings from './../storage/SettingService';
 
-var connector: ILauncherConnector = new ConnectorFactory().CreateConnector(settings.getItem('launcherConnector'));
+const connector: ILauncherConnector = new ConnectorFactory().CreateConnector(settings.getItem('launcherConnector'));
 
 export function startServer(): void {
   if (connector.status === LauncherStatus.Running) {
@@ -23,6 +23,6 @@ export function stopServer(): void {
 }
 
 export function getStatus(): string {
-  var status: string = connector.status === LauncherStatus.Running ? 'Running' : 'Stopped';
+  const status: string = connector.status === LauncherStatus.Running ? 'Running' : 'Stopped';
   return status;
 }

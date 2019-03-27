@@ -8,7 +8,7 @@ export default class VisualDesigner extends Component {
   }
 
   onChange = newData => {
-    var data = {
+    const data = {
       name: this.props.data.name, // this editor should not change file name
       content: JSON.stringify(newData, null, 4),
     };
