@@ -1,6 +1,6 @@
 import { ObiTypes } from '../constants/ObiTypes';
 import { NodeTypes } from '../constants/NodeTypes';
-import { IndexedNode } from '../helpers/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 
 /**
@@ -16,7 +16,7 @@ import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
  *  connect 'recognizer' to 'fallback';
  * output a DirectedGraph prop.
  */
-export const RuleDialogTransformer = {
+export const RuleDialogStrategy = {
   // When input schema is a ObiRuleDialog.
   when: input => input && input.$type === ObiTypes.dialogs.ObiRuleDialog,
   // Select below elements.

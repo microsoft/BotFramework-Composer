@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { DialogFlowEditor } from '../dialog-flow-editor/DialogFlowEditor';
-import { autoTransform } from '../../transformers/autoTransform';
+import { obiTransformer } from '../../transformers/ObiTransformer';
 
 export class ObiEditor extends Component {
   state = {
@@ -16,7 +16,7 @@ export class ObiEditor extends Component {
 
   render() {
     const { width, height, data } = this.props;
-    const directedGraphItems = autoTransform(data);
+    const directedGraphItems = obiTransformer.toDirectedGraphSchema(data);
 
     return (
       <div className="obi-editor-container" data-testid="obi-editor-container">

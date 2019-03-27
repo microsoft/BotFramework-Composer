@@ -1,4 +1,4 @@
-export function applyTransformer(input, transformer) {
+export function consumeStrategy(input, transformer) {
   const { when, selectNodes, buildEdges, output } = transformer;
 
   if (when(input)) {
