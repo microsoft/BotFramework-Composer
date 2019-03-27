@@ -20,10 +20,6 @@ function DesignPage() {
   }, []);
 
   function handleFileClick(index) {
-    if (index === openFileIndex) {
-      return;
-    }
-
     actions.setOpenFileIndex(index);
     actions.navTo(getDialogName(files[index]));
   }

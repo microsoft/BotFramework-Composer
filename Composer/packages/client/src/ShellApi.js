@@ -94,7 +94,7 @@ export function ShellApi() {
   }
 
   function navDown({ subPath }) {
-    actions.focusTo(subPath);
+    actions.navDown(subPath);
   }
 
   function focusTo({ subPath }) {
