@@ -23,7 +23,7 @@ export function ShellApi() {
     return () => {
       apiClient.disconnect();
     };
-  });
+  }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
     if (editors.length >= 1 && resetVisualEditor) {
@@ -54,13 +54,11 @@ export function ShellApi() {
     apiClient.apiCallAt('reset', data, window.frames['window2']);
   }
 
-  function openSubEditor(args) {
-    var data = args.data; // data to open;
-
+  function openSubEditor({ data }) {
     // NOTE: before we have more spec on how muliple editors would render, open, close,
     //       we assume there are only two editors
     // TODO: enable sub editors to also create sub editors
-    if (editors.length == 1) {
+    if (editors.length === 1) {
       createSecondEditor(data);
     } else {
       resetSecondEditor(data);
@@ -71,9 +69,9 @@ export function ShellApi() {
 
   // persist value change
   function handleValueChange(newFileObject, event) {
-    var targetEditor = editors.find(item => window.frames[item.name] == event.source);
+    const targetEditor = editors.find(item => window.frames[item.name] == event.source);
 
-    if (targetEditor.parent != 'window0') {
+    if (targetEditor.parent !== 'window0') {
       // forward the data change
       apiClient.apiCallAt(
         'saveFromChild',
@@ -90,5 +88,5 @@ export function ShellApi() {
 
     actions.updateFile(payload);
   }
-  return false;
+  return null;
 }
