@@ -1,9 +1,9 @@
 import createReducer from './createReducer';
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes, FileTypes } from './../../constants/index';
 const pattern = /\.{1}[a-zA-Z]{1,}$/;
 const projectFiles = ['.bot', '.botproj'];
 
-const initProjectState = state => {
+const closeCurrentProject = state => {
   state.openFileIndex = -1;
   state.editors = [];
   return state;
@@ -56,7 +56,7 @@ const setStorageExplorerStatus = (state, { status }) => {
 
 const getStorageFileSuccess = (state, { response }) => {
   state.currentStorageFiles = response.data.children.reduce((files, file) => {
-    if (file.type === 'folder') {
+    if (file.type === FileTypes.FOLDER) {
       files.push(file);
     } else {
       const path = file.path;
@@ -72,7 +72,7 @@ const getStorageFileSuccess = (state, { response }) => {
 };
 
 export const reducer = createReducer({
-  [ActionTypes.PROJECT_STATE_INIT]: initProjectState,
+  [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
   [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
   [ActionTypes.FILES_UPDATE]: updateFiles,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,

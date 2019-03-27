@@ -15,7 +15,9 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
     "prismjs": "^1.15.0",

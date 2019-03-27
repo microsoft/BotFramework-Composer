@@ -9,47 +9,30 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { PropTypes } from 'prop-types';
 
+import { FileTypes, SupportedFileTypes } from '../../constants/index';
 import { Store } from '../../store/index';
 
 import {
   container,
   body,
   navHeader,
-  navBody,
-  panelNav,
+  leftNav,
   panelContent,
-  iconContainer,
-  icon,
-  navLinks,
+  backIcon,
+  navLinkClass,
   detailListContainer,
   title,
   detailListClass,
+  fileSelectorContainer,
 } from './styles';
 
 export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
   const { storages, currentStorageFiles, storageExplorerStatus } = state;
   const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
-  const [pathNavItems, setPathNavItems] = useState();
+  const [currentPath, setCurrentPath] = useState('');
 
-  const SUPPORTED_ICON = [
-    'accdb',
-    'csv',
-    'docx',
-    'dotx',
-    'mpt',
-    'odt',
-    'one',
-    'onepkg',
-    'onetoc',
-    'pptx',
-    'pub',
-    'vsdx',
-    'xls',
-    'xlsx',
-    'xsn',
-  ];
-
+  const currentStorageId = storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default';
   // for detail file list in open panel
   const tableColums = [
     {
@@ -65,9 +48,9 @@ export function StorageExplorer(props) {
       maxWidth: 16,
       onRender: item => {
         const iconName = item.iconName;
-        if (iconName === 'folder') {
+        if (iconName === FileTypes.FOLDER) {
           return <Icon style={{ fontSize: '16px' }} iconName="Folder" />;
-        } else if (iconName === 'unknow') {
+        } else if (iconName === FileTypes.UNKNOW) {
           return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
         }
         const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
@@ -120,13 +103,14 @@ export function StorageExplorer(props) {
   const selection = new Selection({
     onSelectionChanged: () => {
       const file = selection.getSelection()[0];
-      // todo: fix issue here, some time file is undefine.
+      // selected item will be cleaned when folder path changed
+      // file will be undefine when no item selected.
       if (file) {
         const type = file.fileType;
         const storageId = storages[currentStorageIndex].id;
         const path = file.filePath;
-        if (type === 'folder') {
-          updateCurrentPath(storageId, path);
+        if (type === FileTypes.FOLDER) {
+          updateCurrentPath(path, storageId);
         } else {
           actions.setStorageExplorerStatus('closed');
           props.onFileOpen(storageId, path);
@@ -137,7 +121,7 @@ export function StorageExplorer(props) {
 
   async function init() {
     const res = await actions.fetchStorages();
-    updateCurrentPath(res[currentStorageIndex].id, res[currentStorageIndex].path);
+    updateCurrentPath(res[currentStorageIndex].path, res[currentStorageIndex].id);
   }
 
   // fetch storages first then fetch the folder info under it.
@@ -147,7 +131,7 @@ export function StorageExplorer(props) {
 
   function onStorageSourceChange(index) {
     setCurrentStorageIndex(index);
-    updateCurrentPath(storages[currentStorageIndex].id, storages[currentStorageIndex].path);
+    updateCurrentPath(storages[currentStorageIndex].path, storages[currentStorageIndex].id);
   }
 
   // todo: result parse from api result to ui acceptable format may need move to reducer.
@@ -165,33 +149,46 @@ export function StorageExplorer(props) {
     },
   ];
 
-  function getCurrentPath(array, seperator, start, end) {
+  function getNavItemPath(array, seperator, start, end) {
     if (!start) start = 0;
     if (!end) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
   }
 
-  function updateCurrentPath(storageId, path) {
+  function getPathNavItems(path, storageId) {
+    // todo: make sure the separator is the same and working.
+    const pathItems = path.split('\\');
+    const newPathItems = [];
+    for (let i = 0; i < pathItems.length; i++) {
+      const item = pathItems[i];
+      const currentPath = getNavItemPath(pathItems, '\\', 0, i);
+      newPathItems.push({
+        text: item,
+        key: currentPath,
+        onClick: () => {
+          updateCurrentPath(currentPath, storageId);
+        },
+      });
+    }
+    return newPathItems;
+  }
+
+  function updateCurrentPath(path, storageId) {
     if (storageId && path) {
       actions.fetchFolderItemsByPath(storageId, path);
-
-      // todo: make sure the separator is the same and working.
-      const pathItems = path.split('\\');
-      const newPathItems = [];
-      for (let i = 0; i < pathItems.length; i++) {
-        const item = pathItems[i];
-        const currentPath = getCurrentPath(pathItems, '\\', 0, i);
-        newPathItems.push({
-          text: item,
-          key: currentPath,
-          onClick: () => {
-            updateCurrentPath(storageId, currentPath);
-          },
-        });
-      }
-      setPathNavItems(newPathItems);
+      setCurrentPath(path);
+      // setPathNavItems(newPathItems);
     }
+  }
+
+  function formatBytes(bytes, decimals) {
+    if (bytes == 0) return '0 Bytes';
+    var k = 1024,
+      dm = decimals <= 0 ? 0 : decimals || 2,
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
   const storageFiles = [];
@@ -203,7 +200,7 @@ export function StorageExplorer(props) {
         fileType: file.type,
         iconName: getIconName(file),
         dateModified: getFileEditDate(file),
-        fileSize: file.size,
+        fileSize: file.size ? formatBytes(file.size) : '',
         filePath: file.path,
       });
     });
@@ -224,36 +221,34 @@ export function StorageExplorer(props) {
   }
 
   function getFileEditDate(file) {
-    if (file.type === 'file') {
+    if (file.type === FileTypes.FILE) {
       return new Date(file.lastModified).toLocaleDateString();
     }
 
-    return undefined;
+    return '';
   }
 
   // todo: icon file is fixed for now, need to be updated when get it from designer.
   function getIconName(file) {
     const path = file.path;
     let docType = file.type;
-    if (docType === 'folder') {
+    if (docType === FileTypes.FOLDER) {
       return docType;
     } else {
       docType = path.substring(path.lastIndexOf('.') + 1, path.length);
-      if (SUPPORTED_ICON.includes(docType)) {
+      if (SupportedFileTypes.includes(docType)) {
         return docType;
       }
 
-      return 'unknow';
+      return FileTypes.UNKNOW;
     }
   }
 
   function getLeftNav() {
     return (
-      <div css={panelNav}>
+      <div css={leftNav}>
         <div css={navHeader} onClick={() => toggleExplorer()}>
-          <div css={iconContainer}>
-            <Icon iconName="Back" css={icon} text="Close" />
-          </div>
+          <Icon iconName="Back" css={backIcon} text="Close" />
         </div>
         <div>
           <Nav
@@ -263,10 +258,9 @@ export function StorageExplorer(props) {
               },
             ]}
             initialSelectedKey={'open'}
-            css={navBody}
             styles={{
-              link: navLinks.actionNavLink,
-              linkText: navLinks.linkText,
+              link: navLinkClass.actionNav,
+              linkText: navLinkClass.linkText,
             }}
           />
         </div>
@@ -282,10 +276,9 @@ export function StorageExplorer(props) {
           <div style={{ paddingTop: '10px' }}>
             <Nav
               groups={storageGroup}
-              initialSelectedKey={storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default'}
-              css={navBody}
+              initialSelectedKey={currentStorageId}
               styles={{
-                link: navLinks.sourceNavLink,
+                link: navLinkClass.storageNav,
               }}
             />
           </div>
@@ -296,13 +289,17 @@ export function StorageExplorer(props) {
 
   function getFileSelector() {
     return (
-      <div style={{ width: '100%', paddingLeft: '5px', paddingTop: '90px' }}>
-        <Breadcrumb items={pathNavItems} ariaLabel={'File path'} maxDisplayedItems={'1'} />
+      <div css={fileSelectorContainer}>
+        <Breadcrumb
+          items={getPathNavItems(currentPath, currentStorageId)}
+          ariaLabel={'File path'}
+          maxDisplayedItems={'1'}
+        />
         <DetailsList
           items={storageFiles}
           compact={false}
           columns={tableColums}
-          setKey="set"
+          setKey={currentPath}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           selection={selection}

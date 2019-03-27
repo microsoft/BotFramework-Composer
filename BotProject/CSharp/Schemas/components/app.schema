@@ -159,6 +159,7 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "dialog": {
+                    "type": "object",
                     "$type": "Microsoft.IDialog",
                     "title": "Dialog",
                     "description": "This is the dialog to call.",
@@ -171,6 +172,7 @@
                     "additionalProperties": true
                 },
                 "property": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Property",
                     "description": "The property to bind to the dialog and store the result in",
@@ -252,20 +254,22 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "listProperty": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
-                    "title": "Property",
+                    "title": "List Property",
                     "description": "Expression which is the list property.",
                     "$ref": "#/definitions/Microsoft.IExpression"
                 },
                 "itemProperty": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
-                    "title": "Property",
+                    "title": "Item Property",
                     "description": "Expression which is the item property.",
                     "$ref": "#/definitions/Microsoft.IExpression"
                 },
                 "changeType": {
                     "type": "string",
-                    "title": "change List type",
+                    "title": "Change List type",
                     "description": "push/pop/take/remove/clear",
                     "enum": [
                         "push",
@@ -335,6 +339,7 @@
                     ]
                 },
                 "initialPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Initial Prompt",
                     "description": "The message to send to start.",
@@ -344,6 +349,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "retryPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Retry Prompt",
                     "description": "The message to send to prompt again.",
@@ -353,6 +359,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "noMatchResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "No match",
                     "description": "The message to send to when no date was recognized.",
@@ -362,6 +369,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooSmallResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too small",
                     "description": "The message to send to when the recognized number was less then the MinValue. ",
@@ -371,6 +379,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooLargeResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too large",
                     "description": "The message to send to when the recognized number was greater then the MinValue.",
@@ -416,6 +425,7 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "property": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Property",
                     "description": "The property from dialog memory to return as the result",
@@ -464,6 +474,7 @@
                     "type": "array",
                     "description": "steps to execute",
                     "items": {
+                        "type": "object",
                         "$type": "Microsoft.IDialog",
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
@@ -608,6 +619,7 @@
                     ]
                 },
                 "initialPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Initial Prompt",
                     "description": "The message to send to start.",
@@ -617,6 +629,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "retryPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Retry Prompt",
                     "description": "The message to send to prompt again.",
@@ -626,6 +639,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "noMatchResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "No match",
                     "description": "The message to send to when no number was recognized.",
@@ -635,6 +649,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooSmallResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too small",
                     "description": "The message to send to when the recognized number was less then the MinValue. ",
@@ -644,6 +659,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooLargeResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too large",
                     "description": "The message to send to when the recognized number was greater then the MinValue.",
@@ -689,10 +705,9 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "dialogId": {
-                    "$type": "Microsoft.IDialog",
+                    "type": "string",
                     "title": "Dialog",
-                    "description": "This is the dialog to call.",
-                    "$ref": "#/definitions/Microsoft.IDialog"
+                    "description": "This is the dialog to call."
                 },
                 "options": {
                     "type": "object",
@@ -813,16 +828,19 @@
             "$role": "unionType",
             "oneOf": [
                 {
+                    "type": "object",
                     "title": "Microsoft.LuisRecognizer",
                     "description": "LUIS recognizer.",
                     "$ref": "#/definitions/Microsoft.LuisRecognizer"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.QnaMakerRecognizer",
                     "description": "This represents a configuration of the QNAMaker as a recognizer",
                     "$ref": "#/definitions/Microsoft.QnaMakerRecognizer"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.RegexRecognizer",
                     "description": "Example regular expression recognizer.",
                     "$ref": "#/definitions/Microsoft.RegexRecognizer"
@@ -835,36 +853,43 @@
             "$role": "unionType",
             "oneOf": [
                 {
+                    "type": "object",
                     "title": "Microsoft.EventRule",
                     "description": "Event Rule will be triggered when a event happen",
                     "$ref": "#/definitions/Microsoft.EventRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.FallbackRule",
                     "description": "Fallback Rule will be triggered when no other rules being triggered",
                     "$ref": "#/definitions/Microsoft.FallbackRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.IfPropertyRule",
                     "description": "IfPropertyRule will be triggered when the conditionals are true",
                     "$ref": "#/definitions/Microsoft.IfPropertyRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.IntentRule",
                     "description": "Intent Rule, which will be triggered when the intent is matched.",
                     "$ref": "#/definitions/Microsoft.IntentRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.RePlacePlanRule",
                     "description": "Similar as intent Rule, but the dialog stack will be clean up when it is triggered.",
                     "$ref": "#/definitions/Microsoft.RePlacePlanRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.UtteranceRecognizeRule",
                     "description": "Utterance Recognize will be triggered when the utterance is recognized as intents or entities",
                     "$ref": "#/definitions/Microsoft.UtteranceRecognizeRule"
                 },
                 {
+                    "type": "object",
                     "title": "Microsoft.WelcomeRule",
                     "description": "Welcome Rule will be triggered when user start conversation or update conversation",
                     "$ref": "#/definitions/Microsoft.WelcomeRule"
@@ -905,12 +930,14 @@
                 "ifTrue": {
                     "oneOf": [
                         {
+                            "type": "object",
                             "$type": "Microsoft.IDialogStep",
                             "$ref": "#/definitions/Microsoft.IDialogStep"
                         },
                         {
                             "type": "array",
                             "items": {
+                                "type": "object",
                                 "$type": "Microsoft.IDialogStep",
                                 "$ref": "#/definitions/Microsoft.IDialogStep"
                             },
@@ -923,12 +950,14 @@
                 "ifFalse": {
                     "oneOf": [
                         {
+                            "type": "object",
                             "$type": "Microsoft.IDialogStep",
                             "$ref": "#/definitions/Microsoft.IDialogStep"
                         },
                         {
                             "type": "array",
                             "items": {
+                                "type": "object",
                                 "$type": "Microsoft.IDialogStep",
                                 "$ref": "#/definitions/Microsoft.IDialogStep"
                             },
@@ -939,6 +968,7 @@
                     "description": "Step to execute if expression is false."
                 },
                 "expression": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Condition",
                     "description": "Expression to evaluate.",
@@ -995,6 +1025,7 @@
                     "type": "array",
                     "description": "conditions",
                     "items": {
+                        "type": "string",
                         "$type": "Microsoft.IExpression",
                         "title": "Condition",
                         "description": "Expression to evaluate.",
@@ -1076,6 +1107,7 @@
                     ]
                 },
                 "initialPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Initial Prompt",
                     "description": "The message to send to start.",
@@ -1085,6 +1117,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "retryPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Retry Prompt",
                     "description": "The message to send to prompt again.",
@@ -1094,6 +1127,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "noMatchResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "No match",
                     "description": "The message to send to when no number was recognized.",
@@ -1103,6 +1137,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooSmallResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too small",
                     "description": "The message to send to when the recognized number was less then the MinValue. ",
@@ -1112,6 +1147,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "tooLargeResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Too large",
                     "description": "The message to send to when the recognized number was greater then the MinValue.",
@@ -1175,6 +1211,7 @@
                     "type": "array",
                     "description": "steps to execute",
                     "items": {
+                        "type": "object",
                         "$type": "Microsoft.IDialog",
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
@@ -1495,6 +1532,7 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "storage": {
+                    "type": "object",
                     "$type": "Microsoft.IStorage",
                     "description": "The memory storage",
                     "examples": [
@@ -1503,6 +1541,7 @@
                     "$ref": "#/definitions/Microsoft.IStorage"
                 },
                 "recognizer": {
+                    "type": "object",
                     "$type": "Microsoft.IRecognizer",
                     "description": "The recognizers",
                     "$ref": "#/definitions/Microsoft.IRecognizer"
@@ -1511,6 +1550,7 @@
                     "type": "array",
                     "title": "The rules",
                     "items": {
+                        "type": "object",
                         "$type": "Microsoft.IRule",
                         "description": "The rules",
                         "$ref": "#/definitions/Microsoft.IRule"
@@ -1553,12 +1593,14 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "property": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Property",
                     "description": "Expression which is the property to set.",
                     "$ref": "#/definitions/Microsoft.IExpression"
                 },
                 "entityName": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Value",
                     "description": "Expression which is the value to use.",
@@ -1641,6 +1683,7 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "listProperty": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "List Property",
                     "description": "Expression which is the list property.",
@@ -1708,6 +1751,7 @@
                     ]
                 },
                 "initialPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Initial Prompt",
                     "description": "The message to send to start.",
@@ -1717,6 +1761,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "retryPrompt": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "Retry Prompt",
                     "description": "The message to send to prompt again.",
@@ -1726,6 +1771,7 @@
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
                 },
                 "noMatchResponse": {
+                    "type": "string",
                     "$type": "Microsoft.IActivityTemplate",
                     "title": "No match",
                     "description": "The message to send to when the input didn't match.",
@@ -1845,6 +1891,7 @@
                     "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
                 },
                 "property": {
+                    "type": "string",
                     "$type": "Microsoft.IExpression",
                     "title": "Property",
                     "description": "property which saves the input into.",
@@ -1890,6 +1937,7 @@
                     "type": "array",
                     "description": "steps to execute",
                     "items": {
+                        "type": "object",
                         "$type": "Microsoft.IDialog",
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }

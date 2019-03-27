@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
       "build:cci-graph-lib": "cd cci-graph-lib && yarn build",
-      "build:all": "concurrently --kill-others-on-fail \"yarn build:cci-graph-lib\"" 
+      "build:all": "concurrently --kill-others-on-fail \"yarn build:cci-graph-lib\"",
+      "lint": "exit 0;",
+      "lint:fix": "exit 0;"
     },
     "author": "",
     "license": "ISC"

@@ -20,3 +20,27 @@ export const ActionTypes = {
   STORAGEFILE_GET_SUCCESS: 'STORAGEFILE_GET_SUCCESS',
   STORAGEFILE_GET_FAILURE: 'STORAGEFILE_GET_FAILURE',
 };
+
+export const FileTypes = {
+  FOLDER: 'folder',
+  FILE: 'file',
+  UNKNOW: 'unknow',
+};
+
+export const SupportedFileTypes = [
+  'accdb',
+  'csv',
+  'docx',
+  'dotx',
+  'mpt',
+  'odt',
+  'one',
+  'onepkg',
+  'onetoc',
+  'pptx',
+  'pub',
+  'vsdx',
+  'xls',
+  'xlsx',
+  'xsn',
+];

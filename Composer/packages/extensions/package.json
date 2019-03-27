@@ -7,7 +7,9 @@
     "build:visual-designer": "cd visual-designer && yarn build",
     "build:obieditortest": "cd obieditortest && yarn build",
     "build:sample-json-editor": "cd sample-json-editor && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn build:obieditortest\" \"yarn build:sample-json-editor\" \"yarn build:visual-designer\"" 
+    "build:all": "concurrently --kill-others-on-fail \"yarn build:obieditortest\" \"yarn build:sample-json-editor\" \"yarn build:visual-designer\"" ,
+    "lint": "exit 0;",
+    "lint:fix": "exit 0;"
   },
   "author": "",
   "license": "ISC"
