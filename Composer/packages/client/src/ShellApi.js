@@ -76,14 +76,15 @@ export function ShellApi() {
     if (sourceWindowName === 'VisualEditor') {
       return;
     } else if (sourceWindowName === 'FormEditor') {
-      console.log(newData);
       // TODO: use jsonpath to form a new version of dialogData, and update
       const payload = {
         name: files[openFileIndex].name,
         content: newData,
       };
       console.log(payload);
-      //actions.updateFile(payload);
+      // TODO: save this gracefully
+      // current newData has some field sets to undefined, which is not friendly to runtime
+      // actions.updateFile(payload);
       return true;
     }
   }
