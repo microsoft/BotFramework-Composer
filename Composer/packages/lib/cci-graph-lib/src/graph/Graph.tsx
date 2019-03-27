@@ -80,7 +80,7 @@ export class Graph<TData> extends React.Component<GraphProps<TData>, GraphState>
 
     this.state = {
       edgeDragData: null,
-      transformScale: 0.5,
+      transformScale: 1,
     };
 
     this.layoutGraph = layoutGraph;
