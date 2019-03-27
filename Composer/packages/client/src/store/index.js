@@ -9,7 +9,8 @@ export const Store = React.createContext();
 
 const initialState = {
   files: [],
-  editors: [],
+  navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
+  focusPath: '', // the data path for FormEditor
   storages: [],
   currentStorageFiles: [],
   botStatus: 'stopped',

@@ -23,7 +23,7 @@ export default class VisualDesigner extends Component {
   };
 
   render() {
-    const data = JSON.parse(this.props.data.content);
+    const data = this.props.data;
 
     return (
       <div data-testid="visualdesigner-container">
