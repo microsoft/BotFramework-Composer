@@ -21,8 +21,8 @@
     "start:server": "cd packages/server && yarn start",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache",
-    "lint": "yarn workspaces run lint",
-    "lint:fix": "yarn workspaces run lint:fix",
+    "lint": "wsrun --exclude-missing --collect-logs --report lint",
+    "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:cci-graph-lib\" \"yarn typecheck:server\"",
     "typecheck:cci-graph-lib": "yarn workspace cci-graph-lib typecheck",
     "typecheck:server": "yarn workspace composer-api-server typecheck"
@@ -52,6 +52,7 @@
     "jest": "24.0.0",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.3",
-    "react-testing-library": "^6.0.1"
+    "react-testing-library": "^6.0.1",
+    "wsrun": "^3.6.4"
   }
 }
