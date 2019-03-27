@@ -39,6 +39,10 @@ export class DialogNode extends Component {
       return payload.intent;
     }
 
+    if (payload.property) {
+      return payload.property;
+    }
+
     return payload.$id;
   };
 
