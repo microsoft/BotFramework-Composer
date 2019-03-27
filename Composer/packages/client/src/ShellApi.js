@@ -14,7 +14,7 @@ const apiClient = new ApiClient();
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, editors, resetVisualEditor, navPath, focusPath } = state;
+  const { files, openFileIndex, resetVisualEditor, resetFormEditor, navPath, focusPath } = state;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -31,7 +31,6 @@ export function ShellApi() {
 
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('saveData', handleValueChange);
-    apiClient.registerApi('openSubEditor', openSubEditor);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -50,6 +49,15 @@ export function ShellApi() {
     }
   }, [resetVisualEditor]);
 
+  useEffect(() => {
+    if (focusPath !== '' && resetFormEditor) {
+      var editorWindow = window.frames[1];
+      apiClient.apiCallAt('reset', jp.query(dialogs, focusPath)[0], editorWindow);
+
+      actions.resetFormEditor(false); // clear the flag
+    }
+  }, [resetFormEditor]);
+
   // api to return the data should be showed in this window
   function getData(_, event) {
     const sourceWindowName = event.source.name;
@@ -61,53 +69,23 @@ export function ShellApi() {
     }
   }
 
-  function createSecondEditor(data) {
-    actions.addEditor({
-      col: 1,
-      row: 2,
-      data: data,
-      name: 'window2',
-      parent: 'window1',
-    });
-  }
-
-  function resetSecondEditor(data) {
-    apiClient.apiCallAt('reset', data, window.frames['window2']);
-  }
-
-  function openSubEditor({ data }) {
-    // NOTE: before we have more spec on how muliple editors would render, open, close,
-    //       we assume there are only two editors
-    // TODO: enable sub editors to also create sub editors
-    if (editors.length === 1) {
-      createSecondEditor(data);
-    } else {
-      resetSecondEditor(data);
-    }
-
-    return 'window2';
-  }
-
   // persist value change
-  function handleValueChange(newFileObject, event) {
-    const targetEditor = editors.find(item => window.frames[item.name] == event.source);
+  function handleValueChange(newData, event) {
+    const sourceWindowName = event.source.name;
 
-    if (targetEditor.parent !== 'window0') {
-      // forward the data change
-      apiClient.apiCallAt(
-        'saveFromChild',
-        { data: newFileObject, from: targetEditor.name },
-        window.frames[targetEditor.parent]
-      );
+    if (sourceWindowName === 'VisualEditor') {
       return;
+    } else if (sourceWindowName === 'FormEditor') {
+      console.log(newData);
+      // TODO: use jsonpath to form a new version of dialogData, and update
+      const payload = {
+        name: files[openFileIndex].name,
+        content: newData,
+      };
+      console.log(payload);
+      //actions.updateFile(payload);
+      return true;
     }
-
-    const payload = {
-      name: files[openFileIndex].name,
-      content: newFileObject.content,
-    };
-
-    actions.updateFile(payload);
   }
 
   function navTo({ path }) {

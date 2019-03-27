@@ -57,11 +57,16 @@ function ExtensionContainer() {
       return apiClient.apiCall('saveData', newData);
     },
 
-    openSubEditor: (location, data, onChange) => {
-      apiClient.apiCall('openSubEditor', { location: location, data: data }).then(function(name) {
-        subEditorCallbacks[name] = onChange;
-        return name;
-      });
+    navTo: path => {
+      return apiClient.apiCall('navTo', { path: path });
+    },
+
+    navDown: subPath => {
+      return apiClient.apiCall('navDown', { subPath: subPath });
+    },
+
+    focusTo: subPath => {
+      return apiClient.apiCall('focusTo', { subPath: subPath });
     },
   };
 
