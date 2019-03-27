@@ -1,3 +1,6 @@
+import Path from 'path';
+
+import jp from 'jsonpath';
 import { useEffect, useContext } from 'react';
 
 import { Store } from './store/index';
@@ -11,7 +14,17 @@ const apiClient = new ApiClient();
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, editors, resetVisualEditor } = state;
+  const { files, openFileIndex, editors, resetVisualEditor, navPath, focusPath } = state;
+
+  // convert file to dialogs to use as a base to navPath and focusPath
+  // TODO: create dialog api to return dialogs directly
+  const dialogs = files.reduce(
+    (result, item) => ({
+      ...result,
+      [Path.basename(item.name, '.dialog')]: JSON.parse(item.content),
+    }),
+    {}
+  );
 
   useEffect(() => {
     apiClient.connect();
@@ -19,6 +32,9 @@ export function ShellApi() {
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('openSubEditor', openSubEditor);
+    apiClient.registerApi('navTo', navTo);
+    apiClient.registerApi('navDown', navDown);
+    apiClient.registerApi('focusTo', focusTo);
 
     return () => {
       apiClient.disconnect();
@@ -26,9 +42,9 @@ export function ShellApi() {
   }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
-    if (editors.length >= 1 && resetVisualEditor) {
-      const editorWindow = window.frames[editors[0].name];
-      apiClient.apiCallAt('reset', files[index], editorWindow);
+    if (navPath !== '' && resetVisualEditor) {
+      var editorWindow = window.frames[0];
+      apiClient.apiCallAt('reset', jp.query(dialogs, navPath)[0], editorWindow);
 
       actions.resetVisualEditor(false); // clear the flag
     }
@@ -36,8 +52,13 @@ export function ShellApi() {
 
   // api to return the data should be showed in this window
   function getData(_, event) {
-    const targetEditor = editors.find(item => window.frames[item.name] == event.source);
-    return targetEditor.data;
+    const sourceWindowName = event.source.name;
+
+    if (sourceWindowName === 'VisualEditor') {
+      return jp.query(dialogs, navPath)[0];
+    } else if (sourceWindowName === 'FormEditor') {
+      return jp.query(dialogs, focusPath)[0];
+    }
   }
 
   function createSecondEditor(data) {
@@ -88,5 +109,18 @@ export function ShellApi() {
 
     actions.updateFile(payload);
   }
+
+  function navTo({ path }) {
+    actions.navTo(path);
+  }
+
+  function navDown({ subPath }) {
+    actions.focusTo(subPath);
+  }
+
+  function focusTo({ subPath }) {
+    actions.focusTo(subPath);
+  }
+
   return null;
 }

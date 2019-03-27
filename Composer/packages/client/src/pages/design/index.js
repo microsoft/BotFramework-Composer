@@ -1,3 +1,5 @@
+import Path from 'path';
+
 import React, { Fragment, useContext } from 'react';
 
 import { Tree } from './../../components/Tree';
@@ -5,30 +7,21 @@ import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 
+function getDialogName(file) {
+  return Path.basename(file.name, '.dialog');
+}
+
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, editors } = state;
+  const { files, openFileIndex, navPath, focusPath } = state;
 
   function handleFileClick(index) {
-    // keep a ref because we want to read that from outside
-
     if (index === openFileIndex) {
       return;
     }
 
     actions.setOpenFileIndex(index);
-
-    if (editors.length >= 1) {
-      actions.resetVisualEditor(true);
-    }
-
-    actions.setEditor({
-      col: 1,
-      row: 1,
-      data: files[index],
-      name: 'window1',
-      parent: 'window0', // shell
-    });
+    actions.navTo(getDialogName(files[index]));
   }
 
   return (
@@ -50,17 +43,26 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'row', height: '860px' }}>
-              {editors.length > 0 &&
-                editors.map(item => {
-                  return (
-                    <iframe
-                      key={item.name}
-                      name={item.name}
-                      style={{ height: '100%', width: '100%', border: '0px' }}
-                      src="/extensionContainer.html"
-                    />
-                  );
-                })}
+              {navPath === '' ? (
+                ''
+              ) : (
+                <iframe
+                  key="VisualEditor"
+                  name="VisualEditor"
+                  style={{ height: '100%', width: '100%', border: '0px' }}
+                  src="/extensionContainer.html"
+                />
+              )}
+              {focusPath === '' ? (
+                ''
+              ) : (
+                <iframe
+                  key="FormEditor"
+                  name="FormEditor"
+                  style={{ height: '100%', width: '100%', border: '0px' }}
+                  src="/extensionContainer.html"
+                />
+              )}
             </div>
           </Conversation>
         </div>

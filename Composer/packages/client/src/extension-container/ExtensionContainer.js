@@ -65,7 +65,7 @@ function ExtensionContainer() {
     },
   };
 
-  const RealEditor = getEditor(data);
+  const RealEditor = data === null ? '' : getEditor();
 
   return (
     <Fragment>
