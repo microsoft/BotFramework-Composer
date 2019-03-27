@@ -15,6 +15,7 @@ module.exports = {
     'no-console': 'warn',
     'dot-notation': 'error',
     'yoda': 'error',
+    'eqeqeq': 'warn',
 
     // plugin: import
     'import/first': 'error',
