@@ -101,7 +101,7 @@ export class DialogNode extends Component {
           </div>
         ) : (
           <div
-            style={{ width: '150px', height: '20px', backgroundColor: '#979797' }}
+            style={{ width: '150px', height: '20px', backgroundColor: '#979797', cursor: 'pointer' }}
             onClick={() => data.onClick(dialogPayload)}
           />
         )}
