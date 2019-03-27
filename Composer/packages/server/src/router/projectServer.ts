@@ -84,7 +84,7 @@ export const projectHandler = {
         draft.splice(index, 1);
         let item: any;
         item = Object.assign({}, body);
-        item.path = path.relative(rootPath, body.path);
+        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
         item.lastAccessTime = Date.now();
         draft.push(item);
       });
@@ -92,7 +92,7 @@ export const projectHandler = {
       recentOpenBots = produce(recentOpenBots, draft => {
         let item;
         item = Object.assign({}, body);
-        item.path = path.relative(rootPath, body.path);
+        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
         item.lastAccessTime = Date.now();
         draft.push(item);
       });
