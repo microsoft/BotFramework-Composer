@@ -5,6 +5,7 @@ export const container = css`
   background-color: #ffffff;
   height: 870px;
   overflow: auto;
+  position: relative;
 `;
 
 export const top = css`

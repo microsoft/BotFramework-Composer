@@ -14,6 +14,8 @@ const getFilesSuccess = (state, { response }) => {
     const extension = pattern.exec(value.name)[0];
     if (projectFiles.indexOf(extension) === -1) {
       files.push({ id: files.length, ...value });
+    } else {
+      state.botProjFile = value;
     }
     return files;
   }, []);
@@ -25,6 +27,11 @@ const updateFiles = (state, payload) => {
     if (file.name === payload.name) return { id: index, ...payload };
     return file;
   });
+  return state;
+};
+
+const updateProjFile = (state, payload) => {
+  state.botProjFile = payload;
   return state;
 };
 
@@ -87,4 +94,5 @@ export const reducer = createReducer({
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.EDITOR_RESET_VISUAL]: resetVisualEditor,
+  [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
 });

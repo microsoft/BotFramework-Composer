@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -8,10 +8,6 @@ import { Store } from './../../store/index';
 function DesignPage() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, editors } = state;
-
-  useEffect(() => {
-    actions.fetchFiles();
-  }, []);
 
   function handleFileClick(index) {
     // keep a ref because we want to read that from outside

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { Header } from './components/Header';
@@ -12,6 +12,10 @@ initializeIcons(/* optional base url */);
 export function App() {
   const { state, actions } = useContext(Store);
   const { botStatus } = state;
+
+  useEffect(() => {
+    actions.fetchFiles();
+  }, []);
 
   function handleFileOpen(id, path) {
     actions.closeCurrentProject();
