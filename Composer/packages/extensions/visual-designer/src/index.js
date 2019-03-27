@@ -26,7 +26,7 @@ export default class VisualDesigner extends Component {
     const data = JSON.parse(this.props.data.content);
 
     return (
-      <div className="visualdesigner-container" data-testid="visualdesigner-container">
+      <div style={{ width: '600px' }} data-testid="visualdesigner-container">
         <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
       </div>
     );
