@@ -13,6 +13,7 @@ module.exports = {
     'prefer-const': 'error',
     'no-var': 'error',
     'no-console': 'warn',
+    'dot-notation': 'error',
 
     // plugin: import
     'import/first': 'error',

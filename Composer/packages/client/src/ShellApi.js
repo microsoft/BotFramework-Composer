@@ -51,7 +51,7 @@ export function ShellApi() {
   }
 
   function resetSecondEditor(data) {
-    apiClient.apiCallAt('reset', data, window.frames['window2']);
+    apiClient.apiCallAt('reset', data, window.frames.window2);
   }
 
   function openSubEditor({ data }) {
