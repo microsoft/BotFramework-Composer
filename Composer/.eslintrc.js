@@ -19,6 +19,14 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/*.+(ts|tsx)'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint', 'prettier'],
+      rules: {
+        '@typescript-eslint/interface-name-prefix': 'off'
+      }
+    },
+    {
       files: ['**/*.+(js|jsx)'],
       parser: 'babel-eslint',
     },

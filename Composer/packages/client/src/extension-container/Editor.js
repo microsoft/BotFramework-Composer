@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+
 import getEditor from './EditorMap';
 
 function Editor(props) {
