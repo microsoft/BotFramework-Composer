@@ -14,7 +14,7 @@ class JsonEditor extends Component {
   }
 
   onChange = newContent => {
-    var newData = {
+    const newData = {
       name: this.state.data.name,
       content: newContent,
     };

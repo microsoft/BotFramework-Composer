@@ -20,7 +20,7 @@ export class CSharpLauncherConnector implements ILauncherConnector {
 
     //should get real relatively path of CSharp bot project
     const botPath: string | undefined = storage.getItem<string>('lastActiveBot');
-    var realBotPath: string | undefined;
+    let realBotPath: string | undefined;
     if (botPath !== undefined) {
       realBotPath = botPath.substr(botPath.indexOf('/') + 1);
     }

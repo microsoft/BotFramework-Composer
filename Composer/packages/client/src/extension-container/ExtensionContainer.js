@@ -20,7 +20,7 @@ import './extensionContainer.css';
 
 const apiClient = new ApiClient();
 
-var subEditorCallbacks = {};
+const subEditorCallbacks = {};
 
 function ExtensionContainer() {
   const [data, setData] = useState(null);
@@ -33,7 +33,7 @@ function ExtensionContainer() {
     });
 
     apiClient.registerApi('saveFromChild', args => {
-      var callback = subEditorCallbacks[args.from];
+      const callback = subEditorCallbacks[args.from];
       if (callback) {
         callback(args.data);
       }
