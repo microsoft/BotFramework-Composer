@@ -1,14 +1,18 @@
-import express, { Router } from 'express';
-import storage from '../storage/StorageService';
+/* eslint @typescript-eslint/no-use-before-define:warn */
+
 import fs from 'fs';
-import { FileStorage } from '../storage/FileStorage';
 import path from 'path';
+
+import express, { Router } from 'express';
+
+import storage from '../storage/StorageService';
+import { FileStorage } from '../storage/FileStorage';
 
 const router: Router = express.Router({});
 
 router.get('/', function(req: any, res: any, next: any) {
   try {
-    let storagesList = storageHandler.getStorage(storage);
+    const storagesList = storageHandler.getStorage(storage);
     res.status(200).json(storagesList);
   } catch (error) {
     res.status(400).json({ error: 'get storages error' });
@@ -33,7 +37,7 @@ router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any)
       result = fs.readFileSync(reqPath, 'utf-8');
       result = JSON.parse(result);
     } else if (stat.isDirectory()) {
-      let folderTree = storageHandler.getFolderTree(reqPath);
+      const folderTree = storageHandler.getFolderTree(reqPath);
 
       result = {
         name: path.basename(reqPath),
@@ -54,7 +58,7 @@ export const storageHandler = {
       let storagesList = _storage.getItem<string>('linkedStorages', '[]');
       storagesList = JSON.parse(storagesList);
       // deal with relative path
-      for (let item of storagesList) {
+      for (const item of storagesList) {
         if (item.type === 'LocalDrive') {
           item.path = path.resolve(item.path);
           item.path = path.normalize(item.path);
@@ -67,12 +71,12 @@ export const storageHandler = {
   },
   // get current layer files list
   getFolderTree: (folderPath: string) => {
-    let folderTree = [] as object[];
-    let items = fs.readdirSync(folderPath);
+    const folderTree = [] as object[];
+    const items = fs.readdirSync(folderPath);
 
-    for (let item of items) {
-      let itemPath = path.join(folderPath, item);
-      let tempStat = fs.statSync(itemPath);
+    for (const item of items) {
+      const itemPath = path.join(folderPath, item);
+      const tempStat = fs.statSync(itemPath);
 
       if (tempStat.isDirectory()) {
         folderTree.push({

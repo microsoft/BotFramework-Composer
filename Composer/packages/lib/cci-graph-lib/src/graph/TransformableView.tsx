@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import { R } from '../common/Schemas';
+
 import * as Constants from './Constants';
 import { Coord2d } from './GraphSchemas';
 import { MiniMap } from './MiniMap';

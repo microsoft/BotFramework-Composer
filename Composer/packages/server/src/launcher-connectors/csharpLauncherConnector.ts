@@ -1,7 +1,9 @@
+import childprocess from 'child_process';
+
+import storage from '../storage/StorageService';
+
 import { ILauncherConnector } from './interface';
 import { LauncherStatus } from './launcherStatus';
-import childprocess from 'child_process';
-import storage from '../storage/StorageService';
 
 export class CSharpLauncherConnector implements ILauncherConnector {
   private path: string;

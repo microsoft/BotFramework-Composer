@@ -21,6 +21,8 @@
     "@types/node": "11.10.5",
     "@types/react": "^16.8.7",
     "@types/react-dom": "16.8.2",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
     "@uifabric/fluent-theme": "^0.16.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "24.0.0",
@@ -53,7 +55,9 @@
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
     "test": "yarn typecheck && jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "yarn lint --fix"
   },
   "eslintConfig": {
     "extends": "react-app"

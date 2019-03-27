@@ -3,5 +3,13 @@
     "*.dialog": "json",
     "*.botproj": "json",
     "*.schema": "json"
-  }
+  },
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
 }

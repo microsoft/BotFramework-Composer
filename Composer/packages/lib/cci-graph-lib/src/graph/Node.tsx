@@ -1,7 +1,9 @@
 import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Customizer } from 'office-ui-fabric-react';
 import * as React from 'react';
+
 import * as Utils from '../common/util';
+
 import * as Constants from './Constants';
 import {
   Coord2d,

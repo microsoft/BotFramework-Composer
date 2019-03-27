@@ -1,9 +1,13 @@
+/* eslint @typescript-eslint/no-use-before-define:warn */
+
+import path from 'path';
+
 import express, { Router } from 'express';
+
 import { getFiles } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
-import path from 'path';
 const router: Router = express.Router({});
 let openBot: any | undefined;
 
@@ -36,7 +40,7 @@ router.put('/opened', function(req: any, res: any, next: any) {
 router.get('/opened/files', function(req: any, res: any, next: any) {
   if (openBot) {
     // load local project
-    let result = getFiles(openBot.path);
+    const result = getFiles(openBot.path);
     res.status(200).json(result);
   } else {
     res.status(400).json({ error: "haven't open a project" });
