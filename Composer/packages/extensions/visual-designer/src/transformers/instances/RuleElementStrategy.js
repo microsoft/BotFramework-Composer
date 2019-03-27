@@ -1,4 +1,4 @@
-import { IndexedNode } from '../helpers/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { ActionTypes } from '../constants/ActionTypes';
@@ -9,7 +9,7 @@ import { ActionTypes } from '../constants/ActionTypes';
  * then connect these nodes sequentially;
  * output a DirectedGraph prop.
  */
-export const RuleElementTransformer = {
+export const RuleElementStrategy = {
   when: input => input && input.$type && input.$type.match(/.+Rule$/),
   selectNodes: input => ({
     steps: input.steps

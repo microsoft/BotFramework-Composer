@@ -6,13 +6,14 @@ import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 
 import * as obiExample from './sample.dialog';
-import { RuleDialogTransformer } from '../../src/transformers/instances/RuleDialogTransformer';
-import { autoTransform } from '../../src/transformers/autoTransform';
+import { ObiTransformer } from '../../src/transformers/ObiTransformer';
+
+const obiTransformer = new ObiTransformer();
 
 class Demo extends Component {
   state = {
     obiJson: obiExample,
-    directedGraphSchema: autoTransform(obiExample),
+    directedGraphSchema: obiTransformer.toDirectedGraphSchema(obiExample),
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ class Demo extends Component {
     console.log('json changed:', json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: autoTransform(json),
+      directedGraphSchema: obiTransformer.toDirectedGraphSchema(json),
     });
   }
 
