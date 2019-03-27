@@ -22,21 +22,11 @@ export default class VisualDesigner extends Component {
     });
   };
 
-  getLabel = item => {
-    if (item && item.dialog) {
-      if (item.dialog.$type) {
-        return item.dialog.$type;
-      }
-    } else {
-      return item.$type;
-    }
-  };
-
   render() {
     const data = JSON.parse(this.props.data.content);
 
     return (
-      <div className="visualdesigner-container" data-testid="visualdesigner-container">
+      <div data-testid="visualdesigner-container">
         <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
       </div>
     );

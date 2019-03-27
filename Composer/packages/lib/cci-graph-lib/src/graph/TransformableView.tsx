@@ -113,7 +113,6 @@ export class TransformableView extends React.Component<TransformableViewProps, T
           >
             <div
               className={`boundary ${Constants.transformInteractiveZoneClassName}`}
-              style={{ marginLeft: '100px' }}
               ref={this.contentBoundaryElement}
             >
               <div
@@ -156,7 +155,7 @@ export class TransformableView extends React.Component<TransformableViewProps, T
 
   private initTransformParams(): void {
     this.transformParams = {
-      scale: 1,
+      scale: 0.75,
       dx: 0,
       dy: 0,
       isTranslating: false,
@@ -166,7 +165,7 @@ export class TransformableView extends React.Component<TransformableViewProps, T
     this.translateStartY = 0;
 
     if (this.props.onScaleChanged) {
-      this.props.onScaleChanged(1);
+      this.props.onScaleChanged(0.75);
     }
   }
 
