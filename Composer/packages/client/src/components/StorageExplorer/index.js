@@ -18,12 +18,14 @@ import {
   navHeader,
   leftNav,
   panelContent,
+  closeIcon,
   backIcon,
   navLinkClass,
   detailListContainer,
   title,
   detailListClass,
   fileSelectorContainer,
+  fileSelectorHeader,
 } from './styles';
 
 export function StorageExplorer(props) {
@@ -162,12 +164,12 @@ export function StorageExplorer(props) {
     const newPathItems = [];
     for (let i = 0; i < pathItems.length; i++) {
       const item = pathItems[i];
-      const currentPath = getNavItemPath(pathItems, '\\', 0, i);
+      const itemPath = getNavItemPath(pathItems, '\\', 0, i);
       newPathItems.push({
         text: item,
-        key: currentPath,
+        key: itemPath,
         onClick: () => {
-          updateCurrentPath(currentPath, storageId);
+          updateCurrentPath(itemPath, storageId);
         },
       });
     }
@@ -178,7 +180,6 @@ export function StorageExplorer(props) {
     if (storageId && path) {
       actions.fetchFolderItemsByPath(storageId, path);
       setCurrentPath(path);
-      // setPathNavItems(newPathItems);
     }
   }
 
@@ -224,7 +225,6 @@ export function StorageExplorer(props) {
     if (file.type === FileTypes.FILE) {
       return new Date(file.lastModified).toLocaleDateString();
     }
-
     return '';
   }
 
@@ -248,7 +248,7 @@ export function StorageExplorer(props) {
     return (
       <div css={leftNav}>
         <div css={navHeader} onClick={() => toggleExplorer()}>
-          <Icon iconName="Back" css={backIcon} text="Close" />
+          <Icon iconName="Back" css={closeIcon} text="Close" />
         </div>
         <div>
           <Nav
@@ -290,11 +290,24 @@ export function StorageExplorer(props) {
   function getFileSelector() {
     return (
       <div css={fileSelectorContainer}>
-        <Breadcrumb
-          items={getPathNavItems(currentPath, currentStorageId)}
-          ariaLabel={'File path'}
-          maxDisplayedItems={'1'}
-        />
+        <div css={fileSelectorHeader}>
+          <Icon
+            iconName="Back"
+            css={backIcon}
+            text="Back"
+            onClick={() => {
+              const path = currentPath.substring(0, currentPath.lastIndexOf('\\'));
+              updateCurrentPath(path, currentStorageId);
+            }}
+          />
+          <div style={{ flexGrow: 1 }}>
+            <Breadcrumb
+              items={getPathNavItems(currentPath, currentStorageId)}
+              ariaLabel={'File path'}
+              maxDisplayedItems={'1'}
+            />
+          </div>
+        </div>
         <DetailsList
           items={storageFiles}
           compact={false}
