@@ -42,7 +42,7 @@ export function ShellApi() {
 
   useEffect(() => {
     if (navPath !== '' && resetVisualEditor) {
-      var editorWindow = window.frames[0];
+      const editorWindow = window.frames[0];
       apiClient.apiCallAt('reset', jp.query(dialogs, navPath)[0], editorWindow);
 
       actions.resetVisualEditor(false); // clear the flag
@@ -51,7 +51,7 @@ export function ShellApi() {
 
   useEffect(() => {
     if (focusPath !== '' && resetFormEditor) {
-      var editorWindow = window.frames[1];
+      const editorWindow = window.frames[1];
       apiClient.apiCallAt('reset', jp.query(dialogs, focusPath)[0], editorWindow);
 
       actions.resetFormEditor(false); // clear the flag
