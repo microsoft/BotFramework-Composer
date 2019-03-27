@@ -19,7 +19,11 @@ export class ObiEditor extends Component {
     const directedGraphItems = obiTransformer.toDirectedGraphSchema(data);
 
     return (
-      <div className="obi-editor-container" data-testid="obi-editor-container">
+      <div
+        className="obi-editor-container"
+        data-testid="obi-editor-container"
+        style={{ width: '100%', height: '100%' }}
+      >
         <DialogFlowEditor
           items={directedGraphItems}
           width={width}
@@ -33,8 +37,6 @@ export class ObiEditor extends Component {
 
 ObiEditor.defaultProps = {
   data: {},
-  width: 400,
-  height: 500,
   onClickDialog: () => {},
 };
 
