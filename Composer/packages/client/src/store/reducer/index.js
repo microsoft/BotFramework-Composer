@@ -82,9 +82,14 @@ const resetVisualEditor = (state, { isReset }) => {
   return (state.resetVisualEditor = isReset);
 };
 
+const resetFormEditor = (state, { isReset }) => {
+  return (state.resetFormEditor = isReset);
+};
+
 const navigateTo = (state, { path }) => {
   if (state.navPath !== '' && state.navPath !== path) {
     state.resetVisualEditor = true;
+    state.focusPath = ''; // close form editor since it's not correct
   }
   state.navPath = path;
   return state;
@@ -95,6 +100,9 @@ const navigateDown = (state, { subPath }) => {
 };
 
 const focusTo = (state, { subPath }) => {
+  if (state.focusPath !== '' && state.focusPath !== state.navPath + subPath) {
+    state.resetFormEditor = true;
+  }
   return (state.focusPath = state.navPath + subPath);
 };
 
@@ -111,6 +119,7 @@ export const reducer = createReducer({
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.EDITOR_RESET_VISUAL]: resetVisualEditor,
   [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
+  [ActionTypes.EDITOR_RESET_FORM]: resetFormEditor,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,

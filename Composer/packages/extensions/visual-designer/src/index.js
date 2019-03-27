@@ -15,11 +15,20 @@ export default class VisualDesigner extends Component {
     this.props.onChange(data);
   };
 
+  // infer the path of data in dialog
+  // a very limited path inference, only work on ruleDialog
+  // TODO: this should buit-in into node
+  inferPath = (dialog, data) => {
+    if (dialog.rules) {
+      const index = dialog.rules.findIndex(e => JSON.stringify(e) === JSON.stringify(data));
+      return `.rules[${index}]`;
+    }
+    return '';
+  };
+
   onClick = item => {
-    this.props.shellApi.openSubEditor('right', item, newData => {
-      console.log('data get back from sub editor');
-      console.log(newData);
-    });
+    const subPath = this.inferPath(this.props.data, item);
+    this.props.shellApi.focusTo(subPath);
   };
 
   render() {

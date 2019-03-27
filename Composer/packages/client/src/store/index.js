@@ -19,6 +19,7 @@ const initialState = {
   openFileIndex: -1,
   storageExplorerStatus: 'closed',
   resetVisualEditor: false,
+  resetFormEditor: false,
 };
 
 export function StoreProvider(props) {

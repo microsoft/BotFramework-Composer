@@ -11,7 +11,7 @@ const getEditor = () => {
     return VisualDesigner;
   }
 
-  if (windw.name === 'FormEditor') {
+  if (window.name === 'FormEditor') {
     return FormEditor;
   }
   return null;
