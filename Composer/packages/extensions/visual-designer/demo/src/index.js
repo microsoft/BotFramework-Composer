@@ -6,9 +6,7 @@ import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
 
 import * as obiExample from './sample.dialog';
-import { ObiTransformer } from '../../src/transformers/ObiTransformer';
-
-const obiTransformer = new ObiTransformer();
+import { obiTransformer } from '../../src/transformers/ObiTransformer';
 
 class Demo extends Component {
   state = {

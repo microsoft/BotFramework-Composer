@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { DialogFlowEditor } from '../dialog-flow-editor/DialogFlowEditor';
-import { ObiTransformer } from '../../transformers/ObiTransformer';
-
-const obiTransformer = new ObiTransformer();
+import { obiTransformer } from '../../transformers/ObiTransformer';
 
 export class ObiEditor extends Component {
   state = {

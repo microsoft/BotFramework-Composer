@@ -2,7 +2,7 @@ import { RuleDialogStrategy } from './instances/RuleDialogStrategy';
 import { RuleElementStrategy } from './instances/RuleElementStrategy';
 import { consumeStrategy } from './helpers/consumerStrategy';
 
-export class ObiTransformer {
+class ObiTransformer {
   supportedStrategies = [RuleDialogStrategy, RuleElementStrategy];
 
   checkTransformability(input) {
@@ -19,3 +19,5 @@ export class ObiTransformer {
     return [];
   }
 }
+
+export const obiTransformer = new ObiTransformer();
