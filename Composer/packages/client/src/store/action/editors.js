@@ -13,3 +13,10 @@ export function setEditor(dispatch, editor) {
     payload: { editor },
   });
 }
+
+export function resetVisualEditor(dispatch, isReset) {
+  dispatch({
+    type: ActionsTypes.EDITOR_RESET_VISUAL,
+    payload: { isReset },
+  });
+}

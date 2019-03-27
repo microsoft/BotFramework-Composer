@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.css';
 import { App } from './App';
+import { ShellApi } from './ShellApi';
 import * as serviceWorker from './serviceWorker';
 import { StoreProvider } from './store';
 
 ReactDOM.render(
   <StoreProvider>
-    <App />
+    <Fragment>
+      <App />
+      <ShellApi />
+    </Fragment>
   </StoreProvider>,
   document.getElementById('root')
 );
