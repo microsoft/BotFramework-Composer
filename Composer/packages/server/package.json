@@ -6,7 +6,9 @@
   "scripts": {
     "start": "tsc -p tsconfig.build.json && node build/server.js",
     "test": "yarn typecheck && jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "yarn lint --fix"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +26,8 @@
     "@types/jest": "^24.0.9",
     "@types/morgan": "^1.7.35",
     "@types/node": "^11.9.6",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
     "babel-jest": "24.0.0",
     "jest": "24.0.0",
     "react-testing-library": "^6.0.1",

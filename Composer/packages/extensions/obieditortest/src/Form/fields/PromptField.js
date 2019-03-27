@@ -25,13 +25,8 @@ export function PromptField(props) {
           };
 
           return (
-            <div style={style}>
-              <TextField
-                key={field}
-                value={props.formData[field]}
-                onChange={onChange(field)}
-                label={schema[field].title}
-              />
+            <div style={style} key={field}>
+              <TextField value={props.formData[field]} onChange={onChange(field)} label={schema[field].title} />
             </div>
           );
         })}

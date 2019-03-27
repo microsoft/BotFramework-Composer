@@ -1,7 +1,9 @@
 import * as React from 'react';
+
 import { Graph } from '../../graph/Graph';
 import { GraphEdge } from '../../graph/GraphSchemas';
 import { GraphNode, Node } from '../../graph/Node';
+
 import './SimpleGraph.scss';
 import { Color, DirectedGraphItem } from './SimpleItem';
 
@@ -81,7 +83,7 @@ export class SimpleGraph extends React.Component<GraphPropsType, SimpleGraphStat
     });
   };
 
-  private getGraphNodes(items: DirectedGraphItem[]): Array<GraphNode<DirectedGraphItem>> {
+  private getGraphNodes(items: DirectedGraphItem[]): GraphNode<DirectedGraphItem>[] {
     return items.map(
       (item): GraphNode<DirectedGraphItem> => {
         return {

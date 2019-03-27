@@ -13,14 +13,16 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "client": "cd packages/client && yarn start",
-    "server": "cd packages/server && yarn start",
+    "build": "yarn build:lib && yarn build:extensions",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
-    "build": "yarn build:lib && yarn build:extensions",
-    "start": "concurrently --kill-others-on-fail \"yarn client\" \"yarn server\"",
+    "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
+    "start:client": "cd packages/client && yarn start",
+    "start:server": "cd packages/server && yarn start",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache",
+    "lint": "yarn workspaces run lint",
+    "lint:fix": "yarn workspaces run lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:cci-graph-lib\" \"yarn typecheck:server\"",
     "typecheck:cci-graph-lib": "yarn workspace cci-graph-lib typecheck",
     "typecheck:server": "yarn workspace composer-api-server typecheck"

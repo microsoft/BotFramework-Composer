@@ -81,7 +81,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "yarn lint --fix"
   },
   "eslintConfig": {
     "extends": "react-app"

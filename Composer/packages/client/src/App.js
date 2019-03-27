@@ -14,8 +14,8 @@ export function App() {
   const { botStatus } = state;
 
   function handleFileOpen(id, path) {
+    actions.closeCurrentProject();
     actions.openBotProject(id, path);
-    actions.initProjectState();
   }
 
   return (

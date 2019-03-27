@@ -16,18 +16,18 @@ export function getFiles(botProjFilePath: string = ''): any[] {
     getAllConfig(botProjFilePath);
   }
 
-  let fileList: any[] = [];
+  const fileList: any[] = [];
   // get .bot file
-  let botFileContent: string = fs.readFileSync(botFilePath, 'utf-8');
+  const botFileContent: string = fs.readFileSync(botFilePath, 'utf-8');
   fileList.push({ name: botFileName, content: botFileContent });
 
   // get 'files' from .bot file
-  let botConfig: any = JSON.parse(botFileContent);
+  const botConfig: any = JSON.parse(botFileContent);
   if (botConfig !== undefined && 'files' in botConfig && botConfig.files instanceof Array) {
-    for (let filePath of botConfig.files) {
-      let realFilePath: string = path.join(botFileDir, filePath);
+    for (const filePath of botConfig.files) {
+      const realFilePath: string = path.join(botFileDir, filePath);
       if (fs.lstatSync(realFilePath).isFile()) {
-        let content: string = fs.readFileSync(realFilePath, 'utf-8');
+        const content: string = fs.readFileSync(realFilePath, 'utf-8');
         fileList.push({ name: filePath, content: content });
       }
     }
@@ -41,6 +41,6 @@ export function updateFile(name: string, content: string, botProjFilePath: strin
     getAllConfig(botProjFilePath);
   }
 
-  let realFilePath: string = path.join(botFileDir, name);
+  const realFilePath: string = path.join(botFileDir, name);
   fs.writeFileSync(realFilePath, content, {});
 }

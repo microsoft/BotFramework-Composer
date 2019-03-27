@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 
 import { ObiEditor } from './components/obi-editor/ObiEditor';
 
-export default class extends Component {
+export default class VisualDesigner extends Component {
   constructor(props) {
     super(props);
   }
 
   onChange = newData => {
-    var newData = {
+    var data = {
       name: this.props.data.name, // this editor should not change file name
       content: JSON.stringify(newData, null, 4),
     };
-    this.props.onChange(newData);
+    this.props.onChange(data);
   };
 
   onClick = item => {

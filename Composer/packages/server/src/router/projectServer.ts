@@ -1,9 +1,13 @@
+/* eslint @typescript-eslint/no-use-before-define:warn */
+
+import path from 'path';
+
 import express, { Router } from 'express';
+
 import { getFiles } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
-import path from 'path';
 import produce from 'immer';
 import fs from 'fs';
 
