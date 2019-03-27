@@ -5,6 +5,11 @@ import { consumeStrategy } from './helpers/consumerStrategy';
 export class ObiTransformer {
   supportedStrategies = [RuleDialogStrategy, RuleElementStrategy];
 
+  checkTransformability(input) {
+    const chosenStrategy = this.supportedStrategies.some(strategy => strategy.when(input));
+    return !!chosenStrategy;
+  }
+
   toDirectedGraphSchema(input) {
     const chosenStrategy = this.supportedStrategies.find(strategy => strategy.when(input));
 
