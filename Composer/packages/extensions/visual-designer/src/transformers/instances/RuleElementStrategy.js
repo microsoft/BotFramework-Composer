@@ -1,7 +1,6 @@
 import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
-import { ActionTypes } from '../constants/ActionTypes';
 
 /**
  * When input is detected as a 'rule' element of OBI schema;
@@ -15,12 +14,9 @@ export const RuleElementStrategy = {
     steps: input.steps
       ? input.steps.map((step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, step))
       : [],
-    parents: [new IndexedNode('..', NodeTypes.Start, { $type: ActionTypes.Navigation })],
   }),
   buildEdges: nodeCollection => {
-    const { steps, parents } = nodeCollection;
-    const nodeList = [parents[0], ...steps];
-
+    const { steps: nodeList } = nodeCollection;
     const edges = [];
     for (let i = 0; i < nodeList.length - 1; i++) {
       edges.push({
