@@ -25,7 +25,7 @@ test('transforms IntentRule to steps', () => {
   expect(transformable).toBeTruthy();
 
   const nodes = obiTransformer.toDirectedGraphSchema(schema);
-  expect(nodes.length).toEqual(2);
+  expect(nodes.length).toEqual(1);
 
   nodes.forEach(node => {
     const nodeKeys = Object.keys(node);
