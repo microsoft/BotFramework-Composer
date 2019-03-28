@@ -2,7 +2,8 @@
     "services": [
     ],
     "files": [
-		"main.dialog"
+      "AddToDo.dialog",
+      "main.dialog"
     ],
     "entry": "main.dialog"
 }

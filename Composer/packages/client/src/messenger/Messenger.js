@@ -38,6 +38,10 @@ class Messenger {
   };
 
   subscribeOnce = (messageId, callback) => {
+    if (messageId in this.onceSubscribers) {
+      // eslint-disable-next-line no-console
+      console.error('Error: messageId should be unique');
+    }
     this.onceSubscribers[messageId] = callback;
   };
 

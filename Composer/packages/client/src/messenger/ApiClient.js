@@ -1,3 +1,5 @@
+import nanoid from 'nanoid';
+
 import Messenger from './Messenger';
 
 /**
@@ -5,32 +7,29 @@ import Messenger from './Messenger';
  *
  * This is a layer shared by both Shell and ExtensionContainer
  */
+const messenger = new Messenger();
 
 class ApiClient {
-  messenger = new Messenger();
-
   defaultEndpoint = window.parent;
 
   // helper function for any api call to shell
   apiCallAt = (apiName, args, endpoint) => {
-    // generate a message ID each time
-    // TODO: make this id absolute unique if necessary
-    const mid = new Date().valueOf();
-
-    this.messenger.postMessage(
-      {
-        id: mid,
-        type: 'api_call',
-        name: apiName,
-        args: args,
-      },
-      endpoint
-    );
-
     return new Promise(resolve => {
-      this.messenger.subscribeOnce(mid, function(result) {
+      const messageId = nanoid();
+
+      messenger.subscribeOnce(messageId, result => {
         resolve(result);
       });
+
+      messenger.postMessage(
+        {
+          id: messageId,
+          type: 'api_call',
+          name: apiName,
+          args: args,
+        },
+        endpoint
+      );
     });
   };
 
@@ -39,15 +38,15 @@ class ApiClient {
   };
 
   registerApi = (name, api) => {
-    this.messenger.subscribe(name, api);
+    messenger.subscribe(name, api);
   };
 
   connect = () => {
-    window.addEventListener('message', this.messenger.receiveMessage, false);
+    window.addEventListener('message', messenger.receiveMessage, false);
   };
 
   disconnect = () => {
-    window.removeEventListener('message', this.messenger.receiveMessage, false);
+    window.removeEventListener('message', messenger.receiveMessage, false);
   };
 }
 

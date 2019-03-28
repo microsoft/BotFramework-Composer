@@ -43,16 +43,6 @@ const setOpenFileIndex = (state, { index }) => {
   return (state.openFileIndex = index);
 };
 
-const addEditor = (state, { editor }) => {
-  state.editors.push(editor);
-  return state;
-};
-
-const setEditor = (state, { editor }) => {
-  state.editors = [editor];
-  return state;
-};
-
 const getStoragesSuccess = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -78,8 +68,24 @@ const getStorageFileSuccess = (state, { response }) => {
   return state;
 };
 
-const resetVisualEditor = (state, { isReset }) => {
-  return (state.resetVisualEditor = isReset);
+const navigateTo = (state, { path }) => {
+  if (state.navPath !== path) {
+    state.navPath = path;
+    state.focusPath = '';
+  }
+  return state;
+};
+
+const navigateDown = (state, { subPath }) => {
+  state.navPath = state.navPath + subPath;
+  return state;
+};
+
+const focusTo = (state, { subPath }) => {
+  if (state.focusPath !== state.navPath + subPath) {
+    state.resetFormEditor = true;
+  }
+  return (state.focusPath = state.navPath + subPath);
 };
 
 export const reducer = createReducer({
@@ -88,11 +94,11 @@ export const reducer = createReducer({
   [ActionTypes.FILES_UPDATE]: updateFiles,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
   [ActionTypes.OPEN_FILE_INDEX_SET]: setOpenFileIndex,
-  [ActionTypes.EDITOR_ADD]: addEditor,
-  [ActionTypes.EDITOR_SET]: setEditor,
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
-  [ActionTypes.EDITOR_RESET_VISUAL]: resetVisualEditor,
   [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
+  [ActionTypes.NAVIGATE_TO]: navigateTo,
+  [ActionTypes.NAVIGATE_DOWN]: navigateDown,
+  [ActionTypes.FOCUS_TO]: focusTo,
 });
