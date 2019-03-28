@@ -75,7 +75,8 @@ export const RuleDialogStrategy = {
  * Helpers
  */
 
-const selectRecognizers = input => [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input['recognizer'])];
+const selectRecognizers = input =>
+  input.recognizer ? [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)] : [];
 
 const createRuleTypeSelector = targetRuleType => input =>
   input.rules
