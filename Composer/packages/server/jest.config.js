@@ -3,4 +3,5 @@ module.exports = {
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
   },
+  watchPathIgnorePatterns: ['<rootDir>/__tests__/mocks'],
 };

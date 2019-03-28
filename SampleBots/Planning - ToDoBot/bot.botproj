@@ -2,12 +2,7 @@
     "services": [
     ],
     "files": [
-      "main.dialog",
-      "AddToDo.dialog",
-      "ClearToDos.dialog",
-      "DeleteToDo.dialog",
-      "ShowToDos.dialog",
-      "MyCustomDialog.dialog"
+		  "*.dialog"
     ],
     "entry": "main.dialog"
 }
