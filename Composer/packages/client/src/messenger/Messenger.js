@@ -38,6 +38,9 @@ class Messenger {
   };
 
   subscribeOnce = (messageId, callback) => {
+    if (messageId in this.onceSubscribers) {
+      console.log('Error: messageId should be unique');
+    }
     this.onceSubscribers[messageId] = callback;
   };
 

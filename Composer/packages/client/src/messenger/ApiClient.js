@@ -1,3 +1,5 @@
+import nanoid from 'nanoid';
+
 import Messenger from './Messenger';
 
 /**
@@ -13,13 +15,11 @@ class ApiClient {
 
   // helper function for any api call to shell
   apiCallAt = (apiName, args, endpoint) => {
-    // generate a message ID each time
-    // TODO: make this id absolute unique if necessary
-    const mid = new Date().valueOf();
+    const messsageId = nanoid();
 
     this.messenger.postMessage(
       {
-        id: mid,
+        id: messsageId,
         type: 'api_call',
         name: apiName,
         args: args,
@@ -28,7 +28,7 @@ class ApiClient {
     );
 
     return new Promise(resolve => {
-      this.messenger.subscribeOnce(mid, function(result) {
+      this.messenger.subscribeOnce(messsageId, function(result) {
         resolve(result);
       });
     });
