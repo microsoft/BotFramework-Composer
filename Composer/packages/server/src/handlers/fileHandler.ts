@@ -42,5 +42,10 @@ export function updateFile(name: string, content: string, botProjFilePath: strin
   }
 
   const realFilePath: string = path.join(botFileDir, name);
-  fs.writeFileSync(realFilePath, content, {});
+  try {
+    const parsed = JSON.parse(content);
+    fs.writeFileSync(realFilePath, JSON.stringify(parsed, null, 2), {});
+  } catch (err) {
+    console.error(err);
+  }
 }

@@ -11,13 +11,7 @@ import { mergedSchema } from './schema/appschema';
 import './App.css';
 
 const getType = data => {
-  if (data.dialog) {
-    if (data.dialog.$type) {
-      return data.dialog.$type;
-    }
-  } else {
-    return data.$type;
-  }
+  return data.$type;
 };
 
 export const FormEditor = props => {
@@ -87,7 +81,7 @@ export const FormEditor = props => {
           noValidate
           className="schemaForm"
           onChange={onChange}
-          formData={data.dialog || data}
+          formData={data}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
         >
