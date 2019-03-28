@@ -77,11 +77,9 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                         .AddFolderResources(botProject.path);
                     botResourceManager.Changed += (IBotResourceProvider provider, IBotResource resource) =>
                     {
-                        //Console.WriteLine($"Provider.Id: {provider.Id}\nID:{resource.Id}\nTYPE:{resource.ResourceType}\nSource:{resource.Source}\nNAME:{resource.Name}\n\n");
                         var watcher = EventWatcher.GetWatcher();
                         watcher.FileChange(resource.Id, resource.Name, resource.ResourceType);
                     };
-                    //botResourceManager.MonitorChanges = true;
                     // create LG 
                     var lg = new LGLanguageGenerator(botResourceManager);
                     options.Middleware.Add(new RegisterClassMiddleware<IBotResourceProvider>(botResourceManager));

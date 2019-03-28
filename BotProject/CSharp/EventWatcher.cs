@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BotProject
 {
@@ -13,9 +10,9 @@ namespace BotProject
 
         private static object locker;
 
-
         private static EventWatcher _watcher;
 
+        // Need to clean the watcher after restarting
         public static void Clean()
         {
             _watcher = null;
@@ -23,6 +20,7 @@ namespace BotProject
 
         public static EventWatcher GetWatcher()
         {
+            // Keep a global watcher for restarting the server
             if (_watcher == null)
             {
                 _watcher = new EventWatcher();
@@ -35,14 +33,16 @@ namespace BotProject
 
         public void FileChange(string path, string id, string resourceType)
         {
+            // Ensure thread safe
             lock (locker)
             {
                 FileChangeArgs args = new FileChangeArgs(path, id, resourceType);
 
                 var curPostingTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-                // we need to ensure the updating time is no less than 3 secs
-                if (curPostingTime - lastPostingTime > 3)
+                // Need to ensure the updating time is no less than 3 secs since 
+                // it might deliver many events at the same time.
+                if (curPostingTime - lastPostingTime >= 3)
                 {
                     OnChanged(args);
                 }
@@ -57,7 +57,6 @@ namespace BotProject
             handler?.Invoke(this, e);
         }
 
-        // provide remaining implementation for the class
     }
 
     public class FileChangeArgs: EventArgs

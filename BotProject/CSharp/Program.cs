@@ -23,11 +23,10 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
                 watcher.Changed += (object sender, FileChangeArgs param) =>
                 {
-                    Console.WriteLine($"ID: {param.id}\nPATH: {param.path}\nTYPE: {param.resourceType}\n\n");
                     host.Dispose();
                     host.StopAsync().GetAwaiter().GetResult();
-                    Console.WriteLine($"Restating the server...");
                 };
+                // The thread will block in here until a valid event triggered.
                 host.Run();
             }
         }
