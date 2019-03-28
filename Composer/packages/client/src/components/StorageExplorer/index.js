@@ -185,8 +185,7 @@ export function StorageExplorer(props) {
 
   function getNavItemPath(array, seperator, start, end) {
     if (!start) start = 0;
-    // todo: enable user select root path like 'D:\', currently server will crash.
-    if (!end) end = array.length - 1;
+    if (!end && end !== 0) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
   }
@@ -200,7 +199,7 @@ export function StorageExplorer(props) {
   }
 
   function formatBytes(bytes, decimals) {
-    if (bytes == 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes';
     const k = 1024,
       dm = decimals <= 0 ? 0 : decimals || 2,
       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
