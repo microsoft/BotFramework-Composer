@@ -13,7 +13,7 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPath, focusPath } = state;
+  const { files, openFileIndex } = state;
 
   function handleFileClick(index) {
     actions.setOpenFileIndex(index);
@@ -39,26 +39,18 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'row', height: '860px' }}>
-              {navPath === '' ? (
-                ''
-              ) : (
-                <iframe
-                  key="VisualEditor"
-                  name="VisualEditor"
-                  style={{ height: '100%', width: '100%', border: '0px' }}
-                  src="/extensionContainer.html"
-                />
-              )}
-              {focusPath === '' ? (
-                ''
-              ) : (
-                <iframe
-                  key="FormEditor"
-                  name="FormEditor"
-                  style={{ height: '100%', width: '100%', border: '0px' }}
-                  src="/extensionContainer.html"
-                />
-              )}
+              <iframe
+                key="VisualEditor"
+                name="VisualEditor"
+                style={{ height: '100%', width: '100%', border: '0px' }}
+                src="/extensionContainer.html"
+              />
+              <iframe
+                key="FormEditor"
+                name="FormEditor"
+                style={{ height: '100%', width: '100%', border: '0px' }}
+                src="/extensionContainer.html"
+              />
             </div>
           </Conversation>
         </div>

@@ -23,7 +23,7 @@ const apiClient = new ApiClient();
 const subEditorCallbacks = {};
 
 function ExtensionContainer() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState('');
 
   useEffect(() => {
     apiClient.connect();
@@ -70,7 +70,7 @@ function ExtensionContainer() {
     },
   };
 
-  const RealEditor = data === null ? '' : getEditor();
+  const RealEditor = data === '' ? '' : getEditor();
 
   return (
     <Fragment>

@@ -14,7 +14,7 @@ const apiClient = new ApiClient();
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, resetVisualEditor, resetFormEditor, navPath, focusPath } = state;
+  const { files, openFileIndex, navPath, focusPath } = state;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -41,32 +41,28 @@ export function ShellApi() {
   }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
-    if (navPath !== '' && resetVisualEditor) {
-      const editorWindow = window.frames[0];
-      apiClient.apiCallAt('reset', jp.query(dialogs, navPath)[0], editorWindow);
-
-      actions.resetVisualEditor(false); // clear the flag
-    }
-  }, [resetVisualEditor]);
+    var editorWindow = window.frames[0];
+    const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
+    apiClient.apiCallAt('reset', data, editorWindow);
+  }, [navPath]);
 
   useEffect(() => {
-    if (focusPath !== '' && resetFormEditor) {
-      const editorWindow = window.frames[1];
-      apiClient.apiCallAt('reset', jp.query(dialogs, focusPath)[0], editorWindow);
-
-      actions.resetFormEditor(false); // clear the flag
-    }
-  }, [resetFormEditor]);
+    var editorWindow = window.frames[1];
+    const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
+    apiClient.apiCallAt('reset', data, editorWindow);
+  }, [focusPath]);
 
   // api to return the data should be showed in this window
   function getData(_, event) {
     const sourceWindowName = event.source.name;
 
-    if (sourceWindowName === 'VisualEditor') {
+    if (sourceWindowName === 'VisualEditor' && navPath !== '') {
       return jp.query(dialogs, navPath)[0];
-    } else if (sourceWindowName === 'FormEditor') {
+    } else if (sourceWindowName === 'FormEditor' && focusPath !== '') {
       return jp.query(dialogs, focusPath)[0];
     }
+
+    return '';
   }
 
   // persist value change
