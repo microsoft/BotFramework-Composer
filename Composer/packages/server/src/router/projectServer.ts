@@ -1,15 +1,15 @@
 /* eslint @typescript-eslint/no-use-before-define:warn */
 
 import path from 'path';
+import fs from 'fs';
 
 import express, { Router } from 'express';
+import produce from 'immer';
 
 import { getFiles } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
-import produce from 'immer';
-import fs from 'fs';
 
 const router: Router = express.Router({});
 let openBot: any | undefined = null;
@@ -60,7 +60,7 @@ router.get('/opened/files', function(req: any, res: any, next: any) {
   if (openBot) {
     // load local project
     try {
-      let result = getFiles(openBot.path);
+      const result = getFiles(openBot.path);
       res.status(200).json(result);
     } catch (error) {
       res.status(400).json(error);
@@ -76,26 +76,24 @@ export const projectHandler = {
   updateOpenBot: (body: any, storage: FileStorage) => {
     body.path = path.normalize(body.path);
     // update recent open bot list
-    let recentOpenBots: Array<object> = storage.getItem('recentAccessedBots', []);
+    let recentOpenBots: object[] = storage.getItem('recentAccessedBots', []);
 
     // if this openBot in List, update position
-    let index = recentOpenBots.findIndex((value: any) => {
+    const index = recentOpenBots.findIndex((value: any) => {
       return path.resolve(value.path) === body.path;
     });
     const rootPath = process.cwd();
     if (index >= 0) {
       recentOpenBots = produce(recentOpenBots, draft => {
         draft.splice(index, 1);
-        let item: any;
-        item = Object.assign({}, body);
+        const item = Object.assign({}, body);
         item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
         item.lastAccessTime = Date.now();
         draft.push(item);
       });
     } else {
       recentOpenBots = produce(recentOpenBots, draft => {
-        let item;
-        item = Object.assign({}, body);
+        const item = Object.assign({}, body);
         item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
         item.lastAccessTime = Date.now();
         draft.push(item);
@@ -106,7 +104,7 @@ export const projectHandler = {
   },
   checkOpenBotInStorage: (storage: FileStorage, setting: FileStorage) => {
     const openLastActiveBot = setting.getItem<boolean>('openLastActiveBot', false);
-    let recentOpenBots = storage.getItem('recentAccessedBots', []);
+    const recentOpenBots = storage.getItem('recentAccessedBots', []);
     if (openLastActiveBot && recentOpenBots.length > 0) {
       // deal with relative path
       recentOpenBots[recentOpenBots.length - 1].path = path.resolve(recentOpenBots[recentOpenBots.length - 1].path);

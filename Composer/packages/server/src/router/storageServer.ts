@@ -2,10 +2,12 @@
 
 import fs from 'fs';
 import path from 'path';
+
 import express, { Router } from 'express';
+import produce from 'immer';
+
 import storage from '../storage/StorageService';
 import { FileStorage } from '../storage/FileStorage';
-import produce from 'immer';
 
 const router: Router = express.Router({});
 
@@ -60,8 +62,8 @@ export const storagesServerRouter: Router = router;
 export const storageHandler = {
   getStorage: (_storage: FileStorage) => {
     try {
-      let storagesList = produce(_storage.getItem('linkedStorages', []), draft => {
-        for (let item of draft) {
+      const storagesList = produce(_storage.getItem('linkedStorages', []), draft => {
+        for (const item of draft) {
           if (item.type === 'LocalDrive') {
             // deal with relative path
             item.path = path.resolve(item.path);
