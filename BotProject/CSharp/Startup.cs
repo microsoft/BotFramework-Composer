@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BotProject;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder.AI.LanguageGeneration;
@@ -17,6 +18,7 @@ using Microsoft.Bot.Builder.TestBot.Json.Recognizers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -54,7 +56,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 UserState = userState,
 			    RootDialogFile = botProject.path + rootDialog
             };
-
+            
             services.AddBot<IBot>(
                 (IServiceProvider sp) =>
                 {
@@ -73,7 +75,13 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                         // add current folder, it's project file, packages, projects, etc.
                         .AddProjectResources(HostingEnvironment.ContentRootPath)
                         .AddFolderResources(botProject.path);
-
+                    botResourceManager.Changed += (IBotResourceProvider provider, IBotResource resource) =>
+                    {
+                        //Console.WriteLine($"Provider.Id: {provider.Id}\nID:{resource.Id}\nTYPE:{resource.ResourceType}\nSource:{resource.Source}\nNAME:{resource.Name}\n\n");
+                        var watcher = EventWatcher.GetWatcher();
+                        watcher.FileChange(resource.Id, resource.Name, resource.ResourceType);
+                    };
+                    //botResourceManager.MonitorChanges = true;
                     // create LG 
                     var lg = new LGLanguageGenerator(botResourceManager);
                     options.Middleware.Add(new RegisterClassMiddleware<IBotResourceProvider>(botResourceManager));
@@ -90,15 +98,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseDefaultFiles()
-                .UseStaticFiles()
-                .UseBotFramework();
-            app.UseExceptionHandler();
+            app.UseBotFramework();
         }
 
         private void RegisterTypes()
         {
+            Factory.Reset();
             Factory.Register("Microsoft.RuleRecognizer", typeof(RuleRecognizer));
         }
     }
