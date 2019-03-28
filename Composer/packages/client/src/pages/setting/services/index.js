@@ -3,7 +3,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
-import 'codemirror/theme/material.css';
+import 'codemirror/theme/neat.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
@@ -14,7 +14,7 @@ import { Store } from './../../../store/index';
 window.jsonlint = jsonlint;
 
 const cmOptions = {
-  theme: 'material',
+  theme: 'neat',
   mode: {
     name: 'javascript',
     json: true,
@@ -41,12 +41,15 @@ export const Services = () => {
   }, [botProjFile]);
 
   const updateFormData = (editor, data, value) => {
-    if (editor.state.lint.marked.length == 0) {
+    try {
       if (!botProjFile.name) return;
+      JSON.parse(value);
       updateProjFile({
         name: botProjFile.name,
         content: value,
       });
+    } catch (err) {
+      //TODO
     }
   };
 
