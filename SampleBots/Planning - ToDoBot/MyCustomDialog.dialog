@@ -1,0 +1,16 @@
+{
+  "$schema": "../../Schemas/app.schema",
+  "$type": "Microsoft.RuleDialog",
+  "$id": "MyCustomDialong",
+  "rules": [
+    {
+      "$type": "Microsoft.FallbackRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "You can't do that!"
+        }
+      ]
+    }
+  ]
+}

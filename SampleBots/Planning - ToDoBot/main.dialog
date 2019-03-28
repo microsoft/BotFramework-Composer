@@ -9,9 +9,9 @@
     "$type": "Microsoft.RegexRecognizer",
     "rules": {
       "AddIntent": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+      "ClearIntent": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
       "DeleteIntent": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-      "ShowIntent": "(?:show|see|view) .*(?:to-do|todo|task)",
-      "ClearIntent": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
+      "ShowIntent": "(?:show|see|view) .*(?:to-do|todo|task)"
     }
   },
   "rules": [
@@ -20,7 +20,7 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first one\" to get started."
+          "activity": "Howdy! What do you want to do?"
         }
       ]
     },
@@ -31,8 +31,9 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/AddToDo.dialog"
-          }
+            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/AddToDo.dialog"
+          },
+          "options": {}
         }
       ]
     },
@@ -43,8 +44,9 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/DeleteToDo.dialog"
-          }
+            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
+          },
+          "options": {}
         }
       ]
     },
@@ -55,8 +57,9 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/ClearToDos.dialog"
-          }
+            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ClearToDos.dialog"
+          },
+          "options": {}
         }
       ]
     },
@@ -67,8 +70,9 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/ShowToDos.dialog"
-          }
+            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ShowToDos.dialog"
+          },
+          "options": {}
         }
       ]
     }

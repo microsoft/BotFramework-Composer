@@ -1,7 +1,7 @@
 {
   "$schema": "../../Schemas/app.schema",
   "$type": "Microsoft.RuleDialog",
-  "$id":  "ClearToDoDialog",
+  "$id": "ClearToDoDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
@@ -11,8 +11,8 @@
       "steps": [
         {
           "$type": "Microsoft.ChangeList",
-          "changeType": "4",
-          "listProperty": "user.todos"
+          "listProperty": "user.todos",
+          "changeType": "clear"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -20,5 +20,5 @@
         }
       ]
     }
-  ]   
+  ]
 }

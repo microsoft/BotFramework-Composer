@@ -6,7 +6,8 @@
       "AddToDo.dialog",
       "ClearToDos.dialog",
       "DeleteToDo.dialog",
-      "ShowToDos.dialog"
+      "ShowToDos.dialog",
+      "MyCustomDialog.dialog"
     ],
     "entry": "main.dialog"
 }
