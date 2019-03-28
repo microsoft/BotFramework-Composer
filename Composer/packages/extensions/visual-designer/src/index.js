@@ -36,7 +36,7 @@ export default class VisualDesigner extends Component {
   inferClickActions = node => {
     const { payload } = node;
     const { $type: nodeType } = payload;
-    const { Expand, Focus, OpenLink } = NodeClickActionTypes;
+    const { Expand, Focus } = NodeClickActionTypes;
 
     if (!nodeType) {
       return Focus;
@@ -47,7 +47,7 @@ export default class VisualDesigner extends Component {
     if (nodeType.match(/^.+Recognizer$/)) {
       return Focus;
     } else if (nodeType.match(/^.+Rule$/)) {
-      if (Array.isArray(payload['steps'])) return Expand;
+      if (Array.isArray(payload.steps)) return Expand;
       else return Focus;
     }
     return null;
