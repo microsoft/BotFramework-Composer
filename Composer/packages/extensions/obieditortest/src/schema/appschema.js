@@ -278,9 +278,15 @@ export function getMergedSchema(dialogFiles) {
           dialog: {
             title: 'Dialog',
             description: 'This is the dialog to call.',
-            type: 'string',
-            enum: dialogFiles.map(file => file.relativePath),
-            enumNames: dialogFiles.map(file => file.name),
+            type: 'object',
+            properties: {
+              $ref: {
+                title: 'Dialog',
+                type: 'string',
+                enum: dialogFiles.map(file => file.path),
+                enumNames: dialogFiles.map(file => file.name),
+              },
+            },
           },
           options: {
             type: 'object',
