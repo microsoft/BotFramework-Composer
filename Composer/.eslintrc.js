@@ -11,7 +11,11 @@ module.exports = {
     'no-dupe-class-members': 'off',
     'no-undef': 'off', // ts compiler catches this
     'prefer-const': 'error',
+    'no-var': 'error',
     'no-console': 'warn',
+    'dot-notation': 'error',
+    'yoda': 'error',
+    'eqeqeq': 'warn',
 
     // plugin: import
     'import/first': 'error',

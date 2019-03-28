@@ -27,7 +27,7 @@ export function ShellApi() {
 
   useEffect(() => {
     if (editors.length >= 1 && resetVisualEditor) {
-      var editorWindow = window.frames[editors[0].name];
+      const editorWindow = window.frames[editors[0].name];
       apiClient.apiCallAt('reset', files[index], editorWindow);
 
       actions.resetVisualEditor(false); // clear the flag
@@ -36,7 +36,7 @@ export function ShellApi() {
 
   // api to return the data should be showed in this window
   function getData(_, event) {
-    var targetEditor = editors.find(item => window.frames[item.name] == event.source);
+    const targetEditor = editors.find(item => window.frames[item.name] == event.source);
     return targetEditor.data;
   }
 
@@ -51,7 +51,7 @@ export function ShellApi() {
   }
 
   function resetSecondEditor(data) {
-    apiClient.apiCallAt('reset', data, window.frames['window2']);
+    apiClient.apiCallAt('reset', data, window.frames.window2);
   }
 
   function openSubEditor({ data }) {
