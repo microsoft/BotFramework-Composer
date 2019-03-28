@@ -16,9 +16,17 @@ export default class VisualDesigner extends Component {
     this.props.onChange(data);
   };
 
-  // According to the implementation of transformer strategy,
-  // the id of a node is always a string carried its path in the whole json.
-  inferPath = jsonPathString => {
+  /**
+   * This function is used to normalized the path string:
+   *
+   * - 'node.id' is always a jsonPath-styled string indicates
+   *    where it comes from the whole OBI json.
+   *    Like '$.rules[0]'.
+   *
+   * -  Shell API requires a path without the '$' prefix.
+   *    Like '.rules[0]'.
+   */
+  normalizeDataPath = jsonPathString => {
     if (jsonPathString && jsonPathString[0] === '$') {
       return jsonPathString.substr(1);
     }
@@ -49,7 +57,7 @@ export default class VisualDesigner extends Component {
     const { navDown, focusTo, navTo } = this.props.shellApi;
     const { Expand, Focus, OpenLink } = NodeClickActionTypes;
 
-    const subPath = this.inferPath(node.id);
+    const subPath = this.normalizeDataPath(node.id);
 
     switch (this.inferClickActions(node)) {
       case Expand:
