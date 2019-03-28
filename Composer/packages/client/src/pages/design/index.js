@@ -1,6 +1,7 @@
 import Path from 'path';
 
 import React, { Fragment, useContext } from 'react';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -28,7 +29,18 @@ function DesignPage() {
           <div>
             <Tree variant="large">
               <div style={{ padding: '10px', color: '#4f4f4f' }}>
-                <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Dialogs</div>
+                <div
+                  style={{
+                    fontWeight: 'bold',
+                    marginBottom: '5px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>Dialogs</div>
+                  <IconButton iconProps={{ iconName: 'Add' }} title="New Dialog" ariaLabel="New Dialog" />
+                </div>
                 <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
               </div>
             </Tree>

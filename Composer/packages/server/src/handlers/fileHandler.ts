@@ -4,6 +4,8 @@ import { promisify } from 'util';
 
 import glob from 'globby';
 
+import DIALOG_TEMPLATE from '../dialogTemplate.json';
+
 const readFile = promisify(fs.readFile);
 const lstat = promisify(fs.lstat);
 const writeFile = promisify(fs.writeFile);
@@ -87,4 +89,15 @@ export async function updateFile(name: string, content: string, botProjFilePath:
 
   const parsed = JSON.parse(content);
   await writeFile(realFilePath, JSON.stringify(parsed, null, 2) + '\n');
+}
+
+export async function createFromTemplate(name: string, botProjFilePath: string = ''): Promise<void> {
+  if (!botProjFilePath) {
+    throw new Error(`No Bot Project! Cannot update ${name}`);
+  }
+
+  const { botFileDir } = getAllConfig(botProjFilePath);
+  const realFilePath: string = path.join(botFileDir, `${name}.dialog`);
+
+  await writeFile(realFilePath, JSON.stringify({ ...DIALOG_TEMPLATE, $id: name }, null, 2) + '\n', {});
 }
