@@ -9,8 +9,6 @@ import Messenger from './Messenger';
  */
 const messenger = new Messenger();
 
-const messenger = new Messenger();
-
 class ApiClient {
   defaultEndpoint = window.parent;
 
