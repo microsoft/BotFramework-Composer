@@ -75,6 +75,7 @@ export class DialogNode extends Component {
   render() {
     const { data } = this.props;
     const dialogPayload = data[PAYLOAD_KEY] || {};
+    const onClickContent = () => data.onClick({ id: data.id, payload: dialogPayload });
 
     // todo: this logic to configure the UI for these nodes should be via a function like below:
     // const { header, color, label, subLabel } = this.getNodeOptions(dialogPayload);
@@ -82,7 +83,7 @@ export class DialogNode extends Component {
     return (
       <Fragment>
         {!this.isBranch(dialogPayload) ? (
-          <div style={nodeStyle} onClick={() => data.onClick(dialogPayload)}>
+          <div style={nodeStyle} onClick={onClickContent}>
             <div
               style={{
                 height: '30px',
@@ -105,23 +106,9 @@ export class DialogNode extends Component {
           </div>
         ) : (
           <div
-            style={{
-              width: '150px',
-              height: '20px',
-              backgroundColor: '#ffffff',
-            }}
-          >
-            <svg
-              style={{ marginLeft: '48px' }}
-              width="50"
-              height="20"
-              viewBox="0 0 50 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill="#979797" />
-            </svg>
-          </div>
+            style={{ width: '150px', height: '20px', backgroundColor: '#979797', cursor: 'pointer' }}
+            onClick={onClickContent}
+          />
         )}
       </Fragment>
     );

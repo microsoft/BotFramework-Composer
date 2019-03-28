@@ -43,16 +43,6 @@ const setOpenFileIndex = (state, { index }) => {
   return (state.openFileIndex = index);
 };
 
-const addEditor = (state, { editor }) => {
-  state.editors.push(editor);
-  return state;
-};
-
-const setEditor = (state, { editor }) => {
-  state.editors = [editor];
-  return state;
-};
-
 const getStoragesSuccess = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -104,8 +94,6 @@ export const reducer = createReducer({
   [ActionTypes.FILES_UPDATE]: updateFiles,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
   [ActionTypes.OPEN_FILE_INDEX_SET]: setOpenFileIndex,
-  [ActionTypes.EDITOR_ADD]: addEditor,
-  [ActionTypes.EDITOR_SET]: setEditor,
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
