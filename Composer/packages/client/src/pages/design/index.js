@@ -22,7 +22,10 @@ function DesignPage() {
   }
 
   const breadcrumbItems = useMemo(() => {
-    return navPathItems.map(item => ({ ...item, onClick: (event, item) => actions.updateNavPathItems(item) }));
+    return navPathItems.map(item => ({
+      ...item,
+      onClick: (_event, item) => actions.updateNavPathItems(item.key, item.text),
+    }));
   }, [actions, navPathItems]);
 
   return (
@@ -44,7 +47,7 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'column', height: '860px' }}>
-              <Breadcrumb items={breadcrumbItems} ariaLabel={'Navigation Path'} />
+              <Breadcrumb key={breadcrumbItems.length} items={breadcrumbItems} ariaLabel={'Navigation Path'} />
               <div style={{ display: 'flex', flexDirection: 'row', flexGrow: '1', height: '100%' }}>
                 <iframe
                   key="VisualEditor"

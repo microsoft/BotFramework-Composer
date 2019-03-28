@@ -96,6 +96,10 @@ const updateNavPathItems = (state, { path, name }) => {
     navPathItems.splice(navPathItems.length - num);
     navPathItems.push({ text: name.substring(name.lastIndexOf('.') + 1), key: path });
     state.navPathItems = navPathItems;
+    if (state.focusPath !== path) {
+      state.navPath = path;
+      state.focusPath = '';
+    }
   }
   return state;
 };
