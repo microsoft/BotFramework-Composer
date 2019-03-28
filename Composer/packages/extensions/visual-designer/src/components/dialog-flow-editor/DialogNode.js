@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import './DialogFlowEditor.css';
 import { PAYLOAD_KEY } from '../../utils/constant';
 
-import diamond from './diamond.svg';
-
 const nodeStyle = {
   width: 150,
   height: 150,
@@ -107,12 +105,9 @@ export class DialogNode extends Component {
           </div>
         ) : (
           <div style={{ width: '150px', height: '20px', backgroundColor: '#ffffff' }}>
-            <img
-              style={{ marginLeft: '48px', cursor: 'pointer' }}
-              src={diamond}
-              alt="diamond icon"
-              onClick={() => data.onClick(dialogPayload)}
-            />
+            <svg width="50" height="20" viewBox="0 0 50 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill="#979797" />
+            </svg>
           </div>
         )}
       </Fragment>
