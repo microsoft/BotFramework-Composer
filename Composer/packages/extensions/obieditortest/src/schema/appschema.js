@@ -1455,7 +1455,6 @@ export function getMergedSchema(dialogFiles) {
         title: 'Regular Expression Recognizer',
         description: 'Example regular expression recognizer.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1476,8 +1475,11 @@ export function getMergedSchema(dialogFiles) {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          pattern: {
-            type: 'string',
+          rules: {
+            type: 'object',
+            additionalProperties: {
+              type: 'string',
+            },
           },
         },
         required: ['$type'],
@@ -1486,16 +1488,6 @@ export function getMergedSchema(dialogFiles) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['pattern'],
-          },
-        ],
       },
       'Microsoft.RuleDialog': {
         $role: 'unionType(Microsoft.IDialog)',
