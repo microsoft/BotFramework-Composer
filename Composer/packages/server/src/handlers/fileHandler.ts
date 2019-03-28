@@ -8,7 +8,7 @@ let botFileName: string;
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;
   botFileDir = path.dirname(botFilePath);
-  botFileName = botFilePath.substr(botFilePath.lastIndexOf('/') + 1);
+  botFileName = path.basename(botFilePath);
 }
 
 export function getFiles(botProjFilePath: string = ''): any[] {
@@ -43,24 +43,4 @@ export function updateFile(name: string, content: string, botProjFilePath: strin
 
   const realFilePath: string = path.join(botFileDir, name);
   fs.writeFileSync(realFilePath, content, {});
-}
-
-export function searchFilePath(folderPath: any, fileName: string): string {
-  const items = fs.readdirSync(folderPath);
-  let path = '';
-
-  for (const item of items) {
-    const itemPath = folderPath + '/' + item;
-    if (item === fileName) {
-      return itemPath;
-    } else {
-      const isDirectory = fs.statSync(itemPath).isDirectory();
-
-      if (isDirectory && path === '') {
-        path = searchFilePath(itemPath, fileName);
-      }
-    }
-  }
-  console.log(path);
-  return path;
 }

@@ -19,7 +19,7 @@ by default return
     id: "default"
     name: "This pc",
     type: "LocalDrive",
-    path: "storage path"
+    path: "storage absolute path"
 }
 ```
 
@@ -52,19 +52,20 @@ GET api/storage/default/c:/bots
 {
     name: "bots",
     parent: "c:/",
-    foolderTree: 
+    children: 
     {
-        folders:[
         {
             name: "config",
-            parent: "bots",
-        }],
-        files:[{
-            name: "a.png"
-            parent: "bots",
+            type:"folder",
+            path: "absolute path",
+        },
+        {
+            name: "a.png",
+            type:"file",
+            path: "absolute path",
             lastModified: 201231290, // ms since epoch
             size: 20kb
-        }]
+        }
     }
 }
 
@@ -92,27 +93,35 @@ check if there is a opened projects, return path and storage if any, sample resp
 }
 ```
 
-`POST api/projects/opened`
-open a bot project
+`PUT api/projects/opened`
 
-sample
+open a bot project, request body path must be a absolute path of .bot or .botproj file
+
 ```
-request body:
+request body
 {
-    path: "absolute path"
+    storageId: "default"
+    path: "C:/bots/bot1.bot"
 }
 
-response:
-[{
-    name: "",
-    content:"",
-    path:""
-  },{
-    ……
-  }
-]
+
 ```
 
 `GET api/projects/opened/files`
 
-resolved all files inside this project`
+resolved all files inside this project
+
+sample
+```
+response:
+[
+    {
+        name: "",
+        content:""
+    },
+    {
+        name:"",
+        content:""
+    }
+]
+```

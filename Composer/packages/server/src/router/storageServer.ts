@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import express, { Router } from 'express';
+import produce from 'immer';
 
 import storage from '../storage/StorageService';
 import { FileStorage } from '../storage/FileStorage';
@@ -32,18 +33,24 @@ router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any)
       res.status(404).json(err);
       return;
     }
+    // deal with root path incomplete
+    reqPath = reqPath + '/';
     reqPath = path.normalize(reqPath);
-    if (stat.isFile()) {
-      result = fs.readFileSync(reqPath, 'utf-8');
-      result = JSON.parse(result);
-    } else if (stat.isDirectory()) {
-      const folderTree = storageHandler.getFolderTree(reqPath);
+    try {
+      if (stat.isFile()) {
+        result = fs.readFileSync(reqPath, 'utf-8');
+        result = JSON.parse(result);
+      } else if (stat.isDirectory()) {
+        const folderTree = storageHandler.getFolderTree(reqPath);
 
-      result = {
-        name: path.basename(reqPath),
-        path: path.dirname(reqPath),
-        children: folderTree,
-      };
+        result = {
+          name: path.basename(reqPath),
+          parent: path.dirname(reqPath),
+          children: folderTree,
+        };
+      }
+    } catch (error) {
+      res.status(400).json(error);
     }
     res.status(200).json(result);
   });
@@ -55,15 +62,15 @@ export const storagesServerRouter: Router = router;
 export const storageHandler = {
   getStorage: (_storage: FileStorage) => {
     try {
-      let storagesList = _storage.getItem<string>('linkedStorages', '[]');
-      storagesList = JSON.parse(storagesList);
-      // deal with relative path
-      for (const item of storagesList) {
-        if (item.type === 'LocalDrive') {
-          item.path = path.resolve(item.path);
-          item.path = path.normalize(item.path);
+      const storagesList = produce(_storage.getItem('linkedStorages', []), draft => {
+        for (const item of draft) {
+          if (item.type === 'LocalDrive') {
+            // deal with relative path
+            item.path = path.resolve(item.path);
+            item.path = path.normalize(item.path);
+          }
         }
-      }
+      });
       return storagesList;
     } catch (error) {
       return error;
@@ -73,25 +80,29 @@ export const storageHandler = {
   getFolderTree: (folderPath: string) => {
     const folderTree = [] as object[];
     const items = fs.readdirSync(folderPath);
-
     for (const item of items) {
-      const itemPath = path.join(folderPath, item);
-      const tempStat = fs.statSync(itemPath);
-
-      if (tempStat.isDirectory()) {
-        folderTree.push({
-          name: item,
-          type: 'folder',
-          path: itemPath,
-        });
-      } else if (tempStat.isFile()) {
-        folderTree.push({
-          name: item,
-          size: tempStat.size,
-          type: 'file',
-          lastModified: tempStat.mtimeMs,
-          path: itemPath,
-        });
+      try {
+        const itemPath = path.join(folderPath, item);
+        const tempStat = fs.statSync(itemPath);
+        if (tempStat.isDirectory()) {
+          folderTree.push({
+            name: item,
+            type: 'folder',
+            path: itemPath,
+          });
+        } else if (tempStat.isFile()) {
+          folderTree.push({
+            name: item,
+            size: tempStat.size,
+            type: 'file',
+            lastModified: tempStat.mtimeMs,
+            path: itemPath,
+          });
+        }
+      } catch (error) {
+        // log error, and continute getting the path which can access
+        console.log(error);
+        continue;
       }
     }
     return folderTree;

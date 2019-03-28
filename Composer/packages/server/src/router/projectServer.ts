@@ -1,15 +1,18 @@
 /* eslint @typescript-eslint/no-use-before-define:warn */
 
 import path from 'path';
+import fs from 'fs';
 
 import express, { Router } from 'express';
+import produce from 'immer';
 
 import { getFiles } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
+
 const router: Router = express.Router({});
-let openBot: any | undefined;
+let openBot: any | undefined = null;
 
 // read from memory
 router.get('/opened', function(req: any, res: any, next: any) {
@@ -30,8 +33,24 @@ router.get('/opened', function(req: any, res: any, next: any) {
 router.put('/opened', function(req: any, res: any, next: any) {
   // check whether the data is completed
   if (req.body.path && req.body.storageId) {
-    openBot = projectHandler.updateOpenBot(req.body, storage);
-    res.status(200).json({ result: 'update opened project successfully' });
+    // path must be a .bot/.botproj file path
+    if (path.extname(req.body.path) !== '.bot' && path.extname(req.body.path) !== '.botproj') {
+      res
+        .status(400)
+        .json({ error: 'path error. can not accept this type of file, please give .bot or .botproj file' });
+      return;
+    }
+    // check if the path is correct
+    if (!fs.existsSync(req.body.path)) {
+      res.status(404).json({ error: 'file not found' });
+      return;
+    }
+    try {
+      openBot = projectHandler.updateOpenBot(req.body, storage);
+      res.status(200).json({ result: 'update opened project successfully' });
+    } catch (error) {
+      res.status(400).json(error);
+    }
   } else {
     res.status(400).json({ error: 'please give the project path and storageId' });
   }
@@ -40,8 +59,12 @@ router.put('/opened', function(req: any, res: any, next: any) {
 router.get('/opened/files', function(req: any, res: any, next: any) {
   if (openBot) {
     // load local project
-    const result = getFiles(openBot.path);
-    res.status(200).json(result);
+    try {
+      const result = getFiles(openBot.path);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json(error);
+    }
   } else {
     res.status(400).json({ error: "haven't open a project" });
   }
@@ -53,17 +76,38 @@ export const projectHandler = {
   updateOpenBot: (body: any, storage: FileStorage) => {
     body.path = path.normalize(body.path);
     // update recent open bot list
-    let recentOpenBots = storage.getItem<string>('recentAccessedBots', '[]');
-    recentOpenBots = JSON.parse(recentOpenBots);
-    recentOpenBots.push(body);
-    storage.setItem('recentAccessedBots', JSON.stringify(recentOpenBots));
+    let recentOpenBots: object[] = storage.getItem('recentAccessedBots', []);
+
+    // if this openBot in List, update position
+    const index = recentOpenBots.findIndex((value: any) => {
+      return path.resolve(value.path) === body.path;
+    });
+    const rootPath = process.cwd();
+    if (index >= 0) {
+      recentOpenBots = produce(recentOpenBots, draft => {
+        draft.splice(index, 1);
+        const item = Object.assign({}, body);
+        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
+        item.lastAccessTime = Date.now();
+        draft.push(item);
+      });
+    } else {
+      recentOpenBots = produce(recentOpenBots, draft => {
+        const item = Object.assign({}, body);
+        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
+        item.lastAccessTime = Date.now();
+        draft.push(item);
+      });
+    }
+    storage.setItem('recentAccessedBots', recentOpenBots);
     return body;
   },
   checkOpenBotInStorage: (storage: FileStorage, setting: FileStorage) => {
     const openLastActiveBot = setting.getItem<boolean>('openLastActiveBot', false);
-    let recentOpenBots = storage.getItem<string>('recentAccessedBots', '[]');
-    recentOpenBots = JSON.parse(recentOpenBots);
+    const recentOpenBots = storage.getItem('recentAccessedBots', []);
     if (openLastActiveBot && recentOpenBots.length > 0) {
+      // deal with relative path
+      recentOpenBots[recentOpenBots.length - 1].path = path.resolve(recentOpenBots[recentOpenBots.length - 1].path);
       return recentOpenBots[recentOpenBots.length - 1];
     } else {
       return null;
