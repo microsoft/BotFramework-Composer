@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+DRY_RUN=$1
+ROOT_DIR=$(git rev-parse --show-toplevel)
+UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+
+function run_command {
+  if [[ "$DRY_RUN" == "--dry-run" ]]; then
+    echo "DRY_RUN: $1"
+  else
+    echo $1
+    eval $1
+  fi
+}
+
+function report_if_failure {
+  code=$1
+  msg=$2
+
+  if [[ "$code" != "0" ]]; then
+    echo $msg
+    exit $code
+  fi
+}
+
+# check to see if repository is dirty
+run_command "git fetch"
+if ! git diff $UPSTREAM --quiet; then
+  echo "There are changes that have not been committed or pushed."
+  read -p "Do you want to proceed? (This will reset your current branch to $UPSTREAM) (y|n) " -r
+  echo
+  case "$REPLY" in
+  y|Y )
+    echo "Getting the latest bits..."
+    run_command "git reset --hard $UPSTREAM"
+    report_if_failure $? "Problem updating from github.";;
+  * )
+    echo "Commit your changes, push and then try again."
+    echo "Exiting..."
+    exit;;
+  esac
+fi
+
+run_command "cd $ROOT_DIR/Composer"
+# update dependencies
+run_command "yarn"
+report_if_failure $? "Error installing dependencies."
+
+# build project
+run_command "yarn build"
+report_if_failure $? "Error building project."
+
+# start app
+run_command "yarn start"
+report_if_failure $? "Error starting app."
