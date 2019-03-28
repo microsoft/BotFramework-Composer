@@ -35,6 +35,7 @@ export function ShellApi() {
     apiClient.connect();
 
     apiClient.registerApi('getData', getData);
+    apiClient.registerApi('getDialogs', getDialogs);
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);

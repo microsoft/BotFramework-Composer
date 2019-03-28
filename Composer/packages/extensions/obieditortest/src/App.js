@@ -6,7 +6,7 @@ import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropd
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { mergedSchema } from './schema/appschema';
+import { getMergedSchema } from './schema/appschema';
 
 import './App.css';
 
@@ -15,8 +15,10 @@ const getType = data => {
 };
 
 export const FormEditor = props => {
-  const { data, memory } = props;
+  const { data, memory, dialogs } = props;
   const type = getType(data);
+
+  const mergedSchema = getMergedSchema(dialogs);
 
   const dialogSchema = {
     definitions: { ...mergedSchema.definitions },
