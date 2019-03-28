@@ -23,3 +23,10 @@ export function focusTo(dispatch, subPath) {
     payload: { subPath },
   });
 }
+
+export function updateNavPathItems(dispatch, path, name) {
+  dispatch({
+    type: ActionTypes.NAVPATHITEMS_UPDATE,
+    payload: { path, name },
+  });
+}

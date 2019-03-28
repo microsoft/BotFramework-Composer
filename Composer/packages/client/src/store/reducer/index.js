@@ -88,6 +88,18 @@ const focusTo = (state, { subPath }) => {
   return (state.focusPath = state.navPath + subPath);
 };
 
+const updateNavPathItems = (state, { path, name }) => {
+  if (path && typeof path === 'string') {
+    const navPathItems = state.navPathItems;
+    const items = path.split('.');
+    const num = navPathItems.length - items.length + 1;
+    navPathItems.splice(navPathItems.length - num);
+    navPathItems.push({ text: name.substring(name.lastIndexOf('.') + 1), key: path });
+    state.navPathItems = navPathItems;
+  }
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
   [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
@@ -101,4 +113,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
+  [ActionTypes.NAVPATHITEMS_UPDATE]: updateNavPathItems,
 });
