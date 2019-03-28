@@ -50,7 +50,7 @@ function ExtensionContainer() {
     return () => {
       apiClient.disconnect();
     };
-  }, []);
+  }, [shellApi]);
 
   const shellApi = {
     getData: () => {
@@ -63,6 +63,10 @@ function ExtensionContainer() {
 
     saveData: newData => {
       return apiClient.apiCall('saveData', newData);
+    },
+
+    flushToDisk: () => {
+      return apiClient.apiCall('flushToDisk');
     },
 
     navTo: path => {
@@ -90,7 +94,13 @@ function ExtensionContainer() {
       {RealEditor === '' ? (
         ''
       ) : (
-        <RealEditor data={data} dialogs={dialogs} onChange={shellApi.saveData} shellApi={shellApi} />
+        <RealEditor
+          data={data}
+          dialogs={dialogs}
+          onChange={shellApi.saveData}
+          onBlur={shellApi.flushToDisk}
+          shellApi={shellApi}
+        />
       )}
     </Fragment>
   );

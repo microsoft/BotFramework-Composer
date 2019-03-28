@@ -1,8 +1,9 @@
 import Path from 'path';
 
 import jp from 'jsonpath';
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useContext, useMemo, useRef } from 'react';
 import set from 'lodash.set';
+import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -16,6 +17,8 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, navPath, focusPath } = state;
+  // use a ref to keep a ref to the debounced function across renders
+  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -40,6 +43,7 @@ export function ShellApi() {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
+    apiClient.registerApi('flushToDisk', flushToDisk);
 
     return () => {
       apiClient.disconnect();
@@ -91,8 +95,15 @@ export function ShellApi() {
       };
       // TODO: save this gracefully
       // current newData has some field sets to undefined, which is not friendly to runtime
-      actions.updateFile(payload);
+      updateFile(payload);
+
       return true;
+    }
+  }
+
+  function flushToDisk() {
+    if (updateFile.flush) {
+      updateFile.flush();
     }
   }
 

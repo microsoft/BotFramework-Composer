@@ -60,7 +60,6 @@ export async function updateFile(dispatch, { name, content }) {
 
 export async function updateProjFile(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/fileserver`, { name, content });
     dispatch({
       type: ActionTypes.PROJ_FILE_UPDATE_SUCCESS,
       payload: {
@@ -68,6 +67,7 @@ export async function updateProjFile(dispatch, { name, content }) {
         content,
       },
     });
+    await axios.put(`${BASEURL}/fileserver`, { name, content });
   } catch (err) {
     dispatch({
       type: ActionTypes.PROJ_FILE_UPDATE_FAILURE,
