@@ -9,6 +9,7 @@ export const Store = React.createContext();
 
 const initialState = {
   files: [],
+  botProjFile: {},
   editors: [],
   storages: [],
   currentStorageFiles: [],

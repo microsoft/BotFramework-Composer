@@ -41,7 +41,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
 
 export async function updateFile(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/fileserver`, payload);
+    await axios.put(`${BASEURL}/fileserver`, { name, content });
     dispatch({
       type: ActionTypes.FILES_UPDATE,
       payload: {
@@ -52,6 +52,25 @@ export async function updateFile(dispatch, { name, content }) {
   } catch (err) {
     dispatch({
       type: ActionTypes.FILES_UPDATE_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
+export async function updateProjFile(dispatch, { name, content }) {
+  try {
+    await axios.put(`${BASEURL}/fileserver`, { name, content });
+    dispatch({
+      type: ActionTypes.PROJ_FILE_UPDATE_SUCCESS,
+      payload: {
+        name,
+        content,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.PROJ_FILE_UPDATE_FAILURE,
       payload: null,
       error: err,
     });
