@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-var botFilePath: string;
-var botFileDir: string;
-var botFileName: string;
+let botFilePath: string;
+let botFileDir: string;
+let botFileName: string;
 
 function getAllConfig(botProjFilePath: string): void {
   botFilePath = botProjFilePath;

@@ -4,16 +4,14 @@ import { render } from 'react-dom';
 import './style.css';
 import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
-import { ObiTransformer } from '../../src/utils/obi-transformer';
+import { obiTransformer } from '../../src/transformers/ObiTransformer';
 
 import * as obiExample from './sample.dialog';
 
 class Demo extends Component {
-  obiTransformer = new ObiTransformer();
-
   state = {
     obiJson: obiExample,
-    directedGraphSchema: this.obiTransformer.toDirectedGraphSchema(obiExample),
+    directedGraphSchema: obiTransformer.toDirectedGraphSchema(obiExample),
   };
 
   constructor(props) {
@@ -22,10 +20,9 @@ class Demo extends Component {
 
   onJsonChanged(json) {
     console.log('json changed:', json);
-    const dgSchema = this.obiTransformer.toDirectedGraphSchema(json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: dgSchema,
+      directedGraphSchema: obiTransformer.toDirectedGraphSchema(json),
     });
   }
 
