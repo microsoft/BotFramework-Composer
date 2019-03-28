@@ -29,6 +29,7 @@ module.exports = {
   },
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
+    '\\.(jpg|jpeg|png|svg)$': '<rootDir>/jestMocks/styleMock.js',
     '\\.(s)?css$': '<rootDir>/jestMocks/styleMock.js',
   },
   testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/'],
