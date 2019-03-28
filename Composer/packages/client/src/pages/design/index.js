@@ -13,7 +13,7 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex } = state;
+  const { files, openFileIndex, focusPath } = state;
 
   function handleFileClick(index) {
     actions.setOpenFileIndex(index);
@@ -48,7 +48,12 @@ function DesignPage() {
               <iframe
                 key="FormEditor"
                 name="FormEditor"
-                style={{ height: '100%', width: '100%', border: '0px' }}
+                style={{
+                  height: '100%',
+                  width: focusPath ? '100%' : '0%',
+                  border: '0px',
+                  transition: 'width 0.2s ease-in-out',
+                }}
                 src="/extensionContainer.html"
               />
             </div>
