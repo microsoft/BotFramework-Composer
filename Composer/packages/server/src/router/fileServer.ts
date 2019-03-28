@@ -1,34 +1,34 @@
-import express, { Router } from 'express';
+import express, { Router, Request, Response } from 'express';
 
-import { getFiles, updateFile } from '../handlers/fileHandler';
+import { getFiles, updateFile, FileInfo } from '../handlers/fileHandler';
 import setting from '../storage/SettingService';
 import storage from '../storage/StorageService';
 
 const router: Router = express.Router({});
 
-router.get('/', function(req: any, res: any, next: any) {
-  let fileList: any[] = [];
+router.get('/', async (req: Request, res: Response) => {
+  let fileList: FileInfo[] = [];
   const openLastActiveBot = setting.getItem<boolean>('openLastActiveBot');
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
     if (openLastActiveBot) {
-      fileList = getFiles(lastActiveBot);
+      fileList = await getFiles(lastActiveBot);
     }
     res.status(200).json(fileList);
   } catch (error) {
-    res.status(400).json({ error: 'get file list error' });
+    res.status(400).json({ error: error.message });
   }
 });
 
-router.put('/', function(req: any, res: any, next: any) {
+router.put('/', async (req: Request, res: Response) => {
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
-    updateFile(req.body.name, req.body.content, lastActiveBot);
+    await updateFile(req.body.name, req.body.content, lastActiveBot);
     res.send('OK');
   } catch (error) {
-    res.status(400).json({ error: 'save error' });
+    res.status(400).json({ error: error.message });
   }
 });
 

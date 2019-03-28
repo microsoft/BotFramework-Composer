@@ -1,34 +1,61 @@
 import fs from 'fs';
 import path from 'path';
+import { promisify } from 'util';
 
-let botFilePath: string;
-let botFileDir: string;
-let botFileName: string;
+import glob from 'globby';
 
-function getAllConfig(botProjFilePath: string): void {
-  botFilePath = botProjFilePath;
-  botFileDir = path.dirname(botFilePath);
-  botFileName = path.basename(botFilePath);
+const readFile = promisify(fs.readFile);
+const lstat = promisify(fs.lstat);
+const writeFile = promisify(fs.writeFile);
+
+interface BotFileConfig {
+  botFilePath: string;
+  botFileDir: string;
+  botFileName: string;
 }
 
-export function getFiles(botProjFilePath: string = ''): any[] {
-  if (botProjFilePath) {
-    getAllConfig(botProjFilePath);
+export interface FileInfo {
+  name: string;
+  content: string;
+}
+
+interface BotConfig {
+  files: string[];
+}
+
+function getAllConfig(botProjFilePath: string): BotFileConfig {
+  return {
+    botFilePath: botProjFilePath,
+    botFileDir: path.dirname(botProjFilePath),
+    botFileName: path.basename(botProjFilePath),
+  };
+}
+
+export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]> {
+  if (!botProjFilePath) {
+    throw new Error(`No Bot Project! Cannot find files.`);
   }
 
-  const fileList: any[] = [];
+  const fileList: FileInfo[] = [];
+
+  const { botFileName, botFilePath, botFileDir } = getAllConfig(botProjFilePath);
+
   // get .bot file
-  const botFileContent: string = fs.readFileSync(botFilePath, 'utf-8');
+  const botFileContent = await readFile(botFilePath, 'utf-8');
   fileList.push({ name: botFileName, content: botFileContent });
 
   // get 'files' from .bot file
-  const botConfig: any = JSON.parse(botFileContent);
-  if (botConfig !== undefined && 'files' in botConfig && botConfig.files instanceof Array) {
-    for (const filePath of botConfig.files) {
-      const realFilePath: string = path.join(botFileDir, filePath);
-      if (fs.lstatSync(realFilePath).isFile()) {
-        const content: string = fs.readFileSync(realFilePath, 'utf-8');
-        fileList.push({ name: filePath, content: content });
+  const botConfig: BotConfig = JSON.parse(botFileContent);
+  if (botConfig !== undefined && Array.isArray(botConfig.files)) {
+    for (const pattern of botConfig.files) {
+      const paths = await glob(pattern, { cwd: botFileDir });
+
+      for (const filePath of paths) {
+        const realFilePath: string = path.join(botFileDir, filePath);
+        if ((await lstat(realFilePath)).isFile()) {
+          const content: string = await readFile(realFilePath, 'utf-8');
+          fileList.push({ name: filePath, content: content });
+        }
       }
     }
   }
@@ -36,11 +63,12 @@ export function getFiles(botProjFilePath: string = ''): any[] {
   return fileList;
 }
 
-export function updateFile(name: string, content: string, botProjFilePath: string = ''): void {
-  if (botProjFilePath) {
-    getAllConfig(botProjFilePath);
+export async function updateFile(name: string, content: string, botProjFilePath: string = ''): Promise<void> {
+  if (!botProjFilePath) {
+    throw new Error(`No Bot Project! Cannot update ${name}`);
   }
-
+  const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, name);
-  fs.writeFileSync(realFilePath, content, {});
+
+  await writeFile(realFilePath, content);
 }

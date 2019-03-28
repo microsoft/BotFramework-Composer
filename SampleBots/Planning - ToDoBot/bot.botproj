@@ -2,7 +2,7 @@
     "services": [
     ],
     "files": [
-		"main.dialog"
+		  "*.dialog"
     ],
     "entry": "main.dialog"
 }
