@@ -1,7 +1,7 @@
 import Path from 'path';
 
 import jp from 'jsonpath';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useMemo } from 'react';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -18,12 +18,16 @@ export function ShellApi() {
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
-  const dialogs = files.reduce(
-    (result, item) => ({
-      ...result,
-      [Path.basename(item.name, '.dialog')]: JSON.parse(item.content),
-    }),
-    {}
+  const dialogs = useMemo(
+    () =>
+      files.reduce(
+        (result, item) => ({
+          ...result,
+          [Path.basename(item.name, '.dialog')]: JSON.parse(item.content),
+        }),
+        {}
+      ),
+    [files]
   );
 
   useEffect(() => {
@@ -44,13 +48,13 @@ export function ShellApi() {
     const editorWindow = window.frames[0];
     const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
     apiClient.apiCallAt('reset', data, editorWindow);
-  }, [navPath]);
+  }, [dialogs, navPath]);
 
   useEffect(() => {
     const editorWindow = window.frames[1];
     const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
     apiClient.apiCallAt('reset', data, editorWindow);
-  }, [focusPath]);
+  }, [dialogs, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(_, event) {
