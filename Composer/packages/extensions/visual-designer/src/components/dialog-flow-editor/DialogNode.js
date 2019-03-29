@@ -119,7 +119,7 @@ export class DialogNode extends Component {
             themeColor={this.getHeaderColor(dialogPayload)}
             header={this.getHeader(dialogPayload)}
             label={this.getLabel(dialogPayload)}
-            sublabel={this.getSubLabel(dialogPayload)}
+            details={this.getSubLabel(dialogPayload)}
             onClick={onClickContent}
           />
         ) : (
