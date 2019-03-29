@@ -2,61 +2,16 @@
 
 import fs from 'fs';
 import path from 'path';
+import { promisify } from 'util';
 
-import express, { Router } from 'express';
+import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
 import storage from '../storage/StorageService';
 import { FileStorage } from '../storage/FileStorage';
 
 const router: Router = express.Router({});
-
-router.get('/', function(req: any, res: any, next: any) {
-  try {
-    const storagesList = storageHandler.getStorage(storage);
-    res.status(200).json(storagesList);
-  } catch (error) {
-    res.status(400).json({ error: 'get storages error' });
-  }
-});
-
-// match absolute path
-router.get('/:storageId/blobs/:path(*)', function(req: any, res: any, next: any) {
-  let reqPath: string = req.params.path;
-  if (!reqPath) {
-    res.status(400).json({ error: 'no path' });
-    return;
-  }
-  let result: any;
-  fs.stat(reqPath, (err, stat) => {
-    if (err) {
-      res.status(404).json(err);
-      return;
-    }
-    // deal with root path incomplete
-    reqPath = reqPath + '/';
-    reqPath = path.normalize(reqPath);
-    try {
-      if (stat.isFile()) {
-        result = fs.readFileSync(reqPath, 'utf-8');
-        result = JSON.parse(result);
-      } else if (stat.isDirectory()) {
-        const folderTree = storageHandler.getFolderTree(reqPath);
-
-        result = {
-          name: path.basename(reqPath),
-          parent: path.dirname(reqPath),
-          children: folderTree,
-        };
-      }
-    } catch (error) {
-      res.status(400).json(error);
-    }
-    res.status(200).json(result);
-  });
-});
-
-export const storagesServerRouter: Router = router;
+const fsStat = promisify(fs.stat);
 
 // decouple all handlers for easy testing
 export const storageHandler = {
@@ -89,6 +44,7 @@ export const storageHandler = {
             name: item,
             type: 'folder',
             path: itemPath,
+            lastModified: tempStat.mtimeMs,
           });
         } else if (tempStat.isFile()) {
           folderTree.push({
@@ -107,4 +63,47 @@ export const storageHandler = {
     }
     return folderTree;
   },
+
+  getFilesAndFolders: async (req: Request, res: Response) => {
+    let reqPath: string = req.params.path;
+    if (!reqPath || !path.isAbsolute(reqPath)) {
+      res.status(400).json({ error: 'no path or path is not absolute' });
+      return;
+    }
+    let result: any;
+    try {
+      const stat = await fsStat(reqPath);
+      reqPath = path.normalize(reqPath);
+      if (stat.isFile()) {
+        result = fs.readFileSync(reqPath, 'utf-8');
+        result = JSON.parse(result);
+      } else if (stat.isDirectory()) {
+        const folderTree = storageHandler.getFolderTree(reqPath);
+        result = {
+          name: path.basename(reqPath),
+          parent: path.dirname(reqPath),
+          children: folderTree,
+        };
+      }
+    } catch (error) {
+      res.status(400).json(error);
+      return;
+    }
+    res.status(200).json(result);
+    return;
+  },
 };
+
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const storagesList = storageHandler.getStorage(storage);
+    res.status(200).json(storagesList);
+  } catch (error) {
+    res.status(400).json({ error: 'get storages error' });
+  }
+});
+
+// match absolute path
+router.get('/:storageId/blobs/:path(*)', storageHandler.getFilesAndFolders);
+
+export const storagesServerRouter: Router = router;
