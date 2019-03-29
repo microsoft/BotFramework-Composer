@@ -31,7 +31,7 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "../../../SampleBots/Planning - ToDoBot/main.dialog"
+            "$ref": "../../SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
           },
           "options": {}
         }
@@ -44,7 +44,7 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
+            "$ref": "../../SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
           },
           "options": {}
         }
@@ -57,7 +57,7 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ClearToDos.dialog"
+            "$ref": "../../SampleBots/Planning - ToDoBot/ClearToDos.dialog"
           },
           "options": {}
         }
@@ -70,7 +70,7 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ShowToDos.dialog"
+            "$ref": "../../SampleBots/Planning - ToDoBot/ShowToDos.dialog"
           },
           "options": {}
         }

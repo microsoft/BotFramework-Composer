@@ -8,7 +8,7 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "You can't do that!"
+          "activity": "Go fly a kite!"
         }
       ]
     }
