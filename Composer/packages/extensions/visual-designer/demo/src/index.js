@@ -47,6 +47,9 @@ class Demo extends Component {
               height={500}
               onClickDialog={nodeContent => {
                 console.log('Clicked node:', nodeContent);
+                this.setState({
+                  obiJson: nodeContent.payload,
+                });
               }}
             />
           </div>
