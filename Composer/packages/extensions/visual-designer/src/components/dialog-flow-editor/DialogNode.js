@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './DialogFlowEditor.css';
 import { PAYLOAD_KEY } from '../../utils/constant';
 import { isRecognizerType, isIntentType, isWelcomeType, isCallDialogType } from '../../utils/obiTypeInferrers';
 import { Diamond } from '../nodes/templates/Diamond';

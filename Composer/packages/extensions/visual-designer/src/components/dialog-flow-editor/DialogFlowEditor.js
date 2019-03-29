@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DirectedGraph } from 'cci-graph-lib';
 
-import './DialogFlowEditor.css';
 import { DialogNode } from './DialogNode';
 
 export class DialogFlowEditor extends Component {
