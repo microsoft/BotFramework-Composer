@@ -8,16 +8,6 @@ import { Diamond } from '../nodes/templates/Diamond';
 import { FormCard } from '../nodes/templates/FormCard';
 
 export class DialogNode extends Component {
-  getLabel = payload => {
-    if (isIntentType(payload.$type)) return '';
-    if (payload.dialog) {
-      if (payload.dialog.$type) {
-        return payload.dialog.$type.split('Microsoft.')[1];
-      }
-    }
-    return payload.$type.split('.')[1];
-  };
-
   createCallDialogLink = data => {
     const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
     // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
@@ -44,6 +34,19 @@ export class DialogNode extends Component {
         {dialogName}
       </span>
     );
+  };
+
+  getLabel = payload => {
+    if (isIntentType(payload.$type)) return '';
+
+    if (isCallDialogType(payload.$type)) return '';
+
+    if (payload.dialog) {
+      if (payload.dialog.$type) {
+        return payload.dialog.$type.split('Microsoft.')[1];
+      }
+    }
+    return payload.$type.split('.')[1];
   };
 
   getSubLabel = payload => {
@@ -82,7 +85,7 @@ export class DialogNode extends Component {
     }
 
     if (isCallDialogType($type)) {
-      return 'Dialog';
+      return 'CallDialog';
     }
 
     return '';
