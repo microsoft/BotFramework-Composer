@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import './DialogFlowEditor.css';
 import { PAYLOAD_KEY } from '../../utils/constant';
+import { Diamond } from '../nodes/templates/Diamond';
+import { FormCard } from '../nodes/templates/FormCard';
 
 const nodeStyle = {
   width: 150,
@@ -83,47 +85,15 @@ export class DialogNode extends Component {
     return (
       <Fragment>
         {!this.isBranch(dialogPayload) ? (
-          <div style={nodeStyle} onClick={onClickContent}>
-            <div
-              style={{
-                height: '30px',
-                width: '100%',
-                backgroundColor: this.getHeaderColor(dialogPayload),
-                color: '#ffffff',
-                fontWeight: '700',
-                paddingLeft: '8px',
-                paddingBottom: '8px',
-              }}
-            >
-              {this.getHeader(dialogPayload)}
-            </div>
-            <div style={{ fontWeight: '400', paddingLeft: '5px', marginTop: '5px' }}>
-              {this.getLabel(dialogPayload)}
-            </div>
-            <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px' }}>
-              {this.getSubLabel(dialogPayload)}
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              width: '150px',
-              height: '20px',
-              backgroundColor: '#ffffff',
-            }}
+          <FormCard
+            themeColor={this.getHeaderColor(dialogPayload)}
+            header={this.getHeader(dialogPayload)}
+            label={this.getLabel(dialogPayload)}
+            sublabel={this.getSubLabel(dialogPayload)}
             onClick={onClickContent}
-          >
-            <svg
-              style={{ marginLeft: '48px' }}
-              width="50"
-              height="20"
-              viewBox="0 0 50 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill="#979797" />
-            </svg>
-          </div>
+          />
+        ) : (
+          <Diamond onClick={onClickContent} />
         )}
       </Fragment>
     );
