@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, IconButton, TextField, Button, Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react';
 
 const nameRegex = /^[a-zA-Z0-9-_]+$/;
@@ -54,6 +54,10 @@ const buildDialogOptions = () => {
 export default function NewDialogModal(props) {
   const { isOpen, onDismiss, onSubmit } = props;
   const [formData, setFormData] = useState({ errors: {} });
+
+  useEffect(() => {
+    setFormData({ errors: {} });
+  }, [isOpen]);
 
   const updateForm = field => (e, newValue) => {
     let value = newValue;
