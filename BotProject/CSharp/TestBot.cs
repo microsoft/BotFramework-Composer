@@ -2,37 +2,68 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
+using Microsoft.Bot.Builder.Dialogs.Declarative.Debugger;
 using Microsoft.Bot.Builder.Dialogs.Rules;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Recognizers.Text;
+using Newtonsoft.Json;
+
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
     public class TestBot : IBot
     {
         private DialogSet _dialogs;
-        private SemaphoreSlim _semaphore;
 
-        private readonly IDialog rootDialog;
-        public TestBot(TestBotAccessors accessors)
+        private IDialog rootDialog;
+
+        private readonly ResourceExplorer resourceExplorer;
+
+        private TestBotAccessors accessors;
+
+        private Source.IRegistry registry;
+
+
+        public TestBot(TestBotAccessors accessors, ResourceExplorer resourceExplorer, Source.IRegistry registry)
         {
-            // create the DialogSet from accessor
-            rootDialog = DeclarativeTypeLoader.Load<IDialog>(File.ReadAllText(accessors.RootDialogFile));
-            //rootDialog = CognitiveLoader.Load<IDialog>(File.ReadAllText(@"Samples\Planning 6 - DoSteps\main.dialog"));
+            this.registry = registry;
+            this.accessors = accessors;
+            this.resourceExplorer = resourceExplorer;
+            this.resourceExplorer.Changed += ResourceExplorer_Changed;
+            //this.resourceExplorer.Deleted += ResourceExplorer_Changed;
+
+            LoadRootDialog();
+        }
+
+        private void ResourceExplorer_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (Path.GetExtension(e.FullPath) == ".dialog")
+            {
+                LoadRootDialog();
+            }
+        }
+
+        private void LoadRootDialog()
+        {
+            var rootFile = resourceExplorer.GetResource(accessors.RootDialogFile);
+            rootDialog = DeclarativeTypeLoader.Load<IDialog>(rootFile.FullName, resourceExplorer, registry);
             _dialogs = new DialogSet(accessors.ConversationDialogState);
             _dialogs.Add(rootDialog);
         }
 
         public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (rootDialog is RuleDialog planningDialog)
+            if (rootDialog is AdaptiveDialog adaptiveDialog)
             {
-                await planningDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+                await adaptiveDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
             }
             else
             {

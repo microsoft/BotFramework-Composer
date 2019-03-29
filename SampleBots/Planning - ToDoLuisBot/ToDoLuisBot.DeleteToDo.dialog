@@ -3,16 +3,16 @@
     "$type": "Microsoft.AdaptiveDialog",
     "rules": [
         {
-            "$type": "Microsoft.DefaultRule",
+            "$type": "Microsoft.BeginDialogRule",
             "steps": [
                 {
                     "$type": "Microsoft.SaveEntity",
-                    "entity": "title",
+                    "entity": "TaskContentML",
                     "property": "dialog.todo"
                 },
                 {
                     "$type": "Microsoft.IfProperty",
-                    "expression": "dialog.todo == null",
+                    "expression": "!exists(dialog.todo)",
                     "ifTrue": [
                         {
                             "$type": "Microsoft.TextInput",
@@ -34,15 +34,6 @@
                 {
                     "$type": "Microsoft.ClearProperty",
                     "property": "dialog.todo"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.CancelDialog"
                 }
             ]
         }

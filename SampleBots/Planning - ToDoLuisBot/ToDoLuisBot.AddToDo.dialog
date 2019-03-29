@@ -3,11 +3,11 @@
     "$type": "Microsoft.AdaptiveDialog",
     "rules": [
         {
-            "$type": "Microsoft.DefaultRule",
+            "$type": "Microsoft.BeginDialogRule",
             "steps": [
                 {
                     "$type": "Microsoft.SaveEntity",
-                    "entity": "title",
+                    "entity": "TaskContentML",
                     "property": "dialog.todo"
                 },
                 {
@@ -16,33 +16,24 @@
                     "ifTrue": [
                         {
                             "$type": "Microsoft.TextInput",
-                            "prompt": "OK, please enter the title of the todo you want to remove.",
+                            "prompt": "OK, please enter the title of your todo.",
                             "property": "dialog.todo"
                         }
                     ]
                 },
                 {
                     "$type": "Microsoft.ChangeList",
-                    "changeType": "Remove",
+                    "changeType": "Push",
                     "listProperty": "user.todos",
                     "itemProperty": "dialog.todo"
                 },
                 {
                     "$type": "Microsoft.SendActivity",
-                    "activity": "Successfully removed a todo named \"{dialog.todo}\""
+                    "activity": "Successfully added a todo named \"{dialog.todo}\""
                 },
                 {
                     "$type": "Microsoft.ClearProperty",
                     "property": "dialog.todo"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.CancelDialog"
                 }
             ]
         }

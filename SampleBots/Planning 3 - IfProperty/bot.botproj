@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "ToDoBot.main.dialog"
+    "entry": "IfProperty.main.dialog"
 }

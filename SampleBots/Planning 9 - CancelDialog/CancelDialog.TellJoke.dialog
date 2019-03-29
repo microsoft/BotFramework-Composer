@@ -1,18 +1,29 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
+    "storage": {
+        "$type": "Microsoft.MemoryStorage"
+    },
+    "recognizer": {
+        "$type": "Microsoft.RegexRecognizer",
+        "rules": {
+            "CancelIntent": "(?i)cancel|never mind"
+        }
+    },
     "rules": [
         {
             "$type": "Microsoft.DefaultRule",
             "steps": [
                 {
-                    "$type": "Microsoft.ChangeList",
-                    "changeType": "Clear",
-                    "listProperty": "user.todos"
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Why did the chicken cross the road?"
+                },
+                {
+                    "$type": "Microsoft.WaitForInput"
                 },
                 {
                     "$type": "Microsoft.SendActivity",
-                    "activity": "Successfully clear the todo list."
+                    "activity": "To get to the other side"
                 }
             ]
         },
