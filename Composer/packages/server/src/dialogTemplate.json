@@ -8,7 +8,11 @@
   "rules": [
     {
       "$type": "Microsoft.FallbackRule",
-      "steps": []
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity"
+        }
+      ]
     }
   ]
 }
