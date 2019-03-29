@@ -15,24 +15,21 @@ const getType = data => {
 };
 
 // TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REF
-const runtimePathRegex = new RegExp(/^(\.\.\/\.\.\/[a-zA-Z])/); // "../../WORD"
-const composerPathRegex = new RegExp(/^(\.\.\/\.\.\/\.\.\/[a-zA-Z])/); // "// ../../../WORD"
+// const runtimePathRegex = new RegExp(/^(\.\.\/\.\.\/[a-zA-Z])/); // "../../WORD"
+// const composerPathRegex = new RegExp(/^(\.\.\/\.\.\/\.\.\/[a-zA-Z])/); // "// ../../../WORD"
 const makeState = data => {
-  if (data && data.dialog && data.dialog.$ref) {
-    if (runtimePathRegex.test(data.dialog.$ref)) {
-      data.dialog.$ref = `../${data.dialog.$ref}`;
-    }
-  }
-  data.$copy = undefined;
-  data.$id = undefined;
-  data.property = undefined;
+  // if (data && data.dialog && data.dialog.$ref) {
+  //   if (runtimePathRegex.test(data.dialog.$ref)) {
+  //     data.dialog.$ref = `../${data.dialog.$ref}`;
+  //   }
+  // }
+
   return data;
 };
 
 export const FormEditor = props => {
   const { data, memory, dialogs } = props;
 
-  const [dialogForm, setDialogForm] = useState(makeState(data));
   const type = getType(data);
 
   const mergedSchema = getMergedSchema(dialogs);
@@ -48,11 +45,11 @@ export const FormEditor = props => {
 
   const onChange = newValue => {
     // TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REFS
-    if (newValue.formData && newValue.formData.dialog && newValue.formData.dialog.$ref) {
-      if (composerPathRegex.test(newValue.formData.dialog.$ref)) {
-        newValue.formData.dialog.$ref = newValue.formData.dialog.$ref.replace(/^(\.\.\/)/, '');
-      }
-    }
+    // if (newValue.formData && newValue.formData.dialog && newValue.formData.dialog.$ref) {
+    //   if (composerPathRegex.test(newValue.formData.dialog.$ref)) {
+    //     newValue.formData.dialog.$ref = newValue.formData.dialog.$ref.replace(/^(\.\.\/)/, '');
+    //   }
+    // }
     props.onChange(newValue.formData);
   };
 
@@ -89,10 +86,6 @@ export const FormEditor = props => {
     ...buildScope(memory, 'turn'),
   ];
 
-  useEffect(() => {
-    setDialogForm(makeState(data));
-  }, [data]);
-
   return (
     <Customizer {...FluentCustomizations}>
       <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
@@ -110,7 +103,7 @@ export const FormEditor = props => {
           noValidate
           className="schemaForm"
           onChange={onChange}
-          formData={dialogForm}
+          formData={makeState(data)}
           onBlur={props.onBlur}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}

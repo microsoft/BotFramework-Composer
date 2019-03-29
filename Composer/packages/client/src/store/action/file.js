@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { navDown } from './navigation';
+import { navTo } from './navigation';
 
 export async function fetchFiles(dispatch) {
   try {
@@ -42,7 +42,6 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
 
 export async function updateFile(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/fileserver`, { name, content });
     dispatch({
       type: ActionTypes.FILES_UPDATE,
       payload: {
@@ -56,6 +55,15 @@ export async function updateFile(dispatch, { name, content }) {
       payload: null,
       error: err,
     });
+  }
+}
+
+export async function saveFile(dispatch, { name, content }) {
+  try {
+    await axios.put(`${BASEURL}/fileserver`, { name, content });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
   }
 }
 
@@ -95,7 +103,7 @@ export async function createDialog(dispatch, { name, steps }) {
     });
     // subtract 1 for the botproj file
     setOpenFileIndex(dispatch, response.data.findIndex(f => f.name.startsWith(name)) - 1);
-    navDown(dispatch, `${name}.rules[0]`);
+    navTo(dispatch, `${name}.rules[0]`);
     // focusTo(dispatch, `.steps[0]`);
   } catch (err) {
     // eslint-disable-next-line no-console

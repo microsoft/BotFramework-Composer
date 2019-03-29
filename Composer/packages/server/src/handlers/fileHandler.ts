@@ -63,7 +63,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
       const paths = await glob(pattern, { cwd: botFileDir });
 
       for (const filePath of paths) {
-        const realFilePath: string = path.join(botFileDir, filePath);
+        const realFilePath: string = path.resolve(botFileDir, filePath);
         if ((await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
           fileList.push({
