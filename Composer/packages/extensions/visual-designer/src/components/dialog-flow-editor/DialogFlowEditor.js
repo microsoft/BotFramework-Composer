@@ -17,6 +17,7 @@ export class DialogFlowEditor extends Component {
   render() {
     const { items, width, height } = this.props;
 
+    // TODO: draw minimap, toolbars
     if (items && items.length > 0) {
       const graphNodes = items.map(x => this.bindItemAttributes(x));
       return <DirectedGraph items={graphNodes} width={width} height={height} />;
@@ -29,13 +30,16 @@ DialogFlowEditor.defaultProps = {
   items: [],
   width: 400,
   height: 600,
+  showMinimap: false,
   onNodeClick: () => {},
 };
 
 // TODO: configure a babel transformer for in-class props validation.
 DialogFlowEditor.propTypes = {
   // TODO: define concrete schema. (TSX required)
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired, //IndexedNode[]
   width: PropTypes.number,
   height: PropTypes.number,
+  showMinimap: PropTypes.bool,
+  onNodeClick: PropTypes.func,
 };
