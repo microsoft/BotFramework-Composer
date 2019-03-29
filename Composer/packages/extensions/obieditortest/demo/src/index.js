@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
@@ -60,14 +60,39 @@ const dialogFiles = [
   },
 ];
 
+function getDefaultData() {
+  const storage = window.sessionStorage.getItem('formData');
+
+  if (storage) {
+    return JSON.parse(storage);
+  }
+
+  return defaultData;
+}
+
+function getDefaultMemory() {
+  const storage = window.sessionStorage.getItem('memoryFormData');
+
+  if (storage) {
+    return JSON.parse(storage);
+  }
+
+  return defaultMemory;
+}
+
 function Demo() {
   const [dirtyFormData, setDirtyFormData] = useState(null);
-  const [memoryData, setMemoryData] = useState(JSON.stringify(defaultMemory, null, 2));
-  const [formData, setFormData] = useState(defaultData);
-  const [memoryFormData, setMemoryFormData] = useState(defaultMemory);
+  const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
+  const [formData, setFormData] = useState(getDefaultData());
+  const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
+
+  useEffect(() => {
+    window.sessionStorage.setItem('formData', JSON.stringify(formData));
+    window.sessionStorage.setItem('memoryFormData', JSON.stringify(memoryFormData));
+  }, [formData, memoryFormData]);
 
   const updateFormData = (editor, data, value) => {
     try {
