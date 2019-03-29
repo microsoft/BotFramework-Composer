@@ -1,5 +1,5 @@
 const includeSubstr = (input, substr) => {
-  if (input.includes) {
+  if (input && input.includes) {
     return input.includes(substr);
   }
   return false;
