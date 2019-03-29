@@ -50,7 +50,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   const botFileContent = await readFile(botFilePath, 'utf-8');
   fileList.push({
     name: botFileName,
-    content: botFileContent,
+    content: JSON.parse(botFileContent),
     path: botFilePath,
     dir: botFileDir,
     relativePath: path.relative(botFileDir, botFilePath),
@@ -68,7 +68,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
           const content: string = await readFile(realFilePath, 'utf-8');
           fileList.push({
             name: filePath,
-            content: content,
+            content: JSON.parse(content),
             path: realFilePath,
             dir: botFileDir,
             relativePath: path.relative(botFileDir, realFilePath),

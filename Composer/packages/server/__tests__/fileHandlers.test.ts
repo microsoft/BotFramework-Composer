@@ -18,7 +18,7 @@ describe('fileHandlers', () => {
     await updateFile(files[1].name, JSON.stringify(newVaule), mockFilePath);
     files = await getFiles(mockFilePath);
 
-    expect(JSON.parse(files[1].content)).toEqual(newVaule);
+    expect(files[1].content).toEqual(newVaule);
     await updateFile(files[1].name, JSON.stringify(initValue), mockFilePath);
   });
 });

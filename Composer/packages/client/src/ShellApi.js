@@ -24,7 +24,7 @@ export function ShellApi() {
       files.reduce(
         (result, item) => ({
           ...result,
-          [Path.basename(item.name, '.dialog')]: JSON.parse(item.content),
+          [Path.basename(item.name, '.dialog')]: item.content,
         }),
         {}
       ),
@@ -93,7 +93,7 @@ export function ShellApi() {
       const dialogName = Path.basename(files[openFileIndex].name, '.dialog');
       const payload = {
         name: files[openFileIndex].name,
-        content: JSON.stringify(updatedContent[dialogName]),
+        content: updatedContent[dialogName],
       };
       // TODO: save this gracefully
       // current newData has some field sets to undefined, which is not friendly to runtime
