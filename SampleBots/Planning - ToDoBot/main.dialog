@@ -31,7 +31,7 @@
         {
           "$type": "Microsoft.CallDialog",
           "dialog": {
-            "$ref": "../../SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
+            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/AddToDo.dialog"
           },
           "options": {}
         }
