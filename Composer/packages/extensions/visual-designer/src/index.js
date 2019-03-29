@@ -31,7 +31,7 @@ export default class VisualDesigner extends Component {
     if (jsonPathString && jsonPathString[0] === '$') {
       return jsonPathString.substr(1);
     }
-    return '';
+    return jsonPathString;
   };
 
   inferClickActions = node => {
