@@ -88,7 +88,7 @@ export class DialogNode extends Component {
       return 'CallDialog';
     }
 
-    return '';
+    return 'Step';
   };
 
   getHeaderColor = payload => {
