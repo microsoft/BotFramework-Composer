@@ -18,7 +18,33 @@ export class DialogNode extends Component {
     return payload.$type.split('.')[1];
   };
 
+  createCallDialogLink = data => {
+    const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
+    return (
+      <span
+        style={{
+          cursor: 'pointer',
+          color: 'blue',
+        }}
+        onClick={e => {
+          e.stopPropagation();
+          const { data } = this.props;
+          this.props.data.onClick({
+            id: `${data.id}.dialog.$ref`,
+            payload: calleeDialog,
+          });
+        }}
+      >
+        {calleeDialog}
+      </span>
+    );
+  };
+
   getSubLabel = payload => {
+    if (isCallDialogType(payload.$type)) {
+      return this.createCallDialogLink(payload);
+    }
+
     if (payload.dialog && payload.dialog.$id) {
       return payload.$id;
     }
@@ -39,22 +65,36 @@ export class DialogNode extends Component {
   };
 
   getHeader = payload => {
-    if (isIntentType(payload.$type)) {
+    const { $type } = payload;
+
+    if (isIntentType($type)) {
       return 'Decision';
     }
 
-    if (isWelcomeType(payload.$type)) {
+    if (isWelcomeType($type)) {
       return 'Entry';
     }
+
+    if (isCallDialogType($type)) {
+      return 'Dialog';
+    }
+
+    return '';
   };
 
   getHeaderColor = payload => {
-    if (isIntentType(payload.$type)) {
+    const { $type } = payload;
+
+    if (isIntentType($type)) {
       return '#0078D4';
     }
 
-    if (isWelcomeType(payload.$type)) {
+    if (isWelcomeType($type)) {
       return '#3C3C3C';
+    }
+
+    if (isCallDialogType($type)) {
+      return '#107C10';
     }
 
     return '#00B294';
