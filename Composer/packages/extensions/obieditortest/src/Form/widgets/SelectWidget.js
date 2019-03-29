@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'office-ui-fabric-react';
+import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode';
 
 export function SelectWidget(props) {
   const { label, onChange, value, options, ...rest } = props;
@@ -19,6 +20,7 @@ export function SelectWidget(props) {
         text: o.label,
       }))}
       selectedKey={value}
+      responsiveMode={ResponsiveMode.large}
     />
   );
 }
