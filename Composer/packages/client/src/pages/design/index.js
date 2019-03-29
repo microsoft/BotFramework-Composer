@@ -1,12 +1,13 @@
 import Path from 'path';
 
-import React, { Fragment, useContext, useMemo } from 'react';
+import React, { Fragment, useContext, useState, useEffect } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
+import { breadcrumbClass } from './styles';
 
 function getDialogName(file) {
   return Path.basename(file.name, '.dialog');
@@ -16,21 +17,23 @@ function DesignPage() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, focusPath, navPathItems } = state;
 
+  const [navItems, setNavItems] = useState([]);
+
   function handleFileClick(index) {
     actions.setOpenFileIndex(index);
     actions.navTo(getDialogName(files[index]));
   }
 
-  const breadcrumbItems = useMemo(() => {
-    return navPathItems.map(item => ({
+  useEffect(() => {
+    const items = navPathItems.map(item => ({
       ...item,
       onClick: (_event, item) => actions.updateNavPathItems(item.key, item.text),
     }));
+    setNavItems(items);
   }, [actions, navPathItems]);
 
   return (
     <Fragment>
-      <div />
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
           <div>
@@ -47,7 +50,7 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'column', height: '860px' }}>
-              <Breadcrumb key={breadcrumbItems.length} items={breadcrumbItems} ariaLabel={'Navigation Path'} />
+              <Breadcrumb items={navItems} ariaLabel={'Navigation Path'} styles={breadcrumbClass} />
               <div style={{ display: 'flex', flexDirection: 'row', flexGrow: '1', height: '100%' }}>
                 <iframe
                   key="VisualEditor"

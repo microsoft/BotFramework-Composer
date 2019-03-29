@@ -62,7 +62,6 @@ export function ShellApi() {
     const editorWindow = window.frames[1];
     const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
     apiClient.apiCallAt('reset', data, editorWindow);
-    if (data !== '') updateNavPathItems(focusPath, data.$type);
   }, [dialogs, focusPath]);
 
   // api to return the data should be showed in this window
