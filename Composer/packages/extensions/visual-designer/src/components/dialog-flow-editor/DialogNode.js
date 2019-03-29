@@ -20,6 +20,10 @@ export class DialogNode extends Component {
 
   createCallDialogLink = data => {
     const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
+    // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
+    const regexResult = calleeDialog.match(/.+\/(.+)\.dialog$/);
+    const dialogName = regexResult && regexResult[1] ? regexResult[1] : calleeDialog;
+
     return (
       <span
         style={{
@@ -28,17 +32,16 @@ export class DialogNode extends Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          const { data } = this.props;
           this.props.data.onClick({
-            id: `${data.id}.dialog.$ref`,
+            id: `${dialogName}`,
             payload: {
               $type: '$ref',
-              [PAYLOAD_KEY]: calleeDialog,
+              $ref: calleeDialog,
             },
           });
         }}
       >
-        {calleeDialog}
+        {dialogName}
       </span>
     );
   };

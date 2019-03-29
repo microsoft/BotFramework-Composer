@@ -68,14 +68,7 @@ export default class VisualDesigner extends Component {
         focusTo(subPath);
         break;
       case OpenLink:
-        // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
-        const refDialogFile = node.payload[PAYLOAD_KEY];
-        const regexResult = refDialogFile.match(/.+\/(.+)\.dialog$/);
-        if (regexResult && regexResult[1]) {
-          navTo(regexResult[1]);
-        } else {
-          navTo(refDialogFile);
-        }
+        navTo(subPath);
         break;
       default:
         focusTo(subPath);
