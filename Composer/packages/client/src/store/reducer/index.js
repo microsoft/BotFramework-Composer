@@ -24,7 +24,7 @@ const getFilesSuccess = (state, { response }) => {
 
 const updateFiles = (state, payload) => {
   state.files = state.files.map((file, index) => {
-    if (file.name === payload.name) return { id: index, ...payload };
+    if (file.name === payload.name) return { ...file, id: index, ...payload };
     return file;
   });
   return state;
