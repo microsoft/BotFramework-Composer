@@ -105,7 +105,7 @@ const IDialogNoCall = {
   },
 };
 
-export function getMergedSchema(dialogFiles) {
+export function getMergedSchema(dialogFiles = []) {
   return {
     $schema:
       'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',

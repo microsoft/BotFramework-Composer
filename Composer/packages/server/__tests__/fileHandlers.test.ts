@@ -11,14 +11,14 @@ describe('fileHandlers', () => {
   });
 
   it('should update a file at a path', async () => {
-    const initValue = 'old value';
-    const newVaule = 'new value';
+    const initValue = { old: 'value' };
+    const newVaule = { new: 'value' };
 
     let files: FileInfo[] = await getFiles(mockFilePath);
-    await updateFile(files[1].name, newVaule, mockFilePath);
+    await updateFile(files[1].name, JSON.stringify(newVaule), mockFilePath);
     files = await getFiles(mockFilePath);
 
-    expect(files[1].content).toBe(newVaule);
-    await updateFile(files[1].name, initValue, mockFilePath);
+    expect(JSON.parse(files[1].content)).toEqual(newVaule);
+    await updateFile(files[1].name, JSON.stringify(initValue), mockFilePath);
   });
 });
