@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import { ObiEditor } from './components/obi-editor/ObiEditor';
-import { NodeClickActionTypes } from './utils/constant';
+import { NodeClickActionTypes, PAYLOAD_KEY } from './utils/constant';
+import { isRecognizerType, isRuleType, isRefType } from './utils/obiTypeInferrers';
 
 export default class VisualDesigner extends Component {
   constructor(props) {
@@ -36,19 +37,19 @@ export default class VisualDesigner extends Component {
   inferClickActions = node => {
     const { payload } = node;
     const { $type: nodeType } = payload;
-    const { Expand, Focus } = NodeClickActionTypes;
+    const { Expand, Focus, OpenLink } = NodeClickActionTypes;
 
     if (!nodeType) {
       return Focus;
     }
 
-    // TODO: implement a unified obi $type inferrer.
-
-    if (nodeType.match(/^.+Recognizer$/)) {
+    if (isRecognizerType(nodeType)) {
       return Focus;
-    } else if (nodeType.match(/^.+Rule$/)) {
+    } else if (isRuleType(nodeType)) {
       if (Array.isArray(payload.steps)) return Expand;
       else return Focus;
+    } else if (isRefType(nodeType)) {
+      return OpenLink;
     }
     return null;
   };
@@ -67,7 +68,7 @@ export default class VisualDesigner extends Component {
         focusTo(subPath);
         break;
       case OpenLink:
-        navTo(subPath);
+        navTo(node.payload[PAYLOAD_KEY]);
         break;
       default:
         focusTo(subPath);

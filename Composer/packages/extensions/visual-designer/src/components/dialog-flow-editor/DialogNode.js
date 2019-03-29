@@ -31,7 +31,10 @@ export class DialogNode extends Component {
           const { data } = this.props;
           this.props.data.onClick({
             id: `${data.id}.dialog.$ref`,
-            payload: calleeDialog,
+            payload: {
+              $type: '$ref',
+              [PAYLOAD_KEY]: calleeDialog,
+            },
           });
         }}
       >
