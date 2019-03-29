@@ -3,7 +3,7 @@
 import path from 'path';
 import fs from 'fs';
 
-import express, { Router } from 'express';
+import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
 import { getFiles } from '../handlers/fileHandler';
@@ -15,7 +15,7 @@ const router: Router = express.Router({});
 let openBot: any | undefined = null;
 
 // read from memory
-router.get('/opened', function(req: any, res: any, next: any) {
+router.get('/opened', async (req: Request, res: Response) => {
   if (openBot) {
     res.status(200).json(openBot);
     return;
@@ -30,7 +30,7 @@ router.get('/opened', function(req: any, res: any, next: any) {
 });
 
 // update memory
-router.put('/opened', function(req: any, res: any, next: any) {
+router.put('/opened', async (req: Request, res: Response) => {
   // check whether the data is completed
   if (req.body.path && req.body.storageId) {
     // path must be a .bot/.botproj file path
@@ -56,11 +56,11 @@ router.put('/opened', function(req: any, res: any, next: any) {
   }
 });
 
-router.get('/opened/files', function(req: any, res: any, next: any) {
+router.get('/opened/files', async (req: Request, res: Response) => {
   if (openBot) {
     // load local project
     try {
-      const result = getFiles(openBot.path);
+      const result = await getFiles(openBot.path);
       res.status(200).json(result);
     } catch (error) {
       res.status(400).json(error);
@@ -107,8 +107,10 @@ export const projectHandler = {
     const recentOpenBots = storage.getItem('recentAccessedBots', []);
     if (openLastActiveBot && recentOpenBots.length > 0) {
       // deal with relative path
-      recentOpenBots[recentOpenBots.length - 1].path = path.resolve(recentOpenBots[recentOpenBots.length - 1].path);
-      return recentOpenBots[recentOpenBots.length - 1];
+      const result = produce(recentOpenBots[recentOpenBots.length - 1], draft => {
+        draft.path = path.resolve(draft.path);
+      });
+      return result;
     } else {
       return null;
     }
