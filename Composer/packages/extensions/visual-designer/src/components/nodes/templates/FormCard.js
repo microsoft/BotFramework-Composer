@@ -1,8 +1,13 @@
 import React from 'react';
 
+const boxWidth = 150;
+const boxHeight = 100;
+const headerHeight = 30;
+const contentHeight = boxHeight - headerHeight;
+
 const containerStyle = {
-  width: 150,
-  height: 95,
+  width: boxWidth,
+  height: boxHeight,
   fontSize: '20px',
   cursor: 'pointer',
   overflow: 'hidden',
@@ -17,7 +22,8 @@ export const FormCard = ({ header, label, details, themeColor, onClick }) => (
       className="card__header"
       style={{
         width: '100%',
-        height: 24,
+        height: headerHeight,
+        lineHeight: `${headerHeight}px`,
         backgroundColor: themeColor,
         color: '#ffffff',
         fontWeight: '700',
@@ -31,7 +37,7 @@ export const FormCard = ({ header, label, details, themeColor, onClick }) => (
       className="card__content"
       style={{
         width: '100%',
-        height: 71,
+        height: contentHeight,
       }}
     >
       <div style={{ fontWeight: '400', paddingLeft: '5px', marginTop: '5px' }}>{label}</div>
