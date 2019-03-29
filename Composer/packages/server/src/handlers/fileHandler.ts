@@ -81,15 +81,14 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   return fileList;
 }
 
-export async function updateFile(name: string, content: string, botProjFilePath: string = ''): Promise<void> {
+export async function updateFile(name: string, content: any, botProjFilePath: string = ''): Promise<void> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot update ${name}`);
   }
   const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, name);
 
-  const parsed = JSON.parse(content);
-  await writeFile(realFilePath, JSON.stringify(parsed, null, 2) + '\n');
+  await writeFile(realFilePath, JSON.stringify(content, null, 2) + '\n');
 }
 
 export async function createFromTemplate(name: string, types: string[], botProjFilePath: string = ''): Promise<void> {
