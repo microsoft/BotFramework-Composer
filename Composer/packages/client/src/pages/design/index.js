@@ -1,12 +1,13 @@
 import Path from 'path';
 
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
+import NewDialogModal from './NewDialogModal';
 
 function getDialogName(file) {
   return Path.basename(file.name, '.dialog');
@@ -15,10 +16,16 @@ function getDialogName(file) {
 function DesignPage() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, focusPath } = state;
+  const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
     actions.setOpenFileIndex(index);
     actions.navTo(getDialogName(files[index]));
+  }
+
+  async function onSubmit(data) {
+    await actions.createDialog(data);
+    setModalOpen(false);
   }
 
   return (
@@ -39,7 +46,12 @@ function DesignPage() {
                   }}
                 >
                   <div>Dialogs</div>
-                  <IconButton iconProps={{ iconName: 'Add' }} title="New Dialog" ariaLabel="New Dialog" />
+                  <IconButton
+                    iconProps={{ iconName: 'Add' }}
+                    title="New Dialog"
+                    ariaLabel="New Dialog"
+                    onClick={() => setModalOpen(true)}
+                  />
                 </div>
                 <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
               </div>
@@ -72,6 +84,7 @@ function DesignPage() {
           </Conversation>
         </div>
       </div>
+      <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }

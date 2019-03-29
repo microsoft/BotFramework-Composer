@@ -53,14 +53,15 @@ export function ShellApi() {
   useEffect(() => {
     const editorWindow = window.frames[0];
     const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
-    apiClient.apiCallAt('reset', data, editorWindow);
-  }, [dialogs, navPath]);
+    apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+  }, [dialogs, files, navPath]);
 
   useEffect(() => {
     const editorWindow = window.frames[1];
     const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
-    apiClient.apiCallAt('reset', data, editorWindow);
-  }, [dialogs, focusPath]);
+    console.log('resetting', data, dialogs);
+    apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+  }, [dialogs, files, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(_, event) {

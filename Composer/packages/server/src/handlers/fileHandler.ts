@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 
+import { merge, set } from 'lodash';
 import glob from 'globby';
 
 import DIALOG_TEMPLATE from '../dialogTemplate.json';
@@ -91,13 +92,20 @@ export async function updateFile(name: string, content: string, botProjFilePath:
   await writeFile(realFilePath, JSON.stringify(parsed, null, 2) + '\n');
 }
 
-export async function createFromTemplate(name: string, botProjFilePath: string = ''): Promise<void> {
+export async function createFromTemplate(name: string, types: string[], botProjFilePath: string = ''): Promise<void> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot update ${name}`);
   }
 
-  const { botFileDir } = getAllConfig(botProjFilePath);
-  const realFilePath: string = path.join(botFileDir, `${name}.dialog`);
+  const trimmedName = name.trim();
 
-  await writeFile(realFilePath, JSON.stringify({ ...DIALOG_TEMPLATE, $id: name }, null, 2) + '\n', {});
+  const { botFileDir } = getAllConfig(botProjFilePath);
+  const realFilePath: string = path.join(botFileDir, `${trimmedName}.dialog`);
+  const newDialog = merge({}, DIALOG_TEMPLATE, { $id: trimmedName });
+
+  types.forEach((type: string, idx: number) => {
+    set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
+  });
+
+  await writeFile(realFilePath, JSON.stringify(newDialog, null, 2) + '\n', {});
 }

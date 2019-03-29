@@ -29,8 +29,9 @@ function ExtensionContainer() {
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('reset', data => {
+    apiClient.registerApi('reset', ({ data, dialogs }) => {
       setData(data);
+      setDialogs(dialogs);
     });
 
     apiClient.registerApi('saveFromChild', args => {

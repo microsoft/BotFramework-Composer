@@ -43,7 +43,7 @@ router.post('/new', async (req: Request, res: Response) => {
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
-    await createFromTemplate(req.body.name, lastActiveBot);
+    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });
