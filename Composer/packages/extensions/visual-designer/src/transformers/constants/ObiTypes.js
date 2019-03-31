@@ -15,6 +15,7 @@ export const ObiTypes = {
   // Recognizers
   recognizers: {
     RegexRecognizer: 'Microsoft.RegexRecognizer',
+    LuisRecognizer: 'Microsoft.LuisRecognizer',
   },
 
   steps: {

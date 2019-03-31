@@ -12,6 +12,7 @@ const rendererByObiType = {
   [ObiTypes.rules.IntentRule]: IntentRule,
   [ObiTypes.rules.FallbackRule]: FallbackRule,
   [ObiTypes.recognizers.RegexRecognizer]: Recognizer,
+  [ObiTypes.recognizers.LuisRecognizer]: Recognizer,
   [ObiTypes.steps.CallDialog]: CallDialog,
   default: DefaultRenderer,
 };
