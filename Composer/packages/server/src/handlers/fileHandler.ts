@@ -17,6 +17,9 @@ interface BotFileConfig {
 export interface FileInfo {
   name: string;
   content: string;
+  path: string;
+  dir: string;
+  relativePath: string;
 }
 
 interface BotConfig {
@@ -42,7 +45,13 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
 
   // get .bot file
   const botFileContent = await readFile(botFilePath, 'utf-8');
-  fileList.push({ name: botFileName, content: botFileContent });
+  fileList.push({
+    name: botFileName,
+    content: botFileContent,
+    path: botFilePath,
+    dir: botFileDir,
+    relativePath: path.relative(botFileDir, botFilePath),
+  });
 
   // get 'files' from .bot file
   const botConfig: BotConfig = JSON.parse(botFileContent);
@@ -54,7 +63,13 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
         const realFilePath: string = path.join(botFileDir, filePath);
         if ((await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
-          fileList.push({ name: filePath, content: content });
+          fileList.push({
+            name: filePath,
+            content: content,
+            path: realFilePath,
+            dir: botFileDir,
+            relativePath: path.relative(botFileDir, realFilePath),
+          });
         }
       }
     }
@@ -70,5 +85,6 @@ export async function updateFile(name: string, content: string, botProjFilePath:
   const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, name);
 
-  await writeFile(realFilePath, content);
+  const parsed = JSON.parse(content);
+  await writeFile(realFilePath, JSON.stringify(parsed, null, 2) + '\n');
 }

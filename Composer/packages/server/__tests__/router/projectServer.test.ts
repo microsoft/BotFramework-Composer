@@ -1,18 +1,51 @@
 import path from 'path';
 
 import { projectHandler } from '../../src/router/projectServer';
-import { FileStorage } from '../../src/storage/FileStorage';
+import setting from '../../src/storage/SettingService';
+import storage from '../../src/storage/StorageService';
+
+jest.mock('../../src/storage/SettingService', () => {
+  const mockSettings: any = {
+    openLastActiveBot: true,
+    launcherConnector: {
+      type: 'CSharp',
+      path: '../../../BotLauncher/CSharp',
+    },
+  };
+  return { getItem: (key: string) => mockSettings[key] };
+});
+
+jest.mock('../../src/storage/StorageService', () => {
+  const mockStorage: any = {
+    linkedStorages: [
+      {
+        name: 'test',
+        type: 'LocalDrive',
+        id: 'default',
+        path: 'testPath',
+      },
+    ],
+    lastActiveBot: '../../../../SampleBots/Planning - ToDoLuisBot/bot.botproj',
+    recentAccessedBots: [
+      {
+        path: 'testPath.bot',
+        storageId: 'default',
+        lastAccessTime: 1553848431570,
+      },
+    ],
+  };
+  return {
+    getItem: (key: string) => mockStorage[key],
+    setItem: (key: string, data: any) => {
+      mockStorage[key] = data;
+      console.log('save success');
+    },
+  };
+});
 
 describe('test project server all method', () => {
-  const mockStorage = new FileStorage(path.resolve(__dirname, '../mocks/storage.json'), error => {
-    console.log(error);
-  });
-  const mockSetting = new FileStorage(path.resolve(__dirname, '../mocks/setting.json'), error => {
-    console.log(error);
-  });
-
   test('GET /api/projects handler', () => {
-    const result = projectHandler.checkOpenBotInStorage(mockStorage, mockSetting);
+    const result = projectHandler.checkOpenBotInStorage(storage, setting);
     expect(result).not.toBeUndefined();
     expect(result.path).toBe(path.resolve('testPath.bot'));
     expect(result.storageId).toBe('default');
@@ -24,7 +57,7 @@ describe('test project server all method', () => {
       storageId: 'default',
       lastAccessTime: Date.now(),
     };
-    const openBot = projectHandler.updateOpenBot(mockBody, mockStorage);
+    const openBot = projectHandler.updateOpenBot(mockBody, storage);
     expect(openBot).not.toBeUndefined();
     expect(openBot).toEqual(mockBody);
   });

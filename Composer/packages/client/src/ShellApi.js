@@ -1,7 +1,9 @@
 import Path from 'path';
 
 import jp from 'jsonpath';
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useContext, useMemo, useRef } from 'react';
+import set from 'lodash.set';
+import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -15,6 +17,8 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, navPath, focusPath } = state;
+  // use a ref to keep a ref to the debounced function across renders
+  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -34,10 +38,12 @@ export function ShellApi() {
     apiClient.connect();
 
     apiClient.registerApi('getData', getData);
+    apiClient.registerApi('getDialogs', getDialogs);
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
+    apiClient.registerApi('flushToDisk', flushToDisk);
 
     return () => {
       apiClient.disconnect();
@@ -69,6 +75,10 @@ export function ShellApi() {
     return '';
   }
 
+  function getDialogs() {
+    return files;
+  }
+
   // persist value change
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
@@ -77,15 +87,23 @@ export function ShellApi() {
       return;
     } else if (sourceWindowName === 'FormEditor') {
       // TODO: use jsonpath to form a new version of dialogData, and update
+      const updatedContent = set({ ...dialogs }, focusPath, newData);
+      const dialogName = Path.basename(files[openFileIndex].name, '.dialog');
       const payload = {
         name: files[openFileIndex].name,
-        content: newData,
+        content: JSON.stringify(updatedContent[dialogName]),
       };
-      console.log(payload);
       // TODO: save this gracefully
       // current newData has some field sets to undefined, which is not friendly to runtime
-      // actions.updateFile(payload);
+      updateFile(payload);
+
       return true;
+    }
+  }
+
+  function flushToDisk() {
+    if (updateFile.flush) {
+      updateFile.flush();
     }
   }
 

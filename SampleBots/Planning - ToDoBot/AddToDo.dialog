@@ -1,7 +1,7 @@
 {
   "$schema": "../../Schemas/app.schema",
   "$type": "Microsoft.RuleDialog",
-  "$id":  "AddToDoDialog",
+  "$id": "AddToDoDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
@@ -11,12 +11,11 @@
       "steps": [
         {
           "$type": "Microsoft.SaveEntity",
-          "entityName": "title",
-          "property": "user.todo"
+          "property": "user.todo",
+          "entityName": "title"
         },
         {
           "$type": "Microsoft.IfProperty",
-          "expression": "user.todo == null",
           "ifTrue": [
             {
               "$type": "Microsoft.SendActivity",
@@ -26,13 +25,14 @@
               "$type": "Microsoft.WaitForInput",
               "property": "user.todo"
             }
-          ]
+          ],
+          "expression": "user.todo == null"
         },
         {
           "$type": "Microsoft.ChangeList",
-          "changeType": "0",
           "listProperty": "user.todos",
-          "itemProperty": "user.todo"
+          "itemProperty": "user.todo",
+          "changeType": "push"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -40,5 +40,5 @@
         }
       ]
     }
-  ]   
+  ]
 }

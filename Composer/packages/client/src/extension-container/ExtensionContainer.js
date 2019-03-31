@@ -24,6 +24,7 @@ const subEditorCallbacks = {};
 
 function ExtensionContainer() {
   const [data, setData] = useState('');
+  const [dialogs, setDialogs] = useState([]);
 
   useEffect(() => {
     apiClient.connect();
@@ -39,22 +40,33 @@ function ExtensionContainer() {
       }
     });
 
-    shellApi.getData().then(function(result) {
+    shellApi.getData().then(result => {
       setData(result);
+    });
+    shellApi.getDialogs().then(result => {
+      setDialogs(result);
     });
 
     return () => {
       apiClient.disconnect();
     };
-  }, []);
+  }, [shellApi]);
 
   const shellApi = {
     getData: () => {
       return apiClient.apiCall('getData', {});
     },
 
+    getDialogs: () => {
+      return apiClient.apiCall('getDialogs', {});
+    },
+
     saveData: newData => {
       return apiClient.apiCall('saveData', newData);
+    },
+
+    flushToDisk: () => {
+      return apiClient.apiCall('flushToDisk');
     },
 
     navTo: path => {
@@ -72,9 +84,24 @@ function ExtensionContainer() {
 
   const RealEditor = data === '' ? '' : getEditor();
 
+  if (RealEditor) {
+    window.parent.extensionData = window.parent.extensionData || {};
+    window.parent.extensionData[RealEditor.name] = data;
+  }
+
   return (
     <Fragment>
-      {RealEditor === '' ? '' : <RealEditor data={data} onChange={shellApi.saveData} shellApi={shellApi} />}
+      {RealEditor === '' ? (
+        ''
+      ) : (
+        <RealEditor
+          data={data}
+          dialogs={dialogs}
+          onChange={shellApi.saveData}
+          onBlur={shellApi.flushToDisk}
+          shellApi={shellApi}
+        />
+      )}
     </Fragment>
   );
 }
