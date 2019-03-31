@@ -28,6 +28,10 @@ class Demo extends Component {
 
   render() {
     const { obiJson, directedGraphSchema } = this.state;
+    const reportEvent = eventType => eventData => {
+      console.log('Event triggered:', eventType, eventData);
+    };
+
     return (
       <div>
         <h1>visual-designer Demo</h1>
@@ -43,11 +47,9 @@ class Demo extends Component {
           <div className="block block--right">
             <ObiEditor
               data={obiJson}
-              width={400}
-              height={500}
-              onClickDialog={nodeContent => {
-                console.log('Clicked node:', nodeContent);
-              }}
+              onSelect={reportEvent('select')}
+              onExpand={reportEvent('expand')}
+              onOpen={reportEvent('open')}
             />
           </div>
         </div>
