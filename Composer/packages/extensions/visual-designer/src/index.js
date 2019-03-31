@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-import { ObiEditor } from './components/obi-editor/ObiEditor';
-import { NodeClickActionTypes, PAYLOAD_KEY } from './utils/constant';
-import { isRecognizerType, isRuleType, isRefType } from './utils/obiTypeInferrers';
+import { ObiEditor } from './components/ObiEditor';
 
 export default class VisualDesigner extends Component {
   constructor(props) {
@@ -34,54 +32,23 @@ export default class VisualDesigner extends Component {
     return jsonPathString;
   };
 
-  inferClickActions = node => {
-    const { payload } = node;
-    const { $type: nodeType } = payload;
-    const { Expand, Focus, OpenLink } = NodeClickActionTypes;
-
-    if (!nodeType) {
-      return Focus;
-    }
-
-    if (isRecognizerType(nodeType)) {
-      return Focus;
-    } else if (isRuleType(nodeType)) {
-      if (Array.isArray(payload.steps)) return Expand;
-      else return Focus;
-    } else if (isRefType(nodeType)) {
-      return OpenLink;
-    }
-    return null;
-  };
-
-  onClick = node => {
-    const { navDown, focusTo, navTo } = this.props.shellApi;
-    const { Expand, Focus, OpenLink } = NodeClickActionTypes;
-
-    const subPath = this.normalizeDataPath(node.id);
-
-    switch (this.inferClickActions(node)) {
-      case Expand:
-        navDown(subPath);
-        break;
-      case Focus:
-        focusTo(subPath);
-        break;
-      case OpenLink:
-        navTo(subPath);
-        break;
-      default:
-        focusTo(subPath);
-        break;
-    }
+  applyNormalizePathMiddleware = handler => eventData => {
+    const clickedNodePath = eventData;
+    handler(this.normalizeDataPath(clickedNodePath));
   };
 
   render() {
-    const data = this.props.data;
+    const { data, shellApi } = this.props;
+    const { navDown, focusTo, navTo } = shellApi;
 
     return (
       <div data-testid="visualdesigner-container">
-        <ObiEditor data={data} onClickDialog={item => this.onClick(item)} />
+        <ObiEditor
+          data={data}
+          onSelect={this.applyNormalizePathMiddleware(focusTo)}
+          onExpand={this.applyNormalizePathMiddleware(navDown)}
+          onOpen={this.applyNormalizePathMiddleware(navTo)}
+        />
       </div>
     );
   }
