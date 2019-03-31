@@ -15,6 +15,8 @@ export class IntentRule extends React.Component {
         label={intent}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
+            onTriggerEvent(NodeClickActionTypes.Expand, id);
+          } else {
             onTriggerEvent(NodeClickActionTypes.Focus, id);
           }
         }}

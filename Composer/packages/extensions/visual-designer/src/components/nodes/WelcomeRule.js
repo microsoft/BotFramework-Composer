@@ -7,13 +7,18 @@ import { NodeClickActionTypes } from '../../utils/constant';
 export class WelcomeRule extends React.Component {
   render() {
     const { id, data, onTriggerEvent } = this.props;
+    const { steps } = data;
     return (
       <FormCard
-        themeColor="#0078D4"
+        themeColor="#3C3C3C"
         header="Entry"
         label={data.$type.split('.')[1]}
         onClick={() => {
-          onTriggerEvent(NodeClickActionTypes.Focus, id);
+          if (Array.isArray(steps) && steps.length) {
+            onTriggerEvent(NodeClickActionTypes.Expand, id);
+          } else {
+            onTriggerEvent(NodeClickActionTypes.Focus, id);
+          }
         }}
       />
     );

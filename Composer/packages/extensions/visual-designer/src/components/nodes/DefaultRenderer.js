@@ -14,9 +14,7 @@ export class DefaultRenderer extends React.Component {
         header="Step"
         label={label}
         onClick={() => {
-          if (Array.isArray(steps) && steps.length) {
-            onTriggerEvent(NodeClickActionTypes.Focus, id);
-          }
+          onTriggerEvent(NodeClickActionTypes.Focus, id);
         }}
       />
     );

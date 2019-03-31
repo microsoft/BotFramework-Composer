@@ -6,6 +6,7 @@ export const Diamond = ({ onClick }) => (
       width: '150px',
       height: '20px',
       backgroundColor: '#ffffff',
+      cursor: 'pointer',
     }}
     onClick={onClick}
   >
