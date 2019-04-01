@@ -255,6 +255,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.CallDialog',
+            default: 'Microsoft.CallDialog',
           },
           $copy: {
             title: '$copy',
@@ -323,6 +324,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.CancelDialog',
+            default: 'Microsoft.CancelDialog',
           },
           $copy: {
             title: '$copy',
@@ -357,6 +359,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.ChangeList',
+            default: 'Microsoft.ChangeList',
           },
           $copy: {
             title: '$copy',
@@ -411,6 +414,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.DateTimePrompt',
+            default: 'Microsoft.DateTimePrompt',
           },
           $copy: {
             title: '$copy',
@@ -504,6 +508,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.EndDialog',
+            default: 'Microsoft.EndDialog',
           },
           $copy: {
             title: '$copy',
@@ -546,6 +551,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.EventRule',
+            default: 'Microsoft.EventRule',
           },
           $copy: {
             title: '$copy',
@@ -606,6 +612,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.FallbackRule',
+            default: 'Microsoft.FallbackRule',
           },
           $copy: {
             title: '$copy',
@@ -658,6 +665,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.FloatPrompt',
+            default: 'Microsoft.FloatPrompt',
           },
           $copy: {
             title: '$copy',
@@ -751,6 +759,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.GotoDialog',
+            default: 'Microsoft.GotoDialog',
           },
           $copy: {
             title: '$copy',
@@ -978,6 +987,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.IfProperty',
+            default: 'Microsoft.IfProperty',
           },
           $copy: {
             title: '$copy',
@@ -1040,6 +1050,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.IfPropertyRule',
+            default: 'Microsoft.IfPropertyRule',
           },
           $copy: {
             title: '$copy',
@@ -1103,6 +1114,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.IntegerPrompt',
+            default: 'Microsoft.IntegerPrompt',
           },
           $copy: {
             title: '$copy',
@@ -1196,6 +1208,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.IntentRule',
+            default: 'Microsoft.IntentRule',
           },
           $copy: {
             title: '$copy',
@@ -1262,6 +1275,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.LuisRecognizer',
+            default: 'Microsoft.LuisRecognizer',
           },
           $copy: {
             title: '$copy',
@@ -1324,6 +1338,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.QnaMakerRecognizer',
+            default: 'Microsoft.QnaMakerRecognizer',
           },
           $copy: {
             title: '$copy',
@@ -1378,6 +1393,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.RePlacePlanRule',
+            default: 'Microsoft.RePlacePlanRule',
           },
           $copy: {
             title: '$copy',
@@ -1442,6 +1458,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.RegexRecognizer',
+            default: 'Microsoft.RegexRecognizer',
           },
           $copy: {
             title: '$copy',
@@ -1482,6 +1499,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.RuleDialog',
+            default: 'Microsoft.RuleDialog',
           },
           $copy: {
             title: '$copy',
@@ -1539,6 +1557,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.SaveEntity',
+            default: 'Microsoft.SaveEntity',
           },
           $copy: {
             title: '$copy',
@@ -1587,6 +1606,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.SendActivity',
+            default: 'Microsoft.SendActivity',
           },
           $copy: {
             title: '$copy',
@@ -1625,6 +1645,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.SendList',
+            default: 'Microsoft.SendList',
           },
           $copy: {
             title: '$copy',
@@ -1676,6 +1697,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.TextPrompt',
+            default: 'Microsoft.TextPrompt',
           },
           $copy: {
             title: '$copy',
@@ -1745,6 +1767,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.UtteranceRecognizeRule',
+            default: 'Microsoft.UtteranceRecognizeRule',
           },
           $copy: {
             title: '$copy',
@@ -1810,6 +1833,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.WaitForInput',
+            default: 'Microsoft.WaitForInput',
           },
           $copy: {
             title: '$copy',
@@ -1851,6 +1875,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
             const: 'Microsoft.WelcomeRule',
+            default: 'Microsoft.WelcomeRule',
           },
           $copy: {
             title: '$copy',
