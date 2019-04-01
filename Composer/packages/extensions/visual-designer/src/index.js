@@ -21,11 +21,6 @@ export default class VisualDesigner extends Component {
     return jsonPathString;
   };
 
-  applyNormalizePathMiddleware = handler => eventData => {
-    const clickedNodePath = eventData;
-    handler(this.normalizeDataPath(clickedNodePath));
-  };
-
   render() {
     const { data, shellApi } = this.props;
     const { navDown, focusTo, navTo } = shellApi;
@@ -34,9 +29,9 @@ export default class VisualDesigner extends Component {
       <div data-testid="visualdesigner-container">
         <ObiEditor
           data={data}
-          onSelect={this.applyNormalizePathMiddleware(focusTo)}
-          onExpand={this.applyNormalizePathMiddleware(navDown)}
-          onOpen={this.applyNormalizePathMiddleware(navTo)}
+          onSelect={x => focusTo(this.normalizeDataPath(x))}
+          onExpand={x => navDown(this.normalizeDataPath(x))}
+          onOpen={x => navTo(this.normalizeDataPath(x))}
         />
       </div>
     );
