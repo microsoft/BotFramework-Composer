@@ -32,7 +32,7 @@ function DesignPage() {
     const dialogs = files.reduce(
       (result, item) => ({
         ...result,
-        [getBaseName(item.name)]: JSON.parse(item.content),
+        [getBaseName(item.name)]: item.content,
       }),
       {}
     );
