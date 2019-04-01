@@ -45,18 +45,22 @@ const dialogFiles = [
   {
     name: 'MyCustomDialog1.dialog',
     relativePath: 'MyCustomDialog1.dialog',
+    path: '/Some/Cool/Path/MyCustomDialog1.dialog',
   },
   {
     name: 'MyCustomDialog2.dialog',
     relativePath: 'MyCustomDialog2.dialog',
+    path: '/Some/Cool/Path/MyCustomDialog2.dialog',
   },
   {
     name: 'MyCustomDialog3.dialog',
     relativePath: 'MyCustomDialog3.dialog',
+    path: '/Some/Cool/Path/MyCustomDialog3.dialog',
   },
   {
     name: 'MyCustomDialog4.dialog',
     relativePath: 'MyCustomDialog4.dialog',
+    path: '/Some/Cool/Path/MyCustomDialog4.dialog',
   },
 ];
 
