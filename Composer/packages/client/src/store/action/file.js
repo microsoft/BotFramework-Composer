@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { navTo } from './navigation';
+import { navTo, navDown, clearNavHistory } from './navigation';
 
 export async function fetchFiles(dispatch) {
   try {
@@ -101,10 +101,10 @@ export async function createDialog(dispatch, { name, steps }) {
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },
     });
-    // subtract 1 for the botproj file
-    setOpenFileIndex(dispatch, response.data.findIndex(f => f.name.startsWith(name)) - 1);
     // the new dialog only has 1 rule, so navigate directly there
-    navTo(dispatch, `${name}.rules[0]`, [name]);
+    clearNavHistory(dispatch);
+    navTo(dispatch, `${name}`);
+    navDown(dispatch, '.rules[0]');
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

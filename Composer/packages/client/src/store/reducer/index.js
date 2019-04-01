@@ -70,7 +70,7 @@ const getStorageFileSuccess = (state, { response }) => {
   return state;
 };
 
-const navigateTo = (state, { path, breadcrumb }) => {
+const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
@@ -83,9 +83,6 @@ const navigateTo = (state, { path, breadcrumb }) => {
       if (currentOpenFileIndex > 0) {
         state.openFileIndex = currentOpenFileIndex;
       }
-    }
-    if (breadcrumb && Array.isArray(breadcrumb)) {
-      state.navPathHistory = breadcrumb;
     }
     state.navPathHistory.push(path);
   }

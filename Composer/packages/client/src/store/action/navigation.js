@@ -1,9 +1,9 @@
 import { ActionTypes } from './../../constants/index';
 
-export function navTo(dispatch, path, breadcrumb = []) {
+export function navTo(dispatch, path) {
   dispatch({
     type: ActionTypes.NAVIGATE_TO,
-    payload: { path, breadcrumb },
+    payload: { path },
   });
 }
 
