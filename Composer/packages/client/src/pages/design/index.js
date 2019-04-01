@@ -1,6 +1,6 @@
 import Path from 'path';
 
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { Fragment, useContext, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 
 import { Tree } from './../../components/Tree';
@@ -15,25 +15,36 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, focusPath, navPathItems } = state;
-
-  const [navItems, setNavItems] = useState([]);
+  const { files, openFileIndex, focusPath, navPathHistory } = state;
+  const { setOpenFileIndex, clearNavHistory, navTo } = actions;
 
   function handleFileClick(index) {
-    actions.setOpenFileIndex(index);
-    actions.navTo(getDialogName(files[index]));
+    setOpenFileIndex(index);
+    clearNavHistory();
+    navTo(getDialogName(files[index]));
   }
 
-  useEffect(() => {
-    const items = navPathItems.map(item => ({
-      ...item,
-      onClick: (_event, item) => actions.updateNavPathItems(item.key, item.text),
+  const breadcrumbItems = useMemo(() => {
+    return navPathHistory.map((item, index) => ({
+      key: item,
+      index: index,
+      text: item.substring(item.lastIndexOf('.') + 1, item.length),
+      onClick: (_event, { key, index }) => {
+        clearNavHistory(index);
+        navTo(key);
+      },
     }));
-    setNavItems(items);
-  }, [actions, navPathItems]);
+  }, [clearNavHistory, navPathHistory, navTo]);
 
   return (
     <Fragment>
+      <button
+        onClick={() => {
+          navTo('DeleteToDo');
+        }}
+      >
+        test
+      </button>
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
           <div>
@@ -50,7 +61,7 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'column', height: '860px' }}>
-              <Breadcrumb items={navItems} ariaLabel={'Navigation Path'} styles={breadcrumbClass} />
+              <Breadcrumb items={breadcrumbItems} ariaLabel={'Navigation Path'} styles={breadcrumbClass} />
               <div style={{ display: 'flex', flexDirection: 'row', flexGrow: '1', height: '100%' }}>
                 <iframe
                   key="VisualEditor"

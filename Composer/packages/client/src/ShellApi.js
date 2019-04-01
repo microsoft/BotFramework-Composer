@@ -19,7 +19,6 @@ export function ShellApi() {
   const { files, openFileIndex, navPath, focusPath } = state;
   // use a ref to keep a ref to the debounced function across renders
   const updateFile = useRef(debounce(actions.updateFile, 500)).current;
-  const { updateNavPathItems } = actions;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -55,7 +54,6 @@ export function ShellApi() {
     const editorWindow = window.frames[0];
     const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
     apiClient.apiCallAt('reset', data, editorWindow);
-    if (data !== '') updateNavPathItems(navPath, data.$type);
   }, [dialogs, navPath]);
 
   useEffect(() => {

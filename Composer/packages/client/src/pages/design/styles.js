@@ -9,13 +9,14 @@ export const breadcrumbClass = mergeStyleSets({
     alignItems: 'baseline',
   },
   itemLink: {
-    fontSize: '14px',
+    fontSize: '12px',
     fontWeight: 'bold',
     color: '#4f4f4f',
     paddingRight: '4px',
     paddingLeft: '4px',
   },
   chevron: {
-    fontSize: '10px',
+    fontSize: '8px',
+    fontWeight: 'bold',
   },
 });

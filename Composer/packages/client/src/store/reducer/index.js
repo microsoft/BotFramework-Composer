@@ -72,12 +72,14 @@ const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
+    state.navPathHistory.push(path);
   }
   return state;
 };
 
 const navigateDown = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
+  state.navPathHistory.push(state.navPath);
   return state;
 };
 
@@ -88,19 +90,14 @@ const focusTo = (state, { subPath }) => {
   return (state.focusPath = state.navPath + subPath);
 };
 
-const updateNavPathItems = (state, { path, name }) => {
-  if (path && typeof path === 'string') {
-    const navPathItems = state.navPathItems;
-    const items = path.split('.');
-    const num = navPathItems.length - items.length + 1;
-    navPathItems.splice(navPathItems.length - num);
-    navPathItems.push({ text: name.substring(name.lastIndexOf('.') + 1), key: path });
-    state.navPathItems = navPathItems;
-    if (state.navPath !== path) {
-      state.navPath = path;
-      state.focusPath = '';
-    }
+const clearNavHistory = (state, { fromIndex }) => {
+  const length = state.navPathHistory.length;
+  if (typeof fromIndex === 'undefined') {
+    state.navPathHistory.splice(0, length);
+  } else if (fromIndex + 1 !== state.navPathHistory.length) {
+    state.navPathHistory.splice(fromIndex, length);
   }
+
   return state;
 };
 
@@ -117,5 +114,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
-  [ActionTypes.NAVPATHITEMS_UPDATE]: updateNavPathItems,
+  [ActionTypes.NAV_HISTORY_CLEAR]: clearNavHistory,
 });

@@ -24,9 +24,9 @@ export function focusTo(dispatch, subPath) {
   });
 }
 
-export function updateNavPathItems(dispatch, path, name) {
+export function clearNavHistory(dispatch, fromIndex) {
   dispatch({
-    type: ActionTypes.NAVPATHITEMS_UPDATE,
-    payload: { path, name },
+    type: ActionTypes.NAV_HISTORY_CLEAR,
+    payload: { fromIndex },
   });
 }
