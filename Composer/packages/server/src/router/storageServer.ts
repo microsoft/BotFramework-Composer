@@ -39,6 +39,10 @@ export const storageHandler = {
       try {
         const itemPath = path.join(folderPath, item);
         const tempStat = fs.statSync(itemPath);
+        // filter files, folder which have no read and write
+        if (parseInt((tempStat.mode & parseInt('777', 8)).toString(8)) < 666) {
+          continue;
+        }
         if (tempStat.isDirectory()) {
           folderTree.push({
             name: item,
