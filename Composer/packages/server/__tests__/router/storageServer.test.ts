@@ -50,6 +50,7 @@ describe('test storage server all method', () => {
     const mockreq: any = {
       params: {
         path: __dirname,
+        storageId: 'default',
       },
     };
     await storageHandler.getFilesAndFolders(mockreq, mockResponse);
