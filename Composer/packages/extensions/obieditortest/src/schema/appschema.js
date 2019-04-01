@@ -991,46 +991,6 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          ifTrue: {
-            oneOf: [
-              {
-                type: 'object',
-                $type: 'Microsoft.IDialogStep',
-                $ref: '#/definitions/Microsoft.IDialogStep',
-              },
-              {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  $type: 'Microsoft.IDialogStep',
-                  $ref: '#/definitions/Microsoft.IDialogStep',
-                },
-                title: 'array',
-              },
-            ],
-            title: 'If True',
-            description: 'Step to execute if expression is true.',
-          },
-          ifFalse: {
-            oneOf: [
-              {
-                type: 'object',
-                $type: 'Microsoft.IDialogStep',
-                $ref: '#/definitions/Microsoft.IDialogStep',
-              },
-              {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  $type: 'Microsoft.IDialogStep',
-                  $ref: '#/definitions/Microsoft.IDialogStep',
-                },
-                title: 'array',
-              },
-            ],
-            title: 'If False',
-            description: 'Step to execute if expression is false.',
-          },
           expression: {
             type: 'string',
             $type: 'Microsoft.IExpression',
@@ -1038,6 +998,26 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'Expression to evaluate.',
             examples: ['user.age > 3'],
             $ref: '#/definitions/Microsoft.IExpression',
+          },
+          ifTrue: {
+            type: 'array',
+            items: {
+              type: 'object',
+              $type: 'Microsoft.IDialogStep',
+              $ref: '#/definitions/Microsoft.IDialog',
+            },
+            title: 'If True',
+            description: 'Step to execute if expression is true.',
+          },
+          ifFalse: {
+            type: 'array',
+            items: {
+              type: 'object',
+              $type: 'Microsoft.IDialogStep',
+              $ref: '#/definitions/Microsoft.IDialog',
+            },
+            title: 'If False',
+            description: 'Step to execute if expression is false.',
           },
         },
         patternProperties: {
