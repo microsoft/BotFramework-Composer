@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { NodeClickActionTypes } from '../../utils/constant';
+
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import { FormCard } from './templates/FormCard';
-import { NodeClickActionTypes } from '../../utils/constant';
 
 export class FallbackRule extends React.Component {
   render() {

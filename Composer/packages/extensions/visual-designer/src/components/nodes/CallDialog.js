@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { FormCard } from './templates/FormCard';
 import { NodeClickActionTypes } from '../../utils/constant';
+
+import { FormCard } from './templates/FormCard';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class CallDialog extends React.Component {
@@ -10,7 +11,7 @@ export class CallDialog extends React.Component {
 
     const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
     // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
-    const regexResult = calleeDialog.match(/.+[\/\\](.+)\.dialog$/);
+    const regexResult = calleeDialog.match(/.+[/\\](.+)\.dialog$/);
     const dialogName = regexResult && regexResult[1] ? regexResult[1] : calleeDialog;
 
     return (

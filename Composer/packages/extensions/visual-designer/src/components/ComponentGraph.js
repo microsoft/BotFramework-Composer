@@ -9,6 +9,7 @@ export class ComponentGraph extends Component {
     return {
       id,
       neighborIds,
+      // eslint-disable-next-line react/display-name
       contentRenderer: createReactClass({
         render: () => instance,
       }),

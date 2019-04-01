@@ -8,5 +8,5 @@ export const NodeProps = {
 
 export const defaultNodeProps = {
   data: {},
-  onTriggerEvent: (eventType, data) => {},
+  onTriggerEvent: () => {},
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { FormCard } from './templates/FormCard';
 import { NodeClickActionTypes } from '../../utils/constant';
+
+import { FormCard } from './templates/FormCard';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class DefaultRenderer extends React.Component {
