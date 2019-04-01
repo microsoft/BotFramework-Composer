@@ -1,12 +1,9 @@
 import createReducer from './createReducer';
+import { getBaseName } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
+
 const pattern = /\.{1}[a-zA-Z]{1,}$/;
 const projectFiles = ['.bot', '.botproj'];
-
-const getFileName = file => {
-  const lastIndex = file.lastIndexOf('.');
-  return file.substring(0, lastIndex > 0 ? lastIndex : file.length);
-};
 
 const closeCurrentProject = state => {
   state.openFileIndex = -1;
@@ -80,7 +77,7 @@ const navigateTo = (state, { path }) => {
     //check if navto dialog
     if (path.indexOf('.') <= 0) {
       const currentOpenFileIndex = state.files.findIndex(file => {
-        return getFileName(file.name) === path;
+        return getBaseName(file.name) === path;
       });
 
       if (currentOpenFileIndex > 0) {
@@ -108,6 +105,8 @@ const focusTo = (state, { subPath }) => {
 const clearNavHistory = (state, { fromIndex }) => {
   const length = state.navPathHistory.length;
   if (typeof fromIndex === 'undefined') {
+    state.navPath = '';
+    state.focusPath = '';
     state.navPathHistory.splice(0, length);
   } else if (fromIndex + 1 !== state.navPathHistory.length) {
     state.navPathHistory.splice(fromIndex, length);

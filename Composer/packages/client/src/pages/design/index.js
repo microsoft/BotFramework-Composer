@@ -2,12 +2,14 @@ import Path from 'path';
 
 import React, { Fragment, useContext, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
+import map from 'lodash.map';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
+import { getExtension, getBaseName } from './../../utils';
 
 function getDialogName(file) {
   return Path.basename(file.name, '.dialog');
@@ -25,16 +27,32 @@ function DesignPage() {
   }
 
   const breadcrumbItems = useMemo(() => {
-    return navPathHistory.map((item, index) => ({
-      key: item,
-      index: index,
-      text: item.substring(item.lastIndexOf('.') + 1, item.length),
-      onClick: (_event, { key, index }) => {
-        clearNavHistory(index);
-        navTo(key);
-      },
-    }));
-  }, [clearNavHistory, navPathHistory, navTo]);
+    const dialogs = files.reduce(
+      (result, item) => ({
+        ...result,
+        [getBaseName(item.name)]: JSON.parse(item.content),
+      }),
+      {}
+    );
+
+    return navPathHistory.map((item, index) => {
+      let text = item;
+      if (item !== getBaseName(item)) {
+        text = getExtension(map({ dialogs }, item + '.$type')[0]);
+      }
+
+      return {
+        key: item + index,
+        path: item,
+        index: index,
+        text,
+        onClick: (_event, { path, index }) => {
+          clearNavHistory(index);
+          navTo(path);
+        },
+      };
+    });
+  }, [clearNavHistory, files, navPathHistory, navTo]);
 
   return (
     <Fragment>
