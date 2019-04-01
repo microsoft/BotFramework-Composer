@@ -24,7 +24,7 @@ export const ActionTypes = {
   NAVIGATE_TO: 'NAVIGATE_TO',
   NAVIGATE_DOWN: 'NAVIGATE_DOWN',
   FOCUS_TO: 'FOCUS_TO',
-  NAV_HISTORY_CLEAR: 'NAV_HISTORY_CLEAR',
+  CLEAR_NAV_HISTORY: 'CLEAR_NAV_HISTORY',
 };
 
 export const FileTypes = {

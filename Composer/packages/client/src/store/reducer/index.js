@@ -3,6 +3,11 @@ import { ActionTypes, FileTypes } from './../../constants/index';
 const pattern = /\.{1}[a-zA-Z]{1,}$/;
 const projectFiles = ['.bot', '.botproj'];
 
+const getFileName = file => {
+  const lastIndex = file.lastIndexOf('.');
+  return file.substring(0, lastIndex > 0 ? lastIndex : file.length);
+};
+
 const closeCurrentProject = state => {
   state.openFileIndex = -1;
   state.editors = [];
@@ -72,6 +77,16 @@ const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
+    //check if navto dialog
+    if (path.indexOf('.') <= 0) {
+      const currentOpenFileIndex = state.files.findIndex(file => {
+        return getFileName(file.name) === path;
+      });
+
+      if (currentOpenFileIndex > 0) {
+        state.openFileIndex = currentOpenFileIndex;
+      }
+    }
     state.navPathHistory.push(path);
   }
   return state;
@@ -114,5 +129,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
-  [ActionTypes.NAV_HISTORY_CLEAR]: clearNavHistory,
+  [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
 });

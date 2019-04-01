@@ -38,13 +38,6 @@ function DesignPage() {
 
   return (
     <Fragment>
-      <button
-        onClick={() => {
-          navTo('DeleteToDo');
-        }}
-      >
-        test
-      </button>
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
           <div>
