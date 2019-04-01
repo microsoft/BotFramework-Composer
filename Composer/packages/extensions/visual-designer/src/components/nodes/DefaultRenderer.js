@@ -7,7 +7,7 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class DefaultRenderer extends React.Component {
   render() {
-    const { id, data, onTriggerEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     const label = data.$type ? data.$type.split('.')[1] : '';
     return (
       <FormCard
@@ -15,7 +15,7 @@ export class DefaultRenderer extends React.Component {
         header="Step"
         label={label}
         onClick={() => {
-          onTriggerEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeClickActionTypes.Focus, id);
         }}
       />
     );

@@ -7,7 +7,7 @@ import { FormCard } from './templates/FormCard';
 
 export class WelcomeRule extends React.Component {
   render() {
-    const { id, data, onTriggerEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
       <FormCard
@@ -16,9 +16,9 @@ export class WelcomeRule extends React.Component {
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
-            onTriggerEvent(NodeClickActionTypes.Expand, id);
+            onEvent(NodeClickActionTypes.Expand, id);
           } else {
-            onTriggerEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeClickActionTypes.Focus, id);
           }
         }}
       />

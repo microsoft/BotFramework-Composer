@@ -7,11 +7,11 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class Recognizer extends React.Component {
   render() {
-    const { id, onTriggerEvent } = this.props;
+    const { id, onEvent } = this.props;
     return (
       <Diamond
         onClick={() => {
-          onTriggerEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeClickActionTypes.Focus, id);
         }}
       />
     );

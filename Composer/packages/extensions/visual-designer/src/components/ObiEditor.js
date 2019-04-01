@@ -45,12 +45,12 @@ export class ObiEditor extends Component {
     return renderer;
   }
 
-  createInstance(item) {
+  createRendererInstance(item) {
     const { id, data } = item;
     const ChosenRenderer = this.chooseRendererByType(data.$type);
-    const onTriggerEvent = (eventName, eventData) => this.dispatchEvent(eventName, eventData);
+    const onEvent = (eventName, eventData) => this.dispatchEvent(eventName, eventData);
 
-    return <ChosenRenderer id={id} data={data} onTriggerEvent={onTriggerEvent} />;
+    return <ChosenRenderer id={id} data={data} onEvent={onEvent} />;
   }
 
   buildItemsFromObiJson(data) {
@@ -62,7 +62,7 @@ export class ObiEditor extends Component {
         data: x[PAYLOAD_KEY],
       }))
       .map(x => {
-        const instance = this.createInstance(x);
+        const instance = this.createRendererInstance(x);
         x.instance = instance;
         return x;
       });

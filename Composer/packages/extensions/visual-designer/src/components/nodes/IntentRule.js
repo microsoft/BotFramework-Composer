@@ -7,7 +7,7 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class IntentRule extends React.Component {
   render() {
-    const { id, data, onTriggerEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     const { intent, steps } = data;
     return (
       <FormCard
@@ -16,9 +16,9 @@ export class IntentRule extends React.Component {
         label={intent}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
-            onTriggerEvent(NodeClickActionTypes.Expand, id);
+            onEvent(NodeClickActionTypes.Expand, id);
           } else {
-            onTriggerEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeClickActionTypes.Focus, id);
           }
         }}
       />

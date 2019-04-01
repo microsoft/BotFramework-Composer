@@ -7,7 +7,7 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class CallDialog extends React.Component {
   renderCallDialogLink() {
-    const { data, onTriggerEvent } = this.props;
+    const { data, onEvent } = this.props;
 
     const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
     // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
@@ -22,7 +22,7 @@ export class CallDialog extends React.Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          onTriggerEvent(NodeClickActionTypes.OpenLink, dialogName);
+          onEvent(NodeClickActionTypes.OpenLink, dialogName);
         }}
       >
         {dialogName}
@@ -31,14 +31,14 @@ export class CallDialog extends React.Component {
   }
 
   render() {
-    const { id, onTriggerEvent } = this.props;
+    const { id, onEvent } = this.props;
     return (
       <FormCard
         themeColor="#107C10"
         header="CallDialog"
         details={this.renderCallDialogLink()}
         onClick={() => {
-          onTriggerEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeClickActionTypes.Focus, id);
         }}
       />
     );
