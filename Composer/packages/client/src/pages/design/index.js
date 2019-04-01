@@ -1,7 +1,7 @@
 import Path from 'path';
 
-import React, { Fragment, useContext, useMemo } from 'react';
-import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
+import React, { Fragment, useContext, useState, useMemo } from 'react';
+import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
 import map from 'lodash.map';
 
 import { Tree } from './../../components/Tree';
@@ -10,6 +10,7 @@ import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
 import { getExtension, getBaseName } from './../../utils';
+import NewDialogModal from './NewDialogModal';
 
 function getDialogName(file) {
   return Path.basename(file.name, '.dialog');
@@ -19,6 +20,7 @@ function DesignPage() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, focusPath, navPathHistory } = state;
   const { setOpenFileIndex, clearNavHistory, navTo } = actions;
+  const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
     setOpenFileIndex(index);
@@ -54,6 +56,11 @@ function DesignPage() {
     });
   }, [clearNavHistory, files, navPathHistory, navTo]);
 
+  async function onSubmit(data) {
+    await actions.createDialog(data);
+    setModalOpen(false);
+  }
+
   return (
     <Fragment>
       <div style={{ display: 'flex' }}>
@@ -61,7 +68,27 @@ function DesignPage() {
           <div>
             <Tree variant="large">
               <div style={{ padding: '10px', color: '#4f4f4f' }}>
-                <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Dialogs</div>
+                <div
+                  style={{
+                    fontWeight: 'bold',
+                    marginBottom: '5px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>Dialogs</div>
+                  {files.length > 0 ? (
+                    <IconButton
+                      iconProps={{ iconName: 'Add' }}
+                      title="New Dialog"
+                      ariaLabel="New Dialog"
+                      onClick={() => setModalOpen(true)}
+                    />
+                  ) : (
+                    <div />
+                  )}
+                </div>
                 <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
               </div>
             </Tree>
@@ -96,6 +123,7 @@ function DesignPage() {
           </Conversation>
         </div>
       </div>
+      <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }
