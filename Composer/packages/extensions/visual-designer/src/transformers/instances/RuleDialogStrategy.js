@@ -9,7 +9,7 @@ import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
  *  recognizers from 'recognizer' field (should only exist one recognizer),
  *  welcomes by filtering WelcomRule out of its 'rules' (should only exist one welcome node),
  *  intents by filtering IntentRule out of its 'rules',
- *  fallbacks by filtering FallbackRule out of its 'rules' (should only exist one welcome node);
+ *  fallbacks by filtering NoMatchRule out of its 'rules' (should only exist one welcome node);
  * then
  *  connect 'welcome' to 'recognizer',
  *  connect 'recognizer' to all 'intents',
@@ -18,7 +18,7 @@ import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
  */
 export const RuleDialogStrategy = {
   // When input schema is a ObiRuleDialog.
-  when: input => input && input.$type === ObiTypes.ObiRuleDialog,
+  when: input => input && input.$type === ObiTypes.AdaptiveDialog,
   // Select below elements.
   selectNodes: input => {
     return {
@@ -55,7 +55,7 @@ export const RuleDialogStrategy = {
       });
     }
 
-    // Connect 'FallbackRule' after 'recognizer'
+    // Connect 'NoMatchRule' after 'recognizer'
     if (fallbacks && fallbacks[0]) {
       edges.push({
         from: fallbacks[0].id,
@@ -86,5 +86,5 @@ const createRuleTypeSelector = targetRuleType => input =>
     .filter(x => x);
 
 const selectWelcomes = createRuleTypeSelector(ObiTypes.WelcomeRule);
-const selectFallbacks = createRuleTypeSelector(ObiTypes.FallbackRule);
+const selectFallbacks = createRuleTypeSelector(ObiTypes.NoMatchRule);
 const selectIntents = createRuleTypeSelector(ObiTypes.IntentRule);

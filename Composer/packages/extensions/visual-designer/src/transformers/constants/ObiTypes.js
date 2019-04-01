@@ -12,7 +12,7 @@ export const ObiTypes = {
 
   // rules
   WelcomeRule: 'Microsoft.WelcomeRule',
-  FallbackRule: 'Microsoft.NoMatchRule',
+  NoMatchRule: 'Microsoft.NoMatchRule',
   IntentRule: 'Microsoft.IntentRule',
   EventRule: 'Microsoft.EventRule',
 
