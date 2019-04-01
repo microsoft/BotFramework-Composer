@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import './style.css';
-import { JsonBlock } from './components/json-block';
 import { ObiEditor } from '../../src/components/ObiEditor';
 import { obiTransformer } from '../../src/transformers/ObiTransformer';
 
+import { JsonBlock } from './components/json-block';
 import * as obiExample from './sample.dialog';
+import './style.css';
 
 class Demo extends Component {
   state = {

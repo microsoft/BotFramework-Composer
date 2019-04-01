@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { ObiTypes } from '../transformers/constants/ObiTypes';
+
 import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, CallDialog, FallbackRule } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 

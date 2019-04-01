@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Diamond } from './templates/Diamond';
 import { NodeClickActionTypes } from '../../utils/constant';
+
+import { Diamond } from './templates/Diamond';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class Recognizer extends React.Component {

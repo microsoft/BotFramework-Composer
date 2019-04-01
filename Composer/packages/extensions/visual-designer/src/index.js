@@ -1,20 +1,9 @@
 import React, { Component } from 'react';
+import PropType from 'prop-types';
 
 import { ObiEditor } from './components/ObiEditor';
 
 export default class VisualDesigner extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  onChange = newData => {
-    const data = {
-      name: this.props.data.name, // this editor should not change file name
-      content: JSON.stringify(newData, null, 4),
-    };
-    this.props.onChange(data);
-  };
-
   /**
    * This function is used to normalized the path string:
    *
@@ -53,3 +42,13 @@ export default class VisualDesigner extends Component {
     );
   }
 }
+
+VisualDesigner.propTypes = {
+  data: PropType.object.isRequired,
+  shellApi: PropType.object.isRequired,
+};
+
+VisualDesigner.defaultProps = {
+  data: {},
+  shellApi: {},
+};
