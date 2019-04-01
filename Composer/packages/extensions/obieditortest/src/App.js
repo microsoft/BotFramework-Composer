@@ -113,6 +113,12 @@ FormEditor.propTypes = {
     dialog: PropTypes.any,
   }),
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+};
+
+FormEditor.defaultProps = {
+  onChange: () => {},
+  onBlur: () => {},
 };
 
 export default FormEditor;
