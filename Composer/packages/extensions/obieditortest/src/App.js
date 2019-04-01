@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Customizer } from 'office-ui-fabric-react';
 import { FluentCustomizations } from '@uifabric/fluent-theme';
@@ -6,23 +6,36 @@ import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropd
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { mergedSchema } from './schema/appschema';
+import { getMergedSchema } from './schema/appschema';
 
 import './App.css';
 
 const getType = data => {
-  if (data.dialog) {
-    if (data.dialog.$type) {
-      return data.dialog.$type;
+  return data.$type;
+};
+
+// TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REF
+const runtimePathRegex = new RegExp(/^(\.\.\/\.\.\/[a-zA-Z])/); // "../../WORD"
+const composerPathRegex = new RegExp(/^(\.\.\/\.\.\/\.\.\/[a-zA-Z])/); // "// ../../../WORD"
+const makeState = data => {
+  if (data && data.dialog && data.dialog.$ref) {
+    if (runtimePathRegex.test(data.dialog.$ref)) {
+      data.dialog.$ref = `../${data.dialog.$ref}`;
     }
-  } else {
-    return data.$type;
   }
+  data.$copy = undefined;
+  data.$id = undefined;
+  data.property = undefined;
+  return data;
 };
 
 export const FormEditor = props => {
-  const { data, memory } = props;
+  const { data, memory, dialogs } = props;
+
+  const [dialogForm, setDialogForm] = useState(makeState(data));
   const type = getType(data);
+
+  const mergedSchema = getMergedSchema(dialogs);
 
   const dialogSchema = {
     definitions: { ...mergedSchema.definitions },
@@ -34,6 +47,12 @@ export const FormEditor = props => {
   };
 
   const onChange = newValue => {
+    // TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REFS
+    if (newValue.formData && newValue.formData.dialog && newValue.formData.dialog.$ref) {
+      if (composerPathRegex.test(newValue.formData.dialog.$ref)) {
+        newValue.formData.dialog.$ref = newValue.formData.dialog.$ref.replace(/^(\.\.\/)/, '');
+      }
+    }
     props.onChange(newValue.formData);
   };
 
@@ -70,6 +89,10 @@ export const FormEditor = props => {
     ...buildScope(memory, 'turn'),
   ];
 
+  useEffect(() => {
+    setDialogForm(makeState(data));
+  }, [data]);
+
   return (
     <Customizer {...FluentCustomizations}>
       <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
@@ -87,7 +110,8 @@ export const FormEditor = props => {
           noValidate
           className="schemaForm"
           onChange={onChange}
-          formData={data.dialog || data}
+          formData={dialogForm}
+          onBlur={props.onBlur}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
         >

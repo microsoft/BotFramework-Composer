@@ -41,6 +41,25 @@ const defaultMemory = {
   turn: {},
 };
 
+const dialogFiles = [
+  {
+    name: 'MyCustomDialog1.dialog',
+    relativePath: 'MyCustomDialog1.dialog',
+  },
+  {
+    name: 'MyCustomDialog2.dialog',
+    relativePath: 'MyCustomDialog2.dialog',
+  },
+  {
+    name: 'MyCustomDialog3.dialog',
+    relativePath: 'MyCustomDialog3.dialog',
+  },
+  {
+    name: 'MyCustomDialog4.dialog',
+    relativePath: 'MyCustomDialog4.dialog',
+  },
+];
+
 function Demo() {
   const [dirtyFormData, setDirtyFormData] = useState(null);
   const [memoryData, setMemoryData] = useState(JSON.stringify(defaultMemory, null, 2));
@@ -123,7 +142,7 @@ function Demo() {
         />
       </div>
       <div className="DemoForm">
-        <Example data={formData} memory={memoryFormData} onChange={setFormData} />
+        <Example data={formData} dialogs={dialogFiles} memory={memoryFormData} onChange={setFormData} />
       </div>
     </div>
   );

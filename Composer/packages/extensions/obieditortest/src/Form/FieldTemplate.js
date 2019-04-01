@@ -7,11 +7,11 @@ import get from 'lodash.get';
  */
 
 export default function FieldTemplate(props) {
-  const { children, uiSchema } = props;
+  const { children, label, uiSchema } = props;
 
   const hidden = get(uiSchema, 'ui:widget') === 'hidden';
 
-  if (hidden) {
+  if (hidden || (label && label.startsWith('$'))) {
     return null;
   }
 
