@@ -9,14 +9,14 @@ import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, CallDialog, Fallb
 import { ComponentGraph } from './ComponentGraph';
 
 const rendererByObiType = {
-  [ObiTypes.rules.WelcomeRule]: WelcomeRule,
-  [ObiTypes.rules.IntentRule]: IntentRule,
-  [ObiTypes.rules.FallbackRule]: FallbackRule,
-  [ObiTypes.recognizers.RegexRecognizer]: Recognizer,
-  [ObiTypes.recognizers.LuisRecognizer]: Recognizer,
-  [ObiTypes.steps.CallDialog]: CallDialog,
-  default: DefaultRenderer,
+  [ObiTypes.WelcomeRule]: WelcomeRule,
+  [ObiTypes.IntentRule]: IntentRule,
+  [ObiTypes.FallbackRule]: FallbackRule,
+  [ObiTypes.RegexRecognizer]: Recognizer,
+  [ObiTypes.LuisRecognizer]: Recognizer,
+  [ObiTypes.CallDialog]: CallDialog,
 };
+const DEFAULT_RENDERER = DefaultRenderer;
 
 export class ObiEditor extends Component {
   dispatchEvent(eventName, eventData) {
@@ -41,7 +41,7 @@ export class ObiEditor extends Component {
   }
 
   chooseRendererByType($type) {
-    const renderer = rendererByObiType[$type] || rendererByObiType.default;
+    const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
     return renderer;
   }
 
