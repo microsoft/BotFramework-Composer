@@ -12,6 +12,7 @@ const initialState = {
   botProjFile: {},
   navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
+  navPathHistory: [],
   storages: [],
   currentStorageFiles: [],
   botStatus: 'stopped',

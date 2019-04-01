@@ -1,5 +1,7 @@
 import createReducer from './createReducer';
+import { getBaseName } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
+
 const pattern = /\.{1}[a-zA-Z]{1,}$/;
 const projectFiles = ['.bot', '.botproj'];
 
@@ -72,12 +74,24 @@ const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
+    //check if navto dialog
+    if (path.indexOf('.') <= 0) {
+      const currentOpenFileIndex = state.files.findIndex(file => {
+        return getBaseName(file.name) === path;
+      });
+
+      if (currentOpenFileIndex > 0) {
+        state.openFileIndex = currentOpenFileIndex;
+      }
+    }
+    state.navPathHistory.push(path);
   }
   return state;
 };
 
 const navigateDown = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
+  state.navPathHistory.push(state.navPath);
   return state;
 };
 
@@ -86,6 +100,19 @@ const focusTo = (state, { subPath }) => {
     state.resetFormEditor = true;
   }
   return (state.focusPath = state.navPath + subPath);
+};
+
+const clearNavHistory = (state, { fromIndex }) => {
+  const length = state.navPathHistory.length;
+  if (typeof fromIndex === 'undefined') {
+    state.navPath = '';
+    state.focusPath = '';
+    state.navPathHistory.splice(0, length);
+  } else if (fromIndex + 1 !== state.navPathHistory.length) {
+    state.navPathHistory.splice(fromIndex, length);
+  }
+
+  return state;
 };
 
 export const reducer = createReducer({
@@ -101,4 +128,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
+  [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
 });
