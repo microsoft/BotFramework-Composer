@@ -9,7 +9,7 @@ test('transforms todoBot.dialog to directed graph', () => {
   const transformable = obiTransformer.checkTransformability(schema);
   expect(transformable).toBeTruthy();
 
-  const nodes = obiTransformer.toDirectedGraphSchema(schema);
+  const nodes = obiTransformer.toGraphSchema(schema);
   expect(nodes.length).toEqual(6);
 
   nodes.forEach(node => {
@@ -24,7 +24,7 @@ test('transforms IntentRule to steps', () => {
   const transformable = obiTransformer.checkTransformability(schema);
   expect(transformable).toBeTruthy();
 
-  const nodes = obiTransformer.toDirectedGraphSchema(schema);
+  const nodes = obiTransformer.toGraphSchema(schema);
   expect(nodes.length).toEqual(1);
 
   nodes.forEach(node => {

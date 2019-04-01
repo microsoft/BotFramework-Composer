@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import './style.css';
-import { JsonBlock } from './components/json-block';
-import { ObiEditor } from '../../src/components/obi-editor/ObiEditor';
+import { ObiEditor } from '../../src/components/ObiEditor';
 import { obiTransformer } from '../../src/transformers/ObiTransformer';
 
+import { JsonBlock } from './components/json-block';
 import * as obiExample from './sample.dialog';
+import './style.css';
 
 class Demo extends Component {
   state = {
     obiJson: obiExample,
-    directedGraphSchema: obiTransformer.toDirectedGraphSchema(obiExample),
+    directedGraphSchema: obiTransformer.toGraphSchema(obiExample),
   };
 
   constructor(props) {
@@ -22,12 +22,16 @@ class Demo extends Component {
     console.log('json changed:', json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: obiTransformer.toDirectedGraphSchema(json),
+      directedGraphSchema: obiTransformer.toGraphSchema(json),
     });
   }
 
   render() {
     const { obiJson, directedGraphSchema } = this.state;
+    const logEventThunk = eventType => eventData => {
+      console.log('Event triggered:', eventType, eventData);
+    };
+
     return (
       <div>
         <h1>visual-designer Demo</h1>
@@ -43,11 +47,9 @@ class Demo extends Component {
           <div className="block block--right">
             <ObiEditor
               data={obiJson}
-              width={400}
-              height={500}
-              onClickDialog={nodeContent => {
-                console.log('Clicked node:', nodeContent);
-              }}
+              onSelect={logEventThunk('select')}
+              onExpand={logEventThunk('expand')}
+              onOpen={logEventThunk('open')}
             />
           </div>
         </div>
