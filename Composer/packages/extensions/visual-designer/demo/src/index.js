@@ -28,7 +28,7 @@ class Demo extends Component {
 
   render() {
     const { obiJson, directedGraphSchema } = this.state;
-    const reportEvent = eventType => eventData => {
+    const logEvent = eventType => eventData => {
       console.log('Event triggered:', eventType, eventData);
     };
 
@@ -47,9 +47,9 @@ class Demo extends Component {
           <div className="block block--right">
             <ObiEditor
               data={obiJson}
-              onSelect={reportEvent('select')}
-              onExpand={reportEvent('expand')}
-              onOpen={reportEvent('open')}
+              onSelect={logEvent('select')}
+              onExpand={logEvent('expand')}
+              onOpen={logEvent('open')}
             />
           </div>
         </div>

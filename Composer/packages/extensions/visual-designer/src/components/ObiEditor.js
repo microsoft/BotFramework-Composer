@@ -19,11 +19,6 @@ const rendererByObiType = {
 };
 
 export class ObiEditor extends Component {
-  state = {
-    directedGraphItems: [],
-    prevObiJson: undefined,
-  };
-
   dispatchEvent(eventName, eventData) {
     const { onSelect, onExpand, onOpen } = this.props;
 
