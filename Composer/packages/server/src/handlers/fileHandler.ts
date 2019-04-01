@@ -19,7 +19,7 @@ interface BotFileConfig {
 
 export interface FileInfo {
   name: string;
-  content: string;
+  content: any;
   path: string;
   dir: string;
   relativePath: string;
