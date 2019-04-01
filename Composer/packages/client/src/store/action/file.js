@@ -104,7 +104,7 @@ export async function createDialog(dispatch, { name, steps }) {
     // subtract 1 for the botproj file
     setOpenFileIndex(dispatch, response.data.findIndex(f => f.name.startsWith(name)) - 1);
     // the new dialog only has 1 rule, so navigate directly there
-    navTo(dispatch, `${name}.rules[0]`);
+    navTo(dispatch, `${name}.rules[0]`, [name]);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
