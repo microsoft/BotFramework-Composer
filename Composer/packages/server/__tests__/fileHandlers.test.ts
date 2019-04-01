@@ -9,7 +9,7 @@ describe('fileHandlers', () => {
   describe('getFiles', () => {
     it('should get files at a path', async () => {
       const files: FileInfo[] = await getFiles(mockFilePath);
-      expect(files.length).toBe(2);
+      expect(files.length).toBe(4);
     });
   });
 
