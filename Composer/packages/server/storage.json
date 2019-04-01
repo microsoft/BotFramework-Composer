@@ -5,6 +5,13 @@
             "type": "LocalDrive",
             "id": "default",
             "path": "../../../SampleBots"
+        },
+        {
+            "name": "Azure Blob",
+            "type": "AzureBlob",
+            "id": "azure blob",
+            "account": "composer1",
+            "key":"8NBWK8tbZgZ7y06DNanaIPOhCG/Mp+c1waeemtBCuVjOrJT6ryO62M2qzeaq/Oxv7ANmQBVI2DjpNY4YLQgqiA=="
         }
     ],
     "lastActiveBot": "../../../SampleBots/Planning - ToDoBot/bot.botproj",
