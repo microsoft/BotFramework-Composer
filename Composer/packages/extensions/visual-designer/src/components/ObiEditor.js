@@ -55,7 +55,7 @@ export class ObiEditor extends Component {
 
   buildItemsFromObiJson(data) {
     const selfRenderedItems = obiTransformer
-      .toDirectedGraphSchema(data)
+      .toGraphSchema(data)
       .map(x => ({
         id: x.id,
         neighborIds: x.neighborIds,
@@ -78,7 +78,7 @@ export class ObiEditor extends Component {
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <ComponentGraph items={items} onNodeClick={payload => this.bubbleNodeClickEvent(payload)} />
+        <ComponentGraph items={items} />
       </div>
     );
   }

@@ -11,7 +11,7 @@ import './style.css';
 class Demo extends Component {
   state = {
     obiJson: obiExample,
-    directedGraphSchema: obiTransformer.toDirectedGraphSchema(obiExample),
+    directedGraphSchema: obiTransformer.toGraphSchema(obiExample),
   };
 
   constructor(props) {
@@ -22,7 +22,7 @@ class Demo extends Component {
     console.log('json changed:', json);
     this.setState({
       obiJson: json,
-      directedGraphSchema: obiTransformer.toDirectedGraphSchema(json),
+      directedGraphSchema: obiTransformer.toGraphSchema(json),
     });
   }
 
