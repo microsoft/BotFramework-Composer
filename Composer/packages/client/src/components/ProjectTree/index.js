@@ -15,7 +15,7 @@ export const ProjectTree = props => {
     });
   }
 
-  return <ul css={container}>{files && files.length ? buildProjectTree() : 'loading...'}</ul>;
+  return <ul css={container}>{files && files.length ? buildProjectTree() : ''}</ul>;
 };
 
 ProjectTree.propTypes = {

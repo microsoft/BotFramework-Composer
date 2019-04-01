@@ -46,12 +46,16 @@ function DesignPage() {
                   }}
                 >
                   <div>Dialogs</div>
-                  <IconButton
-                    iconProps={{ iconName: 'Add' }}
-                    title="New Dialog"
-                    ariaLabel="New Dialog"
-                    onClick={() => setModalOpen(true)}
-                  />
+                  {files.length > 0 ? (
+                    <IconButton
+                      iconProps={{ iconName: 'Add' }}
+                      title="New Dialog"
+                      ariaLabel="New Dialog"
+                      onClick={() => setModalOpen(true)}
+                    />
+                  ) : (
+                    <div />
+                  )}
                 </div>
                 <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
               </div>
