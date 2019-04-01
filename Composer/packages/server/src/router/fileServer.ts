@@ -12,7 +12,7 @@ router.get('/', async (req: Request, res: Response) => {
   const lastActiveBot = storage.getItem<string>('lastActiveBot');
 
   try {
-    if (openLastActiveBot) {
+    if (openLastActiveBot || req.query.refresh) {
       fileList = await getFiles(lastActiveBot);
     }
     res.status(200).json(fileList);
