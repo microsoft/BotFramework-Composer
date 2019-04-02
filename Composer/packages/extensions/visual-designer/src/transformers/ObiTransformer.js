@@ -12,7 +12,7 @@ class ObiTransformer {
    * Below is the truth table of how we handle different conditions:
    * (1 indicates the input json 'contains the given element', 0 indicates 'not contains')
    *
-   * | recognizer | rules | steps | treatment
+   * | recognizer | rules | steps | strategy
    * |     1      |   1   |   1   | Decision    (connect 'rules' to 'recognizer'， draw 'steps' as an isolated sequence)
    * |     1      |   1   |   0   | Decision    (connect 'rules' to 'recognizer')
    * |     1      |   0   |   1   | Sequential  ('steps' as a sequence, isolate 'recognizer')
@@ -21,6 +21,21 @@ class ObiTransformer {
    * |     0      |   1   |   0   | Sequential  ( 'rules' as a group, only chunk them)
    * |     0      |   0   |   1   | Sequential  ('steps' as a sequence)
    * |     0      |   0   |   0   | Sequential  (draw nothing, fallback to Sequential)
+   *
+   *
+   * About Decision and Sequential strategy:
+   *
+   * [Decision]
+   *            Decision?
+   *           /    |    \
+   *        Choice Choice Choice
+   *
+   * [Sequential]
+   *            Step1
+   *              |
+   *            Step2
+   *              |
+   *            Step3
    *
    */
   chooseStrategy(input) {
