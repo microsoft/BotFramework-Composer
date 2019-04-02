@@ -34,6 +34,7 @@
     "immer": "^2.1.4",
     "jsonlint-webpack": "^1.1.0",
     "jsonpath": "^1.0.1",
+    "lodash.capitalize": "^4.2.1",
     "lodash.debounce": "^4.0.8",
     "lodash.findlastindex": "^4.6.0",
     "lodash.map": "^4.6.0",
