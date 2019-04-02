@@ -7,7 +7,7 @@ test('transforms todoBot.dialog to directed graph', () => {
   const schema = todoBotSchema;
 
   const nodes = obiTransformer.toGraphSchema(schema);
-  expect(nodes.length).toEqual(6);
+  expect(nodes.length).toEqual(9);
 
   nodes.forEach(node => {
     const nodeKeys = Object.keys(node);
