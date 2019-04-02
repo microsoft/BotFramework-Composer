@@ -17,6 +17,6 @@ export const ObiTypes = {
   EventRule: 'Microsoft.EventRule',
 
   // steps
-  CallDialog: 'Microsoft.CallDialog',
+  CallDialog: 'Microsoft.BeginDialog',
   SendActivity: 'Microsoft.SendActivity',
 };
