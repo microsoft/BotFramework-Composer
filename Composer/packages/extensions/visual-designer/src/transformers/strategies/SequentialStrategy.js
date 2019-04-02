@@ -27,7 +27,7 @@ export const SequentialStrategy = {
     }
 
     if (input.recognizer) {
-      others.push(new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer));
+      others = [...others, new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)];
     }
 
     return {
