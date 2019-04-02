@@ -9,7 +9,7 @@ export const breadcrumbClass = mergeStyleSets({
     alignItems: 'baseline',
   },
   itemLink: {
-    fontSize: '12px',
+    fontSize: '14px',
     fontWeight: 'bold',
     color: '#4f4f4f',
     paddingRight: '4px',
