@@ -1,6 +1,6 @@
 import { consumeStrategy } from './helpers/consumerStrategy';
 import { SequentialStrategy } from './strategies/SequentialStrategy';
-import { DecisionStrategy } from './strategies/DecisionStrategy';
+import { GraphicalStrategy } from './strategies/GraphicalStrategy';
 
 class ObiTransformer {
   /**
@@ -13,19 +13,19 @@ class ObiTransformer {
    * (1 indicates the input json 'contains the given element', 0 indicates 'not contains')
    *
    * | recognizer | rules | steps | strategy
-   * |     1      |   1   |   1   | Decision    (connect 'rules' to 'recognizer'， draw 'steps' as an isolated sequence)
-   * |     1      |   1   |   0   | Decision    (connect 'rules' to 'recognizer')
+   * |     1      |   1   |   1   | Graphical   (connect 'rules' to 'recognizer'， draw 'steps' as an isolated sequence)
+   * |     1      |   1   |   0   | Graphical   (connect 'rules' to 'recognizer')
    * |     1      |   0   |   1   | Sequential  ('steps' as a sequence, isolate 'recognizer')
-   * |     1      |   0   |   0   | Decision    (draw isolated 'recognizer')
+   * |     1      |   0   |   0   | Graphical   (draw isolated 'recognizer')
    * |     0      |   1   |   1   | Sequential  ('steps' as a sequence, draw 'rules' as an isolated group)
    * |     0      |   1   |   0   | Sequential  ( 'rules' as a group, only chunk them)
    * |     0      |   0   |   1   | Sequential  ('steps' as a sequence)
    * |     0      |   0   |   0   | Sequential  (draw nothing, fallback to Sequential)
    *
    *
-   * About Decision and Sequential strategy:
+   * About Graphical and Sequential strategy:
    *
-   * [Decision]
+   * [Graphical]
    *            Decision?
    *           /    |    \
    *        Choice Choice Choice
@@ -51,7 +51,7 @@ class ObiTransformer {
       case '111':
       case '110':
       case '100':
-        return DecisionStrategy;
+        return GraphicalStrategy;
       case '101':
       case '011':
       case '010':

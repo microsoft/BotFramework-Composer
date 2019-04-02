@@ -12,7 +12,7 @@ import { buildObiStep } from '../helpers/elementBuilder';
  *      /     |     \                       |
  *   Rule   Rule  NoMatchRule             Other
  */
-export const DecisionStrategy = {
+export const GraphicalStrategy = {
   selectNodes: input => {
     if (!input) return {};
 
