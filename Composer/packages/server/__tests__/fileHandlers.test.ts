@@ -47,7 +47,7 @@ describe('fileHandlers', () => {
       }
 
       const fileContent = (newFile as FileInfo).content;
-      expect(fileContent.$type).toEqual('Microsoft.RuleDialog');
+      expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
       expect(fileContent.rules).toHaveLength(1);
       expect(fileContent.rules[0].steps).toHaveLength(3);
       expect(fileContent.rules[0].steps).toMatchObject([{ $type: 'foo' }, { $type: 'bar' }, { $type: 'baz' }]);

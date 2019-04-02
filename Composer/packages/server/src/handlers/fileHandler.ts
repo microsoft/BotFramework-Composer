@@ -100,7 +100,7 @@ export async function createFromTemplate(name: string, types: string[], botProjF
 
   const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, `${trimmedName}.dialog`);
-  const newDialog = merge({}, DIALOG_TEMPLATE, { $id: trimmedName });
+  const newDialog = merge({}, DIALOG_TEMPLATE);
 
   types.forEach((type: string, idx: number) => {
     set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
