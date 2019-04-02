@@ -6,7 +6,7 @@ import fs from 'fs';
 import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
-import { getFiles } from '../handlers/fileHandler';
+import { getFiles, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
@@ -67,6 +67,24 @@ router.get('/opened/files', async (req: Request, res: Response) => {
     }
   } else {
     res.status(400).json({ error: "haven't open a project" });
+  }
+});
+
+router.post('/new', async (req: Request, res: Response) => {
+  const { name } = req.body;
+  const trimmedName = (name || '').trim();
+
+  if (!trimmedName) {
+    res.status(400).json({ error: 'Parameter `name` missing.' });
+  }
+
+  const lastActiveBot = projectHandler.checkOpenBotInStorage(storage, setting);
+
+  try {
+    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot ? lastActiveBot.path : '');
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 
