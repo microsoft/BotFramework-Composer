@@ -24,7 +24,9 @@
         },
         {
             "$type": "Microsoft.EventRule",
-            "events": [ "cancelDialog" ],
+            "events": [
+                "cancelDialog"
+            ],
             "steps": [
                 {
                     "$type": "Microsoft.SendActivity",
@@ -36,10 +38,12 @@
             "$type": "Microsoft.IntentRule",
             "intent": "AddIntent",
             "steps": [
-		        {
-		            "$type": "Microsoft.BeginDialog",
-                    "dialog": "AddToDo"
-		        }
+                {
+                    "$type": "Microsoft.CallDialog",
+                    "dialog": {
+                        "$ref": "AddToDo"
+                    }
+                }
             ]
         },
         {
@@ -47,9 +51,11 @@
             "intent": "DeleteIntent",
             "steps": [
                 {
-		            "$type": "Microsoft.BeginDialog",
-                    "dialog": "DeleteToDo"
-		        }
+                    "$type": "Microsoft.CallDialog",
+                    "dialog": {
+                        "$ref": "DeleteToDo"
+                    }
+                }
             ]
         },
         {
@@ -57,9 +63,11 @@
             "intent": "ClearIntent",
             "steps": [
                 {
-		            "$type": "Microsoft.BeginDialog",
-                    "dialog": "ClearToDos"
-		        }
+                    "$type": "Microsoft.CallDialog",
+                    "dialog": {
+                        "$ref": "ClearToDos"
+                    }
+                }
             ]
         },
         {
@@ -67,9 +75,11 @@
             "intent": "ShowIntent",
             "steps": [
                 {
-		            "$type": "Microsoft.BeginDialog",
-                    "dialog": "ShowToDos"
-		        }
+                    "$type": "Microsoft.CallDialog",
+                    "dialog": {
+                        "$ref": "ShowToDos"
+                    }
+                }
             ]
         },
         {
