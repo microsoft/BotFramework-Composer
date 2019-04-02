@@ -1,7 +1,7 @@
 import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
-import { ObiTypes } from '../constants/ObiTypes';
+import { buildObiStep } from '../helpers/elementBuilder';
 
 /**
  *      Step            Rule
@@ -16,17 +16,9 @@ export const SequentialStrategy = {
     let rules = [];
 
     if (Array.isArray(input.steps)) {
-      steps = input.steps.map((step, index) => {
-        let nodeData = step;
-        // Grammar sugar provide by OBI runtime.
-        if (typeof step === 'string') {
-          nodeData = {
-            $type: ObiTypes.CallDialog,
-            dialog: { $ref: step },
-          };
-        }
-        return new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, nodeData);
-      });
+      steps = input.steps.map(
+        (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, buildObiStep(step))
+      );
     }
 
     if (Array.isArray(input.rules)) {
