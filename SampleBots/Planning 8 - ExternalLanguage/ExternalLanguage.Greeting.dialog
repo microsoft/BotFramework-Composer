@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "rules": [

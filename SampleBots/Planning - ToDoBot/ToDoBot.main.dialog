@@ -36,28 +36,40 @@
             "$type": "Microsoft.IntentRule",
             "intent": "AddIntent",
             "steps": [
-                "AddToDo"
+		        {
+		            "$type": "Microsoft.BeginDialog",
+                    "dialog": "AddToDo"
+		        }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "DeleteIntent",
             "steps": [
-                "DeleteToDo"
+                {
+		            "$type": "Microsoft.BeginDialog",
+                    "dialog": "DeleteToDo"
+		        }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ClearIntent",
             "steps": [
-                "ClearToDos"
+                {
+		            "$type": "Microsoft.BeginDialog",
+                    "dialog": "ClearToDos"
+		        }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ShowIntent",
             "steps": [
-                "ShowToDos"
+                {
+		            "$type": "Microsoft.BeginDialog",
+                    "dialog": "ShowToDos"
+		        }
             ]
         },
         {
