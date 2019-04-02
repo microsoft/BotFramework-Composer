@@ -5,7 +5,7 @@ import { NodeClickActionTypes } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import { FormCard } from './templates/FormCard';
 
-export class FallbackRule extends React.Component {
+export class NoMatchRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
@@ -26,5 +26,5 @@ export class FallbackRule extends React.Component {
   }
 }
 
-FallbackRule.propTypes = NodeProps;
-FallbackRule.defaultProps = defaultNodeProps;
+NoMatchRule.propTypes = NodeProps;
+NoMatchRule.defaultProps = defaultNodeProps;

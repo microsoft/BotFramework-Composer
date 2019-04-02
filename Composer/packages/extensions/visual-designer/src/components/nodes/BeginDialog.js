@@ -5,15 +5,10 @@ import { NodeClickActionTypes } from '../../utils/constant';
 import { FormCard } from './templates/FormCard';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
-export class CallDialog extends React.Component {
+export class BeginDialog extends React.Component {
   renderCallDialogLink() {
     const { data, onEvent } = this.props;
-
-    const calleeDialog = data.dialog && data.dialog.$ref ? data.dialog.$ref : '';
-    // TODO: OBI schema no longer uses file path as dialogref. Align with new schema when runtime supports it.
-    const regexResult = calleeDialog.match(/.+[/\\](.+)\.dialog$/);
-    const dialogName = regexResult && regexResult[1] ? regexResult[1] : calleeDialog;
-
+    const calleeDialog = data.dialog;
     return (
       <span
         style={{
@@ -22,10 +17,10 @@ export class CallDialog extends React.Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeClickActionTypes.OpenLink, dialogName);
+          onEvent(NodeClickActionTypes.OpenLink, calleeDialog);
         }}
       >
-        {dialogName}
+        {calleeDialog}
       </span>
     );
   }
@@ -35,7 +30,7 @@ export class CallDialog extends React.Component {
     return (
       <FormCard
         themeColor="#107C10"
-        header="CallDialog"
+        header="BeginDialog"
         details={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(NodeClickActionTypes.Focus, id);
@@ -45,5 +40,5 @@ export class CallDialog extends React.Component {
   }
 }
 
-CallDialog.propTypes = NodeProps;
-CallDialog.defaultProps = defaultNodeProps;
+BeginDialog.propTypes = NodeProps;
+BeginDialog.defaultProps = defaultNodeProps;
