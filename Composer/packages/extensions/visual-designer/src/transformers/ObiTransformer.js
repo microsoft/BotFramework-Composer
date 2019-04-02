@@ -13,6 +13,7 @@ class ObiTransformer {
    * (1 indicates the input json 'contains the given element', 0 indicates 'not contains')
    *
    * | recognizer | rules | steps | strategy
+   * --------------------------------------------------------------------------------------
    * |     1      |   1   |   1   | Graphical   (connect 'rules' to 'recognizer'， draw 'steps' as an isolated sequence)
    * |     1      |   1   |   0   | Graphical   (connect 'rules' to 'recognizer')
    * |     1      |   0   |   1   | Sequential  ('steps' as a sequence, isolate 'recognizer')
@@ -52,11 +53,6 @@ class ObiTransformer {
       case '110':
       case '100':
         return GraphicalStrategy;
-      case '101':
-      case '011':
-      case '010':
-      case '001':
-      case '000':
       default:
         return SequentialStrategy;
     }

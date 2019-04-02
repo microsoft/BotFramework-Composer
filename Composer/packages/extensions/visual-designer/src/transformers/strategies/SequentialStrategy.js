@@ -4,9 +4,11 @@ import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { buildObiStep } from '../helpers/elementBuilder';
 
 /**
- *      Step            Rule
- *        |              |
- *      Step            Rule
+ *      Step                     Rule              ^
+ *        |                       |           <Recognizer>
+ *      Step —— Step             Rule              V
+ *        |      |                |
+ *      Step —— Step             Rule
  *        |
  *      Step
  */
@@ -14,8 +16,9 @@ export const SequentialStrategy = {
   selectNodes: input => {
     let steps = [];
     let rules = [];
-    let others = [];
+    let recognizers = [];
 
+    // TODO: parse steps
     if (Array.isArray(input.steps)) {
       steps = input.steps.map(
         (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, buildObiStep(step))
@@ -27,13 +30,13 @@ export const SequentialStrategy = {
     }
 
     if (input.recognizer) {
-      others = [...others, new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)];
+      recognizers = [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)];
     }
 
     return {
       steps,
       rules,
-      others,
+      recognizers,
     };
   },
   buildEdges: nodeCollection => {

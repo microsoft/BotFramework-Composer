@@ -6,11 +6,20 @@ import { PAYLOAD_KEY } from '../../utils/constant';
 import { buildObiStep } from '../helpers/elementBuilder';
 
 /**
- *          Welcome                       Other
+ * A strategy contains two tasks:
+ *  1. How to select nodes out of raw json.
+ *  2. How to connect your nodes to a graph by following some implicit rules.
+ * Useually, how we connect nodes together is determined by how we select nodes.
+ * Therefore, instead of implemnting node selector and edge connector as standalone modules,
+ * putting them together is a more straight forward approach.
+ */
+
+/**
+ *          Welcome                       Step
  *            |                             |
- *        Recognizer?                     Other
+ *        Recognizer?                     Step
  *      /     |     \                       |
- *   Rule   Rule  NoMatchRule             Other
+ *   Rule   Rule  NoMatchRule             Step
  */
 export const GraphicalStrategy = {
   selectNodes: input => {
