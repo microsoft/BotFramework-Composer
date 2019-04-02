@@ -14,6 +14,7 @@ export const SequentialStrategy = {
   selectNodes: input => {
     let steps = [];
     let rules = [];
+    let others = [];
 
     if (Array.isArray(input.steps)) {
       steps = input.steps.map(
@@ -25,9 +26,14 @@ export const SequentialStrategy = {
       rules = input.rules.map((rule, index) => new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, rule));
     }
 
+    if (input.recognizer) {
+      others.push(new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer));
+    }
+
     return {
       steps,
       rules,
+      others,
     };
   },
   buildEdges: nodeCollection => {
