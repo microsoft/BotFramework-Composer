@@ -39,7 +39,7 @@
             "intent": "AddIntent",
             "steps": [
                 {
-                    "$type": "Microsoft.CallDialog",
+                    "$type": "Microsoft.BeginDialog",
                     "dialog": {
                         "$ref": "AddToDo"
                     }
@@ -51,7 +51,7 @@
             "intent": "DeleteIntent",
             "steps": [
                 {
-                    "$type": "Microsoft.CallDialog",
+                    "$type": "Microsoft.BeginDialog",
                     "dialog": {
                         "$ref": "DeleteToDo"
                     }
@@ -63,7 +63,7 @@
             "intent": "ClearIntent",
             "steps": [
                 {
-                    "$type": "Microsoft.CallDialog",
+                    "$type": "Microsoft.BeginDialog",
                     "dialog": {
                         "$ref": "ClearToDos"
                     }
@@ -75,7 +75,7 @@
             "intent": "ShowIntent",
             "steps": [
                 {
-                    "$type": "Microsoft.CallDialog",
+                    "$type": "Microsoft.BeginDialog",
                     "dialog": {
                         "$ref": "ShowToDos"
                     }
