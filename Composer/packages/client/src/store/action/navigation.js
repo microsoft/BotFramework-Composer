@@ -23,3 +23,10 @@ export function focusTo(dispatch, subPath) {
     payload: { subPath },
   });
 }
+
+export function clearNavHistory(dispatch, fromIndex) {
+  dispatch({
+    type: ActionTypes.CLEAR_NAV_HISTORY,
+    payload: { fromIndex },
+  });
+}

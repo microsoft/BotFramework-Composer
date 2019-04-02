@@ -1,5 +1,9 @@
+import findLastIndex from 'lodash.findlastindex';
+
 import createReducer from './createReducer';
+import { getBaseName } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
+
 const pattern = /\.{1}[a-zA-Z]{1,}$/;
 const projectFiles = ['.bot', '.botproj'];
 
@@ -24,7 +28,7 @@ const getFilesSuccess = (state, { response }) => {
 
 const updateFiles = (state, payload) => {
   state.files = state.files.map((file, index) => {
-    if (file.name === payload.name) return { id: index, ...payload };
+    if (file.name === payload.name) return { ...file, id: index, ...payload };
     return file;
   });
   return state;
@@ -72,12 +76,22 @@ const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
+    state.navPathHistory.push(path);
+    //check if navto dialog
+    const lastDialogIndex = findLastIndex(state.navPathHistory, path => {
+      return getBaseName(path) === path;
+    });
+    const currentOpenFileIndex = state.files.findIndex(file => {
+      return getBaseName(file.name) === state.navPathHistory[lastDialogIndex];
+    });
+    state.openFileIndex = currentOpenFileIndex;
   }
   return state;
 };
 
 const navigateDown = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
+  state.navPathHistory.push(state.navPath);
   return state;
 };
 
@@ -86,6 +100,19 @@ const focusTo = (state, { subPath }) => {
     state.resetFormEditor = true;
   }
   return (state.focusPath = state.navPath + subPath);
+};
+
+const clearNavHistory = (state, { fromIndex }) => {
+  const length = state.navPathHistory.length;
+  if (typeof fromIndex === 'undefined') {
+    state.navPath = '';
+    state.focusPath = '';
+    state.navPathHistory.splice(0, length);
+  } else if (fromIndex + 1 !== state.navPathHistory.length) {
+    state.navPathHistory.splice(fromIndex, length);
+  }
+
+  return state;
 };
 
 export const reducer = createReducer({
@@ -101,4 +128,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
+  [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
 });

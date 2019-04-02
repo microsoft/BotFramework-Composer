@@ -16,7 +16,7 @@ module.exports = {
   rules: {
     'react/no-deprecated': 'warn',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
 
     'react/prop-types': 'warn',
   },

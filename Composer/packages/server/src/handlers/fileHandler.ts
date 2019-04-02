@@ -2,7 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 
+import { merge, set } from 'lodash';
 import glob from 'globby';
+
+import DIALOG_TEMPLATE from '../dialogTemplate.json';
 
 const readFile = promisify(fs.readFile);
 const lstat = promisify(fs.lstat);
@@ -16,7 +19,7 @@ interface BotFileConfig {
 
 export interface FileInfo {
   name: string;
-  content: string;
+  content: any;
   path: string;
   dir: string;
   relativePath: string;
@@ -47,7 +50,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   const botFileContent = await readFile(botFilePath, 'utf-8');
   fileList.push({
     name: botFileName,
-    content: botFileContent,
+    content: JSON.parse(botFileContent),
     path: botFilePath,
     dir: botFileDir,
     relativePath: path.relative(botFileDir, botFilePath),
@@ -59,13 +62,13 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
 
-      for (const filePath of paths) {
-        const realFilePath: string = path.join(botFileDir, filePath);
+      for (const filePath of paths.sort()) {
+        const realFilePath: string = path.resolve(botFileDir, filePath);
         if ((await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
           fileList.push({
             name: filePath,
-            content: content,
+            content: JSON.parse(content),
             path: realFilePath,
             dir: botFileDir,
             relativePath: path.relative(botFileDir, realFilePath),
@@ -78,13 +81,30 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   return fileList;
 }
 
-export async function updateFile(name: string, content: string, botProjFilePath: string = ''): Promise<void> {
+export async function updateFile(name: string, content: any, botProjFilePath: string = ''): Promise<void> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot update ${name}`);
   }
   const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, name);
 
-  const parsed = JSON.parse(content);
-  await writeFile(realFilePath, JSON.stringify(parsed, null, 2) + '\n');
+  await writeFile(realFilePath, JSON.stringify(content, null, 2) + '\n');
+}
+
+export async function createFromTemplate(name: string, types: string[], botProjFilePath: string = ''): Promise<void> {
+  if (!botProjFilePath) {
+    throw new Error(`No Bot Project! Cannot update ${name}`);
+  }
+
+  const trimmedName = name.trim();
+
+  const { botFileDir } = getAllConfig(botProjFilePath);
+  const realFilePath: string = path.join(botFileDir, `${trimmedName}.dialog`);
+  const newDialog = merge({}, DIALOG_TEMPLATE, { $id: trimmedName });
+
+  types.forEach((type: string, idx: number) => {
+    set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
+  });
+
+  await writeFile(realFilePath, JSON.stringify(newDialog, null, 2) + '\n', {});
 }

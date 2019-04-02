@@ -29,7 +29,7 @@ export const navHeader = css`
   cursor: pointer;
 `;
 
-export const backIcon = css`
+export const closeIcon = css`
   font-size: 30px;
   margin-top: 40px;
   padding-left: 30px;
@@ -38,6 +38,20 @@ export const backIcon = css`
   width: 120px;
   &:hover {
     background-color: #366ec2;
+  }
+`;
+
+export const backIcon = css`
+  font-size: 20px;
+  cursor: pointer;
+  transform: rotate(90deg);
+  width: 20px;
+  height: 20px;
+  margin: 18px 0px 0px 3px;
+  padding: 8px;
+  color: dodgerblue;
+  &:hover {
+    background-color: rgb(244, 244, 244);
   }
 `;
 
@@ -66,6 +80,10 @@ export const fileSelectorContainer = css`
   padding-left: 5px;
   padding-top: 90px;
   width: 100%;
+`;
+
+export const fileSelectorHeader = css`
+  display: flex;
 `;
 
 export const navLinkClass = mergeStyleSets({
