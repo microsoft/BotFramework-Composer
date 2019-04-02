@@ -5,7 +5,7 @@ import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, CallDialog, NoMatchRule } from './nodes';
+import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 
 const rendererByObiType = {
@@ -14,7 +14,7 @@ const rendererByObiType = {
   [ObiTypes.NoMatchRule]: NoMatchRule,
   [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.LuisRecognizer]: Recognizer,
-  [ObiTypes.CallDialog]: CallDialog,
+  [ObiTypes.BeginDialog]: BeginDialog,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

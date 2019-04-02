@@ -5,8 +5,8 @@ export function buildObiStep(data) {
   // Grammar sugar provide by OBI runtime.
   if (typeof data === 'string') {
     step = {
-      $type: ObiTypes.CallDialog,
-      dialog: { $ref: step },
+      $type: ObiTypes.BeginDialog,
+      dialog: step,
     };
   }
   return step;
