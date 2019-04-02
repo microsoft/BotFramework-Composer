@@ -1,3 +1,5 @@
+import findLastIndex from 'lodash.findlastindex';
+
 import createReducer from './createReducer';
 import { getBaseName } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
@@ -74,17 +76,15 @@ const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = '';
-    //check if navto dialog
-    if (path.indexOf('.') <= 0) {
-      const currentOpenFileIndex = state.files.findIndex(file => {
-        return getBaseName(file.name) === path;
-      });
-
-      if (currentOpenFileIndex > 0) {
-        state.openFileIndex = currentOpenFileIndex;
-      }
-    }
     state.navPathHistory.push(path);
+    //check if navto dialog
+    const lastDialogIndex = findLastIndex(state.navPathHistory, path => {
+      return getBaseName(path) === path;
+    });
+    const currentOpenFileIndex = state.files.findIndex(file => {
+      return getBaseName(file.name) === state.navPathHistory[lastDialogIndex];
+    });
+    state.openFileIndex = currentOpenFileIndex;
   }
   return state;
 };
