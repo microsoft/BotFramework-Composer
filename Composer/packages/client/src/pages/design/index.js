@@ -3,7 +3,7 @@ import Path from 'path';
 import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
 import map from 'lodash.map';
-import capitalize from 'lodash.capitalize';
+import startCase from 'lodash.startcase';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -48,7 +48,7 @@ function DesignPage() {
         key: item + index,
         path: item,
         index: index,
-        text: capitalize(text),
+        text: startCase(text).replace(/\s/g, ''),
         onClick: (_event, { path, index }) => {
           clearNavHistory(index);
           navTo(path);
