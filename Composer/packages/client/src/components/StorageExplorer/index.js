@@ -148,7 +148,8 @@ export function StorageExplorer(props) {
   ];
 
   const separator = '/';
-  const pathItems = currentPath.split(separator);
+  // filter the empty one, server api need '/' for root path, but no need for others.
+  const pathItems = currentPath.split(separator).filter(p => p);
   const breadcrumbItems = pathItems.map((item, index) => {
     const itemPath = getNavItemPath(pathItems, separator, 0, index);
     return {
@@ -184,8 +185,9 @@ export function StorageExplorer(props) {
   }
 
   function getNavItemPath(array, seperator, start, end) {
+    if (end === 0) return array[0] + seperator;
     if (!start) start = 0;
-    if (!end && end !== 0) end = array.length - 1;
+    if (!end) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
   }
@@ -222,9 +224,10 @@ export function StorageExplorer(props) {
   }
 
   function getFileEditDate(file) {
-    if (file.type === FileTypes.FILE) {
+    if (file && file.lastModified) {
       return new Date(file.lastModified).toLocaleDateString();
     }
+
     return '';
   }
 
@@ -296,7 +299,7 @@ export function StorageExplorer(props) {
             css={backIcon}
             text="Back"
             onClick={() => {
-              const path = currentPath.substring(0, currentPath.lastIndexOf(separator));
+              const path = currentPath.substring(0, currentPath.lastIndexOf(separator) + 1);
               updateCurrentPath(path, currentStorageId);
             }}
           />
