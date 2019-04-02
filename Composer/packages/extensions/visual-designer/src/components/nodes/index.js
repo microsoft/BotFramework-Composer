@@ -1,5 +1,5 @@
 export { WelcomeRule } from './WelcomeRule';
-export { FallbackRule } from './FallbackRule';
+export { NoMatchRule } from './NoMatchRule';
 export { IntentRule } from './IntentRule';
 export { Recognizer } from './Recognizer';
 export { CallDialog } from './CallDialog';

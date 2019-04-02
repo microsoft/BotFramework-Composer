@@ -5,13 +5,13 @@ import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, CallDialog, FallbackRule } from './nodes';
+import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, CallDialog, NoMatchRule } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,
   [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.FallbackRule]: FallbackRule,
+  [ObiTypes.NoMatchRule]: NoMatchRule,
   [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.CallDialog]: CallDialog,
