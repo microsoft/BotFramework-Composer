@@ -6,30 +6,24 @@ import fs from 'fs';
 import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
-import { getFiles, createFromTemplate } from '../handlers/fileHandler';
+import { getFiles, updateFile, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
 
 const router: Router = express.Router({});
-let openBot: any | undefined = null;
 
-// read from memory
 router.get('/opened', async (req: Request, res: Response) => {
-  if (openBot) {
-    res.status(200).json(openBot);
-    return;
-  }
   // check setting file
-  openBot = projectHandler.checkOpenBotInStorage(storage, setting);
-  if (openBot !== null) {
-    res.status(200).json(openBot);
-  } else {
-    res.status(404).json({ error: 'no project open' });
+  const result = projectHandler.checkOpenBotInStorage(storage, setting);
+  try {
+    const files = await getFiles(result.path);
+    res.status(200).json({ ...result, projectFiles: files });
+  } catch (error) {
+    res.status(404).json({ error: 'no access project recently' });
   }
 });
 
-// update memory
 router.put('/opened', async (req: Request, res: Response) => {
   // check whether the data is completed
   if (req.body.path && req.body.storageId) {
@@ -46,7 +40,7 @@ router.put('/opened', async (req: Request, res: Response) => {
       return;
     }
     try {
-      openBot = projectHandler.updateOpenBot(req.body, storage);
+      projectHandler.updateOpenBot(req.body, storage);
       res.status(200).json({ result: 'update opened project successfully' });
     } catch (error) {
       res.status(400).json(error);
@@ -56,17 +50,32 @@ router.put('/opened', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/opened/files', async (req: Request, res: Response) => {
-  if (openBot) {
-    // load local project
-    try {
-      const result = await getFiles(openBot.path);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(400).json(error);
-    }
-  } else {
-    res.status(400).json({ error: "haven't open a project" });
+// update file in current open project
+router.put('/opened/files', async (req: Request, res: Response) => {
+  const result = projectHandler.checkOpenBotInStorage(storage, setting);
+  try {
+    await updateFile(req.body.name, req.body.content, result.path);
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.post('/new', async (req: Request, res: Response) => {
+  const { name } = req.body;
+  const trimmedName = (name || '').trim();
+
+  if (!trimmedName) {
+    res.status(400).json({ error: 'Parameter `name` missing.' });
+  }
+
+  const lastActiveBot = projectHandler.checkOpenBotInStorage(storage, setting);
+
+  try {
+    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot ? lastActiveBot.path : '');
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 
