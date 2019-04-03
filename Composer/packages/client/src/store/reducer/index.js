@@ -14,7 +14,7 @@ const closeCurrentProject = state => {
 };
 
 const getFilesSuccess = (state, { response }) => {
-  state.files = response.data.reduce((files, value) => {
+  state.files = response.data.projectFiles.reduce((files, value) => {
     const extension = pattern.exec(value.name)[0];
     if (projectFiles.indexOf(extension) === -1) {
       files.push({ id: files.length, ...value });
