@@ -26,6 +26,8 @@ export const folderItem = active => {
   `;
 };
 
-export const nodeItem = css`
-  padding-left: 15px;
-`;
+export const nodeItem = id => {
+  return css`
+    padding-left: ${id === 0 ? '15px' : '25px'};
+  `;
+};
