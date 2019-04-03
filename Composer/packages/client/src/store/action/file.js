@@ -5,7 +5,7 @@ import { navTo, navDown, clearNavHistory } from './navigation';
 
 export async function fetchFiles(dispatch) {
   try {
-    const response = await axios.get(`${BASEURL}/fileserver`);
+    const response = await axios.get(`${BASEURL}/projects/opened`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },
@@ -26,7 +26,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
       path: absolutePath,
     };
     await axios.put(`${BASEURL}/projects/opened`, data);
-    const response = await axios.get(`${BASEURL}/projects/opened/files`);
+    const response = await axios.get(`${BASEURL}/projects/opened`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },
@@ -60,7 +60,7 @@ export async function updateFile(dispatch, { name, content }) {
 
 export async function saveFile(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/fileserver`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -76,7 +76,7 @@ export async function updateProjFile(dispatch, { name, content }) {
         content,
       },
     });
-    await axios.put(`${BASEURL}/fileserver`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
   } catch (err) {
     dispatch({
       type: ActionTypes.PROJ_FILE_UPDATE_FAILURE,
@@ -95,8 +95,8 @@ export function setOpenFileIndex(dispatch, index) {
 
 export async function createDialog(dispatch, { name, steps }) {
   try {
-    await axios.post(`${BASEURL}/fileserver/new`, { name, steps });
-    const response = await axios.get(`${BASEURL}/fileserver?refresh=true`);
+    await axios.post(`${BASEURL}/projects/opened/files`, { name, steps });
+    const response = await axios.get(`${BASEURL}/projects/opened?refresh=true`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },

@@ -14,7 +14,7 @@ const closeCurrentProject = state => {
 };
 
 const getFilesSuccess = (state, { response }) => {
-  state.files = response.data.reduce((files, value) => {
+  state.files = response.data.projectFiles.reduce((files, value) => {
     const extension = getExtension(value.name);
     if (projectFiles.indexOf(extension) >= 0) {
       state.botProjFile = value;

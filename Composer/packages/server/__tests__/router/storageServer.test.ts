@@ -38,7 +38,7 @@ describe('test storage server all method', () => {
   });
 
   test('test get folder in one storage', () => {
-    const result = storageHandler.getFolderTree(__dirname);
+    const result = storageHandler.getFolderTree('./../../');
     expect(result.length).toBeGreaterThan(0);
   });
 
