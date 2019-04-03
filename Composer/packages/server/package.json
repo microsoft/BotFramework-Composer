@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "yarn webpack --config webpack.config.js",
     "start": "tsc -p tsconfig.build.json && node build/server.js",
     "test": "yarn typecheck && jest",
     "test:watch": "jest --watch",
