@@ -27,6 +27,8 @@ export interface FileInfo {
 
 interface BotConfig {
   files: string[];
+  services: string[];
+  entry: string;
 }
 
 function getAllConfig(botProjFilePath: string): BotFileConfig {
@@ -62,11 +64,11 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
 
-      // find the index of the entry dialog (main.dialog)
+      // find the index of the entry dialog defined in the botproject
       // save & remove it from the paths array before it is sorted
       let mainPathIndex = 0;
       paths.forEach((path, index) => {
-        if (path.indexOf('main.dialog') !== -1) {
+        if (path.indexOf(botConfig.entry) !== -1) {
           mainPathIndex = index;
         }
       });
@@ -89,7 +91,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
       }
 
       // resolve the entry dialog path and add it to the front of the
-      //sorted paths array
+      // now sorted paths array
       const mainFilePath = path.resolve(botFileDir, mainPath);
       if ((await lstat(mainFilePath)).isFile()) {
         const content: string = await readFile(mainFilePath, 'utf-8');

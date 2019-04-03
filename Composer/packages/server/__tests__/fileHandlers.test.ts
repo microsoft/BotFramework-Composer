@@ -16,14 +16,13 @@ describe('fileHandlers', () => {
   describe('updateFile', () => {
     it('should update a file at a path', async () => {
       const initValue = { old: 'value' };
-      const newVaule = { new: 'value' };
+      const newValue = { new: 'value' };
 
-      let files: FileInfo[] = await getFiles(mockFilePath);
-      await updateFile(files[1].name, newVaule, mockFilePath);
-      files = await getFiles(mockFilePath);
-
-      expect(files[1].content).toEqual(newVaule);
-      await updateFile(files[1].name, initValue, mockFilePath);
+      await updateFile('a.dialog', newValue, mockFilePath);
+      const aDialog = (await getFiles(mockFilePath)).find(f => f.name.startsWith('a'));
+      // @ts-ignore
+      expect(aDialog.content).toEqual(newValue);
+      await updateFile('a.dialog', initValue, mockFilePath);
     });
   });
 
