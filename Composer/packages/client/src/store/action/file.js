@@ -60,7 +60,7 @@ export async function updateFile(dispatch, { name, content }) {
 
 export async function saveFile(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/fileserver`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
