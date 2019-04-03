@@ -61,25 +61,7 @@ router.put('/opened/files', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/new', async (req: Request, res: Response) => {
-  const { name } = req.body;
-  const trimmedName = (name || '').trim();
-
-  if (!trimmedName) {
-    res.status(400).json({ error: 'Parameter `name` missing.' });
-  }
-
-  const lastActiveBot = projectHandler.checkOpenBotInStorage(storage, setting);
-
-  try {
-    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot ? lastActiveBot.path : '');
-    res.send('OK');
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-router.post('/new', async (req: Request, res: Response) => {
+router.post('/opened/files', async (req: Request, res: Response) => {
   const { name } = req.body;
   const trimmedName = (name || '').trim();
 
