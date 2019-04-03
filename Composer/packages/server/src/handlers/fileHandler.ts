@@ -93,7 +93,7 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
       // resolve the entry dialog path and add it to the front of the
       // now sorted paths array
       const mainFilePath = path.resolve(botFileDir, mainPath);
-      if ((await lstat(mainFilePath)).isFile()) {
+      if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
         const content: string = await readFile(mainFilePath, 'utf-8');
         fileList.unshift({
           name: mainPath,
