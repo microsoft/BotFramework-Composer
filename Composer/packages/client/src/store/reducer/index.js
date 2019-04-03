@@ -1,11 +1,11 @@
 import findLastIndex from 'lodash.findlastindex';
 
 import createReducer from './createReducer';
-import { getBaseName } from './../../utils';
+import { getBaseName, getExtension } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
 
-const pattern = /\.{1}[a-zA-Z]{1,}$/;
-const projectFiles = ['.bot', '.botproj'];
+const projectFiles = ['bot', 'botproj'];
+const dialogFiles = ['dialog'];
 
 const closeCurrentProject = state => {
   state.openFileIndex = -1;
@@ -15,11 +15,11 @@ const closeCurrentProject = state => {
 
 const getFilesSuccess = (state, { response }) => {
   state.files = response.data.projectFiles.reduce((files, value) => {
-    const extension = pattern.exec(value.name)[0];
-    if (projectFiles.indexOf(extension) === -1) {
-      files.push({ id: files.length, ...value });
-    } else {
+    const extension = getExtension(value.name);
+    if (projectFiles.indexOf(extension) >= 0) {
       state.botProjFile = value;
+    } else if (dialogFiles.indexOf(extension) >= 0) {
+      files.push({ id: files.length, ...value });
     }
     return files;
   }, []);
@@ -61,7 +61,7 @@ const getStorageFileSuccess = (state, { response }) => {
       files.push(file);
     } else {
       const path = file.path;
-      const extension = path.substring(path.lastIndexOf('.'), path.length);
+      const extension = getExtension(path);
       if (projectFiles.indexOf(extension) >= 0) {
         files.push(file);
       }

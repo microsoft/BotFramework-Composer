@@ -1,9 +1,10 @@
 {
-    "services": [
-    ],
     "files": [
-      "AddToDo.dialog",
-      "main.dialog"
+      "ToDoLuisBot.AddToDo.dialog",
+      "ToDoLuisBot.ClearToDos.dialog",
+      "ToDoLuisBot.DeleteToDo.dialog",
+      "ToDoLuisBot.main.dialog",
+      "ToDoLuisBot.ShowToDos.dialog"
     ],
-    "entry": "main.dialog"
+    "entry": "ToDoLuisBot.main.dialog"
 }

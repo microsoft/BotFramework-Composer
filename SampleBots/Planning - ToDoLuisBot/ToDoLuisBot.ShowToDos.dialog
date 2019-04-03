@@ -1,0 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.IfCondition",
+            "condition": "user.todos == null",
+            "ifTrue": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "You have no todos."
+                }
+            ],
+            "ifFalse": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "[ShowTodo]"
+                }
+            ]
+        }
+    ]
+}

@@ -1,7 +1,9 @@
 {
-  "services": [],
-  "files": [
-    "*.dialog"
-  ],
-  "entry": "main.dialog"
+    "services": [
+    ],
+    "files": [
+       "*.dialog",
+       "*.lg"
+    ],
+    "entry": "ToDoBot.main.dialog"
 }

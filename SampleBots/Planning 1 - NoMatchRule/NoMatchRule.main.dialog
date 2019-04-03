@@ -1,0 +1,15 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "rules": [
+        {
+            "$type": "Microsoft.NoMatchRule",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Hello planning!"
+                }
+            ]
+        }
+    ]
+}

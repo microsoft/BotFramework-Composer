@@ -1,13 +1,12 @@
 {
-  "$schema": "../../Schemas/app.schema",
-  "$type": "Microsoft.RuleDialog",
-  "$id": "{{dialogName}}",
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
   "storage": {
     "$type": "Microsoft.MemoryStorage"
   },
   "rules": [
     {
-      "$type": "Microsoft.FallbackRule",
+      "$type": "Microsoft.NoMatchRule",
       "steps": [
         {
           "$type": "{{stepType}}"
