@@ -1,5 +1,6 @@
 import { storageHandler } from '../../src/router/storageServer';
 import storage from '../../src/storage/StorageService';
+import azure from 'azure-storage';
 
 jest.mock('../../src/storage/StorageService', () => {
   const mockStorage: any = {
@@ -9,6 +10,13 @@ jest.mock('../../src/storage/StorageService', () => {
         type: 'LocalDrive',
         id: 'default',
         path: 'testPath',
+      },
+      {
+        name: 'Azure Blob',
+        type: 'AzureBlob',
+        id: 'azure',
+        account: 'test',
+        key: 'test',
       },
     ],
     lastActiveBot: '../../../../SampleBots/Planning - ToDoLuisBot/bot.botproj',
@@ -28,6 +36,20 @@ jest.mock('../../src/storage/StorageService', () => {
     },
   };
 });
+jest.mock('azure-storage', () => {
+  return {
+    createBlobService: (account: string, key: string) => {
+      return {
+        listContainersSegmented: () => {
+          return { containers: [] };
+        },
+        listBlobsSegmented: () => {
+          return { blobs: [] };
+        },
+      };
+    },
+  };
+});
 
 describe('test storage server all method', () => {
   test('GET /api/storages handler', () => {
@@ -42,19 +64,15 @@ describe('test storage server all method', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  test('get folders and files', async () => {
-    const mockResponse: any = {
-      status: jest.fn(() => mockResponse),
-      json: jest.fn(() => mockResponse),
-    };
-    const mockreq: any = {
-      params: {
-        path: __dirname,
-        storageId: 'default',
-      },
-    };
-    await storageHandler.getFilesAndFolders(mockreq, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalled();
+  test('test listContainers', () => {
+    let mockService = azure.createBlobService('test', 'test');
+    const result = storageHandler.listContainers(mockService);
+    expect(result).not.toBeUndefined();
+  });
+
+  test('test listBlobs', () => {
+    let mockService = azure.createBlobService('test', 'test');
+    const result = storageHandler.listBlobs(mockService, 'azure');
+    expect(result).not.toBeUndefined();
   });
 });
