@@ -15,7 +15,7 @@ export const Node = props => {
   }
 
   return (
-    <li css={nodeItem}>
+    <li css={nodeItem(node.id)}>
       <Folder
         folder={node}
         activeNode={activeNode}

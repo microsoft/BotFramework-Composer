@@ -62,6 +62,17 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
 
+      // find the index of the entry dialog (main.dialog)
+      // save & remove it from the paths array before it is sorted
+      let mainPathIndex = 0;
+      paths.forEach((path, index) => {
+        if (path.indexOf('main.dialog') !== -1) {
+          mainPathIndex = index;
+        }
+      });
+      const mainPath = paths[mainPathIndex];
+      paths.splice(mainPathIndex, 1);
+
       for (const filePath of paths.sort()) {
         const realFilePath: string = path.resolve(botFileDir, filePath);
         // skip lg files for now
@@ -75,6 +86,20 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
             relativePath: path.relative(botFileDir, realFilePath),
           });
         }
+      }
+
+      // resolve the entry dialog path and add it to the front of the
+      //sorted paths array
+      const mainFilePath = path.resolve(botFileDir, mainPath);
+      if ((await lstat(mainFilePath)).isFile()) {
+        const content: string = await readFile(mainFilePath, 'utf-8');
+        fileList.unshift({
+          name: mainPath,
+          content: JSON.parse(content),
+          path: mainFilePath,
+          dir: botFileDir,
+          relativePath: path.relative(botFileDir, mainFilePath),
+        });
       }
     }
   }
