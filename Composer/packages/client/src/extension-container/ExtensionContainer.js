@@ -29,8 +29,9 @@ function ExtensionContainer() {
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('reset', data => {
+    apiClient.registerApi('reset', ({ data, dialogs }) => {
       setData(data);
+      setDialogs(dialogs);
     });
 
     apiClient.registerApi('saveFromChild', args => {
@@ -61,12 +62,12 @@ function ExtensionContainer() {
       return apiClient.apiCall('getDialogs', {});
     },
 
-    saveData: newData => {
-      return apiClient.apiCall('saveData', newData);
+    saveData: () => {
+      return apiClient.apiCall('saveData');
     },
 
-    flushToDisk: () => {
-      return apiClient.apiCall('flushToDisk');
+    changeData: newData => {
+      return apiClient.apiCall('changeData', newData);
     },
 
     navTo: path => {
@@ -97,8 +98,8 @@ function ExtensionContainer() {
         <RealEditor
           data={data}
           dialogs={dialogs}
-          onChange={shellApi.saveData}
-          onBlur={shellApi.flushToDisk}
+          onChange={shellApi.changeData}
+          onBlur={shellApi.saveData}
           shellApi={shellApi}
         />
       )}

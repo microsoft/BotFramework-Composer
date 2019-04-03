@@ -14,25 +14,14 @@ const getType = data => {
   return data.$type;
 };
 
-// TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REF
-const runtimePathRegex = new RegExp(/^(\.\.\/\.\.\/[a-zA-Z])/); // "../../WORD"
-const composerPathRegex = new RegExp(/^(\.\.\/\.\.\/\.\.\/[a-zA-Z])/); // "// ../../../WORD"
-const makeState = data => {
-  if (data && data.dialog && data.dialog.$ref) {
-    if (runtimePathRegex.test(data.dialog.$ref)) {
-      data.dialog.$ref = `../${data.dialog.$ref}`;
-    }
-  }
-  data.$copy = undefined;
-  data.$id = undefined;
-  data.property = undefined;
-  return data;
-};
-
 export const FormEditor = props => {
   const { data, memory, dialogs } = props;
+  const [formData, setFormData] = useState(data);
 
-  const [dialogForm, setDialogForm] = useState(makeState(data));
+  useEffect(() => {
+    setFormData(data);
+  }, [data]);
+
   const type = getType(data);
 
   const mergedSchema = getMergedSchema(dialogs);
@@ -47,13 +36,7 @@ export const FormEditor = props => {
   };
 
   const onChange = newValue => {
-    // TODO: REMOVE AFTER RUNTIME UPDATES TO NAMED DIALOG REFS
-    if (newValue.formData && newValue.formData.dialog && newValue.formData.dialog.$ref) {
-      if (composerPathRegex.test(newValue.formData.dialog.$ref)) {
-        newValue.formData.dialog.$ref = newValue.formData.dialog.$ref.replace(/^(\.\.\/)/, '');
-      }
-    }
-    props.onChange(newValue.formData);
+    setFormData(newValue.formData);
   };
 
   const buildScope = (memory, scope) => {
@@ -89,10 +72,6 @@ export const FormEditor = props => {
     ...buildScope(memory, 'turn'),
   ];
 
-  useEffect(() => {
-    setDialogForm(makeState(data));
-  }, [data]);
-
   return (
     <Customizer {...FluentCustomizations}>
       <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
@@ -110,8 +89,11 @@ export const FormEditor = props => {
           noValidate
           className="schemaForm"
           onChange={onChange}
-          formData={dialogForm}
-          onBlur={props.onBlur}
+          formData={formData}
+          onBlur={() => {
+            props.onChange(formData);
+            props.onBlur();
+          }}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
         >
@@ -131,6 +113,12 @@ FormEditor.propTypes = {
     dialog: PropTypes.any,
   }),
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+};
+
+FormEditor.defaultProps = {
+  onChange: () => {},
+  onBlur: () => {},
 };
 
 export default FormEditor;

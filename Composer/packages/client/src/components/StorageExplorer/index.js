@@ -18,12 +18,14 @@ import {
   navHeader,
   leftNav,
   panelContent,
+  closeIcon,
   backIcon,
   navLinkClass,
   detailListContainer,
   title,
   detailListClass,
   fileSelectorContainer,
+  fileSelectorHeader,
 } from './styles';
 
 export function StorageExplorer(props) {
@@ -119,6 +121,46 @@ export function StorageExplorer(props) {
     },
   });
 
+  const storageFiles = currentStorageFiles.map(file => {
+    return {
+      name: file.name,
+      value: file.name,
+      fileType: file.type,
+      iconName: getIconName(file),
+      dateModified: getFileEditDate(file),
+      fileSize: file.size ? formatBytes(file.size) : '',
+      filePath: file.path,
+    };
+  });
+
+  // todo: result parse from api result to ui acceptable format may need move to reducer.
+  const links = storages.map((storage, index) => {
+    return {
+      name: storage.name,
+      key: storage.id,
+      onClick: () => onStorageSourceChange(index),
+    };
+  });
+  const storageNavItems = [
+    {
+      links: links,
+    },
+  ];
+
+  const separator = '/';
+  // filter the empty one, server api need '/' for root path, but no need for others.
+  const pathItems = currentPath.split(separator).filter(p => p);
+  const breadcrumbItems = pathItems.map((item, index) => {
+    const itemPath = getNavItemPath(pathItems, separator, 0, index);
+    return {
+      text: item,
+      key: itemPath,
+      onClick: () => {
+        updateCurrentPath(itemPath, currentStorageId);
+      },
+    };
+  });
+
   async function init() {
     const res = await actions.fetchStorages();
     updateCurrentPath(res[currentStorageIndex].path, res[currentStorageIndex].id);
@@ -129,61 +171,37 @@ export function StorageExplorer(props) {
     init();
   }, []);
 
+  function formatPath(path) {
+    if (path) {
+      return path.replace(/\\/g, separator);
+    }
+
+    return path;
+  }
+
   function onStorageSourceChange(index) {
     setCurrentStorageIndex(index);
     updateCurrentPath(storages[currentStorageIndex].path, storages[currentStorageIndex].id);
   }
 
-  // todo: result parse from api result to ui acceptable format may need move to reducer.
-  const links = [];
-  storages.forEach((storage, index) => {
-    links.push({
-      name: storage.name,
-      key: storage.id,
-      onClick: () => onStorageSourceChange(index),
-    });
-  });
-  const storageGroup = [
-    {
-      links: links,
-    },
-  ];
-
   function getNavItemPath(array, seperator, start, end) {
+    if (end === 0) return array[0] + seperator;
     if (!start) start = 0;
     if (!end) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
   }
 
-  function getPathNavItems(path, storageId) {
-    // todo: make sure the separator is the same and working.
-    const pathItems = path.split('\\');
-    const newPathItems = [];
-    for (let i = 0; i < pathItems.length; i++) {
-      const item = pathItems[i];
-      const currentPath = getNavItemPath(pathItems, '\\', 0, i);
-      newPathItems.push({
-        text: item,
-        key: currentPath,
-        onClick: () => {
-          updateCurrentPath(currentPath, storageId);
-        },
-      });
-    }
-    return newPathItems;
-  }
-
   function updateCurrentPath(path, storageId) {
     if (storageId && path) {
-      actions.fetchFolderItemsByPath(storageId, path);
-      setCurrentPath(path);
-      // setPathNavItems(newPathItems);
+      const formatedPath = formatPath(path);
+      actions.fetchFolderItemsByPath(storageId, formatedPath);
+      setCurrentPath(formatedPath);
     }
   }
 
   function formatBytes(bytes, decimals) {
-    if (bytes == 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes';
     const k = 1024,
       dm = decimals <= 0 ? 0 : decimals || 2,
       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
@@ -191,27 +209,12 @@ export function StorageExplorer(props) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  const storageFiles = [];
-  if (currentStorageFiles) {
-    currentStorageFiles.forEach(file => {
-      storageFiles.push({
-        name: file.name,
-        value: file.name,
-        fileType: file.type,
-        iconName: getIconName(file),
-        dateModified: getFileEditDate(file),
-        fileSize: file.size ? formatBytes(file.size) : '',
-        filePath: file.path,
-      });
-    });
-  }
-
   function toggleExplorer() {
     status === 'closed' ? 'opened' : 'closed';
     actions.setStorageExplorerStatus(status);
   }
 
-  // this empty div tag used to replace the default panel header.
+  // this empty div tag is used to replace the default panel header.
   function onRenderNavigationContent() {
     return (
       <Fragment>
@@ -221,7 +224,7 @@ export function StorageExplorer(props) {
   }
 
   function getFileEditDate(file) {
-    if (file.type === FileTypes.FILE) {
+    if (file && file.lastModified) {
       return new Date(file.lastModified).toLocaleDateString();
     }
 
@@ -248,7 +251,7 @@ export function StorageExplorer(props) {
     return (
       <div css={leftNav}>
         <div css={navHeader} onClick={() => toggleExplorer()}>
-          <Icon iconName="Back" css={backIcon} text="Close" />
+          <Icon iconName="Back" css={closeIcon} text="Close" />
         </div>
         <div>
           <Nav
@@ -275,7 +278,7 @@ export function StorageExplorer(props) {
           <div css={title}>Open</div>
           <div style={{ paddingTop: '10px' }}>
             <Nav
-              groups={storageGroup}
+              groups={storageNavItems}
               initialSelectedKey={currentStorageId}
               styles={{
                 link: navLinkClass.storageNav,
@@ -290,11 +293,20 @@ export function StorageExplorer(props) {
   function getFileSelector() {
     return (
       <div css={fileSelectorContainer}>
-        <Breadcrumb
-          items={getPathNavItems(currentPath, currentStorageId)}
-          ariaLabel={'File path'}
-          maxDisplayedItems={'1'}
-        />
+        <div css={fileSelectorHeader}>
+          <Icon
+            iconName="Back"
+            css={backIcon}
+            text="Back"
+            onClick={() => {
+              const path = currentPath.substring(0, currentPath.lastIndexOf(separator) + 1);
+              updateCurrentPath(path, currentStorageId);
+            }}
+          />
+          <div style={{ flexGrow: 1 }}>
+            <Breadcrumb items={breadcrumbItems} ariaLabel={'File path'} maxDisplayedItems={1} />
+          </div>
+        </div>
         <DetailsList
           items={storageFiles}
           compact={false}

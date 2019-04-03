@@ -26,6 +26,7 @@
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
     "@types/jest": "^24.0.9",
+    "@types/lodash": "^4.14.123",
     "@types/morgan": "^1.7.35",
     "@types/node": "^11.9.6",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
@@ -45,6 +46,7 @@
     "globby": "^9.1.0",
     "http-errors": "^1.7.2",
     "immer": "^2.1.4",
+    "lodash": "^4.17.11",
     "morgan": "^1.9.1"
   }
 }

@@ -43,15 +43,14 @@ export const Services = () => {
   const updateFormData = (editor, data, value) => {
     try {
       if (!botProjFile.name) return;
-      JSON.parse(value);
       updateProjFile({
         name: botProjFile.name,
-        content: value,
+        content: JSON.parse(value),
       });
     } catch (err) {
       //TODO
     }
   };
 
-  return <CodeMirror value={value} options={cmOptions} onChange={updateFormData} autoCursor />;
+  return <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />;
 };

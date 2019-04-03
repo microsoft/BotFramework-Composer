@@ -10,7 +10,7 @@ class ObiTransformer {
     return !!chosenStrategy;
   }
 
-  toDirectedGraphSchema(input) {
+  toGraphSchema(input) {
     const chosenStrategy = this.supportedStrategies.find(strategy => strategy.when(input));
 
     if (chosenStrategy) {

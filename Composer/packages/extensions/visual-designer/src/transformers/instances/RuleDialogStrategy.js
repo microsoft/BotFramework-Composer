@@ -18,7 +18,7 @@ import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
  */
 export const RuleDialogStrategy = {
   // When input schema is a ObiRuleDialog.
-  when: input => input && input.$type === ObiTypes.dialogs.ObiRuleDialog,
+  when: input => input && input.$type === ObiTypes.ObiRuleDialog,
   // Select below elements.
   selectNodes: input => {
     return {
@@ -85,6 +85,6 @@ const createRuleTypeSelector = targetRuleType => input =>
     )
     .filter(x => x);
 
-const selectWelcomes = createRuleTypeSelector(ObiTypes.rules.WelcomeRule);
-const selectFallbacks = createRuleTypeSelector(ObiTypes.rules.FallbackRule);
-const selectIntents = createRuleTypeSelector(ObiTypes.rules.IntentRule);
+const selectWelcomes = createRuleTypeSelector(ObiTypes.WelcomeRule);
+const selectFallbacks = createRuleTypeSelector(ObiTypes.FallbackRule);
+const selectIntents = createRuleTypeSelector(ObiTypes.IntentRule);

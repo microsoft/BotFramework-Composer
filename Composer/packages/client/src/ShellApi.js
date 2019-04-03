@@ -1,9 +1,8 @@
 import Path from 'path';
 
 import jp from 'jsonpath';
-import { useEffect, useContext, useMemo, useRef } from 'react';
+import { useEffect, useContext, useMemo } from 'react';
 import set from 'lodash.set';
-import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -17,8 +16,6 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, navPath, focusPath } = state;
-  // use a ref to keep a ref to the debounced function across renders
-  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -27,19 +24,24 @@ export function ShellApi() {
       files.reduce(
         (result, item) => ({
           ...result,
-          [Path.basename(item.name, '.dialog')]: JSON.parse(item.content),
+          [Path.basename(item.name, '.dialog')]: item.content,
         }),
         {}
       ),
     [files]
   );
 
+  function saveData() {
+    actions.saveFile(files[openFileIndex]);
+  }
+
   useEffect(() => {
     apiClient.connect();
 
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('getDialogs', getDialogs);
-    apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('changeData', handleValueChange);
+    apiClient.registerApi('saveData', saveData);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -51,16 +53,20 @@ export function ShellApi() {
   }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
-    const editorWindow = window.frames[0];
-    const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
-    apiClient.apiCallAt('reset', data, editorWindow);
-  }, [dialogs, navPath]);
+    if (window.frames[0]) {
+      const editorWindow = window.frames[0];
+      const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
+      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+    }
+  }, [dialogs, files, navPath]);
 
   useEffect(() => {
-    const editorWindow = window.frames[1];
-    const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
-    apiClient.apiCallAt('reset', data, editorWindow);
-  }, [dialogs, focusPath]);
+    if (window.frames[1]) {
+      const editorWindow = window.frames[1];
+      const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
+      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+    }
+  }, [dialogs, files, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(_, event) {
@@ -91,11 +97,11 @@ export function ShellApi() {
       const dialogName = Path.basename(files[openFileIndex].name, '.dialog');
       const payload = {
         name: files[openFileIndex].name,
-        content: JSON.stringify(updatedContent[dialogName]),
+        content: updatedContent[dialogName],
       };
       // TODO: save this gracefully
       // current newData has some field sets to undefined, which is not friendly to runtime
-      updateFile(payload);
+      actions.updateFile(payload);
 
       return true;
     }
