@@ -8,7 +8,9 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 export class BeginDialog extends React.Component {
   renderCallDialogLink() {
     const { data, onEvent } = this.props;
-    const calleeDialog = data.dialog;
+    if (!data || !data.dialog) return null;
+
+    const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
       <span
         style={{
