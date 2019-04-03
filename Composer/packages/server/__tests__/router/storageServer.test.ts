@@ -1,6 +1,7 @@
+import azure from 'azure-storage';
+
 import { storageHandler } from '../../src/router/storageServer';
 import storage from '../../src/storage/StorageService';
-import azure from 'azure-storage';
 
 jest.mock('../../src/storage/StorageService', () => {
   const mockStorage: any = {
@@ -65,13 +66,13 @@ describe('test storage server all method', () => {
   });
 
   test('test listContainers', () => {
-    let mockService = azure.createBlobService('test', 'test');
+    const mockService = azure.createBlobService('test', 'test');
     const result = storageHandler.listContainers(mockService);
     expect(result).not.toBeUndefined();
   });
 
   test('test listBlobs', () => {
-    let mockService = azure.createBlobService('test', 'test');
+    const mockService = azure.createBlobService('test', 'test');
     const result = storageHandler.listBlobs(mockService, 'azure');
     expect(result).not.toBeUndefined();
   });
