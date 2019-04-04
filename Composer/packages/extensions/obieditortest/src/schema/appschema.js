@@ -30,9 +30,10 @@ export const dialogGroups = {
 };
 
 export function getMergedSchema(dialogFiles = []) {
+  const dialogNames = dialogFiles.map(f => f.name.substring(0, f.name.lastIndexOf('.')));
   const dialogEnum = {
-    enum: dialogFiles.map(f => f.path),
-    enumLabels: dialogFiles.map(f => f.name),
+    enum: dialogNames,
+    enumLabels: dialogNames,
   };
 
   return {

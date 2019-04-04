@@ -40,9 +40,7 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": {
-            "$ref": "AddToDo"
-          }
+          "dialog": "AddToDo"
         }
       ]
     },
@@ -52,9 +50,7 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": {
-            "$ref": "DeleteToDo"
-          }
+          "dialog": "DeleteToDo"
         }
       ]
     },
@@ -64,9 +60,7 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": {
-            "$ref": "ClearToDos"
-          }
+          "dialog": "ClearToDos"
         }
       ]
     },
@@ -76,9 +70,7 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": {
-            "$ref": "ShowToDos"
-          }
+          "dialog": "ShowToDos"
         }
       ]
     },
