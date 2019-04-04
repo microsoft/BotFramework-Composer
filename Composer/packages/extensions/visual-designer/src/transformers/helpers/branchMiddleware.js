@@ -6,7 +6,7 @@ import { NodeTypes } from '../constants/NodeTypes';
 /**
  *           ...                           ...
  *            |                             |
- *       IfCondition     ->           <IfCondition>
+ *       IfCondition     =>           <IfCondition>
  *            |                         /       \
  *        StepAfter                  Step(T)   Step(F)
  *                                     |         |
@@ -15,7 +15,7 @@ import { NodeTypes } from '../constants/NodeTypes';
  *                                       \      /
  *                                       StepAfter
  */
-export function ifElseMiddleware({ nodeCollection, edges }) {
+export function branchMiddleware({ nodeCollection, edges }) {
   if (!Array.isArray(nodeCollection.steps) || !nodeCollection.steps.length) {
     return { nodeCollection, edges };
   }
@@ -23,29 +23,31 @@ export function ifElseMiddleware({ nodeCollection, edges }) {
   const globalNodes = { ...nodeCollection };
   const globalEdges = [...edges];
 
-  let branchNodes = [];
-  let branchEdges = [];
+  const newNodes = [];
 
-  const stepNodes = globalNodes.steps;
-  const ifConditionNodes = stepNodes.filter(x => x[PAYLOAD_KEY].$type === ObiTypes.IfCondition);
+  let toBeProcessedNodes = [...globalNodes.steps];
+  // The while loop's count equals to the nested times
+  while (Array.isArray(toBeProcessedNodes) && toBeProcessedNodes.length) {
+    const ifConditionNodes = toBeProcessedNodes.filter(x => x[PAYLOAD_KEY].$type === ObiTypes.IfCondition);
+    const newLevelNodes = [];
+    ifConditionNodes.forEach(node => {
+      const edgeIndexToFollower = globalEdges.findIndex(x => x.from === node.id);
+      const idAfter = edgeIndexToFollower > -1 ? globalEdges[edgeIndexToFollower].to : null;
 
-  ifConditionNodes.forEach(node => {
-    const edgeAfterIndex = globalEdges.findIndex(x => x.from === node.id);
-    const nodeIdAfter = edgeAfterIndex > -1 ? globalEdges[edgeAfterIndex].to : null;
-
-    const subGraph = yieldSubgraph(node, ['ifTrue', 'ifFalse'], nodeIdAfter);
-    branchNodes = subGraph.nodes;
-    branchEdges = subGraph.edges;
-    globalEdges.splice(edgeAfterIndex, 1);
-  });
-
-  if (Array.isArray(globalNodes.branches)) {
-    globalNodes.branches.push(...branchNodes);
-  } else {
-    globalNodes.branches = branchNodes;
+      const subGraph = yieldSubgraph(node, ['ifTrue', 'ifFalse'], idAfter);
+      newLevelNodes.push(...subGraph.nodes);
+      newNodes.push(...subGraph.nodes);
+      globalEdges.splice(edgeIndexToFollower, 1);
+      globalEdges.push(...subGraph.edges);
+    });
+    toBeProcessedNodes = newLevelNodes;
   }
 
-  globalEdges.push(...branchEdges);
+  if (Array.isArray(globalNodes.branches)) {
+    globalNodes.branches.push(...newNodes);
+  } else {
+    globalNodes.branches = newNodes;
+  }
 
   return {
     nodeCollection: globalNodes,
@@ -53,7 +55,25 @@ export function ifElseMiddleware({ nodeCollection, edges }) {
   };
 }
 
-function yieldSubgraph(node, branchKeys, afterNodeId) {
+/**
+ *    ...
+ *     |
+ *   [node]     =>    node ->    [node]         =>              ...
+ *     |                          /  \                           |
+ *  node_after               [child] [child]                   [node]
+ *                              |      |                       /   \
+ *                              o      o                   [child] [child]
+ *                                                            |      |
+ *                                                            o      o
+ *                                                             \    /
+ *                                                            node_after
+ *
+ * Generate a sub graph out of given node and connect it to the node's follower.
+ * @param {object} node target node for building subgraph.
+ * @param {string[]} branchKeys a list of string indicates 'children'.
+ * @param {string} terminatorId all terminators in the result graph will be pointed to this id.
+ */
+function yieldSubgraph(node, branchKeys, terminatorId) {
   if (!Array.isArray(branchKeys) || !branchKeys.length) {
     return { nodes: [], edges: [] };
   }
@@ -80,9 +100,9 @@ function yieldSubgraph(node, branchKeys, afterNodeId) {
       newEdges.push({ from: node.id, to: newNodes[0].id, text: branchKey });
     }
     // Connect the sequence tail to root node's follower.
-    if (afterNodeId) {
+    if (terminatorId) {
       const tailId = newNodes.length ? newNodes[newNodes.length - 1].id : node.id;
-      newEdges.push({ from: tailId, to: afterNodeId });
+      newEdges.push({ from: tailId, to: terminatorId });
     }
 
     // Merge new nodes and edges to results.

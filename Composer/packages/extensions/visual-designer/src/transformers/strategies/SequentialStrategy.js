@@ -2,7 +2,7 @@ import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { normalizeObiStep } from '../helpers/elementBuilder';
-import { ifElseMiddleware } from '../helpers/branchMiddleware';
+import { branchMiddleware } from '../helpers/branchMiddleware';
 
 /**
  *      Step                     Rule              ^
@@ -54,7 +54,7 @@ export const SequentialStrategy = {
     }
     return edges;
   },
-  middlewares: [ifElseMiddleware],
+  middlewares: [branchMiddleware],
   output: (nodeCollection, edges) => {
     const nodes = [].concat(...Object.values(nodeCollection));
     return mergeNodesIntoEdges(nodes, edges);
