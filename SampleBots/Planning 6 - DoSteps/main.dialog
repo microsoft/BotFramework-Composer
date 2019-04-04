@@ -4,8 +4,8 @@
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
-        "JokeIntent": "(?i)joke",
-        "FortuneTellerIntent": "(?i)fortune|future"
+      "JokeIntent": "(?i)joke",
+      "FortuneTellerIntent": "(?i)fortune|future"
     }
   },
   "rules": [
@@ -57,15 +57,15 @@
       "$type": "Microsoft.NoMatchRule",
       "steps": [
         {
-            "$type": "Microsoft.IfCondition",
-            "condition": "user.name == null",
-            "ifTrue": [
-                {
-                    "$type": "Microsoft.TextInput",
-                    "property": "user.name",
-                    "prompt": "Hello, I'm Zoidberg. What is your name?"
-                }
-            ]
+          "$type": "Microsoft.IfCondition",
+          "condition": "user.name == null",
+          "ifTrue": [
+            {
+              "$type": "Microsoft.TextInput",
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?"
+            }
+          ]
         },
         {
           "$type": "Microsoft.SendActivity",

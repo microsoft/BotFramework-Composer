@@ -1,26 +1,26 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Clear",
+      "arrayProperty": "user.todos"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Successfully clear the todo list."
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
         {
-            "$type": "Microsoft.EditArray",
-            "changeType": "Clear",
-            "arrayProperty": "user.todos"
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Successfully clear the todo list."
+          "$type": "Microsoft.CancelDialog"
         }
-    ],
-    "rules": [
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.CancelDialog"
-                }
-            ]
-        }
-    ]
+      ]
+    }
+  ]
 }
