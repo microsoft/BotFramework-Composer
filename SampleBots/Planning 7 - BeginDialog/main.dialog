@@ -13,14 +13,14 @@
             "$type": "Microsoft.IntentRule",
             "intent": "JokeIntent",
             "steps": [
-                "BeginDialog.TellJokeDialog"
+                "TellJokeDialog"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "FortuneTellerIntent",
             "steps": [
-                "BeginDialog.FortuneTellerDialog"
+                "FortuneTellerDialog"
             ]
         },
         {
