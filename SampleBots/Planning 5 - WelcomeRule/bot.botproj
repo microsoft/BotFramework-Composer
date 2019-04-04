@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "WelcomeRule.main.dialog"
+    "entry": "main.dialog"
 }

@@ -22,28 +22,28 @@
             "$type": "Microsoft.IntentRule",
             "intent": "AddToDo",
             "steps": [
-                "ToDoLuisBot.AddToDo"
+                "AddToDo"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "DeleteToDo",
             "steps": [
-                "ToDoLuisBot.DeleteToDo"
+                "DeleteToDo"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ShowToDo",
             "steps": [
-                "ToDoLuisBot.ShowToDos"
+                "ShowToDos"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ClearToDo",
             "steps": [
-                "ToDoLuisBot.ClearToDos"
+                "ClearToDos"
             ]
         }
     ]
