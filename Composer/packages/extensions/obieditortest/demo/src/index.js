@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import debounce from 'lodash.debounce';
 
 import Example from '../../src';
 import { dialogGroups } from '../../src/schema/appschema';
@@ -89,6 +90,7 @@ function Demo() {
   const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
+  const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
@@ -171,7 +173,13 @@ function Demo() {
         />
       </div>
       <div className="DemoForm">
-        <Example data={formData} dialogs={dialogFiles} memory={memoryFormData} onChange={setFormData} />
+        <Example
+          data={formData}
+          dialogs={dialogFiles}
+          memory={memoryFormData}
+          onBlur={setFormData}
+          onChange={debouncedOnChange}
+        />
       </div>
     </div>
   );

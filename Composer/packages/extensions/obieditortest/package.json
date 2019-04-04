@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@uifabric/fluent-theme": "^0.16.2",
+    "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "office-ui-fabric-react": "^6.138.1",
     "react": "^16.8.1",
