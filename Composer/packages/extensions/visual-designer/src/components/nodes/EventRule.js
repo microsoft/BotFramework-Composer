@@ -1,0 +1,30 @@
+import React from 'react';
+
+import { NodeClickActionTypes } from '../../utils/constant';
+
+import { NodeProps, defaultNodeProps } from './sharedProps';
+import { FormCard } from './templates/FormCard';
+
+export class EventRule extends React.Component {
+  render() {
+    const { id, data, onEvent } = this.props;
+    const { steps } = data;
+    return (
+      <FormCard
+        themeColor="#0078D4"
+        header="EventRule"
+        details={data.events}
+        onClick={() => {
+          if (Array.isArray(steps) && steps.length) {
+            onEvent(NodeClickActionTypes.Expand, id);
+          } else {
+            onEvent(NodeClickActionTypes.Focus, id);
+          }
+        }}
+      />
+    );
+  }
+}
+
+EventRule.propTypes = NodeProps;
+EventRule.defaultProps = defaultNodeProps;
