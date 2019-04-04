@@ -19,7 +19,7 @@ export function TextWidget(props) {
       label={label}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholderText}
-      readOnly={readonly}
+      readOnly={Boolean(schema.const) || readonly}
       value={value}
     />
   );
@@ -29,7 +29,7 @@ TextWidget.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
-  readonly: PropTypes.boolean,
+  readonly: PropTypes.bool,
   schema: PropTypes.shape({
     description: PropTypes.string,
     examples: PropTypes.arrayOf(PropTypes.string),
