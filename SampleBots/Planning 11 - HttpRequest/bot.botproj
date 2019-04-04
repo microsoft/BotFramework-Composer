@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "HttpRequest.main.dialog"
+    "entry": "main.dialog"
 }

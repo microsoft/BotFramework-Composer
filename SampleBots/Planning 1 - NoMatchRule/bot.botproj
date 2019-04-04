@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "NoMatchRule.main.dialog"
+    "entry": "main.dialog"
 }

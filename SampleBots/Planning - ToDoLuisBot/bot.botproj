@@ -1,10 +1,10 @@
 {
     "files": [
-      "ToDoLuisBot.AddToDo.dialog",
-      "ToDoLuisBot.ClearToDos.dialog",
-      "ToDoLuisBot.DeleteToDo.dialog",
-      "ToDoLuisBot.main.dialog",
-      "ToDoLuisBot.ShowToDos.dialog"
+      "AddToDo.dialog",
+      "ClearToDos.dialog",
+      "DeleteToDo.dialog",
+      "main.dialog",
+      "ShowToDos.dialog"
     ],
-    "entry": "ToDoLuisBot.main.dialog"
+    "entry": "main.dialog"
 }

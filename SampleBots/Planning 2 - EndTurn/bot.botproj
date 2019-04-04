@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "EndTurn.main.dialog"
+    "entry": "main.dialog"
 }
