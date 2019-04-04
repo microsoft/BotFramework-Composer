@@ -1,10 +1,4 @@
 {
-    "files": [
-      "AddToDo.dialog",
-      "ClearToDos.dialog",
-      "DeleteToDo.dialog",
-      "main.dialog",
-      "ShowToDos.dialog"
-    ],
-    "entry": "main.dialog"
+  "files": ["*.dialog"],
+  "entry": "main.dialog"
 }

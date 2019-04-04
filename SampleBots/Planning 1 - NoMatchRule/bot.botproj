@@ -1,9 +1,5 @@
 {
-    "services": [
-    ],
-    "files": [
-       "*.dialog",
-       "*.lg"
-    ],
-    "entry": "main.dialog"
+  "services": [],
+  "files": ["*.dialog", "*.lg"],
+  "entry": "main.dialog"
 }
