@@ -900,6 +900,7 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft IDialog',
         description: 'Union of components which implement the IDialog interface',
         $role: 'unionType',
+        type: 'object',
         oneOf: [
           {
             title: 'Microsoft.AdaptiveDialog',
@@ -1125,12 +1126,14 @@ export function getMergedSchema(dialogFiles = []) {
               {
                 $type: 'Microsoft.IDialog',
                 $ref: '#/definitions/Microsoft.IDialog',
+                type: 'object',
               },
               {
                 type: 'array',
                 items: {
                   $type: 'Microsoft.IDialog',
                   $ref: '#/definitions/Microsoft.IDialog',
+                  type: 'object',
                 },
                 title: 'array',
               },
@@ -1372,6 +1375,9 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'array',
             title: 'Entities',
             description: 'The entities required to trigger this rule',
+            items: {
+              type: 'string',
+            },
           },
           events: {
             type: 'array',
