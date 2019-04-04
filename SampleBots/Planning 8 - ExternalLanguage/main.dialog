@@ -15,14 +15,14 @@
             "$type": "Microsoft.IntentRule",
             "intent": "JokeIntent",
             "steps": [
-                "ExternalLanguage.TellJoke"
+                "TellJoke"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "FortuneTellerIntent",
             "steps": [
-                "ExternalLanguage.FortuneTeller"
+                "FortuneTeller"
             ]
         },
         {
@@ -38,7 +38,7 @@
             "$type": "Microsoft.IntentRule",
             "intent": "GreetingIntent",
             "steps": [
-                "ExternalLanguage.Greeting"
+                "Greeting"
             ]
         },
         {
