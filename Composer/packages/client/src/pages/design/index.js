@@ -19,7 +19,7 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, focusPath, navPathHistory } = state;
+  const { files, openFileIndex, navPathHistory } = state;
   const { setOpenFileIndex, clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -105,7 +105,7 @@ function DesignPage() {
                 <iframe
                   key="VisualEditor"
                   name="VisualEditor"
-                  style={{ height: '100%', width: '100%', border: '0px' }}
+                  style={{ height: '100%', flex: 1, border: '0px' }}
                   src="/extensionContainer.html"
                 />
                 <iframe
@@ -113,7 +113,8 @@ function DesignPage() {
                   name="FormEditor"
                   style={{
                     height: '100%',
-                    width: focusPath ? '100%' : '0%',
+                    flex: 1,
+                    // width: focusPath ? '100%' : '0%',
                     border: '0px',
                     transition: 'width 0.2s ease-in-out',
                   }}
