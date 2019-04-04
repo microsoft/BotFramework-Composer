@@ -26,18 +26,18 @@ export function branchMiddleware({ nodeCollection, edges }) {
   const newNodes = [];
 
   let toBeProcessedNodes = [...globalNodes.steps];
-  // The while loop's count equals to the nested times
+  // The while loop's count equals to the number of nested level.
   while (Array.isArray(toBeProcessedNodes) && toBeProcessedNodes.length) {
     const ifConditionNodes = toBeProcessedNodes.filter(x => x[PAYLOAD_KEY].$type === ObiTypes.IfCondition);
     const newLevelNodes = [];
     ifConditionNodes.forEach(node => {
       const edgeIndexToFollower = globalEdges.findIndex(x => x.from === node.id);
-      const idAfter = edgeIndexToFollower > -1 ? globalEdges[edgeIndexToFollower].to : null;
+      const followerId = edgeIndexToFollower > -1 ? globalEdges[edgeIndexToFollower].to : null;
+      edgeIndexToFollower > -1 && globalEdges.splice(edgeIndexToFollower, 1);
 
-      const subGraph = yieldSubgraph(node, ['ifTrue', 'ifFalse'], idAfter);
+      const subGraph = yieldSubgraph(node, ['ifTrue', 'ifFalse'], followerId);
       newLevelNodes.push(...subGraph.nodes);
       newNodes.push(...subGraph.nodes);
-      globalEdges.splice(edgeIndexToFollower, 1);
       globalEdges.push(...subGraph.edges);
     });
     toBeProcessedNodes = newLevelNodes;
