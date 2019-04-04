@@ -39,6 +39,9 @@ function getAllConfig(botProjFilePath: string): BotFileConfig {
   };
 }
 
+// todo: extract to isomorphic helpers?
+const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
+
 export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot find files.`);
@@ -63,17 +66,14 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   if (botConfig !== undefined && Array.isArray(botConfig.files)) {
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
-
       // find the index of the entry dialog defined in the botproject
       // save & remove it from the paths array before it is sorted
-      let mainPathIndex = 0;
-      paths.forEach((path, index) => {
-        if (path.indexOf(botConfig.entry) !== -1) {
-          mainPathIndex = index;
-        }
-      });
-      const mainPath = paths[mainPathIndex];
-      paths.splice(mainPathIndex, 1);
+      let mainPath = '';
+      if (isDialogExtension(pattern)) {
+        const mainPathIndex = paths.findIndex(elem => elem.indexOf(botConfig.entry) !== -1);
+        mainPath = paths[mainPathIndex];
+        paths.splice(mainPathIndex, 1);
+      }
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = path.resolve(botFileDir, filePath);
@@ -92,16 +92,19 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
 
       // resolve the entry dialog path and add it to the front of the
       // now sorted paths array
-      const mainFilePath = path.resolve(botFileDir, mainPath);
-      if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
-        const content: string = await readFile(mainFilePath, 'utf-8');
-        fileList.unshift({
-          name: mainPath,
-          content: JSON.parse(content),
-          path: mainFilePath,
-          dir: botFileDir,
-          relativePath: path.relative(botFileDir, mainFilePath),
-        });
+      if (isDialogExtension(pattern)) {
+        // @ts-ignore
+        const mainFilePath = path.resolve(botFileDir, mainPath);
+        if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
+          const content: string = await readFile(mainFilePath, 'utf-8');
+          fileList.unshift({
+            name: mainPath,
+            content: JSON.parse(content),
+            path: mainFilePath,
+            dir: botFileDir,
+            relativePath: path.relative(botFileDir, mainFilePath),
+          });
+        }
       }
     }
   }
