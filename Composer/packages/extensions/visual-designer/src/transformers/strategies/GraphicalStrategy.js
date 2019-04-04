@@ -3,7 +3,7 @@ import { NodeTypes } from '../constants/NodeTypes';
 import { IndexedNode } from '../models/IndexedNode';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { PAYLOAD_KEY } from '../../utils/constant';
-import { buildObiStep } from '../helpers/elementBuilder';
+import { normalizeObiStep } from '../helpers/elementBuilder';
 
 /**
  * A strategy contains two tasks:
@@ -30,7 +30,7 @@ export const GraphicalStrategy = {
     const recognizerNodes = recognizer ? [new IndexedNode(`$.recognizer`, NodeTypes.Decision, recognizer)] : [];
     const ruleNodes = rules ? rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, x)) : [];
     const stepNodes = steps
-      ? steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, buildObiStep(x)))
+      ? steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, normalizeObiStep(x)))
       : [];
 
     const welcomes = [],
