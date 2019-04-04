@@ -140,6 +140,21 @@ function Demo() {
     setFormData({ $type: option.text });
   };
 
+  const handlePaste = updater => (_, e) => {
+    e.preventDefault();
+
+    const data = (e.clipboardData || window.clipboardData).getData('Text');
+
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        updater(parsed);
+      } catch (err) {
+        // do nothing
+      }
+    }
+  };
+
   return (
     <div className="DemoContainer">
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -158,6 +173,7 @@ function Demo() {
           onBeforeChange={updateFormData}
           onChange={updateFormData}
           autoCursor
+          onPaste={handlePaste(setFormData)}
           className={isValid ? '' : 'CodeMirror--error'}
         />
         <div style={{ fontSize: '20px', paddingLeft: '10px' }}>Memory</div>
@@ -169,6 +185,7 @@ function Demo() {
           }}
           onChange={updateMemoryData}
           autoCursor
+          onPaste={handlePaste(setMemoryData)}
           className={isMemoryValid ? '' : 'CodeMirror--error'}
         />
       </div>
