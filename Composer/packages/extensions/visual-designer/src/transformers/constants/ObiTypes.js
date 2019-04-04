@@ -19,4 +19,5 @@ export const ObiTypes = {
   // steps
   BeginDialog: 'Microsoft.BeginDialog',
   SendActivity: 'Microsoft.SendActivity',
+  IfCondition: 'Microsoft.IfCondition',
 };

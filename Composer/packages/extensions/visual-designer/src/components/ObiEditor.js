@@ -7,6 +7,7 @@ import { ObiTypes } from '../transformers/constants/ObiTypes';
 
 import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
+import { IfCondition } from './nodes/IfCondition';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,
@@ -15,6 +16,7 @@ const rendererByObiType = {
   [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.BeginDialog]: BeginDialog,
+  [ObiTypes.IfCondition]: IfCondition,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
