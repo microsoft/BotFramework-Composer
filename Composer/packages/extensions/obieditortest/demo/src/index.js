@@ -29,7 +29,7 @@ const cmOptions = {
 };
 
 const defaultData = {
-  $type: 'Microsoft.TextPrompt',
+  $type: 'Microsoft.TextInput',
 };
 
 const defaultMemory = {
