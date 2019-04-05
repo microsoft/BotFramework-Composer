@@ -37,7 +37,6 @@ export const FormEditor = props => {
 
   const onChange = newValue => {
     setFormData(newValue.formData);
-    props.onChange(newValue.formData);
   };
 
   const buildScope = (memory, scope) => {
@@ -92,6 +91,7 @@ export const FormEditor = props => {
           onChange={onChange}
           formData={formData}
           onBlur={() => {
+            props.onChange(formData);
             props.onBlur(formData);
           }}
           schema={dialogSchema}
