@@ -1,15 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField } from 'office-ui-fabric-react';
+import { TextField, SpinButton } from 'office-ui-fabric-react';
+import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 
 export function TextWidget(props) {
-  const { label, onChange, readonly, value, schema, placeholder, ...rest } = props;
-  const { description, examples = [] } = schema || {};
+  const { label, onBlur, onChange, readonly, value, schema, placeholder, ...rest } = props;
+  const { description, examples = [], type } = schema || {};
 
   let placeholderText = placeholder;
 
   if (!placeholderText && examples.length > 0) {
     placeholderText = `ex. ${examples.join(', ')}`;
+  }
+
+  if (type === 'integer' || type === 'number') {
+    const updateValue = newValue => {
+      onChange(newValue);
+      // need to allow form data to propagate before flushing to state
+      setTimeout(onBlur);
+    };
+
+    const step = type === 'integer' ? 1 : 0.1;
+
+    return (
+      <SpinButton
+        {...rest}
+        label={label}
+        labelPosition={Position.top}
+        onDecrement={value => updateValue(+value - step)}
+        onIncrement={value => updateValue(+value + step)}
+        onValidate={value => updateValue(+value)}
+        placeholder={placeholderText}
+        readOnly={Boolean(schema.const) || readonly}
+        step={step}
+        value={value}
+      />
+    );
   }
 
   return (
@@ -27,6 +53,7 @@ export function TextWidget(props) {
 
 TextWidget.propTypes = {
   label: PropTypes.string,
+  onBlur: PropTypes.func,
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
   readonly: PropTypes.bool,
