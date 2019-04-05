@@ -43,6 +43,7 @@ export function TextWidget(props) {
       {...rest}
       description={description}
       label={label}
+      onBlur={onBlur}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholderText}
       readOnly={Boolean(schema.const) || readonly}
