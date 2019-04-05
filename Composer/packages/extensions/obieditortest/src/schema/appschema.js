@@ -248,16 +248,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.BeginDialog': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -311,16 +311,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.CancelDialog': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -355,16 +355,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.ConfirmInput': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -438,16 +438,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.DeleteProperty': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -487,16 +487,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['property', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['property', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.EditArray': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -547,16 +547,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['changeType', 'listProperty', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['changeType', 'listProperty', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.EndDialog': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -596,16 +596,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.EndTurn': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -640,16 +640,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.EventRule': {
         title: 'Event Rule',
@@ -705,16 +705,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['events', 'steps', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['events', 'steps', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.FloatInput': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -800,16 +800,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.HttpRequest': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -875,16 +875,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['url', 'entity', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['url', 'entity', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.IActivityTemplate': {
         title: 'Microsoft ActivityTemplate',
@@ -1166,16 +1166,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['expression', 'ifTrue', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['expression', 'ifTrue', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.IfPropertyRule': {
         $role: 'unionType(Microsoft.IRule)',
@@ -1234,16 +1234,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['conditionals', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['conditionals', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.IntegerInput': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1329,16 +1329,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.IntentRule': {
         $role: 'unionType(Microsoft.IRule)',
@@ -1407,16 +1407,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['intent', 'steps', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['intent', 'steps', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.MultiLanguageRecognizers': {
         $role: 'unionType(Microsoft.IRecognizer)',
@@ -1468,16 +1468,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['recognizers', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['recognizers', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.NoMatchRule': {
         title: 'No Match Rule',
@@ -1533,16 +1533,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['steps', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['steps', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.RegexRecognizer': {
         $role: 'unionType(Microsoft.IRecognizer)',
@@ -1585,16 +1585,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['intents', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['intents', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.ReplaceWithDialog': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1647,16 +1647,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.Rule': {
         $role: 'unionType(Microsoft.IRule)',
@@ -1705,16 +1705,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['events', 'steps', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['events', 'steps', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.SaveEntity': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1759,16 +1759,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['property', 'entity', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['property', 'entity', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.SendActivity': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1809,16 +1809,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.SendList': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1868,16 +1868,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['listProperty', 'messageTemplate', 'itemTemplate', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['listProperty', 'messageTemplate', 'itemTemplate', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.SwitchCondition': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1958,16 +1958,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['expression', 'ifTrue', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['expression', 'ifTrue', '$type'],
+        //   },
+        // ],
       },
       'Microsoft.TextInput': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -2047,16 +2047,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['$type'],
+        //   },
+        // ],
       },
       'Microsoft.WelcomeRule': {
         $role: 'unionType(Microsoft.IRule)',
@@ -2112,16 +2112,16 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        anyOf: [
-          {
-            title: 'Reference',
-            required: ['$copy'],
-          },
-          {
-            title: 'Type',
-            required: ['steps', '$type'],
-          },
-        ],
+        // anyOf: [
+        //   {
+        //     title: 'Reference',
+        //     required: ['$copy'],
+        //   },
+        //   {
+        //     title: 'Type',
+        //     required: ['steps', '$type'],
+        //   },
+        // ],
       },
     },
   };
