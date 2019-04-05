@@ -92,7 +92,7 @@ export const FormEditor = props => {
           formData={formData}
           onBlur={() => {
             props.onChange(formData);
-            props.onBlur();
+            props.onBlur(formData);
           }}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}

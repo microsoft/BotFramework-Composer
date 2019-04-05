@@ -1,17 +1,17 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "What's up?"
-        },
-        {
-            "$type": "Microsoft.EndTurn"
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Oh I see!"
-        }
-    ]
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "What's up?"
+    },
+    {
+      "$type": "Microsoft.EndTurn"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Oh I see!"
+    }
+  ]
 }

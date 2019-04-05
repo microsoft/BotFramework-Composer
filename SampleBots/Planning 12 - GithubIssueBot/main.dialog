@@ -1,28 +1,28 @@
 {
-   "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
-   "$type": "Microsoft.AdaptiveDialog",
-   "rules": [
-      {
-         "$type": "Microsoft.NoMatchRule",
-        "steps": [
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Getting issues..."
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "rules": [
+    {
+      "$type": "Microsoft.NoMatchRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Getting issues..."
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://api.github.com/repos/Microsoft/botbuilder-dotnet/issues",
+          "method": "GET",
+          "header": {
+            "User-Agent": "TestBot"
           },
-          {
-            "$type": "Microsoft.HttpRequest",
-            "url": "https://api.github.com/repos/Microsoft/botbuilder-dotnet/issues",
-            "method": "GET",
-            "header": {
-              "User-Agent": "TestBot"
-            },
-            "property": "dialog.getResponse"
-          },
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[Show]"
-          }
-        ]
-      }
-   ]
+          "property": "dialog.getResponse"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[Show]"
+        }
+      ]
+    }
+  ]
 }
