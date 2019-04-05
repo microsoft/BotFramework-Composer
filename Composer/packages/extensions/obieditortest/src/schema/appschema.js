@@ -1026,6 +1026,7 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft IRecognizer',
         description: 'Union of components which implement the IRecognizer interface',
         $role: 'unionType',
+        type: 'object',
         oneOf: [
           {
             title: 'Microsoft.MultiLanguageRecognizers',
@@ -1147,12 +1148,14 @@ export function getMergedSchema(dialogFiles = []) {
               {
                 $type: 'Microsoft.IDialog',
                 $ref: '#/definitions/Microsoft.IDialog',
+                type: 'object',
               },
               {
                 type: 'array',
                 items: {
                   $type: 'Microsoft.IDialog',
                   $ref: '#/definitions/Microsoft.IDialog',
+                  type: 'object',
                 },
                 title: 'array',
               },
