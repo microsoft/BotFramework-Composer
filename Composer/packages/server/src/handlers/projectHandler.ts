@@ -11,12 +11,13 @@ export default class ProjectHandler {
   private openBot: any = null;
   private storage: FileStorage;
   private setting: FileStorage;
-  private openLastActiveBot = false;
+  private openLastActiveBot: boolean;
   private storageHandler: StorageHandler;
-  constructor(stoarge: FileStorage, setting: FileStorage) {
+  constructor(stoarge: FileStorage, setting: FileStorage, openLastActiveBot = false) {
     this.storage = stoarge;
     this.setting = setting;
     this.storageHandler = new StorageHandler(stoarge);
+    this.openLastActiveBot = openLastActiveBot;
     // get recentAccessBots
     this.openBot = this.checkOpenBotInStorage();
   }
