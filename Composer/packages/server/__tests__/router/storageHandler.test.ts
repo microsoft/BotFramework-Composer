@@ -36,20 +36,20 @@ jest.mock('../../src/storage/StorageService', () => {
     },
   };
 });
-// jest.mock('azure-storage', () => {
-//   return {
-//     createBlobService: (account: string, key: string) => {
-//       return {
-//         listContainersSegmented: () => {
-//           return { containers: [] };
-//         },
-//         listBlobsSegmented: () => {
-//           return { blobs: [] };
-//         },
-//       };
-//     },
-//   };
-// });
+jest.mock('azure-storage', () => {
+  return {
+    createBlobService: (account: string, key: string) => {
+      return {
+        listContainersSegmented: () => {
+          return { containers: [] };
+        },
+        listBlobsSegmented: () => {
+          return { blobs: [] };
+        },
+      };
+    },
+  };
+});
 const storageHandler = new StorageHandler(storage);
 describe('test storage server all method', () => {
   test('GET /api/storages handler', () => {
@@ -70,14 +70,8 @@ describe('test storage server all method', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  // test('test listContainers', () => {
-  //   const result = storageHandler.getFilesAndFolders(mockService);
-  //   expect(result).not.toBeUndefined();
-  // });
-
-  // test('test listBlobs', () => {
-  //   const mockService = azure.createBlobService('test', 'test');
-  //   const result = storageHandler.getContainersOrBlobs(mockService, 'azure');
-  //   expect(result).not.toBeUndefined();
-  // });
+  test('test listBlobs', () => {
+    const result = storageHandler.getContainersOrBlobs('http://www.bing.com/blob1', 'test', 'test');
+    expect(result).not.toBeUndefined();
+  });
 });

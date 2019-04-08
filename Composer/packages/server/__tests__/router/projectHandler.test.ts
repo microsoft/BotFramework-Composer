@@ -1,7 +1,17 @@
+import path from 'path';
+
 import ProjectHandler from '../../src/handlers/projectHandler';
 import setting from '../../src/storage/SettingService';
 import storage from '../../src/storage/StorageService';
-// import path from 'path';
+const mockFilePath: string = path.resolve('packages/server/__tests__/mocks/1.botproj');
+const mockStorageHandler = jest.fn(() => ({
+  getStorageById: () => ({
+    name: 'test',
+    type: 'LocalDrive',
+    id: 'default',
+    path: 'testPath',
+  }),
+}));
 
 jest.mock('../../src/storage/SettingService', () => {
   const mockSettings: any = {
@@ -14,9 +24,25 @@ jest.mock('../../src/storage/SettingService', () => {
   return { getItem: (key: string) => mockSettings[key] };
 });
 
+jest.mock('azure-storage', () => {
+  return {
+    createBlobService: (account: string, key: string) => {
+      return {
+        listContainersSegmented: () => {
+          return { containers: [] };
+        },
+        listBlobsSegmented: () => {
+          return { blobs: [] };
+        },
+      };
+    },
+  };
+});
+
+// jest.mock('../../src/handlers/storageHandler', ()=>{
+//   mockStorageHandler();
+// });
 jest.mock('../../src/storage/StorageService', () => {
-  const path = require('path');
-  const mockFilePath: string = path.resolve('../mocks/1.botproj');
   const mockStorage: any = {
     linkedStorages: [
       {
@@ -26,10 +52,9 @@ jest.mock('../../src/storage/StorageService', () => {
         path: 'testPath',
       },
     ],
-    lastActiveBot: '../../../../SampleBots/Planning - ToDoLuisBot/bot.botproj',
     recentAccessedBots: [
       {
-        path: mockFilePath,
+        path: 'test',
         storageId: 'default',
         lastAccessTime: 1553848431570,
       },
@@ -45,13 +70,14 @@ jest.mock('../../src/storage/StorageService', () => {
 });
 
 describe('test project server all method', () => {
-  const path = require('path');
-  const mockFilePath: string = path.resolve('../mocks/1.botproj');
+  beforeEach(() => {
+    mockStorageHandler.mockClear();
+  });
   test('GET /api/projects handler', () => {
     const projectHandler = new ProjectHandler(storage, setting, true);
     const result = projectHandler.getOpenBot();
     expect(result).not.toBeUndefined();
-    expect(result.path).toBe(mockFilePath.replace(/\\/g, '/'));
+    expect(result.path).toBeDefined();
     expect(result.storageId).toBe('default');
   });
 
