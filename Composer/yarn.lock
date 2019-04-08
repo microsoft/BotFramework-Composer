@@ -14732,7 +14732,7 @@ react-is@^16.6.0, react-is@^16.8.1, react-is@^16.8.4:
 
 "react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#composer":
   version "1.4.0"
-  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#ad1da2f1488c75f10fbab9fb685b947a8b0b25e5"
+  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#7d6123f243b9eaf1d56d3139694ea641f3f15f3d"
   dependencies:
     ajv "^6.7.0"
     babel-runtime "^6.26.0"
