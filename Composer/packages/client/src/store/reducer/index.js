@@ -23,6 +23,7 @@ const getFilesSuccess = (state, { response }) => {
     }
     return files;
   }, []);
+  state.path = response.data.path;
   return state;
 };
 

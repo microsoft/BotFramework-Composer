@@ -1,6 +1,6 @@
 import Path from 'path';
 
-import React, { Fragment, useContext, useState, useMemo } from 'react';
+import React, { Fragment, useContext, useState, useMemo, useEffect } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
 import map from 'lodash.map';
 import startCase from 'lodash.startcase';
@@ -19,7 +19,7 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPathHistory } = state;
+  const { files, openFileIndex, navPathHistory, path } = state;
   const { setOpenFileIndex, clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -28,6 +28,13 @@ function DesignPage() {
     clearNavHistory();
     navTo(getDialogName(files[index]));
   }
+
+  useEffect(() => {
+    if (files.length > 0) {
+      setOpenFileIndex(0);
+      navTo(getDialogName(files[0]));
+    }
+  }, [path]);
 
   const breadcrumbItems = useMemo(() => {
     const dialogs = files.reduce(
