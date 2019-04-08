@@ -75,9 +75,11 @@ const getStorageFileSuccess = (state, { response }) => {
 const navigateTo = (state, { path }) => {
   if (state.navPath !== path) {
     state.navPath = path;
-    state.focusPath = '';
+    state.focusPath = state.navPath; // fire up form editor on non-leaf node
+
     state.navPathHistory.push(path);
-    //check if navto dialog
+
+    // update file index if we are switching to new dialog
     const lastDialogIndex = findLastIndex(state.navPathHistory, path => {
       return getBaseName(path) === path;
     });
@@ -91,6 +93,7 @@ const navigateTo = (state, { path }) => {
 
 const navigateDown = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
+  state.focusPath = state.navPath; // fire up form editor on non-leaf node
   state.navPathHistory.push(state.navPath);
   return state;
 };
