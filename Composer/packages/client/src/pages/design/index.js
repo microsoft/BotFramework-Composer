@@ -19,7 +19,7 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPathHistory } = state;
+  const { files, openFileIndex, navPathHistory, path } = state;
   const { setOpenFileIndex, clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -34,7 +34,7 @@ function DesignPage() {
       setOpenFileIndex(0);
       navTo(getDialogName(files[0]));
     }
-  }, [files]);
+  }, [path]);
 
   const breadcrumbItems = useMemo(() => {
     const dialogs = files.reduce(
