@@ -783,13 +783,13 @@ export function getMergedSchema(dialogFiles = []) {
             $ref: '#/definitions/Microsoft.IActivityTemplate',
           },
           minValue: {
-            type: 'integer',
+            type: 'number',
             title: 'Mininum value',
             description: 'The minimum value that is acceptable.  ',
             examples: ['0'],
           },
           maxValue: {
-            type: 'integer',
+            type: 'number',
             title: 'Maximum value',
             description: 'The maximum value that is acceptable.  ',
             examples: ['120'],

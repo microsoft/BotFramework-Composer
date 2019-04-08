@@ -14,7 +14,15 @@ export function TextWidget(props) {
   }
 
   if (type === 'integer' || type === 'number') {
-    const updateValue = newValue => {
+    const updateValue = step => value => {
+      // if the number is a float, we need to convert to a fixed decimal place
+      // in order to avoid floating point math rounding errors (ex. 1.2000000001)
+      // ex. if step = 0.01, we fix to 2 decimals
+      const newValue =
+        type === 'integer'
+          ? parseInt(value, 10) + step
+          : (parseFloat(value) + step).toFixed(`${step}`.split('.')[1].length);
+
       onChange(newValue);
       // need to allow form data to propagate before flushing to state
       setTimeout(onBlur);
@@ -27,9 +35,9 @@ export function TextWidget(props) {
         {...rest}
         label={label}
         labelPosition={Position.top}
-        onDecrement={value => updateValue(+value - step)}
-        onIncrement={value => updateValue(+value + step)}
-        onValidate={value => updateValue(+value)}
+        onDecrement={updateValue(-step)}
+        onIncrement={updateValue(step)}
+        onValidate={updateValue(0)}
         placeholder={placeholderText}
         readOnly={Boolean(schema.const) || readonly}
         step={step}
