@@ -26,7 +26,7 @@ export const dialogGroups = {
     'Microsoft.Rule',
     'Microsoft.WelcomeRule',
   ],
-  Recognizers: [, /* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
+  Recognizers: [/* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
   Other: ['Microsoft.AdaptiveDialog'],
 };
 

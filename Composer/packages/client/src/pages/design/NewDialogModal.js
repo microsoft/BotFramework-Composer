@@ -18,22 +18,35 @@ const validateForm = data => {
   return errors;
 };
 
-export const dialogGroups = {
+const dialogGroups = {
   'Input/Prompt Dialogs': [
-    'Microsoft.TextPrompt',
-    'Microsoft.DateTimePrompt',
-    'Microsoft.FloatPrompt',
-    'Microsoft.IntegerPrompt',
+    'Microsoft.ConfirmInput',
+    'Microsoft.FloatInput',
+    'Microsoft.IntegerInput',
+    'Microsoft.TextInput',
   ],
   'Dialog Steps': [
-    'Microsoft.CallDialog',
-    'Microsoft.GotoDialog',
-    'Microsoft.EndDialog',
+    'Microsoft.BeginDialog',
     'Microsoft.CancelDialog',
-    'Microsoft.SendActivity',
-    'Microsoft.IfProperty',
+    'Microsoft.EndDialog',
+    'Microsoft.EndTurn',
     'Microsoft.HttpRequest',
+    'Microsoft.IfCondition',
+    'Microsoft.ReplaceWithDialog',
+    'Microsoft.SendActivity',
+    'Microsoft.SendList',
+    'Microsoft.SwitchCondition',
   ],
+  Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.SaveEntity'],
+  Rules: [
+    'Microsoft.EventRule',
+    'Microsoft.IfPropertyRule',
+    'Microsoft.IntentRule',
+    'Microsoft.NoMatchRule',
+    'Microsoft.Rule',
+    'Microsoft.WelcomeRule',
+  ],
+  Recognizers: [/* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
   Other: ['Microsoft.AdaptiveDialog'],
 };
 
