@@ -1,42 +1,45 @@
 {
-  "$schema": "../../Schemas/app.schema",
-  "$type": "Microsoft.RuleDialog",
-  "$id": "DeleteToDoDialog",
-  "storage": {
-    "$type": "Microsoft.MemoryStorage"
-  },
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.SaveEntity",
+      "entity": "title",
+      "property": "dialog.todo"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "dialog.todo == null",
+      "ifTrue": [
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "OK, please enter the title of the todo you want to remove.",
+          "property": "dialog.todo"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Remove",
+      "arrayProperty": "user.todos",
+      "itemProperty": "dialog.todo"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Successfully removed a todo named \"{dialog.todo}\""
+    },
+    {
+      "$type": "Microsoft.DeleteProperty",
+      "property": "dialog.todo"
+    }
+  ],
   "rules": [
     {
-      "$type": "Microsoft.FallbackRule",
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
       "steps": [
         {
-          "$type": "Microsoft.SaveEntity",
-          "property": "user.todo",
-          "entityName": "title"
-        },
-        {
-          "$type": "Microsoft.IfProperty",
-          "ifTrue": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "activity": "OK, please enter the title of the todo you want to remove."
-            },
-            {
-              "$type": "Microsoft.WaitForInput",
-              "property": "user.todo"
-            }
-          ],
-          "expression": "user.todo == null"
-        },
-        {
-          "$type": "Microsoft.ChangeList",
-          "listProperty": "user.todos",
-          "itemProperty": "user.todo",
-          "changeType": "remove"
-        },
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "Successfully removed a todo named \"{user.todo}\""
+          "$type": "Microsoft.CancelDialog"
         }
       ]
     }

@@ -1,26 +1,36 @@
 {
-  "$schema": "/Users/abrown/code/BotFramework-Composer/Schemas/app.schema",
-  "$type": "Microsoft.RuleDialog",
-  "$id": "root",
-  "storage": {
-    "$type": "Microsoft.MemoryStorage"
-  },
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "rules": {
-      "AddIntent": "(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-      "ClearIntent": "(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
-      "DeleteIntent": "(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-      "ShowIntent": "(?:show|see|view) .*(?:to-do|todo|task)"
+    "intents": {
+      "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+      "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+      "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)|(?i)(?:show|see|view)",
+      "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
+      "HelpIntent": "(?i)help",
+      "CancelIntent": "(?i)cancel|never mind"
     }
   },
   "rules": [
     {
-      "$type": "Microsoft.WelcomeRule",
+      "$type": "Microsoft.NoMatchRule",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Howdy! What do you want to do?"
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "events": [
+        "cancelDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
         }
       ]
     },
@@ -29,11 +39,8 @@
       "intent": "AddIntent",
       "steps": [
         {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/AddToDo.dialog"
-          },
-          "options": {}
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AddToDo"
         }
       ]
     },
@@ -42,11 +49,8 @@
       "intent": "DeleteIntent",
       "steps": [
         {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/DeleteToDo.dialog"
-          },
-          "options": {}
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteToDo"
         }
       ]
     },
@@ -55,11 +59,8 @@
       "intent": "ClearIntent",
       "steps": [
         {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ClearToDos.dialog"
-          },
-          "options": {}
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ClearToDos"
         }
       ]
     },
@@ -68,11 +69,27 @@
       "intent": "ShowIntent",
       "steps": [
         {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "/Users/abrown/code/BotFramework-Composer/SampleBots/Planning - ToDoBot/ShowToDos.dialog"
-          },
-          "options": {}
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowToDos"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HelpIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "I can add a todo, show todos, remove a todo, and clear all todos\n"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.CancelDialog"
         }
       ]
     }

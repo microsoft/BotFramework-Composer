@@ -1,22 +1,24 @@
 {
-  "$schema": "../../Schemas/app.schema",
-  "$type": "Microsoft.RuleDialog",
-  "$id": "ClearToDoDialog",
-  "storage": {
-    "$type": "Microsoft.MemoryStorage"
-  },
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Clear",
+      "arrayProperty": "user.todos"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Successfully clear the todo list."
+    }
+  ],
   "rules": [
     {
-      "$type": "Microsoft.FallbackRule",
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
       "steps": [
         {
-          "$type": "Microsoft.ChangeList",
-          "listProperty": "user.todos",
-          "changeType": "clear"
-        },
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "Successfully clear the todo list."
+          "$type": "Microsoft.CancelDialog"
         }
       ]
     }

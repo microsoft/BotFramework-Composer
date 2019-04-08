@@ -20,7 +20,6 @@ router.get('/opened', async (req: Request, res: Response) => {
   }
 });
 
-// update memory
 router.put('/opened', async (req: Request, res: Response) => {
   try {
     projectHandler.updateOpenBot(req.body);

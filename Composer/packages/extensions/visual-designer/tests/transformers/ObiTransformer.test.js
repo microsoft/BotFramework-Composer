@@ -6,11 +6,8 @@ import * as todoBotSchema from './todoBot.json';
 test('transforms todoBot.dialog to directed graph', () => {
   const schema = todoBotSchema;
 
-  const transformable = obiTransformer.checkTransformability(schema);
-  expect(transformable).toBeTruthy();
-
   const nodes = obiTransformer.toGraphSchema(schema);
-  expect(nodes.length).toEqual(6);
+  expect(nodes.length).toEqual(9);
 
   nodes.forEach(node => {
     const nodeKeys = Object.keys(node);
@@ -20,9 +17,6 @@ test('transforms todoBot.dialog to directed graph', () => {
 
 test('transforms IntentRule to steps', () => {
   const schema = todoBotSchema.rules[1];
-
-  const transformable = obiTransformer.checkTransformability(schema);
-  expect(transformable).toBeTruthy();
 
   const nodes = obiTransformer.toGraphSchema(schema);
   expect(nodes.length).toEqual(1);

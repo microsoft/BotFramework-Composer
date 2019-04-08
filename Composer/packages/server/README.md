@@ -85,17 +85,28 @@ ProjectManagement api allows you to controlled current project status. open\clos
 
 `GET api/projects/opened`
 
-check if there is a opened projects, return path and storage if any, sample response
+check if there is a opened projects, return path and storage if any, resolved all files inside this project, sample response
 ``` 
 {
     storageId: "default"
-    path: "C:/bots/bot1.bot"
+    path: "C:/bots/bot1.bot",
+    lastAccessTime: number
+    projectFiles: [
+        {
+            name: "",
+            content:""
+        },
+        {
+            name:"",
+            content:""
+        }
+    ]
 }
 ```
 
 `PUT api/projects/opened`
 
-open a bot project, request body path must be a absolute path of .bot or .botproj file
+before open another bot project, set newest access project in storage.json, request body path must be a absolute path of .bot or .botproj file
 
 ```
 request body
@@ -103,25 +114,30 @@ request body
     storageId: "default"
     path: "C:/bots/bot1.bot"
 }
-
-
 ```
 
-`GET api/projects/opened/files`
 
-resolved all files inside this project
+`PUT api/projects/opened/files`
 
-sample
+update files in this bot project, request body path must be a absolute path of .bot or .botproj file
+
 ```
-response:
-[
-    {
-        name: "",
-        content:""
-    },
-    {
-        name:"",
-        content:""
-    }
-]
+request body
+{
+    name: "file name",
+    content: "new content of file"
+}
+```
+
+
+`POST api/projects/new`
+
+create a dialog from template
+
+sample body:
+```
+{
+    name:"fire name",
+    steps:["Microsoft.TextPrompt","Microsoft.CallDialog","Microsoft.AdaptiveDialog"]
+}
 ```

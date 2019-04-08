@@ -1,10 +1,7 @@
 {
-  "$schema": "../../Schemas/app.schema",
-  "$type": "Microsoft.RuleDialog",
+  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+  "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
-  "storage": {
-    "$type": "Microsoft.MemoryStorage"
-  },
   "recognizer": {
     "$type": "Microsoft.LuisRecognizer",
     "applicationId": "e4b3cf81-d69c-4323-9374-707655ba9703",
@@ -17,7 +14,7 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first one\" to get started."
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo called first one\" to get started."
         }
       ]
     },
@@ -25,48 +22,28 @@
       "$type": "Microsoft.IntentRule",
       "intent": "AddToDo",
       "steps": [
-        {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/AddToDo.dialog"
-          }
-        }
+        "AddToDo"
       ]
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "DeleteToDo",
       "steps": [
-        {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/DeleteToDo.dialog"
-          }
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "MarkToDo",
-      "steps": [
-        {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/ClearToDos.dialog"
-          }
-        }
+        "DeleteToDo"
       ]
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "ShowToDo",
       "steps": [
-        {
-          "$type": "Microsoft.CallDialog",
-          "dialog": {
-            "$ref": "Samples/Planning - ToDoBot/ShowToDos.dialog"
-          }
-        }
+        "ShowToDos"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ClearToDo",
+      "steps": [
+        "ClearToDos"
       ]
     }
   ]

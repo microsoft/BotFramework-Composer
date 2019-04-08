@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 
 import { Folder } from './folder';
@@ -14,8 +14,16 @@ export const Node = props => {
     e.preventDefault();
   }
 
+  useEffect(() => {
+    if (node.id === 0) {
+      setTimeout(() => {
+        onSelect(node.id);
+      }, 0);
+    }
+  }, [node]);
+
   return (
-    <li css={nodeItem}>
+    <li css={nodeItem(node.id)}>
       <Folder
         folder={node}
         activeNode={activeNode}

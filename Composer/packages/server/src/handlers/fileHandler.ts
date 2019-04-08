@@ -27,6 +27,8 @@ export interface FileInfo {
 
 interface BotConfig {
   files: string[];
+  services: string[];
+  entry: string;
 }
 
 function getAllConfig(botProjFilePath: string): BotFileConfig {
@@ -36,6 +38,9 @@ function getAllConfig(botProjFilePath: string): BotFileConfig {
     botFileName: path.basename(botProjFilePath),
   };
 }
+
+// todo: extract to isomorphic helpers?
+const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
 
 export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]> {
   if (!botProjFilePath) {
@@ -61,10 +66,19 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   if (botConfig !== undefined && Array.isArray(botConfig.files)) {
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
+      // find the index of the entry dialog defined in the botproject
+      // save & remove it from the paths array before it is sorted
+      let mainPath = '';
+      if (isDialogExtension(pattern)) {
+        const mainPathIndex = paths.findIndex(elem => elem.indexOf(botConfig.entry) !== -1);
+        mainPath = paths[mainPathIndex];
+        paths.splice(mainPathIndex, 1);
+      }
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = path.resolve(botFileDir, filePath);
-        if ((await lstat(realFilePath)).isFile()) {
+        // skip lg files for now
+        if (!realFilePath.endsWith('.lg') && (await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
           fileList.push({
             name: filePath,
@@ -72,6 +86,22 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
             path: realFilePath,
             dir: botFileDir,
             relativePath: path.relative(botFileDir, realFilePath),
+          });
+        }
+      }
+
+      // resolve the entry dialog path and add it to the front of the
+      // now sorted paths array
+      if (isDialogExtension(pattern)) {
+        const mainFilePath = path.resolve(botFileDir, mainPath);
+        if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
+          const content: string = await readFile(mainFilePath, 'utf-8');
+          fileList.unshift({
+            name: mainPath,
+            content: JSON.parse(content),
+            path: mainFilePath,
+            dir: botFileDir,
+            relativePath: path.relative(botFileDir, mainFilePath),
           });
         }
       }
@@ -100,7 +130,7 @@ export async function createFromTemplate(name: string, types: string[], botProjF
 
   const { botFileDir } = getAllConfig(botProjFilePath);
   const realFilePath: string = path.join(botFileDir, `${trimmedName}.dialog`);
-  const newDialog = merge({}, DIALOG_TEMPLATE, { $id: trimmedName });
+  const newDialog = merge({}, DIALOG_TEMPLATE);
 
   types.forEach((type: string, idx: number) => {
     set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());

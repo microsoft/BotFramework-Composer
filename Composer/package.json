@@ -13,9 +13,12 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "build": "yarn build:lib && yarn build:extensions",
+    "build": "yarn build:dev && yarn build:server && yarn build:client",
+    "build:dev": "yarn build:lib && yarn build:extensions",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
+    "build:server": "cd packages/server && yarn build",
+    "build:client": "cd packages/client && yarn build",
     "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
     "start:client": "cd packages/client && yarn start",
     "start:server": "cd packages/server && yarn start",

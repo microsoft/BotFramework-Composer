@@ -16,14 +16,13 @@ describe('fileHandlers', () => {
   describe('updateFile', () => {
     it('should update a file at a path', async () => {
       const initValue = { old: 'value' };
-      const newVaule = { new: 'value' };
+      const newValue = { new: 'value' };
 
-      let files: FileInfo[] = await getFiles(mockFilePath);
-      await updateFile(files[1].name, newVaule, mockFilePath);
-      files = await getFiles(mockFilePath);
-
-      expect(files[1].content).toEqual(newVaule);
-      await updateFile(files[1].name, initValue, mockFilePath);
+      await updateFile('a.dialog', newValue, mockFilePath);
+      const aDialog = (await getFiles(mockFilePath)).find(f => f.name.startsWith('a'));
+      // @ts-ignore
+      expect(aDialog.content).toEqual(newValue);
+      await updateFile('a.dialog', initValue, mockFilePath);
     });
   });
 
@@ -47,7 +46,7 @@ describe('fileHandlers', () => {
       }
 
       const fileContent = (newFile as FileInfo).content;
-      expect(fileContent.$type).toEqual('Microsoft.RuleDialog');
+      expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
       expect(fileContent.rules).toHaveLength(1);
       expect(fileContent.rules[0].steps).toHaveLength(3);
       expect(fileContent.rules[0].steps).toMatchObject([{ $type: 'foo' }, { $type: 'bar' }, { $type: 'baz' }]);

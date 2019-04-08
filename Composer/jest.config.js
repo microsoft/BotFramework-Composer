@@ -16,6 +16,7 @@ module.exports = {
     '!**/scripts/**',
     '!**/config/**',
     '!**/build/**',
+    '!**/dist/**',
     '!**/*config.js',
     '!**/gulpfile.js',
     '!**/style.js',

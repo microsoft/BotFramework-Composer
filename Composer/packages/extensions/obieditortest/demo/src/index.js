@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import debounce from 'lodash.debounce';
 
 import Example from '../../src';
 import { dialogGroups } from '../../src/schema/appschema';
@@ -29,7 +30,7 @@ const cmOptions = {
 };
 
 const defaultData = {
-  $type: 'Microsoft.TextPrompt',
+  $type: 'Microsoft.TextInput',
 };
 
 const defaultMemory = {
@@ -89,6 +90,7 @@ function Demo() {
   const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
+  const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
@@ -138,6 +140,21 @@ function Demo() {
     setFormData({ $type: option.text });
   };
 
+  const handlePaste = updater => (_, e) => {
+    e.preventDefault();
+
+    const data = (e.clipboardData || window.clipboardData).getData('Text');
+
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        updater(parsed);
+      } catch (err) {
+        // do nothing
+      }
+    }
+  };
+
   return (
     <div className="DemoContainer">
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -156,6 +173,7 @@ function Demo() {
           onBeforeChange={updateFormData}
           onChange={updateFormData}
           autoCursor
+          onPaste={handlePaste(setFormData)}
           className={isValid ? '' : 'CodeMirror--error'}
         />
         <div style={{ fontSize: '20px', paddingLeft: '10px' }}>Memory</div>
@@ -167,11 +185,18 @@ function Demo() {
           }}
           onChange={updateMemoryData}
           autoCursor
+          onPaste={handlePaste(setMemoryData)}
           className={isMemoryValid ? '' : 'CodeMirror--error'}
         />
       </div>
       <div className="DemoForm">
-        <Example data={formData} dialogs={dialogFiles} memory={memoryFormData} onChange={setFormData} />
+        <Example
+          data={formData}
+          dialogs={dialogFiles}
+          memory={memoryFormData}
+          onBlur={setFormData}
+          onChange={debouncedOnChange}
+        />
       </div>
     </div>
   );
