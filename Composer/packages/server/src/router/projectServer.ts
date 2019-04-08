@@ -3,7 +3,7 @@
 import express, { Router, Request, Response } from 'express';
 
 import ProjectHandler from '../handlers/projectHandler';
-import { getFiles } from '../handlers/fileHandler';
+import { getFiles, updateFile, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 
@@ -13,8 +13,12 @@ const projectHandler = new ProjectHandler(storage, setting);
 router.get('/opened', async (req: Request, res: Response) => {
   const openBot = projectHandler.getOpenBot();
   if (openBot !== null) {
-    res.status(200).json(openBot);
-    return;
+    try {
+      const result = await getFiles(openBot.path);
+      res.status(200).json({ ...openBot, projectFiles: result });
+    } catch (error) {
+      res.status(400).json(error);
+    }
   } else {
     res.status(404).json({ error: 'no project open' });
   }
@@ -29,18 +33,32 @@ router.put('/opened', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/opened/files', async (req: Request, res: Response) => {
-  const openBot = projectHandler.getOpenBot();
-  if (openBot) {
-    // load local project
-    try {
-      const result = await getFiles(openBot.path);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(400).json(error);
-    }
-  } else {
-    res.status(400).json({ error: "haven't open a project" });
+router.post('/opened/files', async (req: Request, res: Response) => {
+  const { name } = req.body;
+  const trimmedName = (name || '').trim();
+
+  if (!trimmedName) {
+    res.status(400).json({ error: 'Parameter `name` missing.' });
+  }
+
+  const lastActiveBot = projectHandler.getOpenBot();
+
+  try {
+    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot ? lastActiveBot.path : '');
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// update file in current open project
+router.put('/opened/files', async (req: Request, res: Response) => {
+  const result = projectHandler.getOpenBot();
+  try {
+    await updateFile(req.body.name, req.body.content, result.path);
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 

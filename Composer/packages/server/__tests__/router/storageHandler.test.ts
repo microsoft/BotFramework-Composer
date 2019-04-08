@@ -1,5 +1,3 @@
-// import azure from 'azure-storage';
-
 import StorageHandler, { IStorageItem } from '../../src/handlers/storageHandler';
 import storage from '../../src/storage/StorageService';
 

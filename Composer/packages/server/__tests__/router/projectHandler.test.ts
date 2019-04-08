@@ -39,9 +39,6 @@ jest.mock('azure-storage', () => {
   };
 });
 
-// jest.mock('../../src/handlers/storageHandler', ()=>{
-//   mockStorageHandler();
-// });
 jest.mock('../../src/storage/StorageService', () => {
   const mockStorage: any = {
     linkedStorages: [
