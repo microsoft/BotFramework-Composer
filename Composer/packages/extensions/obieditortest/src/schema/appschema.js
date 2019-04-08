@@ -11,12 +11,13 @@ export const dialogGroups = {
     'Microsoft.EndDialog',
     'Microsoft.EndTurn',
     'Microsoft.HttpRequest',
+    'Microsoft.IfCondition',
     'Microsoft.ReplaceWithDialog',
     'Microsoft.SendActivity',
     'Microsoft.SendList',
     'Microsoft.SwitchCondition',
   ],
-  Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.IfCondition', 'Microsoft.SaveEntity'],
+  Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.SaveEntity'],
   Rules: [
     'Microsoft.EventRule',
     'Microsoft.IfPropertyRule',
@@ -25,7 +26,7 @@ export const dialogGroups = {
     'Microsoft.Rule',
     'Microsoft.WelcomeRule',
   ],
-  Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
+  Recognizers: [/* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
   Other: ['Microsoft.AdaptiveDialog'],
 };
 
@@ -209,6 +210,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['value.birthday'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
             description: 'This defines properties which be passed as arguments to this dialog',
@@ -248,7 +250,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -293,6 +296,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             ...dialogEnum,
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           options: {
             type: 'object',
             title: 'Options',
@@ -311,7 +315,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -355,7 +360,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -398,9 +404,11 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['user.confirmed'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
+            title: 'Input Properties',
             type: 'object',
-            description: 'This defines properties which be passed as arguments to this dialog',
+            description: 'This defines properties which will be passed as arguments to this dialog',
             examples: ['user.confirmed'],
             additionalProperties: {
               type: 'string',
@@ -438,7 +446,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -487,7 +496,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -547,7 +557,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -589,6 +600,7 @@ export function getMergedSchema(dialogFiles = []) {
             title: 'Property',
             description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
             examples: ['dialog.name'],
+            type: 'string',
           },
         },
         patternProperties: {
@@ -596,7 +608,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -640,7 +653,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -705,7 +719,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -748,6 +763,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['user.height'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
             description: 'This defines properties which be passed as arguments to this dialog',
@@ -783,13 +799,13 @@ export function getMergedSchema(dialogFiles = []) {
             $ref: '#/definitions/Microsoft.IActivityTemplate',
           },
           minValue: {
-            type: 'integer',
+            type: 'number',
             title: 'Mininum value',
             description: 'The minimum value that is acceptable.  ',
             examples: ['0'],
           },
           maxValue: {
-            type: 'integer',
+            type: 'number',
             title: 'Maximum value',
             description: 'The maximum value that is acceptable.  ',
             examples: ['120'],
@@ -800,7 +816,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -814,8 +831,8 @@ export function getMergedSchema(dialogFiles = []) {
       'Microsoft.HttpRequest': {
         $role: 'unionType(Microsoft.IDialog)',
         type: 'object',
-        title: 'Goto Dialog',
-        description: 'This is a step which replaces the current dialog with the target dialog',
+        title: 'HTTP Request',
+        description: 'This is a step which makes an http request and stores the result in memory.',
         additionalProperties: false,
         properties: {
           $type: {
@@ -851,6 +868,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'The url to call (supports data binding)',
             examples: ['https://contoso.com'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           body: {
             type: 'object',
             title: 'Body',
@@ -863,9 +881,10 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'The property to store the result of the HTTP call in (as object or string)',
             examples: ['dialog.contosodata'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           header: {
             type: 'object',
-            additionProperties: true,
+            additionalProperties: true,
             title: 'Http headers',
             description: 'Http headers to include with the HTTP request (supports data binding)',
           },
@@ -875,7 +894,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -890,18 +910,21 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft ActivityTemplate',
         description: 'Union of components which implement the IActivityTemplate interface',
         $role: 'unionType',
-        oneOf: [
-          {
-            type: 'string',
-            title: 'string',
-          },
-        ],
+        type: 'string',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
+        // oneOf: [
+        //   {
+        //     type: 'string',
+        //     title: 'string',
+        //   },
+        // ],
       },
       'Microsoft.IDialog': {
         title: 'Microsoft IDialog',
         description: 'Union of components which implement the IDialog interface',
         $role: 'unionType',
         type: 'object',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
             title: 'Microsoft.AdaptiveDialog',
@@ -1004,29 +1027,34 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft IExpression',
         description: 'Union of components which implement the IExpression interface',
         $role: 'unionType',
-        oneOf: [
-          {
-            type: 'string',
-            title: 'string',
-          },
-        ],
+        type: 'string',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
+        // oneOf: [
+        //   {
+        //     type: 'string',
+        //     title: 'string',
+        //   },
+        // ],
       },
       'Microsoft.ILanguagePolicy': {
         title: 'Microsoft Language Policy',
         description: 'Union of components which implement the ILanguagePolicy interface',
         $role: 'unionType',
-        oneOf: [
-          {
-            type: 'string',
-            title: 'string',
-          },
-        ],
+        type: 'string',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
+        // oneOf: [
+        //   {
+        //     type: 'string',
+        //     title: 'string',
+        //   },
+        // ],
       },
       'Microsoft.IRecognizer': {
         title: 'Microsoft IRecognizer',
         description: 'Union of components which implement the IRecognizer interface',
         $role: 'unionType',
         type: 'object',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
             title: 'Microsoft.MultiLanguageRecognizers',
@@ -1045,6 +1073,8 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft IRule',
         description: 'Union of components which implement the IRule interface',
         $role: 'unionType',
+        type: 'object',
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
             title: 'Microsoft.EventRule',
@@ -1082,12 +1112,14 @@ export function getMergedSchema(dialogFiles = []) {
         title: 'Microsoft TextTemplate',
         description: 'Union of components which implement the ITextTemplate interface',
         $role: 'unionType',
-        oneOf: [
-          {
-            type: 'string',
-            title: 'string',
-          },
-        ],
+        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
+        type: 'string',
+        // oneOf: [
+        //   {
+        //     type: 'string',
+        //     title: 'string',
+        //   },
+        // ],
       },
       'Microsoft.IfCondition': {
         $role: 'unionType(Microsoft.IDialog)',
@@ -1124,6 +1156,7 @@ export function getMergedSchema(dialogFiles = []) {
             $ref: '#/definitions/Microsoft.IExpression',
           },
           ifTrue: {
+            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
             oneOf: [
               {
                 $type: 'Microsoft.IDialog',
@@ -1144,6 +1177,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'Step to execute if expression is true.',
           },
           ifFalse: {
+            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
             oneOf: [
               {
                 $type: 'Microsoft.IDialog',
@@ -1169,7 +1203,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1211,15 +1246,17 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'array',
             items: {
               type: 'object',
-              expression: {
-                $type: 'Microsoft.IExpression',
-                $ref: '#/definitions/Microsoft.IExpression',
-              },
-              rules: {
-                type: 'array',
-                items: {
-                  $type: 'Microsoft.IRule',
-                  $ref: '#/definitions/Microsoft.IRule',
+              properties: {
+                expression: {
+                  $type: 'Microsoft.IExpression',
+                  $ref: '#/definitions/Microsoft.IExpression',
+                },
+                rules: {
+                  type: 'array',
+                  items: {
+                    $type: 'Microsoft.IRule',
+                    $ref: '#/definitions/Microsoft.IRule',
+                  },
                 },
               },
             },
@@ -1237,6 +1274,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
+        // TODO
         // anyOf: [
         //   {
         //     title: 'Reference',
@@ -1280,6 +1318,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['value.birthday'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
             description: 'This defines properties which be passed as arguments to this dialog',
@@ -1332,7 +1371,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1410,7 +1450,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1450,11 +1491,13 @@ export function getMergedSchema(dialogFiles = []) {
           },
           languagePolicy: {
             $type: 'Microsoft.ILanguagePolicy',
-            type: 'object',
+            // TODO - not sure if this is incorrect. ILangaugePolicy defines its own type
+            // type: 'object',
             title: 'Language Policy',
             description: 'Defines languages to try per language.',
             $ref: '#/definitions/Microsoft.ILanguagePolicy',
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           recognizers: {
             type: 'object',
             title: 'Recognizers',
@@ -1471,7 +1514,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1536,7 +1580,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1573,6 +1618,7 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           intents: {
             type: 'object',
             title: 'RegEx patterns to intents',
@@ -1588,7 +1634,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1643,6 +1690,7 @@ export function getMergedSchema(dialogFiles = []) {
             title: 'Property',
             description: 'The property to bind to the dialog and store the result in',
             examples: ['user.name'],
+            type: 'string',
           },
         },
         patternProperties: {
@@ -1650,7 +1698,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1708,7 +1757,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1762,7 +1812,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1812,7 +1863,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1871,7 +1923,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -1916,9 +1969,11 @@ export function getMergedSchema(dialogFiles = []) {
             examples: ['user.age > 3'],
             $ref: '#/definitions/Microsoft.IExpression',
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           cases: {
             type: 'object',
             additionalProperties: {
+              // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
               oneOf: [
                 {
                   $type: 'Microsoft.IDialog',
@@ -1938,6 +1993,7 @@ export function getMergedSchema(dialogFiles = []) {
             },
           },
           default: {
+            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
             oneOf: [
               {
                 $type: 'Microsoft.IDialog',
@@ -1961,7 +2017,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -2004,6 +2061,7 @@ export function getMergedSchema(dialogFiles = []) {
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['user.name'],
           },
+          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
             description: 'This defines properties which be passed as arguments to this dialog',
@@ -2050,7 +2108,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
@@ -2115,7 +2174,8 @@ export function getMergedSchema(dialogFiles = []) {
             type: 'string',
           },
         },
-        // anyOf: [
+        // TODO
+        // anyOf: \[
         //   {
         //     title: 'Reference',
         //     required: ['$copy'],
