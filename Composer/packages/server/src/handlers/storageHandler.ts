@@ -151,4 +151,64 @@ export default class StorageHandler {
     }
     return result;
   }
+
+  // add Or Update Storage
+  public async addStorage(body: IStorageItem) {
+    // check
+    switch (body.type) {
+      // check whether account and key is complete
+      case 'AzureBlob':
+        if (!body.account || !body.key) {
+          throw { error: 'lack account or key' };
+        }
+        break;
+      case 'LocalDrive':
+        if (!body.path) {
+          throw { error: 'lack path' };
+        }
+        break;
+    }
+    // save body in linkedStorages
+    try {
+      const result = produce<IStorageItem[]>(this._storage.getItem('linkedStorages', []), draft => {
+        const index = draft.findIndex((value: IStorageItem) => {
+          return value.id === body.id;
+        });
+        if (index >= 0) {
+          draft.splice(index, 1);
+        }
+        if (body.type === 'LocalDrive') {
+          // deal with relative path
+          const rootPath = process.cwd();
+          body.path = path.relative(rootPath, body.path);
+          body.path = body.path.replace(/\\/g, '/');
+        }
+        draft.push(body);
+      });
+      this._storage.setItem('linkedStorages', result);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async deleteStorage(body: any) {
+    if (!body.id) {
+      throw { error: 'lack of id' };
+    }
+    try {
+      const result = produce<IStorageItem[]>(this._storage.getItem('linkedStorages', []), draft => {
+        const index = draft.findIndex((value: IStorageItem) => {
+          return value.id === body.id;
+        });
+        if (index >= 0) {
+          draft.splice(index, 1);
+        } else {
+          throw { error: 'storage not exist' };
+        }
+      });
+      this._storage.setItem('linkedStorages', result);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

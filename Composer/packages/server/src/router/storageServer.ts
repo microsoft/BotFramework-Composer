@@ -2,7 +2,7 @@
 import express, { Router, Request, Response } from 'express';
 
 import storage from '../storage/StorageService';
-import StorageHandler from '../handlers/storageHandler';
+import StorageHandler, { IStorageItem } from '../handlers/storageHandler';
 
 const router: Router = express.Router({});
 const storageHandler = new StorageHandler(storage);
@@ -26,11 +26,29 @@ router.get('/:storageId?', async (req: Request, res: Response) => {
   }
 });
 
-// router.post('/', async (req: Request, res: Response) => {
-//   if (req.body.type && req.body.type === "AzureBlob") {
-//     storageHandler.addAzureStorage(req.body);
-//   }
-// });
+// add or update a storage
+router.put('/', async (req: Request, res: Response) => {
+  if (req.body as IStorageItem) {
+    try {
+      await storageHandler.addStorage(req.body);
+      res.send('OK');
+    } catch (error) {
+      res.status(400).json(error);
+    }
+  } else {
+    res.status(400).json('lack type or id');
+  }
+});
+
+router.delete('/', async (req: Request, res: Response) => {
+  try {
+    await storageHandler.deleteStorage(req.body);
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
 // match absolute path
 router.get('/:storageId/blobs/:path(*)', async (req: Request, res: Response) => {
   try {

@@ -62,7 +62,7 @@ export default class ProjectHandler {
     const rootPath = process.cwd();
     body.path = body.path.replace(/\\/g, '/');
     let item;
-    if (index > 0) {
+    if (index >= 0) {
       recentOpenBots = produce(recentOpenBots, draft => {
         draft.splice(index, 1);
         item = Object.assign({}, body);
