@@ -6,6 +6,7 @@
   "scripts": {
     "build": "yarn webpack --config webpack.config.js",
     "start": "tsc -p tsconfig.build.json && node build/server.js",
+    "debug": "nodemon -r ts-node/register --inspect src/server.ts",
     "test": "yarn typecheck && jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
@@ -14,6 +15,21 @@
   },
   "author": "",
   "license": "ISC",
+  "nodemonConfig": {
+    "ignore": [
+      "*.js",
+      "*.json",
+      ".git",
+      ".vscode",
+      "__tests__",
+      "node_modules",
+      "build"
+    ],
+    "watch": [
+      "src"
+    ],
+    "ext": "ts"
+  },
   "devDependencies": {
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
@@ -36,6 +52,7 @@
     "clean-webpack-plugin": "^2.0.1",
     "copy-webpack-plugin": "^5.0.2",
     "jest": "24.0.0",
+    "nodemon": "^1.18.11",
     "react-testing-library": "^6.0.1",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.0.2",

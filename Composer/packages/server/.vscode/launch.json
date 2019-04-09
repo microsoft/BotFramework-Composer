@@ -29,6 +29,14 @@
        "cwd": "${workspaceRoot}",
        "sourceMaps": true,
        "console": "integratedTerminal"
-    }
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Node: Nodemon",
+      "processId": "${command:PickProcess}",
+      "restart": true,
+      "protocol": "inspector",
+    },
   ]
 }
