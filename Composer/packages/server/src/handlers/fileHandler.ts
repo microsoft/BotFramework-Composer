@@ -6,6 +6,7 @@ import { merge, set } from 'lodash';
 import glob from 'globby';
 
 import DIALOG_TEMPLATE from '../dialogTemplate.json';
+
 import { FileInfo } from './fileHandler';
 
 const readFile = promisify(fs.readFile);
