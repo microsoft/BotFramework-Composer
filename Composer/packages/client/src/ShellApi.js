@@ -1,8 +1,9 @@
 import Path from 'path';
 
 import jp from 'jsonpath';
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useContext, useMemo, useRef } from 'react';
 import set from 'lodash.set';
+import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -16,6 +17,7 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { files, openFileIndex, navPath, focusPath } = state;
+  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -31,21 +33,15 @@ export function ShellApi() {
     [files]
   );
 
-  function saveData() {
-    actions.saveFile(files[openFileIndex]);
-  }
-
   useEffect(() => {
     apiClient.connect();
 
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('getDialogs', getDialogs);
-    apiClient.registerApi('changeData', handleValueChange);
-    apiClient.registerApi('saveData', saveData);
+    apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
-    apiClient.registerApi('flushToDisk', flushToDisk);
 
     return () => {
       apiClient.disconnect();
@@ -99,29 +95,30 @@ export function ShellApi() {
         name: files[openFileIndex].name,
         content: updatedContent[dialogName],
       };
-      // TODO: save this gracefully
-      // current newData has some field sets to undefined, which is not friendly to runtime
-      actions.updateFile(payload);
+      updateFile(payload);
 
       return true;
     }
   }
 
-  function flushToDisk() {
+  function flushUpdates() {
     if (updateFile.flush) {
       updateFile.flush();
     }
   }
 
   function navTo({ path }) {
+    flushUpdates();
     actions.navTo(path);
   }
 
   function navDown({ subPath }) {
+    flushUpdates();
     actions.navDown(subPath);
   }
 
   function focusTo({ subPath }) {
+    flushUpdates();
     actions.focusTo(subPath);
   }
 

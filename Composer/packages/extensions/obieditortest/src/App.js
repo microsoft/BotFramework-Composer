@@ -16,12 +16,6 @@ const getType = data => {
 
 export const FormEditor = props => {
   const { data, memory, dialogs } = props;
-  const [formData, setFormData] = useState(data);
-
-  useEffect(() => {
-    setFormData(data);
-  }, [data]);
-
   const type = getType(data);
 
   const mergedSchema = getMergedSchema(dialogs);
@@ -36,7 +30,7 @@ export const FormEditor = props => {
   };
 
   const onChange = newValue => {
-    setFormData(newValue.formData);
+    props.onChange(newValue.formData);
   };
 
   const buildScope = (memory, scope) => {
@@ -89,11 +83,8 @@ export const FormEditor = props => {
           noValidate
           className="schemaForm"
           onChange={onChange}
-          formData={formData}
-          onBlur={() => {
-            props.onChange(formData);
-            props.onBlur(formData);
-          }}
+          formData={data}
+          onBlur={props.onBlur}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
         >
@@ -106,6 +97,7 @@ export const FormEditor = props => {
 
 FormEditor.propTypes = {
   data: PropTypes.shape({ data: PropTypes.any }),
+  dialogs: PropTypes.array,
   memory: PropTypes.shape({
     user: PropTypes.any,
     conversation: PropTypes.any,

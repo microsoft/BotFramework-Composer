@@ -62,12 +62,8 @@ function ExtensionContainer() {
       return apiClient.apiCall('getDialogs', {});
     },
 
-    saveData: () => {
-      return apiClient.apiCall('saveData');
-    },
-
-    changeData: newData => {
-      return apiClient.apiCall('changeData', newData);
+    saveData: newData => {
+      return apiClient.apiCall('saveData', newData);
     },
 
     navTo: path => {
@@ -95,13 +91,7 @@ function ExtensionContainer() {
       {RealEditor === '' ? (
         ''
       ) : (
-        <RealEditor
-          data={data}
-          dialogs={dialogs}
-          onChange={shellApi.changeData}
-          onBlur={shellApi.saveData}
-          shellApi={shellApi}
-        />
+        <RealEditor data={data} dialogs={dialogs} onChange={shellApi.saveData} shellApi={shellApi} />
       )}
     </Fragment>
   );
