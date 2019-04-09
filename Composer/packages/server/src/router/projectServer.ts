@@ -18,7 +18,7 @@ router.get('/opened', async (req: Request, res: Response) => {
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
     const files = await getFiles(result.path);
-    res.status(200).json({ ...result, projectFiles: files });
+    res.status(200).json({ ...result, ...files });
   } catch (error) {
     res.status(404).json({ error: 'no access project recently' });
   }
@@ -50,8 +50,8 @@ router.put('/opened', async (req: Request, res: Response) => {
   }
 });
 
-// update file in current open project
-router.put('/opened/files', async (req: Request, res: Response) => {
+// update bot file in current open project
+router.put('/opened/botproject', async (req: Request, res: Response) => {
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
     await updateFile(req.body.name, req.body.content, result.path);
@@ -61,7 +61,19 @@ router.put('/opened/files', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/opened/files', async (req: Request, res: Response) => {
+// update dialog in current open project
+router.put('/opened/dialog', async (req: Request, res: Response) => {
+  const result = projectHandler.checkOpenBotInStorage(storage, setting);
+  try {
+    await updateFile(req.body.name, req.body.content, result.path);
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+//create dialog in current open project
+router.post('/opened/dialog', async (req: Request, res: Response) => {
   const { name } = req.body;
   const trimmedName = (name || '').trim();
 

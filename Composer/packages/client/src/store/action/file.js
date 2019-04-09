@@ -40,10 +40,10 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
   }
 }
 
-export async function updateFile(dispatch, { name, content }) {
+export async function updateDialog(dispatch, { name, content }) {
   try {
     dispatch({
-      type: ActionTypes.FILES_UPDATE,
+      type: ActionTypes.UPDATE_DIALOG,
       payload: {
         name,
         content,
@@ -52,16 +52,16 @@ export async function updateFile(dispatch, { name, content }) {
     await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
   } catch (err) {
     dispatch({
-      type: ActionTypes.FILES_UPDATE_FAILURE,
+      type: ActionTypes.UPDATE_DIALOG_FAILURE,
       payload: null,
       error: err,
     });
   }
 }
 
-export async function saveFile(dispatch, { name, content }) {
+export async function saveDialog(dispatch, { name, content }) {
   try {
-    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/dialog`, { name, content });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
@@ -77,7 +77,7 @@ export async function updateProjFile(dispatch, { name, content }) {
         content,
       },
     });
-    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/botproject`, { name, content });
   } catch (err) {
     dispatch({
       type: ActionTypes.PROJ_FILE_UPDATE_FAILURE,
@@ -87,17 +87,17 @@ export async function updateProjFile(dispatch, { name, content }) {
   }
 }
 
-export function setOpenFileIndex(dispatch, index) {
+export function setOpenedDialogIndex(dispatch, index) {
   dispatch({
-    type: ActionTypes.OPEN_FILE_INDEX_SET,
+    type: ActionTypes.SET_OPENED_FILE_INDEX,
     payload: { index },
   });
 }
 
 export async function createDialog(dispatch, { name, steps }) {
   try {
-    await axios.post(`${BASEURL}/projects/opened/files`, { name, steps });
-    const response = await axios.get(`${BASEURL}/projects/opened?refresh=true`);
+    await axios.post(`${BASEURL}/projects/opened/dialog`, { name, steps });
+    const response = await axios.get(`${BASEURL}/projects/opened`);
     dispatch({
       type: ActionTypes.FILES_GET_SUCCESS,
       payload: { response },

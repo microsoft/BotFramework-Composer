@@ -19,25 +19,25 @@ function getDialogName(file) {
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPathHistory, path } = state;
-  const { setOpenFileIndex, clearNavHistory, navTo } = actions;
+  const { dialogFiles, openedDialogIndex, navPathHistory, path } = state;
+  const { setOpenedDialogIndex, clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
-    setOpenFileIndex(index);
+    setOpenedDialogIndex(index);
     clearNavHistory();
-    navTo(getDialogName(files[index]));
+    navTo(getDialogName(dialogFiles[index]));
   }
 
   useEffect(() => {
-    if (files.length > 0) {
-      setOpenFileIndex(0);
-      navTo(getDialogName(files[0]));
+    if (dialogFiles.length > 0) {
+      setOpenedDialogIndex(0);
+      navTo(getDialogName(dialogFiles[0]));
     }
   }, [path]);
 
   const breadcrumbItems = useMemo(() => {
-    const dialogs = files.reduce(
+    const dialogs = dialogFiles.reduce(
       (result, item) => ({
         ...result,
         [getBaseName(item.name)]: item.content,
@@ -62,7 +62,7 @@ function DesignPage() {
         },
       };
     });
-  }, [clearNavHistory, files, navPathHistory, navTo]);
+  }, [clearNavHistory, dialogFiles, navPathHistory, navTo]);
 
   async function onSubmit(data) {
     await actions.createDialog(data);
@@ -86,7 +86,7 @@ function DesignPage() {
                   }}
                 >
                   <div>Dialogs</div>
-                  {files.length > 0 ? (
+                  {dialogFiles.length > 0 ? (
                     <IconButton
                       iconProps={{ iconName: 'Add' }}
                       title="New Dialog"
@@ -97,7 +97,7 @@ function DesignPage() {
                     <div />
                   )}
                 </div>
-                <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
+                <ProjectTree files={dialogFiles} activeNode={openedDialogIndex} onSelect={handleFileClick} />
               </div>
             </Tree>
             <div style={{ height: '20px' }} />
