@@ -96,7 +96,7 @@ function getAllConfig(botProjFilePath: string): BotFileConfig {
 // todo: extract to isomorphic helpers?
 const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
 
-export async function getFiles(botProjFilePath: string = ''): Promise<any> {
+export async function getFiles(botProjFilePath: string = ''): Promise<{ [key: string]: FileInfo[] }> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot find files.`);
   }

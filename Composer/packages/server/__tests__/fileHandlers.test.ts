@@ -8,8 +8,8 @@ const mockFilePath: string = path.join(__dirname, 'mocks/1.botproj');
 describe('fileHandlers', () => {
   describe('getFiles', () => {
     it('should get files at a path', async () => {
-      const files: FileInfo[] = await getFiles(mockFilePath);
-      expect(files.length).toBe(4);
+      const files: any = await getFiles(mockFilePath);
+      expect(files.dialogFiles.length).toBe(3);
     });
   });
 
@@ -19,7 +19,7 @@ describe('fileHandlers', () => {
       const newValue = { new: 'value' };
 
       await updateFile('a.dialog', newValue, mockFilePath);
-      const aDialog = (await getFiles(mockFilePath)).find(f => f.name.startsWith('a'));
+      const aDialog = (await getFiles(mockFilePath)).dialogFiles.find(f => f.name.startsWith('a'));
       // @ts-ignore
       expect(aDialog.content).toEqual(newValue);
       await updateFile('a.dialog', initValue, mockFilePath);
@@ -39,7 +39,7 @@ describe('fileHandlers', () => {
 
     it('should create a dialog file with given steps', async () => {
       await createFromTemplate(dialogName, ['foo', 'bar', 'baz'], mockFilePath);
-      const newFile = (await getFiles(mockFilePath)).find(f => f.name.startsWith(dialogName));
+      const newFile = (await getFiles(mockFilePath)).dialogFiles.find(f => f.name.startsWith(dialogName));
 
       if (!newFile) {
         expect(newFile).toBeTruthy();
