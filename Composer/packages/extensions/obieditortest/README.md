@@ -15,10 +15,30 @@ Describe obieditortest here.
 [coveralls-badge]: https://img.shields.io/coveralls/user/repo/master.png?style=flat-square
 [coveralls]: https://coveralls.io/github/user/repo
 
+[react-jsonschema-form]: https://github.com/mozilla-services/react-jsonschema-form
+
+#### Playground
+
+There is a playground to see and experiment with all of the different OBI types. This is usually helpful to view
+outside of Composer because it gives you a finer grain of control and allows you to drill down into any level of detail easily.
+
+In the Composer directory or in the obieditortest directory:
+```bash
+yarn start
+```
+
+You can now access the playground at http://localhost:3001
+
+To see your changes in Composer:
+
+1. Build `yarn build`
+2. Refresh Composer.
+
 
 #### React JSON Schema Form
 
-We are currently using a custom fork of the react-jsonschema-form library.
+This is a light wrapper around [react-jsonschema-form](react-jsonschema-form). It is possible that changes will need to be made
+in our fork of the project. When doing so, use the steps outlined below.
 
 ##### Development
 

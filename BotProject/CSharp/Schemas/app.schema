@@ -855,7 +855,7 @@
             "$role": "unionType(Microsoft.IDialog)",
             "type": "object",
             "title": "Http Request",
-            "description": "This is a step which replaces the current dialog with the target dialog",
+            "description": "This is a step which makes an http request and stores the result in memory.",
             "additionalProperties": false,
             "properties": {
                 "$type": {
