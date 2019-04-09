@@ -6,7 +6,7 @@
   "scripts": {
     "build": "yarn webpack --config webpack.config.js",
     "start": "tsc -p tsconfig.build.json && node build/server.js",
-    "debug": "nodemon -r ts-node/register --inspect src/server.ts",
+    "start:watch": "nodemon -r ts-node/register --inspect src/server.ts",
     "test": "yarn typecheck && jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
