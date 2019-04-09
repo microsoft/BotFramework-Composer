@@ -190,13 +190,7 @@ function Demo() {
         />
       </div>
       <div className="DemoForm">
-        <Example
-          data={formData}
-          dialogs={dialogFiles}
-          memory={memoryFormData}
-          onBlur={setFormData}
-          onChange={debouncedOnChange}
-        />
+        <Example data={formData} dialogs={dialogFiles} memory={memoryFormData} onChange={debouncedOnChange} />
       </div>
     </div>
   );
