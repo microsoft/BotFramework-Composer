@@ -1,7 +1,8 @@
 import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
-import { buildObiStep } from '../helpers/elementBuilder';
+import { normalizeObiStep } from '../helpers/elementBuilder';
+import { branchMiddleware } from '../helpers/branchMiddleware';
 
 /**
  *      Step                     Rule              ^
@@ -21,7 +22,7 @@ export const SequentialStrategy = {
     // TODO: parse steps
     if (Array.isArray(input.steps)) {
       steps = input.steps.map(
-        (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, buildObiStep(step))
+        (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, normalizeObiStep(step))
       );
     }
 
@@ -53,6 +54,7 @@ export const SequentialStrategy = {
     }
     return edges;
   },
+  middlewares: [branchMiddleware],
   output: (nodeCollection, edges) => {
     const nodes = [].concat(...Object.values(nodeCollection));
     return mergeNodesIntoEdges(nodes, edges);

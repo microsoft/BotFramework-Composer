@@ -5,7 +5,16 @@ import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule, EventRule } from './nodes';
+import {
+  DefaultRenderer,
+  WelcomeRule,
+  IntentRule,
+  Recognizer,
+  BeginDialog,
+  NoMatchRule,
+  EventRule,
+  IfCondition,
+} from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 
 const rendererByObiType = {
@@ -16,6 +25,7 @@ const rendererByObiType = {
   [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.EventRule]: EventRule,
+  [ObiTypes.IfCondition]: IfCondition,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
