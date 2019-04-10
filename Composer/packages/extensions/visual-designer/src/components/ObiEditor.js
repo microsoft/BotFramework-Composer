@@ -3,35 +3,9 @@ import PropTypes from 'prop-types';
 
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
-import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import {
-  DefaultRenderer,
-  WelcomeRule,
-  IntentRule,
-  Recognizer,
-  BeginDialog,
-  NoMatchRule,
-  EventRule,
-  IfCondition,
-  EventGroup,
-  IntentGroup,
-} from './nodes';
 import { ComponentGraph } from './ComponentGraph';
-
-const rendererByObiType = {
-  [ObiTypes.WelcomeRule]: WelcomeRule,
-  [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.NoMatchRule]: NoMatchRule,
-  [ObiTypes.RegexRecognizer]: Recognizer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
-  [ObiTypes.BeginDialog]: BeginDialog,
-  [ObiTypes.EventRule]: EventRule,
-  [ObiTypes.IfCondition]: IfCondition,
-  [ObiTypes.EventGroup]: EventGroup,
-  [ObiTypes.IntentGroup]: IntentGroup,
-};
-const DEFAULT_RENDERER = DefaultRenderer;
+import { chooseRendererByType } from './nodes/nodeRenderer';
 
 export class ObiEditor extends Component {
   dispatchEvent(eventName, eventData) {
@@ -55,14 +29,9 @@ export class ObiEditor extends Component {
     return handler(eventData);
   }
 
-  chooseRendererByType($type) {
-    const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-    return renderer;
-  }
-
   createRendererInstance(item) {
     const { id, data } = item;
-    const ChosenRenderer = this.chooseRendererByType(data.$type);
+    const ChosenRenderer = chooseRendererByType(data.$type);
     const onEvent = (eventName, eventData) => this.dispatchEvent(eventName, eventData);
 
     return <ChosenRenderer id={id} data={data} onEvent={onEvent} />;
