@@ -22,16 +22,16 @@ export const FormCard = ({ header, label, details, themeColor, onClick }) => (
       className="card__header"
       style={{
         width: '100%',
-        height: headerHeight,
-        lineHeight: `${headerHeight}px`,
+        height: `${headerHeight}px`,
         backgroundColor: themeColor,
+        fontFamily: 'Segoe UI',
+        fontSize: '14px',
+        lineHeight: '19px',
         color: '#ffffff',
-        fontWeight: '700',
         paddingLeft: '8px',
-        paddingBottom: '8px',
       }}
     >
-      {header}
+      <span>{header}</span>
     </div>
     <div
       className="card__content"
