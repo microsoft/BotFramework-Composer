@@ -1,15 +1,15 @@
-.StringArrayContainer {
+.ArrayContainer {
   margin: 20px 0;
 }
 
-.StringItem {
+.ArrayItem {
   display: flex;
 
-  .StringItemField {
+  .ArrayItemField {
     flex: 1;
   }
 
-  .StringItemContext {
+  .ArrayItemContext {
     flex-basis: auto;
     margin-left: 15px;
   }
