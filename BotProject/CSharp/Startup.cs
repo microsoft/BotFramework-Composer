@@ -24,14 +24,9 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             HostingEnvironment = env;
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
-
+                
+            Configuration = configuration;
+           
             // set the configuration for types
             TypeFactory.Configuration = this.Configuration;
 
@@ -57,6 +52,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             // Get Bot file
             string rootDialog = string.Empty;
+
             var botFile = Configuration.GetSection("bot").Get<BotFile>();
             var botProject = BotProject.Load(botFile);
             rootDialog = botProject.entry;
