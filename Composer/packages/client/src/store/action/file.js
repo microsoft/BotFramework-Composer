@@ -49,7 +49,7 @@ export async function updateDialog(dispatch, { name, content }) {
         content,
       },
     });
-    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
+    await axios.put(`${BASEURL}/projects/opened/dialog`, { name, content });
   } catch (err) {
     dispatch({
       type: ActionTypes.UPDATE_DIALOG_FAILURE,

@@ -15,7 +15,7 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogFiles, openedDialogIndex, navPath, focusPath } = state;
-  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
+  const updateDialog = useRef(debounce(actions.updateDialog, 500)).current;
 
   // convert file to dialogs to use as a base to navPath and focusPath
   // TODO: create dialog api to return dialogs directly
@@ -93,15 +93,15 @@ export function ShellApi() {
         name: dialogFiles[openedDialogIndex].name,
         content: updatedContent[dialogName],
       };
-      updateFile(payload);
+      updateDialog(payload);
 
       return true;
     }
   }
 
   function flushUpdates() {
-    if (updateFile.flush) {
-      updateFile.flush();
+    if (updateDialog.flush) {
+      updateDialog.flush();
     }
   }
 
