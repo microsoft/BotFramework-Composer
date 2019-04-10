@@ -37,6 +37,7 @@ export const RootDialogStrategy = {
       switch (node[PAYLOAD_KEY].$type) {
         case ObiTypes.WelcomeRule:
         case ObiTypes.NoMatchRule:
+        case ObiTypes.EventRule:
           events.push(node);
           break;
         case ObiTypes.IntentRule:
