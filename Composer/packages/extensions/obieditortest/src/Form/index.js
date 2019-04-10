@@ -4,6 +4,7 @@ import JSONFrom from 'react-jsonschema-form';
 
 import * as widgets from './widgets';
 import * as fields from './fields';
+import ArrayFieldTemplate from './ArrayFieldTemplate';
 import FieldTemplate from './FieldTemplate';
 
 import './styles.scss';
@@ -14,13 +15,14 @@ export default function Form(props) {
   return (
     <div className="FormContainer">
       <JSONFrom
+        ArrayFieldTemplate={ArrayFieldTemplate}
+        fields={fields}
+        FieldTemplate={FieldTemplate}
+        formData={formData}
+        onChange={onChange}
         schema={schema}
         uiSchema={uiSchema}
         widgets={widgets}
-        fields={fields}
-        formData={formData}
-        onChange={onChange}
-        FieldTemplate={FieldTemplate}
         {...rest}
       />
     </div>
