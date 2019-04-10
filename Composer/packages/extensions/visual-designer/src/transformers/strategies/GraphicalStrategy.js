@@ -27,7 +27,10 @@ export const GraphicalStrategy = {
 
     const { rules, steps, recognizer } = input;
 
-    const recognizerNodes = recognizer ? [new IndexedNode(`$.recognizer`, NodeTypes.Decision, recognizer)] : [];
+    const recognizerNodes =
+      typeof recognizer === 'object' && recognizer.$type
+        ? [new IndexedNode(`$.recognizer`, NodeTypes.Decision, recognizer)]
+        : [];
     const ruleNodes = rules ? rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, x)) : [];
     const stepNodes = steps
       ? steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, normalizeObiStep(x)))
