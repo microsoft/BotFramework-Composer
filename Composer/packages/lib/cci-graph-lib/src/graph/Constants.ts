@@ -10,5 +10,5 @@ export const mouseButtons = {
   left: 1,
   right: 2,
 };
-export const graphRankSeparation = 180;
+export const graphRankSeparation = 90;
 export const graphNodeSeparation = 15;
