@@ -3,7 +3,6 @@
 import express, { Router, Request, Response } from 'express';
 
 import ProjectHandler from '../handlers/projectHandler';
-import { getFiles, updateFile, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 
@@ -14,7 +13,7 @@ router.get('/opened', async (req: Request, res: Response) => {
   const openBot = projectHandler.getOpenBot();
   if (openBot !== null) {
     try {
-      const result = await getFiles(openBot.path);
+      const result = await projectHandler.getFiles();
       res.status(200).json({ ...openBot, projectFiles: result });
     } catch (error) {
       res.status(400).json(error);
@@ -33,18 +32,15 @@ router.put('/opened', async (req: Request, res: Response) => {
   }
 });
 
+// create file in current bot project
 router.post('/opened/files', async (req: Request, res: Response) => {
   const { name } = req.body;
   const trimmedName = (name || '').trim();
-
   if (!trimmedName) {
     res.status(400).json({ error: 'Parameter `name` missing.' });
   }
-
-  const lastActiveBot = projectHandler.getOpenBot();
-
   try {
-    await createFromTemplate(req.body.name, req.body.steps, lastActiveBot ? lastActiveBot.path : '');
+    await projectHandler.addFileToBot(req.body.name, req.body.steps);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -53,9 +49,8 @@ router.post('/opened/files', async (req: Request, res: Response) => {
 
 // update file in current open project
 router.put('/opened/files', async (req: Request, res: Response) => {
-  const result = projectHandler.getOpenBot();
   try {
-    await updateFile(req.body.name, req.body.content, result.path);
+    await projectHandler.updateFileInBot(req.body.name, req.body.content);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });

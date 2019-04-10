@@ -2,8 +2,8 @@
 import express, { Router, Request, Response } from 'express';
 
 import storage from '../storage/StorageService';
-import StorageHandler, { IStorageItem } from '../handlers/storageHandler';
-
+import StorageHandler from '../handlers/storageHandler';
+import { IStorageDefinition } from '../storage/IStorageDefinition';
 const router: Router = express.Router({});
 const storageHandler = new StorageHandler(storage);
 
@@ -28,7 +28,7 @@ router.get('/:storageId?', async (req: Request, res: Response) => {
 
 // add or update a storage
 router.put('/', async (req: Request, res: Response) => {
-  if (req.body as IStorageItem) {
+  if (req.body as IStorageDefinition) {
     try {
       await storageHandler.addStorage(req.body);
       res.send('OK');

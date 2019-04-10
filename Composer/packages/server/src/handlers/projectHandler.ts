@@ -1,18 +1,21 @@
-import path from 'path';
-import fs from 'fs';
-
 import produce from 'immer';
-
 import { FileStorage } from '../storage/FileStorage';
 import StorageHandler from '../handlers/storageHandler';
+import { AzureStorage } from '../storage/AzureStorage';
+import { LocalStorage } from '../storage/LocalStorage';
+import { Constant } from '../constant';
+import { IStorageProvider } from '../storage/IStorageProvider';
+import { IStorageDefinition } from '../storage/IStorageDefinition';
 
 export default class ProjectHandler {
   // memory cache the project we opened
-  private openBot: any = null;
+  private openBot: any;
   private storage: FileStorage;
   private setting: FileStorage;
   private openLastActiveBot: boolean;
   private storageHandler: StorageHandler;
+  private botStorage: IStorageDefinition | any;
+  private storageProvider: IStorageProvider | any;
   constructor(stoarge: FileStorage, setting: FileStorage, openLastActiveBot = false) {
     this.storage = stoarge;
     this.setting = setting;
@@ -20,6 +23,10 @@ export default class ProjectHandler {
     this.openLastActiveBot = openLastActiveBot;
     // get recentAccessBots
     this.openBot = this.checkOpenBotInStorage();
+    if (this.openBot) {
+      this.botStorage = this.storageHandler.getStorageById(this.openBot.storageId);
+      this.storageProvider = this.getProvider(this.botStorage);
+    }
   }
 
   public updateOpenBot = (body: any) => {
@@ -27,73 +34,39 @@ export default class ProjectHandler {
     if (!body.storageId) {
       throw { error: 'please give the storageId where project saved' };
     }
-    const currentStorage = this.storageHandler.getStorageById(body.storageId);
-    if (!currentStorage) {
-      throw { error: 'can not find storage' };
-    }
     try {
-      if (currentStorage.type === 'LocalDrive') {
-        this.openBot = this.updateLocalBot(body);
-      } else if (currentStorage.type === 'AzureBlob') {
-        this.openBot = this.updateAzureBot(body);
+      const currentStorage = this.storageHandler.getStorageById(body.storageId);
+      // change path to relative if local storage
+      const pathToSave =
+        currentStorage.type === Constant.LocalDrive ? LocalStorage.pathToRelative(body.path) : body.path;
+      let item = this.updateRecentAccessBot({ storageId: body.storageId, path: pathToSave });
+      if (item && currentStorage.type === Constant.LocalDrive) {
+        this.openBot = {
+          storageId: item.storageId,
+          path: LocalStorage.pathToAbsolute(body.path),
+          lastAccessTime: item.lastAccessTime,
+        };
+      } else {
+        this.openBot = { storageId: item.storageId, path: body.path, lastAccessTime: item.lastAccessTime };
       }
+      this.botStorage = currentStorage;
+      this.storageProvider = this.getProvider(this.botStorage);
     } catch (error) {
       throw error;
     }
+
     return this.openBot;
   };
 
-  private updateLocalBot = (body: any) => {
-    if (!body.path || (path.extname(body.path) !== '.bot' && path.extname(body.path) !== '.botproj')) {
-      throw { error: 'path error. can not accept this type of file, please give .bot or .botproj file' };
-    }
-    // check if the path is correct
-    if (!fs.existsSync(body.path)) {
-      throw { error: 'file not found' };
-    }
-    body.path = path.normalize(body.path);
+  private updateRecentAccessBot = (body: any) => {
     // update recent open bot list
     let recentOpenBots: object[] = this.storage.getItem('recentAccessedBots', []);
-
     // if this openBot in List, update position
     const index = recentOpenBots.findIndex((value: any) => {
-      return path.resolve(value.path) === body.path;
+      return value.storageId === body.storageId && value.path === body.path;
     });
-    const rootPath = process.cwd();
-    body.path = body.path.replace(/\\/g, '/');
-    let item;
-    if (index >= 0) {
-      recentOpenBots = produce(recentOpenBots, draft => {
-        draft.splice(index, 1);
-        item = Object.assign({}, body);
-        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
-        item.lastAccessTime = Date.now();
-        draft.push(item);
-        body.lastAccessTime = item.lastAccessTime;
-      });
-    } else {
-      recentOpenBots = produce(recentOpenBots, draft => {
-        item = Object.assign({}, body);
-        item.path = path.relative(rootPath, body.path).replace(/\\/g, '/');
-        item.lastAccessTime = Date.now();
-        draft.push(item);
-        body.lastAccessTime = item.lastAccessTime;
-      });
-    }
-    this.storage.setItem('recentAccessedBots', recentOpenBots);
-    return body;
-  };
 
-  private updateAzureBot = (body: any) => {
-    // open a bot project in azure blob
-    // update recent open bot list
-    let recentOpenBots: object[] = this.storage.getItem('recentAccessedBots', []);
-
-    // if this openBot in List, update position
-    const index = recentOpenBots.findIndex((value: any) => {
-      return value.container === body.container && value.blob === body.blob;
-    });
-    let item;
+    let item: any;
     if (index >= 0) {
       recentOpenBots = produce(recentOpenBots, draft => {
         draft.splice(index, 1);
@@ -111,14 +84,43 @@ export default class ProjectHandler {
     this.storage.setItem('recentAccessedBots', recentOpenBots);
     return item;
   };
+
+  // private updateAzureBot = (body: any) => {
+  //   // open a bot project in azure blob
+  //   // update recent open bot list
+  //   let recentOpenBots: object[] = this.storage.getItem('recentAccessedBots', []);
+
+  //   // if this openBot in List, update position
+  //   const index = recentOpenBots.findIndex((value: any) => {
+  //     return value.container === body.container && value.blob === body.blob;
+  //   });
+  //   let item;
+  //   if (index >= 0) {
+  //     recentOpenBots = produce(recentOpenBots, draft => {
+  //       draft.splice(index, 1);
+  //       item = Object.assign({}, body);
+  //       item.lastAccessTime = Date.now();
+  //       draft.push(item);
+  //     });
+  //   } else {
+  //     recentOpenBots = produce(recentOpenBots, draft => {
+  //       item = Object.assign({}, body);
+  //       item.lastAccessTime = Date.now();
+  //       draft.push(item);
+  //     });
+  //   }
+  //   this.storage.setItem('recentAccessedBots', recentOpenBots);
+  //   return item;
+  // };
   private checkOpenBotInStorage = () => {
     const openLastActiveBot = this.openLastActiveBot || this.setting.getItem<boolean>('openLastActiveBot', false);
     const recentOpenBots = this.storage.getItem('recentAccessedBots', []);
     if (openLastActiveBot && recentOpenBots.length > 0) {
       // deal with relative path
       const result = produce(recentOpenBots[recentOpenBots.length - 1], draft => {
-        draft.path = path.resolve(draft.path);
-        draft.path = draft.path.replace(/\\/g, '/');
+        if (draft.type === Constant.LocalDrive) {
+          draft.path = LocalStorage.pathToAbsolute(draft.path);
+        }
       });
       return result;
     } else {
@@ -128,5 +130,47 @@ export default class ProjectHandler {
 
   public getOpenBot() {
     return this.openBot;
+  }
+
+  private getProvider(body: IStorageDefinition): IStorageProvider {
+    try {
+      const { type, path } = body;
+      switch (type) {
+        case Constant.AzureBlob:
+          const { account, key } = body;
+          return new AzureStorage(account, key, path);
+        case Constant.LocalDrive:
+          return new LocalStorage(path);
+        default:
+          throw { error: 'not support this type of storage' };
+      }
+    } catch (error) {
+      // body lack of id or type
+      throw error;
+    }
+  }
+
+  public async getFiles() {
+    try {
+      return await this.storageProvider.getBotProject(this.openBot.path);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async addFileToBot(name: string, steps: string[]) {
+    try {
+      return await this.storageProvider.createFile(name, steps, this.openBot.path);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async updateFileInBot(name: string, steps: string[]) {
+    try {
+      return await this.storageProvider.updateFile(name, steps, this.openBot.path);
+    } catch (error) {
+      throw error;
+    }
   }
 }
