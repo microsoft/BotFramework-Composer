@@ -1,15 +1,15 @@
 import path from 'path';
 import fs from 'fs';
 
-import { getFiles, updateFile, FileInfo, createFromTemplate } from '../src/handlers/fileHandler';
+import { getOpenedElements, updateFile, createFromTemplate } from '../src/handlers/fileHandler';
 
 const mockFilePath: string = path.join(__dirname, 'mocks/1.botproj');
 
 describe('fileHandlers', () => {
   describe('getFiles', () => {
     it('should get files at a path', async () => {
-      const files: FileInfo[] = await getFiles(mockFilePath);
-      expect(files.length).toBe(4);
+      const elements = await getOpenedElements(mockFilePath);
+      expect(elements.dialogs.length).toBe(3);
     });
   });
 
@@ -19,9 +19,10 @@ describe('fileHandlers', () => {
       const newValue = { new: 'value' };
 
       await updateFile('a.dialog', newValue, mockFilePath);
-      const aDialog = (await getFiles(mockFilePath)).find(f => f.name.startsWith('a'));
+      const elements: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getOpenedElements(mockFilePath);
+      const aDialog = elements.dialogs.find(f => f.name.startsWith('a'));
       // @ts-ignore
-      expect(aDialog.content).toEqual(newValue);
+      expect(aDialog.json).toEqual(newValue);
       await updateFile('a.dialog', initValue, mockFilePath);
     });
   });
@@ -39,13 +40,14 @@ describe('fileHandlers', () => {
 
     it('should create a dialog file with given steps', async () => {
       await createFromTemplate(dialogName, ['foo', 'bar', 'baz'], mockFilePath);
-      const newFile = (await getFiles(mockFilePath)).find(f => f.name.startsWith(dialogName));
+      const elements: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getOpenedElements(mockFilePath);
+      const newFile = elements.dialogs.find(f => f.name.startsWith(dialogName));
 
       if (!newFile) {
         expect(newFile).toBeTruthy();
       }
 
-      const fileContent = (newFile as FileInfo).content;
+      const fileContent = (newFile as { [key: string]: any }).json;
       expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
       expect(fileContent.rules).toHaveLength(1);
       expect(fileContent.rules[0].steps).toHaveLength(3);

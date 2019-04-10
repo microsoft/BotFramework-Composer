@@ -7,6 +7,8 @@ import glob from 'globby';
 
 import DIALOG_TEMPLATE from '../dialogTemplate.json';
 
+import { applyIndexer } from './indexers/index';
+
 const readFile = promisify(fs.readFile);
 const lstat = promisify(fs.lstat);
 const writeFile = promisify(fs.writeFile);
@@ -20,9 +22,6 @@ interface BotFileConfig {
 export interface FileInfo {
   name: string;
   content: any;
-  path: string;
-  dir: string;
-  relativePath: string;
 }
 
 interface BotConfig {
@@ -39,10 +38,7 @@ function getAllConfig(botProjFilePath: string): BotFileConfig {
   };
 }
 
-// todo: extract to isomorphic helpers?
-const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
-
-export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]> {
+export async function getOpenedElements(botProjFilePath: string = ''): Promise<any> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot find files.`);
   }
@@ -53,12 +49,10 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
 
   // get .bot file
   const botFileContent = await readFile(botFilePath, 'utf-8');
+
   fileList.push({
     name: botFileName,
-    content: JSON.parse(botFileContent),
-    path: botFilePath,
-    dir: botFileDir,
-    relativePath: path.relative(botFileDir, botFilePath),
+    content: botFileContent,
   });
 
   // get 'files' from .bot file
@@ -66,49 +60,22 @@ export async function getFiles(botProjFilePath: string = ''): Promise<FileInfo[]
   if (botConfig !== undefined && Array.isArray(botConfig.files)) {
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
-      // find the index of the entry dialog defined in the botproject
-      // save & remove it from the paths array before it is sorted
-      let mainPath = '';
-      if (isDialogExtension(pattern)) {
-        const mainPathIndex = paths.findIndex(elem => elem.indexOf(botConfig.entry) !== -1);
-        mainPath = paths[mainPathIndex];
-        paths.splice(mainPathIndex, 1);
-      }
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = path.resolve(botFileDir, filePath);
         // skip lg files for now
-        if (!realFilePath.endsWith('.lg') && (await lstat(realFilePath)).isFile()) {
+        if ((await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
           fileList.push({
             name: filePath,
-            content: JSON.parse(content),
-            path: realFilePath,
-            dir: botFileDir,
-            relativePath: path.relative(botFileDir, realFilePath),
-          });
-        }
-      }
-
-      // resolve the entry dialog path and add it to the front of the
-      // now sorted paths array
-      if (isDialogExtension(pattern)) {
-        const mainFilePath = path.resolve(botFileDir, mainPath);
-        if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
-          const content: string = await readFile(mainFilePath, 'utf-8');
-          fileList.unshift({
-            name: mainPath,
-            content: JSON.parse(content),
-            path: mainFilePath,
-            dir: botFileDir,
-            relativePath: path.relative(botFileDir, mainFilePath),
+            content: content,
           });
         }
       }
     }
   }
 
-  return fileList;
+  return applyIndexer(botConfig.entry, fileList);
 }
 
 export async function updateFile(name: string, content: any, botProjFilePath: string = ''): Promise<void> {

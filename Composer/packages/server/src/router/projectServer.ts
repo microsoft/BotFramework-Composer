@@ -6,7 +6,7 @@ import fs from 'fs';
 import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
-import { getFiles, updateFile, createFromTemplate } from '../handlers/fileHandler';
+import { getOpenedElements, updateFile, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
@@ -17,8 +17,8 @@ router.get('/opened', async (req: Request, res: Response) => {
   // check setting file
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
-    const files = await getFiles(result.path);
-    res.status(200).json({ ...result, projectFiles: files });
+    const elements = await getOpenedElements(result.path);
+    res.status(200).json({ ...result, ...elements });
   } catch (error) {
     res.status(404).json({ error: 'no access project recently' });
   }
