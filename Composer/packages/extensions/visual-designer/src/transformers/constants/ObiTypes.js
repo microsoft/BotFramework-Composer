@@ -19,4 +19,8 @@ export const ObiTypes = {
   // steps
   BeginDialog: 'Microsoft.BeginDialog',
   SendActivity: 'Microsoft.SendActivity',
+  EditArray: 'Microsoft.EditArray',
+  SaveEntity: 'Microsoft.SaveEntity',
+  DeleteProperty: 'Microsoft.DeleteProperty',
+  IfCondition: 'Microsoft.IfCondition',
 };
