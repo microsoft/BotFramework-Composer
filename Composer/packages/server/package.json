@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "yarn webpack --config webpack.config.js",
-    "start": "tsc -p tsconfig.build.json && node build/server.js",
-    "start:watch": "nodemon -r ts-node/register --inspect src/server.ts",
+    "start": "tsc -p tsconfig.build.json && node --inspect=9229 build/server.js",
+    "start:watch": "nodemon",
     "test": "yarn typecheck && jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
@@ -25,6 +25,7 @@
       "node_modules",
       "build"
     ],
+    "exec": "yarn start",
     "watch": [
       "src"
     ],

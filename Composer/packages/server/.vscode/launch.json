@@ -33,10 +33,11 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Node: Nodemon",
-      "processId": "${command:PickProcess}",
+      "name": "Server: Attach",
+      "port": 9229,
+      "sourceMaps": true,
       "restart": true,
-      "protocol": "inspector",
+      "outFiles": ["${workspaceFolder}/Composer/pacakges/server/build/**/*.js"]
     },
   ]
 }
