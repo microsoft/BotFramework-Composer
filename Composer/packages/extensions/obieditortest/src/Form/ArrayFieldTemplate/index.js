@@ -1,54 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, IconButton, TextField, Button, Text, Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react';
 import { findSchemaDefinition } from 'react-jsonschema-form/lib/utils';
 
-import { dialogGroups } from '../../schema/appschema';
-
 import StringArray from './StringArray';
-
-const buildDialogOptions = () => {
-  const options = [];
-
-  for (const elem in dialogGroups) {
-    options.push({ key: elem, text: elem, itemType: DropdownMenuItemType.Header });
-    dialogGroups[elem].forEach(dialog => {
-      options.push({ key: dialog, text: dialog });
-    });
-    options.push({ key: `${elem}_divider`, text: '-', itemType: DropdownMenuItemType.Divider });
-  }
-
-  return options;
-};
+import ObjectArray from './ObjectArray';
 
 export default function ArrayFieldTemplate(props) {
-  const { title, items, canAdd, onAddClick, schema } = props;
+  let itemSchema = props.schema.items;
 
-  console.log('schema', schema, items);
-
-  const itemSchema = schema.items;
-  console.log(itemSchema);
+  if (!itemSchema.type && itemSchema.$ref) {
+    itemSchema = findSchemaDefinition(itemSchema.$ref, props.registry.definitions);
+  }
 
   switch (itemSchema.type) {
-    case 'string':
-      return <StringArray {...props} />;
+    case 'object':
+      return <ObjectArray {...props} />;
     default:
-      return (
-        <div>
-          <h3>{title}</h3>
-          {items.map(element => element.children)}
-          {canAdd && (
-            <Button
-              type="button"
-              onClick={() => console.info('click')}
-              split
-              menuProps={{ items: buildDialogOptions() }}
-            >
-              Add
-            </Button>
-          )}
-        </div>
-      );
+      return <StringArray {...props} />;
   }
 }
 
@@ -59,9 +27,16 @@ const ArrayFieldProps = {
   idSchema: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.node),
   onAddClick: PropTypes.func,
+  registry: PropTypes.shape({
+    definitions: PropTypes.object,
+  }),
+  schema: PropTypes.shape({
+    items: PropTypes.object,
+  }),
   title: PropTypes.string,
   TitleField: PropTypes.func,
 };
 
 ArrayFieldTemplate.propTypes = ArrayFieldProps;
 StringArray.propTypes = ArrayFieldProps;
+ObjectArray.propTypes = ArrayFieldProps;
