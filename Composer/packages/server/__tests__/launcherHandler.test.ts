@@ -12,6 +12,27 @@ jest.mock('../src/storage/SettingService', () => {
   return { getItem: (key: string) => mockSettings[key] };
 });
 
+jest.mock('../src/storage/StorageService', () => {
+  const mockStorage: any = {
+    linkedStorages: [
+      {
+        name: 'This PC',
+        type: 'LocalDrive',
+        id: 'default',
+        path: '../../../SampleBots',
+      },
+    ],
+    recentAccessedBots: [
+      {
+        storageId: 'default',
+        path: '../../../SampleBots/LocalToDoBot/bot.botproj',
+        lastAccessTime: 1554936695241,
+      },
+    ],
+  };
+  return { getItem: (key: string, fallback: any) => mockStorage[key] || fallback };
+});
+
 const mockKill = jest.fn(() => null);
 const mockOn = jest.fn(() => null);
 const mockSpawnSync = jest.fn(() => null);
