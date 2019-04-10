@@ -7,3 +7,8 @@ export const Constant = {
   linkedStorages: 'linkedStorages',
   recentAccessedBots: 'recentAccessedBots',
 };
+export interface BotConfig {
+  files: string[];
+  services: string[];
+  entry: string;
+}
