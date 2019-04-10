@@ -30,7 +30,10 @@ export class FileStorage {
       if (fs.existsSync(this.path)) {
         this._lastFlushedSerializedFileInfo = fs.readFileSync(this.path, 'utf-8');
       } else {
-        this._lastFlushedSerializedFileInfo = fs.readFileSync(path.resolve('storage.example.json'), 'utf-8');
+        this._lastFlushedSerializedFileInfo = fs.readFileSync(
+          path.resolve(__dirname, '../../storage.example.json'),
+          'utf-8'
+        );
       }
 
       return JSON.parse(this._lastFlushedSerializedFileInfo);
