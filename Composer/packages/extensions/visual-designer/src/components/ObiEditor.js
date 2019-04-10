@@ -14,6 +14,8 @@ import {
   NoMatchRule,
   EventRule,
   IfCondition,
+  EventGroup,
+  IntentGroup,
 } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 
@@ -26,6 +28,8 @@ const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
+  [ObiTypes.EventGroup]: EventGroup,
+  [ObiTypes.IntentGroup]: IntentGroup,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

@@ -2,14 +2,17 @@ import React from 'react';
 
 import { NodeClickActionTypes } from '../../utils/constant';
 
-import { Diamond } from './templates/Diamond';
+import { FormCard } from './templates/FormCard';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class Recognizer extends React.Component {
   render() {
-    const { id, onEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     return (
-      <Diamond
+      <FormCard
+        themeColor="#0078D4"
+        header="Recognizer"
+        label={data.$type.split('.')[1]}
         onClick={() => {
           onEvent(NodeClickActionTypes.Focus, id);
         }}

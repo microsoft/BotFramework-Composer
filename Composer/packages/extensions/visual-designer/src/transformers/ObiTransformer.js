@@ -1,6 +1,7 @@
 import { consumeStrategy } from './helpers/consumerStrategy';
 import { SequentialStrategy } from './strategies/SequentialStrategy';
 import { GraphicalStrategy } from './strategies/GraphicalStrategy';
+import { RootDialogStrategy } from './strategies/RootDialogStrategy';
 
 class ObiTransformer {
   /**
@@ -15,7 +16,7 @@ class ObiTransformer {
    * | recognizer | rules | steps | strategy
    * --------------------------------------------------------------------------------------
    * |     1      |   1   |   1   | Graphical   (connect 'rules' to 'recognizer'， draw 'steps' as an isolated sequence)
-   * |     1      |   1   |   0   | Graphical   (connect 'rules' to 'recognizer')
+   * |     1      |   1   |   0   | RootDialog  (group intents together)
    * |     1      |   0   |   1   | Sequential  ('steps' as a sequence, isolate 'recognizer')
    * |     1      |   0   |   0   | Graphical   (draw isolated 'recognizer')
    * |     0      |   1   |   1   | Sequential  ('steps' as a sequence, draw 'rules' as an isolated group)
@@ -50,9 +51,10 @@ class ObiTransformer {
 
     switch (flag) {
       case '111':
-      case '110':
       case '100':
         return GraphicalStrategy;
+      case '110':
+        return RootDialogStrategy;
       default:
         return SequentialStrategy;
     }
