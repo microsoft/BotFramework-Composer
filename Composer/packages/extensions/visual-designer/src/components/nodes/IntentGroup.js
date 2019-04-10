@@ -5,9 +5,10 @@ import { PAYLOAD_KEY } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import { chooseRendererByType } from './nodeRenderer';
 
-const IntentHeight = 50;
-const IntentMargin = 10;
-const IntentBlockHeight = IntentHeight + 2 * IntentMargin;
+const IntentElementHeight = 50;
+const IntentMarginX = 18;
+const IntentMarginY = 20;
+const IntentBlockHeight = IntentElementHeight + 2 * IntentMarginY;
 const ContainerBonusHeight = 10;
 
 export class IntentGroup extends React.Component {
@@ -23,13 +24,23 @@ export class IntentGroup extends React.Component {
     return (
       <div
         style={{
-          width: 200,
+          width: 206,
           height: intents.length * IntentBlockHeight + ContainerBonusHeight,
           border: '0.25px solid #000000',
           boxSizing: 'border-box',
         }}
       >
-        {intents.map(x => this.renderIntent(x))}
+        {intents.map(x => (
+          <div
+            key={x.id + 'block'}
+            style={{
+              padding: `${IntentMarginY}px ${IntentMarginX}px`,
+              height: IntentElementHeight,
+            }}
+          >
+            {this.renderIntent(x)}
+          </div>
+        ))}
       </div>
     );
   }

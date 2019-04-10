@@ -1,8 +1,8 @@
 import React from 'react';
 
-const boxWidth = 150;
-const boxHeight = 100;
-const headerHeight = 30;
+const boxWidth = 170;
+const boxHeight = 50;
+const headerHeight = 24;
 const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
