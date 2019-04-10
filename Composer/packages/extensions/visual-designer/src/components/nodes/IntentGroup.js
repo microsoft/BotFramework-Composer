@@ -35,7 +35,8 @@ export class IntentGroup extends React.Component {
             key={x.id + 'block'}
             style={{
               padding: `${IntentMarginY}px ${IntentMarginX}px`,
-              height: IntentElementHeight,
+              height: IntentBlockHeight,
+              boxSizing: 'border-box',
             }}
           >
             {this.renderIntent(x)}
