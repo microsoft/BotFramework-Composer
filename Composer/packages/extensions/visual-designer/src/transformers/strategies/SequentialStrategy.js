@@ -3,6 +3,7 @@ import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
 import { normalizeObiStep } from '../helpers/elementBuilder';
 import { branchMiddleware } from '../helpers/branchMiddleware';
+import { isRecognizer } from '../../utils/obiTypeChecker';
 
 /**
  *      Step                     Rule              ^
@@ -30,7 +31,7 @@ export const SequentialStrategy = {
       rules = input.rules.map((rule, index) => new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, rule));
     }
 
-    if (input.recognizer) {
+    if (isRecognizer(input.recognizer)) {
       recognizers = [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)];
     }
 

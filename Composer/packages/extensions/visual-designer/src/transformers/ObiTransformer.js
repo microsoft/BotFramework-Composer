@@ -2,6 +2,7 @@ import { consumeStrategy } from './helpers/consumerStrategy';
 import { SequentialStrategy } from './strategies/SequentialStrategy';
 import { GraphicalStrategy } from './strategies/GraphicalStrategy';
 import { RootDialogStrategy } from './strategies/RootDialogStrategy';
+import { isRecognizer } from '../utils/obiTypeChecker';
 
 class ObiTransformer {
   /**
@@ -45,7 +46,7 @@ class ObiTransformer {
 
     const { recognizer, rules, steps } = input;
     let flag = '';
-    flag += recognizer ? '1' : '0';
+    flag += isRecognizer(recognizer) ? '1' : '0';
     flag += Array.isArray(rules) && rules.length ? '1' : '0';
     flag += Array.isArray(steps) && steps.length ? '1' : '0';
 
