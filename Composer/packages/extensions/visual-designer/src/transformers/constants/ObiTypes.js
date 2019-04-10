@@ -23,6 +23,7 @@ export const ObiTypes = {
   SaveEntity: 'Microsoft.SaveEntity',
   DeleteProperty: 'Microsoft.DeleteProperty',
   IfCondition: 'Microsoft.IfCondition',
+  TextInput: 'Microsoft.TextInput',
 
   // virtual types
   IntentGroup: 'VisualEditor.IntentGroup',

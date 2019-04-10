@@ -26,6 +26,10 @@ const ContentKeyByTypes = {
   [ObiTypes.DeleteProperty]: {
     label: 'property',
   },
+  [ObiTypes.TextInput]: {
+    label: 'property',
+    details: 'prompt',
+  },
 };
 
 /**

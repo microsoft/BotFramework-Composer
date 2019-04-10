@@ -1,6 +1,6 @@
 {
-  "$schema": "../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "inputProperties": {},
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
@@ -93,5 +93,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../app.schema"
 }
