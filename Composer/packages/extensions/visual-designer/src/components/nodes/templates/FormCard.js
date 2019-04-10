@@ -40,8 +40,10 @@ export const FormCard = ({ header, label, details, themeColor, onClick }) => (
         height: contentHeight,
       }}
     >
-      <div style={{ fontWeight: '400', paddingLeft: '5px', marginTop: '5px' }}>{label}</div>
-      <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px' }}>{details}</div>
+      <div style={{ fontWeight: '400', paddingLeft: '5px', marginTop: '5px', fontSize: '14px', lineHeight: '19px' }}>
+        {label}
+      </div>
+      <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px', fontSize: '12px' }}>{details}</div>
     </div>
   </div>
 );
