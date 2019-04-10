@@ -5,9 +5,8 @@ import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule } from './nodes';
+import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule, IfCondition } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
-import { IfCondition } from './nodes/IfCondition';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,
