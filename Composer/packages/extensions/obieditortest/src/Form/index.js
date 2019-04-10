@@ -1,14 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import JSONFrom from 'react-jsonschema-form';
-import { initializeIcons } from '@uifabric/icons';
 
 import * as widgets from './widgets';
 import * as fields from './fields';
 import FieldTemplate from './FieldTemplate';
 
 import './styles.scss';
-
-initializeIcons();
 
 export default function Form(props) {
   const { formData, schema, uiSchema, onChange, ...rest } = props;
@@ -28,3 +26,14 @@ export default function Form(props) {
     </div>
   );
 }
+
+Form.propTypes = {
+  formData: PropTypes.object,
+  onChange: PropTypes.func,
+  schema: PropTypes.object,
+  uiSchema: PropTypes.object,
+};
+
+Form.defaultProps = {
+  onChange: () => {},
+};
