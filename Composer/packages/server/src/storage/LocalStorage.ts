@@ -2,6 +2,7 @@ import fs from 'fs';
 import { IStorageProvider } from './IStorageProvider';
 import path from 'path';
 import { promisify } from 'util';
+import glob from 'globby';
 
 const fsStat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
@@ -115,6 +116,9 @@ export class LocalStorage implements IStorageProvider {
       };
     }
     return result;
+  }
+  async listFilesByPattern(reqPath: string, pattern: string): Promise<string[]> {
+    return await glob(pattern, { cwd: reqPath });
   }
   // get files and folders from local drive
   private async getFolderTree(folderPath: string) {

@@ -3,5 +3,6 @@
 export interface IStorageDefinition {
   type: string;
   id: string;
+  path: string;
   [key: string]: any;
 }

@@ -12,3 +12,9 @@ export interface BotConfig {
   services: string[];
   entry: string;
 }
+export interface FileInfo {
+  name: string;
+  content: any;
+  path: string;
+  dir: string;
+}

@@ -6,6 +6,11 @@ import { LocalStorage } from '../storage/LocalStorage';
 import { Constant } from '../constant';
 import { IStorageProvider } from '../storage/IStorageProvider';
 import { IStorageDefinition } from '../storage/IStorageDefinition';
+import path from 'path';
+import { merge, set } from 'lodash';
+
+import DIALOG_TEMPLATE from '../dialogTemplate.json';
+import { FileInfo, BotConfig } from '../constant';
 
 export default class ProjectHandler {
   // memory cache the project we opened
@@ -16,10 +21,10 @@ export default class ProjectHandler {
   private storageHandler: StorageHandler;
   private botStorage: IStorageDefinition | any;
   private storageProvider: IStorageProvider | any;
-  constructor(stoarge: FileStorage, setting: FileStorage, openLastActiveBot = false) {
-    this.storage = stoarge;
+  constructor(storage: FileStorage, setting: FileStorage, openLastActiveBot = false) {
+    this.storage = storage;
     this.setting = setting;
-    this.storageHandler = new StorageHandler(stoarge);
+    this.storageHandler = new StorageHandler(storage);
     this.openLastActiveBot = openLastActiveBot;
     // get recentAccessBots
     this.openBot = this.checkOpenBotInStorage();
@@ -28,7 +33,9 @@ export default class ProjectHandler {
       this.storageProvider = this.getProvider(this.botStorage);
     }
   }
+
   isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
+
   public updateOpenBot = (body: any) => {
     // deal with parameters
     if (!body.storageId) {
@@ -137,20 +144,15 @@ export default class ProjectHandler {
     }
     return true;
   }
-  private createFromTemplate() {
-    const temp = new URL(reqPath);
-    if (temp.hostname !== this.rootPath.hostname) {
-      throw new Error('path error');
-    }
-    const index = temp.pathname.indexOf('/');
-
+  private createFromTemplate(steps: string[]) {
     const newDialog = merge({}, DIALOG_TEMPLATE);
-
     steps.forEach((type: string, idx: number) => {
       set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
     });
     const text = JSON.stringify(newDialog, null, 2) + '\n';
+    return text;
   }
+
   private getProvider(body: IStorageDefinition): IStorageProvider {
     try {
       const { type, path } = body;
@@ -169,25 +171,77 @@ export default class ProjectHandler {
     }
   }
 
-  public async getFiles() {
+  public async getBotProject(reqPath: string): Promise<FileInfo[]> {
     try {
-      return await this.storageProvider.getBotProject(this.openBot.path);
+      if (!ProjectHandler.isBotProj(reqPath)) {
+        throw { error: 'not a bot project file' };
+      }
+      const fileList: FileInfo[] = [];
+      let content = await this.storageProvider.readFile(reqPath);
+      const index = reqPath.lastIndexOf('/');
+      fileList.push({
+        name: reqPath.substring(index + 1),
+        content: JSON.parse(content),
+        path: reqPath,
+        dir: reqPath.substring(0, index),
+      });
+      // get 'files' from .bot file
+      const botConfig: BotConfig = JSON.parse(content);
+      if (botConfig !== undefined && Array.isArray(botConfig.files)) {
+        for (const pattern of botConfig.files) {
+          const paths = await (this.storageProvider as IStorageProvider).listFilesByPattern(
+            reqPath.substring(0, index),
+            pattern
+          );
+          // find the index of the entry dialog defined in the botproject
+          // save & remove it from the paths array before it is sorted
+          let mainPath = '';
+          if (this.isDialogExtension(pattern)) {
+            const mainPathIndex = paths.findIndex((elem: any) => elem.indexOf(botConfig.entry) !== -1);
+            mainPath = paths[mainPathIndex];
+            paths.splice(mainPathIndex, 1);
+          }
+
+          for (const filePath of paths.sort()) {
+            const realFilePath: string = `${reqPath.substring(0, index)}/${filePath}`;
+            // skip lg files for now
+            if (!realFilePath.endsWith('.lg')) {
+              content = await this.storageProvider.readFile(realFilePath);
+              fileList.push({
+                name: filePath,
+                content: JSON.parse(content),
+                path: realFilePath,
+                dir: reqPath.substring(0, index),
+              });
+            }
+          }
+
+          // resolve the entry dialog path and add it to the front of the
+          // now sorted paths array
+          if (this.isDialogExtension(pattern)) {
+            const mainFilePath = `${reqPath.substring(0, index)}/${mainPath}`;
+            if (!mainFilePath.endsWith('.lg')) {
+              content = await this.storageProvider.readFile(mainFilePath);
+              fileList.unshift({
+                name: mainPath,
+                content: JSON.parse(content),
+                path: mainFilePath,
+                dir: reqPath.substring(0, index),
+              });
+            }
+          }
+        }
+      }
+      return fileList;
     } catch (error) {
       throw error;
     }
   }
 
-  public async addFileToBot(name: string, steps: string[]) {
+  public async writeFileToBot(name: string, steps: string[]) {
     try {
-      return await this.storageProvider.createFile(name, steps, this.openBot.path);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  public async updateFileInBot(name: string, steps: string[]) {
-    try {
-      return await this.storageProvider.updateFile(name, steps, this.openBot.path);
+      const content = this.createFromTemplate(steps);
+      return await this.storageProvider.writeFile(name, content, this.openBot.path);
     } catch (error) {
       throw error;
     }

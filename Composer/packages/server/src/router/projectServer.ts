@@ -13,7 +13,7 @@ router.get('/opened', async (req: Request, res: Response) => {
   const openBot = projectHandler.getOpenBot();
   if (openBot !== null) {
     try {
-      const result = await projectHandler.getFiles();
+      const result = await projectHandler.getBotProject(openBot.path);
       res.status(200).json({ ...openBot, projectFiles: result });
     } catch (error) {
       res.status(400).json(error);
@@ -40,7 +40,7 @@ router.post('/opened/files', async (req: Request, res: Response) => {
     res.status(400).json({ error: 'Parameter `name` missing.' });
   }
   try {
-    await projectHandler.addFileToBot(req.body.name, req.body.steps);
+    await projectHandler.writeFileToBot(req.body.name, req.body.steps);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -50,7 +50,7 @@ router.post('/opened/files', async (req: Request, res: Response) => {
 // update file in current open project
 router.put('/opened/files', async (req: Request, res: Response) => {
   try {
-    await projectHandler.updateFileInBot(req.body.name, req.body.content);
+    await projectHandler.writeFileToBot(req.body.name, req.body.content);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });
