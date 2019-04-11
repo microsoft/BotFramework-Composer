@@ -17,8 +17,8 @@ router.get('/opened', async (req: Request, res: Response) => {
   // check setting file
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
-    const elements = await getParsedObjects(result.path);
-    res.status(200).json({ ...result, ...elements });
+    const objects = await getParsedObjects(result.path);
+    res.status(200).json({ ...result, ...objects });
   } catch (error) {
     res.status(404).json({ error: 'no access project recently' });
   }

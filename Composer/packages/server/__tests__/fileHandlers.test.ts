@@ -1,15 +1,15 @@
 import path from 'path';
 import fs from 'fs';
 
-import { getOpenedElements, updateFile, createFromTemplate } from '../src/handlers/fileHandler';
+import { getParsedObjects, updateFile, createFromTemplate } from '../src/handlers/fileHandler';
 
 const mockFilePath: string = path.join(__dirname, 'mocks/1.botproj');
 
 describe('fileHandlers', () => {
   describe('getFiles', () => {
     it('should get files at a path', async () => {
-      const elements = await getOpenedElements(mockFilePath);
-      expect(elements.dialogs.length).toBe(3);
+      const objects = await getParsedObjects(mockFilePath);
+      expect(objects.dialogs.length).toBe(3);
     });
   });
 
@@ -19,10 +19,10 @@ describe('fileHandlers', () => {
       const newValue = { new: 'value' };
 
       await updateFile('a.dialog', newValue, mockFilePath);
-      const elements: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getOpenedElements(mockFilePath);
-      const aDialog = elements.dialogs.find(f => f.name.startsWith('a'));
+      const objects: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getParsedObjects(mockFilePath);
+      const aDialog = objects.dialogs.find(f => f.name.startsWith('a'));
       // @ts-ignore
-      expect(aDialog.json).toEqual(newValue);
+      expect(aDialog.content).toEqual(newValue);
       await updateFile('a.dialog', initValue, mockFilePath);
     });
   });
@@ -40,14 +40,14 @@ describe('fileHandlers', () => {
 
     it('should create a dialog file with given steps', async () => {
       await createFromTemplate(dialogName, ['foo', 'bar', 'baz'], mockFilePath);
-      const elements: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getOpenedElements(mockFilePath);
-      const newFile = elements.dialogs.find(f => f.name.startsWith(dialogName));
+      const objects: { [key: string]: any; dialogs: [{ [key: string]: any }] } = await getParsedObjects(mockFilePath);
+      const newFile = objects.dialogs.find(f => f.name.startsWith(dialogName));
 
       if (!newFile) {
         expect(newFile).toBeTruthy();
       }
 
-      const fileContent = (newFile as { [key: string]: any }).json;
+      const fileContent = (newFile as { [key: string]: any }).content;
       expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
       expect(fileContent.rules).toHaveLength(1);
       expect(fileContent.rules[0].steps).toHaveLength(3);

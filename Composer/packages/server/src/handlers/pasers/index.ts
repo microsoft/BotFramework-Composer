@@ -1,5 +1,6 @@
-import { FileInfo } from '../fileHandler';
 import path from 'path';
+
+import { FileInfo } from '../fileHandler';
 
 import { dialogParse } from './dialogParser';
 import { botProjectParse } from './botProjectPaser';
