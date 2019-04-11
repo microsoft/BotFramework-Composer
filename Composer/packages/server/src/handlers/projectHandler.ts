@@ -1,4 +1,8 @@
+import path from 'path';
+
 import produce from 'immer';
+import { merge, set } from 'lodash';
+
 import { FileStorage } from '../storage/FileStorage';
 import StorageHandler from '../handlers/storageHandler';
 import { AzureStorage } from '../storage/AzureStorage';
@@ -6,9 +10,6 @@ import { LocalStorage } from '../storage/LocalStorage';
 import { Constant } from '../constant';
 import { IStorageProvider } from '../storage/IStorageProvider';
 import { IStorageDefinition } from '../storage/IStorageDefinition';
-import path from 'path';
-import { merge, set } from 'lodash';
-
 import DIALOG_TEMPLATE from '../dialogTemplate.json';
 import { FileInfo, BotConfig } from '../constant';
 
@@ -46,7 +47,7 @@ export default class ProjectHandler {
       // change path to relative if local storage
       const pathToSave =
         currentStorage.type === Constant.LocalDrive ? LocalStorage.pathToRelative(body.path) : body.path;
-      let item = this.updateRecentAccessBot({ storageId: body.storageId, path: pathToSave });
+      const item = this.updateRecentAccessBot({ storageId: body.storageId, path: pathToSave });
       if (item && currentStorage.type === Constant.LocalDrive) {
         this.openBot = {
           storageId: item.storageId,
@@ -155,10 +156,9 @@ export default class ProjectHandler {
 
   private getProvider(body: IStorageDefinition): IStorageProvider {
     try {
-      const { type, path } = body;
+      const { type, path, account, key } = body;
       switch (type) {
         case Constant.AzureBlob:
-          const { account, key } = body;
           return new AzureStorage(account, key, path);
         case Constant.LocalDrive:
           return new LocalStorage(path);

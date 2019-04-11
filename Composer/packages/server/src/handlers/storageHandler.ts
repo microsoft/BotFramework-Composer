@@ -1,10 +1,9 @@
+import produce from 'immer';
+import { IStorageProvider } from 'src/storage/IStorageProvider';
+
 import { Constant } from '../constant';
 import { IStorageDefinition } from '../storage/IStorageDefinition';
-import produce from 'immer';
-
 import { FileStorage } from '../storage/FileStorage';
-
-import { IStorageProvider } from 'src/storage/IStorageProvider';
 import { AzureStorage } from '../storage/AzureStorage';
 import { LocalStorage } from '../storage/LocalStorage';
 
@@ -15,10 +14,9 @@ export default class StorageHandler {
   }
   private getProvider(body: IStorageDefinition): IStorageProvider {
     try {
-      const { type, path } = body;
+      const { type, path, account, key } = body;
       switch (type) {
         case Constant.AzureBlob:
-          const { account, key } = body;
           return new AzureStorage(account, key, path);
         case Constant.LocalDrive:
           return new LocalStorage(path);
@@ -68,7 +66,7 @@ export default class StorageHandler {
   }
 
   public async getFilesAndFolders(params: any) {
-    let reqPath: string = params.path;
+    const reqPath: string = params.path;
     const storageId: string = params.storageId;
     if (!reqPath) {
       throw { error: 'no path' };
@@ -79,7 +77,7 @@ export default class StorageHandler {
       if (!current) {
         throw { error: 'storage not found' };
       }
-      let storageProvider = this.getProvider(current);
+      const storageProvider = this.getProvider(current);
       result = await storageProvider.listFiles(reqPath);
     } catch (error) {
       throw error;

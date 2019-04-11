@@ -1,7 +1,8 @@
-import azure, { BlobService } from 'azure-storage';
-import { IStorageProvider } from './IStorageProvider';
 import { URL } from 'url';
-import path from 'path';
+
+import azure, { BlobService } from 'azure-storage';
+
+import { IStorageProvider } from './IStorageProvider';
 
 const urlExp = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/);
 
@@ -140,18 +141,17 @@ export class AzureStorage implements IStorageProvider {
       throw { error: 'path is not valid' };
     }
     try {
-      let result: any;
       const temp = new URL(reqPath).pathname;
       const items = decodeURIComponent(temp)
         .split('/')
         .filter(i => i.length);
       const blobPrefix = items.splice(1).join('/');
-      result = await this.listBlobsInDir(items[0], blobPrefix);
-      let reg = new RegExp(pattern);
-      let filesPath: string[] = [];
+      const result = await this.listBlobsInDir(items[0], blobPrefix);
+      const reg = new RegExp(pattern);
+      const filesPath: string[] = [];
       (result as BlobService.BlobResult[]).filter(blobfile => {
-        let index = blobfile.name.lastIndexOf('/');
-        let filename = blobfile.name.substring(index + 1);
+        const index = blobfile.name.lastIndexOf('/');
+        const filename = blobfile.name.substring(index + 1);
         if (reg.test(filename)) {
           filesPath.push(blobfile.name);
         }

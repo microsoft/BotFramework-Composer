@@ -1,8 +1,10 @@
 import fs from 'fs';
-import { IStorageProvider } from './IStorageProvider';
 import path from 'path';
 import { promisify } from 'util';
+
 import glob from 'globby';
+
+import { IStorageProvider } from './IStorageProvider';
 
 const fsStat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
