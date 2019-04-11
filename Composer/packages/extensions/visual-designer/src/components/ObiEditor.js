@@ -78,13 +78,14 @@ export class ObiEditor extends Component {
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <ComponentGraph items={items} />
+        <ComponentGraph key={this.props.path + '/ComponentGraph'} items={items} />
       </div>
     );
   }
 }
 
 ObiEditor.defaultProps = {
+  path: '.',
   data: {},
   onSelect: () => {},
   onExpand: () => {},
@@ -92,6 +93,7 @@ ObiEditor.defaultProps = {
 };
 
 ObiEditor.propTypes = {
+  path: PropTypes.string,
   // Obi raw json
   data: PropTypes.object,
   onSelect: PropTypes.func,

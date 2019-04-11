@@ -4,8 +4,6 @@ import { DirectedGraph } from 'cci-graph-lib';
 import createReactClass from 'create-react-class';
 
 export class ComponentGraph extends Component {
-  key = 0;
-
   toGraphLibSchema(item) {
     const { id, neighborIds, instance } = item;
     return {
@@ -25,17 +23,19 @@ export class ComponentGraph extends Component {
     // TODO: draw minimap, toolbars
     if (items && items.length > 0) {
       const graphNodes = items.map(x => this.toGraphLibSchema(x));
-      return <DirectedGraph key={++this.key} items={graphNodes} />;
+      return <DirectedGraph key={this.props.key + '/directedGraph'} items={graphNodes} />;
     }
     return null;
   }
 }
 
 ComponentGraph.defaultProps = {
+  key: '',
   items: [],
 };
 
 ComponentGraph.propTypes = {
+  key: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
