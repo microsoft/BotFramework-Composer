@@ -52,19 +52,14 @@ npm run dist
 In this directory:
 ```bash
 yarn link react-jsonschema-form
+# test changes
+yarn unlink react-jsonschema-form
 ```
 
 ##### Upgrading
 
 Once you are done making changes, commit them and push.
 Then merge those changes into the [composer branch](https://github.com/a-b-r-o-w-n/react-jsonschema-form/tree/composer).
-Once merged, update the `yarn.lock` entry with the new commit id:
-
-```
-"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#composer":
-  version "1.4.0"
-  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#<new commit id>"
-  dependencies:
-    ...
-```
-
+Once merged, update the package version by incrementing the number after the actual package version (ex. `1.4.0-1` -> `1.4.0-2`).
+Create a tag with the new version number (`git tag v1.4.0-2`) and push to git.
+Finally, update the tag in obieditortest package.json to reference the newly created tag.
