@@ -22,7 +22,7 @@ function getTarget(dialogs, path) {
 }
 
 export function query(dialogs, path) {
-  if (dialogs.length === 0 || !path) return null;
+  if (dialogs.length === 0 || !path) return '';
   const { object, subPath } = getTarget(dialogs, path);
   return get(object, subPath);
 }
