@@ -13,7 +13,7 @@ export class EventRule extends React.Component {
       <FormCard
         themeColor="#0078D4"
         header="EventRule"
-        details={data.events}
+        label={data.events}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
             onEvent(NodeClickActionTypes.Expand, id);
