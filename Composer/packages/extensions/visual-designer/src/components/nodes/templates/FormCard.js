@@ -53,7 +53,18 @@ export const FormCard = ({ header, label, details, icon, themeColor, onClick }) 
         }}
       >
         <Icon icon={icon || 'MessageBot'} color={themeColor} />
-        {label}
+        <div
+          style={{
+            height: '100%',
+            width: 'calc(100% - 20px)',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+          }}
+          title={typeof label === 'string' ? label : ''}
+        >
+          {label}
+        </div>
       </div>
       <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px', fontSize: '12px' }}>{details}</div>
     </div>
