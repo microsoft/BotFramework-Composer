@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Icon } from '../icons/icon';
+
 const boxWidth = 170;
 const boxHeight = 50;
 const headerHeight = 24;
@@ -16,7 +18,7 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-export const FormCard = ({ header, label, details, themeColor, onClick }) => (
+export const FormCard = ({ header, label, details, icon, themeColor, onClick }) => (
   <div className="card" style={containerStyle} onClick={onClick}>
     <div
       className="card__header"
@@ -40,7 +42,17 @@ export const FormCard = ({ header, label, details, themeColor, onClick }) => (
         height: contentHeight,
       }}
     >
-      <div style={{ fontWeight: '400', paddingLeft: '5px', marginTop: '5px', fontSize: '14px', lineHeight: '19px' }}>
+      <div
+        style={{
+          fontWeight: '400',
+          paddingLeft: '5px',
+          marginTop: '5px',
+          fontSize: '14px',
+          lineHeight: '19px',
+          display: 'flex',
+        }}
+      >
+        <Icon icon={icon || 'MessageBot'} color={themeColor} />
         {label}
       </div>
       <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px', fontSize: '12px' }}>{details}</div>

@@ -10,9 +10,10 @@ export class Recognizer extends React.Component {
     const { id, data, onEvent } = this.props;
     return (
       <FormCard
-        themeColor="#0078D4"
+        themeColor="#00B294"
         header="Recognizer"
         label={data.$type.split('.')[1]}
+        icon="Friend"
         onClick={() => {
           onEvent(NodeClickActionTypes.Focus, id);
         }}

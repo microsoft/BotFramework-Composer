@@ -45,6 +45,7 @@ export class IntentRule extends React.Component {
         themeColor="#0078D4"
         header={intent}
         label={this.getDetails()}
+        icon="MessageBot"
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
             onEvent(NodeClickActionTypes.Expand, id);
