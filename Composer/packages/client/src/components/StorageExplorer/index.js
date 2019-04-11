@@ -6,7 +6,13 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { useEffect, Fragment, useState, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  Selection,
+  SelectionMode,
+  CheckboxVisibility,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import { PropTypes } from 'prop-types';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
@@ -311,14 +317,15 @@ export function StorageExplorer(props) {
           items={storageFiles}
           compact={false}
           columns={tableColums}
-          setKey={currentPath}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           selection={selection}
-          selectionMode={SelectionMode.none}
+          selectionMode={SelectionMode.single}
           selectionPreservedOnEmptyClick={true}
           enterModalSelectionOnTouch={true}
+          checkboxVisibility={CheckboxVisibility.hidden}
           css={detailListContainer}
+          getKey={item => item.name}
         />
       </div>
     );
