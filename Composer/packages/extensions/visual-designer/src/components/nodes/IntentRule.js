@@ -14,22 +14,19 @@ export class IntentRule extends React.Component {
       const normalizedStep = normalizeObiStep(steps[0]);
       if (normalizedStep.$type === ObiTypes.BeginDialog) {
         return (
-          <div>
-            Begin Dialog:
-            <span
-              style={{
-                cursor: 'pointer',
-                color: 'blue',
-                marginLeft: 5,
-              }}
-              onClick={e => {
-                e.stopPropagation();
-                this.props.onEvent(NodeClickActionTypes.OpenLink, normalizedStep.dialog);
-              }}
-            >
-              {normalizedStep.dialog}
-            </span>
-          </div>
+          <span
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              marginLeft: 5,
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              this.props.onEvent(NodeClickActionTypes.OpenLink, normalizedStep.dialog);
+            }}
+          >
+            {normalizedStep.dialog}
+          </span>
         );
       }
     }
