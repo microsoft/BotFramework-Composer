@@ -1,13 +1,21 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
+import * as pathHelper from 'path';
+
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { useEffect, Fragment, useState, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { PropTypes } from 'prop-types';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  Selection,
+  SelectionMode,
+  CheckboxVisibility,
+} from 'office-ui-fabric-react/lib/DetailsList';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
 import { Store } from '../../store/index';
@@ -30,7 +38,7 @@ import {
 
 export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
-  const { storages, currentStorageFiles, storageExplorerStatus } = state;
+  const { storages, focusedStorageFolder, storageExplorerStatus } = state;
   const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
   const [currentPath, setCurrentPath] = useState('');
 
@@ -121,17 +129,19 @@ export function StorageExplorer(props) {
     },
   });
 
-  const storageFiles = currentStorageFiles.map(file => {
-    return {
-      name: file.name,
-      value: file.name,
-      fileType: file.type,
-      iconName: getIconName(file),
-      dateModified: getFileEditDate(file),
-      fileSize: file.size ? formatBytes(file.size) : '',
-      filePath: file.path,
-    };
-  });
+  const storageFiles = focusedStorageFolder.children
+    ? focusedStorageFolder.children.map(file => {
+        return {
+          name: file.name,
+          value: file.name,
+          fileType: file.type,
+          iconName: getIconName(file),
+          dateModified: getFileEditDate(file),
+          fileSize: file.size ? formatBytes(file.size) : '',
+          filePath: file.path,
+        };
+      })
+    : [];
 
   // todo: result parse from api result to ui acceptable format may need move to reducer.
   const links = storages.map((storage, index) => {
@@ -149,7 +159,10 @@ export function StorageExplorer(props) {
 
   const separator = '/';
   // filter the empty one, server api need '/' for root path, but no need for others.
-  const pathItems = currentPath.split(separator).filter(p => p);
+  const pathItems = pathHelper
+    .normalize(currentPath)
+    .split(separator)
+    .filter(p => p);
   const breadcrumbItems = pathItems.map((item, index) => {
     const itemPath = getNavItemPath(pathItems, separator, 0, index);
     return {
@@ -171,17 +184,9 @@ export function StorageExplorer(props) {
     init();
   }, []);
 
-  function formatPath(path) {
-    if (path) {
-      return path.replace(/\\/g, separator);
-    }
-
-    return path;
-  }
-
   function onStorageSourceChange(index) {
     setCurrentStorageIndex(index);
-    updateCurrentPath(storages[currentStorageIndex].path, storages[currentStorageIndex].id);
+    updateCurrentPath(storages[index].path, storages[index].id);
   }
 
   function getNavItemPath(array, seperator, start, end) {
@@ -194,7 +199,7 @@ export function StorageExplorer(props) {
 
   function updateCurrentPath(path, storageId) {
     if (storageId && path) {
-      const formatedPath = formatPath(path);
+      const formatedPath = pathHelper.normalize(path.replace(/\\/g, separator));
       actions.fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
@@ -247,6 +252,11 @@ export function StorageExplorer(props) {
     }
   }
 
+  function onBackIconClicked() {
+    const path = focusedStorageFolder.parent;
+    updateCurrentPath(path, currentStorageId);
+  }
+
   function getLeftNav() {
     return (
       <div css={leftNav}>
@@ -294,31 +304,22 @@ export function StorageExplorer(props) {
     return (
       <div css={fileSelectorContainer}>
         <div css={fileSelectorHeader}>
-          <Icon
-            iconName="Back"
-            css={backIcon}
-            text="Back"
-            onClick={() => {
-              const path = currentPath.substring(0, currentPath.lastIndexOf(separator) + 1);
-              updateCurrentPath(path, currentStorageId);
-            }}
-          />
+          <Icon iconName="Back" css={backIcon} text="Back" onClick={onBackIconClicked} />
           <div style={{ flexGrow: 1 }}>
             <Breadcrumb items={breadcrumbItems} ariaLabel={'File path'} maxDisplayedItems={1} />
           </div>
         </div>
         <DetailsList
+          css={detailListContainer}
           items={storageFiles}
           compact={false}
           columns={tableColums}
-          setKey={currentPath}
+          getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           selection={selection}
-          selectionMode={SelectionMode.none}
-          selectionPreservedOnEmptyClick={true}
-          enterModalSelectionOnTouch={true}
-          css={detailListContainer}
+          selectionMode={SelectionMode.single}
+          checkboxVisibility={CheckboxVisibility.hidden}
         />
       </div>
     );
