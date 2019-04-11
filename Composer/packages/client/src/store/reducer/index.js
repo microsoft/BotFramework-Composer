@@ -1,36 +1,25 @@
-import findLastIndex from 'lodash.findlastindex';
-
 import createReducer from './createReducer';
-import { getBaseName, getExtension } from './../../utils';
+import { getExtension } from './../../utils';
 import { ActionTypes, FileTypes } from './../../constants/index';
 
 const projectFiles = ['bot', 'botproj'];
-const dialogFiles = ['dialog'];
 
 const closeCurrentProject = state => {
-  state.openFileIndex = -1;
   state.editors = [];
   return state;
 };
 
-const getFilesSuccess = (state, { response }) => {
-  state.files = response.data.projectFiles.reduce((files, value) => {
-    const extension = getExtension(value.name);
-    if (projectFiles.indexOf(extension) >= 0) {
-      state.botProjFile = value;
-    } else if (dialogFiles.indexOf(extension) >= 0) {
-      files.push({ id: files.length, ...value });
-    }
-    return files;
-  }, []);
+const getProjectSuccess = (state, { response }) => {
+  state.dialogs = response.data.dialogs;
+  state.botProjFile = response.data.botProject[0];
   state.path = response.data.path;
   return state;
 };
 
-const updateFiles = (state, payload) => {
-  state.files = state.files.map((file, index) => {
-    if (file.name === payload.name) return { ...file, id: index, ...payload };
-    return file;
+const updateDialog = (state, payload) => {
+  state.dialogs = state.dialogs.map(dialog => {
+    if (dialog.name === payload.name) return { ...dialog, ...payload };
+    return dialog;
   });
   return state;
 };
@@ -42,10 +31,6 @@ const updateProjFile = (state, payload) => {
 
 const setBotStatus = (state, { status }) => {
   return (state.botStatus = status);
-};
-
-const setOpenFileIndex = (state, { index }) => {
-  return (state.openFileIndex = index);
 };
 
 const getStoragesSuccess = (state, { response }) => {
@@ -79,15 +64,6 @@ const navigateTo = (state, { path }) => {
     state.focusPath = state.navPath; // fire up form editor on non-leaf node
 
     state.navPathHistory.push(path);
-
-    // update file index if we are switching to new dialog
-    const lastDialogIndex = findLastIndex(state.navPathHistory, path => {
-      return getBaseName(path) === path;
-    });
-    const currentOpenFileIndex = state.files.findIndex(file => {
-      return getBaseName(file.name) === state.navPathHistory[lastDialogIndex];
-    });
-    state.openFileIndex = currentOpenFileIndex;
   }
   return state;
 };
@@ -121,10 +97,9 @@ const clearNavHistory = (state, { fromIndex }) => {
 
 export const reducer = createReducer({
   [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
-  [ActionTypes.FILES_GET_SUCCESS]: getFilesSuccess,
-  [ActionTypes.FILES_UPDATE]: updateFiles,
+  [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
-  [ActionTypes.OPEN_FILE_INDEX_SET]: setOpenFileIndex,
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,

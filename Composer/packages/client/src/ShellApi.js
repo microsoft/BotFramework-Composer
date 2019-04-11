@@ -1,12 +1,9 @@
-import Path from 'path';
-
-import jp from 'jsonpath';
-import { useEffect, useContext, useMemo, useRef } from 'react';
-import set from 'lodash.set';
+import { useEffect, useContext, useRef } from 'react';
 import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
+import { query, update } from './utils/fileUtil';
 
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
@@ -16,22 +13,8 @@ const apiClient = new ApiClient();
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPath, focusPath } = state;
-  const updateFile = useRef(debounce(actions.updateFile, 500)).current;
-
-  // convert file to dialogs to use as a base to navPath and focusPath
-  // TODO: create dialog api to return dialogs directly
-  const dialogs = useMemo(
-    () =>
-      files.reduce(
-        (result, item) => ({
-          ...result,
-          [Path.basename(item.name, '.dialog')]: item.content,
-        }),
-        {}
-      ),
-    [files]
-  );
+  const { dialogs, navPath, focusPath } = state;
+  const updateDialog = useRef(debounce(actions.updateDialog, 500)).current;
 
   useEffect(() => {
     apiClient.connect();
@@ -51,34 +34,34 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
-      const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
-      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+      const data = query(dialogs, navPath);
+      apiClient.apiCallAt('reset', { data, dialogs: dialogs }, editorWindow);
     }
-  }, [dialogs, files, navPath]);
+  }, [dialogs, navPath]);
 
   useEffect(() => {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
-      const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
-      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+      const data = query(dialogs, focusPath);
+      apiClient.apiCallAt('reset', { data, dialogs: dialogs }, editorWindow);
     }
-  }, [dialogs, files, focusPath]);
+  }, [dialogs, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(_, event) {
     const sourceWindowName = event.source.name;
 
     if (sourceWindowName === 'VisualEditor' && navPath !== '') {
-      return jp.query(dialogs, navPath)[0];
+      return query(dialogs, navPath);
     } else if (sourceWindowName === 'FormEditor' && focusPath !== '') {
-      return jp.query(dialogs, focusPath)[0];
+      return query(dialogs, focusPath);
     }
 
     return '';
   }
 
   function getDialogs() {
-    return files;
+    return dialogs;
   }
 
   // persist value change
@@ -88,22 +71,16 @@ export function ShellApi() {
     if (sourceWindowName === 'VisualEditor') {
       return;
     } else if (sourceWindowName === 'FormEditor') {
-      // TODO: use jsonpath to form a new version of dialogData, and update
-      const updatedContent = set({ ...dialogs }, focusPath, newData);
-      const dialogName = Path.basename(files[openFileIndex].name, '.dialog');
-      const payload = {
-        name: files[openFileIndex].name,
-        content: updatedContent[dialogName],
-      };
-      updateFile(payload);
+      const updatedDialog = update(dialogs, focusPath, newData);
+      updateDialog(updatedDialog);
 
       return true;
     }
   }
 
   function flushUpdates() {
-    if (updateFile.flush) {
-      updateFile.flush();
+    if (updateDialog.flush) {
+      updateDialog.flush();
     }
   }
 

@@ -14,7 +14,7 @@ export function App() {
   const { botStatus } = state;
 
   useEffect(() => {
-    actions.fetchFiles();
+    actions.fetchProject();
   }, []);
 
   function handleFileOpen(id, path) {

@@ -1,55 +1,37 @@
-import Path from 'path';
-
 import React, { Fragment, useContext, useState, useMemo, useEffect } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import map from 'lodash.map';
 import startCase from 'lodash.startcase';
+import findindex from 'lodash.findindex';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
-import { getExtension, getBaseName } from './../../utils';
+import { getExtension } from './../../utils';
 import NewDialogModal from './NewDialogModal';
-
-function getDialogName(file) {
-  return Path.basename(file.name, '.dialog');
-}
+import { query } from './../../utils/fileUtil';
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPathHistory, path } = state;
-  const { setOpenFileIndex, clearNavHistory, navTo } = actions;
+  const { dialogs, navPath, navPathHistory, path } = state;
+  const { clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
-    setOpenFileIndex(index);
     clearNavHistory();
-    navTo(getDialogName(files[index]));
+    navTo(dialogs[index].name);
   }
 
   useEffect(() => {
-    if (files.length > 0) {
-      setOpenFileIndex(0);
-      navTo(getDialogName(files[0]));
+    if (dialogs.length > 0) {
+      navTo(dialogs[0].name);
     }
   }, [path]);
 
   const breadcrumbItems = useMemo(() => {
-    const dialogs = files.reduce(
-      (result, item) => ({
-        ...result,
-        [getBaseName(item.name)]: item.content,
-      }),
-      {}
-    );
-
     return navPathHistory.map((item, index) => {
-      let text = item;
-      if (item !== getBaseName(item)) {
-        text = getExtension(map({ dialogs }, item + '.$type')[0]);
-      }
+      const text = item.indexOf('.') > -1 ? getExtension(query(dialogs, `${item}.$type`)) : item;
 
       return {
         key: item + index,
@@ -62,7 +44,15 @@ function DesignPage() {
         },
       };
     });
-  }, [clearNavHistory, files, navPathHistory, navTo]);
+  }, [clearNavHistory, dialogs, navPathHistory, navTo]);
+
+  const activeDialog = useMemo(() => {
+    if (!navPath) {
+      return -1;
+    }
+    const dialogName = navPath.split('.')[0];
+    return findindex(dialogs, { name: dialogName });
+  }, [navPath]);
 
   async function onSubmit(data) {
     await actions.createDialog(data);
@@ -86,7 +76,7 @@ function DesignPage() {
                   }}
                 >
                   <div>Dialogs</div>
-                  {files.length > 0 ? (
+                  {dialogs.length > 0 ? (
                     <IconButton
                       iconProps={{ iconName: 'Add' }}
                       title="New Dialog"
@@ -97,7 +87,7 @@ function DesignPage() {
                     <div />
                   )}
                 </div>
-                <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
+                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
               </div>
             </Tree>
             <div style={{ height: '20px' }} />
