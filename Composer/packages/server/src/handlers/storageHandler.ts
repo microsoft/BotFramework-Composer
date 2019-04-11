@@ -80,7 +80,7 @@ export default class StorageHandler {
         throw { error: 'storage not found' };
       }
       let storageProvider = this.getProvider(current);
-      result = await storageProvider.getFilesAndFoldersByPath(reqPath);
+      result = await storageProvider.listFiles(reqPath);
     } catch (error) {
       throw error;
     }

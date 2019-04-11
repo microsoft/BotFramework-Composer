@@ -28,7 +28,7 @@ export default class ProjectHandler {
       this.storageProvider = this.getProvider(this.botStorage);
     }
   }
-
+  isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
   public updateOpenBot = (body: any) => {
     // deal with parameters
     if (!body.storageId) {
@@ -131,7 +131,26 @@ export default class ProjectHandler {
   public getOpenBot() {
     return this.openBot;
   }
+  public static isBotProj(reqPath: string): boolean {
+    if (!reqPath || (path.extname(reqPath) !== '.bot' && path.extname(reqPath) !== '.botproj')) {
+      return false;
+    }
+    return true;
+  }
+  private createFromTemplate() {
+    const temp = new URL(reqPath);
+    if (temp.hostname !== this.rootPath.hostname) {
+      throw new Error('path error');
+    }
+    const index = temp.pathname.indexOf('/');
 
+    const newDialog = merge({}, DIALOG_TEMPLATE);
+
+    steps.forEach((type: string, idx: number) => {
+      set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
+    });
+    const text = JSON.stringify(newDialog, null, 2) + '\n';
+  }
   private getProvider(body: IStorageDefinition): IStorageProvider {
     try {
       const { type, path } = body;

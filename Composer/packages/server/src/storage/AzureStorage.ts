@@ -2,10 +2,6 @@ import azure, { BlobService } from 'azure-storage';
 import { IStorageProvider } from './IStorageProvider';
 import { URL } from 'url';
 import path from 'path';
-import glob from 'globby';
-import { merge, set } from 'lodash';
-import DIALOG_TEMPLATE from '../dialogTemplate.json';
-import { BotConfig } from '../constant';
 
 const urlExp = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/);
 
@@ -13,17 +9,101 @@ export class AzureStorage implements IStorageProvider {
   public _blobService: BlobService;
   private account: string;
   private key: string;
-  private rootPath: URL;
+  private rootPath: string; // base url only include hostname
   constructor(account: string, key: string, url: string) {
+    if (!urlExp.test(url)) {
+      throw new Error('url invalid');
+    }
     this.account = account;
     this.key = key;
     this._blobService = azure.createBlobService(this.account, this.key);
-    this.rootPath = new URL(url);
-    this.rootPath.hostname.split('.')[0];
+    this.rootPath = new URL(url).host; //encode string
   }
-  isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
-  // reqPath is url, like https://.../blob/files
-  async updateFile(name: string, content: any, reqPath: string) {}
+
+  async deleteFile(reqPath: string): Promise<any> {
+    if (!this.isValidate(reqPath)) {
+      throw new Error('path invalid');
+    }
+  }
+  async rmdir(reqPath: string): Promise<any> {
+    if (!this.isValidate(reqPath)) {
+      throw new Error('path invalid');
+    }
+  }
+  isValidate(reqPath: string): boolean {
+    // check if the path under the rootpath, if no, it's not validate
+    if (reqPath === this.rootPath) return false; // not child
+    if (!urlExp.test(reqPath)) return false; // not url
+    const parentTokens = this.rootPath.split('/').filter(i => i.length);
+    return parentTokens.every((t, i) => reqPath.split('/')[i] === t);
+  }
+  public async listFiles(reqPath: string) {
+    if (!this.isValidate(reqPath)) {
+      throw { error: 'path is not valid' };
+    }
+    try {
+      let result: any;
+      const url = new URL(reqPath);
+
+      if (url.pathname === '/') {
+        result = await this.listContainers();
+      } else if (url.pathname !== '/') {
+        let pathList = url.pathname.substring(1).split('/');
+        if (pathList.length >= 2 && pathList[1] !== '') {
+          result = await this.listBlobsInDir(pathList[0], pathList[1]);
+        } else if (pathList[0] !== '') {
+          // 有folder
+          result = await this.listBlobDirInContainer(pathList[0]);
+        } else {
+          // 没有foldere
+          result = await this.listBlobsInContainer(pathList[0]);
+        }
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async readFile(reqPath: string): Promise<any> {
+    reqPath = encodeURI(reqPath);
+    const temp = new URL(reqPath);
+    temp.pathname = decodeURI(temp.pathname);
+    const index = temp.pathname.substring(1).indexOf('/');
+    const container = temp.pathname.substring(1, index + 1);
+    // const prefix = temp.pathname.indexOf('/', index + 1);
+    const folder = temp.pathname.substring(index + 2);
+    return new Promise((resolve, reject) => {
+      this._blobService.getBlobToText(container, folder, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  async writeFile(name: string, content: any, reqPath: string): Promise<any> {
+    // update or create
+    if (!this.isValidate(reqPath)) {
+      throw new Error('path invalid');
+    }
+    return new Promise((resolve, reject) => {
+      this._blobService.createBlockBlobFromText(
+        temp.pathname.substring(1, index),
+        `${temp.pathname.substring(index)}/${name}`,
+        content,
+        err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({ message: `OK` });
+          }
+        }
+      );
+    });
+  }
+
   async getBotProject(reqPath: string) {
     if (!AzureStorage.isBotProj(reqPath)) {
       throw { error: 'not a bot project file' };
@@ -33,6 +113,7 @@ export class AzureStorage implements IStorageProvider {
       let content = await this.getFileByPath(reqPath);
       const index = reqPath.lastIndexOf('/');
       let botPath = new URL(reqPath).pathname;
+      botPath = decodeURI(botPath);
       fileList.push({
         name: reqPath.substring(index + 1),
         content: JSON.parse(content),
@@ -90,100 +171,6 @@ export class AzureStorage implements IStorageProvider {
     }
   }
 
-  async getFileByPath(reqPath: string): Promise<string> {
-    const temp = new URL(reqPath);
-    const index = temp.pathname.substring(1).indexOf('/');
-    const container = temp.pathname.substring(1, index + 1);
-    // const prefix = temp.pathname.indexOf('/', index + 1);
-    const folder = temp.pathname.substring(index + 2);
-    return new Promise((resolve, reject) => {
-      this._blobService.getBlobToText(container, folder, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-  }
-  async createFile(name: string, steps: string[], reqPath: string) {
-    const temp = new URL(reqPath);
-    if (temp.hostname !== this.rootPath.hostname) {
-      throw new Error('path error');
-    }
-    const index = temp.pathname.indexOf('/');
-
-    const newDialog = merge({}, DIALOG_TEMPLATE);
-
-    steps.forEach((type: string, idx: number) => {
-      set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
-    });
-    const text = JSON.stringify(newDialog, null, 2) + '\n';
-    return new Promise((resolve, reject) => {
-      this._blobService.createBlockBlobFromText(
-        temp.pathname.substring(1, index),
-        `${temp.pathname.substring(index)}/${name}`,
-        text,
-        err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve({ message: `OK` });
-          }
-        }
-      );
-    });
-  }
-  deleteFile() {
-    throw new Error('Method not implemented.');
-  }
-  isValidate(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  isPathValidate(reqPath: string): boolean {
-    const temp = new URL(reqPath);
-    if (temp.hostname !== this.rootPath.hostname) {
-      return false;
-    }
-    return true;
-  }
-  public isFileExist(): boolean {
-    return false;
-  }
-  public static isBotProj(reqPath: string): boolean {
-    let url = new URL(reqPath);
-    if (!url || (path.extname(url.pathname) !== '.bot' && path.extname(url.pathname) !== '.botproj')) {
-      return false;
-    }
-    return true;
-  }
-
-  public async getFilesAndFoldersByPath(reqPath: string) {
-    if (!urlExp.test(reqPath)) {
-      throw { error: 'path is not url' };
-    }
-    if (!this.isPathValidate(reqPath)) {
-      throw { error: 'path is not valid' };
-    }
-    try {
-      let result: any;
-      const url = new URL(reqPath);
-
-      if (url.pathname === '/') {
-        result = await this.listContainers();
-      } else if (url.pathname !== '/') {
-        let pathList = url.pathname.substring(1).split('/');
-        if (pathList.length > 1) {
-          result = await this.listBlobsWithPrefix(pathList[0]);
-        } else {
-          result = await this.listBlobs(pathList[0]);
-        }
-      }
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
   private async listContainers(): Promise<BlobService.ContainerResult[] | Error> {
     return new Promise((resolve, reject) => {
       this._blobService.listContainersSegmented(null as any, (err, data) => {
@@ -195,8 +182,20 @@ export class AzureStorage implements IStorageProvider {
       });
     });
   }
+  private async listBlobsInDir(container: string, dir: string): Promise<BlobService.BlobResult[] | Error> {
+    return new Promise((resolve, reject) => {
+      this._blobService.listBlobsSegmentedWithPrefix(container, dir, null as any, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log({ message: `${data.entries.length} blobs in '${container}'`, blobs: data.entries });
+          resolve(data.entries);
+        }
+      });
+    });
+  }
 
-  private async listBlobsWithPrefix(containerName: string): Promise<BlobService.BlobResult[] | Error> {
+  private async listBlobsInContainer(containerName: string): Promise<BlobService.BlobResult[] | Error> {
     return new Promise((resolve, reject) => {
       this._blobService.listBlobsSegmented(containerName, null as any, (err, data) => {
         if (err) {
@@ -209,7 +208,7 @@ export class AzureStorage implements IStorageProvider {
     });
   }
 
-  private async listBlobs(containerName: string): Promise<BlobService.BlobDirectoryResult[] | Error> {
+  private async listBlobDirInContainer(containerName: string): Promise<BlobService.BlobDirectoryResult[] | Error> {
     return new Promise((resolve, reject) => {
       this._blobService.listBlobDirectoriesSegmented(containerName, null as any, (err, data) => {
         if (err) {
