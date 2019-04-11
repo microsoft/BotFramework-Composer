@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, findAllByText } from 'react-testing-library';
+import { render, fireEvent, findByText } from 'react-testing-library';
 
 import ObjectArray from '../../../src/Form/ArrayFieldTemplate/ObjectArray';
 
@@ -64,14 +64,13 @@ describe('<ObjectArray />', () => {
 
   it('can add an item with a given type', async () => {
     const onAddClick = jest.fn();
-    const { findByTestId, debug } = renderDefault({ canAdd: true, onAddClick });
+    const { findByTestId } = renderDefault({ canAdd: true, onAddClick });
     const addBtn = await findByTestId('ArrayContainerAdd');
-    const menuBtn = addBtn.nextElementSibling;
+    const menuBtn = addBtn.querySelectorAll('button')[1];
 
-    debug(addBtn);
     fireEvent.click(menuBtn);
 
-    const sendActivity = await findAllByText(menuBtn, 'Microsoft.SendActivity');
+    const sendActivity = await findByText(document, 'Microsoft.SendActivity');
     fireEvent.click(sendActivity);
 
     expect(onAddClick.mock.calls[0][1]).toEqual({ $type: 'Microsoft.SendActivity' });
