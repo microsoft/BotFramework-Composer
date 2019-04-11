@@ -6,7 +6,7 @@ import fs from 'fs';
 import express, { Router, Request, Response } from 'express';
 import produce from 'immer';
 
-import { getOpenedElements, updateFile, createFromTemplate } from '../handlers/fileHandler';
+import { getParsedObjects, updateFile, createFromTemplate } from '../handlers/fileHandler';
 import storage from '../storage/StorageService';
 import setting from '../storage/SettingService';
 import { FileStorage } from '../storage/FileStorage';
@@ -17,7 +17,7 @@ router.get('/opened', async (req: Request, res: Response) => {
   // check setting file
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
-    const elements = await getOpenedElements(result.path);
+    const elements = await getParsedObjects(result.path);
     res.status(200).json({ ...result, ...elements });
   } catch (error) {
     res.status(404).json({ error: 'no access project recently' });
@@ -50,18 +50,29 @@ router.put('/opened', async (req: Request, res: Response) => {
   }
 });
 
-// update file in current open project
-router.put('/opened/files', async (req: Request, res: Response) => {
+router.put('/opened/projectFile', async (req: Request, res: Response) => {
   const result = projectHandler.checkOpenBotInStorage(storage, setting);
   try {
-    await updateFile(req.body.name, req.body.content, result.path);
+    const name = `${req.body.name}.botproj`;
+    await updateFile(name, req.body.content, result.path);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-router.post('/opened/files', async (req: Request, res: Response) => {
+router.put('/opened/dialogs/:id', async (req: Request, res: Response) => {
+  const result = projectHandler.checkOpenBotInStorage(storage, setting);
+  try {
+    const name = `${req.param('id')}.dialog`;
+    await updateFile(name, req.body.content, result.path);
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.post('/opened/dialogs', async (req: Request, res: Response) => {
   const { name } = req.body;
   const trimmedName = (name || '').trim();
 

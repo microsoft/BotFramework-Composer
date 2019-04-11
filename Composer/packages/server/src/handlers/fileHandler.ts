@@ -7,7 +7,8 @@ import glob from 'globby';
 
 import DIALOG_TEMPLATE from '../dialogTemplate.json';
 
-import { applyIndexer } from './indexers/index';
+import { applyAllParsers } from './pasers/index';
+//import { IIndexer } from './indexers/interface';
 
 const readFile = promisify(fs.readFile);
 const lstat = promisify(fs.lstat);
@@ -38,7 +39,7 @@ function getAllConfig(botProjFilePath: string): BotFileConfig {
   };
 }
 
-export async function getOpenedElements(botProjFilePath: string = ''): Promise<any> {
+export async function getParsedObjects(botProjFilePath: string = ''): Promise<any> {
   if (!botProjFilePath) {
     throw new Error(`No Bot Project! Cannot find files.`);
   }
@@ -49,33 +50,30 @@ export async function getOpenedElements(botProjFilePath: string = ''): Promise<a
 
   // get .bot file
   const botFileContent = await readFile(botFilePath, 'utf-8');
-
-  fileList.push({
-    name: botFileName,
-    content: botFileContent,
-  });
+  fileList.push({ name: botFileName, content: botFileContent });
 
   // get 'files' from .bot file
   const botConfig: BotConfig = JSON.parse(botFileContent);
+  const entryFileContent = await readFile(path.resolve(botFileDir, botConfig.entry), 'utf-8');
+  fileList.push({ name: botConfig.entry, content: entryFileContent });
+
   if (botConfig !== undefined && Array.isArray(botConfig.files)) {
     for (const pattern of botConfig.files) {
       const paths = await glob(pattern, { cwd: botFileDir });
 
       for (const filePath of paths.sort()) {
+        if (filePath == botConfig.entry) continue;
         const realFilePath: string = path.resolve(botFileDir, filePath);
-        // skip lg files for now
+
         if ((await lstat(realFilePath)).isFile()) {
           const content: string = await readFile(realFilePath, 'utf-8');
-          fileList.push({
-            name: filePath,
-            content: content,
-          });
+          fileList.push({ name: filePath, content: content });
         }
       }
     }
   }
 
-  return applyIndexer(botConfig.entry, fileList);
+  return applyAllParsers(fileList);
 }
 
 export async function updateFile(name: string, content: any, botProjFilePath: string = ''): Promise<void> {
