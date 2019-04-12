@@ -9,8 +9,19 @@ import { ComponentGraph } from './ComponentGraph';
 
 export class ObiEditor extends Component {
   state = {
+    prevPath: '',
     focusedId: '',
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.path !== state.prevPath) {
+      return {
+        prevPath: props.path,
+        focusedId: '',
+      };
+    }
+    return null;
+  }
 
   dispatchEvent(eventName, eventData) {
     const { onSelect, onExpand, onOpen } = this.props;
