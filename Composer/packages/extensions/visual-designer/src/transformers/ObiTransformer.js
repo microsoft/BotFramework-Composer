@@ -1,8 +1,9 @@
+import { isRecognizer } from '../utils/obiTypeChecker';
+
 import { consumeStrategy } from './helpers/consumerStrategy';
 import { SequentialStrategy } from './strategies/SequentialStrategy';
 import { GraphicalStrategy } from './strategies/GraphicalStrategy';
 import { RootDialogStrategy } from './strategies/RootDialogStrategy';
-import { isRecognizer } from '../utils/obiTypeChecker';
 
 class ObiTransformer {
   /**

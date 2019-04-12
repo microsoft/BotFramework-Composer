@@ -36,7 +36,6 @@ export class IntentRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { intent, steps } = data;
-    const x = this.getDetails();
     return (
       <FormCard
         themeColor="#0078D4"
