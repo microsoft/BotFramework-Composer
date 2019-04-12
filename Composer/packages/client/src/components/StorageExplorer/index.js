@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import * as pathHelper from 'path';
+import path from 'path';
 
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
@@ -159,10 +159,10 @@ export function StorageExplorer(props) {
 
   const separator = '/';
   // filter the empty one, server api need '/' for root path, but no need for others.
-  const pathItems = pathHelper
+  const pathItems = path
     .normalize(currentPath)
     .split(separator)
-    .filter(p => p);
+    .filter(p => p !== '');
   const breadcrumbItems = pathItems.map((item, index) => {
     const itemPath = getNavItemPath(pathItems, separator, 0, index);
     return {
@@ -197,9 +197,9 @@ export function StorageExplorer(props) {
     return array.slice(start, end).join(seperator);
   }
 
-  function updateCurrentPath(path, storageId) {
-    if (storageId && path) {
-      const formatedPath = pathHelper.normalize(path.replace(/\\/g, separator));
+  function updateCurrentPath(newPath, storageId) {
+    if (storageId && newPath) {
+      const formatedPath = path.normalize(newPath.replace(/\\/g, separator));
       actions.fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
