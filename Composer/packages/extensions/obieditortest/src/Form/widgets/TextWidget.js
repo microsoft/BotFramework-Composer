@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 
+const getInt = (value, step) => {
+  return parseInt(value, 10) + step;
+};
+
+const getFloat = (value, step) => {
+  return (parseFloat(value) + step).toFixed(step > 0 ? `${step}`.split('.')[1].length : step);
+};
+
 export function TextWidget(props) {
   const { label, onBlur, onChange, readonly, value, schema, placeholder, ...rest } = props;
   const { description, examples = [], type } = schema || {};
@@ -18,10 +26,7 @@ export function TextWidget(props) {
       // if the number is a float, we need to convert to a fixed decimal place
       // in order to avoid floating point math rounding errors (ex. 1.2000000001)
       // ex. if step = 0.01, we fix to 2 decimals
-      const newValue =
-        type === 'integer'
-          ? parseInt(value, 10) + step
-          : (parseFloat(value) + step).toFixed(`${step}`.split('.')[1].length);
+      const newValue = type === 'integer' ? getInt(value, step) : getFloat(value, step);
 
       onChange(newValue);
       // need to allow form data to propagate before flushing to state
