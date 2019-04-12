@@ -36,7 +36,6 @@ export class EventGroup extends React.Component {
             width: EventBlockWidth,
             height: EventGroupTitleHeight,
             background: themeColor,
-            cursor: 'pointer',
           }}
         >
           <span

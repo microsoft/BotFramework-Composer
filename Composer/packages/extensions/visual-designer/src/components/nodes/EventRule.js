@@ -11,7 +11,7 @@ export class EventRule extends React.Component {
     const { steps } = data;
     return (
       <FormCard
-        themeColor="#0078D4"
+        themeColor="#BAD80A"
         header="EventRule"
         label={data.events}
         onClick={() => {

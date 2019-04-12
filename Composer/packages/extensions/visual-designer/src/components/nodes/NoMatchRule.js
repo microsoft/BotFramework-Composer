@@ -11,8 +11,8 @@ export class NoMatchRule extends React.Component {
     const { steps } = data;
     return (
       <FormCard
-        themeColor="#0078D4"
-        header="Fallback"
+        themeColor="#BAD80A"
+        header="NoMatchRule"
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
