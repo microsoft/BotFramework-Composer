@@ -7,8 +7,6 @@ import { NodeRenderer } from '../../utils/NodeRenderer';
 const IntentElementHeight = 50;
 const IntentMarginX = 18;
 const IntentMarginY = 20;
-const IntentBlockHeight = IntentElementHeight + 2 * IntentMarginY;
-const ContainerBonusHeight = 10;
 
 export class IntentGroup extends React.Component {
   renderIntent(intent) {
@@ -24,7 +22,6 @@ export class IntentGroup extends React.Component {
       <div
         style={{
           width: 206,
-          height: intents.length * IntentBlockHeight + ContainerBonusHeight,
           border: '0.25px solid #000000',
           boxSizing: 'border-box',
         }}
