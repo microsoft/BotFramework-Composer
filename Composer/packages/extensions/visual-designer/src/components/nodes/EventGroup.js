@@ -1,32 +1,68 @@
 import React from 'react';
 
+import { PAYLOAD_KEY } from '../../utils/constant';
+
 import { NodeProps, defaultNodeProps } from './sharedProps';
+import { chooseRendererByType } from './nodeRenderer';
+
+const EventGroupTitleHeight = 30;
+const EventElemetHeight = 50;
+const EventElemetWidth = 170;
+const EventMarginX = 5;
+const EventMarginY = 10;
+const EventBlockHeight = EventElemetHeight + 2 * EventMarginY;
+const EventBlockWidth = EventElemetWidth + 2 * EventMarginX;
+const themeColor = '#BAD80A';
 
 export class EventGroup extends React.Component {
+  renderEvent(eventNode) {
+    const data = eventNode[PAYLOAD_KEY];
+    const ChosenRenderer = chooseRendererByType(data.$type);
+    const propagateEvent = (...args) => this.props.onEvent(...args);
+    return <ChosenRenderer id={eventNode.id} key={eventNode.id} data={data} onEvent={propagateEvent} />;
+  }
   render() {
     const { data } = this.props;
     return (
       <div
         style={{
-          width: 170,
-          height: 30,
-          background: '#BAD80A',
-          boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
-          borderRadius: '4px',
-          cursor: 'pointer',
+          width: EventBlockWidth,
+          height: data.children.length * EventBlockHeight + EventGroupTitleHeight,
+          border: `1px solid ${themeColor}`,
         }}
       >
-        <span
+        <div
           style={{
-            marginLeft: 10,
-            fontFamily: 'Segoe UI',
-            fontSize: '14px',
-            lineHeight: '19px',
-            color: '#FFFFFF',
+            width: EventBlockWidth,
+            height: EventGroupTitleHeight,
+            background: themeColor,
+            cursor: 'pointer',
           }}
         >
-          Events ({data.children.length})
-        </span>
+          <span
+            style={{
+              marginLeft: 10,
+              fontFamily: 'Segoe UI',
+              fontSize: '14px',
+              lineHeight: '19px',
+              color: '#FFFFFF',
+            }}
+          >
+            Events ({data.children.length})
+          </span>
+        </div>
+        {data.children.map(x => (
+          <div
+            key={x.id + 'block'}
+            style={{
+              padding: `${EventMarginY}px ${EventMarginX}px`,
+              height: EventBlockHeight,
+              boxSizing: 'border-box',
+            }}
+          >
+            {this.renderEvent(x)}
+          </div>
+        ))}
       </div>
     );
   }
