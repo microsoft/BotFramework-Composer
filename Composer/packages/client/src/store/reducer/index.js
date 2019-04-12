@@ -91,6 +91,10 @@ const navigateTo = (state, { path }) => {
     });
     state.openFileIndex = currentOpenFileIndex;
   }
+
+  if (state.focusPath !== path) {
+    state.focusPath = path;
+  }
   return state;
 };
 

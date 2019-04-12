@@ -22,12 +22,13 @@ export default class VisualDesigner extends Component {
   };
 
   render() {
-    const { data, shellApi } = this.props;
+    const { navPath, data, shellApi } = this.props;
     const { navDown, focusTo, navTo } = shellApi;
 
     return (
       <div data-testid="visualdesigner-container">
         <ObiEditor
+          path={navPath}
           data={data}
           onSelect={x => focusTo(this.normalizeDataPath(x))}
           onExpand={x => navDown(this.normalizeDataPath(x))}
@@ -39,11 +40,13 @@ export default class VisualDesigner extends Component {
 }
 
 VisualDesigner.propTypes = {
+  navPath: PropType.string.isRequired,
   data: PropType.object.isRequired,
   shellApi: PropType.object.isRequired,
 };
 
 VisualDesigner.defaultProps = {
+  navPath: '.',
   data: {},
   shellApi: {},
 };
