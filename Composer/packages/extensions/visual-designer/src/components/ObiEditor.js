@@ -55,6 +55,7 @@ export class ObiEditor extends Component {
 
   render() {
     const items = this.buildItemsFromObiJson(this.props.data);
+    const graphId = this.props.path + '/ComponentGraph';
 
     return (
       <div
@@ -62,13 +63,14 @@ export class ObiEditor extends Component {
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <ComponentGraph items={items} />
+        <ComponentGraph key={graphId} graphId={graphId} items={items} />
       </div>
     );
   }
 }
 
 ObiEditor.defaultProps = {
+  path: '.',
   data: {},
   onSelect: () => {},
   onExpand: () => {},
@@ -76,6 +78,7 @@ ObiEditor.defaultProps = {
 };
 
 ObiEditor.propTypes = {
+  path: PropTypes.string,
   // Obi raw json
   data: PropTypes.object,
   onSelect: PropTypes.func,
