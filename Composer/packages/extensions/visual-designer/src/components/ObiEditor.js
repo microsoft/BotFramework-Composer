@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
-import { chooseRendererByType } from '../utils/nodeRendererMap';
+import { NodeRenderer } from '../utils/NodeRenderer';
 
 import { ComponentGraph } from './ComponentGraph';
 
 export class ObiEditor extends Component {
+  state = {
+    focusedId: '',
+  };
+
   dispatchEvent(eventName, eventData) {
     const { onSelect, onExpand, onOpen } = this.props;
 
@@ -26,15 +30,18 @@ export class ObiEditor extends Component {
         handler = onSelect;
         break;
     }
+    if (this.state.focusedId !== eventData) {
+      this.setState({ focusedId: eventData });
+    }
     return handler(eventData);
   }
 
   createRendererInstance(item) {
     const { id, data } = item;
-    const ChosenRenderer = chooseRendererByType(data.$type);
+    const { focusedId } = this.state;
     const onEvent = (eventName, eventData) => this.dispatchEvent(eventName, eventData);
 
-    return <ChosenRenderer id={id} data={data} onEvent={onEvent} />;
+    return <NodeRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} />;
   }
 
   buildItemsFromObiJson(data) {

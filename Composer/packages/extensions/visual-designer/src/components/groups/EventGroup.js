@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PAYLOAD_KEY } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
-import { chooseRendererByType } from '../../utils/nodeRendererMap';
+import { NodeRenderer } from '../../utils/NodeRenderer';
 
 const EventGroupTitleHeight = 30;
 const EventElemetHeight = 50;
@@ -16,9 +16,16 @@ const themeColor = '#BAD80A';
 export class EventGroup extends React.Component {
   renderEvent(eventNode) {
     const data = eventNode[PAYLOAD_KEY];
-    const ChosenRenderer = chooseRendererByType(data.$type);
     const propagateEvent = (...args) => this.props.onEvent(...args);
-    return <ChosenRenderer id={eventNode.id} key={eventNode.id} data={data} onEvent={propagateEvent} />;
+    return (
+      <NodeRenderer
+        id={eventNode.id}
+        key={eventNode.id}
+        data={data}
+        focusedId={this.props.focusedId}
+        onEvent={propagateEvent}
+      />
+    );
   }
   render() {
     const { data } = this.props;
@@ -53,8 +60,8 @@ export class EventGroup extends React.Component {
           <div
             key={x.id + 'block'}
             style={{
-              padding: `${EventMarginY}px ${EventMarginX}px`,
-              height: EventBlockHeight,
+              margin: `${EventMarginY}px ${EventMarginX}px`,
+              height: EventElemetHeight,
               boxSizing: 'border-box',
             }}
           >
