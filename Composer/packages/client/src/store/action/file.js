@@ -49,6 +49,7 @@ export async function updateFile(dispatch, { name, content }) {
         content,
       },
     });
+    await axios.put(`${BASEURL}/projects/opened/files`, { name, content });
   } catch (err) {
     dispatch({
       type: ActionTypes.FILES_UPDATE_FAILURE,

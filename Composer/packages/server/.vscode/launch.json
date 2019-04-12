@@ -29,6 +29,15 @@
        "cwd": "${workspaceRoot}",
        "sourceMaps": true,
        "console": "integratedTerminal"
-    }
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Server: Attach",
+      "port": 9229,
+      "sourceMaps": true,
+      "restart": true,
+      "outFiles": ["${workspaceFolder}/Composer/pacakges/server/build/**/*.js"]
+    },
   ]
 }
