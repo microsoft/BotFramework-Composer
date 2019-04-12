@@ -1,5 +1,5 @@
-import { ObiTypes } from '../../transformers/constants/ObiTypes';
-
+import { ObiTypes } from '../transformers/constants/ObiTypes';
+import { EventGroup, IntentGroup } from '../components/groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -9,9 +9,7 @@ import {
   NoMatchRule,
   EventRule,
   IfCondition,
-  EventGroup,
-  IntentGroup,
-} from './index';
+} from '../components/nodes/index';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,
@@ -22,6 +20,7 @@ const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
+  // groups
   [ObiTypes.EventGroup]: EventGroup,
   [ObiTypes.IntentGroup]: IntentGroup,
 };

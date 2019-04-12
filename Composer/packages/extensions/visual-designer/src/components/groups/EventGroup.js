@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { PAYLOAD_KEY } from '../../utils/constant';
-
-import { NodeProps, defaultNodeProps } from './sharedProps';
-import { chooseRendererByType } from './nodeRenderer';
+import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
+import { chooseRendererByType } from '../../utils/nodeRendererMap';
 
 const EventGroupTitleHeight = 30;
 const EventElemetHeight = 50;

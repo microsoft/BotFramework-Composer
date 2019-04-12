@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
+import { chooseRendererByType } from '../utils/nodeRendererMap';
 
 import { ComponentGraph } from './ComponentGraph';
-import { chooseRendererByType } from './nodes/nodeRenderer';
 
 export class ObiEditor extends Component {
   dispatchEvent(eventName, eventData) {
