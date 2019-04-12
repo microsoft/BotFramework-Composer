@@ -5,15 +5,15 @@ import { NodeClickActionTypes } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import { FormCard } from './templates/FormCard';
 
-export class NoMatchRule extends React.Component {
+export class EventRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
       <FormCard
         themeColor="#BAD80A"
-        header="NoMatchRule"
-        label={data.$type.split('.')[1]}
+        header="EventRule"
+        label={data.events}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
             onEvent(NodeClickActionTypes.Expand, id);
@@ -26,5 +26,5 @@ export class NoMatchRule extends React.Component {
   }
 }
 
-NoMatchRule.propTypes = NodeProps;
-NoMatchRule.defaultProps = defaultNodeProps;
+EventRule.propTypes = NodeProps;
+EventRule.defaultProps = defaultNodeProps;

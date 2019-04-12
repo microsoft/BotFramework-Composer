@@ -3,22 +3,26 @@ import PropTypes from 'prop-types';
 
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
-import { ObiTypes } from '../transformers/constants/ObiTypes';
+import { NodeRenderer } from '../utils/NodeRenderer';
 
-import { DefaultRenderer, WelcomeRule, IntentRule, Recognizer, BeginDialog, NoMatchRule } from './nodes';
 import { ComponentGraph } from './ComponentGraph';
 
-const rendererByObiType = {
-  [ObiTypes.WelcomeRule]: WelcomeRule,
-  [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.NoMatchRule]: NoMatchRule,
-  [ObiTypes.RegexRecognizer]: Recognizer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
-  [ObiTypes.BeginDialog]: BeginDialog,
-};
-const DEFAULT_RENDERER = DefaultRenderer;
-
 export class ObiEditor extends Component {
+  state = {
+    prevPath: '',
+    focusedId: '',
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.path !== state.prevPath) {
+      return {
+        prevPath: props.path,
+        focusedId: '',
+      };
+    }
+    return null;
+  }
+
   dispatchEvent(eventName, eventData) {
     const { onSelect, onExpand, onOpen } = this.props;
 
@@ -37,20 +41,18 @@ export class ObiEditor extends Component {
         handler = onSelect;
         break;
     }
+    if (this.state.focusedId !== eventData) {
+      this.setState({ focusedId: eventData });
+    }
     return handler(eventData);
-  }
-
-  chooseRendererByType($type) {
-    const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-    return renderer;
   }
 
   createRendererInstance(item) {
     const { id, data } = item;
-    const ChosenRenderer = this.chooseRendererByType(data.$type);
+    const { focusedId } = this.state;
     const onEvent = (eventName, eventData) => this.dispatchEvent(eventName, eventData);
 
-    return <ChosenRenderer id={id} data={data} onEvent={onEvent} />;
+    return <NodeRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} />;
   }
 
   buildItemsFromObiJson(data) {

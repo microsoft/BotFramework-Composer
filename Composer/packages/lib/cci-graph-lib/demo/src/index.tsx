@@ -99,7 +99,7 @@ class Demo extends React.Component {
     const displayedJson = demoAssets[this.state.itemIndex];
     return (
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div>
+        <div style={{ minWidth: 600 }}>
           <button onClick={() => this.showNextJson()}>Change Json</button>
           <DirectedGraph items={displayedJson} width={600} height={700} />
         </div>

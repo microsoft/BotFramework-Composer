@@ -1,6 +1,6 @@
 import { ObiTypes } from '../constants/ObiTypes';
 
-export function buildObiStep(data) {
+export function normalizeObiStep(data) {
   let step = data;
   // Grammar sugar provide by OBI runtime.
   if (typeof data === 'string') {
