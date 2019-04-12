@@ -1,3 +1,5 @@
+import { AdaptiveDialog, RulesSection, StepsField } from '../Form/fields';
+
 const hideMetaData = {
   $ref: {
     'ui:widget': 'hidden',
@@ -14,45 +16,12 @@ const hideMetaData = {
 };
 
 export const uiSchema = {
-  'Microsoft.TextPrompt': {
-    ...hideMetaData,
-    property: {
-      'ui:options': {
-        span: 2,
-      },
+  'Microsoft.AdaptiveDialog': {
+    rules: {
+      'ui:field': RulesSection,
     },
-    pattern: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-  },
-  'Microsoft.SendActivityTemplateStep': {
-    ...hideMetaData,
-  },
-  'Microsoft.IntegerPrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-    maxValue: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-  },
-  'Microsoft.EndDialog': {
-    ...hideMetaData,
-  },
-  'Microsoft.DateTimePrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:widget': 'datetime',
-    },
-    maxValue: {
-      'ui:widget': 'datetime',
+    steps: {
+      'ui:field': StepsField,
     },
   },
 };
