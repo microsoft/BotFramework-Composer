@@ -1,12 +1,25 @@
-# Bot Project
+## Bot Project
 Bot project is the launcher project for the bots written in [OBI](https://github.com/Microsoft/botframework-obi) format.
 
-## Download and run
-### restore the packages
-* You can restore the packages from this feed directly in vs nuget package manager: https://fuselabs.visualstudio.com/Composer/_packaging?_a=feed&feed=ComposableDialog 
-* You can also add feed by:
-* nuget.exe sources Add -Name "ComposableDialog" -Source "https://fuselabs.pkgs.visualstudio.com/_packaging/ComposableDialog/nuget/v3/index.json"
-* If you are unauthorized to restore the packages, please contact luhan@microsoft.com. 
+## Instructions
+
+### Prerequisite:
+* Install .Netcore 2
+* Install nuget
+
+### Commands:
+
+* nuget sources Add -Name "ComposableDialog" -Source "https://fuselabs.pkgs.visualstudio.com/_packaging/ComposableDialog/nuget/v3/index.json". 
+* This packages are only avaiable for microsoft employees and we will publish them soon.
+* please contact luhan@microsoft.com for any authentation issue.
+* dotnet restore // for the package updates
+* dotnet build // build
+* dotnet run // start the bot
+* It will start a web server and listening at http://localhost:3979.
+
+### Test bot
+* You can set you emulator to connect to http://localhost:3979/api/messages.
+
 ### config your bot
 * The only thing you need to config is appsetting.json, which have a bot setting to launch the bot
 ```
@@ -16,12 +29,7 @@ Bot project is the launcher project for the bots written in [OBI](https://github
       "path": "../../Bots/SampleBot3/bot3.botproj"
     }
 ```
-### Build & run bot
-* dotnet build
-* dotnet run
-* It will start a web server and listening at http://localhost:3979.
-### Test bot
-* You can set you emulator to connect to http://localhost:3979/api/messages.
+
 
 ## .botproj folder structure
 ```
