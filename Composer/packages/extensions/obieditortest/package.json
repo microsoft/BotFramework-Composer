@@ -23,7 +23,7 @@
     "@uifabric/fluent-theme": "^0.16.2",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
-    "office-ui-fabric-react": "^6.138.1",
+    "office-ui-fabric-react": "^6.165.1",
     "react": "^16.8.1",
     "react-jsonschema-form": "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-1",
     "react-scripts": "2.1.3"
