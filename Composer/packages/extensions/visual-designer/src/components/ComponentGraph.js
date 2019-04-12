@@ -23,19 +23,19 @@ export class ComponentGraph extends Component {
     // TODO: draw minimap, toolbars
     if (items && items.length > 0) {
       const graphNodes = items.map(x => this.toGraphLibSchema(x));
-      return <DirectedGraph key={this.props.key + '/directedGraph'} items={graphNodes} />;
+      return <DirectedGraph key={this.props.graphId + '/directedGraph'} items={graphNodes} />;
     }
     return null;
   }
 }
 
 ComponentGraph.defaultProps = {
-  key: '',
+  graphId: '',
   items: [],
 };
 
 ComponentGraph.propTypes = {
-  key: PropTypes.string.isRequired,
+  graphId: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
