@@ -57,7 +57,8 @@ const setStorageExplorerStatus = (state, { status }) => {
 };
 
 const getStorageFileSuccess = (state, { response }) => {
-  state.currentStorageFiles = response.data.children.reduce((files, file) => {
+  const focusedStorageFolder = response.data;
+  focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
     if (file.type === FileTypes.FOLDER) {
       files.push(file);
     } else {
@@ -70,6 +71,7 @@ const getStorageFileSuccess = (state, { response }) => {
 
     return files;
   }, []);
+  state.focusedStorageFolder = focusedStorageFolder;
   return state;
 };
 
