@@ -14,7 +14,7 @@ const initialState = {
   focusPath: '', // the data path for FormEditor
   navPathHistory: [],
   storages: [],
-  currentStorageFiles: [],
+  focusedStorageFolder: {},
   botStatus: 'stopped',
   openFileIndex: -1,
   storageExplorerStatus: 'closed',
