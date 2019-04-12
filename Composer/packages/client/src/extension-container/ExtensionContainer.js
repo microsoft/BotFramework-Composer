@@ -25,13 +25,15 @@ const subEditorCallbacks = {};
 function ExtensionContainer() {
   const [data, setData] = useState('');
   const [dialogs, setDialogs] = useState([]);
+  const [navPath, setNavPath] = useState('');
 
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('reset', ({ data, dialogs }) => {
+    apiClient.registerApi('reset', ({ data, dialogs, navPath }) => {
       setData(data);
       setDialogs(dialogs);
+      setNavPath(navPath);
     });
 
     apiClient.registerApi('saveFromChild', args => {
@@ -91,7 +93,7 @@ function ExtensionContainer() {
       {RealEditor === '' ? (
         ''
       ) : (
-        <RealEditor data={data} dialogs={dialogs} onChange={shellApi.saveData} shellApi={shellApi} />
+        <RealEditor navPath={navPath} data={data} dialogs={dialogs} onChange={shellApi.saveData} shellApi={shellApi} />
       )}
     </Fragment>
   );

@@ -52,7 +52,7 @@ export function ShellApi() {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
       const data = navPath === '' ? '' : jp.query(dialogs, navPath)[0];
-      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+      apiClient.apiCallAt('reset', { data, dialogs: files, navPath: navPath }, editorWindow);
     }
   }, [dialogs, files, navPath]);
 
@@ -60,7 +60,7 @@ export function ShellApi() {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
       const data = focusPath === '' ? '' : jp.query(dialogs, focusPath)[0];
-      apiClient.apiCallAt('reset', { data, dialogs: files }, editorWindow);
+      apiClient.apiCallAt('reset', { data, dialogs: files, navPath: navPath }, editorWindow);
     }
   }, [dialogs, files, focusPath]);
 
