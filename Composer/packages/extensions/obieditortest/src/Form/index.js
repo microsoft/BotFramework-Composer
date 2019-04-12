@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import JSONFrom from 'react-jsonschema-form';
+import JSONForm from 'react-jsonschema-form';
 
 import * as widgets from './widgets';
 import * as fields from './fields';
@@ -14,7 +14,7 @@ export default function Form(props) {
 
   return (
     <div className="FormContainer">
-      <JSONFrom
+      <JSONForm
         ArrayFieldTemplate={ArrayFieldTemplate}
         fields={fields}
         FieldTemplate={FieldTemplate}
