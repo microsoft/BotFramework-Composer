@@ -4,6 +4,7 @@ import React, { Fragment, useContext, useState, useMemo, useEffect } from 'react
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
 import map from 'lodash.map';
 import startCase from 'lodash.startcase';
+import formatMessage from 'format-message';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -89,8 +90,8 @@ function DesignPage() {
                   {files.length > 0 ? (
                     <IconButton
                       iconProps={{ iconName: 'Add' }}
-                      title="New Dialog"
-                      ariaLabel="New Dialog"
+                      title={formatMessage('New Dialog')}
+                      ariaLabel={formatMessage('New Dialog')}
                       onClick={() => setModalOpen(true)}
                     />
                   ) : (
@@ -107,7 +108,11 @@ function DesignPage() {
         <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'column', height: '860px' }}>
-              <Breadcrumb items={breadcrumbItems} ariaLabel={'Navigation Path'} styles={breadcrumbClass} />
+              <Breadcrumb
+                items={breadcrumbItems}
+                ariaLabel={formatMessage('Navigation Path')}
+                styles={breadcrumbClass}
+              />
               <div style={{ display: 'flex', flexDirection: 'row', flexGrow: '1', height: '100%' }}>
                 <iframe
                   key="VisualEditor"

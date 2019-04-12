@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
@@ -43,9 +44,9 @@ export function App() {
             float: 'left',
           }}
         >
-          <NavItem to="/" exact={true} iconName="SplitObject" label="Design" />
-          <NavItem to="content" iconName="CollapseMenu" label="Content" />
-          <NavItem to="setting" iconName="Settings" label="Settings" />
+          <NavItem to="/" exact={true} iconName="SplitObject" label={formatMessage('Design')} />
+          <NavItem to="content" iconName="CollapseMenu" label={formatMessage('Content')} />
+          <NavItem to="setting" iconName="Settings" label={formatMessage('Settings')} />
         </div>
         <div
           style={{

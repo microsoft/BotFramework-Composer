@@ -9,6 +9,7 @@ import { useEffect, Fragment, useState, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { PropTypes } from 'prop-types';
+import formatMessage from 'format-message';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -47,10 +48,10 @@ export function StorageExplorer(props) {
   const tableColums = [
     {
       key: 'column1',
-      name: 'File Type',
+      name: formatMessage('File Type'),
       className: detailListClass.fileIconCell,
       iconClassName: detailListClass.fileIconHeaderIcon,
-      ariaLabel: 'Column operations for File type, Press to sort on File type',
+      ariaLabel: formatMessage('Column operations for File type, Press to sort on File type'),
       iconName: 'Page',
       isIconOnly: true,
       fieldName: 'name',
@@ -84,7 +85,7 @@ export function StorageExplorer(props) {
     },
     {
       key: 'column3',
-      name: 'Date Modified',
+      name: formatMessage('Date Modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 70,
       maxWidth: 90,
@@ -97,7 +98,7 @@ export function StorageExplorer(props) {
     },
     {
       key: 'column4',
-      name: 'File Size',
+      name: formatMessage('File Size'),
       fieldName: 'fileSizeRaw',
       minWidth: 70,
       maxWidth: 90,
@@ -261,13 +262,13 @@ export function StorageExplorer(props) {
     return (
       <div css={leftNav}>
         <div css={navHeader} onClick={() => toggleExplorer()}>
-          <Icon iconName="Back" css={closeIcon} text="Close" />
+          <Icon iconName="Back" css={closeIcon} text={formatMessage('Close')} />
         </div>
         <div>
           <Nav
             groups={[
               {
-                links: [{ name: 'Open', key: 'open' }],
+                links: [{ name: formatMessage('Open'), key: 'open' }],
               },
             ]}
             initialSelectedKey={'open'}
@@ -304,9 +305,9 @@ export function StorageExplorer(props) {
     return (
       <div css={fileSelectorContainer}>
         <div css={fileSelectorHeader}>
-          <Icon iconName="Back" css={backIcon} text="Back" onClick={onBackIconClicked} />
+          <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
           <div style={{ flexGrow: 1 }}>
-            <Breadcrumb items={breadcrumbItems} ariaLabel={'File path'} maxDisplayedItems={1} />
+            <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
           </div>
         </div>
         <DetailsList

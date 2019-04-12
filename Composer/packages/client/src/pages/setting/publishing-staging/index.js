@@ -1,5 +1,6 @@
 import React from 'react';
+import formatMessage from 'format-message';
 
 export const PublishingStaging = () => {
-  return <div>Publishing And Staging</div>;
+  return <div>{formatMessage('Publishing And Staging')}</div>;
 };
