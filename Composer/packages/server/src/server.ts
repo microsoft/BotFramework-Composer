@@ -3,9 +3,6 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
 import { apiRouter } from './router/api';
-import ProjectService from './services/project';
-
-ProjectService.init();
 
 const app: Express = express();
 

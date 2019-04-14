@@ -6,14 +6,12 @@ class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
   public recentBotProjects: BotProjectRef[] = [];
 
-  constructor() {}
-
-  public init = () => {
+  constructor() {
     this.recentBotProjects = Store.get('recentBotProjects');
     if (this.recentBotProjects.length > 0) {
       this.currentBotProject = new BotProject(this.recentBotProjects[0]);
     }
-  };
+  }
 
   public getProject = async () => {
     if (this.currentBotProject !== undefined) {
@@ -23,5 +21,4 @@ class BotProjectService {
 }
 
 const service = new BotProjectService();
-
 export default service;
