@@ -10,9 +10,9 @@ class BotProjectService {
     this.currentBotProject = new BotProject(Storage.recentAccessedBots[0]);
   };
 
-  public getProject = () => {
+  public getProject = async () => {
     if (this.currentBotProject !== undefined) {
-      return this.currentBotProject.getFiles();
+      return await this.currentBotProject.getFiles();
     }
   };
 }

@@ -1,5 +1,13 @@
-import { BotProjectRef } from './interface';
+import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
+import fs from 'fs';
 import path from 'path';
+import { promisify } from 'util';
+
+import glob from 'globby';
+
+const readFile = promisify(fs.readFile);
+const lstat = promisify(fs.lstat);
+const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
 
 export class BotProject {
   public ref: BotProjectRef;
@@ -15,7 +23,66 @@ export class BotProject {
     this.name = path.basename(this.absolutePath);
   }
 
-  public getFiles = () => {
-    return [];
+  public getFiles = async () => {
+    const fileList: FileInfo[] = [];
+
+    // get .bot file
+    const botFileContent = await readFile(this.absolutePath, 'utf-8');
+    fileList.push({
+      name: this.name,
+      content: JSON.parse(botFileContent),
+      path: this.absolutePath,
+      dir: this.dir,
+      relativePath: path.relative(this.dir, this.absolutePath),
+    });
+
+    // get 'files' from .bot file
+    const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
+    if (botConfig !== undefined && Array.isArray(botConfig.files)) {
+      for (const pattern of botConfig.files) {
+        const paths = await glob(pattern, { cwd: this.dir });
+        // find the index of the entry dialog defined in the botproject
+        // save & remove it from the paths array before it is sorted
+        let mainPath = '';
+        if (isDialogExtension(pattern)) {
+          const mainPathIndex = paths.findIndex(elem => elem.indexOf(botConfig.entry) !== -1);
+          mainPath = paths[mainPathIndex];
+          paths.splice(mainPathIndex, 1);
+        }
+
+        for (const filePath of paths.sort()) {
+          const realFilePath: string = path.resolve(this.dir, filePath);
+          // skip lg files for now
+          if (!realFilePath.endsWith('.lg') && (await lstat(realFilePath)).isFile()) {
+            const content: string = await readFile(realFilePath, 'utf-8');
+            fileList.push({
+              name: filePath,
+              content: JSON.parse(content),
+              path: realFilePath,
+              dir: this.dir,
+              relativePath: path.relative(this.dir, realFilePath),
+            });
+          }
+        }
+
+        // resolve the entry dialog path and add it to the front of the
+        // now sorted paths array
+        if (isDialogExtension(pattern)) {
+          const mainFilePath = path.resolve(this.dir, mainPath);
+          if (!mainFilePath.endsWith('.lg') && (await lstat(mainFilePath)).isFile()) {
+            const content: string = await readFile(mainFilePath, 'utf-8');
+            fileList.unshift({
+              name: mainPath,
+              content: JSON.parse(content),
+              path: mainFilePath,
+              dir: this.dir,
+              relativePath: path.relative(this.dir, mainFilePath),
+            });
+          }
+        }
+      }
+    }
+
+    return fileList;
   };
 }
