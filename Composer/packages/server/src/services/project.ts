@@ -1,6 +1,7 @@
 import { BotProject } from '../models/bot/botProject';
 import { BotProjectRef } from '../models/bot/interface';
 import { Store } from '../store/store';
+import StorageService from './storage';
 
 class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
@@ -17,6 +18,13 @@ class BotProjectService {
     if (this.currentBotProject !== undefined) {
       return await this.currentBotProject.getFiles();
     }
+  };
+
+  public openProject = async (projRef: BotProjectRef) => {
+    if (!StorageService.checkBlob(projRef.storageId, projRef.path)) {
+      throw new Error(`file not exist ${projRef.path}`);
+    }
+    this.currentBotProject = new BotProject(projRef);
   };
 }
 

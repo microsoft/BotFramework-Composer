@@ -17,4 +17,8 @@ export class LocalDiskStorage implements IFileStorage {
   readDirSync(path: string): string[] {
     return fs.readdirSync(path);
   }
+
+  existSync(path: string): boolean {
+    return fs.existsSync(path);
+  }
 }

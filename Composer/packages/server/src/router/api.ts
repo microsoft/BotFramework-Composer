@@ -10,6 +10,7 @@ const router: Router = express.Router({});
 
 // projects
 router.get('/projects/opened', ProjectController.getProject);
+router.put('/projects/opened', ProjectController.openProject);
 /*
 router.get('/projects/opened/files', ProjectController.getFiles);
 router.post('/projects/opened/files', ProjectController.createFile);

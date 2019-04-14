@@ -24,6 +24,12 @@ class StorageService {
     });
   };
 
+  public checkBlob = (storageId: string, filePath: string): boolean => {
+    const connection = this.storageConnections.filter(c => c.id === storageId)[0];
+    const storageClient = StorageFactory.createStorageClient(connection);
+    return storageClient.existSync(filePath);
+  };
+
   // return connent for file
   // return children for dir
   public getBlob = (storageId: string, filePath: string) => {
