@@ -1,13 +1,16 @@
 import { BotProject } from '../models/bot/botProject';
-import Storage from '../../storage.json';
+import { BotProjectRef } from '../models/bot/interface';
+import { Store } from '../store/store';
 
 class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
+  public recentBotProjects: BotProjectRef[] = [];
 
   constructor() {}
 
   public init = () => {
-    this.currentBotProject = new BotProject(Storage.recentAccessedBots[0]);
+    this.recentBotProjects = Store.get('recentBotProjects');
+    this.currentBotProject = new BotProject(this.recentBotProjects[0]);
   };
 
   public getProject = async () => {
