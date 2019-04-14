@@ -36,7 +36,27 @@ async function openProject(req: Request, res: Response) {
   }
 }
 
+async function updateFile(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    await ProjectService.currentBotProject.updateFile(req.body.name, req.body.content);
+    res.status(200).json('OK');
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
+async function createFileFromTemplate(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    await ProjectService.currentBotProject.createFileFromTemplate(req.body.name, req.body.steps);
+    res.status(200).json('OK');
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
+  updateFile: updateFile,
+  createFileFromTemplate: createFileFromTemplate,
 };

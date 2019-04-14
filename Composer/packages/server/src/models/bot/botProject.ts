@@ -5,10 +5,17 @@ import { promisify } from 'util';
 
 import glob from 'globby';
 
+import DIALOG_TEMPLATE from '../../dialogTemplate.json';
+import { merge, set } from 'lodash';
+
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 const lstat = promisify(fs.lstat);
 const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
 
+// TODO:
+// 1. refactor this class to use on IFileStorage instead of operating on fs
+// 2. refactor this layer, to operate on dialogs, not files
 export class BotProject {
   public ref: BotProjectRef;
 
@@ -84,5 +91,21 @@ export class BotProject {
     }
 
     return fileList;
+  };
+
+  public createFileFromTemplate = async (name: string, types: string[]) => {
+    const absolutePath: string = path.join(this.dir, `${name.trim()}.dialog`);
+    const newDialog = merge({}, DIALOG_TEMPLATE);
+
+    types.forEach((type: string, idx: number) => {
+      set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
+    });
+
+    await writeFile(absolutePath, JSON.stringify(newDialog, null, 2) + '\n', {});
+  };
+
+  public updateFile = async (name: string, content: any) => {
+    const absolutePath: string = path.join(this.dir, name);
+    await writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
   };
 }

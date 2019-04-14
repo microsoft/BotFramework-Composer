@@ -11,11 +11,8 @@ const router: Router = express.Router({});
 // projects
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
-/*
-router.get('/projects/opened/files', ProjectController.getFiles);
-router.post('/projects/opened/files', ProjectController.createFile);
-router.put('/projects/opened/files', ProjectController.updateFile); 
-*/
+router.put('/projects/opened/files', ProjectController.updateFile);
+router.post('/projects/opened/files', ProjectController.createFileFromTemplate);
 
 // storages
 router.get('/storages', StorageController.getStorageConnections);
