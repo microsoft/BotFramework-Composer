@@ -10,7 +10,9 @@ class BotProjectService {
 
   public init = () => {
     this.recentBotProjects = Store.get('recentBotProjects');
-    this.currentBotProject = new BotProject(this.recentBotProjects[0]);
+    if (this.recentBotProjects.length > 0) {
+      this.currentBotProject = new BotProject(this.recentBotProjects[0]);
+    }
   };
 
   public getProject = async () => {

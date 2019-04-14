@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import data from './store.json';
+import data from './data.json';
 
 interface KVStore {
   get(key: string): any;
@@ -34,4 +34,4 @@ class JsonStore implements KVStore {
   }
 }
 
-export const Store = new JsonStore('./store.json', data);
+export const Store = new JsonStore('./data.json', data);
