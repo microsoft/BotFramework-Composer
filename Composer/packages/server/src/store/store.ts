@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import data from './store.json';
 
 interface KVStore {
   get(key: string): any;
@@ -27,10 +28,10 @@ class JsonStore implements KVStore {
     fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');
   };
 
-  constructor(jsonFilePath: string) {
+  constructor(jsonFilePath: string, data: any) {
     this.filePath = path.resolve(jsonFilePath);
-    this.data = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+    this.data = data;
   }
 }
 
-export const Store = new JsonStore('./store.json');
+export const Store = new JsonStore('./store.json', data);
