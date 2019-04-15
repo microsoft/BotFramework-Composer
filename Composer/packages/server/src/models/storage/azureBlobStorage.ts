@@ -18,4 +18,7 @@ export class AzureBlobStorage implements IFileStorage {
   existSync(path: string): boolean {
     throw new Error('Method not implemented.');
   }
+  writeFileSync(path: string, content: any): void {
+    throw new Error('Method not implemented.');
+  }
 }

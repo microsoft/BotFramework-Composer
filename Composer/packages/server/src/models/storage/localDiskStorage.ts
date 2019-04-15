@@ -22,4 +22,7 @@ export class LocalDiskStorage implements IFileStorage {
   existSync(path: string): boolean {
     return fs.existsSync(path);
   }
+  writeFileSync(path: string, content: any): void {
+    return fs.writeFileSync(path, content);
+  }
 }
