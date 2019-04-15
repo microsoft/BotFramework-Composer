@@ -1156,44 +1156,22 @@ export function getMergedSchema(dialogFiles = []) {
             $ref: '#/definitions/Microsoft.IExpression',
           },
           ifTrue: {
-            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-            oneOf: [
-              {
-                $type: 'Microsoft.IDialog',
-                $ref: '#/definitions/Microsoft.IDialog',
-                type: 'object',
-              },
-              {
-                type: 'array',
-                items: {
-                  $type: 'Microsoft.IDialog',
-                  $ref: '#/definitions/Microsoft.IDialog',
-                  type: 'object',
-                },
-                title: 'array',
-              },
-            ],
+            type: 'array',
+            items: {
+              $type: 'Microsoft.IDialog',
+              $ref: '#/definitions/Microsoft.IDialog',
+              type: 'object',
+            },
             title: 'If True',
             description: 'Step to execute if expression is true.',
           },
           ifFalse: {
-            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-            oneOf: [
-              {
-                $type: 'Microsoft.IDialog',
-                $ref: '#/definitions/Microsoft.IDialog',
-                type: 'object',
-              },
-              {
-                type: 'array',
-                items: {
-                  $type: 'Microsoft.IDialog',
-                  $ref: '#/definitions/Microsoft.IDialog',
-                  type: 'object',
-                },
-                title: 'array',
-              },
-            ],
+            type: 'array',
+            items: {
+              $type: 'Microsoft.IDialog',
+              $ref: '#/definitions/Microsoft.IDialog',
+              type: 'object',
+            },
             title: 'If False',
             description: 'Step to execute if expression is false.',
           },
