@@ -5,7 +5,7 @@ import { promisify } from 'util';
 
 import glob from 'globby';
 
-import DIALOG_TEMPLATE from '../../dialogTemplate.json';
+import DIALOG_TEMPLATE from '../../store/dialogTemplate.json';
 import { merge, set } from 'lodash';
 
 const readFile = promisify(fs.readFile);
