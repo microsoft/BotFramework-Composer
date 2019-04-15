@@ -10,7 +10,7 @@ import FieldTemplate from './FieldTemplate';
 import './styles.scss';
 
 export default function Form(props) {
-  const { formData, schema, uiSchema, onChange, ...rest } = props;
+  const { formData, schema, uiSchema, onChange, formContext, ...rest } = props;
 
   return (
     <div className="FormContainer">
@@ -18,6 +18,7 @@ export default function Form(props) {
         ArrayFieldTemplate={ArrayFieldTemplate}
         fields={fields}
         FieldTemplate={FieldTemplate}
+        formContext={formContext}
         formData={formData}
         onChange={onChange}
         schema={schema}
@@ -30,6 +31,7 @@ export default function Form(props) {
 }
 
 Form.propTypes = {
+  formContext: PropTypes.object,
   formData: PropTypes.object,
   onChange: PropTypes.func,
   schema: PropTypes.object,
