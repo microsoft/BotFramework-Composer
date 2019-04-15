@@ -18,8 +18,8 @@ router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs/:path(*)', StorageController.getBlob);
 
 // connector
-router.get('/launchers/start', BotConnectorController.start);
-router.get('/launchers/stop', BotConnectorController.stop);
-router.get('/launchers/status', BotConnectorController.status);
+router.get('/launcher/start', BotConnectorController.start);
+router.get('/launcher/stop', BotConnectorController.stop);
+router.get('/launcher/status', BotConnectorController.status);
 
 export const apiRouter = router;
