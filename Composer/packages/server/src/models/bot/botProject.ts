@@ -1,6 +1,6 @@
-// import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
-// import { promisify } from 'util';
+import { promisify } from 'util';
 
 import { merge, set } from 'lodash';
 import glob from 'globby';
@@ -9,9 +9,9 @@ import DIALOG_TEMPLATE from '../../store/dialogTemplate.json';
 
 import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 
-// const readFile = promisify(fs.readFile);
-// const writeFile = promisify(fs.writeFile);
-// const lstat = promisify(fs.lstat);
+const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
+const lstat = promisify(fs.lstat);
 const isDialogExtension = (input: string): boolean => input.indexOf('.dialog') !== -1;
 
 // TODO:
