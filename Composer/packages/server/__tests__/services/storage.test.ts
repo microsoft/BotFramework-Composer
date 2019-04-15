@@ -1,5 +1,6 @@
-import StorageService from '../../src/services/storage';
 import path from 'path';
+
+import StorageService from '../../src/services/storage';
 jest.mock('../../src/store/store', () => {
   const data = [
     {
