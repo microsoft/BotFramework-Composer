@@ -1,7 +1,7 @@
+import { Request, Response } from 'express';
+
 import ProjectService from '../services/project';
 import { BotProjectRef } from '../models/bot/interface';
-
-import { Request, Response } from 'express';
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {

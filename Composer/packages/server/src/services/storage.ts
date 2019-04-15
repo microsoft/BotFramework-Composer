@@ -1,7 +1,8 @@
+import path from 'path';
+
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
-import path from 'path';
 
 class StorageService {
   private STORE_KEY = 'storageConnections';
@@ -18,7 +19,7 @@ class StorageService {
 
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
-      let temp = Object.assign({}, s);
+      const temp = Object.assign({}, s);
       temp.path = path.resolve(s.path); // resolve path if path is relative
       return temp;
     });
@@ -51,7 +52,7 @@ class StorageService {
 
   private getChildren = (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
-    let children = storage.readDirSync(dirPath).map(childName => {
+    const children = storage.readDirSync(dirPath).map(childName => {
       const childAbsPath = path.join(dirPath, childName);
       const childStat = storage.statSync(childAbsPath);
 

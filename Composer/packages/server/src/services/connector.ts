@@ -1,6 +1,7 @@
 import settings from '../settings/settings.json';
 import { IBotConnector } from '../models/connector/interface';
 import { ConnectorFactory } from '../models/connector/connectorFactory';
+
 import BotProjectService from './project';
 
 class BotConnectorService {

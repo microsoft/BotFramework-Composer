@@ -1,7 +1,9 @@
-import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
 import path from 'path';
 import fs from 'fs';
+
 import { BotProject } from 'src/models/bot/botProject';
+
+import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
 
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',

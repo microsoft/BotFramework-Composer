@@ -1,6 +1,6 @@
-import StorageService from '../services/storage';
-
 import { Request, Response } from 'express';
+
+import StorageService from '../services/storage';
 
 function getStorageConnections(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());

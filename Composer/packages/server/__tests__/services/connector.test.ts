@@ -1,5 +1,4 @@
 import BotConnectorService from '../../src/services/connector';
-
 import { BotStatus } from '../../src/models/connector/interface';
 
 const mockKill = jest.fn(() => null);

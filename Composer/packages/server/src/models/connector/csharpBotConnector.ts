@@ -1,7 +1,8 @@
 import childprocess from 'child_process';
 
-import { IBotConnector, BotStatus } from './interface';
 import { BotProjectRef } from '../bot/interface';
+
+import { IBotConnector, BotStatus } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private path: string;

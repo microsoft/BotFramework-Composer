@@ -1,5 +1,6 @@
-import { IFileStorage, Stat } from './interface';
 import fs from 'fs';
+
+import { IFileStorage, Stat } from './interface';
 
 export class LocalDiskStorage implements IFileStorage {
   statSync(path: string): Stat {

@@ -1,12 +1,13 @@
-import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 
+import { merge, set } from 'lodash';
 import glob from 'globby';
 
 import DIALOG_TEMPLATE from '../../store/dialogTemplate.json';
-import { merge, set } from 'lodash';
+
+import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
