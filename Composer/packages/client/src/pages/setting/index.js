@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
+import formatMessage from 'format-message';
 
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
@@ -16,10 +17,10 @@ export const SettingPage = () => {
           <Tree variant="largest">
             <div>
               <div css={title}>Settings</div>
-              <SettingItem to="dialog-settings" label="Dialog settings" />
-              <SettingItem to="services" label="Services" />
-              <SettingItem to="composer-configuration" label="Composer configuration" />
-              <SettingItem to="publishing-staging" label="Publishing and staging" />
+              <SettingItem to="dialog-settings" label={formatMessage('Dialog settings')} />
+              <SettingItem to="services" label={formatMessage('Services')} />
+              <SettingItem to="composer-configuration" label={formatMessage('Composer configuration')} />
+              <SettingItem to="publishing-staging" label={formatMessage('Publishing and staging')} />
             </div>
           </Tree>
         </div>

@@ -155,7 +155,7 @@ export class TransformableView extends React.Component<TransformableViewProps, T
 
   private initTransformParams(): void {
     this.transformParams = {
-      scale: 0.75,
+      scale: 1,
       dx: 0,
       dy: 0,
       isTranslating: false,

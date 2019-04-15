@@ -19,4 +19,13 @@ export const ObiTypes = {
   // steps
   BeginDialog: 'Microsoft.BeginDialog',
   SendActivity: 'Microsoft.SendActivity',
+  EditArray: 'Microsoft.EditArray',
+  SaveEntity: 'Microsoft.SaveEntity',
+  DeleteProperty: 'Microsoft.DeleteProperty',
+  IfCondition: 'Microsoft.IfCondition',
+  TextInput: 'Microsoft.TextInput',
+
+  // virtual types
+  IntentGroup: 'VisualEditor.IntentGroup',
+  EventGroup: 'VisualEditor.EventGroup',
 };

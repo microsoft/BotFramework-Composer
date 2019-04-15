@@ -33,7 +33,7 @@ export class BeginDialog extends React.Component {
       <FormCard
         themeColor="#107C10"
         header="BeginDialog"
-        details={this.renderCallDialogLink()}
+        label={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(NodeClickActionTypes.Focus, id);
         }}

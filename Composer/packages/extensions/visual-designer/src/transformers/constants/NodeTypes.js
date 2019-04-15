@@ -3,4 +3,5 @@ export const NodeTypes = {
   End: 'end',
   Process: 'process',
   Decision: 'decision',
+  Group: 'group',
 };

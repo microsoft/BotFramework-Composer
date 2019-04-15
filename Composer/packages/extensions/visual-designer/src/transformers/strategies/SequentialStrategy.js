@@ -1,7 +1,9 @@
 import { IndexedNode } from '../models/IndexedNode';
 import { NodeTypes } from '../constants/NodeTypes';
 import { mergeNodesIntoEdges } from '../helpers/mergeNodesIntoEdges';
-import { buildObiStep } from '../helpers/elementBuilder';
+import { normalizeObiStep } from '../helpers/elementBuilder';
+import { branchMiddleware } from '../helpers/branchMiddleware';
+import { isRecognizer } from '../../utils/obiTypeChecker';
 
 /**
  *      Step                     Rule              ^
@@ -21,7 +23,7 @@ export const SequentialStrategy = {
     // TODO: parse steps
     if (Array.isArray(input.steps)) {
       steps = input.steps.map(
-        (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, buildObiStep(step))
+        (step, index) => new IndexedNode(`$.steps[${index}]`, NodeTypes.Process, normalizeObiStep(step))
       );
     }
 
@@ -29,7 +31,7 @@ export const SequentialStrategy = {
       rules = input.rules.map((rule, index) => new IndexedNode(`$.rules[${index}]`, NodeTypes.Process, rule));
     }
 
-    if (input.recognizer) {
+    if (isRecognizer(input.recognizer)) {
       recognizers = [new IndexedNode(`$.recognizer`, NodeTypes.Decision, input.recognizer)];
     }
 
@@ -53,6 +55,7 @@ export const SequentialStrategy = {
     }
     return edges;
   },
+  middlewares: [branchMiddleware],
   output: (nodeCollection, edges) => {
     const nodes = [].concat(...Object.values(nodeCollection));
     return mergeNodesIntoEdges(nodes, edges);

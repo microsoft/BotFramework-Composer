@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, IconButton, TextField, Button, Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
@@ -109,17 +110,22 @@ export default function NewDialogModal(props) {
         <div style={{ position: 'absolute', top: 10, right: 10 }}>
           <IconButton
             iconProps={{ iconName: 'ChromeClose' }}
-            title="Add Dialog"
-            ariaLabel="Add Dialog"
+            title={formatMessage('Add Dialog')}
+            ariaLabel={formatMessage('Add Dialog')}
             onClick={onDismiss}
           />
         </div>
         <div>
           <form onSubmit={handleSubmit}>
-            <TextField label="Dialog Name" onChange={updateForm('name')} required errorMessage={formData.errors.name} />
+            <TextField
+              label={formatMessage('Dialog Name')}
+              onChange={updateForm('name')}
+              required
+              errorMessage={formData.errors.name}
+            />
             <Dropdown
               label="Steps"
-              description="Type of first step in the dialog"
+              description={formatMessage('Type of first step in the dialog')}
               options={buildDialogOptions()}
               onChange={updateForm('steps')}
               multiSelect

@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
+import formatMessage from 'format-message';
 
 import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
 
@@ -23,10 +24,12 @@ export const Header = props => {
         </ActionButton>
       </div>
       <div css={bot}>
-        <span css={botMessage}>{botStatus === 'running' ? 'Bot is running at http://localhost:3979' : ''}</span>
+        <span css={botMessage}>
+          {botStatus === 'running' ? formatMessage('Bot is running at http://localhost:3979') : ''}
+        </span>
         <PrimaryButton
           css={botButton}
-          text={botStatus === 'running' ? 'Stop' : 'Start'}
+          text={botStatus === 'running' ? formatMessage('Stop') : formatMessage('Start')}
           onClick={() => setBotStatus(botStatus)}
         />
       </div>
