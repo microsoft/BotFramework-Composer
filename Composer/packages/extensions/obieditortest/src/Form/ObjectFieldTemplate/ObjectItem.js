@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { DefaultButton } from 'office-ui-fabric-react';
 
 import './styles.scss';
@@ -34,3 +35,13 @@ export default function ObjectItem(props) {
     </div>
   );
 }
+
+ObjectItem.propTypes = {
+  content: PropTypes.node,
+  name: PropTypes.string,
+  onDropPropertyClick: PropTypes.func,
+  onEdit: PropTypes.func,
+  schema: PropTypes.shape({
+    __additional_property: PropTypes.bool,
+  }),
+};
