@@ -23,8 +23,8 @@ async function openProject(req: Request, res: Response) {
     path: req.body.path,
   };
 
-  if (!projRef.path.endsWith('.bot') && !projRef.path.endsWith('.botproj')) {
-    res.status(400).json('unsupported project file type, expect .bot or .botproj');
+  if (!projRef.path.endsWith('.botproj')) {
+    res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
 
