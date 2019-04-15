@@ -7,6 +7,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { Store } from '../../../store/index';
 
@@ -17,112 +18,38 @@ export function LanguageGenerationSettings() {
   const { lgTemplates } = state;
   let currentFileContent = '';
 
-  lgTemplates.forEach(lgTemplate => (currentFileContent = lgTemplate.content.toString()));
-
+  lgTemplates.forEach(lgTemplate => (currentFileContent += lgTemplate.content.toString()));
   // todo: use lg parser.
   const templates = [];
   const templateStrings = currentFileContent.split('#').filter(line => line);
+
   templateStrings.forEach(temp => {
     const lines = temp.match(/^.+$/gm);
     const newTemplate = {
-      responses: [],
+      type: 'Rotate',
+      content: '',
     };
-    const cases = {
-      default: '',
-      condition: '',
-      list: [],
-    };
-    let currentSet = '';
-    let response = '';
-    let isMutiLineResponse = false;
     lines.forEach((innerLine, index) => {
-      if (!innerLine.trim() || innerLine.startsWith('>')) return;
+      if (!innerLine.trim()) return;
+      if (innerLine.trim().startsWith('>')) return;
 
       if (index === 0) {
         newTemplate.name = innerLine;
         return;
       }
-      if (innerLine.startsWith('- CASE')) {
-        currentSet = 'case';
-        cases.condition = innerLine.split('- CASE: ')[1].trim();
-        return;
-      } else if (innerLine.startsWith('- DEFAULT')) {
-        currentSet = 'default';
-      } else if (innerLine.startsWith('-')) {
-        currentSet = 'response';
-        const re = innerLine.split('-')[1].trim();
-        isMutiLineResponse = re === '```';
-        if (isMutiLineResponse) {
-          return;
-        }
-        newTemplate.responses.push(re);
-        return;
-      }
 
-      if (currentSet === 'case') {
-        const ca = innerLine.substr(innerLine.indexOf('-') + 2).trim();
-        cases.list.push(ca);
+      if (innerLine.trim().startsWith('- DEFAULT') || innerLine.trim().startsWith('- IF')) {
+        newTemplate.type = 'Condition';
       }
-      if (currentSet === 'default') {
-        const de = innerLine.substr(innerLine.indexOf('-') + 2).trim();
-        cases.default = de;
-      }
-      if (currentSet === 'response' && innerLine.trim() === '```') {
-        newTemplate.responses.push(response);
-        currentSet = '';
-        response = '';
-      } else if (currentSet === 'response') {
-        response += innerLine;
-      }
+      newTemplate.content += innerLine + '\r\n';
     });
-    if (cases.default) {
-      newTemplate.type = 'Condition';
-      newTemplate.cases = cases;
-    } else {
-      newTemplate.type = 'Rotate';
-    }
     if (newTemplate.name) {
       templates.push(newTemplate);
     }
   });
-
-  function getTemplatePhrase(template) {
-    if (template.type === 'Rotate') {
-      return getRotateTemplate(template);
-    } else {
-      return getConditionTemplate(template);
-    }
-  }
-
-  function getRotateTemplate(template) {
-    return template.responses.map((res, index) => {
-      return <div key={index}> - {res}</div>;
-    });
-  }
-
-  function getConditionTemplate(template) {
+  function getTemplatePhrase(content) {
     return (
-      <div>
-        {getDefaultCase(template)}
-        {getOtherCases(template)}
-      </div>
-    );
-  }
-
-  function getDefaultCase(template) {
-    return <div>default: {template.cases.default}</div>;
-  }
-
-  function getOtherCases(template) {
-    const cases = template.cases.list.map((condition, index) => {
-      return <div key={index}> - {condition}</div>;
-    });
-
-    return (
-      <div>
-        <div>case: {template.cases.condition}</div>
-        {cases}
-      </div>
+      <TextField borderless multiline autoAdjustHeight placeholder="No borders here, folks." defaultValue={content} />
     );
   }
 
@@ -145,7 +72,7 @@ export function LanguageGenerationSettings() {
         name: template.name,
         value: template.name,
         type: template.type,
-        content: template,
+        content: template.content,
       });
     });
   }
