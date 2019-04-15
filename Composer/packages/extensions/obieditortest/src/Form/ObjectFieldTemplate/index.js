@@ -1,10 +1,9 @@
-import React, { useState, useDebugValue } from 'react';
+import React, { useState } from 'react';
 import { createTheme, PrimaryButton } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import { getUiOptions } from 'react-jsonschema-form/lib/utils';
 import omit from 'lodash.omit';
-import startCase from 'lodash.startcase';
 
 import ObjectItem from './ObjectItem';
 import NewPropertyModal from './NewPropertyModal';
