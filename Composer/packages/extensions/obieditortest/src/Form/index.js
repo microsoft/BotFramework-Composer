@@ -5,6 +5,7 @@ import JSONFrom from 'react-jsonschema-form';
 import * as widgets from './widgets';
 import * as fields from './fields';
 import ArrayFieldTemplate from './ArrayFieldTemplate';
+import ObjectFieldTemplate from './ObjectFieldTemplate';
 import FieldTemplate from './FieldTemplate';
 
 import './styles.scss';
@@ -20,6 +21,7 @@ export default function Form(props) {
         FieldTemplate={FieldTemplate}
         formContext={formContext}
         formData={formData}
+        ObjectFieldTemplate={ObjectFieldTemplate}
         onChange={onChange}
         schema={schema}
         uiSchema={uiSchema}
