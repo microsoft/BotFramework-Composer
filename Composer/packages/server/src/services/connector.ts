@@ -1,5 +1,5 @@
 import settings from '../settings/settings.json';
-import { IBotConnector } from '../models/connector/interface';
+import { IBotConnector, BotStatus } from '../models/connector/interface';
 import { ConnectorFactory } from '../models/connector/connectorFactory';
 
 import BotProjectService from './project';
@@ -12,6 +12,10 @@ class BotConnectorService {
 
   // start the current bot
   public start = () => {
+    if (this.connector.status === BotStatus.Running) {
+      throw new Error('Bot already running');
+    }
+
     if (BotProjectService.currentBotProject === undefined) {
       throw new Error('Not opened bot to start');
     }
@@ -24,6 +28,9 @@ class BotConnectorService {
   };
 
   public stop = () => {
+    if (this.connector.status === BotStatus.Stopped) {
+      throw new Error('Bot already stopped');
+    }
     this.connector.stop();
   };
 

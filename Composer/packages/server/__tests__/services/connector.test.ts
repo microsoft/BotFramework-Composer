@@ -15,10 +15,6 @@ jest.mock('child_process', () => ({
   spawn: () => mockSpawn(),
 }));
 
-function statusToString(status: BotStatus): string {
-  return BotStatus[status];
-}
-
 describe('BotConnectorService', () => {
   beforeEach(() => {
     mockKill.mockClear();
@@ -32,7 +28,7 @@ describe('BotConnectorService', () => {
     expect(mockSpawn).toHaveBeenCalled();
     expect(mockSpawnSync).toHaveBeenCalled();
     expect(mockOn).toHaveBeenCalledTimes(3);
-    expect(BotConnectorService.status()).toBe(statusToString(BotStatus.Running));
+    expect(BotConnectorService.status()).toBe(BotStatus.Running);
   });
 
   it('should throw an error on start if already running', () => {
@@ -44,11 +40,11 @@ describe('BotConnectorService', () => {
   it('should not throw an error on stop', () => {
     expect(() => BotConnectorService.stop()).not.toThrowError();
     expect(mockKill).toHaveBeenCalledTimes(1);
-    expect(BotConnectorService.status()).toBe(statusToString(BotStatus.Stopped));
+    expect(BotConnectorService.status()).toBe(BotStatus.Stopped);
   });
 
   it('should thrown an error on stop if already stopped', () => {
-    expect(() => BotConnectorService.start()).toThrowError();
+    expect(() => BotConnectorService.stop()).toThrowError();
     expect(mockKill).not.toHaveBeenCalled();
   });
 });

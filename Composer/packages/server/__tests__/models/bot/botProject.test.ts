@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
-import { BotProject } from 'src/models/bot/botProject';
+import { BotProject } from '../../../src/models/bot/botProject';
 
 import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
 
