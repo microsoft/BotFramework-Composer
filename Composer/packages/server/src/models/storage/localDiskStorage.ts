@@ -6,32 +6,32 @@ import { promisify } from 'util';
 
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
-const readDir = promisify(fs.readDir);
+const readDir = promisify(fs.readdir);
 const exists = promisify(fs.exists);
 const writeFile = promisify(fs.writeFile);
 
 export class LocalDiskStorage implements IFileStorage {
-  statSync(path: string): Stat {
-    const stat = await stat(path);
+  async stat(path: string): Promise<Stat> {
+    const fstat = await stat(path);
     return {
-      isDir: stat.isDirectory(),
-      isFile: stat.isFile(),
+      isDir: fstat.isDirectory(),
+      isFile: fstat.isFile(),
     };
   }
 
-  readFileSync(path: string): string {
+  async readFile(path: string): Promise<string> {
     return await readFile(path, 'utf-8');
   }
 
-  readDirSync(path: string): string[] {
+  async readDir(path: string): Promise<string[]> {
     return await readDir(path);
   }
 
-  existSync(path: string): boolean {
+  async exists(path: string): Promise<boolean> {
     return await exists(path);
   }
 
-  writeFileSync(path: string, content: any): void {
+  async writeFile(path: string, content: any): Promise<void> {
     return await writeFile(path, content);
   }
 }

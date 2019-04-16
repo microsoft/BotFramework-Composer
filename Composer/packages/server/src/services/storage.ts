@@ -45,7 +45,7 @@ class StorageService {
       return {
         name: path.basename(filePath),
         parent: path.dirname(filePath),
-        children: this.getChildren(storageClient, filePath),
+        children: await this.getChildren(storageClient, filePath),
       };
     }
   };
@@ -65,7 +65,7 @@ class StorageService {
       };
     });
 
-    return children;
+    return await Promise.all(children);
   };
 }
 
