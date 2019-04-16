@@ -15,19 +15,20 @@ class BotProjectService {
     }
   }
 
-  public getProject = async () => {
-    if (this.currentBotProject !== undefined) {
-      return await this.currentBotProject.getFiles();
+  public init = async () => {
+    if (typeof this.currentBotProject !== 'undefined') {
+      await this.currentBotProject.init();
     }
   };
-
   public openProject = async (projRef: BotProjectRef) => {
     if (!(await StorageService.checkBlob(projRef.storageId, projRef.path))) {
       throw new Error(`file not exist ${projRef.path}`);
     }
     this.currentBotProject = new BotProject(projRef);
+    this.currentBotProject.init();
   };
 }
 
 const service = new BotProjectService();
+service.init();
 export default service;

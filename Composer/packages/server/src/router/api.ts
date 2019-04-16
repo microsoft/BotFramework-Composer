@@ -9,8 +9,9 @@ const router: Router = express.Router({});
 // projects
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
-router.put('/projects/opened/files', ProjectController.updateFile);
-router.post('/projects/opened/files', ProjectController.createFileFromTemplate);
+router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
+router.post('/projects/opened/dialogs', ProjectController.createDialogFromTemplate);
+router.put('/projects/opened/botFile', ProjectController.updateDialog);
 
 // storages
 router.get('/storages', StorageController.getStorageConnections);

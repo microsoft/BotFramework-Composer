@@ -5,8 +5,8 @@ import { BotProjectRef } from '../models/bot/interface';
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const files = await ProjectService.currentBotProject.getFiles();
-    res.status(200).json({ projectFiles: files });
+    const project = await ProjectService.currentBotProject.getProject();
+    res.status(200).json({ ...project });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
@@ -36,18 +36,27 @@ async function openProject(req: Request, res: Response) {
   }
 }
 
-async function updateFile(req: Request, res: Response) {
+async function updateDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    await ProjectService.currentBotProject.updateFile(req.body.name, req.body.content);
+    await ProjectService.currentBotProject.updateDialog(req.body.name, req.body.content);
     res.status(200).json('OK');
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
 }
 
-async function createFileFromTemplate(req: Request, res: Response) {
+async function updateBotFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    await ProjectService.currentBotProject.createFileFromTemplate(req.body.name, req.body.steps);
+    await ProjectService.currentBotProject.updateBotFile(req.body.name, req.body.content);
+    res.status(200).json('OK');
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
+async function createDialogFromTemplate(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    await ProjectService.currentBotProject.createDialogFromTemplate(req.body.name, req.body.steps);
     res.status(200).json('OK');
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -57,6 +66,7 @@ async function createFileFromTemplate(req: Request, res: Response) {
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
-  updateFile: updateFile,
-  createFileFromTemplate: createFileFromTemplate,
+  updateDialog: updateDialog,
+  createDialogFromTemplate: createDialogFromTemplate,
+  updateBotFile: updateBotFile,
 };
