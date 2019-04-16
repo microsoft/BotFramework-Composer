@@ -34,12 +34,18 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string) => {
-    const connection = this.storageConnections.filter(c => c.id === storageId)[0];
+    const connection = this.storageConnections.find(c => c.id === storageId);
+    if (connection === undefined) {
+      throw new Error(`no storage connection with id ${storageId}`);
+    }
     const storageClient = StorageFactory.createStorageClient(connection);
 
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
-      // NOTE: this should NOT parse the content, just to keep the previous behavior
+      // NOTE: this behavior is not correct, we should NOT parse this file as json
+      // becase it might not be json, this api is a more general file api than json file
+      // didn't fix it because this is the previous behavior
+      // TODO: fix this behavior and the upper layer interface accordingly
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
       return {

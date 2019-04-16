@@ -31,6 +31,6 @@ export class LocalDiskStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
-    return await writeFile(path, content);
+    await writeFile(path, content);
   }
 }
