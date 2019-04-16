@@ -1,58 +1,54 @@
-const hideMetaData = {
-  $ref: {
-    'ui:widget': 'hidden',
-  },
-  $copy: {
-    'ui:widget': 'hidden',
-  },
-  $id: {
-    'ui:widget': 'hidden',
-  },
-  $type: {
-    'ui:widget': 'hidden',
-  },
-};
+import { RulesField, StepsField } from '../Form/fields';
 
 export const uiSchema = {
-  'Microsoft.TextPrompt': {
-    ...hideMetaData,
-    property: {
-      'ui:options': {
-        span: 2,
-      },
+  'Microsoft.AdaptiveDialog': {
+    rules: {
+      'ui:field': RulesField,
     },
-    pattern: {
-      'ui:options': {
-        span: 2,
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.WelcomeRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.EventRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.IntentRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.NoMatchRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.Rule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.IfPropertyRule': {
+    conditionals: {
+      items: {
+        rules: {
+          'ui:field': RulesField,
+        },
       },
     },
   },
-  'Microsoft.SendActivityTemplateStep': {
-    ...hideMetaData,
-  },
-  'Microsoft.IntegerPrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:options': {
-        span: 2,
-      },
+  'Microsoft.IfCondition': {
+    ifTrue: {
+      'ui:field': StepsField,
     },
-    maxValue: {
-      'ui:options': {
-        span: 2,
-      },
-    },
-  },
-  'Microsoft.EndDialog': {
-    ...hideMetaData,
-  },
-  'Microsoft.DateTimePrompt': {
-    ...hideMetaData,
-    minValue: {
-      'ui:widget': 'datetime',
-    },
-    maxValue: {
-      'ui:widget': 'datetime',
+    ifFalse: {
+      'ui:field': StepsField,
     },
   },
 };
