@@ -11,7 +11,7 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 
 import { buildDialogOptions, swap, remove } from '../utils';
 
-export function RulesSection(props) {
+export function RulesField(props) {
   const [currentItem, setCurrentItem] = useState(null);
 
   const columns = [

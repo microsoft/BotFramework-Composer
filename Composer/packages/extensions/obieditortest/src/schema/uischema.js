@@ -1,4 +1,4 @@
-import { AdaptiveDialog, RulesSection, StepsField } from '../Form/fields';
+import { AdaptiveDialog, RulesField, StepsField } from '../Form/fields';
 
 const hideMetaData = {
   $ref: {
@@ -18,7 +18,7 @@ const hideMetaData = {
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     rules: {
-      'ui:field': RulesSection,
+      'ui:field': RulesField,
     },
     steps: {
       'ui:field': StepsField,
@@ -47,6 +47,15 @@ export const uiSchema = {
   'Microsoft.Rule': {
     steps: {
       'ui:field': StepsField,
+    },
+  },
+  'Microsoft.IfPropertyRule': {
+    conditionals: {
+      items: {
+        rules: {
+          'ui:field': RulesField,
+        },
+      },
     },
   },
 };
