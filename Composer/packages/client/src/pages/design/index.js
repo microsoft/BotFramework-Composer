@@ -73,7 +73,7 @@ function DesignPage() {
   return (
     <Fragment>
       <div style={{ display: 'flex' }}>
-        <div style={{ flexGrow: '0', flexShrink: '0', width: '270px', marginLeft: '20px', marginTop: '20px' }}>
+        <div style={{ flexGrow: '0', flexShrink: '0', width: '255px', marginLeft: '20px', marginTop: '20px' }}>
           <div>
             <Tree variant="large">
               <div style={{ padding: '10px', color: '#4f4f4f' }}>
