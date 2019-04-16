@@ -24,4 +24,29 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
   },
+  'Microsoft.WelcomeRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.EventRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.IntentRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.NoMatchRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.Rule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+  },
 };
