@@ -1,19 +1,4 @@
-import { AdaptiveDialog, RulesField, StepsField } from '../Form/fields';
-
-const hideMetaData = {
-  $ref: {
-    'ui:widget': 'hidden',
-  },
-  $copy: {
-    'ui:widget': 'hidden',
-  },
-  $id: {
-    'ui:widget': 'hidden',
-  },
-  $type: {
-    'ui:widget': 'hidden',
-  },
-};
+import { RulesField, StepsField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
