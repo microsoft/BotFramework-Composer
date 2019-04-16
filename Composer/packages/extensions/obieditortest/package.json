@@ -22,6 +22,7 @@
   "dependencies": {
     "@uifabric/fluent-theme": "^0.16.2",
     "@uifabric/styling": "^6.45.3",
+    "format-message": "^6.2.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.omit": "^4.5.0",
