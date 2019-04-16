@@ -3,7 +3,7 @@ import path from 'path';
 
 import initData from './data.template.json';
 
-const dataStorePath = path.resolve('./data.json');
+const dataStorePath = path.join(__dirname, 'data.json');
 
 // create data.json if not exits
 if (!fs.existsSync(dataStorePath)) {
@@ -38,7 +38,7 @@ class JsonStore implements KVStore {
 
   constructor(jsonFilePath: string) {
     this.filePath = path.resolve(jsonFilePath);
-    this.data = JSON.parse(this.filePath);
+    this.data = JSON.parse(fs.readFileSync(this.filePath).toString());
   }
 }
 
