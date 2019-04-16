@@ -1,8 +1,7 @@
 import fs from 'fs';
+import { promisify } from 'util';
 
 import { IFileStorage, Stat } from './interface';
-
-import { promisify } from 'util';
 
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);

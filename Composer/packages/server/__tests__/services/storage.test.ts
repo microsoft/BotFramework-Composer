@@ -31,8 +31,8 @@ describe('test StorageService', () => {
     const result = StorageService.checkBlob('default', path.resolve('.'));
     expect(result).toBeTruthy();
   });
-  it('getBlob', () => {
-    const result = StorageService.getBlob('default', path.resolve('.'));
+  it('getBlob', async () => {
+    const result = await StorageService.getBlob('default', path.resolve('.'));
     expect(result).not.toBeUndefined();
     expect(result.children).not.toBeUndefined();
   });
