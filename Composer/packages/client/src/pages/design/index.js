@@ -73,7 +73,7 @@ function DesignPage() {
   return (
     <Fragment>
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
+        <div style={{ flexGrow: '0', flexShrink: '0', width: '270px', marginLeft: '20px', marginTop: '20px' }}>
           <div>
             <Tree variant="large">
               <div style={{ padding: '10px', color: '#4f4f4f' }}>
@@ -105,7 +105,7 @@ function DesignPage() {
             <Tree />
           </div>
         </div>
-        <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
+        <div style={{ flexGrow: '4', marginTop: '20px', marginLeft: '20px', marginRight: '20px' }}>
           <Conversation>
             <div style={{ display: 'flex', flexDirection: 'column', height: '860px' }}>
               <Breadcrumb
