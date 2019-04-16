@@ -25,7 +25,7 @@ class BotProjectService {
       throw new Error(`file not exist ${projRef.path}`);
     }
     this.currentBotProject = new BotProject(projRef);
-    this.currentBotProject.init();
+    await this.currentBotProject.init();
   };
 }
 

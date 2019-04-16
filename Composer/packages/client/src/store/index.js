@@ -8,7 +8,7 @@ import * as actions from './action';
 export const Store = React.createContext();
 
 const initialState = {
-  files: [],
+  dialogs: [],
   botProjFile: {},
   navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
@@ -16,7 +16,6 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'stopped',
-  openFileIndex: -1,
   storageExplorerStatus: 'closed',
 };
 

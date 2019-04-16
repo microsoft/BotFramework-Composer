@@ -14,15 +14,15 @@ export function dialogIndexer(files: FileInfo[]) {
 
     if (extName === '.dialog') {
       const dialog = {
-        id: count++,
+        id: 0,
         name: path.basename(file.name, extName),
         content: JSON.parse(file.content),
       };
 
       if (file.name === entry) {
-        dialog['id'] = 0;
         dialogs.unshift(dialog);
       } else {
+        dialog['id'] = count++;
         dialogs.push(dialog);
       }
     }

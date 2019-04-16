@@ -11,7 +11,7 @@ router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
 router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
 router.post('/projects/opened/dialogs', ProjectController.createDialogFromTemplate);
-router.put('/projects/opened/botFile', ProjectController.updateDialog);
+router.put('/projects/opened/botFile', ProjectController.updateBotFile);
 
 // storages
 router.get('/storages', StorageController.getStorageConnections);

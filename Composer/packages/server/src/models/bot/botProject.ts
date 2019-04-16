@@ -83,6 +83,8 @@ export class BotProject {
     });
 
     await writeFile(absolutePath, JSON.stringify(newDialog, null, 2) + '\n', {});
+    this.dialogs.push({ name, content: newDialog, id: this.dialogs.length });
+    return this.dialogs;
   };
 
   public updateFile = async (name: string, content: any) => {
@@ -92,9 +94,15 @@ export class BotProject {
 
   public updateDialog = async (name: string, content: any) => {
     await this.updateFile(`${name}.dialog`, content);
+    return this.dialogs.map(dialog => {
+      if (dialog.name === name) dialog.content = content;
+      return dialog;
+    });
   };
 
   public updateBotFile = async (name: string, content: any) => {
-    await this.updateFile(`${name}.botproj`, content);
+    await this.updateFile(`${name}`, content);
+    this.botFile.content = content;
+    return this.botFile;
   };
 }
