@@ -21,32 +21,41 @@ export function LanguageGenerationSettings() {
   lgTemplates.forEach(lgTemplate => (currentFileContent += lgTemplate.content.toString()));
   // todo: use lg parser.
   const templates = [];
-  const templateStrings = currentFileContent.split('#').filter(line => line);
 
-  templateStrings.forEach(temp => {
-    const lines = temp.match(/^.+$/gm);
-    const newTemplate = {
-      type: 'Rotate',
-      content: '',
-    };
-    lines.forEach((innerLine, index) => {
-      if (!innerLine.trim()) return;
-      if (innerLine.trim().startsWith('>')) return;
+  const lines = currentFileContent.match(/^.+$/gm) || [];
 
-      if (index === 0) {
-        newTemplate.name = innerLine;
-        return;
+  let newTemplate = {
+    type: 'Rotate',
+    content: '',
+  };
+  lines.forEach((line, index) => {
+    if (!line) return;
+    if (!line.trim()) return;
+    if (line.trim().startsWith('>')) return;
+
+    if (line.trim().startsWith('#')) {
+      if (newTemplate.name) {
+        templates.push(newTemplate);
       }
+      newTemplate = {
+        type: 'Rotate',
+        content: '',
+        name: line.trim().split(' ')[1],
+      };
+      return;
+    }
 
-      if (innerLine.trim().startsWith('- DEFAULT') || innerLine.trim().startsWith('- IF')) {
-        newTemplate.type = 'Condition';
+    if (line.trim().startsWith('- DEFAULT') || line.trim().startsWith('- IF')) {
+      newTemplate.type = 'Condition';
+    }
+    newTemplate.content += line + '\r\n';
+    if (index === lines.length - 1) {
+      if (newTemplate.name) {
+        templates.push(newTemplate);
       }
-      newTemplate.content += innerLine + '\r\n';
-    });
-    if (newTemplate.name) {
-      templates.push(newTemplate);
     }
   });
+
   function getTemplatePhrase(content) {
     return (
       <TextField borderless multiline autoAdjustHeight placeholder="No borders here, folks." defaultValue={content} />
