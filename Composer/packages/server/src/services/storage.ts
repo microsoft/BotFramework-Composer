@@ -25,22 +25,22 @@ class StorageService {
     });
   };
 
-  public checkBlob = (storageId: string, filePath: string): boolean => {
+  public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
     const connection = this.storageConnections.filter(c => c.id === storageId)[0];
     const storageClient = StorageFactory.createStorageClient(connection);
-    return storageClient.existSync(filePath);
+    return await storageClient.exists(filePath);
   };
 
   // return connent for file
   // return children for dir
-  public getBlob = (storageId: string, filePath: string) => {
+  public getBlob = async (storageId: string, filePath: string) => {
     const connection = this.storageConnections.filter(c => c.id === storageId)[0];
     const storageClient = StorageFactory.createStorageClient(connection);
 
-    const stat = storageClient.statSync(filePath);
+    const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
       // NOTE: this should NOT parse the content, just to keep the previous behavior
-      return JSON.parse(storageClient.readFileSync(filePath));
+      return JSON.parse(await storageClient.readFile(filePath));
     } else {
       return {
         name: path.basename(filePath),
@@ -50,11 +50,11 @@ class StorageService {
     }
   };
 
-  private getChildren = (storage: IFileStorage, dirPath: string) => {
+  private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
-    const children = storage.readDirSync(dirPath).map(childName => {
+    const children = (await storage.readDir(dirPath)).map(async childName => {
       const childAbsPath = path.join(dirPath, childName);
-      const childStat = storage.statSync(childAbsPath);
+      const childStat = await storage.stat(childAbsPath);
 
       return {
         name: childName,

@@ -22,7 +22,7 @@ class BotProjectService {
   };
 
   public openProject = async (projRef: BotProjectRef) => {
-    if (!StorageService.checkBlob(projRef.storageId, projRef.path)) {
+    if (!(await StorageService.checkBlob(projRef.storageId, projRef.path))) {
       throw new Error(`file not exist ${projRef.path}`);
     }
     this.currentBotProject = new BotProject(projRef);

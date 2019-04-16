@@ -11,10 +11,11 @@ export interface Stat {
 }
 
 export interface IFileStorage {
-  statSync(path: string): Stat;
-  readFileSync(path: string): string;
-  readDirSync(path: string): string[];
-  existSync(path: string): boolean;
-  writeFileSync(path: string, content: any): void;
   // TODO: we probably should include glob pattern here
+
+  stat(path: string): Promise<Stat>;
+  readFile(path: string): Promise<string>;
+  readDir(path: string): Promise<string[]>;
+  exists(path: string): Promise<boolean>;
+  writeFile(path: string, content: any): Promise<void>;
 }

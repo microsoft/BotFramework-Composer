@@ -11,11 +11,11 @@ function createStorageConnection(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
 
-function getBlob(req: Request, res: Response) {
+async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
   const path = req.params.path;
   try {
-    res.status(200).json(StorageService.getBlob(storageId, path));
+    res.status(200).json(await StorageService.getBlob(storageId, path));
   } catch (e) {
     res.status(400).json(e);
   }
