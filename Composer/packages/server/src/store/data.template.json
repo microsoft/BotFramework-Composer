@@ -1,0 +1,16 @@
+{
+  "storageConnections": [
+    {
+      "id": "default",
+      "name": "This PC",
+      "type": "LocalDisk",
+      "path": "../../../SampleBots"
+    }
+  ],
+  "recentBotProjects": [
+    {
+      "storageId": "default",
+      "path": "../../../SampleBots/Planning - ToDoBot/bot.botproj"
+    }
+  ]
+}

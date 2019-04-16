@@ -2,9 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
-import { launcherServerRouter } from './router/launcherServer';
-import { storagesServerRouter } from './router/storageServer';
-import { projectsServerRouter } from './router/projectServer';
+import { apiRouter } from './router/api';
 
 const app: Express = express();
 
@@ -26,9 +24,7 @@ app.get('/test', function(req: Request, res: Response) {
   res.send('fortest');
 });
 
-app.use('/api/launcher', launcherServerRouter);
-app.use('/api/storages', storagesServerRouter);
-app.use('/api/projects', projectsServerRouter);
+app.use('/api', apiRouter);
 
 app.get('*', function(req, res, next) {
   res.sendFile('./public/index.html');
