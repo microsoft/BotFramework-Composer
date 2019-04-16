@@ -102,7 +102,7 @@ export function StepsField(props) {
     : [];
 
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div style={{ margin: '10px 0' }}>
       <Separator>Steps</Separator>
       <DetailsList
         items={items}

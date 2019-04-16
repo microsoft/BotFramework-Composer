@@ -117,7 +117,7 @@ export function RulesField(props) {
     : [];
 
   return (
-    <div>
+    <div style={{ margin: '10px 0' }}>
       <Separator>Rules</Separator>
       <DetailsList
         items={items}
