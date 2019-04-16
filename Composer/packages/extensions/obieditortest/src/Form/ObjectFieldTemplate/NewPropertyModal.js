@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, PrimaryButton } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 import Modal from '../../Modal';
 
@@ -8,11 +9,11 @@ const NAME_PATTERN = /^\S+$/;
 
 function validateName(name) {
   if (!name || name.trim().length === 0) {
-    return "Name can't be blank";
+    return formatMessage("Name can't be blank");
   }
 
   if (!NAME_PATTERN.test(name)) {
-    return "Name can't contain any spaces";
+    return formatMessage("Name can't contain any spaces");
   }
 
   return null;
@@ -48,14 +49,14 @@ export default function NewPropertyModal(props) {
     <Modal onDismiss={onDismiss}>
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Name"
+          label={formatMessage('Name')}
           onChange={updateForm('name')}
           required
           errorMessage={formData.errors.name}
           value={formData.name}
         />
         <TextField
-          label="Value"
+          label={formatMessage('Value')}
           onChange={updateForm('value')}
           errorMessage={formData.errors.value}
           value={formData.value}

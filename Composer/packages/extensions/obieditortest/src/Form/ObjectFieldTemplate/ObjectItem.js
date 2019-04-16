@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DefaultButton } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 import './styles.scss';
 
@@ -11,14 +12,14 @@ export default function ObjectItem(props) {
   if (schema.__additional_property) {
     contextItems.push({
       key: 'edit',
-      text: 'Edit',
+      text: formatMessage('Edit'),
       iconProps: { iconName: 'Edit' },
       onClick: onEdit,
     });
 
     contextItems.push({
       key: 'remove',
-      text: 'Remove',
+      text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       onClick: onDropPropertyClick(name),
     });
@@ -29,7 +30,7 @@ export default function ObjectItem(props) {
       <div className="ObjectItemField">{content}</div>
       {contextItems.length > 0 && (
         <div className="ObjectItemContext">
-          <DefaultButton ariaLabel="Edit Property" menuProps={{ items: contextItems }} />
+          <DefaultButton ariaLabel={formatMessage('Edit Property')} menuProps={{ items: contextItems }} />
         </div>
       )}
     </div>

@@ -16,7 +16,7 @@ const columns = [
 
 const renderTitle = item => {
   if (!item.$type) {
-    return 'New Rule';
+    return formatMessage('New Rule');
   }
 
   if (item.$type.includes('Intent')) {

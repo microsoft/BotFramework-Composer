@@ -3,7 +3,7 @@ import formatMessage from 'format-message';
 
 import { TableField } from './TableField';
 
-const renderTitle = item => item.$type || 'New Step';
+const renderTitle = item => item.$type || formatMessage('New Step');
 
 export function StepsField(props) {
   return (
