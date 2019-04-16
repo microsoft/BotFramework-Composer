@@ -54,7 +54,7 @@
     "copy-webpack-plugin": "^5.0.2",
     "jest": "24.0.0",
     "nodemon": "^1.18.11",
-    "react-testing-library": "^6.0.1",
+    "react-testing-library": "^6.0.2",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333",

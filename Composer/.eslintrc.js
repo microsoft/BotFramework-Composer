@@ -14,8 +14,8 @@ module.exports = {
     'no-var': 'error',
     'no-console': 'warn',
     'dot-notation': 'error',
-    'yoda': 'error',
-    'eqeqeq': 'warn',
+    yoda: 'error',
+    eqeqeq: 'warn',
 
     // plugin: import
     'import/first': 'error',
@@ -27,8 +27,9 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint', 'prettier'],
       rules: {
-        '@typescript-eslint/interface-name-prefix': 'off'
-      }
+        '@typescript-eslint/interface-name-prefix': 'off',
+        '@typescript-eslint/explicit-function-return-type': ['warn', { allowTypedFunctionExpressions: true }],
+      },
     },
     {
       files: ['**/*.+(js|jsx)'],
