@@ -1,7 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
-import data from './data.json';
+import initData from './data.template.json';
+
+const dataStorePath = path.resolve('./data.json');
+
+// create data.json if not exits
+if (!fs.existsSync(dataStorePath)) {
+  fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+}
 
 interface KVStore {
   get(key: string): any;
@@ -29,10 +36,10 @@ class JsonStore implements KVStore {
     fs.writeFileSync(this.filePath, JSON.stringify(this.data, null, 2) + '\n');
   };
 
-  constructor(jsonFilePath: string, data: any) {
+  constructor(jsonFilePath: string) {
     this.filePath = path.resolve(jsonFilePath);
-    this.data = data;
+    this.data = JSON.parse(this.filePath);
   }
 }
 
-export const Store = new JsonStore('./data.json', data);
+export const Store = new JsonStore(dataStorePath);
