@@ -58,4 +58,12 @@ export const uiSchema = {
       },
     },
   },
+  'Microsoft.IfCondition': {
+    ifTrue: {
+      'ui:field': StepsField,
+    },
+    ifFalse: {
+      'ui:field': StepsField,
+    },
+  },
 };

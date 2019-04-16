@@ -6,10 +6,21 @@ import {
   DirectionalHint,
   PrimaryButton,
   SelectionMode,
+  createTheme,
 } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
+import { ColorClassNames, FontClassNames } from '@uifabric/styling';
+import startCase from 'lodash.startcase';
 
 import { buildDialogOptions, swap, remove } from '../utils';
+
+const fieldHeaderTheme = createTheme({
+  fonts: {
+    medium: {
+      fontSize: '18px',
+    },
+  },
+});
 
 export function StepsField(props) {
   const [currentItem, setCurrentItem] = useState(null);
@@ -103,7 +114,12 @@ export function StepsField(props) {
 
   return (
     <div style={{ margin: '10px 0' }}>
-      <Separator>Steps</Separator>
+      <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
+        {props.title || startCase(props.name)}
+      </Separator>
+      {props.schema.description && (
+        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.schema.description}</p>
+      )}
       <DetailsList
         items={items}
         columns={columns}

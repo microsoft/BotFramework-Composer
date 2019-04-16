@@ -1163,7 +1163,7 @@ export function getMergedSchema(dialogFiles = []) {
               type: 'object',
             },
             title: 'If True',
-            description: 'Step to execute if expression is true.',
+            description: 'Steps to execute if expression is true.',
           },
           ifFalse: {
             type: 'array',
@@ -1173,7 +1173,7 @@ export function getMergedSchema(dialogFiles = []) {
               type: 'object',
             },
             title: 'If False',
-            description: 'Step to execute if expression is false.',
+            description: 'Steps to execute if expression is false.',
           },
         },
         patternProperties: {
