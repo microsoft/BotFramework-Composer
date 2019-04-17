@@ -11,23 +11,24 @@ const mockProjectRef: BotProjectRef = {
 
 const proj = new BotProject(mockProjectRef);
 
-describe('getFiles', () => {
+describe('getProject', () => {
   it('should get files at a path', async () => {
-    const files: FileInfo[] = await proj.getFiles();
-    expect(files.length).toBe(4);
+    await proj.init();
+    const project: { [key: string]: any } = await proj.getProject();
+    expect(project.dialogs.length).toBe(3);
   });
 });
 
-describe('updateFile', () => {
+describe('updateDialog', () => {
   it('should update a file at a path', async () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
 
-    await proj.updateFile('a.dialog', newValue);
-    const aDialog = (await proj.getFiles()).find(f => f.name.startsWith('a'));
+    const dialogs = await proj.updateDialog('a', newValue);
+    const aDialog = dialogs.find(f => f.name.startsWith('a'));
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
-    await proj.updateFile('a.dialog', initValue);
+    await proj.updateDialog('a', initValue);
   });
 });
 
@@ -43,8 +44,8 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    await proj.createFileFromTemplate(dialogName, ['foo', 'bar', 'baz']);
-    const newFile = (await proj.getFiles()).find(f => f.name.startsWith(dialogName));
+    const dialogs = await proj.createDialogFromTemplate(dialogName, ['foo', 'bar', 'baz']);
+    const newFile = dialogs.find(f => f.name.startsWith(dialogName));
 
     if (!newFile) {
       expect(newFile).toBeTruthy();
