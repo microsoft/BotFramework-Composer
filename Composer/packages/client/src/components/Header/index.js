@@ -12,15 +12,26 @@ export const Header = props => {
     <header css={header}>
       <div css={aside}>Composer</div>
       <div css={actionButton}>
-        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}
+          onClick={() => openStorageExplorer('new')}
+        >
           New
         </ActionButton>
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer()}
+          onClick={() => openStorageExplorer('open')}
         >
           Open
+        </ActionButton>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'Save', iconColor: '#ffffff' }}
+          onClick={() => openStorageExplorer('saveas')}
+        >
+          Save as
         </ActionButton>
       </div>
       <div css={bot}>

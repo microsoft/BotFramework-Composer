@@ -3,32 +3,25 @@
 
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { useContext } from 'react';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
-import { Store } from '../../../store/index';
-
 import { navHeader, leftNav, closeIcon, navLinkClass } from './styles';
 
 export function ActionSelector(props) {
-  const { actions } = useContext(Store);
-
-  function toggleExplorer() {
-    status === 'closed' ? 'opened' : 'closed';
-    actions.setStorageExplorerStatus(status);
-  }
+  const { links, onCloseExplorer, onLinkClick, selectedKey } = props;
 
   return (
     <div css={leftNav}>
-      <div css={navHeader} onClick={() => toggleExplorer()}>
+      <div css={navHeader} onClick={onCloseExplorer}>
         <Icon iconName="Back" css={closeIcon} text={formatMessage('Close')} />
       </div>
       <div>
         <Nav
-          groups={props.groups}
-          initialSelectedKey={'open'}
+          groups={[{ links: links }]}
+          selectedKey={selectedKey}
+          onLinkClick={onLinkClick}
           styles={{
             link: navLinkClass.actionNav,
             linkText: navLinkClass.linkText,
@@ -40,5 +33,8 @@ export function ActionSelector(props) {
 }
 
 ActionSelector.propTypes = {
-  groups: PropTypes.array,
+  links: PropTypes.string,
+  onLinkClick: PropTypes.func,
+  selectedKey: PropTypes.array,
+  onCloseExplorer: PropTypes.func,
 };

@@ -60,7 +60,11 @@ export function StorageExplorer(props) {
 
   const actionNavItems = [
     {
-      links: [{ name: formatMessage('Open'), key: 'open' }],
+      links: [
+        { name: formatMessage('New'), key: 'new' },
+        { name: formatMessage('Open'), key: 'open' },
+        { name: formatMessage('Save As'), key: 'saveas' },
+      ],
     },
   ];
 

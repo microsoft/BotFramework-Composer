@@ -4,8 +4,8 @@ import path from 'path';
 
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { useContext } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -16,13 +16,11 @@ import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
 import { FileTypes, SupportedFileTypes } from '../../../constants/index';
-import { Store } from '../../../store/index';
 
 import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
 
 export function FileSelector(props) {
-  const { state } = useContext(Store);
-  const { focusedStorageFolder } = state;
+  const { saveAction, onSelectionChanged, currentPath, updateCurrentPath, focusedStorageFolder } = props;
   // for detail file list in open panel
   const tableColums = [
     {
@@ -104,10 +102,19 @@ export function FileSelector(props) {
       })
     : [];
 
+  const selection = new Selection({
+    onSelectionChanged: () => {
+      const file = selection.getSelection()[0];
+      // selected item will be cleaned when folder path changed
+      // file will be undefine when no item selected.
+      onSelectionChanged(file);
+    },
+  });
+
   const separator = '/';
   // filter the empty one, server api need '/' for root path, but no need for others.
   const pathItems = path
-    .normalize(props.currentPath)
+    .normalize(currentPath)
     .split(separator)
     .filter(p => p !== '');
   const breadcrumbItems = pathItems.map((item, index) => {
@@ -116,7 +123,7 @@ export function FileSelector(props) {
       text: item,
       key: itemPath,
       onClick: () => {
-        props.updateCurrentPath(itemPath);
+        updateCurrentPath(itemPath);
       },
     };
   });
@@ -164,7 +171,7 @@ export function FileSelector(props) {
 
   function onBackIconClicked() {
     const path = focusedStorageFolder.parent;
-    props.updateCurrentPath(path);
+    updateCurrentPath(path);
   }
 
   return (
@@ -175,6 +182,7 @@ export function FileSelector(props) {
           <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
         </div>
       </div>
+      {saveAction}
       <DetailsList
         css={detailListContainer}
         items={storageFiles}
@@ -183,7 +191,7 @@ export function FileSelector(props) {
         getKey={item => item.name}
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
-        selection={props.selection}
+        selection={selection}
         selectionMode={SelectionMode.single}
         checkboxVisibility={CheckboxVisibility.hidden}
       />
@@ -192,7 +200,9 @@ export function FileSelector(props) {
 }
 
 FileSelector.propTypes = {
+  saveAction: PropTypes.element,
+  focusedStorageFolder: PropTypes.object,
   currentPath: PropTypes.string,
   updateCurrentPath: PropTypes.func,
-  selection: PropTypes.object,
+  onSelectionChanged: PropTypes.func,
 };

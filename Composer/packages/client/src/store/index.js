@@ -16,7 +16,7 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'stopped',
-  storageExplorerStatus: 'closed',
+  storageExplorerStatus: '',
 };
 
 export function StoreProvider(props) {

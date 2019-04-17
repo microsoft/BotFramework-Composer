@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const leftNav = css`
-  width: 150px;
+  width: 120px;
   height: 100vh;
   background: #2b579a;
   font-size: 20px;
@@ -20,7 +20,7 @@ export const closeIcon = css`
   padding-left: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
-  width: 120px;
+  width: 90px;
   &:hover {
     background-color: #366ec2;
   }
