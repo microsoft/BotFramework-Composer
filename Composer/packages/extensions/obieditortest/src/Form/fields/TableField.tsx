@@ -40,7 +40,7 @@ interface TableFieldProps<T> extends FieldProps {
 interface DetailItem<T> {
   item: T;
   index: number;
-  target?: HTMLElement;
+  target: HTMLElement;
 }
 
 export function TableField<T = object>(props: TableFieldProps<T>) {
@@ -61,13 +61,11 @@ export function TableField<T = object>(props: TableFieldProps<T>) {
   const items = props.formData;
 
   const onItemContextMenu = (item: T, index: number | undefined, e: Event | undefined) => {
-    if (index && event) {
-      const ev = e as Event;
-      ev.preventDefault();
-      const target = ev.target as HTMLElement;
+    const ev = e as Event;
+    ev.preventDefault();
+    const target = ev.target as HTMLElement;
 
-      setCurrentItem({ item, index, target: target.parentElement || target });
-    }
+    setCurrentItem({ item, index: index as number, target: target.parentElement || target });
   };
 
   const onChange = newItem => {
