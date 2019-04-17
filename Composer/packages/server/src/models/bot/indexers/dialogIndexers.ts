@@ -22,7 +22,7 @@ export function dialogIndexer(files: FileInfo[]) {
       if (file.name === entry) {
         dialogs.unshift(dialog);
       } else {
-        dialog['id'] = count++;
+        dialog.id = count++;
         dialogs.push(dialog);
       }
     }
