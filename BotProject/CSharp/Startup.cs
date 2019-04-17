@@ -67,7 +67,10 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer();
-            resourceExplorer.AddFolder(botProject.path);
+            foreach (var folder in botProject.Folders)
+            {
+                resourceExplorer.AddFolder(folder);
+            }
 
             services.AddBot<IBot>(
                 (IServiceProvider sp) =>
