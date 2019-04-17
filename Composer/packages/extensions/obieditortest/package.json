@@ -11,7 +11,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:ts && yarn build:css",
+    "build": "yarn clean && yarn build:css && yarn build:ts",
     "build:ts": "tsc --build tsconfig.json",
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
