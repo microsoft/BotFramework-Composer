@@ -2,7 +2,13 @@ import React from 'react';
 import { Modal as FabricModal, IconButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
-export default function Modal(props) {
+interface ModalProps {
+  children: React.ReactNode;
+  isOpen: boolean;
+  onDismiss: () => void;
+}
+
+const Modal: React.FunctionComponent<ModalProps> = props => {
   const { children, isOpen, onDismiss } = props;
 
   return (
@@ -20,15 +26,11 @@ export default function Modal(props) {
       </div>
     </FabricModal>
   );
-}
-
-// Modal.propTypes = {
-//   children: PropTypes.node,
-//   isOpen: PropTypes.bool,
-//   onDismiss: PropTypes.func,
-// };
+};
 
 Modal.defaultProps = {
   isOpen: true,
   onDismiss: () => {},
 };
+
+export default Modal;

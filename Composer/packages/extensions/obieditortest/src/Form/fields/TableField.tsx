@@ -6,6 +6,7 @@ import {
   PrimaryButton,
   SelectionMode,
   createTheme,
+  IContextualMenuItem,
 } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
@@ -43,8 +44,8 @@ interface DetailItem<T> {
   target: HTMLElement;
 }
 
-export function TableField<T = object>(props: TableFieldProps<T>) {
-  const [currentItem, setCurrentItem] = useState<DetailItem<T> | null>(null);
+export const TableField: React.FunctionComponent<TableFieldProps<object>> = props => {
+  const [currentItem, setCurrentItem] = useState<DetailItem<object> | null>(null);
   const { additionalColumns, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
 
   const columns = [
@@ -60,7 +61,7 @@ export function TableField<T = object>(props: TableFieldProps<T>) {
 
   const items = props.formData;
 
-  const onItemContextMenu = (item: T, index: number | undefined, e: Event | undefined) => {
+  const onItemContextMenu = (item: object, index: number | undefined, e: Event | undefined) => {
     const ev = e as Event;
     ev.preventDefault();
     const target = ev.target as HTMLElement;
@@ -81,7 +82,7 @@ export function TableField<T = object>(props: TableFieldProps<T>) {
     return false;
   };
 
-  const menuItems = currentItem
+  const menuItems: IContextualMenuItem[] = currentItem
     ? [
         {
           key: 'edit',
@@ -164,7 +165,7 @@ export function TableField<T = object>(props: TableFieldProps<T>) {
       )}
     </div>
   );
-}
+};
 
 TableField.defaultProps = {
   additionalColumns: [],

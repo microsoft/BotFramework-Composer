@@ -5,9 +5,6 @@ module.exports = {
     '\\.(s)?css$': '<rootDir>/__tests__/jestMocks/styleMock.ts',
   },
   testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '__tests__/setup.ts'],
-  // transform: {
-  //   '^.+\\.(j|t)sx?$': 'babel-jest',
-  // },
   // Some node modules are packaged and distributed in a non-transpiled form
   // (ex. contain import & export statements); and Jest won't be able to
   // understand them because node_modules aren't transformed by default. So
