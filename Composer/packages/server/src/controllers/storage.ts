@@ -17,6 +17,7 @@ async function getBlob(req: Request, res: Response) {
   try {
     res.status(200).json(await StorageService.getBlob(storageId, path));
   } catch (e) {
+    console.log(e);
     res.status(400).json(e);
   }
 }

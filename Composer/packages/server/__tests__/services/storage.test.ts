@@ -1,6 +1,20 @@
 import path from 'path';
 
 import StorageService from '../../src/services/storage';
+jest.mock('azure-storage', () => {
+  return {
+    createBlobService: (account: string, key: string) => {
+      return {
+        listContainersSegmented: () => {
+          return { containers: [] };
+        },
+        listBlobsSegmented: () => {
+          return { blobs: [] };
+        },
+      };
+    },
+  };
+});
 jest.mock('../../src/store/store', () => {
   const data = [
     {
@@ -27,8 +41,8 @@ describe('test StorageService', () => {
     expect(result[0].type).toBe('LocalDisk');
     expect(result[0].path).toBe(path.resolve('.'));
   });
-  it('checkBlob', () => {
-    const result = StorageService.checkBlob('default', path.resolve('.'));
+  it('checkBlob', async () => {
+    const result = await StorageService.checkBlob('default', path.resolve('.'));
     expect(result).toBeTruthy();
   });
   it('getBlob', async () => {
