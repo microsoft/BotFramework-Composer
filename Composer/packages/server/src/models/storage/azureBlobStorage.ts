@@ -14,9 +14,9 @@ export class AzureBlobStorage implements IFileStorage {
   async stat(reqPath: string): Promise<Stat> {
     reqPath = decodeURI(reqPath);
     const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
-    let lastModified: string = '';
+    let lastModified = '';
     let isFile = false;
-    let size: string = '';
+    let size = '';
     if (names.length > 1) {
       // try to list blob with prefix, if return value length larger than 1, is dir
       const container = names[0];
