@@ -6,6 +6,7 @@ import ArrayItem from '../../../src/Form/ArrayFieldTemplate/ArrayItem';
 describe('<ArrayItem />', () => {
   it('does not render a context menu if no actions can be made', () => {
     const { queryByTestId } = render(
+      // @ts-ignore
       <ArrayItem>
         <div>element 1</div>
       </ArrayItem>
@@ -36,6 +37,7 @@ describe('<ArrayItem />', () => {
       };
 
       renderResult = render(
+        // @ts-ignore
         <ArrayItem
           hasMoveUp
           hasMoveDown

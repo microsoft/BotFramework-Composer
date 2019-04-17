@@ -27,6 +27,7 @@ function renderDefault(propOverrides = {}) {
     ...propOverrides,
   };
 
+  // @ts-ignore
   return render(<ObjectArray {...props} />);
 }
 
