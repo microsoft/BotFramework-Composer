@@ -1,8 +1,8 @@
 import React from 'react';
 import formatMessage from 'format-message';
+import { FieldProps } from 'react-jsonschema-form';
 
 import { TableField } from './TableField';
-import { FieldProps } from 'react-jsonschema-form';
 
 const renderTitle = item => item.$type || formatMessage('New Step');
 

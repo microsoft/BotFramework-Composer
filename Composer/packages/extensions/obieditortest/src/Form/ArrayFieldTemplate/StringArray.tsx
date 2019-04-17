@@ -1,12 +1,12 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
 
 import ArrayItem from './ArrayItem';
 
 import './styles.scss';
-import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
 
-export default function StringArray(props: ArrayFieldTemplateProps) {
+const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   const { TitleField, DescriptionField } = props;
 
   return (
@@ -23,10 +23,12 @@ export default function StringArray(props: ArrayFieldTemplateProps) {
       )}
     </div>
   );
-}
+};
 
 StringArray.defaultProps = {
   formData: [],
   items: [],
   onAddClick: () => {},
 };
+
+export default StringArray;

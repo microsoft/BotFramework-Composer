@@ -4,7 +4,9 @@ export enum MemoryScope {
   dialog = 'dialog',
   turn = 'turn',
 }
-type MemoryBag = { [key: string]: any };
+interface MemoryBag {
+  [key: string]: any;
+}
 
 export interface FormMemory {
   [MemoryScope.user]: MemoryBag;

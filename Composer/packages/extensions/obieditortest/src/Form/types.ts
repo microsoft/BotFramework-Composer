@@ -1,4 +1,5 @@
 import { WidgetProps } from 'react-jsonschema-form';
+
 import { ShellApi } from '../types';
 
 export interface FormContext {

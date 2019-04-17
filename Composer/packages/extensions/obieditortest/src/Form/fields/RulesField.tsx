@@ -1,9 +1,9 @@
 import React from 'react';
 import formatMessage from 'format-message';
-
-import { TableField } from './TableField';
 import { IColumn } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
+
+import { TableField } from './TableField';
 
 const columns: IColumn[] = [
   {

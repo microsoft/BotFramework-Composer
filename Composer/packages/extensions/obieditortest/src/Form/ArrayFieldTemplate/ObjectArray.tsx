@@ -1,9 +1,10 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
+import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
+
+import { buildDialogOptions } from '../utils';
 
 import ArrayItem from './ArrayItem';
-import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
-import { buildDialogOptions } from '../utils';
 
 const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   const { items, canAdd, onAddClick, TitleField, DescriptionField } = props;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { findSchemaDefinition } from 'react-jsonschema-form/lib/utils';
+import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
 
 import StringArray from './StringArray';
 import ObjectArray from './ObjectArray';
-import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
 
 const ArrayFieldTemplate: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   if (!props.schema.items) {

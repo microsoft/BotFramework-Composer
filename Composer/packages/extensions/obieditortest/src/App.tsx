@@ -2,15 +2,15 @@ import React from 'react';
 import { Customizer } from 'office-ui-fabric-react';
 import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { JSONSchema6Definition } from 'json-schema';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMergedSchema } from './schema/appschema';
-
-import './App.css';
 import { getMemoryOptions } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi } from './types';
-import { JSONSchema6Definition } from 'json-schema';
+
+import './App.css';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;

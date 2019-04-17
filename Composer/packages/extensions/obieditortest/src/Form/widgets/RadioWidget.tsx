@@ -1,7 +1,8 @@
 import React from 'react';
 import { ChoiceGroup } from 'office-ui-fabric-react';
-import { RadioWidgetProps } from '../types';
 import { IChoiceGroupOption } from 'office-ui-fabric-react';
+
+import { RadioWidgetProps } from '../types';
 
 export function RadioWidget(props: RadioWidgetProps) {
   const { label, onChange, onBlur, onFocus, value, options, ...rest } = props;

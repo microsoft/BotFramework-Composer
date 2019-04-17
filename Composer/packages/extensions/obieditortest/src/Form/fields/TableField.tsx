@@ -11,10 +11,10 @@ import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import startCase from 'lodash.startcase';
 import formatMessage from 'format-message';
-
-import { buildDialogOptions, swap, remove } from '../utils';
 import { IColumn } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
+
+import { buildDialogOptions, swap, remove } from '../utils';
 import { FormContext } from '../types';
 
 const fieldHeaderTheme = createTheme({

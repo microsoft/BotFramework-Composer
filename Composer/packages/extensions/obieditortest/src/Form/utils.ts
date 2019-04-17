@@ -11,7 +11,7 @@ import { FormMemory, MemoryScope } from '../types';
 export function buildDialogOptions(
   onClick: (newItem: any, e?: any) => void = () => {},
   filter: (elem: string) => boolean = () => true
-) {
+): IContextualMenuItem[] {
   const options: IContextualMenuItem[] = [];
 
   for (const elem in dialogGroups) {
@@ -33,7 +33,7 @@ export function buildDialogOptions(
   return options;
 }
 
-export function swap(arr: any[], a: number, b: number) {
+export function swap<T = any>(arr: T[], a: number, b: number): T[] {
   const newArr = [...arr];
   const tmp = newArr[a];
 
@@ -43,13 +43,21 @@ export function swap(arr: any[], a: number, b: number) {
   return newArr;
 }
 
-export function remove(arr: any[], i: number) {
+export function remove<T = any>(arr: T[], i: number): T[] {
   const newArr = [...arr];
   newArr.splice(i, 1);
   return newArr;
 }
 
-function buildScope(memory: FormMemory, scope: MemoryScope) {
+function getOptions(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
+  const options: IDropdownOption[] = [];
+  for (const key in memory[scope]) {
+    options.push({ key: `${scope}.${key}`, text: `${memory[scope][key]}` });
+  }
+  return options;
+}
+
+function buildScope(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
   if (!memory || !memory[scope]) return [];
 
   const options = getOptions(memory, scope);
@@ -61,14 +69,6 @@ function buildScope(memory: FormMemory, scope: MemoryScope) {
     ...options,
     { key: `${scope}_divider`, text: '-', itemType: DropdownMenuItemType.Divider },
   ];
-}
-
-function getOptions(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
-  const options: IDropdownOption[] = [];
-  for (const key in memory[scope]) {
-    options.push({ key: `${scope}.${key}`, text: `${memory[scope][key]}` });
-  }
-  return options;
 }
 
 export function getMemoryOptions(memory: FormMemory): IDropdownOption[] {

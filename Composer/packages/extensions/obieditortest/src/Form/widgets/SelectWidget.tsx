@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
 import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode';
+
 import { SelectWidgetProps } from '../types';
 
 export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props => {

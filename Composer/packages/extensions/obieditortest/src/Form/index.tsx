@@ -1,17 +1,17 @@
 import React from 'react';
 import JSONForm, { UiSchema, Widget, FormProps as JSONFormProps } from 'react-jsonschema-form';
+import { JSONSchema6 } from 'json-schema';
 
 import * as widgets from './widgets';
 import * as fields from './fields';
 import ArrayFieldTemplate from './ArrayFieldTemplate';
 import ObjectFieldTemplate from './ObjectFieldTemplate';
 import FieldTemplate from './FieldTemplate';
+import { FormContext } from './types';
 
 import './styles.scss';
-import { FormContext } from './types';
-import { JSONSchema6 } from 'json-schema';
 
-function removeUndefinedOrEmpty(object: any) {
+function removeUndefinedOrEmpty(object: any): any {
   if (object === null) {
     return null;
   }
@@ -53,7 +53,7 @@ interface FormProps extends JSONFormProps<object> {
   uiSchema: UiSchema;
 }
 
-export default function Form(props: FormProps) {
+const Form: React.FunctionComponent<FormProps> = props => {
   const { formData, schema, uiSchema, onChange, formContext, ...rest } = props;
 
   return (
@@ -74,8 +74,10 @@ export default function Form(props: FormProps) {
       />
     </div>
   );
-}
+};
 
 Form.defaultProps = {
   onChange: () => {},
 };
+
+export default Form;

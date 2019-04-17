@@ -1,9 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 import { TextField, PrimaryButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { JSONSchema6 } from 'json-schema';
 
 import Modal from '../../Modal';
-import { JSONSchema6 } from 'json-schema';
 
 const NAME_PATTERN = /^\S+$/;
 

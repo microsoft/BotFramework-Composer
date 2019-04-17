@@ -28,7 +28,13 @@ module.exports = {
       plugins: ['@typescript-eslint', 'prettier'],
       rules: {
         '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/explicit-function-return-type': ['warn', { allowTypedFunctionExpressions: true }],
+        '@typescript-eslint/explicit-function-return-type': [
+          'warn',
+          {
+            allowExpressions: true,
+            allowTypedFunctionExpressions: true,
+          },
+        ],
       },
     },
     {

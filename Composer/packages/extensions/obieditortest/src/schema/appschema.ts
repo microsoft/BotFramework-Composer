@@ -1,5 +1,6 @@
-import { DialogInfo } from '../types';
 import { JSONSchema6 } from 'json-schema';
+
+import { DialogInfo } from '../types';
 
 export const dialogGroups = {
   'Input/Prompt Dialogs': [
