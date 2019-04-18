@@ -1,7 +1,8 @@
+import path from 'path';
+
 import { Request, Response } from 'express';
 
 import StorageService from '../services/storage';
-
 function getStorageConnections(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
@@ -13,9 +14,12 @@ function createStorageConnection(req: Request, res: Response) {
 
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
-  const path = req.params.path;
+  const reqpath = req.params.path;
   try {
-    res.status(200).json(await StorageService.getBlob(storageId, path));
+    if (!path.isAbsolute(reqpath)) {
+      throw new Error('path must be absolute');
+    }
+    res.status(200).json(await StorageService.getBlob(storageId, reqpath));
   } catch (e) {
     console.log(e);
     res.status(400).json(e);

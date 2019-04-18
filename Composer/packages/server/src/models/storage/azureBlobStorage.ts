@@ -16,9 +16,10 @@ export class AzureBlobStorage implements IFileStorage {
     const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
     let lastModified = '';
     let isFile = false;
+    let isDir = false;
     let size = '';
     if (names.length > 1) {
-      // try to list blob with prefix, if return value length larger than 1, is dir
+      // blob equal to file, if blob exist, reqPath is file path
       const container = names[0];
       const blobPrefix = names.slice(1).join('/');
       isFile = await new Promise((resolve, reject) => {
@@ -32,9 +33,24 @@ export class AzureBlobStorage implements IFileStorage {
           }
         });
       });
+      if (!isFile) {
+        // if not a file, try to find dir with this prefix, if path is wrong, throw error.
+        isDir = await new Promise((resolve, reject) => {
+          this.client.listBlobDirectoriesSegmentedWithPrefix(container, blobPrefix, null as any, (err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (data.entries.length <= 0) reject(new Error('path is not exists'));
+              lastModified = '';
+              size = '';
+              resolve(true);
+            }
+          });
+        });
+      }
     }
     return {
-      isDir: !isFile,
+      isDir: isDir,
       isFile: isFile,
       lastModified: lastModified,
       size: size,
@@ -79,16 +95,20 @@ export class AzureBlobStorage implements IFileStorage {
       const container = names[0];
       const blobPath = names.slice(1).join('/');
       return new Promise((resolve, reject) => {
+        // get files in this prefix.
+        console.log(blobPath);
         this.client.listBlobsSegmentedWithPrefix(container, blobPath, null as any, (err, data) => {
           if (err) {
+            console.log(err);
             reject(err);
           } else {
-            const result: string[] = [] as string[];
+            const result: Set<string> = new Set();
             data.entries.forEach(i => {
               const index = i.name.indexOf(blobPath);
-              result.push(i.name.substring(index + blobPath.length));
+              const temp = i.name.substring(index + blobPath.length);
+              result.add(temp.split('/').filter(i => i.length)[0]); //temp.split('/')[0]
             });
-            resolve(result);
+            resolve(Array.from(result));
           }
         });
       });
