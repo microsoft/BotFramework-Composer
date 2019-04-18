@@ -13,7 +13,7 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./__tests__/**/*"],
   "exclude": [
     "node_modules"
   ],
