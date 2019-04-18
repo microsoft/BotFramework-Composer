@@ -49,6 +49,18 @@ export function remove<T = any>(arr: T[], i: number): T[] {
   return newArr;
 }
 
+export function insertAt<T = any>(arr: T[], item: T, idx: number): T[] {
+  const newArr = [...arr];
+
+  if (idx <= 0) {
+    newArr.splice(0, 0, item);
+  } else {
+    newArr.splice(idx, 0, item);
+  }
+
+  return newArr;
+}
+
 function getOptions(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
   const options: IDropdownOption[] = [];
   for (const key in memory[scope]) {
