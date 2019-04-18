@@ -1,0 +1,16 @@
+{
+  "$type": "Microsoft.IfCondition",
+  "condition": "user.todos == null",
+  "ifTrue": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "You have no todos."
+    }
+  ],
+  "ifFalse": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[ShowTodo]"
+    }
+  ]
+}
