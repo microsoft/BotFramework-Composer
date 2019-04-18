@@ -11,15 +11,15 @@ export class AzureBlobStorage implements IFileStorage {
       throw new Error('miss data');
     }
   }
-  async stat(reqPath: string): Promise<Stat> {
-    reqPath = decodeURI(reqPath);
-    const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
+  async stat(path: string): Promise<Stat> {
+    path = decodeURI(path);
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
     let lastModified = '';
     let isFile = false;
     let isDir = false;
     let size = '';
     if (names.length > 1) {
-      // blob equal to file, if blob exist, reqPath is file path
+      // blob equal to file, if blob exist, path is file path
       const container = names[0];
       const blobPrefix = names.slice(1).join('/');
       isFile = await new Promise((resolve, reject) => {
@@ -57,9 +57,9 @@ export class AzureBlobStorage implements IFileStorage {
     };
   }
 
-  async readFile(reqPath: string): Promise<string> {
-    reqPath = decodeURI(reqPath);
-    const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
+  async readFile(path: string): Promise<string> {
+    path = decodeURI(path);
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
     const container = names[0];
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
@@ -73,9 +73,9 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
 
-  async readDir(reqPath: string): Promise<string[]> {
-    reqPath = decodeURI(reqPath);
-    const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
+  async readDir(path: string): Promise<string[]> {
+    path = decodeURI(path);
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
     if (names.length === 0) {
       // show containers
       return new Promise((resolve, reject) => {
@@ -116,9 +116,9 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   // check if it's file and can be read
-  async exists(reqPath: string): Promise<boolean> {
-    reqPath = decodeURI(reqPath);
-    const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
+  async exists(path: string): Promise<boolean> {
+    path = decodeURI(path);
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
     if (names.length < 2) {
       return false;
     }
@@ -135,9 +135,9 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
 
-  async writeFile(reqPath: string, content: any): Promise<void> {
-    reqPath = decodeURI(reqPath);
-    const names = reqPath.split(/[/]|[\\]/).filter(i => i.length);
+  async writeFile(path: string, content: any): Promise<void> {
+    path = decodeURI(path);
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
       this.client.createOrReplaceAppendBlob(names[0], blobPath, err => {
