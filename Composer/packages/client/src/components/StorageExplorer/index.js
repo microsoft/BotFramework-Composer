@@ -5,7 +5,7 @@ import path from 'path';
 import { jsx } from '@emotion/core';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { useEffect, Fragment, useState, useContext } from 'react';
+import { useEffect, Fragment, useState, useContext, useRef } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { PropTypes } from 'prop-types';
@@ -40,10 +40,10 @@ import {
 export function StorageExplorer(props) {
   const { state, actions } = useContext(Store);
   const { storages, focusedStorageFolder, storageExplorerStatus } = state;
-  const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
+  const currentStorageIndex = useRef(0);
   const [currentPath, setCurrentPath] = useState('');
 
-  const currentStorageId = storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default';
+  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
   // for detail file list in open panel
   const tableColums = [
     {
@@ -118,7 +118,7 @@ export function StorageExplorer(props) {
       // file will be undefine when no item selected.
       if (file) {
         const type = file.fileType;
-        const storageId = storages[currentStorageIndex].id;
+        const storageId = storages[currentStorageIndex.current].id;
         const path = file.filePath;
         if (type === FileTypes.FOLDER) {
           updateCurrentPath(path, storageId);
@@ -177,7 +177,7 @@ export function StorageExplorer(props) {
 
   async function init() {
     const res = await actions.fetchStorages();
-    updateCurrentPath(res[currentStorageIndex].path, res[currentStorageIndex].id);
+    updateCurrentPath(res[currentStorageIndex.current].path, res[currentStorageIndex.current].id);
   }
 
   // fetch storages first then fetch the folder info under it.
@@ -186,7 +186,7 @@ export function StorageExplorer(props) {
   }, []);
 
   function onStorageSourceChange(index) {
-    setCurrentStorageIndex(index);
+    currentStorageIndex.current = index;
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
@@ -207,7 +207,7 @@ export function StorageExplorer(props) {
   }
 
   function formatBytes(bytes, decimals) {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0 || bytes === '0') return '0 Bytes';
     const k = 1024,
       dm = decimals <= 0 ? 0 : decimals || 2,
       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
