@@ -6,8 +6,8 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
-        "expression": {
-            "type": "string",
+        "constraint": {
+            "$type": "Microsoft.IExpression",
             "title": "Constraint",
             "description": "Optional constraint to which must be met for this rule to fire",
             "examples": [
@@ -23,7 +23,6 @@
         }
     },
     "required": [
-        "events",
         "steps"
     ]
 }

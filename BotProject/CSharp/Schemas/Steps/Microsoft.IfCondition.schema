@@ -14,39 +14,26 @@
                 "user.age > 3"
             ]
         },
-        "ifTrue": {
-            "oneOf": [
-                {
-                    "$type": "Microsoft.IDialog"
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "$type": "Microsoft.IDialog"
-                    }
-                }
-            ],
-            "title": "If True",
-            "description": "Step to execute if expression is true."
+        "steps": {
+            "type": "array",
+            "items": {
+                "$type": "Microsoft.IDialog"
+            },
+            "title": "Steps",
+            "description": "Step to execute if condition is true."
         },
-        "ifFalse": {
-            "oneOf": [
-                {
-                    "$type": "Microsoft.IDialog"
-                },
-                {
-                    "type": "array",
-                    "items": {
-                        "$type": "Microsoft.IDialog"
-                    }
-                }
-            ],
-            "title": "If False",
-            "description": "Step to execute if expression is false."
+        "elseSteps": {
+            "type": "array",
+            "items": {
+                "$type": "Microsoft.IDialog"
+            },
+            "title": "Else Steps",
+            "description": "Step to execute if condition is false."
         }
+
     },
     "required": [
         "expression",
-        "ifTrue"
+        "steps"
     ]
 }

@@ -11,7 +11,19 @@
             "type": "array",
             "description": "Events to trigger this rule for",
             "items": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                    "beginDialog",
+                    "consultDialog",
+                    "cancelDialog",
+                    "activityReceived",
+                    "recognizedIntent",
+                    "unknownIntent",
+                    "stepsStarted",
+                    "stepsSaved",
+                    "stepsEnded",
+                    "stepsResumed"
+                ]
             }
         }
     },

@@ -7,13 +7,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
-    <PackageReference Include="Microsoft.Bot.Builder" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Builder.AI.LanguageGeneration" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Composition" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.1-local" />
-    <PackageReference Include="Microsoft.Bot.Connector" Version="4.5.1-local" />
+    <PackageReference Include="Microsoft.Bot.Builder" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Builder.LanguageGeneration.Renderer" Version="4.5.2-local" />
+    <PackageReference Include="Microsoft.Bot.Connector" Version="4.5.2-local" />
   </ItemGroup>
 
 </Project>

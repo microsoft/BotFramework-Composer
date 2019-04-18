@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
     "$role": "unionType(Microsoft.IDialog)",
     "type": "object",
-    "title": "Http Request",
+    "title": "Goto Dialog",
     "description": "This is a step which replaces the current dialog with the target dialog",
     "additionalProperties": false,
     "properties": {
@@ -46,6 +46,17 @@
             "additionProperties": true,
             "title": "Http headers",
             "description": "Http headers to include with the HTTP request (supports data binding)"
+        },
+        "responseTypes": {
+            "type": "string",
+            "title": "Response Types",
+            "description": "Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.",
+            "enum": [
+                "none",
+                "json",
+                "activity",
+                "activities"
+            ]
         }
     },
     "required": [
