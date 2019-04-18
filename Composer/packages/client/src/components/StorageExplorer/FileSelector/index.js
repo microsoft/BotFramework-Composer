@@ -3,6 +3,7 @@
 import path from 'path';
 
 import { jsx } from '@emotion/core';
+import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
@@ -20,7 +21,7 @@ import { FileTypes, SupportedFileTypes } from '../../../constants/index';
 import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
 
 export function FileSelector(props) {
-  const { saveAction, onSelectionChanged, currentPath, updateCurrentPath, focusedStorageFolder } = props;
+  const { saveAction, onSelectionChanged, currentPath, updateCurrentPath, focusedStorageFolder, checkShowItem } = props;
   // for detail file list in open panel
   const tableColums = [
     {
@@ -88,9 +89,12 @@ export function FileSelector(props) {
     },
   ];
 
-  const storageFiles = focusedStorageFolder.children
-    ? focusedStorageFolder.children.map(file => {
-        return {
+  const storageFiles = useMemo(() => {
+    if (!focusedStorageFolder.children) return [];
+    return focusedStorageFolder.children.reduce((result, file) => {
+      const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
+      if (check(file)) {
+        result.push({
           name: file.name,
           value: file.name,
           fileType: file.type,
@@ -98,9 +102,11 @@ export function FileSelector(props) {
           dateModified: getFileEditDate(file),
           fileSize: file.size ? formatBytes(file.size) : '',
           filePath: file.path,
-        };
-      })
-    : [];
+        });
+      }
+      return result;
+    }, []);
+  }, [focusedStorageFolder]);
 
   const selection = new Selection({
     onSelectionChanged: () => {
@@ -205,4 +211,5 @@ FileSelector.propTypes = {
   currentPath: PropTypes.string,
   updateCurrentPath: PropTypes.func,
   onSelectionChanged: PropTypes.func,
+  checkShowItem: PropTypes.func,
 };

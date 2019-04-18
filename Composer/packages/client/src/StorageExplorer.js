@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useEffect, useState, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import formatMessage from 'format-message';
+import findindex from 'lodash.findindex';
 
 import { FileTypes } from './constants';
 import { Store } from './store';
@@ -14,7 +15,6 @@ import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { StorageSelector } from './components/StorageExplorer/StorageSelector';
 import { container, body, panelContent } from './components/StorageExplorer/styles';
 import { SaveAction } from './components/StorageExplorer/SaveAction/index';
-
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
   return <div style={{ height: '0px' }} />;
@@ -50,14 +50,13 @@ export function StorageExplorer() {
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
-  const separator = '/';
   function updateCurrentPath(newPath, storageId) {
     if (!storageId) {
       storageId = currentStorageId;
     }
 
     if (newPath) {
-      const formatedPath = path.normalize(newPath.replace(/\\/g, separator));
+      const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
       fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
@@ -90,6 +89,28 @@ export function StorageExplorer() {
     setStorageExplorerStatus(item.key);
   };
 
+  const checkShowItem = item => {
+    if (storageExplorerStatus === 'saveas' && item.type !== 'folder') {
+      return false;
+    }
+    return true;
+  };
+
+  const checkDuplicate = value => {
+    if (focusedStorageFolder.children) {
+      const index = findindex(focusedStorageFolder.children, { name: value });
+      if (index >= 0) {
+        return 'Duplicate folder name';
+      }
+    }
+    console.log(value);
+    return '';
+  };
+
+  const handleSaveAs = value => {
+    console.log(value);
+  };
+
   return (
     <Panel
       isOpen={storageExplorerStatus !== ''}
@@ -116,7 +137,14 @@ export function StorageExplorer() {
           />
           <div style={{ paddingTop: '90px' }}>
             <FileSelector
-              saveAction={storageExplorerStatus === 'open' ? <div /> : <SaveAction />}
+              saveAction={
+                storageExplorerStatus === 'open' ? (
+                  <div />
+                ) : (
+                  <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
+                )
+              }
+              checkShowItem={checkShowItem}
               currentPath={currentPath}
               focusedStorageFolder={focusedStorageFolder}
               updateCurrentPath={updateCurrentPath}

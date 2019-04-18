@@ -33,8 +33,8 @@ export function ActionSelector(props) {
 }
 
 ActionSelector.propTypes = {
-  links: PropTypes.string,
+  links: PropTypes.array,
   onLinkClick: PropTypes.func,
-  selectedKey: PropTypes.array,
+  selectedKey: PropTypes.string,
   onCloseExplorer: PropTypes.func,
 };
