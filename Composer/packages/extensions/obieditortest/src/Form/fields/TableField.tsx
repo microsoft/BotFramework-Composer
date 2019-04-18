@@ -13,7 +13,7 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import startCase from 'lodash.startcase';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
-import { FieldProps } from 'react-jsonschema-form';
+import { JSONSchema6 } from 'json-schema';
 
 import { buildDialogOptions, swap, remove } from '../utils';
 import { FormContext } from '../types';
@@ -26,16 +26,18 @@ const fieldHeaderTheme = createTheme({
   },
 });
 
-interface TableFieldProps<T> extends FieldProps {
+interface TableFieldProps<T> {
   additionalColumns?: IColumn[];
   defaultItem: object;
-  filterNewOptions: (item: string) => boolean;
+  filterNewOptions?: (item: string) => boolean;
   formContext: FormContext;
   formData: object[];
   label: string;
   navPrefix: string;
   onChange: (items: T[]) => void;
   renderTitle: (item: T) => string;
+  name?: string;
+  schema: JSONSchema6;
 }
 
 interface DetailItem<T> {
@@ -98,6 +100,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
           key: 'moveUp',
           text: formatMessage('Move Up'),
           iconProps: { iconName: 'CaretSolidUp' },
+          disabled: currentItem.index === 0,
           onClick: () => {
             const newItems = swap(items, currentItem.index, currentItem.index - 1);
             onChange(newItems);
@@ -108,6 +111,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
           key: 'moveDown',
           text: formatMessage('Move Down'),
           iconProps: { iconName: 'CaretSolidDown' },
+          disabled: currentItem.index === items.length - 1,
           onClick: () => {
             const newItems = swap(items, currentItem.index, currentItem.index + 1);
             onChange(newItems);
