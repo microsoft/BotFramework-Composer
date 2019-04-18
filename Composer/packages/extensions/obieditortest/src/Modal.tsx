@@ -4,7 +4,7 @@ import formatMessage from 'format-message';
 
 interface ModalProps {
   children: React.ReactNode;
-  isOpen: boolean;
+  isOpen?: boolean;
   onDismiss: () => void;
 }
 
