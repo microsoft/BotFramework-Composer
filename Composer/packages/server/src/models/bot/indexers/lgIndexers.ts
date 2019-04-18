@@ -2,6 +2,17 @@ import path from 'path';
 
 import { FileInfo, LGTemplate } from './../interface';
 
+function getNewTemplate(id: number, fileName: string, content: string, comments: string) {
+  return {
+    id: id,
+    name: '',
+    fileName: fileName,
+    type: 'Rotate',
+    content: content,
+    comments: comments,
+  };
+}
+
 export function lgIndexer(files: FileInfo[]) {
   if (files.length === 0) return [];
 
@@ -56,15 +67,4 @@ export function lgIndexer(files: FileInfo[]) {
   }
   console.log(lgTemplates);
   return lgTemplates;
-}
-
-function getNewTemplate(id: number, fileName: string, content: string, comments: string) {
-  return {
-    id: id,
-    name: '',
-    fileName: fileName,
-    type: 'Rotate',
-    content: content,
-    comments: comments,
-  };
 }
