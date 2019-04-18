@@ -2,7 +2,8 @@
 /* eslint-disable no-unused-vars */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext } from 'react';
+import debounce from 'lodash.debounce';
+import { Fragment, useContext, useRef } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -14,51 +15,44 @@ import { Store } from '../../../store/index';
 import { scrollablePaneRoot, title, label } from './styles';
 
 export function LanguageGenerationSettings() {
-  const { state } = useContext(Store);
+  const { state, actions } = useContext(Store);
   const { lgTemplates } = state;
-  let currentFileContent = '';
+  const updateLG = useRef(debounce(actions.updateLG, 500)).current;
 
-  lgTemplates.forEach(lgTemplate => (currentFileContent += lgTemplate.content.toString()));
-  // todo: use lg parser.
-  const templates = [];
+  function updateTemplateContent(index, lgName, templateName, content) {
+    let updatedLG = '';
+    lgTemplates[index].name = templateName;
+    lgTemplates[index].content = content;
+    lgTemplates
+      .filter(template => template.fileName === lgName)
+      .forEach(template => {
+        if (template.comments) {
+          updatedLG += `${template.comments}`;
+        }
+        if (template.name) {
+          updatedLG += `# ${template.name}` + '\n';
+          updatedLG += `${template.content}` + '\n';
+        }
+      });
 
-  const lines = currentFileContent.match(/^.+$/gm) || [];
+    const payload = {
+      name: lgName,
+      content: updatedLG.trim('\n'),
+    };
 
-  let newTemplate = {
-    type: 'Rotate',
-    content: '',
-  };
-  lines.forEach((line, index) => {
-    if (!line) return;
-    if (!line.trim()) return;
-    if (line.trim().startsWith('>')) return;
+    updateLG(payload);
+  }
 
-    if (line.trim().startsWith('#')) {
-      if (newTemplate.name) {
-        templates.push(newTemplate);
-      }
-      newTemplate = {
-        type: 'Rotate',
-        content: '',
-        name: line.trim().split(' ')[1],
-      };
-      return;
-    }
-
-    if (line.trim().startsWith('- DEFAULT') || line.trim().startsWith('- IF')) {
-      newTemplate.type = 'Condition';
-    }
-    newTemplate.content += line + '\r\n';
-    if (index === lines.length - 1) {
-      if (newTemplate.name) {
-        templates.push(newTemplate);
-      }
-    }
-  });
-
-  function getTemplatePhrase(content) {
+  function getTemplatePhrase(index, lgName, templateName, content) {
     return (
-      <TextField borderless multiline autoAdjustHeight placeholder="No borders here, folks." defaultValue={content} />
+      <TextField
+        borderless
+        multiline
+        autoAdjustHeight
+        placeholder="Template Content."
+        defaultValue={content}
+        onChange={(event, newValue) => updateTemplateContent(index, lgName, templateName, newValue)}
+      />
     );
   }
 
@@ -75,13 +69,15 @@ export function LanguageGenerationSettings() {
   }
 
   const items = [];
-  if (templates) {
-    templates.forEach(template => {
+  if (lgTemplates) {
+    lgTemplates.forEach(template => {
       items.push({
         name: template.name,
         value: template.name,
+        fileName: template.fileName,
         type: template.type,
         content: template.content,
+        comments: template.comments,
       });
     });
   }
@@ -96,8 +92,17 @@ export function LanguageGenerationSettings() {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      onRender: item => {
-        return <span>{item.name}</span>;
+      onRender: (item, index) => {
+        return (
+          <span>
+            <TextField
+              borderless
+              placeholder="Template Name."
+              defaultValue={item.name}
+              onChange={(event, newName) => updateTemplateContent(index, item.fileName, newName, item.content)}
+            />
+          </span>
+        );
       },
     },
     {
@@ -120,8 +125,8 @@ export function LanguageGenerationSettings() {
       isResizable: true,
       data: 'string',
       isPadded: true,
-      onRender: item => {
-        return <span>{getTemplatePhrase(item.content)}</span>;
+      onRender: (item, index) => {
+        return <span>{getTemplatePhrase(index, item.fileName, item.name, item.content)}</span>;
       },
     },
   ];

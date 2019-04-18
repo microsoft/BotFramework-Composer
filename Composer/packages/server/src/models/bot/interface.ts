@@ -22,3 +22,12 @@ export interface Dialog {
   content: any;
   path: string;
 }
+
+export interface LGTemplate {
+  id: number;
+  fileName: string;
+  type: string;
+  name: string;
+  content: any;
+  comments: string;
+}

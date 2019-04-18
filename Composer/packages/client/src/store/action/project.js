@@ -118,3 +118,19 @@ export async function createDialog(dispatch, { name, steps }) {
     console.error(err);
   }
 }
+
+export async function updateLG(dispatch, { name, content }) {
+  try {
+    const response = await axios.put(`${BASEURL}/projects/opened/lgTemplates/${name}`, { name, content });
+    dispatch({
+      type: ActionTypes.UPDATE_LG,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.UPDATE_LG_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
