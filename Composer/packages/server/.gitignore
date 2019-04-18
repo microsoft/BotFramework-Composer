@@ -1,3 +1,4 @@
 build/
 
 storage.json
+src/store/data.json

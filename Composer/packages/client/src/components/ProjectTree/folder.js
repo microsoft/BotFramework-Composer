@@ -18,7 +18,7 @@ export const Folder = props => {
   }
 
   return (
-    <div css={folderItem(activeNode == folder.id)}>
+    <div css={folderItem(activeNode === folder.id)}>
       <span onClick={() => onFolderClick(folder)} onContextMenu={onFolderRightClick}>
         {splitFileName(folder.name)}
       </span>

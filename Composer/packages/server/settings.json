@@ -1,7 +1,0 @@
-{
-    "openLastActiveBot": true,
-    "launcherConnector": {
-        "type": "CSharp",
-        "path": "../../../BotProject/CSharp"
-    }
-}

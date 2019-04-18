@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 
 export const container = css`
-  max-width: 1190px;
+  width: 100%;
   background-color: #ffffff;
   height: 870px;
   overflow: auto;

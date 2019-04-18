@@ -15,7 +15,7 @@ const getType = data => {
 };
 
 export const FormEditor = props => {
-  const { data, memory, dialogs } = props;
+  const { data, memory, dialogs, shellApi } = props;
   const type = getType(data);
 
   const mergedSchema = getMergedSchema(dialogs);
@@ -87,6 +87,9 @@ export const FormEditor = props => {
           onBlur={props.onBlur}
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
+          formContext={{
+            shellApi,
+          }}
         >
           <button style={{ display: 'none' }} />
         </Form>

@@ -85,6 +85,11 @@ function getDefaultMemory() {
   return defaultMemory;
 }
 
+const mockShellApi = ['getData', 'getDialogs', 'saveData', 'navTo', 'navDown', 'focusTo'].reduce((mock, api) => {
+  mock[api] = (...args) => console.info(`shellApi.${api} called with`, args);
+  return mock;
+}, {});
+
 function Demo() {
   const [dirtyFormData, setDirtyFormData] = useState(null);
   const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
@@ -190,7 +195,13 @@ function Demo() {
         />
       </div>
       <div className="DemoForm">
-        <Example data={formData} dialogs={dialogFiles} memory={memoryFormData} onChange={debouncedOnChange} />
+        <Example
+          data={formData}
+          dialogs={dialogFiles}
+          memory={memoryFormData}
+          onChange={debouncedOnChange}
+          shellApi={mockShellApi}
+        />
       </div>
     </div>
   );

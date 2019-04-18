@@ -1,4 +1,4 @@
-export * from './file.js';
+export * from './project.js';
 export * from './editors.js';
 export * from './bot.js';
 export * from './storage.js';

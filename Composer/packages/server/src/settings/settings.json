@@ -1,0 +1,6 @@
+{
+    "botConnector": {
+        "type": "CSharp",
+        "path": "../../../BotProject/CSharp"
+    }
+}

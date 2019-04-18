@@ -14,7 +14,7 @@ export const container = variant => {
   }
 
   return css`
-    width: 325px;
+    width: 100%;
     background-color: #ffffff;
     height: ${height};
     overflow: auto;
