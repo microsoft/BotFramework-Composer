@@ -49,6 +49,7 @@ module.exports = {
       rules: {
         'typescript/class-name-casing': 'off',
         'typescript/no-explicit-any': 'off',
+        '@typescript-eslint/no-object-literal-type-assertion': 'off',
       },
     },
   ],

@@ -35,7 +35,9 @@ export const dialogGroups = {
 };
 
 export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
-  const dialogNames = dialogFiles.map(f => f.name.substring(0, f.name.lastIndexOf('.')));
+  const dialogNames = dialogFiles.map(f => {
+    return f.name.includes('.') ? f.name.substring(0, f.name.lastIndexOf('.')) : f.name;
+  });
   const dialogEnum = {
     enum: dialogNames,
     enumLabels: dialogNames,
