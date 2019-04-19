@@ -4,33 +4,30 @@ import { DialogInfo } from '../types';
 
 export const dialogGroups = {
   'Input/Prompt Dialogs': [
+    'Microsoft.ChoiceInput',
     'Microsoft.ConfirmInput',
     'Microsoft.FloatInput',
     'Microsoft.IntegerInput',
+    'Microsoft.NumberInput',
     'Microsoft.TextInput',
   ],
   'Dialog Steps': [
     'Microsoft.BeginDialog',
-    'Microsoft.CancelDialog',
+    'Microsoft.CancelAllDialogs',
     'Microsoft.EndDialog',
     'Microsoft.EndTurn',
     'Microsoft.HttpRequest',
     'Microsoft.IfCondition',
-    'Microsoft.ReplaceWithDialog',
+    'Microsoft.InitProperty',
+    'Microsoft.LogStep',
+    'Microsoft.ReplaceDialog',
     'Microsoft.SendActivity',
-    'Microsoft.SendList',
     'Microsoft.SwitchCondition',
+    'Microsoft.TraceActivity',
   ],
   Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.SaveEntity'],
-  Rules: [
-    'Microsoft.EventRule',
-    'Microsoft.IfPropertyRule',
-    'Microsoft.IntentRule',
-    'Microsoft.NoMatchRule',
-    'Microsoft.Rule',
-    'Microsoft.WelcomeRule',
-  ],
-  Recognizers: [/* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
+  Rules: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.Rule', 'Microsoft.UnknownIntentRule'],
+  Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
   Other: ['Microsoft.AdaptiveDialog'],
 };
 
