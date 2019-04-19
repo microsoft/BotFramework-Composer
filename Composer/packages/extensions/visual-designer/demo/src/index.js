@@ -8,7 +8,7 @@ import * as ObiExamples from './samples';
 import './style.css';
 
 const sampleFileNames = Object.keys(ObiExamples);
-const defaultFile = sampleFileNames[0];
+const defaultFile = sampleFileNames[1];
 
 class Demo extends Component {
   state = {
