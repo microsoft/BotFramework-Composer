@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
+import { IContextualMenuItem, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
 import Example from '@app/index';
 import { ShellApi } from '@app/types';
@@ -90,7 +90,7 @@ const mockShellApi = ['getData', 'getDialogs', 'saveData', 'navTo', 'navDown', '
   return mock;
 }, {});
 
-function Demo() {
+const Demo: React.FC = () => {
   const [dirtyFormData, setDirtyFormData] = useState(null);
   const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
   const [formData, setFormData] = useState(getDefaultData());
@@ -127,15 +127,16 @@ function Demo() {
     }
   };
 
-  const buildDialogOptions = () => {
-    const options = [];
+  const buildDialogOptions = (): IContextualMenuItem[] => {
+    const options: IContextualMenuItem[] = [];
 
     for (const elem in dialogGroups) {
-      options.push({ key: elem, text: elem, itemType: DropdownMenuItemType.Header });
-      dialogGroups[elem].forEach(dialog => {
-        options.push({ key: dialog, text: dialog });
+      const subOptions = dialogGroups[elem].map(dialog => ({ key: dialog, text: dialog }));
+      options.push({
+        key: elem,
+        text: elem,
+        subMenuProps: { items: subOptions },
       });
-      options.push({ key: `${elem}_divider`, text: '-', itemType: DropdownMenuItemType.Divider });
     }
 
     return options;
@@ -163,14 +164,15 @@ function Demo() {
   return (
     <div className="DemoContainer">
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <Dropdown
-          style={{ width: '300px', paddingBottom: '10px', marginLeft: '10px', marginTop: '10px' }}
-          placeholder="Dialog Types"
-          options={buildDialogOptions()}
-          onChange={onDialogChange}
-          selectedKey={null}
-        />
-        <div style={{ fontSize: '20px', paddingLeft: '10px' }}>Data</div>
+        <div style={{ fontSize: '20px', paddingLeft: '10px', display: 'flex', justifyContent: 'space-between' }}>
+          <div>Data</div>
+          <PrimaryButton
+            title="Dialog Types"
+            menuProps={{ items: buildDialogOptions(), directionalHint: DirectionalHint.bottomAutoEdge }}
+          >
+            Dialog Types
+          </PrimaryButton>
+        </div>
         <CodeMirror
           value={dirtyFormData || JSON.stringify(formData, null, 2)}
           options={cmOptions}
@@ -204,6 +206,6 @@ function Demo() {
       </div>
     </div>
   );
-}
+};
 
 render(<Demo />, document.querySelector('#demo'));
