@@ -8,89 +8,55 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { DynamicStyledComponent } from '../shared/DynamicStyledComponent';
 import { OffsetContainer } from '../OffsetContainer';
 
-const ContainerPaddingX = 50;
-const ContainerPaddingY = 50;
 const ElementInterval = 30;
 
 export class AdaptiveDialog extends DynamicStyledComponent {
   width = 0;
   height = 0;
 
-  boxes = {
-    recognizerNode: new GraphObjectModel(),
-    eventGroupNode: new GraphObjectModel(),
-    intentGroupNode: new GraphObjectModel(),
-  };
+  dialogBoxes = [];
+  ruleGroupBox = new GraphObjectModel();
+  stepGroupBox = new GraphObjectModel();
 
   computeProps(props) {
-    const { boxes } = this;
-    const { recognizer, eventGroup, intentGroup } = transformAdaptiveDialog(props.data);
-    const buildProps = node => ({
-      id: node.id,
-      data: node.json,
-      focusedId: props.focusedId,
-      onEvent: (...args) => this.props.onEvent(...args),
-    });
+    const { recognizer, eventGroup, intentGroup, ruleGroup, stepGroup } = transformAdaptiveDialog(props.data);
 
-    if (recognizer) {
-      boxes.recognizerNode.props = buildProps(recognizer);
-    }
-    if (eventGroup) {
-      boxes.eventGroupNode.props = buildProps(eventGroup);
-    }
-    if (intentGroup) {
-      boxes.intentGroupNode.props = buildProps(intentGroup);
-    }
+    const createGraphNode = input => {
+      const result = new GraphObjectModel();
+      result.props = {
+        id: input.id,
+        data: input.json,
+        focusedId: props.focusedId,
+        onEvent: (...args) => this.props.onEvent(...args),
+      };
+      return result;
+    };
+
+    this.dialogBoxes = [recognizer, eventGroup, intentGroup].map(x => (x ? createGraphNode(x) : null)).filter(x => !!x);
+    if (ruleGroup) this.ruleGroupBox = createGraphNode(ruleGroup);
+    if (stepGroup) this.stepGroupBox = createGraphNode(stepGroup);
   }
 
   measureLayout() {
-    const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
-    const nodes = [recognizerNode, eventGroupNode, intentGroupNode];
-
+    const nodes = this.dialogBoxes;
     // Measure node size
     nodes.forEach(x => {
       x.boundary = x.ref.current.getBoundary();
     });
 
     // Measure container size
-    const maxWidth = Math.max(...nodes.map(x => x.boundary.width));
-    const totalHeight =
-      recognizerNode.boundary.height + eventGroupNode.boundary.height + intentGroupNode.boundary.height;
+    this.width = Math.max(...nodes.map(x => x.boundary.width));
+    this.height =
+      nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
+      ElementInterval * Math.max(nodes.length - 1, 0);
 
-    this.width = maxWidth + 2 * ContainerPaddingX;
-    this.height = totalHeight + 2 * ElementInterval + 2 * ContainerPaddingY;
-
-    // Measure node offset
-    recognizerNode.offset = { x: (this.width - recognizerNode.boundary.width) / 2, y: ContainerPaddingY };
-    eventGroupNode.offset = {
-      x: (this.width - eventGroupNode.boundary.width) / 2,
-      y: recognizerNode.offset.y + recognizerNode.boundary.height + ElementInterval,
-    };
-    intentGroupNode.offset = {
-      x: (this.width - intentGroupNode.boundary.width) / 2,
-      y: eventGroupNode.offset.y + eventGroupNode.boundary.height + ElementInterval,
-    };
+    nodes.reduce((offsetY, node) => {
+      node.offset = { x: (this.width - node.boundary.width) / 2, y: offsetY };
+      return offsetY + node.boundary.height + ElementInterval;
+    }, 0);
   }
 
   renderContent() {
-    const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
-
-    const recognizer = recognizerNode.props && (
-      <OffsetContainer offset={recognizerNode.offset}>
-        <NodeRenderer key="recognizer" ref={recognizerNode.ref} {...recognizerNode.props} />
-      </OffsetContainer>
-    );
-    const events = eventGroupNode.props && (
-      <OffsetContainer offset={eventGroupNode.offset}>
-        <NodeRenderer key="eventGroup" ref={eventGroupNode.ref} {...eventGroupNode.props} />
-      </OffsetContainer>
-    );
-    const intents = intentGroupNode.props && (
-      <OffsetContainer offset={intentGroupNode.offset}>
-        <NodeRenderer key="intentGroup" ref={intentGroupNode.ref} {...intentGroupNode.props} />
-      </OffsetContainer>
-    );
-
     return (
       <div
         style={{ width: this.width, height: this.height, position: 'relative' }}
@@ -99,9 +65,11 @@ export class AdaptiveDialog extends DynamicStyledComponent {
           this.props.onEvent(NodeClickActionTypes.Focus, '');
         }}
       >
-        {recognizer}
-        {events}
-        {intents}
+        {this.dialogBoxes.map((x, index) => (
+          <OffsetContainer key={`dialogBoxes.offset[${index}]`} offset={x.offset}>
+            <NodeRenderer key={`dialogBoxes[${index}}]`} ref={x.ref} {...x.props} />
+          </OffsetContainer>
+        ))}
       </div>
     );
   }
