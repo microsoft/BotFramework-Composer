@@ -8,7 +8,7 @@ test('transforms todoBot-with-step.dialog to directed graph', () => {
   const schema = todoBotWithStepSchema;
 
   const nodes = obiTransformer.toGraphSchema(schema);
-  expect(nodes.length).toEqual(10);
+  expect(nodes.length).toEqual(4);
 
   nodes.forEach(node => {
     const nodeKeys = Object.keys(node);
