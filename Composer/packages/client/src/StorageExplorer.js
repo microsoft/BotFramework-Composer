@@ -29,7 +29,13 @@ const links = [
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
   const { storages, storageExplorerStatus, focusedStorageFolder } = state;
-  const { setStorageExplorerStatus, closeCurrentProject, fetchFolderItemsByPath, openBotProject } = actions;
+  const {
+    setStorageExplorerStatus,
+    closeCurrentProject,
+    fetchFolderItemsByPath,
+    openBotProject,
+    saveProjectAs,
+  } = actions;
   const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
   const [currentPath, setCurrentPath] = useState('');
 
@@ -103,12 +109,15 @@ export function StorageExplorer() {
         return 'Duplicate folder name';
       }
     }
-    console.log(value);
     return '';
   };
 
-  const handleSaveAs = value => {
-    console.log(value);
+  const handleSaveAs = async value => {
+    const dir = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}`;
+    const absolutePath = `${dir}/${value}/bot.botproj`;
+    await saveProjectAs(storages[currentStorageIndex].id, absolutePath);
+    updateCurrentPath(dir, storages[currentStorageIndex].id);
+    onCloseExplorer();
   };
 
   return (
