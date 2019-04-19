@@ -2,9 +2,9 @@ import React from 'react';
 
 import { NodeClickActionTypes } from '../../utils/constant';
 import { ObiTypes } from '../../transformers/constants/ObiTypes';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 

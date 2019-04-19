@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 export class Recognizer extends React.Component {
   getBoundary() {

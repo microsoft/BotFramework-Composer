@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { NodeClickActionTypes } from '../../utils/constant';
-
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+
 import { FormCard } from './templates/FormCard';
 
 export class WelcomeRule extends React.Component {
