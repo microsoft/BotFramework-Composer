@@ -27,7 +27,7 @@ const createDialogSuccess = (state, { response }) => {
 };
 
 const updateLG = (state, { response }) => {
-  state.dialogs = response.data.lgTemplates;
+  state.lgTemplates = response.data.lgTemplates;
   return state;
 };
 
