@@ -28,6 +28,5 @@ export const ObiTypes = {
   // virtual types
   IntentGroup: 'VisualEditor.IntentGroup',
   EventGroup: 'VisualEditor.EventGroup',
-  RuleGroup: 'VisualEditor.RuleGroup',
   StepGroup: 'VisualEditor.StepGroup',
 };
