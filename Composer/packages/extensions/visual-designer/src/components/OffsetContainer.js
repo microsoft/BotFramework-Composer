@@ -11,8 +11,8 @@ export class OffsetContainer extends React.Component {
 
 OffsetContainer.propTypes = {
   offset: PropTypes.shape({
-    x: PropTypes.string,
-    y: PropTypes.string,
+    x: PropTypes.number,
+    y: PropTypes.number,
   }),
   children: PropTypes.element,
 };
