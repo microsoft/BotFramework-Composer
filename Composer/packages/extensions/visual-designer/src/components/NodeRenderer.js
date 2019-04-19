@@ -36,29 +36,20 @@ function chooseRendererByType($type) {
   return renderer;
 }
 
-export class NodeRenderer extends React.Component {
-  contentRef = React.createRef();
+export const NodeRenderer = React.forwardRef(function RefNodeRenderer(props, ref) {
+  const { id, data, focusedId, onEvent } = props;
+  const ChosenRenderer = chooseRendererByType(data.$type);
 
-  getBoundary() {
-    if (this.contentRef && this.contentRef.current && this.contentRef.current.getBoundary) {
-      return this.contentRef.current.getBoundary();
-    }
-    return {};
-  }
-
-  render() {
-    const { id, data, focusedId, onEvent } = this.props;
-    const ChosenRenderer = chooseRendererByType(data.$type);
-
-    const nodeContent = (
-      <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} ref={this.contentRef} />
-    );
-    if (focusedId === id) {
-      return <div style={{ outline: '2px solid grey', display: 'inline-block' }}>{nodeContent}</div>;
-    }
-    return nodeContent;
-  }
-}
+  return (
+    <div
+      className="node-renderer-container"
+      style={{ position: 'absolute', outline: focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+      ref={ref}
+    >
+      <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
+    </div>
+  );
+});
 
 NodeRenderer.propTypes = {
   id: PropTypes.string,

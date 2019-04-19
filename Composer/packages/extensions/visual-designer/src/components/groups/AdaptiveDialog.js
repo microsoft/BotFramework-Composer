@@ -3,65 +3,66 @@ import React from 'react';
 import transformAdaptiveDialog from '../../transformers/transformAdaptiveDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
-import { OffsetContainer } from '../OffsetContainer';
-import { GraphNode } from '../shared/GraphNode';
+import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { DynamicStyledComponent } from '../shared/DynamicStyledComponent';
 
 const ContainerPaddingX = 50;
 const ContainerPaddingY = 50;
 const ElementInterval = 30;
 
-export class AdaptiveDialog extends React.Component {
+export class AdaptiveDialog extends DynamicStyledComponent {
   width = 0;
   height = 0;
 
-  elements = {
-    recognizerNode: new GraphNode(),
-    eventGroupNode: new GraphNode(),
-    intentGroupNode: new GraphNode(),
+  boxes = {
+    recognizerNode: new GraphObjectModel(),
+    eventGroupNode: new GraphObjectModel(),
+    intentGroupNode: new GraphObjectModel(),
   };
 
-  componentDidMount() {
-    this.updateLayoutAfterChildrenMount();
-    this.forceUpdate();
-  }
-
-  updateElements() {
-    const { elements } = this;
-    const { recognizer, eventGroup, intentGroup } = transformAdaptiveDialog(this.props.data);
+  computeProps(props) {
+    const { boxes } = this;
+    const { recognizer, eventGroup, intentGroup } = transformAdaptiveDialog(props.data);
+    const buildProps = node => ({
+      id: node.id,
+      data: node.json,
+      focusedId: props.focusedId,
+      onEvent: (...args) => this.props.onEvent(...args),
+    });
 
     if (recognizer) {
-      elements.recognizerNode.props = this.buildProps(recognizer);
+      boxes.recognizerNode.props = buildProps(recognizer);
     }
     if (eventGroup) {
-      elements.eventGroupNode.props = this.buildProps(eventGroup);
+      boxes.eventGroupNode.props = buildProps(eventGroup);
     }
     if (intentGroup) {
-      elements.intentGroupNode.props = this.buildProps(intentGroup);
+      boxes.intentGroupNode.props = buildProps(intentGroup);
     }
   }
 
-  getBoundary() {
-    return {
-      width: this.width,
-      height: this.height,
-      in: { x: 0, y: this.width / 2 },
-      out: { x: this.height, y: this.width / 2 },
-    };
-  }
+  updateDOMStyle() {
+    const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
+    const nodes = [recognizerNode, eventGroupNode, intentGroupNode];
 
-  updateLayoutAfterChildrenMount() {
-    const { recognizerNode, eventGroupNode, intentGroupNode } = this.elements;
-    [recognizerNode, eventGroupNode, intentGroupNode].forEach(x => (x.boundary = x.ref.current.getBoundary()));
+    // Measure node size
+    nodes.forEach(x => {
+      x.boundary = {
+        width: x.ref.current.scrollWidth,
+        height: x.ref.current.scrollHeight,
+      };
+    });
 
-    const maxWidth = Math.max(...[recognizerNode, eventGroupNode, intentGroupNode].map(x => x.boundary.width));
-
+    // Measure container size
+    const maxWidth = Math.max(...nodes.map(x => x.boundary.width));
     const totalHeight =
       recognizerNode.boundary.height + eventGroupNode.boundary.height + intentGroupNode.boundary.height;
 
     this.width = maxWidth + 2 * ContainerPaddingX;
     this.height = totalHeight + 2 * ElementInterval + 2 * ContainerPaddingY;
 
+    // Measure node offset
     recognizerNode.offset = { x: (this.width - recognizerNode.boundary.width) / 2, y: ContainerPaddingY };
     eventGroupNode.offset = {
       x: (this.width - eventGroupNode.boundary.width) / 2,
@@ -71,36 +72,25 @@ export class AdaptiveDialog extends React.Component {
       x: (this.width - intentGroupNode.boundary.width) / 2,
       y: eventGroupNode.offset.y + eventGroupNode.boundary.height + ElementInterval,
     };
+
+    // Apply layout
+    nodes.forEach(x => {
+      x.ref.current.style.left = x.offset.x + 'px';
+      x.ref.current.style.top = x.offset.y + 'px';
+    });
   }
 
-  buildProps(node) {
-    return {
-      id: node.id,
-      data: node.json,
-      focusedId: this.props.focusedId,
-      onEvent: (...args) => this.props.onEvent(...args),
-    };
-  }
-
-  render() {
-    this.updateElements();
-
-    const { recognizerNode, eventGroupNode, intentGroupNode } = this.elements;
+  renderContent() {
+    const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
 
     const recognizer = recognizerNode.props && (
-      <OffsetContainer offset={recognizerNode.offset}>
-        <NodeRenderer key="recognizer" ref={recognizerNode.ref} {...recognizerNode.props} />
-      </OffsetContainer>
+      <NodeRenderer key="recognizer" ref={recognizerNode.ref} {...recognizerNode.props} />
     );
     const events = eventGroupNode.props && (
-      <OffsetContainer offset={eventGroupNode.offset}>
-        <NodeRenderer key="eventGroup" ref={eventGroupNode.ref} {...eventGroupNode.props} />
-      </OffsetContainer>
+      <NodeRenderer key="eventGroup" ref={eventGroupNode.ref} {...eventGroupNode.props} />
     );
     const intents = intentGroupNode.props && (
-      <OffsetContainer offset={intentGroupNode.offset}>
-        <NodeRenderer key="intentGroup" ref={intentGroupNode.ref} {...intentGroupNode.props} />
-      </OffsetContainer>
+      <NodeRenderer key="intentGroup" ref={intentGroupNode.ref} {...intentGroupNode.props} />
     );
 
     return (
