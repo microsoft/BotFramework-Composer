@@ -16,15 +16,6 @@ export class EventGroup extends React.Component {
   width = 0;
   height = 0;
 
-  getBoundary() {
-    return {
-      width: this.width,
-      height: this.height,
-      in: { x: 0, y: this.width / 2 },
-      out: { x: this.height, y: this.width / 2 },
-    };
-  }
-
   renderEvent(eventNode) {
     const data = eventNode.json;
     const propagateEvent = (...args) => this.props.onEvent(...args);

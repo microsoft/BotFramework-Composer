@@ -22,15 +22,6 @@ export class IntentGroup extends React.Component {
     return <NodeRenderer id={intent.id} data={data} focusedId={focusedId} onEvent={propagateEvent} />;
   }
 
-  getBoundary() {
-    return {
-      width: this.width,
-      height: this.height,
-      in: { x: 0, y: this.width / 2 },
-      out: { x: this.height, y: this.width / 2 },
-    };
-  }
-
   render() {
     const { data } = this.props;
     const intents = data.children || [];
