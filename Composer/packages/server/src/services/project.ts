@@ -26,7 +26,24 @@ class BotProjectService {
     }
     this.currentBotProject = new BotProject(projRef);
     await this.currentBotProject.init();
+    this.updateRecentBotProjects();
   };
+
+  private updateRecentBotProjects(): void {
+    if (!this.currentBotProject) {
+      return;
+    }
+
+    const currRef = this.currentBotProject.ref;
+    const idx = this.recentBotProjects.findIndex(ref => currRef.path === ref.path);
+
+    if (idx > -1) {
+      this.recentBotProjects.splice(idx, 1);
+    }
+
+    this.recentBotProjects.unshift(this.currentBotProject.ref);
+    Store.set('recentBotProjects', this.recentBotProjects);
+  }
 }
 
 const service = new BotProjectService();
