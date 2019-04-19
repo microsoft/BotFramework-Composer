@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
-import { AdaptiveDialog, EventGroup, IntentGroup, IfCondition } from '../components/groups';
+
+import { AdaptiveDialog, EventGroup, IntentGroup, IfCondition } from './groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -11,7 +12,7 @@ import {
   BeginDialog,
   NoMatchRule,
   EventRule,
-} from '../components/nodes/index';
+} from './nodes/index';
 
 const rendererByObiType = {
   [ObiTypes.AdaptiveDialog]: AdaptiveDialog,

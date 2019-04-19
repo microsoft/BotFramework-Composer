@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PAYLOAD_KEY } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
-import { NodeRenderer } from '../../utils/NodeRenderer';
+import { NodeRenderer } from '../NodeRenderer';
 
 const IntentPaddingX = 18;
 const IntentPaddingY = 20;

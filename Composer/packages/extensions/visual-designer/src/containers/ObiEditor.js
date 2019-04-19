@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
-import { NodeRenderer } from '../utils/NodeRenderer';
+import { NodeRenderer } from '../components/NodeRenderer';
 
 export class ObiEditor extends Component {
   state = {
