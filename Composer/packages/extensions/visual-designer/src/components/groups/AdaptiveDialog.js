@@ -43,7 +43,7 @@ export class AdaptiveDialog extends DynamicStyledComponent {
     }
   }
 
-  measureStyle() {
+  measureLayout() {
     const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
     const nodes = [recognizerNode, eventGroupNode, intentGroupNode];
 

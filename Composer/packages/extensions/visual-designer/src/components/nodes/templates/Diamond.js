@@ -14,7 +14,7 @@ export const Diamond = ({ onClick }) => (
     }}
   >
     <svg
-      style={{ marginLeft: '48px' }}
+      style={{ marginLeft: '50px' }}
       width="50"
       height="20"
       viewBox="0 0 50 20"

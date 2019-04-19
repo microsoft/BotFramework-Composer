@@ -16,7 +16,7 @@ export class DynamicStyledComponent extends React.Component {
     switch (this.renderStage) {
       case STAGE.ELEMENT:
         this.renderStage = STAGE.STYLE;
-        this.measureStyle();
+        this.measureLayout();
         this.forceUpdate();
         break;
       case STAGE.STYLE:
@@ -25,7 +25,7 @@ export class DynamicStyledComponent extends React.Component {
     }
   }
 
-  measureStyle() {
+  measureLayout() {
     throw new Error('measureStyle() is not implemented!');
   }
 
