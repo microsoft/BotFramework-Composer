@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-/* eslint-disable no-unused-vars */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
@@ -7,7 +6,7 @@ import { Fragment, useContext, useRef } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { DetailsList, DetailsListLayoutMode, Selection, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { Store } from '../../../store/index';
@@ -18,6 +17,55 @@ export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgTemplates } = state;
   const updateLG = useRef(debounce(actions.updateLG, 500)).current;
+
+  const tableColums = [
+    {
+      key: 'name',
+      name: 'Name',
+      fieldName: 'name',
+      minWidth: 150,
+      maxWidth: 200,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item, index) => {
+        return (
+          <span>
+            <TextField
+              borderless
+              placeholder="Template Name."
+              defaultValue={item.name}
+              onChange={(event, newName) => updateTemplateContent(index, item.fileName, newName, item.content)}
+            />
+          </span>
+        );
+      },
+    },
+    {
+      key: 'type',
+      name: 'Type',
+      fieldName: 'type',
+      minWidth: 50,
+      maxWidth: 100,
+      data: 'string',
+      isPadded: true,
+      onRender: item => {
+        return <span>{item.type}</span>;
+      },
+    },
+    {
+      key: 'phrase',
+      name: 'Sample phrase',
+      fieldName: 'samplePhrase',
+      minWidth: 500,
+      isResizable: true,
+      data: 'string',
+      isPadded: true,
+      onRender: (item, index) => {
+        return <span>{getTemplatePhrase(index, item.fileName, item.name, item.content)}</span>;
+      },
+    },
+  ];
 
   function updateTemplateContent(index, lgName, templateName, content) {
     let updatedLG = '';
@@ -82,55 +130,27 @@ export function LanguageGenerationSettings() {
     });
   }
 
-  const tableColums = [
-    {
-      key: 'name',
-      name: 'Name',
-      fieldName: 'name',
-      minWidth: 150,
-      maxWidth: 200,
-      isRowHeader: true,
-      isResizable: true,
-      data: 'string',
-      onRender: (item, index) => {
-        return (
-          <span>
-            <TextField
-              borderless
-              placeholder="Template Name."
-              defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(index, item.fileName, newName, item.content)}
-            />
-          </span>
-        );
-      },
-    },
-    {
-      key: 'type',
-      name: 'Type',
-      fieldName: 'type',
-      minWidth: 50,
-      maxWidth: 100,
-      data: 'string',
-      isPadded: true,
-      onRender: item => {
-        return <span>{item.type}</span>;
-      },
-    },
-    {
-      key: 'phrase',
-      name: 'Sample phrase',
-      fieldName: 'samplePhrase',
-      minWidth: 500,
-      isResizable: true,
-      data: 'string',
-      isPadded: true,
-      onRender: (item, index) => {
-        return <span>{getTemplatePhrase(index, item.fileName, item.name, item.content)}</span>;
-      },
-    },
-  ];
-
+  const groups = [];
+  let currentKey = '';
+  let itemCount = 0;
+  lgTemplates.forEach((template, index) => {
+    if (template.fileName !== currentKey) {
+      if (itemCount !== 0) {
+        groups.push({
+          name: currentKey,
+          count: itemCount,
+          key: currentKey,
+          startIndex: index - itemCount,
+        });
+        itemCount = 0;
+      }
+      currentKey = template.fileName;
+    }
+    itemCount++;
+    if (index === lgTemplates.length - 1) {
+      groups.push({ name: currentKey, count: itemCount, key: currentKey, startIndex: index - itemCount + 1 });
+    }
+  });
   return (
     <Fragment>
       <div>
@@ -145,6 +165,7 @@ export function LanguageGenerationSettings() {
             layoutMode={DetailsListLayoutMode.fixedColumns}
             onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.none}
+            groups={groups}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>
