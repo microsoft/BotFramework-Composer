@@ -1,15 +1,10 @@
-import { RulesField, StepsField } from '../Form/fields';
+import { RulesField, StepsField, SelectorField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     rules: {
       'ui:field': RulesField,
     },
-    steps: {
-      'ui:field': StepsField,
-    },
-  },
-  'Microsoft.WelcomeRule': {
     steps: {
       'ui:field': StepsField,
     },
@@ -24,7 +19,7 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
   },
-  'Microsoft.NoMatchRule': {
+  'Microsoft.UnknownIntentRule': {
     steps: {
       'ui:field': StepsField,
     },
@@ -49,6 +44,14 @@ export const uiSchema = {
     },
     ifFalse: {
       'ui:field': StepsField,
+    },
+  },
+  'Microsoft.ConditionalSelector': {
+    ifTrue: {
+      'ui:field': SelectorField,
+    },
+    ifFalse: {
+      'ui:field': SelectorField,
     },
   },
 };
