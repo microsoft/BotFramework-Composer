@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { ObiTypes } from '../../transformers/constants/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 

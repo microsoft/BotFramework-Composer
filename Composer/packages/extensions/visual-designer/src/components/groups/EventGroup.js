@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { PAYLOAD_KEY } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 
@@ -27,7 +26,7 @@ export class EventGroup extends React.Component {
   }
 
   renderEvent(eventNode) {
-    const data = eventNode[PAYLOAD_KEY];
+    const data = eventNode.json;
     const propagateEvent = (...args) => this.props.onEvent(...args);
     return (
       <NodeRenderer

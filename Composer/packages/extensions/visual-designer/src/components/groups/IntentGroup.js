@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { PAYLOAD_KEY } from '../../utils/constant';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 
@@ -18,7 +17,7 @@ export class IntentGroup extends React.Component {
 
   renderIntent(intent) {
     const { focusedId } = this.props;
-    const data = intent[PAYLOAD_KEY];
+    const data = intent.json;
     const propagateEvent = (...args) => this.props.onEvent(...args);
     return <NodeRenderer id={intent.id} data={data} focusedId={focusedId} onEvent={propagateEvent} />;
   }

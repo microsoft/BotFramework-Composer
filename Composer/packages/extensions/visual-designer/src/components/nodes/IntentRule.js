@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ObiTypes } from '../../transformers/constants/ObiTypes';
-import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 

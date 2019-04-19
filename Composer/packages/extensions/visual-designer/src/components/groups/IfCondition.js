@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { Diamond } from '../nodes/templates/Diamond';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 

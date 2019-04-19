@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
+import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
 import { NodeRenderer } from '../components/NodeRenderer';
 
 export class ObiEditor extends Component {

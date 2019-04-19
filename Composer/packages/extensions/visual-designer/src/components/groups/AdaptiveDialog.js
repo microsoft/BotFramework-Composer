@@ -5,7 +5,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { OffsetContainer } from '../OffsetContainer';
 import { GraphNode } from '../shared/GraphNode';
-import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 
 const ContainerPaddingX = 50;
 const ContainerPaddingY = 50;
