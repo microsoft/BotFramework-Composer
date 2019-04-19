@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NodeClickActionTypes } from '../../utils/constant';
 import { Diamond } from '../nodes/templates/Diamond';
-import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 export class IfCondition extends React.Component {
   render() {

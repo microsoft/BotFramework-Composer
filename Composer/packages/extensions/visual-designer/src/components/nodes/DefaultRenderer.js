@@ -4,7 +4,7 @@ import { NodeClickActionTypes } from '../../utils/constant';
 import { ObiTypes } from '../../transformers/constants/ObiTypes';
 
 import { FormCard } from './templates/FormCard';
-import { NodeProps, defaultNodeProps } from './sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 

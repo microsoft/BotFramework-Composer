@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { RootDialogStrategy } from '../../transformers/strategies/RootDialogStrategy';
-import { NodeRenderer } from '../../utils/NodeRenderer';
+import { NodeRenderer } from '../NodeRenderer';
 import { OffsetContainer } from '../OffsetContainer';
 
 const ContainerPaddingX = 50;

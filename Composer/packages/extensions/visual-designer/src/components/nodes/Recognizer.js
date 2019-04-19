@@ -3,7 +3,7 @@ import React from 'react';
 import { NodeClickActionTypes } from '../../utils/constant';
 
 import { FormCard } from './templates/FormCard';
-import { NodeProps, defaultNodeProps } from './sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 export class Recognizer extends React.Component {
   getBoundary() {

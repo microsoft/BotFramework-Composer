@@ -5,7 +5,7 @@ import { NodeClickActionTypes } from '../../utils/constant';
 import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 
 import { FormCard } from './templates/FormCard';
-import { NodeProps, defaultNodeProps } from './sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 export class IntentRule extends React.Component {
   getDetails() {
