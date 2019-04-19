@@ -3,9 +3,9 @@ import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Dropdown, DropdownMenuItemType } from 'office-ui-fabric-react/lib/Dropdown';
 import debounce from 'lodash.debounce';
-
-import Example from '../../src';
-import { dialogGroups } from '../../src/schema/appschema';
+import Example from '@app/index';
+import { ShellApi } from '@app/types';
+import { dialogGroups } from '@schema/appschema';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
@@ -13,7 +13,6 @@ import 'codemirror/theme/material.css';
 import 'codemirror/theme/neat.css';
 
 import './styles.scss';
-import { ShellApi } from '../../src/types';
 
 const cmOptions = {
   theme: 'material',

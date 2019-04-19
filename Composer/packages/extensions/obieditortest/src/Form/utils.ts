@@ -4,8 +4,8 @@ import {
   ContextualMenuItemType,
   IDropdownOption,
 } from 'office-ui-fabric-react';
+import { dialogGroups } from '@schema/appschema';
 
-import { dialogGroups } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
 
 export function buildDialogOptions(

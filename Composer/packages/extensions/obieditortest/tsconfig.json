@@ -14,7 +14,8 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "paths": {
-      "@app/*": ["src/*"]
+      "@app/*": ["src/*"],
+      "@schema/*": ["src/schema/*"]
     }
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
