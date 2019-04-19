@@ -48,7 +48,10 @@
             "$type": "Microsoft.IntentRule",
             "intent": "JokeIntent",
             "steps": [
-                "EndDialog.TellJoke"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "EndDialog.TellJoke"
+                }              
             ]
         }
     ]

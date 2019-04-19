@@ -23,21 +23,30 @@
             "$type": "Microsoft.IntentRule",
             "intent": "JokeIntent",
             "steps": [
-                "ExternalLanguage.TellJoke"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ExternalLanguage.TellJoke"
+                }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "FortuneTellerIntent",
             "steps": [
-                "ExternalLanguage.FortuneTeller"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ExternalLanguage.FortuneTeller"
+                }              
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "GreetingIntent",
             "steps": [
-                "ExternalLanguage.Greeting"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ExternalLanguage.Greeting"
+                }                
             ]
         },
         {
