@@ -59,4 +59,16 @@ export const uiSchema = {
       'ui:field': SelectorField,
     },
   },
+  'Microsoft.SwitchCondition': {
+    cases: {
+      items: {
+        steps: {
+          'ui:field': StepsField,
+        },
+      },
+    },
+    default: {
+      'ui:field': StepsField,
+    },
+  },
 };
