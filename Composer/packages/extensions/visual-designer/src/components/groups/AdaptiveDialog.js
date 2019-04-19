@@ -1,7 +1,7 @@
 import React from 'react';
 
+import transformAdaptiveDialog from '../../transformers/transformAdaptiveDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { RootDialogStrategy } from '../../transformers/strategies/RootDialogStrategy';
 import { NodeRenderer } from '../NodeRenderer';
 import { OffsetContainer } from '../OffsetContainer';
 import { GraphNode } from '../shared/GraphNode';
@@ -28,10 +28,10 @@ export class AdaptiveDialog extends React.Component {
 
   updateElements() {
     const { elements } = this;
-    const { recognizers, eventGroup, intentGroup } = RootDialogStrategy.selectNodes(this.props.data);
+    const { recognizer, eventGroup, intentGroup } = transformAdaptiveDialog(this.props.data);
 
-    if (Array.isArray(recognizers) && recognizers.length) {
-      elements.recognizerNode.props = this.buildProps(recognizers[0]);
+    if (recognizer) {
+      elements.recognizerNode.props = this.buildProps(recognizer);
     }
     if (eventGroup) {
       elements.eventGroupNode.props = this.buildProps(eventGroup);
