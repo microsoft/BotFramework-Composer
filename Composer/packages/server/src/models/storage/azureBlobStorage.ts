@@ -16,7 +16,6 @@ export class AzureBlobStorage implements IFileStorage {
     const names = path.split(/[/]|[\\]/).filter(i => i.length);
     let lastModified = '';
     let isFile = false;
-    let isDir = false;
     let size = '';
     if (names.length > 1) {
       // blob equal to file, if blob exist, path is file path
@@ -35,7 +34,7 @@ export class AzureBlobStorage implements IFileStorage {
       });
       if (!isFile) {
         // if not a file, try to find dir with this prefix, if path is wrong, throw error.
-        isDir = await new Promise((resolve, reject) => {
+        await new Promise((resolve, reject) => {
           this.client.listBlobDirectoriesSegmentedWithPrefix(container, blobPrefix, null as any, (err, data) => {
             if (err) {
               reject(err);
@@ -50,7 +49,7 @@ export class AzureBlobStorage implements IFileStorage {
       }
     }
     return {
-      isDir: isDir,
+      isDir: !isFile,
       isFile: isFile,
       lastModified: lastModified,
       size: size,
