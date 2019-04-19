@@ -131,7 +131,11 @@ const Demo: React.FC = () => {
     const options: IContextualMenuItem[] = [];
 
     for (const elem in dialogGroups) {
-      const subOptions = dialogGroups[elem].map(dialog => ({ key: dialog, text: dialog }));
+      const subOptions = dialogGroups[elem].map(dialog => ({
+        key: dialog,
+        text: dialog,
+        onClick: () => setFormData({ $type: dialog }),
+      }));
       options.push({
         key: elem,
         text: elem,
@@ -140,10 +144,6 @@ const Demo: React.FC = () => {
     }
 
     return options;
-  };
-
-  const onDialogChange = (event, option) => {
-    setFormData({ $type: option.text });
   };
 
   const handlePaste = updater => (_, e) => {
