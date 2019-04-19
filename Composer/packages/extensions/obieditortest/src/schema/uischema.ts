@@ -39,10 +39,10 @@ export const uiSchema = {
     },
   },
   'Microsoft.IfCondition': {
-    ifTrue: {
+    steps: {
       'ui:field': StepsField,
     },
-    ifFalse: {
+    elseSteps: {
       'ui:field': StepsField,
     },
   },
@@ -51,6 +51,11 @@ export const uiSchema = {
       'ui:field': SelectorField,
     },
     ifFalse: {
+      'ui:field': SelectorField,
+    },
+  },
+  'Microsoft.MostSpecificSelector': {
+    selector: {
       'ui:field': SelectorField,
     },
   },
