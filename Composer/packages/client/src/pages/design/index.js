@@ -1,9 +1,8 @@
-import Path from 'path';
-
-import React, { Fragment, useContext, useState, useMemo, useEffect } from 'react';
+import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import map from 'lodash.map';
 import startCase from 'lodash.startcase';
+import findindex from 'lodash.findindex';
+import get from 'lodash.get';
 import formatMessage from 'format-message';
 
 import { Tree } from './../../components/Tree';
@@ -11,59 +10,47 @@ import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
-import { getExtension, getBaseName } from './../../utils';
 import NewDialogModal from './NewDialogModal';
-
-function getDialogName(file) {
-  return Path.basename(file.name, '.dialog');
-}
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
-  const { files, openFileIndex, navPathHistory, path } = state;
-  const { setOpenFileIndex, clearNavHistory, navTo } = actions;
+  const { dialogs, navPath, navPathHistory } = state;
+  const { clearNavHistory, navTo } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
-    setOpenFileIndex(index);
     clearNavHistory();
-    navTo(getDialogName(files[index]));
+    navTo(dialogs[index].name);
   }
 
-  useEffect(() => {
-    if (files.length > 0) {
-      setOpenFileIndex(0);
-      navTo(getDialogName(files[0]));
-    }
-  }, [path]);
+  const dialogsMap = useMemo(() => {
+    return dialogs.reduce((result, dialog) => {
+      result[dialog.name] = dialog.content;
+      return result;
+    }, {});
+  }, [dialogs]);
 
   const breadcrumbItems = useMemo(() => {
-    const dialogs = files.reduce(
-      (result, item) => ({
-        ...result,
-        [getBaseName(item.name)]: item.content,
-      }),
-      {}
-    );
-
     return navPathHistory.map((item, index) => {
-      let text = item;
-      if (item !== getBaseName(item)) {
-        text = getExtension(map({ dialogs }, item + '.$type')[0]);
-      }
+      const text = item.indexOf('.') > -1 ? get(dialogsMap, `${item}.$type`) : item;
 
       return {
-        key: item + index,
+        key: index,
         path: item,
-        index: index,
-        text: startCase(text).replace(/\s/g, ''),
-        onClick: (_event, { path, index }) => {
-          clearNavHistory(index);
+        text: formatMessage(startCase(text).replace(/\s/g, '')),
+        onClick: (_event, { path, key }) => {
+          clearNavHistory(key);
           navTo(path);
         },
       };
     });
-  }, [clearNavHistory, files, navPathHistory, navTo]);
+  }, [clearNavHistory, dialogs, navPathHistory, navTo]);
+
+  const activeDialog = useMemo(() => {
+    if (!navPath) return -1;
+    const dialogName = navPath.split('.')[0];
+    return findindex(dialogs, { name: dialogName });
+  }, [navPath]);
 
   async function onSubmit(data) {
     await actions.createDialog(data);
@@ -73,7 +60,7 @@ function DesignPage() {
   return (
     <Fragment>
       <div style={{ display: 'flex' }}>
-        <div style={{ flexGrow: '0', flexShrink: '0', width: '270px', marginLeft: '20px', marginTop: '20px' }}>
+        <div style={{ flexGrow: '0', flexShrink: '0', width: '255px', marginLeft: '20px', marginTop: '20px' }}>
           <div>
             <Tree variant="large">
               <div style={{ padding: '10px', color: '#4f4f4f' }}>
@@ -87,7 +74,7 @@ function DesignPage() {
                   }}
                 >
                   <div>Dialogs</div>
-                  {files.length > 0 ? (
+                  {dialogs.length > 0 ? (
                     <IconButton
                       iconProps={{ iconName: 'Add' }}
                       title={formatMessage('New Dialog')}
@@ -98,7 +85,7 @@ function DesignPage() {
                     <div />
                   )}
                 </div>
-                <ProjectTree files={files} activeNode={openFileIndex} onSelect={handleFileClick} />
+                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
               </div>
             </Tree>
             <div style={{ height: '20px' }} />
