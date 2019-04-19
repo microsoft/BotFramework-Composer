@@ -22,6 +22,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/*.+(ts|tsx)'],
+      rules: {
+        'react/prop-types': 'off'
+      }
+    },
+    {
       files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)'],
       rules: {
         'react/display-name': 'off',
