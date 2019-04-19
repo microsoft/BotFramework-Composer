@@ -8,7 +8,10 @@ export const Diamond = ({ onClick }) => (
       backgroundColor: '#ffffff',
       cursor: 'pointer',
     }}
-    onClick={onClick}
+    onClick={e => {
+      e.stopPropagation();
+      onClick();
+    }}
   >
     <svg
       style={{ marginLeft: '48px' }}
