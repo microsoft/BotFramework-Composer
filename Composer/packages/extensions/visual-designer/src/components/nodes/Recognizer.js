@@ -6,6 +6,15 @@ import { FormCard } from './templates/FormCard';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 export class Recognizer extends React.Component {
+  getBoundary() {
+    return {
+      width: 170,
+      height: 50,
+      in: { x: 0, y: 85 },
+      out: { x: 50, y: 85 },
+    };
+  }
+
   render() {
     const { id, data, onEvent } = this.props;
     return (

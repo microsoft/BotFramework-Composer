@@ -5,8 +5,6 @@ import { obiTransformer } from '../transformers/ObiTransformer';
 import { PAYLOAD_KEY, NodeClickActionTypes } from '../utils/constant';
 import { NodeRenderer } from '../utils/NodeRenderer';
 
-import { ComponentGraph } from './ComponentGraph';
-
 export class ObiEditor extends Component {
   state = {
     prevPath: '',
@@ -72,7 +70,6 @@ export class ObiEditor extends Component {
   }
 
   render() {
-    const items = this.buildItemsFromObiJson(this.props.data);
     const graphId = this.props.path + '/ComponentGraph';
 
     return (
@@ -81,7 +78,13 @@ export class ObiEditor extends Component {
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <ComponentGraph key={graphId} graphId={graphId} items={items} />
+        <NodeRenderer
+          key={graphId}
+          id={graphId}
+          data={this.props.data}
+          focusedId={this.state.focusedId}
+          onEvent={(...args) => this.dispatchEvent(...args)}
+        />
       </div>
     );
   }

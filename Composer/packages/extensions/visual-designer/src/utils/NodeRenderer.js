@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
-import { EventGroup, IntentGroup } from '../components/groups';
+import { AdaptiveDialog, EventGroup, IntentGroup } from '../components/groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -14,6 +15,7 @@ import {
 } from '../components/nodes/index';
 
 const rendererByObiType = {
+  [ObiTypes.AdaptiveDialog]: AdaptiveDialog,
   [ObiTypes.WelcomeRule]: WelcomeRule,
   [ObiTypes.IntentRule]: IntentRule,
   [ObiTypes.NoMatchRule]: NoMatchRule,
@@ -33,12 +35,33 @@ function chooseRendererByType($type) {
   return renderer;
 }
 
-export function NodeRenderer({ id, data, focusedId, onEvent }) {
-  const ChosenRenderer = chooseRendererByType(data.$type);
+export class NodeRenderer extends React.Component {
+  contentRef = React.createRef();
 
-  const nodeContent = <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} />;
-  if (focusedId === id) {
-    return <div style={{ outline: '2px solid grey' }}>{nodeContent}</div>;
+  getBoundary() {
+    if (this.contentRef && this.contentRef.current && this.contentRef.current.getBoundary) {
+      return this.contentRef.current.getBoundary();
+    }
+    return {};
   }
-  return nodeContent;
+
+  render() {
+    const { id, data, focusedId, onEvent } = this.props;
+    const ChosenRenderer = chooseRendererByType(data.$type);
+
+    const nodeContent = (
+      <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} ref={this.contentRef} />
+    );
+    if (focusedId === id) {
+      return <div style={{ outline: '2px solid grey', display: 'inline-block' }}>{nodeContent}</div>;
+    }
+    return nodeContent;
+  }
 }
+
+NodeRenderer.propTypes = {
+  id: PropTypes.string,
+  data: PropTypes.any,
+  focusedId: PropTypes.string,
+  onEvent: PropTypes.func,
+};
