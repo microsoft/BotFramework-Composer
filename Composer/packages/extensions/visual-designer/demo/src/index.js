@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-import { ObiEditor } from '../../src/components/ObiEditor';
+import { ObiEditor } from '../../src/containers/ObiEditor';
 
 import { JsonBlock } from './components/json-block';
 import * as ObiExamples from './samples';
