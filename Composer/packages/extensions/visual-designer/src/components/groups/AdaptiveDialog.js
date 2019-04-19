@@ -6,6 +6,7 @@ import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { DynamicStyledComponent } from '../shared/DynamicStyledComponent';
+import { OffsetContainer } from '../OffsetContainer';
 
 const ContainerPaddingX = 50;
 const ContainerPaddingY = 50;
@@ -42,16 +43,13 @@ export class AdaptiveDialog extends DynamicStyledComponent {
     }
   }
 
-  updateDOMStyle() {
+  measureStyle() {
     const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
     const nodes = [recognizerNode, eventGroupNode, intentGroupNode];
 
     // Measure node size
     nodes.forEach(x => {
-      x.boundary = {
-        width: x.ref.current.scrollWidth,
-        height: x.ref.current.scrollHeight,
-      };
+      x.boundary = x.ref.current.getBoundary();
     });
 
     // Measure container size
@@ -72,25 +70,25 @@ export class AdaptiveDialog extends DynamicStyledComponent {
       x: (this.width - intentGroupNode.boundary.width) / 2,
       y: eventGroupNode.offset.y + eventGroupNode.boundary.height + ElementInterval,
     };
-
-    // Apply layout
-    nodes.forEach(x => {
-      x.ref.current.style.left = x.offset.x + 'px';
-      x.ref.current.style.top = x.offset.y + 'px';
-    });
   }
 
   renderContent() {
     const { recognizerNode, eventGroupNode, intentGroupNode } = this.boxes;
 
     const recognizer = recognizerNode.props && (
-      <NodeRenderer key="recognizer" ref={recognizerNode.ref} {...recognizerNode.props} />
+      <OffsetContainer offset={recognizerNode.offset}>
+        <NodeRenderer key="recognizer" ref={recognizerNode.ref} {...recognizerNode.props} />
+      </OffsetContainer>
     );
     const events = eventGroupNode.props && (
-      <NodeRenderer key="eventGroup" ref={eventGroupNode.ref} {...eventGroupNode.props} />
+      <OffsetContainer offset={eventGroupNode.offset}>
+        <NodeRenderer key="eventGroup" ref={eventGroupNode.ref} {...eventGroupNode.props} />
+      </OffsetContainer>
     );
     const intents = intentGroupNode.props && (
-      <NodeRenderer key="intentGroup" ref={intentGroupNode.ref} {...intentGroupNode.props} />
+      <OffsetContainer offset={intentGroupNode.offset}>
+        <NodeRenderer key="intentGroup" ref={intentGroupNode.ref} {...intentGroupNode.props} />
+      </OffsetContainer>
     );
 
     return (

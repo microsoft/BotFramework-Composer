@@ -1,12 +1,12 @@
 import React from 'react';
 
-const FLAGS = {
+const STAGE = {
   ELEMENT: 0,
-  LAYOUT: 1,
+  STYLE: 1,
 };
 
 export class DynamicStyledComponent extends React.Component {
-  renderStage = FLAGS.ELEMENT;
+  renderStage = STAGE.ELEMENT;
 
   componentDidMount() {
     this.forceUpdate();
@@ -14,19 +14,19 @@ export class DynamicStyledComponent extends React.Component {
 
   componentDidUpdate() {
     switch (this.renderStage) {
-      case FLAGS.ELEMENT:
-        this.renderStage = FLAGS.LAYOUT;
-        this.updateDOMStyle();
+      case STAGE.ELEMENT:
+        this.renderStage = STAGE.STYLE;
+        this.measureStyle();
         this.forceUpdate();
         break;
-      case FLAGS.LAYOUT:
-        this.renderStage = FLAGS.ELEMENT;
+      case STAGE.STYLE:
+        this.renderStage = STAGE.ELEMENT;
         break;
     }
   }
 
-  updateDOMStyle() {
-    throw new Error('updateDOMStyle() is not implemented!');
+  measureStyle() {
+    throw new Error('measureStyle() is not implemented!');
   }
 
   computeProps() {
@@ -38,7 +38,7 @@ export class DynamicStyledComponent extends React.Component {
   }
 
   render() {
-    if (this.renderStage === FLAGS.ELEMENT) {
+    if (this.renderStage === STAGE.ELEMENT) {
       this.computeProps(this.props);
     }
 

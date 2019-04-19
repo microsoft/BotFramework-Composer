@@ -13,6 +13,7 @@ import {
   NoMatchRule,
   EventRule,
 } from './nodes/index';
+import { Boundary } from './shared/Boundary';
 
 const rendererByObiType = {
   [ObiTypes.AdaptiveDialog]: AdaptiveDialog,
@@ -36,20 +37,38 @@ function chooseRendererByType($type) {
   return renderer;
 }
 
-export const NodeRenderer = React.forwardRef(function RefNodeRenderer(props, ref) {
-  const { id, data, focusedId, onEvent } = props;
-  const ChosenRenderer = chooseRendererByType(data.$type);
+export class NodeRenderer extends React.Component {
+  containerRef = React.createRef();
+  contentRef = React.createRef();
 
-  return (
-    <div
-      className="node-renderer-container"
-      style={{ position: 'absolute', outline: focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
-      ref={ref}
-    >
-      <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
-    </div>
-  );
-});
+  getBoundary() {
+    if (this.contentRef.current && this.contentRef.current.getBoundary) {
+      return this.contentRef.current.getBoundary();
+    }
+
+    const boundary = new Boundary();
+    boundary.width = this.containerRef.current.scrollWidth || 0;
+    boundary.height = this.containerRef.current.scrollHeight || 0;
+    boundary.in = { x: boundary.width / 2, y: 0 };
+    boundary.out = { x: boundary.width / 2, y: boundary.height };
+    return boundary;
+  }
+
+  render() {
+    const { id, data, focusedId, onEvent } = this.props;
+    const ChosenRenderer = chooseRendererByType(data.$type);
+
+    return (
+      <div
+        className="node-renderer-container"
+        style={{ outline: focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+        ref={this.containerRef}
+      >
+        <ChosenRenderer ref={this.contentRef} id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
+      </div>
+    );
+  }
+}
 
 NodeRenderer.propTypes = {
   id: PropTypes.string,
