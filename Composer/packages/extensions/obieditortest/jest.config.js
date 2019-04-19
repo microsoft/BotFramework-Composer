@@ -3,8 +3,6 @@ module.exports = {
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
     '\\.(s)?css$': '<rootDir>/__tests__/jestMocks/styleMock.ts',
-    // needs to mirror tsconfig.paths
-    '@app/(.*)': '<rootDir>/src/$1',
   },
   testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '__tests__/setup.ts'],
   // Some node modules are packaged and distributed in a non-transpiled form
