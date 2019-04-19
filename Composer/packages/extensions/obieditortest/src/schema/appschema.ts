@@ -28,6 +28,14 @@ export const dialogGroups = {
   Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.SaveEntity'],
   Rules: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.Rule', 'Microsoft.UnknownIntentRule'],
   Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
+  Selectors: [
+    'Microsoft.ConditionalSelector',
+    'Microsoft.FirstSelector',
+    'Microsoft.IRuleSelector',
+    'Microsoft.MostSpecificSelector',
+    'Microsoft.RandomSelector',
+    'Microsoft.TrueSelector',
+  ],
   Other: ['Microsoft.AdaptiveDialog'],
 };
 
