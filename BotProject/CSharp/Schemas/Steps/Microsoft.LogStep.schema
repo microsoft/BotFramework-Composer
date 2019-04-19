@@ -2,9 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
     "$role": "unionType(Microsoft.IDialog)",
     "title": "Log Step",
-    "description": "This is a step which writes to console.log and optional creates a TraceActivity around a text binding",
+    "description": "This is a step which writes to console.log and optionally creates a TraceActivity around a text binding",
     "type": "object",
-    "additionalProperties": false,
     "properties": {
         "text": {
             "type": "string",
