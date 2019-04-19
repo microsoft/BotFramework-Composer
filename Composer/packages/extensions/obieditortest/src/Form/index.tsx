@@ -30,10 +30,22 @@ function removeUndefinedOrEmpty(object: any): any {
       }
 
       const result = removeUndefinedOrEmpty(obj[key]);
-      if (result === undefined || Object.keys(obj[key]).length === 0) {
-        delete obj[key];
-      } else {
-        obj[key] = result;
+      switch (typeof result) {
+        case 'undefined':
+          delete obj[key];
+          break;
+        case 'boolean':
+          obj[key] = result;
+          break;
+        case 'object':
+          if (Object.keys(result).length === 0) {
+            delete obj[key];
+          } else {
+            obj[key] = result;
+          }
+          break;
+        default:
+          obj[key] = result;
       }
     }
 
