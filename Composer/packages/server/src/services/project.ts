@@ -20,6 +20,7 @@ class BotProjectService {
       await this.currentBotProject.init();
     }
   };
+
   public openProject = async (projRef: BotProjectRef) => {
     if (!(await StorageService.checkBlob(projRef.storageId, projRef.path))) {
       throw new Error(`file not exist ${projRef.path}`);
@@ -44,6 +45,15 @@ class BotProjectService {
     this.recentBotProjects.unshift(this.currentBotProject.ref);
     Store.set('recentBotProjects', this.recentBotProjects);
   }
+  
+  public saveProjectAs = async (projRef: BotProjectRef) => {
+    if (typeof this.currentBotProject !== 'undefined') {
+      const prevFiles = this.currentBotProject.getFiles();
+      this.currentBotProject = new BotProject(projRef);
+      await this.currentBotProject.copyProject(prevFiles);
+      await this.currentBotProject.init();
+    }
+  };
 }
 
 const service = new BotProjectService();
