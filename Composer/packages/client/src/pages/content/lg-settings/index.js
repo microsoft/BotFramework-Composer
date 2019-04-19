@@ -17,7 +17,6 @@ export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgTemplates } = state;
   const updateLG = useRef(debounce(actions.updateLG, 500)).current;
-
   const tableColums = [
     {
       key: 'name',
@@ -62,44 +61,33 @@ export function LanguageGenerationSettings() {
       data: 'string',
       isPadded: true,
       onRender: (item, index) => {
-        return <span>{getTemplatePhrase(index, item.fileName, item.name, item.content)}</span>;
+        return <span>{getTemplatePhrase(item, index)}</span>;
       },
     },
   ];
 
-  function updateTemplateContent(index, lgName, templateName, content) {
-    let updatedLG = '';
-    lgTemplates[index].name = templateName;
-    lgTemplates[index].content = content;
-    lgTemplates
-      .filter(template => template.fileName === lgName)
-      .forEach(template => {
-        if (template.comments) {
-          updatedLG += `${template.comments}`;
-        }
-        if (template.name) {
-          updatedLG += `# ${template.name}` + '\n';
-          updatedLG += `${template.content}` + '\n';
-        }
-      });
+  function updateTemplateContent(index, file, templateName, content) {
+    const newTemplate = lgTemplates[index];
+    newTemplate.name = templateName;
+    newTemplate.content = content;
 
     const payload = {
-      name: lgName,
-      content: updatedLG.trim('\n'),
+      name: file,
+      content: newTemplate,
     };
 
     updateLG(payload);
   }
 
-  function getTemplatePhrase(index, lgName, templateName, content) {
+  function getTemplatePhrase(item, index) {
     return (
       <TextField
         borderless
         multiline
         autoAdjustHeight
         placeholder="Template Content."
-        defaultValue={content}
-        onChange={(event, newValue) => updateTemplateContent(index, lgName, templateName, newValue)}
+        defaultValue={item.content}
+        onChange={(event, newValue) => updateTemplateContent(index, item.fileName, item.name, newValue)}
       />
     );
   }
@@ -151,6 +139,7 @@ export function LanguageGenerationSettings() {
       groups.push({ name: currentKey, count: itemCount, key: currentKey, startIndex: index - itemCount + 1 });
     }
   });
+
   return (
     <Fragment>
       <div>

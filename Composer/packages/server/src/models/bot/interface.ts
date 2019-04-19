@@ -23,11 +23,21 @@ export interface Dialog {
   path: string;
 }
 
+// export interface LGTemplate {
+//   id: number;
+//   fileName: string;
+//   type: string;
+//   name: string;
+//   content: any;
+//   comments: string;
+// }
+
 export interface LGTemplate {
   id: number;
-  fileName: string;
-  type: string;
   name: string;
+  type: string;
+  parameters: string[];
   content: any;
+  fileName: string;
   comments: string;
 }

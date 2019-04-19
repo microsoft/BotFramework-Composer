@@ -28,6 +28,9 @@ const createDialogSuccess = (state, { response }) => {
 
 const updateLG = (state, { response }) => {
   state.lgTemplates = response.data.lgTemplates;
+  console.log('------');
+  console.log(response);
+
   return state;
 };
 

@@ -107,22 +107,12 @@ async function updateLG(req: Request, res: Response) {
   }
 }
 
-async function createLGFromTemplate(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
-    const lgTemplates = await ProjectService.currentBotProject.createLGFromTemplate(req.body.name, req.body.content);
-    res.status(200).json({ lgTemplates });
-  } else {
-    res.status(404).json({ error: 'No bot project opened' });
-  }
-}
-
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
   updateDialog: updateDialog,
   createDialogFromTemplate: createDialogFromTemplate,
   updateLG: updateLG,
-  createLGFromTemplate: createLGFromTemplate,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
 };
