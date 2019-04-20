@@ -5,7 +5,7 @@ const STAGE = {
   STYLE: 1,
 };
 
-export class DynamicStyledComponent extends React.Component {
+export class DynamicLayoutComponent extends React.Component {
   renderStage = STAGE.ELEMENT;
 
   componentDidMount() {

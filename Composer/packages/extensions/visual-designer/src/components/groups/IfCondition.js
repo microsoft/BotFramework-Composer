@@ -4,8 +4,9 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { Diamond } from '../nodes/templates/Diamond';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
+import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 
-export class IfCondition extends React.Component {
+export class IfCondition extends DynamicLayoutComponent {
   width = 150;
   height = 20;
 

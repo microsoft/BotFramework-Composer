@@ -4,12 +4,12 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../OffsetContainer';
-import { DynamicStyledComponent } from '../shared/DynamicStyledComponent';
+import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { VerticalEdge } from '../shared/Edges';
 
 const StepInterval = 20;
 
-export class StepGroup extends DynamicStyledComponent {
+export class StepGroup extends DynamicLayoutComponent {
   width = 0;
   height = 0;
 

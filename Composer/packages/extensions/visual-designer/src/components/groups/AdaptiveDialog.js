@@ -5,12 +5,12 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
-import { DynamicStyledComponent } from '../shared/DynamicStyledComponent';
+import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { OffsetContainer } from '../OffsetContainer';
 
 const ElementInterval = 30;
 
-export class AdaptiveDialog extends DynamicStyledComponent {
+export class AdaptiveDialog extends DynamicLayoutComponent {
   width = 0;
   height = 0;
 
