@@ -1,6 +1,4 @@
-import fs from 'fs';
 import path from 'path';
-import { promisify } from 'util';
 
 import { merge, set } from 'lodash';
 import glob from 'globby';
@@ -9,12 +7,10 @@ import DIALOG_TEMPLATE from '../../store/dialogTemplate.json';
 
 import { BotProjectRef, FileInfo, BotProjectFileContent, Dialog } from './interface';
 import { dialogIndexer } from './indexers';
+import { IFileStorage, StorageConnection } from '../storage/interface.js';
+import { StorageFactory } from '../storage/storageFactory.js';
+import { Store } from 'src/store/store.js';
 
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-const lstat = promisify(fs.lstat);
-const mkDir = promisify(fs.mkdir);
-const exists = promisify(fs.exists);
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
 // 2. refactor this layer, to operate on dialogs, not files
@@ -24,12 +20,19 @@ export class BotProject {
   public name: string;
   public absolutePath: string;
   public dir: string;
-  public files: FileInfo[] = [];
+  public fileStorage: IFileStorage;
+  public storageConnection: StorageConnection | undefined = undefined;
   public dialogs: Dialog[] = [];
   public botFile: FileInfo | any = null;
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
+
+    this.storageConnection = this._getStorageConnection(this.ref.storageId);
+    if (this.storageConnection === undefined) {
+      throw new Error('no storage match');
+    }
+    this.fileStorage = StorageFactory.createStorageClient(this.storageConnection);
 
     this.absolutePath = path.resolve(this.ref.path);
     this.dir = path.dirname(this.absolutePath);
@@ -42,10 +45,17 @@ export class BotProject {
     this.botFile = this.files[0];
   };
 
+  private _getStorageConnection = (id: string): StorageConnection | undefined => {
+    const storageConnections: StorageConnection[] = Store.get('storageConnections');
+    return storageConnections.find(s => {
+      return s.id === id;
+    });
+  };
+
   public loadResource = async () => {
     const fileList: FileInfo[] = [];
     // get .bot file
-    const botFileContent = await readFile(this.absolutePath, 'utf-8');
+    const botFileContent = await this.fileStorage.readFile(this.absolutePath);
     // get 'files' from .bot file
     const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
 
@@ -98,14 +108,14 @@ export class BotProject {
       set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
     });
 
-    await writeFile(absolutePath, JSON.stringify(newDialog, null, 2) + '\n', {});
+    await this.fileStorage.writeFile(absolutePath, JSON.stringify(newDialog, null, 2) + '\n');
     this.dialogs.push({ name, content: newDialog, id: this.dialogs.length });
     return this.dialogs;
   };
 
   public updateFile = async (name: string, content: any) => {
     const absolutePath: string = path.join(this.dir, name);
-    await writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
+    await this.fileStorage.writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
   };
 
   public updateDialog = async (name: string, content: any) => {
