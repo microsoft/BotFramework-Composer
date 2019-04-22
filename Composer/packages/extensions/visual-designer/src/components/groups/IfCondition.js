@@ -9,10 +9,11 @@ import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { OffsetContainer } from '../OffsetContainer';
 import { NodeRenderer } from '../NodeRenderer';
 import { Boundary } from '../shared/Boundary';
+import { HorizontalEdge, VerticalEdge } from '../shared/Edges';
 
-const ChoiceNodeWidth = 150;
-const ChoiceNodeHeight = 50;
-const BranchIntervalX = 30;
+const ChoiceNodeWidth = 50;
+const ChoiceNodeHeight = 20;
+const BranchIntervalX = 50;
 const BranchIntervalY = 30;
 
 export class IfCondition extends DynamicLayoutComponent {
@@ -21,6 +22,8 @@ export class IfCondition extends DynamicLayoutComponent {
   choiceNode = null;
   ifGroupNode = null;
   elseGroupNode = null;
+
+  edges = [];
 
   getBoundary() {
     return this.boundary;
@@ -48,6 +51,8 @@ export class IfCondition extends DynamicLayoutComponent {
 
   measureLayout() {
     const { choiceNode, ifGroupNode, elseGroupNode } = this;
+    choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
+
     const branchNodes = [ifGroupNode, elseGroupNode];
     branchNodes
       .filter(x => !!x)
@@ -66,15 +71,26 @@ export class IfCondition extends DynamicLayoutComponent {
          *        [else]         |
          *          |-------------
          */
-        this.boundary.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX + ifWidth;
-        this.boundary.height = Math.max(ChoiceNodeHeight + BranchIntervalY + elseHeight, ifHeight + BranchIntervalY);
+        this.boundary.width =
+          Math.max(choiceNode.boundary.axisX, choiceNode.boundary.width - choiceNode.boundary.axisX) +
+          Math.max(elseGroupNode.boundary.axisX, elseGroupNode.boundary.width - elseGroupNode.boundary.axisX) +
+          BranchIntervalX +
+          ifWidth;
+        this.boundary.height = Math.max(
+          choiceNode.boundary.height + 2 * BranchIntervalY + elseHeight,
+          ifHeight + BranchIntervalY
+        );
+        this.boundary.axisX = Math.max(choiceNode.boundary.axisX, elseGroupNode.boundary.axisX);
 
-        choiceNode.offset = { x: (Math.max(ChoiceNodeWidth, elseWith) - ChoiceNodeWidth) / 2, y: 0 };
-        elseGroupNode.offset = {
-          x: (Math.max(ChoiceNodeWidth, elseWith) - elseWith) / 2,
-          y: ChoiceNodeHeight + BranchIntervalY,
+        choiceNode.offset = {
+          x: this.boundary.axisX - choiceNode.boundary.axisX,
+          y: 0,
         };
-        ifGroupNode.offset = { x: Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX, y: 0 };
+        elseGroupNode.offset = {
+          x: this.boundary.axisX - elseGroupNode.boundary.axisX,
+          y: choiceNode.boundary.height + BranchIntervalY,
+        };
+        ifGroupNode.offset = { x: Math.max(choiceNode.boundary.width, elseWith) + BranchIntervalX, y: 0 };
         break;
       case '10':
         /**
@@ -83,11 +99,12 @@ export class IfCondition extends DynamicLayoutComponent {
          *         |         |
          *         |----------
          */
-        this.boundary.width = ChoiceNodeWidth + BranchIntervalX + ifWidth;
-        this.boundary.height = Math.max(ChoiceNodeHeight, ifHeight) + BranchIntervalY;
+        this.boundary.width = choiceNode.boundary.width + BranchIntervalX + ifWidth;
+        this.boundary.height = Math.max(choiceNode.boundary.height, ifHeight) + BranchIntervalY;
+        this.boundary.axisX = choiceNode.boundary.axisX;
 
         choiceNode.offset = { x: 0, y: 0 };
-        ifGroupNode.offset = { x: ChoiceNodeWidth + BranchIntervalX, y: 0 };
+        ifGroupNode.offset = { x: choiceNode.boundary.width + BranchIntervalX, y: 0 };
         break;
       case '01':
         /**
@@ -96,26 +113,111 @@ export class IfCondition extends DynamicLayoutComponent {
          *        [else]    |
          *          |--------
          */
-        this.boundary.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX;
-        this.boundary.height = ChoiceNodeHeight + BranchIntervalY * 2;
+        this.boundary.width = Math.max(choiceNode.boundary.width, elseWith) + BranchIntervalX;
+        this.boundary.height = choiceNode.boundary.height + elseHeight + BranchIntervalY * 2;
+        this.boundary.axisX = Math.max(choiceNode.boundary.axisX, elseGroupNode.boundary.axisX);
 
-        choiceNode.offset = { x: (Math.max(ChoiceNodeWidth, elseWith) - ChoiceNodeWidth) / 2, y: 0 };
+        choiceNode.offset = {
+          x: this.boundary.axisX - choiceNode.boundary.axisX,
+          y: 0,
+        };
         elseGroupNode.offset = {
-          x: (Math.max(ChoiceNodeWidth, elseWith) - elseWith) / 2,
-          y: ChoiceNodeHeight + BranchIntervalY,
+          x: this.boundary.axisX - elseGroupNode.boundary.axisX,
+          y: choiceNode.boundary.height + BranchIntervalY,
         };
         break;
       case '00':
         /**
          *    <Choice>
          */
-        this.boundary.width = ChoiceNodeWidth;
-        this.boundary.height = ChoiceNodeHeight;
+        this.boundary.width = choiceNode.boundary.width;
+        this.boundary.height = choiceNode.boundary.height;
+        this.boundary.axisX = choiceNode.boundary.axisX;
         choiceNode.offset = { x: 0, y: 0 };
         break;
       default:
         break;
     }
+
+    const { id } = this.props;
+    const edgeList = [];
+    if (ifGroupNode) {
+      edgeList.push(
+        {
+          key: `${id}/edges/choice->if`,
+          direction: 'x',
+          x: choiceNode.offset.x + choiceNode.boundary.width,
+          y: choiceNode.offset.y + choiceNode.boundary.axisY,
+          length: ifGroupNode.offset.x - choiceNode.boundary.width - choiceNode.offset.x,
+        },
+        {
+          key: `${id}/edges/if->bottom`,
+          direction: 'y',
+          x: ifGroupNode.offset.x + ifGroupNode.boundary.axisX,
+          y: ifGroupNode.offset.y + ifGroupNode.boundary.height,
+          length: this.boundary.height - (ifGroupNode.offset.y + ifGroupNode.boundary.height),
+        },
+        {
+          key: `${id}/edges/bottome->out`,
+          direction: 'x',
+          x: this.boundary.axisX,
+          y: this.boundary.height,
+          length: ifGroupNode.offset.x + ifGroupNode.boundary.axisX - this.boundary.axisX,
+        }
+      );
+    } else {
+      edgeList.push(
+        {
+          key: `${id}/edges/choice->right`,
+          direction: 'x',
+          x: choiceNode.offset.x + choiceNode.boundary.width,
+          y: choiceNode.offset.y + choiceNode.boundary.axisY,
+          length: this.boundary.width - (choiceNode.offset.x + choiceNode.boundary.width),
+        },
+        {
+          key: `${id}/edges/top-bottom`,
+          direction: 'y',
+          x: this.boundary.width,
+          y: choiceNode.offset.y + choiceNode.boundary.axisY,
+          length: this.boundary.height - (choiceNode.offset.y + choiceNode.boundary.axisY),
+        },
+        {
+          key: `${id}/edges/bottome->out`,
+          direction: 'x',
+          x: this.boundary.axisX,
+          y: this.boundary.height,
+          length: this.boundary.width - this.boundary.axisX,
+        }
+      );
+    }
+
+    if (elseGroupNode) {
+      edgeList.push(
+        {
+          key: `${id}/edges/choice->else`,
+          direction: 'y',
+          x: this.boundary.axisX,
+          y: choiceNode.offset.y + choiceNode.boundary.height,
+          length: BranchIntervalY,
+        },
+        {
+          key: `${id}/edges/else->out`,
+          direction: 'y',
+          x: this.boundary.axisX,
+          y: elseGroupNode.offset.y + elseGroupNode.boundary.height,
+          length: BranchIntervalY,
+        }
+      );
+    } else {
+      edgeList.push({
+        key: `${id}/edges/choice->out`,
+        x: this.boundary.axisX,
+        y: choiceNode.offset.y + choiceNode.boundary.height,
+        length: this.boundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
+      });
+    }
+
+    this.edges = edgeList.map(x => (x.direction === 'x' ? <HorizontalEdge {...x} /> : <VerticalEdge {...x} />));
   }
 
   renderContent() {
@@ -136,6 +238,7 @@ export class IfCondition extends DynamicLayoutComponent {
               <NodeRenderer key={`${id}.branches[${index}]`} ref={x.ref} {...x.props} />
             </OffsetContainer>
           ))}
+        {this.edges}
       </div>
     );
   }
