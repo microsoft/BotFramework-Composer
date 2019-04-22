@@ -43,8 +43,8 @@ export class StepGroup extends DynamicLayoutComponent {
       x.boundary = x.ref.current.getBoundary();
     });
 
-    this.boundary.axisX = Math.max(...steps.map(x => x.boundary.axisX));
-    this.boundary.width = this.boundary.axisX + Math.max(...steps.map(x => x.boundary.width - x.boundary.axisX));
+    this.boundary.axisX = Math.max(0, ...steps.map(x => x.boundary.axisX));
+    this.boundary.width = this.boundary.axisX + Math.max(0, ...steps.map(x => x.boundary.width - x.boundary.axisX));
     this.boundary.height =
       steps.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
       StepInterval * Math.max(steps.length - 1, 0);

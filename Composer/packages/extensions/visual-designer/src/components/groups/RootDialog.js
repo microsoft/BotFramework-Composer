@@ -46,7 +46,7 @@ export class RootDialog extends DynamicLayoutComponent {
     this.width =
       nodes.map(x => x.boundary.width).reduce((sum, val) => sum + val, 0) +
       ElementIntervalX * Math.max(nodes.length - 1, 0);
-    this.height = Math.max(...nodes.map(x => x.boundary.height));
+    this.height = Math.max(0, ...nodes.map(x => x.boundary.height));
 
     nodes.reduce((offsetX, node) => {
       node.offset = { x: offsetX, y: 0 };

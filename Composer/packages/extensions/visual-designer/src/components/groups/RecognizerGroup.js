@@ -40,7 +40,7 @@ export class RecognizerGroup extends DynamicLayoutComponent {
     });
 
     // Measure container size
-    this.width = Math.max(...nodes.map(x => x.boundary.width));
+    this.width = Math.max(0, ...nodes.map(x => x.boundary.width));
     this.height =
       nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
       ElementIntervalVertical * Math.max(nodes.length - 1, 0);
