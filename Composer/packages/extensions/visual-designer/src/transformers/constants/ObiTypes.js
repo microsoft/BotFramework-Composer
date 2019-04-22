@@ -1,7 +1,5 @@
 export const ObiTypes = {
   // dialogs
-  ObiRuleDialog: 'Microsoft.RuleDialog',
-  SequenceDialog: 'Microsoft.SequenceDialog',
   AdaptiveDialog: 'Microsoft.AdaptiveDialog',
 
   // recognizers

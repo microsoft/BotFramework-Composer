@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { transformIfCondtiom } from '../../transformers/transformIfCondition';
+import { transformIfCondtion } from '../../transformers/transformIfCondition';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { Diamond } from '../nodes/templates/Diamond';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -31,7 +31,7 @@ export class IfCondition extends DynamicLayoutComponent {
 
   computeProps(props) {
     const { id, data, focusedId, onEvent } = props;
-    const { choice, ifGroup, elseGroup } = transformIfCondtiom(data, id);
+    const { choice, ifGroup, elseGroup } = transformIfCondtion(data, id);
 
     const createGraphNode = input => {
       const result = new GraphObjectModel();

@@ -1,7 +1,7 @@
 import { ObiTypes } from './constants/ObiTypes';
 import { IndexedNode } from './models/IndexedNode';
 
-export function transformIfCondtiom(input, jsonpath) {
+export function transformIfCondtion(input, jsonpath) {
   if (!input || input.$type !== ObiTypes.IfCondition) return {};
 
   const result = {
