@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+
 import { FileInfo, LGTemplate } from '../interface';
 
 export class LGIndexer {
