@@ -1,5 +1,4 @@
-import * as todo from './todo.dialog';
-import * as ifelse from './ifelse.dialog';
-import * as stepGroup from './stepGroup.dialog';
+import * as todo from './main.dialog';
+import * as AddToDo from './AddToDo.dialog';
 
-export { todo, ifelse, stepGroup };
+export { todo, AddToDo };
