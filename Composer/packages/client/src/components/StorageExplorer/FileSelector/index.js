@@ -21,7 +21,15 @@ import { FileTypes, SupportedFileTypes } from '../../../constants/index';
 import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
 
 export function FileSelector(props) {
-  const { saveAction, onSelectionChanged, currentPath, updateCurrentPath, focusedStorageFolder, checkShowItem } = props;
+  const {
+    saveAction,
+    onSelectionChanged,
+    currentPath,
+    updateCurrentPath,
+    focusedStorageFolder,
+    checkShowItem,
+    storageExplorerStatus,
+  } = props;
   // for detail file list in open panel
   const tableColums = [
     {
@@ -106,7 +114,7 @@ export function FileSelector(props) {
       }
       return result;
     }, []);
-  }, [focusedStorageFolder]);
+  }, [focusedStorageFolder, storageExplorerStatus]);
 
   const selection = new Selection({
     onSelectionChanged: () => {
@@ -208,6 +216,7 @@ export function FileSelector(props) {
 FileSelector.propTypes = {
   saveAction: PropTypes.element,
   focusedStorageFolder: PropTypes.object,
+  storageExplorerStatus: PropTypes.string,
   currentPath: PropTypes.string,
   updateCurrentPath: PropTypes.func,
   onSelectionChanged: PropTypes.func,

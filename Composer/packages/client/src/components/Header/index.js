@@ -15,7 +15,7 @@ export const Header = props => {
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer('new')}
+          // onClick={() => openStorageExplorer('new')}
         >
           New
         </ActionButton>

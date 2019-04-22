@@ -20,11 +20,7 @@ function onRenderNavigationContent() {
   return <div style={{ height: '0px' }} />;
 }
 
-const links = [
-  { name: formatMessage('New'), key: 'new' },
-  { name: formatMessage('Open'), key: 'open' },
-  { name: formatMessage('Save As'), key: 'saveas' },
-];
+const links = [{ name: formatMessage('Open'), key: 'open' }, { name: formatMessage('Save As'), key: 'saveas' }];
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
@@ -153,6 +149,7 @@ export function StorageExplorer() {
                   <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
                 )
               }
+              storageExplorerStatus={storageExplorerStatus}
               checkShowItem={checkShowItem}
               currentPath={currentPath}
               focusedStorageFolder={focusedStorageFolder}
