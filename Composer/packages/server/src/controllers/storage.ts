@@ -14,14 +14,13 @@ function createStorageConnection(req: Request, res: Response) {
 
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
-  const reqpath = req.params.path;
+  const reqpath = decodeURI(req.params.path);
   try {
     if (!path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath));
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 }

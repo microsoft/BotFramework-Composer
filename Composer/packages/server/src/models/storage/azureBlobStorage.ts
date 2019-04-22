@@ -12,8 +12,7 @@ export class AzureBlobStorage implements IFileStorage {
     }
   }
   async stat(path: string): Promise<Stat> {
-    path = decodeURI(path);
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     let lastModified = '';
     let isFile = false;
     let size = '';
@@ -57,8 +56,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
-    path = decodeURI(path);
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     const container = names[0];
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
@@ -73,8 +71,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readDir(path: string): Promise<string[]> {
-    path = decodeURI(path);
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length === 0) {
       // show containers
       return new Promise((resolve, reject) => {
@@ -105,7 +102,7 @@ export class AzureBlobStorage implements IFileStorage {
             data.entries.forEach(i => {
               const index = i.name.indexOf(blobPath);
               const temp = i.name.substring(index + blobPath.length);
-              result.add(temp.split('/').filter(i => i.length)[0]); //temp.split('/')[0]
+              result.add(temp.split('/').filter(i => i.length)[0]);
             });
             resolve(Array.from(result));
           }
@@ -116,8 +113,7 @@ export class AzureBlobStorage implements IFileStorage {
 
   // check if it's file and can be read
   async exists(path: string): Promise<boolean> {
-    path = decodeURI(path);
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length < 2) {
       return false;
     }
@@ -135,8 +131,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
-    path = decodeURI(path);
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
       this.client.createOrReplaceAppendBlob(names[0], blobPath, err => {
