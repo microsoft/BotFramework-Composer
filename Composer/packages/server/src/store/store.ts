@@ -3,7 +3,7 @@ import path from 'path';
 
 import initData from './data.template.json';
 
-const dataStorePath = path.join(__dirname, 'data.json');
+const dataStorePath = path.resolve(__dirname, '../../data.json');
 
 // create data.json if not exits
 if (!fs.existsSync(dataStorePath)) {

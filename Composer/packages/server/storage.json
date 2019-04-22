@@ -1,0 +1,22 @@
+{
+    "linkedStorages": [
+        {
+            "name": "This PC",
+            "type": "LocalDrive",
+            "id": "default",
+            "path": "../../../SampleBots"
+        }
+    ],
+    "recentAccessedBots": [
+        {
+            "storageId": "default",
+            "path": "../../../SampleBots/Planning 1 - NoMatchRule/bot.botproj",
+            "lastAccessTime": 1555310209255
+        },
+        {
+            "storageId": "default",
+            "path": "../../../SampleBots/Planning - ToDoBot/bot.botproj",
+            "lastAccessTime": 1555310219889
+        }
+    ]
+}
