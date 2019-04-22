@@ -2,7 +2,8 @@ import React from 'react';
 import { Customizer } from 'office-ui-fabric-react';
 import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { JSONSchema6Definition } from 'json-schema';
+import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
+import merge from 'lodash.merge';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
@@ -53,8 +54,8 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   }
 
   const dialogSchema = {
-    definitions,
-    ...(typeDef as object),
+    ...(typeDef as JSONSchema6),
+    definitions: merge({}, definitions, (typeDef as JSONSchema6).definitions),
   };
 
   const dialogUiSchema = {
