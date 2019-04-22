@@ -12,6 +12,8 @@ export interface BotProjectFileContent {
 export interface FileInfo {
   name: string;
   content: any;
+  path: string;
+  relativePath: string;
 }
 
 export interface Dialog {
