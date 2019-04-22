@@ -132,14 +132,24 @@ export class AzureBlobStorage implements IFileStorage {
 
   async writeFile(path: string, content: any): Promise<void> {
     const names = path.split('/').filter(i => i.length);
+    if (names.length <= 1) {
+      throw new Error('path must include container name and blob name');
+    }
     const blobPath = names.slice(1).join('/');
+
     return new Promise((resolve, reject) => {
-      this.client.createOrReplaceAppendBlob(names[0], blobPath, err => {
+      // if container not exist, create container, then create blob file
+      this.client.createContainerIfNotExists(names[0], err => {
         if (err) {
           reject(err);
-        } else {
-          resolve();
         }
+        this.client.createBlockBlobFromText(names[0], blobPath, content, err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
       });
     });
   }
