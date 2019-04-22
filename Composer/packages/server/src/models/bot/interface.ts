@@ -23,19 +23,11 @@ export interface Dialog {
   path: string;
 }
 
-// export interface LGTemplate {
-//   id: number;
-//   fileName: string;
-//   type: string;
-//   name: string;
-//   content: any;
-//   comments: string;
-// }
-
 export interface LGTemplate {
   id: number;
   name: string;
   type: string;
+  // for now parameters is not been used because it shown up with the name.
   parameters: string[];
   content: any;
   fileName: string;

@@ -110,32 +110,8 @@ export class BotProject {
   private _updateFile = async (name: string, content: string) => {
     const index = this.files.findIndex(file => {
       return file.name === name;
-    });
-    this.files[index].content = content;
-  };
-
-  private _getFiles = async () => {
-    const fileList: FileInfo[] = [];
-    // get .bot file
-    const botFileContent = await this.fileStorage.readFile(this.absolutePath);
     // get 'files' from .bot file
-    const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
-
-    if (botConfig !== undefined && Array.isArray(botConfig.files)) {
-      fileList.push({
-        name: this.name,
-        content: botConfig,
-        path: this.absolutePath,
-        relativePath: path.relative(this.dir, this.absolutePath),
       });
-
-      for (const pattern of botConfig.files) {
-        const paths = await glob(pattern, { cwd: this.dir });
-
-        for (const filePath of paths.sort()) {
-          const realFilePath: string = path.resolve(this.dir, filePath);
-          // skip lg files for now
-          if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
             fileList.push({
               name: filePath,

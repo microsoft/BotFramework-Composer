@@ -119,11 +119,11 @@ export async function createDialog(dispatch, { name, steps }) {
   }
 }
 
-export async function updateLG(dispatch, { name, content }) {
+export async function updateLgTemplate(dispatch, { name, content }) {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgTemplates/${name}`, { name, content });
     dispatch({
-      type: ActionTypes.UPDATE_LG,
+      type: ActionTypes.UPDATE_LG_TEMPLATE,
       payload: { response },
     });
   } catch (err) {

@@ -16,7 +16,7 @@ import { scrollablePaneRoot, title, label } from './styles';
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgTemplates } = state;
-  const updateLG = useRef(debounce(actions.updateLG, 500)).current;
+  const updateLG = useRef(debounce(actions.updateLgTemplate, 500)).current;
   const tableColums = [
     {
       key: 'name',
@@ -125,7 +125,7 @@ export function LanguageGenerationSettings() {
     if (template.fileName !== currentKey) {
       if (itemCount !== 0) {
         groups.push({
-          name: currentKey,
+          name: currentKey + '.lg',
           count: itemCount,
           key: currentKey,
           startIndex: index - itemCount,
@@ -136,7 +136,7 @@ export function LanguageGenerationSettings() {
     }
     itemCount++;
     if (index === lgTemplates.length - 1) {
-      groups.push({ name: currentKey, count: itemCount, key: currentKey, startIndex: index - itemCount + 1 });
+      groups.push({ name: currentKey + '.lg', count: itemCount, key: currentKey, startIndex: index - itemCount + 1 });
     }
   });
 

@@ -1,2 +1,2 @@
 export * from './dialogIndexers';
-export * from './lgIndexers';
+export * from './lgIndexer';

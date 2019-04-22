@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
-import { FileInfo, LGTemplate } from './../interface';
+import { FileInfo, LGTemplate } from '../interface';
 
 export class LGIndexer {
   private lgTemplates: LGTemplate[] = [];
@@ -25,7 +25,7 @@ export class LGIndexer {
     };
   }
 
-  public addLgFiles(files: FileInfo[]) {
+  public index(files: FileInfo[]) {
     if (files.length === 0) return [];
 
     const lgTemplates: LGTemplate[] = [];
@@ -47,6 +47,7 @@ export class LGIndexer {
               newTemplate.id = count++;
               newTemplate.fileName = fileName;
               newTemplate.comments += line;
+              newTemplate.content = newTemplate.content.trim();
               lgTemplates.push(newTemplate);
             } else {
               newTemplate.comments += line + '\n';
@@ -56,6 +57,7 @@ export class LGIndexer {
 
           if (line.trim().startsWith('#')) {
             if (newTemplate.name) {
+              newTemplate.content = newTemplate.content.trim();
               lgTemplates.push(newTemplate);
               newTemplate = this.getNewTemplate(count++, fileName);
             }
@@ -72,6 +74,7 @@ export class LGIndexer {
 
           if (newTemplate.name && index === lines.length - 1) {
             newTemplate.id = count++;
+            newTemplate.content = newTemplate.content.trim();
             lgTemplates.push(newTemplate);
           }
         });
@@ -96,11 +99,16 @@ export class LGIndexer {
             updatedLG += `${template.comments}`;
           }
           if (template.name) {
+            if (template.content.indexOf('- IF') !== -1 || template.content.indexOf('- DEFAULT') !== -1) {
+              template.type = 'Condition';
+            } else {
+              template.type = 'Rotate';
+            }
             updatedLG += `# ${template.name}` + '\n';
             updatedLG += `${template.content}` + '\n';
           }
         });
-      await this.writeFile(absolutePath, updatedLG);
+      await this.writeFile(absolutePath, updatedLG.trim() + '\n');
     } else {
       throw new Error(`Lg template not found, id: ${lgTemplate.id}`);
     }

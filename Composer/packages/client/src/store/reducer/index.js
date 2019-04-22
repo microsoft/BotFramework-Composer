@@ -26,11 +26,8 @@ const createDialogSuccess = (state, { response }) => {
   return state;
 };
 
-const updateLG = (state, { response }) => {
+const updateLgTemplate = (state, { response }) => {
   state.lgTemplates = response.data.lgTemplates;
-  console.log('------');
-  console.log(response);
-
   return state;
 };
 
@@ -125,5 +122,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
-  [ActionTypes.UPDATE_LG]: updateLG,
+  [ActionTypes.UPDATE_LG_TEMPLATE]: updateLgTemplate,
 });

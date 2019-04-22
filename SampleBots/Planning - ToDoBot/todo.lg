@@ -1,4 +1,4 @@
-﻿# ShowTodo
+# ShowTodo
 - CASE: {count(user.todos) > 0}
     - ```
 Your most recent @{count(user.todos)} tasks are 
