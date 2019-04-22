@@ -14,7 +14,7 @@ import { normalizeObiStep } from './helpers/elementBuilder';
  *      |   +   |
  *      ---------
  */
-export default function transform(input) {
+function transformRecognizerDialog(input) {
   if (!input) return {};
   const { rules, steps, recognizer } = input;
 
@@ -44,20 +44,28 @@ export default function transform(input) {
 
   const result = {};
   if (recognizerNode) {
-    result.recognizer = recognizerNode;
+    const payload = {
+      $type: ObiTypes.RecognizerGroup,
+      recognizer: recognizerNode,
+    };
+
+    if (eventNodes.length) {
+      payload.eventGroup = new IndexedNode('$.eventGroup', {
+        $type: ObiTypes.EventGroup,
+        children: eventNodes,
+      });
+    }
+
+    if (intentNodes.length) {
+      payload.intentGroup = new IndexedNode('$.intentGroup', {
+        $type: ObiTypes.IntentGroup,
+        children: intentNodes,
+      });
+    }
+
+    result.recognizerGroup = new IndexedNode('$.recognizerGroup', payload);
   }
-  if (eventNodes.length) {
-    result.eventGroup = new IndexedNode('$.eventGroup', {
-      $type: ObiTypes.EventGroup,
-      children: eventNodes,
-    });
-  }
-  if (intentNodes.length) {
-    result.intentGroup = new IndexedNode('$.intentGroup', {
-      $type: ObiTypes.IntentGroup,
-      children: intentNodes,
-    });
-  }
+
   if (otherRuleNodes.length) {
     result.ruleGroup = new IndexedNode('$.ruleGroup', {
       $type: ObiTypes.RuleGroup,
@@ -71,4 +79,32 @@ export default function transform(input) {
     });
   }
   return result;
+}
+
+function transformSimpleDialog(input) {
+  if (!input) return {};
+
+  const result = {};
+  if (Array.isArray(input.rules)) {
+    result.ruleGroup = new IndexedNode('$.rules', {
+      $type: ObiTypes.RuleGroup,
+      children: input.rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
+    });
+  }
+
+  if (Array.isArray(input.steps)) {
+    result.stepGroup = new IndexedNode('$.steps', {
+      $type: ObiTypes.StepGroup,
+      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, x)),
+    });
+  }
+  return result;
+}
+
+export default function transform(input) {
+  if (!input) return {};
+  if (input.recognizer && input.recognizer.$type) {
+    return transformRecognizerDialog(input);
+  }
+  return transformSimpleDialog(input);
 }

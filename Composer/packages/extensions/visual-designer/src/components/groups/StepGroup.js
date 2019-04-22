@@ -6,6 +6,7 @@ import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../OffsetContainer';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { VerticalEdge } from '../shared/Edges';
+import { Boundary } from '../shared/Boundary';
 
 const StepInterval = 20;
 
@@ -25,12 +26,16 @@ export class StepGroup extends DynamicLayoutComponent {
       const node = new GraphObjectModel();
       node.props = {
         id: `${id}[${index}]`,
-        data: step,
+        data: step.json,
         focusedId: focusedId,
         onEvent: (...args) => this.props.onEvent(...args),
       };
       return node;
     });
+  }
+
+  getBoundary() {
+    return new Boundary(this.width, this.height);
   }
 
   measureLayout() {

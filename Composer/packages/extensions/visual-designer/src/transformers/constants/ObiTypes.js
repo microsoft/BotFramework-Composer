@@ -29,4 +29,6 @@ export const ObiTypes = {
   IntentGroup: 'VisualEditor.IntentGroup',
   EventGroup: 'VisualEditor.EventGroup',
   StepGroup: 'VisualEditor.StepGroup',
+  RuleGroup: 'VisualEditor.RuleGroup',
+  RecognizerGroup: 'VisualEditor.RecognizerGroup',
 };

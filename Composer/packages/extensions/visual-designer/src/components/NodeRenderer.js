@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { RootDialog, EventGroup, IntentGroup, IfCondition, StepGroup } from './groups';
+import { RootDialog, EventGroup, IntentGroup, IfCondition, StepGroup, RecognizerGroup } from './groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -25,9 +25,11 @@ const rendererByObiType = {
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
   // groups
+  [ObiTypes.RecognizerGroup]: RecognizerGroup,
   [ObiTypes.EventGroup]: EventGroup,
   [ObiTypes.IntentGroup]: IntentGroup,
   [ObiTypes.StepGroup]: StepGroup,
+  [ObiTypes.RuleGroup]: StepGroup,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

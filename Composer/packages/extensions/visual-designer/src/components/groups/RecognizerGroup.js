@@ -1,6 +1,5 @@
 import React from 'react';
 
-import transformRootDialog from '../../transformers/transformRootDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
@@ -8,16 +7,16 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { OffsetContainer } from '../OffsetContainer';
 
-const ElementIntervalX = 30;
+const ElementIntervalVertical = 30;
 
-export class RootDialog extends DynamicLayoutComponent {
+export class RecognizerGroup extends DynamicLayoutComponent {
   width = 0;
   height = 0;
 
   dialogBoxes = [];
 
   computeProps(props) {
-    const { recognizerGroup, ruleGroup, stepGroup } = transformRootDialog(props.data);
+    const { recognizer, eventGroup, intentGroup } = props.data;
 
     const createGraphNode = input => {
       const result = new GraphObjectModel();
@@ -30,9 +29,7 @@ export class RootDialog extends DynamicLayoutComponent {
       return result;
     };
 
-    this.dialogBoxes = [recognizerGroup, stepGroup, ruleGroup]
-      .map(x => (x ? createGraphNode(x) : null))
-      .filter(x => !!x);
+    this.dialogBoxes = [recognizer, eventGroup, intentGroup].map(x => (x ? createGraphNode(x) : null)).filter(x => !!x);
   }
 
   measureLayout() {
@@ -43,14 +40,14 @@ export class RootDialog extends DynamicLayoutComponent {
     });
 
     // Measure container size
-    this.width =
-      nodes.map(x => x.boundary.width).reduce((sum, val) => sum + val, 0) +
-      ElementIntervalX * Math.max(nodes.length - 1, 0);
-    this.height = Math.max(...nodes.map(x => x.boundary.height));
+    this.width = Math.max(...nodes.map(x => x.boundary.width));
+    this.height =
+      nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
+      ElementIntervalVertical * Math.max(nodes.length - 1, 0);
 
-    nodes.reduce((offsetX, node) => {
-      node.offset = { x: offsetX, y: 0 };
-      return offsetX + node.boundary.width + ElementIntervalX;
+    nodes.reduce((offsetY, node) => {
+      node.offset = { x: (this.width - node.boundary.width) / 2, y: offsetY };
+      return offsetY + node.boundary.height + ElementIntervalVertical;
     }, 0);
   }
 
@@ -73,5 +70,5 @@ export class RootDialog extends DynamicLayoutComponent {
   }
 }
 
-RootDialog.propTypes = NodeProps;
-RootDialog.defaultProps = defaultNodeProps;
+RecognizerGroup.propTypes = NodeProps;
+RecognizerGroup.defaultProps = defaultNodeProps;
