@@ -13,14 +13,19 @@ class StorageService {
   }
 
   public createStorageConnection = (connection: StorageConnection) => {
-    this.storageConnections.push(connection);
-    Store.set(this.STORE_KEY, this.storageConnections);
+    // if id is already in store, skip it
+    if (!this.storageConnections.find(item => item.id === connection.id)) {
+      this.storageConnections.push(connection);
+      Store.set(this.STORE_KEY, this.storageConnections);
+    }
   };
 
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      temp.path = path.resolve(s.path); // resolve path if path is relative
+      if (!path.isAbsolute(s.path)) {
+        temp.path = path.resolve(s.path); // resolve path if path is relative
+      }
       return temp;
     });
   };
@@ -39,35 +44,40 @@ class StorageService {
       throw new Error(`no storage connection with id ${storageId}`);
     }
     const storageClient = StorageFactory.createStorageClient(connection);
-
-    const stat = await storageClient.stat(filePath);
-    if (stat.isFile) {
-      // NOTE: this behavior is not correct, we should NOT parse this file as json
-      // becase it might not be json, this api is a more general file api than json file
-      // didn't fix it because this is the previous behavior
-      // TODO: fix this behavior and the upper layer interface accordingly
-      return JSON.parse(await storageClient.readFile(filePath));
-    } else {
-      return {
-        name: path.basename(filePath),
-        parent: path.dirname(filePath),
-        children: await this.getChildren(storageClient, filePath),
-      };
+    try {
+      const stat = await storageClient.stat(filePath);
+      if (stat.isFile) {
+        // NOTE: this behavior is not correct, we should NOT parse this file as json
+        // becase it might not be json, this api is a more general file api than json file
+        // didn't fix it because this is the previous behavior
+        // TODO: fix this behavior and the upper layer interface accordingly
+        return JSON.parse(await storageClient.readFile(filePath));
+      } else {
+        return {
+          name: path.basename(filePath),
+          parent: path.dirname(filePath),
+          children: await this.getChildren(storageClient, filePath),
+        };
+      }
+    } catch (err) {
+      throw err;
     }
   };
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
     const children = (await storage.readDir(dirPath)).map(async childName => {
+      if (childName === '') {
+        return;
+      }
       const childAbsPath = path.join(dirPath, childName);
       const childStat = await storage.stat(childAbsPath);
-
       return {
         name: childName,
         type: childStat.isDir ? 'folder' : 'file',
         path: childAbsPath,
-        lastModified: 0, // just keep the previous interface
-        size: 0, // just keep the previous interface
+        lastModified: childStat.lastModified, // just keep the previous interface
+        size: childStat.size, // just keep the previous interface
       };
     });
 
