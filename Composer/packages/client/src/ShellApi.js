@@ -11,6 +11,14 @@ import ApiClient from './messenger/ApiClient';
 
 const apiClient = new ApiClient();
 
+function getDialogData(dialogsMap, path) {
+  const dialog = Object.keys(dialogsMap).find(d => path.startsWith(d));
+  const data = dialogsMap[dialog];
+  const subPath = path.replace(`${dialog}.`, '');
+
+  return subPath === dialog ? data : get(data, subPath);
+}
+
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, focusPath } = state;
@@ -41,7 +49,7 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
-      const data = get(dialogsMap, navPath) || '';
+      const data = getDialogData(dialogsMap, navPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
     }
   }, [dialogs, navPath]);
@@ -49,7 +57,7 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
-      const data = get(dialogsMap, focusPath) || '';
+      const data = getDialogData(dialogsMap, focusPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
     }
   }, [dialogs, focusPath]);
@@ -59,9 +67,9 @@ export function ShellApi() {
     const sourceWindowName = event.source.name;
 
     if (sourceWindowName === 'VisualEditor' && navPath !== '') {
-      return get(dialogsMap, navPath);
+      return getDialogData(dialogsMap, navPath);
     } else if (sourceWindowName === 'FormEditor' && focusPath !== '') {
-      return get(dialogsMap, focusPath);
+      return getDialogData(dialogsMap, focusPath);
     }
 
     return '';
