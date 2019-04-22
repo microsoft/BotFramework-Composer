@@ -101,7 +101,7 @@ function transformSimpleDialog(input) {
   return result;
 }
 
-export default function transform(input) {
+export function transformRootDialog(input) {
   if (!input) return {};
   if (input.recognizer && input.recognizer.$type) {
     return transformRecognizerDialog(input);

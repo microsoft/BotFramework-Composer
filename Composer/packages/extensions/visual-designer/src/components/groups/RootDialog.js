@@ -1,6 +1,6 @@
 import React from 'react';
 
-import transformRootDialog from '../../transformers/transformRootDialog';
+import { transformRootDialog } from '../../transformers/transformRootDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
