@@ -1,5 +1,4 @@
 import { css } from '@emotion/core';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const container = css`
   width: 1000px;
@@ -16,131 +15,9 @@ export const body = css`
   left: 0;
 `;
 
-export const leftNav = css`
-  width: 150px;
-  height: 100vh;
-  background: #2b579a;
-  font-size: 20px;
-  color: #fff;
-`;
-
-export const navHeader = css`
-  width: 100%;
-  cursor: pointer;
-`;
-
-export const closeIcon = css`
-  font-size: 30px;
-  margin-top: 40px;
-  padding-left: 30px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  width: 120px;
-  &:hover {
-    background-color: #366ec2;
-  }
-`;
-
-export const backIcon = css`
-  font-size: 20px;
-  cursor: pointer;
-  transform: rotate(90deg);
-  width: 20px;
-  height: 20px;
-  margin: 18px 0px 0px 3px;
-  padding: 8px;
-  color: dodgerblue;
-  &:hover {
-    background-color: rgb(244, 244, 244);
-  }
-`;
-
 export const panelContent = css`
   width: 825px;
   height: 100vh;
   display: flex;
   flex-direction: row;
 `;
-
-export const detailListContainer = css`
-  padding-top: 20px;
-  height: calc(100vh - 155px);
-  overflow-x: hidden;
-  width: 640px;
-`;
-
-export const title = css`
-  padding: 37px 30px 2px 30px;
-  font-size: 34px;
-  color: #2b579a !important;
-  font-weight: lighter;
-`;
-
-export const fileSelectorContainer = css`
-  padding-left: 5px;
-  padding-top: 90px;
-  width: 100%;
-`;
-
-export const fileSelectorHeader = css`
-  display: flex;
-`;
-
-export const navLinkClass = mergeStyleSets({
-  actionNav: {
-    backgroundColor: '#2b579a',
-    color: 'white',
-    fontSize: '16px',
-    selectors: {
-      '&:hover': {
-        displayName: 'testHover',
-        color: 'white !important',
-        fontSize: '16px',
-        backgroundColor: '#366ec2 !important',
-      },
-      '&:after': {
-        border: '0px !important',
-        backgroundColor: '#1e3c6b !important',
-        z: '-1',
-      },
-    },
-  },
-  storageNav: {
-    color: 'black',
-    fontSize: '16px',
-    width: '200px',
-    selectors: {
-      '&:after': {
-        border: '0px !important',
-      },
-    },
-  },
-  linkText: {
-    zIndex: '1111',
-  },
-});
-
-export const detailListClass = mergeStyleSets({
-  fileIconHeaderIcon: {
-    padding: 0,
-    fontSize: '16px',
-  },
-  fileIconCell: {
-    textAlign: 'center',
-    selectors: {
-      '&:before': {
-        content: '.',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        height: '100%',
-        width: '0px',
-        visibility: 'hidden',
-      },
-    },
-  },
-  fileIconImg: {
-    verticalAlign: 'middle',
-    maxHeight: '16px',
-    maxWidth: '16px',
-  },
-});

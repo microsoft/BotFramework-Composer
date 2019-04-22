@@ -4,7 +4,7 @@ import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
-import { StorageExplorer } from './components/StorageExplorer';
+import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
 
@@ -13,28 +13,21 @@ initializeIcons(/* optional base url */);
 export function App() {
   const { state, actions } = useContext(Store);
   const { botStatus } = state;
-
+  const { toggleBot, setStorageExplorerStatus } = actions;
   useEffect(() => {
     actions.fetchProject();
   }, []);
-
-  function handleFileOpen(id, path) {
-    actions.closeCurrentProject();
-    actions.openBotProject(id, path);
-  }
 
   return (
     <Fragment>
       <Header
         botStatus={botStatus}
         setBotStatus={status => {
-          actions.toggleBot(status);
+          toggleBot(status);
         }}
-        openStorageExplorer={() => {
-          actions.setStorageExplorerStatus('opened');
-        }}
+        openStorageExplorer={setStorageExplorerStatus}
       />
-      <StorageExplorer onFileOpen={handleFileOpen} />
+      <StorageExplorer />
       <div style={{ backgroundColor: '#f6f6f6', height: 'calc(100vh - 50px)' }}>
         <div
           style={{

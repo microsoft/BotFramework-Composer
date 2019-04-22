@@ -13,7 +13,8 @@ import { dialogIndexer } from './indexers';
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const lstat = promisify(fs.lstat);
-
+const mkDir = promisify(fs.mkdir);
+const exists = promisify(fs.exists);
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
 // 2. refactor this layer, to operate on dialogs, not files
@@ -23,6 +24,7 @@ export class BotProject {
   public name: string;
   public absolutePath: string;
   public dir: string;
+  public files: FileInfo[] = [];
   public dialogs: Dialog[] = [];
   public botFile: FileInfo | any = null;
 
@@ -35,9 +37,9 @@ export class BotProject {
   }
 
   init = async () => {
-    const files = await this.loadResource();
-    this.dialogs = dialogIndexer(files);
-    this.botFile = files[0];
+    this.files = await this.loadResource();
+    this.dialogs = dialogIndexer(this.files);
+    this.botFile = this.files[0];
   };
 
   public loadResource = async () => {
@@ -48,7 +50,12 @@ export class BotProject {
     const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
 
     if (botConfig !== undefined && Array.isArray(botConfig.files)) {
-      fileList.push({ name: this.name, content: botConfig });
+      fileList.push({
+        name: this.name,
+        content: botConfig,
+        path: this.absolutePath,
+        relativePath: path.relative(this.dir, this.absolutePath),
+      });
 
       for (const pattern of botConfig.files) {
         const paths = await glob(pattern, { cwd: this.dir });
@@ -58,13 +65,22 @@ export class BotProject {
           // skip lg files for now
           if ((await lstat(realFilePath)).isFile()) {
             const content: string = await readFile(realFilePath, 'utf-8');
-            fileList.push({ name: filePath, content: content });
+            fileList.push({
+              name: filePath,
+              content: content,
+              path: realFilePath,
+              relativePath: path.relative(this.dir, realFilePath),
+            });
           }
         }
       }
     }
 
     return fileList;
+  };
+
+  public getFiles = () => {
+    return this.files;
   };
 
   public getProject = () => {
@@ -104,5 +120,17 @@ export class BotProject {
     await this.updateFile(`${name}`, content);
     this.botFile.content = content;
     return this.botFile;
+  };
+
+  public copyProject = async (prevFiles: FileInfo[]) => {
+    if (!(await exists(this.dir))) {
+      await mkDir(this.dir);
+    }
+    for (const index in prevFiles) {
+      const file = prevFiles[index];
+      const absolutePath = path.resolve(this.dir, file.relativePath);
+      const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
+      await writeFile(absolutePath, content, {});
+    }
   };
 }
