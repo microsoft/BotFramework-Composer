@@ -57,7 +57,7 @@ export class RootDialog extends DynamicLayoutComponent {
   renderContent() {
     return (
       <div
-        style={{ width: this.width, height: this.height, position: 'relative' }}
+        style={{ width: this.width, height: this.height, margin: 20, position: 'relative' }}
         onClick={e => {
           e.stopPropagation();
           this.props.onEvent(NodeClickActionTypes.Focus, '');
