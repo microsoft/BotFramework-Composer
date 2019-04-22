@@ -47,12 +47,7 @@ export class NodeRenderer extends React.Component {
       return this.contentRef.current.getBoundary();
     }
 
-    const boundary = new Boundary();
-    boundary.width = this.containerRef.current.scrollWidth || 0;
-    boundary.height = this.containerRef.current.scrollHeight || 0;
-    boundary.in = { x: boundary.width / 2, y: 0 };
-    boundary.out = { x: boundary.width / 2, y: boundary.height };
-    return boundary;
+    return new Boundary(this.containerRef.current.scrollWidth || 0, this.containerRef.current.scrollHeight || 0);
   }
 
   render() {

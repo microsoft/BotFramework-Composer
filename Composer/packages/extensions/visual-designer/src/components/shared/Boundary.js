@@ -1,18 +1,24 @@
-class Point {
-  x = 0;
-  y = 0;
-}
-
+/**
+ * Describe a rectangle's boundary and its connection point.
+ *
+ *                    (0, axisX)
+ *                    ---o------
+ *                    |         |
+ *        (0, axisY)  o         o (width, axisY)
+ *                    |         |
+ *                    ---o-------
+ *                 (height, axisX)
+ */
 export class Boundary {
   width = 0;
   height = 0;
-  in = new Point();
-  out = new Point();
+  axisX = 0;
+  axisY = 0;
 
   constructor(width = 0, height = 0) {
     this.width = width;
     this.height = height;
-    this.in = { x: width / 2, y: 0 };
-    this.out = { x: width / 2, y: height };
+    this.axisX = this.width / 2;
+    this.axisY = this.height / 2;
   }
 }

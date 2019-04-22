@@ -57,8 +57,8 @@ export class StepGroup extends DynamicLayoutComponent {
     this.edges = [];
     for (let i = 0; i < steps.length - 1; i++) {
       const { boundary, offset } = steps[i];
-      const x = boundary.out.x + offset.x;
-      const y = boundary.out.y + offset.y;
+      const x = boundary.axisX + offset.x;
+      const y = boundary.height + offset.y;
       this.edges.push(<VerticalEdge key={`stepGroup.edges[${i}]`} length={StepInterval} x={x} y={y} />);
     }
   }

@@ -8,6 +8,7 @@ import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { OffsetContainer } from '../OffsetContainer';
 import { NodeRenderer } from '../NodeRenderer';
+import { Boundary } from '../shared/Boundary';
 
 const ChoiceNodeWidth = 150;
 const ChoiceNodeHeight = 50;
@@ -15,20 +16,14 @@ const BranchIntervalX = 30;
 const BranchIntervalY = 30;
 
 export class IfCondition extends DynamicLayoutComponent {
-  width = 150;
-  height = 20;
+  boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
 
   choiceNode = null;
   ifGroupNode = null;
   elseGroupNode = null;
 
   getBoundary() {
-    return {
-      width: this.width,
-      height: this.height,
-      in: { x: this.width / 2, y: 0 },
-      out: { x: this.width / 2, y: this.height },
-    };
+    return this.boundary;
   }
 
   computeProps(props) {
@@ -71,8 +66,8 @@ export class IfCondition extends DynamicLayoutComponent {
          *        [else]         |
          *          |-------------
          */
-        this.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX + ifWidth;
-        this.height = Math.max(ChoiceNodeHeight + BranchIntervalY + elseHeight, ifHeight + BranchIntervalY);
+        this.boundary.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX + ifWidth;
+        this.boundary.height = Math.max(ChoiceNodeHeight + BranchIntervalY + elseHeight, ifHeight + BranchIntervalY);
 
         choiceNode.offset = { x: (Math.max(ChoiceNodeWidth, elseWith) - ChoiceNodeWidth) / 2, y: 0 };
         elseGroupNode.offset = {
@@ -88,8 +83,8 @@ export class IfCondition extends DynamicLayoutComponent {
          *         |         |
          *         |----------
          */
-        this.width = ChoiceNodeWidth + BranchIntervalX + ifWidth;
-        this.height = Math.max(ChoiceNodeHeight, ifHeight) + BranchIntervalY;
+        this.boundary.width = ChoiceNodeWidth + BranchIntervalX + ifWidth;
+        this.boundary.height = Math.max(ChoiceNodeHeight, ifHeight) + BranchIntervalY;
 
         choiceNode.offset = { x: 0, y: 0 };
         ifGroupNode.offset = { x: ChoiceNodeWidth + BranchIntervalX, y: 0 };
@@ -101,8 +96,8 @@ export class IfCondition extends DynamicLayoutComponent {
          *        [else]    |
          *          |--------
          */
-        this.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX;
-        this.height = ChoiceNodeHeight + BranchIntervalY * 2;
+        this.boundary.width = Math.max(ChoiceNodeWidth, elseWith) + BranchIntervalX;
+        this.boundary.height = ChoiceNodeHeight + BranchIntervalY * 2;
 
         choiceNode.offset = { x: (Math.max(ChoiceNodeWidth, elseWith) - ChoiceNodeWidth) / 2, y: 0 };
         elseGroupNode.offset = {
@@ -114,8 +109,8 @@ export class IfCondition extends DynamicLayoutComponent {
         /**
          *    <Choice>
          */
-        this.width = ChoiceNodeWidth;
-        this.height = ChoiceNodeHeight;
+        this.boundary.width = ChoiceNodeWidth;
+        this.boundary.height = ChoiceNodeHeight;
         choiceNode.offset = { x: 0, y: 0 };
         break;
       default:
@@ -126,7 +121,7 @@ export class IfCondition extends DynamicLayoutComponent {
   renderContent() {
     const { id, onEvent } = this.props;
     return (
-      <div style={{ width: this.width, height: this.height, position: 'relative' }}>
+      <div style={{ width: this.boundary.width, height: this.boundary.height, position: 'relative' }}>
         <OffsetContainer offset={this.choiceNode.offset}>
           <Diamond
             onClick={() => {
