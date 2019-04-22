@@ -45,7 +45,7 @@ class BotProjectService {
     this.recentBotProjects.unshift(this.currentBotProject.ref);
     Store.set('recentBotProjects', this.recentBotProjects);
   }
-  
+
   public saveProjectAs = async (projRef: BotProjectRef) => {
     if (typeof this.currentBotProject !== 'undefined') {
       const prevFiles = this.currentBotProject.getFiles();
