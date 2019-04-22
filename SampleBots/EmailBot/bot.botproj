@@ -1,29 +1,5 @@
 {
-    "services": [
-    ],
-    "files": [
-       "*.dialog",
-       "*.lg"
-    ],
-    "entry": "GithubBot.main.dialog"
+  "services": [],
+  "files": ["*.dialog", "*.lg"],
+  "entry": "GithubBot.main.dialog"
 }
-Dialogs update
-	• ChoiceInput Added
-	• NumberInput Added
-
-Rules update
-	• IfPropertyRule deleted
-	• NoMatchRule -> UnknownIntentRule
-	• WelcomeRule deleted.
-
-Steps update
-	• CancelDialog -> CancelAllDialog
-	• DebugBreak added, no sample yet, let's don't expose it in composer I think.
-	• EmitEvent Trying to understand this, seems it is incomplete yet, let's discuss whether to expose it to user.
-	• Ifcondition schema change: ifTrue->steps ifFalse->elseSteps
-	• IfProperty deleted
-	• InitProperty added
-	• LogStep added  Lu will add sample on this later.
-	• ReplaceWithDialog -> ReplaceDialog, Lu will add sample on this later
-	• SendList deleted
-TraceActivity added Lu will add sample on this later.
