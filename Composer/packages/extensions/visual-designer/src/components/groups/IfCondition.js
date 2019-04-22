@@ -152,6 +152,7 @@ export class IfCondition extends DynamicLayoutComponent {
           x: choiceNode.offset.x + choiceNode.boundary.width,
           y: choiceNode.offset.y + choiceNode.boundary.axisY,
           length: ifGroupNode.offset.x - choiceNode.boundary.width - choiceNode.offset.x,
+          text: 'Y',
         },
         {
           key: `${id}/edges/if->bottom`,
@@ -202,6 +203,7 @@ export class IfCondition extends DynamicLayoutComponent {
           x: this.boundary.axisX,
           y: choiceNode.offset.y + choiceNode.boundary.height,
           length: BranchIntervalY,
+          text: 'N',
         },
         {
           key: `${id}/edges/else->out`,
@@ -217,6 +219,7 @@ export class IfCondition extends DynamicLayoutComponent {
         x: this.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.height,
         length: this.boundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
+        text: 'N',
       });
     }
 
