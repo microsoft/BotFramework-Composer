@@ -1,6 +1,6 @@
 import React from 'react';
 
-import transformAdaptiveDialog from '../../transformers/transformAdaptiveDialog';
+import transformRootDialog from '../../transformers/transformRootDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
@@ -10,7 +10,7 @@ import { OffsetContainer } from '../OffsetContainer';
 
 const ElementInterval = 30;
 
-export class AdaptiveDialog extends DynamicLayoutComponent {
+export class RootDialog extends DynamicLayoutComponent {
   width = 0;
   height = 0;
 
@@ -19,7 +19,7 @@ export class AdaptiveDialog extends DynamicLayoutComponent {
   stepGroupBox = new GraphObjectModel();
 
   computeProps(props) {
-    const { recognizer, eventGroup, intentGroup, ruleGroup, stepGroup } = transformAdaptiveDialog(props.data);
+    const { recognizer, eventGroup, intentGroup, ruleGroup, stepGroup } = transformRootDialog(props.data);
 
     const createGraphNode = input => {
       const result = new GraphObjectModel();
@@ -75,5 +75,5 @@ export class AdaptiveDialog extends DynamicLayoutComponent {
   }
 }
 
-AdaptiveDialog.propTypes = NodeProps;
-AdaptiveDialog.defaultProps = defaultNodeProps;
+RootDialog.propTypes = NodeProps;
+RootDialog.defaultProps = defaultNodeProps;

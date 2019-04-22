@@ -15,7 +15,7 @@ import { normalizeObiStep } from './helpers/elementBuilder';
  *      ---------
  */
 export default function transform(input) {
-  if (!input || input.$type !== ObiTypes.AdaptiveDialog) return {};
+  if (!input) return {};
   const { rules, steps, recognizer } = input;
 
   const recognizerNode = recognizer ? new IndexedNode(`$.recognizer`, recognizer) : null;

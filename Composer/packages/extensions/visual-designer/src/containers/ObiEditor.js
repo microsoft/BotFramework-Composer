@@ -57,6 +57,7 @@ export class ObiEditor extends Component {
           key={graphId}
           id={graphId}
           data={this.props.data}
+          expanded={true}
           focusedId={this.state.focusedId}
           onEvent={(...args) => this.dispatchEvent(...args)}
         />

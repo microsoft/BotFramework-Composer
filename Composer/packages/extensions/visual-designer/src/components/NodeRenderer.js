@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { AdaptiveDialog, EventGroup, IntentGroup, IfCondition, StepGroup } from './groups';
+import { RootDialog, EventGroup, IntentGroup, IfCondition, StepGroup } from './groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -16,7 +16,6 @@ import {
 import { Boundary } from './shared/Boundary';
 
 const rendererByObiType = {
-  [ObiTypes.AdaptiveDialog]: AdaptiveDialog,
   [ObiTypes.WelcomeRule]: WelcomeRule,
   [ObiTypes.IntentRule]: IntentRule,
   [ObiTypes.NoMatchRule]: NoMatchRule,
@@ -55,8 +54,14 @@ export class NodeRenderer extends React.Component {
   }
 
   render() {
-    const { id, data, focusedId, onEvent } = this.props;
-    const ChosenRenderer = chooseRendererByType(data.$type);
+    const { id, data, expanded, focusedId, onEvent } = this.props;
+
+    let ChosenRenderer;
+    if (expanded) {
+      ChosenRenderer = RootDialog;
+    } else {
+      ChosenRenderer = chooseRendererByType(data.$type);
+    }
 
     return (
       <div
