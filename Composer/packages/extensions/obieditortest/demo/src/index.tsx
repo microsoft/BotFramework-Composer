@@ -4,9 +4,9 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 import { IContextualMenuItem, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
 
-import Example from '../src';
-import { ShellApi } from '../src/types';
-import { dialogGroups } from '../src/schema/appschema';
+import Example from '../../src';
+import { ShellApi } from '../../src/types';
+import { dialogGroups } from '../../src/schema/appschema';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';

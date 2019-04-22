@@ -2,6 +2,9 @@ import { RulesField, StepsField, SelectorField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
+    selector: {
+      'ui:field': SelectorField,
+    },
     rules: {
       'ui:field': RulesField,
     },
