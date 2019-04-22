@@ -13,9 +13,9 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import startCase from 'lodash.startcase';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
-import { FieldProps } from 'react-jsonschema-form';
+import { JSONSchema6 } from 'json-schema';
 
-import { buildDialogOptions, swap, remove } from '../utils';
+import { buildDialogOptions, swap, remove, insertAt } from '../utils';
 import { FormContext } from '../types';
 
 const fieldHeaderTheme = createTheme({
@@ -26,16 +26,18 @@ const fieldHeaderTheme = createTheme({
   },
 });
 
-interface TableFieldProps<T> extends FieldProps {
+interface TableFieldProps<T> {
   additionalColumns?: IColumn[];
   defaultItem: object;
-  filterNewOptions: (item: string) => boolean;
+  filterNewOptions?: (item: string) => boolean;
   formContext: FormContext;
   formData: object[];
   label: string;
   navPrefix: string;
   onChange: (items: T[]) => void;
   renderTitle: (item: T) => string;
+  name?: string;
+  schema: JSONSchema6;
 }
 
 interface DetailItem<T> {
@@ -44,8 +46,8 @@ interface DetailItem<T> {
   target: HTMLElement;
 }
 
-export const TableField: React.FunctionComponent<TableFieldProps<object>> = props => {
-  const [currentItem, setCurrentItem] = useState<DetailItem<object> | null>(null);
+export const TableField: React.FunctionComponent<TableFieldProps<any>> = props => {
+  const [currentItem, setCurrentItem] = useState<DetailItem<any> | null>(null);
   const { additionalColumns, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
 
   const columns = [
@@ -61,7 +63,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
 
   const items = props.formData;
 
-  const onItemContextMenu = (item: object, index: number | undefined, e: Event | undefined) => {
+  const onItemContextMenu = (item: any, index: number | undefined, e: Event | undefined) => {
     const ev = e as Event;
     ev.preventDefault();
     const target = ev.target as HTMLElement;
@@ -77,8 +79,8 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
     }
   };
 
-  const createNewItem = () => {
-    onChange(defaultItem);
+  const createNewItemAtIndex = (idx: number = items.length) => (newItem: any = defaultItem) => {
+    onChange(insertAt(items, newItem, idx));
     return false;
   };
 
@@ -98,6 +100,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
           key: 'moveUp',
           text: formatMessage('Move Up'),
           iconProps: { iconName: 'CaretSolidUp' },
+          disabled: currentItem.index === 0,
           onClick: () => {
             const newItems = swap(items, currentItem.index, currentItem.index - 1);
             onChange(newItems);
@@ -108,6 +111,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
           key: 'moveDown',
           text: formatMessage('Move Down'),
           iconProps: { iconName: 'CaretSolidDown' },
+          disabled: currentItem.index === items.length - 1,
           onClick: () => {
             const newItems = swap(items, currentItem.index, currentItem.index + 1);
             onChange(newItems);
@@ -132,7 +136,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
           key: 'new',
           text: formatMessage('New'),
           iconProps: { iconName: 'Add' },
-          onClick: createNewItem,
+          subMenuProps: { items: buildDialogOptions(createNewItemAtIndex(currentItem.index + 1), filterNewOptions) },
         },
       ]
     : [];
@@ -153,8 +157,8 @@ export const TableField: React.FunctionComponent<TableFieldProps<object>> = prop
         styles={{ root: { marginBottom: '20px' } }}
       />
       <PrimaryButton
-        menuProps={{ items: buildDialogOptions(onChange, filterNewOptions) }}
-        onClick={createNewItem}
+        menuProps={{ items: buildDialogOptions(createNewItemAtIndex(), filterNewOptions) }}
+        onClick={() => createNewItemAtIndex()()}
         split
         type="button"
       >

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   extends: [
     '../../../.eslintrc.js',
@@ -6,7 +8,7 @@ module.exports = {
     'prettier/@typescript-eslint',
   ],
   parserOptions: {
-    project: './tsconfig.json',
+    project: path.resolve(__dirname, 'tsconfig.json'),
   },
   rules: {
     '@typescript-eslint/explicit-member-accessibility': 'off',
