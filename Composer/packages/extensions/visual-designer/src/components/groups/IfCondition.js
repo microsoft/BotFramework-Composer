@@ -71,16 +71,19 @@ export class IfCondition extends DynamicLayoutComponent {
          *        [else]         |
          *          |-------------
          */
+        this.boundary.axisX = Math.max(choiceNode.boundary.axisX, elseGroupNode.boundary.axisX);
         this.boundary.width =
-          Math.max(choiceNode.boundary.axisX, choiceNode.boundary.width - choiceNode.boundary.axisX) +
-          Math.max(elseGroupNode.boundary.axisX, elseGroupNode.boundary.width - elseGroupNode.boundary.axisX) +
+          this.boundary.axisX +
+          Math.max(
+            elseGroupNode.boundary.width - elseGroupNode.boundary.axisX,
+            choiceNode.boundary.width - choiceNode.boundary.axisX
+          ) +
           BranchIntervalX +
           ifWidth;
         this.boundary.height = Math.max(
           choiceNode.boundary.height + 2 * BranchIntervalY + elseHeight,
           ifHeight + BranchIntervalY
         );
-        this.boundary.axisX = Math.max(choiceNode.boundary.axisX, elseGroupNode.boundary.axisX);
 
         choiceNode.offset = {
           x: this.boundary.axisX - choiceNode.boundary.axisX,
