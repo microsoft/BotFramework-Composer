@@ -3,13 +3,13 @@ import path from 'path';
 import { merge, set } from 'lodash';
 import glob from 'globby';
 
-import DIALOG_TEMPLATE from '../../store/dialogTemplate.json';
+import { Store } from '../../store/store';
 
-import { BotProjectRef, FileInfo, BotProjectFileContent, Dialog } from './interface';
-import { dialogIndexer } from './indexers';
-import { IFileStorage, StorageConnection } from '../storage/interface.js';
-import { StorageFactory } from '../storage/storageFactory.js';
-import { Store } from 'src/store/store.js';
+import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
+import { IFileStorage, StorageConnection } from './../storage/interface';
+import { StorageFactory } from './../storage/storageFactory';
+import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
+import { DialogIndexer } from './indexers/dialogIndexers';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -22,7 +22,7 @@ export class BotProject {
   public dir: string;
   public fileStorage: IFileStorage;
   public storageConnection: StorageConnection | undefined = undefined;
-  public dialogs: Dialog[] = [];
+  public dialogIndexer: DialogIndexer;
   public botFile: FileInfo | any = null;
 
   constructor(ref: BotProjectRef) {
@@ -33,16 +33,20 @@ export class BotProject {
       throw new Error('no storage match');
     }
     this.fileStorage = StorageFactory.createStorageClient(this.storageConnection);
-
+    this.dialogIndexer = new DialogIndexer(this.fileStorage);
     this.absolutePath = path.resolve(this.ref.path);
     this.dir = path.dirname(this.absolutePath);
     this.name = path.basename(this.absolutePath);
   }
 
   init = async () => {
-    this.files = await this.loadResource();
-    this.dialogs = dialogIndexer(this.files);
-    this.botFile = this.files[0];
+    const files = await this._loadResource();
+    const dialogs = this.dialogIndexer.index(files);
+    this.botFile = files[0];
+    return {
+      dialogs: dialogs,
+      botFile: this.botFile,
+    };
   };
 
   private _getStorageConnection = (id: string): StorageConnection | undefined => {
@@ -52,7 +56,7 @@ export class BotProject {
     });
   };
 
-  public loadResource = async () => {
+  private _loadResource = async () => {
     const fileList: FileInfo[] = [];
     // get .bot file
     const botFileContent = await this.fileStorage.readFile(this.absolutePath);
@@ -73,8 +77,8 @@ export class BotProject {
         for (const filePath of paths.sort()) {
           const realFilePath: string = path.resolve(this.dir, filePath);
           // skip lg files for now
-          if ((await lstat(realFilePath)).isFile()) {
-            const content: string = await readFile(realFilePath, 'utf-8');
+          if ((await this.fileStorage.stat(realFilePath)).isFile) {
+            const content: string = await this.fileStorage.readFile(realFilePath);
             fileList.push({
               name: filePath,
               content: content,
@@ -89,15 +93,14 @@ export class BotProject {
     return fileList;
   };
 
-  public getFiles = () => {
-    return this.files;
+  public getFiles = async () => {
+    const files = await this._loadResource();
+    return files;
   };
 
-  public getProject = () => {
-    return {
-      dialogs: this.dialogs,
-      botFile: this.botFile,
-    };
+  public getProject = async () => {
+    const project = await this.init();
+    return project;
   };
 
   public createDialogFromTemplate = async (name: string, types: string[]) => {
@@ -108,39 +111,31 @@ export class BotProject {
       set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
     });
 
-    await this.fileStorage.writeFile(absolutePath, JSON.stringify(newDialog, null, 2) + '\n');
-    this.dialogs.push({ name, content: newDialog, id: this.dialogs.length });
-    return this.dialogs;
-  };
-
-  public updateFile = async (name: string, content: any) => {
-    const absolutePath: string = path.join(this.dir, name);
-    await this.fileStorage.writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
+    const dialogs = this.dialogIndexer.addDialog(absolutePath, name, newDialog);
+    return dialogs;
   };
 
   public updateDialog = async (name: string, content: any) => {
-    await this.updateFile(`${name}.dialog`, content);
-    return this.dialogs.map(dialog => {
-      if (dialog.name === name) dialog.content = content;
-      return dialog;
-    });
+    const dialogs = await this.dialogIndexer.updateDialogs(name, content);
+    return dialogs;
   };
 
   public updateBotFile = async (name: string, content: any) => {
-    await this.updateFile(`${name}`, content);
-    this.botFile.content = content;
+    await this.fileStorage.writeFile(this.botFile.path, JSON.stringify(content, null, 2) + '\n');
+    const botFileContent = await this.fileStorage.readFile(this.botFile.path);
+    this.botFile.content = JSON.parse(botFileContent);
     return this.botFile;
   };
 
   public copyProject = async (prevFiles: FileInfo[]) => {
-    if (!(await exists(this.dir))) {
-      await mkDir(this.dir);
+    if (!(await this.fileStorage.exists(this.dir))) {
+      await this.fileStorage.mkDir(this.dir);
     }
     for (const index in prevFiles) {
       const file = prevFiles[index];
       const absolutePath = path.resolve(this.dir, file.relativePath);
       const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      await writeFile(absolutePath, content, {});
+      await this.fileStorage.writeFile(absolutePath, content);
     }
   };
 }

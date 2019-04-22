@@ -48,14 +48,12 @@ class BotProjectService {
 
   public saveProjectAs = async (projRef: BotProjectRef) => {
     if (typeof this.currentBotProject !== 'undefined') {
-      const prevFiles = this.currentBotProject.getFiles();
+      const prevFiles = await this.currentBotProject.getFiles();
       this.currentBotProject = new BotProject(projRef);
       await this.currentBotProject.copyProject(prevFiles);
-      await this.currentBotProject.init();
     }
   };
 }
 
 const service = new BotProjectService();
-service.init();
 export default service;

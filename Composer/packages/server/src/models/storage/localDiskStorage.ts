@@ -8,6 +8,7 @@ const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
 const exists = promisify(fs.exists);
 const writeFile = promisify(fs.writeFile);
+const mkDir = promisify(fs.mkdir);
 
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
@@ -34,5 +35,9 @@ export class LocalDiskStorage implements IFileStorage {
 
   async writeFile(path: string, content: any): Promise<void> {
     await writeFile(path, content);
+  }
+
+  async mkDir(path: string): Promise<void> {
+    await mkDir(path);
   }
 }
