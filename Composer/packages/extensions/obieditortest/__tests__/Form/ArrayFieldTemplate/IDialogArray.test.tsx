@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, fireEvent, RenderResult } from 'react-testing-library';
+import { render, fireEvent, findByText, RenderResult } from 'react-testing-library';
 
-import ObjectArray from '../../../src/Form/ArrayFieldTemplate/ObjectArray';
+import IDialogArray from '../../../src/Form/ArrayFieldTemplate/IDialogArray';
 
 const TestTitleField: React.FC<any> = ({ title, ...rest }) => <label {...rest}>{title}</label>;
 const TestDescriptionField: React.FC<any> = ({ description, ...rest }) => <p {...rest}>{description}</p>;
@@ -22,22 +22,22 @@ function renderDefault(propOverrides = {}): RenderResult {
       description: 'My array description.',
     },
     idSchema: {
-      __id: 'ObjectArrayTest',
+      __id: 'IDialogArrayTest',
     },
     ...propOverrides,
   };
 
   // @ts-ignore
-  return render(<ObjectArray {...props} />);
+  return render(<IDialogArray {...props} />);
 }
 
-describe('<ObjectArray />', () => {
+describe('<IDialogArray />', () => {
   it('renders a TitleField', async () => {
     const { findByText } = renderDefault();
 
     const title = await findByText('My Array Title');
     expect(title.tagName).toEqual('LABEL');
-    expect(title.id).toEqual('ObjectArrayTest__title');
+    expect(title.id).toEqual('IDialogArrayTest__title');
   });
 
   it('renders a DescriptionField', async () => {
@@ -45,7 +45,7 @@ describe('<ObjectArray />', () => {
 
     const title = await findByText('My array description.');
     expect(title.tagName).toEqual('P');
-    expect(title.id).toEqual('ObjectArrayTest__description');
+    expect(title.id).toEqual('IDialogArrayTest__description');
   });
 
   it('renders a StringItem for each item', async () => {
@@ -55,11 +55,25 @@ describe('<ObjectArray />', () => {
     expect(items).toHaveLength(3);
   });
 
-  it('can add new items', async () => {
+  it('can add the default item', async () => {
     const onAddClick = jest.fn();
     const { findByText } = renderDefault({ canAdd: true, onAddClick });
     const addBtn = await findByText('Add');
     fireEvent.click(addBtn);
-    expect(onAddClick).toHaveBeenCalled();
+    expect(onAddClick.mock.calls[0][1]).toEqual({ $type: 'Microsoft.AdaptiveDialog' });
+  });
+
+  it('can add an item with a given type', async () => {
+    const onAddClick = jest.fn();
+    const { findByTestId } = renderDefault({ canAdd: true, onAddClick });
+    const addBtn = await findByTestId('ArrayContainerAdd');
+    const menuBtn = addBtn.querySelectorAll('button')[1];
+
+    fireEvent.click(menuBtn);
+
+    const sendActivity = await findByText(document.body, 'Microsoft.SendActivity');
+    fireEvent.click(sendActivity);
+
+    expect(onAddClick.mock.calls[0][1]).toEqual({ $type: 'Microsoft.SendActivity' });
   });
 });
