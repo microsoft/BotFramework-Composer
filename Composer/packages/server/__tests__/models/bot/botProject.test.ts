@@ -51,7 +51,7 @@ describe('createFromTemplate', () => {
       expect(newFile).toBeTruthy();
     }
 
-    const fileContent = (newFile as FileInfo).content;
+    const fileContent = ((newFile as unknown) as FileInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
     expect(fileContent.rules).toHaveLength(1);
     expect(fileContent.rules[0].steps).toHaveLength(3);
