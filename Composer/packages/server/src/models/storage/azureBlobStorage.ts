@@ -153,4 +153,11 @@ export class AzureBlobStorage implements IFileStorage {
       });
     });
   }
+
+  async mkDir(path: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      //TODO: mkDir
+      resolve();
+    });
+  }
 }

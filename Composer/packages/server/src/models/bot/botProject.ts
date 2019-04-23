@@ -93,7 +93,7 @@ export class BotProject {
     return fileList;
   };
 
-  public getFiles = async () => {
+  private _getFiles = async () => {
     const files = await this._loadResource();
     return files;
   };
@@ -127,7 +127,7 @@ export class BotProject {
     return this.botFile;
   };
 
-  public copyProject = async (prevFiles: FileInfo[]) => {
+  public copyFiles = async (prevFiles: FileInfo[]) => {
     if (!(await this.fileStorage.exists(this.dir))) {
       await this.fileStorage.mkDir(this.dir);
     }
@@ -137,5 +137,11 @@ export class BotProject {
       const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
+  };
+
+  public copyTo = async (projRef: BotProjectRef) => {
+    const newBotProject = new BotProject(projRef);
+    await newBotProject.copyFiles(await this._getFiles());
+    return newBotProject;
   };
 }
