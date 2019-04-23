@@ -1,4 +1,4 @@
-import { getDialogData } from '../../src/utils/dialogUtil';
+import { getDialogData, setDialogData, getRootDialogName } from '../../src/utils/dialogUtil';
 
 const dialogsMap = {
   Dialog1: {
@@ -23,6 +23,16 @@ const dialogsMap = {
   },
 };
 
+describe('getRootDialogName', () => {
+  it('returns the dialog name for the given path', () => {
+    let result = getRootDialogName(dialogsMap, 'Dialog2.main');
+    expect(result).toEqual('Dialog2.main');
+
+    result = getRootDialogName(dialogsMap, 'Dialog2.main.steps[1]');
+    expect(result).toEqual('Dialog2.main');
+  });
+});
+
 describe('getDialogData', () => {
   it('returns all dialog data if path is a top level property', () => {
     const result = getDialogData(dialogsMap, 'Dialog1');
@@ -42,5 +52,17 @@ describe('getDialogData', () => {
   it('returns a sub path when "." is in path', () => {
     const result = getDialogData(dialogsMap, 'Dialog2.main.steps[1]');
     expect(result).toEqual(dialogsMap['Dialog2.main'].steps[1]);
+  });
+});
+
+describe('setDialogData', () => {
+  it('returns updated top level dialog data', () => {
+    const result = setDialogData(dialogsMap, 'Dialog2.main', { new: 'data' });
+    expect(result['Dialog2.main']).toEqual({ new: 'data' });
+  });
+
+  it('returns updated dialog data at a path', () => {
+    const result = setDialogData(dialogsMap, 'Dialog2.main.steps[1]', { new: 'data' });
+    expect(result).toEqual({ steps: [{ $type: 'Step3' }, { new: 'data' }] });
   });
 });
