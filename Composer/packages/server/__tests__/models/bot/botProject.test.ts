@@ -15,9 +15,15 @@ const mockProjectRef: BotProjectRef = {
 
 const proj = new BotProject(mockProjectRef);
 
+describe('init', () => {
+  it('should get files at a path', async () => {
+    const project: { [key: string]: any } = await proj.init();
+    expect(project.dialogs.length).toBe(3);
+  });
+});
+
 describe('getProject', () => {
   it('should get files at a path', async () => {
-    await proj.init();
     const project: { [key: string]: any } = await proj.getProject();
     expect(project.dialogs.length).toBe(3);
   });
@@ -72,5 +78,43 @@ describe('createFromTemplate', () => {
     expect(fileContent.rules).toHaveLength(1);
     expect(fileContent.rules[0].steps).toHaveLength(3);
     expect(fileContent.rules[0].steps).toMatchObject([{ $type: 'foo' }, { $type: 'bar' }, { $type: 'baz' }]);
+  });
+});
+
+describe('copyTo', () => {
+  const projectRef: BotProjectRef = {
+    storageId: 'default',
+    path: path.join(__dirname, '../../copy/1.botproj'),
+  };
+
+  afterEach(() => {
+    try {
+      const deleteFolder = (path: string) => {
+        let files = [];
+        if (fs.existsSync(path)) {
+          files = fs.readdirSync(path);
+          files.forEach(function(file, index) {
+            var curPath = path + '/' + file;
+            if (fs.statSync(curPath).isDirectory()) {
+              // recurse
+              deleteFolder(curPath);
+            } else {
+              // delete file
+              fs.unlinkSync(curPath);
+            }
+          });
+          fs.rmdirSync(path);
+        }
+      };
+      deleteFolder(path.resolve(__dirname, `../../copy`));
+    } catch (err) {
+      // ignore
+    }
+  });
+
+  it('should create a dialog file with given steps', async () => {
+    const newBotProject = await proj.copyTo(projectRef);
+    const project: { [key: string]: any } = await newBotProject.init();
+    expect(project.dialogs.length).toBe(3);
   });
 });
