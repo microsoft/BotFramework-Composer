@@ -5,7 +5,7 @@ import { BotProjectRef } from '../models/bot/interface';
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    ProjectService.currentBotProject.index();
+    await ProjectService.currentBotProject.index();
     const project = await ProjectService.currentBotProject.getIndexes();
     res.status(200).json({ ...project });
   } else {

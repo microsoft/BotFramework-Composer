@@ -9,6 +9,7 @@ import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
 import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
+import { LGIndexer } from './indexers/lgIndexer';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -22,6 +23,7 @@ export class BotProject {
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
+  public lgIndexer: LGIndexer;
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
@@ -31,16 +33,19 @@ export class BotProject {
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
+    this.lgIndexer = new LGIndexer(this.fileStorage);
   }
 
   public index = async () => {
     this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
+    this.lgIndexer.index(this.files);
   };
 
   public getIndexes = () => {
     return {
       dialogs: this.dialogIndexer.getDialogs(),
+      lgTemplates: this.lgIndexer.getLgTemplates(),
       botFile: this.getBotFile(),
     };
   };
@@ -77,6 +82,12 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
+  public updateLgTemplate = async (name: string, content: any) => {
+    const newFileContent = await this.lgIndexer.updateLgTemplate(content);
+    this._updateFile(`${name.trim()}.lg`, newFileContent);
+    return this.lgIndexer.getLgTemplates();
+  };
+
   public copyFiles = async (prevFiles: FileInfo[]) => {
     if (!(await this.fileStorage.exists(this.dir))) {
       await this.fileStorage.mkDir(this.dir);
@@ -110,8 +121,32 @@ export class BotProject {
   private _updateFile = async (name: string, content: string) => {
     const index = this.files.findIndex(file => {
       return file.name === name;
+    });
+    this.files[index].content = content;
+  };
+
+  private _getFiles = async () => {
+    const fileList: FileInfo[] = [];
+    // get .bot file
+    const botFileContent = await this.fileStorage.readFile(this.absolutePath);
     // get 'files' from .bot file
+    const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
+
+    if (botConfig !== undefined && Array.isArray(botConfig.files)) {
+      fileList.push({
+        name: this.name,
+        content: botConfig,
+        path: this.absolutePath,
+        relativePath: path.relative(this.dir, this.absolutePath),
       });
+
+      for (const pattern of botConfig.files) {
+        const paths = await glob(pattern, { cwd: this.dir });
+
+        for (const filePath of paths.sort()) {
+          const realFilePath: string = path.resolve(this.dir, filePath);
+          // skip lg files for now
+          if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
             fileList.push({
               name: filePath,

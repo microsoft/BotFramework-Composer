@@ -14,7 +14,7 @@ export class LGIndexer {
 
   private getNewTemplate(
     id: number,
-    fileName: string,
+    absolutePath: string,
     name: string = '',
     content: string = '',
     comments: string = '',
@@ -23,7 +23,7 @@ export class LGIndexer {
     return {
       id: id,
       name: name,
-      fileName: fileName,
+      absolutePath: absolutePath,
       type: 'Rotate',
       content: content,
       comments: comments,
@@ -39,7 +39,7 @@ export class LGIndexer {
 
     for (const file of files) {
       const extName = path.extname(file.name);
-      const fileName = path.basename(file.name, extName);
+      const absolutePath = file.path;
       // todo: use lg parser.
       if (extName === '.lg') {
         const lines = file.content.split(/\r?\n/) || [];
@@ -48,10 +48,10 @@ export class LGIndexer {
           if (!line.trim() || line.trim().startsWith('>')) {
             if (newTemplate.name) {
               lgTemplates.push(newTemplate);
-              newTemplate = this.getNewTemplate(count++, fileName, '', line);
+              newTemplate = this.getNewTemplate(count++, absolutePath, '', line);
             } else if (index === lines.length - 1 && newTemplate.comments) {
               newTemplate.id = count++;
-              newTemplate.fileName = fileName;
+              newTemplate.absolutePath = absolutePath;
               newTemplate.comments += line;
               newTemplate.content = newTemplate.content.trim();
               lgTemplates.push(newTemplate);
@@ -65,11 +65,11 @@ export class LGIndexer {
             if (newTemplate.name) {
               newTemplate.content = newTemplate.content.trim();
               lgTemplates.push(newTemplate);
-              newTemplate = this.getNewTemplate(count++, fileName);
+              newTemplate = this.getNewTemplate(count++, absolutePath);
             }
             newTemplate.id = count;
             newTemplate.name = line.trim().split(' ')[1];
-            newTemplate.fileName = path.basename(file.name, extName);
+            newTemplate.absolutePath = absolutePath;
             return;
           }
 
@@ -93,13 +93,18 @@ export class LGIndexer {
     return this.lgTemplates;
   }
 
-  public async updateLgTemplate(absolutePath: string, lgTemplate: LGTemplate) {
+  public async updateLgTemplate(lgTemplate: LGTemplate) {
+    const absolutePath = lgTemplate.absolutePath;
     const updatedIndex = this.lgTemplates.findIndex(template => lgTemplate.id === template.id);
     if (updatedIndex >= 0) {
-      this.lgTemplates[updatedIndex] = lgTemplate;
+      if (lgTemplate.name) {
+        this.lgTemplates[updatedIndex] = lgTemplate;
+      } else {
+        this.lgTemplates.splice(updatedIndex, 1);
+      }
       let updatedLG = '';
       this.lgTemplates
-        .filter(template => template.fileName === lgTemplate.fileName)
+        .filter(template => template.absolutePath === lgTemplate.absolutePath)
         .forEach(template => {
           if (template.comments) {
             updatedLG += `${template.comments}`;
@@ -114,7 +119,9 @@ export class LGIndexer {
             updatedLG += `${template.content}` + '\n';
           }
         });
-      await this.storage.writeFile(absolutePath, updatedLG.trim() + '\n');
+      const newFileContent = updatedLG.trim() + '\n';
+      await this.storage.writeFile(absolutePath, newFileContent);
+      return newFileContent;
     } else {
       throw new Error(`Lg template not found, id: ${lgTemplate.id}`);
     }

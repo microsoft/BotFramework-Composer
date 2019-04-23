@@ -35,7 +35,7 @@ export function LanguageGenerationSettings() {
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(index, item.fileName, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(index, newName, item.content)}
             />
           </span>
         );
@@ -67,13 +67,13 @@ export function LanguageGenerationSettings() {
     },
   ];
 
-  function updateTemplateContent(index, file, templateName, content) {
+  function updateTemplateContent(index, templateName, content) {
     const newTemplate = lgTemplates[index];
     newTemplate.name = templateName;
     newTemplate.content = content;
 
     const payload = {
-      name: file,
+      name: templateName,
       content: newTemplate,
     };
 
@@ -88,7 +88,7 @@ export function LanguageGenerationSettings() {
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
         defaultValue={item.content}
-        onChange={(event, newValue) => updateTemplateContent(index, item.fileName, item.name, newValue)}
+        onChange={(event, newValue) => updateTemplateContent(index, item.name, newValue)}
       />
     );
   }
@@ -111,7 +111,7 @@ export function LanguageGenerationSettings() {
       items.push({
         name: template.name,
         value: template.name,
-        fileName: template.fileName,
+        absolutePath: template.absolutePath,
         type: template.type,
         content: template.content,
         comments: template.comments,
@@ -123,21 +123,28 @@ export function LanguageGenerationSettings() {
   let currentKey = '';
   let itemCount = 0;
   lgTemplates.forEach((template, index) => {
-    if (template.fileName !== currentKey) {
+    if (template.absolutePath !== currentKey) {
       if (itemCount !== 0) {
+        const pathItems = currentKey.split(/[\\/]+/g);
         groups.push({
-          name: currentKey + '.lg',
+          name: pathItems[pathItems.length - 1],
           count: itemCount,
           key: currentKey,
           startIndex: index - itemCount,
         });
         itemCount = 0;
       }
-      currentKey = template.fileName;
+      currentKey = template.absolutePath;
     }
     itemCount++;
     if (index === lgTemplates.length - 1) {
-      groups.push({ name: currentKey + '.lg', count: itemCount, key: currentKey, startIndex: index - itemCount + 1 });
+      const pathItems = currentKey.split(/[\\/]+/g);
+      groups.push({
+        name: pathItems[pathItems.length - 1],
+        count: itemCount,
+        key: currentKey,
+        startIndex: index - itemCount + 1,
+      });
     }
   });
 

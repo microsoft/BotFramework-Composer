@@ -30,6 +30,6 @@ export interface LGTemplate {
   // for now parameters is not been used because it shown up with the name.
   parameters: string[];
   content: any;
-  fileName: string;
+  absolutePath: string;
   comments: string;
 }

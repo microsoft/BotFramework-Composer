@@ -3,6 +3,10 @@ import path from 'path';
 import { BotProject } from '../../../../src/models/bot/botProject';
 import { BotProjectRef } from '../../../../src/models/bot/interface';
 
+jest.mock('azure-storage', () => {
+  return {};
+});
+
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',
   path: path.join(__dirname, '../../mocks/1.botproj'),
@@ -13,14 +17,24 @@ const proj = new BotProject(mockProjectRef);
 describe('Index lg files', () => {
   it('should index the lg file.', async () => {
     const initFiles = [
-      { name: 'test.lg', content: '# greet\n- Hello!' },
-      { name: 'a.dialog', content: { old: 'value' } },
+      {
+        name: 'test.lg',
+        content: '# greet\n- Hello!',
+        path: path.join(__dirname, '../../mocks/test.lg'),
+        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')),
+      },
+      {
+        name: 'a.dialog',
+        content: { old: 'value' },
+        path: path.join(__dirname, '../../mocks/a.dialog'),
+        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/a.dialog')),
+      },
     ];
     const aTemplate = {
       id: 1,
       name: 'greet',
       content: '- Hello!',
-      fileName: 'test',
+      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
       parameters: [],
       type: 'Rotate',
       comments: '',
