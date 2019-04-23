@@ -1,23 +1,15 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import debounce from 'lodash.debounce';
-import get from 'lodash.get';
 import set from 'lodash.set';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
+import { getDialogData } from './utils';
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
 
 const apiClient = new ApiClient();
-
-function getDialogData(dialogsMap, path) {
-  const dialog = Object.keys(dialogsMap).find(d => path.startsWith(d));
-  const data = dialogsMap[dialog];
-  const subPath = path.replace(`${dialog}.`, '');
-
-  return subPath === dialog ? data : get(data, subPath);
-}
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
