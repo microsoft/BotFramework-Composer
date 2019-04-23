@@ -3,7 +3,7 @@
 import path from 'path';
 
 import { jsx } from '@emotion/core';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import formatMessage from 'format-message';
 import findindex from 'lodash.findindex';
@@ -32,14 +32,14 @@ export function StorageExplorer() {
     openBotProject,
     saveProjectAs,
   } = actions;
-  const [currentStorageIndex, setCurrentStorageIndex] = useState(0);
+  const currentStorageIndex = useRef(0);
   const [currentPath, setCurrentPath] = useState('');
 
-  const currentStorageId = storages[currentStorageIndex] ? storages[currentStorageIndex].id : 'default';
+  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
   async function init() {
     const res = await actions.fetchStorages();
-    updateCurrentPath(res[currentStorageIndex].path, res[currentStorageIndex].id);
+    updateCurrentPath(res[currentStorageIndex.current].path, res[currentStorageIndex.current].id);
   }
 
   // fetch storages first then fetch the folder info under it.
@@ -48,7 +48,7 @@ export function StorageExplorer() {
   }, []);
 
   function onStorageSourceChange(index) {
-    setCurrentStorageIndex(index);
+    currentStorageIndex.current = index;
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
@@ -73,7 +73,7 @@ export function StorageExplorer() {
   const onSelectionChanged = item => {
     if (item) {
       const type = item.fileType;
-      const storageId = storages[currentStorageIndex].id;
+      const storageId = storages[currentStorageIndex.current].id;
       const path = item.filePath;
       if (type === FileTypes.FOLDER) {
         updateCurrentPath(path, storageId);
@@ -111,8 +111,8 @@ export function StorageExplorer() {
   const handleSaveAs = async value => {
     const dir = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}`;
     const absolutePath = `${dir}/${value}/bot.botproj`;
-    await saveProjectAs(storages[currentStorageIndex].id, absolutePath);
-    updateCurrentPath(dir, storages[currentStorageIndex].id);
+    await saveProjectAs(storages[currentStorageIndex.current].id, absolutePath);
+    updateCurrentPath(dir, storages[currentStorageIndex.current].id);
     onCloseExplorer();
   };
 
