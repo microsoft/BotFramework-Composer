@@ -5,7 +5,8 @@ import { BotProjectRef } from '../models/bot/interface';
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const project = ProjectService.currentBotProject.getProject();
+    ProjectService.currentBotProject.index();
+    const project = await ProjectService.currentBotProject.getIndexes();
     res.status(200).json({ ...project });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -31,7 +32,7 @@ async function openProject(req: Request, res: Response) {
   try {
     await ProjectService.openProject(projRef);
     if (ProjectService.currentBotProject !== undefined) {
-      const project = ProjectService.currentBotProject.getProject();
+      const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
     } else {
       res.status(404).json({ error: 'No bot project opened' });
@@ -60,7 +61,7 @@ async function saveProjectAs(req: Request, res: Response) {
   try {
     await ProjectService.saveProjectAs(projRef);
     if (ProjectService.currentBotProject !== undefined) {
-      const project = ProjectService.currentBotProject.getProject();
+      const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
     } else {
       res.status(404).json({ error: 'No bot project opened' });
