@@ -82,6 +82,7 @@ describe('copyTo', () => {
     path: path.join(__dirname, '../../copy/1.botproj'),
   };
 
+  const copyDir = path.join(__dirname, `../../copy`);
   afterEach(() => {
     try {
       const deleteFolder = (path: string) => {
@@ -101,7 +102,7 @@ describe('copyTo', () => {
           fs.rmdirSync(path);
         }
       };
-      deleteFolder(path.join(__dirname, `../../copy`));
+      deleteFolder(copyDir);
     } catch (err) {
       // ignore
     }
