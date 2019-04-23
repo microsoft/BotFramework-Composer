@@ -1,7 +1,8 @@
 import path from 'path';
 
-import { FileInfo, LGTemplate } from '../interface';
 import { IFileStorage } from 'src/models/storage/interface';
+
+import { FileInfo, LGTemplate } from '../interface';
 
 export class LGIndexer {
   private lgTemplates: LGTemplate[] = [];
