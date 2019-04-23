@@ -11,3 +11,18 @@ export const title = css`
   line-height: 40px;
   padding-left: 15px;
 `;
+
+export const navLinkClass = {
+  default: {
+    display: 'block',
+    textDecoration: 'none',
+    color: '#5f5f5f',
+    fontSize: '13px',
+    fontWeight: 'bold',
+    lineHeight: '30px',
+    paddingLeft: '15px',
+  },
+  activestyle: {
+    color: '#0083cb',
+  },
+};

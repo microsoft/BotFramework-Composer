@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
+import formatMessage from 'format-message';
 
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { NavLink } from './../../components/NavLink/index';
-import { title, label } from './styles';
+import { title, label, navLinkClass } from './styles';
 
 // todo: should wrap the NavLink to another component.
 export const ContentPage = () => {
@@ -16,36 +17,12 @@ export const ContentPage = () => {
         <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
           <Tree variant="largest">
             <div>
-              <div css={title}>Content</div>
-              <NavLink
-                to={'lu'}
-                style={{
-                  display: 'block',
-                  textDecoration: 'none',
-                  color: '#5f5f5f',
-                  fontSize: '13px',
-                  fontWeight: 'bold',
-                  lineHeight: '30px',
-                  paddingLeft: '15px',
-                }}
-                activestyle={{ color: '#0083cb' }}
-              >
-                <div css={label}>{'Language Understanding'}</div>
+              <div css={title}>{formatMessage('Content')}</div>
+              <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
+                <div css={label}>{formatMessage('Language Understanding')}</div>
               </NavLink>
-              <NavLink
-                to={'lg'}
-                style={{
-                  display: 'block',
-                  textDecoration: 'none',
-                  color: '#5f5f5f',
-                  fontSize: '13px',
-                  fontWeight: 'bold',
-                  lineHeight: '30px',
-                  paddingLeft: '15px',
-                }}
-                activestyle={{ color: '#0083cb' }}
-              >
-                <div css={label}>{'Language Generation'}</div>
+              <NavLink to={'lg'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
+                <div css={label}>{formatMessage('Language Generation')}</div>
               </NavLink>
             </div>
           </Tree>

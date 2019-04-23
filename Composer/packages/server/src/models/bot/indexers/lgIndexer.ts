@@ -1,12 +1,16 @@
 import path from 'path';
-import fs from 'fs';
-import { promisify } from 'util';
 
 import { FileInfo, LGTemplate } from '../interface';
+import { IFileStorage } from 'src/models/storage/interface';
 
 export class LGIndexer {
   private lgTemplates: LGTemplate[] = [];
-  private writeFile = promisify(fs.writeFile);
+  private storage: IFileStorage;
+
+  constructor(storage: IFileStorage) {
+    this.storage = storage;
+  }
+
   private getNewTemplate(
     id: number,
     fileName: string,
@@ -109,7 +113,7 @@ export class LGIndexer {
             updatedLG += `${template.content}` + '\n';
           }
         });
-      await this.writeFile(absolutePath, updatedLG.trim() + '\n');
+      await this.storage.writeFile(absolutePath, updatedLG.trim() + '\n');
     } else {
       throw new Error(`Lg template not found, id: ${lgTemplate.id}`);
     }

@@ -8,6 +8,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
@@ -32,7 +33,7 @@ export function LanguageGenerationSettings() {
           <span>
             <TextField
               borderless
-              placeholder="Template Name."
+              placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
               onChange={(event, newName) => updateTemplateContent(index, item.fileName, newName, item.content)}
             />
@@ -85,7 +86,7 @@ export function LanguageGenerationSettings() {
         borderless
         multiline
         autoAdjustHeight
-        placeholder="Template Content."
+        placeholder={formatMessage('Template Content.')}
         defaultValue={item.content}
         onChange={(event, newValue) => updateTemplateContent(index, item.fileName, item.name, newValue)}
       />
@@ -143,8 +144,8 @@ export function LanguageGenerationSettings() {
   return (
     <Fragment>
       <div>
-        <div css={title}>Content &gt; Language Generation</div>
-        <div css={label}>Templates</div>
+        <div css={title}>{formatMessage('Content > Language Generation')}</div>
+        <div css={label}>{formatMessage('Templates')}</div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             items={items}
