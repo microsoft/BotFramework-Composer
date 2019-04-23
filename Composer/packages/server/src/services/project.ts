@@ -20,6 +20,7 @@ class BotProjectService {
       throw new Error(`file not exist ${projRef.path}`);
     }
     this.currentBotProject = new BotProject(projRef);
+    await this.currentBotProject.index();
     this.updateRecentBotProjects();
   };
 
@@ -42,6 +43,7 @@ class BotProjectService {
   public saveProjectAs = async (projRef: BotProjectRef) => {
     if (typeof this.currentBotProject !== 'undefined') {
       this.currentBotProject = await this.currentBotProject.copyTo(projRef);
+      await this.currentBotProject.index();
     }
   };
 }

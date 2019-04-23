@@ -16,7 +16,7 @@ const mockProjectRef: BotProjectRef = {
 const proj = new BotProject(mockProjectRef);
 
 beforeEach(async () => {
-  await proj.index(true);
+  await proj.index();
 });
 
 describe('index', () => {
@@ -76,13 +76,14 @@ describe('createFromTemplate', () => {
   });
 });
 
+const copyDir = path.join(__dirname, `../../copy`);
+
 describe('copyTo', () => {
   const projectRef: BotProjectRef = {
     storageId: 'default',
     path: path.join(__dirname, '../../copy/1.botproj'),
   };
 
-  const copyDir = path.join(__dirname, `../../copy`);
   afterEach(() => {
     try {
       const deleteFolder = (path: string) => {
@@ -110,7 +111,7 @@ describe('copyTo', () => {
 
   it('should create a dialog file with given steps', async () => {
     const newBotProject = await proj.copyTo(projectRef);
-    await newBotProject.index(true);
+    await newBotProject.index();
     const project: { [key: string]: any } = await newBotProject.getIndexes();
     expect(project.dialogs.length).toBe(3);
   });

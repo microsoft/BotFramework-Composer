@@ -3,11 +3,12 @@ import path from 'path';
 import { merge, set } from 'lodash';
 import glob from 'globby';
 
+import StorageService from '../../services/storage';
+
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
 import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
-import StorageService from '../../services/storage';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -30,17 +31,10 @@ export class BotProject {
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
-
-    this._getFiles().then((files: FileInfo[]) => {
-      this.files = files;
-      this.index();
-    });
   }
 
-  public index = async (reloadFiles: boolean = false) => {
-    if (reloadFiles) {
-      this.files = await this._getFiles();
-    }
+  public index = async () => {
+    this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
   };
 
