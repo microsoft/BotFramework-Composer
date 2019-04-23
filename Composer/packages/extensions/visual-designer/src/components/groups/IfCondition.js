@@ -162,7 +162,7 @@ export class IfCondition extends DynamicLayoutComponent {
           length: this.boundary.height - (ifGroupNode.offset.y + ifGroupNode.boundary.height),
         },
         {
-          key: `${id}/edges/bottome->out`,
+          key: `${id}/edges/bottom->out`,
           direction: 'x',
           x: this.boundary.axisX,
           y: this.boundary.height,
@@ -186,7 +186,7 @@ export class IfCondition extends DynamicLayoutComponent {
           length: this.boundary.height - (choiceNode.offset.y + choiceNode.boundary.axisY),
         },
         {
-          key: `${id}/edges/bottome->out`,
+          key: `${id}/edges/bottom->out`,
           direction: 'x',
           x: this.boundary.axisX,
           y: this.boundary.height,
