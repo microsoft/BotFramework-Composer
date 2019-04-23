@@ -94,7 +94,7 @@ describe('copyTo', () => {
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
           files.forEach(function(file, index) {
-            var curPath = path + '/' + file;
+            const curPath = path + '/' + file;
             if (fs.statSync(curPath).isDirectory()) {
               // recurse
               deleteFolder(curPath);
