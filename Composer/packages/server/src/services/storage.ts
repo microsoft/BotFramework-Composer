@@ -12,6 +12,17 @@ class StorageService {
     this.storageConnections = Store.get(this.STORE_KEY);
   }
 
+  public getStorageClient = (storageId: string): IFileStorage => {
+    const conns: StorageConnection[] = Store.get('storageConnections');
+    const conn = conns.find(s => {
+      return s.id === storageId;
+    });
+    if (conn === undefined) {
+      throw new Error(`no storage connection with id ${storageId}`);
+    }
+    return StorageFactory.createStorageClient(conn);
+  };
+
   public createStorageConnection = (connection: StorageConnection) => {
     // if id is already in store, skip it
     if (!this.storageConnections.find(item => item.id === connection.id)) {

@@ -3,13 +3,11 @@ import path from 'path';
 import { merge, set } from 'lodash';
 import glob from 'globby';
 
-import { Store } from '../../store/store';
-
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
-import { IFileStorage, StorageConnection } from './../storage/interface';
-import { StorageFactory } from './../storage/storageFactory';
+import { IFileStorage } from './../storage/interface';
 import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
+import StorageService from '../../services/storage';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -30,8 +28,7 @@ export class BotProject {
     this.dir = path.dirname(this.absolutePath);
     this.name = path.basename(this.absolutePath);
 
-    const storageConnection = this._getStorageConnection(this.ref.storageId);
-    this.fileStorage = StorageFactory.createStorageClient(storageConnection);
+    this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
 
     this._getFiles().then((files: FileInfo[]) => {
@@ -121,17 +118,6 @@ export class BotProject {
       return file.name === name;
     });
     this.files[index].content = content;
-  };
-
-  private _getStorageConnection = (id: string): StorageConnection => {
-    const storageConnections: StorageConnection[] = Store.get('storageConnections');
-    const storageConnection = storageConnections.find(s => {
-      return s.id === id;
-    });
-    if (storageConnection === undefined) {
-      throw new Error('no storage match');
-    }
-    return storageConnection;
   };
 
   private _getFiles = async () => {
