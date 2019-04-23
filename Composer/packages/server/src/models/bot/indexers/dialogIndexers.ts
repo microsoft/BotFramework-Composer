@@ -46,6 +46,10 @@ export class DialogIndexer {
     return this.dialogs;
   };
 
+  public getDialogs = () => {
+    return this.dialogs;
+  };
+
   public updateDialogs = async (name: string, content: any): Promise<Dialog[]> => {
     const index = this.dialogs.findIndex(dialog => {
       return dialog.name === name;
@@ -56,13 +60,11 @@ export class DialogIndexer {
     const dialogContent = await this.storage.readFile(dialog.path);
     this.dialogs[index].content = JSON.parse(dialogContent);
 
-    return this.dialogs;
+    return this.dialogs[index].content;
   };
 
-  public addDialog = async (absolutePath: string, name: string, content: any): Promise<Dialog[]> => {
-    await this.storage.writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
-    const dialogContent = await this.storage.readFile(absolutePath);
-    this.dialogs.push({ name, content: JSON.parse(dialogContent), id: this.dialogs.length, path: absolutePath });
-    return this.dialogs;
+  public addDialog = (name: string, content: string, path: string) => {
+    this.dialogs.push({ name, content: JSON.parse(content), id: this.dialogs.length, path: path });
+    return content;
   };
 }

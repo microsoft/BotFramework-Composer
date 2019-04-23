@@ -15,16 +15,13 @@ const mockProjectRef: BotProjectRef = {
 
 const proj = new BotProject(mockProjectRef);
 
-describe('init', () => {
-  it('should get files at a path', async () => {
-    const project: { [key: string]: any } = await proj.init();
-    expect(project.dialogs.length).toBe(3);
-  });
+beforeEach(async () => {
+  await proj.index(true);
 });
 
-describe('getProject', () => {
-  it('should get files at a path', async () => {
-    const project: { [key: string]: any } = await proj.getProject();
+describe('index', () => {
+  it('should get project', async () => {
+    const project: { [key: string]: any } = await proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
   });
 });
@@ -33,7 +30,6 @@ describe('updateDialog', () => {
   it('should update a file at a path', async () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
-
     const dialogs = await proj.updateDialog('a', newValue);
     const aDialog = dialogs.find((f: { name: string }) => f.name.startsWith('a'));
     // @ts-ignore
@@ -46,7 +42,6 @@ describe('updateBotFile', () => {
   it('should update a file at a path', async () => {
     const initValue = { services: [], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
     const newValue = { services: ['test'], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
-
     const botFile = await proj.updateBotFile('1', newValue);
     // @ts-ignore
     expect(botFile.content).toEqual(newValue);
@@ -106,7 +101,7 @@ describe('copyTo', () => {
           fs.rmdirSync(path);
         }
       };
-      deleteFolder(path.resolve(__dirname, `../../copy`));
+      deleteFolder(path.join(__dirname, `../../copy`));
     } catch (err) {
       // ignore
     }
@@ -114,7 +109,8 @@ describe('copyTo', () => {
 
   it('should create a dialog file with given steps', async () => {
     const newBotProject = await proj.copyTo(projectRef);
-    const project: { [key: string]: any } = await newBotProject.init();
+    await newBotProject.index(true);
+    const project: { [key: string]: any } = await newBotProject.getIndexes();
     expect(project.dialogs.length).toBe(3);
   });
 });
