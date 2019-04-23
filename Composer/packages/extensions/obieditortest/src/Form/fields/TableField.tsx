@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  ContextualMenu,
   ContextualMenuItemType,
+  createTheme,
+  DefaultButton,
   DetailsList,
+  IContextualMenuItem,
   PrimaryButton,
   SelectionMode,
-  createTheme,
-  IContextualMenuItem,
 } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
@@ -42,36 +42,85 @@ interface TableFieldProps<T> {
   schema: JSONSchema6;
 }
 
-interface DetailItem<T> {
-  item: T;
-  index: number;
-  target: HTMLElement;
+interface ItemActionsProps<T = any> extends TableFieldProps<T> {
+  item: any;
+  index?: number;
+  newOptions: IContextualMenuItem[];
 }
 
-export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
-  const [currentItem, setCurrentItem] = useState<DetailItem<any> | null>(null);
-  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
+const ItemActions: React.FC<ItemActionsProps> = props => {
+  const { navPrefix, index, onChange, formData, formContext, newOptions } = props;
 
-  const columns = [
+  if (typeof index === 'undefined') {
+    return null;
+  }
+
+  const menuItems: IContextualMenuItem[] = [
     {
-      key: 'column1',
-      name: columnHeader || formatMessage('Type'),
-      minWidth: 140,
-      maxWidth: 200,
-      onRender: renderTitle,
+      key: 'edit',
+      text: formatMessage('Edit'),
+      iconProps: { iconName: 'Edit' },
+      onClick: () => {
+        formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
+        formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
+        return false;
+      },
     },
-    ...(additionalColumns || []),
+    {
+      key: 'moveUp',
+      text: formatMessage('Move Up'),
+      iconProps: { iconName: 'CaretSolidUp' },
+      disabled: index === 0,
+      onClick: () => {
+        const newItems = swap(formData, index, index - 1);
+        onChange(newItems);
+        return false;
+      },
+    },
+    {
+      key: 'moveDown',
+      text: formatMessage('Move Down'),
+      iconProps: { iconName: 'CaretSolidDown' },
+      disabled: index === formData.length - 1,
+      onClick: () => {
+        const newItems = swap(formData, index, index + 1);
+        onChange(newItems);
+        return false;
+      },
+    },
+    {
+      key: 'remove',
+      text: formatMessage('Remove'),
+      iconProps: { iconName: 'Cancel' },
+      onClick: () => {
+        const newItems = remove(formData, index);
+        onChange(newItems);
+        return false;
+      },
+    },
+    {
+      key: 'divider_1',
+      itemType: ContextualMenuItemType.Divider,
+    },
+    {
+      key: 'new',
+      text: formatMessage('New'),
+      iconProps: { iconName: 'Add' },
+      subMenuProps: {
+        items: newOptions,
+        calloutProps: { calloutMaxHeight: 500 },
+        directionalHint: DirectionalHint.rightTopEdge,
+      },
+    },
   ];
 
+  return <DefaultButton menuProps={{ items: menuItems }} />;
+};
+
+export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
+  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
+
   const items = props.formData;
-
-  const onItemContextMenu = (item: any, index: number | undefined, e: Event | undefined) => {
-    const ev = e as Event;
-    ev.preventDefault();
-    const target = ev.target as HTMLElement;
-
-    setCurrentItem({ item, index: index as number, target: target.parentElement || target });
-  };
 
   const onChange = newItem => {
     if (Array.isArray(newItem)) {
@@ -86,66 +135,33 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
     return false;
   };
 
-  const menuItems: IContextualMenuItem[] = currentItem
-    ? [
-        {
-          key: 'edit',
-          text: formatMessage('Edit'),
-          iconProps: { iconName: 'Edit' },
-          onClick: () => {
-            props.formContext.shellApi.focusTo(`.${navPrefix}[${currentItem.index}]`);
-            props.formContext.shellApi.navDown(`.${navPrefix}[${currentItem.index}]`);
-            return false;
-          },
-        },
-        {
-          key: 'moveUp',
-          text: formatMessage('Move Up'),
-          iconProps: { iconName: 'CaretSolidUp' },
-          disabled: currentItem.index === 0,
-          onClick: () => {
-            const newItems = swap(items, currentItem.index, currentItem.index - 1);
-            onChange(newItems);
-            return false;
-          },
-        },
-        {
-          key: 'moveDown',
-          text: formatMessage('Move Down'),
-          iconProps: { iconName: 'CaretSolidDown' },
-          disabled: currentItem.index === items.length - 1,
-          onClick: () => {
-            const newItems = swap(items, currentItem.index, currentItem.index + 1);
-            onChange(newItems);
-            return false;
-          },
-        },
-        {
-          key: 'remove',
-          text: formatMessage('Remove'),
-          iconProps: { iconName: 'Cancel' },
-          onClick: () => {
-            const newItems = remove(items, currentItem.index);
-            onChange(newItems);
-            return false;
-          },
-        },
-        {
-          key: 'divider_1',
-          itemType: ContextualMenuItemType.Divider,
-        },
-        {
-          key: 'new',
-          text: formatMessage('New'),
-          iconProps: { iconName: 'Add' },
-          subMenuProps: {
-            items: buildDialogOptions(createNewItemAtIndex(currentItem.index + 1), filterNewOptions),
-            calloutProps: { calloutMaxHeight: 500 },
-            directionalHint: DirectionalHint.rightTopEdge,
-          },
-        },
-      ]
-    : [];
+  const columns: IColumn[] = [
+    {
+      key: 'column1',
+      name: columnHeader || formatMessage('Type'),
+      minWidth: 140,
+      maxWidth: 200,
+      onRender: renderTitle,
+    },
+    ...(additionalColumns || []),
+    {
+      key: 'menu',
+      name: '',
+      minWidth: 140,
+      maxWidth: 200,
+      // eslint-disable-next-line react/display-name
+      onRender: (item, index) => {
+        return (
+          <ItemActions
+            {...props}
+            item={item}
+            index={index}
+            newOptions={buildDialogOptions(createNewItemAtIndex((index || -1) + 1), filterNewOptions)}
+          />
+        );
+      },
+    },
+  ];
 
   return (
     <div style={{ margin: '10px 0' }}>
@@ -158,7 +174,6 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       <DetailsList
         columns={columns}
         items={items}
-        onItemContextMenu={onItemContextMenu}
         selectionMode={SelectionMode.none}
         styles={{ root: { marginBottom: '20px' } }}
       />
@@ -174,14 +189,6 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       >
         {label}
       </PrimaryButton>
-      {currentItem && (
-        <ContextualMenu
-          items={menuItems}
-          target={currentItem.target}
-          directionalHint={DirectionalHint.bottomLeftEdge}
-          onDismiss={() => setCurrentItem(null)}
-        />
-      )}
     </div>
   );
 }
