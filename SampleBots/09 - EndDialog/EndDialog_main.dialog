@@ -50,7 +50,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "EndDialog.TellJoke"
+                    "dialog": "EndDialog_TellJoke"
                 }              
             ]
         }

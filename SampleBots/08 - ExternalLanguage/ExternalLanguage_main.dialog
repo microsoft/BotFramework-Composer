@@ -16,7 +16,10 @@
             "$type": "Microsoft.SendActivity",
             "activity": "[welcome]"
         },
-        "ExternalLanguage.Greeting"
+        {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ExternalLanguage_Greeting"
+        }
     ],
     "rules": [
         {
@@ -25,7 +28,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ExternalLanguage.TellJoke"
+                    "dialog": "ExternalLanguage_TellJoke"
                 }
             ]
         },
@@ -35,7 +38,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ExternalLanguage.FortuneTeller"
+                    "dialog": "ExternalLanguage_FortuneTeller"
                 }              
             ]
         },
@@ -45,7 +48,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ExternalLanguage.Greeting"
+                    "dialog": "ExternalLanguage_Greeting"
                 }                
             ]
         },

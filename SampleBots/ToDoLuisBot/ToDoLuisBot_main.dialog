@@ -17,7 +17,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.AddItem"
+                    "dialog": "ToDoLuisBot_AddItem"
                 }               
             ]
         },
@@ -27,7 +27,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.DeleteItem"
+                    "dialog": "ToDoLuisBot_DeleteItem"
                 }             
             ]
         },
@@ -37,7 +37,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.ShowItems"
+                    "dialog": "ToDoLuisBot_ShowItems"
                 }                
             ]
         },

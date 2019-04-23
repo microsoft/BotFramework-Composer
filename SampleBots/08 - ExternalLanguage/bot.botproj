@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "ExternalLanguage.main.dialog"
+    "entry": "ExternalLanguage_main.dialog"
 }
