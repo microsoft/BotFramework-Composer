@@ -4,6 +4,10 @@ import fs from 'fs';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
 
+jest.mock('azure-storage', () => {
+  return {};
+});
+
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',
   path: path.join(__dirname, '../../mocks/1.botproj'),
@@ -25,10 +29,22 @@ describe('updateDialog', () => {
     const newValue = { new: 'value' };
 
     const dialogs = await proj.updateDialog('a', newValue);
-    const aDialog = dialogs.find(f => f.name.startsWith('a'));
+    const aDialog = dialogs.find((f: { name: string }) => f.name.startsWith('a'));
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
     await proj.updateDialog('a', initValue);
+  });
+});
+
+describe('updateBotFile', () => {
+  it('should update a file at a path', async () => {
+    const initValue = { services: [], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
+    const newValue = { services: ['test'], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
+
+    const botFile = await proj.updateBotFile('1', newValue);
+    // @ts-ignore
+    expect(botFile.content).toEqual(newValue);
+    await proj.updateBotFile('1', initValue);
   });
 });
 
@@ -45,7 +61,7 @@ describe('createFromTemplate', () => {
 
   it('should create a dialog file with given steps', async () => {
     const dialogs = await proj.createDialogFromTemplate(dialogName, ['foo', 'bar', 'baz']);
-    const newFile = dialogs.find(f => f.name.startsWith(dialogName));
+    const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
 
     if (!newFile) {
       expect(newFile).toBeTruthy();
