@@ -20,4 +20,5 @@ export interface Dialog {
   id: number;
   name: string;
   content: any;
+  path: string;
 }
