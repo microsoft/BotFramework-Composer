@@ -5,7 +5,7 @@ import { BotProjectRef } from '../models/bot/interface';
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    ProjectService.currentBotProject.index();
+    await ProjectService.currentBotProject.index();
     const project = await ProjectService.currentBotProject.getIndexes();
     res.status(200).json({ ...project });
   } else {
@@ -98,11 +98,21 @@ async function createDialogFromTemplate(req: Request, res: Response) {
   }
 }
 
+async function updateLgTemplate(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const lgTemplates = await ProjectService.currentBotProject.updateLgTemplate(req.body.name, req.body.content);
+    res.status(200).json({ lgTemplates });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
   updateDialog: updateDialog,
   createDialogFromTemplate: createDialogFromTemplate,
+  updateLgTemplate: updateLgTemplate,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
 };
