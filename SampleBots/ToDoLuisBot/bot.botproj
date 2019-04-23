@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "ToDoLuisBot_main.dialog"
+    "entry": "ToDoLuisBot.main.dialog"
 }

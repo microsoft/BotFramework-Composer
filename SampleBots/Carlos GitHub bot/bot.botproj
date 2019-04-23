@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "GithubBot_main.dialog"
+    "entry": "GithubBot.main.dialog"
 }

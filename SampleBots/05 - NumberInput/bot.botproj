@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "NumberInput_main.dialog"
+    "entry": "NumberInput.main.dialog"
 }

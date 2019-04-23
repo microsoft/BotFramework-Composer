@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "Steps_main.dialog"
+    "entry": "Steps.main.dialog"
 }

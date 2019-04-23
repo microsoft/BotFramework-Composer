@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "EndDialog_main.dialog"
+    "entry": "EndDialog.main.dialog"
 }

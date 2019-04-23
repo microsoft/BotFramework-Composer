@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "IfCondition_main.dialog"
+    "entry": "IfCondition.main.dialog"
 }

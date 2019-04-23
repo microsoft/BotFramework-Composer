@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "TraceAndLog_main.dialog"
+    "entry": "TraceAndLog.main.dialog"
 }

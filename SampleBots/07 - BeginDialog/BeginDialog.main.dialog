@@ -33,7 +33,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "BeginDialog_TellJokeDialog"
+                    "dialog": "BeginDialog.TellJokeDialog"
                 }                
             ]
         },
@@ -43,7 +43,7 @@
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "BeginDialog_FortuneTellerDialog"
+                    "dialog": "BeginDialog.FortuneTellerDialog"
                 }              
             ]
         }
