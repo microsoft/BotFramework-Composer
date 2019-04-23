@@ -29,6 +29,7 @@ const fieldHeaderTheme = createTheme({
 
 interface TableFieldProps<T> {
   additionalColumns?: IColumn[];
+  columnHeader?: string;
   defaultItem: object;
   filterNewOptions?: (item: string) => boolean;
   formContext: FormContext;
@@ -47,14 +48,14 @@ interface DetailItem<T> {
   target: HTMLElement;
 }
 
-export const TableField: React.FunctionComponent<TableFieldProps<any>> = props => {
+export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
   const [currentItem, setCurrentItem] = useState<DetailItem<any> | null>(null);
-  const { additionalColumns, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
+  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
 
   const columns = [
     {
       key: 'column1',
-      name: formatMessage('Type'),
+      name: columnHeader || formatMessage('Type'),
       minWidth: 140,
       maxWidth: 200,
       onRender: renderTitle,
@@ -183,7 +184,7 @@ export const TableField: React.FunctionComponent<TableFieldProps<any>> = props =
       )}
     </div>
   );
-};
+}
 
 TableField.defaultProps = {
   additionalColumns: [],

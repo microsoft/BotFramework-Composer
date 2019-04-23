@@ -1,4 +1,4 @@
-import { RulesField, StepsField, SelectorField } from '../Form/fields';
+import { CasesField, RulesField, StepsField, SelectorField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
@@ -64,11 +64,7 @@ export const uiSchema = {
   },
   'Microsoft.SwitchCondition': {
     cases: {
-      items: {
-        steps: {
-          'ui:field': StepsField,
-        },
-      },
+      'ui:field': CasesField,
     },
     default: {
       'ui:field': StepsField,
