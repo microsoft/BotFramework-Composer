@@ -21,4 +21,5 @@ export interface IFileStorage {
   exists(path: string): Promise<boolean>;
   writeFile(path: string, content: any): Promise<void>;
   mkDir(path: string): Promise<void>;
+  glob(pattern: string, path: string): Promise<string[]>;
 }
