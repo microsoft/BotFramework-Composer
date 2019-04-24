@@ -58,7 +58,7 @@ describe('getDialogData', () => {
 describe('setDialogData', () => {
   it('returns updated top level dialog data', () => {
     const result = setDialogData(dialogsMap, 'Dialog2.main', { new: 'data' });
-    expect(result['Dialog2.main']).toEqual({ new: 'data' });
+    expect(result).toEqual({ new: 'data' });
   });
 
   it('returns updated dialog data at a path', () => {

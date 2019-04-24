@@ -23,7 +23,7 @@ export function setDialogData(dialogsMap, path, data) {
   const dialogsMapClone = cloneDeep(dialogsMap);
 
   if (dialogsMapClone.hasOwnProperty(path)) {
-    return set(dialogsMapClone, path, data);
+    return data;
   }
 
   const dialog = getRootDialogName(dialogsMapClone, path);
