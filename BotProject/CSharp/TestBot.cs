@@ -8,9 +8,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Debugger;
-using Microsoft.Bot.Builder.Dialogs.Rules;
+using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Recognizers.Text;
@@ -22,40 +23,39 @@ namespace Microsoft.Bot.Builder.TestBot.Json
     public class TestBot : IBot
     {
         private DialogSet _dialogs;
-
         private IDialog rootDialog;
-
         private readonly ResourceExplorer resourceExplorer;
-
-        private TestBotAccessors accessors;
-
+        private UserState userState;
+        private ConversationState conversationState;
+        private IStatePropertyAccessor<DialogState> dialogState;
         private Source.IRegistry registry;
+        private string rootDialogFile { get; set; }
 
-
-        public TestBot(TestBotAccessors accessors, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public TestBot(string rootDialogFile, UserState userState, ConversationState conversationState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
         {
+            dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.registry = registry;
-            this.accessors = accessors;
             this.resourceExplorer = resourceExplorer;
+            this.rootDialogFile = rootDialogFile;
+            // auto reload dialogs when file changes
             this.resourceExplorer.Changed += ResourceExplorer_Changed;
-            //this.resourceExplorer.Deleted += ResourceExplorer_Changed;
 
-            LoadRootDialog();
+            LoadRootDialogAsync();
         }
 
-        private void ResourceExplorer_Changed(object sender, FileSystemEventArgs e)
+        private void ResourceExplorer_Changed(string[] paths)
         {
-            if (Path.GetExtension(e.FullPath) == ".dialog")
+            if (paths.Any(p => Path.GetExtension(p) == ".dialog"))
             {
-                LoadRootDialog();
+                Task.Run(() => this.LoadRootDialogAsync());
             }
         }
 
-        private void LoadRootDialog()
+        private void LoadRootDialogAsync()
         {
-            var rootFile = resourceExplorer.GetResource(accessors.RootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<IDialog>(rootFile.FullName, resourceExplorer, registry);
-            _dialogs = new DialogSet(accessors.ConversationDialogState);
+            var rootFile = resourceExplorer.GetResource(rootDialogFile);
+            rootDialog = DeclarativeTypeLoader.Load<IDialog>(rootFile, resourceExplorer, registry);
+            _dialogs = new DialogSet(this.dialogState);
             _dialogs.Add(rootDialog);
         }
 

@@ -14,6 +14,7 @@ import startCase from 'lodash.startcase';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
+import { DirectionalHint } from 'office-ui-fabric-react';
 
 import { buildDialogOptions, swap, remove, insertAt } from '../utils';
 import { FormContext } from '../types';
@@ -136,7 +137,11 @@ export const TableField: React.FunctionComponent<TableFieldProps<any>> = props =
           key: 'new',
           text: formatMessage('New'),
           iconProps: { iconName: 'Add' },
-          subMenuProps: { items: buildDialogOptions(createNewItemAtIndex(currentItem.index + 1), filterNewOptions) },
+          subMenuProps: {
+            items: buildDialogOptions(createNewItemAtIndex(currentItem.index + 1), filterNewOptions),
+            calloutProps: { calloutMaxHeight: 500 },
+            directionalHint: DirectionalHint.rightTopEdge,
+          },
         },
       ]
     : [];
@@ -157,7 +162,11 @@ export const TableField: React.FunctionComponent<TableFieldProps<any>> = props =
         styles={{ root: { marginBottom: '20px' } }}
       />
       <PrimaryButton
-        menuProps={{ items: buildDialogOptions(createNewItemAtIndex(), filterNewOptions) }}
+        menuProps={{
+          items: buildDialogOptions(createNewItemAtIndex(), filterNewOptions),
+          calloutProps: { calloutMaxHeight: 500 },
+          directionalHint: DirectionalHint.bottomLeftEdge,
+        }}
         onClick={() => createNewItemAtIndex()()}
         split
         type="button"
@@ -165,7 +174,12 @@ export const TableField: React.FunctionComponent<TableFieldProps<any>> = props =
         {label}
       </PrimaryButton>
       {currentItem && (
-        <ContextualMenu items={menuItems} target={currentItem.target} onDismiss={() => setCurrentItem(null)} />
+        <ContextualMenu
+          items={menuItems}
+          target={currentItem.target}
+          directionalHint={DirectionalHint.bottomLeftEdge}
+          onDismiss={() => setCurrentItem(null)}
+        />
       )}
     </div>
   );

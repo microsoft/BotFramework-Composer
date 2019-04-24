@@ -1,10 +1,9 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import debounce from 'lodash.debounce';
-import get from 'lodash.get';
-import set from 'lodash.set';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
+import { getDialogData, setDialogData, getRootDialogName } from './utils';
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -41,7 +40,7 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
-      const data = get(dialogsMap, navPath) || '';
+      const data = getDialogData(dialogsMap, navPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
     }
   }, [dialogs, navPath]);
@@ -49,7 +48,7 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
-      const data = get(dialogsMap, focusPath) || '';
+      const data = getDialogData(dialogsMap, focusPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
     }
   }, [dialogs, focusPath]);
@@ -59,9 +58,9 @@ export function ShellApi() {
     const sourceWindowName = event.source.name;
 
     if (sourceWindowName === 'VisualEditor' && navPath !== '') {
-      return get(dialogsMap, navPath);
+      return getDialogData(dialogsMap, navPath);
     } else if (sourceWindowName === 'FormEditor' && focusPath !== '') {
-      return get(dialogsMap, focusPath);
+      return getDialogData(dialogsMap, focusPath);
     }
 
     return '';
@@ -78,11 +77,11 @@ export function ShellApi() {
     if (sourceWindowName === 'VisualEditor') {
       return;
     } else if (sourceWindowName === 'FormEditor') {
-      const updatedDialogs = set(dialogsMap, focusPath, newData);
-      const dialogName = focusPath.split('.')[0];
+      const updatedDialog = setDialogData(dialogsMap, focusPath, newData);
+      const dialogName = getRootDialogName(dialogsMap, focusPath);
       const payload = {
         name: dialogName,
-        content: updatedDialogs[dialogName],
+        content: updatedDialog,
       };
       updateDialog(payload);
 

@@ -19,7 +19,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         public List<string> Files { get; set; }
         [JsonProperty("entry")]
         public string entry { get; set; }
-        public string path { get; set; }
+        public List<string> Folders{ get; set; }
 
         public static async Task<BotProject> LoadAsync(BotFile botFile)
         {
@@ -37,12 +37,20 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 json = await stream.ReadToEndAsync().ConfigureAwait(false);
             }
+            var currentFolder = Path.GetFullPath(Path.GetDirectoryName(botFile.path));          
             var bot = JsonConvert.DeserializeObject<BotProject>(json);
-            var index = file.LastIndexOf("/");
-            if (index > 0)
+            bot.Folders = new List<string>();
+            bot.Folders.Add(currentFolder);
+
+            foreach(string f in bot.Files)
             {
-                bot.path = file.Substring(0, index + 1);
+                var folder = Path.GetFullPath(Path.GetDirectoryName(Path.Combine(currentFolder, f)));
+                if (Directory.Exists(folder) && !bot.Folders.Contains(folder))
+                {
+                    bot.Folders.Add(folder);
+                }
             }
+
             return bot;
         }
 
