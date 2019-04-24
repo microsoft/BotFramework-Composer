@@ -1,6 +1,8 @@
 import fs from 'fs';
 import { promisify } from 'util';
+
 import glob from 'globby';
+
 import { IFileStorage, Stat } from './interface';
 
 const stat = promisify(fs.stat);

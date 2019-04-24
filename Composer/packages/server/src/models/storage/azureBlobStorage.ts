@@ -1,5 +1,6 @@
 import azure from 'azure-storage';
 import minimatch from 'minimatch';
+
 import { IFileStorage, Stat, StorageConnection } from './interface';
 
 export class AzureBlobStorage implements IFileStorage {
@@ -182,7 +183,7 @@ export class AzureBlobStorage implements IFileStorage {
             reject(err);
           } else {
             // filter all file names
-            let result = [] as string[];
+            const result = [] as string[];
             for (let i = 0; i < data.entries.length; i++) {
               data.entries[i].name = data.entries[i].name.replace(`${prefix}/`, '');
               if (minimatch(data.entries[i].name, pattern)) {
