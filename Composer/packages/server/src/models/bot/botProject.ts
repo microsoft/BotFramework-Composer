@@ -9,6 +9,7 @@ import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
 import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
+import { LGIndexer } from './indexers/lgIndexer';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -22,6 +23,7 @@ export class BotProject {
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
+  public lgIndexer: LGIndexer;
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
@@ -31,16 +33,19 @@ export class BotProject {
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
+    this.lgIndexer = new LGIndexer(this.fileStorage);
   }
 
   public index = async () => {
     this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
+    this.lgIndexer.index(this.files);
   };
 
   public getIndexes = () => {
     return {
       dialogs: this.dialogIndexer.getDialogs(),
+      lgTemplates: this.lgIndexer.getLgTemplates(),
       botFile: this.getBotFile(),
     };
   };
@@ -75,6 +80,12 @@ export class BotProject {
     const newFileContent = await this._createFile(absolutePath, name, JSON.stringify(newDialog, null, 2) + '\n');
     this.dialogIndexer.addDialog(name, newFileContent, absolutePath);
     return this.dialogIndexer.getDialogs();
+  };
+
+  public updateLgTemplate = async (name: string, content: any) => {
+    const newFileContent = await this.lgIndexer.updateLgTemplate(content);
+    this._updateFile(`${name.trim()}.lg`, newFileContent);
+    return this.lgIndexer.getLgTemplates();
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {

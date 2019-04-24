@@ -9,8 +9,8 @@ import { ContentPage } from './pages/content/index';
 const Routes = () => (
   <Router>
     <DesignPage path="/" />
-    <ContentPage path="content" />
     <SettingPage path="setting/*" />
+    <ContentPage path="content/*" />
     <NotFound default />
   </Router>
 );

@@ -116,3 +116,34 @@ describe('copyTo', () => {
     expect(project.dialogs.length).toBe(3);
   });
 });
+
+describe('update lg template', () => {
+  it('should update the lg template.', async () => {
+    const initFiles = [
+      {
+        name: 'test.lg',
+        content: '# greet\n- Hello!',
+        path: path.join(__dirname, '../../mocks/test.lg'),
+        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')),
+      },
+    ];
+    const initValue = {
+      id: 1,
+      name: 'greet',
+      content: '- Hello!',
+      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+    };
+    const newValue = {
+      id: 1,
+      name: 'updated',
+      content: '- new value',
+      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+    };
+    await proj.lgIndexer.index(initFiles);
+    const lgTemplates = await proj.updateLgTemplate('test', newValue);
+    const aTemplate = lgTemplates.find(f => f.name.startsWith('updated'));
+    // @ts-ignore
+    expect(aTemplate).toEqual(newValue);
+    await proj.updateLgTemplate('test', initValue);
+  });
+});
