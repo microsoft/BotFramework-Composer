@@ -15,6 +15,7 @@ import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { StorageSelector } from './components/StorageExplorer/StorageSelector';
 import { body, panelContent, panelStyle } from './components/StorageExplorer/styles';
 import { SaveAction } from './components/StorageExplorer/SaveAction/index';
+import AddStoragePanel from './components/StorageExplorer/NewStorage/index';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
   return <div style={{ height: '0px' }} />;
@@ -24,17 +25,18 @@ const links = [{ name: formatMessage('Open'), key: 'open' }, { name: formatMessa
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
-  const { storages, storageExplorerStatus, focusedStorageFolder } = state;
+  const { storages, storageExplorerStatus, focusedStorageFolder, storageFileLoadingStatus } = state;
   const {
     setStorageExplorerStatus,
     closeCurrentProject,
     fetchFolderItemsByPath,
     openBotProject,
     saveProjectAs,
+    addNewStorage,
   } = actions;
   const currentStorageIndex = useRef(0);
   const [currentPath, setCurrentPath] = useState('');
-
+  const [openAdd, setOpenAdd] = useState(false);
   const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
   async function init() {
@@ -49,6 +51,7 @@ export function StorageExplorer() {
 
   function onStorageSourceChange(index) {
     currentStorageIndex.current = index;
+    setOpenAdd(false);
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
@@ -116,6 +119,10 @@ export function StorageExplorer() {
     onCloseExplorer();
   };
 
+  const handleAddStorage = async storageData => {
+    await addNewStorage(storageData);
+  };
+
   return (
     <Panel
       isOpen={storageExplorerStatus !== ''}
@@ -137,25 +144,33 @@ export function StorageExplorer() {
           <StorageSelector
             storages={storages}
             onStorageSourceChange={onStorageSourceChange}
+            onAddNew={() => {
+              setOpenAdd(true);
+            }}
             currentStorageId={currentStorageId}
             actionName={formatMessage(storageExplorerStatus === 'open' ? 'Open' : 'Save As')}
           />
           <div style={{ paddingTop: '90px' }}>
-            <FileSelector
-              saveAction={
-                storageExplorerStatus === 'open' ? (
-                  <div />
-                ) : (
-                  <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
-                )
-              }
-              storageExplorerStatus={storageExplorerStatus}
-              checkShowItem={checkShowItem}
-              currentPath={currentPath}
-              focusedStorageFolder={focusedStorageFolder}
-              updateCurrentPath={updateCurrentPath}
-              onSelectionChanged={onSelectionChanged}
-            />
+            {openAdd ? (
+              <AddStoragePanel onSubmit={handleAddStorage} />
+            ) : (
+              <FileSelector
+                saveAction={
+                  storageExplorerStatus === 'open' ? (
+                    <div />
+                  ) : (
+                    <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
+                  )
+                }
+                storageExplorerStatus={storageExplorerStatus}
+                storageFileLoadingStatus={storageFileLoadingStatus}
+                checkShowItem={checkShowItem}
+                currentPath={currentPath}
+                focusedStorageFolder={focusedStorageFolder}
+                updateCurrentPath={updateCurrentPath}
+                onSelectionChanged={onSelectionChanged}
+              />
+            )}
           </div>
         </div>
       </div>

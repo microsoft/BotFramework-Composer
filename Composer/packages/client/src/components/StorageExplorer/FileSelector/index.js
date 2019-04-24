@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -29,6 +30,7 @@ export function FileSelector(props) {
     focusedStorageFolder,
     checkShowItem,
     storageExplorerStatus,
+    storageFileLoadingStatus,
   } = props;
   // for detail file list in open panel
   const tableColums = [
@@ -197,18 +199,22 @@ export function FileSelector(props) {
         </div>
       </div>
       {saveAction}
-      <DetailsList
-        css={detailListContainer}
-        items={storageFiles}
-        compact={false}
-        columns={tableColums}
-        getKey={item => item.name}
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible={true}
-        selection={selection}
-        selectionMode={SelectionMode.single}
-        checkboxVisibility={CheckboxVisibility.hidden}
-      />
+      {storageFileLoadingStatus === 'success' && (
+        <DetailsList
+          css={detailListContainer}
+          items={storageFiles}
+          compact={false}
+          columns={tableColums}
+          getKey={item => item.name}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          checkboxVisibility={CheckboxVisibility.hidden}
+        />
+      )}
+      {storageFileLoadingStatus === 'pending' && <Spinner size={SpinnerSize.medium} />}
+      {storageFileLoadingStatus === 'failure' && <div>failure</div>}
     </div>
   );
 }

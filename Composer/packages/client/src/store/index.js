@@ -17,6 +17,7 @@ const initialState = {
   focusedStorageFolder: {},
   botStatus: 'stopped',
   storageExplorerStatus: '',
+  storageFileLoadingStatus: 'success',
   lgTemplates: [],
 };
 
