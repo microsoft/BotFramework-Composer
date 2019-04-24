@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { promisify } from 'util';
-
+import glob from 'globby';
 import { IFileStorage, Stat } from './interface';
 
 const stat = promisify(fs.stat);
@@ -39,5 +39,9 @@ export class LocalDiskStorage implements IFileStorage {
 
   async mkDir(path: string): Promise<void> {
     await mkDir(path);
+  }
+
+  async filesFilter(path: string, pattern: string): Promise<string[]> {
+    return await glob(pattern, { cwd: path });
   }
 }

@@ -1,5 +1,5 @@
 import azure from 'azure-storage';
-
+import minimatch from 'minimatch';
 import { IFileStorage, Stat, StorageConnection } from './interface';
 
 export class AzureBlobStorage implements IFileStorage {
@@ -138,26 +138,62 @@ export class AzureBlobStorage implements IFileStorage {
     const blobPath = names.slice(1).join('/');
 
     return new Promise((resolve, reject) => {
-      // if container not exist, create container, then create blob file
-      this.client.createContainerIfNotExists(names[0], err => {
+      this.client.createBlockBlobFromText(names[0], blobPath, content, err => {
         if (err) {
+          console.log(err);
           reject(err);
+        } else {
+          resolve();
         }
-        this.client.createBlockBlobFromText(names[0], blobPath, content, err => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
       });
     });
   }
 
   async mkDir(path: string): Promise<void> {
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    if (names.length <= 1) {
+      throw new Error('path must include container name and blob name');
+    }
     return new Promise((resolve, reject) => {
-      //TODO: mkDir
-      resolve();
+      // if container not exist, create container, then create blob file
+      this.client.createContainerIfNotExists(names[0], err => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
+  }
+
+  async filesFilter(path: string, pattern: string): Promise<string[]> {
+    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const prefix = names.slice(1).join('/');
+
+    if (names.length <= 1) {
+      throw new Error('path must include container name and blob name');
+    } else {
+      return new Promise((resolve, reject) => {
+        // if container not exist, create container, then create blob file
+        this.client.listBlobsSegmentedWithPrefix(names[0], prefix, null as any, (err, data) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            // filter all file names
+            let result = [] as string[];
+            for (let i = 0; i < data.entries.length; i++) {
+              data.entries[i].name = data.entries[i].name.replace(`${prefix}/`, '');
+              if (minimatch(data.entries[i].name, pattern)) {
+                console.log(data.entries[i].name);
+                result.push(data.entries[i].name);
+              }
+            }
+            resolve(result);
+          }
+        });
+      });
+    }
   }
 }
