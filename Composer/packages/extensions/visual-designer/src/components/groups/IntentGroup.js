@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
+import { Boundary } from '../shared/Boundary';
 
 const IntentPaddingX = 18;
 const IntentPaddingY = 20;
@@ -12,11 +13,29 @@ const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
 const BonusHeight = 50;
 
 export class IntentGroup extends React.Component {
+  containerElement;
+
+  propagateBoundary() {
+    if (!this.containerElement) return;
+
+    const { scrollWidth, scrollHeight } = this.containerElement;
+    this.props.onResize(new Boundary(scrollWidth, scrollHeight));
+  }
+
   renderIntent(intent) {
-    const { focusedId } = this.props;
+    const { focusedId, onEvent } = this.props;
     const data = intent.json;
-    const propagateEvent = (...args) => this.props.onEvent(...args);
-    return <NodeRenderer id={intent.id} data={data} focusedId={focusedId} onEvent={propagateEvent} />;
+    return (
+      <NodeRenderer
+        id={intent.id}
+        data={data}
+        focusedId={focusedId}
+        onEvent={onEvent}
+        onResize={() => {
+          this.propagateBoundary();
+        }}
+      />
+    );
   }
 
   render() {
@@ -33,6 +52,10 @@ export class IntentGroup extends React.Component {
           height,
           border: '0.25px solid #000000',
           boxSizing: 'border-box',
+        }}
+        ref={el => {
+          this.containerElement = el;
+          this.propagateBoundary();
         }}
       >
         {intents.map(x => (

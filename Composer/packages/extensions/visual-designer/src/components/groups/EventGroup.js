@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
+import { Boundary } from '../shared/Boundary';
 
 const EventGroupTitleHeight = 30;
 const EventElemetHeight = 50;
@@ -13,16 +14,28 @@ const EventBlockWidth = EventElemetWidth + 2 * EventMarginX;
 const themeColor = '#BAD80A';
 
 export class EventGroup extends React.Component {
+  containerElement;
+
+  propagateBoundary() {
+    if (!this.containerElement) return;
+
+    const { scrollWidth, scrollHeight } = this.containerElement;
+    this.props.onResize(new Boundary(scrollWidth, scrollHeight));
+  }
+
   renderEvent(eventNode) {
     const data = eventNode.json;
-    const propagateEvent = (...args) => this.props.onEvent(...args);
+    const { focusedId, onEvent } = this.props;
     return (
       <NodeRenderer
         id={eventNode.id}
         key={eventNode.id}
         data={data}
-        focusedId={this.props.focusedId}
-        onEvent={propagateEvent}
+        focusedId={focusedId}
+        onEvent={onEvent}
+        onResize={() => {
+          this.propagateBoundary();
+        }}
       />
     );
   }
@@ -38,6 +51,10 @@ export class EventGroup extends React.Component {
           width,
           height,
           border: `1px solid ${themeColor}`,
+        }}
+        ref={el => {
+          this.containerElement = el;
+          this.propagateBoundary();
         }}
       >
         <div
