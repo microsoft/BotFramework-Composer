@@ -1,7 +1,6 @@
 import path from 'path';
 
 import { merge, set } from 'lodash';
-import glob from 'globby';
 
 import StorageService from '../../services/storage';
 
@@ -27,7 +26,7 @@ export class BotProject {
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
-    this.absolutePath = path.resolve(this.ref.path);
+    this.absolutePath = path.isAbsolute(this.ref.path) ? this.ref.path : path.resolve(this.ref.path);
     this.dir = path.dirname(this.absolutePath);
     this.name = path.basename(this.absolutePath);
 
@@ -94,7 +93,7 @@ export class BotProject {
     }
     for (const index in prevFiles) {
       const file = prevFiles[index];
-      const absolutePath = path.resolve(this.dir, file.relativePath);
+      const absolutePath = path.join(this.dir, file.relativePath);
       const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
@@ -141,10 +140,10 @@ export class BotProject {
       });
 
       for (const pattern of botConfig.files) {
-        const paths = await glob(pattern, { cwd: this.dir });
+        const paths = await this.fileStorage.glob(pattern, this.dir);
 
         for (const filePath of paths.sort()) {
-          const realFilePath: string = path.resolve(this.dir, filePath);
+          const realFilePath: string = path.join(this.dir, filePath);
           // skip lg files for now
           if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
