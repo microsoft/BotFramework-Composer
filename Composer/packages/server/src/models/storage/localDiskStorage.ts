@@ -43,7 +43,7 @@ export class LocalDiskStorage implements IFileStorage {
     await mkDir(path);
   }
 
-  async filesFilter(path: string, pattern: string): Promise<string[]> {
+  async glob(pattern: string, path: string): Promise<string[]> {
     return await glob(pattern, { cwd: path });
   }
 }

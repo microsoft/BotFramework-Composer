@@ -140,7 +140,7 @@ export class BotProject {
       });
 
       for (const pattern of botConfig.files) {
-        const paths = await this.fileStorage.filesFilter(this.dir, pattern);
+        const paths = await this.fileStorage.glob(pattern, this.dir);
 
         for (const filePath of paths.sort()) {
           const realFilePath: string = path.join(this.dir, filePath);

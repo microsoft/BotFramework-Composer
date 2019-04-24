@@ -152,7 +152,7 @@ export class AzureBlobStorage implements IFileStorage {
 
   async mkDir(path: string): Promise<void> {
     const names = path.split(/[/]|[\\]/).filter(i => i.length);
-    if (names.length <= 1) {
+    if (names.length < 1) {
       throw new Error('path must include container name and blob name');
     }
     return new Promise((resolve, reject) => {
@@ -168,16 +168,36 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
 
-  async filesFilter(path: string, pattern: string): Promise<string[]> {
+  async glob(pattern: string, path: string): Promise<string[]> {
+    // all the path transform should be remove next time and ensure path was posix pattern
     const names = path.split(/[/]|[\\]/).filter(i => i.length);
     const prefix = names.slice(1).join('/');
+    const containers = [] as string[];
 
-    if (names.length <= 1) {
-      throw new Error('path must include container name and blob name');
+    // get all containers under path
+    if (names.length < 1) {
+      await new Promise((resolve, reject) => {
+        this.client.listContainersSegmented(null as any, (err, data) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            data.entries.forEach(item => {
+              containers.push(item.name);
+            });
+            resolve(containers);
+          }
+        });
+      });
     } else {
-      return new Promise((resolve, reject) => {
-        // if container not exist, create container, then create blob file
-        this.client.listBlobsSegmentedWithPrefix(names[0], prefix, null as any, (err, data) => {
+      containers.push(names[0]);
+    }
+
+    // get all blob under path
+    return await new Promise((resolve, reject) => {
+      for (let index = 0; index < containers.length; index++) {
+        const element = containers[index];
+        this.client.listBlobsSegmentedWithPrefix(element, prefix ? prefix : '', null as any, (err, data) => {
           if (err) {
             console.log(err);
             reject(err);
@@ -185,16 +205,18 @@ export class AzureBlobStorage implements IFileStorage {
             // filter all file names
             const result = [] as string[];
             for (let i = 0; i < data.entries.length; i++) {
-              data.entries[i].name = data.entries[i].name.replace(`${prefix}/`, '');
-              if (minimatch(data.entries[i].name, pattern)) {
-                console.log(data.entries[i].name);
-                result.push(data.entries[i].name);
+              let temp = `/${element}/${data.entries[i].name}`;
+              path = path.replace(/\\/g, '/');
+              temp = temp.replace(`${path}/`, '');
+              if (minimatch(temp, pattern)) {
+                console.log(temp);
+                result.push(temp);
               }
             }
             resolve(result);
           }
         });
-      });
-    }
+      }
+    });
   }
 }
