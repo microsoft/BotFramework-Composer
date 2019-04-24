@@ -54,7 +54,7 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
   };
 
   return (
-    <div>
+    <div className="ObjectFieldTemplate">
       {(props.uiSchema['ui:title'] || props.title) && (
         <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
           {props.uiSchema['ui:title'] || props.title}
