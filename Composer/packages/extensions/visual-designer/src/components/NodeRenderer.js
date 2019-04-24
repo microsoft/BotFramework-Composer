@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
-import { RootDialog, EventGroup, IntentGroup, IfCondition, StepGroup, RecognizerGroup } from './groups';
+import { RootDialog, EventGroup, IntentGroup, StepGroup, RecognizerGroup } from './groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -11,6 +11,7 @@ import {
   BeginDialog,
   NoMatchRule,
   EventRule,
+  IfCondition,
 } from './nodes/index';
 import { Boundary } from './shared/Boundary';
 import { NodeProps, defaultNodeProps } from './shared/sharedProps';

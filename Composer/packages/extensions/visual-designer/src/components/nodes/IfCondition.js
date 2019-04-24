@@ -2,7 +2,6 @@ import React from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
-import { Diamond } from '../nodes/templates/Diamond';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
@@ -10,6 +9,8 @@ import { OffsetContainer } from '../OffsetContainer';
 import { NodeRenderer } from '../NodeRenderer';
 import { Boundary } from '../shared/Boundary';
 import { HorizontalEdge, VerticalEdge } from '../shared/Edges';
+
+import { Diamond } from './templates/Diamond';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
