@@ -5,6 +5,7 @@ import { PrimaryButton, IDropdownOption, IContextualMenuItem } from 'office-ui-f
 import { Dropdown } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DefaultButton } from 'office-ui-fabric-react';
+import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode';
 
 import { buildDialogOptions } from '../utils';
 import Modal from '../../Modal';
@@ -70,6 +71,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
               label={formatMessage('Recognizer Type')}
               options={buildDialogOptions(elem => elem.includes('Recognizer')) as IDropdownOption[]}
               selectedKey={newRecognizer}
+              responsiveMode={ResponsiveMode.large}
               onChange={(_, option) => {
                 if (option) {
                   setNewRecognizer(option.text);
