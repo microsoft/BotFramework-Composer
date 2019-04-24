@@ -5,7 +5,7 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
-import { OffsetContainer } from '../OffsetContainer';
+import { OffsetContainer } from '../shared/OffsetContainer';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
 import { HorizontalEdge, VerticalEdge } from '../shared/Edges';

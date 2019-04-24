@@ -3,7 +3,7 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
-import { OffsetContainer } from '../OffsetContainer';
+import { OffsetContainer } from '../shared/OffsetContainer';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { VerticalEdge } from '../shared/Edges';
 import { Boundary } from '../shared/Boundary';
