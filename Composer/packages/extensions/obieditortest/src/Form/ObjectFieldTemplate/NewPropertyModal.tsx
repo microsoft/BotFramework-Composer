@@ -25,19 +25,13 @@ interface NewPropertyModalProps {
   onDismiss: () => void;
   onSubmit: (name: string, value: string) => void;
   schema: JSONSchema6;
-  value: any;
 }
 
 interface NewPropertyFormState {
-  name: string;
-  value: string;
-  errors: {
-    name?: string;
-  };
+  name?: string;
+  error?: string;
 }
-type formUpdater<T = HTMLInputElement | HTMLTextAreaElement> = (
-  field: string
-) => (e: FormEvent<T>, newValue?: string) => void;
+type formUpdater<T = HTMLInputElement | HTMLTextAreaElement> = (e: FormEvent<T>, newValue?: string) => void;
 
 function getDefaultValue(schema: JSONSchema6): any {
   switch (get(schema, 'additionalProperties.type')) {
@@ -51,11 +45,11 @@ function getDefaultValue(schema: JSONSchema6): any {
 }
 
 const NewPropertyModal: React.FunctionComponent<NewPropertyModalProps> = props => {
-  const { onDismiss, onSubmit, name, value, schema } = props;
-  const [formData, setFormData] = useState<NewPropertyFormState>({ name, value, errors: {} });
+  const { onDismiss, onSubmit, name, schema } = props;
+  const [formData, setFormData] = useState<NewPropertyFormState>({ name });
 
-  const updateForm: formUpdater = field => (_, newValue): void => {
-    setFormData({ ...formData, errors: {}, [field]: newValue });
+  const updateForm: formUpdater = (_, newValue): void => {
+    setFormData({ error: undefined, name: newValue });
   };
 
   const handleSubmit = (e: FormEvent): void => {
@@ -63,18 +57,12 @@ const NewPropertyModal: React.FunctionComponent<NewPropertyModalProps> = props =
 
     const nameError = validateName(formData.name);
     if (nameError) {
-      setFormData({ ...formData, errors: { name: nameError } });
+      setFormData({ ...formData, error: nameError });
       return;
     }
 
-    onSubmit(formData.name, formData.value || getDefaultValue(schema));
+    onSubmit(formData.name as string, getDefaultValue(schema));
   };
-
-  let placeholderText = '';
-
-  if (Array.isArray(schema.examples) && schema.examples.length > 0) {
-    placeholderText = `ex. ${schema.examples.join(', ')}`;
-  }
 
   return (
     <Modal onDismiss={onDismiss}>
@@ -82,22 +70,13 @@ const NewPropertyModal: React.FunctionComponent<NewPropertyModalProps> = props =
         <TextField
           description={get(schema, 'propertyNames.description')}
           label={get(schema, 'propertyNames.title') || formatMessage('Name')}
-          onChange={updateForm('name')}
+          onChange={updateForm}
           required
-          errorMessage={formData.errors.name}
+          errorMessage={formData.error}
           value={formData.name}
         />
-        {typeof schema.additionalProperties === 'boolean' && (
-          <TextField
-            label={formatMessage('Value')}
-            onChange={updateForm('value')}
-            value={formData.value}
-            description={schema.description}
-            placeholder={placeholderText}
-          />
-        )}
         <PrimaryButton type="submit" primary styles={{ root: { width: '100%', marginTop: '20px' } }}>
-          Add
+          {formatMessage('Add')}
         </PrimaryButton>
       </form>
     </Modal>
