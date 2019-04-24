@@ -90,6 +90,7 @@ const Form: React.FunctionComponent<FormProps> = props => {
 
 Form.defaultProps = {
   onChange: () => {},
+  onSubmit: () => {},
 };
 
 export default Form;

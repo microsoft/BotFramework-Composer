@@ -2306,6 +2306,9 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             title: 'RegEx patterns to intents',
             description: 'Pattern->Intents mappings',
+            propertyNames: {
+              title: 'Intent Name',
+            },
             additionalProperties: {
               type: 'string',
             },

@@ -1,9 +1,13 @@
-import { CasesField, RulesField, StepsField, SelectorField } from '../Form/fields';
+import { CasesField, RulesField, StepsField, SelectorField, RecognizerField, UnsupportedField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
+    'ui:order': ['*', 'recognizer', 'selector'],
     selector: {
       'ui:field': SelectorField,
+    },
+    recognizer: {
+      'ui:field': RecognizerField,
     },
     rules: {
       'ui:field': RulesField,
