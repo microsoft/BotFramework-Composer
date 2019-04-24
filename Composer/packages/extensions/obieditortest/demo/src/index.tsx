@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 import Example from '../../src';
 import { ShellApi } from '../../src/types';
 import { dialogGroups } from '../../src/schema/appschema';
+import { buildDialogOptions } from '../../src/Form/utils';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
@@ -128,25 +129,6 @@ const Demo: React.FC = () => {
     }
   };
 
-  const buildDialogOptions = (): IContextualMenuItem[] => {
-    const options: IContextualMenuItem[] = [];
-
-    for (const elem in dialogGroups) {
-      const subOptions = dialogGroups[elem].map(dialog => ({
-        key: dialog,
-        text: dialog,
-        onClick: () => setFormData({ $type: dialog }),
-      }));
-      options.push({
-        key: elem,
-        text: elem,
-        subMenuProps: { items: subOptions },
-      });
-    }
-
-    return options;
-  };
-
   const handlePaste = updater => (_, e) => {
     e.preventDefault();
 
@@ -169,7 +151,10 @@ const Demo: React.FC = () => {
           <div>Data</div>
           <PrimaryButton
             title="Dialog Types"
-            menuProps={{ items: buildDialogOptions(), directionalHint: DirectionalHint.bottomAutoEdge }}
+            menuProps={{
+              items: buildDialogOptions({ onClick: (_, item) => setFormData(item.data) }),
+              directionalHint: DirectionalHint.bottomAutoEdge,
+            }}
           >
             Dialog Types
           </PrimaryButton>

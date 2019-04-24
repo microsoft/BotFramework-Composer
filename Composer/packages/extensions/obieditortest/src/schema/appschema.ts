@@ -1,5 +1,4 @@
 import { JSONSchema6 } from 'json-schema';
-import { string } from 'prop-types';
 
 import { DialogInfo } from '../types';
 

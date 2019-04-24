@@ -9,6 +9,7 @@ import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/
 
 import { buildDialogOptions } from '../utils';
 import Modal from '../../Modal';
+import { DialogGroup } from '../../schema/appschema';
 
 import './styles.scss';
 
@@ -69,7 +70,12 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           <form onSubmit={handleSubmit}>
             <Dropdown
               label={formatMessage('Recognizer Type')}
-              options={buildDialogOptions(elem => elem.includes('Recognizer')) as IDropdownOption[]}
+              options={
+                buildDialogOptions({
+                  include: [DialogGroup.RECOGNIZER],
+                  asDropdown: true,
+                }) as IDropdownOption[]
+              }
               selectedKey={newRecognizer}
               responsiveMode={ResponsiveMode.large}
               onChange={(_, option) => {

@@ -3,6 +3,8 @@ import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
 
+import { DialogGroup } from '../../schema/appschema';
+
 import { TableField } from './TableField';
 
 const columns: IColumn[] = [
@@ -34,8 +36,7 @@ export function RulesField(props: FieldProps) {
     <TableField
       {...props}
       additionalColumns={columns}
-      defaultItem={{ $type: 'Microsoft.NoMatchRule' }}
-      filterNewOptions={item => item.includes('Rule')}
+      dialogOptionsOpts={{ include: [DialogGroup.RULE], subMenu: false }}
       label={formatMessage('Add New Rule')}
       navPrefix="rules"
       renderTitle={renderTitle}

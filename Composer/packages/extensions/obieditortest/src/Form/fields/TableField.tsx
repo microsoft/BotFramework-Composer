@@ -16,7 +16,7 @@ import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
 
-import { buildDialogOptions, swap, remove, insertAt } from '../utils';
+import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
 
 const fieldHeaderTheme = createTheme({
@@ -30,8 +30,6 @@ const fieldHeaderTheme = createTheme({
 interface TableFieldProps<T> {
   additionalColumns?: IColumn[];
   columnHeader?: string;
-  defaultItem: object;
-  filterNewOptions?: (item: string) => boolean;
   formContext: FormContext;
   formData: object[];
   label: string;
@@ -40,17 +38,17 @@ interface TableFieldProps<T> {
   renderTitle: (item: T) => string;
   name?: string;
   schema: JSONSchema6;
+  dialogOptionsOpts?: DialogOptionsOpts;
 }
 
 interface ItemActionsProps<T = any> extends TableFieldProps<T> {
   item: any;
   index?: number;
   newOptions: IContextualMenuItem[];
-  onClick: (e?: any, item?: IContextualMenuItem) => boolean | void;
 }
 
 const ItemActions: React.FC<ItemActionsProps> = props => {
-  const { navPrefix, index, onChange, formData, formContext, newOptions, onClick } = props;
+  const { navPrefix, index, onChange, formData, formContext, newOptions } = props;
 
   if (typeof index === 'undefined') {
     return null;
@@ -107,7 +105,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
         items: newOptions,
         calloutProps: { calloutMaxHeight: 500 },
         directionalHint: DirectionalHint.rightTopEdge,
-        onItemClick: onClick,
       },
     },
   ];
@@ -116,7 +113,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
 };
 
 export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, renderTitle } = props;
+  const { additionalColumns, columnHeader, dialogOptionsOpts, label, renderTitle } = props;
 
   const items = props.formData;
 
@@ -128,9 +125,8 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
     }
   };
 
-  const createNewItemAtIndex = (idx: number = items.length) => (e?: any, item?: IContextualMenuItem) => {
-    const newItem = item && item.data ? item.data : defaultItem;
-    onChange(insertAt(items, newItem, idx));
+  const createNewItemAtIndex = (idx: number = items.length) => (_: any, item: IContextualMenuItem) => {
+    onChange(insertAt(items, item.data, idx));
     return true;
   };
 
@@ -155,8 +151,10 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
             {...props}
             item={item}
             index={index}
-            newOptions={buildDialogOptions(filterNewOptions)}
-            onClick={createNewItemAtIndex(typeof index === 'undefined' ? 0 : index + 1)}
+            newOptions={buildDialogOptions({
+              ...dialogOptionsOpts,
+              onClick: createNewItemAtIndex(typeof index === 'undefined' ? 0 : index + 1),
+            })}
           />
         );
       },
@@ -179,12 +177,10 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       />
       <PrimaryButton
         menuProps={{
-          items: buildDialogOptions(filterNewOptions),
+          items: buildDialogOptions({ ...dialogOptionsOpts, onClick: createNewItemAtIndex() }),
           calloutProps: { calloutMaxHeight: 500 },
           directionalHint: DirectionalHint.bottomLeftEdge,
-          onItemClick: createNewItemAtIndex(),
         }}
-        onClick={createNewItemAtIndex()}
         split
         type="button"
       >
@@ -196,7 +192,6 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
 
 TableField.defaultProps = {
   additionalColumns: [],
-  filterNewOptions: () => true,
   formData: [],
   navPrefix: '',
   onChange: () => {},
