@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { ObiTypes } from '../transformers/constants/ObiTypes';
 
@@ -14,6 +13,7 @@ import {
   EventRule,
 } from './nodes/index';
 import { Boundary } from './shared/Boundary';
+import { NodeProps, defaultNodeProps } from './shared/sharedProps';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,
@@ -72,9 +72,5 @@ export class NodeRenderer extends React.Component {
   }
 }
 
-NodeRenderer.propTypes = {
-  id: PropTypes.string,
-  data: PropTypes.any,
-  focusedId: PropTypes.string,
-  onEvent: PropTypes.func,
-};
+NodeRenderer.propTypes = NodeProps;
+NodeRenderer.defaultProps = defaultNodeProps;
