@@ -5,7 +5,11 @@ import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
-import { OffsetContainer } from '../OffsetContainer';
+import { OffsetContainer } from '../shared/OffsetContainer';
+import { Boundary } from '../shared/Boundary';
+
+import { EventGroup } from './EventGroup';
+import { IntentGroup } from './IntentGroup';
 
 const ElementIntervalVertical = 30;
 
@@ -13,30 +17,38 @@ export class RecognizerGroup extends DynamicLayoutComponent {
   width = 0;
   height = 0;
 
-  dialogBoxes = [];
+  elements = [];
 
   computeProps(props) {
     const { recognizer, eventGroup, intentGroup } = props.data;
 
     const createGraphNode = input => {
+      if (!input) return null;
       const result = new GraphObjectModel();
       result.props = {
         id: input.id,
         data: input.json,
-        focusedId: props.focusedId,
         onEvent: (...args) => this.props.onEvent(...args),
       };
       return result;
     };
 
-    this.dialogBoxes = [recognizer, eventGroup, intentGroup].map(x => (x ? createGraphNode(x) : null)).filter(x => !!x);
+    this.elements = {
+      recognizer: createGraphNode(recognizer),
+      eventGroup: createGraphNode(eventGroup),
+      intentGroup: createGraphNode(intentGroup),
+    };
   }
 
   measureLayout() {
-    const nodes = this.dialogBoxes;
+    const nodes = Object.values(this.elements).filter(x => !!x);
     // Measure node size
     nodes.forEach(x => {
-      x.boundary = x.ref.current.getBoundary();
+      if (x.ref.current.getBoundary) {
+        x.boundary = x.ref.current.getBoundary();
+      } else {
+        x.boundary = new Boundary(x.ref.current.scrollWidth, x.ref.current.scrollHeight);
+      }
     });
 
     // Measure container size
@@ -51,6 +63,36 @@ export class RecognizerGroup extends DynamicLayoutComponent {
     }, 0);
   }
 
+  renderElement(element, key) {
+    if (!element) return null;
+    let content = null;
+    switch (key) {
+      case 'recognizer':
+        content = <NodeRenderer key={key} focusedId={this.props.focusedId} ref={element.ref} {...element.props} />;
+        break;
+      case 'eventGroup':
+        content = (
+          <div ref={element.ref}>
+            <EventGroup key={key} focusedId={this.props.focusedId} {...element.props} />
+          </div>
+        );
+        break;
+      case 'intentGroup':
+        content = (
+          <div ref={element.ref}>
+            <IntentGroup key={key} focusedId={this.props.focusedId} {...element.props} />
+          </div>
+        );
+        break;
+    }
+    if (!content) return null;
+    return (
+      <OffsetContainer key={`${key}.offset`} offset={element.offset}>
+        {content}
+      </OffsetContainer>
+    );
+  }
+
   renderContent() {
     return (
       <div
@@ -60,11 +102,7 @@ export class RecognizerGroup extends DynamicLayoutComponent {
           this.props.onEvent(NodeClickActionTypes.Focus, '');
         }}
       >
-        {this.dialogBoxes.map((x, index) => (
-          <OffsetContainer key={`dialogBoxes.offset[${index}]`} offset={x.offset}>
-            <NodeRenderer key={`dialogBoxes[${index}}]`} ref={x.ref} {...x.props} />
-          </OffsetContainer>
-        ))}
+        {Object.keys(this.elements).map(key => this.renderElement(this.elements[key], key))}
       </div>
     );
   }

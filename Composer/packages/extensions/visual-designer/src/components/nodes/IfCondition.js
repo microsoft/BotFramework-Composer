@@ -6,7 +6,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { NodeRenderer } from '../shared/NodeRenderer';
+import { StepGroup } from '../groups';
 import { Boundary } from '../shared/Boundary';
 import { HorizontalEdge, VerticalEdge } from '../shared/Edges';
 
@@ -242,7 +242,7 @@ export class IfCondition extends DynamicLayoutComponent {
           .filter(x => !!x)
           .map((x, index) => (
             <OffsetContainer key={`${id}.branches[${index}].offset`} offset={x.offset}>
-              <NodeRenderer key={`${id}.branches[${index}]`} ref={x.ref} {...x.props} />
+              <StepGroup key={`${id}.branches[${index}]`} ref={x.ref} {...x.props} />
             </OffsetContainer>
           ))}
         {this.edges}

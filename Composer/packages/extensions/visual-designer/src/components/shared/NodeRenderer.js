@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ObiTypes } from '../../transformers/constants/ObiTypes';
-import { RootDialog, EventGroup, IntentGroup, StepGroup, RecognizerGroup } from '../groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -25,12 +24,6 @@ const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
-  // groups
-  [ObiTypes.RecognizerGroup]: RecognizerGroup,
-  [ObiTypes.EventGroup]: EventGroup,
-  [ObiTypes.IntentGroup]: IntentGroup,
-  [ObiTypes.StepGroup]: StepGroup,
-  [ObiTypes.RuleGroup]: StepGroup,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
@@ -52,19 +45,12 @@ export class NodeRenderer extends React.Component {
   }
 
   render() {
-    const { id, data, expanded, focusedId, onEvent } = this.props;
-
-    let ChosenRenderer;
-    if (expanded) {
-      ChosenRenderer = RootDialog;
-    } else {
-      ChosenRenderer = chooseRendererByType(data.$type);
-    }
-
+    const { id, data, focusedId, onEvent } = this.props;
+    const ChosenRenderer = chooseRendererByType(data.$type);
     return (
       <div
         className="node-renderer-container"
-        style={{ outline: focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+        style={{ outline: focusedId && focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
         ref={this.containerRef}
       >
         <ChosenRenderer ref={this.contentRef} id={id} data={data} focusedId={focusedId} onEvent={onEvent} />

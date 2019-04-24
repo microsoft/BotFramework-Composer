@@ -22,11 +22,4 @@ export const ObiTypes = {
   DeleteProperty: 'Microsoft.DeleteProperty',
   IfCondition: 'Microsoft.IfCondition',
   TextInput: 'Microsoft.TextInput',
-
-  // virtual types
-  IntentGroup: 'VisualEditor.IntentGroup',
-  EventGroup: 'VisualEditor.EventGroup',
-  StepGroup: 'VisualEditor.StepGroup',
-  RuleGroup: 'VisualEditor.RuleGroup',
-  RecognizerGroup: 'VisualEditor.RecognizerGroup',
 };
