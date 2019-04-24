@@ -81,7 +81,6 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
               onSubmit={handlePropertyEdit}
               onDismiss={onDismiss}
               name={editableProperty}
-              value={props.formData[editableProperty]}
               schema={props.schema || {}}
             />
           )}

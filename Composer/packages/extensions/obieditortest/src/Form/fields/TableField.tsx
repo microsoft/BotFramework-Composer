@@ -46,10 +46,11 @@ interface ItemActionsProps<T = any> extends TableFieldProps<T> {
   item: any;
   index?: number;
   newOptions: IContextualMenuItem[];
+  onClick: (e?: any, item?: IContextualMenuItem) => boolean | void;
 }
 
 const ItemActions: React.FC<ItemActionsProps> = props => {
-  const { navPrefix, index, onChange, formData, formContext, newOptions } = props;
+  const { navPrefix, index, onChange, formData, formContext, newOptions, onClick } = props;
 
   if (typeof index === 'undefined') {
     return null;
@@ -63,7 +64,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       onClick: () => {
         formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
         formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
-        return false;
       },
     },
     {
@@ -74,7 +74,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       onClick: () => {
         const newItems = swap(formData, index, index - 1);
         onChange(newItems);
-        return false;
       },
     },
     {
@@ -85,7 +84,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       onClick: () => {
         const newItems = swap(formData, index, index + 1);
         onChange(newItems);
-        return false;
       },
     },
     {
@@ -95,7 +93,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       onClick: () => {
         const newItems = remove(formData, index);
         onChange(newItems);
-        return false;
       },
     },
     {
@@ -110,6 +107,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
         items: newOptions,
         calloutProps: { calloutMaxHeight: 500 },
         directionalHint: DirectionalHint.rightTopEdge,
+        onItemClick: onClick,
       },
     },
   ];
@@ -118,7 +116,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
 };
 
 export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, navPrefix, renderTitle } = props;
+  const { additionalColumns, columnHeader, defaultItem, filterNewOptions, label, renderTitle } = props;
 
   const items = props.formData;
 
@@ -130,9 +128,10 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
     }
   };
 
-  const createNewItemAtIndex = (idx: number = items.length) => (newItem: any = defaultItem) => {
+  const createNewItemAtIndex = (idx: number = items.length) => (e?: any, item?: IContextualMenuItem) => {
+    const newItem = item && item.data ? item.data : defaultItem;
     onChange(insertAt(items, newItem, idx));
-    return false;
+    return true;
   };
 
   const columns: IColumn[] = [
@@ -156,7 +155,8 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
             {...props}
             item={item}
             index={index}
-            newOptions={buildDialogOptions(createNewItemAtIndex((index || -1) + 1), filterNewOptions)}
+            newOptions={buildDialogOptions(filterNewOptions)}
+            onClick={createNewItemAtIndex(typeof index === 'undefined' ? 0 : index + 1)}
           />
         );
       },
@@ -179,11 +179,12 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       />
       <PrimaryButton
         menuProps={{
-          items: buildDialogOptions(createNewItemAtIndex(), filterNewOptions),
+          items: buildDialogOptions(filterNewOptions),
           calloutProps: { calloutMaxHeight: 500 },
           directionalHint: DirectionalHint.bottomLeftEdge,
+          onItemClick: createNewItemAtIndex(),
         }}
-        onClick={() => createNewItemAtIndex()()}
+        onClick={createNewItemAtIndex()}
         split
         type="button"
       >

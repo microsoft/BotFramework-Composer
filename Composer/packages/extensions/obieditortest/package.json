@@ -20,6 +20,7 @@
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
+    "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
   },
   "dependencies": {
@@ -85,7 +86,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "author": "",
-  "homepage": "",
+  "homepage": "https://github.com/Microsoft/BotFramework-Composer",
   "license": "MIT",
   "repository": "",
   "keywords": [

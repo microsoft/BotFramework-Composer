@@ -25,13 +25,10 @@ export interface RadioWidgetProps extends WidgetProps {
 
 export interface OBISchema {
   $role?: string;
-  $id?: string;
-  $copy?: string;
-  $type?: string;
 }
 
 declare module 'json-schema' {
-  interface JSONSchema6 {
+  interface JSONSchema6 extends OBISchema {
     title?: string;
     __additional_property?: boolean;
   }

@@ -8,10 +8,7 @@ import {
 import { dialogGroups } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
 
-export function buildDialogOptions(
-  onClick: (newItem: any, e?: any) => void = () => {},
-  filter: (elem: string) => boolean = () => true
-): IContextualMenuItem[] {
+export function buildDialogOptions(filter: (elem: string) => boolean = () => true): IContextualMenuItem[] {
   const options: IContextualMenuItem[] = [];
 
   for (const elem in dialogGroups) {
@@ -21,8 +18,8 @@ export function buildDialogOptions(
         options.push({
           key: dialog,
           text: dialog,
-          onClick: e => {
-            onClick({ $type: dialog }, e);
+          data: {
+            $type: dialog,
           },
         });
       });

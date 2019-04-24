@@ -16,6 +16,7 @@ const columns: IColumn[] = [
     data: 'number',
     minWidth: 0,
     onRender: item => {
+      // @ts-ignore
       return Object.values(item)[0].length;
     },
   },

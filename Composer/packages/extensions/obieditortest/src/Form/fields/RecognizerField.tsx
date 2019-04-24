@@ -21,11 +21,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       setShowModal(false);
     };
 
-    const handleAdd = () => {
-      console.log('Added item');
-      return false;
-    };
-
     const label = formatMessage('Add Recognizer');
 
     return (
@@ -35,7 +30,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           <form onSubmit={handleSubmit}>
             <Dropdown
               label={formatMessage('Recognizer Type')}
-              options={buildDialogOptions(handleAdd, elem => elem.includes('Recognizer')) as IDropdownOption[]}
+              options={buildDialogOptions(elem => elem.includes('Recognizer')) as IDropdownOption[]}
               onChange={(_, option) => {
                 if (option) {
                   setNewRecognizer(option.text);

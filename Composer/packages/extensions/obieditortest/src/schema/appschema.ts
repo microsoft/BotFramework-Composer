@@ -2676,6 +2676,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
                   type: 'array',
                   items: {
                     $type: 'Microsoft.IDialog',
+                    $ref: '#/defintions/Microsoft.IDialog',
                   },
                   title: 'Steps',
                   description: 'Steps to execute if case is equal to condition',
