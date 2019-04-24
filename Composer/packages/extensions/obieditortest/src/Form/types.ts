@@ -31,7 +31,8 @@ export interface OBISchema {
 }
 
 declare module 'json-schema' {
-  interface JSONSchema6 extends OBISchema {
+  interface JSONSchema6 {
+    title?: string;
     __additional_property?: boolean;
   }
 }
