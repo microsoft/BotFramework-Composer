@@ -45,7 +45,7 @@ export class ObiEditor extends Component {
   }
 
   render() {
-    const graphId = this.props.path + '/ComponentGraph';
+    const graphId = this.props.path;
 
     return (
       <div
