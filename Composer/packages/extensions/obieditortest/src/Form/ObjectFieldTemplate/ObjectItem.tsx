@@ -16,6 +16,11 @@ interface ObjectItemProps {
 
 export default function ObjectItem(props: ObjectItemProps) {
   const { content, schema, onEdit, onDropPropertyClick, name } = props;
+
+  if (name && name.startsWith('$')) {
+    return null;
+  }
+
   const contextItems: IContextualMenuItem[] = [];
 
   if (schema.__additional_property) {
