@@ -2662,22 +2662,26 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
           cases: {
             type: 'array',
+            title: 'Cases',
+            desc: 'Cases to evaluate against condition',
             items: {
               type: 'object',
-              propertyNames: {
-                title: 'Case',
-                description: 'Case expression to compare to condition',
-                $role: 'expression',
-              },
-              additionalProperties: {
-                type: 'array',
-                items: {
-                  $type: 'Microsoft.IDialog',
-                  $ref: '#/definitions/Microsoft.IDialog',
+              properties: {
+                value: {
+                  $role: 'expression',
+                  title: 'Value',
+                  description: 'Value which must match the condition property',
                 },
-                title: 'If True',
-                description: 'Step to execute if case is equal to condition',
+                steps: {
+                  type: 'array',
+                  items: {
+                    $type: 'Microsoft.IDialog',
+                  },
+                  title: 'Steps',
+                  description: 'Steps to execute if case is equal to condition',
+                },
               },
+              required: ['value', 'case'],
             },
           },
           default: {
