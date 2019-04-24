@@ -15232,9 +15232,9 @@ react-is@^16.6.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
-"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-7":
+"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-8":
   version "1.4.0-1"
-  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#39f00aa9ad6d90756ed8b573960b36d8d78e6b9c"
+  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#27d4d932521cbcecb1f0670cef338c401ea93f4c"
   dependencies:
     ajv "^6.7.0"
     babel-runtime "^6.26.0"
