@@ -1,12 +1,23 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
+interface BaseSchema {
+  /** Defines the valid properties for the component you are configuring (from a dialog .schema file) */
+  $type: string;
+  /** Inline id for reuse of an inline definition */
+  $id?: string;
+  /** Copy the definition by id from a .dialog file. */
+  $copy?: string;
+  /** Extra information for the Bot Framework Designer. */
+  $designer?: OpenObject;
+}
+
 /* Union of components which implement the IDialog interface */
-interface MicrosoftIDialog {}
+interface MicrosoftIDialog extends BaseSchema {}
 
 /* Union of components which implement the IActivityTemplate interface */
 type MicrosoftIActivityTemplate = string;
 
-interface IBaseDialog {
+interface IBaseDialog extends BaseSchema {
   /** This is that will be passed in as InputProperty and also set as the OutputProperty */
   property?: string;
   /** This defines properties which be passed as arguments to this dialog */
@@ -15,7 +26,7 @@ interface IBaseDialog {
   outputProperty?: string;
 }
 
-enum ListStyle {
+declare enum ListStyle {
   None = 'None',
   Auto = 'Auto',
   Inline = 'Inline',
@@ -24,8 +35,8 @@ enum ListStyle {
   HeroCard = 'HeroCard',
 }
 
-interface OpenObject {
-  [x: string]: string;
+interface OpenObject<T = string> {
+  [x: string]: T;
 }
 type CardAction = OpenObject;
 
@@ -38,7 +49,7 @@ interface IChoice {
   synonyms?: string[];
 }
 
-/*
+/**
  * Steps
  */
 
@@ -79,3 +90,20 @@ interface TextInput extends IBaseDialog {
   /** A regular expression pattern which must match */
   pattern?: string;
 }
+
+/**
+ * Recognizers
+ */
+
+interface LuisRecognizer extends BaseSchema {
+  applicationId: string;
+  endpoint: string;
+  endpointKey: string;
+}
+
+interface RegexRecognizer extends BaseSchema {
+  /** Pattern->Intents mappings */
+  intents: OpenObject;
+}
+
+type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer;
