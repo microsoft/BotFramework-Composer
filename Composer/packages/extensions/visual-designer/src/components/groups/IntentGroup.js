@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../NodeRenderer';
+import { NodeRenderer } from '../shared/NodeRenderer';
 
 const IntentPaddingX = 18;
 const IntentPaddingY = 20;

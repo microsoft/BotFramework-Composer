@@ -1,4 +1,4 @@
-import { NodeRenderer } from '../../../src/components/NodeRenderer';
+import { NodeRenderer } from '../../../src/components/shared/NodeRenderer';
 import * as RendererCollection from '../../../src/components/nodes/index';
 
 test('every renderer should use sharedProps', () => {

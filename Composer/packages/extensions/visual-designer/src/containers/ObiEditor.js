@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
-import { NodeRenderer } from '../components/NodeRenderer';
+import { NodeRenderer } from '../components/shared/NodeRenderer';
 
 export class ObiEditor extends Component {
   state = {

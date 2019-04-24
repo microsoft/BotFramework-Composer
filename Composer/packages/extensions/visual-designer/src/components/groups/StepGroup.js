@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../NodeRenderer';
+import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../OffsetContainer';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';

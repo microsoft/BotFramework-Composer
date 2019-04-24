@@ -2,7 +2,7 @@ import React from 'react';
 
 import { transformRootDialog } from '../../transformers/transformRootDialog';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../NodeRenderer';
+import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { DynamicLayoutComponent } from '../shared/DynamicLayoutComponent';

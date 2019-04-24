@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { ObiTypes } from '../transformers/constants/ObiTypes';
-
-import { RootDialog, EventGroup, IntentGroup, StepGroup, RecognizerGroup } from './groups';
+import { ObiTypes } from '../../transformers/constants/ObiTypes';
+import { RootDialog, EventGroup, IntentGroup, StepGroup, RecognizerGroup } from '../groups';
 import {
   DefaultRenderer,
   WelcomeRule,
@@ -12,9 +11,10 @@ import {
   NoMatchRule,
   EventRule,
   IfCondition,
-} from './nodes/index';
-import { Boundary } from './shared/Boundary';
-import { NodeProps, defaultNodeProps } from './shared/sharedProps';
+} from '../nodes/index';
+
+import { Boundary } from './Boundary';
+import { NodeProps, defaultNodeProps } from './sharedProps';
 
 const rendererByObiType = {
   [ObiTypes.WelcomeRule]: WelcomeRule,

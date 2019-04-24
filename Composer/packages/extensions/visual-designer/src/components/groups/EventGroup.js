@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../NodeRenderer';
+import { NodeRenderer } from '../shared/NodeRenderer';
 
 const EventGroupTitleHeight = 30;
 const EventElemetHeight = 50;
