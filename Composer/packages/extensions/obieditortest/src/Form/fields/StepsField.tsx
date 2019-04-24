@@ -6,7 +6,7 @@ import { TableField } from './TableField';
 
 const renderTitle = item => item.$type || formatMessage('New Step');
 
-export function StepsField(props: FieldProps) {
+export const StepsField: React.FC<FieldProps> = props => {
   return (
     <TableField
       {...props}
@@ -17,4 +17,4 @@ export function StepsField(props: FieldProps) {
       renderTitle={renderTitle}
     />
   );
-}
+};

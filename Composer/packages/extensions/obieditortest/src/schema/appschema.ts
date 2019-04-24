@@ -36,7 +36,7 @@ export const dialogGroups = {
     'Microsoft.SetProperty',
   ],
   Rules: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.Rule', 'Microsoft.UnknownIntentRule'],
-  Recognizers: ['Microsoft.LuisRecognizer', 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
+  Recognizers: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
   Selectors: [
     'Microsoft.ConditionalSelector',
     'Microsoft.FirstSelector',
@@ -139,12 +139,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
         $ref: '#/definitions/Microsoft.IntentRule',
       },
-      {
-        title: 'Microsoft.MultiLanguageRecognizers',
-        description:
-          'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-        $ref: '#/definitions/Microsoft.MultiLanguageRecognizers',
-      },
+      // {
+      //   title: 'Microsoft.MultiLanguageRecognizers',
+      //   description:
+      //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+      //   $ref: '#/definitions/Microsoft.MultiLanguageRecognizers',
+      // },
       {
         title: 'Microsoft.NoMatchRule',
         description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
@@ -263,7 +263,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $type: 'Microsoft.IRecognizer',
             type: 'object',
             title: 'Recognizer',
-            decription: 'Configured recognizer to generate intent and entites from user utterance',
+            description: 'Configured recognizer to generate intent and entites from user utterance',
             $ref: '#/definitions/Microsoft.IRecognizer',
           },
           selector: {
@@ -1461,12 +1461,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'LUIS recognizer.',
             $ref: '#/definitions/Microsoft.LuisRecognizer',
           },
-          {
-            title: 'Microsoft.MultiLanguageRecognizer',
-            description:
-              'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-            $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
-          },
+          // {
+          //   title: 'Microsoft.MultiLanguageRecognizer',
+          //   description:
+          //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+          //   $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
+          // },
           {
             title: 'Microsoft.RegexRecognizer',
             description: 'Recognizer which uses regex expressions to generate intents and entities.',
@@ -2001,62 +2001,62 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
         },
       },
-      'Microsoft.MultiLanguageRecognizer': {
-        $role: 'unionType(Microsoft.IRecognizer)',
-        title: 'Multi Language Recognizer',
-        description:
-          'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-        type: 'object',
-        properties: {
-          $type: {
-            title: '$type',
-            description:
-              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.MultiLanguageRecognizer',
-          },
-          $copy: {
-            title: '$copy',
-            description: 'Copy the definition by id from a .dialog file.',
-            type: 'string',
-            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-          },
-          $id: {
-            title: '$id',
-            description: 'Inline id for reuse of an inline definition',
-            type: 'string',
-            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-          },
-          $designer: {
-            title: '$designer',
-            type: 'object',
-            description: 'Extra information for the Bot Framework Designer.',
-          },
-          languagePolicy: {
-            $type: 'Microsoft.ILanguagePolicy',
-            type: 'object',
-            title: 'Language Policy',
-            description: 'Defines languages to try per language.',
-            $ref: '#/definitions/Microsoft.ILanguagePolicy',
-          },
-          recognizers: {
-            type: 'object',
-            title: 'Recognizers',
-            description: 'Map of language -> IRecognizer',
-            additionalProperties: {
-              $type: 'Microsoft.IRecognizer',
-              $ref: '#/definitions/Microsoft.IRecognizer',
-            },
-          },
-        },
-        additionalProperties: false,
-        patternProperties: {
-          '^\\$': {
-            type: 'string',
-          },
-        },
-      },
+      // 'Microsoft.MultiLanguageRecognizer': {
+      //   $role: 'unionType(Microsoft.IRecognizer)',
+      //   title: 'Multi Language Recognizer',
+      //   description:
+      //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+      //   type: 'object',
+      //   properties: {
+      //     $type: {
+      //       title: '$type',
+      //       description:
+      //         'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+      //       type: 'string',
+      //       pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+      //       const: 'Microsoft.MultiLanguageRecognizer',
+      //     },
+      //     $copy: {
+      //       title: '$copy',
+      //       description: 'Copy the definition by id from a .dialog file.',
+      //       type: 'string',
+      //       pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+      //     },
+      //     $id: {
+      //       title: '$id',
+      //       description: 'Inline id for reuse of an inline definition',
+      //       type: 'string',
+      //       pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+      //     },
+      //     $designer: {
+      //       title: '$designer',
+      //       type: 'object',
+      //       description: 'Extra information for the Bot Framework Designer.',
+      //     },
+      //     languagePolicy: {
+      //       $type: 'Microsoft.ILanguagePolicy',
+      //       type: 'object',
+      //       title: 'Language Policy',
+      //       description: 'Defines languages to try per language.',
+      //       $ref: '#/definitions/Microsoft.ILanguagePolicy',
+      //     },
+      //     recognizers: {
+      //       type: 'object',
+      //       title: 'Recognizers',
+      //       description: 'Map of language -> IRecognizer',
+      //       additionalProperties: {
+      //         $type: 'Microsoft.IRecognizer',
+      //         $ref: '#/definitions/Microsoft.IRecognizer',
+      //       },
+      //     },
+      //   },
+      //   additionalProperties: false,
+      //   patternProperties: {
+      //     '^\\$': {
+      //       type: 'string',
+      //     },
+      //   },
+      // },
       'Microsoft.NumberInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Number prompt',
@@ -2306,6 +2306,9 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             title: 'RegEx patterns to intents',
             description: 'Pattern->Intents mappings',
+            propertyNames: {
+              title: 'Intent Name',
+            },
             additionalProperties: {
               type: 'string',
             },
@@ -2659,25 +2662,27 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
           cases: {
             type: 'array',
+            title: 'Cases',
+            desc: 'Cases to evaluate against condition',
             items: {
               type: 'object',
               properties: {
-                propertyNames: {
-                  title: 'Case',
-                  description: 'Case expression to compare to condition',
+                value: {
                   $role: 'expression',
-                  type: 'string',
+                  title: 'Value',
+                  description: 'Value which must match the condition property',
                 },
                 steps: {
                   type: 'array',
-                  title: 'If True',
-                  description: 'Step to execute if case is equal to condition',
                   items: {
                     $type: 'Microsoft.IDialog',
-                    $ref: '#/definitions/Microsoft.IDialog',
+                    $ref: '#/defintions/Microsoft.IDialog',
                   },
+                  title: 'Steps',
+                  description: 'Steps to execute if case is equal to condition',
                 },
               },
+              required: ['value', 'case'],
             },
           },
           default: {

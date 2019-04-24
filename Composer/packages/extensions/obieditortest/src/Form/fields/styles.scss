@@ -4,3 +4,17 @@
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 }
+
+.RecognizerField {
+  display: flex;
+
+  .ObjectFieldTemplate {
+    flex: 1;
+  }
+
+  .RecognizerFieldMenu {
+    flex-grow: 0;
+    margin-left: 20px;
+    padding-top: 4px;
+  }
+}
