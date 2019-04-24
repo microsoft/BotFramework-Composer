@@ -12,9 +12,6 @@ const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
 const BonusHeight = 50;
 
 export class IntentGroup extends React.Component {
-  width = 0;
-  height = 0;
-
   renderIntent(intent) {
     const { focusedId } = this.props;
     const data = intent.json;
@@ -26,14 +23,14 @@ export class IntentGroup extends React.Component {
     const { data } = this.props;
     const intents = data.children || [];
 
-    this.width = IntentBlockWidth;
-    this.height = IntentBlockHeight * intents.length + BonusHeight;
+    const width = IntentBlockWidth;
+    const height = IntentBlockHeight * intents.length + BonusHeight;
 
     return (
       <div
         style={{
-          width: this.width,
-          height: this.height,
+          width,
+          height,
           border: '0.25px solid #000000',
           boxSizing: 'border-box',
         }}

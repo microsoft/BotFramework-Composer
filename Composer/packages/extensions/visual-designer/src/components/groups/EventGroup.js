@@ -13,9 +13,6 @@ const EventBlockWidth = EventElemetWidth + 2 * EventMarginX;
 const themeColor = '#BAD80A';
 
 export class EventGroup extends React.Component {
-  width = 0;
-  height = 0;
-
   renderEvent(eventNode) {
     const data = eventNode.json;
     const propagateEvent = (...args) => this.props.onEvent(...args);
@@ -32,14 +29,14 @@ export class EventGroup extends React.Component {
 
   render() {
     const { data } = this.props;
-    this.width = EventBlockWidth;
-    this.height = data.children.length * EventBlockHeight + EventGroupTitleHeight;
+    const width = EventBlockWidth;
+    const height = data.children.length * EventBlockHeight + EventGroupTitleHeight;
 
     return (
       <div
         style={{
-          width: this.width,
-          height: this.height,
+          width,
+          height,
           border: `1px solid ${themeColor}`,
         }}
       >
