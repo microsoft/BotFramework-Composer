@@ -68,7 +68,6 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
             <StepGroup
               key={x.id}
               id={x.id}
-              ref={x.ref}
               data={x.data}
               focusedId={focusedId}
               onEvent={onEvent}
