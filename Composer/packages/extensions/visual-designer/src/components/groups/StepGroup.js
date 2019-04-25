@@ -5,9 +5,9 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { VerticalEdge } from '../shared/EdgeComponents';
+import { Edge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
-import { GraphLayout } from '../shared/GraphLayout';
+import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 
 const StepInterval = 20;
 
@@ -34,33 +34,11 @@ export class StepGroup extends React.Component {
   });
 
   computeLayout = memoize((inputNodes, boundaryByNodeId) => {
-    const containerBoundary = new Boundary();
-    // Merge node boundary into node data
     const nodes = inputNodes.map(x => ({
       ...x,
       boundary: boundaryByNodeId[x.id] || new Boundary(),
     }));
-    containerBoundary.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
-    containerBoundary.width =
-      containerBoundary.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
-    containerBoundary.height =
-      nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
-      StepInterval * Math.max(nodes.length - 1, 0);
-
-    nodes.reduce((offsetY, node) => {
-      node.offset = { x: containerBoundary.axisX - node.boundary.axisX, y: offsetY };
-      return offsetY + node.boundary.height + StepInterval;
-    }, 0);
-
-    const edges = [];
-    for (let i = 0; i < nodes.length - 1; i++) {
-      const { boundary, offset } = nodes[i];
-      const x = containerBoundary.axisX;
-      const y = boundary.height + offset.y;
-      edges.push(<VerticalEdge key={`stepGroup.edges[${i}]`} length={StepInterval} x={x} y={y} />);
-    }
-
-    return new GraphLayout(containerBoundary, nodes, edges);
+    return sequentialLayouter(nodes, StepInterval);
   });
 
   patchBoundary(id, boundary) {
@@ -112,7 +90,9 @@ export class StepGroup extends React.Component {
             />
           </OffsetContainer>
         ))}
-        {edges}
+        {edges.map(x => (
+          <Edge key={x.id} {...x} />
+        ))}
       </div>
     );
   }
