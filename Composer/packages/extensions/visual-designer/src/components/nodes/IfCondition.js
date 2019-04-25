@@ -15,20 +15,12 @@ import { Diamond } from './templates/Diamond';
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
 
-const createGraphNode = input => {
-  if (!input) return null;
-  const node = new GraphObjectModel();
-  node.id = input.id;
-  node.data = input.json;
-  return node;
-};
-
 const calculateNodes = (path, data) => {
   const { choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
-    choiceNode: createGraphNode(choice),
-    ifGroupNode: createGraphNode(ifGroup),
-    elseGroupNode: createGraphNode(elseGroup),
+    choiceNode: choice ? new GraphObjectModel(choice.id, choice.json) : null,
+    ifGroupNode: ifGroup ? new GraphObjectModel(ifGroup.id, ifGroup.json) : null,
+    elseGroupNode: elseGroup ? new GraphObjectModel(elseGroup.id, elseGroup.json) : null,
   };
 };
 
