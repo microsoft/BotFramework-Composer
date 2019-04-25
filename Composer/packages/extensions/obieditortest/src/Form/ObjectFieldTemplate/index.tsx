@@ -9,11 +9,16 @@ import { ObjectFieldTemplateProps } from 'react-jsonschema-form';
 import ObjectItem from './ObjectItem';
 import NewPropertyModal from './NewPropertyModal';
 
+import './styles.scss';
+
 const fieldHeaderTheme = createTheme({
   fonts: {
     medium: {
       fontSize: '24px',
     },
+  },
+  palette: {
+    neutralLighter: '#d0d0d0',
   },
 });
 

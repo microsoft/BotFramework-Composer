@@ -22,8 +22,11 @@ import { FormContext } from '../types';
 const fieldHeaderTheme = createTheme({
   fonts: {
     medium: {
-      fontSize: '18px',
+      fontSize: '24px',
     },
+  },
+  palette: {
+    neutralLighter: '#d0d0d0',
   },
 });
 
@@ -162,7 +165,7 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
   ];
 
   return (
-    <div style={{ margin: '10px 0' }}>
+    <div style={{ margin: '30px 0' }}>
       <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
         {props.schema.title || startCase(props.name)}
       </Separator>
