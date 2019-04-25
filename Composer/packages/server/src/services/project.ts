@@ -10,6 +10,7 @@ class BotProjectService {
 
   constructor() {
     this.recentBotProjects = Store.get('recentBotProjects');
+    console.log(this.recentBotProjects);
     if (this.recentBotProjects.length > 0) {
       this.currentBotProject = new BotProject(this.recentBotProjects[0]);
     }

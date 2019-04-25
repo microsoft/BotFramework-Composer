@@ -35,7 +35,7 @@ class StorageService {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
       if (!path.isAbsolute(s.path)) {
-        temp.path = path.resolve(s.path); // resolve path if path is relative
+        temp.path = path.resolve(s.path).replace(/\\/g, '/'); // resolve path if path is relative, and change it to unix pattern
       }
       return temp;
     });
@@ -65,8 +65,8 @@ class StorageService {
         return JSON.parse(await storageClient.readFile(filePath));
       } else {
         return {
-          name: path.basename(filePath),
-          parent: path.dirname(filePath),
+          name: path.posix.basename(filePath),
+          parent: path.posix.dirname(filePath),
           children: await this.getChildren(storageClient, filePath),
         };
       }
@@ -81,7 +81,7 @@ class StorageService {
       if (childName === '') {
         return;
       }
-      const childAbsPath = path.join(dirPath, childName);
+      const childAbsPath = path.posix.join(dirPath, childName);
       const childStat = await storage.stat(childAbsPath);
       return {
         name: childName,
