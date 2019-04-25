@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
-import { AdaptiveDialogEditor } from '../components/AdaptiveDialogEditor';
+
+import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
 export class ObiEditor extends Component {
   state = {

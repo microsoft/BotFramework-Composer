@@ -2,10 +2,9 @@ import React, { useMemo } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
-
-import { NodeProps, defaultNodeProps } from './shared/sharedProps';
-import { GraphObjectModel } from './shared/GraphObjectModel';
-import { RecognizerGroup, StepGroup } from './groups';
+import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
+import { GraphObjectModel } from '../components/shared/GraphObjectModel';
+import { RecognizerGroup, StepGroup } from '../components/groups';
 
 const ColMargin = 10;
 
