@@ -83,6 +83,11 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
                   setNewRecognizer(option.text);
                 }
               }}
+              componentRef={ref => {
+                if (ref) {
+                  ref.focus();
+                }
+              }}
             />
             <PrimaryButton type="submit" styles={{ root: { width: '100%', marginTop: '20px' } }}>
               {newLabel}

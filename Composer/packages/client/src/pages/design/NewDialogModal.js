@@ -57,6 +57,11 @@ export default function NewDialogModal(props) {
               onChange={updateForm('name')}
               required
               errorMessage={formData.errors.name}
+              componentRef={ref => {
+                if (ref) {
+                  ref.focus();
+                }
+              }}
             />
             <Button
               onClick={handleSubmit}
