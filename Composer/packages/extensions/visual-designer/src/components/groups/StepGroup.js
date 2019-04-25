@@ -14,7 +14,7 @@ const InitStepHeight = 50;
 
 const calculateNodes = data => {
   if (data && data.children && Array.isArray(data.children)) {
-    return data.children.map(indexedStep => new GraphObjectModel(indexedStep.id, indexedStep.json));
+    return data.children.map(indexedStep => GraphObjectModel.fromIndexedJson(indexedStep));
   }
   return [];
 };

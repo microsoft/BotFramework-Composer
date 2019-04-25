@@ -14,3 +14,8 @@ export class GraphObjectModel {
     this.data = data;
   }
 }
+
+GraphObjectModel.fromIndexedJson = indexedJson => {
+  if (!indexedJson) return null;
+  return new GraphObjectModel(indexedJson.id, indexedJson.json);
+};

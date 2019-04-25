@@ -18,9 +18,9 @@ const ChoiceNodeHeight = 20;
 const calculateNodeMap = (path, data) => {
   const { choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
-    choiceNode: choice ? new GraphObjectModel(choice.id, choice.json) : null,
-    ifGroupNode: ifGroup ? new GraphObjectModel(ifGroup.id, ifGroup.json) : null,
-    elseGroupNode: elseGroup ? new GraphObjectModel(elseGroup.id, elseGroup.json) : null,
+    choiceNode: GraphObjectModel.fromIndexedJson(choice),
+    ifGroupNode: GraphObjectModel.fromIndexedJson(ifGroup),
+    elseGroupNode: GraphObjectModel.fromIndexedJson(elseGroup),
   };
 };
 
