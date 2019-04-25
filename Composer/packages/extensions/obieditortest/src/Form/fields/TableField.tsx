@@ -105,7 +105,6 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
     {
       key: 'new',
       text: formatMessage('New'),
-      iconProps: { iconName: 'Add' },
       subMenuProps: {
         items: newOptions,
         calloutProps: { calloutMaxHeight: 500 },
