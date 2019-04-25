@@ -138,12 +138,11 @@ export class IfCondition extends React.Component {
         break;
     }
 
-    const { id } = this.props;
     const edgeList = [];
     if (ifGroupNode) {
       edgeList.push(
         {
-          key: `${id}/edges/choice->if`,
+          key: `edges/${ifGroupNode.id}/if/choice->if}`,
           direction: 'x',
           x: choiceNode.offset.x + choiceNode.boundary.width,
           y: choiceNode.offset.y + choiceNode.boundary.axisY,
@@ -151,14 +150,14 @@ export class IfCondition extends React.Component {
           text: 'Y',
         },
         {
-          key: `${id}/edges/if->bottom`,
+          key: `edges/${ifGroupNode.id}/if/if->border.bottom`,
           direction: 'y',
           x: ifGroupNode.offset.x + ifGroupNode.boundary.axisX,
           y: ifGroupNode.offset.y + ifGroupNode.boundary.height,
           length: containerBoundary.height - (ifGroupNode.offset.y + ifGroupNode.boundary.height),
         },
         {
-          key: `${id}/edges/bottom->out`,
+          key: `edges/${ifGroupNode.id}/if/border.bottom->out`,
           direction: 'x',
           x: containerBoundary.axisX,
           y: containerBoundary.height,
@@ -168,21 +167,21 @@ export class IfCondition extends React.Component {
     } else {
       edgeList.push(
         {
-          key: `${id}/edges/choice->right`,
+          key: `edges/${choiceNode.id}/if/choice->border.right`,
           direction: 'x',
           x: choiceNode.offset.x + choiceNode.boundary.width,
           y: choiceNode.offset.y + choiceNode.boundary.axisY,
           length: containerBoundary.width - (choiceNode.offset.x + choiceNode.boundary.width),
         },
         {
-          key: `${id}/edges/top-bottom`,
+          key: `edges/${choiceNode.id}/if/border.top->border.bottom`,
           direction: 'y',
           x: containerBoundary.width,
           y: choiceNode.offset.y + choiceNode.boundary.axisY,
           length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.axisY),
         },
         {
-          key: `${id}/edges/bottom->out`,
+          key: `edges/${choiceNode.id}/if/border.bottom->out`,
           direction: 'x',
           x: containerBoundary.axisX,
           y: containerBoundary.height,
@@ -194,7 +193,7 @@ export class IfCondition extends React.Component {
     if (elseGroupNode) {
       edgeList.push(
         {
-          key: `${id}/edges/choice->else`,
+          key: `edges/${elseGroupNode.id}/else/choice->else`,
           direction: 'y',
           x: containerBoundary.axisX,
           y: choiceNode.offset.y + choiceNode.boundary.height,
@@ -202,7 +201,7 @@ export class IfCondition extends React.Component {
           text: 'N',
         },
         {
-          key: `${id}/edges/else->out`,
+          key: `edges/${elseGroupNode.id}/else/else->out`,
           direction: 'y',
           x: containerBoundary.axisX,
           y: elseGroupNode.offset.y + elseGroupNode.boundary.height,
@@ -211,7 +210,7 @@ export class IfCondition extends React.Component {
       );
     } else {
       edgeList.push({
-        key: `${id}/edges/choice->out`,
+        key: `edges/${choiceNode.id}/else/choice->out`,
         x: containerBoundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.height,
         length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
