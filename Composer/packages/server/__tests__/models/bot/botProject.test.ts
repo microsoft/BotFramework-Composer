@@ -10,7 +10,7 @@ jest.mock('azure-storage', () => {
 
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',
-  path: path.join(__dirname, '../../mocks/1.botproj'),
+  path: path.join(__dirname, '../../mocks/1.botproj').replace(/\\/g, '/'),
 };
 
 const proj = new BotProject(mockProjectRef);
@@ -54,7 +54,7 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(path.resolve(__dirname, `../../mocks/${dialogName}.dialog`));
+      fs.unlinkSync(path.resolve(__dirname, `../../mocks/${dialogName}.dialog`).replace(/\\/g, '/'));
     } catch (err) {
       // ignore
     }
@@ -76,12 +76,12 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = path.join(__dirname, `../../copy`);
+const copyDir = path.join(__dirname, `../../copy`).replace(/\\/g, '/');
 
 describe('copyTo', () => {
   const projectRef: BotProjectRef = {
     storageId: 'default',
-    path: path.join(__dirname, '../../copy/1.botproj'),
+    path: path.join(__dirname, '../../copy/1.botproj').replace(/\\/g, '/'),
   };
 
   afterEach(() => {
@@ -123,21 +123,21 @@ describe('update lg template', () => {
       {
         name: 'test.lg',
         content: '# greet\n- Hello!',
-        path: path.join(__dirname, '../../mocks/test.lg'),
-        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')),
+        path: path.join(__dirname, '../../mocks/test.lg').replace(/\\/g, '/'),
+        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')).replace(/\\/g, '/'),
       },
     ];
     const initValue = {
       id: 1,
       name: 'greet',
       content: '- Hello!',
-      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+      absolutePath: path.join(__dirname, '../../mocks/test.lg').replace(/\\/g, '/'),
     };
     const newValue = {
       id: 1,
       name: 'updated',
       content: '- new value',
-      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+      absolutePath: path.join(__dirname, '../../mocks/test.lg').replace(/\\/g, '/'),
     };
     await proj.lgIndexer.index(initFiles);
     const lgTemplates = await proj.updateLgTemplate('test', newValue);
