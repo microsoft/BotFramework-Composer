@@ -175,7 +175,7 @@ export function StorageExplorer() {
             }}
           >
             {openAdd ? (
-              <AddStoragePanel onSubmit={handleAddStorage} />
+              <AddStoragePanel storages={storages} onSubmit={handleAddStorage} />
             ) : (
               <FileSelector
                 saveAction={

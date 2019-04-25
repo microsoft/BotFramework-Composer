@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Dropdown } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import findindex from 'lodash.findindex';
 
 const options = [
   {
@@ -10,8 +11,16 @@ const options = [
 ];
 
 export default function AddStoragePanel(props) {
-  const { onSubmit } = props;
+  const { onSubmit, storages } = props;
   const [storageData, setStorageData] = useState({ type: 'AzureBlobStorage' });
+
+  const checkDuplicate = value => {
+    const index = findindex(storages, { name: value });
+    if (index >= 0) {
+      return 'Duplicate storage name';
+    }
+    return '';
+  };
 
   const updateInfo = field => (e, newValue) => {
     const value = newValue;
@@ -46,7 +55,12 @@ export default function AddStoragePanel(props) {
           defaultSelectedKey="azure"
           required
         />
-        <TextField label={formatMessage('Name')} onChange={updateInfo('name')} required />
+        <TextField
+          label={formatMessage('Name')}
+          onChange={updateInfo('name')}
+          onGetErrorMessage={checkDuplicate}
+          required
+        />
         <TextField label={formatMessage('Account')} onChange={updateInfo('account')} required />
         <TextField label={formatMessage('Key')} onChange={updateInfo('key')} required />
         <TextField label={formatMessage('Path')} onChange={updateInfo('path')} required />
