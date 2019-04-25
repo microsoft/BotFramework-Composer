@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
-import { ObiTypes } from '../../transformers/constants/ObiTypes';
+import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';

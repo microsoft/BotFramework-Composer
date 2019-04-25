@@ -1,4 +1,5 @@
-import { ObiTypes } from './constants/ObiTypes';
+import { ObiTypes } from '../shared/ObiTypes';
+
 import { IndexedNode } from './models/IndexedNode';
 
 export function transformIfCondtion(input, jsonpath) {

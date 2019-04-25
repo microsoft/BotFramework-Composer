@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ObiTypes } from '../../transformers/constants/ObiTypes';
+import { ObiTypes } from '../../shared/ObiTypes';
 import {
   DefaultRenderer,
   WelcomeRule,
