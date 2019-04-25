@@ -8,7 +8,7 @@ import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
-import { HorizontalEdge, VerticalEdge } from '../shared/EdgeComponents';
+import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
 import { Diamond } from './templates/Diamond';
@@ -107,7 +107,9 @@ export class IfCondition extends React.Component {
               />
             </OffsetContainer>
           ))}
-        {edges.map(x => (x.direction === 'x' ? <HorizontalEdge {...x} /> : <VerticalEdge {...x} />))}
+        {edges.map(x => (
+          <Edge key={x.id} {...x} />
+        ))}
       </div>
     );
   }

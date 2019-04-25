@@ -92,7 +92,7 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
   if (ifBoundary) {
     edgeList.push(
       {
-        key: `edge/${ifBoundary.id}/if/choice->if}`,
+        id: `edge/${ifBoundary.id}/if/choice->if}`,
         direction: 'x',
         x: choiceBoundary.offset.x + choiceBoundary.boundary.width,
         y: choiceBoundary.offset.y + choiceBoundary.boundary.axisY,
@@ -100,14 +100,14 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
         text: 'Y',
       },
       {
-        key: `edge/${ifBoundary.id}/if/if->border.bottom`,
+        id: `edge/${ifBoundary.id}/if/if->border.bottom`,
         direction: 'y',
         x: ifBoundary.offset.x + ifBoundary.boundary.axisX,
         y: ifBoundary.offset.y + ifBoundary.boundary.height,
         length: containerBoundary.height - (ifBoundary.offset.y + ifBoundary.boundary.height),
       },
       {
-        key: `edge/${ifBoundary.id}/if/border.bottom->out`,
+        id: `edge/${ifBoundary.id}/if/border.bottom->out`,
         direction: 'x',
         x: containerBoundary.axisX,
         y: containerBoundary.height,
@@ -117,21 +117,21 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
   } else {
     edgeList.push(
       {
-        key: `edge/${choiceBoundary.id}/if/choice->border.right`,
+        id: `edge/${choiceBoundary.id}/if/choice->border.right`,
         direction: 'x',
         x: choiceBoundary.offset.x + choiceBoundary.boundary.width,
         y: choiceBoundary.offset.y + choiceBoundary.boundary.axisY,
         length: containerBoundary.width - (choiceBoundary.offset.x + choiceBoundary.boundary.width),
       },
       {
-        key: `edge/${choiceBoundary.id}/if/border.top->border.bottom`,
+        id: `edge/${choiceBoundary.id}/if/border.top->border.bottom`,
         direction: 'y',
         x: containerBoundary.width,
         y: choiceBoundary.offset.y + choiceBoundary.boundary.axisY,
         length: containerBoundary.height - (choiceBoundary.offset.y + choiceBoundary.boundary.axisY),
       },
       {
-        key: `edge/${choiceBoundary.id}/if/border.bottom->out`,
+        id: `edge/${choiceBoundary.id}/if/border.bottom->out`,
         direction: 'x',
         x: containerBoundary.axisX,
         y: containerBoundary.height,
@@ -143,7 +143,7 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
   if (elseBoundary) {
     edgeList.push(
       {
-        key: `edge/${elseBoundary.id}/else/choice->else`,
+        id: `edge/${elseBoundary.id}/else/choice->else`,
         direction: 'y',
         x: containerBoundary.axisX,
         y: choiceBoundary.offset.y + choiceBoundary.boundary.height,
@@ -151,7 +151,7 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
         text: 'N',
       },
       {
-        key: `edge/${elseBoundary.id}/else/else->out`,
+        id: `edge/${elseBoundary.id}/else/else->out`,
         direction: 'y',
         x: containerBoundary.axisX,
         y: elseBoundary.offset.y + elseBoundary.boundary.height,
@@ -160,7 +160,7 @@ export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
     );
   } else {
     edgeList.push({
-      key: `edge/${choiceBoundary.id}/else/choice->out`,
+      id: `edge/${choiceBoundary.id}/else/choice->out`,
       x: containerBoundary.axisX,
       y: choiceBoundary.offset.y + choiceBoundary.boundary.height,
       length: containerBoundary.height - (choiceBoundary.offset.y + choiceBoundary.boundary.height),

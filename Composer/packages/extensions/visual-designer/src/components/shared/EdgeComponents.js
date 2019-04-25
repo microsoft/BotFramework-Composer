@@ -25,3 +25,10 @@ export const VerticalEdge = ({ length, text, x, y }) => (
     <line x1="0" y1="0" x2="0" y2={length} stroke="grey" strokeWidth="1" />
   </svg>
 );
+
+export const Edge = ({ direction, x, y, length, text }) =>
+  direction === 'x' ? (
+    <HorizontalEdge x={x} y={y} length={length} text={text} />
+  ) : (
+    <VerticalEdge x={x} y={y} length={length} text={text} />
+  );
