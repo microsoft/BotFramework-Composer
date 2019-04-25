@@ -25,7 +25,6 @@
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
-    "memoize-one": "^5.0.4",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
