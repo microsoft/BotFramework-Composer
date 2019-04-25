@@ -82,19 +82,24 @@ export class AzureBlobStorage implements IFileStorage {
       return new Promise((resolve, reject) => {
         // get files in this prefix.
         console.log(blobPath);
-        this.client.listBlobsSegmentedWithPrefix(container, blobPath, null as any, (err, data) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            const result: Set<string> = new Set();
-            data.entries.forEach(i => {
-              const temp = i.name.replace(blobPath, '');
-              result.add(temp.split('/').filter(i => i.length)[0]);
-            });
-            resolve(Array.from(result));
+        this.client.listBlobsSegmentedWithPrefix(
+          container,
+          names.length > 1 ? `${blobPath}/` : '',
+          null as any,
+          (err, data) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              const result: Set<string> = new Set();
+              data.entries.forEach(i => {
+                const temp = i.name.replace(blobPath, '');
+                result.add(temp.split('/').filter(i => i.length)[0]);
+              });
+              resolve(Array.from(result));
+            }
           }
-        });
+        );
       });
     }
   }
@@ -164,24 +169,29 @@ export class AzureBlobStorage implements IFileStorage {
     return await new Promise((resolve, reject) => {
       for (let index = 0; index < containers.length; index++) {
         const element = containers[index];
-        this.client.listBlobsSegmentedWithPrefix(element, prefix ? prefix : '', null as any, (err, data) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            // filter all file names
-            const result = [] as string[];
-            for (let i = 0; i < data.entries.length; i++) {
-              let temp = `/${element}/${data.entries[i].name}`;
-              temp = temp.replace(`${path}/`, '');
-              if (minimatch(temp, pattern)) {
-                console.log(temp);
-                result.push(temp);
+        this.client.listBlobsSegmentedWithPrefix(
+          element,
+          names.length > 1 ? `${prefix}/` : '',
+          null as any,
+          (err, data) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              // filter all file names
+              const result = [] as string[];
+              for (let i = 0; i < data.entries.length; i++) {
+                let temp = `/${element}/${data.entries[i].name}`;
+                temp = temp.replace(`${path}/`, '');
+                if (minimatch(temp, pattern)) {
+                  console.log(temp);
+                  result.push(temp);
+                }
               }
+              resolve(result);
             }
-            resolve(result);
           }
-        });
+        );
       }
     });
   }
