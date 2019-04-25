@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private Source.IRegistry registry;
         private string rootDialogFile { get; set; }
 
-        public TestBot(string rootDialogFile, UserState userState, ConversationState conversationState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public TestBot(string rootDialogFile, ConversationState conversationState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
         {
             dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.registry = registry;
