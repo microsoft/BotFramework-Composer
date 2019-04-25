@@ -15,7 +15,7 @@ import { Diamond } from './templates/Diamond';
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
 
-const calculateNodes = (path, data) => {
+const calculateNodeMap = (path, data) => {
   const { choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
     choiceNode: choice ? new GraphObjectModel(choice.id, choice.json) : null,
@@ -35,7 +35,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
 
 export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) {
   const [boundaryMap, setBoundaryMap] = useState({});
-  const initialNodeMap = useMemo(() => calculateNodes(id, data), [id, data]);
+  const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
 
   const patchBoundary = (id, boundary) => {
