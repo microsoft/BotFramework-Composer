@@ -6,8 +6,6 @@ import { DialogGroup } from '../../schema/appschema';
 
 import { TableField } from './TableField';
 
-const renderTitle = item => item.$type || formatMessage('New Step');
-
 export const StepsField: React.FC<FieldProps> = props => {
   return (
     <TableField
@@ -15,7 +13,6 @@ export const StepsField: React.FC<FieldProps> = props => {
       dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       label={formatMessage('Add New Step')}
       navPrefix="steps"
-      renderTitle={renderTitle}
     />
   );
 };

@@ -7,6 +7,7 @@ import {
   IContextualMenuItem,
   PrimaryButton,
   SelectionMode,
+  DetailsListLayoutMode,
 } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
@@ -15,6 +16,7 @@ import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
+import get from 'lodash.get';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
@@ -38,7 +40,7 @@ interface TableFieldProps<T> {
   label: string;
   navPrefix: string;
   onChange: (items: T[]) => void;
-  renderTitle: (item: T) => string;
+  renderTitle?: (item: T) => string;
   name?: string;
   schema: JSONSchema6;
   dialogOptionsOpts?: DialogOptionsOpts;
@@ -116,7 +118,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
 };
 
 export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns, columnHeader, dialogOptionsOpts, label, renderTitle } = props;
+  const { additionalColumns = [], columnHeader, dialogOptionsOpts, label, renderTitle } = props;
 
   const items = props.formData;
 
@@ -138,15 +140,15 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       key: 'column1',
       name: columnHeader || formatMessage('Type'),
       minWidth: 140,
-      maxWidth: 200,
+      maxWidth: additionalColumns.length ? 200 : undefined,
       onRender: renderTitle,
     },
-    ...(additionalColumns || []),
+    ...additionalColumns,
     {
       key: 'menu',
       name: '',
-      minWidth: 140,
-      maxWidth: 200,
+      minWidth: 85,
+      maxWidth: 85,
       // eslint-disable-next-line react/display-name
       onRender: (item, index) => {
         return (
@@ -177,6 +179,7 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
         items={items}
         selectionMode={SelectionMode.none}
         styles={{ root: { marginBottom: '20px' } }}
+        layoutMode={DetailsListLayoutMode.justified}
       />
       <PrimaryButton
         menuProps={{
@@ -198,4 +201,5 @@ TableField.defaultProps = {
   formData: [],
   navPrefix: '',
   onChange: () => {},
+  renderTitle: item => get(item, '$designer.friendlyName', item.$type),
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
+import get from 'lodash.get';
 
 import { DialogGroup } from '../../schema/appschema';
 
@@ -12,7 +13,8 @@ const columns: IColumn[] = [
     key: 'column2',
     name: formatMessage('# of Steps'),
     data: 'number',
-    minWidth: 0,
+    minWidth: 50,
+    isCollapsable: true,
     onRender: item => {
       return (item.steps || []).length;
     },
@@ -20,12 +22,15 @@ const columns: IColumn[] = [
 ];
 
 const renderTitle = item => {
-  if (!item.$type) {
-    return formatMessage('New Rule');
+  const friendlyName = get(item, '$designer.friendlyName');
+
+  if (friendlyName) {
+    return friendlyName;
   }
 
-  if (item.$type.includes('Intent')) {
-    return item.intent || item.$type;
+  const intentName = item.intent;
+  if (intentName) {
+    return intentName;
   }
 
   return item.$type;
