@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
 import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { GraphObjectModel } from '../shared/GraphObjectModel';
+import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
@@ -18,9 +18,9 @@ const ChoiceNodeHeight = 20;
 const calculateNodeMap = (path, data) => {
   const { choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
-    choiceNode: GraphObjectModel.fromIndexedJson(choice),
-    ifGroupNode: GraphObjectModel.fromIndexedJson(ifGroup),
-    elseGroupNode: GraphObjectModel.fromIndexedJson(elseGroup),
+    choiceNode: GraphNode.fromIndexedJson(choice),
+    ifGroupNode: GraphNode.fromIndexedJson(ifGroup),
+    elseGroupNode: GraphNode.fromIndexedJson(elseGroup),
   };
 };
 

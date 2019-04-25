@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
-import { GraphObjectModel } from '../shared/GraphObjectModel';
+import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
@@ -14,7 +14,7 @@ const InitStepHeight = 50;
 
 const calculateNodes = data => {
   if (data && data.children && Array.isArray(data.children)) {
-    return data.children.map(indexedStep => GraphObjectModel.fromIndexedJson(indexedStep));
+    return data.children.map(indexedStep => GraphNode.fromIndexedJson(indexedStep));
   }
   return [];
 };

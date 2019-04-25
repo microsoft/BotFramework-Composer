@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
-import { GraphObjectModel } from '../components/shared/GraphObjectModel';
+import { GraphNode } from '../components/shared/GraphNode';
 import { RecognizerGroup, StepGroup } from '../components/groups';
 
 const ColMargin = 10;
@@ -11,9 +11,9 @@ const ColMargin = 10;
 const calculateNodeMap = (_, data) => {
   const { recognizerGroup, ruleGroup, stepGroup } = transformRootDialog(data);
   return {
-    dialog: GraphObjectModel.fromIndexedJson(recognizerGroup),
-    ruleGroup: GraphObjectModel.fromIndexedJson(ruleGroup),
-    stepGroup: GraphObjectModel.fromIndexedJson(stepGroup),
+    dialog: GraphNode.fromIndexedJson(recognizerGroup),
+    ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
+    stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
 };
 

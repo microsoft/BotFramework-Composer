@@ -1,11 +1,8 @@
-import React from 'react';
-
 import { Boundary } from './Boundary';
 
-export class GraphObjectModel {
+export class GraphNode {
   id = '';
   data = {};
-  ref = React.createRef();
   boundary = new Boundary();
   offset = { x: 0, y: 0 };
 
@@ -15,7 +12,7 @@ export class GraphObjectModel {
   }
 }
 
-GraphObjectModel.fromIndexedJson = indexedJson => {
+GraphNode.fromIndexedJson = indexedJson => {
   if (!indexedJson) return null;
-  return new GraphObjectModel(indexedJson.id, indexedJson.json);
+  return new GraphNode(indexedJson.id, indexedJson.json);
 };
