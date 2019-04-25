@@ -1,5 +1,5 @@
 {
   "services": [],
-  "files": ["*.dialog", "*.lg"],
+  "files": ["*\*.dialog", "*\*.lg"],
   "entry": "GithubBot.main.dialog"
 }
