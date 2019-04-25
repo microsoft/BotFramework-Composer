@@ -70,7 +70,7 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
         <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.description}</p>
       )}
       {props.properties.map(p => (
-        <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} />
+        <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
       ))}
       {canExpand(props) && (
         <>
