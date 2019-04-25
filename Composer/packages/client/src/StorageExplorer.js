@@ -70,17 +70,17 @@ export function StorageExplorer() {
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
-  function updateCurrentPath(newPath, storageId) {
+  const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
       storageId = currentStorageId;
     }
 
     if (newPath) {
       const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
-      fetchFolderItemsByPath(storageId, formatedPath);
+      await fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
-  }
+  };
 
   function openFile(newPath, storageId) {
     setStorageExplorerStatus('');

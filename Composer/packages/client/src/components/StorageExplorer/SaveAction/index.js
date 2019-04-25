@@ -3,23 +3,27 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { saveButtonClass, saveContainer, saveInputClass } from './styles';
+import { saveButtonClass, saveContainer, saveInputClass, loading } from './styles';
 
 export function SaveAction(props) {
   const [value, setValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isError, setError] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(true);
   const { onSave, onGetErrorMessage } = props;
 
-  function saveButtonClick() {
+  const saveButtonClick = async () => {
     if (value === '') {
       setError(true);
       setErrorMessage('Please enter a new folder name');
     } else {
-      onSave(value);
+      setLoadingStatus(true);
+      await onSave(value);
+      setLoadingStatus(false);
     }
-  }
+  };
 
   return (
     <div css={saveContainer}>
@@ -41,15 +45,21 @@ export function SaveAction(props) {
             setError(false);
           }
         }}
-      />
-      <DefaultButton
-        primary
-        text="Save"
-        disabled={isError}
-        styles={saveButtonClass}
-        iconProps={{ iconName: 'SaveAs' }}
-        onClick={saveButtonClick}
-      />
+      />{' '}
+      {loadingStatus ? (
+        <Spinner size={SpinnerSize.medium} css={loading} />
+      ) : (
+        <DefaultButton
+          primary
+          text="Save"
+          disabled={isError}
+          styles={saveButtonClass}
+          iconProps={{
+            iconName: 'SaveAs',
+          }}
+          onClick={saveButtonClick}
+        />
+      )}
     </div>
   );
 }
