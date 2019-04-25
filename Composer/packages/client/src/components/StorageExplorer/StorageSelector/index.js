@@ -18,7 +18,7 @@ export function StorageSelector(props) {
       };
     });
 
-    links.push({ name: 'Add a place', key: 'New Storage', icon: 'Add', onClick: onAddNew });
+    links.push({ name: 'New Storage', key: 'New Storage', icon: 'Add', onClick: onAddNew });
 
     return [
       {
