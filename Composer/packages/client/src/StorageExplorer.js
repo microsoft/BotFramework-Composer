@@ -18,10 +18,25 @@ import { SaveAction } from './components/StorageExplorer/SaveAction/index';
 import AddStoragePanel from './components/StorageExplorer/NewStorage/index';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
-  return <div style={{ height: '0px' }} />;
+  return (
+    <div
+      style={{
+        height: '0px',
+      }}
+    />
+  );
 }
 
-const links = [{ name: formatMessage('Open'), key: 'open' }, { name: formatMessage('Save As'), key: 'saveas' }];
+const links = [
+  {
+    name: formatMessage('Open'),
+    key: 'open',
+  },
+  {
+    name: formatMessage('Save As'),
+    key: 'saveas',
+  },
+];
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
@@ -112,7 +127,11 @@ export function StorageExplorer() {
   };
 
   const handleSaveAs = async value => {
-    const dir = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}`;
+    let parent = focusedStorageFolder.parent;
+    if (parent === '/') {
+      parent = '';
+    }
+    const dir = `${parent}/${focusedStorageFolder.name}`;
     const absolutePath = `${dir}/${value}/bot.botproj`;
     await saveProjectAs(storages[currentStorageIndex.current].id, absolutePath);
     updateCurrentPath(dir, storages[currentStorageIndex.current].id);
@@ -150,7 +169,11 @@ export function StorageExplorer() {
             currentStorageId={currentStorageId}
             actionName={formatMessage(storageExplorerStatus === 'open' ? 'Open' : 'Save As')}
           />
-          <div style={{ paddingTop: '90px' }}>
+          <div
+            style={{
+              paddingTop: '90px',
+            }}
+          >
             {openAdd ? (
               <AddStoragePanel onSubmit={handleAddStorage} />
             ) : (

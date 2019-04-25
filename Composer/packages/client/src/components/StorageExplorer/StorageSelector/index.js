@@ -18,19 +18,23 @@ export function StorageSelector(props) {
       };
     });
 
-    links.push({
-      name: 'Add a place',
-      key: 'add nav',
-      onClick: onAddNew,
-    });
+    links.push({ name: 'Add a place', key: 'New Storage', icon: 'Add', onClick: onAddNew });
 
-    return [{ links: links }];
+    return [
+      {
+        links: links,
+      },
+    ];
   };
 
   return (
     <div>
       <div css={title}>{actionName}</div>
-      <div style={{ paddingTop: '10px' }}>
+      <div
+        style={{
+          paddingTop: '10px',
+        }}
+      >
         <Nav
           groups={getNavItems()}
           initialSelectedKey={currentStorageId}
