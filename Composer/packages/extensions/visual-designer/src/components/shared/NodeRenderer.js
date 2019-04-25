@@ -34,10 +34,7 @@ function chooseRendererByType($type) {
 
 export class NodeRenderer extends React.Component {
   containerRef = React.createRef();
-
-  getBoundary() {
-    return new Boundary(50, 50);
-  }
+  interactive = false;
 
   render() {
     const { id, data, focusedId, onEvent, onResize } = this.props;
@@ -47,12 +44,21 @@ export class NodeRenderer extends React.Component {
         className="node-renderer-container"
         style={{ outline: focusedId && focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
         ref={el => {
-          if (el) {
-            onResize(new Boundary(el.scrollWidth, el.scrollHeight));
+          if (el && !this.interactive) {
+            onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');
           }
         }}
       >
-        <ChosenRenderer id={id} data={data} focusedId={focusedId} onEvent={onEvent} onResize={onResize} />
+        <ChosenRenderer
+          id={id}
+          data={data}
+          focusedId={focusedId}
+          onEvent={onEvent}
+          onResize={size => {
+            this.interactive = true;
+            onResize(size, 'node');
+          }}
+        />
       </div>
     );
   }

@@ -22,3 +22,7 @@ export class Boundary {
     this.axisY = this.height / 2;
   }
 }
+
+export function areBoundariesEqual(a, b) {
+  return a.width === b.width && a.height === b.height && a.axisX === b.axisX && a.axisY === b.axisY;
+}

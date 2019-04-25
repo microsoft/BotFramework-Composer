@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { Boundary } from './Boundary';
+
 export class GraphObjectModel {
+  id = '';
+  data = {};
   ref = React.createRef();
-  boundary = {
-    width: 0,
-    height: 0,
-  };
+  boundary = new Boundary();
   offset = { x: 0, y: 0 };
-  props;
 }
