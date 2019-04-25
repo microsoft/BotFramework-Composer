@@ -96,34 +96,34 @@ export class LGIndexer {
   public async updateLgTemplate(lgTemplate: LGTemplate) {
     const absolutePath = lgTemplate.absolutePath;
     const updatedIndex = this.lgTemplates.findIndex(template => lgTemplate.id === template.id);
-    if (updatedIndex >= 0) {
-      if (lgTemplate.name) {
-        this.lgTemplates[updatedIndex] = lgTemplate;
+    if (lgTemplate.name && lgTemplate.content) {
+      if (updatedIndex < 0) {
+        // create a new id if the lg template is not exist and id not provided.
+        lgTemplate.id = lgTemplate.id || this.lgTemplates.length + 1;
+        this.lgTemplates.push(lgTemplate);
       } else {
-        this.lgTemplates.splice(updatedIndex, 1);
+        this.lgTemplates[updatedIndex] = lgTemplate;
       }
-      let updatedLG = '';
-      this.lgTemplates
-        .filter(template => template.absolutePath === lgTemplate.absolutePath)
-        .forEach(template => {
-          if (template.comments) {
-            updatedLG += `${template.comments}`;
-          }
-          if (template.name) {
-            if (template.content.indexOf('- IF') !== -1 || template.content.indexOf('- DEFAULT') !== -1) {
-              template.type = 'Condition';
-            } else {
-              template.type = 'Rotate';
-            }
-            updatedLG += `# ${template.name}` + '\n';
-            updatedLG += `${template.content}` + '\n';
-          }
-        });
-      const newFileContent = updatedLG.trim() + '\n';
-      await this.storage.writeFile(absolutePath, newFileContent);
-      return newFileContent;
-    } else {
-      throw new Error(`Lg template not found, id: ${lgTemplate.id}`);
     }
+    let updatedLG = '';
+    this.lgTemplates
+      .filter(template => template.absolutePath === lgTemplate.absolutePath)
+      .forEach(template => {
+        if (template.comments) {
+          updatedLG += `${template.comments}`;
+        }
+        if (template.name) {
+          if (template.content.indexOf('- IF') !== -1 || template.content.indexOf('- DEFAULT') !== -1) {
+            template.type = 'Condition';
+          } else {
+            template.type = 'Rotate';
+          }
+          updatedLG += `# ${template.name}` + '\n';
+          updatedLG += `${template.content}` + '\n';
+        }
+      });
+    const newFileContent = updatedLG.trim() + '\n';
+    await this.storage.writeFile(absolutePath, newFileContent);
+    return newFileContent;
   }
 }

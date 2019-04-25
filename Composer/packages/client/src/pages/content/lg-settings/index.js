@@ -2,22 +2,49 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef } from 'react';
+import { Fragment, useContext, useRef, useState, useEffect } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
-import { scrollablePaneRoot, title, label } from './styles';
+import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgTemplates } = state;
+  const [initializedStatus, setInitializedStatus] = useState(false);
+  const [items, setItems] = useState([]);
   const updateLG = useRef(debounce(actions.updateLgTemplate, 500)).current;
+
+  function refreshItems(templates) {
+    const newItems = [];
+    templates.forEach(template => {
+      newItems.push({
+        id: template.id,
+        name: template.name,
+        value: template.name,
+        absolutePath: template.absolutePath,
+        type: template.type,
+        content: template.content,
+        comments: template.comments,
+      });
+    });
+    setItems(newItems);
+    setInitializedStatus(true);
+  }
+
+  useEffect(() => {
+    if (initializedStatus === false && lgTemplates.length !== 0) {
+      refreshItems(lgTemplates);
+    }
+  }, [lgTemplates]);
+
   const tableColums = [
     {
       key: 'name',
@@ -28,14 +55,14 @@ export function LanguageGenerationSettings() {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      onRender: (item, index) => {
+      onRender: item => {
         return (
           <span>
             <TextField
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(index, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(item.id, newName, item.content)}
             />
           </span>
         );
@@ -61,26 +88,13 @@ export function LanguageGenerationSettings() {
       isResizable: true,
       data: 'string',
       isPadded: true,
-      onRender: (item, index) => {
-        return <span>{getTemplatePhrase(item, index)}</span>;
+      onRender: item => {
+        return <span>{getTemplatePhrase(item)}</span>;
       },
     },
   ];
 
-  function updateTemplateContent(index, templateName, content) {
-    const newTemplate = lgTemplates[index];
-    newTemplate.name = templateName;
-    newTemplate.content = content;
-
-    const payload = {
-      name: templateName,
-      content: newTemplate,
-    };
-
-    updateLG(payload);
-  }
-
-  function getTemplatePhrase(item, index) {
+  function getTemplatePhrase(item) {
     return (
       <TextField
         borderless
@@ -88,9 +102,24 @@ export function LanguageGenerationSettings() {
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
         defaultValue={item.content}
-        onChange={(event, newValue) => updateTemplateContent(index, item.name, newValue)}
+        onChange={(event, newValue) => updateTemplateContent(item.id, item.name, newValue)}
       />
     );
+  }
+
+  function updateTemplateContent(templateId, templateName, content) {
+    const newTemplate = items.find(template => template.id === templateId);
+    newTemplate.name = templateName;
+    newTemplate.content = content;
+    newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
+
+    const payload = {
+      name: templateName,
+      content: newTemplate,
+    };
+
+    updateLG(payload);
+    refreshItems(items);
   }
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -98,32 +127,60 @@ export function LanguageGenerationSettings() {
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
-          // eslint-disable-next-line react/display-name
           onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
   }
 
-  const items = [];
-  if (lgTemplates) {
-    lgTemplates.forEach(template => {
-      items.push({
-        name: template.name,
-        value: template.name,
-        absolutePath: template.absolutePath,
-        type: template.type,
-        content: template.content,
-        comments: template.comments,
-      });
+  function getNewItem(id) {
+    return {
+      id: id,
+      name: '',
+      value: '',
+      absolutePath: '',
+      type: 'Rotate',
+      content: '',
+      comments: '',
+    };
+  }
+
+  function onCreateNewTempalte(groupIndex, selectedGroup) {
+    const newItem = getNewItem(items.length + 1);
+    groups.forEach((group, index) => {
+      if (index === groupIndex) {
+        const firstItem = items[selectedGroup.startIndex];
+        newItem.absolutePath = firstItem.absolutePath;
+        items.splice(selectedGroup.startIndex + selectedGroup.count, 0, newItem);
+        selectedGroup.count++;
+      }
+      if (index > groupIndex) {
+        group.startIndex++;
+      }
     });
+    refreshItems(items);
+  }
+
+  function onRenderGroupFooter(groupProps) {
+    return (
+      <div>
+        {' '}
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => onCreateNewTempalte(groupProps.groupIndex, groupProps.group)}
+        >
+          New
+        </ActionButton>{' '}
+      </div>
+    );
   }
 
   const groups = [];
   let currentKey = '';
   let itemCount = 0;
-  lgTemplates.forEach((template, index) => {
-    if (template.absolutePath !== currentKey) {
+  items.forEach((item, index) => {
+    if (item.absolutePath !== currentKey) {
       if (itemCount !== 0) {
         const pathItems = currentKey.split(/[\\/]+/g);
         groups.push({
@@ -134,10 +191,10 @@ export function LanguageGenerationSettings() {
         });
         itemCount = 0;
       }
-      currentKey = template.absolutePath;
+      currentKey = item.absolutePath;
     }
     itemCount++;
-    if (index === lgTemplates.length - 1) {
+    if (index === items.length - 1) {
       const pathItems = currentKey.split(/[\\/]+/g);
       groups.push({
         name: pathItems[pathItems.length - 1],
@@ -155,14 +212,18 @@ export function LanguageGenerationSettings() {
         <div css={label}>{formatMessage('Templates')}</div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            changed={initializedStatus}
             items={items}
             compact={false}
             columns={tableColums}
-            setKey="key"
+            getKey={item => item.id}
             layoutMode={DetailsListLayoutMode.fixedColumns}
             onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.none}
             groups={groups}
+            groupProps={{
+              onRenderFooter: onRenderGroupFooter,
+            }}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>
