@@ -217,9 +217,8 @@ export class IfCondition extends React.Component {
         text: 'N',
       });
     }
-    const edges = edgeList.map(x => (x.direction === 'x' ? <HorizontalEdge {...x} /> : <VerticalEdge {...x} />));
 
-    return { boundary: containerBoundary, nodes, edges };
+    return { boundary: containerBoundary, nodes, edges: edgeList };
   });
 
   patchBoundary(id, boundary) {
@@ -277,7 +276,7 @@ export class IfCondition extends React.Component {
               />
             </OffsetContainer>
           ))}
-        {edges}
+        {edges.map(x => (x.direction === 'x' ? <HorizontalEdge {...x} /> : <VerticalEdge {...x} />))}
       </div>
     );
   }
