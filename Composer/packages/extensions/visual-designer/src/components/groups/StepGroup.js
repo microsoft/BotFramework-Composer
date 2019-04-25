@@ -5,7 +5,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { VerticalEdge } from '../shared/Edges';
+import { VerticalEdge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { GraphLayout } from '../shared/GraphLayout';
 

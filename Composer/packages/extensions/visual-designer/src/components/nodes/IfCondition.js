@@ -8,7 +8,7 @@ import { GraphObjectModel } from '../shared/GraphObjectModel';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
-import { HorizontalEdge, VerticalEdge } from '../shared/Edges';
+import { HorizontalEdge, VerticalEdge } from '../shared/EdgeComponents';
 
 import { Diamond } from './templates/Diamond';
 
@@ -52,10 +52,9 @@ export class IfCondition extends React.Component {
     Object.values(nodes)
       .filter(x => !!x)
       .forEach(x => (x.boundary = boundaryByNodeId[x.id] || new Boundary()));
+    if (nodes.choiceNode) nodes.choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
 
     const { choiceNode, ifGroupNode, elseGroupNode } = nodes;
-    choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
-
     const { width: ifWidth, height: ifHeight } = ifGroupNode ? ifGroupNode.boundary : new Boundary();
     const { width: elseWith, height: elseHeight } = elseGroupNode ? elseGroupNode.boundary : new Boundary();
 
