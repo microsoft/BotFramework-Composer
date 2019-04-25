@@ -82,8 +82,10 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                     .UseStorage(storage)
                     .UseState(userState, conversationState)
                     .UseLanguageGenerator(new LGLanguageGenerator(resourceExplorer))
-                    .UseDebugger(Configuration.GetValue<int>("debugport", 4712));
-
+                    .UseDebugger(Configuration.GetValue<int>("debugport", 4712))
+                    .UseResourceExplorer(resourceExplorer, () =>
+                    {
+                    });
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
                     await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
