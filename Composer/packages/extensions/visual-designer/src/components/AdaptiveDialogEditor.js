@@ -18,7 +18,7 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const RootDialog = ({ id, data, focusedId, onEvent }) => {
+export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { dialog, stepGroup, ruleGroup } = nodeMap;
 
@@ -66,5 +66,5 @@ export const RootDialog = ({ id, data, focusedId, onEvent }) => {
   );
 };
 
-RootDialog.propTypes = NodeProps;
-RootDialog.defaultProps = defaultNodeProps;
+AdaptiveDialogEditor.propTypes = NodeProps;
+AdaptiveDialogEditor.defaultProps = defaultNodeProps;

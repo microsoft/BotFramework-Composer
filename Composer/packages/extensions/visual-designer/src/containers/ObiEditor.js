@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
-import { RootDialog } from '../components/RootDialog';
+import { AdaptiveDialogEditor } from '../components/AdaptiveDialogEditor';
 
 export class ObiEditor extends Component {
   state = {
@@ -53,7 +53,7 @@ export class ObiEditor extends Component {
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <RootDialog
+        <AdaptiveDialogEditor
           key={graphId}
           id={graphId}
           data={this.props.data}
