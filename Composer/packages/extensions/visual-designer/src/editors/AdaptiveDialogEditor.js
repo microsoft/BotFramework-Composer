@@ -17,7 +17,7 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
+export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent, nodeRefs, selectedNodes }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { dialog, stepGroup, ruleGroup } = nodeMap;
 
@@ -36,7 +36,15 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
     >
       {dialog ? (
         <div style={{ margin: ColMargin }}>
-          <RecognizerGroup key={dialog.id} id={dialog.id} data={dialog.data} focusedId={focusedId} onEvent={onEvent} />
+          <RecognizerGroup
+            key={dialog.id}
+            id={dialog.id}
+            data={dialog.data}
+            focusedId={focusedId}
+            onEvent={onEvent}
+            nodeRefs={nodeRefs}
+            selectedNodes={selectedNodes}
+          />
         </div>
       ) : null}
       {stepGroup ? (
@@ -47,6 +55,8 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
             data={stepGroup.data}
             focusedId={focusedId}
             onEvent={onEvent}
+            nodeRefs={nodeRefs}
+            selectedNodes={selectedNodes}
           />
         </div>
       ) : null}
@@ -58,6 +68,8 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
             data={ruleGroup.data}
             focusedId={focusedId}
             onEvent={onEvent}
+            nodeRefs={nodeRefs}
+            selectedNodes={selectedNodes}
           />
         </div>
       ) : null}

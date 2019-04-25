@@ -25,7 +25,7 @@ export class EventGroup extends React.Component {
 
   renderEvent(eventNode) {
     const data = eventNode.json;
-    const { focusedId, onEvent } = this.props;
+    const { focusedId, onEvent, nodeRefs, selectedNodes } = this.props;
     return (
       <NodeRenderer
         id={eventNode.id}
@@ -36,6 +36,8 @@ export class EventGroup extends React.Component {
         onResize={() => {
           this.propagateBoundary();
         }}
+        nodeRefs={nodeRefs}
+        selectedNodes={selectedNodes}
       />
     );
   }

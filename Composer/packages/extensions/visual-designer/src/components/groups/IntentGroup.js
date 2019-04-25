@@ -23,7 +23,7 @@ export class IntentGroup extends React.Component {
   }
 
   renderIntent(intent) {
-    const { focusedId, onEvent } = this.props;
+    const { focusedId, onEvent, nodeRefs, selectedNodes } = this.props;
     const data = intent.json;
     return (
       <NodeRenderer
@@ -34,6 +34,8 @@ export class IntentGroup extends React.Component {
         onResize={() => {
           this.propagateBoundary();
         }}
+        nodeRefs={nodeRefs}
+        selectedNodes={selectedNodes}
       />
     );
   }

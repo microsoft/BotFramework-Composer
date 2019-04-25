@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropType from 'prop-types';
 
 import { ObiEditor } from './editors/ObiEditor';
+import './styles.css';
 
 export default class VisualDesigner extends Component {
   /**

@@ -36,16 +36,30 @@ export class NodeRenderer extends React.Component {
   containerRef = React.createRef();
   interactive = false;
 
+  getOutline = (id, focusedId, selectedNodes = []) => {
+    const found = selectedNodes.find(element => {
+      return element === id;
+    });
+
+    if (found) {
+      return { outline: '3px solid #0078d3', display: 'inline-block' };
+    }
+    return { outline: focusedId && focusedId === id ? '3px solid grey' : null, display: 'inline-block' };
+  };
+
   render() {
-    const { id, data, focusedId, onEvent, onResize } = this.props;
+    const { id, data, focusedId, onEvent, onResize, nodeRefs, selectedNodes } = this.props;
     const ChosenRenderer = chooseRendererByType(data.$type);
     return (
       <div
         className="node-renderer-container"
-        style={{ outline: focusedId && focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+        style={this.getOutline(id, focusedId, selectedNodes)}
         ref={el => {
           if (el && !this.interactive) {
             onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');
+          }
+          if (el && nodeRefs) {
+            nodeRefs[id] = el;
           }
         }}
       >

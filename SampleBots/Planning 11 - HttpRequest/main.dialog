@@ -19,16 +19,11 @@
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "http://petstore.swagger.io/v2/pet",
       "method": "POST",
-      "header": {
-        "test": "test",
-        "test2": "test2"
-      },
+      "url": "http://petstore.swagger.io/v2/pet",
       "body": {
         "id": "{dialog.petid}",
         "category": {
-          "id": 0,
           "name": "string"
         },
         "name": "{dialog.petname}",
@@ -43,7 +38,11 @@
         ],
         "status": "available"
       },
-      "property": "dialog.postResponse"
+      "property": "dialog.postResponse",
+      "header": {
+        "test": "test",
+        "test2": "test2"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",

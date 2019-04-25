@@ -9,12 +9,21 @@ import { IntentGroup } from './IntentGroup';
 
 const ElementMargin = 10;
 
-export const RecognizerGroup = ({ data, focusedId, onEvent }) => {
+export const RecognizerGroup = ({ data, focusedId, onEvent, nodeRefs, selectedNodes }) => {
+  console.log('r', nodeRefs, selectedNodes);
   const renderElement = (node, Renderer) => {
     if (node) {
       return (
         <div style={{ margin: ElementMargin }}>
-          <Renderer key={node.id} id={node.id} data={node.json} focusedId={focusedId} onEvent={onEvent} />
+          <Renderer
+            key={node.id}
+            id={node.id}
+            data={node.json}
+            focusedId={focusedId}
+            onEvent={onEvent}
+            nodeRefs={nodeRefs}
+            selectedNodes={selectedNodes}
+          />
         </div>
       );
     }
