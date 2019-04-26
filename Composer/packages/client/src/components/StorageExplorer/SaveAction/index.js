@@ -11,7 +11,7 @@ export function SaveAction(props) {
   const [value, setValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isError, setError] = useState(false);
-  const [loadingStatus, setLoadingStatus] = useState(true);
+  const [loadingStatus, setLoadingStatus] = useState(false);
   const { onSave, onGetErrorMessage } = props;
 
   const saveButtonClick = async () => {
