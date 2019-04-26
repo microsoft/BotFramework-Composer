@@ -38,7 +38,8 @@ async function openProject(req: Request, res: Response) {
       res.status(404).json({ error: 'No bot project opened' });
     }
   } catch (e) {
-    res.status(400).json(e);
+    console.log(e.message);
+    res.status(400).json(e.message);
   }
 }
 
