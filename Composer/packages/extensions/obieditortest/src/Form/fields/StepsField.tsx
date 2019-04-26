@@ -12,7 +12,7 @@ export const StepsField: React.FC<FieldProps> = props => {
       {...props}
       dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       label={formatMessage('Add New Step')}
-      navPrefix="steps"
+      navPrefix={props.name}
     />
   );
 };
