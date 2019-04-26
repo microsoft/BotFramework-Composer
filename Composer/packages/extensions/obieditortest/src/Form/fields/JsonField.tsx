@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { FieldProps } from 'react-jsonschema-form';
+import { Separator, createTheme, ColorClassNames, FontClassNames } from 'office-ui-fabric-react';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
-import './codemirror-fabric.scss';
 
+import './codemirror-fabric.scss';
 import './styles.scss';
-import { Separator, createTheme, ColorClassNames, FontClassNames } from 'office-ui-fabric-react';
 
 const fieldHeaderTheme = createTheme({
   fonts: {
