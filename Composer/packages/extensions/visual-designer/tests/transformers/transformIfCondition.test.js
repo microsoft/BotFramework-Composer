@@ -1,5 +1,5 @@
 import { transformIfCondtion } from '../../src/transformers/transformIfCondition';
-import { ObiTypes } from '../../src/transformers/constants/ObiTypes';
+import { ObiTypes } from '../../src/shared/ObiTypes';
 
 test('should return {} when input is not IfCondition', () => {
   const json = { $type: '' };
@@ -8,7 +8,7 @@ test('should return {} when input is not IfCondition', () => {
 });
 
 test('should return correct schema when input choice only json', () => {
-  const json = { $type: ObiTypes.IfCondition, conditon: 'a==b', ifTrue: [], ifFalse: [] };
+  const json = { $type: ObiTypes.IfCondition, conditon: 'a==b', steps: [], elseSteps: [] };
   const result = transformIfCondtion(json);
   expect(result.choice).toBeTruthy();
   expect(result.ifGroup).toBeFalsy();
@@ -19,8 +19,8 @@ test('should return correct schema when input complete json', () => {
   const json = {
     $type: ObiTypes.IfCondition,
     conditon: 'a==b',
-    ifTrue: [{ $type: 'any' }],
-    ifFalse: [{ $type: 'any' }, { $type: 'any' }],
+    steps: [{ $type: 'any' }],
+    elseSteps: [{ $type: 'any' }, { $type: 'any' }],
   };
   const result = transformIfCondtion(json);
 
@@ -39,8 +39,8 @@ test('should jsonpath be passed down to children', () => {
   const json = {
     $type: ObiTypes.IfCondition,
     conditon: 'a==b',
-    ifTrue: [{ $type: 'any' }],
-    ifFalse: [{ $type: 'any' }, { $type: 'any' }],
+    steps: [{ $type: 'any' }],
+    elseSteps: [{ $type: 'any' }, { $type: 'any' }],
   };
   const currentPath = 'current';
   const result = transformIfCondtion(json, currentPath);

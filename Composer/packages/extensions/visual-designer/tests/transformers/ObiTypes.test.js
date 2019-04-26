@@ -1,4 +1,4 @@
-import { ObiTypes } from '../../src/transformers/constants/ObiTypes';
+import { ObiTypes } from '../../src/shared/ObiTypes';
 
 test("ObiTypes shoudn't contain duplicate values", () => {
   const valueMap = {};
