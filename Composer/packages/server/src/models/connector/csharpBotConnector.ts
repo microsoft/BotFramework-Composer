@@ -19,13 +19,16 @@ export class CSharpBotConnector implements IBotConnector {
 
     console.log(`command: 'bot build' at ${this.path}`);
     const buildProcess = childprocess.spawnSync('dotnet', [`build`], { cwd: `${this.path}` });
-    const stdout = String(buildProcess.stdout);
 
-    if (buildProcess.status !== 0) {
-      console.error(stdout);
-      throw new Error('unable to build bot project');
-    } else {
-      console.log(stdout);
+    if (buildProcess.stdout) {
+      const stdout = String(buildProcess.stdout);
+
+      if (buildProcess.status !== 0) {
+        console.error(stdout);
+        throw new Error('unable to build bot project');
+      } else {
+        console.log(stdout);
+      }
     }
 
     console.log('command: ' + `$dotnet bin/Debug/netcoreapp2.0/BotProject.dll ` + `--bot:path=${realBotPath}`);
