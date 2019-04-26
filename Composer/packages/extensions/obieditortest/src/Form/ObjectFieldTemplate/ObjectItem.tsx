@@ -3,6 +3,7 @@ import { DefaultButton, IContextualMenuItem, ContextualMenuItemType } from 'offi
 import formatMessage from 'format-message';
 
 import './styles.scss';
+import { FIELDS_TO_HIDE } from '../../schema/appschema';
 
 interface ObjectItemProps {
   content: React.ReactNode;
@@ -18,7 +19,7 @@ interface ObjectItemProps {
 export default function ObjectItem(props: ObjectItemProps) {
   const { content, schema, onAdd, onEdit, onDropPropertyClick, name } = props;
 
-  if (name && name.startsWith('$')) {
+  if (name && FIELDS_TO_HIDE.includes(name)) {
     return null;
   }
 

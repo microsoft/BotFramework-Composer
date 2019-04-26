@@ -2,6 +2,8 @@ import { JSONSchema6 } from 'json-schema';
 
 import { DialogInfo } from '../types';
 
+export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'inputProperties', 'selector'];
+
 export enum DialogGroup {
   INPUT = 'INPUT',
   RESPONSE = 'RESPONSE',
