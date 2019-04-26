@@ -8,7 +8,7 @@ import { TableField } from './TableField';
 
 export const StepsField: React.FC<FieldProps> = props => {
   return (
-    <TableField
+    <TableField<MicrosoftIDialog>
       {...props}
       dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       label={formatMessage('Add New Step')}

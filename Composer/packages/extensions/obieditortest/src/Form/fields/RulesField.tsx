@@ -38,7 +38,7 @@ const renderTitle = item => {
 
 export function RulesField(props: FieldProps) {
   return (
-    <TableField
+    <TableField<MicrosoftIRule>
       {...props}
       additionalColumns={columns}
       dialogOptionsOpts={{ include: [DialogGroup.RULE], subMenu: false }}

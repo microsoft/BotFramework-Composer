@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ContextualMenuItemType,
-  createTheme,
   DefaultButton,
   DetailsList,
   IContextualMenuItem,
@@ -9,39 +8,28 @@ import {
   SelectionMode,
   DetailsListLayoutMode,
 } from 'office-ui-fabric-react';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { ColorClassNames, FontClassNames } from '@uifabric/styling';
-import startCase from 'lodash.startcase';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
+import { FieldProps } from 'react-jsonschema-form';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
 
-const fieldHeaderTheme = createTheme({
-  fonts: {
-    medium: {
-      fontSize: '24px',
-    },
-  },
-  palette: {
-    neutralLighter: '#d0d0d0',
-  },
-});
+import { BaseField } from './BaseField';
 
-interface TableFieldProps<T> {
+interface TableFieldProps<T> extends FieldProps<T> {
   additionalColumns?: IColumn[];
   columnHeader?: string;
   formContext: FormContext;
-  formData: object[];
+  formData: T;
   label: string;
   navPrefix: string;
   onChange: (items: T[]) => void;
   renderTitle?: (item: T) => string;
-  name?: string;
+  name: string;
   schema: JSONSchema6;
   dialogOptionsOpts?: DialogOptionsOpts;
 }
@@ -116,7 +104,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
   return <DefaultButton menuProps={{ items: menuItems }} />;
 };
 
-export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
+export function TableField<T = any>(props: TableFieldProps<T[]>): JSX.Element {
   const { additionalColumns = [], columnHeader, dialogOptionsOpts, label, renderTitle } = props;
 
   const items = props.formData;
@@ -166,13 +154,7 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
   ];
 
   return (
-    <div style={{ margin: '30px 0' }}>
-      <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-        {props.schema.title || startCase(props.name)}
-      </Separator>
-      {props.schema.description && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.schema.description}</p>
-      )}
+    <BaseField {...props}>
       <DetailsList
         columns={columns}
         items={items}
@@ -191,7 +173,7 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
       >
         {label}
       </PrimaryButton>
-    </div>
+    </BaseField>
   );
 }
 
