@@ -111,7 +111,7 @@ export async function createDialog(dispatch, { name, steps }) {
       payload: { response },
     });
     clearNavHistory(dispatch);
-    navTo(dispatch, `[${name}]#`);
+    navTo(dispatch, `${name}#`);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
