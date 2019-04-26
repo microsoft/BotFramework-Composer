@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { PAYLOAD_KEY } from '../../utils/constant';
-import { NodeProps, defaultNodeProps } from '../nodes/sharedProps';
-import { NodeRenderer } from '../../utils/NodeRenderer';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { NodeRenderer } from '../shared/NodeRenderer';
+import { Boundary } from '../shared/Boundary';
 
 const EventGroupTitleHeight = 30;
 const EventElemetHeight = 50;
@@ -14,27 +14,47 @@ const EventBlockWidth = EventElemetWidth + 2 * EventMarginX;
 const themeColor = '#BAD80A';
 
 export class EventGroup extends React.Component {
+  containerElement;
+
+  propagateBoundary() {
+    if (!this.containerElement) return;
+
+    const { scrollWidth, scrollHeight } = this.containerElement;
+    this.props.onResize(new Boundary(scrollWidth, scrollHeight));
+  }
+
   renderEvent(eventNode) {
-    const data = eventNode[PAYLOAD_KEY];
-    const propagateEvent = (...args) => this.props.onEvent(...args);
+    const data = eventNode.json;
+    const { focusedId, onEvent } = this.props;
     return (
       <NodeRenderer
         id={eventNode.id}
         key={eventNode.id}
         data={data}
-        focusedId={this.props.focusedId}
-        onEvent={propagateEvent}
+        focusedId={focusedId}
+        onEvent={onEvent}
+        onResize={() => {
+          this.propagateBoundary();
+        }}
       />
     );
   }
+
   render() {
     const { data } = this.props;
+    const width = EventBlockWidth;
+    const height = data.children.length * EventBlockHeight + EventGroupTitleHeight;
+
     return (
       <div
         style={{
-          width: EventBlockWidth,
-          height: data.children.length * EventBlockHeight + EventGroupTitleHeight,
+          width,
+          height,
           border: `1px solid ${themeColor}`,
+        }}
+        ref={el => {
+          this.containerElement = el;
+          this.propagateBoundary();
         }}
       >
         <div

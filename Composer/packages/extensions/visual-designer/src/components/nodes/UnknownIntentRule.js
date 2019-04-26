@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../utils/constant';
+import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
-import { NodeProps, defaultNodeProps } from './sharedProps';
 import { FormCard } from './templates/FormCard';
 
-export class WelcomeRule extends React.Component {
+export class UnknownIntentRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
       <FormCard
-        themeColor="#3C3C3C"
-        header="Entry"
+        themeColor="#BAD80A"
+        header="UnknownIntentRule"
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
@@ -26,5 +26,5 @@ export class WelcomeRule extends React.Component {
   }
 }
 
-WelcomeRule.propTypes = NodeProps;
-WelcomeRule.defaultProps = defaultNodeProps;
+UnknownIntentRule.propTypes = NodeProps;
+UnknownIntentRule.defaultProps = defaultNodeProps;
