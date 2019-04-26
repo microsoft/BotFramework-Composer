@@ -1,26 +1,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
+import formatMessage from 'format-message';
+import startCase from 'lodash.startcase';
 
 import { folderItem } from './styles';
 
 export const Folder = props => {
   const { activeNode, folder, onFolderClick, onFolderRightClick } = props;
 
-  function splitFileName(text) {
-    const pattern = /\.{1}[a-zA-Z]{1,}$/;
-    let temp = text;
-    if (pattern.exec(text) !== null) {
-      temp = text.slice(0, pattern.exec(text).index);
-    }
-
-    return temp.charAt(0).toUpperCase() + temp.slice(1);
-  }
-
   return (
     <div css={folderItem(activeNode === folder.id)}>
       <span onClick={() => onFolderClick(folder)} onContextMenu={onFolderRightClick}>
-        {splitFileName(folder.name)}
+        {formatMessage(startCase(folder.name).replace(/\s/g, ''))}
       </span>
     </div>
   );

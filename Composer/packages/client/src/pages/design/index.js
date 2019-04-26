@@ -21,7 +21,7 @@ function DesignPage() {
 
   function handleFileClick(index) {
     clearNavHistory();
-    navTo(`[${dialogs[index].name}]`);
+    navTo(`${dialogs[index].name}#`);
   }
 
   const dialogsMap = useMemo(() => {
@@ -33,7 +33,8 @@ function DesignPage() {
 
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
-      const text = item.indexOf('.') > -1 ? getDialogData(dialogsMap, `${item}.$type`) : item;
+      const pathList = item.split('#');
+      const text = pathList[1] === '' ? item : getDialogData(dialogsMap, `${item}#$type`);
 
       return {
         key: index,
@@ -49,7 +50,7 @@ function DesignPage() {
 
   const activeDialog = useMemo(() => {
     if (!navPath) return -1;
-    const dialogName = navPath.split('.')[0];
+    const dialogName = navPath.split('#')[0];
     return findindex(dialogs, { name: dialogName });
   }, [navPath]);
 
