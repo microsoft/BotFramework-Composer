@@ -1,7 +1,8 @@
 ## Bot Project
-Bot project is the launcher project for the bots written in [OBI](https://github.com/Microsoft/botframework-obi) format.
+Bot project is the launcher project for the bots written in declarative form (JSON), using the Composer, for the Bot Framework SDK. They follow pattern defined in [OBI](https://github.com/Microsoft/botframework-obi) format. 
 
-## Instructions
+## Instructions for setting up the Bot Project runtime
+The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch it from the emulator, you need to make sure you can run the bot. 
 
 ### Prerequisite:
 * Install .Netcore 2
@@ -13,6 +14,8 @@ Bot project is the launcher project for the bots written in [OBI](https://github
 
 ### Commands:
 
+* from root folder 
+* cd BotProject
 * dotnet restore // for the package updates
 * dotnet build // build
 * dotnet run // start the bot
@@ -22,6 +25,7 @@ Bot project is the launcher project for the bots written in [OBI](https://github
 * You can set you emulator to connect to http://localhost:3979/api/messages.
 
 ### config your bot
+This setp is required for local testing of your Bot Runtime. 
 * The only thing you need to config is appsetting.json, which have a bot setting to launch the bot
 ```
     appsettings.json：
