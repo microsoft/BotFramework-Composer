@@ -145,7 +145,7 @@ const Demo: React.FC = () => {
 
   return (
     <div className="DemoContainer">
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }} className="DemoJSONContainer">
         <div style={{ fontSize: '20px', paddingLeft: '10px', display: 'flex', justifyContent: 'space-between' }}>
           <div>Data</div>
           <PrimaryButton

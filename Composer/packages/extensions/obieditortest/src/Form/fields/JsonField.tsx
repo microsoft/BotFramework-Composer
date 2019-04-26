@@ -4,8 +4,7 @@ import { FieldProps } from 'react-jsonschema-form';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/theme/neat.css';
+import './codemirror-fabric.scss';
 
 import './styles.scss';
 import { Separator, createTheme, ColorClassNames, FontClassNames } from 'office-ui-fabric-react';
@@ -22,7 +21,7 @@ const fieldHeaderTheme = createTheme({
 });
 
 const cmOptions = {
-  theme: 'neat',
+  theme: 'fabric',
   viewportMargin: Infinity,
   mode: {
     name: 'javascript',
@@ -34,6 +33,7 @@ const cmOptions = {
   indentWithTabs: false,
   tabSize: 2,
   smartIndent: true,
+  height: 'auto',
 };
 
 export const JsonField: React.FC<FieldProps> = props => {
