@@ -8,7 +8,7 @@ Bot project is the launcher project for the bots written in [OBI](https://github
 * Install nuget
 
 ### Add Nuget Feed
-* option 1: use VisualStudio "Manage Nuget Packages" to add a new package feed: "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json"
+* option 1: use VisualStudio "Manage Nuget Packages" to add a new package feed: "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
 * option 2: nuget sources Add -Name "ComposableDialog" -Source "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
 
 ### Commands:
