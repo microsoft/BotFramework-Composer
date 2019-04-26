@@ -34,7 +34,7 @@ function DesignPage() {
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
-      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}#$type`);
+      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
 
       return {
         key: index,
