@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { IContextualMenuItem, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
 
 import Example from '../../src';
 import { ShellApi } from '../../src/types';
-import { dialogGroups } from '../../src/schema/appschema';
+import { buildDialogOptions } from '../../src/Form/utils';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
@@ -128,25 +128,6 @@ const Demo: React.FC = () => {
     }
   };
 
-  const buildDialogOptions = (): IContextualMenuItem[] => {
-    const options: IContextualMenuItem[] = [];
-
-    for (const elem in dialogGroups) {
-      const subOptions = dialogGroups[elem].map(dialog => ({
-        key: dialog,
-        text: dialog,
-        onClick: () => setFormData({ $type: dialog }),
-      }));
-      options.push({
-        key: elem,
-        text: elem,
-        subMenuProps: { items: subOptions },
-      });
-    }
-
-    return options;
-  };
-
   const handlePaste = updater => (_, e) => {
     e.preventDefault();
 
@@ -164,12 +145,15 @@ const Demo: React.FC = () => {
 
   return (
     <div className="DemoContainer">
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }} className="DemoJSONContainer">
         <div style={{ fontSize: '20px', paddingLeft: '10px', display: 'flex', justifyContent: 'space-between' }}>
           <div>Data</div>
           <PrimaryButton
             title="Dialog Types"
-            menuProps={{ items: buildDialogOptions(), directionalHint: DirectionalHint.bottomAutoEdge }}
+            menuProps={{
+              items: buildDialogOptions({ onClick: (_, item) => setFormData(item.data) }),
+              directionalHint: DirectionalHint.bottomAutoEdge,
+            }}
           >
             Dialog Types
           </PrimaryButton>

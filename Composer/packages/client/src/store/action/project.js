@@ -110,9 +110,8 @@ export async function createDialog(dispatch, { name, steps }) {
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: { response },
     });
-    // the new dialog only has 1 rule, so navigate directly there
     clearNavHistory(dispatch);
-    navTo(dispatch, `[${name}]#rules[0]`);
+    navTo(dispatch, `${name}#`);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

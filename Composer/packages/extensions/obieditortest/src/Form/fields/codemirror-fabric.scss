@@ -1,0 +1,13 @@
+.cm-s-fabric span.cm-comment { color: #a6a6a6; } // disabledText
+.cm-s-fabric span.cm-keyword { line-height: 1em; font-weight: bold; color: #0078d4; } // themePrimary
+.cm-s-fabric span.cm-string { color: #0078d4; } // blue
+.cm-s-fabric span.cm-property { color: #00188f; } // blueMid
+.cm-s-fabric span.cm-builtin { line-height: 1em; font-weight: bold; color: #077; }
+.cm-s-fabric span.cm-special { line-height: 1em; font-weight: bold; color: #0aa; }
+.cm-s-fabric span.cm-variable { color: black; }
+.cm-s-fabric span.cm-number, .cm-s-fabric span.cm-atom { color: #008272; } // teal
+.cm-s-fabric span.cm-meta { color: #555; }
+.cm-s-fabric span.cm-link { color: #3a3; }
+
+.cm-s-fabric .CodeMirror-activeline-background { background: #6a7583; }
+.cm-s-fabric .CodeMirror-matchingbracket { outline:1px solid grey; color:black !important; }

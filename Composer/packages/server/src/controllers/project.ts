@@ -92,7 +92,7 @@ async function updateBotFile(req: Request, res: Response) {
 
 async function createDialogFromTemplate(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.createDialogFromTemplate(req.body.name, req.body.steps);
+    const dialogs = await ProjectService.currentBotProject.createDialogFromTemplate(req.body.name);
     res.status(200).json({ dialogs });
   } else {
     res.status(404).json({ error: 'No bot project opened' });

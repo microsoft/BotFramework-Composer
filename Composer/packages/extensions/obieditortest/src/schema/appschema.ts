@@ -2,49 +2,98 @@ import { JSONSchema6 } from 'json-schema';
 
 import { DialogInfo } from '../types';
 
-export const dialogGroups = {
-  'Input/Prompt Dialogs': [
-    'Microsoft.ChoiceInput',
-    'Microsoft.ConfirmInput',
-    'Microsoft.FloatInput',
-    'Microsoft.IntegerInput',
-    'Microsoft.NumberInput',
-    'Microsoft.TextInput',
-  ],
-  'Dialog Steps': [
-    'Microsoft.BeginDialog',
-    // There is a typo in the sdk
-    // 'Microsoft.CancelAllDialogs',
-    'Microsoft.CancelAllDialog',
-    'Microsoft.EmitEvent',
-    'Microsoft.EndDialog',
-    'Microsoft.EndTurn',
-    'Microsoft.HttpRequest',
-    'Microsoft.IfCondition',
-    'Microsoft.LogStep',
-    'Microsoft.RepeatDialog',
-    'Microsoft.ReplaceDialog',
-    'Microsoft.SendActivity',
-    'Microsoft.SwitchCondition',
-    'Microsoft.TraceActivity',
-  ],
-  Memory: [
-    'Microsoft.DeleteProperty',
-    'Microsoft.EditArray',
-    'Microsoft.InitProperty',
-    'Microsoft.SaveEntity',
-    'Microsoft.SetProperty',
-  ],
-  Rules: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.Rule', 'Microsoft.UnknownIntentRule'],
-  Recognizers: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
-  Selectors: [
-    'Microsoft.ConditionalSelector',
-    'Microsoft.FirstSelector',
-    'Microsoft.MostSpecificSelector',
-    'Microsoft.RandomSelector',
-    'Microsoft.TrueSelector',
-  ],
-  Other: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
+export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'inputProperties', 'selector'];
+
+export enum DialogGroup {
+  INPUT = 'INPUT',
+  RESPONSE = 'RESPONSE',
+  MEMORY = 'MEMORY',
+  STEP = 'STEP',
+  CODE = 'CODE',
+  LOG = 'LOG',
+  RULE = 'RULE',
+  RECOGNIZER = 'RECOGNIZER',
+  SELECTOR = 'SELECTOR',
+  OTHER = 'OTHER',
+}
+
+export interface DialogGroupItem {
+  label: string;
+  types: string[];
+}
+
+export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
+export const dialogGroups: DialogGroupsMap = {
+  [DialogGroup.INPUT]: {
+    label: 'Input/Prompt Dialogs',
+    types: [
+      'Microsoft.ChoiceInput',
+      'Microsoft.ConfirmInput',
+      'Microsoft.FloatInput',
+      'Microsoft.IntegerInput',
+      'Microsoft.NumberInput',
+      'Microsoft.TextInput',
+    ],
+  },
+  [DialogGroup.RESPONSE]: {
+    label: 'Sending a response',
+    types: ['Microsoft.SendActivity'],
+  },
+  [DialogGroup.MEMORY]: {
+    label: 'Memory manipulation',
+    types: [
+      'Microsoft.DeleteProperty',
+      'Microsoft.EditArray',
+      'Microsoft.InitProperty',
+      'Microsoft.SaveEntity',
+      'Microsoft.SetProperty',
+    ],
+  },
+  [DialogGroup.STEP]: {
+    label: 'Conversational flow and dialog management',
+    types: [
+      'Microsoft.BeginDialog',
+      'Microsoft.CancelAllDialogs',
+      'Microsoft.EmitEvent',
+      'Microsoft.EndDialog',
+      'Microsoft.EndTurn',
+      'Microsoft.IfCondition',
+      'Microsoft.RepeatDialog',
+      'Microsoft.ReplaceDialog',
+      'Microsoft.SendActivity',
+      'Microsoft.SwitchCondition',
+    ],
+  },
+  [DialogGroup.CODE]: {
+    label: 'Roll your own code',
+    types: [/* 'Microsoft.CodeStep', */ 'Microsoft.HttpRequest'],
+  },
+  [DialogGroup.LOG]: {
+    label: 'Tracing and logging',
+    types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
+  },
+  [DialogGroup.RULE]: {
+    label: 'Rules',
+    types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
+  },
+  [DialogGroup.RECOGNIZER]: {
+    label: 'Recognizers',
+    types: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
+  },
+  [DialogGroup.SELECTOR]: {
+    label: 'Selectors',
+    types: [
+      'Microsoft.ConditionalSelector',
+      'Microsoft.FirstSelector',
+      'Microsoft.MostSpecificSelector',
+      'Microsoft.RandomSelector',
+      'Microsoft.TrueSelector',
+    ],
+  },
+  [DialogGroup.OTHER]: {
+    label: 'Other',
+    types: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
+  },
 };
 
 export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
@@ -356,7 +405,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
         },
       },
-      'Microsoft.CancelAllDialog': {
+      'Microsoft.CancelAllDialogs': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Cancel All Dialogs',
         description:
@@ -369,7 +418,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.CancelAllDialog',
+            const: 'Microsoft.CancelAllDialogs',
           },
           $copy: {
             title: '$copy',
@@ -1301,10 +1350,10 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.BeginDialog',
           },
           {
-            title: 'Microsoft.CancelAllDialog',
+            title: 'Microsoft.CancelAllDialogs',
             description:
               'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
-            $ref: '#/definitions/Microsoft.CancelAllDialog',
+            $ref: '#/definitions/Microsoft.CancelAllDialogs',
           },
           {
             title: 'Microsoft.ChoiceInput',
