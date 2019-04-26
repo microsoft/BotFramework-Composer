@@ -3,11 +3,10 @@ import React from 'react';
 import { ObiTypes } from '../../shared/ObiTypes';
 import {
   DefaultRenderer,
-  WelcomeRule,
   IntentRule,
   Recognizer,
   BeginDialog,
-  NoMatchRule,
+  UnknownIntentRule,
   EventRule,
   IfCondition,
 } from '../nodes/index';
@@ -16,9 +15,8 @@ import { Boundary } from './Boundary';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
 const rendererByObiType = {
-  [ObiTypes.WelcomeRule]: WelcomeRule,
   [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.NoMatchRule]: NoMatchRule,
+  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
   [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.BeginDialog]: BeginDialog,

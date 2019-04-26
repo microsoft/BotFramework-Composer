@@ -9,8 +9,7 @@ export const ObiTypes = {
   QnARecognizer: 'Microsoft.QnARecognizer',
 
   // rules
-  WelcomeRule: 'Microsoft.WelcomeRule',
-  NoMatchRule: 'Microsoft.NoMatchRule',
+  UnknownIntentRule: 'Microsoft.UnknownIntentRule',
   IntentRule: 'Microsoft.IntentRule',
   EventRule: 'Microsoft.EventRule',
 

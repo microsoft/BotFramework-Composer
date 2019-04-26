@@ -5,14 +5,14 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
 
-export class NoMatchRule extends React.Component {
+export class UnknownIntentRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
       <FormCard
         themeColor="#BAD80A"
-        header="NoMatchRule"
+        header="UnknownIntentRule"
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
@@ -26,5 +26,5 @@ export class NoMatchRule extends React.Component {
   }
 }
 
-NoMatchRule.propTypes = NodeProps;
-NoMatchRule.defaultProps = defaultNodeProps;
+UnknownIntentRule.propTypes = NodeProps;
+UnknownIntentRule.defaultProps = defaultNodeProps;

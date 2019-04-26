@@ -29,8 +29,7 @@ function transformRecognizerDialog(input) {
 
   for (const node of ruleNodes) {
     switch (node.json.$type) {
-      case ObiTypes.WelcomeRule:
-      case ObiTypes.NoMatchRule:
+      case ObiTypes.UnknownIntentRule:
       case ObiTypes.EventRule:
         eventNodes.push(node);
         break;

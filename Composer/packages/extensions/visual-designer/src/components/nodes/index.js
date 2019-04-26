@@ -1,5 +1,4 @@
-export { WelcomeRule } from './WelcomeRule';
-export { NoMatchRule } from './NoMatchRule';
+export { UnknownIntentRule } from './UnknownIntentRule';
 export { IntentRule } from './IntentRule';
 export { Recognizer } from './Recognizer';
 export { BeginDialog } from './BeginDialog';
