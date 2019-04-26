@@ -7,11 +7,12 @@ Bot project is the launcher project for the bots written in [OBI](https://github
 * Install .Netcore 2
 * Install nuget
 
+### Add Nuget Feed
+* option 1: use VisualStudio "Manage Nuget Packages" to add a new package feed: "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
+* option 2: nuget sources Add -Name "ComposableDialog" -Source "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
+
 ### Commands:
 
-* nuget sources Add -Name "ComposableDialog" -Source "https://fuselabs.pkgs.visualstudio.com/_packaging/ComposableDialog/nuget/v3/index.json". 
-* This packages are only avaiable for microsoft employees and we will publish them soon.
-* please contact luhan@microsoft.com for any authentation issue.
 * dotnet restore // for the package updates
 * dotnet build // build
 * dotnet run // start the bot
@@ -29,7 +30,6 @@ Bot project is the launcher project for the bots written in [OBI](https://github
       "path": "../../Bots/SampleBot3/bot3.botproj"
     }
 ```
-
 
 ## .botproj folder structure
 ```
