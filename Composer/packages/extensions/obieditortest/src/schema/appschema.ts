@@ -53,9 +53,7 @@ export const dialogGroups: DialogGroupsMap = {
     label: 'Conversational flow and dialog management',
     types: [
       'Microsoft.BeginDialog',
-      // There is a typo in the sdk
-      // 'Microsoft.CancelAllDialogs',
-      'Microsoft.CancelAllDialog',
+      'Microsoft.CancelAllDialogs',
       'Microsoft.EmitEvent',
       'Microsoft.EndDialog',
       'Microsoft.EndTurn',
@@ -407,7 +405,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
         },
       },
-      'Microsoft.CancelAllDialog': {
+      'Microsoft.CancelAllDialogs': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Cancel All Dialogs',
         description:
@@ -420,7 +418,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.CancelAllDialog',
+            const: 'Microsoft.CancelAllDialogs',
           },
           $copy: {
             title: '$copy',
@@ -1352,10 +1350,10 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.BeginDialog',
           },
           {
-            title: 'Microsoft.CancelAllDialog',
+            title: 'Microsoft.CancelAllDialogs',
             description:
               'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
-            $ref: '#/definitions/Microsoft.CancelAllDialog',
+            $ref: '#/definitions/Microsoft.CancelAllDialogs',
           },
           {
             title: 'Microsoft.ChoiceInput',
