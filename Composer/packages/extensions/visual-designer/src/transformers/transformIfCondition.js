@@ -12,7 +12,8 @@ export function transformIfCondtion(input, jsonpath) {
     }),
   };
 
-  const { ifTrue, ifFalse } = input;
+  const ifTrue = input.steps;
+  const ifFalse = input.elseSteps;
   if (Array.isArray(ifTrue) && ifTrue.length) {
     result.ifGroup = new IndexedNode(`${jsonpath}.ifTrue`, {
       $type: ObiTypes.StepGroup,
