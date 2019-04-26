@@ -1,7 +1,6 @@
-import path from 'path';
-
 import { merge, set } from 'lodash';
 
+import { Path } from '../../utility/path';
 import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
@@ -26,11 +25,9 @@ export class BotProject {
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
-    this.absolutePath = path.isAbsolute(this.ref.path)
-      ? this.ref.path
-      : path.resolve(this.ref.path).replace(/\\/g, '/');
-    this.dir = path.posix.dirname(this.absolutePath);
-    this.name = path.posix.basename(this.absolutePath);
+    this.absolutePath = Path.isAbsolute(this.ref.path) ? this.ref.path : Path.resolve(this.ref.path);
+    this.dir = Path.dirname(this.absolutePath);
+    this.name = Path.basename(this.absolutePath);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
@@ -71,7 +68,7 @@ export class BotProject {
   };
 
   public createDialogFromTemplate = async (name: string, types: string[]) => {
-    const absolutePath: string = path.posix.join(this.dir, `${name.trim()}.dialog`);
+    const absolutePath: string = Path.join(this.dir, `${name.trim()}.dialog`);
     const newDialog = merge({}, DIALOG_TEMPLATE);
 
     types.forEach((type: string, idx: number) => {
@@ -95,7 +92,7 @@ export class BotProject {
     }
     for (const index in prevFiles) {
       const file = prevFiles[index];
-      const absolutePath = path.posix.join(this.dir, file.relativePath);
+      const absolutePath = Path.join(this.dir, file.relativePath);
       const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
@@ -114,7 +111,7 @@ export class BotProject {
       name: name,
       content: content,
       path: absolutePath,
-      relativePath: path.relative(this.dir, absolutePath).replace(/\\/g, '/'),
+      relativePath: Path.relative(this.dir, absolutePath),
     });
     return fileContent;
   };
@@ -138,14 +135,14 @@ export class BotProject {
         name: this.name,
         content: botConfig,
         path: this.absolutePath,
-        relativePath: path.relative(this.dir, this.absolutePath).replace(/\\/g, '/'),
+        relativePath: Path.relative(this.dir, this.absolutePath),
       });
 
       for (const pattern of botConfig.files) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
 
         for (const filePath of paths.sort()) {
-          const realFilePath: string = path.posix.join(this.dir, filePath);
+          const realFilePath: string = Path.join(this.dir, filePath);
           // skip lg files for now
           if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
@@ -153,7 +150,7 @@ export class BotProject {
               name: filePath,
               content: content,
               path: realFilePath,
-              relativePath: path.relative(this.dir, realFilePath).replace(/\\/g, '/'),
+              relativePath: Path.relative(this.dir, realFilePath),
             });
           }
         }

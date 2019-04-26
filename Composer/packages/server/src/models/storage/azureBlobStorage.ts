@@ -81,7 +81,6 @@ export class AzureBlobStorage implements IFileStorage {
       const blobPath = names.slice(1).join('/');
       return new Promise((resolve, reject) => {
         // get files in this prefix.
-        console.log(blobPath);
         this.client.listBlobsSegmentedWithPrefix(
           container,
           names.length > 1 ? `${blobPath}/` : '',
@@ -184,7 +183,6 @@ export class AzureBlobStorage implements IFileStorage {
                 let temp = `/${element}/${data.entries[i].name}`;
                 temp = temp.replace(`${path}/`, '');
                 if (minimatch(temp, pattern)) {
-                  console.log(temp);
                   result.push(temp);
                 }
               }
