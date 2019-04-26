@@ -24,7 +24,8 @@ export class LocalDiskStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
-    return await readFile(path, 'utf-8');
+    const raw = await readFile(path, 'utf-8');
+    return raw.replace(/^\uFEFF/, ''); // UTF-8 BOM: https://github.com/nodejs/node-v0.x-archive/issues/1918
   }
 
   async readDir(path: string): Promise<string[]> {
