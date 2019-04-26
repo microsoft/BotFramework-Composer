@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { ObiEditor } from '../../src/editors/ObiEditor';
 
 import { JsonBlock } from './components/json-block';
-import * as ObiExamples from './samples';
+import { ObiExamples } from './samples';
 import './style.css';
 
 const sampleFileNames = Object.keys(ObiExamples);

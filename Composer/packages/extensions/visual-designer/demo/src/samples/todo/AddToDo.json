@@ -1,5 +1,5 @@
 {
-  "$schema": "../app.schema",
+  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "steps": [
     {
@@ -10,11 +10,22 @@
     {
       "$type": "Microsoft.IfCondition",
       "condition": "dialog.todo == null",
-      "ifTrue": [
+      "steps": [
         {
           "$type": "Microsoft.TextInput",
           "prompt": "OK, please enter the title of your todo.",
           "property": "dialog.todo"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.todos == null",
+      "steps": [
+        {
+          "$type": "Microsoft.InitProperty",
+          "property": "user.todos",
+          "type": "array"
         }
       ]
     },
@@ -39,7 +50,7 @@
       "intent": "CancelIntent",
       "steps": [
         {
-          "$type": "Microsoft.CancelDialog"
+          "$type": "Microsoft.CancelAllDialog"
         }
       ]
     }
