@@ -12,7 +12,7 @@ interface BaseSchema {
 }
 
 /* Union of components which implement the IDialog interface */
-interface MicrosoftIDialog extends BaseSchema {}
+type MicrosoftIDialog = MicrosoftIRecognizer | MicrosoftIRule;
 
 /* Union of components which implement the IActivityTemplate interface */
 type MicrosoftIActivityTemplate = string;
@@ -21,7 +21,7 @@ interface IBaseDialog extends BaseSchema {
   /** This is that will be passed in as InputProperty and also set as the OutputProperty */
   property?: string;
   /** This defines properties which be passed as arguments to this dialog */
-  inputProperties?: { [XPathEvaluator: string]: string };
+  inputProperties?: { [x: string]: string };
   /** This is the property which the EndDialog(result) will be set to when EndDialog() is called */
   outputProperty?: string;
 }
@@ -107,3 +107,49 @@ interface RegexRecognizer extends BaseSchema {
 }
 
 type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer;
+
+/**
+ * Rules
+ */
+
+declare enum DialogEvent {
+  beginDialog = 'beginDialog',
+  consultDialog = 'consultDialog',
+  cancelDialog = 'cancelDialog',
+  activityReceived = 'activityReceived',
+  recognizedIntent = 'recognizedIntent',
+  unknownIntent = 'unknownIntent',
+  stepsStarted = 'stepsStarted',
+  stepsSaved = 'stepsSaved',
+  stepsEnded = 'stepsEnded',
+  stepsResumed = 'stepsResumed',
+}
+
+interface RuleBase extends BaseSchema {
+  /** Optional constraint to which must be met for this rule to fire */
+  constraint: string;
+  /** Sequence of steps or dialogs to execute */
+  steps: MicrosoftIDialog[];
+}
+
+/** Defines a rule for an event which is triggered by some source */
+interface EventRule extends RuleBase {
+  /** Events to trigger this rule for */
+  events: DialogEvent[];
+}
+
+/** This defines the steps to take when an Intent is recognized (and optionally entities) */
+interface IntentRule extends RuleBase {
+  /** Intent name to trigger on */
+  intent: string;
+  /** The entities required to trigger this rule */
+  entities: string[];
+}
+
+/** Defines a rule for an event which is triggered by some source */
+interface Rule extends RuleBase {}
+
+/** Defines a sequence of steps to take if there is no other trigger or plan operating */
+interface UnknownIntentRule extends RuleBase {}
+
+type MicrosoftIRule = EventRule | IntentRule | Rule | UnknownIntentRule;
