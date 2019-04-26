@@ -2,9 +2,9 @@
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
-import startCase from 'lodash.startcase';
 
 import { folderItem } from './styles';
+import { upperCaseName } from './../../utils/fileUtil';
 
 export const Folder = props => {
   const { activeNode, folder, onFolderClick, onFolderRightClick } = props;
@@ -12,7 +12,7 @@ export const Folder = props => {
   return (
     <div css={folderItem(activeNode === folder.id)}>
       <span onClick={() => onFolderClick(folder)} onContextMenu={onFolderRightClick}>
-        {formatMessage(startCase(folder.name).replace(/\s/g, ''))}
+        {formatMessage(upperCaseName(folder.name))}
       </span>
     </div>
   );

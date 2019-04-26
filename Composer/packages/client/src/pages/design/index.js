@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import startCase from 'lodash.startcase';
 import findindex from 'lodash.findindex';
 import formatMessage from 'format-message';
 
@@ -12,6 +11,7 @@ import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
 import NewDialogModal from './NewDialogModal';
+import { upperCaseName } from './../../utils/fileUtil';
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
@@ -34,12 +34,12 @@ function DesignPage() {
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
-      const text = pathList[1] === '' ? item : getDialogData(dialogsMap, `${item}#$type`);
+      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}#$type`);
 
       return {
         key: index,
         path: item,
-        text: formatMessage(startCase(text).replace(/\s/g, '')),
+        text: formatMessage(upperCaseName(text)),
         onClick: (_event, { path, key }) => {
           clearNavHistory(key);
           navTo(path);
