@@ -5,5 +5,5 @@
        "*.dialog",
        "*.lg"
     ],
-    "entry": "CalendarBot.main.dialog"
+    "entry": "SwitchCondition.main.dialog"
 }
