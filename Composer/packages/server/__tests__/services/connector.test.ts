@@ -3,7 +3,9 @@ import { BotStatus } from '../../src/models/connector/interface';
 
 const mockKill = jest.fn(() => null);
 const mockOn = jest.fn(() => null);
-const mockSpawnSync = jest.fn(() => null);
+const mockSpawnSync = jest.fn(() => ({
+  status: 0,
+}));
 const mockSpawn = jest.fn(() => ({
   kill: mockKill,
   on: mockOn,
