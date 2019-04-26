@@ -37,12 +37,14 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
+  const accumulatedPatches = {};
 
   const patchBoundary = (id, boundary) => {
     if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
+      accumulatedPatches[id] = boundary;
       setBoundaryMap({
         ...boundaryMap,
-        [id]: boundary,
+        ...accumulatedPatches,
       });
     }
   };

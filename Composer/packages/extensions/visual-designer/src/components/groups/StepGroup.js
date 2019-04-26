@@ -28,12 +28,14 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
+  const accumulatedPatches = {};
 
   const patchBoundary = (id, boundary) => {
     if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
+      accumulatedPatches[id] = boundary;
       setBoundaryMap({
         ...boundaryMap,
-        [id]: boundary,
+        ...accumulatedPatches,
       });
     }
   };
