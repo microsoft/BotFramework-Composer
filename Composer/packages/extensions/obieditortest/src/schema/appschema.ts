@@ -68,7 +68,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: ['Microsoft.CodeStep', 'Microsoft.HttpRequest'],
+    types: [/* 'Microsoft.CodeStep', */ 'Microsoft.HttpRequest'],
   },
   [DialogGroup.LOG]: {
     label: 'Tracing and logging',
