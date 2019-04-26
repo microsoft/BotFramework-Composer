@@ -2,10 +2,6 @@ import get from 'lodash.get';
 import set from 'lodash.set';
 import cloneDeep from 'lodash.clonedeep';
 
-export function getRootDialogName(dialogsMap, path) {
-  return Object.keys(dialogsMap).find(d => path.startsWith(d));
-}
-
 export function getDialogData(dialogsMap, path) {
   if (path === '') return '';
   const pathList = path.split('#');
