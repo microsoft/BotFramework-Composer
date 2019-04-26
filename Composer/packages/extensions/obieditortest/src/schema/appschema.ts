@@ -4,34 +4,47 @@ import { DialogInfo } from '../types';
 
 export const dialogGroups = {
   'Input/Prompt Dialogs': [
+    'Microsoft.ChoiceInput',
     'Microsoft.ConfirmInput',
     'Microsoft.FloatInput',
     'Microsoft.IntegerInput',
+    'Microsoft.NumberInput',
     'Microsoft.TextInput',
   ],
   'Dialog Steps': [
     'Microsoft.BeginDialog',
-    'Microsoft.CancelDialog',
+    // There is a typo in the sdk
+    // 'Microsoft.CancelAllDialogs',
+    'Microsoft.CancelAllDialog',
+    'Microsoft.EmitEvent',
     'Microsoft.EndDialog',
     'Microsoft.EndTurn',
     'Microsoft.HttpRequest',
     'Microsoft.IfCondition',
-    'Microsoft.ReplaceWithDialog',
+    'Microsoft.LogStep',
+    'Microsoft.RepeatDialog',
+    'Microsoft.ReplaceDialog',
     'Microsoft.SendActivity',
-    'Microsoft.SendList',
     'Microsoft.SwitchCondition',
+    'Microsoft.TraceActivity',
   ],
-  Memory: ['Microsoft.DeleteProperty', 'Microsoft.EditArray', 'Microsoft.SaveEntity'],
-  Rules: [
-    'Microsoft.EventRule',
-    'Microsoft.IfPropertyRule',
-    'Microsoft.IntentRule',
-    'Microsoft.NoMatchRule',
-    'Microsoft.Rule',
-    'Microsoft.WelcomeRule',
+  Memory: [
+    'Microsoft.DeleteProperty',
+    'Microsoft.EditArray',
+    'Microsoft.InitProperty',
+    'Microsoft.SaveEntity',
+    'Microsoft.SetProperty',
   ],
-  Recognizers: [/* 'Microsoft.LuisRecognizer' */ 'Microsoft.MultiLanguageRecognizers', 'Microsoft.RegexRecognizer'],
-  Other: ['Microsoft.AdaptiveDialog'],
+  Rules: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.Rule', 'Microsoft.UnknownIntentRule'],
+  Recognizers: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
+  Selectors: [
+    'Microsoft.ConditionalSelector',
+    'Microsoft.FirstSelector',
+    'Microsoft.MostSpecificSelector',
+    'Microsoft.RandomSelector',
+    'Microsoft.TrueSelector',
+  ],
+  Other: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
 };
 
 export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
@@ -126,12 +139,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
         $ref: '#/definitions/Microsoft.IntentRule',
       },
-      {
-        title: 'Microsoft.MultiLanguageRecognizers',
-        description:
-          'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-        $ref: '#/definitions/Microsoft.MultiLanguageRecognizers',
-      },
+      // {
+      //   title: 'Microsoft.MultiLanguageRecognizers',
+      //   description:
+      //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+      //   $ref: '#/definitions/Microsoft.MultiLanguageRecognizers',
+      // },
       {
         title: 'Microsoft.NoMatchRule',
         description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
@@ -189,7 +202,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         title: 'Adaptive Dialog',
         description: 'Configures a data driven dialog via a collection of steps/dialogs.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -211,14 +223,22 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Property',
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
+            title: 'Input Properties',
             description: 'This defines properties which be passed as arguments to this dialog',
             examples: ['value.birthday'],
             additionalProperties: {
@@ -226,13 +246,32 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
           outputProperty: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Output Property',
             description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
             examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          autoEndDialog: {
+            type: 'boolean',
+            title: 'Auto End Dialog',
+            description:
+              'IF this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
           },
           recognizer: {
             $type: 'Microsoft.IRecognizer',
+            type: 'object',
+            title: 'Recognizer',
+            description: 'Configured recognizer to generate intent and entites from user utterance',
             $ref: '#/definitions/Microsoft.IRecognizer',
+          },
+          selector: {
+            $type: 'Microsoft.IRuleSelector',
+            type: 'object',
+            title: 'Selector',
+            description: 'Policy for how to select rule to execute next',
+            $ref: '#/definitions/Microsoft.IRuleSelector',
           },
           steps: {
             type: 'array',
@@ -251,29 +290,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.BeginDialog': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Begin Dialog',
         description: 'Step which begins another dialog (and when that dialog is done, it will return the caller).',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -295,14 +323,17 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           dialog: {
             $type: 'Microsoft.IDialog',
             title: 'Dialog',
             description: 'This is the dialog to call.',
-            type: 'string',
             ...dialogEnum,
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           options: {
             type: 'object',
             title: 'Options',
@@ -310,35 +341,27 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             additionalProperties: true,
           },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'Property',
             description: 'The property to bind to the dialog and store the result in',
             examples: ['user.name'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
-      'Microsoft.CancelDialog': {
+      'Microsoft.CancelAllDialog': {
         $role: 'unionType(Microsoft.IDialog)',
-        title: 'Cancel Dialog',
-        description: 'Command to cancel the current dialog, trigging a cancelation event',
+        title: 'Cancel All Dialogs',
+        description:
+          'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -346,7 +369,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.CancelDialog',
+            const: 'Microsoft.CancelAllDialog',
           },
           $copy: {
             title: '$copy',
@@ -360,30 +383,238 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          eventName: {
+            type: 'string',
+            title: 'Event Name',
+            description: 'Name of the event which is emitted',
+          },
+          eventValue: {
+            type: 'object',
+            title: 'Event Value',
+            description:
+              'object value which is a payload to communicate to the parent dialogs so that they can decide how to process it',
+            additionalProperties: true,
+          },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
+      },
+      'Microsoft.ChoiceInput': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'ChoiceInput Dialog',
+        description: 'This represents a dialog which gathers a choice responses',
+        type: 'object',
+        definitions: {
+          choice: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'the value to return when selected.',
+              },
+              action: {
+                title: 'Action',
+                description: 'Card action for the choice',
+                type: 'object',
+              },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                items: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+          CardAction: {
+            type: 'object',
+          },
+        },
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.ChoiceInput',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          prompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Initial Prompt',
+            description: 'The message to send to as prompt for this input.',
+            examples: ['Are you sure?'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          retryPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Retry Prompt',
+            description: 'The message to send to prompt again.',
+            examples: ["Let's try again."],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          invalidPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Invalid Prompt',
+            description: 'The message to send to when then input was not recognized or not valid for the input type.',
+            examples: ["I didn't recognize a yes/no response"],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          style: {
+            type: 'string',
+            enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
+            title: 'List Style',
+            description: 'The kind of choice list style to generate',
+          },
+          choicesProperty: {
+            type: 'string',
+            title: 'Choices Property',
+            decription: 'unknown ??? ',
+          },
+          choices: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                value: {
+                  type: 'string',
+                  title: 'Value',
+                  description: 'the value to return when selected.',
+                },
+                action: {
+                  title: 'Action',
+                  description: 'Card action for the choice',
+                  type: 'object',
+                },
+                synonyms: {
+                  type: 'array',
+                  title: 'Synonyms',
+                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                  items: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.ConditionalSelector': {
+        $role: 'unionType(Microsoft.IRuleSelector)',
+        title: 'Condtional Rule Selector',
+        description: 'Use a rule selector based on a condition',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.ConditionalSelector',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          condition: {
+            $role: 'expression',
+            type: 'string',
+            description: 'String must contain an expression.',
+          },
+          ifTrue: {
+            $type: 'Microsoft.IRuleSelector',
+            $ref: '#/definitions/Microsoft.IRuleSelector',
+          },
+          ifFalse: {
+            $type: 'Microsoft.IRuleSelector',
+            $ref: '#/definitions/Microsoft.IRuleSelector',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
       },
       'Microsoft.ConfirmInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'ConfirmInput Dialog',
         description: 'This represents a dialog which gathers a yes/no style responses',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -405,25 +636,35 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          property: {
-            type: 'string',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['user.confirmed'],
-          },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
-          inputProperties: {
-            title: 'Input Properties',
+          $designer: {
+            title: '$designer',
             type: 'object',
-            description: 'This defines properties which will be passed as arguments to this dialog',
-            examples: ['user.confirmed'],
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
             additionalProperties: {
               type: 'string',
             },
           },
           outputProperty: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Output Property',
             description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['user.confirmed'],
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
@@ -447,29 +688,57 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.IActivityTemplate',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
+      // 'Microsoft.DebugBreak': {
+      //   $role: 'unionType(Microsoft.IDialog)',
+      //   title: 'Debugger Break Step',
+      //   description: 'If debugger is attached, do a debugger break at this point',
+      //   type: 'object',
+      //   properties: {
+      //     $type: {
+      //       title: '$type',
+      //       description:
+      //         'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+      //       type: 'string',
+      //       pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+      //       const: 'Microsoft.DebugBreak',
+      //     },
+      //     $copy: {
+      //       title: '$copy',
+      //       description: 'Copy the definition by id from a .dialog file.',
+      //       type: 'string',
+      //       pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+      //     },
+      //     $id: {
+      //       title: '$id',
+      //       description: 'Inline id for reuse of an inline definition',
+      //       type: 'string',
+      //       pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+      //     },
+      //     $designer: {
+      //       title: '$designer',
+      //       type: 'object',
+      //       description: 'Extra information for the Bot Framework Designer.',
+      //     },
+      //   },
+      //   additionalProperties: false,
+      //   patternProperties: {
+      //     '^\\$': {
+      //       type: 'string',
+      //     },
+      //   },
+      // },
       'Microsoft.DeleteProperty': {
         $role: 'unionType(Microsoft.IDialog)',
-        title: 'Delete Property',
+        title: 'Delete PropertyS',
         description: 'This is a step which allows you to remove a property from memory',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -491,35 +760,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'Property',
             description: 'The Memory property path to delete',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['property', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.EditArray': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Edit Array Step',
         description: 'This is a step which allows you to modify an array in memory',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -541,6 +806,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           changeType: {
             type: 'string',
             title: 'Change Type',
@@ -548,39 +818,97 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             enum: ['Push', 'Pop', 'Take', 'Remove', 'Clear'],
           },
           arrayProperty: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'Array Property',
             description: 'Memory expression of the array to manipulate.',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           itemProperty: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'List Property',
             description: 'Memory expression for the item',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['changeType', 'listProperty', '$type'],
-        //   },
-        // ],
+      },
+      'Microsoft.EmitEvent': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'Emit Event Step',
+        description: 'This is a step which allows you to emit an event',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.EmitEvent',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          eventName: {
+            type: 'string',
+            title: 'Event Name',
+            description: 'The name of event to emit',
+            enum: [
+              'BeginDialog',
+              'ConsultDialog',
+              'ActivityReceived',
+              'UtteranceRecognized',
+              'Fallback',
+              'PlanStarted',
+              'PlanSaved',
+              'PlanEnded',
+              'PlanResumed',
+            ],
+          },
+          eventValue: {
+            type: 'object',
+            title: 'Event Value',
+            description: 'optional value to emit along with the event',
+          },
+          bubbleEvent: {
+            type: 'boolean',
+            title: 'Bubble Event',
+            description: 'if true this event should propagate to parent dialogs',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
       },
       'Microsoft.EndDialog': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'End Dialog',
         description: 'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -602,36 +930,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           property: {
-            title: 'Property',
+            $role: 'memoryPath',
             description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
             examples: ['dialog.name'],
             type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.EndTurn': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'End Turn',
         description: 'End the current turn without ending the dialog.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -653,29 +976,24 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.EventRule': {
         title: 'Event Rule',
-        description: 'Defines a rule for an event which is triggered by some sourcy',
+        description: 'Defines a rule for an event which is triggered by some source',
         type: 'object',
-        additionalProperties: false,
+        $role: 'unionType(Microsoft.IRule)',
         properties: {
           $type: {
             title: '$type',
@@ -697,18 +1015,17 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          events: {
-            type: 'array',
-            description: 'Events to trigger this rule for',
-            items: {
-              type: 'string',
-            },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          expression: {
-            type: 'string',
+          constraint: {
+            $role: 'expression',
             title: 'Constraint',
             description: 'Optional constraint to which must be met for this rule to fire',
             examples: ['user.vip == true'],
+            type: 'string',
           },
           steps: {
             type: 'array',
@@ -718,31 +1035,77 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               $ref: '#/definitions/Microsoft.IDialog',
             },
           },
+          events: {
+            type: 'array',
+            description: 'Events to trigger this rule for',
+            items: {
+              type: 'string',
+              enum: [
+                'beginDialog',
+                'consultDialog',
+                'cancelDialog',
+                'activityReceived',
+                'recognizedIntent',
+                'unknownIntent',
+                'stepsStarted',
+                'stepsSaved',
+                'stepsEnded',
+                'stepsResumed',
+              ],
+            },
+          },
         },
-        $role: 'unionType(Microsoft.IRule)',
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['events', 'steps', '$type'],
-        //   },
-        // ],
+      },
+      'Microsoft.FirstSelector': {
+        $role: 'unionType(Microsoft.IRuleSelector)',
+        title: 'First Rule Selector',
+        description: 'Selector for first true rule',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.FirstSelector',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
       },
       'Microsoft.FloatInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Float  prompt',
         description: 'This represents a dialog which gathers a number in a specified range',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -764,24 +1127,35 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          property: {
-            type: 'string',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['user.height'],
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
           inputProperties: {
             type: 'object',
+            title: 'Input Properties',
             description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['user.height'],
+            examples: ['value.birthday'],
             additionalProperties: {
               type: 'string',
             },
           },
           outputProperty: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Output Property',
             description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['user.height'],
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
@@ -808,38 +1182,27 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'number',
             title: 'Mininum value',
             description: 'The minimum value that is acceptable.  ',
-            examples: ['0'],
+            examples: ['0.5'],
           },
           maxValue: {
             type: 'number',
             title: 'Maximum value',
             description: 'The maximum value that is acceptable.  ',
-            examples: ['120'],
+            examples: ['12.5'],
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.HttpRequest': {
         $role: 'unionType(Microsoft.IDialog)',
         type: 'object',
-        title: 'HTTP Request',
-        description: 'This is a step which makes an http request and stores the result in memory.',
-        additionalProperties: false,
+        title: 'Http Request',
+        description: 'This is a step which replaces the current dialog with the target dialog',
         properties: {
           $type: {
             title: '$type',
@@ -861,6 +1224,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           method: {
             type: 'string',
             title: 'Method',
@@ -874,7 +1242,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'The url to call (supports data binding)',
             examples: ['https://contoso.com'],
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           body: {
             type: 'object',
             title: 'Body',
@@ -882,55 +1249,46 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             additionalProperties: true,
           },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'Property',
             description: 'The property to store the result of the HTTP call in (as object or string)',
             examples: ['dialog.contosodata'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           header: {
             type: 'object',
-            additionalProperties: true,
+            additionProperties: true,
             title: 'Http headers',
             description: 'Http headers to include with the HTTP request (supports data binding)',
           },
+          responseTypes: {
+            type: 'string',
+            title: 'Response Types',
+            description:
+              'Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.',
+            enum: ['none', 'json', 'activity', 'activities'],
+          },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['url', 'entity', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.IActivityTemplate': {
         title: 'Microsoft ActivityTemplate',
-        description: 'Union of components which implement the IActivityTemplate interface',
+        // description: 'Union of components which implement the IActivityTemplate interface',
         $role: 'unionType',
         type: 'string',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-        // oneOf: [
-        //   {
-        //     type: 'string',
-        //     title: 'string',
-        //   },
-        // ],
+        description: 'String is used for language generation.',
       },
       'Microsoft.IDialog': {
         title: 'Microsoft IDialog',
         description: 'Union of components which implement the IDialog interface',
         $role: 'unionType',
         type: 'object',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
             title: 'Microsoft.AdaptiveDialog',
@@ -943,15 +1301,26 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.BeginDialog',
           },
           {
-            title: 'Microsoft.CancelDialog',
-            description: 'Command to cancel the current dialog, trigging a cancelation event',
-            $ref: '#/definitions/Microsoft.CancelDialog',
+            title: 'Microsoft.CancelAllDialog',
+            description:
+              'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
+            $ref: '#/definitions/Microsoft.CancelAllDialog',
+          },
+          {
+            title: 'Microsoft.ChoiceInput',
+            description: 'This represents a dialog which gathers a choice responses',
+            $ref: '#/definitions/Microsoft.ChoiceInput',
           },
           {
             title: 'Microsoft.ConfirmInput',
             description: 'This represents a dialog which gathers a yes/no style responses',
             $ref: '#/definitions/Microsoft.ConfirmInput',
           },
+          // {
+          //   title: 'Microsoft.DebugBreak',
+          //   description: 'If debugger is attached, do a debugger break at this point',
+          //   $ref: '#/definitions/Microsoft.DebugBreak',
+          // },
           {
             title: 'Microsoft.DeleteProperty',
             description: 'This is a step which allows you to remove a property from memory',
@@ -961,6 +1330,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             title: 'Microsoft.EditArray',
             description: 'This is a step which allows you to modify an array in memory',
             $ref: '#/definitions/Microsoft.EditArray',
+          },
+          {
+            title: 'Microsoft.EmitEvent',
+            description: 'This is a step which allows you to emit an event',
+            $ref: '#/definitions/Microsoft.EmitEvent',
           },
           {
             title: 'Microsoft.EndDialog',
@@ -989,14 +1363,40 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.IfCondition',
           },
           {
+            title: 'Microsoft.InitProperty',
+            description: 'This step allows you to initialize a property to either an object or array',
+            $ref: '#/definitions/Microsoft.InitProperty',
+          },
+          {
             title: 'Microsoft.IntegerInput',
             description: 'This represents a dialog which gathers a number in a specified range',
             $ref: '#/definitions/Microsoft.IntegerInput',
           },
           {
-            title: 'Microsoft.ReplaceWithDialog',
+            title: 'Microsoft.LogStep',
+            description:
+              'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
+            $ref: '#/definitions/Microsoft.LogStep',
+          },
+          {
+            title: 'Microsoft.NumberInput',
+            description: 'This represents a dialog which gathers a decimal number in a specified range',
+            $ref: '#/definitions/Microsoft.NumberInput',
+          },
+          {
+            title: 'Microsoft.QnAMakerDialog',
+            description: 'This represents a dialog which is driven by a call to QnAMaker.ai knowledge base',
+            $ref: '#/definitions/Microsoft.QnAMakerDialog',
+          },
+          {
+            title: 'Microsoft.RepeatDialog',
+            description: 'This is a step which repeats the current dialog with the same dialog.',
+            $ref: '#/definitions/Microsoft.RepeatDialog',
+          },
+          {
+            title: 'Microsoft.ReplaceDialog',
             description: 'This is a step which replaces the current dialog with the target dialog',
-            $ref: '#/definitions/Microsoft.ReplaceWithDialog',
+            $ref: '#/definitions/Microsoft.ReplaceDialog',
           },
           {
             title: 'Microsoft.SaveEntity',
@@ -1009,9 +1409,9 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.SendActivity',
           },
           {
-            title: 'Microsoft.SendList',
-            description: 'TEMPORARY, THIS SHOULD BE REPLACED WITH LG TEMPLATE',
-            $ref: '#/definitions/Microsoft.SendList',
+            title: 'Microsoft.SetProperty',
+            description: 'This step allows you to set memory to the value of an expression',
+            $ref: '#/definitions/Microsoft.SetProperty',
           },
           {
             title: 'Microsoft.SwitchCondition',
@@ -1024,50 +1424,49 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.TextInput',
           },
           {
+            title: 'Microsoft.TraceActivity',
+            description: 'This is a step which sends an TraceActivity to the transcript',
+            $ref: '#/definitions/Microsoft.TraceActivity',
+          },
+          {
             type: 'string',
             title: 'string',
           },
         ],
       },
-      'Microsoft.IExpression': {
-        title: 'Microsoft IExpression',
-        description: 'Union of components which implement the IExpression interface',
-        $role: 'unionType',
-        type: 'string',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-        // oneOf: [
-        //   {
-        //     type: 'string',
-        //     title: 'string',
-        //   },
-        // ],
-      },
       'Microsoft.ILanguagePolicy': {
         title: 'Microsoft Language Policy',
         description: 'Union of components which implement the ILanguagePolicy interface',
         $role: 'unionType',
-        type: 'string',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-        // oneOf: [
-        //   {
-        //     type: 'string',
-        //     title: 'string',
-        //   },
-        // ],
+        oneOf: [
+          {
+            title: 'Microsoft.LanguagePolicy',
+            description: 'This represents a dialog which gathers a DateTime in a specified range',
+            $ref: '#/definitions/Microsoft.LanguagePolicy',
+          },
+          {
+            type: 'string',
+            // TODO -- what is a better title for this?
+            title: 'string',
+          },
+        ],
       },
       'Microsoft.IRecognizer': {
         title: 'Microsoft IRecognizer',
         description: 'Union of components which implement the IRecognizer interface',
         $role: 'unionType',
-        type: 'object',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
-            title: 'Microsoft.MultiLanguageRecognizers',
-            description:
-              'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-            $ref: '#/definitions/Microsoft.MultiLanguageRecognizers',
+            title: 'Microsoft.LuisRecognizer',
+            description: 'LUIS recognizer.',
+            $ref: '#/definitions/Microsoft.LuisRecognizer',
           },
+          // {
+          //   title: 'Microsoft.MultiLanguageRecognizer',
+          //   description:
+          //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+          //   $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
+          // },
           {
             title: 'Microsoft.RegexRecognizer',
             description: 'Recognizer which uses regex expressions to generate intents and entities.',
@@ -1079,18 +1478,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         title: 'Microsoft IRule',
         description: 'Union of components which implement the IRule interface',
         $role: 'unionType',
-        type: 'object',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         oneOf: [
           {
             title: 'Microsoft.EventRule',
-            description: 'Defines a rule for an event which is triggered by some sourcy',
+            description: 'Defines a rule for an event which is triggered by some source',
             $ref: '#/definitions/Microsoft.EventRule',
-          },
-          {
-            title: 'Microsoft.IfPropertyRule',
-            description: '',
-            $ref: '#/definitions/Microsoft.IfPropertyRule',
           },
           {
             title: 'Microsoft.IntentRule',
@@ -1098,19 +1490,47 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.IntentRule',
           },
           {
-            title: 'Microsoft.NoMatchRule',
-            description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
-            $ref: '#/definitions/Microsoft.NoMatchRule',
-          },
-          {
             title: 'Microsoft.Rule',
-            description: 'Defines a rule for an event which is triggered by some sourcy',
+            description: 'Defines a rule for an event which is triggered by some source',
             $ref: '#/definitions/Microsoft.Rule',
           },
           {
-            title: 'Microsoft.WelcomeRule',
-            description: 'Defines a sequence of steps to take if the user is a new user',
-            $ref: '#/definitions/Microsoft.WelcomeRule',
+            title: 'Microsoft.UnknownIntentRule',
+            description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
+            $ref: '#/definitions/Microsoft.UnknownIntentRule',
+          },
+        ],
+      },
+      'Microsoft.IRuleSelector': {
+        title: 'Microsoft IRuleSelector',
+        description: 'Union of components which implement the IRuleSelector interface',
+        $role: 'unionType',
+        type: 'object',
+        oneOf: [
+          {
+            title: 'Microsoft.ConditionalSelector',
+            description: 'Use a rule selector based on a condition',
+            $ref: '#/definitions/Microsoft.ConditionalSelector',
+          },
+          {
+            title: 'Microsoft.FirstSelector',
+            description: 'Selector for first true rule',
+            $ref: '#/definitions/Microsoft.FirstSelector',
+          },
+          {
+            title: 'Microsoft.MostSpecificSelector',
+            description: 'Select most specific true rules with optional additional selector',
+            $ref: '#/definitions/Microsoft.MostSpecificSelector',
+          },
+          {
+            title: 'Microsoft.RandomSelector',
+            description: 'Select most specific true rule',
+            $ref: '#/definitions/Microsoft.RandomSelector',
+          },
+          {
+            title: 'Microsoft.TrueSelector',
+            description: 'Selector for all true rules',
+            $ref: '#/definitions/Microsoft.TrueSelector',
           },
         ],
       },
@@ -1118,21 +1538,13 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         title: 'Microsoft TextTemplate',
         description: 'Union of components which implement the ITextTemplate interface',
         $role: 'unionType',
-        // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
         type: 'string',
-        // oneOf: [
-        //   {
-        //     type: 'string',
-        //     title: 'string',
-        //   },
-        // ],
       },
       'Microsoft.IfCondition': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'If Condition Step',
         description: 'Step which conditionally decides which step to execute next.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1154,57 +1566,49 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           condition: {
-            $type: 'Microsoft.IExpression',
+            $role: 'expression',
             title: 'Condition',
             description: 'Expression to evaluate.',
             examples: ['user.age > 3'],
-            $ref: '#/definitions/Microsoft.IExpression',
+            type: 'string',
           },
-          ifTrue: {
+          steps: {
             type: 'array',
+            title: 'Steps',
+            description: 'Step to execute if condition is true.',
             items: {
               $type: 'Microsoft.IDialog',
               $ref: '#/definitions/Microsoft.IDialog',
-              type: 'object',
             },
-            title: 'If True',
-            description: 'Steps to execute if expression is true.',
           },
-          ifFalse: {
+          elseSteps: {
             type: 'array',
+            title: 'Else Steps',
+            description: 'Step to execute if condition is false.',
             items: {
               $type: 'Microsoft.IDialog',
               $ref: '#/definitions/Microsoft.IDialog',
-              type: 'object',
             },
-            title: 'If False',
-            description: 'Steps to execute if expression is false.',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['expression', 'ifTrue', '$type'],
-        //   },
-        // ],
       },
-      'Microsoft.IfPropertyRule': {
-        $role: 'unionType(Microsoft.IRule)',
-        title: '',
-        description: '',
+      'Microsoft.InitProperty': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'Init Property Step',
+        description: 'This step allows you to initialize a property to either an object or array',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1212,7 +1616,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.IfPropertyRule',
+            const: 'Microsoft.InitProperty',
           },
           $copy: {
             title: '$copy',
@@ -1226,56 +1630,38 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          conditionals: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                expression: {
-                  $type: 'Microsoft.IExpression',
-                  $ref: '#/definitions/Microsoft.IExpression',
-                },
-                rules: {
-                  type: 'array',
-                  items: {
-                    $type: 'Microsoft.IRule',
-                    $ref: '#/definitions/Microsoft.IRule',
-                  },
-                },
-              },
-            },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          else: {
-            type: 'array',
-            items: {
-              $type: 'Microsoft.IRule',
-              $ref: '#/definitions/Microsoft.IRule',
-            },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'The property to set the value of',
+            examples: ['user.age'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          type: {
+            type: 'string',
+            title: 'Type',
+            description: 'Type of value to set the property to, object or array.',
+            enum: ['object', 'array'],
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: [
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['conditionals', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.IntegerInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Integer prompt',
         description: 'This represents a dialog which gathers a number in a specified range',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1297,14 +1683,22 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Property',
             description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
             examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
           inputProperties: {
             type: 'object',
+            title: 'Input Properties',
             description: 'This defines properties which be passed as arguments to this dialog',
             examples: ['value.birthday'],
             additionalProperties: {
@@ -1312,9 +1706,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
           outputProperty: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Output Property',
             description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
             examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
@@ -1350,29 +1747,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             examples: ['120'],
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.IntentRule': {
         $role: 'unionType(Microsoft.IRule)',
         title: 'Intent Rule',
         description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1394,6 +1780,26 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          constraint: {
+            $role: 'expression',
+            title: 'Constraint',
+            description: 'Optional constraint to which must be met for this rule to fire',
+            examples: ['user.vip == true'],
+            type: 'string',
+          },
+          steps: {
+            type: 'array',
+            description: 'Sequence of steps or dialogs to execute',
+            items: {
+              $type: 'Microsoft.IDialog',
+              $ref: '#/definitions/Microsoft.IDialog',
+            },
+          },
           intent: {
             type: 'string',
             title: 'Intent',
@@ -1407,51 +1813,20 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               type: 'string',
             },
           },
-          events: {
-            type: 'array',
-            description: 'Events to trigger this rule for',
-            items: {
-              type: 'string',
-            },
-          },
-          expression: {
-            type: 'string',
-            title: 'Constraint',
-            description: 'Optional constraint to which must be met for this rule to fire',
-            examples: ['user.vip == true'],
-          },
-          steps: {
-            type: 'array',
-            description: 'Sequence of steps or dialogs to execute',
-            items: {
-              $type: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
-            },
-          },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['intent', 'steps', '$type'],
-        //   },
-        // ],
       },
-      'Microsoft.MultiLanguageRecognizers': {
-        $role: 'unionType(Microsoft.IRecognizer)',
-        title: 'Multi Language Recognizer',
-        description:
-          'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+      'Microsoft.LanguagePolicy': {
+        $role: 'unionType(Microsoft.ILanguagePolicy)',
+        title: 'Language Policy',
+        description: 'This represents a dialog which gathers a DateTime in a specified range',
         type: 'object',
+        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1459,7 +1834,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.MultiLanguageRecognizers',
+            const: 'Microsoft.LanguagePolicy',
           },
           $copy: {
             title: '$copy',
@@ -1473,48 +1848,24 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          languagePolicy: {
-            $type: 'Microsoft.ILanguagePolicy',
-            // TODO - not sure if this is incorrect. ILangaugePolicy defines its own type
-            // type: 'object',
-            title: 'Language Policy',
-            description: 'Defines languages to try per language.',
-            $ref: '#/definitions/Microsoft.ILanguagePolicy',
-          },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
-          recognizers: {
+          $designer: {
+            title: '$designer',
             type: 'object',
-            title: 'Recognizers',
-            description: 'Map of language -> IRecognizer',
-            additionalProperties: {
-              $type: 'Microsoft.IRecognizer',
-              $ref: '#/definitions/Microsoft.IRecognizer',
-            },
+            description: 'Extra information for the Bot Framework Designer.',
           },
         },
-        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['recognizers', '$type'],
-        //   },
-        // ],
       },
-      'Microsoft.NoMatchRule': {
-        title: 'No Match Rule',
-        description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
+      'Microsoft.LogStep': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'Log Step',
+        description:
+          'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1522,7 +1873,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.NoMatchRule',
+            const: 'Microsoft.LogStep',
           },
           $copy: {
             title: '$copy',
@@ -1536,45 +1887,389 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          events: {
-            type: 'array',
-            description: 'Events to trigger this rule for',
-            items: {
-              type: 'string',
-            },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          expression: {
+          text: {
             type: 'string',
-            title: 'Constraint',
-            description: 'Optional constraint to which must be met for this rule to fire',
-            examples: ['user.vip == true'],
+            title: 'Text',
+            description: 'LG Expression to write to the log',
           },
-          steps: {
-            type: 'array',
-            description: 'Sequence of steps or dialogs to execute',
-            items: {
-              $type: 'Microsoft.IDialog',
-              $ref: '#/definitions/Microsoft.IDialog',
-            },
+          traceActivity: {
+            type: 'boolean',
+            title: 'Send Trace Activity',
+            description: 'Set to true to also create a TraceActivity with the log text',
           },
         },
-        $role: 'unionType(Microsoft.IRule)',
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['steps', '$type'],
-        //   },
-        // ],
+      },
+      'Microsoft.LuisRecognizer': {
+        $role: 'unionType(Microsoft.IRecognizer)',
+        title: 'LUIS Recognizer',
+        description: 'LUIS recognizer.',
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.LuisRecognizer',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          applicationId: {
+            type: 'string',
+          },
+          endpoint: {
+            type: 'string',
+          },
+          endpointKey: {
+            type: 'string',
+          },
+        },
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.MostSpecificSelector': {
+        $role: 'unionType(Microsoft.IRuleSelector)',
+        title: 'Most Specific Rule Selector',
+        description: 'Select most specific true rules with optional additional selector',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.MostSpecificSelector',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          selector: {
+            $type: 'Microsoft.IRuleSelector',
+            $ref: '#/definitions/Microsoft.IRuleSelector',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      // 'Microsoft.MultiLanguageRecognizer': {
+      //   $role: 'unionType(Microsoft.IRecognizer)',
+      //   title: 'Multi Language Recognizer',
+      //   description:
+      //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
+      //   type: 'object',
+      //   properties: {
+      //     $type: {
+      //       title: '$type',
+      //       description:
+      //         'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+      //       type: 'string',
+      //       pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+      //       const: 'Microsoft.MultiLanguageRecognizer',
+      //     },
+      //     $copy: {
+      //       title: '$copy',
+      //       description: 'Copy the definition by id from a .dialog file.',
+      //       type: 'string',
+      //       pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+      //     },
+      //     $id: {
+      //       title: '$id',
+      //       description: 'Inline id for reuse of an inline definition',
+      //       type: 'string',
+      //       pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+      //     },
+      //     $designer: {
+      //       title: '$designer',
+      //       type: 'object',
+      //       description: 'Extra information for the Bot Framework Designer.',
+      //     },
+      //     languagePolicy: {
+      //       $type: 'Microsoft.ILanguagePolicy',
+      //       type: 'object',
+      //       title: 'Language Policy',
+      //       description: 'Defines languages to try per language.',
+      //       $ref: '#/definitions/Microsoft.ILanguagePolicy',
+      //     },
+      //     recognizers: {
+      //       type: 'object',
+      //       title: 'Recognizers',
+      //       description: 'Map of language -> IRecognizer',
+      //       additionalProperties: {
+      //         $type: 'Microsoft.IRecognizer',
+      //         $ref: '#/definitions/Microsoft.IRecognizer',
+      //       },
+      //     },
+      //   },
+      //   additionalProperties: false,
+      //   patternProperties: {
+      //     '^\\$': {
+      //       type: 'string',
+      //     },
+      //   },
+      // },
+      'Microsoft.NumberInput': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'Number prompt',
+        description: 'This represents a dialog which gathers a decimal number in a specified range',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.NumberInput',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          prompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Initial Prompt',
+            description: 'The message to send to as prompt for this input.',
+            examples: ['What is your birth date?'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          retryPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Retry Prompt',
+            description: 'The message to send to prompt again.',
+            examples: ["Let's try again. What is your birth date?"],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          invalidPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Invalid Prompt',
+            description: 'The message to send to when then input was not recognized or not valid for the input type.',
+            examples: ['No date was recognized'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          minValue: {
+            type: 'number',
+            title: 'Mininum value',
+            description: 'The minimum value that is acceptable.  ',
+            examples: ['0.1'],
+          },
+          maxValue: {
+            type: 'number',
+            title: 'Maximum value',
+            description: 'The maximum value that is acceptable.  ',
+            examples: ['12.5'],
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.QnAMakerDialog': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'QnAMaker Dialog',
+        description: 'This represents a dialog which is driven by a call to QnAMaker.ai knowledge base',
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.QnAMakerDialog',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          endpoint: {
+            type: 'object',
+            title: 'Endpoint',
+            description: 'This is the QnAMaker endpoint to use',
+            required: ['knowledgeBaseId', 'endpointKey', 'host'],
+            properties: {
+              knowledgeBaseId: {
+                type: 'string',
+                title: 'Knowledgebase Id',
+                description: 'the knowledge base ID.',
+              },
+              endpointKey: {
+                type: 'string',
+                title: 'Endpoint Key',
+                description: 'sets the endpoint key for the knowledge base',
+              },
+              host: {
+                type: 'string',
+                title: 'Host',
+                description: 'sets the host path',
+                examples: ['https://yourserver.azurewebsites.net/qnamaker'],
+              },
+            },
+          },
+          options: {
+            type: 'object',
+            title: 'Options',
+            properties: {
+              scoreThreshold: {
+                type: 'number',
+                title: 'Score Threshold',
+                description:
+                  '"sets the minimum score threshold, used to filter returned results. Scores are normalized to the range of 0.0 to 1.0',
+              },
+            },
+          },
+        },
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.RandomSelector': {
+        $role: 'unionType(Microsoft.IRuleSelector)',
+        title: 'Random rule selector',
+        description: 'Select most specific true rule',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.RandomSelector',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          seed: {
+            type: 'integer',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
       },
       'Microsoft.RegexRecognizer': {
         $role: 'unionType(Microsoft.IRecognizer)',
@@ -1602,11 +2297,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           intents: {
             type: 'object',
             title: 'RegEx patterns to intents',
             description: 'Pattern->Intents mappings',
+            propertyNames: {
+              title: 'Intent Name',
+            },
             additionalProperties: {
               type: 'string',
             },
@@ -1618,24 +2320,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['intents', '$type'],
-        //   },
-        // ],
       },
-      'Microsoft.ReplaceWithDialog': {
+      'Microsoft.RepeatDialog': {
         $role: 'unionType(Microsoft.IDialog)',
         type: 'object',
-        title: 'Replace Dialog',
-        description: 'This is a step which replaces the current dialog with the target dialog',
-        additionalProperties: false,
+        title: 'Repeat Dialog',
+        description: 'This is a step which repeats the current dialog with the same dialog.',
         properties: {
           $type: {
             title: '$type',
@@ -1643,7 +2333,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.ReplaceWithDialog',
+            const: 'Microsoft.RepeatDialog',
           },
           $copy: {
             title: '$copy',
@@ -1657,11 +2347,54 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.ReplaceDialog': {
+        $role: 'unionType(Microsoft.IDialog)',
+        type: 'object',
+        title: 'Replace Dialog',
+        description: 'This is a step which replaces the current dialog with the target dialog',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.ReplaceDialog',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           dialog: {
             $type: 'Microsoft.IDialog',
             title: 'Dialog',
             description: 'This is the dialog to switch to.',
-            type: 'string',
             ...dialogEnum,
           },
           options: {
@@ -1671,35 +2404,25 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             additionalProperties: true,
           },
           property: {
-            title: 'Property',
+            $role: 'memoryPath',
             description: 'The property to bind to the dialog and store the result in',
             examples: ['user.name'],
             type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
       'Microsoft.Rule': {
         $role: 'unionType(Microsoft.IRule)',
         title: 'Event Rule',
-        description: 'Defines a rule for an event which is triggered by some sourcy',
+        description: 'Defines a rule for an event which is triggered by some source',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1721,11 +2444,17 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          expression: {
-            type: 'string',
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          constraint: {
+            $role: 'expression',
             title: 'Constraint',
             description: 'Optional constraint to which must be met for this rule to fire',
             examples: ['user.vip == true'],
+            type: 'string',
           },
           steps: {
             type: 'array',
@@ -1736,29 +2465,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['events', 'steps', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.SaveEntity': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'SaveEntity Step',
         description: 'This is a step which allows you to save a memory property as an entity',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1780,40 +2498,36 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           entity: {
             type: 'string',
             title: 'Entity',
             description: 'name of the entity to save',
           },
           property: {
-            type: 'string',
+            $role: 'memoryPath',
             title: 'Property',
             description: 'Memory expression of the property to save as an entity.',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['property', 'entity', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.SendActivity': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Send Activity Step',
         description: 'This is a step which sends an activity to the user',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1835,6 +2549,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
           activity: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Activity',
@@ -1842,29 +2561,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             $ref: '#/definitions/Microsoft.IActivityTemplate',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
-      'Microsoft.SendList': {
+      'Microsoft.SetProperty': {
         $role: 'unionType(Microsoft.IDialog)',
-        title: 'SendList Step',
-        description: 'TEMPORARY, THIS SHOULD BE REPLACED WITH LG TEMPLATE',
+        title: 'Set Property Step',
+        description: 'This step allows you to set memory to the value of an expression',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1872,7 +2580,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.SendList',
+            const: 'Microsoft.SetProperty',
           },
           $copy: {
             title: '$copy',
@@ -1886,45 +2594,39 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          listProperty: {
-            type: 'string',
-            title: 'List Property',
-            description: 'Memory expression of the list to manipulate.',
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          messageTemplate: {
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'The property to set the value of',
+            examples: ['user.age'],
             type: 'string',
-            title: 'List Property',
-            description: 'Memory expression for the item',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
-          itemTemplate: {
+          value: {
+            $role: 'expression',
+            title: 'Value',
+            description: 'Expression against memory to use to get the value.',
+            examples: ['dialog.result'],
             type: 'string',
-            title: 'List Property',
-            description: 'Memory expression for the item',
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['listProperty', 'messageTemplate', 'itemTemplate', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.SwitchCondition': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Switch Step',
         description: 'Step which conditionally decides which step to execute next.',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -1946,79 +2648,65 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          condition: {
-            $type: 'Microsoft.IExpression',
-            title: 'Condition',
-            description: 'Expression to evaluate.',
-            examples: ['user.age > 3'],
-            $ref: '#/definitions/Microsoft.IExpression',
-          },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
-          cases: {
+          $designer: {
+            title: '$designer',
             type: 'object',
-            additionalProperties: {
-              // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-              oneOf: [
-                {
-                  $type: 'Microsoft.IDialog',
-                  $ref: '#/definitions/Microsoft.IDialog',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          condition: {
+            $role: 'expression',
+            title: 'Condition',
+            description: 'Expression to evaluate to switch on.',
+            examples: ['user.age > 3'],
+            type: 'string',
+          },
+          cases: {
+            type: 'array',
+            title: 'Cases',
+            desc: 'Cases to evaluate against condition',
+            items: {
+              type: 'object',
+              properties: {
+                value: {
+                  $role: 'expression',
+                  title: 'Value',
+                  description: 'Value which must match the condition property',
                 },
-                {
+                steps: {
                   type: 'array',
                   items: {
                     $type: 'Microsoft.IDialog',
-                    $ref: '#/definitions/Microsoft.IDialog',
+                    $ref: '#/defintions/Microsoft.IDialog',
                   },
-                  title: 'array',
+                  title: 'Steps',
+                  description: 'Steps to execute if case is equal to condition',
                 },
-              ],
-              title: 'If False',
-              description: 'Step to execute if case is true',
+              },
+              required: ['value', 'case'],
             },
           },
           default: {
-            // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/137
-            oneOf: [
-              {
-                $type: 'Microsoft.IDialog',
-                $ref: '#/definitions/Microsoft.IDialog',
-              },
-              {
-                type: 'array',
-                items: {
-                  $type: 'Microsoft.IDialog',
-                  $ref: '#/definitions/Microsoft.IDialog',
-                },
-                title: 'array',
-              },
-            ],
-            title: 'If True',
-            description: 'Step to execute if expression is true.',
+            type: 'array',
+            title: 'Default',
+            description: 'Step to execute if no case is equal to condition',
+            items: {
+              $type: 'Microsoft.IDialog',
+              $ref: '#/definitions/Microsoft.IDialog',
+            },
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['expression', 'ifTrue', '$type'],
-        //   },
-        // ],
       },
       'Microsoft.TextInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Text prompt',
         description: 'This represents a dialog which gathers a text from the user',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -2040,24 +2728,35 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          property: {
-            type: 'string',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['user.name'],
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          // TODO - https://github.com/Microsoft/BotFramework-Composer/issues/136
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
           inputProperties: {
             type: 'object',
+            title: 'Input Properties',
             description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['user.name'],
+            examples: ['value.birthday'],
             additionalProperties: {
               type: 'string',
             },
           },
           outputProperty: {
-            type: 'string',
+            $role: 'memoryPath',
+            title: 'Output Property',
             description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['user.name'],
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
@@ -2087,29 +2786,18 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             examples: ['\\w{3,30}'],
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['$type'],
-        //   },
-        // ],
       },
-      'Microsoft.WelcomeRule': {
-        $role: 'unionType(Microsoft.IRule)',
-        title: 'Welcome Rule',
-        description: 'Defines a sequence of steps to take if the user is a new user',
+      'Microsoft.TraceActivity': {
+        $role: 'unionType(Microsoft.IDialog)',
+        title: 'Trace Activity Step',
+        description: 'This is a step which sends an TraceActivity to the transcript',
         type: 'object',
-        additionalProperties: false,
         properties: {
           $type: {
             title: '$type',
@@ -2117,7 +2805,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
               'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-            const: 'Microsoft.WelcomeRule',
+            const: 'Microsoft.TraceActivity',
           },
           $copy: {
             title: '$copy',
@@ -2131,18 +2819,113 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
           },
-          events: {
-            type: 'array',
-            description: 'Events to trigger this rule for',
-            items: {
-              type: 'string',
-            },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
           },
-          expression: {
+          name: {
             type: 'string',
+            title: 'Name',
+            description: 'Name of the trace activity',
+          },
+          valueType: {
+            type: 'string',
+            title: 'Value Type',
+            description: 'Value type of the trace activity',
+          },
+          valueProperty: {
+            $role: 'memoryPath',
+            title: 'Value Property',
+            description: 'Property path to memory object to send as the value of the trace activity',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.TrueSelector': {
+        $role: 'unionType(Microsoft.IRuleSelector)',
+        title: 'True Rule Selector',
+        description: 'Selector for all true rules',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.TrueSelector',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+        },
+        additionalProperties: false,
+        patternProperties: {
+          '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.UnknownIntentRule': {
+        title:
+          'This defines the steps to take when an utterence is not recognized (aka, the None Intent). NOTE: UnknownIntent will defer to any specific intent that fires in a parent dialog',
+        description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
+        $role: 'unionType(Microsoft.IRule)',
+        type: 'object',
+        properties: {
+          $type: {
+            title: '$type',
+            description:
+              'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+            const: 'Microsoft.UnknownIntentRule',
+          },
+          $copy: {
+            title: '$copy',
+            description: 'Copy the definition by id from a .dialog file.',
+            type: 'string',
+            pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+          },
+          $id: {
+            title: '$id',
+            description: 'Inline id for reuse of an inline definition',
+            type: 'string',
+            pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+          },
+          $designer: {
+            title: '$designer',
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          constraint: {
+            $role: 'expression',
             title: 'Constraint',
             description: 'Optional constraint to which must be met for this rule to fire',
             examples: ['user.vip == true'],
+            type: 'string',
           },
           steps: {
             type: 'array',
@@ -2153,22 +2936,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
         },
+        additionalProperties: false,
         patternProperties: {
           '^\\$': {
             type: 'string',
           },
         },
-        // TODO
-        // anyOf: \[
-        //   {
-        //     title: 'Reference',
-        //     required: ['$copy'],
-        //   },
-        //   {
-        //     title: 'Type',
-        //     required: ['steps', '$type'],
-        //   },
-        // ],
       },
     },
   };

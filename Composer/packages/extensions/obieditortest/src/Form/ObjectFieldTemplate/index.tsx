@@ -54,7 +54,7 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
   };
 
   return (
-    <div>
+    <div className="ObjectFieldTemplate">
       {(props.uiSchema['ui:title'] || props.title) && (
         <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
           {props.uiSchema['ui:title'] || props.title}
@@ -81,7 +81,6 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
               onSubmit={handlePropertyEdit}
               onDismiss={onDismiss}
               name={editableProperty}
-              value={props.formData[editableProperty]}
               schema={props.schema || {}}
             />
           )}

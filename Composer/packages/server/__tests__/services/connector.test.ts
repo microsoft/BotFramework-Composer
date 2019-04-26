@@ -14,7 +14,20 @@ jest.mock('child_process', () => ({
   spawnSync: () => mockSpawnSync(),
   spawn: () => mockSpawn(),
 }));
-
+jest.mock('azure-storage', () => {
+  return {
+    createBlobService: (account: string, key: string) => {
+      return {
+        listContainersSegmented: () => {
+          return { containers: [] };
+        },
+        listBlobsSegmented: () => {
+          return { blobs: [] };
+        },
+      };
+    },
+  };
+});
 describe('BotConnectorService', () => {
   beforeEach(() => {
     mockKill.mockClear();

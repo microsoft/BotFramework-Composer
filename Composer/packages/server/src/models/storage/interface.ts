@@ -8,6 +8,8 @@ export interface StorageConnection {
 export interface Stat {
   isDir: boolean;
   isFile: boolean;
+  lastModified: string;
+  size: string;
 }
 
 export interface IFileStorage {
@@ -18,4 +20,6 @@ export interface IFileStorage {
   readDir(path: string): Promise<string[]>;
   exists(path: string): Promise<boolean>;
   writeFile(path: string, content: any): Promise<void>;
+  mkDir(path: string): Promise<void>;
+  glob(pattern: string, path: string): Promise<string[]>;
 }

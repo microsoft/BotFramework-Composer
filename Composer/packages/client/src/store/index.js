@@ -16,7 +16,8 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'stopped',
-  storageExplorerStatus: 'closed',
+  storageExplorerStatus: '',
+  lgTemplates: [],
 };
 
 export function StoreProvider(props) {

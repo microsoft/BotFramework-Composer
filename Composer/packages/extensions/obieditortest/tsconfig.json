@@ -12,10 +12,7 @@
     "esModuleInterop": true,
     "strict": true,
     "noUnusedLocals": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@app/*": ["src/*"]
-    }
+    "resolveJsonModule": true
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
   "exclude": [

@@ -2,8 +2,9 @@ import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
 import startCase from 'lodash.startcase';
 import findindex from 'lodash.findindex';
-import get from 'lodash.get';
 import formatMessage from 'format-message';
+
+import { getDialogData } from '../../utils';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -32,7 +33,7 @@ function DesignPage() {
 
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
-      const text = item.indexOf('.') > -1 ? get(dialogsMap, `${item}.$type`) : item;
+      const text = item.indexOf('.') > -1 ? getDialogData(dialogsMap, `${item}.$type`) : item;
 
       return {
         key: index,

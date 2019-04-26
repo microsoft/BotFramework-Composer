@@ -12,6 +12,7 @@ const closeCurrentProject = state => {
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botProjFile = response.data.botFile;
+  state.lgTemplates = response.data.lgTemplates;
   return state;
 };
 
@@ -22,6 +23,11 @@ const updateDialog = (state, { response }) => {
 
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  return state;
+};
+
+const updateLgTemplate = (state, { response }) => {
+  state.lgTemplates = response.data.lgTemplates;
   return state;
 };
 
@@ -116,4 +122,5 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
+  [ActionTypes.UPDATE_LG_TEMPLATE]: updateLgTemplate,
 });

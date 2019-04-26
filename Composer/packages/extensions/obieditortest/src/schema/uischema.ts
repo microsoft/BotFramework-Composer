@@ -1,15 +1,17 @@
-import { RulesField, StepsField } from '../Form/fields';
+import { CasesField, RulesField, StepsField, SelectorField, RecognizerField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
+    'ui:order': ['*', 'recognizer', 'selector'],
+    selector: {
+      'ui:field': SelectorField,
+    },
+    recognizer: {
+      'ui:field': RecognizerField,
+    },
     rules: {
       'ui:field': RulesField,
     },
-    steps: {
-      'ui:field': StepsField,
-    },
-  },
-  'Microsoft.WelcomeRule': {
     steps: {
       'ui:field': StepsField,
     },
@@ -24,7 +26,7 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
   },
-  'Microsoft.NoMatchRule': {
+  'Microsoft.UnknownIntentRule': {
     steps: {
       'ui:field': StepsField,
     },
@@ -44,10 +46,31 @@ export const uiSchema = {
     },
   },
   'Microsoft.IfCondition': {
-    ifTrue: {
+    steps: {
       'ui:field': StepsField,
     },
+    elseSteps: {
+      'ui:field': StepsField,
+    },
+  },
+  'Microsoft.ConditionalSelector': {
+    ifTrue: {
+      'ui:field': SelectorField,
+    },
     ifFalse: {
+      'ui:field': SelectorField,
+    },
+  },
+  'Microsoft.MostSpecificSelector': {
+    selector: {
+      'ui:field': SelectorField,
+    },
+  },
+  'Microsoft.SwitchCondition': {
+    cases: {
+      'ui:field': CasesField,
+    },
+    default: {
       'ui:field': StepsField,
     },
   },
