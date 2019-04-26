@@ -31,7 +31,6 @@ Bot project is the launcher project for the bots written in [OBI](https://github
     }
 ```
 
-
 ## .botproj folder structure
 ```
     bot.botproj, bot project got the rootDialog from "entry"
