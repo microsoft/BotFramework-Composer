@@ -18,3 +18,22 @@
     padding-top: 4px;
   }
 }
+
+.JsonField {
+  .react-codemirror2 {
+    margin-top: 0;
+    height: 450px;
+    position: relative;
+    border: 1px solid rgb(161, 159, 157);
+    border-radius: 2px;
+  }
+
+  .CodeMirror {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
+}

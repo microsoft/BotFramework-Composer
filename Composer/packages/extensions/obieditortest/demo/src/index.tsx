@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { IContextualMenuItem, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
 
 import Example from '../../src';
 import { ShellApi } from '../../src/types';
-import { dialogGroups } from '../../src/schema/appschema';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import 'codemirror/mode/javascript/javascript';
