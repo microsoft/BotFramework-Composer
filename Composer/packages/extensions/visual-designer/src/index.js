@@ -22,6 +22,10 @@ export default class VisualDesigner extends Component {
     return jsonPathString;
   };
 
+  handleSelectedNodes = nodes => {
+    this.props.shellApi.selectedNodes(nodes);
+  };
+
   render() {
     const { navPath, data, shellApi } = this.props;
     const { navDown, focusTo, navTo } = shellApi;
@@ -34,6 +38,7 @@ export default class VisualDesigner extends Component {
           onSelect={x => focusTo(this.normalizeDataPath(x))}
           onExpand={x => navDown(this.normalizeDataPath(x))}
           onOpen={x => navTo(this.normalizeDataPath(x))}
+          onSelectedNodes={this.handleSelectedNodes}
         />
       </div>
     );

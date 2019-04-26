@@ -11,4 +11,6 @@ export const defaultNodeProps = {
   data: {},
   onEvent: () => {},
   onResize: () => {},
+  nodeRefs: {},
+  selectedNodes: [],
 };

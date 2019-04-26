@@ -36,15 +36,14 @@ export class NodeRenderer extends React.Component {
   containerRef = React.createRef();
   interactive = false;
 
-  getOutline = (id, focusedId, selectedNodes = []) => {
+  getOutline = (id, focusedId, selectedNodes = [], type) => {
     const found = selectedNodes.find(element => {
       return element === id;
     });
 
-    if (found) {
+    if ((found || focusedId === id) && type !== ObiTypes.IfCondition) {
       return { outline: '3px solid #0078d3', display: 'inline-block' };
     }
-    return { outline: focusedId && focusedId === id ? '3px solid grey' : null, display: 'inline-block' };
   };
 
   render() {
@@ -53,7 +52,7 @@ export class NodeRenderer extends React.Component {
     return (
       <div
         className="node-renderer-container"
-        style={this.getOutline(id, focusedId, selectedNodes)}
+        style={this.getOutline(id, focusedId, selectedNodes, data.$type)}
         ref={el => {
           if (el && !this.interactive) {
             onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');
@@ -72,6 +71,8 @@ export class NodeRenderer extends React.Component {
             this.interactive = true;
             onResize(size, 'node');
           }}
+          nodeRefs={nodeRefs}
+          selectedNodes={selectedNodes}
         />
       </div>
     );

@@ -79,6 +79,9 @@ function ExtensionContainer() {
     focusTo: subPath => {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
+    selectedNodes: nodes => {
+      console.log({ selectedNodes: nodes });
+    },
   };
 
   const RealEditor = data === '' ? '' : getEditor();

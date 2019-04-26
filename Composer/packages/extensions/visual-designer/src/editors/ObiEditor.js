@@ -48,32 +48,45 @@ export class ObiEditor extends Component {
     return handler(eventData);
   }
 
+  emptyNodes = () => {
+    this.setState({ selectedNodes: [] });
+  };
+
+  componentDidMount() {
+    window.addEventListener('mouseup', this.emptyNodes);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this.emptyNodes);
+  }
+
   onSelectArea = data => {
     const selected = [];
     const { initClientX, currClientX, initClientY, currClientY } = data;
-    if (!initClientX && !currClientX && !initClientY && !currClientY) return;
+    const bottomUp = initClientY > currClientY ? true : false;
+    const minX = Math.min(initClientX, currClientX);
+    const minY = Math.min(initClientY, currClientY);
+    const maxX = Math.max(initClientX, currClientX);
+    const maxY = Math.max(initClientY, currClientY);
+
+    if ((!minX && !minY) || (!maxX && !maxY)) return;
     for (const key in this.state.nodeRefs) {
       const current = this.state.nodeRefs[key];
       const bounds = current.getBoundingClientRect();
-      if (bounds.left > initClientX && bounds.right < currClientX) {
-        if (bounds.top > initClientY && bounds.bottom < currClientY) {
+      if (bounds.left > minX && bounds.right < maxX) {
+        if (bounds.top > (bottomUp ? minY + 20 : minY) && bounds.bottom < (bottomUp ? maxY : maxY + 20)) {
           // in bounds
           selected.push(key);
         }
       }
     }
     this.setState({ selectedNodes: selected });
+    if (selected.length > 0) {
+      this.props.onSelectedNodes(selected);
+    }
   };
 
   onChange = () => {};
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.path.graphId !== this.props.path.graphId) return true;
-    if (nextProps.data !== this.props.data) return true;
-    if (nextState.focusedId !== this.state.focusedId) return true;
-    if (nextState.selectedNodes !== this.state.selectedNodes) return true;
-    return false;
-  }
 
   render() {
     const graphId = this.props.path;
@@ -107,6 +120,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   onExpand: () => {},
   onOpen: () => {},
+  onSelectedNodes: () => {},
 };
 
 ObiEditor.propTypes = {
@@ -116,6 +130,7 @@ ObiEditor.propTypes = {
   onSelect: PropTypes.func,
   onExpand: PropTypes.func,
   onOpen: PropTypes.func,
+  onSelectedNodes: PropTypes.func,
 };
 
 ///////////////////
