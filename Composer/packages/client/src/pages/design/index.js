@@ -21,7 +21,7 @@ function DesignPage() {
 
   function handleFileClick(index) {
     clearNavHistory();
-    navTo(dialogs[index].name);
+    navTo(`[${dialogs[index].name}]`);
   }
 
   const dialogsMap = useMemo(() => {
