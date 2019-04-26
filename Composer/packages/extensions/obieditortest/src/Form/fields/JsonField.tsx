@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { FieldProps } from 'react-jsonschema-form';
 
@@ -37,8 +37,20 @@ const cmOptions = {
 };
 
 export const JsonField: React.FC<FieldProps> = props => {
+  const [parseError, setParseError] = useState(false);
+
+  const saveValue = value => {
+    try {
+      const data = JSON.parse(value);
+      props.onChange(data);
+      setParseError(false);
+    } catch (err) {
+      setParseError(true);
+    }
+  };
+
   return (
-    <div className="JsonField">
+    <div className="JsonField" style={{ margin: '30px 0' }}>
       {(props.uiSchema['ui:title'] || props.schema.title) && (
         <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
           {props.uiSchema['ui:title'] || props.schema.title}
@@ -50,12 +62,9 @@ export const JsonField: React.FC<FieldProps> = props => {
       <CodeMirror
         value={JSON.stringify(props.formData, null, 2)}
         options={cmOptions}
+        className={parseError ? 'CodeMirror--error' : ''}
         onChange={(editor, data, value) => {
-          try {
-            props.onChange(JSON.parse(value));
-          } catch (err) {
-            console.error(err);
-          }
+          saveValue(value);
         }}
         autoCursor={false}
       />

@@ -29,4 +29,8 @@
   .CodeMirror {
     height: auto;
   }
+
+  .CodeMirror--error {
+    border: 2px solid #e81123;
+  }
 }
