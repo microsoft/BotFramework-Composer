@@ -1,6 +1,7 @@
 import { ObiTypes } from '../shared/ObiTypes';
 
 import { IndexedNode } from './models/IndexedNode';
+import { normalizeObiStep } from './helpers/elementBuilder';
 
 export function transformObiRules(input, jsonpath) {
   if (!input) return {};
@@ -15,7 +16,7 @@ export function transformObiRules(input, jsonpath) {
   if (Array.isArray(input.steps)) {
     result.stepGroup = new IndexedNode(`${jsonpath}.stepGroup`, {
       $type: ObiTypes.StepGroup,
-      children: input.steps.map((x, index) => new IndexedNode(`${jsonpath}.steps[${index}]`, x)),
+      children: input.steps.map((x, index) => new IndexedNode(`${jsonpath}.steps[${index}]`, normalizeObiStep(x))),
     });
   }
   return result;
