@@ -2,19 +2,17 @@ import React from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from 'react-jsonschema-form';
 
-import { TableField } from './TableField';
+import { DialogGroup } from '../../schema/appschema';
 
-const renderTitle = item => item.$type || formatMessage('New Step');
+import { TableField } from './TableField';
 
 export const StepsField: React.FC<FieldProps> = props => {
   return (
     <TableField
       {...props}
-      defaultItem={{ $type: 'Microsoft.SendActivity' }}
-      filterNewOptions={item => !item.includes('Rule')}
+      dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       label={formatMessage('Add New Step')}
-      navPrefix="steps"
-      renderTitle={renderTitle}
+      navPrefix={props.name}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { merge, set } from 'lodash';
+import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
 import StorageService from '../../services/storage';
@@ -67,13 +67,9 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialogFromTemplate = async (name: string, types: string[]) => {
+  public createDialogFromTemplate = async (name: string) => {
     const absolutePath: string = Path.join(this.dir, `${name.trim()}.dialog`);
     const newDialog = merge({}, DIALOG_TEMPLATE);
-
-    types.forEach((type: string, idx: number) => {
-      set(newDialog, `rules[0].steps[${idx}].$type`, type.trim());
-    });
 
     const newFileContent = await this._createFile(absolutePath, name, JSON.stringify(newDialog, null, 2) + '\n');
     this.dialogIndexer.addDialog(name, newFileContent, absolutePath);

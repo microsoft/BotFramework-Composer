@@ -12,7 +12,7 @@ export async function fetchProject(dispatch) {
       payload: { response },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, dialogs[0].name);
+      navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
     dispatch({
@@ -36,7 +36,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
       payload: { response },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, dialogs[0].name);
+      navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
     dispatch({
@@ -60,7 +60,7 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
       payload: { response },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, dialogs[0].name);
+      navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
     dispatch({
@@ -110,9 +110,8 @@ export async function createDialog(dispatch, { name, steps }) {
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: { response },
     });
-    // the new dialog only has 1 rule, so navigate directly there
     clearNavHistory(dispatch);
-    navTo(dispatch, `${name}.rules[0]`);
+    navTo(dispatch, `${name}#`);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

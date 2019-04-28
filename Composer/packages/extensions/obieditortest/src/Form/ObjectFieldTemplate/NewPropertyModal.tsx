@@ -74,6 +74,11 @@ const NewPropertyModal: React.FunctionComponent<NewPropertyModalProps> = props =
           required
           errorMessage={formData.error}
           value={formData.name}
+          componentRef={ref => {
+            if (ref) {
+              ref.focus();
+            }
+          }}
         />
         <PrimaryButton type="submit" primary styles={{ root: { width: '100%', marginTop: '20px' } }}>
           {formatMessage('Add')}

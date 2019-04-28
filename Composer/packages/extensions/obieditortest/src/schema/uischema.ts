@@ -1,4 +1,4 @@
-import { CasesField, RulesField, StepsField, SelectorField, RecognizerField } from '../Form/fields';
+import { CasesField, RulesField, StepsField, SelectorField, RecognizerField, JsonField } from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
@@ -72,6 +72,12 @@ export const uiSchema = {
     },
     default: {
       'ui:field': StepsField,
+    },
+  },
+  'Microsoft.HttpRequest': {
+    'ui:order': ['*', 'body'],
+    body: {
+      'ui:field': JsonField,
     },
   },
 };

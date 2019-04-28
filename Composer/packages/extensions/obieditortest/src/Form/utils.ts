@@ -5,29 +5,77 @@ import {
   IDropdownOption,
 } from 'office-ui-fabric-react';
 
-import { dialogGroups } from '../schema/appschema';
+import { dialogGroups, DialogGroup, DialogGroupItem } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
 
-export function buildDialogOptions(filter: (elem: string) => boolean = () => true): IContextualMenuItem[] {
-  const options: IContextualMenuItem[] = [];
+export interface DialogOptionsOpts {
+  /** Used to filter individual types from the result. Default: () => true */
+  filter?: (type: string) => boolean | void;
+  /** Include only specific categories, if undefined, all categories are included. Default: undefined */
+  include?: DialogGroup[];
+  /** Exclude specific categories. Default: undefined */
+  exclude?: DialogGroup[];
+  /** Hide types in sub menus. Default: true */
+  subMenu?: boolean;
+  /** Returns non-nested options for usage in dropdown. Default: false */
+  asDropdown?: boolean;
+  onClick?: (e: any, item: IContextualMenuItem) => void;
+}
 
-  for (const elem in dialogGroups) {
-    if (!filter || filter(elem)) {
-      options.push({ key: elem, text: elem, itemType: ContextualMenuItemType.Header });
-      dialogGroups[elem].forEach(dialog => {
-        options.push({
-          key: dialog,
-          text: dialog,
-          data: {
-            $type: dialog,
-          },
-        });
-      });
-      options.push({ key: `${elem}_divider`, text: '-', itemType: ContextualMenuItemType.Divider });
+export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMenuItem[] {
+  const { filter = () => true, include, exclude, subMenu = true, onClick, asDropdown = false } = opts;
+  let menuOptions: IContextualMenuItem[] = [];
+
+  const filteredGroups = Object.keys(dialogGroups).reduce<DialogGroupItem[]>((filtered, group) => {
+    let includeGroup = true;
+
+    if (include) {
+      includeGroup = include.includes(group as DialogGroup);
     }
+
+    if (exclude) {
+      includeGroup = !exclude.includes(group as DialogGroup);
+    }
+
+    if (includeGroup) {
+      filtered.push(dialogGroups[group]);
+    }
+    return filtered;
+  }, []);
+
+  const handleClick = (e, item) => {
+    if (onClick && item) {
+      onClick(e as any, item);
+    }
+  };
+
+  for (const group of filteredGroups) {
+    const dialogOpts = group.types.filter(filter).map(dialog => ({
+      key: dialog,
+      text: dialog,
+      data: {
+        $type: dialog,
+      },
+      onClick: subMenu ? undefined : handleClick,
+    }));
+
+    if (subMenu && !asDropdown) {
+      const header: IContextualMenuItem = {
+        key: group.label,
+        text: group.label,
+        subMenuProps: {
+          items: dialogOpts,
+          onItemClick: handleClick,
+        },
+      };
+      menuOptions.push(header);
+    } else {
+      menuOptions = menuOptions.concat(dialogOpts);
+    }
+    menuOptions.push({ key: `${group.label}_divider`, text: '-', itemType: ContextualMenuItemType.Divider });
   }
 
-  return options;
+  return menuOptions;
 }
 
 export function swap<T = any>(arr: T[], a: number, b: number): T[] {

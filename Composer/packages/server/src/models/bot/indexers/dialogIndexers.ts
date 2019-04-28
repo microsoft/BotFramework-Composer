@@ -12,10 +12,6 @@ export class DialogIndexer {
     this.storage = storage;
   }
 
-  private _dialogParse(content: string) {
-    return JSON.parse(content);
-  }
-
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
@@ -24,21 +20,24 @@ export class DialogIndexer {
 
       for (const file of files) {
         const extName = path.extname(file.name);
+        try {
+          if (extName === '.dialog') {
+            const dialog = {
+              id: 0,
+              name: path.basename(file.name, extName),
+              content: JSON.parse(file.content),
+              path: file.path,
+            };
 
-        if (extName === '.dialog') {
-          const dialog = {
-            id: 0,
-            name: path.basename(file.name, extName),
-            content: this._dialogParse(file.content),
-            path: file.path,
-          };
-
-          if (file.name === entry) {
-            this.dialogs.unshift(dialog);
-          } else {
-            dialog.id = count++;
-            this.dialogs.push(dialog);
+            if (file.name === entry) {
+              this.dialogs.unshift(dialog);
+            } else {
+              dialog.id = count++;
+              this.dialogs.push(dialog);
+            }
           }
+        } catch (e) {
+          throw new Error(`parse failed at ${file.name}, ${e}`);
         }
       }
     }

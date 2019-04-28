@@ -61,7 +61,7 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialogFromTemplate(dialogName, ['foo', 'bar', 'baz']);
+    const dialogs = await proj.createDialogFromTemplate(dialogName);
     const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
 
     if (!newFile) {
@@ -70,9 +70,6 @@ describe('createFromTemplate', () => {
 
     const fileContent = ((newFile as unknown) as FileInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
-    expect(fileContent.rules).toHaveLength(1);
-    expect(fileContent.rules[0].steps).toHaveLength(3);
-    expect(fileContent.rules[0].steps).toMatchObject([{ $type: 'foo' }, { $type: 'bar' }, { $type: 'baz' }]);
   });
 });
 

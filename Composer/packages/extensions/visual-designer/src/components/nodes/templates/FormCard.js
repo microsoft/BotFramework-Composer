@@ -19,7 +19,14 @@ const containerStyle = {
 };
 
 export const FormCard = ({ header, label, details, icon, themeColor, onClick }) => (
-  <div className="card" style={containerStyle} onClick={onClick}>
+  <div
+    className="card"
+    style={containerStyle}
+    onClick={e => {
+      e.stopPropagation();
+      onClick();
+    }}
+  >
     <div
       className="card__header"
       style={{
