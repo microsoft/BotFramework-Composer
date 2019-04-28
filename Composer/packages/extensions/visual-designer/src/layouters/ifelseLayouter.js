@@ -5,6 +5,8 @@ const BranchIntervalY = 30;
 
 export function ifElseLayouter(choiceBoundary, ifBoundary, elseBoundary) {
   const containerBoundary = new Boundary();
+  if (!choiceBoundary) return { boundary: containerBoundary };
+
   const { width: ifWidth, height: ifHeight } = ifBoundary ? ifBoundary.boundary : new Boundary();
   const { width: elseWith, height: elseHeight } = elseBoundary ? elseBoundary.boundary : new Boundary();
 
