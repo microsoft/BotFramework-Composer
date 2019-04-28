@@ -13,21 +13,23 @@
   height: 100%;
 }
 
-.react-codemirror2 {
-  margin-top: 0;
-  height: 100%;
-  position: relative;
-}
+.DemoJSONContainer {
+  .react-codemirror2 {
+    margin-top: 0;
+    height: 100%;
+    position: relative;
+  }
 
-.CodeMirror {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-}
+  .CodeMirror {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+  }
 
-.CodeMirror--error {
-  border: 10px solid #e81123;
+  .CodeMirror--error {
+    border: 10px solid #e81123;
+  }
 }

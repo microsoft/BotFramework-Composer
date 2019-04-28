@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import startCase from 'lodash.startcase';
 import findindex from 'lodash.findindex';
 import formatMessage from 'format-message';
 
@@ -12,6 +11,7 @@ import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import { breadcrumbClass } from './styles';
 import NewDialogModal from './NewDialogModal';
+import { upperCaseName } from './../../utils/fileUtil';
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
@@ -21,7 +21,7 @@ function DesignPage() {
 
   function handleFileClick(index) {
     clearNavHistory();
-    navTo(dialogs[index].name);
+    navTo(`${dialogs[index].name}#`);
   }
 
   const dialogsMap = useMemo(() => {
@@ -33,12 +33,13 @@ function DesignPage() {
 
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
-      const text = item.indexOf('.') > -1 ? getDialogData(dialogsMap, `${item}.$type`) : item;
+      const pathList = item.split('#');
+      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
 
       return {
         key: index,
         path: item,
-        text: formatMessage(startCase(text).replace(/\s/g, '')),
+        text: formatMessage(upperCaseName(text)),
         onClick: (_event, { path, key }) => {
           clearNavHistory(key);
           navTo(path);
@@ -49,7 +50,7 @@ function DesignPage() {
 
   const activeDialog = useMemo(() => {
     if (!navPath) return -1;
-    const dialogName = navPath.split('.')[0];
+    const dialogName = navPath.split('#')[0];
     return findindex(dialogs, { name: dialogName });
   }, [navPath]);
 

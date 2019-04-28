@@ -7,3 +7,8 @@ export function getBaseName(filename) {
   if (typeof filename !== 'string') return filename;
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
+
+export function upperCaseName(filename) {
+  if (typeof filename !== 'string') return filename;
+  return filename.charAt(0).toUpperCase() + filename.slice(1);
+}

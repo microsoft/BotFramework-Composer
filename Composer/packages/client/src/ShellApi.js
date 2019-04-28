@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
-import { getDialogData, setDialogData, getRootDialogName } from './utils';
+import { getDialogData, setDialogData } from './utils';
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -78,7 +78,7 @@ export function ShellApi() {
       return;
     } else if (sourceWindowName === 'FormEditor') {
       const updatedDialog = setDialogData(dialogsMap, focusPath, newData);
-      const dialogName = getRootDialogName(dialogsMap, focusPath);
+      const dialogName = focusPath.split('#')[0];
       const payload = {
         name: dialogName,
         content: updatedDialog,
