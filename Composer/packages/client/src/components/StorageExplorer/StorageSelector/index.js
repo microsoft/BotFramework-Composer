@@ -37,7 +37,7 @@ export function StorageSelector(props) {
       >
         <Nav
           groups={getNavItems()}
-          initialSelectedKey={currentStorageId}
+          selectedKey={currentStorageId}
           styles={{
             link: navLinkClass.storageNav,
           }}
@@ -52,4 +52,5 @@ StorageSelector.propTypes = {
   actionName: PropTypes.string,
   currentStorageId: PropTypes.string,
   onStorageSourceChange: PropTypes.func,
+  onAddNew: PropTypes.func,
 };

@@ -15,7 +15,7 @@ import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { StorageSelector } from './components/StorageExplorer/StorageSelector';
 import { body, panelContent, panelStyle } from './components/StorageExplorer/styles';
 import { SaveAction } from './components/StorageExplorer/SaveAction/index';
-import AddStoragePanel from './components/StorageExplorer/NewStorage/index';
+import NewStorageModal from './components/StorageExplorer/NewStorage/NewStorageModal';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
   return (
@@ -140,6 +140,7 @@ export function StorageExplorer() {
 
   const handleAddStorage = async storageData => {
     await addNewStorage(storageData);
+    setOpenAdd(false);
   };
 
   return (
@@ -174,29 +175,31 @@ export function StorageExplorer() {
               paddingTop: '90px',
             }}
           >
-            {openAdd ? (
-              <AddStoragePanel storages={storages} onSubmit={handleAddStorage} />
-            ) : (
-              <FileSelector
-                saveAction={
-                  storageExplorerStatus === 'open' ? (
-                    <div />
-                  ) : (
-                    <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
-                  )
-                }
-                storageExplorerStatus={storageExplorerStatus}
-                storageFileLoadingStatus={storageFileLoadingStatus}
-                checkShowItem={checkShowItem}
-                currentPath={currentPath}
-                focusedStorageFolder={focusedStorageFolder}
-                updateCurrentPath={updateCurrentPath}
-                onSelectionChanged={onSelectionChanged}
-              />
-            )}
+            <FileSelector
+              saveAction={
+                storageExplorerStatus === 'open' ? (
+                  <div />
+                ) : (
+                  <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
+                )
+              }
+              storageExplorerStatus={storageExplorerStatus}
+              storageFileLoadingStatus={storageFileLoadingStatus}
+              checkShowItem={checkShowItem}
+              currentPath={currentPath}
+              focusedStorageFolder={focusedStorageFolder}
+              updateCurrentPath={updateCurrentPath}
+              onSelectionChanged={onSelectionChanged}
+            />
           </div>
         </div>
       </div>
+      <NewStorageModal
+        isOpen={openAdd}
+        storages={storages}
+        onSubmit={handleAddStorage}
+        onDismiss={() => setOpenAdd(false)}
+      />
     </Panel>
   );
 }
