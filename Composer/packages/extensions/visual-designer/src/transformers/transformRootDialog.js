@@ -95,7 +95,7 @@ function transformSimpleDialog(input) {
   if (Array.isArray(input.steps)) {
     result.stepGroup = new IndexedNode('$.stepGroup', {
       $type: ObiTypes.StepGroup,
-      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, x)),
+      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
     });
   }
   return result;
