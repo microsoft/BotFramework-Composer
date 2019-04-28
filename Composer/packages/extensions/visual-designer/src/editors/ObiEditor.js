@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
+import { ObiTypes } from '../shared/ObiTypes';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
+import { RuleEditor } from './RuleEditor';
 
 export class ObiEditor extends Component {
   state = {
@@ -45,18 +47,31 @@ export class ObiEditor extends Component {
     return handler(eventData);
   }
 
-  render() {
-    const graphId = this.props.path;
+  chooseEditor($type) {
+    if ($type === ObiTypes.AdaptiveDialog) {
+      return AdaptiveDialogEditor;
+    }
+    return RuleEditor;
+  }
 
+  renderFallbackContent() {
+    return null;
+  }
+
+  render() {
+    const { path, data } = this.props;
+    if (!data) return this.renderFallbackContent();
+
+    const ChosenEditor = this.chooseEditor(data.$type);
     return (
       <div
         className="obi-editor-container"
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
       >
-        <AdaptiveDialogEditor
-          key={graphId}
-          id={graphId}
+        <ChosenEditor
+          key={path}
+          id={path}
           data={this.props.data}
           focusedId={this.state.focusedId}
           onEvent={(...args) => this.dispatchEvent(...args)}
