@@ -76,11 +76,6 @@
             "$ref": "#/definitions/Microsoft.FirstSelector"
         },
         {
-            "title": "Microsoft.FloatInput",
-            "description": "This represents a dialog which gathers a number in a specified range",
-            "$ref": "#/definitions/Microsoft.FloatInput"
-        },
-        {
             "title": "Microsoft.HttpRequest",
             "description": "This is a step which replaces the current dialog with the target dialog",
             "$ref": "#/definitions/Microsoft.HttpRequest"
@@ -92,13 +87,8 @@
         },
         {
             "title": "Microsoft.InitProperty",
-            "description": "This step allows you to initialize a property to either an object or array",
+            "description": "This step allows you to innitial a property to either an object or array",
             "$ref": "#/definitions/Microsoft.InitProperty"
-        },
-        {
-            "title": "Microsoft.IntegerInput",
-            "description": "This represents a dialog which gathers a number in a specified range",
-            "$ref": "#/definitions/Microsoft.IntegerInput"
         },
         {
             "title": "Microsoft.IntentRule",
@@ -112,7 +102,7 @@
         },
         {
             "title": "Microsoft.LogStep",
-            "description": "This is a step which writes to console.log and optionally creates a TraceActivity around a text binding",
+            "description": "This is a step which writes to console.log and optional creates a TraceActivity around a text binding",
             "$ref": "#/definitions/Microsoft.LogStep"
         },
         {
@@ -276,7 +266,7 @@
                 "recognizer": {
                     "$type": "Microsoft.IRecognizer",
                     "title": "Recognizer",
-                    "decription": "Configured recognizer to generate intent and entites from user utterance",
+                    "description": "Configured recognizer to generate intent and entites from user utterance",
                     "$ref": "#/definitions/Microsoft.IRecognizer"
                 },
                 "selector": {
@@ -426,17 +416,6 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
-                },
-                "eventName": {
-                    "type": "string",
-                    "title": "Event Name",
-                    "description": "Name of the event which is emitted"
-                },
-                "eventValue": {
-                    "type": "object",
-                    "title": "Event Value",
-                    "description": "object value which is a payload to communicate to the parent dialogs so that they can decide how to process it",
-                    "additionalProperties": true
                 }
             },
             "additionalProperties": false,
@@ -592,7 +571,7 @@
                 "choicesProperty": {
                     "type": "string",
                     "title": "Choices Property",
-                    "decription": "unknown ??? "
+                    "description": "unknown ??? "
                 },
                 "choices": {
                     "type": "array",
@@ -620,6 +599,15 @@
                                 }
                             }
                         }
+                    ]
+                },
+                "alwaysPrompt": {
+                    "type": "boolean",
+                    "title": "Always Prompt",
+                    "description": "If set to true this will always prompt the user regardless if you already have the value or not.",
+                    "default": "false",
+                    "examples": [
+                        "false"
                     ]
                 }
             },
@@ -799,6 +787,15 @@
                         "I didn't recognize a yes/no response"
                     ],
                     "$ref": "#/definitions/Microsoft.IActivityTemplate"
+                },
+                "alwaysPrompt": {
+                    "type": "boolean",
+                    "title": "Always Prompt",
+                    "description": "If set to true this will always prompt the user regardless if you already have the value or not.",
+                    "default": "false",
+                    "examples": [
+                        "false"
+                    ]
                 }
             },
             "additionalProperties": false,
@@ -876,7 +873,7 @@
         },
         "Microsoft.DeleteProperty": {
             "$role": "unionType(Microsoft.IDialog)",
-            "title": "Delete PropertyS",
+            "title": "Delete Property",
             "description": "This is a step which allows you to remove a property from memory",
             "type": "object",
             "properties": {
@@ -1063,7 +1060,8 @@
                 "eventValue": {
                     "type": "object",
                     "title": "Event Value",
-                    "description": "optional value to emit along with the event"
+                    "description": "optional value to emit along with the event",
+                    "additionalProperties": true
                 },
                 "bubbleEvent": {
                     "type": "boolean",
@@ -1348,136 +1346,10 @@
                 }
             ]
         },
-        "Microsoft.FloatInput": {
-            "$role": "unionType(Microsoft.IDialog)",
-            "title": "Float  prompt",
-            "description": "This represents a dialog which gathers a number in a specified range",
-            "type": "object",
-            "properties": {
-                "$type": {
-                    "title": "$type",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.FloatInput"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "property": {
-                    "$role": "memoryPath",
-                    "title": "Property",
-                    "description": "This is that will be passed in as InputProperty and also set as the OutputProperty",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
-                },
-                "inputProperties": {
-                    "type": "object",
-                    "title": "Input Properties",
-                    "description": "This defines properties which be passed as arguments to this dialog",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "outputProperty": {
-                    "$role": "memoryPath",
-                    "title": "Output Property",
-                    "description": "This is the property which the EndDialog(result) will be set to when EndDialog() is called",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
-                },
-                "prompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Initial Prompt",
-                    "description": "The message to send to as prompt for this input.",
-                    "examples": [
-                        "What is your height?"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "retryPrompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Retry Prompt",
-                    "description": "The message to send to prompt again.",
-                    "examples": [
-                        "Let's try again. What is your height?"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "invalidPrompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Invalid Prompt",
-                    "description": "The message to send to when then input was not recognized or not valid for the input type.",
-                    "examples": [
-                        "I didn't recognize a number"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "minValue": {
-                    "type": "integer",
-                    "title": "Mininum value",
-                    "description": "The minimum value that is acceptable.  ",
-                    "examples": [
-                        "0"
-                    ]
-                },
-                "maxValue": {
-                    "type": "integer",
-                    "title": "Maximum value",
-                    "description": "The maximum value that is acceptable.  ",
-                    "examples": [
-                        "120"
-                    ]
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$type"
-                    ]
-                }
-            ]
-        },
         "Microsoft.HttpRequest": {
             "$role": "unionType(Microsoft.IDialog)",
             "type": "object",
-            "title": "Http Request",
+            "title": "Goto Dialog",
             "description": "This is a step which replaces the current dialog with the target dialog",
             "properties": {
                 "$type": {
@@ -1656,11 +1528,6 @@
                     "$ref": "#/definitions/Microsoft.EndTurn"
                 },
                 {
-                    "title": "Microsoft.FloatInput",
-                    "description": "This represents a dialog which gathers a number in a specified range",
-                    "$ref": "#/definitions/Microsoft.FloatInput"
-                },
-                {
                     "title": "Microsoft.HttpRequest",
                     "description": "This is a step which replaces the current dialog with the target dialog",
                     "$ref": "#/definitions/Microsoft.HttpRequest"
@@ -1672,17 +1539,12 @@
                 },
                 {
                     "title": "Microsoft.InitProperty",
-                    "description": "This step allows you to initialize a property to either an object or array",
+                    "description": "This step allows you to innitial a property to either an object or array",
                     "$ref": "#/definitions/Microsoft.InitProperty"
                 },
                 {
-                    "title": "Microsoft.IntegerInput",
-                    "description": "This represents a dialog which gathers a number in a specified range",
-                    "$ref": "#/definitions/Microsoft.IntegerInput"
-                },
-                {
                     "title": "Microsoft.LogStep",
-                    "description": "This is a step which writes to console.log and optionally creates a TraceActivity around a text binding",
+                    "description": "This is a step which writes to console.log and optional creates a TraceActivity around a text binding",
                     "$ref": "#/definitions/Microsoft.LogStep"
                 },
                 {
@@ -1776,6 +1638,10 @@
                     "title": "Microsoft.RegexRecognizer",
                     "description": "Recognizer which uses regex expressions to generate intents and entities.",
                     "$ref": "#/definitions/Microsoft.RegexRecognizer"
+                },
+                {
+                    "type": "string",
+                    "title": "string"
                 }
             ]
         },
@@ -1923,7 +1789,7 @@
                 {
                     "title": "Type",
                     "required": [
-                        "condition",
+                        "expression",
                         "steps",
                         "$type"
                     ]
@@ -1933,7 +1799,7 @@
         "Microsoft.InitProperty": {
             "$role": "unionType(Microsoft.IDialog)",
             "title": "Init Property Step",
-            "description": "This step allows you to initialize a property to either an object or array",
+            "description": "This step allows you to innitial a property to either an object or array",
             "type": "object",
             "properties": {
                 "$type": {
@@ -1972,8 +1838,8 @@
                 },
                 "type": {
                     "type": "string",
-                    "title": "Type",
-                    "description": "Type of value to set the property to, object or array.",
+                    "title": "type",
+                    "description": "type of value to set the property to, object or array.",
                     "enum": [
                         "object",
                         "array"
@@ -1998,132 +1864,6 @@
                     "required": [
                         "property",
                         "type",
-                        "$type"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.IntegerInput": {
-            "$role": "unionType(Microsoft.IDialog)",
-            "title": "Integer prompt",
-            "description": "This represents a dialog which gathers a number in a specified range",
-            "type": "object",
-            "properties": {
-                "$type": {
-                    "title": "$type",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.IntegerInput"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "property": {
-                    "$role": "memoryPath",
-                    "title": "Property",
-                    "description": "This is that will be passed in as InputProperty and also set as the OutputProperty",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
-                },
-                "inputProperties": {
-                    "type": "object",
-                    "title": "Input Properties",
-                    "description": "This defines properties which be passed as arguments to this dialog",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "outputProperty": {
-                    "$role": "memoryPath",
-                    "title": "Output Property",
-                    "description": "This is the property which the EndDialog(result) will be set to when EndDialog() is called",
-                    "examples": [
-                        "value.birthday"
-                    ],
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
-                },
-                "prompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Initial Prompt",
-                    "description": "The message to send to as prompt for this input.",
-                    "examples": [
-                        "What is your birth date?"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "retryPrompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Retry Prompt",
-                    "description": "The message to send to prompt again.",
-                    "examples": [
-                        "Let's try again. What is your birth date?"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "invalidPrompt": {
-                    "$type": "Microsoft.IActivityTemplate",
-                    "title": "Invalid Prompt",
-                    "description": "The message to send to when then input was not recognized or not valid for the input type.",
-                    "examples": [
-                        "No date was recognized"
-                    ],
-                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
-                },
-                "minValue": {
-                    "type": "integer",
-                    "title": "Mininum value",
-                    "description": "The minimum value that is acceptable.  ",
-                    "examples": [
-                        "0"
-                    ]
-                },
-                "maxValue": {
-                    "type": "integer",
-                    "title": "Maximum value",
-                    "description": "The maximum value that is acceptable.  ",
-                    "examples": [
-                        "120"
-                    ]
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
                         "$type"
                     ]
                 }
@@ -2184,7 +1924,10 @@
                 "entities": {
                     "type": "array",
                     "title": "Entities",
-                    "description": "The entities required to trigger this rule"
+                    "description": "The entities required to trigger this rule",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
             "additionalProperties": false,
@@ -2265,7 +2008,7 @@
         "Microsoft.LogStep": {
             "$role": "unionType(Microsoft.IDialog)",
             "title": "Log Step",
-            "description": "This is a step which writes to console.log and optionally creates a TraceActivity around a text binding",
+            "description": "This is a step which writes to console.log and optional creates a TraceActivity around a text binding",
             "type": "object",
             "properties": {
                 "$type": {
@@ -2606,6 +2349,7 @@
                     "type": "number",
                     "title": "Mininum value",
                     "description": "The minimum value that is acceptable.  ",
+                    "default": "-2147483648",
                     "examples": [
                         "0.1"
                     ]
@@ -2614,8 +2358,27 @@
                     "type": "number",
                     "title": "Maximum value",
                     "description": "The maximum value that is acceptable.  ",
+                    "default": "2147483647",
                     "examples": [
                         "12.5"
+                    ]
+                },
+                "precision": {
+                    "type": "number",
+                    "title": "Precision",
+                    "description": "The precision of decimal points you want. Default is zero, which integers.",
+                    "default": "0",
+                    "examples": [
+                        "2"
+                    ]
+                },
+                "alwaysPrompt": {
+                    "type": "boolean",
+                    "title": "Always Prompt",
+                    "description": "If set to true this will always prompt the user regardless if you already have the value or not.",
+                    "default": "false",
+                    "examples": [
+                        "false"
                     ]
                 }
             },
@@ -3282,20 +3045,31 @@
                     "type": "string"
                 },
                 "cases": {
-                    "type": "object",
-                    "propertyNames": {
-                        "title": "Case",
-                        "description": "Case expression to compare to condition",
-                        "$role": "expression",
-                        "type": "string"
-                    },
-                    "additionalProperties": {
-                        "type": "array",
-                        "title": "If True",
-                        "description": "Step to execute if case is equal to condition",
-                        "items": {
-                            "$type": "Microsoft.IDialog",
-                            "$ref": "#/definitions/Microsoft.IDialog"
+                    "type": "array",
+                    "title": "Cases",
+                    "desc": "Cases to evaluate against condition",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "value",
+                            "case"
+                        ],
+                        "properties": {
+                            "value": {
+                                "$role": "expression",
+                                "title": "Value",
+                                "description": "Value which must match the condition property",
+                                "type": "string"
+                            },
+                            "steps": {
+                                "type": "array",
+                                "title": "Steps",
+                                "description": "Steps to execute if case is equal to condition",
+                                "items": {
+                                    "$type": "Microsoft.IDialog",
+                                    "$ref": "#/definitions/Microsoft.IDialog"
+                                }
+                            }
                         }
                     }
                 },
@@ -3425,6 +3199,15 @@
                     "description": "A regular expression pattern which must match",
                     "examples": [
                         "\\w{3,30}"
+                    ]
+                },
+                "alwaysPrompt": {
+                    "type": "boolean",
+                    "title": "Always Prompt",
+                    "description": "If set to true this will always prompt the user regardless if you already have the value or not.",
+                    "default": "false",
+                    "examples": [
+                        "false"
                     ]
                 }
             },
