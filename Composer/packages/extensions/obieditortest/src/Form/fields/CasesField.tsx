@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from 'react-jsonschema-form';
-import {
-  PrimaryButton,
-  TextField,
-  DirectionalHint,
-  DefaultButton,
-  IContextualMenuItem,
-  ContextualMenuItemType,
-} from 'office-ui-fabric-react';
+import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 
 import Modal from '../../Modal';
@@ -25,7 +18,7 @@ interface CaseFormData {
 }
 
 function CaseConditionActions(props) {
-  const { item, index, onEdit, onRemove, onMove, canMoveUp, canMoveDown, onNew } = props;
+  const { item, index, onEdit, onRemove, onMove, canMoveUp, canMoveDown } = props;
 
   const menuItems: IContextualMenuItem[] = [
     {
@@ -57,15 +50,6 @@ function CaseConditionActions(props) {
       text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       onClick: () => onRemove(item.value),
-    },
-    {
-      key: 'divider_1',
-      itemType: ContextualMenuItemType.Divider,
-    },
-    {
-      key: 'new',
-      text: formatMessage('New'),
-      onClick: onNew,
     },
   ];
 
