@@ -1,7 +1,7 @@
 import { Boundary } from '../components/shared/Boundary';
 
 const SwitchToBaseline = 10;
-const CaseToBaseline = 20;
+const CaseToBaseline = 30;
 const CaseToBottom = 20;
 const CaseBlockIntervalX = 20;
 
@@ -14,6 +14,10 @@ const CaseBlockIntervalX = 20;
 export function switchCaseLayouter(switchNode, caseNodes = []) {
   if (!Array.isArray(caseNodes) || caseNodes.length === 0) {
     return { boundary: switchNode.boundary, nodeMap: { switchNode, caseNodes: [] }, edges: [] };
+  }
+
+  if (caseNodes.length === 1) {
+    return singleCaseLayouter(switchNode, caseNodes[0]);
   }
 
   /** Calculate boundary */
@@ -115,17 +119,52 @@ export function switchCaseLayouter(switchNode, caseNodes = []) {
         direction: 'y',
         x: x.offset.x + x.boundary.axisX,
         y: BaselinePositionY,
-        length: x.offset.y - BaselinePositionY,
+        length: CaseToBaseline,
+        text: x.data.label,
       },
       {
         id: `edge/${switchNode.id}/case/${x.id}->bottom`,
         direction: 'y',
         x: x.offset.x + x.boundary.axisX,
         y: x.offset.y + x.boundary.height,
-        length: CaseToBottom,
+        length: containerBoundary.height - x.offset.y - x.boundary.height,
       }
     );
   });
 
   return { boundary: containerBoundary, nodeMap: { switchNode, caseNodes }, edges };
+}
+
+/**
+ *      [switch]
+ *         |
+ *       [case]
+ */
+function singleCaseLayouter(switchNode, caseNode) {
+  const box = new Boundary();
+  box.axisX = Math.max(switchNode.boundary.axisX, caseNode.boundary.axisX);
+  box.width =
+    box.axisX +
+    Math.max(switchNode.boundary.width - switchNode.boundary.axisX, caseNode.boundary.width - caseNode.boundary.axisX);
+  box.height = switchNode.boundary.height + (SwitchToBaseline + CaseToBaseline) + caseNode.boundary.height;
+
+  switchNode.offset = {
+    x: box.axisX - switchNode.boundary.axisX,
+    y: 0,
+  };
+  caseNode.offset = {
+    x: box.axisX - caseNode.boundary.axisX,
+    y: box.height - caseNode.boundary.height,
+  };
+  const edges = [
+    {
+      id: `edge/${switchNode.id}/switch/switch->${caseNode.id}`,
+      direction: 'y',
+      x: box.axisX,
+      y: switchNode.offset.y + switchNode.boundary.height,
+      length: SwitchToBaseline + CaseToBaseline,
+      text: caseNode.data.label,
+    },
+  ];
+  return { boundary: box, nodeMap: { switchNode, caseNodes: [caseNode] }, edges };
 }
