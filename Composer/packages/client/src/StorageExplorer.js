@@ -121,7 +121,9 @@ export function StorageExplorer() {
       isOpen={storageExplorerStatus !== ''}
       type={PanelType.customNear}
       styles={panelStyle}
+      isLightDismiss={true}
       hasCloseButton={false}
+      onDismiss={onCloseExplorer}
       onRenderNavigation={onRenderNavigationContent}
     >
       <div css={body}>
