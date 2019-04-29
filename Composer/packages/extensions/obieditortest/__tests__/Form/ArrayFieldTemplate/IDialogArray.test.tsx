@@ -71,6 +71,9 @@ describe('<IDialogArray />', () => {
 
     fireEvent.click(menuBtn);
 
+    const responseMenu = await findByText(document.body, 'Sending a response');
+    fireEvent.click(responseMenu);
+
     const sendActivity = await findByText(document.body, 'Microsoft.SendActivity');
     fireEvent.click(sendActivity);
 

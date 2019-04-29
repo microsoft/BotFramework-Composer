@@ -11,9 +11,7 @@
         {
             "$type": "Microsoft.TraceActivity",
             "valueType": "memory",
-            "value": "{user}",
-            "ValueProperty": "user.name"
-                
+            "value": "{user}"
         },
         {
             "$type": "Microsoft.LogStep",

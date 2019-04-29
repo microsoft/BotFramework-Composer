@@ -1,17 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
-  "$type": "Microsoft.AdaptiveDialog",
-  "storage": {
-    "$type": "Microsoft.MemoryStorage"
-  },
-  "rules": [
-    {
-      "$type": "Microsoft.NoMatchRule",
-      "steps": [
-        {
-          "$type": "{{stepType}}"
-        }
-      ]
-    }
-  ]
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$type": "Microsoft.AdaptiveDialog"
 }

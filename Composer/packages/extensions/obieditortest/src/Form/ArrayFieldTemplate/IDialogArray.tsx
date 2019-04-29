@@ -24,7 +24,10 @@ const IDialogArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => 
           }}
           split
           menuProps={{
-            items: buildDialogOptions(item => !item.includes('Rule')),
+            items: buildDialogOptions({
+              filter: item => !item.includes('Rule'),
+              onClick: (e, item) => onAddClick(e, item.data),
+            }),
             onItemClick: (e, item) => {
               const newItem = item && item.data;
 

@@ -5,15 +5,21 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import { getUiOptions } from 'react-jsonschema-form/lib/utils';
 import omit from 'lodash.omit';
 import { ObjectFieldTemplateProps } from 'react-jsonschema-form';
+import formatMessage from 'format-message';
 
 import ObjectItem from './ObjectItem';
 import NewPropertyModal from './NewPropertyModal';
+
+import './styles.scss';
 
 const fieldHeaderTheme = createTheme({
   fonts: {
     medium: {
       fontSize: '24px',
     },
+  },
+  palette: {
+    neutralLighter: '#d0d0d0',
   },
 });
 
@@ -64,17 +70,12 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
         <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.description}</p>
       )}
       {props.properties.map(p => (
-        <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} />
+        <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
       ))}
       {canExpand(props) && (
         <>
-          <PrimaryButton
-            type="button"
-            onClick={() => setShowModal(true)}
-            styles={{ root: { marginTop: '10px' } }}
-            iconProps={{ iconName: 'Add' }}
-          >
-            Add
+          <PrimaryButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
+            {formatMessage('Add')}
           </PrimaryButton>
           {showModal && (
             <NewPropertyModal

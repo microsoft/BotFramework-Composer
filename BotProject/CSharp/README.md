@@ -1,17 +1,21 @@
 ## Bot Project
-Bot project is the launcher project for the bots written in [OBI](https://github.com/Microsoft/botframework-obi) format.
+Bot project is the launcher project for the bots written in declarative form (JSON), using the Composer, for the Bot Framework SDK. They follow pattern defined in [OBI](https://github.com/Microsoft/botframework-obi) format. 
 
-## Instructions
+## Instructions for setting up the Bot Project runtime
+The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch it from the emulator, you need to make sure you can run the bot. 
 
 ### Prerequisite:
 * Install .Netcore 2
 * Install nuget
 
+### Add Nuget Feed
+* option 1: use VisualStudio "Manage Nuget Packages" to add a new package feed: "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
+* option 2: nuget sources Add -Name "ComposableDialog" -Source "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json".
+
 ### Commands:
 
-* nuget sources Add -Name "ComposableDialog" -Source "https://fuselabs.pkgs.visualstudio.com/_packaging/ComposableDialog/nuget/v3/index.json". 
-* This packages are only avaiable for microsoft employees and we will publish them soon.
-* please contact luhan@microsoft.com for any authentation issue.
+* from root folder 
+* cd BotProject
 * dotnet restore // for the package updates
 * dotnet build // build
 * dotnet run // start the bot
@@ -21,6 +25,7 @@ Bot project is the launcher project for the bots written in [OBI](https://github
 * You can set you emulator to connect to http://localhost:3979/api/messages.
 
 ### config your bot
+This setp is required for local testing of your Bot Runtime. 
 * The only thing you need to config is appsetting.json, which have a bot setting to launch the bot
 ```
     appsettings.json：
@@ -29,7 +34,6 @@ Bot project is the launcher project for the bots written in [OBI](https://github
       "path": "../../Bots/SampleBot3/bot3.botproj"
     }
 ```
-
 
 ## .botproj folder structure
 ```

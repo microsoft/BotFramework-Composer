@@ -28,9 +28,8 @@ export const CasesField: React.FC<FieldProps> = props => {
       {...props}
       additionalColumns={columns}
       columnHeader={formatMessage('Case')}
-      defaultItem={{ $type: 'Microsoft.SendActivity' }}
-      filterNewOptions={item => !item.includes('Rule')}
-      label={formatMessage('Add New Step')}
+      dialogOptionsOpts={{ include: [] }}
+      label={formatMessage('Add New Case')}
       navPrefix="cases"
       renderTitle={renderTitle}
     />
