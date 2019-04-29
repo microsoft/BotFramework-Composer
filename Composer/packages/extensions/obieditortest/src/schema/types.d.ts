@@ -11,9 +11,6 @@ interface BaseSchema {
   $designer?: OpenObject;
 }
 
-/* Union of components which implement the IDialog interface */
-type MicrosoftIDialog = MicrosoftIRecognizer | MicrosoftIRule;
-
 /* Union of components which implement the IActivityTemplate interface */
 type MicrosoftIActivityTemplate = string;
 
@@ -127,7 +124,7 @@ declare enum DialogEvent {
 
 interface RuleBase extends BaseSchema {
   /** Optional constraint to which must be met for this rule to fire */
-  constraint: string;
+  constraint?: string;
   /** Sequence of steps or dialogs to execute */
   steps: MicrosoftIDialog[];
 }
@@ -153,3 +150,33 @@ interface Rule extends RuleBase {}
 interface UnknownIntentRule extends RuleBase {}
 
 type MicrosoftIRule = EventRule | IntentRule | Rule | UnknownIntentRule;
+
+/**
+ * Conversational Flow and Dialog Management
+ */
+
+interface CaseCondition {
+  /** Value which must match the condition property */
+  value: string;
+  /** Steps to execute if case is equal to condition */
+  steps: MicrosoftIDialog[];
+}
+
+/** Step which conditionally decides which step to execute next. */
+interface SwitchCondition extends BaseSchema {
+  /** Expression to evaluate to switch on. */
+  condition?: string;
+  /** Cases to evaluate against condition */
+  cases?: CaseCondition[];
+  /** Step to execute if no case is equal to condition */
+  default?: MicrosoftIDialog[];
+}
+
+/* Union of components which implement the IDialog interface */
+type MicrosoftIDialog =
+  | ChoiceInput
+  | ConfirmInput
+  | MicrosoftIRecognizer
+  | MicrosoftIRule
+  | SwitchCondition
+  | TextInput;
