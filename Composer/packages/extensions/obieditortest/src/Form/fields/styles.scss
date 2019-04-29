@@ -9,17 +9,25 @@
   grid-row-gap: 20px;
 }
 
-.RecognizerField {
+.RecognizerField, .CasesFieldConditions {
   display: flex;
 
   .ObjectFieldTemplate {
     flex: 1;
   }
 
-  .RecognizerFieldMenu {
+  .BaseField {
+    flex: 1;
+  }
+
+  .RecognizerFieldMenu, .CasesFieldConditionsMenu {
     flex-grow: 0;
     margin-left: 20px;
     padding-top: 4px;
+  }
+
+  .CasesFieldConditionsMenu {
+    margin-top: 30px;
   }
 }
 
