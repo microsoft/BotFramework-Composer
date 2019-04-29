@@ -23,7 +23,7 @@ export function transformSwitchCondition(input, jsonpath) {
       return new IndexedNode(`${prefix}.stepGroup`, {
         $type: ObiTypes.StepGroup,
         label: value,
-        children: steps.map((x, index) => new IndexedNode(`${prefix}[${index}]`, x)),
+        children: steps.map((x, index) => new IndexedNode(`${prefix}.steps[${index}]`, x)),
       });
     });
   } else {
@@ -33,7 +33,7 @@ export function transformSwitchCondition(input, jsonpath) {
       return new IndexedNode(`${prefix}.stepGroup`, {
         $type: ObiTypes.StepGroup,
         label: caseName,
-        children: cases[caseName].map((x, index) => new IndexedNode(`${prefix}[${index}]`, x)),
+        children: cases[caseName].map((x, index) => new IndexedNode(`${prefix}.steps[${index}]`, x)),
       });
     });
   }
