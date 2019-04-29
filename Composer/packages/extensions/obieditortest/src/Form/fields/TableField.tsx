@@ -4,7 +4,6 @@ import {
   DefaultButton,
   DetailsList,
   IContextualMenuItem,
-  PrimaryButton,
   SelectionMode,
   DetailsListLayoutMode,
 } from 'office-ui-fabric-react';
@@ -20,18 +19,23 @@ import { FormContext } from '../types';
 
 import { BaseField } from './BaseField';
 
-interface TableFieldProps<T> extends FieldProps<T> {
+interface TableRenderProps<T> {
+  createNewItemAtIndex: (idx?: number) => (e: any, item: IContextualMenuItem) => void;
+  onChange: (newItem: T | T[]) => void;
+}
+
+interface TableFieldProps<T> extends FieldProps<T[]> {
   additionalColumns?: IColumn[];
   columnHeader?: string;
   formContext: FormContext;
-  formData: T;
-  label: string;
+  formData: T[];
   navPrefix: string;
   onChange: (items: T[]) => void;
   renderTitle?: (item: T) => string;
   name: string;
   schema: JSONSchema6;
   dialogOptionsOpts?: DialogOptionsOpts;
+  children?: (props: TableRenderProps<T>) => React.ReactNode;
 }
 
 interface ItemActionsProps<T = any> extends TableFieldProps<T> {
@@ -104,8 +108,8 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
   return <DefaultButton menuProps={{ items: menuItems }} />;
 };
 
-export function TableField<T = any>(props: TableFieldProps<T[]>): JSX.Element {
-  const { additionalColumns = [], columnHeader, dialogOptionsOpts, label, renderTitle } = props;
+export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
+  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderTitle, children } = props;
 
   const items = props.formData;
 
@@ -126,8 +130,9 @@ export function TableField<T = any>(props: TableFieldProps<T[]>): JSX.Element {
     {
       key: 'column1',
       name: columnHeader || formatMessage('Type'),
-      minWidth: 140,
+      minWidth: 30,
       maxWidth: additionalColumns.length ? 200 : undefined,
+      isResizable: true,
       onRender: renderTitle,
     },
     ...additionalColumns,
@@ -155,24 +160,15 @@ export function TableField<T = any>(props: TableFieldProps<T[]>): JSX.Element {
 
   return (
     <BaseField {...props}>
-      <DetailsList
-        columns={columns}
-        items={items}
-        selectionMode={SelectionMode.none}
-        styles={{ root: { marginBottom: '20px' } }}
-        layoutMode={DetailsListLayoutMode.justified}
-      />
-      <PrimaryButton
-        menuProps={{
-          items: buildDialogOptions({ ...dialogOptionsOpts, onClick: createNewItemAtIndex() }),
-          calloutProps: { calloutMaxHeight: 500 },
-          directionalHint: DirectionalHint.bottomLeftEdge,
-        }}
-        split
-        type="button"
-      >
-        {label}
-      </PrimaryButton>
+      {items && items.length > 0 && (
+        <DetailsList
+          columns={columns}
+          items={items}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+        />
+      )}
+      {children && children({ onChange, createNewItemAtIndex })}
     </BaseField>
   );
 }

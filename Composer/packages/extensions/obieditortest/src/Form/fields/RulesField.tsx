@@ -1,10 +1,11 @@
 import React from 'react';
 import formatMessage from 'format-message';
-import { IColumn } from 'office-ui-fabric-react';
+import { IColumn, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
 import get from 'lodash.get';
 
 import { DialogGroup } from '../../schema/appschema';
+import { buildDialogOptions } from '../utils';
 
 import { TableField } from './TableField';
 
@@ -45,6 +46,20 @@ export function RulesField(props: FieldProps) {
       label={formatMessage('Add New Rule')}
       navPrefix="rules"
       renderTitle={renderTitle}
-    />
+    >
+      {({ createNewItemAtIndex }) => (
+        <PrimaryButton
+          styles={{ root: { marginTop: '20px' } }}
+          menuProps={{
+            items: buildDialogOptions({ include: [DialogGroup.RULE], subMenu: false, onClick: createNewItemAtIndex() }),
+            calloutProps: { calloutMaxHeight: 500 },
+            directionalHint: DirectionalHint.bottomLeftEdge,
+          }}
+          type="button"
+        >
+          {formatMessage('Add New Rule')}
+        </PrimaryButton>
+      )}
+    </TableField>
   );
 }
