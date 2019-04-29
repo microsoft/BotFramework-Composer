@@ -13,7 +13,7 @@ import { Store } from './store';
 import { FileSelector } from './components/StorageExplorer/FileSelector';
 import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { StorageSelector } from './components/StorageExplorer/StorageSelector';
-import { container, body, panelContent } from './components/StorageExplorer/styles';
+import { body, panelContent, panelStyle } from './components/StorageExplorer/styles';
 import { SaveAction } from './components/StorageExplorer/SaveAction/index';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
@@ -120,9 +120,7 @@ export function StorageExplorer() {
     <Panel
       isOpen={storageExplorerStatus !== ''}
       type={PanelType.customNear}
-      css={container}
-      isModeless={true}
-      isBlocking={false}
+      styles={panelStyle}
       hasCloseButton={false}
       onRenderNavigation={onRenderNavigationContent}
     >
