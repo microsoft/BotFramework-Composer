@@ -4,6 +4,7 @@ const SwitchToBaseline = 10;
 const CaseToBaseline = 30;
 const CaseToBottom = 20;
 const CaseBlockIntervalX = 20;
+const MisalignmentThreshold = 30;
 
 /**
  *        [switch]
@@ -14,10 +15,6 @@ const CaseBlockIntervalX = 20;
 export function switchCaseLayouter(switchNode, caseNodes = []) {
   if (!Array.isArray(caseNodes) || caseNodes.length === 0) {
     return { boundary: switchNode.boundary, nodeMap: { switchNode, caseNodes: [] }, edges: [] };
-  }
-
-  if (caseNodes.length === 1) {
-    return singleCaseLayouter(switchNode, caseNodes[0]);
   }
 
   /** Calculate boundary */
@@ -49,6 +46,27 @@ export function switchCaseLayouter(switchNode, caseNodes = []) {
     };
     return accOffsetX + CaseBlockIntervalX + x.boundary.width;
   }, 0);
+
+  /**
+   * Handle misalignment cases
+   *
+   *      [switch]
+   *          |
+   *         --
+   *         |
+   *        [case]
+   *         --
+   *          |
+   * When caseNode[caseNode.length / 2] happened to be possibly aligned with switch node's axis X, align them.
+   * The threshold should be smaller than switchNode.width / 2, otherwise it will change the container's width.
+   */
+  const middleCase = caseNodes[Math.floor(caseNodes.length / 2)];
+  const xAxisDelta =
+    middleCase.offset.x + middleCase.boundary.axisX - (switchNode.offset.x + switchNode.boundary.axisX);
+  if (Math.abs(xAxisDelta) < MisalignmentThreshold) {
+    containerBoundary.axisX += xAxisDelta;
+    switchNode.offset.x += xAxisDelta;
+  }
 
   /** Calculate edges */
   const edges = [];
@@ -133,38 +151,4 @@ export function switchCaseLayouter(switchNode, caseNodes = []) {
   });
 
   return { boundary: containerBoundary, nodeMap: { switchNode, caseNodes }, edges };
-}
-
-/**
- *      [switch]
- *         |
- *       [case]
- */
-function singleCaseLayouter(switchNode, caseNode) {
-  const box = new Boundary();
-  box.axisX = Math.max(switchNode.boundary.axisX, caseNode.boundary.axisX);
-  box.width =
-    box.axisX +
-    Math.max(switchNode.boundary.width - switchNode.boundary.axisX, caseNode.boundary.width - caseNode.boundary.axisX);
-  box.height = switchNode.boundary.height + (SwitchToBaseline + CaseToBaseline) + caseNode.boundary.height;
-
-  switchNode.offset = {
-    x: box.axisX - switchNode.boundary.axisX,
-    y: 0,
-  };
-  caseNode.offset = {
-    x: box.axisX - caseNode.boundary.axisX,
-    y: box.height - caseNode.boundary.height,
-  };
-  const edges = [
-    {
-      id: `edge/${switchNode.id}/switch/switch->${caseNode.id}`,
-      direction: 'y',
-      x: box.axisX,
-      y: switchNode.offset.y + switchNode.boundary.height,
-      length: SwitchToBaseline + CaseToBaseline,
-      text: caseNode.data.label,
-    },
-  ];
-  return { boundary: box, nodeMap: { switchNode, caseNodes: [caseNode] }, edges };
 }
