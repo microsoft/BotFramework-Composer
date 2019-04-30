@@ -118,9 +118,9 @@ export async function createDialog(dispatch, { name, steps }) {
   }
 }
 
-export async function updateLgTemplate(dispatch, { name, content }) {
+export async function updateLgTemplate(dispatch, { content }) {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/lgTemplates/${name}`, { name, content });
+    const response = await axios.put(`${BASEURL}/projects/opened/lgTemplates`, { content });
     dispatch({
       type: ActionTypes.UPDATE_LG_TEMPLATE,
       payload: { response },

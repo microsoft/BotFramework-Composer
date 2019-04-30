@@ -68,7 +68,7 @@ export class LGIndexer {
               newTemplate = this.getNewTemplate(count++, absolutePath);
             }
             newTemplate.id = count;
-            newTemplate.name = line.trim().split(' ')[1];
+            newTemplate.name = line.split('#')[1].trim();
             newTemplate.absolutePath = absolutePath;
             return;
           }
@@ -93,21 +93,22 @@ export class LGIndexer {
     return this.lgTemplates;
   }
 
-  public async updateLgTemplate(lgTemplate: LGTemplate) {
-    const absolutePath = lgTemplate.absolutePath;
-    const updatedIndex = this.lgTemplates.findIndex(template => lgTemplate.id === template.id);
-    if (lgTemplate.name && lgTemplate.content) {
+  public async updateLgTemplate(newTemplate: LGTemplate) {
+    const absolutePath = newTemplate.absolutePath;
+    const updatedIndex = this.lgTemplates.findIndex(template => newTemplate.id === template.id);
+    const sameNameIndex = this.lgTemplates.findIndex(template => newTemplate.name === template.name);
+    if (newTemplate.name && newTemplate.content && sameNameIndex < 0) {
       if (updatedIndex < 0) {
         // create a new id if the lg template is not exist and id not provided.
-        lgTemplate.id = lgTemplate.id || this.lgTemplates.length + 1;
-        this.lgTemplates.push(lgTemplate);
+        newTemplate.id = newTemplate.id || this.lgTemplates.length + 1;
+        this.lgTemplates.push(newTemplate);
       } else {
-        this.lgTemplates[updatedIndex] = lgTemplate;
+        this.lgTemplates[updatedIndex] = newTemplate;
       }
     }
     let updatedLG = '';
     this.lgTemplates
-      .filter(template => template.absolutePath === lgTemplate.absolutePath)
+      .filter(template => template.absolutePath === newTemplate.absolutePath)
       .forEach(template => {
         if (template.comments) {
           updatedLG += `${template.comments}`;

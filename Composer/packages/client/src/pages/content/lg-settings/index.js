@@ -114,7 +114,6 @@ export function LanguageGenerationSettings() {
     newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
 
     const payload = {
-      name: templateName,
       content: newTemplate,
     };
 

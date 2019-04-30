@@ -76,9 +76,11 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public updateLgTemplate = async (name: string, content: any) => {
+  public updateLgTemplate = async (content: any) => {
     const newFileContent = await this.lgIndexer.updateLgTemplate(content);
-    this._updateFile(`${name.trim()}.lg`, newFileContent);
+    const pathItems = content.absolutePath.split(/[\\/]+/g);
+    const fileName = pathItems[pathItems.length - 1];
+    this._updateFile(fileName, newFileContent);
     return this.lgIndexer.getLgTemplates();
   };
 

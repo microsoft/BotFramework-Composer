@@ -137,10 +137,10 @@ describe('update lg template', () => {
       absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
     };
     await proj.lgIndexer.index(initFiles);
-    const lgTemplates = await proj.updateLgTemplate('test', newValue);
+    const lgTemplates = await proj.updateLgTemplate(newValue);
     const aTemplate = lgTemplates.find(f => f.name.startsWith('updated'));
     // @ts-ignore
     expect(aTemplate).toEqual(newValue);
-    await proj.updateLgTemplate('test', initValue);
+    await proj.updateLgTemplate(initValue);
   });
 });
