@@ -1,8 +1,9 @@
 import { css } from '@emotion/core';
 
-export const container = css`
-  width: 1000px;
-`;
+export const panelStyle = {
+  main: { width: '1000px' },
+  overlay: { width: '100vw' },
+};
 
 export const body = css`
   display: flex;
