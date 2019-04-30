@@ -3,7 +3,7 @@ import { DefaultButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
 import { ArrayFieldItem } from 'react-jsonschema-form';
 
-export default function ArrayItem(props: ArrayFieldItem) {
+const ArrayItem: React.FC<ArrayFieldItem> = props => {
   const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
 
   // This needs to return true to dismiss the menu after a click.
@@ -50,4 +50,11 @@ export default function ArrayItem(props: ArrayFieldItem) {
       )}
     </div>
   );
-}
+};
+
+ArrayItem.defaultProps = {
+  onReorderClick: () => () => {},
+  onDropIndexClick: () => () => {},
+};
+
+export default ArrayItem;
