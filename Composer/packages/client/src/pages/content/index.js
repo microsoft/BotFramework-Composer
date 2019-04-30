@@ -7,15 +7,16 @@ import Routes from './router';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { NavLink } from './../../components/NavLink/index';
-import { title, label, navLinkClass } from './styles';
+import { title, label, navLinkClass, contentContainer, fileList } from './styles';
+import { contentEditor } from './styles';
 
 // todo: should wrap the NavLink to another component.
 export const ContentPage = () => {
   return (
     <Fragment>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
-          <Tree variant="largest">
+      <div css={contentContainer}>
+        <div css={fileList}>
+          <Tree variant="self-adaption">
             <div>
               <div css={title}>{formatMessage('Content')}</div>
               <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
@@ -27,11 +28,9 @@ export const ContentPage = () => {
             </div>
           </Tree>
         </div>
-        <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
-          <Conversation>
-            <Routes />
-          </Conversation>
-        </div>
+        <Conversation extraCss={contentEditor}>
+          <Routes />
+        </Conversation>
       </div>
     </Fragment>
   );
