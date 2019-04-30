@@ -1,5 +1,4 @@
-import path from 'path';
-
+import { Path } from '../../../../src/utility/path';
 import { BotProject } from '../../../../src/models/bot/botProject';
 import { BotProjectRef } from '../../../../src/models/bot/interface';
 
@@ -9,7 +8,7 @@ jest.mock('azure-storage', () => {
 
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',
-  path: path.join(__dirname, '../../mocks/1.botproj'),
+  path: Path.join(__dirname, '../../mocks/1.botproj'),
 };
 
 const proj = new BotProject(mockProjectRef);
@@ -20,21 +19,21 @@ describe('Index lg files', () => {
       {
         name: 'test.lg',
         content: '# greet\n- Hello!',
-        path: path.join(__dirname, '../../mocks/test.lg'),
-        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')),
+        path: Path.join(__dirname, '../../mocks/test.lg'),
+        relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/test.lg')),
       },
       {
         name: 'a.dialog',
         content: { old: 'value' },
-        path: path.join(__dirname, '../../mocks/a.dialog'),
-        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/a.dialog')),
+        path: Path.join(__dirname, '../../mocks/a.dialog'),
+        relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/a.dialog')),
       },
     ];
     const aTemplate = {
       id: 1,
       name: 'greet',
       content: '- Hello!',
-      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
       parameters: [],
       type: 'Rotate',
       comments: '',

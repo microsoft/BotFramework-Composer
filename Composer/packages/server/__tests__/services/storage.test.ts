@@ -1,5 +1,4 @@
-import path from 'path';
-
+import { Path } from '../../src/utility/path';
 import StorageService from '../../src/services/storage';
 jest.mock('azure-storage', () => {
   return {
@@ -39,14 +38,14 @@ describe('test StorageService', () => {
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].id).toBe('default');
     expect(result[0].type).toBe('LocalDisk');
-    expect(result[0].path).toBe(path.resolve('.'));
+    expect(result[0].path).toBe(Path.resolve('.'));
   });
   it('checkBlob', async () => {
-    const result = await StorageService.checkBlob('default', path.resolve('.'));
+    const result = await StorageService.checkBlob('default', Path.resolve('.'));
     expect(result).toBeTruthy();
   });
   it('getBlob', async () => {
-    const result = await StorageService.getBlob('default', path.resolve('.'));
+    const result = await StorageService.getBlob('default', Path.resolve('.'));
     expect(result).not.toBeUndefined();
     expect(result.children).not.toBeUndefined();
   });
