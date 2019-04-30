@@ -13,7 +13,7 @@ export class AzureBlobStorage implements IFileStorage {
     }
   }
   async stat(path: string): Promise<Stat> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     let lastModified = '';
     let isFile = false;
     let size = '';
@@ -57,7 +57,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     const container = names[0];
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readDir(path: string): Promise<string[]> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length === 0) {
       // show containers
       return await this.getContainersByPath(path);
@@ -81,27 +81,31 @@ export class AzureBlobStorage implements IFileStorage {
       const blobPath = names.slice(1).join('/');
       return new Promise((resolve, reject) => {
         // get files in this prefix.
-        console.log(blobPath);
-        this.client.listBlobsSegmentedWithPrefix(container, blobPath, null as any, (err, data) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            const result: Set<string> = new Set();
-            data.entries.forEach(i => {
-              const temp = i.name.replace(blobPath, '');
-              result.add(temp.split(/[/]|[\\]/).filter(i => i.length)[0]);
-            });
-            resolve(Array.from(result));
+        this.client.listBlobsSegmentedWithPrefix(
+          container,
+          names.length > 1 ? `${blobPath}/` : '',
+          null as any,
+          (err, data) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              const result: Set<string> = new Set();
+              data.entries.forEach(i => {
+                const temp = i.name.replace(blobPath, '');
+                result.add(temp.split('/').filter(i => i.length)[0]);
+              });
+              resolve(Array.from(result));
+            }
           }
-        });
+        );
       });
     }
   }
 
   // check if it's file and can be read
   async exists(path: string): Promise<boolean> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length < 2) {
       return false;
     }
@@ -119,7 +123,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length <= 1) {
       throw new Error('path must include container name and blob name');
     }
@@ -138,7 +142,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async mkDir(path: string): Promise<void> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     if (names.length < 1) {
       throw new Error('path must include container name and blob name');
     }
@@ -157,38 +161,41 @@ export class AzureBlobStorage implements IFileStorage {
 
   async glob(pattern: string, path: string): Promise<string[]> {
     // all the path transform should be remove next time and ensure path was posix pattern
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     const prefix = names.slice(1).join('/');
     const containers = await this.getContainersByPath(path);
     // get all blob under path
     return await new Promise((resolve, reject) => {
       for (let index = 0; index < containers.length; index++) {
         const element = containers[index];
-        this.client.listBlobsSegmentedWithPrefix(element, prefix ? prefix : '', null as any, (err, data) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            // filter all file names
-            const result = [] as string[];
-            for (let i = 0; i < data.entries.length; i++) {
-              let temp = `/${element}/${data.entries[i].name}`;
-              path = path.replace(/\\/g, '/');
-              temp = temp.replace(`${path}/`, '');
-              if (minimatch(temp, pattern)) {
-                console.log(temp);
-                result.push(temp);
+        this.client.listBlobsSegmentedWithPrefix(
+          element,
+          names.length > 1 ? `${prefix}/` : '',
+          null as any,
+          (err, data) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              // filter all file names
+              const result = [] as string[];
+              for (let i = 0; i < data.entries.length; i++) {
+                let temp = `/${element}/${data.entries[i].name}`;
+                temp = temp.replace(`${path}/`, '');
+                if (minimatch(temp, pattern)) {
+                  result.push(temp);
+                }
               }
+              resolve(result);
             }
-            resolve(result);
           }
-        });
+        );
       }
     });
   }
 
   async getContainersByPath(path: string): Promise<string[]> {
-    const names = path.split(/[/]|[\\]/).filter(i => i.length);
+    const names = path.split('/').filter(i => i.length);
     const containers = [] as string[];
     // get all containers under path
     if (names.length < 1) {
