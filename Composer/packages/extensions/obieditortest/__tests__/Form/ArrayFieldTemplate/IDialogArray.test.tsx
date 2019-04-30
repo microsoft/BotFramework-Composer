@@ -55,21 +55,12 @@ describe('<IDialogArray />', () => {
     expect(items).toHaveLength(3);
   });
 
-  it('can add the default item', async () => {
-    const onAddClick = jest.fn();
-    const { findByText } = renderDefault({ canAdd: true, onAddClick });
-    const addBtn = await findByText('Add');
-    fireEvent.click(addBtn);
-    expect(onAddClick.mock.calls[0][1]).toEqual({ $type: 'Microsoft.AdaptiveDialog' });
-  });
-
   it('can add an item with a given type', async () => {
     const onAddClick = jest.fn();
     const { findByTestId } = renderDefault({ canAdd: true, onAddClick });
     const addBtn = await findByTestId('ArrayContainerAdd');
-    const menuBtn = addBtn.querySelectorAll('button')[1];
 
-    fireEvent.click(menuBtn);
+    fireEvent.click(addBtn);
 
     const responseMenu = await findByText(document.body, 'Sending a response');
     fireEvent.click(responseMenu);

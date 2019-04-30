@@ -3,9 +3,8 @@ import { DefaultButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
 import { ArrayFieldItem } from 'react-jsonschema-form';
 
-export default function ArrayItem(props: ArrayFieldItem) {
+const ArrayItem: React.FC<ArrayFieldItem> = props => {
   const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
-  const contextItems: IContextualMenuItem[] = [];
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -13,32 +12,29 @@ export default function ArrayItem(props: ArrayFieldItem) {
     return true;
   };
 
-  if (hasMoveUp) {
-    contextItems.push({
+  const contextItems: IContextualMenuItem[] = [
+    {
       key: 'moveUp',
       text: 'Move Up',
       iconProps: { iconName: 'CaretSolidUp' },
+      disabled: !hasMoveUp,
       onClick: fabricMenuItemClickHandler(onReorderClick(index, index - 1)),
-    });
-  }
-
-  if (hasMoveDown) {
-    contextItems.push({
+    },
+    {
       key: 'moveDown',
       text: 'Move Down',
       iconProps: { iconName: 'CaretSolidDown' },
+      disabled: !hasMoveDown,
       onClick: fabricMenuItemClickHandler(onReorderClick(index, index + 1)),
-    });
-  }
-
-  if (hasRemove) {
-    contextItems.push({
+    },
+    {
       key: 'remove',
       text: 'Remove',
       iconProps: { iconName: 'Cancel' },
+      disabled: !hasRemove,
       onClick: fabricMenuItemClickHandler(onDropIndexClick(index)),
-    });
-  }
+    },
+  ];
 
   return (
     <div className="ArrayItem">
@@ -54,4 +50,11 @@ export default function ArrayItem(props: ArrayFieldItem) {
       )}
     </div>
   );
-}
+};
+
+ArrayItem.defaultProps = {
+  onReorderClick: () => () => {},
+  onDropIndexClick: () => () => {},
+};
+
+export default ArrayItem;
