@@ -1,6 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
+import formatMessage from 'format-message';
 
 import { buildDialogOptions } from '../utils';
 
@@ -19,10 +20,6 @@ const IDialogArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => 
       {canAdd && (
         <PrimaryButton
           type="button"
-          onClick={e => {
-            onAddClick(e, { $type: 'Microsoft.AdaptiveDialog' });
-          }}
-          split
           menuProps={{
             items: buildDialogOptions({
               filter: item => !item.includes('Rule'),
@@ -38,7 +35,7 @@ const IDialogArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => 
           }}
           data-testid="ArrayContainerAdd"
         >
-          Add
+          {formatMessage('Add')}
         </PrimaryButton>
       )}
     </div>
