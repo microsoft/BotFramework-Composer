@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 
@@ -26,8 +26,18 @@ const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
 );
 
 const App: React.FC<FormEditorProps> = props => {
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorCount, setErrorCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (hasError) {
+      setErrorCount(errorCount + 1);
+      setHasError(false);
+    }
+  }, [props.data]);
+
   return (
-    <ErrorBoundary key={JSON.stringify(props.data)} FallbackComponent={ErrorInfo}>
+    <ErrorBoundary key={errorCount} onError={() => setHasError(true)} FallbackComponent={ErrorInfo}>
       <FormEditor {...props} />
     </ErrorBoundary>
   );
