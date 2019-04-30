@@ -13,7 +13,7 @@ export default function FieldTemplate(props: FieldTemplateProps) {
 
   const hidden = get(uiSchema, 'ui:widget') === 'hidden';
 
-  if (hidden || FIELDS_TO_HIDE.includes(label.toLowerCase())) {
+  if (hidden || (label && FIELDS_TO_HIDE.includes(label.toLowerCase()))) {
     return null;
   }
 
