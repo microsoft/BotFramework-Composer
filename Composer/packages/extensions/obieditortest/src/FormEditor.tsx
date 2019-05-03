@@ -18,6 +18,8 @@ const getType = (data: FormData): string | undefined => {
 };
 
 export interface FormEditorProps {
+  navPath: string;
+  focusPath: string;
   data: FormData;
   dialogs: DialogInfo[];
   memory: FormMemory;
@@ -96,6 +98,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           formContext={{
             shellApi,
           }}
+          idPrefix={props.focusPath}
         >
           <button style={{ display: 'none' }} />
         </Form>
