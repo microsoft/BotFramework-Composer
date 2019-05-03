@@ -49,6 +49,9 @@ function ExtensionContainer() {
     shellApi.getDialogs().then(result => {
       setDialogs(result);
     });
+    shellApi.getNavPath().then(result => {
+      setNavPath(result);
+    });
 
     return () => {
       apiClient.disconnect();
@@ -62,6 +65,10 @@ function ExtensionContainer() {
 
     getDialogs: () => {
       return apiClient.apiCall('getDialogs', {});
+    },
+
+    getNavPath: () => {
+      return apiClient.apiCall('getNavPath', {});
     },
 
     saveData: newData => {

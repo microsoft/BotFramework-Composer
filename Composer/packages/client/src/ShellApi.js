@@ -20,6 +20,7 @@ export function ShellApi() {
 
     apiClient.registerApi('getData', getData);
     apiClient.registerApi('getDialogs', getDialogs);
+    apiClient.registerApi('getNavPath', getNavPath);
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -68,6 +69,10 @@ export function ShellApi() {
 
   function getDialogs() {
     return dialogs;
+  }
+
+  function getNavPath() {
+    return navPath;
   }
 
   // persist value change
