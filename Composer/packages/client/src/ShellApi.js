@@ -18,9 +18,7 @@ export function ShellApi() {
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('getData', getData);
-    apiClient.registerApi('getDialogs', getDialogs);
-    apiClient.registerApi('getNavPath', getNavPath);
+    apiClient.registerApi('getState', getState);
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -42,7 +40,7 @@ export function ShellApi() {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
       const data = getDialogData(dialogsMap, navPath) || '';
-      apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
+      apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
     }
   }, [dialogs, navPath]);
 
@@ -50,7 +48,7 @@ export function ShellApi() {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
       const data = getDialogData(dialogsMap, focusPath) || '';
-      apiClient.apiCallAt('reset', { data, dialogs: dialogs, navPath: navPath }, editorWindow);
+      apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
     }
   }, [dialogs, focusPath]);
 
@@ -67,12 +65,13 @@ export function ShellApi() {
     return '';
   }
 
-  function getDialogs() {
-    return dialogs;
-  }
-
-  function getNavPath() {
-    return navPath;
+  function getState(...args) {
+    return {
+      data: getData(...args),
+      dialogs,
+      navPath,
+      focusPath,
+    };
   }
 
   // persist value change

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -23,17 +23,13 @@ const apiClient = new ApiClient();
 const subEditorCallbacks = {};
 
 function ExtensionContainer() {
-  const [data, setData] = useState('');
-  const [dialogs, setDialogs] = useState([]);
-  const [navPath, setNavPath] = useState('');
+  const [shellData, setShellData] = useState({});
 
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('reset', ({ data, dialogs, navPath }) => {
-      setData(data);
-      setDialogs(dialogs);
-      setNavPath(navPath);
+    apiClient.registerApi('reset', newShellData => {
+      setShellData(newShellData);
     });
 
     apiClient.registerApi('saveFromChild', args => {
@@ -43,14 +39,8 @@ function ExtensionContainer() {
       }
     });
 
-    shellApi.getData().then(result => {
-      setData(result);
-    });
-    shellApi.getDialogs().then(result => {
-      setDialogs(result);
-    });
-    shellApi.getNavPath().then(result => {
-      setNavPath(result);
+    shellApi.getState().then(result => {
+      setShellData(result);
     });
 
     return () => {
@@ -59,16 +49,8 @@ function ExtensionContainer() {
   }, [shellApi]);
 
   const shellApi = {
-    getData: () => {
-      return apiClient.apiCall('getData', {});
-    },
-
-    getDialogs: () => {
-      return apiClient.apiCall('getDialogs', {});
-    },
-
-    getNavPath: () => {
-      return apiClient.apiCall('getNavPath', {});
+    getState: () => {
+      return apiClient.apiCall('getState', {});
     },
 
     saveData: newData => {
@@ -88,22 +70,14 @@ function ExtensionContainer() {
     },
   };
 
-  const RealEditor = data === '' ? '' : getEditor();
+  const RealEditor = shellData.data ? getEditor() : null;
 
   if (RealEditor) {
     window.parent.extensionData = window.parent.extensionData || {};
-    window.parent.extensionData[RealEditor.name] = data;
+    window.parent.extensionData[RealEditor.name] = shellData.data;
   }
 
-  return (
-    <Fragment>
-      {RealEditor === '' ? (
-        ''
-      ) : (
-        <RealEditor navPath={navPath} data={data} dialogs={dialogs} onChange={shellApi.saveData} shellApi={shellApi} />
-      )}
-    </Fragment>
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;
