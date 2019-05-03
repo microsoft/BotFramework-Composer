@@ -97,6 +97,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           uiSchema={dialogUiSchema}
           formContext={{
             shellApi,
+            rootId: props.focusPath,
           }}
           idPrefix={props.focusPath}
         >
