@@ -1625,6 +1625,13 @@
   dependencies:
     "@types/lodash" "*"
 
+"@types/lodash.startcase@^4.4.6":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@types/lodash.startcase/-/lodash.startcase-4.4.6.tgz#0e91c90004c87f738ae495a24e7b858cdecf0e2f"
+  integrity sha512-wtUyl30SWGQY08prEd5zdflQKbl/lwKXwLfWaQbTLwnGPFAFkAWOOOI/WYVfK8p61CtfmCbxNHvnTK4vW2idxg==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash@*", "@types/lodash@^4.14.123":
   version "4.14.123"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
@@ -1646,6 +1653,13 @@
   integrity sha512-E9qFi0seOkdlQnCTPv54brNfGWeFdRaEhI5tSue4pdx/V+xfxvMETsxXhOEcj1cYL+0n/jcTEmj/jD2gjzCwMg==
   dependencies:
     "@types/express" "*"
+
+"@types/nanoid@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/nanoid/-/nanoid-1.2.1.tgz#995bd0538ef04c4751d88d2fa15a97f0b85dd848"
+  integrity sha512-G3fQNcOYPHLXigI5nxpmSCCJIAEqgd+DP3p1IaxcdXJRJxdoeIZi/MGt58j/lI0AIsgajwG10Vs6J2xzkGZfEQ==
+  dependencies:
+    "@types/node" "*"
 
 "@types/node@*", "@types/node@^11.9.6":
   version "11.11.4"
@@ -1691,7 +1705,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.7":
+"@types/react@*", "@types/react@^16.8.13", "@types/react@^16.8.7":
   version "16.8.15"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.15.tgz#a76515fed5aa3e996603056f54427fec5f2a5122"
   integrity sha512-dMhzw1rWK+wwJWvPp5Pk12ksSrm/z/C/+lOQbMZ7YfDQYnJ02bc0wtg4EJD9qrFhuxFrf/ywNgwTboucobJqQg==
@@ -15256,9 +15270,9 @@ react-is@^16.6.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
-"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-8":
+"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-9":
   version "1.4.0-1"
-  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#27d4d932521cbcecb1f0670cef338c401ea93f4c"
+  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#47611fe572628e1153e901c59d52e75818113510"
   dependencies:
     ajv "^6.7.0"
     babel-runtime "^6.26.0"
