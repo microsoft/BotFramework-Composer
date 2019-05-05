@@ -63,7 +63,13 @@ const getStorageFileSuccess = (state, { response }) => {
 
     return files;
   }, []);
+  state.storageFileLoadingStatus = 'success';
   state.focusedStorageFolder = focusedStorageFolder;
+  return state;
+};
+
+const setStorageFileFetchingStatus = (state, { status }) => {
+  state.storageFileLoadingStatus = status;
   return state;
 };
 
@@ -125,6 +131,7 @@ export const reducer = createReducer({
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
+  [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
   [ActionTypes.NAVIGATE_TO]: navigateTo,

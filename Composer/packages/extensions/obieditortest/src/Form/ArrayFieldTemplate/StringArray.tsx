@@ -15,7 +15,7 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
       <TitleField title={props.title} id={`${props.idSchema.__id}__title`} required={props.required} />
       <DescriptionField description={props.schema.description} id={`${props.idSchema.__id}__description`} />
       {props.items.map((element, idx) => (
-        <ArrayItem {...element} key={JSON.stringify(props.formData[idx]) || idx} />
+        <ArrayItem {...element} key={idx} />
       ))}
       {props.canAdd && (
         <PrimaryButton type="button" onClick={e => props.onAddClick(e)} styles={{ root: { marginTop: '10px' } }}>

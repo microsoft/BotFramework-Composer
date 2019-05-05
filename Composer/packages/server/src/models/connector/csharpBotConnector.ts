@@ -31,10 +31,10 @@ export class CSharpBotConnector implements IBotConnector {
       }
     }
 
-    console.log('command: ' + `$dotnet bin/Debug/netcoreapp2.0/BotProject.dll ` + `--bot:path=${realBotPath}`);
+    console.log('command: ' + `$dotnet bin/Debug/netcoreapp2.1/BotProject.dll ` + `--bot:path=${realBotPath}`);
     this.child = childprocess.spawn(
       'dotnet',
-      [`bin/Debug/netcoreapp2.0/BotProject.dll`, `--bot:path=${realBotPath}`, '--urls', `http://localhost:3979`],
+      [`bin/Debug/netcoreapp2.1/BotProject.dll`, `--bot:path=${realBotPath}`, '--urls', `http://localhost:3979`],
       {
         detached: true,
         cwd: `${this.path}`,

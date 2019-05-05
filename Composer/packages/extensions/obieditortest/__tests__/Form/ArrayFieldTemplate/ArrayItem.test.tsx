@@ -4,18 +4,6 @@ import { render, fireEvent, findAllByText } from 'react-testing-library';
 import ArrayItem from '../../../src/Form/ArrayFieldTemplate/ArrayItem';
 
 describe('<ArrayItem />', () => {
-  it('does not render a context menu if no actions can be made', () => {
-    const { queryByTestId } = render(
-      // @ts-ignore
-      <ArrayItem>
-        <div>element 1</div>
-      </ArrayItem>
-    );
-
-    const menuButton = queryByTestId('ArrayItemContextMenu');
-    expect(menuButton).toBe(null);
-  });
-
   describe('when there are actions that can be made', () => {
     let renderResult, onReorderClick, onDropIndexClick, clickResults;
 

@@ -1,5 +1,4 @@
-import path from 'path';
-
+import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
@@ -34,8 +33,8 @@ class StorageService {
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      if (!path.isAbsolute(s.path)) {
-        temp.path = path.resolve(s.path); // resolve path if path is relative
+      if (!Path.isAbsolute(s.path)) {
+        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       }
       return temp;
     });
@@ -65,8 +64,8 @@ class StorageService {
         return JSON.parse(await storageClient.readFile(filePath));
       } else {
         return {
-          name: path.basename(filePath),
-          parent: path.dirname(filePath),
+          name: Path.basename(filePath),
+          parent: Path.dirname(filePath),
           children: await this.getChildren(storageClient, filePath),
         };
       }
@@ -81,7 +80,7 @@ class StorageService {
       if (childName === '') {
         return;
       }
-      const childAbsPath = path.join(dirPath, childName);
+      const childAbsPath = Path.join(dirPath, childName);
       const childStat = await storage.stat(childAbsPath);
       return {
         name: childName,

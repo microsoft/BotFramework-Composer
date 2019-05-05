@@ -31,6 +31,11 @@ export const pathNav = css`
   display: flex;
 `;
 
+export const loading = css`
+  height: 50vh;
+  width: 600px;
+`;
+
 export const detailListClass = mergeStyleSets({
   fileIconHeaderIcon: {
     padding: 0,

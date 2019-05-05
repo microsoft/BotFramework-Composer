@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
@@ -15,27 +16,28 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            var commandLineConfig = new ConfigurationBuilder()
-                        .AddCommandLine(args)
-                        .Build();
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                var env = hostingContext.HostingEnvironment;
+                var luisAuthoringRegion = Environment.GetEnvironmentVariable("LUIS_AUTHORING_REGION") ?? "westus";
+                config
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"luis.settings.{env.EnvironmentName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"luis.settings.{Environment.UserName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true);
 
-            return WebHost.CreateDefaultBuilder(args)
-                    .ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                        var env = hostingContext.HostingEnvironment;
+                if (env.IsDevelopment())
+                {
+                    config.AddUserSecrets<Startup>();
+                }
 
-                        config.SetBasePath(Directory.GetCurrentDirectory());
-                        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                        config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-                        config.AddEnvironmentVariables();
-                        config.AddCommandLine(args);
-                    })
-                    .UseConfiguration(commandLineConfig)
-                    .UseStartup<Startup>()
-                    .Build();
-        }
+                config
+                    .AddEnvironmentVariables()
+                    .AddCommandLine(args);
 
+            }).UseStartup<Startup>()
+            .Build();
     }
 }

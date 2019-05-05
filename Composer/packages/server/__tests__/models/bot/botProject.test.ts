@@ -1,6 +1,6 @@
-import path from 'path';
 import fs from 'fs';
 
+import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
 
@@ -10,7 +10,7 @@ jest.mock('azure-storage', () => {
 
 const mockProjectRef: BotProjectRef = {
   storageId: 'default',
-  path: path.join(__dirname, '../../mocks/1.botproj'),
+  path: Path.join(__dirname, '../../mocks/1.botproj'), //Path.join().replace(/\\/g, '/'),
 };
 
 const proj = new BotProject(mockProjectRef);
@@ -54,7 +54,7 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(path.resolve(__dirname, `../../mocks/${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `../../mocks/${dialogName}.dialog`));
     } catch (err) {
       // ignore
     }
@@ -73,12 +73,12 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = path.join(__dirname, `../../copy`);
+const copyDir = Path.join(__dirname, `../../copy`);
 
 describe('copyTo', () => {
   const projectRef: BotProjectRef = {
     storageId: 'default',
-    path: path.join(__dirname, '../../copy/1.botproj'),
+    path: Path.join(__dirname, '../../copy/1.botproj'),
   };
 
   afterEach(() => {
@@ -120,21 +120,21 @@ describe('update lg template', () => {
       {
         name: 'test.lg',
         content: '# greet\n- Hello!',
-        path: path.join(__dirname, '../../mocks/test.lg'),
-        relativePath: path.relative(proj.dir, path.join(__dirname, '../../mocks/test.lg')),
+        path: Path.join(__dirname, '../../mocks/test.lg'),
+        relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/test.lg')),
       },
     ];
     const initValue = {
       id: 1,
       name: 'greet',
       content: '- Hello!',
-      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
     };
     const newValue = {
       id: 1,
       name: 'updated',
       content: '- new value',
-      absolutePath: path.join(__dirname, '../../mocks/test.lg'),
+      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
     };
     await proj.lgIndexer.index(initFiles);
     const lgTemplates = await proj.updateLgTemplate('test', newValue);
