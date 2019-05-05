@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef, useState, useEffect } from 'react';
+import { Fragment, useContext, useRef } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -17,33 +17,35 @@ import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
-  const { lgTemplates } = state;
-  const [initializedStatus, setInitializedStatus] = useState(false);
-  const [items, setItems] = useState([]);
-  const updateLG = useRef(debounce(actions.updateLgTemplate, 500)).current;
+  const { lgFiles } = state;
+  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
 
-  function refreshItems(templates) {
-    const newItems = [];
-    templates.forEach(template => {
-      newItems.push({
-        id: template.id,
+  let items = [];
+  const groups = [];
+  let itemCount = 0;
+
+  lgFiles.forEach((file, fileIndex) => {
+    const templates = file.templates.map((template, templateIndex) => {
+      return {
+        id: `${fileIndex}:${templateIndex}`,
+        fileId: file.id,
         name: template.name,
         value: template.name,
-        absolutePath: template.absolutePath,
         type: template.type,
         content: template.content,
         comments: template.comments,
-      });
+      };
     });
-    setItems(newItems);
-    setInitializedStatus(true);
-  }
-
-  useEffect(() => {
-    if (initializedStatus === false && lgTemplates.length !== 0) {
-      refreshItems(lgTemplates);
-    }
-  }, [lgTemplates]);
+    items = items.concat(templates);
+    // init groups for detail table.
+    groups.push({
+      name: file.id + '.lg',
+      count: file.templates.length,
+      key: file.id,
+      startIndex: itemCount,
+    });
+    itemCount += file.templates.length;
+  });
 
   const tableColums = [
     {
@@ -62,7 +64,7 @@ export function LanguageGenerationSettings() {
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(item.id, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.content)}
             />
           </span>
         );
@@ -102,23 +104,27 @@ export function LanguageGenerationSettings() {
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
         defaultValue={item.content}
-        onChange={(event, newValue) => updateTemplateContent(item.id, item.name, newValue)}
+        onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
       />
     );
   }
 
-  function updateTemplateContent(templateId, templateName, content) {
-    const newTemplate = items.find(template => template.id === templateId);
+  function updateTemplateContent(templateId, fileId, templateName, content) {
+    const fileIndex = templateId.split(':')[0];
+    const templateIndex = templateId.split(':')[1];
+    const newTemplate = lgFiles[fileIndex].templates[templateIndex];
+    const isValid = templateName && content;
     newTemplate.name = templateName;
     newTemplate.content = content;
     newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
 
     const payload = {
-      content: newTemplate,
+      id: fileId,
+      lgTemplates: lgFiles[fileIndex].templates,
+      isValid: isValid,
     };
 
-    updateLG(payload);
-    refreshItems(items);
+    updateLgFile(payload);
   }
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -132,32 +138,22 @@ export function LanguageGenerationSettings() {
     );
   }
 
-  function getNewItem(id) {
-    return {
-      id: id,
+  function onCreateNewTempalte(selectedGroup) {
+    const id = selectedGroup.key;
+    const lgTemplates = lgFiles.find(file => file.id === id).templates;
+    lgTemplates.push({
       name: '',
       value: '',
-      absolutePath: '',
       type: 'Rotate',
       content: '',
       comments: '',
-    };
-  }
-
-  function onCreateNewTempalte(groupIndex, selectedGroup) {
-    const newItem = getNewItem(items.length + 1);
-    groups.forEach((group, index) => {
-      if (index === groupIndex) {
-        const firstItem = items[selectedGroup.startIndex];
-        newItem.absolutePath = firstItem.absolutePath;
-        items.splice(selectedGroup.startIndex + selectedGroup.count, 0, newItem);
-        selectedGroup.count++;
-      }
-      if (index > groupIndex) {
-        group.startIndex++;
-      }
     });
-    refreshItems(items);
+    const payload = {
+      id: id,
+      lgTemplates: lgTemplates,
+      isValid: false,
+    };
+    updateLgFile(payload);
   }
 
   function onRenderGroupFooter(groupProps) {
@@ -167,42 +163,13 @@ export function LanguageGenerationSettings() {
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'CirclePlus' }}
-          onClick={() => onCreateNewTempalte(groupProps.groupIndex, groupProps.group)}
+          onClick={() => onCreateNewTempalte(groupProps.group)}
         >
           New
         </ActionButton>{' '}
       </div>
     );
   }
-
-  const groups = [];
-  let currentKey = '';
-  let itemCount = 0;
-  items.forEach((item, index) => {
-    if (item.absolutePath !== currentKey) {
-      if (itemCount !== 0) {
-        const pathItems = currentKey.split(/[\\/]+/g);
-        groups.push({
-          name: pathItems[pathItems.length - 1],
-          count: itemCount,
-          key: currentKey,
-          startIndex: index - itemCount,
-        });
-        itemCount = 0;
-      }
-      currentKey = item.absolutePath;
-    }
-    itemCount++;
-    if (index === items.length - 1) {
-      const pathItems = currentKey.split(/[\\/]+/g);
-      groups.push({
-        name: pathItems[pathItems.length - 1],
-        count: itemCount,
-        key: currentKey,
-        startIndex: index - itemCount + 1,
-      });
-    }
-  });
 
   return (
     <Fragment>
@@ -211,7 +178,6 @@ export function LanguageGenerationSettings() {
         <div css={label}>{formatMessage('Templates')}</div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            changed={initializedStatus}
             items={items}
             compact={false}
             columns={tableColums}

@@ -12,7 +12,7 @@ const closeCurrentProject = state => {
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botProjFile = response.data.botFile;
-  state.lgTemplates = response.data.lgTemplates;
+  state.lgFiles = response.data.lgFiles;
   return state;
 };
 
@@ -27,7 +27,13 @@ const createDialogSuccess = (state, { response }) => {
 };
 
 const updateLgTemplate = (state, { response }) => {
-  state.lgTemplates = response.data.lgTemplates;
+  state.lgFiles = response.data.lgFiles;
+  return state;
+};
+
+const updateLgTemplateState = (state, { id, lgTemplates }) => {
+  state.lgFiles.find(file => file.id === id).templates = lgTemplates;
+  state.lgFiles = state.lgFiles.slice();
   return state;
 };
 
@@ -139,4 +145,5 @@ export const reducer = createReducer({
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_TEMPLATE]: updateLgTemplate,
+  [ActionTypes.UPDATE_LG_TEMPLATE_STATE]: updateLgTemplateState,
 });
