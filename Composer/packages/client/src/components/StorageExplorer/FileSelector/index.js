@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -15,10 +16,12 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
+import { Fragment } from 'react';
 
 import { FileTypes, SupportedFileTypes } from '../../../constants/index';
 
 import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
+import { loading } from './styles';
 
 export function FileSelector(props) {
   const {
@@ -29,6 +32,7 @@ export function FileSelector(props) {
     focusedStorageFolder,
     checkShowItem,
     storageExplorerStatus,
+    storageFileLoadingStatus,
   } = props;
   // for detail file list in open panel
   const tableColums = [
@@ -46,9 +50,23 @@ export function FileSelector(props) {
       onRender: item => {
         const iconName = item.iconName;
         if (iconName === FileTypes.FOLDER) {
-          return <Icon style={{ fontSize: '16px' }} iconName="Folder" />;
+          return (
+            <Icon
+              style={{
+                fontSize: '16px',
+              }}
+              iconName="Folder"
+            />
+          );
         } else if (iconName === FileTypes.UNKNOW) {
-          return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
+          return (
+            <Icon
+              style={{
+                fontSize: '16px',
+              }}
+              iconName="Page"
+            />
+          );
         }
         const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
         return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
@@ -119,14 +137,15 @@ export function FileSelector(props) {
   const selection = new Selection({
     onSelectionChanged: () => {
       const file = selection.getSelection()[0];
-      // selected item will be cleaned when folder path changed
-      // file will be undefine when no item selected.
+      // selected item will be cleaned when folder path changed file will be undefine
+      // when no item selected.
       onSelectionChanged(file);
     },
   });
 
   const separator = '/';
-  // filter the empty one, server api need '/' for root path, but no need for others.
+  // filter the empty one, server api need '/' for root path, but no need for
+  // others.
   const pathItems = path
     .normalize(currentPath)
     .split(separator)
@@ -150,7 +169,8 @@ export function FileSelector(props) {
     return '';
   }
 
-  // todo: icon file is fixed for now, need to be updated when get it from designer.
+  // todo: icon file is fixed for now, need to be updated when get it from
+  // designer.
   function getIconName(file) {
     const path = file.path;
     let docType = file.type;
@@ -190,25 +210,41 @@ export function FileSelector(props) {
 
   return (
     <div css={fileSelectorContainer}>
-      <div css={pathNav}>
-        <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
-        <div style={{ flexGrow: 1 }}>
-          <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
+      {storageFileLoadingStatus === 'success' && (
+        <Fragment>
+          <div css={pathNav}>
+            <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
+            <div
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
+            </div>
+          </div>
+          {saveAction}
+          <DetailsList
+            css={detailListContainer}
+            items={storageFiles}
+            compact={false}
+            columns={tableColums}
+            getKey={item => item.name}
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible={true}
+            selection={selection}
+            selectionMode={SelectionMode.single}
+            checkboxVisibility={CheckboxVisibility.hidden}
+          />
+        </Fragment>
+      )}
+      {storageFileLoadingStatus === 'pending' && (
+        <div>
+          <Spinner size={SpinnerSize.medium} css={loading} />
         </div>
-      </div>
-      {saveAction}
-      <DetailsList
-        css={detailListContainer}
-        items={storageFiles}
-        compact={false}
-        columns={tableColums}
-        getKey={item => item.name}
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible={true}
-        selection={selection}
-        selectionMode={SelectionMode.single}
-        checkboxVisibility={CheckboxVisibility.hidden}
-      />
+      )}
+      {storageFileLoadingStatus === 'failure' && (
+        <div css={loading}>{formatMessage('Can not connect the storage.')}</div>
+      )}
     </div>
   );
 }

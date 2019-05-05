@@ -15,26 +15,43 @@ import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { StorageSelector } from './components/StorageExplorer/StorageSelector';
 import { body, panelContent, panelStyle } from './components/StorageExplorer/styles';
 import { SaveAction } from './components/StorageExplorer/SaveAction/index';
+import NewStorageModal from './components/StorageExplorer/NewStorage/NewStorageModal';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
-  return <div style={{ height: '0px' }} />;
+  return (
+    <div
+      style={{
+        height: '0px',
+      }}
+    />
+  );
 }
 
-const links = [{ name: formatMessage('Open'), key: 'open' }, { name: formatMessage('Save As'), key: 'saveas' }];
+const links = [
+  {
+    name: formatMessage('Open'),
+    key: 'open',
+  },
+  {
+    name: formatMessage('Save As'),
+    key: 'saveas',
+  },
+];
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
-  const { storages, storageExplorerStatus, focusedStorageFolder } = state;
+  const { storages, storageExplorerStatus, focusedStorageFolder, storageFileLoadingStatus } = state;
   const {
     setStorageExplorerStatus,
     closeCurrentProject,
     fetchFolderItemsByPath,
     openBotProject,
     saveProjectAs,
+    addNewStorage,
   } = actions;
   const currentStorageIndex = useRef(0);
   const [currentPath, setCurrentPath] = useState('');
-
+  const [openAdd, setOpenAdd] = useState(false);
   const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
   async function init() {
@@ -49,20 +66,21 @@ export function StorageExplorer() {
 
   function onStorageSourceChange(index) {
     currentStorageIndex.current = index;
+    setOpenAdd(false);
     updateCurrentPath(storages[index].path, storages[index].id);
   }
 
-  function updateCurrentPath(newPath, storageId) {
+  const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
       storageId = currentStorageId;
     }
 
     if (newPath) {
       const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
-      fetchFolderItemsByPath(storageId, formatedPath);
+      await fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
-  }
+  };
 
   function openFile(newPath, storageId) {
     setStorageExplorerStatus('');
@@ -109,11 +127,20 @@ export function StorageExplorer() {
   };
 
   const handleSaveAs = async value => {
-    const dir = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}`;
+    let parent = focusedStorageFolder.parent;
+    if (parent === '/') {
+      parent = '';
+    }
+    const dir = `${parent}/${focusedStorageFolder.name}`;
     const absolutePath = `${dir}/${value}/bot.botproj`;
     await saveProjectAs(storages[currentStorageIndex.current].id, absolutePath);
     updateCurrentPath(dir, storages[currentStorageIndex.current].id);
     onCloseExplorer();
+  };
+
+  const handleAddStorage = async storageData => {
+    await addNewStorage(storageData);
+    setOpenAdd(false);
   };
 
   return (
@@ -137,10 +164,17 @@ export function StorageExplorer() {
           <StorageSelector
             storages={storages}
             onStorageSourceChange={onStorageSourceChange}
+            onAddNew={() => {
+              setOpenAdd(true);
+            }}
             currentStorageId={currentStorageId}
             actionName={formatMessage(storageExplorerStatus === 'open' ? 'Open' : 'Save As')}
           />
-          <div style={{ paddingTop: '90px' }}>
+          <div
+            style={{
+              paddingTop: '90px',
+            }}
+          >
             <FileSelector
               saveAction={
                 storageExplorerStatus === 'open' ? (
@@ -150,6 +184,7 @@ export function StorageExplorer() {
                 )
               }
               storageExplorerStatus={storageExplorerStatus}
+              storageFileLoadingStatus={storageFileLoadingStatus}
               checkShowItem={checkShowItem}
               currentPath={currentPath}
               focusedStorageFolder={focusedStorageFolder}
@@ -159,6 +194,12 @@ export function StorageExplorer() {
           </div>
         </div>
       </div>
+      <NewStorageModal
+        isOpen={openAdd}
+        storages={storages}
+        onSubmit={handleAddStorage}
+        onDismiss={() => setOpenAdd(false)}
+      />
     </Panel>
   );
 }
