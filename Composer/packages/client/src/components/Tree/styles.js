@@ -9,7 +9,7 @@ export const container = variant => {
     case 'largest':
       height = '870px';
       break;
-    case 'self-adaption':
+    case 'fill':
       height = '100%';
       break;
     default:

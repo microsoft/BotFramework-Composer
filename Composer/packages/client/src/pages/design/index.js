@@ -80,7 +80,7 @@ function DesignPage() {
           <Tree variant="large" extraCss={projectTree}>
             <div css={projectWrapper}>
               <div css={projectHeader}>
-                <div>Dialogs</div>
+                <div>{formatMessage('Dialogs')}</div>
                 {dialogs.length > 0 ? (
                   <IconButton
                     iconProps={{ iconName: 'Add' }}

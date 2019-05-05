@@ -16,7 +16,7 @@ export const ContentPage = () => {
     <Fragment>
       <div css={contentContainer}>
         <div css={fileList}>
-          <Tree variant="self-adaption">
+          <Tree variant="fill">
             <div>
               <div css={title}>{formatMessage('Content')}</div>
               <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>

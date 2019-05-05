@@ -14,9 +14,9 @@ export const SettingPage = () => {
     <Fragment>
       <div css={contentContainer}>
         <div css={fileList}>
-          <Tree variant="self-adaption">
+          <Tree variant="fill">
             <div>
-              <div css={title}>Settings</div>
+              <div css={title}>{formatMessage('Settings')}</div>
               <SettingItem to="dialog-settings" label={formatMessage('Dialog settings')} />
               <SettingItem to="services" label={formatMessage('Services')} />
               <SettingItem to="composer-configuration" label={formatMessage('Composer configuration')} />
