@@ -25,7 +25,7 @@ export class BotProject {
 
   constructor(ref: BotProjectRef) {
     this.ref = ref;
-    this.absolutePath = Path.isAbsolute(this.ref.path) ? this.ref.path : Path.resolve(this.ref.path);
+    this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
     this.name = Path.basename(this.absolutePath);
 
