@@ -13,7 +13,7 @@ const apiClient = new ApiClient();
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, focusPath } = state;
-  const updateDialog = useRef(debounce(actions.updateDialog, 500)).current;
+  const updateDialog = useRef(debounce(actions.updateDialog, 750)).current;
 
   useEffect(() => {
     apiClient.connect();
