@@ -20,5 +20,9 @@ export const ObiTypes = {
   SaveEntity: 'Microsoft.SaveEntity',
   DeleteProperty: 'Microsoft.DeleteProperty',
   IfCondition: 'Microsoft.IfCondition',
+  SwitchCondition: 'Microsoft.SwitchCondition',
   TextInput: 'Microsoft.TextInput',
+
+  // virtual
+  StepGroup: 'VisualSDK.StepGroup',
 };
