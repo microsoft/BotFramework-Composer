@@ -2,24 +2,25 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef } from 'react';
+import { Fragment, useContext, useRef, useState } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
+import NewLgTemplateModal from './NewLgTemplateModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgFiles } = state;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
-
+  const [modalOpen, setModalOpen] = useState(false);
   // items used to render the detail table.
   const items = lgFiles.flatMap((file, fileIndex) => {
     const templates = file.templates.map((template, templateIndex) => {
@@ -173,11 +174,25 @@ export function LanguageGenerationSettings() {
     );
   }
 
+  async function onSubmit(data) {
+    await actions.addLgFile(data);
+    setModalOpen(false);
+  }
+
   return (
     <Fragment>
       <div>
         <div css={title}>{formatMessage('Content > Language Generation')}</div>
-        <div css={label}>{formatMessage('Templates')}</div>
+        <div css={label}>
+          {formatMessage('Templates')}
+          <IconButton
+            style={{ marginLeft: '10px' }}
+            iconProps={{ iconName: 'Add' }}
+            title={formatMessage('New LG Template')}
+            ariaLabel={formatMessage('New LG Template')}
+            onClick={() => setModalOpen(true)}
+          />
+        </div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             items={items}
@@ -190,11 +205,13 @@ export function LanguageGenerationSettings() {
             groups={groups}
             groupProps={{
               onRenderFooter: onRenderGroupFooter,
+              showEmptyGroups: true,
             }}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>
       </div>
+      <NewLgTemplateModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }

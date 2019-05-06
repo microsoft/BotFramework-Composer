@@ -103,4 +103,9 @@ export class LGIndexer {
     await this.storage.writeFile(absolutePath, newFileContent);
     return newFileContent;
   }
+
+  public addLgFile = (id: string, templates: string, absolutePath: string) => {
+    this.lgFiles.push({ id, templates: [], absolutePath });
+    return templates;
+  };
 }

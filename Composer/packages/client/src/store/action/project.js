@@ -140,3 +140,19 @@ export async function updateLgFile(dispatch, { id, lgTemplates, isValid }) {
     });
   }
 }
+
+export async function addLgFile(dispatch, { name, content }) {
+  try {
+    const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { name, content });
+    dispatch({
+      type: ActionTypes.CREATE_LG_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.CREATE_LG_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}

@@ -108,12 +108,22 @@ async function updateLgFile(req: Request, res: Response) {
   }
 }
 
+async function addLgFile(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name);
+    res.status(200).json({ lgFiles });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
   updateDialog: updateDialog,
   createDialogFromTemplate: createDialogFromTemplate,
   updateLgFile: updateLgFile,
+  addLgFile: addLgFile,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
 };
