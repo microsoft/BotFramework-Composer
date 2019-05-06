@@ -9,6 +9,10 @@ import { getFriendlyName } from './utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
+const DefaultKeyMap = {
+  label: 'property',
+};
+
 const ContentKeyByTypes = {
   [ObiTypes.SendActivity]: {
     label: 'activity',
@@ -46,7 +50,7 @@ export class DefaultRenderer extends React.Component {
       label = '',
       details = '';
 
-    const keyMap = data.$type ? ContentKeyByTypes[data.$type] : null;
+    const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
     if (keyMap) {
       header = header || data[keyMap.header] || header;
       label = data[keyMap.label] || label;

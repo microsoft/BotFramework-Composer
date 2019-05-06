@@ -7,29 +7,37 @@ import { PropTypes } from 'prop-types';
 import { navLinkClass, title } from './styles';
 
 export function StorageSelector(props) {
-  const { storages, actionName, currentStorageId, onStorageSourceChange } = props;
-  // todo: result parse from api result to ui acceptable format may need move to reducer.
-  const links = storages.map((storage, index) => {
-    return {
-      name: storage.name,
-      key: storage.id,
-      onClick: () => onStorageSourceChange(index),
-    };
-  });
+  const { storages, actionName, currentStorageId, onStorageSourceChange, onAddNew } = props;
 
-  const storageNavItems = [
-    {
-      links: links,
-    },
-  ];
+  const getNavItems = () => {
+    const links = storages.map((storage, index) => {
+      return {
+        name: storage.name,
+        key: storage.id,
+        onClick: () => onStorageSourceChange(index),
+      };
+    });
+
+    links.push({ name: 'New Storage', key: 'New Storage', icon: 'Add', onClick: onAddNew });
+
+    return [
+      {
+        links: links,
+      },
+    ];
+  };
 
   return (
     <div>
       <div css={title}>{actionName}</div>
-      <div style={{ paddingTop: '10px' }}>
+      <div
+        style={{
+          paddingTop: '10px',
+        }}
+      >
         <Nav
-          groups={storageNavItems}
-          initialSelectedKey={currentStorageId}
+          groups={getNavItems()}
+          selectedKey={currentStorageId}
           styles={{
             link: navLinkClass.storageNav,
           }}
@@ -44,4 +52,5 @@ StorageSelector.propTypes = {
   actionName: PropTypes.string,
   currentStorageId: PropTypes.string,
   onStorageSourceChange: PropTypes.func,
+  onAddNew: PropTypes.func,
 };

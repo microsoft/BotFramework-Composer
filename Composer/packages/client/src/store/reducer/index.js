@@ -12,7 +12,7 @@ const closeCurrentProject = state => {
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botProjFile = response.data.botFile;
-  state.lgTemplates = response.data.lgTemplates;
+  state.lgFiles = response.data.lgFiles;
   return state;
 };
 
@@ -27,7 +27,13 @@ const createDialogSuccess = (state, { response }) => {
 };
 
 const updateLgTemplate = (state, { response }) => {
-  state.lgTemplates = response.data.lgTemplates;
+  state.lgFiles = response.data.lgFiles;
+  return state;
+};
+
+const updateLgTemplateState = (state, { id, lgTemplates }) => {
+  state.lgFiles.find(file => file.id === id).templates = lgTemplates;
+  state.lgFiles = state.lgFiles.slice();
   return state;
 };
 
@@ -63,7 +69,13 @@ const getStorageFileSuccess = (state, { response }) => {
 
     return files;
   }, []);
+  state.storageFileLoadingStatus = 'success';
   state.focusedStorageFolder = focusedStorageFolder;
+  return state;
+};
+
+const setStorageFileFetchingStatus = (state, { status }) => {
+  state.storageFileLoadingStatus = status;
   return state;
 };
 
@@ -125,6 +137,7 @@ export const reducer = createReducer({
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,
   [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
   [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
+  [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
@@ -132,4 +145,5 @@ export const reducer = createReducer({
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_TEMPLATE]: updateLgTemplate,
+  [ActionTypes.UPDATE_LG_TEMPLATE_STATE]: updateLgTemplateState,
 });
