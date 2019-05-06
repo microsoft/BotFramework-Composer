@@ -1,11 +1,16 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "steps": [
     {
       "$type": "Microsoft.EditArray",
       "changeType": "Clear",
-      "arrayProperty": "user.todos"
+      "arrayProperty": "user.todos",
+      "$designer": {
+        "createdAt": "2019-05-06T22:00:12.384Z",
+        "updatedAt": "2019-05-06T22:00:16.151Z",
+        "id": "448545",
+        "name": "Clear Todos"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -22,5 +27,11 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-05-06T22:00:07.509Z",
+    "updatedAt": "2019-05-06T22:00:07.537Z",
+    "id": "208808"
+  }
 }
