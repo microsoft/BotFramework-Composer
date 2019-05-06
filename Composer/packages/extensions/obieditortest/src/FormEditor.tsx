@@ -4,6 +4,7 @@ import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
+import isEqual from 'lodash.isequal';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
@@ -65,7 +66,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   };
 
   const onChange = newValue => {
-    props.onChange(newValue.formData);
+    if (!isEqual(newValue.formData, data)) {
+      props.onChange(newValue.formData);
+    }
   };
 
   const onMemoryDropdownChange = (event, option) => {
