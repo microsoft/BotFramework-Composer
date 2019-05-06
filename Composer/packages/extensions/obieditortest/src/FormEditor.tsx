@@ -9,7 +9,7 @@ import isEqual from 'lodash.isequal';
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMergedSchema } from './schema/appschema';
-import { getMemoryOptions } from './Form/utils';
+import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi } from './types';
 
 import './App.css';
@@ -27,6 +27,14 @@ export interface FormEditorProps {
   shellApi: ShellApi;
   onChange: (newData: object) => void;
   onBlur?: () => void;
+}
+
+function updateDesigner(data) {
+  if (data && data.$designer) {
+    data.$designer.updatedAt = getTimestamp();
+  }
+
+  return data;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
@@ -67,7 +75,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
-      props.onChange(newValue.formData);
+      props.onChange(updateDesigner(newValue.formData));
     }
   };
 

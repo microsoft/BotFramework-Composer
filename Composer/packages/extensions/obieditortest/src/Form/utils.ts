@@ -152,3 +152,7 @@ export function useFormState<T extends object>(initialData?: T): [T, FormUpdater
 
   return [formData, update];
 }
+
+export function getTimestamp(): string {
+  return new Date().toISOString();
+}
