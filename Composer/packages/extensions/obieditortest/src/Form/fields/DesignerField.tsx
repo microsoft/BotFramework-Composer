@@ -4,7 +4,7 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { useFormState } from '../utils';
+import { useFormState, getTimestamp } from '../utils';
 
 import './DesignerField.scss';
 
@@ -23,48 +23,54 @@ interface DesignerFieldProps {
 }
 
 export const DesignerField: React.FC<DesignerFieldProps> = props => {
-  const { data, onChange, parentData } = props;
+  const { data, onChange } = props;
   const [formState, setFormState] = useFormState<DesignerData>(data);
 
   useEffect(() => {
+    // create new designer metadata
     if (!formState.id) {
+      const timestamp = getTimestamp();
       const newDesigner: DesignerData = {
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: timestamp,
+        updatedAt: timestamp,
         id: nanoid('1234567890', 6),
+        ...data,
       };
 
       setFormState(newDesigner);
       onChange(newDesigner);
+      // dialog data has been updated, need sync updatedAt
+    } else if (data.updatedAt && formState.updatedAt !== data.updatedAt && !isNaN(Date.parse(data.updatedAt))) {
+      setFormState({ updatedAt: data.updatedAt });
     }
   }, [data]);
 
   useEffect(() => {
     onChange(formState);
-  }, [formState, parentData]);
+  }, [formState]);
 
-  const update = field => (e, val) => {
+  const update = (field: string, val?: string) => {
     setFormState({
+      updatedAt: getTimestamp(),
       [field]: val,
-      updatedAt: new Date().toISOString(),
     });
   };
 
   return (
     <div className="DesignerField">
       <div className="DesignerFieldSection">
-        <TextField value={formState.name} label={formatMessage('Name')} onChange={update('name')} />
+        <TextField value={formState.name} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
         <TextField
           value={formState.description}
           label={formatMessage('Description')}
-          onChange={update('description')}
+          onChange={(_, val) => update('description', val)}
         />
       </div>
       <div className="DesignerFieldSection">
         <TextField
           value={
             formState.updatedAt
-              ? formatMessage('{ udpatedAt, date, short } { updatedAt, time }', {
+              ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
                   updatedAt: Date.parse(formState.updatedAt),
                 })
               : 'N/A'
