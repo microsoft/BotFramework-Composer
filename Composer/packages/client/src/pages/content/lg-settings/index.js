@@ -20,11 +20,8 @@ export function LanguageGenerationSettings() {
   const { lgFiles } = state;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
 
-  let items = [];
-  const groups = [];
-  let itemCount = 0;
-
-  lgFiles.forEach((file, fileIndex) => {
+  // items used to render the detail table.
+  const items = lgFiles.flatMap((file, fileIndex) => {
     const templates = file.templates.map((template, templateIndex) => {
       return {
         id: `${fileIndex}:${templateIndex}`,
@@ -36,15 +33,20 @@ export function LanguageGenerationSettings() {
         comments: template.comments,
       };
     });
-    items = items.concat(templates);
-    // init groups for detail table.
-    groups.push({
+    return templates;
+  });
+
+  // init groups for detail table.
+  let startIndex = 0;
+  const groups = lgFiles.map(file => {
+    const group = {
       name: file.id + '.lg',
       count: file.templates.length,
       key: file.id,
-      startIndex: itemCount,
-    });
-    itemCount += file.templates.length;
+      startIndex: startIndex,
+    };
+    startIndex += file.templates.length;
+    return group;
   });
 
   const tableColums = [
