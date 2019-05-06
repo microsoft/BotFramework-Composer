@@ -3,6 +3,7 @@ import nanoid from 'nanoid/generate';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import get from 'lodash.get';
 
 import { getTimestamp } from '../utils';
 
@@ -26,7 +27,7 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
 
   useEffect(() => {
     // create new designer metadata
-    if (!data.id) {
+    if (!data || !data.id) {
       const timestamp = getTimestamp();
       const newDesigner: DesignerData = {
         createdAt: timestamp,
@@ -50,9 +51,9 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
   return (
     <div className="DesignerField">
       <div className="DesignerFieldSection">
-        <TextField value={data.name} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
+        <TextField value={get(data, 'name')} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
         <TextField
-          value={data.description}
+          value={get(data, 'description')}
           label={formatMessage('Description')}
           onChange={(_, val) => update('description', val)}
         />
@@ -60,9 +61,9 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
       <div className="DesignerFieldSection">
         <TextField
           value={
-            data.updatedAt
+            get(data, 'updatedAt')
               ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
-                  updatedAt: Date.parse(data.updatedAt),
+                  updatedAt: Date.parse(get(data, 'updatedAt')),
                 })
               : 'N/A'
           }
@@ -72,7 +73,7 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
         />
         <TextField
-          value={data.id}
+          value={get(data, 'id')}
           label={formatMessage('ID number')}
           borderless
           readOnly
