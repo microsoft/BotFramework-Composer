@@ -53,9 +53,7 @@ function RootDialog(props) {
           {description || schema.description}
         </p>
       )}
-      {hasDesigner && (
-        <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} parentData={formData} />
-      )}
+      {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
     </div>
   );
 }

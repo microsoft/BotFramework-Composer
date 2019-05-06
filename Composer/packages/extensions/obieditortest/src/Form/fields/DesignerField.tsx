@@ -4,7 +4,7 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { useFormState, getTimestamp } from '../utils';
+import { getTimestamp } from '../utils';
 
 import './DesignerField.scss';
 
@@ -19,16 +19,14 @@ interface DesignerData {
 interface DesignerFieldProps {
   data: DesignerData;
   onChange: (data: DesignerData) => void;
-  parentData: any;
 }
 
 export const DesignerField: React.FC<DesignerFieldProps> = props => {
   const { data, onChange } = props;
-  const [formState, setFormState] = useFormState<DesignerData>(data);
 
   useEffect(() => {
     // create new designer metadata
-    if (!formState.id) {
+    if (!data.id) {
       const timestamp = getTimestamp();
       const newDesigner: DesignerData = {
         createdAt: timestamp,
@@ -37,31 +35,24 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
         ...data,
       };
 
-      setFormState(newDesigner);
       onChange(newDesigner);
-      // dialog data has been updated, need sync updatedAt
-    } else if (data.updatedAt && formState.updatedAt !== data.updatedAt && !isNaN(Date.parse(data.updatedAt))) {
-      setFormState({ updatedAt: data.updatedAt });
     }
   }, [data]);
 
-  useEffect(() => {
-    onChange(formState);
-  }, [formState]);
-
   const update = (field: string, val?: string) => {
-    setFormState({
-      updatedAt: getTimestamp(),
+    onChange({
+      ...data,
       [field]: val,
+      updatedAt: getTimestamp(),
     });
   };
 
   return (
     <div className="DesignerField">
       <div className="DesignerFieldSection">
-        <TextField value={formState.name} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
+        <TextField value={data.name} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
         <TextField
-          value={formState.description}
+          value={data.description}
           label={formatMessage('Description')}
           onChange={(_, val) => update('description', val)}
         />
@@ -69,9 +60,9 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
       <div className="DesignerFieldSection">
         <TextField
           value={
-            formState.updatedAt
+            data.updatedAt
               ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
-                  updatedAt: Date.parse(formState.updatedAt),
+                  updatedAt: Date.parse(data.updatedAt),
                 })
               : 'N/A'
           }
@@ -81,7 +72,7 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
         />
         <TextField
-          value={formState.id}
+          value={data.id}
           label={formatMessage('ID number')}
           borderless
           readOnly
