@@ -124,23 +124,30 @@ describe('update lg template', () => {
         relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/test.lg')),
       },
     ];
-    const initValue = {
-      id: 1,
-      name: 'greet',
-      content: '- Hello!',
-      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
-    };
-    const newValue = {
-      id: 1,
-      name: 'updated',
-      content: '- new value',
-      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
-    };
+    const initValue = [
+      {
+        name: 'greet',
+        type: 'Rotate',
+        parameters: [],
+        content: '- Hello!',
+        comments: '',
+      },
+    ];
+
+    const newValue = [
+      {
+        name: 'updated',
+        type: 'Rotate',
+        parameters: [],
+        content: '- new value',
+        comments: '',
+      },
+    ];
     await proj.lgIndexer.index(initFiles);
-    const lgTemplates = await proj.updateLgTemplate('test', newValue);
-    const aTemplate = lgTemplates.find(f => f.name.startsWith('updated'));
+    const lgFiles = await proj.updateLgFile('test', newValue);
+    const aFile = lgFiles.find(f => f.id === 'test');
     // @ts-ignore
-    expect(aTemplate).toEqual(newValue);
-    await proj.updateLgTemplate('test', initValue);
+    expect(aFile.templates).toEqual(newValue);
+    await proj.updateLgFile('test', initValue);
   });
 });

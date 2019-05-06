@@ -5,7 +5,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { BotProjectRef, FileInfo, BotProjectFileContent } from './interface';
+import { BotProjectRef, FileInfo, BotProjectFileContent, LGTemplate } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 
@@ -43,7 +43,7 @@ export class BotProject {
   public getIndexes = () => {
     return {
       dialogs: this.dialogIndexer.getDialogs(),
-      lgTemplates: this.lgIndexer.getLgTemplates(),
+      lgFiles: this.lgIndexer.getLgFiles(),
       botFile: this.getBotFile(),
     };
   };
@@ -76,10 +76,10 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public updateLgTemplate = async (name: string, content: any) => {
-    const newFileContent = await this.lgIndexer.updateLgTemplate(content);
-    this._updateFile(`${name.trim()}.lg`, newFileContent);
-    return this.lgIndexer.getLgTemplates();
+  public updateLgFile = async (id: string, content: LGTemplate[]) => {
+    const newFileContent = await this.lgIndexer.updateLgFile(id, content);
+    this._updateFile(`${id.trim()}.lg`, newFileContent);
+    return this.lgIndexer.getLgFiles();
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {

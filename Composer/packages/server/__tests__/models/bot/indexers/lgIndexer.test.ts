@@ -30,19 +30,17 @@ describe('Index lg files', () => {
       },
     ];
     const aTemplate = {
-      id: 1,
       name: 'greet',
       content: '- Hello!',
-      absolutePath: Path.join(__dirname, '../../mocks/test.lg'),
       parameters: [],
       type: 'Rotate',
       comments: '',
     };
     await proj.lgIndexer.index(initFiles);
 
-    const lgTemplates = await proj.lgIndexer.getLgTemplates();
+    const lgFiles = await proj.lgIndexer.getLgFiles();
     // @ts-ignore
-    expect(lgTemplates.length).toEqual(1);
-    expect(aTemplate).toEqual(lgTemplates[0]);
+    expect(lgFiles.length).toEqual(1);
+    expect(aTemplate).toEqual(lgFiles[0].templates[0]);
   });
 });

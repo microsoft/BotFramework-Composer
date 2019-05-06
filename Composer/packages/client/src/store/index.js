@@ -18,7 +18,7 @@ const initialState = {
   botStatus: 'stopped',
   storageExplorerStatus: '',
   storageFileLoadingStatus: 'success',
-  lgTemplates: [],
+  lgFiles: [],
 };
 
 export function StoreProvider(props) {
