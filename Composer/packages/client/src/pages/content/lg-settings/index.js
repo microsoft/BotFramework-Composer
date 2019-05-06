@@ -8,16 +8,47 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
-import { scrollablePaneRoot, title, label } from './styles';
+import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
-  const { lgTemplates } = state;
-  const updateLG = useRef(debounce(actions.updateLgTemplate, 500)).current;
+  const { lgFiles } = state;
+  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+
+  // items used to render the detail table.
+  const items = lgFiles.flatMap((file, fileIndex) => {
+    const templates = file.templates.map((template, templateIndex) => {
+      return {
+        id: `${fileIndex}:${templateIndex}`,
+        fileId: file.id,
+        name: template.name,
+        value: template.name,
+        type: template.type,
+        content: template.content,
+        comments: template.comments,
+      };
+    });
+    return templates;
+  });
+
+  // init groups for detail table.
+  let startIndex = 0;
+  const groups = lgFiles.map(file => {
+    const group = {
+      name: file.id + '.lg',
+      count: file.templates.length,
+      key: file.id,
+      startIndex: startIndex,
+    };
+    startIndex += file.templates.length;
+    return group;
+  });
+
   const tableColums = [
     {
       key: 'name',
@@ -28,14 +59,14 @@ export function LanguageGenerationSettings() {
       isRowHeader: true,
       isResizable: true,
       data: 'string',
-      onRender: (item, index) => {
+      onRender: item => {
         return (
           <span>
             <TextField
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(index, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.content)}
             />
           </span>
         );
@@ -61,26 +92,13 @@ export function LanguageGenerationSettings() {
       isResizable: true,
       data: 'string',
       isPadded: true,
-      onRender: (item, index) => {
-        return <span>{getTemplatePhrase(item, index)}</span>;
+      onRender: item => {
+        return <span>{getTemplatePhrase(item)}</span>;
       },
     },
   ];
 
-  function updateTemplateContent(index, templateName, content) {
-    const newTemplate = lgTemplates[index];
-    newTemplate.name = templateName;
-    newTemplate.content = content;
-
-    const payload = {
-      name: templateName,
-      content: newTemplate,
-    };
-
-    updateLG(payload);
-  }
-
-  function getTemplatePhrase(item, index) {
+  function getTemplatePhrase(item) {
     return (
       <TextField
         borderless
@@ -88,9 +106,27 @@ export function LanguageGenerationSettings() {
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
         defaultValue={item.content}
-        onChange={(event, newValue) => updateTemplateContent(index, item.name, newValue)}
+        onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
       />
     );
+  }
+
+  function updateTemplateContent(templateId, fileId, templateName, content) {
+    const fileIndex = templateId.split(':')[0];
+    const templateIndex = templateId.split(':')[1];
+    const newTemplate = lgFiles[fileIndex].templates[templateIndex];
+    const isValid = templateName && content;
+    newTemplate.name = templateName;
+    newTemplate.content = content;
+    newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
+
+    const payload = {
+      id: fileId,
+      lgTemplates: lgFiles[fileIndex].templates,
+      isValid: isValid,
+    };
+
+    updateLgFile(payload);
   }
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -98,55 +134,44 @@ export function LanguageGenerationSettings() {
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
-          // eslint-disable-next-line react/display-name
           onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
   }
 
-  const items = [];
-  if (lgTemplates) {
-    lgTemplates.forEach(template => {
-      items.push({
-        name: template.name,
-        value: template.name,
-        absolutePath: template.absolutePath,
-        type: template.type,
-        content: template.content,
-        comments: template.comments,
-      });
+  function onCreateNewTempalte(selectedGroup) {
+    const id = selectedGroup.key;
+    const lgTemplates = lgFiles.find(file => file.id === id).templates;
+    lgTemplates.push({
+      name: '',
+      value: '',
+      type: 'Rotate',
+      content: '',
+      comments: '',
     });
+    const payload = {
+      id: id,
+      lgTemplates: lgTemplates,
+      isValid: false,
+    };
+    updateLgFile(payload);
   }
 
-  const groups = [];
-  let currentKey = '';
-  let itemCount = 0;
-  lgTemplates.forEach((template, index) => {
-    if (template.absolutePath !== currentKey) {
-      if (itemCount !== 0) {
-        const pathItems = currentKey.split(/[\\/]+/g);
-        groups.push({
-          name: pathItems[pathItems.length - 1],
-          count: itemCount,
-          key: currentKey,
-          startIndex: index - itemCount,
-        });
-        itemCount = 0;
-      }
-      currentKey = template.absolutePath;
-    }
-    itemCount++;
-    if (index === lgTemplates.length - 1) {
-      const pathItems = currentKey.split(/[\\/]+/g);
-      groups.push({
-        name: pathItems[pathItems.length - 1],
-        count: itemCount,
-        key: currentKey,
-        startIndex: index - itemCount + 1,
-      });
-    }
-  });
+  function onRenderGroupFooter(groupProps) {
+    return (
+      <div>
+        {' '}
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => onCreateNewTempalte(groupProps.group)}
+        >
+          New
+        </ActionButton>{' '}
+      </div>
+    );
+  }
 
   return (
     <Fragment>
@@ -158,11 +183,14 @@ export function LanguageGenerationSettings() {
             items={items}
             compact={false}
             columns={tableColums}
-            setKey="key"
+            getKey={item => item.id}
             layoutMode={DetailsListLayoutMode.fixedColumns}
             onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.none}
             groups={groups}
+            groupProps={{
+              onRenderFooter: onRenderGroupFooter,
+            }}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>

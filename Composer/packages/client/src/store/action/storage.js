@@ -26,6 +26,22 @@ export async function fetchStorages(dispatch) {
   }
 }
 
+export async function addNewStorage(dispatch, storageData) {
+  try {
+    const response = await axios.post(`${BASEURL}/storages`, storageData);
+    dispatch({
+      type: ActionTypes.STORAGE_GET_SUCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.STORAGE_GET_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
 // todo: enable this if we have more storage, currently we only have one.
 export async function fetchStorageByName(dispatch, fileName) {
   try {
@@ -45,6 +61,10 @@ export async function fetchStorageByName(dispatch, fileName) {
 
 export async function fetchFolderItemsByPath(dispatch, id, path) {
   try {
+    dispatch({
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: { status: 'pending' },
+    });
     const response = await axios.get(`${BASEURL}/storages/${id}/blobs/${path}`);
     dispatch({
       type: ActionTypes.STORAGEFILE_GET_SUCCESS,
@@ -52,8 +72,8 @@ export async function fetchFolderItemsByPath(dispatch, id, path) {
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.STORAGEFILE_GET_FAILURE,
-      payload: null,
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: { status: 'failure' },
       error: err,
     });
   }

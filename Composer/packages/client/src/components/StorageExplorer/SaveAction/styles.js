@@ -23,3 +23,7 @@ export const saveInputClass = css`
   flex-grow: 1;
   margin-right: 10px;
 `;
+
+export const loading = css`
+  width: 98px;
+`;

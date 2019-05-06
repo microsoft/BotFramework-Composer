@@ -11,9 +11,6 @@ interface BaseSchema {
   $designer?: OpenObject;
 }
 
-/* Union of components which implement the IDialog interface */
-interface MicrosoftIDialog extends BaseSchema {}
-
 /* Union of components which implement the IActivityTemplate interface */
 type MicrosoftIActivityTemplate = string;
 
@@ -21,7 +18,7 @@ interface IBaseDialog extends BaseSchema {
   /** This is that will be passed in as InputProperty and also set as the OutputProperty */
   property?: string;
   /** This defines properties which be passed as arguments to this dialog */
-  inputProperties?: { [XPathEvaluator: string]: string };
+  inputProperties?: { [x: string]: string };
   /** This is the property which the EndDialog(result) will be set to when EndDialog() is called */
   outputProperty?: string;
 }
@@ -107,3 +104,79 @@ interface RegexRecognizer extends BaseSchema {
 }
 
 type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer;
+
+/**
+ * Rules
+ */
+
+declare enum DialogEvent {
+  beginDialog = 'beginDialog',
+  consultDialog = 'consultDialog',
+  cancelDialog = 'cancelDialog',
+  activityReceived = 'activityReceived',
+  recognizedIntent = 'recognizedIntent',
+  unknownIntent = 'unknownIntent',
+  stepsStarted = 'stepsStarted',
+  stepsSaved = 'stepsSaved',
+  stepsEnded = 'stepsEnded',
+  stepsResumed = 'stepsResumed',
+}
+
+interface RuleBase extends BaseSchema {
+  /** Optional constraint to which must be met for this rule to fire */
+  constraint?: string;
+  /** Sequence of steps or dialogs to execute */
+  steps: MicrosoftIDialog[];
+}
+
+/** Defines a rule for an event which is triggered by some source */
+interface EventRule extends RuleBase {
+  /** Events to trigger this rule for */
+  events: DialogEvent[];
+}
+
+/** This defines the steps to take when an Intent is recognized (and optionally entities) */
+interface IntentRule extends RuleBase {
+  /** Intent name to trigger on */
+  intent: string;
+  /** The entities required to trigger this rule */
+  entities: string[];
+}
+
+/** Defines a rule for an event which is triggered by some source */
+interface Rule extends RuleBase {}
+
+/** Defines a sequence of steps to take if there is no other trigger or plan operating */
+interface UnknownIntentRule extends RuleBase {}
+
+type MicrosoftIRule = EventRule | IntentRule | Rule | UnknownIntentRule;
+
+/**
+ * Conversational Flow and Dialog Management
+ */
+
+interface CaseCondition {
+  /** Value which must match the condition property */
+  value: string;
+  /** Steps to execute if case is equal to condition */
+  steps: MicrosoftIDialog[];
+}
+
+/** Step which conditionally decides which step to execute next. */
+interface SwitchCondition extends BaseSchema {
+  /** Expression to evaluate to switch on. */
+  condition?: string;
+  /** Cases to evaluate against condition */
+  cases?: CaseCondition[];
+  /** Step to execute if no case is equal to condition */
+  default?: MicrosoftIDialog[];
+}
+
+/* Union of components which implement the IDialog interface */
+type MicrosoftIDialog =
+  | ChoiceInput
+  | ConfirmInput
+  | MicrosoftIRecognizer
+  | MicrosoftIRule
+  | SwitchCondition
+  | TextInput;

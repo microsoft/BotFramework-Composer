@@ -21,3 +21,9 @@ export const label = css`
   line-height: 30px;
   padding-left: 15px;
 `;
+
+export const actionButton = css`
+  font-size: 16px;
+  margin-top: 2px;
+  margin-left: 15px;
+`;
