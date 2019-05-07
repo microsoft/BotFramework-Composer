@@ -4,7 +4,6 @@ import path from 'path';
 class PathHandler {
   resolve(...params: string[]) {
     const pathToTransform = path.join(...params);
-    console.log(pathToTransform);
     if (path.isAbsolute(pathToTransform)) return pathToTransform.replace(/\\/g, '/');
     return path.resolve(...params).replace(/\\/g, '/');
   }
