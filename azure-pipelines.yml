@@ -6,8 +6,6 @@
 trigger:
 - master
 
-name: Composer-CI-NEW
-
 pool:
   name: Hosted macOS
 
