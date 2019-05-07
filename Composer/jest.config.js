@@ -33,7 +33,7 @@ module.exports = {
     '\\.(jpg|jpeg|png|svg)$': '<rootDir>/jestMocks/styleMock.js',
     '\\.(s)?css$': '<rootDir>/jestMocks/styleMock.js',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s'],
+  testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s', '/cypress/'],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
   },
