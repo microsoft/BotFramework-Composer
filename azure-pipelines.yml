@@ -24,7 +24,7 @@ jobs:
     pool:
       name: Hosted macOS
     steps:
-    - script: cd Composer && yarn build
+    - script: cd Composer && yarn && yarn build
       displayName: 'yarn build'
   - job: lint
     displayName: Lint
