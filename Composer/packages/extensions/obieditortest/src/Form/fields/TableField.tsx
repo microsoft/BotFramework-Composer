@@ -32,6 +32,7 @@ interface TableFieldProps<T> extends FieldProps<T[]> {
   navPrefix: string;
   onChange: (items: T[]) => void;
   renderTitle?: (item: T) => string;
+  renderDescription?: (item: T) => string;
   name: string;
   schema: JSONSchema6;
   dialogOptionsOpts?: DialogOptionsOpts;
@@ -109,7 +110,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
 };
 
 export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderTitle, children } = props;
+  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderTitle, renderDescription, children } = props;
 
   const items = props.formData;
 
@@ -128,12 +129,19 @@ export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
 
   const columns: IColumn[] = [
     {
-      key: 'column1',
-      name: columnHeader || formatMessage('Type'),
+      key: 'name',
+      name: columnHeader || formatMessage('Name'),
       minWidth: 30,
-      maxWidth: additionalColumns.length ? 200 : undefined,
+      maxWidth: 150,
       isResizable: true,
       onRender: renderTitle,
+    },
+    {
+      key: 'description',
+      name: formatMessage('Description'),
+      minWidth: 30,
+      isResizable: true,
+      onRender: renderDescription,
     },
     ...additionalColumns,
     {
@@ -178,5 +186,6 @@ TableField.defaultProps = {
   formData: [],
   navPrefix: '',
   onChange: () => {},
-  renderTitle: item => get(item, '$designer.friendlyName', item.$type),
+  renderTitle: item => get(item, '$designer.name', item.$type),
+  renderDescription: item => get(item, '$designer.description'),
 };

@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
+import nanoid from 'nanoid';
 
 import Example from '../../src';
 import { ShellApi } from '../../src/types';
@@ -96,6 +97,7 @@ const Demo: React.FC = () => {
   const [memoryData, setMemoryData] = useState(JSON.stringify(getDefaultMemory(), null, 2));
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
+  const [navPath, setNavPath] = useState(nanoid());
   const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
 
   const [isValid, setValid] = useState(true);
@@ -182,6 +184,8 @@ const Demo: React.FC = () => {
       </div>
       <div className="DemoForm">
         <Example
+          navPath={navPath}
+          focusPath={navPath}
           data={formData}
           dialogs={dialogFiles}
           memory={memoryFormData}

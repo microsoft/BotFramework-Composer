@@ -4,6 +4,8 @@ import {
   ContextualMenuItemType,
   IDropdownOption,
 } from 'office-ui-fabric-react';
+import { useState } from 'react';
+import merge from 'lodash.merge';
 
 import { dialogGroups, DialogGroup, DialogGroupItem } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
@@ -135,4 +137,22 @@ export function getMemoryOptions(memory: FormMemory): IDropdownOption[] {
     ...buildScope(memory, MemoryScope.dialog),
     ...buildScope(memory, MemoryScope.turn),
   ];
+}
+
+type FormUpdater<T> = (updates: Partial<T>) => void;
+
+export function useFormState<T extends object>(initialData?: T): [T, FormUpdater<T>] {
+  // @ts-ignore
+  const defaultFormState: T = {};
+  const [formData, setFormData] = useState<T>(initialData || defaultFormState);
+
+  const update: FormUpdater<T> = updates => {
+    setFormData(merge({}, formData, updates));
+  };
+
+  return [formData, update];
+}
+
+export function getTimestamp(): string {
+  return new Date().toISOString();
 }
