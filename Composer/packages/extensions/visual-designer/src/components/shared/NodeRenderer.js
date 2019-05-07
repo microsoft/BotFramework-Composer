@@ -9,6 +9,7 @@ import {
   UnknownIntentRule,
   EventRule,
   IfCondition,
+  SwitchCondition,
 } from '../nodes/index';
 
 import { Boundary } from './Boundary';
@@ -22,6 +23,7 @@ const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
+  [ObiTypes.SwitchCondition]: SwitchCondition,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
