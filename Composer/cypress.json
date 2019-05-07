@@ -1,0 +1,6 @@
+{
+  "ignoreTestFiles": "**/examples/*",
+  "video": false,
+  "viewportWidth": 1600,
+  "viewportHeight": 1200
+}
