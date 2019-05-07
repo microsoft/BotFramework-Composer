@@ -1,5 +1,30 @@
 export const BASEURL = 'http://localhost:5000/api';
 
+/**
+ * Global ActionTypes Defination Instruction.
+ * For unification consideration, please follow the naming pattern below
+ * You may not need all of this types. but the type must be one of them.
+ * Shortly, a good ActionType name should be:
+ * <DO_WHAT_STATUS> or <DO_WHAT>
+ *
+ * <DO>
+ * e.g. 'GET' / 'SET' / 'FETCH' / 'UPDATE' / 'CREATE' etc.
+ *
+ * <DO_WHAT>
+ * usage example, 'GET_DATA' / 'UPDATE_FILE' / 'SET_STATE'
+ *
+ * <STATUS>
+ * START ---> SUCCESS || FAILURE ---> COMPLETE
+ * it's a status flow, <STATUS> must be one of them
+ * complete is fired no mater it's success or failure.
+ * usage example, 'GET_DATA_SUCCESS' / 'UPDATE_FILE_FAILURE' / 'SET_STATE_COMPLETE'
+ *
+ * Bad Practices:
+ * - Reversed <WHAT_DO>, e.g. 'DATA_GET', 'FILE_SET'
+ * - ACTION use as ACTION_SUCCESS
+ * - Overdesign, unused types
+ */
+
 export const ActionTypes = {
   PROJECT_STATE_INIT: 'PROJECT_STATE_INIT',
   PROJ_FILE_UPDATE_SUCCESS: 'PROJ_FILE_UPDATE_SUCCESS',
