@@ -1,6 +1,6 @@
 import React from 'react';
 import formatMessage from 'format-message';
-import { IColumn, PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import { FieldProps } from 'react-jsonschema-form';
 import get from 'lodash.get';
 
@@ -9,27 +9,14 @@ import { buildDialogOptions } from '../utils';
 
 import { TableField } from './TableField';
 
-const columns: IColumn[] = [
-  {
-    key: 'column2',
-    name: formatMessage('# of Steps'),
-    data: 'number',
-    minWidth: 50,
-    isCollapsable: true,
-    onRender: item => {
-      return (item.steps || []).length;
-    },
-  },
-];
-
-const renderTitle = item => {
-  const friendlyName = get(item, '$designer.friendlyName');
+const renderTitle = (item: MicrosoftIRule) => {
+  const friendlyName = get(item, '$designer.name');
 
   if (friendlyName) {
     return friendlyName;
   }
 
-  const intentName = item.intent;
+  const intentName = (item as IntentRule).intent;
   if (intentName) {
     return intentName;
   }
@@ -41,7 +28,6 @@ export function RulesField(props: FieldProps) {
   return (
     <TableField<MicrosoftIRule>
       {...props}
-      additionalColumns={columns}
       dialogOptionsOpts={{ include: [DialogGroup.RULE], subMenu: false }}
       label={formatMessage('Add New Rule')}
       navPrefix="rules"

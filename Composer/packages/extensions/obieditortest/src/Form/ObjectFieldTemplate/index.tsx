@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
-import { createTheme, PrimaryButton } from 'office-ui-fabric-react';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { ColorClassNames, FontClassNames } from '@uifabric/styling';
+import { PrimaryButton } from 'office-ui-fabric-react';
 import { getUiOptions } from 'react-jsonschema-form/lib/utils';
 import omit from 'lodash.omit';
 import { ObjectFieldTemplateProps } from 'react-jsonschema-form';
 import formatMessage from 'format-message';
 
+import { BaseField } from '../fields/BaseField';
+
 import ObjectItem from './ObjectItem';
 import NewPropertyModal from './NewPropertyModal';
 
 import './styles.scss';
-
-const fieldHeaderTheme = createTheme({
-  fonts: {
-    medium: {
-      fontSize: '24px',
-    },
-  },
-  palette: {
-    neutralLighter: '#d0d0d0',
-  },
-});
 
 function canExpand({ formData, schema, uiSchema }: ObjectFieldTemplateProps): boolean {
   if (!schema.additionalProperties) {
@@ -60,33 +49,27 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
   };
 
   return (
-    <div className="ObjectFieldTemplate">
-      {(props.uiSchema['ui:title'] || props.title) && (
-        <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-          {props.uiSchema['ui:title'] || props.title}
-        </Separator>
-      )}
-      {props.description && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.description}</p>
-      )}
-      {props.properties.map(p => (
-        <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
-      ))}
-      {canExpand(props) && (
-        <>
-          <PrimaryButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
-            {formatMessage('Add')}
-          </PrimaryButton>
-          {showModal && (
-            <NewPropertyModal
-              onSubmit={handlePropertyEdit}
-              onDismiss={onDismiss}
-              name={editableProperty}
-              schema={props.schema || {}}
-            />
-          )}
-        </>
-      )}
+    <div className="ObjectFieldTemplate" key={props.idSchema.__id}>
+      <BaseField {...props}>
+        {props.properties.map(p => (
+          <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
+        ))}
+        {canExpand(props) && (
+          <>
+            <PrimaryButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
+              {formatMessage('Add')}
+            </PrimaryButton>
+            {showModal && (
+              <NewPropertyModal
+                onSubmit={handlePropertyEdit}
+                onDismiss={onDismiss}
+                name={editableProperty}
+                schema={props.schema || {}}
+              />
+            )}
+          </>
+        )}
+      </BaseField>
     </div>
   );
 };

@@ -3,9 +3,6 @@ import { render, fireEvent } from 'react-testing-library';
 
 import StringArray from '../../../src/Form/ArrayFieldTemplate/StringArray';
 
-const TestTitleField = ({ title, ...rest }) => <label {...rest}>{title}</label>;
-const TestDescriptionField = ({ description, ...rest }) => <p {...rest}>{description}</p>;
-
 const items = [
   { children: <div>element 1</div> },
   { children: <div>element 2</div> },
@@ -14,8 +11,6 @@ const items = [
 
 function renderDefault(propOverrides = {}) {
   const props = {
-    TitleField: TestTitleField,
-    DescriptionField: TestDescriptionField,
     items,
     title: 'My Array Title',
     schema: {
@@ -36,16 +31,14 @@ describe('<StringArray />', () => {
     const { findByText } = renderDefault();
 
     const title = await findByText('My Array Title');
-    expect(title.tagName).toEqual('LABEL');
-    expect(title.id).toEqual('StringArrayTest__title');
+    expect(title).toBeTruthy();
   });
 
   it('renders a DescriptionField', async () => {
     const { findByText } = renderDefault();
 
-    const title = await findByText('My array description.');
-    expect(title.tagName).toEqual('P');
-    expect(title.id).toEqual('StringArrayTest__description');
+    const description = await findByText('My array description.');
+    expect(description).toBeTruthy();
   });
 
   it('renders a StringItem for each item', async () => {

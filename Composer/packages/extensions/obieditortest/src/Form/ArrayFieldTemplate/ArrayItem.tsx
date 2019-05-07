@@ -2,6 +2,7 @@ import React from 'react';
 import { DefaultButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
 import { ArrayFieldItem } from 'react-jsonschema-form';
+import formatMessage from 'format-message';
 
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
   const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
@@ -39,15 +40,13 @@ const ArrayItem: React.FC<ArrayFieldItem> = props => {
   return (
     <div className="ArrayItem">
       <div className="ArrayItemField">{props.children}</div>
-      {contextItems.length > 0 && (
-        <div className="ArrayItemContext">
-          <DefaultButton
-            menuProps={{ items: contextItems }}
-            ariaLabel="Item Actions"
-            data-testid="ArrayItemContextMenu"
-          />
-        </div>
-      )}
+      <div className="ArrayItemContext">
+        <DefaultButton
+          menuProps={{ items: contextItems }}
+          ariaLabel={formatMessage('Item Actions')}
+          data-testid="ArrayItemContextMenu"
+        />
+      </div>
     </div>
   );
 };

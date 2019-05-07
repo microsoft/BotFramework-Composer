@@ -25,7 +25,7 @@ export interface FormData {
 }
 
 export interface ShellApi {
-  getData: <T = any>() => Promise<T>;
+  getState: <T = any>() => Promise<T>;
   getDialogs: <T = any>() => Promise<T>;
   saveData: <T = any>(newData: T) => Promise<void>;
   navTo: (path: string) => Promise<void>;
