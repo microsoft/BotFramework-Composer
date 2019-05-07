@@ -91,12 +91,12 @@ export async function updateProjFile(dispatch, { name, content }) {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/botFile`, { name, content });
     dispatch({
-      type: ActionTypes.PROJ_FILE_UPDATE_SUCCESS,
+      type: ActionTypes.UPDATE_PROJFILE__SUCCESS,
       payload: { response },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.PROJ_FILE_UPDATE_FAILURE,
+      type: ActionTypes.UPDATE_PROJFILE__FAILURE,
       payload: null,
       error: err,
     });
@@ -123,7 +123,7 @@ export async function updateLgFile(dispatch, { id, lgTemplates, isValid }) {
     if (isValid) {
       const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, lgTemplates });
       dispatch({
-        type: ActionTypes.UPDATE_LG_TEMPLATE,
+        type: ActionTypes.UPDATE_LG_SUCCESS,
         payload: { response },
       });
     } else {
