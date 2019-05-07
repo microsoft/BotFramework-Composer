@@ -1,0 +1,60 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "recognizer": {
+        "$type": "Microsoft.MultiLanguageRecognizer",
+        "recognizers": {
+            "en-us" : {
+                "$type": "Microsoft.RegexRecognizer",
+                "intents": {
+                    "Greeting": "(?i)howdy",
+                    "Goodbye": "(?i)bye"
+                }
+            },
+            "en-gb" : {
+                "$type": "Microsoft.RegexRecognizer",
+                "intents": {
+                    "Greeting": "(?i)hiya",
+                    "Goodbye": "(?i)cheerio"
+                }
+            },
+            "en" : {
+                "$type": "Microsoft.RegexRecognizer",
+                "intents": {
+                    "Greeting": "(?i)hello",
+                    "Goodbye": "(?i)goodbye"
+                }
+            },
+            "" : {
+                "$type": "Microsoft.RegexRecognizer",
+                "intents": {
+                    "Greeting": "(?i)salve",
+                    "Goodbye": "(?i)vale dicere"
+                }
+            }
+        }
+    },
+    "rules": [
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "Greeting",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "greeting intent"
+                  }             
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "Goodbye",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "goodbye intent"
+                  }            
+            ]
+        }
+    ]
+}
