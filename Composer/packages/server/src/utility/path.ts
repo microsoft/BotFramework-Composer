@@ -3,6 +3,9 @@ import path from 'path';
 // handle all the path to unix pattern
 class PathHandler {
   resolve(...params: string[]) {
+    const pathToTransform = path.join(...params);
+    console.log(pathToTransform);
+    if (path.isAbsolute(pathToTransform)) return pathToTransform.replace(/\\/g, '/');
     return path.resolve(...params).replace(/\\/g, '/');
   }
   relative(from: string, to: string) {
