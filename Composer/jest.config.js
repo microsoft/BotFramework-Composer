@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
+    'packages/**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
@@ -21,6 +21,7 @@ module.exports = {
     '!**/gulpfile.js',
     '!**/style.js',
     '!**/styles.js',
+    '!cypress/',
   ],
   coverageReporters: ['json', 'lcov', 'text-summary', 'cobertura'],
   coverageThreshold: {
