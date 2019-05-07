@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef, useState } from 'react';
+import { Fragment, useContext, useRef, useState, useMemo } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -13,7 +13,7 @@ import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
-import NewLgTemplateModal from './NewLgTemplateModal';
+import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
@@ -21,34 +21,39 @@ export function LanguageGenerationSettings() {
   const { lgFiles } = state;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const [modalOpen, setModalOpen] = useState(false);
+
   // items used to render the detail table.
-  const items = lgFiles.flatMap((file, fileIndex) => {
-    const templates = file.templates.map((template, templateIndex) => {
-      return {
-        id: `${fileIndex}:${templateIndex}`,
-        fileId: file.id,
-        name: template.name,
-        value: template.name,
-        type: template.type,
-        content: template.content,
-        comments: template.comments,
-      };
+  const items = useMemo(() => {
+    return lgFiles.flatMap((file, fileIndex) => {
+      const templates = file.templates.map((template, templateIndex) => {
+        return {
+          id: `${fileIndex}:${templateIndex}`,
+          fileId: file.id,
+          name: template.name,
+          value: template.name,
+          type: template.type,
+          content: template.content,
+          comments: template.comments,
+        };
+      });
+      return templates;
     });
-    return templates;
-  });
+  }, [lgFiles]);
 
   // init groups for detail table.
-  let startIndex = 0;
-  const groups = lgFiles.map(file => {
-    const group = {
-      name: file.id + '.lg',
-      count: file.templates.length,
-      key: file.id,
-      startIndex: startIndex,
-    };
-    startIndex += file.templates.length;
-    return group;
-  });
+  const groups = useMemo(() => {
+    let startIndex = 0;
+    return lgFiles.map(file => {
+      const group = {
+        name: file.id + '.lg',
+        count: file.templates.length,
+        key: file.id,
+        startIndex: startIndex,
+      };
+      startIndex += file.templates.length;
+      return group;
+    });
+  }, [lgFiles]);
 
   const tableColums = [
     {
@@ -184,12 +189,12 @@ export function LanguageGenerationSettings() {
       <div>
         <div css={title}>{formatMessage('Content > Language Generation')}</div>
         <div css={label}>
-          {formatMessage('Templates')}
+          {formatMessage('Files')}
           <IconButton
             style={{ marginLeft: '10px' }}
             iconProps={{ iconName: 'Add' }}
-            title={formatMessage('New LG Template')}
-            ariaLabel={formatMessage('New LG Template')}
+            title={formatMessage('New LG file')}
+            ariaLabel={formatMessage('New LG file')}
             onClick={() => setModalOpen(true)}
           />
         </div>
@@ -211,7 +216,7 @@ export function LanguageGenerationSettings() {
           />
         </ScrollablePane>
       </div>
-      <NewLgTemplateModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
+      <NewLgFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }

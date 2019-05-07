@@ -15,7 +15,7 @@ const validateForm = data => {
   return errors;
 };
 
-export default function NewLgTemplategModal(props) {
+export default function NewLgFileModal(props) {
   const { isOpen, onDismiss, onSubmit } = props;
   const [formData, setFormData] = useState({ errors: {} });
 
@@ -45,15 +45,15 @@ export default function NewLgTemplategModal(props) {
         <div style={{ position: 'absolute', top: 10, right: 10 }}>
           <IconButton
             iconProps={{ iconName: 'ChromeClose' }}
-            title={formatMessage('Add LG Template')}
-            ariaLabel={formatMessage('Add LG Template')}
+            title={formatMessage('Add LG file')}
+            ariaLabel={formatMessage('Add LG file')}
             onClick={onDismiss}
           />
         </div>
         <div>
           <form onSubmit={handleSubmit}>
             <TextField
-              label={formatMessage('LG Template Name')}
+              label={formatMessage('LG file name')}
               onChange={updateForm('name')}
               required
               errorMessage={formData.errors.name}
@@ -69,7 +69,7 @@ export default function NewLgTemplategModal(props) {
               primary
               styles={{ root: { width: '100%', marginTop: '20px' } }}
             >
-              {formatMessage('Create New LG Template')}
+              {formatMessage('Add LG file')}
             </Button>
           </form>
         </div>
