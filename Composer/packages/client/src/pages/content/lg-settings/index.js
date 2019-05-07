@@ -175,7 +175,7 @@ export function LanguageGenerationSettings() {
   }
 
   async function onSubmit(data) {
-    await actions.addLgFile(data);
+    await actions.createLgFile(data);
     setModalOpen(false);
   }
 

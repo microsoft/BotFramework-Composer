@@ -104,7 +104,7 @@ export class LGIndexer {
     return newFileContent;
   }
 
-  public addLgFile = (id: string, templates: string, absolutePath: string) => {
+  public createLgFile = (id: string, templates: string, absolutePath: string) => {
     this.lgFiles.push({ id, templates: [], absolutePath });
     return templates;
   };

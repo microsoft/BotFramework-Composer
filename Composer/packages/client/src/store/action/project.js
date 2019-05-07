@@ -141,7 +141,7 @@ export async function updateLgFile(dispatch, { id, lgTemplates, isValid }) {
   }
 }
 
-export async function addLgFile(dispatch, { name, content }) {
+export async function createLgFile(dispatch, { name, content }) {
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { name, content });
     dispatch({

@@ -108,7 +108,7 @@ async function updateLgFile(req: Request, res: Response) {
   }
 }
 
-async function addLgFile(req: Request, res: Response) {
+async function createLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name);
     res.status(200).json({ lgFiles });
@@ -123,7 +123,7 @@ export const ProjectController = {
   updateDialog: updateDialog,
   createDialogFromTemplate: createDialogFromTemplate,
   updateLgFile: updateLgFile,
-  addLgFile: addLgFile,
+  createLgFile: createLgFile,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
 };
