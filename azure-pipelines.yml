@@ -7,8 +7,8 @@ trigger:
 - master
 
 jobs:
-  - job: install
-    displayName: Install Dependencies
+  - job: test
+    displayName: Unit Tests
     pool:
       name: Hosted macOS
     steps:
@@ -18,28 +18,8 @@ jobs:
         versionSpec: 10.15.3
     - script: cd Composer && yarn install --network-concurrency 1
       displayName: 'yarn install'
-  - job: build
-    displayName: Build
-    dependsOn: install
-    pool:
-      name: Hosted macOS
-    steps:
-    - script: cd Composer && yarn && yarn build
-      displayName: 'yarn build'
-  - job: lint
-    displayName: Lint
-    dependsOn: install
-    pool:
-      name: Hosted macOS
-    steps:
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
-  - job: test
-    displayName: Test
-    dependsOn: install
-    pool:
-      name: Hosted macOS
-    steps:
     - script: cd Composer && yarn test:coverage
       displayName: 'yarn test:coverage'
       condition: succeededOrFailed()
@@ -49,3 +29,16 @@ jobs:
         codeCoverageTool: Cobertura
         summaryFileLocation: 'Composer/coverage/cobertura-coverage.xml'
         reportDirectory: 'Composer/coverage/lcov-report'
+  - job: e2e
+    displayName: E2E Tests
+    steps:
+    - task: NodeTool@0
+      displayName: 'Use Node 10.15.3'
+      inputs:
+        versionSpec: 10.15.3
+    - script: cd Composer && yarn install --network-concurrency 1
+      displayName: 'yarn install'
+    - script: cd Composer && yarn && yarn build
+      displayName: 'yarn build'
+    - script: cd Composer && yarn test:integration
+      displayName: yarn test:integration
