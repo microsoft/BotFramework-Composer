@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
+    'packages/**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
@@ -21,6 +21,7 @@ module.exports = {
     '!**/gulpfile.js',
     '!**/style.js',
     '!**/styles.js',
+    '!cypress/',
   ],
   coverageReporters: ['json', 'lcov', 'text-summary', 'cobertura'],
   coverageThreshold: {
@@ -33,7 +34,7 @@ module.exports = {
     '\\.(jpg|jpeg|png|svg)$': '<rootDir>/jestMocks/styleMock.js',
     '\\.(s)?css$': '<rootDir>/jestMocks/styleMock.js',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s'],
+  testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s', '/cypress/'],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
   },
