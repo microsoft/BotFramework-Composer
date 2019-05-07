@@ -17,7 +17,7 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   padding-top: 20px;
-  height: calc(100vh - 155px);
+  height: calc(100% - 555px);
   overflow-x: hidden;
   width: 640px;
 `;

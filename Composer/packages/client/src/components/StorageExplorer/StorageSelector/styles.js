@@ -1,12 +1,4 @@
-import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-
-export const title = css`
-  padding: 37px 30px 2px 30px;
-  font-size: 34px;
-  color: #2b579a !important;
-  font-weight: lighter;
-`;
 
 export const navLinkClass = mergeStyleSets({
   storageNav: {
