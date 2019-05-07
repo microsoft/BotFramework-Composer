@@ -25,3 +25,23 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import 'cypress-testing-library/add-commands';
+
+Cypress.Commands.add('openBot', botName => {
+  cy.getByText('Open').click();
+  cy.getByText(botName).click();
+  cy.getByText('bot.botproj').click();
+  cy.wait(500);
+});
+
+Cypress.Commands.add('withinEditor', (editorName, cb) => {
+  cy.get(`iframe[name="${editorName}"]`).then(editor => {
+    cy.wrap(editor.contents().find('body')).within(cb);
+  });
+});
+
+Cypress.Commands.add('openDialog', dialogName => {
+  cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.getByText(dialogName).click();
+    cy.wait(500);
+  });
+});
