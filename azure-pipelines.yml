@@ -35,6 +35,7 @@ jobs:
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/junit.xml'
+        testRunTitle: Unit Tests
         mergeTestResults: true
   - job: e2e
     displayName: E2E Tests
@@ -55,5 +56,6 @@ jobs:
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: '**/cypress/results/results-*.xml'
+        testRunTitle: E2E Tests
         mergeTestResults: true
     
