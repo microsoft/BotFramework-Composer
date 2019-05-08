@@ -1,0 +1,33 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "$id": "root",
+    "recognizer": {
+        "$type": "Microsoft.RegexRecognizer",
+        "intents": {
+            "CancelIntent": "(?i)cancel|never mind|end"
+        }
+    },
+    "steps": [
+        {
+            "$type": "Microsoft.TextInput",
+            "prompt": "Hello, what is your name?",
+            "property": "user.name"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Got it, {user.name}."
+        }
+    ],
+    "rules": [
+        {
+          "$type": "Microsoft.IntentRule",
+          "intent": "CancelIntent",
+          "steps": [
+            {
+              "$type": "Microsoft.CancelAllDialogs"
+            }
+          ]
+        }
+    ]
+}
