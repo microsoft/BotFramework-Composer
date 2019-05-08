@@ -45,7 +45,6 @@ jobs:
       displayName: 'Use Node 10.15.3'
       inputs:
         versionSpec: 10.15.3
-    - script: env | grep BUILD
     - script: cd Composer && yarn install --network-concurrency 1
       displayName: 'yarn install'
     - script: cd Composer && yarn build
