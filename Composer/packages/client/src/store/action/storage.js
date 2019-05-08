@@ -4,7 +4,7 @@ import { BASEURL, ActionTypes } from './../../constants/index';
 
 export async function setStorageExplorerStatus(dispatch, status) {
   dispatch({
-    type: ActionTypes.STORAGEEXPLORER_STATUS_SET,
+    type: ActionTypes.SET_STORAGEEXPLORER_STATUS,
     payload: { status },
   });
 }
@@ -13,13 +13,13 @@ export async function fetchStorages(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
     dispatch({
-      type: ActionTypes.STORAGE_GET_SUCCESS,
+      type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: { response },
     });
     return response.data;
   } catch (err) {
     dispatch({
-      type: ActionTypes.STORAGE_GET_FAILURE,
+      type: ActionTypes.GET_STORAGE_FAILURE,
       payload: null,
       error: err,
     });
@@ -30,12 +30,12 @@ export async function addNewStorage(dispatch, storageData) {
   try {
     const response = await axios.post(`${BASEURL}/storages`, storageData);
     dispatch({
-      type: ActionTypes.STORAGE_GET_SUCCESS,
+      type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: { response },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.STORAGE_GET_FAILURE,
+      type: ActionTypes.GET_STORAGE_FAILURE,
       payload: null,
       error: err,
     });
@@ -47,12 +47,12 @@ export async function fetchStorageByName(dispatch, fileName) {
   try {
     const response = await axios.get(`${BASEURL}/storage/${fileName}`);
     dispatch({
-      type: ActionTypes.STORAGE_GET_SUCCESS,
+      type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: { response },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.STORAGE_GET_FAILURE,
+      type: ActionTypes.GET_STORAGE_FAILURE,
       payload: null,
       error: err,
     });
@@ -67,7 +67,7 @@ export async function fetchFolderItemsByPath(dispatch, id, path) {
     });
     const response = await axios.get(`${BASEURL}/storages/${id}/blobs/${path}`);
     dispatch({
-      type: ActionTypes.STORAGEFILE_GET_SUCCESS,
+      type: ActionTypes.GET_STORAGEFILE_SUCCESS,
       payload: { response },
     });
   } catch (err) {

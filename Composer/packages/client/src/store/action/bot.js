@@ -8,14 +8,14 @@ export async function toggleBot(dispatch, status) {
   try {
     await axios.get(`${BASEURL}/${path}`);
     dispatch({
-      type: ActionTypes.BOT_STATUS_SET,
+      type: ActionTypes.SET_BOT_STATUS_SUCCESS,
       payload: {
         status: status === 'stopped' ? 'running' : 'stopped',
       },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.BOT_STATUS_SET_FAILURE,
+      type: ActionTypes.SET_BOT_STATUS_FAILURE,
       payload: null,
       error: err,
     });
@@ -25,6 +25,6 @@ export async function toggleBot(dispatch, status) {
 export function closeCurrentProject(dispatch) {
   clearNavHistory(dispatch);
   dispatch({
-    type: ActionTypes.PROJECT_STATE_INIT,
+    type: ActionTypes.INIT_PROJECT_STATE,
   });
 }

@@ -2,52 +2,58 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef } from 'react';
+import { Fragment, useContext, useRef, useState, useMemo } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
+import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgFiles } = state;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const [modalOpen, setModalOpen] = useState(false);
 
   // items used to render the detail table.
-  const items = lgFiles.flatMap((file, fileIndex) => {
-    const templates = file.templates.map((template, templateIndex) => {
-      return {
-        id: `${fileIndex}:${templateIndex}`,
-        fileId: file.id,
-        name: template.name,
-        value: template.name,
-        type: template.type,
-        content: template.content,
-        comments: template.comments,
-      };
+  const items = useMemo(() => {
+    return lgFiles.flatMap((file, fileIndex) => {
+      const templates = file.templates.map((template, templateIndex) => {
+        return {
+          id: `${fileIndex}:${templateIndex}`,
+          fileId: file.id,
+          name: template.name,
+          value: template.name,
+          type: template.type,
+          content: template.content,
+          comments: template.comments,
+        };
+      });
+      return templates;
     });
-    return templates;
-  });
+  }, [lgFiles]);
 
   // init groups for detail table.
-  let startIndex = 0;
-  const groups = lgFiles.map(file => {
-    const group = {
-      name: file.id + '.lg',
-      count: file.templates.length,
-      key: file.id,
-      startIndex: startIndex,
-    };
-    startIndex += file.templates.length;
-    return group;
-  });
+  const groups = useMemo(() => {
+    let startIndex = 0;
+    return lgFiles.map(file => {
+      const group = {
+        name: file.id + '.lg',
+        count: file.templates.length,
+        key: file.id,
+        startIndex: startIndex,
+      };
+      startIndex += file.templates.length;
+      return group;
+    });
+  }, [lgFiles]);
 
   const tableColums = [
     {
@@ -173,11 +179,25 @@ export function LanguageGenerationSettings() {
     );
   }
 
+  async function onSubmit(data) {
+    await actions.createLgFile(data);
+    setModalOpen(false);
+  }
+
   return (
     <Fragment>
       <div>
         <div css={title}>{formatMessage('Content > Language Generation')}</div>
-        <div css={label}>{formatMessage('Templates')}</div>
+        <div css={label}>
+          {formatMessage('Files')}
+          <IconButton
+            style={{ marginLeft: '10px' }}
+            iconProps={{ iconName: 'Add' }}
+            title={formatMessage('New LG file')}
+            ariaLabel={formatMessage('New LG file')}
+            onClick={() => setModalOpen(true)}
+          />
+        </div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             items={items}
@@ -190,11 +210,13 @@ export function LanguageGenerationSettings() {
             groups={groups}
             groupProps={{
               onRenderFooter: onRenderGroupFooter,
+              showEmptyGroups: true,
             }}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>
       </div>
+      <NewLgFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }
