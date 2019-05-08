@@ -5,6 +5,7 @@ import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { getFriendlyName } from './utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
@@ -45,15 +46,19 @@ const ContentKeyByTypes = {
 export class DefaultRenderer extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
-    let header = truncateType(data.$type),
+    let header = getFriendlyName(data),
       label = '',
       details = '';
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
     if (keyMap) {
-      header = data[keyMap.header] || header;
+      header = header || data[keyMap.header] || header;
       label = data[keyMap.label] || label;
       details = data[keyMap.details] || details;
+    }
+
+    if (!header) {
+      header = truncateType(data.$type);
     }
 
     return (

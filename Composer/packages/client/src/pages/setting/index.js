@@ -7,16 +7,16 @@ import Routes from './router';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { SettingItem } from './../../components/SettingItem';
-import { title } from './styles';
+import { title, contentContainer, fileList, contentEditor } from './styles';
 
 export const SettingPage = () => {
   return (
     <Fragment>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, marginLeft: '30px', marginTop: '20px' }}>
-          <Tree variant="largest">
+      <div css={contentContainer}>
+        <div css={fileList}>
+          <Tree variant="fill">
             <div>
-              <div css={title}>Settings</div>
+              <div css={title}>{formatMessage('Settings')}</div>
               <SettingItem to="dialog-settings" label={formatMessage('Dialog settings')} />
               <SettingItem to="services" label={formatMessage('Services')} />
               <SettingItem to="composer-configuration" label={formatMessage('Composer configuration')} />
@@ -24,11 +24,9 @@ export const SettingPage = () => {
             </div>
           </Tree>
         </div>
-        <div style={{ flex: 4, marginTop: '20px', marginLeft: '20px' }}>
-          <Conversation>
-            <Routes />
-          </Conversation>
-        </div>
+        <Conversation extraCss={contentEditor}>
+          <Routes />
+        </Conversation>
       </div>
     </Fragment>
   );

@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import { container, top } from './styles';
 
 export const Conversation = props => (
-  <div css={container}>
+  <div css={[container, props.extraCss]}>
     <div css={top} />
     {props.children}
   </div>

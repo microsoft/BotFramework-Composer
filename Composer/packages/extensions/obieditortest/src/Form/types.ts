@@ -4,6 +4,7 @@ import { ShellApi } from '../types';
 
 export interface FormContext {
   shellApi: ShellApi;
+  rootId: string;
 }
 
 interface EnumOption {

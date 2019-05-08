@@ -4,11 +4,12 @@ import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
+import isEqual from 'lodash.isequal';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMergedSchema } from './schema/appschema';
-import { getMemoryOptions } from './Form/utils';
+import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi } from './types';
 
 import './App.css';
@@ -18,12 +19,22 @@ const getType = (data: FormData): string | undefined => {
 };
 
 export interface FormEditorProps {
+  navPath: string;
+  focusPath: string;
   data: FormData;
   dialogs: DialogInfo[];
   memory: FormMemory;
   shellApi: ShellApi;
   onChange: (newData: object) => void;
   onBlur?: () => void;
+}
+
+function updateDesigner(data) {
+  if (data && data.$designer) {
+    data.$designer.updatedAt = getTimestamp();
+  }
+
+  return data;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
@@ -63,7 +74,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   };
 
   const onChange = newValue => {
-    props.onChange(newValue.formData);
+    if (!isEqual(newValue.formData, data)) {
+      props.onChange(updateDesigner(newValue.formData));
+    }
   };
 
   const onMemoryDropdownChange = (event, option) => {
@@ -95,7 +108,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           uiSchema={dialogUiSchema}
           formContext={{
             shellApi,
+            rootId: props.focusPath,
           }}
+          idPrefix={props.focusPath}
         >
           <button style={{ display: 'none' }} />
         </Form>

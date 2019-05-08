@@ -2,15 +2,15 @@ import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
 
+import { BaseField } from '../fields/BaseField';
+
 import ArrayItem from './ArrayItem';
 
 const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
-  const { items, canAdd, onAddClick, TitleField, DescriptionField } = props;
+  const { items, canAdd, onAddClick } = props;
 
   return (
-    <div className="ArrayContainer">
-      <TitleField title={props.title} id={`${props.idSchema.__id}__title`} required={props.required} />
-      <DescriptionField description={props.schema.description} id={`${props.idSchema.__id}__description`} />
+    <BaseField {...props}>
       {items.map((element, idx) => (
         <ArrayItem {...element} key={idx} />
       ))}
@@ -19,7 +19,7 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
           Add
         </PrimaryButton>
       )}
-    </div>
+    </BaseField>
   );
 };
 

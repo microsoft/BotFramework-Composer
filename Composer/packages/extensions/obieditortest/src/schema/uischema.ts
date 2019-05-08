@@ -17,11 +17,13 @@ export const uiSchema = {
     },
   },
   'Microsoft.EventRule': {
+    'ui:order': ['*', 'steps'],
     steps: {
       'ui:field': StepsField,
     },
   },
   'Microsoft.IntentRule': {
+    'ui:order': ['intent', 'constraint', 'entities', '*'],
     steps: {
       'ui:field': StepsField,
     },

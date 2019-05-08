@@ -86,16 +86,16 @@ function transformSimpleDialog(input) {
 
   const result = {};
   if (Array.isArray(input.rules)) {
-    result.ruleGroup = new IndexedNode('$.rules', {
+    result.ruleGroup = new IndexedNode('$.ruleGroup', {
       $type: ObiTypes.RuleGroup,
       children: input.rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
     });
   }
 
   if (Array.isArray(input.steps)) {
-    result.stepGroup = new IndexedNode('$.steps', {
+    result.stepGroup = new IndexedNode('$.stepGroup', {
       $type: ObiTypes.StepGroup,
-      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, x)),
+      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
     });
   }
   return result;
