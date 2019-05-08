@@ -22,6 +22,7 @@ jobs:
       displayName: 'yarn lint'
     - script: cd Composer && yarn test:coverage
       displayName: 'yarn test:coverage'
+      condition: succeededOrFailed()
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage from Composer/coverage/cobertura-coverage.xml'
       condition: succeededOrFailed()
