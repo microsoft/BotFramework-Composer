@@ -1,7 +1,8 @@
+import path from 'path';
+
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import path from 'path';
 
 import { apiRouter } from './router/api';
 
