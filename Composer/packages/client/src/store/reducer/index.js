@@ -74,8 +74,21 @@ const getStorageFileSuccess = (state, { response }) => {
   return state;
 };
 
-const setStorageFileFetchingStatus = (state, { status }) => {
+const setStorageFileFetchingStatus = (state, { status }, error) => {
   state.storageFileLoadingStatus = status;
+  if (status === 'failure') {
+    state = collectErrors(state, null, error);
+  }
+  return state;
+};
+
+const collectErrors = (state, payload, error) => {
+  // does error have same structure?
+  console.log(error.response);
+  state.errorMessages.unshift({
+    Message: error.response.data,
+    status: error.response.status,
+  });
   return state;
 };
 
@@ -132,6 +145,7 @@ const clearNavHistory = (state, { fromIndex }) => {
 export const reducer = createReducer({
   [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_FAILURE]: collectErrors,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.BOT_STATUS_SET]: setBotStatus,

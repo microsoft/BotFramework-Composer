@@ -7,6 +7,7 @@ import { NavItem } from './components/NavItem';
 import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
+import { ErrorStack } from './components/ErrorStack';
 
 initializeIcons(/* optional base url */);
 
@@ -20,6 +21,7 @@ export function App() {
 
   return (
     <Fragment>
+      <ErrorStack />
       <Header
         botStatus={botStatus}
         setBotStatus={status => {
