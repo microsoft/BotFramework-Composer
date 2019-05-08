@@ -1,3 +1,4 @@
+import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 
 export const navLinkClass = mergeStyleSets({
@@ -14,4 +15,14 @@ export const navLinkClass = mergeStyleSets({
   linkText: {
     zIndex: '1111',
   },
+  groupContent: {
+    marginBottom: 0,
+  },
+  navItems: {
+    marginBlockEnd: '0px',
+  },
 });
+
+export const newStorageButton = css`
+  margin-left: 25px;
+`;

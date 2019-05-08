@@ -42,29 +42,15 @@ export const sampleList = css`
 `;
 
 export const sampleItem = css`
-  cursor: pointer;
   margin-right: 35px;
   margin-bottom: 20px;
-`;
-
-export const sampleItemImage = css`
   width: 120px;
   height: 160px;
   cursor: pointer;
   background: #eee;
-  box-shadow: 3px 3px 2px #aaa;
-  & : hover {
-    box-shadow: 5px 5px 2px #aaa;
-  }
-`;
-
-export const sampleItemName = css`
-  width: 120px;
-  margin-top: 5px;
-  font-size: 14px;
-  text-alain: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 export const newTip = css`

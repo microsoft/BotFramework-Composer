@@ -9,7 +9,6 @@ export const backIcon = css`
   height: 20px;
   margin: 18px 0px 0px 3px;
   padding: 8px;
-  color: dodgerblue;
   &:hover {
     background-color: rgb(244, 244, 244);
   }

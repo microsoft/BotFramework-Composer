@@ -5,7 +5,7 @@ import { useState, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
-import { sampleItem, sampleItemImage, sampleItemName, sampleList, newTip } from './styles';
+import { sampleItem, sampleList, newTip } from './styles';
 import { LocationSelectContent } from './LocationSelectContent';
 import { Store } from './../../store';
 
@@ -52,8 +52,7 @@ export function NewContent(props) {
             focusedStorageFolder.children.map((item, index) => {
               return (
                 <div key={index} css={sampleItem} onClick={() => handleSampleClick(item)}>
-                  <div css={sampleItemImage} />
-                  <div css={sampleItemName}>{`${item.name}`}</div>
+                  {`${item.name}`}
                 </div>
               );
             })}

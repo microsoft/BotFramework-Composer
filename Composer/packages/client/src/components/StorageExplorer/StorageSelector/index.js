@@ -2,9 +2,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 
-import { navLinkClass } from './styles';
+import { navLinkClass, newStorageButton } from './styles';
 
 export function StorageSelector(props) {
   const { storages, currentStorageId, onStorageSourceChange, onAddNew } = props;
@@ -17,8 +18,6 @@ export function StorageSelector(props) {
         onClick: () => onStorageSourceChange(index),
       };
     });
-
-    links.push({ name: 'New Storage', key: 'New Storage', icon: 'Add', onClick: onAddNew });
 
     return [
       {
@@ -38,8 +37,11 @@ export function StorageSelector(props) {
         selectedKey={currentStorageId}
         styles={{
           link: navLinkClass.storageNav,
+          groupContent: navLinkClass.groupContent,
+          navItems: navLinkClass.navItems,
         }}
       />
+      <IconButton css={newStorageButton} iconProps={{ iconName: 'Add' }} onClick={onAddNew} />
     </div>
   );
 }
