@@ -2,7 +2,7 @@
 
 context('ToDo Bot', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
   });
 
