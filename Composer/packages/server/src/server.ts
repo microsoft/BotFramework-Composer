@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import path from 'path';
 
 import { apiRouter } from './router/api';
 
@@ -13,7 +14,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(express.static('./public'));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.use(morgan('dev'));
 
@@ -27,7 +28,7 @@ app.get('/test', function(req: Request, res: Response) {
 app.use('/api', apiRouter);
 
 app.get('*', function(req, res, next) {
-  res.sendFile('./public/index.html');
+  res.sendFile(path.resolve(__dirname, './public/index.html'));
 });
 
 const port = process.env.PORT || 5000;
