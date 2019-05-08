@@ -39,6 +39,7 @@ jobs:
         mergeTestResults: true
   - job: e2e
     displayName: E2E Tests
+    pool: Hosted macOS
     steps:
     - task: NodeTool@0
       displayName: 'Use Node 10.15.3'
