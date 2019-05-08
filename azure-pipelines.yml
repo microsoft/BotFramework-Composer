@@ -29,6 +29,13 @@ jobs:
         codeCoverageTool: Cobertura
         summaryFileLocation: 'Composer/coverage/cobertura-coverage.xml'
         reportDirectory: 'Composer/coverage/lcov-report'
+    - task: PublishTestResults@2
+      displayName: Publish Unit Test Results
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/junit.xml'
+        mergeTestResults: true
+        failTaskOnFailedTests: true
   - job: e2e
     displayName: E2E Tests
     steps:
@@ -42,3 +49,10 @@ jobs:
       displayName: 'yarn build'
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
+    - task: PublishTestResults@2
+      displayName: Publish E2E Test Results
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/cypress/results/results-*.xml'
+        mergeTestResults: true
+        failTaskOnFailedTests: true
