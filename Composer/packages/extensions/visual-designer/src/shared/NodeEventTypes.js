@@ -1,5 +1,6 @@
 export const NodeEventTypes = {
-  Expand: 'action.nodeclick.expand',
-  Focus: 'action.nodeclick.focus',
-  OpenLink: 'action.nodeclick.openlink',
+  Expand: 'event.view.expand',
+  Focus: 'event.view.focus',
+  OpenLink: 'event.nav.openlink',
+  Delete: 'event.data.delete',
 };

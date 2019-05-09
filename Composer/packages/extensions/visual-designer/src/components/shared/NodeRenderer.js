@@ -11,6 +11,7 @@ import {
   IfCondition,
   SwitchCondition,
 } from '../nodes/index';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 import { Boundary } from './Boundary';
 import { NodeProps, defaultNodeProps } from './sharedProps';
@@ -44,7 +45,7 @@ export class NodeRenderer extends React.Component {
         <button
           onClick={e => {
             e.stopPropagation();
-            onEvent('DELETE', id);
+            onEvent(NodeEventTypes.Delete, { id });
           }}
         >
           X
@@ -59,7 +60,11 @@ export class NodeRenderer extends React.Component {
     return (
       <div
         className="node-renderer-container"
-        style={{ outline: focusedId && focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+        style={{
+          outline: focusedId && focusedId === id ? '2px solid grey' : null,
+          display: 'inline-block',
+          position: 'relative',
+        }}
         ref={el => {
           if (el && !this.interactive) {
             onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');

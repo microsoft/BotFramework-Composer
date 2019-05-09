@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
+import { deleteNode } from '../shared/jsonTracker';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
@@ -24,7 +25,7 @@ export class ObiEditor extends Component {
   }
 
   dispatchEvent(eventName, eventData) {
-    const { onSelect, onExpand, onOpen } = this.props;
+    const { onSelect, onExpand, onOpen, onChange } = this.props;
 
     let handler;
     switch (eventName) {
@@ -36,6 +37,9 @@ export class ObiEditor extends Component {
         break;
       case NodeEventTypes.OpenLink:
         handler = onOpen;
+        break;
+      case NodeEventTypes.Delete:
+        handler = e => onChange(deleteNode(this.props.data, e.id));
         break;
       default:
         handler = onSelect;
@@ -88,6 +92,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   onExpand: () => {},
   onOpen: () => {},
+  onChange: () => {},
 };
 
 ObiEditor.propTypes = {
@@ -97,4 +102,5 @@ ObiEditor.propTypes = {
   onSelect: PropTypes.func,
   onExpand: PropTypes.func,
   onOpen: PropTypes.func,
+  onChange: PropTypes.func,
 };
