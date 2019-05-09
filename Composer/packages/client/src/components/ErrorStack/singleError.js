@@ -17,12 +17,10 @@ export const SingleError = props => {
       messageBarType={MessageBarType.error}
       isMultiline={true}
       onDismiss={() => {
-        console.log('close error message');
         props.onDismiss();
       }}
       dismissButtonAriaLabel="Close"
     >
-      <div>Error Id: {props.message.errorId}</div>
       <div>Server Error: {props.message.status}</div>
       {props.message.Message.message}
     </MessageBar>
