@@ -20,7 +20,7 @@ export class BeginDialog extends React.Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeClickActionTypes.OpenLink, calleeDialog + '#');
+          onEvent(NodeClickActionTypes.OpenLink, calleeDialog);
         }}
       >
         {calleeDialog}
