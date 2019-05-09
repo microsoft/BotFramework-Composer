@@ -14,6 +14,7 @@ import {
 
 import { Boundary } from './Boundary';
 import { NodeProps, defaultNodeProps } from './sharedProps';
+import './NodeRenderer.css';
 
 const rendererByObiType = {
   [ObiTypes.IntentRule]: IntentRule,
@@ -36,6 +37,22 @@ export class NodeRenderer extends React.Component {
   containerRef = React.createRef();
   interactive = false;
 
+  renderToolbar() {
+    const { id, onEvent } = this.props;
+    return (
+      <div className="node-renderer-toolbar" style={{ position: 'absolute', height: '20px', right: 0, top: -20 }}>
+        <button
+          onClick={e => {
+            e.stopPropagation();
+            onEvent('DELETE', id);
+          }}
+        >
+          X
+        </button>
+      </div>
+    );
+  }
+
   render() {
     const { id, data, focusedId, onEvent, onResize } = this.props;
     const ChosenRenderer = chooseRendererByType(data.$type);
@@ -49,6 +66,7 @@ export class NodeRenderer extends React.Component {
           }
         }}
       >
+        {this.renderToolbar()}
         <ChosenRenderer
           id={id}
           data={data}
