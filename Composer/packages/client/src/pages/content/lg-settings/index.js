@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
+import merge from 'lodash.merge';
 import { Fragment, useContext, useRef, useState, useMemo } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -22,9 +23,15 @@ export function LanguageGenerationSettings() {
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const [modalOpen, setModalOpen] = useState(false);
 
+  // store in state, then merge it.
+  // so we won't lose page status.
+  // such as group collapsed, item editing, focus and so on.
+  const [groups, setGroups] = useState([]);
+  const [items, setItems] = useState([]);
+
   // items used to render the detail table.
-  const items = useMemo(() => {
-    return lgFiles.flatMap((file, fileIndex) => {
+  useMemo(() => {
+    const newItems = lgFiles.flatMap((file, fileIndex) => {
       const templates = file.templates.map((template, templateIndex) => {
         return {
           id: `${fileIndex}:${templateIndex}`,
@@ -38,12 +45,14 @@ export function LanguageGenerationSettings() {
       });
       return templates;
     });
+
+    setItems(merge(items, newItems));
   }, [lgFiles]);
 
-  // init groups for detail table.
-  const groups = useMemo(() => {
+  // groups for detail table.
+  useMemo(() => {
     let startIndex = 0;
-    return lgFiles.map(file => {
+    const newGroups = lgFiles.map(file => {
       const group = {
         name: file.id + '.lg',
         count: file.templates.length,
@@ -53,6 +62,8 @@ export function LanguageGenerationSettings() {
       startIndex += file.templates.length;
       return group;
     });
+
+    setGroups(merge(groups, newGroups));
   }, [lgFiles]);
 
   const tableColums = [
@@ -211,6 +222,7 @@ export function LanguageGenerationSettings() {
             groupProps={{
               onRenderFooter: onRenderGroupFooter,
               showEmptyGroups: true,
+              isAllGroupsCollapsed: true,
             }}
             selectionPreservedOnEmptyClick={true}
           />
