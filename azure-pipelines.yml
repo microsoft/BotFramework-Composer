@@ -53,7 +53,12 @@ jobs:
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
       env:
-        CYPRESS_COMPOSER_URL: http://localhost:5000
+        CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/screenshots
+    - task: PublishBuildArtifacts@1
+      condition: failed()
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/screenshots'
+        artifactName: screenshots
     - task: PublishTestResults@2
       displayName: Publish E2E Test Results
       condition: succeededOrFailed()
