@@ -47,7 +47,7 @@ export const sampleItem = css`
   width: 120px;
   height: 160px;
   cursor: pointer;
-  background: #eee;
+  border: 1px solid #aaa;
   display: flex;
   justify-content: space-around;
   align-items: center;
