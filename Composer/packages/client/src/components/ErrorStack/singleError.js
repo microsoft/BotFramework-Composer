@@ -2,8 +2,16 @@
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { useEffect } from 'react';
 export const SingleError = props => {
-  console.log('error upon');
+  useEffect(() => {
+    const timerID = setInterval(() => {
+      props.onDismiss(); //close component 5s later
+    }, 5000);
+    return function cleanUpTimer() {
+      clearInterval(timerID);
+    };
+  });
   return (
     <MessageBar
       styles={{
