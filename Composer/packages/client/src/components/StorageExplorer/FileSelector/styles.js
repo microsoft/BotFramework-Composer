@@ -16,7 +16,7 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   padding-top: 20px;
-  height: calc(100% - 555px);
+  height: calc(100% - 14px);
   overflow-x: hidden;
   width: 640px;
 `;
@@ -24,6 +24,8 @@ export const detailListContainer = css`
 export const fileSelectorContainer = css`
   padding-left: 5px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const pathNav = css`
