@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
@@ -56,7 +56,7 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
       <OffsetContainer offset={nodeMap.switchNode.offset}>
         <Diamond
           onClick={() => {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }}
         />
       </OffsetContainer>

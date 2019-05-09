@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
@@ -68,7 +68,7 @@ export class DefaultRenderer extends React.Component {
         label={label}
         details={details}
         onClick={() => {
-          onEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, id);
         }}
       />
     );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
@@ -28,13 +28,13 @@ export class ObiEditor extends Component {
 
     let handler;
     switch (eventName) {
-      case NodeClickActionTypes.Focus:
+      case NodeEventTypes.Focus:
         handler = onSelect;
         break;
-      case NodeClickActionTypes.Expand:
+      case NodeEventTypes.Expand:
         handler = onExpand;
         break;
-      case NodeClickActionTypes.OpenLink:
+      case NodeEventTypes.OpenLink:
         handler = onOpen;
         break;
       default:

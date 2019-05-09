@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ObiTypes } from '../../shared/ObiTypes';
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
@@ -23,7 +23,7 @@ export class IntentRule extends React.Component {
             }}
             onClick={e => {
               e.stopPropagation();
-              this.props.onEvent(NodeClickActionTypes.OpenLink, normalizedStep.dialog + '#');
+              this.props.onEvent(NodeEventTypes.OpenLink, normalizedStep.dialog + '#');
             }}
           >
             {normalizedStep.dialog}
@@ -45,9 +45,9 @@ export class IntentRule extends React.Component {
         icon="MessageBot"
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
-            onEvent(NodeClickActionTypes.Expand, id);
+            onEvent(NodeEventTypes.Expand, id);
           } else {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }
         }}
       />

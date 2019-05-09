@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
@@ -59,7 +59,7 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
       <OffsetContainer offset={nodeMap.choice.offset}>
         <Diamond
           onClick={() => {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }}
         />
       </OffsetContainer>
