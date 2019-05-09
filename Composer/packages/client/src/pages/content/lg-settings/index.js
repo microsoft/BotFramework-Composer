@@ -38,9 +38,8 @@ export function LanguageGenerationSettings() {
           fileId: file.id,
           name: template.name,
           value: template.name,
-          type: template.type,
-          content: template.content,
-          comments: template.comments,
+          type: template.body.includes('- IF') ? 'Condition' : 'Rotate',
+          body: template.body,
         };
       });
       return templates;
@@ -83,7 +82,7 @@ export function LanguageGenerationSettings() {
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.body)}
             />
           </span>
         );
@@ -122,20 +121,19 @@ export function LanguageGenerationSettings() {
         multiline
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
-        defaultValue={item.content}
+        defaultValue={item.body}
         onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
       />
     );
   }
 
-  function updateTemplateContent(templateId, fileId, templateName, content) {
+  function updateTemplateContent(templateId, fileId, templateName, body) {
     const fileIndex = templateId.split(':')[0];
     const templateIndex = templateId.split(':')[1];
     const newTemplate = lgFiles[fileIndex].templates[templateIndex];
-    const isValid = templateName && content;
+    const isValid = templateName && body;
     newTemplate.name = templateName;
-    newTemplate.content = content;
-    newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
+    newTemplate.body = body;
 
     const payload = {
       id: fileId,
@@ -164,7 +162,7 @@ export function LanguageGenerationSettings() {
       name: '',
       value: '',
       type: 'Rotate',
-      content: '',
+      body: '',
       comments: '',
     });
     const payload = {
