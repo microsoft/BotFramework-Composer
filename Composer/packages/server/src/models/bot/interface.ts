@@ -25,10 +25,7 @@ export interface Dialog {
 
 export interface LGTemplate {
   name: string;
-  type: string;
-  parameters: string[];
-  content: any;
-  comments: string;
+  body: string;
 }
 
 export interface LGFile {
