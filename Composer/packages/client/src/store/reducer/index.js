@@ -84,10 +84,12 @@ const setStorageFileFetchingStatus = (state, { status }, error) => {
 
 const collectErrors = (state, payload, error) => {
   // does error have same structure?
-  console.log(error.response);
+  const errorNum = state.errorMessages.length;
+  console.log(error.response.data);
   state.errorMessages.unshift({
     Message: error.response.data,
     status: error.response.status,
+    errorId: errorNum,
   });
   return state;
 };

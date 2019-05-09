@@ -8,12 +8,12 @@ import { Store } from '../../store/index';
 import { container } from './styles';
 import { SingleError } from './singleError';
 export const ErrorStack = () => {
+  const MaxinumErrorNum = 2;
   const { state } = useContext(Store);
   const { errorMessages } = state;
   const [errorShownNum, setShowState] = useState(0);
   useMemo(() => {
-    console.log(`get last  ${errorMessages.length}`);
-    if (errorShownNum < 3) {
+    if (errorShownNum < MaxinumErrorNum) {
       setShowState(errorShownNum + 1);
     }
   }, [errorMessages]);

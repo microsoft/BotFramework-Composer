@@ -9,6 +9,9 @@ export const SingleError = props => {
       styles={{
         root: {
           background: 'pink',
+          borderBottomColor: 'deeppink',
+          borderWidth: '1px',
+          borderBottomStyle: 'solid',
         },
       }}
       messageBarType={MessageBarType.error}
@@ -19,6 +22,7 @@ export const SingleError = props => {
       }}
       dismissButtonAriaLabel="Close"
     >
+      <div>Error Id: {props.message.errorId}</div>
       <div>Server Error: {props.message.status}</div>
       {props.message.Message.message}
     </MessageBar>
