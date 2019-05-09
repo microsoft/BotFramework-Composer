@@ -1,1 +1,6 @@
 dist/
+junit.xml
+
+cypress/screenshots
+cypress/results
+cypress/videos
