@@ -82,6 +82,13 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
+  public createLgFile = async (id: string) => {
+    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
+    const newFileContent = await this._createFile(absolutePath, id, '');
+    this.lgIndexer.createLgFile(id, newFileContent, absolutePath);
+    return this.lgIndexer.getLgFiles();
+  };
+
   public copyFiles = async (prevFiles: FileInfo[]) => {
     if (!(await this.fileStorage.exists(this.dir))) {
       await this.fileStorage.mkDir(this.dir);

@@ -130,20 +130,21 @@ const clearNavHistory = (state, { fromIndex }) => {
 };
 
 export const reducer = createReducer({
-  [ActionTypes.PROJECT_STATE_INIT]: closeCurrentProject,
+  [ActionTypes.INIT_PROJECT_STATE]: closeCurrentProject,
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
-  [ActionTypes.BOT_STATUS_SET]: setBotStatus,
-  [ActionTypes.STORAGEEXPLORER_STATUS_SET]: setStorageExplorerStatus,
-  [ActionTypes.STORAGE_GET_SUCCESS]: getStoragesSuccess,
+  [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
+  [ActionTypes.SET_STORAGEEXPLORER_STATUS]: setStorageExplorerStatus,
+  [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
-  [ActionTypes.STORAGEFILE_GET_SUCCESS]: getStorageFileSuccess,
-  [ActionTypes.PROJ_FILE_UPDATE_SUCCESS]: updateProjFile,
+  [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
+  [ActionTypes.UPDATE_PROJFILE__SUCCESS]: updateProjFile,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
-  [ActionTypes.UPDATE_LG_TEMPLATE]: updateLgTemplate,
+  [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.UPDATE_LG_TEMPLATE_STATE]: updateLgTemplateState,
+  [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
 });
