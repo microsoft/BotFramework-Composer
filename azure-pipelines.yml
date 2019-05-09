@@ -54,6 +54,7 @@ jobs:
       displayName: yarn test:integration
       env:
         CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/screenshots
+        CYPRESS_COMPOSER_URL: http://localhost:5000
     - task: PublishBuildArtifacts@1
       condition: failed()
       inputs:
