@@ -1,5 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
