@@ -16,7 +16,7 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'stopped',
-  storageExplorerStatus: 'New',
+  storageExplorerStatus: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
 };
