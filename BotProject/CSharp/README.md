@@ -16,7 +16,7 @@ The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch
 
 * from root folder 
 * cd BotProject
-* cs CSharp
+* cd CSharp
 * dotnet restore // for the package updates
 * dotnet build // build
 * dotnet run // start the bot
