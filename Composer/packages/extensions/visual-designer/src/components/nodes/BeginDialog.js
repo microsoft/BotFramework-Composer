@@ -4,6 +4,7 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { getFriendlyName } from './utils';
 
 export class BeginDialog extends React.Component {
   renderCallDialogLink() {
@@ -19,7 +20,7 @@ export class BeginDialog extends React.Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeClickActionTypes.OpenLink, calleeDialog + '#');
+          onEvent(NodeClickActionTypes.OpenLink, calleeDialog);
         }}
       >
         {calleeDialog}
@@ -28,11 +29,11 @@ export class BeginDialog extends React.Component {
   }
 
   render() {
-    const { id, onEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     return (
       <FormCard
         themeColor="#107C10"
-        header="BeginDialog"
+        header={getFriendlyName(data) || 'BeginDialog'}
         label={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(NodeClickActionTypes.Focus, id);

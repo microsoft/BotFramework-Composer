@@ -127,20 +127,14 @@ describe('update lg template', () => {
     const initValue = [
       {
         name: 'greet',
-        type: 'Rotate',
-        parameters: [],
-        content: '- Hello!',
-        comments: '',
+        body: '- Hello!',
       },
     ];
 
     const newValue = [
       {
         name: 'updated',
-        type: 'Rotate',
-        parameters: [],
-        content: '- new value',
-        comments: '',
+        body: '- new value',
       },
     ];
     await proj.lgIndexer.index(initFiles);

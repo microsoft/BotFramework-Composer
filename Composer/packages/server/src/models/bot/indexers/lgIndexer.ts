@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { IFileStorage } from 'src/models/storage/interface';
+import { TemplateEngine } from 'botbuilder-lg';
 
 import { FileInfo, LGTemplate, LGFile } from '../interface';
 
@@ -12,63 +13,23 @@ export class LGIndexer {
     this.storage = storage;
   }
 
-  private getNewTemplate(name: string = '', content: string = '', comments: string = '', parameters: string[] = []) {
-    return {
-      name: name,
-      type: 'Rotate',
-      content: content,
-      comments: comments,
-      parameters: parameters,
-    };
-  }
-
   public index(files: FileInfo[]) {
     if (files.length === 0) return [];
     this.lgFiles = [];
     for (const file of files) {
-      const lgTemplates: LGTemplate[] = [];
       const extName = path.extname(file.name);
       // todo: use lg parser.
       if (extName === '.lg') {
-        const lines = file.content.split(/\r?\n/) || [];
-        let newTemplate: LGTemplate = this.getNewTemplate();
-        lines.forEach((line: string, index: number) => {
-          if (!line.trim() || line.trim().startsWith('>')) {
-            if (newTemplate.name) {
-              lgTemplates.push(newTemplate);
-              newTemplate = this.getNewTemplate('', line);
-            } else if (index === lines.length - 1 && newTemplate.comments) {
-              newTemplate.comments += line;
-              newTemplate.content = newTemplate.content.trim();
-              lgTemplates.push(newTemplate);
-            } else {
-              newTemplate.comments += line + '\n';
-            }
-            return;
-          }
-
-          if (line.trim().startsWith('#')) {
-            if (newTemplate.name) {
-              newTemplate.content = newTemplate.content.trim();
-              lgTemplates.push(newTemplate);
-              newTemplate = this.getNewTemplate();
-            }
-            newTemplate.name = line.split('#')[1].trim();
-            return;
-          }
-
-          if (line.trim().startsWith('- DEFAULT') || line.trim().startsWith('- IF')) {
-            newTemplate.type = 'Condition';
-          }
-          newTemplate.content += line + '\n';
-
-          if (newTemplate.name && index === lines.length - 1) {
-            newTemplate.content = newTemplate.content.trim();
-            lgTemplates.push(newTemplate);
-          }
+        TemplateEngine.fromText(file.content);
+        const templateStringArray = file.content.split('# ').filter((content: string) => content.trim() !== '');
+        const lgTemplates = templateStringArray.map((templateString: string) => {
+          const firstLineBreak = templateString.indexOf('\n');
+          const name = templateString.substr(0, firstLineBreak).trim();
+          const body = templateString.substr(firstLineBreak).trim();
+          return { name, body };
         });
         this.lgFiles.push({
-          id: path.basename(file.name, '.lg'),
+          id: path.basename(file.name, extName),
           absolutePath: file.path,
           templates: lgTemplates,
         });
@@ -86,21 +47,19 @@ export class LGIndexer {
     this.lgFiles[updatedIndex].templates = templates;
     let updatedLG = '';
     templates.forEach(template => {
-      if (template.comments) {
-        updatedLG += `${template.comments}`;
-      }
-      if (template.name && template.content) {
-        if (template.content.indexOf('- IF') !== -1 || template.content.indexOf('- DEFAULT') !== -1) {
-          template.type = 'Condition';
-        } else {
-          template.type = 'Rotate';
-        }
-        updatedLG += `# ${template.name}` + '\n';
-        updatedLG += `${template.content}` + '\n';
+      if (template.name && template.body) {
+        updatedLG += `# ${template.name.trim()}` + '\n';
+        updatedLG += `${template.body.trim()}` + '\n\n';
       }
     });
     const newFileContent = updatedLG.trim() + '\n';
+    TemplateEngine.fromText(newFileContent);
     await this.storage.writeFile(absolutePath, newFileContent);
     return newFileContent;
   }
+
+  public createLgFile = (id: string, templates: string, absolutePath: string) => {
+    this.lgFiles.push({ id, templates: [], absolutePath });
+    return templates;
+  };
 }

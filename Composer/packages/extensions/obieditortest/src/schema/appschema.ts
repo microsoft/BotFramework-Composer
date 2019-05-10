@@ -1085,6 +1085,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             },
           },
           events: {
+            title: 'Events',
             type: 'array',
             description: 'Events to trigger this rule for',
             items: {

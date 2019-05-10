@@ -1,0 +1,9 @@
+{
+  "ignoreTestFiles": ["**/examples/*", "*.hot-update.js"],
+  "video": false,
+  "viewportWidth": 1600,
+  "viewportHeight": 1200,
+  "env": {
+    "COMPOSER_URL": "http://localhost:3000"
+  }
+}

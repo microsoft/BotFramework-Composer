@@ -4,6 +4,7 @@ import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { getFriendlyName } from './utils';
 
 export class Recognizer extends React.Component {
   render() {
@@ -11,7 +12,7 @@ export class Recognizer extends React.Component {
     return (
       <FormCard
         themeColor="#00B294"
-        header="Recognizer"
+        header={getFriendlyName(data) || 'Recognizer'}
         label={data.$type.split('.')[1]}
         icon="Friend"
         onClick={() => {

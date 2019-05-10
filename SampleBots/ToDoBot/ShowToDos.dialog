@@ -1,5 +1,4 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "steps": [
     {
@@ -29,5 +28,11 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-05-06T22:02:20.262Z",
+    "updatedAt": "2019-05-06T22:02:20.290Z",
+    "id": "211799"
+  }
 }

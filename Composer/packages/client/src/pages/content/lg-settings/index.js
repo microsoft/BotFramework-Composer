@@ -2,52 +2,68 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef } from 'react';
+import merge from 'lodash.merge';
+import { Fragment, useContext, useRef, useState, useMemo } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Store } from '../../../store/index';
 
+import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
   const { lgFiles } = state;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // store in state, then merge it.
+  // so we won't lose page status.
+  // such as group collapsed, item editing, focus and so on.
+  const [groups, setGroups] = useState([]);
+  const [items, setItems] = useState([]);
 
   // items used to render the detail table.
-  const items = lgFiles.flatMap((file, fileIndex) => {
-    const templates = file.templates.map((template, templateIndex) => {
-      return {
-        id: `${fileIndex}:${templateIndex}`,
-        fileId: file.id,
-        name: template.name,
-        value: template.name,
-        type: template.type,
-        content: template.content,
-        comments: template.comments,
-      };
+  useMemo(() => {
+    const newItems = lgFiles.flatMap((file, fileIndex) => {
+      const templates = file.templates.map((template, templateIndex) => {
+        return {
+          id: `${fileIndex}:${templateIndex}`,
+          fileId: file.id,
+          name: template.name,
+          value: template.name,
+          type: template.body.includes('- IF') ? 'Condition' : 'Rotate',
+          body: template.body,
+        };
+      });
+      return templates;
     });
-    return templates;
-  });
 
-  // init groups for detail table.
-  let startIndex = 0;
-  const groups = lgFiles.map(file => {
-    const group = {
-      name: file.id + '.lg',
-      count: file.templates.length,
-      key: file.id,
-      startIndex: startIndex,
-    };
-    startIndex += file.templates.length;
-    return group;
-  });
+    setItems(merge(items, newItems));
+  }, [lgFiles]);
+
+  // groups for detail table.
+  useMemo(() => {
+    let startIndex = 0;
+    const newGroups = lgFiles.map(file => {
+      const group = {
+        name: file.id + '.lg',
+        count: file.templates.length,
+        key: file.id,
+        startIndex: startIndex,
+      };
+      startIndex += file.templates.length;
+      return group;
+    });
+
+    setGroups(merge(groups, newGroups));
+  }, [lgFiles]);
 
   const tableColums = [
     {
@@ -66,7 +82,7 @@ export function LanguageGenerationSettings() {
               borderless
               placeholder={formatMessage('Template Name.')}
               defaultValue={item.name}
-              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.content)}
+              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.body)}
             />
           </span>
         );
@@ -105,20 +121,19 @@ export function LanguageGenerationSettings() {
         multiline
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
-        defaultValue={item.content}
+        defaultValue={item.body}
         onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
       />
     );
   }
 
-  function updateTemplateContent(templateId, fileId, templateName, content) {
+  function updateTemplateContent(templateId, fileId, templateName, body) {
     const fileIndex = templateId.split(':')[0];
     const templateIndex = templateId.split(':')[1];
     const newTemplate = lgFiles[fileIndex].templates[templateIndex];
-    const isValid = templateName && content;
+    const isValid = templateName && body;
     newTemplate.name = templateName;
-    newTemplate.content = content;
-    newTemplate.type = content.includes('- IF') || content.includes('- DEFAULT') ? 'Condition' : 'Rotate';
+    newTemplate.body = body;
 
     const payload = {
       id: fileId,
@@ -147,7 +162,7 @@ export function LanguageGenerationSettings() {
       name: '',
       value: '',
       type: 'Rotate',
-      content: '',
+      body: '',
       comments: '',
     });
     const payload = {
@@ -173,11 +188,25 @@ export function LanguageGenerationSettings() {
     );
   }
 
+  async function onSubmit(data) {
+    await actions.createLgFile(data);
+    setModalOpen(false);
+  }
+
   return (
     <Fragment>
       <div>
         <div css={title}>{formatMessage('Content > Language Generation')}</div>
-        <div css={label}>{formatMessage('Templates')}</div>
+        <div css={label}>
+          {formatMessage('Files')}
+          <IconButton
+            style={{ marginLeft: '10px' }}
+            iconProps={{ iconName: 'Add' }}
+            title={formatMessage('New LG file')}
+            ariaLabel={formatMessage('New LG file')}
+            onClick={() => setModalOpen(true)}
+          />
+        </div>
         <ScrollablePane css={scrollablePaneRoot} scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             items={items}
@@ -190,11 +219,14 @@ export function LanguageGenerationSettings() {
             groups={groups}
             groupProps={{
               onRenderFooter: onRenderGroupFooter,
+              showEmptyGroups: true,
+              isAllGroupsCollapsed: true,
             }}
             selectionPreservedOnEmptyClick={true}
           />
         </ScrollablePane>
       </div>
+      <NewLgFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
 }

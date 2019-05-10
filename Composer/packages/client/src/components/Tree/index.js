@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import { container, top } from './styles';
 
 export const Tree = props => (
-  <div css={container(props.variant)}>
+  <div css={[container(props.variant), props.extraCss]} data-testid="ProjectTree">
     <div css={top} />
     {props.children}
   </div>
