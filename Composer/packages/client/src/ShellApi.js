@@ -1,5 +1,6 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import debounce from 'lodash.debounce';
+import get from 'lodash.get';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -78,17 +79,24 @@ export function ShellApi() {
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
 
-    if (sourceWindowName === 'VisualEditor') {
-      return;
-    } else if (sourceWindowName === 'FormEditor') {
-      const updatedDialog = setDialogData(dialogsMap, focusPath, newData);
-      const dialogName = focusPath.split('#')[0];
+    if (sourceWindowName === 'VisualEditor' || sourceWindowName === 'FormEditor') {
+      let path = navPath;
+      if (sourceWindowName === 'FormEditor') {
+        path = focusPath;
+      }
+      const updatedDialog = setDialogData(dialogsMap, path, newData);
+      const dialogName = path.split('#')[0];
       const payload = {
         name: dialogName,
         content: updatedDialog,
       };
+      if (sourceWindowName === 'VisualEditor') {
+        const data = get(updatedDialog, focusPath.split('#')[1]);
+        if (typeof data === 'undefined') {
+          actions.focusTo('');
+        }
+      }
       updateDialog(payload);
-
       return true;
     }
   }
