@@ -1,7 +1,7 @@
 
 # Microsoft Bot Framework Composer
 
-[![Build status](https://fuselabs.visualstudio.com/Composer/_apis/build/status/ComposerCI/Composer-CI)](https://fuselabs.visualstudio.com/Composer/_build/latest?definitionId=450)
+[![Build Status](https://fuselabs.visualstudio.com/Composer/_apis/build/status/ComposerCI/Composer-CI?branchName=master)](https://fuselabs.visualstudio.com/Composer/_build/latest?definitionId=516&branchName=master)
 
 ## Overview 
 
