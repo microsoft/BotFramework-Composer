@@ -643,11 +643,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             description: 'String must contain an expression.',
           },
-          ifTrue: {
+          steps: {
             $type: 'Microsoft.IRuleSelector',
             $ref: '#/definitions/Microsoft.IRuleSelector',
           },
-          ifFalse: {
+          elseSteps: {
             $type: 'Microsoft.IRuleSelector',
             $ref: '#/definitions/Microsoft.IRuleSelector',
           },
