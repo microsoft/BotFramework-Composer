@@ -67,9 +67,15 @@ class Demo extends Component {
           <div className="block block--right">
             <ObiEditor
               data={obiJson}
+              path={selectedFile}
               onSelect={logEventThunk('select')}
               onExpand={logEventThunk('expand')}
               onOpen={logEventThunk('open')}
+              onChange={json => {
+                this.setState({
+                  obiJson: json,
+                });
+              }}
             />
           </div>
         </div>
