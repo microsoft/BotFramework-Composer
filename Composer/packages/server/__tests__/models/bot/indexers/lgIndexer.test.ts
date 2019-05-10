@@ -31,15 +31,11 @@ describe('Index lg files', () => {
     ];
     const aTemplate = {
       name: 'greet',
-      content: '- Hello!',
-      parameters: [],
-      type: 'Rotate',
-      comments: '',
+      body: '- Hello!',
     };
     await proj.lgIndexer.index(initFiles);
 
     const lgFiles = await proj.lgIndexer.getLgFiles();
-    // @ts-ignore
     expect(lgFiles.length).toEqual(1);
     expect(aTemplate).toEqual(lgFiles[0].templates[0]);
   });
