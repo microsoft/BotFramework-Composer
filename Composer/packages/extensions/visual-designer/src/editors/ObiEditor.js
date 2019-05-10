@@ -12,6 +12,8 @@ export class ObiEditor extends Component {
   state = {
     prevPath: '',
     focusedId: '',
+    prevData: null,
+    dataVersion: 0,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -19,6 +21,14 @@ export class ObiEditor extends Component {
       return {
         prevPath: props.path,
         focusedId: '',
+        prevData: props.data,
+        dataVersion: 0,
+      };
+    }
+    if (props.data !== state.prevData) {
+      return {
+        prevData: props.data,
+        dataVersion: state.dataVersion + 1,
       };
     }
     return null;
@@ -74,7 +84,7 @@ export class ObiEditor extends Component {
         style={{ width: '100%', height: '100%' }}
       >
         <ChosenEditor
-          key={path}
+          key={path + '/' + this.state.dataVersion}
           id={path}
           data={this.props.data}
           expanded={true}
