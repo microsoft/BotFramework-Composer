@@ -1,39 +1,58 @@
-import { CasesField, RulesField, StepsField, SelectorField, RecognizerField, JsonField } from '../Form/fields';
+import {
+  CasesField,
+  RulesField,
+  StepsField,
+  SelectorField,
+  RecognizerField,
+  JsonField,
+  CodeField,
+} from '../Form/fields';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
-    'ui:order': ['*', 'recognizer', 'selector'],
-    selector: {
-      'ui:field': SelectorField,
-    },
     recognizer: {
       'ui:field': RecognizerField,
     },
     rules: {
       'ui:field': RulesField,
     },
+    selector: {
+      'ui:field': SelectorField,
+    },
     steps: {
       'ui:field': StepsField,
+    },
+    'ui:order': ['*', 'recognizer', 'selector'],
+  },
+  'Microsoft.CodeStep': {
+    codeHandler: {
+      'ui:field': CodeField,
+    },
+  },
+  'Microsoft.ConditionalSelector': {
+    ifFalse: {
+      'ui:field': SelectorField,
+    },
+    ifTrue: {
+      'ui:field': SelectorField,
     },
   },
   'Microsoft.EventRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
     'ui:order': ['*', 'steps'],
-    steps: {
+  },
+  'Microsoft.HttpRequest': {
+    body: {
+      'ui:field': JsonField,
+    },
+    'ui:order': ['*', 'body'],
+  },
+  'Microsoft.IfCondition': {
+    elseSteps: {
       'ui:field': StepsField,
     },
-  },
-  'Microsoft.IntentRule': {
-    'ui:order': ['intent', 'constraint', 'entities', '*'],
-    steps: {
-      'ui:field': StepsField,
-    },
-  },
-  'Microsoft.UnknownIntentRule': {
-    steps: {
-      'ui:field': StepsField,
-    },
-  },
-  'Microsoft.Rule': {
     steps: {
       'ui:field': StepsField,
     },
@@ -47,25 +66,20 @@ export const uiSchema = {
       },
     },
   },
-  'Microsoft.IfCondition': {
+  'Microsoft.IntentRule': {
     steps: {
       'ui:field': StepsField,
     },
-    elseSteps: {
-      'ui:field': StepsField,
-    },
-  },
-  'Microsoft.ConditionalSelector': {
-    ifTrue: {
-      'ui:field': SelectorField,
-    },
-    ifFalse: {
-      'ui:field': SelectorField,
-    },
+    'ui:order': ['intent', 'constraint', 'entities', '*'],
   },
   'Microsoft.MostSpecificSelector': {
     selector: {
       'ui:field': SelectorField,
+    },
+  },
+  'Microsoft.Rule': {
+    steps: {
+      'ui:field': StepsField,
     },
   },
   'Microsoft.SwitchCondition': {
@@ -76,10 +90,9 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
   },
-  'Microsoft.HttpRequest': {
-    'ui:order': ['*', 'body'],
-    body: {
-      'ui:field': JsonField,
+  'Microsoft.UnknownIntentRule': {
+    steps: {
+      'ui:field': StepsField,
     },
   },
 };
