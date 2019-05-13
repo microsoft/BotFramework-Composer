@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { FieldProps } from 'react-jsonschema-form';
-import { Separator, createTheme, ColorClassNames, FontClassNames } from 'office-ui-fabric-react';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 
 import './codemirror-fabric.scss';
 import './styles.scss';
-
-const fieldHeaderTheme = createTheme({
-  fonts: {
-    medium: {
-      fontSize: '24px',
-    },
-  },
-  palette: {
-    neutralLighter: '#d0d0d0',
-  },
-});
+import { BaseField } from './BaseField';
 
 const cmOptions = {
   theme: 'fabric',
@@ -26,7 +15,6 @@ const cmOptions = {
   mode: {
     name: 'javascript',
     json: true,
-    statementIndent: 2,
   },
   lineNumbers: true,
   lineWrapping: true,
@@ -50,15 +38,7 @@ export const JsonField: React.FC<FieldProps> = props => {
   };
 
   return (
-    <div className="JsonField" style={{ margin: '30px 0' }}>
-      {(props.uiSchema['ui:title'] || props.schema.title) && (
-        <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-          {props.uiSchema['ui:title'] || props.schema.title}
-        </Separator>
-      )}
-      {props.schema.description && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>{props.schema.description}</p>
-      )}
+    <BaseField {...props} className="JsonField">
       <CodeMirror
         value={JSON.stringify(props.formData, null, 2)}
         options={cmOptions}
@@ -68,6 +48,6 @@ export const JsonField: React.FC<FieldProps> = props => {
         }}
         autoCursor={false}
       />
-    </div>
+    </BaseField>
   );
 };
