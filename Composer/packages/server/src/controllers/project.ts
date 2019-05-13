@@ -2,16 +2,16 @@ import { Request, Response } from 'express';
 
 import ProjectService from '../services/project';
 import AssectService from '../services/asset';
-import { BotProjectRef } from '../models/bot/interface';
+import { LocationRef } from '../models/bot/interface';
 
 async function createProject(req: Request, res: Response) {
-  const projRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
   try {
-    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, projRef);
-    await ProjectService.openProject(projRef);
+    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    await ProjectService.openProject(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -37,18 +37,18 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
-  const projRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
 
-  if (!projRef.path.endsWith('.botproj')) {
+  if (!locationRef.path.endsWith('.botproj')) {
     res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
 
   try {
-    await ProjectService.openProject(projRef);
+    await ProjectService.openProject(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -66,18 +66,18 @@ async function saveProjectAs(req: Request, res: Response) {
     return;
   }
 
-  const projRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
 
-  if (!projRef.path.endsWith('.botproj')) {
+  if (!locationRef.path.endsWith('.botproj')) {
     res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
 
   try {
-    await ProjectService.saveProjectAs(projRef);
+    await ProjectService.saveProjectAs(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });

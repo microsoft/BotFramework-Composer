@@ -5,7 +5,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { BotProjectRef, FileInfo, BotProjectFileContent, LGTemplate } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent, LGTemplate } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 
@@ -13,7 +13,7 @@ import { LGIndexer } from './indexers/lgIndexer';
 // 1. refactor this class to use on IFileStorage instead of operating on fs
 // 2. refactor this layer, to operate on dialogs, not files
 export class BotProject {
-  public ref: BotProjectRef;
+  public ref: LocationRef;
 
   public name: string;
   public absolutePath: string;
@@ -23,7 +23,7 @@ export class BotProject {
   public dialogIndexer: DialogIndexer;
   public lgIndexer: LGIndexer;
 
-  constructor(ref: BotProjectRef) {
+  constructor(ref: LocationRef) {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
@@ -101,8 +101,8 @@ export class BotProject {
     }
   };
 
-  public copyTo = async (projRef: BotProjectRef) => {
-    const newBotProject = new BotProject(projRef);
+  public copyTo = async (locationRef: LocationRef) => {
+    const newBotProject = new BotProject(locationRef);
     await newBotProject.copyFiles(await this._getFiles());
     return newBotProject;
   };

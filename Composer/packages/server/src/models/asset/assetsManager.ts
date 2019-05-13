@@ -1,7 +1,7 @@
 import { find } from 'lodash';
 
 import { LocalDiskStorage } from './../storage/localDiskStorage';
-import { BotProjectRef } from './../bot/interface';
+import { LocationRef } from './../bot/interface';
 import { ITemplate } from './interface';
 import { Path } from './../../utility/path';
 
@@ -32,7 +32,7 @@ export class AssetsManager {
     return output;
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: BotProjectRef) {
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef) {
     const template = find(this.projectTemplates, { id: templateId });
     if (template !== undefined && template.path !== undefined) {
       const dir = Path.dirname(Path.resolve(ref.path));
