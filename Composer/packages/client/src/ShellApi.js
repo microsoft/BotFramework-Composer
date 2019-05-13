@@ -78,27 +78,33 @@ export function ShellApi() {
   // persist value change
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
-
-    if (sourceWindowName === 'VisualEditor' || sourceWindowName === 'FormEditor') {
-      let path = navPath;
-      if (sourceWindowName === 'FormEditor') {
+    let path = '';
+    switch (sourceWindowName) {
+      case 'VisualEditor':
+        path = navPath;
+        break;
+      case 'FormEditor':
         path = focusPath;
-      }
+        break;
+      default:
+        path = '';
+        break;
+    }
+
+    if (path !== '') {
       const updatedDialog = setDialogData(dialogsMap, path, newData);
       const dialogName = path.split('#')[0];
-      const payload = {
-        name: dialogName,
-        content: updatedDialog,
-      };
+      const payload = { name: dialogName, content: updatedDialog };
+      updateDialog(payload);
+
       if (sourceWindowName === 'VisualEditor') {
         const data = get(updatedDialog, focusPath.split('#')[1]);
         if (typeof data === 'undefined') {
           actions.focusTo('');
         }
       }
-      updateDialog(payload);
-      return true;
     }
+    return true;
   }
 
   function flushUpdates() {
