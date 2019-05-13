@@ -1,7 +1,25 @@
 import { Request, Response } from 'express';
 
 import ProjectService from '../services/project';
+import AssectService from '../services/asset';
 import { BotProjectRef } from '../models/bot/interface';
+
+async function createProject(req: Request, res: Response) {
+  const projRef: BotProjectRef = {
+    storageId: req.body.storageId,
+    path: req.body.path,
+  };
+  try {
+    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, projRef);
+    await ProjectService.openProject(projRef);
+    if (ProjectService.currentBotProject !== undefined) {
+      const project = await ProjectService.currentBotProject.getIndexes();
+      res.status(200).json({ ...project });
+    }
+  } catch (err) {
+    res.status(404).json({ error: 'Create bot project error' });
+  }
+}
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
@@ -38,7 +56,6 @@ async function openProject(req: Request, res: Response) {
       res.status(404).json({ error: 'No bot project opened' });
     }
   } catch (e) {
-    console.log(e.message);
     res.status(400).json(e.message);
   }
 }
@@ -126,4 +143,5 @@ export const ProjectController = {
   createLgFile: createLgFile,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
+  createProject: createProject,
 };
