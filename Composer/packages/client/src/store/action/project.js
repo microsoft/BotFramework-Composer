@@ -71,14 +71,14 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
   }
 }
 
-export async function saveNewProject(dispatch, storageId, absolutePath, fromPath) {
+export async function createProject(dispatch, storageId, absolutePath, templateId) {
   try {
     const data = {
       storageId: storageId,
       path: absolutePath,
-      fromPath,
+      templateId,
     };
-    const response = await axios.post(`${BASEURL}/projects/newProject/save`, data);
+    const response = await axios.post(`${BASEURL}/projects`, data);
     const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,

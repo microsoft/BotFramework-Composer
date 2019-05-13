@@ -28,7 +28,7 @@ export async function fetchStorages(dispatch) {
 
 export async function fetchTemplates() {
   try {
-    const response = await axios.get(`${BASEURL}/storages/templates`);
+    const response = await axios.get(`${BASEURL}/assets/projectTemplates`);
     return response.data;
   } catch (err) {
     console.log(err);

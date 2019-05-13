@@ -11,10 +11,10 @@ import { Store } from './../../store';
 
 export function NewContent(props) {
   const [step, setStep] = useState(0);
-  const [templates, setTemplates] = useState(0);
+  const [templates, setTemplates] = useState([]);
   const { actions } = useContext(Store);
   const selectedTemplate = useRef();
-  const { fetchTemplates, closeCurrentProject, saveNewProject } = actions;
+  const { fetchTemplates, closeCurrentProject, createProject } = actions;
   const { onCloseExplorer } = props;
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function NewContent(props) {
 
   const handleSaveAs = async (storageId, absolutePath) => {
     closeCurrentProject();
-    await saveNewProject(storageId, absolutePath, selectedTemplate.current.path + '/bot.botproj');
+    await createProject(storageId, absolutePath, selectedTemplate.current.id);
     onCloseExplorer();
   };
 
@@ -52,14 +52,13 @@ export function NewContent(props) {
       </div>
       {step === 0 ? (
         <div css={sampleList}>
-          {templates.children &&
-            templates.children.map((item, index) => {
-              return (
-                <div key={index} css={sampleItem} onClick={() => handleSampleClick(item)}>
-                  {`${item.name}`}
-                </div>
-              );
-            })}
+          {templates.map(item => {
+            return (
+              <div key={item.id} css={sampleItem} onClick={() => handleSampleClick(item)}>
+                {`${item.name}`}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div style={{ display: 'flex' }}>
