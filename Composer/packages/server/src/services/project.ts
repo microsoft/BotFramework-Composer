@@ -1,12 +1,12 @@
 import { BotProject } from '../models/bot/botProject';
-import { BotProjectRef } from '../models/bot/interface';
+import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 
 import StorageService from './storage';
 
 class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
-  public recentBotProjects: BotProjectRef[] = [];
+  public recentBotProjects: LocationRef[] = [];
 
   constructor() {
     this.recentBotProjects = Store.get('recentBotProjects');
@@ -15,11 +15,11 @@ class BotProjectService {
     }
   }
 
-  public openProject = async (projRef: BotProjectRef) => {
-    if (!(await StorageService.checkBlob(projRef.storageId, projRef.path))) {
-      throw new Error(`file not exist ${projRef.path}`);
+  public openProject = async (locationRef: LocationRef) => {
+    if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
+      throw new Error(`file not exist ${locationRef.path}`);
     }
-    this.currentBotProject = new BotProject(projRef);
+    this.currentBotProject = new BotProject(locationRef);
     await this.currentBotProject.index();
     this.updateRecentBotProjects();
   };
@@ -40,9 +40,9 @@ class BotProjectService {
     Store.set('recentBotProjects', this.recentBotProjects);
   }
 
-  public saveProjectAs = async (projRef: BotProjectRef) => {
+  public saveProjectAs = async (locationRef: LocationRef) => {
     if (typeof this.currentBotProject !== 'undefined') {
-      this.currentBotProject = await this.currentBotProject.copyTo(projRef);
+      this.currentBotProject = await this.currentBotProject.copyTo(locationRef);
       await this.currentBotProject.index();
     }
   };

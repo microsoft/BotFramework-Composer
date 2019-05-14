@@ -1,7 +1,25 @@
 import { Request, Response } from 'express';
 
 import ProjectService from '../services/project';
-import { BotProjectRef } from '../models/bot/interface';
+import AssectService from '../services/asset';
+import { LocationRef } from '../models/bot/interface';
+
+async function createProject(req: Request, res: Response) {
+  const locationRef: LocationRef = {
+    storageId: req.body.storageId,
+    path: req.body.path,
+  };
+  try {
+    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    await ProjectService.openProject(locationRef);
+    if (ProjectService.currentBotProject !== undefined) {
+      const project = await ProjectService.currentBotProject.getIndexes();
+      res.status(200).json({ ...project });
+    }
+  } catch (err) {
+    res.status(404).json({ error: 'Create bot project error' });
+  }
+}
 
 async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
@@ -19,18 +37,18 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
-  const projRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
 
-  if (!projRef.path.endsWith('.botproj')) {
+  if (!locationRef.path.endsWith('.botproj')) {
     res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
 
   try {
-    await ProjectService.openProject(projRef);
+    await ProjectService.openProject(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -38,7 +56,6 @@ async function openProject(req: Request, res: Response) {
       res.status(404).json({ error: 'No bot project opened' });
     }
   } catch (e) {
-    console.log(e.message);
     res.status(400).json(e.message);
   }
 }
@@ -49,18 +66,18 @@ async function saveProjectAs(req: Request, res: Response) {
     return;
   }
 
-  const projRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
 
-  if (!projRef.path.endsWith('.botproj')) {
+  if (!locationRef.path.endsWith('.botproj')) {
     res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
 
   try {
-    await ProjectService.saveProjectAs(projRef);
+    await ProjectService.saveProjectAs(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -126,4 +143,5 @@ export const ProjectController = {
   createLgFile: createLgFile,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
+  createProject: createProject,
 };

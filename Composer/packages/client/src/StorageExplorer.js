@@ -1,205 +1,72 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
-import path from 'path';
-
 import { jsx } from '@emotion/core';
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useContext } from 'react';
 import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import formatMessage from 'format-message';
-import findindex from 'lodash.findindex';
 
-import { FileTypes } from './constants';
+import { OpenStatus } from './constants';
 import { Store } from './store';
-import { FileSelector } from './components/StorageExplorer/FileSelector';
 import { ActionSelector } from './components/StorageExplorer/ActionSelector';
-import { StorageSelector } from './components/StorageExplorer/StorageSelector';
-import { body, panelContent, panelStyle } from './components/StorageExplorer/styles';
-import { SaveAction } from './components/StorageExplorer/SaveAction/index';
-import NewStorageModal from './components/StorageExplorer/NewStorage/NewStorageModal';
+import { body, panelContent, panelStyle, title } from './components/StorageExplorer/styles';
+import { LocationSelectContent } from './components/StorageExplorer/LocationSelectContent';
+import { NewContent } from './components/StorageExplorer/NewContent';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
-  return (
-    <div
-      style={{
-        height: '0px',
-      }}
-    />
-  );
+  return <div style={{ height: '0px' }} />;
 }
-
-const links = [
-  {
-    name: formatMessage('Open'),
-    key: 'open',
-  },
-  {
-    name: formatMessage('Save As'),
-    key: 'saveas',
-  },
-];
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
-  const { storages, storageExplorerStatus, focusedStorageFolder, storageFileLoadingStatus } = state;
-  const {
-    setStorageExplorerStatus,
-    closeCurrentProject,
-    fetchFolderItemsByPath,
-    openBotProject,
-    saveProjectAs,
-    addNewStorage,
-  } = actions;
-  const currentStorageIndex = useRef(0);
-  const [currentPath, setCurrentPath] = useState('');
-  const [openAdd, setOpenAdd] = useState(false);
-  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
+  const { storageExplorerStatus } = state;
+  const { setStorageExplorerStatus, closeCurrentProject, openBotProject, saveProjectAs } = actions;
 
-  async function init() {
-    const res = await actions.fetchStorages();
-    updateCurrentPath(res[currentStorageIndex.current].path, res[currentStorageIndex.current].id);
-  }
-
-  // fetch storages first then fetch the folder info under it.
   useEffect(() => {
-    init();
+    actions.fetchStorages();
   }, []);
 
-  function onStorageSourceChange(index) {
-    currentStorageIndex.current = index;
-    setOpenAdd(false);
-    updateCurrentPath(storages[index].path, storages[index].id);
-  }
-
-  const updateCurrentPath = async (newPath, storageId) => {
-    if (!storageId) {
-      storageId = currentStorageId;
-    }
-
-    if (newPath) {
-      const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
-      await fetchFolderItemsByPath(storageId, formatedPath);
-      setCurrentPath(formatedPath);
-    }
-  };
-
-  function openFile(newPath, storageId) {
-    setStorageExplorerStatus('');
-    closeCurrentProject();
-    openBotProject(storageId, newPath);
-  }
-
-  const onSelectionChanged = item => {
-    if (item) {
-      const type = item.fileType;
-      const storageId = storages[currentStorageIndex.current].id;
-      const path = item.filePath;
-      if (type === FileTypes.FOLDER) {
-        updateCurrentPath(path, storageId);
-      } else {
-        openFile(path, storageId);
-      }
-    }
-  };
-
-  const onCloseExplorer = () => {
-    setStorageExplorerStatus('');
+  const closeExplorer = () => {
+    setStorageExplorerStatus(OpenStatus.CLOSE);
   };
 
   const onLinkClick = (event, item) => {
     setStorageExplorerStatus(item.key);
   };
 
-  const checkShowItem = item => {
-    if (storageExplorerStatus === 'saveas' && item.type !== 'folder') {
-      return false;
-    }
-    return true;
+  const handleSaveAs = async (storageId, absolutePath) => {
+    await saveProjectAs(storageId, absolutePath);
+    closeExplorer();
   };
 
-  const checkDuplicate = value => {
-    if (focusedStorageFolder.children) {
-      const index = findindex(focusedStorageFolder.children, { name: value });
-      if (index >= 0) {
-        return 'Duplicate folder name';
-      }
-    }
-    return '';
-  };
-
-  const handleSaveAs = async value => {
-    let parent = focusedStorageFolder.parent;
-    if (parent === '/') {
-      parent = '';
-    }
-    const dir = `${parent}/${focusedStorageFolder.name}`;
-    const absolutePath = `${dir}/${value}/bot.botproj`;
-    await saveProjectAs(storages[currentStorageIndex.current].id, absolutePath);
-    updateCurrentPath(dir, storages[currentStorageIndex.current].id);
-    onCloseExplorer();
-  };
-
-  const handleAddStorage = async storageData => {
-    await addNewStorage(storageData);
-    setOpenAdd(false);
+  const handleOpenBot = (path, storageId) => {
+    closeCurrentProject();
+    openBotProject(storageId, path);
+    closeExplorer();
   };
 
   return (
     <Panel
-      isOpen={storageExplorerStatus !== ''}
+      isOpen={storageExplorerStatus !== OpenStatus.CLOSE}
       type={PanelType.customNear}
       styles={panelStyle}
       isLightDismiss={true}
       hasCloseButton={false}
-      onDismiss={onCloseExplorer}
+      onDismiss={closeExplorer}
       onRenderNavigation={onRenderNavigationContent}
     >
       <div css={body}>
-        <ActionSelector
-          links={links}
-          selectedKey={storageExplorerStatus}
-          onLinkClick={onLinkClick}
-          onCloseExplorer={onCloseExplorer}
-        />
-        <div css={panelContent}>
-          <StorageSelector
-            storages={storages}
-            onStorageSourceChange={onStorageSourceChange}
-            onAddNew={() => {
-              setOpenAdd(true);
-            }}
-            currentStorageId={currentStorageId}
-            actionName={formatMessage(storageExplorerStatus === 'open' ? 'Open' : 'Save As')}
-          />
-          <div
-            style={{
-              paddingTop: '90px',
-            }}
-          >
-            <FileSelector
-              saveAction={
-                storageExplorerStatus === 'open' ? (
-                  <div />
-                ) : (
-                  <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
-                )
-              }
-              storageExplorerStatus={storageExplorerStatus}
-              storageFileLoadingStatus={storageFileLoadingStatus}
-              checkShowItem={checkShowItem}
-              currentPath={currentPath}
-              focusedStorageFolder={focusedStorageFolder}
-              updateCurrentPath={updateCurrentPath}
-              onSelectionChanged={onSelectionChanged}
-            />
+        <ActionSelector selectedKey={storageExplorerStatus} onLinkClick={onLinkClick} onCloseExplorer={closeExplorer} />
+        <div>
+          <div css={title}>{formatMessage(storageExplorerStatus)}</div>
+          <div css={panelContent}>
+            {storageExplorerStatus === OpenStatus.NEW ? (
+              <NewContent onCloseExplorer={closeExplorer} />
+            ) : (
+              <LocationSelectContent onSaveAs={handleSaveAs} onOpen={handleOpenBot} />
+            )}
           </div>
         </div>
       </div>
-      <NewStorageModal
-        isOpen={openAdd}
-        storages={storages}
-        onSubmit={handleAddStorage}
-        onDismiss={() => setOpenAdd(false)}
-      />
     </Panel>
   );
 }

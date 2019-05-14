@@ -2,12 +2,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 
-import { navLinkClass, title } from './styles';
+import { navLinkClass, newStorageButton } from './styles';
 
 export function StorageSelector(props) {
-  const { storages, actionName, currentStorageId, onStorageSourceChange, onAddNew } = props;
+  const { storages, currentStorageId, onStorageSourceChange, onAddNew } = props;
 
   const getNavItems = () => {
     const links = storages.map((storage, index) => {
@@ -18,8 +19,6 @@ export function StorageSelector(props) {
       };
     });
 
-    links.push({ name: 'New Storage', key: 'New Storage', icon: 'Add', onClick: onAddNew });
-
     return [
       {
         links: links,
@@ -28,21 +27,21 @@ export function StorageSelector(props) {
   };
 
   return (
-    <div>
-      <div css={title}>{actionName}</div>
-      <div
-        style={{
-          paddingTop: '10px',
+    <div
+      style={{
+        paddingTop: '10px',
+      }}
+    >
+      <Nav
+        groups={getNavItems()}
+        selectedKey={currentStorageId}
+        styles={{
+          link: navLinkClass.storageNav,
+          groupContent: navLinkClass.groupContent,
+          navItems: navLinkClass.navItems,
         }}
-      >
-        <Nav
-          groups={getNavItems()}
-          selectedKey={currentStorageId}
-          styles={{
-            link: navLinkClass.storageNav,
-          }}
-        />
-      </div>
+      />
+      <IconButton css={newStorageButton} iconProps={{ iconName: 'Add' }} onClick={onAddNew} />
     </div>
   );
 }

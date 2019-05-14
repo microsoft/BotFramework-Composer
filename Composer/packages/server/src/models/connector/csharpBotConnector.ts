@@ -1,6 +1,6 @@
 import childprocess from 'child_process';
 
-import { BotProjectRef } from '../bot/interface';
+import { LocationRef } from '../bot/interface';
 
 import { IBotConnector, BotStatus } from './interface';
 
@@ -14,7 +14,7 @@ export class CSharpBotConnector implements IBotConnector {
 
   public status: BotStatus = BotStatus.Stopped;
 
-  start = (proj: BotProjectRef) => {
+  start = (proj: LocationRef) => {
     const realBotPath = proj.path;
 
     console.log(`command: 'bot build' at ${this.path}`);
