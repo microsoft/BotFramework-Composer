@@ -45,6 +45,7 @@ export function SaveAction(props) {
             setError(false);
           }
         }}
+        data-testid="NewBotProjectInput"
       />{' '}
       {loadingStatus ? (
         <Spinner size={SpinnerSize.medium} css={loading} />
