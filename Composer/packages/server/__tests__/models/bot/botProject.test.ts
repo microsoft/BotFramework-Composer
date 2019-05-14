@@ -2,18 +2,18 @@ import fs from 'fs';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
-import { BotProjectRef, FileInfo } from '../../../src/models/bot/interface';
+import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
 
 jest.mock('azure-storage', () => {
   return {};
 });
 
-const mockProjectRef: BotProjectRef = {
+const mockLocationRef: LocationRef = {
   storageId: 'default',
   path: Path.join(__dirname, '../../mocks/1.botproj'), //Path.join().replace(/\\/g, '/'),
 };
 
-const proj = new BotProject(mockProjectRef);
+const proj = new BotProject(mockLocationRef);
 
 beforeEach(async () => {
   await proj.index();
@@ -76,7 +76,7 @@ describe('createFromTemplate', () => {
 const copyDir = Path.join(__dirname, `../../copy`);
 
 describe('copyTo', () => {
-  const projectRef: BotProjectRef = {
+  const locationRef: LocationRef = {
     storageId: 'default',
     path: Path.join(__dirname, '../../copy/1.botproj'),
   };
@@ -107,7 +107,7 @@ describe('copyTo', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const newBotProject = await proj.copyTo(projectRef);
+    const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.index();
     const project: { [key: string]: any } = await newBotProject.getIndexes();
     expect(project.dialogs.length).toBe(3);
