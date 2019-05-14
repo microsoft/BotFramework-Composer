@@ -1,14 +1,14 @@
 import { find } from 'lodash';
 
-import { LocalDiskStorage } from './../storage/localDiskStorage';
-import { LocationRef } from './../bot/interface';
-import { ITemplate } from './interface';
-import { Path } from './../../utility/path';
+import { LocalDiskStorage } from '../storage/localDiskStorage';
+import { LocationRef } from '../bot/interface';
+import { IProjectTemplate } from './interface';
+import { Path } from '../../utility/path';
 
-export class AssetsManager {
+export class AssetManager {
   public templateStorage: LocalDiskStorage;
   private assetsLibrayPath: string;
-  private projectTemplates: ITemplate[] = [];
+  private projectTemplates: IProjectTemplate[] = [];
 
   constructor(assetsLibrayPath: string) {
     this.assetsLibrayPath = assetsLibrayPath;
