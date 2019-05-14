@@ -89,6 +89,13 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
+  public removeLgFile = async (id: string) => {
+    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
+    await this._removeFile(absolutePath);
+    this.lgIndexer.removeLgFile(id);
+    return this.lgIndexer.getLgFiles();
+  };
+
   public copyFiles = async (prevFiles: FileInfo[]) => {
     if (!(await this.fileStorage.exists(this.dir))) {
       await this.fileStorage.mkDir(this.dir);
@@ -117,6 +124,10 @@ export class BotProject {
       relativePath: Path.relative(this.dir, absolutePath),
     });
     return fileContent;
+  };
+
+  private _removeFile = async (absolutePath: string) => {
+    await this.fileStorage.removeFile(absolutePath);
   };
 
   private _updateFile = async (name: string, content: string) => {
