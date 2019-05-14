@@ -5,6 +5,7 @@ import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
 import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
+import { OpenStatus } from './../../constants';
 
 export const Header = props => {
   const { botStatus, setBotStatus, openStorageExplorer } = props;
@@ -15,21 +16,21 @@ export const Header = props => {
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}
-          // onClick={() => openStorageExplorer('new')}
+          onClick={() => openStorageExplorer(OpenStatus.NEW)}
         >
           New
         </ActionButton>
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer('open')}
+          onClick={() => openStorageExplorer(OpenStatus.OPEN)}
         >
           Open
         </ActionButton>
         <ActionButton
           css={actionButton}
           iconProps={{ iconName: 'Save', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer('saveas')}
+          onClick={() => openStorageExplorer(OpenStatus.SAVEAS)}
         >
           Save as
         </ActionButton>

@@ -1,0 +1,13 @@
+# Hello
+- [Welcome(time)] {name}
+
+# Welcome(time)
+- IF: {time == 'morning'}
+ - Good morning
+- ELSEIF: {time == 'evening'}
+ - Good evening
+- ELSE:
+ - How are you doing,
+
+# Exit
+- Thanks for using todo bot.
