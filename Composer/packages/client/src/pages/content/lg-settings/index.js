@@ -2,8 +2,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import debounce from 'lodash.debounce';
-import merge from 'lodash.merge';
-import { Fragment, useContext, useRef, useState, useMemo } from 'react';
+import lodash from 'lodash';
+import { Fragment, useContext, useRef, useState, useEffect } from 'react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -30,7 +30,7 @@ export function LanguageGenerationSettings() {
   const [items, setItems] = useState([]);
 
   // items used to render the detail table.
-  useMemo(() => {
+  useEffect(() => {
     const newItems = lgFiles.flatMap((file, fileIndex) => {
       const templates = file.templates.map((template, templateIndex) => {
         return {
@@ -44,12 +44,11 @@ export function LanguageGenerationSettings() {
       });
       return templates;
     });
-
-    setItems(merge(items, newItems));
+    setItems(newItems);
   }, [lgFiles]);
 
   // groups for detail table.
-  useMemo(() => {
+  useEffect(() => {
     let startIndex = 0;
     const newGroups = lgFiles.map(file => {
       const group = {
@@ -59,10 +58,10 @@ export function LanguageGenerationSettings() {
         startIndex: startIndex,
       };
       startIndex += file.templates.length;
-      return group;
+      return lodash.merge(lodash.find(groups, { key: file.id }), group);
     });
 
-    setGroups(merge(groups, newGroups));
+    setGroups(newGroups);
   }, [lgFiles]);
 
   const tableColums = [
@@ -81,7 +80,7 @@ export function LanguageGenerationSettings() {
             <TextField
               borderless
               placeholder={formatMessage('Template Name.')}
-              defaultValue={item.name}
+              value={item.name}
               onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.body)}
             />
           </span>
@@ -112,6 +111,22 @@ export function LanguageGenerationSettings() {
         return <span>{getTemplatePhrase(item)}</span>;
       },
     },
+    {
+      key: 'buttons',
+      name: 'Delete template',
+      fieldName: 'buttons',
+      minWidth: 50,
+      maxWidth: 100,
+      data: 'string',
+      isPadded: true,
+      onRender: item => {
+        return (
+          <ActionButton css={actionButton} iconProps={{ iconName: 'Delete' }} onClick={() => onRemoveTempalte(item)}>
+            {/* Delete */}
+          </ActionButton>
+        );
+      },
+    },
   ];
 
   function getTemplatePhrase(item) {
@@ -121,7 +136,7 @@ export function LanguageGenerationSettings() {
         multiline
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
-        defaultValue={item.body}
+        value={item.body}
         onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
       />
     );
@@ -173,16 +188,48 @@ export function LanguageGenerationSettings() {
     updateLgFile(payload);
   }
 
+  function onRemoveTempalte(item) {
+    const { fileId, name } = item;
+    const lgTemplates = lgFiles.find(file => file.id === fileId).templates;
+    const templateIndex = lgTemplates.findIndex(template => {
+      return name === template.name;
+    });
+
+    lgTemplates.splice(templateIndex, 1);
+    const payload = {
+      id: fileId,
+      lgTemplates: lgTemplates,
+      isValid: false,
+    };
+
+    updateLgFile(payload);
+  }
+
+  function onRemoveLgFile(selectedGroup) {
+    const id = selectedGroup.key;
+    const payload = {
+      id: id,
+    };
+    actions.removeLgFile(payload);
+  }
+
   function onRenderGroupFooter(groupProps) {
     return (
       <div>
         {' '}
         <ActionButton
           css={actionButton}
+          iconProps={{ iconName: 'Delete' }}
+          onClick={() => onRemoveLgFile(groupProps.group)}
+        >
+          Delete file
+        </ActionButton>
+        <ActionButton
+          css={actionButton}
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => onCreateNewTempalte(groupProps.group)}
         >
-          New
+          New template
         </ActionButton>{' '}
       </div>
     );

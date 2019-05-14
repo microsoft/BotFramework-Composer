@@ -156,3 +156,19 @@ export async function createLgFile(dispatch, { name, content }) {
     });
   }
 }
+
+export async function removeLgFile(dispatch, { id }) {
+  try {
+    const response = await axios.delete(`${BASEURL}/projects/opened/lgFiles/${id}`);
+    dispatch({
+      type: ActionTypes.REMOVE_LG_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.REMOVE_LG_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
