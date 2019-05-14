@@ -10,7 +10,7 @@ class Messenger {
   subscribers = {};
 
   postMessage = (message, window) => {
-    window.postMessage(message);
+    window.postMessage(message, '*');
   };
 
   receiveMessage = event => {
@@ -29,11 +29,14 @@ class Messenger {
     if (message.type && message.type === 'api_call') {
       const callback = this.subscribers[message.name];
       const result = callback(message.args, event); // we pass args and the original event
-      event.source.postMessage({
-        type: 'api_result',
-        id: message.id,
-        result: result,
-      });
+      event.source.postMessage(
+        {
+          type: 'api_result',
+          id: message.id,
+          result: result,
+        },
+        '*'
+      );
     }
   };
 

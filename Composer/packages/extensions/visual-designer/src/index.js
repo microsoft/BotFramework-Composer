@@ -32,7 +32,7 @@ export default class VisualDesigner extends Component {
           data={data}
           onSelect={x => focusTo(this.normalizeDataPath(x))}
           onExpand={x => navDown(this.normalizeDataPath(x))}
-          onOpen={x => navTo(this.normalizeDataPath(x))}
+          onOpen={x => navTo(this.normalizeDataPath(x) + '#')}
         />
       </div>
     );
