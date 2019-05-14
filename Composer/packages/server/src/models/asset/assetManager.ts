@@ -2,8 +2,9 @@ import { find } from 'lodash';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
-import { IProjectTemplate } from './interface';
 import { Path } from '../../utility/path';
+
+import { IProjectTemplate } from './interface';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
