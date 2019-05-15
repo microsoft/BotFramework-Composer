@@ -143,20 +143,13 @@ export async function createDialog(dispatch, { name, steps }) {
   }
 }
 
-export async function updateLgFile(dispatch, { id, lgTemplates, isValid }) {
+export async function updateLgFile(dispatch, { id, lgTemplates }) {
   try {
-    if (isValid) {
-      const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, lgTemplates });
-      dispatch({
-        type: ActionTypes.UPDATE_LG_SUCCESS,
-        payload: { response },
-      });
-    } else {
-      dispatch({
-        type: ActionTypes.UPDATE_LG_TEMPLATE_STATE,
-        payload: { id, lgTemplates },
-      });
-    }
+    const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, lgTemplates });
+    dispatch({
+      type: ActionTypes.UPDATE_LG_SUCCESS,
+      payload: { response },
+    });
   } catch (err) {
     dispatch({
       type: ActionTypes.UPDATE_LG_FAILURE,

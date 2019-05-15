@@ -145,7 +145,6 @@ export const reducer = createReducer({
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
-  [ActionTypes.UPDATE_LG_TEMPLATE_STATE]: updateLgTemplateState,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
 });
