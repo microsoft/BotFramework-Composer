@@ -7,6 +7,7 @@ import { deleteNode } from '../shared/jsonTracker';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
+import './ObiEditor.css';
 
 export class ObiEditor extends Component {
   state = {
@@ -79,9 +80,16 @@ export class ObiEditor extends Component {
     const ChosenEditor = this.chooseEditor(data.$type);
     return (
       <div
+        tabIndex="0"
         className="obi-editor-container"
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
+        onKeyUp={e => {
+          const keyString = e.key;
+          if (keyString === 'Delete' && this.state.focusedId) {
+            this.dispatchEvent(NodeEventTypes.Delete, { id: this.state.focusedId });
+          }
+        }}
       >
         <ChosenEditor
           key={path + '/' + this.state.dataVersion}
