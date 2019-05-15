@@ -107,6 +107,10 @@ export class BotProject {
     return newBotProject;
   };
 
+  public exists() {
+    return this.fileStorage.exists(this.absolutePath);
+  }
+
   private _createFile = async (absolutePath: string, name: string, content: string) => {
     await this.fileStorage.writeFile(absolutePath, content);
     const fileContent: string = await this.fileStorage.readFile(absolutePath);
