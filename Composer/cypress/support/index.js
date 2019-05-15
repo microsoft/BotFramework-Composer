@@ -22,3 +22,7 @@ import './commands';
 beforeEach(() => {
   cy.exec('yarn test:integration:clean');
 });
+
+after(() => {
+  cy.exec('yarn test:integration:clean');
+});
