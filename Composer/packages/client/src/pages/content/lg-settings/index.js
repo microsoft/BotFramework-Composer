@@ -67,7 +67,7 @@ export function LanguageGenerationSettings() {
   const tableColums = [
     {
       key: 'name',
-      name: 'Name',
+      name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 150,
       maxWidth: 200,
@@ -89,7 +89,7 @@ export function LanguageGenerationSettings() {
     },
     {
       key: 'type',
-      name: 'Type',
+      name: formatMessage('Type'),
       fieldName: 'type',
       minWidth: 50,
       maxWidth: 100,
@@ -101,7 +101,7 @@ export function LanguageGenerationSettings() {
     },
     {
       key: 'phrase',
-      name: 'Sample phrase',
+      name: formatMessage('Sample phrase'),
       fieldName: 'samplePhrase',
       minWidth: 500,
       isResizable: true,
@@ -113,7 +113,7 @@ export function LanguageGenerationSettings() {
     },
     {
       key: 'buttons',
-      name: 'Delete template',
+      name: formatMessage('Delete template'),
       fieldName: 'buttons',
       minWidth: 50,
       maxWidth: 100,
@@ -121,9 +121,7 @@ export function LanguageGenerationSettings() {
       isPadded: true,
       onRender: item => {
         return (
-          <ActionButton css={actionButton} iconProps={{ iconName: 'Delete' }} onClick={() => onRemoveTempalte(item)}>
-            {/* Delete */}
-          </ActionButton>
+          <ActionButton css={actionButton} iconProps={{ iconName: 'Delete' }} onClick={() => onRemoveTempalte(item)} />
         );
       },
     },
@@ -219,17 +217,17 @@ export function LanguageGenerationSettings() {
         {' '}
         <ActionButton
           css={actionButton}
-          iconProps={{ iconName: 'Delete' }}
-          onClick={() => onRemoveLgFile(groupProps.group)}
-        >
-          Delete file
-        </ActionButton>
-        <ActionButton
-          css={actionButton}
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => onCreateNewTempalte(groupProps.group)}
         >
-          New template
+          {formatMessage('New template')}
+        </ActionButton>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'Delete' }}
+          onClick={() => onRemoveLgFile(groupProps.group)}
+        >
+          {formatMessage('Delete file')}
         </ActionButton>{' '}
       </div>
     );
