@@ -4549,7 +4549,7 @@ boom@2.x.x:
 
 "botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz":
   version "4.5.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz#a3a7385d2c20453064abaa4c229c6bfa80fa5cf6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz#5e5d033d62ddc994e9bab251ff103285a151c38e"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.0.tgz"
