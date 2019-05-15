@@ -1,17 +1,17 @@
 import { Path } from '../../../../src/utility/path';
 import { BotProject } from '../../../../src/models/bot/botProject';
-import { BotProjectRef } from '../../../../src/models/bot/interface';
+import { LocationRef } from '../../../../src/models/bot/interface';
 
 jest.mock('azure-storage', () => {
   return {};
 });
 
-const mockProjectRef: BotProjectRef = {
+const mockLocationRef: LocationRef = {
   storageId: 'default',
   path: Path.join(__dirname, '../../mocks/1.botproj'),
 };
 
-const proj = new BotProject(mockProjectRef);
+const proj = new BotProject(mockLocationRef);
 
 describe('Index lg files', () => {
   it('should index the lg file.', async () => {

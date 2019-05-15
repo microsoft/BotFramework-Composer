@@ -8,9 +8,25 @@ import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
 import { navHeader, leftNav, closeIcon, navLinkClass } from './styles';
+import { OpenStatus } from './../../../constants';
+
+const links = [
+  {
+    name: formatMessage('New'),
+    key: OpenStatus.NEW,
+  },
+  {
+    name: formatMessage('Open'),
+    key: OpenStatus.OPEN,
+  },
+  {
+    name: formatMessage('Save As'),
+    key: OpenStatus.SAVEAS,
+  },
+];
 
 export function ActionSelector(props) {
-  const { links, onCloseExplorer, onLinkClick, selectedKey } = props;
+  const { onCloseExplorer, onLinkClick, selectedKey } = props;
 
   return (
     <div css={leftNav}>

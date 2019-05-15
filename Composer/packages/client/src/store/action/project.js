@@ -71,6 +71,31 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
   }
 }
 
+export async function createProject(dispatch, storageId, absolutePath, templateId) {
+  try {
+    const data = {
+      storageId: storageId,
+      path: absolutePath,
+      templateId,
+    };
+    const response = await axios.post(`${BASEURL}/projects`, data);
+    const dialogs = response.data.dialogs;
+    dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: { response },
+    });
+    if (dialogs && dialogs.length > 0) {
+      navTo(dispatch, `${dialogs[0].name}#`);
+    }
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.GET_PROJECT_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
 export async function updateDialog(dispatch, { name, content }) {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${name}`, { name, content });
