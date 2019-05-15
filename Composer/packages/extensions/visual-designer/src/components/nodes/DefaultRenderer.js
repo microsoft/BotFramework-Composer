@@ -5,6 +5,7 @@ import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
@@ -65,6 +66,7 @@ export class DefaultRenderer extends React.Component {
       <FormCard
         themeColor="#00B294"
         header={header}
+        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
         label={label}
         details={details}
         onClick={() => {

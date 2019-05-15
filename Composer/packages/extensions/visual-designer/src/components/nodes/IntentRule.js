@@ -6,6 +6,7 @@ import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class IntentRule extends React.Component {
@@ -41,6 +42,7 @@ export class IntentRule extends React.Component {
       <FormCard
         themeColor="#0078D4"
         header={getFriendlyName(data) || intent}
+        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
         label={this.getDetails()}
         icon="MessageBot"
         onClick={() => {

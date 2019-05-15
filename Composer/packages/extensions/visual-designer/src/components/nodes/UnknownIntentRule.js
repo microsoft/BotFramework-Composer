@@ -4,6 +4,7 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class UnknownIntentRule extends React.Component {
@@ -14,6 +15,7 @@ export class UnknownIntentRule extends React.Component {
       <FormCard
         themeColor="#BAD80A"
         header={getFriendlyName(data) || 'UnknownIntentRule'}
+        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
