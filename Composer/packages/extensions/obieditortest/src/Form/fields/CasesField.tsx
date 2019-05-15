@@ -68,14 +68,16 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
     const { oldValue, newValue } = caseFormData;
 
     if (newValue) {
-      // TODO: if new value already exists, update it, if not, push to array
       const existingCase = items.find(i => i.value === oldValue);
 
       if (existingCase) {
         props.onChange(
           items.map(i => {
             if (i.value === oldValue) {
-              i.value = newValue;
+              return {
+                ...i,
+                value: newValue,
+              };
             }
             return i;
           })
@@ -83,13 +85,19 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
       } else {
         props.onChange([...(items || []), { value: newValue }]);
       }
+
+      setShowModal(false);
+      setCaseFormData({});
     }
   };
 
   const handleStepsUpdate = (caseName: string) => (caseSteps: MicrosoftIDialog[]) => {
     const updatedCases = items.map(i => {
       if (i.value === caseName) {
-        i.steps = caseSteps;
+        return {
+          ...i,
+          steps: caseSteps,
+        };
       }
 
       return i;
