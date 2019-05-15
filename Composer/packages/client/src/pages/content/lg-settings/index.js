@@ -11,11 +11,22 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fab
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { LGParser } from 'botbuilder-lg';
 
 import { Store } from '../../../store/index';
 
 import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
+
+const isTemplateValid = (name, body) => {
+  const text = ['#', name, '\n', body].join('');
+  try {
+    LGParser.Parse(text);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 export function LanguageGenerationSettings() {
   const { state, actions } = useContext(Store);
@@ -81,7 +92,12 @@ export function LanguageGenerationSettings() {
               borderless
               placeholder={formatMessage('Template Name.')}
               value={item.name}
-              onChange={(event, newName) => updateTemplateContent(item.id, item.fileId, newName, item.body)}
+              validateOnLoad={false}
+              onGetErrorMessage={newName => {
+                return validateNameMessage(newName);
+              }}
+              onBlur={() => submitTemplateChange(item)}
+              onChange={(event, newName) => updateTemplateContent(item, newName, item.body)}
             />
           </span>
         );
@@ -127,6 +143,26 @@ export function LanguageGenerationSettings() {
     },
   ];
 
+  const validateNameMessage = name => {
+    if (name === '') {
+      return 'name can not be empty';
+    }
+
+    if (items.filter(item => item.name === name).length > 1) {
+      return 'name has been taken';
+    }
+
+    const isValid = isTemplateValid(name, '- body');
+
+    return isValid ? '' : 'name is not valid';
+  };
+
+  const validateBodyMessage = body => {
+    const isValid = isTemplateValid('name', body);
+
+    return isValid ? '' : 'template is not valid';
+  };
+
   function getTemplatePhrase(item) {
     return (
       <TextField
@@ -135,26 +171,47 @@ export function LanguageGenerationSettings() {
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
         value={item.body}
-        onChange={(event, newValue) => updateTemplateContent(item.id, item.fileId, item.name, newValue)}
+        validateOnLoad={false}
+        onGetErrorMessage={newBody => {
+          return validateBodyMessage(newBody);
+        }}
+        onBlur={() => submitTemplateChange(item)}
+        onChange={(event, newBody) => updateTemplateContent(item, item.name, newBody)}
       />
     );
   }
 
-  function updateTemplateContent(templateId, fileId, templateName, body) {
-    const fileIndex = templateId.split(':')[0];
-    const templateIndex = templateId.split(':')[1];
-    const newTemplate = lgFiles[fileIndex].templates[templateIndex];
-    const isValid = templateName && body;
-    newTemplate.name = templateName;
-    newTemplate.body = body;
+  // submit template change in component state
+  function submitTemplateChange(currentTemplate) {
+    const templateInState = items.find(item => currentTemplate.id === item.id);
+    const { name, body, changed } = templateInState;
+    const isValid = isTemplateValid(name, body);
 
+    console.log(currentTemplate, templateInState);
+
+    // if no change, reject
+    // if is not valid, reject
+    if (!changed || !isValid) return;
+    const [fileIndex, itemIndex] = currentTemplate.id.split(':');
+    const templateInLgFile = lgFiles[fileIndex].templates[itemIndex];
+
+    templateInLgFile.name = name;
+    templateInLgFile.body = body;
     const payload = {
-      id: fileId,
+      id: currentTemplate.fileId,
       lgTemplates: lgFiles[fileIndex].templates,
-      isValid: isValid,
     };
-
     updateLgFile(payload);
+  }
+
+  // update template in component state
+  function updateTemplateContent(currentTemplate, newName, newBody) {
+    const newItems = [...items];
+    const template = newItems.find(item => currentTemplate.id === item.id);
+    template.name = newName;
+    template.body = newBody;
+    template.changed = true;
+    setItems(newItems);
   }
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -181,7 +238,6 @@ export function LanguageGenerationSettings() {
     const payload = {
       id: id,
       lgTemplates: lgTemplates,
-      isValid: false,
     };
     updateLgFile(payload);
   }
@@ -197,7 +253,6 @@ export function LanguageGenerationSettings() {
     const payload = {
       id: fileId,
       lgTemplates: lgTemplates,
-      isValid: false,
     };
 
     updateLgFile(payload);
