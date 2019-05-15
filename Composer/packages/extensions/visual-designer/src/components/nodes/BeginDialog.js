@@ -5,6 +5,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
+import { NodeMenu } from './templates/NodeMenu';
 
 export class BeginDialog extends React.Component {
   renderCallDialogLink() {
@@ -34,6 +35,7 @@ export class BeginDialog extends React.Component {
       <FormCard
         themeColor="#107C10"
         header={getFriendlyName(data) || 'BeginDialog'}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);

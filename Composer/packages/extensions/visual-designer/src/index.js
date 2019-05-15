@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from './editors/ObiEditor';
+
+initializeIcons(/* optional base url */);
 
 export default class VisualDesigner extends Component {
   /**
