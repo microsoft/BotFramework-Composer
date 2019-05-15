@@ -35,6 +35,11 @@ export function SaveAction(props) {
         onChange={(event, value) => {
           setValue(value);
         }}
+        onKeyPress={event => {
+          if (event.charCode === 13) {
+            saveButtonClick();
+          }
+        }}
         onGetErrorMessage={onGetErrorMessage}
         onNotifyValidationResult={errorMessage => {
           setErrorMessage('');
