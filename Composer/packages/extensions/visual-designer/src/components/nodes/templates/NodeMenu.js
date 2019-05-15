@@ -3,7 +3,7 @@ import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 
-export const NodeMenu = ({ onEvent }) => {
+const NodeMenuTemplate = ({ onEvent }) => {
   const _onRenderItem = item => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
@@ -43,6 +43,8 @@ export const NodeMenu = ({ onEvent }) => {
     />
   );
 };
+
+export const NodeMenu = ({ id, onEvent }) => <NodeMenuTemplate onEvent={e => onEvent(e, { id })} />;
 
 NodeMenu.defaultProps = {
   onEvent: () => {},

@@ -15,7 +15,7 @@ export class EventRule extends React.Component {
       <FormCard
         themeColor="#BAD80A"
         header={getFriendlyName(data) || 'EventRule'}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.events}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {

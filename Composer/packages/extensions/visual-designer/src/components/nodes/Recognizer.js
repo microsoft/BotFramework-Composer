@@ -14,7 +14,7 @@ export class Recognizer extends React.Component {
       <FormCard
         themeColor="#00B294"
         header={getFriendlyName(data) || 'Recognizer'}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.$type.split('.')[1]}
         icon="Friend"
         onClick={() => {

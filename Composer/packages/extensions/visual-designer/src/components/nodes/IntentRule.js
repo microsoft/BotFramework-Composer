@@ -42,7 +42,7 @@ export class IntentRule extends React.Component {
       <FormCard
         themeColor="#0078D4"
         header={getFriendlyName(data) || intent}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.getDetails()}
         icon="MessageBot"
         onClick={() => {

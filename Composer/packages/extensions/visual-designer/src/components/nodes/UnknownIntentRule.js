@@ -15,7 +15,7 @@ export class UnknownIntentRule extends React.Component {
       <FormCard
         themeColor="#BAD80A"
         header={getFriendlyName(data) || 'UnknownIntentRule'}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.$type.split('.')[1]}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {

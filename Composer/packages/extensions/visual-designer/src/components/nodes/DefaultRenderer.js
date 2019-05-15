@@ -66,7 +66,7 @@ export class DefaultRenderer extends React.Component {
       <FormCard
         themeColor="#00B294"
         header={header}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={label}
         details={details}
         onClick={() => {

@@ -35,7 +35,7 @@ export class BeginDialog extends React.Component {
       <FormCard
         themeColor="#107C10"
         header={getFriendlyName(data) || 'BeginDialog'}
-        corner={<NodeMenu onEvent={e => onEvent(e, id)} />}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);
