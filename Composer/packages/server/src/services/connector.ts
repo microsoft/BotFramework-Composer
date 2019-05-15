@@ -20,11 +20,11 @@ class BotConnectorService {
       throw new Error('Not opened bot to start');
     }
 
-    const projRef = {
+    const locationRef = {
       storageId: BotProjectService.currentBotProject.ref.storageId,
       path: BotProjectService.currentBotProject.absolutePath,
     };
-    this.connector.start(projRef);
+    this.connector.start(locationRef);
   };
 
   public stop = () => {

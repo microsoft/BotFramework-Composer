@@ -1,4 +1,4 @@
-export interface BotProjectRef {
+export interface LocationRef {
   storageId: string;
   path: string;
 }

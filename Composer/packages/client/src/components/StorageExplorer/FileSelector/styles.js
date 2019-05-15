@@ -9,7 +9,6 @@ export const backIcon = css`
   height: 20px;
   margin: 18px 0px 0px 3px;
   padding: 8px;
-  color: dodgerblue;
   &:hover {
     background-color: rgb(244, 244, 244);
   }
@@ -17,7 +16,7 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   padding-top: 20px;
-  height: calc(100vh - 155px);
+  height: calc(100% - 14px);
   overflow-x: hidden;
   width: 640px;
 `;
@@ -25,6 +24,8 @@ export const detailListContainer = css`
 export const fileSelectorContainer = css`
   padding-left: 5px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const pathNav = css`

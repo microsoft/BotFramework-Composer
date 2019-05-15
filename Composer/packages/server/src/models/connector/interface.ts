@@ -1,4 +1,4 @@
-import { BotProjectRef } from '../bot/interface';
+import { LocationRef } from '../bot/interface';
 
 export enum BotStatus {
   Running,
@@ -7,7 +7,7 @@ export enum BotStatus {
 
 export interface IBotConnector {
   status: BotStatus;
-  start(proj: BotProjectRef): boolean; // maybe start should return address
+  start(proj: LocationRef): boolean; // maybe start should return address
   stop(): boolean;
   inspect(): any;
 }
