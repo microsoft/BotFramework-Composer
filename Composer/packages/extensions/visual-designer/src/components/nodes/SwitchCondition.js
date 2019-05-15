@@ -11,6 +11,7 @@ import { transformSwitchCondition } from '../../transformers/transformSwitchCond
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
 
 import { Diamond } from './templates/Diamond';
+import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
@@ -75,6 +76,9 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
         </OffsetContainer>
       ))}
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <NodeMenu id={id} onEvent={onEvent} />
+      </div>
     </div>
   );
 };

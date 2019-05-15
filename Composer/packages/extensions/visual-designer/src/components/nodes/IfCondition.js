@@ -11,6 +11,7 @@ import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
 import { Diamond } from './templates/Diamond';
+import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
@@ -82,6 +83,9 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
       {edges.map(x => (
         <Edge key={x.id} {...x} />
       ))}
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <NodeMenu id={id} onEvent={onEvent} />
+      </div>
     </div>
   );
 };
