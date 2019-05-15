@@ -18,7 +18,7 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-export const FormCard = ({ header, label, details, icon, themeColor, onClick }) => (
+export const FormCard = ({ header, corner, label, details, icon, themeColor, onClick }) => (
   <div
     className="card"
     style={containerStyle}
@@ -41,6 +41,7 @@ export const FormCard = ({ header, label, details, icon, themeColor, onClick }) 
       }}
     >
       <span>{header}</span>
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>{corner}</div>
     </div>
     <div
       className="card__content"
