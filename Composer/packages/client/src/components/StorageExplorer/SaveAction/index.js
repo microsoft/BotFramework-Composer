@@ -14,7 +14,7 @@ export function SaveAction(props) {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { onSave, onGetErrorMessage } = props;
 
-  const saveButtonClick = async () => {
+  const handleSubmit = async () => {
     if (value === '') {
       setError(true);
       setErrorMessage('Please enter a new folder name');
@@ -26,7 +26,7 @@ export function SaveAction(props) {
   };
 
   return (
-    <div css={saveContainer}>
+    <form onSubmit={handleSubmit} css={saveContainer}>
       <TextField
         css={saveInputClass}
         placeholder="Please enter a new folder name"
@@ -34,11 +34,6 @@ export function SaveAction(props) {
         errorMessage={errorMessage}
         onChange={(event, value) => {
           setValue(value);
-        }}
-        onKeyPress={event => {
-          if (event.charCode === 13) {
-            saveButtonClick();
-          }
         }}
         onGetErrorMessage={onGetErrorMessage}
         onNotifyValidationResult={errorMessage => {
@@ -57,14 +52,15 @@ export function SaveAction(props) {
         <DefaultButton
           primary
           text="Save"
+          type="submit"
           disabled={isError}
           styles={saveButtonClass}
           iconProps={{
             iconName: 'SaveAs',
           }}
-          onClick={saveButtonClick}
+          onClick={handleSubmit}
         />
       )}
-    </div>
+    </form>
   );
 }
