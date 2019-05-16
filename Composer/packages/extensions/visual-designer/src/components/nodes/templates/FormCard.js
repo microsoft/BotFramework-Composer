@@ -41,7 +41,7 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
       }}
     >
       <span>{header}</span>
-      <div style={{ position: 'absolute', top: 0, right: 0 }}>{corner}</div>
+      <div style={{ position: 'absolute', top: 3, right: 0 }}>{corner}</div>
     </div>
     <div
       className="card__content"

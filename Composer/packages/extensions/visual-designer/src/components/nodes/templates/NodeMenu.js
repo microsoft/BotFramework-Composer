@@ -34,7 +34,7 @@ const NodeMenuTemplate = ({ onEvent }) => {
       overflowItems={[
         {
           key: 'delete',
-          name: 'Delete Node',
+          name: 'Delete',
           onClick: () => onEvent(NodeEventTypes.Delete),
         },
       ]}
