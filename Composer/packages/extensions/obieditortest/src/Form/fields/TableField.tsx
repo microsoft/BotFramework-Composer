@@ -59,7 +59,7 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       iconProps: { iconName: 'Edit' },
       onClick: () => {
         formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
-        //formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
+        formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
       },
     },
     {
