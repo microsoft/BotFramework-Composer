@@ -20,7 +20,7 @@ context('SwitchCondition', () => {
     });
 
     // Add case and add/delete/edit steps
-    cy.withinEditor('FormEditor', async () => {
+    cy.withinEditor('FormEditor', () => {
       // Edit condition
       cy.getByLabelText('Condition').type('user.age >= 21');
 
@@ -58,7 +58,7 @@ context('SwitchCondition', () => {
         .find('button')
         .click();
       // btn0.click();
-      await btn0.invoke('attr', 'aria-owns').then(menuId => {
+      btn0.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
           .click();
@@ -70,7 +70,7 @@ context('SwitchCondition', () => {
         .find('button')
         .click();
       // btn2.click();
-      await btn2.invoke('attr', 'aria-owns').then(menuId => {
+      btn2.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
           .click();
@@ -99,7 +99,7 @@ context('SwitchCondition', () => {
         .first()
         .find('button');
       btn.click();
-      await btn.invoke('attr', 'aria-owns').then(menuId => {
+      btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
           .click();
@@ -116,7 +116,7 @@ context('SwitchCondition', () => {
         .first()
         .find('button');
       btn.click();
-      await btn.invoke('attr', 'aria-owns').then(menuId => {
+      btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Remove')
           .click();
