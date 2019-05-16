@@ -17,7 +17,7 @@ export const aside = css`
 
 export const bot = css`
   color: #eaeaea;
-  width: 450px;
+  width: 320px;
   position: absolute;
   right: 0;
 `;
