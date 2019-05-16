@@ -21,7 +21,7 @@ export function transformSwitchCondition(input, jsonpath) {
     return new IndexedNode(`${prefix}.stepGroup`, {
       $type: ObiTypes.StepGroup,
       label: value,
-      children: steps.map((x, index) => new IndexedNode(`${prefix}.steps[${index}]`, x)),
+      children: (steps || []).map((x, index) => new IndexedNode(`${prefix}.steps[${index}]`, x)),
     });
   });
   return result;

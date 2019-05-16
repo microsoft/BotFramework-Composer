@@ -30,6 +30,7 @@
     "test:integration:start": "cd packages/server && node build/server.js",
     "test:integration:open": "cypress open",
     "test:integration:run": "yarn run test:integration:prereport && cypress run --reporter mocha-multi-reporters --reporter-options configFile=reporter-config.json",
+    "test:integration:clean": "rimraf ../SampleBots/__Test* packages/server/data.json && git checkout ../SampleBots",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:cci-graph-lib\" \"yarn typecheck:server\"",
