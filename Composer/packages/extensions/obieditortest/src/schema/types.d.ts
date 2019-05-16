@@ -66,6 +66,11 @@ interface ChoiceInput extends IBaseDialog {
   choices?: IChoice[];
 }
 
+/** A dialog step that executes custom code */
+interface CodeStep extends IBaseDialog {
+  codeHandler: string;
+}
+
 /** This represents a dialog which gathers a yes/no style responses */
 interface ConfirmInput extends IBaseDialog {
   /** The message to send to as prompt for this input. */
