@@ -31,12 +31,6 @@ const updateLgTemplate = (state, { response }) => {
   return state;
 };
 
-const updateLgTemplateState = (state, { id, lgTemplates }) => {
-  state.lgFiles.find(file => file.id === id).templates = lgTemplates;
-  state.lgFiles = state.lgFiles.slice();
-  return state;
-};
-
 const updateProjFile = (state, { response }) => {
   state.botProjFile = response.data.botFile;
   return state;
