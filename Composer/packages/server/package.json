@@ -74,6 +74,6 @@
     "lodash": "^4.17.11",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz"
+    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.1.tgz"
   }
 }

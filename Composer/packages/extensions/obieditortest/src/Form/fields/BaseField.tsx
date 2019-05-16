@@ -7,6 +7,7 @@ import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema } from 'react-jsonschema-form';
 import get from 'lodash.get';
+import classnames from 'classnames';
 
 import { FormContext } from '../types';
 
@@ -26,14 +27,15 @@ const fieldHeaderTheme = createTheme({
 });
 
 interface BaseFieldProps<T> {
-  formContext: FormContext;
-  title?: string;
-  description?: string;
   children?: React.ReactNode;
-  schema: JSONSchema6;
-  name?: string;
-  idSchema: IdSchema;
+  className?: string;
+  description?: string;
+  formContext: FormContext;
   formData: T;
+  idSchema: IdSchema;
+  name?: string;
+  schema: JSONSchema6;
+  title?: string;
 }
 
 function RootDialog(props) {
@@ -59,11 +61,11 @@ function RootDialog(props) {
 }
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
-  const { children, title, name, description, schema, idSchema, formContext } = props;
+  const { children, title, name, description, schema, idSchema, formContext, className } = props;
   const isRoot = idSchema.__id === formContext.rootId;
 
   return (
-    <div className="BaseField" key={idSchema.__id} id={idSchema.__id}>
+    <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
       {isRoot ? (
         <RootDialog {...props} />
       ) : (
