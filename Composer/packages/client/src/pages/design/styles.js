@@ -1,5 +1,5 @@
 import { css } from '@emotion/core';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const contentContainer = css`
   display: flex;
@@ -70,21 +70,16 @@ export const formEditor = css`
 
 export const breadcrumbClass = mergeStyleSets({
   root: {
-    marginTop: '5px',
-    marginLeft: '10px',
-  },
-  listItem: {
-    alignItems: 'baseline',
+    margin: '0',
+    padding: '10px',
   },
   itemLink: {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: '#4f4f4f',
-    paddingRight: '4px',
-    paddingLeft: '4px',
+    fontSize: FontSizes.smallPlus,
+    fontWeight: FontWeights.bold,
+    padding: '4px 8px',
   },
   chevron: {
-    fontSize: '8px',
-    fontWeight: 'bold',
+    fontSize: FontSizes.mini,
+    fontWeight: FontWeights.bold,
   },
 });
