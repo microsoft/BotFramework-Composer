@@ -187,8 +187,6 @@ export function LanguageGenerationSettings() {
     const { name, body, changed } = templateInState;
     const isValid = isTemplateValid(name, body);
 
-    console.log(currentTemplate, templateInState);
-
     // if no change, reject
     // if is not valid, reject
     if (!changed || !isValid) return;
@@ -259,6 +257,10 @@ export function LanguageGenerationSettings() {
   }
 
   function onRemoveLgFile(selectedGroup) {
+    const title = formatMessage(`Confirm delete ${selectedGroup.name} file?`);
+
+    if (confirm(title) === false) return;
+
     const id = selectedGroup.key;
     const payload = {
       id: id,
@@ -268,7 +270,7 @@ export function LanguageGenerationSettings() {
 
   function onRenderGroupFooter(groupProps) {
     return (
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '1050px' }}>
         {' '}
         <ActionButton
           css={actionButton}
