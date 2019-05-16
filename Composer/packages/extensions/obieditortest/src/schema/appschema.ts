@@ -3,6 +3,13 @@ import { JSONSchema6 } from 'json-schema';
 import { DialogInfo } from '../types';
 
 export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'inputProperties', 'selector'];
+/** Types that can be represented by a sub tree in the graph */
+export const COMPOUND_TYPES = [
+  'Microsoft.AdaptiveDialog',
+  'Microsoft.EventRule',
+  'Microsoft.IntentRule',
+  'Microsoft.UnknownIntentRule',
+];
 
 export enum DialogGroup {
   INPUT = 'INPUT',
