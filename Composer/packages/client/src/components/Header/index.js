@@ -4,8 +4,18 @@ import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
-import { header, aside, bot, botButton, botMessage, actionButton } from './styles';
+import { header, aside, bot, botButton, actionButton } from './styles';
 import { OpenStatus } from './../../constants';
+
+const openInEmulator = url => {
+  // this creates a temporary hidden iframe to fire off the bfemulator protocol
+  // and start up the emulator
+  const i = document.createElement('iframe');
+  i.style.display = 'none';
+  i.onload = () => i.parentNode.removeChild(i);
+  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}`;
+  document.body.appendChild(i);
+};
 
 export const Header = props => {
   const { botStatus, setBotStatus, openStorageExplorer } = props;
@@ -36,9 +46,15 @@ export const Header = props => {
         </ActionButton>
       </div>
       <div css={bot}>
-        <span css={botMessage}>
-          {botStatus === 'running' ? formatMessage('Bot is running at http://localhost:3979') : ''}
-        </span>
+        {botStatus === 'running' && (
+          <ActionButton
+            iconProps={{ iconName: 'OpenInNewTab', iconColor: '#ffffff' }}
+            css={actionButton}
+            style={{ marginTop: '3px' }}
+            text={formatMessage('Connect and Test')}
+            onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+          />
+        )}
         <PrimaryButton
           css={botButton}
           text={botStatus === 'running' ? formatMessage('Stop') : formatMessage('Start')}
