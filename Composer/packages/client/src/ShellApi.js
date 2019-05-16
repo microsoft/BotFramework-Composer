@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import debounce from 'lodash.debounce';
+import { debounce, replace, startsWith } from 'lodash';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -42,7 +42,7 @@ export function ShellApi() {
       const data = getDialogData(dialogsMap, navPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
     }
-  }, [dialogs, navPath]);
+  }, [dialogs, focusPath, navPath]);
 
   useEffect(() => {
     if (window.frames[1]) {
@@ -109,9 +109,16 @@ export function ShellApi() {
     actions.navDown(subPath);
   }
 
-  function focusTo({ subPath }) {
+  function focusTo({ subPath }, event) {
+    let realSubPath = subPath;
+    if (event.source.name === 'FormEditor') {
+      realSubPath = `${replace(focusPath, navPath, '')}${subPath}`;
+      if (!startsWith(realSubPath, '.')) {
+        realSubPath = '.' + realSubPath;
+      }
+    }
     flushUpdates();
-    actions.focusTo(subPath);
+    actions.focusTo(realSubPath);
   }
 
   return null;
