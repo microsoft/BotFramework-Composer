@@ -18,14 +18,10 @@ import { Store } from '../../../store/index';
 import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
 
-const isTemplateValid = (name, body) => {
+const lgParserValidate = (name, body) => {
   const text = ['#', name, '\n', body].join('');
-  try {
-    LGParser.Parse(text);
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const res = LGParser.TryParse(text);
+  return res.isValid ? '' : res.error.Message;
 };
 
 export function LanguageGenerationSettings() {
@@ -145,22 +141,18 @@ export function LanguageGenerationSettings() {
 
   const validateNameMessage = name => {
     if (name === '') {
-      return 'name can not be empty';
+      return formatMessage('name can not be empty');
     }
 
     if (items.filter(item => item.name === name).length > 1) {
-      return 'name has been taken';
+      return formatMessage('name has been taken');
     }
 
-    const isValid = isTemplateValid(name, '- body');
-
-    return isValid ? '' : 'name is not valid';
+    return lgParserValidate(name, '- body');
   };
 
   const validateBodyMessage = body => {
-    const isValid = isTemplateValid('name', body);
-
-    return isValid ? '' : 'template is not valid';
+    return lgParserValidate('name', body);
   };
 
   function getTemplatePhrase(item) {
@@ -185,11 +177,11 @@ export function LanguageGenerationSettings() {
   function submitTemplateChange(currentTemplate) {
     const templateInState = items.find(item => currentTemplate.id === item.id);
     const { name, body, changed } = templateInState;
-    const isValid = isTemplateValid(name, body);
+    const isValid = lgParserValidate(name, body);
 
     // if no change, reject
     // if is not valid, reject
-    if (!changed || !isValid) return;
+    if (changed !== true || isValid !== '') return;
     const [fileIndex, itemIndex] = currentTemplate.id.split(':');
     const templateInLgFile = lgFiles[fileIndex].templates[itemIndex];
 
