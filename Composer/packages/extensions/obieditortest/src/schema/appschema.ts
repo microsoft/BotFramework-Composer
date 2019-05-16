@@ -73,7 +73,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: [/* 'Microsoft.CodeStep', */ 'Microsoft.HttpRequest'],
+    types: ['Microsoft.CodeStep', 'Microsoft.HttpRequest'],
   },
   [DialogGroup.LOG]: {
     label: 'Tracing and logging',
@@ -610,6 +610,26 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         additionalProperties: false,
         patternProperties: {
           '^\\$': {
+            type: 'string',
+          },
+        },
+      },
+      'Microsoft.CodeStep': {
+        title: 'Code Step',
+        description: 'A dialog step that executes custom code',
+        type: 'object',
+        properties: {
+          $type: {
+            type: 'string',
+            const: 'Microsoft.CodeStep',
+          },
+          $designer: {
+            type: 'object',
+            description: 'Extra information for the Bot Framework Designer.',
+          },
+          codeHandler: {
+            title: 'Code Handler',
+            description: 'The handler that is invoked for the code step.',
             type: 'string',
           },
         },
