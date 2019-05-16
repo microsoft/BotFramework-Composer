@@ -1,6 +1,7 @@
 import './styles.scss';
 
 export * from './CasesField';
+export * from './CodeField';
 export * from './JsonField';
 export * from './RecognizerField';
 export * from './RulesField';
