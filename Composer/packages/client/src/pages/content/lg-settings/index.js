@@ -14,6 +14,7 @@ import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
 
 import { Store } from '../../../store/index';
+import { OpenConfirmModal } from '../../../components/Modal';
 
 import NewLgFileModal from './NewLgFileModal';
 import { scrollablePaneRoot, title, label, actionButton } from './styles';
@@ -250,14 +251,16 @@ export function LanguageGenerationSettings() {
 
   function onRemoveLgFile(selectedGroup) {
     const title = formatMessage(`Confirm delete ${selectedGroup.name} file?`);
-
-    if (confirm(title) === false) return;
-
-    const id = selectedGroup.key;
-    const payload = {
-      id: id,
-    };
-    actions.removeLgFile(payload);
+    OpenConfirmModal(title).then(result => {
+      if (result === false) {
+        return;
+      }
+      const id = selectedGroup.key;
+      const payload = {
+        id: id,
+      };
+      actions.removeLgFile(payload);
+    });
   }
 
   function onRenderGroupFooter(groupProps) {
