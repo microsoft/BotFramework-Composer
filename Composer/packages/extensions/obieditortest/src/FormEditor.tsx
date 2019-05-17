@@ -87,7 +87,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   return (
     <Customizer {...FluentCustomizations}>
-      <div className="App" style={{ margin: '15px 15px 15px 15px' }}>
+      <div className="App">
         {memoryOptions.length > 0 && (
           <Dropdown
             style={{ width: '300px', paddingBottom: '10px' }}

@@ -4,7 +4,7 @@ import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
-import { header, aside, bot, botButton, actionButton } from './styles';
+import { headerMain, headerSub, aside, bot, botButton, actionButton } from './styles';
 import { OpenStatus } from './../../constants';
 
 const openInEmulator = url => {
@@ -20,46 +20,51 @@ const openInEmulator = url => {
 export const Header = props => {
   const { botStatus, setBotStatus, openStorageExplorer } = props;
   return (
-    <header css={header}>
-      <div css={aside}>Composer</div>
-      <div css={actionButton}>
-        <ActionButton
-          css={actionButton}
-          iconProps={{ iconName: 'CirclePlus', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer(OpenStatus.NEW)}
-        >
-          New
-        </ActionButton>
-        <ActionButton
-          css={actionButton}
-          iconProps={{ iconName: 'OpenFolderHorizontal', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer(OpenStatus.OPEN)}
-        >
-          Open
-        </ActionButton>
-        <ActionButton
-          css={actionButton}
-          iconProps={{ iconName: 'Save', iconColor: '#ffffff' }}
-          onClick={() => openStorageExplorer(OpenStatus.SAVEAS)}
-        >
-          Save as
-        </ActionButton>
+    <header>
+      <div css={headerMain}>
+        <div css={aside}>Composer</div>
       </div>
-      <div css={bot}>
-        {botStatus === 'running' && (
+      <div css={headerSub}>
+        <div css={actionButton}>
           <ActionButton
-            iconProps={{ iconName: 'OpenInNewTab', iconColor: '#ffffff' }}
             css={actionButton}
-            style={{ marginTop: '3px' }}
-            text={formatMessage('Connect and Test')}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+            iconProps={{ iconName: 'CirclePlus' }}
+            onClick={() => openStorageExplorer(OpenStatus.NEW)}
+          >
+            {formatMessage('New')}
+          </ActionButton>
+          <ActionButton
+            css={actionButton}
+            iconProps={{ iconName: 'OpenFolderHorizontal' }}
+            onClick={() => openStorageExplorer(OpenStatus.OPEN)}
+          >
+            {formatMessage('Open')}
+          </ActionButton>
+          <ActionButton
+            css={actionButton}
+            iconProps={{ iconName: 'Save' }}
+            onClick={() => openStorageExplorer(OpenStatus.SAVEAS)}
+          >
+            {formatMessage('Save as')}
+          </ActionButton>
+        </div>
+        <div css={bot}>
+          {botStatus === 'running' && (
+            <ActionButton
+              iconProps={{ iconName: 'OpenInNewTab' }}
+              css={actionButton}
+              style={{ marginTop: '3px' }}
+              onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+            >
+              {formatMessage('Connect and Test')}
+            </ActionButton>
+          )}
+          <PrimaryButton
+            css={botButton}
+            text={botStatus === 'running' ? formatMessage('Stop') : formatMessage('Start')}
+            onClick={() => setBotStatus(botStatus)}
           />
-        )}
-        <PrimaryButton
-          css={botButton}
-          text={botStatus === 'running' ? formatMessage('Stop') : formatMessage('Start')}
-          onClick={() => setBotStatus(botStatus)}
-        />
+        </div>
       </div>
     </header>
   );
