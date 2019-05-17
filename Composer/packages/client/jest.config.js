@@ -14,4 +14,6 @@ module.exports = {
   // understand them because node_modules aren't transformed by default. So
   // we can specify that they need to be transformed here.
   transformIgnorePatterns: ['"/node_modules/(?!office-ui-fabric-react).+\\.js$"'],
+
+  setupFilesAfterEnv: ['./setupTests.js'],
 };

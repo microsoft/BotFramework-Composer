@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, cleanup } from 'react-testing-library';
+import { render } from 'react-testing-library';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
 import Routes from '../src/router';
@@ -19,8 +19,6 @@ const App = () => (
 );
 
 describe('<Router/> router test', () => {
-  afterEach(cleanup);
-
   test('full app rendering/navigating', async () => {
     const {
       container,

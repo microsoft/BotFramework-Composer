@@ -1,15 +1,10 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render, waitForElement } from 'react-testing-library';
-import { toHaveStyle } from 'jest-dom';
+import { fireEvent, render, waitForElement } from 'react-testing-library';
 
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/index.js';
 
-expect.extend({ toHaveStyle });
-
 describe('<ProjectTree/>', () => {
-  afterEach(cleanup);
-
   it('should render the projecttree', async () => {
     const { getByText } = render(<ProjectTree files={dialogs} />);
 

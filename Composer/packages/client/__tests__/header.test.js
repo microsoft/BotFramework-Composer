@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render, waitForElement } from 'react-testing-library';
+import { fireEvent, render, waitForElement } from 'react-testing-library';
 
 import { Header } from '../src/components/Header';
 
 describe('<Header />', () => {
-  afterEach(cleanup);
-
   it('should render the header', async () => {
     const { getByText } = render(<Header />);
 
