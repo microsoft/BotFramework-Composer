@@ -62,6 +62,7 @@ export const visualEditor = css`
   flex: 1;
   border: 0px;
   background-color: ${NeutralColors.gray20};
+  min-height: 80vh;
 `;
 
 export const formEditor = css`
@@ -69,6 +70,7 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
+  min-height: 80vh;
 `;
 
 export const breadcrumbClass = mergeStyleSets({

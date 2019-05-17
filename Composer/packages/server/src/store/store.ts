@@ -20,6 +20,8 @@ class JsonStore implements KVStore {
   private filePath: string;
 
   get = (key: string): any => {
+    this.readStore();
+
     if (key in this.data) {
       return this.data[key];
     } else {
@@ -38,7 +40,23 @@ class JsonStore implements KVStore {
 
   constructor(jsonFilePath: string) {
     this.filePath = path.resolve(jsonFilePath);
-    this.data = JSON.parse(fs.readFileSync(this.filePath).toString());
+    this.ensureStore();
+  }
+
+  private ensureStore() {
+    if (!fs.existsSync(this.filePath)) {
+      this.initializeStore();
+    }
+  }
+
+  private initializeStore() {
+    fs.writeFileSync(this.filePath, JSON.stringify(initData, null, 2) + '\n');
+  }
+
+  private readStore() {
+    this.ensureStore();
+
+    this.data = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
   }
 }
 

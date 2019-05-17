@@ -388,3 +388,4 @@ typings/
 
 # Local sample bots
 SampleBots/Local*
+SampleBots/__Test*
