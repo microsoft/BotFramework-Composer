@@ -39,7 +39,7 @@ interface BaseFieldProps<T> {
 }
 
 function RootDialog(props) {
-  const { title, name, description, schema, formData } = props;
+  const { schema, formData } = props;
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
@@ -49,14 +49,6 @@ function RootDialog(props) {
 
   return (
     <div id={props.id}>
-      <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
-        {title || schema.title || startCase(name)}
-      </h3>
-      {(description || schema.description) && (
-        <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
-          {description || schema.description}
-        </p>
-      )}
       {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
       {props.children}
     </div>
