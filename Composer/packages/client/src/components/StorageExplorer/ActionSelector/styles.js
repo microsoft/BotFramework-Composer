@@ -1,10 +1,11 @@
 import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export const leftNav = css`
   width: 120px;
   height: 100vh;
-  background: #2b579a;
+  background: ${SharedColors.cyanBlue10};
   font-size: 20px;
   color: #fff;
 `;
@@ -22,13 +23,13 @@ export const closeIcon = css`
   padding-bottom: 10px;
   width: 90px;
   &:hover {
-    background-color: #366ec2;
+    background-color: ${SharedColors.cyanBlue20};
   }
 `;
 
 export const navLinkClass = mergeStyleSets({
   actionNav: {
-    backgroundColor: '#2b579a',
+    backgroundColor: SharedColors.cyanBlue10,
     color: 'white',
     fontSize: '16px',
     selectors: {
@@ -36,11 +37,11 @@ export const navLinkClass = mergeStyleSets({
         displayName: 'testHover',
         color: 'white !important',
         fontSize: '16px',
-        backgroundColor: '#366ec2 !important',
+        backgroundColor: `${SharedColors.cyanBlue20} !important`,
       },
       '&:after': {
         border: '0px !important',
-        backgroundColor: '#1e3c6b !important',
+        backgroundColor: `${SharedColors.cyanBlue20} !important`,
         z: '-1',
       },
     },
