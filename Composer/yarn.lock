@@ -1771,7 +1771,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.13", "@types/react@^16.8.7":
+"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.7":
   version "16.8.17"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.17.tgz#f287b76a5badb93bc9aa3f54521a3eb53d6c2374"
   integrity sha512-pln3mgc6VfkNg92WXODul/ONo140huK9OMsx62GlBlZ2lvjNK86PQJhYMPLO1i66aF5O9OPyZefogvNltBIszA==
@@ -4547,9 +4547,9 @@ boom@2.x.x:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     moment "2.24.0"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz":
-  version "4.5.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.0.tgz#5e5d033d62ddc994e9bab251ff103285a151c38e"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.1.tgz":
+  version "4.5.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.1.tgz#6c166a97d497f8d21769122b1b4073a11ecfaf04"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.0.tgz"
