@@ -55,6 +55,7 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap.switchNode.offset}>
         <Diamond
+          data-testid="SwitchConditionDiamond"
           onClick={() => {
             onEvent(NodeClickActionTypes.Focus, id);
           }}

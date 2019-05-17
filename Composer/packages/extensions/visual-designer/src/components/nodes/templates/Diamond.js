@@ -1,7 +1,8 @@
 import React from 'react';
 
-export const Diamond = ({ onClick }) => (
+export const Diamond = ({ onClick, ...rest }) => (
   <div
+    {...rest}
     style={{
       width: '50px',
       height: '20px',
