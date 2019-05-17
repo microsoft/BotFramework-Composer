@@ -5,7 +5,6 @@ export const Diamond = ({ onClick }) => (
     style={{
       width: '50px',
       height: '20px',
-      backgroundColor: '#ffffff',
       cursor: 'pointer',
     }}
     onClick={e => {
