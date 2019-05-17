@@ -6,11 +6,6 @@ The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch
 
 ### Prerequisite:
 * Install .Netcore 2
-* Install nuget
-
-### Add Nuget Feed
-* option 1: use VisualStudio "Manage Nuget Packages" to add a new package feed: "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json"
-* option 2: `nuget sources Add -Name "ComposableDialog" -Source "https://botbuilder.myget.org/F/botbuilder-declarative/api/v3/index.json"`
 
 ### Commands:
 
