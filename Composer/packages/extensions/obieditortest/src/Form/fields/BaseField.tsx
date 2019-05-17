@@ -48,14 +48,17 @@ function RootDialog(props) {
   };
 
   return (
-    <div>
-      <h3>{title || schema.title || startCase(name)}</h3>
+    <div id={props.id}>
+      <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
+        {title || schema.title || startCase(name)}
+      </h3>
       {(description || schema.description) && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.medium].join(' ')}>
+        <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
           {description || schema.description}
         </p>
       )}
       {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
+      {props.children}
     </div>
   );
 }
@@ -64,21 +67,19 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const { children, title, name, description, schema, idSchema, formContext, className } = props;
   const isRoot = idSchema.__id === formContext.rootId;
 
-  return (
+  return isRoot ? (
+    <RootDialog {...props} key={idSchema.__id} id={idSchema.__id}>
+      {children}
+    </RootDialog>
+  ) : (
     <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
-      {isRoot ? (
-        <RootDialog {...props} />
-      ) : (
-        <>
-          <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-            {title || schema.title || startCase(name)}
-          </Separator>
-          {(description || schema.description) && (
-            <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>
-              {description || schema.description}
-            </p>
-          )}
-        </>
+      <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
+        {title || schema.title || startCase(name)}
+      </Separator>
+      {(description || schema.description) && (
+        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>
+          {description || schema.description}
+        </p>
       )}
       {children}
     </div>
