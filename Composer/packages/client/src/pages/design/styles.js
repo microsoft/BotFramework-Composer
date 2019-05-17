@@ -1,9 +1,16 @@
 import { css } from '@emotion/core';
 import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
+
+const contentTopMargin = 10;
+const contentBottomMargin = 0;
 
 export const contentContainer = css`
   display: flex;
-  height: calc(99vh - 50px);
+  height: calc(100vh - ${105 + contentTopMargin + contentBottomMargin}px);
+  margin-top: ${contentTopMargin}px;
+  margin-bottom: ${contentBottomMargin}px;
+  margin-left: 20px;
 `;
 
 export const projectContainer = css`
@@ -12,21 +19,19 @@ export const projectContainer = css`
   flex-grow: 0;
   flex-shrink: 0;
   width: 255px;
-  margin-left: 20px;
-  margin-top: 20px;
 `;
 
-export const projectWrapper = css`
-  padding: 10px;
-  color: #4f4f4f;
-`;
+export const projectWrapper = css``;
 
 export const projectHeader = css`
   font-weight: bold;
-  margin-bottom: 5px;
+  padding: 7px 10px;
+  line-height: 14px;
+  font-size: ${FontSizes.medium};
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: ${NeutralColors.gray20};
 `;
 
 export const projectTree = css`
@@ -42,11 +47,8 @@ export const assetTree = css`
 export const editorContainer = css`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 20px);
+  height: 100%;
   flex-grow: 4;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
 `;
 
 export const editorWrapper = css`
@@ -59,6 +61,7 @@ export const visualEditor = css`
   height: 100%;
   flex: 1;
   border: 0px;
+  background-color: ${NeutralColors.gray20};
 `;
 
 export const formEditor = css`
@@ -74,7 +77,7 @@ export const breadcrumbClass = mergeStyleSets({
     padding: '10px',
   },
   itemLink: {
-    fontSize: FontSizes.smallPlus,
+    fontSize: FontSizes.medium,
     fontWeight: FontWeights.bold,
     padding: '4px 8px',
   },
