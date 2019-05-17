@@ -22,7 +22,7 @@ async function createProject(req: Request, res: Response) {
 }
 
 async function getProject(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
+  if (ProjectService.currentBotProject !== undefined && (await ProjectService.currentBotProject.exists())) {
     await ProjectService.currentBotProject.index();
     const project = await ProjectService.currentBotProject.getIndexes();
     res.status(200).json({ ...project });

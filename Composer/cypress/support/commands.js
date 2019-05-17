@@ -45,3 +45,11 @@ Cypress.Commands.add('openDialog', dialogName => {
     cy.wait(500);
   });
 });
+
+Cypress.Commands.add('copyBot', (bot, name) => {
+  cy.openBot(bot);
+  cy.getByText('Save as').click();
+
+  cy.get('input[data-testid="NewBotProjectInput"]').type(`__Test${name}`);
+  cy.getByText('Save').click();
+});

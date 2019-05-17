@@ -16,6 +16,7 @@ import { FieldProps } from 'react-jsonschema-form';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
+import { COMPOUND_TYPES } from '../../schema/appschema';
 
 import { BaseField } from './BaseField';
 
@@ -24,7 +25,7 @@ interface TableRenderProps<T> {
   onChange: (newItem: T | T[]) => void;
 }
 
-interface TableFieldProps<T> extends FieldProps<T[]> {
+interface TableFieldProps<T extends MicrosoftIDialog = MicrosoftIDialog> extends FieldProps<T[]> {
   additionalColumns?: IColumn[];
   columnHeader?: string;
   formContext: FormContext;
@@ -39,14 +40,14 @@ interface TableFieldProps<T> extends FieldProps<T[]> {
   children?: (props: TableRenderProps<T>) => React.ReactNode;
 }
 
-interface ItemActionsProps<T = any> extends TableFieldProps<T> {
-  item: any;
+interface ItemActionsProps<T extends MicrosoftIDialog> extends TableFieldProps<T> {
+  item: T;
   index?: number;
   newOptions: IContextualMenuItem[];
 }
 
-const ItemActions: React.FC<ItemActionsProps> = props => {
-  const { navPrefix, index, onChange, formData, formContext, newOptions } = props;
+function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
+  const { item, navPrefix, index, onChange, formData, formContext, newOptions } = props;
 
   if (typeof index === 'undefined') {
     return null;
@@ -59,7 +60,10 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
       iconProps: { iconName: 'Edit' },
       onClick: () => {
         formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
-        formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
+
+        if (COMPOUND_TYPES.includes(item.$type)) {
+          formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
+        }
       },
     },
     {
@@ -107,9 +111,9 @@ const ItemActions: React.FC<ItemActionsProps> = props => {
   ];
 
   return <DefaultButton menuProps={{ items: menuItems }} />;
-};
+}
 
-export function TableField<T = any>(props: TableFieldProps<T>): JSX.Element {
+export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
   const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderTitle, renderDescription, children } = props;
 
   const items = props.formData;
