@@ -223,18 +223,19 @@ export function FileSelector(props) {
             </div>
           </div>
           {saveAction}
-          <DetailsList
-            css={detailListContainer}
-            items={storageFiles}
-            compact={false}
-            columns={tableColums}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            selection={selection}
-            selectionMode={SelectionMode.single}
-            checkboxVisibility={CheckboxVisibility.hidden}
-          />
+          <div data-is-scrollable="true" css={detailListContainer}>
+            <DetailsList
+              items={storageFiles}
+              compact={false}
+              columns={tableColums}
+              getKey={item => item.name}
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible={true}
+              selection={selection}
+              selectionMode={SelectionMode.single}
+              checkboxVisibility={CheckboxVisibility.hidden}
+            />
+          </div>
         </Fragment>
       )}
       {storageFileLoadingStatus === 'pending' && (
