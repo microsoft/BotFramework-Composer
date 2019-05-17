@@ -18,7 +18,7 @@ export const HorizontalEdge = ({ length, text, x, y }) => (
 export const VerticalEdge = ({ length, text, x, y }) => (
   <svg style={{ position: 'absolute', overflow: 'visible', left: x, top: y, width: BAR_SIZE, height: length }}>
     {text ? (
-      <text x={TEXT_PADDING} y={FONT_SIZE + TEXT_PADDING}>
+      <text x={TEXT_PADDING} y={FONT_SIZE + TEXT_PADDING} fontSize={FONT_SIZE}>
         {text}
       </text>
     ) : null}
