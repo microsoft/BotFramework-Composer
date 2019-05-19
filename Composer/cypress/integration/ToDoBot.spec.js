@@ -11,7 +11,7 @@ context('ToDo Bot', () => {
       cy.getByText('Welcome User').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Adaptive Dialog').should('exist');
+      cy.getByText('Welcome User').should('exist');
     });
   });
 
@@ -23,7 +23,7 @@ context('ToDo Bot', () => {
       cy.getByText('Add To Todos').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Adaptive Dialog').should('exist');
+      cy.getByText('Steps').should('exist');
     });
   });
 
@@ -33,7 +33,7 @@ context('ToDo Bot', () => {
       cy.getByText('Clear Todos').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Adaptive Dialog').should('exist');
+      cy.getByText('Clear Todos').should('exist');
     });
   });
 
@@ -43,7 +43,7 @@ context('ToDo Bot', () => {
       cy.getByText('Remove').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Adaptive Dialog').should('exist');
+      cy.getByText('Microsoft.DeleteProperty').should('exist');
     });
   });
 
@@ -53,7 +53,7 @@ context('ToDo Bot', () => {
       cy.getByText('[ShowTodo]').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Adaptive Dialog').should('exist');
+      cy.getByText('Steps').should('exist');
     });
   });
 });

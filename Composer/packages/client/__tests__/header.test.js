@@ -9,7 +9,7 @@ describe('<Header />', () => {
   it('should render the header', async () => {
     const { getByText } = render(<Header />);
 
-    await waitForElement(() => getByText(/Composer/));
+    await waitForElement(() => getByText(/Bot Framework Designer/));
     await waitForElement(() => getByText(/New/));
     await waitForElement(() => getByText(/Open/));
   });
