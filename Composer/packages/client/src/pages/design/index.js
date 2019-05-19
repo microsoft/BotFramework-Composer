@@ -18,7 +18,7 @@ import {
   projectContainer,
   projectHeader,
   projectTree,
-  assetTree,
+  // assetTree,
   editorContainer,
   visualEditor,
   formEditor,
@@ -95,8 +95,8 @@ function DesignPage() {
               <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
             </div>
           </Tree>
-          <div style={{ height: '20px' }} />
-          <Tree extraCss={assetTree} />
+          {/* <div style={{ height: '20px' }} />
+          <Tree extraCss={assetTree} /> */}
         </div>
         <Conversation extraCss={editorContainer}>
           <Fragment>

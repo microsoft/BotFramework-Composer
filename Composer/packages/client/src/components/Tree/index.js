@@ -2,11 +2,10 @@
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 
-import { container, top } from './styles';
+import { container } from './styles';
 
 export const Tree = props => (
   <div css={[container(props.variant), props.extraCss]} data-testid="ProjectTree">
-    <div css={top} />
     {props.children}
   </div>
 );
