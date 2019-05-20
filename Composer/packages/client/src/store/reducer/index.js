@@ -31,12 +31,6 @@ const updateLgTemplate = (state, { response }) => {
   return state;
 };
 
-const updateLgTemplateState = (state, { id, lgTemplates }) => {
-  state.lgFiles.find(file => file.id === id).templates = lgTemplates;
-  state.lgFiles = state.lgFiles.slice();
-  return state;
-};
-
 const updateProjFile = (state, { response }) => {
   state.botProjFile = response.data.botFile;
   return state;
@@ -145,6 +139,6 @@ export const reducer = createReducer({
   [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
-  [ActionTypes.UPDATE_LG_TEMPLATE_STATE]: updateLgTemplateState,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
 });
