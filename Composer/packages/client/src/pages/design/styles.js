@@ -2,17 +2,6 @@ import { css } from '@emotion/core';
 import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-const contentTopMargin = 10;
-const contentBottomMargin = 0;
-
-export const contentContainer = css`
-  display: flex;
-  height: calc(100vh - ${105 + contentTopMargin + contentBottomMargin}px);
-  margin-top: ${contentTopMargin}px;
-  margin-bottom: ${contentBottomMargin}px;
-  margin-left: 20px;
-`;
-
 export const projectContainer = css`
   display: flex;
   flex-direction: column;
