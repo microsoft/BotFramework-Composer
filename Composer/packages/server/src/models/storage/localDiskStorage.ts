@@ -10,6 +10,7 @@ const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
 const exists = promisify(fs.exists);
 const writeFile = promisify(fs.writeFile);
+const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 
 export class LocalDiskStorage implements IFileStorage {
@@ -38,6 +39,10 @@ export class LocalDiskStorage implements IFileStorage {
 
   async writeFile(path: string, content: any): Promise<void> {
     await writeFile(path, content);
+  }
+
+  async removeFile(path: string): Promise<void> {
+    await removeFile(path);
   }
 
   async mkDir(path: string): Promise<void> {
