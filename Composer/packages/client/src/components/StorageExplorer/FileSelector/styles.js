@@ -16,8 +16,8 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   padding-top: 20px;
-  height: calc(100% - 14px);
   overflow-x: hidden;
+  overflow-y: scroll;
   width: 640px;
 `;
 

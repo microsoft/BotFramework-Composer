@@ -7,12 +7,13 @@ import Routes from './router';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { SettingItem } from './../../components/SettingItem';
-import { title, contentContainer, fileList, contentEditor } from './styles';
+import { title, fileList, contentEditor } from './styles';
+import { MainContent } from './../../components/MainContent/index';
 
 export const SettingPage = () => {
   return (
     <Fragment>
-      <div css={contentContainer}>
+      <MainContent>
         <div css={fileList}>
           <Tree variant="fill">
             <div>
@@ -27,7 +28,7 @@ export const SettingPage = () => {
         <Conversation extraCss={contentEditor}>
           <Routes />
         </Conversation>
-      </div>
+      </MainContent>
     </Fragment>
   );
 };

@@ -1,13 +1,22 @@
 import { css } from '@emotion/core';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
-export const header = css`
+export const headerMain = css`
   position: relative;
   line-height: 50px;
-  background: #001f52;
+  background: ${SharedColors.cyanBlue10};
   font-size: 20px;
   color: #fff;
   height: 50px;
   display: flex;
+`;
+
+export const headerSub = css`
+  padding: 5px 20px 5px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${NeutralColors.gray30};
 `;
 
 export const aside = css`
@@ -16,18 +25,11 @@ export const aside = css`
 `;
 
 export const bot = css`
-  color: #eaeaea;
-  width: 320px;
-  position: absolute;
-  right: 0;
+  display: flex;
+  align-items: center;
 `;
 
-export const botButton = css`
-  color: white;
-  margin-top: 8px;
-  margin-right: 35px;
-  float: right;
-`;
+export const botButton = css``;
 
 export const botMessage = css`
   margin-left: 5px;
@@ -35,10 +37,12 @@ export const botMessage = css`
 `;
 
 export const actionButton = css`
-  color: #eaeaea;
   font-size: 16px;
   margin-top: 2px;
-  margin-left: 15px;
+
+  & + & {
+    margin-left: 15px;
+  }
 `;
 
 export const fileInput = css`

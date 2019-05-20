@@ -13,12 +13,11 @@ import { ProjectTree } from './../../components/ProjectTree';
 import { Store } from './../../store/index';
 import {
   breadcrumbClass,
-  contentContainer,
   projectWrapper,
   projectContainer,
   projectHeader,
   projectTree,
-  assetTree,
+  // assetTree,
   editorContainer,
   visualEditor,
   formEditor,
@@ -26,6 +25,7 @@ import {
 } from './styles';
 import NewDialogModal from './NewDialogModal';
 import { upperCaseName } from './../../utils/fileUtil';
+import { MainContent } from './../../components/MainContent/index';
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
@@ -75,7 +75,7 @@ function DesignPage() {
 
   return (
     <Fragment>
-      <div css={contentContainer}>
+      <MainContent>
         <div css={projectContainer}>
           <Tree variant="large" extraCss={projectTree}>
             <div css={projectWrapper}>
@@ -95,8 +95,8 @@ function DesignPage() {
               <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
             </div>
           </Tree>
-          <div style={{ height: '20px' }} />
-          <Tree extraCss={assetTree} />
+          {/* <div style={{ height: '20px' }} />
+          <Tree extraCss={assetTree} /> */}
         </div>
         <Conversation extraCss={editorContainer}>
           <Fragment>
@@ -107,7 +107,7 @@ function DesignPage() {
             </div>
           </Fragment>
         </Conversation>
-      </div>
+      </MainContent>
       <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>
   );
