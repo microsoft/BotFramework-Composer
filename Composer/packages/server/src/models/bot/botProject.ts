@@ -172,7 +172,7 @@ export class BotProject {
               name: 'editorSchema',
               content: editorSchema,
               path: `${this.dir}/${botConfig.schemas.editor}`,
-              relativePath: Path.relative(this.dir, botConfig.schemas.editor),
+              relativePath: botConfig.schemas.editor,
             });
           } catch {
             throw new Error('Attempt to parse editor schema as JSON failed');
