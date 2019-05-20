@@ -1,4 +1,5 @@
 import { css } from '@emotion/core';
+import { SharedColors } from '@uifabric/fluent-theme';
 
 export const container = css`
   list-style: none;
@@ -18,8 +19,12 @@ export const childrenUl = isOpen => {
 export const folderItem = active => {
   return css`
     cursor: default;
-    color: ${active ? '#0083cb' : '#4f4f4f'};
+    color: ${active ? SharedColors.cyanBlue10 : 'inherit'};
     font-weight: ${active ? 'bold' : 'normal'};
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
     &:hover {
       font-weight: bold;
     }
@@ -28,6 +33,7 @@ export const folderItem = active => {
 
 export const nodeItem = id => {
   return css`
+    padding: 7px 10px;
     padding-left: ${id === 0 ? '15px' : '25px'};
   `;
 };
