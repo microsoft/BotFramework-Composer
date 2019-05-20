@@ -58,7 +58,7 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap.choice.offset}>
         <Diamond
-          condition={data.condition}
+          text={data.condition}
           onClick={() => {
             onEvent(NodeClickActionTypes.Focus, id);
           }}
