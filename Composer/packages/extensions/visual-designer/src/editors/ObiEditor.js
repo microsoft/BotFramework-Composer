@@ -8,7 +8,6 @@ import { deleteNode } from '../shared/jsonTracker';
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
-import './FabricOverride.css';
 
 export class ObiEditor extends Component {
   state = {

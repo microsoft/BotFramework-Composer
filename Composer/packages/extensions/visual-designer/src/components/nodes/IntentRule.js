@@ -24,7 +24,7 @@ export class IntentRule extends React.Component {
             }}
             onClick={e => {
               e.stopPropagation();
-              this.props.onEvent(NodeClickActionTypes.OpenLink, normalizedStep.dialog);
+              this.props.onEvent(NodeEventTypes.OpenLink, normalizedStep.dialog);
             }}
           >
             {normalizedStep.dialog}

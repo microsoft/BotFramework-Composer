@@ -23,7 +23,11 @@ const NodeMenuTemplate = ({ onEvent }) => {
       },
     };
     return (
-      <IconButton styles={buttonStyles} menuIconProps={{ iconName: 'More' }} menuProps={{ items: overflowItems }} />
+      <IconButton
+        styles={buttonStyles}
+        menuIconProps={{ iconName: 'More' }}
+        menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: 100 } }}
+      />
     );
   };
 
