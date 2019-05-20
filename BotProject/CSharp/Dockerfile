@@ -10,7 +10,7 @@ COPY NuGet.Config .
 RUN dotnet restore
 
 COPY . .
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.1-alpine AS runtime
 WORKDIR /app/botproject/csharp

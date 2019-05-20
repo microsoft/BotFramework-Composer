@@ -1,8 +1,15 @@
-version: '0.1'
+version: '3.4'
 services:
   composer: 
     build: Composer
     ports:
+    - "3000:5000"
     - "5000:5000"
     volumes:
     - ./SampleBots:/SampleBots
+  botruntime: 
+    build: BotProject/CSharp
+    ports:
+    - "3979:80"
+    volumes:
+    - ./SampleBots:/app/SampleBots
