@@ -8,6 +8,9 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -134,6 +137,17 @@ export function FileSelector(props) {
     }, []);
   }, [focusedStorageFolder, storageExplorerStatus]);
 
+  function onRenderDetailsHeader(props, defaultRender) {
+    return (
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        {defaultRender({
+          ...props,
+          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+        })}
+      </Sticky>
+    );
+  }
+
   const selection = new Selection({
     onSelectionChanged: () => {
       const file = selection.getSelection()[0];
@@ -224,17 +238,20 @@ export function FileSelector(props) {
           </div>
           {saveAction}
           <div data-is-scrollable="true" css={detailListContainer}>
-            <DetailsList
-              items={storageFiles}
-              compact={false}
-              columns={tableColums}
-              getKey={item => item.name}
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible={true}
-              selection={selection}
-              selectionMode={SelectionMode.single}
-              checkboxVisibility={CheckboxVisibility.hidden}
-            />
+            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+              <DetailsList
+                items={storageFiles}
+                compact={false}
+                columns={tableColums}
+                getKey={item => item.name}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderDetailsHeader={onRenderDetailsHeader}
+                isHeaderVisible={true}
+                selection={selection}
+                selectionMode={SelectionMode.single}
+                checkboxVisibility={CheckboxVisibility.hidden}
+              />
+            </ScrollablePane>
           </div>
         </Fragment>
       )}
