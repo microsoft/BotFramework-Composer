@@ -16,11 +16,16 @@ export const body = css`
   left: 0;
 `;
 
+export const content = css`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const panelContent = css`
-  width: 825px;
-  height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
 `;
 
 export const title = css`
