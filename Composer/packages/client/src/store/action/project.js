@@ -190,3 +190,51 @@ export async function removeLgFile(dispatch, { id }) {
     });
   }
 }
+
+export async function updateLuFile(dispatch, { id, content }) {
+  try {
+    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
+    dispatch({
+      type: ActionTypes.UPDATE_LU_SUCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.UPDATE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
+export async function createLuFile(dispatch, { name, content }) {
+  try {
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id: name, content });
+    dispatch({
+      type: ActionTypes.CREATE_LU_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.CREATE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
+export async function removeLuFile(dispatch, { id }) {
+  try {
+    const response = await axios.delete(`${BASEURL}/projects/opened/luFiles/${id}`);
+    dispatch({
+      type: ActionTypes.REMOVE_LU_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.REMOVE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
