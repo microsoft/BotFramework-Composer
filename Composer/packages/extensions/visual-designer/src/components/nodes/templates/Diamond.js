@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Diamond = ({ condition, onClick, ...rest }) => (
+export const Diamond = ({ text, onClick, ...rest }) => (
   <div
     {...rest}
     style={{
@@ -13,18 +13,26 @@ export const Diamond = ({ condition, onClick, ...rest }) => (
       onClick();
     }}
   >
-    {condition ? (
+    {text ? (
       <div
+        title={text}
         style={{
           position: 'absolute',
           right: '56px',
           fontSize: '12px',
           lineHeight: '19px',
+          maxHeight: '38px',
           maxWidth: '54px',
           color: '#323130',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineClamp: 2,
+          WebkitLineClamp: 2,
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
         }}
       >
-        {condition}
+        {text}
       </div>
     ) : null}
     <svg width="50" height="20" viewBox="0 0 50 20" fill="none" xmlns="http://www.w3.org/2000/svg">
