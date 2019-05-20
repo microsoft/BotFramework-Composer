@@ -20,6 +20,7 @@ const initialState = {
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},
+  projTemplates: [],
 };
 
 export function StoreProvider(props) {

@@ -124,6 +124,11 @@ const clearNavHistory = (state, { fromIndex }) => {
   return state;
 };
 
+const getProjectTemplates = (state, { response }) => {
+  state.projTemplates = response.data;
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.INIT_PROJECT_STATE]: closeCurrentProject,
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
@@ -142,4 +147,5 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.GET_PROJECT_TEMPLATE_SUCCESS]: getProjectTemplates,
 });

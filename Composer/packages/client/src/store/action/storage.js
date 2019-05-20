@@ -26,15 +26,6 @@ export async function fetchStorages(dispatch) {
   }
 }
 
-export async function fetchTemplates() {
-  try {
-    const response = await axios.get(`${BASEURL}/assets/projectTemplates`);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 export async function addNewStorage(dispatch, storageData) {
   try {
     const response = await axios.post(`${BASEURL}/storages`, storageData);

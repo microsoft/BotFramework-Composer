@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
 
@@ -10,15 +10,19 @@ import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content } from './styles';
+import NewBotModal from './NewBotModal';
 
 initializeIcons(/* optional base url */);
 
 export function App() {
   const { state, actions } = useContext(Store);
-  const { botStatus } = state;
+  const [modalOpen, setModalOpen] = useState(false);
+  const { botStatus, projTemplates } = state;
   const { toggleBot, setStorageExplorerStatus } = actions;
+
   useEffect(() => {
     actions.fetchProject();
+    actions.fetchTemplates();
   }, []);
 
   return (
@@ -28,6 +32,7 @@ export function App() {
         setBotStatus={status => {
           toggleBot(status);
         }}
+        openNewModal={() => setModalOpen(true)}
         openStorageExplorer={setStorageExplorerStatus}
       />
       <StorageExplorer />
@@ -41,6 +46,7 @@ export function App() {
           <Routes />
         </div>
       </div>
+      <NewBotModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} templates={projTemplates} />
     </Fragment>
   );
 }

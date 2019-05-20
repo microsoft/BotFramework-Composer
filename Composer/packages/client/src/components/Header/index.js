@@ -18,7 +18,7 @@ const openInEmulator = url => {
 };
 
 export const Header = props => {
-  const { botStatus, setBotStatus, openStorageExplorer } = props;
+  const { botStatus, setBotStatus, openStorageExplorer, openNewModal } = props;
   return (
     <header>
       <div css={headerMain}>
@@ -26,11 +26,7 @@ export const Header = props => {
       </div>
       <div css={headerSub}>
         <div css={actionButton}>
-          <ActionButton
-            css={actionButton}
-            iconProps={{ iconName: 'CirclePlus' }}
-            onClick={() => openStorageExplorer(OpenStatus.NEW)}
-          >
+          <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={openNewModal}>
             {formatMessage('New')}
           </ActionButton>
           <ActionButton
@@ -74,4 +70,5 @@ Header.propTypes = {
   botStatus: PropTypes.string,
   setBotStatus: PropTypes.func,
   openStorageExplorer: PropTypes.func,
+  openNewModal: PropTypes.func,
 };
