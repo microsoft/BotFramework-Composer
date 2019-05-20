@@ -1,5 +1,5 @@
 module.exports = {
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
+  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/serviceWorker.js'],
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
     '\\.(jpg|jpeg|png|svg)$': '<rootDir>/__tests__/jestMocks/styleMock.js',
