@@ -110,7 +110,8 @@ export class BotProject {
     for (const index in prevFiles) {
       const file = prevFiles[index];
       const absolutePath = Path.join(this.dir, file.relativePath);
-      const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
+      const content =
+        index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
   };
