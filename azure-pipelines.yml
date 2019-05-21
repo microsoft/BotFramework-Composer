@@ -7,6 +7,19 @@ trigger:
 - master
 
 jobs:
+  - job: botproject
+    displayName: BotProject Build
+    pool:
+      name: Hosted macOS
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'BotProject/CSharp/BotProject.csproj'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+
+  
   - job: test
     displayName: Unit Tests
     pool:
