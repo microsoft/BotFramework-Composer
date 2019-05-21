@@ -52,6 +52,7 @@ export function App() {
         onDismiss={() => setModalOpen(false)}
         templates={projTemplates}
         defaultLocation={settings.defaultLocation || ''}
+        onSubmit={actions.createProject}
       />
     </Fragment>
   );

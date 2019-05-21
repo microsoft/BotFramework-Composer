@@ -71,11 +71,12 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
   }
 }
 
-export async function createProject(dispatch, storageId, absolutePath, templateId) {
+export async function createProject(dispatch, { name, templateId, storageId, path }) {
   try {
     const data = {
-      storageId: storageId,
-      path: absolutePath,
+      name,
+      storageId,
+      path,
       templateId,
     };
     const response = await axios.post(`${BASEURL}/projects`, data);

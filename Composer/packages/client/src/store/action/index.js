@@ -4,4 +4,4 @@ export * from './bot.js';
 export * from './storage.js';
 export * from './navigation.js';
 export * from './templates.js';
-export * from './settings.js';
+export * from './settings';

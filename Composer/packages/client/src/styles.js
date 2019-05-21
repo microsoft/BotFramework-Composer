@@ -49,6 +49,7 @@ export const templateItem = isActive => css`
   margin-top: 5px;
   padding-left: 5px;
   background: ${isActive ? SharedColors.cyanBlue10 : NeutralColors.white};
+  color: ${isActive ? NeutralColors.white : NeutralColors.black};
 
   &:hover {
     background: ${isActive ? SharedColors.cyanBlue10 : NeutralColors.gray20};
