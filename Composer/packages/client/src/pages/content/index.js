@@ -16,22 +16,24 @@ export const ContentPage = () => {
   return (
     <Fragment>
       <MainContent>
-        <div css={fileList}>
-          <Tree variant="fill">
-            <div>
-              <div css={title}>{formatMessage('Content')}</div>
-              <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
-                <div css={label}>{formatMessage('Language Understanding')}</div>
-              </NavLink>
-              <NavLink to={'lg'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
-                <div css={label}>{formatMessage('Language Generation')}</div>
-              </NavLink>
-            </div>
-          </Tree>
-        </div>
-        <Conversation extraCss={contentEditor}>
-          <Routes />
-        </Conversation>
+        <Fragment>
+          <div css={fileList}>
+            <Tree variant="fill">
+              <div>
+                <div css={title}>{formatMessage('Content')}</div>
+                <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
+                  <div css={label}>{formatMessage('Language Understanding')}</div>
+                </NavLink>
+                <NavLink to={'lg'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
+                  <div css={label}>{formatMessage('Language Generation')}</div>
+                </NavLink>
+              </div>
+            </Tree>
+          </div>
+          <Conversation extraCss={contentEditor}>
+            <Routes />
+          </Conversation>
+        </Fragment>
       </MainContent>
     </Fragment>
   );
