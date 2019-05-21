@@ -22,7 +22,7 @@ export const Header = props => {
   return (
     <header>
       <div css={headerMain}>
-        <div css={aside}>Composer</div>
+        <div css={aside}>{formatMessage('Bot Framework Designer')}</div>
       </div>
       <div css={headerSub}>
         <div css={actionButton}>

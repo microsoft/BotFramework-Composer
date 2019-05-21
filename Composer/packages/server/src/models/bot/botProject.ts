@@ -45,11 +45,18 @@ export class BotProject {
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       botFile: this.getBotFile(),
+      schemas: this.getSchemas(),
     };
   };
 
   public getBotFile = () => {
     return this.files[0];
+  };
+
+  public getSchemas = () => {
+    return {
+      editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
+    };
   };
 
   public updateBotFile = async (name: string, content: any) => {
@@ -103,7 +110,8 @@ export class BotProject {
     for (const index in prevFiles) {
       const file = prevFiles[index];
       const absolutePath = Path.join(this.dir, file.relativePath);
-      const content = index === '0' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
+      const content =
+        index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
   };
@@ -155,6 +163,23 @@ export class BotProject {
         path: this.absolutePath,
         relativePath: Path.relative(this.dir, this.absolutePath),
       });
+
+      if (botConfig.schemas) {
+        if (botConfig.schemas.editor) {
+          const editorSchemaFile = await this.fileStorage.readFile(`${this.dir}/${botConfig.schemas.editor}`);
+          try {
+            const editorSchema = JSON.parse(editorSchemaFile);
+            fileList.push({
+              name: 'editorSchema',
+              content: editorSchema,
+              path: `${this.dir}/${botConfig.schemas.editor}`,
+              relativePath: botConfig.schemas.editor,
+            });
+          } catch {
+            throw new Error('Attempt to parse editor schema as JSON failed');
+          }
+        }
+      }
 
       for (const pattern of botConfig.files) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
