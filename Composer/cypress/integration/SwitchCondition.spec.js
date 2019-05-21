@@ -16,7 +16,7 @@ context('SwitchCondition', () => {
 
     // Focus switch condition in form editor
     cy.withinEditor('VisualEditor', () => {
-      cy.getByTestId('SwitchConditionDiamond').click();
+      cy.getByTestId('SwitchConditionDiamond').click({ force: true });
     });
 
     // Add case and add/delete/edit steps
