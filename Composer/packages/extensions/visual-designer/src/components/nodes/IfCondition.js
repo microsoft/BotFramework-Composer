@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
@@ -11,6 +11,7 @@ import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
 import { Diamond } from './templates/Diamond';
+import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
@@ -60,7 +61,7 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
         <Diamond
           text={data.condition}
           onClick={() => {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }}
         />
       </OffsetContainer>
@@ -83,6 +84,9 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
       {edges.map(x => (
         <Edge key={x.id} {...x} />
       ))}
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <NodeMenu id={id} onEvent={onEvent} />
+      </div>
     </div>
   );
 };

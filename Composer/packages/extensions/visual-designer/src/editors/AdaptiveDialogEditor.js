@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
-import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
 import { RecognizerGroup, StepGroup } from '../components/groups';
@@ -31,7 +31,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeClickActionTypes.Focus, '');
+        onEvent(NodeEventTypes.Focus, '');
       }}
     >
       {dialog ? (

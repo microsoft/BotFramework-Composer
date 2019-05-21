@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
@@ -11,6 +11,7 @@ import { transformSwitchCondition } from '../../transformers/transformSwitchCond
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
 
 import { Diamond } from './templates/Diamond';
+import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
@@ -58,7 +59,7 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
           data-testid="SwitchConditionDiamond"
           text={data.condition}
           onClick={() => {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }}
         />
       </OffsetContainer>
@@ -77,6 +78,9 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
         </OffsetContainer>
       ))}
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <NodeMenu id={id} onEvent={onEvent} />
+      </div>
     </div>
   );
 };

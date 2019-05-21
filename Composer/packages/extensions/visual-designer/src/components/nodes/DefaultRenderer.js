@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
@@ -65,10 +66,11 @@ export class DefaultRenderer extends React.Component {
       <FormCard
         themeColor="#00B294"
         header={header}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={label}
         details={details}
         onClick={() => {
-          onEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, id);
         }}
       />
     );

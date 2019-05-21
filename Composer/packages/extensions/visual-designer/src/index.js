@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from './editors/ObiEditor';
+
+initializeIcons(/* optional base url */);
 
 export default class VisualDesigner extends Component {
   /**
@@ -22,7 +25,7 @@ export default class VisualDesigner extends Component {
   };
 
   render() {
-    const { navPath, data, shellApi } = this.props;
+    const { navPath, data, shellApi, onChange } = this.props;
     const { navDown, focusTo, navTo } = shellApi;
 
     return (
@@ -33,6 +36,7 @@ export default class VisualDesigner extends Component {
           onSelect={x => focusTo(this.normalizeDataPath(x))}
           onExpand={x => navDown(this.normalizeDataPath(x))}
           onOpen={x => navTo(this.normalizeDataPath(x) + '#')}
+          onChange={x => onChange(x)}
         />
       </div>
     );

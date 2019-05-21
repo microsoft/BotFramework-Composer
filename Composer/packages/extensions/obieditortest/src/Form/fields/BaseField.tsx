@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createTheme } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
@@ -38,8 +38,24 @@ interface BaseFieldProps<T> {
   title?: string;
 }
 
+const overrideDefaults = {
+  title: undefined,
+  description: undefined,
+};
+
 function RootDialog(props) {
-  const { title, name, description, schema, formData } = props;
+  const { title, name, description, schema, formData, formContext } = props;
+  const [hasLoadedSchemas, setHasLoadedSchemas] = useState(false);
+  const [templateOverrides, setTemplateOverrides] = useState(overrideDefaults);
+
+  useEffect(() => {
+    formContext.shellApi.getState().then(state => {
+      setHasLoadedSchemas(true);
+      if (state.schemas.editor) {
+        setTemplateOverrides(state.schemas.editor.content.fieldTemplateOverrides.BaseField);
+      }
+    });
+  }, []);
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
@@ -49,14 +65,22 @@ function RootDialog(props) {
 
   return (
     <div id={props.id}>
-      <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
-        {title || schema.title || startCase(name)}
-      </h3>
-      {(description || schema.description) && (
-        <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
-          {description || schema.description}
-        </p>
-      )}
+      {hasLoadedSchemas &&
+        (templateOverrides.title === false ? null : (
+          <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
+            {title || schema.title || startCase(name)}
+          </h3>
+        ))}
+      {hasLoadedSchemas &&
+        (templateOverrides.description === false
+          ? null
+          : (description || schema.description) && (
+              <p
+                className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}
+              >
+                {description || schema.description}
+              </p>
+            ))}
       {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
       {props.children}
     </div>
@@ -68,7 +92,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const isRoot = idSchema.__id === formContext.rootId;
 
   return isRoot ? (
-    <RootDialog {...props} key={idSchema.__id} id={idSchema.__id}>
+    <RootDialog {...props} key={idSchema.__id} id={idSchema.__id} formContext={formContext}>
       {children}
     </RootDialog>
   ) : (

@@ -1,9 +1,8 @@
 {
-    "services": [
-    ],
-    "files": [
-       "*.dialog",
-       "*.lg"
-    ],
-    "entry": "ToDoLuisBot.main.dialog"
+  "services": [],
+  "schemas": {
+    "editor": "editor.schema"
+  },
+  "files": ["*.dialog", "*.lg"],
+  "entry": "ToDoLuisBot.main.dialog"
 }

@@ -4,7 +4,12 @@
     {
       "$type": "Microsoft.SaveEntity",
       "entity": "title",
-      "property": "dialog.todo"
+      "property": "dialog.todo",
+      "$designer": {
+        "createdAt": "2019-05-19T15:50:09.467Z",
+        "updatedAt": "2019-05-19T15:50:09.475Z",
+        "id": "403945"
+      }
     },
     {
       "$type": "Microsoft.IfCondition",

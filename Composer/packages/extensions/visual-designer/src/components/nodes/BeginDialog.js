@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
+import { NodeMenu } from './templates/NodeMenu';
 
 export class BeginDialog extends React.Component {
   renderCallDialogLink() {
@@ -20,7 +21,7 @@ export class BeginDialog extends React.Component {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeClickActionTypes.OpenLink, calleeDialog);
+          onEvent(NodeEventTypes.OpenLink, calleeDialog);
         }}
       >
         {calleeDialog}
@@ -34,9 +35,10 @@ export class BeginDialog extends React.Component {
       <FormCard
         themeColor="#107C10"
         header={getFriendlyName(data) || 'BeginDialog'}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
-          onEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, id);
         }}
       />
     );
