@@ -141,6 +141,25 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
 
+  async removeFile(path: string): Promise<void> {
+    const names = path.split('/').filter(i => i.length);
+    if (names.length <= 1) {
+      throw new Error('path must include container name and blob name');
+    }
+    const blobPath = names.slice(1).join('/');
+
+    return new Promise((resolve, reject) => {
+      this.client.deleteBlob(names[0], blobPath, err => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   async mkDir(path: string): Promise<void> {
     const names = path.split('/').filter(i => i.length);
     if (names.length < 1) {

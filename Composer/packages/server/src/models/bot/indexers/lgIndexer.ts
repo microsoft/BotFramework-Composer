@@ -62,4 +62,12 @@ export class LGIndexer {
     this.lgFiles.push({ id, templates: [], absolutePath });
     return templates;
   };
+
+  public removeLgFile = (id: string) => {
+    const itemIndex = this.lgFiles.findIndex(lgFile => {
+      return id === lgFile.id;
+    });
+
+    return this.lgFiles.splice(itemIndex, 1);
+  };
 }

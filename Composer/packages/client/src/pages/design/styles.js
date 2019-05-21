@@ -1,10 +1,6 @@
 import { css } from '@emotion/core';
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
-
-export const contentContainer = css`
-  display: flex;
-  height: calc(99vh - 50px);
-`;
+import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const projectContainer = css`
   display: flex;
@@ -12,21 +8,19 @@ export const projectContainer = css`
   flex-grow: 0;
   flex-shrink: 0;
   width: 255px;
-  margin-left: 20px;
-  margin-top: 20px;
 `;
 
-export const projectWrapper = css`
-  padding: 10px;
-  color: #4f4f4f;
-`;
+export const projectWrapper = css``;
 
 export const projectHeader = css`
   font-weight: bold;
-  margin-bottom: 5px;
+  padding: 7px 10px;
+  line-height: 14px;
+  font-size: ${FontSizes.medium};
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: ${NeutralColors.gray20};
 `;
 
 export const projectTree = css`
@@ -42,11 +36,8 @@ export const assetTree = css`
 export const editorContainer = css`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 20px);
+  height: 100%;
   flex-grow: 4;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
 `;
 
 export const editorWrapper = css`
@@ -59,6 +50,7 @@ export const visualEditor = css`
   height: 100%;
   flex: 1;
   border: 0px;
+  background-color: ${NeutralColors.gray20};
   min-height: 80vh;
 `;
 
@@ -72,21 +64,16 @@ export const formEditor = css`
 
 export const breadcrumbClass = mergeStyleSets({
   root: {
-    marginTop: '5px',
-    marginLeft: '10px',
-  },
-  listItem: {
-    alignItems: 'baseline',
+    margin: '0',
+    padding: '10px',
   },
   itemLink: {
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: '#4f4f4f',
-    paddingRight: '4px',
-    paddingLeft: '4px',
+    fontSize: FontSizes.medium,
+    fontWeight: FontWeights.bold,
+    padding: '4px 8px',
   },
   chevron: {
-    fontSize: '8px',
-    fontWeight: 'bold',
+    fontSize: FontSizes.mini,
+    fontWeight: FontWeights.bold,
   },
 });

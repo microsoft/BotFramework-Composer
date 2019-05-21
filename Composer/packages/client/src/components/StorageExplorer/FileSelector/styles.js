@@ -15,10 +15,11 @@ export const backIcon = css`
 `;
 
 export const detailListContainer = css`
+  position: relative;
   padding-top: 20px;
-  height: calc(100% - 14px);
-  overflow-x: hidden;
-  width: 640px;
+  overflow: hidden;
+  width: 645px;
+  flex-grow: 1;
 `;
 
 export const fileSelectorContainer = css`
