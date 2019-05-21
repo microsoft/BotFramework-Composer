@@ -37,6 +37,7 @@
     "@babel/plugin-proposal-class-properties": "7.3.4",
     "@babel/preset-env": "7.3.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/archiver": "^3.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
     "@types/debug": "^4.1.2",
@@ -64,6 +65,8 @@
   },
   "dependencies": {
     "@types/rimraf": "^2.0.2",
+    "archiver": "^3.0.0",
+    "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.1.tgz",

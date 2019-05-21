@@ -1,76 +1,53 @@
-import childprocess from 'child_process';
+import fs from 'fs';
 
-import { LocationRef } from '../bot/interface';
+import axios from 'axios';
+import archiver from 'archiver';
+
+import BotProjectService from '../../services/project';
 
 import { IBotConnector, BotStatus } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
-  private path: string;
+  private endpoint: string;
 
-  private child: childprocess.ChildProcess | undefined;
-  constructor(pathConfig: any) {
-    this.path = pathConfig.path;
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
   }
 
-  public status: BotStatus = BotStatus.Stopped;
+  public status: BotStatus = BotStatus.NotConnected;
 
-  start = (proj: LocationRef) => {
-    const realBotPath = proj.path;
-
-    console.log(`command: 'bot build' at ${this.path}`);
-    const buildProcess = childprocess.spawnSync('dotnet', [`build`], { cwd: `${this.path}` });
-
-    if (buildProcess.stdout) {
-      const stdout = String(buildProcess.stdout);
-
-      if (buildProcess.status !== 0) {
-        console.error(stdout);
-        throw new Error('unable to build bot project');
-      } else {
-        console.log(stdout);
-      }
+  connect = async () => {
+    // confirm bot runtime is listening here
+    try {
+      await axios.get(this.endpoint + '/api/reload');
+    } catch (err) {
+      throw new Error(err);
     }
 
-    console.log('command: ' + `$dotnet bin/Debug/netcoreapp2.1/BotProject.dll ` + `--bot:path=${realBotPath}`);
-    this.child = childprocess.spawn(
-      'dotnet',
-      [`bin/Debug/netcoreapp2.1/BotProject.dll`, `--bot:path=${realBotPath}`, '--urls', `http://localhost:3979`],
-      {
-        detached: true,
-        cwd: `${this.path}`,
-      }
-    );
+    this.status = BotStatus.NotConnected;
+  };
 
-    if (this.child.stdout !== null) {
-      this.child.stdout.on('data', (data: any) => {
-        console.log(`stdout: ${data}`);
-      });
+  sync = async () => {
+    // archive the project
+    // send to bot runtime service
+    if (BotProjectService.currentBotProject === undefined) {
+      throw new Error('no project is opened, nothing to sync');
     }
+    const dir = BotProjectService.currentBotProject.dir;
+    await this.archiveDirectory(dir, './tmp.zip');
+  };
 
-    if (this.child.stderr !== null) {
-      this.child.stderr.on('data', (data: any) => {
-        console.log(`stderr: ${data}`);
-      });
-    }
+  archiveDirectory = (src: string, dest: string) => {
+    return new Promise((resolve, reject) => {
+      const archive = archiver('zip');
+      const output = fs.createWriteStream(dest);
 
-    this.child.on('error', (err: any) => {
-      console.log(`stderr: ${err}`);
+      archive.pipe(output);
+      archive.directory(src, false);
+      archive.finalize();
+
+      output.on('close', () => resolve(archive));
+      archive.on('error', err => reject(err));
     });
-
-    this.status = BotStatus.Running;
-    return true;
-  };
-
-  stop = () => {
-    console.log(`Stopping launcher`);
-    if (this.child !== undefined) {
-      this.child.kill();
-    }
-    this.status = BotStatus.Stopped;
-    return true;
-  };
-
-  inspect = () => {
-    return true;
   };
 }

@@ -18,7 +18,7 @@ export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botStatus } = state;
-  const { toggleBot, setStorageExplorerStatus } = actions;
+  const { connectBot, reloadBot, setStorageExplorerStatus } = actions;
   useEffect(() => {
     actions.fetchProject();
   }, []);
@@ -27,9 +27,8 @@ export function App() {
     <Fragment>
       <Header
         botStatus={botStatus}
-        setBotStatus={status => {
-          toggleBot(status);
-        }}
+        connectBot={connectBot}
+        reloadBot={reloadBot}
         openStorageExplorer={setStorageExplorerStatus}
       />
       <StorageExplorer />

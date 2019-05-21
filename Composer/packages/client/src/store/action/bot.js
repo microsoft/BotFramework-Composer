@@ -3,21 +3,36 @@ import axios from 'axios';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { clearNavHistory } from './navigation';
 
-export async function toggleBot(dispatch, status) {
-  const path = `launcher/${status === 'stopped' ? 'start' : 'stop'}`;
+export async function connectBot(dispatch) {
+  const path = `${BASEURL}/launcher/connect`;
   try {
-    await axios.get(`${BASEURL}/${path}`);
+    await axios.get(path);
     dispatch({
-      type: ActionTypes.SET_BOT_STATUS_SUCCESS,
+      type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
-        status: status === 'stopped' ? 'running' : 'stopped',
+        status: 'connected',
       },
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.SET_BOT_STATUS_FAILURE,
-      payload: null,
-      error: err,
+      type: ActionTypes.CONNECT_BOT_FAILURE,
+      payload: {
+        error: err,
+      },
+    });
+  }
+}
+
+export async function reloadBot(dispatch) {
+  const path = `${BASEURL}/launcher/sync`;
+  try {
+    await axios.get(path);
+    dispatch({
+      type: ActionTypes.RELOAD_BOT_SUCCESS,
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.RELOAD_BOT_FAILURE,
     });
   }
 }
