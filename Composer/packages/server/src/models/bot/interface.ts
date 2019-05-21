@@ -7,6 +7,10 @@ export interface BotProjectFileContent {
   files: string[];
   services: string[];
   entry: string;
+  schemas?: {
+    editor?: string;
+    sdk?: string;
+  };
 }
 
 export interface FileInfo {
