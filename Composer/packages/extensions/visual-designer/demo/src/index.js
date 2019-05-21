@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from '../../src/editors/ObiEditor';
 
 import { JsonBlock } from './components/json-block';
 import { ObiExamples } from './samples';
 import './style.css';
+
+initializeIcons(/* optional base url */);
 
 const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
@@ -67,9 +70,15 @@ class Demo extends Component {
           <div className="block block--right">
             <ObiEditor
               data={obiJson}
+              path={selectedFile}
               onSelect={logEventThunk('select')}
               onExpand={logEventThunk('expand')}
               onOpen={logEventThunk('open')}
+              onChange={json => {
+                this.setState({
+                  obiJson: json,
+                });
+              }}
             />
           </div>
         </div>

@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { ObiTypes } from '../../shared/ObiTypes';
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class IntentRule extends React.Component {
@@ -23,7 +24,7 @@ export class IntentRule extends React.Component {
             }}
             onClick={e => {
               e.stopPropagation();
-              this.props.onEvent(NodeClickActionTypes.OpenLink, normalizedStep.dialog);
+              this.props.onEvent(NodeEventTypes.OpenLink, normalizedStep.dialog);
             }}
           >
             {normalizedStep.dialog}
@@ -41,13 +42,14 @@ export class IntentRule extends React.Component {
       <FormCard
         themeColor="#0078D4"
         header={getFriendlyName(data) || intent}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.getDetails()}
         icon="MessageBot"
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
-            onEvent(NodeClickActionTypes.Expand, id);
+            onEvent(NodeEventTypes.Expand, id);
           } else {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }
         }}
       />
