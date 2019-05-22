@@ -129,6 +129,11 @@ const getProjectTemplates = (state, { response }) => {
   return state;
 };
 
+const getSettings = (state, { response }) => {
+  state.settings = response.data;
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.INIT_PROJECT_STATE]: closeCurrentProject,
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
@@ -148,4 +153,5 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.GET_PROJECT_TEMPLATE_SUCCESS]: getProjectTemplates,
+  [ActionTypes.GET_SETTINGS_SUCCESS]: getSettings,
 });

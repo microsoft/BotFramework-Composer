@@ -1,3 +1,4 @@
+import { SettingController } from './../controllers/setting';
 import express, { Router } from 'express';
 
 import { ProjectController } from '../controllers/project';
@@ -31,5 +32,8 @@ router.get('/launcher/status', BotConnectorController.status);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
+
+//settings
+router.get('/settings', SettingController.getSettings);
 
 export const apiRouter = router;

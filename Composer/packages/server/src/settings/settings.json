@@ -3,5 +3,9 @@
         "type": "CSharp",
         "path": "../../../BotProject/CSharp"
     },
-    "assetsLibray": "./assets"
+    "assetsLibray": "./assets",
+    "defaultLocation": {
+        "storageId": "default",
+        "path": "../../default"
+    },
 }

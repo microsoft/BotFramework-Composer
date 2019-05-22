@@ -17,12 +17,13 @@ initializeIcons(/* optional base url */);
 export function App() {
   const { state, actions } = useContext(Store);
   const [modalOpen, setModalOpen] = useState(false);
-  const { botStatus, projTemplates } = state;
+  const { botStatus, projTemplates, settings } = state;
   const { toggleBot, setStorageExplorerStatus } = actions;
 
   useEffect(() => {
     actions.fetchProject();
     actions.fetchTemplates();
+    actions.fetchSettings();
   }, []);
 
   return (
@@ -46,7 +47,12 @@ export function App() {
           <Routes />
         </div>
       </div>
-      <NewBotModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} templates={projTemplates} />
+      <NewBotModal
+        isOpen={modalOpen}
+        onDismiss={() => setModalOpen(false)}
+        templates={projTemplates}
+        defaultLocation={settings.defaultLocation || ''}
+      />
     </Fragment>
   );
 }

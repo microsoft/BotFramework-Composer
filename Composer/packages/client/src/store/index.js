@@ -21,6 +21,7 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   projTemplates: [],
+  settings: {},
 };
 
 export function StoreProvider(props) {
