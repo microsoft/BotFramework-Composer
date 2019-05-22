@@ -8,8 +8,8 @@ context('Creating a new bot', () => {
   it('can create a bot from the ToDo template', () => {
     cy.getByText('New').click();
     cy.getByText('ToDoBot').click();
-    cy.get('input[data-testid="NewBotProjectInput"]').type('__TestNewProject');
-    cy.getByText('Save').click();
+    cy.get('input[data-testid="NewProjectInput"]').type('__TestNewProject');
+    cy.getByText('Create').click();
     // cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('ToDoBot.main').should('exist');

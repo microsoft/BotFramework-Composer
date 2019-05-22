@@ -17,13 +17,19 @@ describe('<Header />', () => {
   it('should open storage explorer', async () => {
     const mockOpenStorageExplorer = jest.fn(() => null);
     const { findByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
-    const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);
-    fireEvent.click(newButton);
     fireEvent.click(openButton);
     fireEvent.click(saveButton);
-    expect(mockOpenStorageExplorer).toHaveBeenCalledTimes(3);
+    expect(mockOpenStorageExplorer).toHaveBeenCalledTimes(2);
+  });
+
+  it('should open new bot modal', async () => {
+    const mockOpenNewModal = jest.fn(() => null);
+    const { findByText } = render(<Header openNewModal={mockOpenNewModal} />);
+    const newButton = await findByText(/New/);
+    fireEvent.click(newButton);
+    expect(mockOpenNewModal).toHaveBeenCalledTimes(1);
   });
 
   it('should set bot status', async () => {

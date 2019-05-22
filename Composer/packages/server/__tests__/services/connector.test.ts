@@ -12,6 +12,14 @@ const mockSpawn = jest.fn(() => ({
   stdout: { on: mockOn },
   stderr: { on: mockOn },
 }));
+jest.mock('../../src/settings/settings.json', () => {
+  return {
+    botConnector: {
+      type: 'CSharp',
+      path: 'test path',
+    },
+  };
+});
 jest.mock('child_process', () => ({
   spawnSync: () => mockSpawnSync(),
   spawn: () => mockSpawn(),

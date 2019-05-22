@@ -1,10 +1,11 @@
-import { SettingController } from './../controllers/setting';
 import express, { Router } from 'express';
 
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
 import { BotConnectorController } from '../controllers/connector';
 import { AssetController } from '../controllers/asset';
+
+import { SettingController } from './../controllers/setting';
 
 const router: Router = express.Router({});
 

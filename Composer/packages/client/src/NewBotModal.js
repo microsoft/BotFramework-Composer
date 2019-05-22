@@ -59,6 +59,7 @@ export default function NewBotModal(props) {
             required
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
+            data-testid="NewProjectInput"
           />
           <TextField disabled label={formatMessage('Location:')} value={defaultLocation.path || ''} />
           <div>

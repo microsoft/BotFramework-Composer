@@ -1,0 +1,20 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Hello, I'm the echo bot.",
+      "property": "user.input"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "your input is : {user.input}"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-05-22T17:27:49.351Z",
+    "updatedAt": "2019-05-22T17:27:49.402Z",
+    "id": "080036"
+  }
+}
