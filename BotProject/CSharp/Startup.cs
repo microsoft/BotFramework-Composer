@@ -1,34 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility;
+using BotProject.Managers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.LanguageGeneration.Renderer;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.Integration;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Schema;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Debug;
-using System.Diagnostics;
-using System.IO;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -54,10 +36,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
-            IStorage storage = new MemoryStorage();
-            var userState = new UserState(storage);
-            var conversationState = new ConversationState(storage);
-
             // Get Bot file
             string rootDialog = string.Empty;
 
@@ -73,30 +51,10 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             }
             // TODO get rid of this dependency
             TypeFactory.Configuration = this.Configuration;
-
-            // set up bot framework runtime environment (Aka the adapter)
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
-            {
-                var adapter = new BotFrameworkHttpAdapter();
-                adapter
-                    .UseStorage(storage)
-                    .UseState(userState, conversationState)
-                    .UseLanguageGenerator(new LGLanguageGenerator(resourceExplorer))
-                    .UseDebugger(Configuration.GetValue<int>("debugport", 4712))
-                    .UseResourceExplorer(resourceExplorer, () =>
-                    {
-                    });
-                adapter.OnTurnError = async (turnContext, exception) =>
-                {
-                    await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-
-                    await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
-                    await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
-                };
-                return adapter;
-            });
-
-            services.AddSingleton<IBot, TestBot>((sp) => new TestBot(rootDialog, conversationState, resourceExplorer, DebugSupport.SourceRegistry));
+            
+            var botManager = new BotManager();
+            botManager.Push(new BotInjectItem(resourceExplorer, rootDialog, Configuration.GetValue<int>("debugport", 4712)));
+            services.AddSingleton<IBotManager, BotManager>((sp) => botManager);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

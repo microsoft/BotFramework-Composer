@@ -3,20 +3,15 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
 
+using BotProject.Managers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -27,34 +22,31 @@ namespace Microsoft.Bot.Builder.TestBot.Json
     [ApiController]
     public class BotController : ControllerBase
     {
-        private readonly IBotFrameworkHttpAdapter Adapter;
-        private readonly IBot Bot;
+        private readonly IBotManager BotManager;
 
-        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
+        public BotController(IBotManager botManager)
         {
-            Adapter = adapter;
-            Bot = bot;
+            BotManager = botManager;
+        }
+
+        [HttpPost]
+        public async Task PostAsync()
+        {
+            // Delegate the processing of the HTTP POST to the adapter.
+            // The adapter will invoke the bot.
+            await BotManager.Current.Adapter.ProcessAsync(Request, Response, BotManager.Current.Bot);
         }
 
         [HttpPost]
         public async Task PostAsync(ICollection<IFormFile> files)
         {
+            // TODO
+            // Get new IBot, and Adapter
+            // Then BotManager.Push(new BotInjectItem(IBot, Adapter));
             if (files != null && files.Count > 0)
             {
+                // the zip file will be extracted to the folder
                 var folder = await HandleFileResource(files.First());
-                if (!string.IsNullOrEmpty(folder) && Adapter is BotFrameworkHttpAdapter bfAdapter)
-                {
-                    var resourceExplorer = new ResourceExplorer();
-                    resourceExplorer.AddFolder(folder);
-
-                    bfAdapter.UseResourceExplorer(resourceExplorer, () => { });
-                }
-            }
-            else
-            {
-                // Delegate the processing of the HTTP POST to the adapter.
-                // The adapter will invoke the bot.
-                await Adapter.ProcessAsync(Request, Response, Bot);
             }
         }
 
