@@ -1,40 +1,78 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
+import { useContext, useMemo } from 'react';
 import formatMessage from 'format-message';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { navigate } from '@reach/router';
 
-import { LanguageGenerationSettings } from './lg-settings';
-import { Tree } from './../../components/Tree/index';
+import { Store } from '../../store/index';
+
+import Routes from './router';
 import { Conversation } from './../../components/Conversation/index';
-import { NavLink } from './../../components/NavLink/index';
-import { title, label, navLinkClass, fileList } from './styles';
+import { contentContainer } from './styles';
 import { contentEditor } from './styles';
 import { MainContent } from './../../components/MainContent/index';
 
-// todo: should wrap the NavLink to another component.
 export const ContentPage = () => {
+  const { state } = useContext(Store);
+  const { luFiles, lgFiles } = state;
+  const currentPathname = window.location.pathname;
+
+  const currentFileId = useMemo(() => {
+    // currentPathname should be '/content/*/fileId'
+    return currentPathname.split('/')[3];
+  }, [currentPathname]);
+  const groups = useMemo(() => {
+    const lgLinks = lgFiles.map(file => {
+      return {
+        key: file.id,
+        name: `${file.id}.lg`,
+        url: `/content/lg/${file.id}`,
+        forceAnchor: true,
+        onClick: event => {
+          event.preventDefault();
+          navigate(`/content/lg/${file.id}`);
+        },
+      };
+    });
+    const luLinks = luFiles.map(file => {
+      return {
+        key: file.id,
+        name: `${file.id}.lu`,
+        url: `/content/lu/${file.id}`,
+        forceAnchor: true,
+        onClick: event => {
+          event.preventDefault();
+          navigate(`/content/lu/${file.id}`);
+        },
+      };
+    });
+
+    return [
+      {
+        name: formatMessage('Language Understanding'),
+        links: luLinks,
+      },
+      {
+        name: formatMessage('Language Generation'),
+        links: lgLinks,
+      },
+    ];
+  }, [lgFiles, luFiles]);
+
   return (
-    <Fragment>
-      <MainContent>
-        <Fragment>
-          <div css={fileList}>
-            <Tree variant="fill">
-              <div>
-                <div css={title}>{formatMessage('Content')}</div>
-                <NavLink to={'lu'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
-                  <div css={label}>{formatMessage('Language Understanding')}</div>
-                </NavLink>
-                <NavLink to={'lg'} style={navLinkClass.default} activestyle={navLinkClass.activestyle}>
-                  <div css={label}>{formatMessage('Language Generation')}</div>
-                </NavLink>
-              </div>
-            </Tree>
-          </div>
-          <Conversation extraCss={contentEditor}>
-            <LanguageGenerationSettings />
-          </Conversation>
-        </Fragment>
-      </MainContent>
-    </Fragment>
+    <MainContent>
+      <div css={contentContainer}>
+        <Nav
+          styles={{ root: { width: 250 } }}
+          selectedKey={currentFileId}
+          expandButtonAriaLabel="Expand or collapse"
+          groups={groups}
+        />
+        <Conversation extraCss={contentEditor}>
+          <Routes />
+        </Conversation>
+      </div>
+    </MainContent>
   );
 };
