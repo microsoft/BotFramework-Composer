@@ -10,7 +10,6 @@ import { Store } from './store';
 import { ActionSelector } from './components/StorageExplorer/ActionSelector';
 import { body, content, panelContent, panelStyle, title } from './components/StorageExplorer/styles';
 import { LocationSelectContent } from './components/StorageExplorer/LocationSelectContent';
-import { NewContent } from './components/StorageExplorer/NewContent';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
   return <div style={{ height: '0px' }} />;
@@ -59,11 +58,7 @@ export function StorageExplorer() {
         <div css={content}>
           <div css={title}>{formatMessage(storageExplorerStatus)}</div>
           <div css={panelContent}>
-            {storageExplorerStatus === OpenStatus.NEW ? (
-              <NewContent onCloseExplorer={closeExplorer} />
-            ) : (
-              <LocationSelectContent onSaveAs={handleSaveAs} onOpen={handleOpenBot} />
-            )}
+            <LocationSelectContent onSaveAs={handleSaveAs} onOpen={handleOpenBot} />
           </div>
         </div>
       </div>

@@ -12,10 +12,6 @@ import { OpenStatus } from './../../../constants';
 
 const links = [
   {
-    name: formatMessage('New'),
-    key: OpenStatus.NEW,
-  },
-  {
     name: formatMessage('Open'),
     key: OpenStatus.OPEN,
   },

@@ -70,7 +70,6 @@ export const FileTypes = {
 };
 
 export const OpenStatus = {
-  NEW: 'New',
   SAVEAS: 'Save as',
   OPEN: 'Open',
   CLOSE: '',
