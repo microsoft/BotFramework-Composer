@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, replace, startsWith } from 'lodash';
+import { debounce, replace, startsWith, get } from 'lodash';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -42,7 +42,7 @@ export function ShellApi() {
       const data = getDialogData(dialogsMap, navPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
     }
-  }, [dialogs, focusPath, navPath]);
+  }, [dialogs, navPath]);
 
   useEffect(() => {
     if (window.frames[1]) {
@@ -78,20 +78,33 @@ export function ShellApi() {
   // persist value change
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
+    let path = '';
+    switch (sourceWindowName) {
+      case 'VisualEditor':
+        path = navPath;
+        break;
+      case 'FormEditor':
+        path = focusPath;
+        break;
+      default:
+        path = '';
+        break;
+    }
 
-    if (sourceWindowName === 'VisualEditor') {
-      return;
-    } else if (sourceWindowName === 'FormEditor') {
-      const updatedDialog = setDialogData(dialogsMap, focusPath, newData);
-      const dialogName = focusPath.split('#')[0];
-      const payload = {
-        name: dialogName,
-        content: updatedDialog,
-      };
+    if (path !== '') {
+      const updatedDialog = setDialogData(dialogsMap, path, newData);
+      const dialogName = path.split('#')[0];
+      const payload = { name: dialogName, content: updatedDialog };
       updateDialog(payload);
 
-      return true;
+      if (sourceWindowName === 'VisualEditor') {
+        const data = get(updatedDialog, focusPath.split('#')[1]);
+        if (typeof data === 'undefined') {
+          actions.focusTo('');
+        }
+      }
     }
+    return true;
   }
 
   function flushUpdates() {

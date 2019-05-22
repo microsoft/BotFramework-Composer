@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
+import { deleteNode } from '../shared/jsonTracker';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
+import './ObiEditor.css';
 
 export class ObiEditor extends Component {
   state = {
     prevPath: '',
     focusedId: '',
+    prevData: null,
+    dataVersion: 0,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -18,24 +22,35 @@ export class ObiEditor extends Component {
       return {
         prevPath: props.path,
         focusedId: '',
+        prevData: props.data,
+        dataVersion: 0,
+      };
+    }
+    if (props.data !== state.prevData) {
+      return {
+        prevData: props.data,
+        dataVersion: state.dataVersion + 1,
       };
     }
     return null;
   }
 
   dispatchEvent(eventName, eventData) {
-    const { onSelect, onExpand, onOpen } = this.props;
+    const { onSelect, onExpand, onOpen, onChange } = this.props;
 
     let handler;
     switch (eventName) {
-      case NodeClickActionTypes.Focus:
+      case NodeEventTypes.Focus:
         handler = onSelect;
         break;
-      case NodeClickActionTypes.Expand:
+      case NodeEventTypes.Expand:
         handler = onExpand;
         break;
-      case NodeClickActionTypes.OpenLink:
+      case NodeEventTypes.OpenLink:
         handler = onOpen;
+        break;
+      case NodeEventTypes.Delete:
+        handler = e => onChange(deleteNode(this.props.data, e.id));
         break;
       default:
         handler = onSelect;
@@ -65,12 +80,19 @@ export class ObiEditor extends Component {
     const ChosenEditor = this.chooseEditor(data.$type);
     return (
       <div
+        tabIndex="0"
         className="obi-editor-container"
         data-testid="obi-editor-container"
         style={{ width: '100%', height: '100%' }}
+        onKeyUp={e => {
+          const keyString = e.key;
+          if (keyString === 'Delete' && this.state.focusedId) {
+            this.dispatchEvent(NodeEventTypes.Delete, { id: this.state.focusedId });
+          }
+        }}
       >
         <ChosenEditor
-          key={path}
+          key={path + '/' + this.state.dataVersion}
           id={path}
           data={this.props.data}
           expanded={true}
@@ -88,6 +110,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   onExpand: () => {},
   onOpen: () => {},
+  onChange: () => {},
 };
 
 ObiEditor.propTypes = {
@@ -97,4 +120,5 @@ ObiEditor.propTypes = {
   onSelect: PropTypes.func,
   onExpand: PropTypes.func,
   onOpen: PropTypes.func,
+  onChange: PropTypes.func,
 };

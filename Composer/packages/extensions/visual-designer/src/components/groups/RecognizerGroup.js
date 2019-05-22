@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 import { EventGroup } from './EventGroup';
 import { IntentGroup } from './IntentGroup';
@@ -31,7 +31,7 @@ export const RecognizerGroup = ({ data, focusedId, onEvent }) => {
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeClickActionTypes.Focus, '');
+        onEvent(NodeEventTypes.Focus, '');
       }}
     >
       {renderElement(eventGroup, EventGroup)}
