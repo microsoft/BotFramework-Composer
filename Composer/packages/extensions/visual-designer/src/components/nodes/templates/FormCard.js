@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { Icon } from '../icons/icon';
+import { ElementWidth, ElementHeight, HeaderHeight } from '../../shared/NodeMeta';
 
-const boxWidth = 170;
-const boxHeight = 50;
-const headerHeight = 24;
+const boxWidth = ElementWidth;
+const boxHeight = ElementHeight;
+const headerHeight = HeaderHeight;
 const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
@@ -38,10 +39,12 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
         lineHeight: '19px',
         color: '#ffffff',
         paddingLeft: '8px',
+        paddingTop: '5px',
+        boxSizing: 'border-box',
       }}
     >
       <span>{header}</span>
-      <div style={{ position: 'absolute', top: 3, right: 0 }}>{corner}</div>
+      <div style={{ position: 'absolute', top: 8, right: 0 }}>{corner}</div>
     </div>
     <div
       className="card__content"
@@ -54,7 +57,7 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
         style={{
           fontWeight: '400',
           paddingLeft: '5px',
-          marginTop: '5px',
+          marginTop: '6px',
           fontSize: '14px',
           lineHeight: '19px',
           display: 'flex',

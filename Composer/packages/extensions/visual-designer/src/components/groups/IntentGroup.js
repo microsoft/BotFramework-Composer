@@ -3,14 +3,15 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
+import { ElementWidth, ElementHeight } from '../shared/NodeMeta';
 
-const IntentPaddingX = 18;
-const IntentPaddingY = 20;
-const IntentElementHeight = 50;
-const IntentElementWidth = 170;
-const IntentBlockWidth = IntentElementWidth + 2 * IntentPaddingX;
+const IntentBlockPaddingX = 70;
+const IntentPaddingX = 17;
+const IntentPaddingY = 32;
+const IntentElementHeight = ElementHeight;
+const IntentElementWidth = ElementWidth;
+const IntentBlockWidth = (IntentElementWidth + IntentPaddingX + IntentBlockPaddingX + 1) * 2; // border: 1px
 const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
-const BonusHeight = 50;
 
 export class IntentGroup extends React.Component {
   containerElement;
@@ -41,16 +42,16 @@ export class IntentGroup extends React.Component {
   render() {
     const { data } = this.props;
     const intents = data.children || [];
-
     const width = IntentBlockWidth;
-    const height = IntentBlockHeight * intents.length + BonusHeight;
+    const height = IntentBlockHeight * Math.round(intents.length / 2);
 
     return (
       <div
         style={{
           width,
           height,
-          border: '0.25px solid #000000',
+          padding: `0 ${IntentBlockPaddingX}px ${IntentPaddingY}px`,
+          border: '1px solid #A4A4A4',
           boxSizing: 'border-box',
         }}
         ref={el => {
@@ -58,13 +59,16 @@ export class IntentGroup extends React.Component {
           this.propagateBoundary();
         }}
       >
-        {intents.map(x => (
+        {intents.map((x, index) => (
           <div
             key={x.id + 'block'}
             style={{
-              padding: `${IntentPaddingY}px ${IntentPaddingX}px`,
+              padding: `${IntentPaddingY}px ${index % 2 === 0 ? IntentPaddingX : 0}px 0 ${
+                index % 2 === 0 ? 0 : IntentPaddingX
+              }px`,
               height: IntentBlockHeight,
               boxSizing: 'border-box',
+              display: 'inline-block',
             }}
           >
             {this.renderIntent(x)}

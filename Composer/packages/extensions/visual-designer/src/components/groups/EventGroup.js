@@ -3,10 +3,11 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
+import { ElementWidth, ElementHeight } from '../shared/NodeMeta';
 
 const EventGroupTitleHeight = 30;
-const EventElemetHeight = 50;
-const EventElemetWidth = 170;
+const EventElemetHeight = ElementHeight;
+const EventElemetWidth = ElementWidth;
 const EventMarginX = 5;
 const EventMarginY = 10;
 const EventBlockHeight = EventElemetHeight + 2 * EventMarginY;

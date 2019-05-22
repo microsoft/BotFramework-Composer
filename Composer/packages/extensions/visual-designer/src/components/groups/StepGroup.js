@@ -7,10 +7,11 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
+import { ElementWidth, ElementHeight } from '../shared/NodeMeta';
 
 const StepInterval = 20;
-const InitStepWidth = 170;
-const InitStepHeight = 50;
+const InitStepWidth = ElementWidth;
+const InitStepHeight = ElementHeight;
 
 const calculateNodes = data => {
   if (data && data.children && Array.isArray(data.children)) {
