@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { fireEvent, render, cleanup } from 'react-testing-library';
+import { fireEvent, render } from 'react-testing-library';
 import { SharedColors } from '@uifabric/fluent-theme';
 
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/index.js';
 
 describe('<ProjectTree/>', () => {
-  afterEach(cleanup);
   it('should render the projecttree', async () => {
     const { findByText } = render(<ProjectTree files={dialogs} />);
 

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render } from 'react-testing-library';
+import { fireEvent, render } from 'react-testing-library';
 
 import { Header } from '../../src/components/Header';
 
 describe('<Header />', () => {
-  afterEach(cleanup);
   it('should render the header', () => {
     const { container } = render(<Header />);
 

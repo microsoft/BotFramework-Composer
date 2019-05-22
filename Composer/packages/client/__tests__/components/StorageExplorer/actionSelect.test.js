@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { fireEvent, render, cleanup } from 'react-testing-library';
+import { fireEvent, render } from 'react-testing-library';
 
 import { ActionSelector } from './../../../src/components/StorageExplorer/ActionSelector/index';
 
 describe('<ActionSelect/>', () => {
-  afterEach(cleanup);
   it('should render the new storage modal', () => {
     const { container } = render(<ActionSelector />);
 
