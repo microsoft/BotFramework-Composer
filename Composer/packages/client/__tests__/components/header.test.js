@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render, waitForElement } from 'react-testing-library';
+import { cleanup, fireEvent, render } from 'react-testing-library';
 
 import { Header } from '../../src/components/Header';
 
 describe('<Header />', () => {
   afterEach(cleanup);
-
   it('should render the header', () => {
     const { container } = render(<Header />);
 
@@ -18,10 +17,10 @@ describe('<Header />', () => {
 
   it('should open storage explorer', async () => {
     const mockOpenStorageExplorer = jest.fn(() => null);
-    const { getByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
-    const newButton = await waitForElement(() => getByText(/New/));
-    const openButton = await waitForElement(() => getByText(/Open/));
-    const saveButton = await waitForElement(() => getByText(/Save as/));
+    const { findByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
+    const newButton = await findByText(/New/);
+    const openButton = await findByText(/Open/);
+    const saveButton = await findByText(/Save as/);
     fireEvent.click(newButton);
     fireEvent.click(openButton);
     fireEvent.click(saveButton);
@@ -30,14 +29,14 @@ describe('<Header />', () => {
 
   it('should set bot status', async () => {
     const mockSetBotStatus = jest.fn(() => null);
-    const { getByText, rerender } = render(<Header setBotStatus={mockSetBotStatus} botStatus={'stopped'} />);
+    const { findByText, rerender } = render(<Header setBotStatus={mockSetBotStatus} botStatus={'stopped'} />);
 
-    const startButton = await waitForElement(() => getByText(/Start/));
+    const startButton = await findByText(/Start/);
     fireEvent.click(startButton);
     expect(mockSetBotStatus).toHaveBeenCalled();
 
     rerender(<Header setBotStatus={mockSetBotStatus} botStatus={'running'} />);
-    const connectButton = await waitForElement(() => getByText('Connect and Test'));
+    const connectButton = await findByText(/Connect and Test/);
     fireEvent.click(connectButton);
   });
 });
