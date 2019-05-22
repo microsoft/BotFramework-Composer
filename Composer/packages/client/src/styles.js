@@ -22,16 +22,25 @@ export const content = css`
 `;
 
 export const newBotModal = {
-  main: { maxWidth: '500px', width: '100%' },
+  main: { maxWidth: '600px', width: '60vw' },
 };
 
 export const newContainer = css`
-  padding: 30px;
+  padding: 27px 36px 29px 39px;
 `;
 
 export const newModalTitle = css`
-  font-weight: ${FontWeights.bold};
-  font-size: ${FontSizes.large};
+  font-weight: ${FontWeights.semibold};
+  font-size: ${FontSizes.icon};
+  line-height: 19px;
+`;
+
+export const newModalForm = css`
+  margin-top: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 460px;
 `;
 
 export const templateList = css`
@@ -57,7 +66,6 @@ export const templateItem = isActive => css`
 `;
 
 export const actionWrap = css`
-  margin-top: 40px;
   display: flex;
   justify-content: flex-end;
 `;

@@ -6,6 +6,6 @@
     "assetsLibray": "./assets",
     "defaultLocation": {
         "storageId": "default",
-        "path": "../../default"
+        "path": "../../../default"
     },
 }

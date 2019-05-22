@@ -7,7 +7,7 @@ import { LocationRef } from '../models/bot/interface';
 async function createProject(req: Request, res: Response) {
   const locationRef: LocationRef = {
     storageId: req.body.storageId,
-    path: req.body.path,
+    path: `${req.body.path}/${req.body.name}/bot.botproj`,
   };
   try {
     await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
@@ -17,7 +17,7 @@ async function createProject(req: Request, res: Response) {
       res.status(200).json({ ...project });
     }
   } catch (err) {
-    res.status(404).json({ error: 'Create bot project error' });
+    res.status(404).json({ error: err.message });
   }
 }
 

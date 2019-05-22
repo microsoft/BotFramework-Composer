@@ -37,6 +37,9 @@ export class AssetManager {
     const template = find(this.projectTemplates, { id: templateId });
     if (template !== undefined && template.path !== undefined) {
       const dir = Path.dirname(Path.resolve(ref.path));
+      if (this.templateStorage.exists(dir)) {
+        throw new Error('Duplicate folder name');
+      }
       await this.templateStorage.mkDir(dir);
       await this._copy(template.path, dir);
     }

@@ -36,6 +36,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
       payload: { response },
     });
     if (dialogs && dialogs.length > 0) {
+      clearNavHistory(dispatch);
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
@@ -86,9 +87,11 @@ export async function createProject(dispatch, { name, templateId, storageId, pat
       payload: { response },
     });
     if (dialogs && dialogs.length > 0) {
+      clearNavHistory(dispatch);
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
+    alert(err.response.data.error);
     dispatch({
       type: ActionTypes.GET_PROJECT_FAILURE,
       payload: null,
