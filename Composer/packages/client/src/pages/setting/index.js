@@ -14,20 +14,22 @@ export const SettingPage = () => {
   return (
     <Fragment>
       <MainContent>
-        <div css={fileList}>
-          <Tree variant="fill">
-            <div>
-              <div css={title}>{formatMessage('Settings')}</div>
-              <SettingItem to="dialog-settings" label={formatMessage('Dialog settings')} />
-              <SettingItem to="services" label={formatMessage('Services')} />
-              <SettingItem to="composer-configuration" label={formatMessage('Composer configuration')} />
-              <SettingItem to="publishing-staging" label={formatMessage('Publishing and staging')} />
-            </div>
-          </Tree>
-        </div>
-        <Conversation extraCss={contentEditor}>
-          <Routes />
-        </Conversation>
+        <Fragment>
+          <div css={fileList}>
+            <Tree variant="fill">
+              <div>
+                <div css={title}>{formatMessage('Settings')}</div>
+                <SettingItem to="dialog-settings" label={formatMessage('Dialog settings')} />
+                <SettingItem to="services" label={formatMessage('Services')} />
+                <SettingItem to="composer-configuration" label={formatMessage('Composer configuration')} />
+                <SettingItem to="publishing-staging" label={formatMessage('Publishing and staging')} />
+              </div>
+            </Tree>
+          </div>
+          <Conversation extraCss={contentEditor}>
+            <Routes />
+          </Conversation>
+        </Fragment>
       </MainContent>
     </Fragment>
   );
