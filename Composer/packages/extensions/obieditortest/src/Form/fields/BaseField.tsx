@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { createTheme } from 'office-ui-fabric-react';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
@@ -45,17 +45,8 @@ const overrideDefaults = {
 
 function RootDialog(props) {
   const { title, name, description, schema, formData, formContext } = props;
-  const [hasLoadedSchemas, setHasLoadedSchemas] = useState(false);
-  const [templateOverrides, setTemplateOverrides] = useState(overrideDefaults);
 
-  useEffect(() => {
-    formContext.shellApi.getState().then(state => {
-      setHasLoadedSchemas(true);
-      if (state.schemas.editor) {
-        setTemplateOverrides(state.schemas.editor.content.fieldTemplateOverrides.BaseField);
-      }
-    });
-  }, []);
+  const templateOverrides = get(formContext.editorSchema, 'content.fieldTemplateOverrides.BaseField', overrideDefaults);
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
@@ -65,22 +56,18 @@ function RootDialog(props) {
 
   return (
     <div id={props.id}>
-      {hasLoadedSchemas &&
-        (templateOverrides.title === false ? null : (
-          <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
-            {title || schema.title || startCase(name)}
-          </h3>
-        ))}
-      {hasLoadedSchemas &&
-        (templateOverrides.description === false
-          ? null
-          : (description || schema.description) && (
-              <p
-                className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}
-              >
-                {description || schema.description}
-              </p>
-            ))}
+      {templateOverrides.title === false ? null : (
+        <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
+          {title || schema.title || startCase(name)}
+        </h3>
+      )}
+      {templateOverrides.description === false
+        ? null
+        : (description || schema.description) && (
+            <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
+              {description || schema.description}
+            </p>
+          )}
       {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
       {props.children}
     </div>
