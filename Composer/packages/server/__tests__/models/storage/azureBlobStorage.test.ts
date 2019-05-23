@@ -104,10 +104,7 @@ describe('test Azure Blob Storage', () => {
     await expect(client.mkDir('/')).rejects.toThrow('path must include container name and blob name');
     await expect(client.mkDir('/container')).resolves.toBeUndefined();
   });
-  // it('test glob function', async () => {
-  //   const client = new AzureBlobStorage(mockStorageConnect);
-  //   await client.readFile('/');
-  // });
+
   it('test getContainersByPath function', async () => {
     const client = new AzureBlobStorage(mockStorageConnect);
     let result = await client.getContainersByPath('/testContainer');
