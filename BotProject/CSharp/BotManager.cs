@@ -24,7 +24,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         {
             Config = config;
 
-            var bot = Config.GetSection("bot").Get<BotFile>();
+            var bot = Config.GetSection("bot").Get<string>();
             var botProj = BotProject.Load(bot);
             SetCurrent(botProj);
         }
