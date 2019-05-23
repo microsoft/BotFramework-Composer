@@ -29,6 +29,23 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
     }}
   >
     <div
+      title={details}
+      style={{
+        fontWeight: '300',
+        position: 'absolute',
+        fontSize: '12px',
+        color: '#656565',
+        maxWidth: '60px',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        right: '5px',
+        top: '-16px',
+      }}
+    >
+      {details}
+    </div>
+    <div
       className="card__header"
       style={{
         width: '100%',
@@ -77,7 +94,6 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
           {label}
         </div>
       </div>
-      <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px', fontSize: '12px' }}>{details}</div>
     </div>
   </div>
 );

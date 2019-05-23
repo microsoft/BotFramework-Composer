@@ -10,7 +10,8 @@ const IntentPaddingX = 17;
 const IntentPaddingY = 32;
 const IntentElementHeight = ElementHeight;
 const IntentElementWidth = ElementWidth;
-const IntentBlockWidth = (IntentElementWidth + IntentPaddingX + IntentBlockPaddingX + 1) * 2; // border: 1px
+const DoubleIntentBlockWidth = (IntentElementWidth + IntentPaddingX + IntentBlockPaddingX + 1) * 2; // border: 1px
+const SingleIntentBlockWidth = IntentElementWidth + (IntentBlockPaddingX + 1) * 2;
 const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
 
 export class IntentGroup extends React.Component {
@@ -42,7 +43,7 @@ export class IntentGroup extends React.Component {
   render() {
     const { data } = this.props;
     const intents = data.children || [];
-    const width = IntentBlockWidth;
+    const width = intents.length > 1 ? DoubleIntentBlockWidth : SingleIntentBlockWidth;
     const height = IntentBlockHeight * Math.round(intents.length / 2);
 
     return (
@@ -63,9 +64,12 @@ export class IntentGroup extends React.Component {
           <div
             key={x.id + 'block'}
             style={{
-              padding: `${IntentPaddingY}px ${index % 2 === 0 ? IntentPaddingX : 0}px 0 ${
-                index % 2 === 0 ? 0 : IntentPaddingX
-              }px`,
+              padding:
+                intents.length > 1
+                  ? `${IntentPaddingY}px ${index % 2 === 0 ? IntentPaddingX : 0}px 0 ${
+                      index % 2 === 0 ? 0 : IntentPaddingX
+                    }px`
+                  : `${IntentPaddingY}px 0px`,
               height: IntentBlockHeight,
               boxSizing: 'border-box',
               display: 'inline-block',
