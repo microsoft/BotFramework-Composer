@@ -17,9 +17,7 @@ jobs:
         command: 'build'
         projects: 'BotProject/CSharp/BotProject.csproj'
         feedsToUse: 'select'
-        versioningScheme: 'off'
-
-  
+        versioningScheme: 'off'  
   - job: test
     displayName: Unit Tests
     pool:
