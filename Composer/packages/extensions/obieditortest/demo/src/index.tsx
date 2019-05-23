@@ -87,10 +87,17 @@ function getDefaultMemory() {
   return defaultMemory;
 }
 
-const mockShellApi = ['getData', 'getDialogs', 'saveData', 'navTo', 'navDown', 'focusTo'].reduce((mock, api) => {
-  mock[api] = (...args) => console.info(`shellApi.${api} called with`, args);
-  return mock;
-}, {});
+const mockShellApi = ['getState', 'getData', 'getDialogs', 'saveData', 'navTo', 'navDown', 'focusTo'].reduce(
+  (mock, api) => {
+    mock[api] = (...args) =>
+      new Promise(resolve => {
+        console.info(`shellApi.${api} called with`, args);
+        resolve();
+      });
+    return mock;
+  },
+  {}
+);
 
 const Demo: React.FC = () => {
   const [dirtyFormData, setDirtyFormData] = useState(null);
@@ -190,6 +197,7 @@ const Demo: React.FC = () => {
           dialogs={dialogFiles}
           memory={memoryFormData}
           onChange={debouncedOnChange}
+          schemas={{ editor: {} }}
           shellApi={mockShellApi as ShellApi}
         />
       </div>
