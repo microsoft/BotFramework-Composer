@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class Recognizer extends React.Component {
@@ -13,10 +14,11 @@ export class Recognizer extends React.Component {
       <FormCard
         themeColor="#00B294"
         header={getFriendlyName(data) || 'Recognizer'}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.$type.split('.')[1]}
         icon="Friend"
         onClick={() => {
-          onEvent(NodeClickActionTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, id);
         }}
       />
     );

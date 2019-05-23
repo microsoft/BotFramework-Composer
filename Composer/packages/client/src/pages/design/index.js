@@ -76,37 +76,43 @@ function DesignPage() {
   return (
     <Fragment>
       <MainContent>
-        <div css={projectContainer}>
-          <Tree variant="large" extraCss={projectTree}>
-            <div css={projectWrapper}>
-              <div css={projectHeader}>
-                <div>{formatMessage('Dialogs')}</div>
-                {dialogs.length > 0 ? (
-                  <IconButton
-                    iconProps={{ iconName: 'Add' }}
-                    title={formatMessage('New Dialog')}
-                    ariaLabel={formatMessage('New Dialog')}
-                    onClick={() => setModalOpen(true)}
-                  />
-                ) : (
-                  <div />
-                )}
+        <Fragment>
+          <div css={projectContainer}>
+            <Tree variant="large" extraCss={projectTree}>
+              <div css={projectWrapper}>
+                <div css={projectHeader}>
+                  <div>{formatMessage('Dialogs')}</div>
+                  {dialogs.length > 0 ? (
+                    <IconButton
+                      iconProps={{ iconName: 'Add' }}
+                      title={formatMessage('New Dialog')}
+                      ariaLabel={formatMessage('New Dialog')}
+                      onClick={() => setModalOpen(true)}
+                    />
+                  ) : (
+                    <div />
+                  )}
+                </div>
+                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
               </div>
-              <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
-            </div>
-          </Tree>
-          {/* <div style={{ height: '20px' }} />
+            </Tree>
+            {/* <div style={{ height: '20px' }} />
           <Tree extraCss={assetTree} /> */}
-        </div>
-        <Conversation extraCss={editorContainer}>
-          <Fragment>
-            <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('Navigation Path')} styles={breadcrumbClass} />
-            <div css={editorWrapper}>
-              <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
-              <iframe key="FormEditor" name="FormEditor" css={formEditor} src="/extensionContainer.html" />
-            </div>
-          </Fragment>
-        </Conversation>
+          </div>
+          <Conversation extraCss={editorContainer}>
+            <Fragment>
+              <Breadcrumb
+                items={breadcrumbItems}
+                ariaLabel={formatMessage('Navigation Path')}
+                styles={breadcrumbClass}
+              />
+              <div css={editorWrapper}>
+                <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
+                <iframe key="FormEditor" name="FormEditor" css={formEditor} src="/extensionContainer.html" />
+              </div>
+            </Fragment>
+          </Conversation>
+        </Fragment>
       </MainContent>
       <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
     </Fragment>

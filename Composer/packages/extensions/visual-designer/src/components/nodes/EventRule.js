@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { NodeClickActionTypes } from '../../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { FormCard } from './templates/FormCard';
+import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class EventRule extends React.Component {
@@ -14,12 +15,13 @@ export class EventRule extends React.Component {
       <FormCard
         themeColor="#BAD80A"
         header={getFriendlyName(data) || 'EventRule'}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.events}
         onClick={() => {
           if (Array.isArray(steps) && steps.length) {
-            onEvent(NodeClickActionTypes.Expand, id);
+            onEvent(NodeEventTypes.Expand, id);
           } else {
-            onEvent(NodeClickActionTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, id);
           }
         }}
       />

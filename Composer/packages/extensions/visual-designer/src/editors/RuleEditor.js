@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { NodeClickActionTypes } from '../shared/NodeClickActionTypes';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
 import { StepGroup } from '../components/groups';
@@ -30,7 +30,7 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeClickActionTypes.Focus, '');
+        onEvent(NodeEventTypes.Focus, '');
       }}
     >
       {stepGroup ? (

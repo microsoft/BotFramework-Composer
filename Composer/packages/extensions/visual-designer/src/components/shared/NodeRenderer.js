@@ -14,6 +14,7 @@ import {
 
 import { Boundary } from './Boundary';
 import { NodeProps, defaultNodeProps } from './sharedProps';
+import './NodeRenderer.css';
 
 const rendererByObiType = {
   [ObiTypes.IntentRule]: IntentRule,
@@ -42,7 +43,11 @@ export class NodeRenderer extends React.Component {
     return (
       <div
         className="node-renderer-container"
-        style={{ outline: focusedId && focusedId === id ? '2px solid grey' : null, display: 'inline-block' }}
+        style={{
+          outline: focusedId && focusedId === id ? '2px solid grey' : null,
+          display: 'inline-block',
+          position: 'relative',
+        }}
         ref={el => {
           if (el && !this.interactive) {
             onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');
