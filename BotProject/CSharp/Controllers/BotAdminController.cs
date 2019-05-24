@@ -4,12 +4,14 @@
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
 
 using System;
+using System.Linq;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -37,6 +39,13 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 dirInfo.Create();
             }
+        }
+
+        private void CleanDir(string dirPath)
+        {
+            var dir = new DirectoryInfo(dirPath);
+            dir.GetFiles().ToList().ForEach(f => f.Delete());
+            dir.GetDirectories().ToList().ForEach(d => dir.Delete(true));
         }
 
 
@@ -80,6 +89,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private string ExtractFile(string filePath, string dstDirPath)
         {
             EnsureDirExists(dstDirPath);
+            CleanDir(dstDirPath);
             ZipFile.ExtractToDirectory(filePath, dstDirPath);
             return dstDirPath;
         }
