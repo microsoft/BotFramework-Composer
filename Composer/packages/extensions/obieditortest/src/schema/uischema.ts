@@ -1,12 +1,13 @@
 import {
   CasesField,
-  RulesField,
-  StepsField,
-  SelectorField,
-  RecognizerField,
-  JsonField,
   CodeField,
+  JsonField,
+  RecognizerField,
+  RulesField,
+  SelectorField,
+  StepsField,
 } from '../Form/fields';
+import { DialogSelectWidget } from '../Form/widgets';
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
@@ -23,6 +24,11 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     'ui:order': ['*', 'recognizer', 'selector'],
+  },
+  'Microsoft.BeginDialog': {
+    dialog: {
+      'ui:widget': DialogSelectWidget,
+    },
   },
   'Microsoft.CodeStep': {
     codeHandler: {
@@ -75,6 +81,11 @@ export const uiSchema = {
   'Microsoft.MostSpecificSelector': {
     selector: {
       'ui:field': SelectorField,
+    },
+  },
+  'Microsoft.ReplaceDialog': {
+    dialog: {
+      'ui:widget': DialogSelectWidget,
     },
   },
   'Microsoft.Rule': {

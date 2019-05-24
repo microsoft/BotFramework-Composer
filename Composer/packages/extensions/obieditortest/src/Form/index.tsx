@@ -44,21 +44,12 @@ function removeUndefinedOrEmpty(object: any): any {
             obj[key] = result;
           }
           break;
-        case 'string':
-          if (result === '') {
-            delete obj[key];
-          }
-          break;
         default:
           obj[key] = result;
       }
     }
 
     return obj;
-  }
-
-  if (typeof object === 'string') {
-    object === '' ? undefined : object;
   }
 
   return object;

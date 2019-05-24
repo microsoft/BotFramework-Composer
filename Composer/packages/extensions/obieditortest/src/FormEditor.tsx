@@ -23,6 +23,7 @@ export interface FormEditorProps {
   focusPath: string;
   data: FormData;
   dialogs: DialogInfo[];
+  schemas: any;
   memory: FormMemory;
   shellApi: ShellApi;
   onChange: (newData: object) => void;
@@ -38,7 +39,7 @@ function updateDesigner(data) {
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, memory, dialogs, shellApi } = props;
+  const { data, schemas, memory, dialogs, shellApi } = props;
   const type = getType(data);
 
   if (!type) {
@@ -72,6 +73,8 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const dialogUiSchema = {
     ...uiSchema[type],
   };
+
+  const dialogOptions = dialogs.map(f => f.name);
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
@@ -108,6 +111,8 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           uiSchema={dialogUiSchema}
           formContext={{
             shellApi,
+            dialogOptions,
+            editorSchema: schemas.editor,
             rootId: props.focusPath,
           }}
           idPrefix={props.focusPath}
@@ -122,6 +127,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 FormEditor.defaultProps = {
   onChange: () => {},
   onBlur: () => {},
+  schemas: {
+    editor: {},
+  },
 };
 
 export default FormEditor;
