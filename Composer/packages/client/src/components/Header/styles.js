@@ -12,7 +12,7 @@ export const headerMain = css`
 `;
 
 export const headerSub = css`
-  padding: 5px 20px 5px 100px;
+  padding: 5px 20px 5px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;

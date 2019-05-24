@@ -1,21 +1,26 @@
 import { css } from '@emotion/core';
+import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
+
+export const link = { display: 'block', textDecoration: 'none', color: '#4f4f4f' };
 
 export const outer = css`
-  font-size: 30px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 0 0 0;
-  cursor: pointer;
+  flex-direction: row;
+  padding: 10px;
+  width: 200px;
+  box-sizing: border-box;
   &:hover {
-    color: #0083cb;
+    color: ${SharedColors.cyanBlue10};
   }
 `;
 
 export const icon = css`
-  font-size: 25px;
+  font-size: ${FontSizes.size18};
 `;
 
-export const label = css`
-  font-size: 13px;
+export const label = isHide => css`
+  font-size: ${FontSizes.size14};
+  line-height: 20px;
+  margin-left: 10px;
+  visibility: ${isHide ? 'hidden' : 'visible'};
 `;

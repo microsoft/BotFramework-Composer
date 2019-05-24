@@ -2,6 +2,6 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 
-export function LanguageUnderstandingSettings() {
+export function LanguageUnderstanding() {
   return <div>{formatMessage('Language Understanding')}</div>;
 }
