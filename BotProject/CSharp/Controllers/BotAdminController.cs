@@ -3,6 +3,7 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
 
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
@@ -54,7 +55,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             var extractPath = ExtractFile(downloadPath, ConvertPath("bot"));
 
             // locate the proj file
-            var projFile = Path.Combine(extractPath, "bot.botproj");
+            var projFile = FindBotProjFile(extractPath);
 
             var botProj = BotProject.Load(projFile);
             BotManager.SetCurrent(botProj);
@@ -82,18 +83,15 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             ZipFile.ExtractToDirectory(filePath, dstDirPath);
             return dstDirPath;
         }
-
-
-        private async Task<string> CreateTmpDirIfNotExists()
+      
+        private string FindBotProjFile(string dir)
         {
-            var curDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var tmpDir = Path.Combine(curDir, "tmp");
-            var dirInfo = new DirectoryInfo(tmpDir);
-            if (!dirInfo.Exists)
+            string[] projFiles = Directory.GetFiles(dir, "*.botproj");
+            if (projFiles.Length != 1)
             {
-                dirInfo.Create();
+                throw new Exception("no bot proj file in zip file");
             }
-            return tmpDir;
+            return projFiles[0];
         }
 
 
