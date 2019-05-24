@@ -33,9 +33,7 @@ class StorageService {
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      if (!Path.isAbsolute(s.path)) {
-        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
-      }
+      temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       return temp;
     });
   };
