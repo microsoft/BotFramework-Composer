@@ -6,6 +6,7 @@ import archiver from 'archiver';
 import BotProjectService from '../../services/project';
 
 import { IBotConnector, BotStatus } from './interface';
+import FormData from 'form-data';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
@@ -19,7 +20,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async () => {
     // confirm bot runtime is listening here
     try {
-      await axios.get(this.endpoint + '/api/reload');
+      await axios.get(this.endpoint + '/api/admin');
     } catch (err) {
       throw new Error(err);
     }
@@ -35,6 +36,15 @@ export class CSharpBotConnector implements IBotConnector {
     }
     const dir = BotProjectService.currentBotProject.dir;
     await this.archiveDirectory(dir, './tmp.zip');
+    const content = fs.readFileSync('./tmp.zip');
+
+    const form = new FormData();
+    form.append('file', content, 'bot.zip');
+    try {
+      await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   archiveDirectory = (src: string, dest: string) => {
