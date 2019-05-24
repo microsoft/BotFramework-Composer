@@ -19,6 +19,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
     [ApiController]
     public class BotAdminController : ControllerBase
     {
+        private static string workDir = ConvertPath("tmp");
         private readonly IBotManager BotManager;
 
         public BotAdminController(IBotManager botManager)
@@ -26,7 +27,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             BotManager = botManager;
         }
 
-        private string ConvertPath(string relativePath)
+        public static string ConvertPath(string relativePath)
         {
             var curDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             return Path.Combine(curDir, relativePath);
@@ -49,6 +50,13 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         }
 
 
+        [HttpGet] 
+        public IActionResult GetAsync()
+        {
+            return Ok();
+        }
+           
+
         [HttpPost]
         public async Task<IActionResult> PostAsync(IFormFile file)
         {
@@ -61,7 +69,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             var downloadPath = await SaveFile(file, "tmp.zip");
 
             // extract to bot folder
-            var extractPath = ExtractFile(downloadPath, ConvertPath("bot"));
+            var extractPath = ExtractFile(downloadPath, GenNewBotDir());
 
             // locate the proj file
             var projFile = FindBotProjFile(extractPath);
@@ -71,14 +79,18 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             return Ok();
         }
 
+        private string GenNewBotDir()
+        {
+            return System.Guid.NewGuid().ToString("N");
+        }
+
         // Download the zip file
         private async Task<string> SaveFile(IFormFile file, string fileName = null)
         {
-            var dstDir = ConvertPath("download");
-            EnsureDirExists(dstDir);
+            EnsureDirExists(workDir);
 
-            var filePath = Path.Combine(dstDir, fileName ?? file.Name);
-            using (var outStream = new FileStream(filePath, FileMode.OpenOrCreate))
+            var filePath = Path.Combine(workDir, fileName ?? file.Name);
+            using (var outStream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(outStream);
             }
@@ -88,10 +100,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         // Extract file to a dir
         private string ExtractFile(string filePath, string dstDirPath)
         {
-            EnsureDirExists(dstDirPath);
-            CleanDir(dstDirPath);
-            ZipFile.ExtractToDirectory(filePath, dstDirPath);
-            return dstDirPath;
+            EnsureDirExists(workDir);
+
+            var finalDstPath = Path.Combine(workDir, dstDirPath);
+
+            ZipFile.ExtractToDirectory(filePath, finalDstPath);
+            return finalDstPath;
         }
       
         private string FindBotProjFile(string dir)
