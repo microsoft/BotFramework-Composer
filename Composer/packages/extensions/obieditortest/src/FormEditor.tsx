@@ -74,6 +74,8 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     ...uiSchema[type],
   };
 
+  const dialogOptions = dialogs.map(f => f.name);
+
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
       props.onChange(updateDesigner(newValue.formData));
@@ -109,6 +111,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           uiSchema={dialogUiSchema}
           formContext={{
             shellApi,
+            dialogOptions,
             editorSchema: schemas.editor,
             rootId: props.focusPath,
           }}
