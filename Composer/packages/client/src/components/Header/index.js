@@ -50,7 +50,7 @@ export const Header = props => {
           </ActionButton>
         </div>
         <div css={bot}>
-          {botStatus === 'running' && (
+          {connected && (
             <ActionButton
               iconProps={{ iconName: 'OpenInNewTab' }}
               css={actionButton}
