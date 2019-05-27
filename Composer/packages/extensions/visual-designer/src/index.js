@@ -16,10 +16,12 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
    */
   let data = inputData;
   const dataCache = useRef();
+  const dataVersion = useRef(0);
   if (isEqual(dataCache.current, data)) {
     data = dataCache.current;
   } else {
     dataCache.current = data;
+    dataVersion.current += 1;
   }
 
   /**
@@ -58,6 +60,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
   return (
     <div data-testid="visualdesigner-container">
       <ObiEditor
+        key={navPath + '?version=' + dataVersion.current}
         path={navPath}
         focusedId={normalizeFocusedId(focusPath, navPath)}
         data={data}

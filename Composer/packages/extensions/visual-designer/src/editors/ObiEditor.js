@@ -60,7 +60,6 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       }}
     >
       <ChosenEditor
-        key={path}
         id={path}
         data={data}
         expanded={true}
