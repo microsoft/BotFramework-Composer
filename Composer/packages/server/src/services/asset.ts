@@ -1,4 +1,4 @@
-import settings from '../settings/settings.json';
+import settings from '../settings/settings';
 import { AssetManager } from '../models/asset/assetManager';
 
 class AssetService {

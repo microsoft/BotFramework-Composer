@@ -1,4 +1,4 @@
-import settings from '../settings/settings.json';
+import settings from '../settings/settings';
 import { IBotConnector, BotStatus } from '../models/connector/interface';
 import { CSharpBotConnector } from '../models/connector/csharpBotConnector';
 

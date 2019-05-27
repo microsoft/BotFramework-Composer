@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3'
 services:
   composer: 
     build: Composer
@@ -7,6 +7,8 @@ services:
     - "5000:5000"
     volumes:
     - ./SampleBots:/SampleBots
+    environment:
+    - NODE_ENV=container
   botruntime: 
     build: BotProject/CSharp
     ports:
