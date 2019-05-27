@@ -2,11 +2,11 @@ import fs from 'fs';
 
 import axios from 'axios';
 import archiver from 'archiver';
+import FormData from 'form-data';
 
 import BotProjectService from '../../services/project';
 
 import { IBotConnector, BotStatus } from './interface';
-import FormData from 'form-data';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
