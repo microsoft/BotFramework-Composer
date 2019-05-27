@@ -42,7 +42,7 @@ export function ShellApi() {
       const data = getDialogData(dialogsMap, navPath) || '';
       apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
     }
-  }, [dialogs, navPath]);
+  }, [dialogs, navPath, focusPath]);
 
   useEffect(() => {
     if (window.frames[1]) {

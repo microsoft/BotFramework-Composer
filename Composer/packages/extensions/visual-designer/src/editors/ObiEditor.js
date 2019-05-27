@@ -12,7 +12,6 @@ import './ObiEditor.css';
 export class ObiEditor extends Component {
   state = {
     prevPath: '',
-    focusedId: '',
     prevData: null,
     dataVersion: 0,
   };
@@ -21,7 +20,6 @@ export class ObiEditor extends Component {
     if (props.path !== state.prevPath) {
       return {
         prevPath: props.path,
-        focusedId: '',
         prevData: props.data,
         dataVersion: 0,
       };
@@ -56,9 +54,6 @@ export class ObiEditor extends Component {
         handler = onSelect;
         break;
     }
-    if (this.state.focusedId !== eventData) {
-      this.setState({ focusedId: eventData });
-    }
     return handler(eventData);
   }
 
@@ -74,7 +69,7 @@ export class ObiEditor extends Component {
   }
 
   render() {
-    const { path, data } = this.props;
+    const { path, focusedId, data } = this.props;
     if (!data) return this.renderFallbackContent();
 
     const ChosenEditor = this.chooseEditor(data.$type);
@@ -86,7 +81,7 @@ export class ObiEditor extends Component {
         style={{ width: '100%', height: '100%' }}
         onKeyUp={e => {
           const keyString = e.key;
-          if (keyString === 'Delete' && this.state.focusedId) {
+          if (keyString === 'Delete' && focusedId) {
             this.dispatchEvent(NodeEventTypes.Delete, { id: this.state.focusedId });
           }
         }}
@@ -96,7 +91,7 @@ export class ObiEditor extends Component {
           id={path}
           data={this.props.data}
           expanded={true}
-          focusedId={this.state.focusedId}
+          focusedId={focusedId}
           onEvent={(...args) => this.dispatchEvent(...args)}
         />
       </div>
@@ -106,6 +101,7 @@ export class ObiEditor extends Component {
 
 ObiEditor.defaultProps = {
   path: '.',
+  focusedId: '',
   data: {},
   onSelect: () => {},
   onExpand: () => {},
@@ -115,6 +111,7 @@ ObiEditor.defaultProps = {
 
 ObiEditor.propTypes = {
   path: PropTypes.string,
+  focusedId: PropTypes.string,
   // Obi raw json
   data: PropTypes.object,
   onSelect: PropTypes.func,

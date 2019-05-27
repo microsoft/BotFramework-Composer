@@ -90,7 +90,7 @@ const navigateTo = (state, { path }) => {
 
 const navigateDown = (state, { subPath }) => {
   if (state.navPath.endsWith('#')) {
-    state.navPath = state.navPath + subPath.substring(1);
+    state.navPath = state.navPath + subPath;
   } else {
     state.navPath = state.navPath + subPath;
   }
@@ -104,7 +104,7 @@ const focusTo = (state, { subPath }) => {
     state.resetFormEditor = true;
   }
   if (state.navPath.endsWith('#')) {
-    state.focusPath = state.navPath + subPath.substring(1);
+    state.focusPath = state.navPath + subPath;
   } else {
     state.focusPath = state.navPath + subPath;
   }
