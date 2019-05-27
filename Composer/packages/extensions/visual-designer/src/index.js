@@ -9,7 +9,7 @@ initializeIcons(/* optional base url */);
 
 const JSON_PATH_PREFIX = '$.';
 
-const VisualDesigner = ({ navPath, focusPath, data: inputData, shellApi }) => {
+const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }) => {
   /**
    * VisualDesigner is coupled with ShellApi where input json always mutates.
    * Deep checking input data here to make React change detection works.
@@ -74,6 +74,7 @@ VisualDesigner.propTypes = {
   navPath: PropType.string.isRequired,
   focusPath: PropType.string.isRequired,
   data: PropType.object.isRequired,
+  onChange: PropType.func.isRequired,
   shellApi: PropType.object.isRequired,
 };
 
@@ -81,7 +82,12 @@ VisualDesigner.defaultProps = {
   navPath: '.',
   focusPath: '',
   data: {},
-  shellApi: {},
+  onChange: () => {},
+  shellApi: {
+    navDown: () => {},
+    focusTo: () => {},
+    navTo: () => {},
+  },
 };
 
 export default VisualDesigner;
