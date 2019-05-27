@@ -30,10 +30,6 @@ export const globalNav = css`
   &:hover {
     background: ${NeutralColors.gray40};
   }
-
-  &:focus {
-    background: ${NeutralColors.gray40};
-  }
 `;
 
 export const content = css`

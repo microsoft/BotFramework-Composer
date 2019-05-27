@@ -28,7 +28,6 @@ export const Header = props => {
         <div css={actionButton}>
           <ActionButton
             css={actionButton}
-            tabIndex={-1}
             iconProps={{ iconName: 'CirclePlus' }}
             onClick={() => openStorageExplorer(OpenStatus.NEW)}
           >
@@ -36,7 +35,6 @@ export const Header = props => {
           </ActionButton>
           <ActionButton
             css={actionButton}
-            tabIndex={-1}
             iconProps={{ iconName: 'OpenFolderHorizontal' }}
             onClick={() => openStorageExplorer(OpenStatus.OPEN)}
           >
@@ -44,7 +42,6 @@ export const Header = props => {
           </ActionButton>
           <ActionButton
             css={actionButton}
-            tabIndex={-1}
             iconProps={{ iconName: 'Save' }}
             onClick={() => openStorageExplorer(OpenStatus.SAVEAS)}
           >
@@ -55,7 +52,6 @@ export const Header = props => {
           {botStatus === 'running' && (
             <ActionButton
               iconProps={{ iconName: 'OpenInNewTab' }}
-              tabIndex={-1}
               css={actionButton}
               style={{ marginTop: '3px' }}
               onClick={() => openInEmulator('http://localhost:3979/api/messages')}

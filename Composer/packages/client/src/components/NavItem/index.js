@@ -22,9 +22,9 @@ export const NavItem = props => {
     >
       <div tabIndex={-1} css={outer(!labelHide)}>
         {labelHide ? (
-          <IconButton iconProps={{ iconName }} tabIndex={-1} styles={iconButton} />
+          <IconButton iconProps={{ iconName }} styles={iconButton} />
         ) : (
-          <CommandBarButton iconProps={{ iconName }} tabIndex={-1} text={labelName} styles={commandBarButton} />
+          <CommandBarButton iconProps={{ iconName }} text={labelName} styles={commandBarButton} />
         )}
       </div>
     </Link>
