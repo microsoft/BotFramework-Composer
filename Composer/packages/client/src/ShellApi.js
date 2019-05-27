@@ -127,8 +127,8 @@ export function ShellApi() {
     let realSubPath = subPath;
     if (event.source.name === 'FormEditor') {
       realSubPath = `${replace(focusPath, navPath, '')}${subPath}`;
-      if (!startsWith(realSubPath, '.')) {
-        realSubPath = '.' + realSubPath;
+      if (startsWith(realSubPath, '.')) {
+        realSubPath = realSubPath.substr(1);
       }
     }
     flushUpdates();
