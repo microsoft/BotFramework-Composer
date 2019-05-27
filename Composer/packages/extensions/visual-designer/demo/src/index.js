@@ -13,6 +13,8 @@ initializeIcons(/* optional base url */);
 const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
 
+const copyJson = json => JSON.parse(JSON.stringify(json));
+
 class Demo extends Component {
   state = {
     selectedFile: defaultFile,
@@ -27,7 +29,7 @@ class Demo extends Component {
   onFileSelected(file) {
     this.setState({
       selectedFile: file,
-      obiJson: ObiExamples[file],
+      obiJson: copyJson(ObiExamples[file]),
       focusPath: file,
     });
   }
@@ -41,6 +43,7 @@ class Demo extends Component {
     console.log('focus node', id);
     this.setState({
       focusPath: this.state.selectedFile + id,
+      obiJson: copyJson(this.state.obiJson),
     });
   }
 
