@@ -20,8 +20,8 @@ export const headerSub = css`
 `;
 
 export const aside = css`
-  width: 200;
-  margin-left: 100px;
+  width: 200px;
+  margin-left: 50px;
 `;
 
 export const bot = css`

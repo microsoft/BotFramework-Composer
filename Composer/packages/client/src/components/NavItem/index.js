@@ -2,15 +2,17 @@
 import { jsx } from '@emotion/core';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 
-import { outer, icon, label, link } from './styles';
+import { link, outer, iconButton, commandBarButton } from './styles';
 
 export const NavItem = props => {
-  const { to, exact, isLabelHide, iconName, labelName } = props;
+  const { to, exact, labelHide, iconName, labelName } = props;
   return (
     <Link
       to={to}
+      tabIndex={-1}
       style={link}
       getProps={({ isCurrent, isPartiallyCurrent }) => {
         const activeStyle = { style: { ...link, color: '#0083cb' } };
@@ -18,11 +20,12 @@ export const NavItem = props => {
         return isActive ? activeStyle : null;
       }}
     >
-      <div css={outer}>
-        <div css={icon}>
-          <Icon iconName={iconName} />
-        </div>
-        <div css={label(isLabelHide)}>{labelName}</div>
+      <div tabIndex={-1} css={outer(!labelHide)}>
+        {labelHide ? (
+          <IconButton iconProps={{ iconName }} tabIndex={-1} styles={iconButton} />
+        ) : (
+          <CommandBarButton iconProps={{ iconName }} tabIndex={-1} text={labelName} styles={commandBarButton} />
+        )}
       </div>
     </Link>
   );
@@ -33,5 +36,5 @@ NavItem.propTypes = {
   iconName: PropTypes.string,
   labelName: PropTypes.string,
   exact: PropTypes.bool,
-  isLabelHide: PropTypes.bool,
+  labelHide: PropTypes.bool,
 };

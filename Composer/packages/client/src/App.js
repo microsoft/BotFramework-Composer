@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -16,7 +16,7 @@ initializeIcons(/* optional base url */);
 
 export function App() {
   const { state, actions } = useContext(Store);
-  const [sideBarSpread, setSideBarSpread] = useState('');
+  const [sideBarExpand, setSideBarExpand] = useState('');
   const { botStatus } = state;
   const { toggleBot, setStorageExplorerStatus } = actions;
   useEffect(() => {
@@ -34,12 +34,12 @@ export function App() {
       />
       <StorageExplorer />
       <div css={main}>
-        <div css={sideBar(sideBarSpread)}>
-          <Icon
-            iconName="GlobalNavButton"
+        <div css={sideBar(sideBarExpand)}>
+          <IconButton
+            iconProps={{ iconName: 'GlobalNavButton' }}
             css={globalNav}
             onClick={() => {
-              setSideBarSpread(!sideBarSpread);
+              setSideBarExpand(!sideBarExpand);
             }}
           />
           <div css={divider} />
@@ -48,16 +48,11 @@ export function App() {
             exact={true}
             iconName="SplitObject"
             labelName={formatMessage('Flow design')}
-            isLabelHide={!sideBarSpread}
+            labelHide={!sideBarExpand}
           />
-          <NavItem to="lg" iconName="Robot" labelName={formatMessage('Bot says')} isLabelHide={!sideBarSpread} />
-          <NavItem to="lu" iconName="People" labelName={formatMessage('User says')} isLabelHide={!sideBarSpread} />
-          <NavItem
-            to="setting"
-            iconName="Settings"
-            labelName={formatMessage('Settings')}
-            isLabelHide={!sideBarSpread}
-          />
+          <NavItem to="lg" iconName="Robot" labelName={formatMessage('Bot says')} labelHide={!sideBarExpand} />
+          <NavItem to="lu" iconName="People" labelName={formatMessage('User says')} labelHide={!sideBarExpand} />
+          <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} />
         </div>
         <div css={content}>
           <Routes />

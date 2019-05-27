@@ -1,26 +1,49 @@
 import { css } from '@emotion/core';
-import { SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 
-export const link = { display: 'block', textDecoration: 'none', color: '#4f4f4f' };
+export const link = {
+  display: 'block',
+  textDecoration: 'none',
+  color: '#4f4f4f',
+};
 
-export const outer = css`
+export const outer = isExpand => css`
   display: flex;
-  flex-direction: row;
-  padding: 10px;
   width: 200px;
-  box-sizing: border-box;
-  &:hover {
-    color: ${SharedColors.cyanBlue10};
-  }
+  justify-content: flex-end;
+  transform: translateX(${isExpand ? '0px' : '-160px'});
+  transition: transform 0.3s ease-in-out;
 `;
 
-export const icon = css`
-  font-size: ${FontSizes.size18};
-`;
+export const iconButton = {
+  root: {
+    color: 'currentColor',
+    height: '40px',
+    width: '40px',
+    fontSize: `${FontSizes.size16}`,
+  },
+  icon: {
+    fontSize: `${FontSizes.size16}`,
+  },
+};
 
-export const label = isHide => css`
-  font-size: ${FontSizes.size14};
-  line-height: 20px;
-  margin-left: 10px;
-  visibility: ${isHide ? 'hidden' : 'visible'};
-`;
+export const commandBarButton = {
+  root: {
+    color: 'currentColor',
+    height: '40px',
+    width: '200px',
+    fontSize: `${FontSizes.size16}`,
+    paddingLeft: '0px',
+  },
+  icon: {
+    color: 'currentColor',
+    width: '40px',
+    paddingRight: '10px',
+    boxSizing: 'border-box',
+    fontSize: `${FontSizes.size16}`,
+  },
+  textContainer: {
+    textAlign: 'left',
+    zIndex: '1',
+  },
+};
