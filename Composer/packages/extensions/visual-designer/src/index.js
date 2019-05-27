@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropType from 'prop-types';
+import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from './editors/ObiEditor';
@@ -8,7 +9,19 @@ initializeIcons(/* optional base url */);
 
 const JSON_PATH_PREFIX = '$.';
 
-const VisualDesigner = ({ navPath, focusPath, data, shellApi }) => {
+const VisualDesigner = ({ navPath, focusPath, data: inputData, shellApi }) => {
+  /**
+   * VisualDesigner is coupled with ShellApi where input json always mutates.
+   * Deep checking input data here to make React change detection works.
+   */
+  let data = inputData;
+  const dataCache = useRef();
+  if (isEqual(dataCache.current, data)) {
+    data = dataCache.current;
+  } else {
+    dataCache.current = data;
+  }
+
   /**
    * This function is used to normalized the path string:
    *  - input:  '$.steps[0]'

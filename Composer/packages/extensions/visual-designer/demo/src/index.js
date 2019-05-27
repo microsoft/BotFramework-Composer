@@ -13,6 +13,7 @@ initializeIcons(/* optional base url */);
 const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
 
+// Simulate the condition that json is always mutated.
 const copyJson = json => JSON.parse(JSON.stringify(json));
 
 class Demo extends Component {
