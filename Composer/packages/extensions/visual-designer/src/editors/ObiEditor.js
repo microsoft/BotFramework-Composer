@@ -10,29 +10,6 @@ import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
 export class ObiEditor extends Component {
-  state = {
-    prevPath: '',
-    prevData: null,
-    dataVersion: 0,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.path !== state.prevPath) {
-      return {
-        prevPath: props.path,
-        prevData: props.data,
-        dataVersion: 0,
-      };
-    }
-    if (props.data !== state.prevData) {
-      return {
-        prevData: props.data,
-        dataVersion: state.dataVersion + 1,
-      };
-    }
-    return null;
-  }
-
   dispatchEvent(eventName, eventData) {
     const { onSelect, onExpand, onOpen, onChange } = this.props;
 
@@ -82,12 +59,12 @@ export class ObiEditor extends Component {
         onKeyUp={e => {
           const keyString = e.key;
           if (keyString === 'Delete' && focusedId) {
-            this.dispatchEvent(NodeEventTypes.Delete, { id: this.state.focusedId });
+            this.dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
           }
         }}
       >
         <ChosenEditor
-          key={path + '/' + this.state.dataVersion}
+          key={path}
           id={path}
           data={this.props.data}
           expanded={true}
