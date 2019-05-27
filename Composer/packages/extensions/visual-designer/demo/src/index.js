@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
-import { ObiEditor } from '../../src/editors/ObiEditor';
+import VisualDesigner from '../../src';
 
 import { JsonBlock } from './components/json-block';
 import { ObiExamples } from './samples';
@@ -17,6 +17,7 @@ class Demo extends Component {
   state = {
     selectedFile: defaultFile,
     obiJson: ObiExamples[defaultFile],
+    focusPath: '',
   };
 
   constructor(props) {
@@ -24,7 +25,11 @@ class Demo extends Component {
   }
 
   onFileSelected(file) {
-    this.setState({ selectedFile: file, obiJson: ObiExamples[file] });
+    this.setState({
+      selectedFile: file,
+      obiJson: ObiExamples[file],
+      focusPath: file,
+    });
   }
 
   onJsonChanged(json) {
@@ -32,11 +37,15 @@ class Demo extends Component {
     this.setState({ obiJson: json });
   }
 
+  onFocus(id) {
+    console.log('focus node', id);
+    this.setState({
+      focusPath: this.state.selectedFile + id,
+    });
+  }
+
   render() {
-    const { selectedFile, obiJson } = this.state;
-    const logEventThunk = eventType => eventData => {
-      console.log('Event triggered:', eventType, eventData);
-    };
+    const { selectedFile, obiJson, focusPath } = this.state;
 
     return (
       <div>
@@ -68,12 +77,24 @@ class Demo extends Component {
             />
           </div>
           <div className="block block--right">
-            <ObiEditor
+            <VisualDesigner
               data={obiJson}
-              path={selectedFile}
-              onSelect={logEventThunk('select')}
-              onExpand={logEventThunk('expand')}
-              onOpen={logEventThunk('open')}
+              navPath={selectedFile}
+              focusPath={focusPath}
+              shellApi={{
+                navDown: e => {
+                  console.log('navDown', e);
+                  this.onFocus(e);
+                },
+                navTo: e => {
+                  console.log('navTo', e);
+                  this.onFocus(e);
+                },
+                focusTo: e => {
+                  console.log('focusTo', e);
+                  this.onFocus(e);
+                },
+              }}
               onChange={json => {
                 this.setState({
                   obiJson: json,
