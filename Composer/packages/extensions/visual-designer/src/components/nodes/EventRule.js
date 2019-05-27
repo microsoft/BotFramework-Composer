@@ -4,17 +4,15 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
-import { FormCard } from './templates/FormCard';
-import { getFriendlyName } from './utils';
+import { IconButton } from './templates/IconButton';
 
 export class EventRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
-      <FormCard
-        themeColor="#BAD80A"
-        header={getFriendlyName(data) || 'EventRule'}
+      <IconButton
+        themeColor="#B2D20E"
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.events}
         onClick={() => {

@@ -6,8 +6,7 @@ import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
-import { FormCard } from './templates/FormCard';
-import { getFriendlyName } from './utils';
+import { IconButton } from './templates/IconButton';
 
 export class IntentRule extends React.Component {
   getDetails() {
@@ -19,8 +18,6 @@ export class IntentRule extends React.Component {
           <span
             style={{
               cursor: 'pointer',
-              color: 'blue',
-              marginLeft: 5,
             }}
             onClick={e => {
               e.stopPropagation();
@@ -39,9 +36,8 @@ export class IntentRule extends React.Component {
     const { id, data, onEvent } = this.props;
     const { intent, steps } = data;
     return (
-      <FormCard
+      <IconButton
         themeColor="#0078D4"
-        header={getFriendlyName(data) || intent}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.getDetails()}
         icon="MessageBot"
