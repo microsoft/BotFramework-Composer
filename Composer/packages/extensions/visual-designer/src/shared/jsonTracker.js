@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 function locateNode(dialog, path) {
   if (!path) return null;
 
@@ -39,7 +41,8 @@ function locateNode(dialog, path) {
   return { parentData, currentData, currentKey };
 }
 
-export function deleteNode(dialog, path) {
+export function deleteNode(inputDialog, path) {
+  const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
   if (!target) return dialog;
 
@@ -51,6 +54,5 @@ export function deleteNode(dialog, path) {
     delete parentData[currentKey];
   }
 
-  // Deep copy to trigger re-render
-  return JSON.parse(JSON.stringify(dialog));
+  return dialog;
 }
