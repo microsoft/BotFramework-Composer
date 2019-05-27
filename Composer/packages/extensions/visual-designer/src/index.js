@@ -1,27 +1,37 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import PropType from 'prop-types';
 import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from './editors/ObiEditor';
+import { outlineObiJson } from './transformers/outlineObiJson';
 
 initializeIcons(/* optional base url */);
 
 const JSON_PATH_PREFIX = '$.';
 
 const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }) => {
+  const dataCache = useRef();
+  const outlineCache = useRef();
+  const outlineVersion = useRef(0);
+
   /**
    * VisualDesigner is coupled with ShellApi where input json always mutates.
    * Deep checking input data here to make React change detection works.
    */
-  let data = inputData;
-  const dataCache = useRef();
-  const dataVersion = useRef(0);
-  if (isEqual(dataCache.current, data)) {
-    data = dataCache.current;
-  } else {
-    dataCache.current = data;
-    dataVersion.current += 1;
+  const dataChanged = !isEqual(dataCache.current, inputData);
+  if (dataChanged) {
+    dataCache.current = inputData;
+  }
+
+  /**
+   * Caching the outline of graph shape to avoid global rerender.
+   */
+  const outline = useMemo(() => outlineObiJson(dataCache.current), [dataCache.current]);
+  const outlineChanged = !isEqual(outlineCache.current, outline);
+  if (outlineChanged) {
+    outlineCache.current = outline;
+    outlineVersion.current += 1;
   }
 
   /**
@@ -56,11 +66,12 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
     return '';
   };
 
+  const data = dataCache.current;
   const { navDown, focusTo, navTo } = shellApi;
   return (
     <div data-testid="visualdesigner-container">
       <ObiEditor
-        key={navPath + '?version=' + dataVersion.current}
+        key={navPath + '?version=' + outlineVersion.current}
         path={navPath}
         focusedId={normalizeFocusedId(focusPath, navPath)}
         data={data}
