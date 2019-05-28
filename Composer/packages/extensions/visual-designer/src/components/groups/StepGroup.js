@@ -73,12 +73,14 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
             x: boundary.axisX - EdgeAddButtonSize.width / 2,
             y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
           }}
+          styles={{ zIndex: 100 }}
         >
           <EdgeMenu />
         </OffsetContainer>
       ))}
       <OffsetContainer
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
+        styles={{ zIndex: 100 }}
       >
         <EdgeMenu />
       </OffsetContainer>
