@@ -2,9 +2,9 @@ import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { NodeMenu } from '../shared/NodeMenu';
 
 import { FormCard } from './templates/FormCard';
-import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class Recognizer extends React.Component {

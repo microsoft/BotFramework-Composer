@@ -5,13 +5,13 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
+import { NodeMenu } from '../shared/NodeMenu';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
 import { Diamond } from './templates/Diamond';
-import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
