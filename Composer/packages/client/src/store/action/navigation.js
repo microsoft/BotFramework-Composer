@@ -17,10 +17,10 @@ export function navDown(dispatch, subPath) {
 
 // this sub path is relative to the navPath, not focusPath
 // so new focusPath = navPath + subPath
-export function focusTo(dispatch, subPath) {
+export function focusTo(dispatch, path) {
   dispatch({
     type: ActionTypes.FOCUS_TO,
-    payload: { subPath },
+    payload: { path },
   });
 }
 
