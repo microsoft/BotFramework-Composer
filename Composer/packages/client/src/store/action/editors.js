@@ -6,10 +6,3 @@ export function resetVisualEditor(dispatch, isReset) {
     payload: { isReset },
   });
 }
-
-export function resetFormEditor(dispatch, isReset) {
-  dispatch({
-    type: ActionTypes.EDITOR_RESET_FORM,
-    payload: { isReset },
-  });
-}

@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, replace, startsWith, get } from 'lodash';
+import { debounce, get } from 'lodash';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -123,16 +123,9 @@ export function ShellApi() {
     actions.navDown(subPath);
   }
 
-  function focusTo({ subPath }, event) {
-    let realSubPath = subPath;
-    if (event.source.name === 'FormEditor') {
-      realSubPath = `${replace(focusPath, navPath, '')}${subPath}`;
-      if (!startsWith(realSubPath, '.')) {
-        realSubPath = '.' + realSubPath;
-      }
-    }
+  function focusTo({ subPath }) {
     flushUpdates();
-    actions.focusTo(realSubPath);
+    actions.focusTo(navPath + subPath);
   }
 
   return null;
