@@ -4,9 +4,9 @@ import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { NodeMenu } from '../shared/NodeMenu';
 
 import { FormCard } from './templates/FormCard';
-import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 export class IntentRule extends React.Component {
