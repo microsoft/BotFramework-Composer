@@ -5,7 +5,7 @@ import { NavItem } from '../src/components/NavItem';
 
 describe('<Header />', () => {
   it('should render a nav item', async () => {
-    const { findByText } = render(<NavItem label={'some nav item'} to={'/'} />);
+    const { findByText } = render(<NavItem labelName={'some nav item'} to={'/'} />);
 
     await findByText(/some nav item/);
   });

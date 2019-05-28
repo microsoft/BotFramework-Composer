@@ -1,0 +1,125 @@
+{
+    "fieldTemplateOverrides": {
+      "BaseField": {
+        "title": false,
+        "description": false
+      }
+    },
+    "SDKOverrides": {
+      "Microsoft.AdaptiveDialog": {
+        "name": "AdaptiveDialog"
+      },
+      "Microsoft.BeginDialog": {
+        "name": "BeginDialog"
+      },
+      "Microsoft.CancelAllDialogs": {
+        "name": "CancelAllDialogs"
+      },
+      "Microsoft.ChoiceInput": {
+        "name": "ChoiceInput"
+      },
+      "Microsoft.ConditionalSelector": {
+        "name": "ConditionalSelector"
+      },
+      "Microsoft.ConfirmInput": {
+        "name": "ConfirmInput"
+      },
+      "Microsoft.DebugBreak": {
+        "name": "DebugBreak"
+      },
+      "Microsoft.DeleteProperty": {
+        "name": "DeleteProperty"
+      },
+      "Microsoft.EditArray": {
+        "name": "EditArray"
+      },
+      "Microsoft.EmitEvent": {
+        "name": "EmitEvent"
+      },
+      "Microsoft.EndDialog": {
+        "name": "EndDialog"
+      },
+      "Microsoft.EndTurn": {
+        "name": "EndTurn"
+      },
+      "Microsoft.EventRule": {
+        "name": "EventRule"
+      },
+      "Microsoft.FirstSelector": {
+        "name": "FirstSelector"
+      },
+      "Microsoft.HttpRequest": {
+        "name": "HttpRequest"
+      },
+      "Microsoft.IfCondition": {
+        "name": "IfCondition"
+      },
+      "Microsoft.InitProperty": {
+        "name": "InitProperty"
+      },
+      "Microsoft.IntentRule": {
+        "name": "IntentRule"
+      },
+      "Microsoft.LanguagePolicy": {
+        "name": "LanguagePolicy"
+      },
+      "Microsoft.LogStep": {
+        "name": "LogStep"
+      },
+      "Microsoft.LuisRecognizer": {
+        "name": "LuisRecognizer"
+      },
+      "Microsoft.MostSpecificSelector": {
+        "name": "MostSpecificSelector"
+      },
+      "Microsoft.MultiLanguageRecognizer": {
+        "name": "MultiLanguageRecognizer"
+      },
+      "Microsoft.NumberInput": {
+        "name": "NumberInput"
+      },
+      "Microsoft.QnAMakerDialog": {
+        "name": "QnAMakerDialog"
+      },
+      "Microsoft.RandomSelector": {
+        "name": "RandomSelector"
+      },
+      "Microsoft.RegexRecognizer": {
+        "name": "RegexRecognizer"
+      },
+      "Microsoft.RepeatDialog": {
+        "name": "RepeatDialog"
+      },
+      "Microsoft.ReplaceDialog": {
+        "name": "ReplaceDialog"
+      },
+      "Microsoft.Rule": {
+        "name": "Rule"
+      },
+      "Microsoft.SaveEntity": {
+        "name": "SaveEntity"
+      },
+      "Microsoft.SendActivity": {
+        "name": "SendActivity"
+      },
+      "Microsoft.SetProperty": {
+        "name": "SetProperty"
+      },
+      "Microsoft.SwitchCondition": {
+        "name": "SwitchCondition"
+      },
+      "Microsoft.TextInput": {
+        "name": "TextInput"
+      },
+      "Microsoft.TraceActivity": {
+        "name": "TraceActivity"
+      },
+      "Microsoft.TrueSelector": {
+        "name": "TrueSelector"
+      },
+      "Microsoft.UnknownIntentRule": {
+        "name": "UnknownIntentRule"
+      }
+    }
+  }
+  
