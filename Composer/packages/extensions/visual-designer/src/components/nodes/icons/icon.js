@@ -33,15 +33,15 @@ const svgByIconName = {
   Stop: StopSVG,
 };
 
-export const Icon = ({ icon, color }) =>
+export const Icon = ({ icon, color, size }) =>
   svgByIconName[icon] ? (
     <span
       style={{
+        transform: `scale(${size / 18})`,
         width: 18,
         height: 18,
         borderRadius: '37.5px',
         backgroundColor: color || 'black',
-        marginRight: '2px',
         textAlign: 'center',
         display: 'flex',
         justifyContent: 'center',

@@ -5,7 +5,7 @@ import { InitNodeSize } from '../../../shared/elementSizes';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;
-const headerHeight = 24;
+const headerHeight = 40;
 const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
@@ -19,7 +19,7 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-export const FormCard = ({ header, corner, label, details, icon, themeColor, onClick }) => (
+export const FormCard = ({ header, corner, label, icon, themeColor, onClick }) => (
   <div
     className="card"
     style={containerStyle}
@@ -38,11 +38,10 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
         fontSize: '14px',
         lineHeight: '19px',
         color: '#ffffff',
-        paddingLeft: '8px',
       }}
     >
-      <span>{header}</span>
-      <div style={{ position: 'absolute', top: 3, right: 0 }}>{corner}</div>
+      <div style={{ padding: '5px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{header}</div>
+      <div style={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
     </div>
     <div
       className="card__content"
@@ -55,13 +54,15 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
         style={{
           fontWeight: '400',
           paddingLeft: '5px',
-          marginTop: '5px',
+          margin: '5px',
           fontSize: '14px',
           lineHeight: '19px',
           display: 'flex',
         }}
       >
-        <Icon icon={icon || 'MessageBot'} color={themeColor} />
+        <div style={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
+          <Icon icon={icon || 'MessageBot'} color={themeColor} size={30} />
+        </div>
         <div
           style={{
             height: '100%',
@@ -69,13 +70,15 @@ export const FormCard = ({ header, corner, label, details, icon, themeColor, onC
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
+            fontSize: '14px',
+            lineHeight: '19px',
+            fontFamily: 'Segoe UI',
           }}
           title={typeof label === 'string' ? label : ''}
         >
           {label}
         </div>
       </div>
-      <div style={{ fontWeight: '300', paddingLeft: '5px', marginTop: '5px', fontSize: '12px' }}>{details}</div>
     </div>
   </div>
 );
