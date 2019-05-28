@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
 
-const NodeMenuTemplate = ({ iconName, overflowItems }) => {
+const NodeMenuTemplate = ({ iconName, overflowItems, menuWidth }) => {
   const _onRenderItem = item => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
@@ -24,7 +25,7 @@ const NodeMenuTemplate = ({ iconName, overflowItems }) => {
       <IconButton
         styles={buttonStyles}
         menuIconProps={{ iconName }}
-        menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: 100 } }}
+        menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
       />
     );
   };
@@ -40,10 +41,24 @@ const NodeMenuTemplate = ({ iconName, overflowItems }) => {
   );
 };
 
-export const IconMenu = ({ iconName, overflowItems }) => (
-  <NodeMenuTemplate iconName={iconName} overflowItems={overflowItems} />
+export const IconMenu = ({ iconName, overflowItems, menuWidth }) => (
+  <NodeMenuTemplate iconName={iconName} overflowItems={overflowItems} menuWidth={menuWidth} />
 );
 
 IconMenu.defaultProps = {
-  onEvent: () => {},
+  iconName: 'More',
+  overflowItems: [],
+  menuWidth: 100,
+};
+
+IconMenu.propTypes = {
+  iconName: PropTypes.string.isRequired,
+  overflowItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      onClick: PropTypes.func,
+    })
+  ).isRequired,
+  menuWidth: PropTypes.number,
 };
