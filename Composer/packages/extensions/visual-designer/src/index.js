@@ -8,7 +8,7 @@ import { outlineObiJson } from './transformers/outlineObiJson';
 
 initializeIcons(/* optional base url */);
 
-const JSON_PATH_PREFIX = '$.';
+const JSON_PATH_PREFIX = '$';
 
 const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }) => {
   const dataCache = useRef();
@@ -37,7 +37,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
   /**
    * This function is used to normalized the path string:
    *  - input:  '$.steps[0]'
-   *  - output: 'steps[0]'
+   *  - output: '.steps[0]'
    */
   const normalizeDataPath = jsonPathString => {
     if (jsonPathString && jsonPathString.indexOf(JSON_PATH_PREFIX) === 0) {
