@@ -1,20 +1,7 @@
 import React from 'react';
 import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-
-const NodeMenuTemplate = ({ type, onEvent }) => {
-  const MoreMenuItems = [
-    {
-      key: 'delete',
-      name: 'Delete',
-      onClick: () => onEvent(NodeEventTypes.Delete),
-    },
-  ];
-  const AddMenuItems = [];
-
-  const iconName = type === 'More' ? 'More' : 'CirclePlus';
-  const overflowItems = type === 'More' ? MoreMenuItems : AddMenuItems;
+const NodeMenuTemplate = ({ iconName, overflowItems }) => {
   const _onRenderItem = item => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
@@ -53,9 +40,10 @@ const NodeMenuTemplate = ({ type, onEvent }) => {
   );
 };
 
-export const NodeMenu = ({ id, type, onEvent }) => <NodeMenuTemplate type={type} onEvent={e => onEvent(e, { id })} />;
+export const IconMenu = ({ iconName, overflowItems }) => (
+  <NodeMenuTemplate iconName={iconName} overflowItems={overflowItems} />
+);
 
-NodeMenu.defaultProps = {
+IconMenu.defaultProps = {
   onEvent: () => {},
-  type: 'More',
 };
