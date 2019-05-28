@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
 
-const NodeMenuTemplate = ({ iconName, overflowItems, menuWidth }) => {
+export const IconMenu = ({ iconName, menuItems, menuWidth }) => {
   const _onRenderItem = item => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
@@ -34,26 +34,22 @@ const NodeMenuTemplate = ({ iconName, overflowItems, menuWidth }) => {
     <OverflowSet
       styles={{ position: 'absolute', top: 0 }}
       vertical
-      overflowItems={overflowItems}
+      overflowItems={menuItems}
       onRenderOverflowButton={_onRenderOverflowButton}
       onRenderItem={_onRenderItem}
     />
   );
 };
 
-export const IconMenu = ({ iconName, overflowItems, menuWidth }) => (
-  <NodeMenuTemplate iconName={iconName} overflowItems={overflowItems} menuWidth={menuWidth} />
-);
-
 IconMenu.defaultProps = {
   iconName: 'More',
-  overflowItems: [],
+  menuItems: [],
   menuWidth: 100,
 };
 
 IconMenu.propTypes = {
   iconName: PropTypes.string.isRequired,
-  overflowItems: PropTypes.arrayOf(
+  menuItems: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
