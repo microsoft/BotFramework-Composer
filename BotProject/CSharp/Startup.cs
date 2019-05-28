@@ -54,49 +54,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
-            IStorage storage = new MemoryStorage();
-            var userState = new UserState(storage);
-            var conversationState = new ConversationState(storage);
-
-            // Get Bot file
-            string rootDialog = string.Empty;
-
-            var botFile = Configuration.GetSection("bot").Get<BotFile>();
-            var botProject = BotProject.Load(botFile);
-            rootDialog = botProject.entry;
-
-            // manage all bot resources
-            var resourceExplorer = new ResourceExplorer();
-            foreach (var folder in botProject.Folders)
-            {
-                resourceExplorer.AddFolder(folder);
-            }
-            // TODO get rid of this dependency
             TypeFactory.Configuration = this.Configuration;
-
-            // set up bot framework runtime environment (Aka the adapter)
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
-            {
-                var adapter = new BotFrameworkHttpAdapter();
-                adapter
-                    .UseStorage(storage)
-                    .UseState(userState, conversationState)
-                    .UseLanguageGenerator(new LGLanguageGenerator(resourceExplorer))
-                    .UseDebugger(Configuration.GetValue<int>("debugport", 4712))
-                    .UseResourceExplorer(resourceExplorer, () =>
-                    {
-                    });
-                adapter.OnTurnError = async (turnContext, exception) =>
-                {
-                    await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-
-                    await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
-                    await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
-                };
-                return adapter;
-            });
-
-            services.AddSingleton<IBot, TestBot>((sp) => new TestBot(rootDialog, conversationState, resourceExplorer, DebugSupport.SourceRegistry));
+            services.AddSingleton<IBotManager, BotManager>((sp) => new BotManager(this.Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

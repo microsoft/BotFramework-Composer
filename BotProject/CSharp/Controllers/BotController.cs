@@ -19,13 +19,11 @@ namespace Microsoft.Bot.Builder.TestBot.Json
     [ApiController]
     public class BotController : ControllerBase
     {
-        private readonly IBotFrameworkHttpAdapter Adapter;
-        private readonly IBot Bot;
+        private readonly IBotManager BotManager;
 
-        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
+        public BotController(IBotManager botManager)
         {
-            Adapter = adapter;
-            Bot = bot;
+            BotManager = botManager;
         }
 
         [HttpPost]
@@ -33,7 +31,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         {
             // Delegate the processing of the HTTP POST to the adapter.
             // The adapter will invoke the bot.
-            await Adapter.ProcessAsync(Request, Response, Bot);
+            await BotManager.CurrentAdapter.ProcessAsync(Request, Response, BotManager.CurrentBot);
         }
     }
 }

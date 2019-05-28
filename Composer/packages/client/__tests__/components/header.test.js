@@ -11,7 +11,7 @@ describe('<Header />', () => {
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
     expect(container).toHaveTextContent('Save as');
-    expect(container).toHaveTextContent('Start');
+    expect(container).toHaveTextContent('Connect');
   });
 
   it('should open storage explorer', async () => {
@@ -27,15 +27,11 @@ describe('<Header />', () => {
   });
 
   it('should set bot status', async () => {
-    const mockSetBotStatus = jest.fn(() => null);
-    const { findByText, rerender } = render(<Header setBotStatus={mockSetBotStatus} botStatus={'stopped'} />);
+    const mockConnectBot = jest.fn(() => null);
+    const { findByText } = render(<Header connectBot={mockConnectBot} botStatus={'unConnected'} />);
 
-    const startButton = await findByText(/Start/);
-    fireEvent.click(startButton);
-    expect(mockSetBotStatus).toHaveBeenCalled();
-
-    rerender(<Header setBotStatus={mockSetBotStatus} botStatus={'running'} />);
-    const connectButton = await findByText(/Connect and Test/);
+    const connectButton = await findByText(/Connect/);
     fireEvent.click(connectButton);
+    expect(mockConnectBot).toHaveBeenCalled();
   });
 });

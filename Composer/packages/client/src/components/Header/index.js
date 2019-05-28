@@ -18,7 +18,8 @@ const openInEmulator = url => {
 };
 
 export const Header = props => {
-  const { botStatus, setBotStatus, openStorageExplorer } = props;
+  const { botStatus, connectBot, reloadBot, openStorageExplorer } = props;
+  const connected = botStatus === 'connected';
   return (
     <header>
       <div css={headerMain}>
@@ -49,20 +50,20 @@ export const Header = props => {
           </ActionButton>
         </div>
         <div css={bot}>
-          {botStatus === 'running' && (
+          {connected && (
             <ActionButton
               iconProps={{ iconName: 'OpenInNewTab' }}
               css={actionButton}
               style={{ marginTop: '3px' }}
               onClick={() => openInEmulator('http://localhost:3979/api/messages')}
             >
-              {formatMessage('Connect and Test')}
+              {formatMessage('Test in Emulator')}
             </ActionButton>
           )}
           <PrimaryButton
             css={botButton}
-            text={botStatus === 'running' ? formatMessage('Stop') : formatMessage('Start')}
-            onClick={() => setBotStatus(botStatus)}
+            text={connected ? formatMessage('Reload') : formatMessage('Connect')}
+            onClick={() => (connected ? reloadBot() : connectBot())}
           />
         </div>
       </div>
@@ -72,6 +73,7 @@ export const Header = props => {
 
 Header.propTypes = {
   botStatus: PropTypes.string,
-  setBotStatus: PropTypes.func,
+  connectBot: PropTypes.func,
+  reloadBot: PropTypes.func,
   openStorageExplorer: PropTypes.func,
 };
