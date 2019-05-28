@@ -34,7 +34,7 @@ export class IntentRule extends React.Component {
 
   render() {
     const { id, data, onEvent } = this.props;
-    const { intent, steps } = data;
+    const { steps } = data;
     return (
       <IconButton
         themeColor="#0078D4"
