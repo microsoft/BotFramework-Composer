@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import formatMessage from 'format-message';
 
-import Routes from './router';
+import { LanguageGenerationSettings } from './lg-settings';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { NavLink } from './../../components/NavLink/index';
@@ -31,7 +31,7 @@ export const ContentPage = () => {
             </Tree>
           </div>
           <Conversation extraCss={contentEditor}>
-            <Routes />
+            <LanguageGenerationSettings />
           </Conversation>
         </Fragment>
       </MainContent>

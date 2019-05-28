@@ -58,6 +58,16 @@ export const sampleItem = css`
   align-items: center;
 `;
 
+export const newContainer = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const locationSelection = css`
+  display: flex;
+  flex-grow: 1;
+`;
+
 export const newTip = css`
   padding-left: 30px;
   font-size: 14px;

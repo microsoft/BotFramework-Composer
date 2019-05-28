@@ -5,7 +5,7 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
-import { sampleItem, sampleList, newTip } from './styles';
+import { newContainer, sampleItem, sampleList, newTip, locationSelection } from './styles';
 import { LocationSelectContent } from './LocationSelectContent';
 import { Store } from './../../store';
 
@@ -38,7 +38,7 @@ export function NewContent(props) {
   };
 
   return (
-    <div>
+    <div css={newContainer}>
       <div css={newTip}>
         <span>{formatMessage(`Choose a ${step === 0 ? 'template' : 'location'}`)}</span>
         {step === 1 && (
@@ -61,7 +61,7 @@ export function NewContent(props) {
           })}
         </div>
       ) : (
-        <div style={{ display: 'flex' }}>
+        <div css={locationSelection}>
           <LocationSelectContent onSaveAs={handleSaveAs} />
         </div>
       )}

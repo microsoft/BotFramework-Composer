@@ -10,7 +10,7 @@ import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMergedSchema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
-import { DialogInfo, FormMemory, FormData, ShellApi } from './types';
+import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema } from './types';
 
 import './App.css';
 
@@ -23,7 +23,7 @@ export interface FormEditorProps {
   focusPath: string;
   data: FormData;
   dialogs: DialogInfo[];
-  schemas: any;
+  schemas: EditorSchema;
   memory: FormMemory;
   shellApi: ShellApi;
   onChange: (newData: object) => void;
