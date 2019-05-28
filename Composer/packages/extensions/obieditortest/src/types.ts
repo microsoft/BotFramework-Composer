@@ -32,3 +32,11 @@ export interface ShellApi {
   navDown: (path: string) => Promise<void>;
   focusTo: (path: string) => Promise<void>;
 }
+export interface EditorSchema {
+  editor: {
+    content?: {
+      fieldTemplateOverrides?: any;
+      SDKOverrides?: any;
+    };
+  };
+}

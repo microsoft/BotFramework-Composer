@@ -2,7 +2,6 @@ import { css } from '@emotion/core';
 
 export const fileList = css`
   flex: 1;
-  margin-left: 30px;
 `;
 
 export const contentEditor = css`
