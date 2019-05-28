@@ -12,7 +12,7 @@ export const headerMain = css`
 `;
 
 export const headerSub = css`
-  padding: 5px 20px 5px 100px;
+  padding: 5px 20px 5px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,8 +20,8 @@ export const headerSub = css`
 `;
 
 export const aside = css`
-  width: 200;
-  margin-left: 100px;
+  width: 200px;
+  margin-left: 50px;
 `;
 
 export const bot = css`
