@@ -13,6 +13,7 @@ export async function connectBot(dispatch) {
         status: 'connected',
       },
     });
+    await reloadBot(dispatch);
   } catch (err) {
     dispatch({
       type: ActionTypes.CONNECT_BOT_FAILURE,
