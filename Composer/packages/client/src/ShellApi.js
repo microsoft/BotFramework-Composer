@@ -123,9 +123,13 @@ export function ShellApi() {
     actions.navDown(subPath);
   }
 
-  function focusTo({ subPath }) {
+  function focusTo({ subPath }, event) {
     flushUpdates();
-    actions.focusTo(navPath + subPath);
+    let path = navPath;
+    if (event.source.name === 'FormEditor') {
+      path = focusPath;
+    }
+    actions.focusTo(path + subPath);
   }
 
   return null;
