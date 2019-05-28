@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { Icon } from '../icons/icon';
+import { InitNodeSize } from '../../../shared/elementSizes';
 
-const boxWidth = 170;
-const boxHeight = 50;
+const boxWidth = InitNodeSize.width;
+const boxHeight = InitNodeSize.height;
 const headerHeight = 24;
 const contentHeight = boxHeight - headerHeight;
 
