@@ -4,12 +4,12 @@ import { IconMenu } from '../nodes/templates/IconMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 export const NodeMenu = ({ id, onEvent }) => {
-  const overflowItems = [
+  const menuItems = [
     {
       key: 'delete',
       name: 'Delete',
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
-  return <IconMenu iconName="More" overflowItems={overflowItems} />;
+  return <IconMenu iconName="More" menuItems={menuItems} />;
 };
