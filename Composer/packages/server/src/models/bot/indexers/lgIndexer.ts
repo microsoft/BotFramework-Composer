@@ -32,6 +32,7 @@ export class LGIndexer {
           id: path.basename(file.name, extName),
           absolutePath: file.path,
           templates: lgTemplates,
+          content: file.content,
         });
       }
     }
@@ -59,7 +60,7 @@ export class LGIndexer {
   }
 
   public createLgFile = (id: string, templates: string, absolutePath: string) => {
-    this.lgFiles.push({ id, templates: [], absolutePath });
+    this.lgFiles.push({ id, templates: [], content: '', absolutePath });
     return templates;
   };
 

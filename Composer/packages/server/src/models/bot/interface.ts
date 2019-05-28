@@ -35,6 +35,7 @@ export interface LGTemplate {
 export interface LGFile {
   id: string;
   absolutePath: string;
+  content: any;
   templates: LGTemplate[];
 }
 

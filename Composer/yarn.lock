@@ -4633,11 +4633,6 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-brace@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/brace/-/brace-0.11.1.tgz#4896fcc9d544eef45f4bb7660db320d3b379fe58"
-  integrity sha1-SJb8ydVE7vRfS7dmDbMg07N5/lg=
-
 braces@^0.1.2:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/braces/-/braces-0.1.5.tgz#c085711085291d8b75fdd74eab0f8597280711e6"
@@ -7127,11 +7122,6 @@ di@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/di/-/di-0.0.1.tgz#806649326ceaa7caa3306d75d985ea2748ba913c"
   integrity sha1-gGZJMmzqp8qjMG112YXqJ0i6kTw=
-
-diff-match-patch@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.4.tgz#6ac4b55237463761c4daf0dc603eb869124744b1"
-  integrity sha512-Uv3SW8bmH9nAtHKaKSanOQmj2DnlH65fUpcrMdfdaOxUG02QQ4YGZ8AE7kKOMisF7UqvOlGKVYWRvezdncW9lg==
 
 diff-sequences@^24.3.0:
   version "24.3.0"
@@ -13152,6 +13142,11 @@ moment@2.24.0:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
+monaco-editor@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.17.0.tgz#d1d035c6f512ab88503cbee8213cab34b85ab954"
+  integrity sha512-8BQQHCFxy3DF0GYFOy5BmcCWlwm/XaTMPbPbN4gwItFGctZErSfX82uQSBpojJSlPNyudB5Q5qnukoorD3/UuA==
+
 morgan@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -15763,17 +15758,6 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-ace@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-6.5.0.tgz#8238fff6d1b037c0aef864aab3715a7c60153f8f"
-  integrity sha512-W8iA6669Tf3sfjCsBg8gKs2pUVMy6BroX6O6GZcgadnLN+MTq7jhs6Q2Rsjq3E3SrWjyA9vZgs1Uzjy8XgWX5w==
-  dependencies:
-    brace "^0.11.1"
-    diff-match-patch "^1.0.4"
-    lodash.get "^4.4.2"
-    lodash.isequal "^4.5.0"
-    prop-types "^15.6.2"
-
 react-app-polyfill@^0.2.0, react-app-polyfill@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-app-polyfill/-/react-app-polyfill-0.2.2.tgz#a903b61a8bfd9c5e5f16fc63bebe44d6922a44fb"
@@ -15879,6 +15863,15 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-monaco-editor@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.26.1.tgz#59a832b7d6db3191c43075c5c057fef4f51a328d"
+  integrity sha512-tfSzBngrIH4hRwnELqKSP4aqGcodJQU0ztd6HKNzTitL/GjZNDFuQv7FjQb67kDmHsyDTBp96Vicdhy+ssXJ7w==
+  dependencies:
+    "@types/react" "*"
+    monaco-editor "^0.17.0"
+    prop-types "^15.7.2"
 
 react-proxy@^1.1.7:
   version "1.1.8"

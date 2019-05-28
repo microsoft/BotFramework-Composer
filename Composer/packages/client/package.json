@@ -58,6 +58,7 @@
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.4",
     "react-frame-component": "^4.0.2",
+    "react-monaco-editor": "^0.26.1",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
