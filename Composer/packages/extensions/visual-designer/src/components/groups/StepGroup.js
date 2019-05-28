@@ -7,7 +7,8 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
-import { ElementInterval, InitNodeSize } from '../../shared/elementSizes';
+import { ElementInterval, InitNodeSize, EdgeAddButtonSize } from '../../shared/elementSizes';
+import { EdgeMenu } from '../shared/EdgeMenu';
 
 const StepInterval = ElementInterval.y;
 const InitStepWidth = InitNodeSize.width;
@@ -48,6 +49,9 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
   const { boundary, nodes, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      {edges.map(x => (
+        <Edge key={x.id} {...x} />
+      ))}
       {nodes.map(x => (
         <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
           <NodeRenderer
@@ -62,9 +66,22 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
           />
         </OffsetContainer>
       ))}
-      {edges.map(x => (
-        <Edge key={x.id} {...x} />
+      {nodes.map(x => (
+        <OffsetContainer
+          key={`stepGroup/${x.id}/footer/offset`}
+          offset={{
+            x: boundary.axisX - EdgeAddButtonSize.width / 2,
+            y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
+          }}
+        >
+          <EdgeMenu />
+        </OffsetContainer>
       ))}
+      <OffsetContainer
+        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
+      >
+        <EdgeMenu />
+      </OffsetContainer>
     </div>
   );
 };
