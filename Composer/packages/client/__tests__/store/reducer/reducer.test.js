@@ -82,7 +82,7 @@ describe('test all reducer handlers', () => {
     expect(result.navPathHistory).toHaveLength(1);
   });
   it('test focusTo reducer', () => {
-    const result = reducer({ navPath: '' }, { type: ActionTypes.FOCUS_TO, payload: { subPath: 'mock path' } });
+    const result = reducer({ navPath: '' }, { type: ActionTypes.FOCUS_TO, payload: { path: 'mock path' } });
     expect(result.focusPath).toBe('mock path');
   });
   it('test clearNavHistory reducer', () => {
