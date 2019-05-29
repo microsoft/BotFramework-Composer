@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export class OffsetContainer extends React.Component {
   render() {
-    const { offset, children } = this.props;
+    const { offset, children, styles } = this.props;
     if (!offset) return children;
     return (
       <div
@@ -13,6 +13,7 @@ export class OffsetContainer extends React.Component {
           top: offset.y,
           transitionDuration: '50ms',
           transitionProperty: 'left, right, top, bottom',
+          ...styles,
         }}
       >
         {children}
@@ -20,6 +21,10 @@ export class OffsetContainer extends React.Component {
     );
   }
 }
+
+OffsetContainer.defaultProps = {
+  styles: {},
+};
 
 OffsetContainer.propTypes = {
   offset: PropTypes.shape({

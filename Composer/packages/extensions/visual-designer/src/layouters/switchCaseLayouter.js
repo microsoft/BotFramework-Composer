@@ -1,10 +1,11 @@
 import { Boundary } from '../components/shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
 const SwitchToBaseline = 10;
 const CaseToBaseline = 30;
 const CaseToBottom = 20;
-const CaseBlockIntervalX = 20;
-const MisalignmentThreshold = 30;
+const CaseBlockIntervalX = ElementInterval.y;
+const MisalignmentThreshold = 50;
 
 /**
  *        [switch]
