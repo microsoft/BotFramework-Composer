@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from 'react-jsonschema-form';
+import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, IDropdownOption, IContextualMenuItem } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';

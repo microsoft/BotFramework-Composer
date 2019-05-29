@@ -1,6 +1,6 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import { ArrayFieldTemplateProps } from 'react-jsonschema-form';
+import { ArrayFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 
 import { BaseField } from '../fields/BaseField';
 

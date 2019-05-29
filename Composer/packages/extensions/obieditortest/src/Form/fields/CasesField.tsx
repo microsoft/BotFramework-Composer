@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from 'react-jsonschema-form';
+import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 

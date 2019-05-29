@@ -1,7 +1,7 @@
 import React from 'react';
 import { DefaultButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
-import { ArrayFieldItem } from 'react-jsonschema-form';
+import { ArrayFieldItem } from '@bfdesigner/react-jsonschema-form';
 import formatMessage from 'format-message';
 
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
