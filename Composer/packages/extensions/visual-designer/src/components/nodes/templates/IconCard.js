@@ -5,7 +5,7 @@ import { Icon } from '../icons/icon';
 const boxWidth = 227;
 const boxHeight = 36;
 
-export const IconButton = ({ corner, label, icon, themeColor, onClick }) => {
+export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
   const containerStyle = {
     width: boxWidth,
     height: boxHeight,
