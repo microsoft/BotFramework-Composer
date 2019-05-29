@@ -11,5 +11,5 @@ export const NodeMenu = ({ id, onEvent }) => {
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
-  return <IconMenu iconName="More" menuItems={menuItems} />;
+  return <IconMenu iconName="More" menuItems={menuItems} menuWidth={100} />;
 };

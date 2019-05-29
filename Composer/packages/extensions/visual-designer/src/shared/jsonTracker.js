@@ -56,3 +56,69 @@ export function deleteNode(inputDialog, path) {
 
   return dialog;
 }
+
+function locateArrayInsertPoint(data, path) {
+  const matchResult = path.match(/^(.+)\[(\d+)\]$/);
+  if (!matchResult) {
+    console.warn('insert checking failed: invalid path', path);
+    return null;
+  }
+
+  const targetPath = matchResult[1];
+  const targetIndex = parseInt(matchResult[2]);
+
+  const targetArray = locateNode(data, targetPath).currentData;
+  if (!Array.isArray(targetArray)) {
+    console.warn('insert checking failed: invalid data, expect an array but got', targetArray);
+    return null;
+  }
+
+  return {
+    targetArray,
+    targetIndex,
+  };
+}
+
+export function insertBefore(inputDialog, path, $type) {
+  const dialog = cloneDeep(inputDialog);
+  const insertLocation = locateArrayInsertPoint(dialog, path);
+
+  if (!insertLocation) {
+    return dialog;
+  }
+
+  const { targetArray, targetIndex } = insertLocation;
+  const newStep = { $type };
+  targetArray.splice(targetIndex, 0, newStep);
+  return dialog;
+}
+
+export function insertAfter(inputDialog, path, $type) {
+  const dialog = cloneDeep(inputDialog);
+  const insertLocation = locateArrayInsertPoint(dialog, path);
+
+  if (!insertLocation) {
+    return dialog;
+  }
+
+  const { targetArray, targetIndex } = insertLocation;
+  const newStep = { $type };
+  targetArray.splice(targetIndex + 1, 0, newStep);
+  return dialog;
+}
+
+export function appendToArray(inputDialog, path, $type) {
+  const dialog = cloneDeep(inputDialog);
+  const target = locateNode(dialog, path);
+
+  if (!target) return dialog;
+
+  const { parentData, currentKey, currentData } = target;
+  const newStep = { $type };
+  if (Array.isArray(currentData)) {
+    currentData.push(newStep);
+  } else {
+    parentData[currentKey] = [{ $type }];
+  }
+  return dialog;
+}
