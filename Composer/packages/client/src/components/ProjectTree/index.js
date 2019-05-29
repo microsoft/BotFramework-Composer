@@ -1,21 +1,44 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { useMemo } from 'react';
 import { PropTypes } from 'prop-types';
-
-import { Node } from './node';
-import { container } from './styles';
+import { Nav } from 'office-ui-fabric-react';
 
 export const ProjectTree = props => {
-  const { files, activeNode, onSelect } = props;
+  const { files, onSelect, activeNode } = props;
 
-  function buildProjectTree() {
-    return files.map(node => {
-      if (!node.parent)
-        return <Node key={node.id} node={node} files={files} activeNode={activeNode} onSelect={onSelect} />;
-    });
-  }
+  const links = useMemo(() => {
+    return files.reduce((result, file) => {
+      if (result.length === 0) {
+        result = [{ links: [] }];
+      }
+      const item = {
+        key: file.id,
+        ...file,
+      };
 
-  return <ul css={container}>{files && files.length ? buildProjectTree() : ''}</ul>;
+      if (file.id === 0) {
+        result[0] = { ...result[0], ...item, isExpanded: true };
+      } else {
+        result[0].links.push(item);
+      }
+      return result;
+    }, []);
+  }, [files]);
+
+  return (
+    <Nav
+      onLinkClick={(ev, item) => {
+        onSelect(item.id);
+        ev.preventDefault();
+      }}
+      onLinkExpandClick={(ev, item) => {
+        onSelect(item.id);
+      }}
+      groups={[{ links: links, collapseByDefault: true }]}
+      selectedKey={activeNode}
+    />
+  );
 };
 
 ProjectTree.propTypes = {
