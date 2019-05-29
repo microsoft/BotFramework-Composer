@@ -131,4 +131,6 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
+  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
 });

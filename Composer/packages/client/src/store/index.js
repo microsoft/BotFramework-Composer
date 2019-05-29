@@ -15,7 +15,7 @@ const initialState = {
   navPathHistory: [],
   storages: [],
   focusedStorageFolder: {},
-  botStatus: 'stopped',
+  botStatus: 'unConnected',
   storageExplorerStatus: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
