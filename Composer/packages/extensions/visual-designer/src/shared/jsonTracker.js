@@ -106,3 +106,19 @@ export function insertAfter(inputDialog, path, $type) {
   targetArray.splice(targetIndex + 1, 0, newStep);
   return dialog;
 }
+
+export function appendToArray(inputDialog, path, $type) {
+  const dialog = cloneDeep(inputDialog);
+  const target = locateNode(dialog, path);
+
+  if (!target) return dialog;
+
+  const { parentData, currentKey, currentData } = target;
+  const newStep = { $type };
+  if (Array.isArray(currentData)) {
+    currentData.push(newStep);
+  } else {
+    parentData[currentKey] = [{ $type }];
+  }
+  return dialog;
+}

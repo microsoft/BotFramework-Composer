@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
-import { deleteNode, insertBefore, insertAfter } from '../shared/jsonTracker';
+import { deleteNode, insertBefore, insertAfter, appendToArray } from '../shared/jsonTracker';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
@@ -30,6 +30,9 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
         break;
       case NodeEventTypes.InsertAfter:
         handler = e => onChange(insertAfter(data, e.id, e.$type));
+        break;
+      case NodeEventTypes.Insert:
+        handler = e => onChange(appendToArray(data, e.id, e.$type));
         break;
       default:
         handler = onSelect;

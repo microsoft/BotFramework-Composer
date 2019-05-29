@@ -5,4 +5,5 @@ export const NodeEventTypes = {
   Delete: 'event.data.delete',
   InsertBefore: 'event.data.insert-before',
   InsertAfter: 'event.data.insert-after',
+  Insert: 'event.data.insert',
 };

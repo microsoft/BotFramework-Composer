@@ -4,7 +4,9 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
-import { RecognizerGroup, StepGroup } from '../components/groups';
+import { RecognizerGroup } from '../components/groups';
+
+import { StepEditor } from './StepEditor';
 
 const ColMargin = 10;
 
@@ -41,7 +43,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       ) : null}
       {stepGroup ? (
         <div style={{ margin: ColMargin }}>
-          <StepGroup
+          <StepEditor
             key={stepGroup.id}
             id={stepGroup.id}
             data={stepGroup.data}
@@ -52,7 +54,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       ) : null}
       {ruleGroup ? (
         <div style={{ margin: ColMargin }}>
-          <StepGroup
+          <StepEditor
             key={ruleGroup.id}
             id={ruleGroup.id}
             data={ruleGroup.data}
