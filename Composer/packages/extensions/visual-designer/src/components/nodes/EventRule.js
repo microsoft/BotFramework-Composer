@@ -4,14 +4,14 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
-import { IconButton } from './templates/IconButton';
+import { IconCard } from './templates/IconCard';
 
 export class EventRule extends React.Component {
   render() {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
-      <IconButton
+      <IconCard
         themeColor="#B2D20E"
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.events}

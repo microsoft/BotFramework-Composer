@@ -6,7 +6,7 @@ import { normalizeObiStep } from '../../transformers/helpers/elementBuilder';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
-import { IconButton } from './templates/IconButton';
+import { IconCard } from './templates/IconCard';
 
 export class IntentRule extends React.Component {
   getDetails() {
@@ -36,7 +36,7 @@ export class IntentRule extends React.Component {
     const { id, data, onEvent } = this.props;
     const { steps } = data;
     return (
-      <IconButton
+      <IconCard
         themeColor="#0078D4"
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.getDetails()}
