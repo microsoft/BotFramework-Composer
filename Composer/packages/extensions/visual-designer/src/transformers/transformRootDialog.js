@@ -23,18 +23,15 @@ function transformRecognizerDialog(input) {
   const ruleNodes = rules ? rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)) : [];
   const stepNodes = steps ? steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))) : [];
 
-  const eventNodes = [],
-    intentNodes = [],
+  const taskNodes = [],
     otherRuleNodes = [];
 
   for (const node of ruleNodes) {
     switch (node.json.$type) {
       case ObiTypes.UnknownIntentRule:
       case ObiTypes.EventRule:
-        eventNodes.push(node);
-        break;
       case ObiTypes.IntentRule:
-        intentNodes.push(node);
+        taskNodes.push(node);
         break;
       default:
         otherRuleNodes.push(node);
@@ -49,17 +46,10 @@ function transformRecognizerDialog(input) {
       recognizer: recognizerNode,
     };
 
-    if (eventNodes.length) {
-      payload.eventGroup = new IndexedNode('$.eventGroup', {
-        $type: ObiTypes.EventGroup,
-        children: eventNodes,
-      });
-    }
-
-    if (intentNodes.length) {
-      payload.intentGroup = new IndexedNode('$.intentGroup', {
-        $type: ObiTypes.IntentGroup,
-        children: intentNodes,
+    if (taskNodes.length) {
+      payload.taskGroup = new IndexedNode('$.taskGroup', {
+        $type: ObiTypes.TaskGroup,
+        children: taskNodes,
       });
     }
 

@@ -3,8 +3,7 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
-import { EventGroup } from './EventGroup';
-import { IntentGroup } from './IntentGroup';
+import { TaskGroup } from './TaskGroup';
 
 const ElementMargin = 10;
 
@@ -20,7 +19,7 @@ export const RecognizerGroup = ({ data, focusedId, onEvent }) => {
     return null;
   };
 
-  const { eventGroup, intentGroup } = data;
+  const { taskGroup } = data;
   return (
     <div
       style={{
@@ -34,8 +33,7 @@ export const RecognizerGroup = ({ data, focusedId, onEvent }) => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {renderElement(eventGroup, EventGroup)}
-      {renderElement(intentGroup, IntentGroup)}
+      {renderElement(taskGroup, TaskGroup)}
     </div>
   );
 };
