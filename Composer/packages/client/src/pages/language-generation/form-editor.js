@@ -19,6 +19,21 @@ const lgParserValidate = (name, body) => {
   return res.isValid ? '' : res.error.Message;
 };
 
+const textFromTemplates = templates => {
+  let text = '';
+  templates.forEach(template => {
+    if (template.Name && template.Body) {
+      text += `# ${template.Name.trim()}` + '\n';
+      text += `${template.Body.trim()}` + '\n\n';
+    }
+  });
+  return text;
+};
+
+const randomName = () => {
+  return `TemplateName${Math.floor(Math.random() * 1000)}`;
+};
+
 export default function FormEditor(props) {
   const { actions } = useContext(Store);
   const lgFile = props.file;
@@ -41,13 +56,13 @@ export default function FormEditor(props) {
           <TextField
             borderless
             placeholder={formatMessage('Template Name.')}
-            value={item.name}
+            value={item.Name}
             validateOnLoad={false}
             onGetErrorMessage={newName => {
               return validateNameMessage(newName);
             }}
             onBlur={() => submitTemplateChange(item)}
-            onChange={(event, newName) => updateTemplateContent(item, newName, item.body)}
+            onChange={(event, newName) => updateTemplateContent(item, newName, item.Body)}
           />
         );
       },
@@ -85,7 +100,7 @@ export default function FormEditor(props) {
       return formatMessage('name can not be empty');
     }
 
-    if (items.filter(item => item.name === name).length > 1) {
+    if (items.filter(item => item.Name === name).length > 1) {
       return formatMessage('name has been taken');
     }
 
@@ -103,55 +118,55 @@ export default function FormEditor(props) {
         multiline
         autoAdjustHeight
         placeholder={formatMessage('Template Content.')}
-        value={item.body}
+        value={item.Body}
         validateOnLoad={false}
         onGetErrorMessage={newBody => {
           return validateBodyMessage(newBody);
         }}
         onBlur={() => submitTemplateChange(item)}
-        onChange={(event, newBody) => updateTemplateContent(item, item.name, newBody)}
+        onChange={(event, newBody) => updateTemplateContent(item, item.Name, newBody)}
       />
     );
   }
 
   // submit template change in component state
   function submitTemplateChange(currentTemplate) {
-    const templateInState = items.find(item => currentTemplate.name === item.name);
-    const templateIndex = items.findIndex(item => currentTemplate.name === item.name);
-    const { name, body, changed } = templateInState;
-    const isValid = lgParserValidate(name, body);
+    const templateInState = items.find(item => currentTemplate.Name === item.Name);
+    const templateIndex = items.findIndex(item => currentTemplate.Name === item.Name);
+    const { Name, Body, changed } = templateInState;
+    const isValid = lgParserValidate(Name, Body);
 
     // if no change, reject
     // if is not valid, reject
     if (changed !== true || isValid !== '') return;
     const templateInLgFile = lgFile.templates[templateIndex];
 
-    templateInLgFile.name = name;
-    templateInLgFile.body = body;
+    templateInLgFile.Name = Name;
+    templateInLgFile.Body = Body;
     const payload = {
       id: lgFile.id,
-      lgTemplates: lgFile.templates,
+      content: textFromTemplates(lgFile.templates),
     };
     updateLgFile(payload);
   }
 
   // update template in component state
   function updateTemplateContent(currentTemplate, newName, newBody) {
-    const template = items.find(item => currentTemplate.name === item.name);
-    template.name = newName;
-    template.body = newBody;
+    const template = items.find(item => currentTemplate.Name === item.Name);
+    template.Name = newName;
+    template.Body = newBody;
     template.changed = true;
   }
 
   function onCreateNewTemplate() {
     const newItems = [...items];
     newItems.push({
-      name: 'TemplateName',
-      body: '-TemplateValue',
+      Name: randomName(), // need optimize
+      Body: '-TemplateValue',
     });
     const payload = {
       id: lgFile.id,
-      lgTemplates: newItems,
+      content: textFromTemplates(newItems),
     };
     updateLgFile(payload);
   }
@@ -159,13 +174,13 @@ export default function FormEditor(props) {
   function onRemoveTemplate(item) {
     const newItems = [...items];
     const templateIndex = items.findIndex(template => {
-      return item.name === template.name;
+      return item.Name === template.Name;
     });
 
     newItems.splice(templateIndex, 1);
     const payload = {
       id: lgFile.id,
-      lgTemplates: newItems,
+      content: textFromTemplates(newItems),
     };
 
     updateLgFile(payload);
@@ -181,7 +196,7 @@ export default function FormEditor(props) {
           items={lgFile.templates}
           compact={false}
           columns={tableColums}
-          getKey={item => item.name}
+          getKey={item => item.Name}
           // layoutMode={DetailsListLayoutMode.fixedColumns}
           // onRenderDetailsHeader={onRenderDetailsHeader}
           selectionMode={SelectionMode.none}

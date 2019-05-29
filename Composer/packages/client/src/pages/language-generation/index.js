@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import lodash from 'lodash';
-import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'react';
+import { useContext, Fragment, useEffect, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { LGParser } from 'botbuilder-lg';
 
 import { Store } from '../../store/index';
 import { OpenConfirmModal } from '../../components/Modal';
@@ -23,6 +24,7 @@ export const LGPage = props => {
   const [modalOpen, setModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(false);
   const [contentChanged, setContentChanged] = useState(false);
+  const [groups, setGroups] = useState([]);
 
   let changedNewContent = '';
 
@@ -35,6 +37,42 @@ export const LGPage = props => {
     if (lgFiles.length !== 0 && lgFile === undefined) {
       navigate(`./${lgFiles[0].id}`);
     }
+
+    lgFiles.forEach(file => {
+      const parseResult = LGParser.TryParse(file.content);
+      if (parseResult.isValid) {
+        file.templates = parseResult.templates;
+      }
+    });
+
+    const links = lgFiles.map(file => {
+      const subNav = file.templates.map(template => {
+        return {
+          name: template.Name,
+        };
+      });
+
+      return {
+        key: file.id,
+        name: `${file.id}.lg`,
+        collapseByDefault: false,
+        ariaLabel: file.id,
+        altText: file.id,
+        title: file.id,
+        isExpanded: true,
+        links: subNav,
+        forceAnchor: false,
+        onClick: event => {
+          event.preventDefault();
+          navigate(`./${file.id}`);
+        },
+      };
+    });
+    setGroups([
+      {
+        links: links,
+      },
+    ]);
 
     setLgFile({ ...lgFile });
 
@@ -75,41 +113,12 @@ export const LGPage = props => {
   }
 
   async function onCreateLgFile(data) {
-    await actions.createLgFile(data);
+    await actions.createLgFile({
+      id: data.name,
+    });
     setModalOpen(false);
     navigate(`./${data.name}`);
   }
-
-  const groups = useMemo(() => {
-    const links = lgFiles.map(file => {
-      const subNav = file.templates.map(template => {
-        return {
-          name: template.name,
-        };
-      });
-
-      return {
-        key: file.id,
-        name: `${file.id}.lg`,
-        collapseByDefault: false,
-        ariaLabel: file.id,
-        altText: file.id,
-        title: file.id,
-        isExpanded: true,
-        links: subNav,
-        forceAnchor: false,
-        onClick: event => {
-          event.preventDefault();
-          navigate(`./${file.id}`);
-        },
-      };
-    });
-    return [
-      {
-        links: links,
-      },
-    ];
-  }, [lgFiles]);
 
   return (
     <Fragment>

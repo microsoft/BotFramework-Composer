@@ -5,7 +5,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent, LGTemplate } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -88,7 +88,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public updateLgFile = async (id: string, content: LGTemplate[]) => {
+  public updateLgFile = async (id: string, content: string) => {
     const newFileContent = await this.lgIndexer.updateLgFile(id, content);
     this._updateFile(`${id.trim()}.lg`, newFileContent);
     return this.lgIndexer.getLgFiles();

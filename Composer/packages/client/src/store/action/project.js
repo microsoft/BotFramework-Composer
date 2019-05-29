@@ -143,9 +143,9 @@ export async function createDialog(dispatch, { name, steps }) {
   }
 }
 
-export async function updateLgFile(dispatch, { id, lgTemplates }) {
+export async function updateLgFile(dispatch, { id, content }) {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, lgTemplates });
+    const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_LG_SUCCESS,
       payload: { response },
@@ -159,9 +159,9 @@ export async function updateLgFile(dispatch, { id, lgTemplates }) {
   }
 }
 
-export async function createLgFile(dispatch, { name, content }) {
+export async function createLgFile(dispatch, { id, content }) {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { name, content });
+    const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
     dispatch({
       type: ActionTypes.CREATE_LG_SUCCCESS,
       payload: { response },
@@ -207,9 +207,9 @@ export async function updateLuFile(dispatch, { id, content }) {
   }
 }
 
-export async function createLuFile(dispatch, { name, content }) {
+export async function createLuFile(dispatch, { id, content }) {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id: name, content });
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id, content });
     dispatch({
       type: ActionTypes.CREATE_LU_SUCCCESS,
       payload: { response },

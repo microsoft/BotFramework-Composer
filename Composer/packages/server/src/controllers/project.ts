@@ -118,7 +118,7 @@ async function createDialogFromTemplate(req: Request, res: Response) {
 
 async function updateLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.lgTemplates);
+    const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -127,7 +127,7 @@ async function updateLgFile(req: Request, res: Response) {
 
 async function createLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name);
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id);
     res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
