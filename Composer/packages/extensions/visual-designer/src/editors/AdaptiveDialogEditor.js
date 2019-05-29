@@ -5,7 +5,7 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
 import { RecognizerGroup } from '../components/groups';
-import { FoldNode } from '../components/nodes/templates/Fold';
+import { Fold } from '../components/nodes/templates/Fold';
 
 import { StepEditor } from './StepEditor';
 
@@ -26,33 +26,6 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
   const recognizerFoldText = `Trigger(${dialog ? dialog.data.taskGroup.json.children.length : 0})`;
   const stepFoldText = `Steps(${steps ? steps.length : 0})`;
   const ruleFoldText = `Rules(${rules ? rules.length : 0})`;
-  let recognizerGroupElement = null;
-  let stepGroupElement = null;
-  let ruleGroupElement = null;
-
-  const foldGroup = (isFold, group) => {
-    let groupElement = null;
-
-    switch (group) {
-      case 'rule':
-        groupElement = ruleGroupElement;
-        break;
-      case 'step':
-        groupElement = stepGroupElement;
-        break;
-      default:
-        groupElement = recognizerGroupElement;
-        break;
-    }
-
-    if (!groupElement) return;
-
-    if (isFold) {
-      groupElement.style.display = 'none';
-    } else {
-      groupElement.style.display = 'block';
-    }
-  };
 
   return (
     <div
@@ -66,8 +39,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
     >
       {dialog ? (
         <div>
-          <FoldNode text={recognizerFoldText} onFold={isFold => foldGroup(isFold, 'recognizer')} />
-          <div ref={el => (recognizerGroupElement = el)}>
+          <Fold text={recognizerFoldText}>
             <RecognizerGroup
               key={dialog.id}
               id={dialog.id}
@@ -75,13 +47,12 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
               focusedId={focusedId}
               onEvent={onEvent}
             />
-          </div>
+          </Fold>
         </div>
       ) : null}
       {stepGroup ? (
         <div style={{ margin: '10px 0' }}>
-          <FoldNode text={stepFoldText} onFold={isFold => foldGroup(isFold, 'step')} />
-          <div ref={el => (stepGroupElement = el)}>
+          <Fold text={stepFoldText}>
             <StepEditor
               key={stepGroup.id}
               id={stepGroup.id}
@@ -89,13 +60,12 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
               focusedId={focusedId}
               onEvent={onEvent}
             />
-          </div>
+          </Fold>
         </div>
       ) : null}
       {ruleGroup ? (
         <div style={{ margin: '10px 0' }}>
-          <FoldNode text={ruleFoldText} onFold={isFold => foldGroup(isFold, 'rule')} />
-          <div ref={el => (ruleGroupElement = el)}>
+          <Fold text={ruleFoldText}>
             <StepEditor
               key={ruleGroup.id}
               id={ruleGroup.id}
@@ -103,7 +73,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
               focusedId={focusedId}
               onEvent={onEvent}
             />
-          </div>
+          </Fold>
         </div>
       ) : null}
     </div>
