@@ -1,7 +1,8 @@
 import { Boundary } from '../components/shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
-const BranchIntervalX = 50;
-const BranchIntervalY = 20;
+const BranchIntervalX = ElementInterval.x;
+const BranchIntervalY = ElementInterval.y / 2;
 
 export function ifElseLayouter(choiceNode, ifNode, elseNode) {
   const containerBoundary = new Boundary();

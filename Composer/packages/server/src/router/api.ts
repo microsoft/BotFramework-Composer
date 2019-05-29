@@ -25,8 +25,8 @@ router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs/:path(*)', StorageController.getBlob);
 
 // connector
-router.get('/launcher/start', BotConnectorController.start);
-router.get('/launcher/stop', BotConnectorController.stop);
+router.get('/launcher/connect', BotConnectorController.connect);
+router.get('/launcher/sync', BotConnectorController.sync);
 router.get('/launcher/status', BotConnectorController.status);
 
 //assets

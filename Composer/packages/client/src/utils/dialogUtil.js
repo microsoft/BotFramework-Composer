@@ -1,10 +1,9 @@
-import get from 'lodash.get';
-import set from 'lodash.set';
-import cloneDeep from 'lodash.clonedeep';
+import { get, set, cloneDeep, replace } from 'lodash';
 
 export function getDialogData(dialogsMap, path) {
   if (path === '') return '';
-  const pathList = path.split('#');
+  const realPath = replace(path, '#.', '#');
+  const pathList = realPath.split('#');
   const dialog = dialogsMap[pathList[0]];
 
   if (pathList[1] === '') {
@@ -16,7 +15,8 @@ export function getDialogData(dialogsMap, path) {
 
 export function setDialogData(dialogsMap, path, data) {
   const dialogsMapClone = cloneDeep(dialogsMap);
-  const pathList = path.split('#');
+  const realPath = replace(path, '#.', '#');
+  const pathList = realPath.split('#');
   const dialog = dialogsMapClone[pathList[0]];
 
   if (pathList[1] === '') {

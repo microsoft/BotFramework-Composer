@@ -3,9 +3,9 @@ import React from 'react';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { NodeMenu } from '../shared/NodeMenu';
 
 import { FormCard } from './templates/FormCard';
-import { NodeMenu } from './templates/NodeMenu';
 import { getFriendlyName } from './utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');

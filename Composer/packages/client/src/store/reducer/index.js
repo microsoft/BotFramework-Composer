@@ -89,25 +89,14 @@ const navigateTo = (state, { path }) => {
 };
 
 const navigateDown = (state, { subPath }) => {
-  if (state.navPath.endsWith('#')) {
-    state.navPath = state.navPath + subPath.substring(1);
-  } else {
-    state.navPath = state.navPath + subPath;
-  }
+  state.navPath = state.navPath + subPath;
   state.focusPath = state.navPath; // fire up form editor on non-leaf node
   state.navPathHistory.push(state.navPath);
   return state;
 };
 
-const focusTo = (state, { subPath }) => {
-  if (state.focusPath !== state.navPath + subPath) {
-    state.resetFormEditor = true;
-  }
-  if (state.navPath.endsWith('#')) {
-    state.focusPath = state.navPath + subPath.substring(1);
-  } else {
-    state.focusPath = state.navPath + subPath;
-  }
+const focusTo = (state, { path }) => {
+  state.focusPath = path;
   return state.focusPath;
 };
 
@@ -142,4 +131,6 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
+  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
 });

@@ -1,56 +1,101 @@
-import React, { Component } from 'react';
+import React, { useRef } from 'react';
 import PropType from 'prop-types';
+import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
 import { ObiEditor } from './editors/ObiEditor';
+import { isLayoutEqual } from './shared/isLayoutEqual';
 
 initializeIcons(/* optional base url */);
 
-export default class VisualDesigner extends Component {
+const JSON_PATH_PREFIX = '$';
+
+const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }) => {
+  const dataCache = useRef();
+  const layoutVersion = useRef(0);
+
+  /**
+   * VisualDesigner is coupled with ShellApi where input json always mutates.
+   * Deep checking input data here to make React change detection works.
+   * Deep checking layout to trigger a redraw.
+   */
+  const dataChanged = !isEqual(dataCache.current, inputData);
+  const layoutChanged = dataChanged && !isLayoutEqual(dataCache.current, inputData);
+  if (dataChanged) {
+    dataCache.current = inputData;
+  }
+  if (layoutChanged) {
+    layoutVersion.current += 1;
+  }
+
   /**
    * This function is used to normalized the path string:
-   *
-   * - 'node.id' is always a jsonPath-styled string indicates
-   *    where it comes from the whole OBI json.
-   *    Like '$.rules[0]'.
-   *
-   * -  Shell API requires a path without the '$' prefix.
-   *    Like '.rules[0]'.
+   *  - input:  '$.steps[0]'
+   *  - output: '.steps[0]'
    */
-  normalizeDataPath = jsonPathString => {
-    if (jsonPathString && jsonPathString[0] === '$') {
-      return jsonPathString.substr(1);
+  const normalizeDataPath = jsonPathString => {
+    if (jsonPathString && jsonPathString.indexOf(JSON_PATH_PREFIX) === 0) {
+      return jsonPathString.substr(JSON_PATH_PREFIX.length);
     }
     return jsonPathString;
   };
 
-  render() {
-    const { navPath, data, shellApi, onChange } = this.props;
-    const { navDown, focusTo, navTo } = shellApi;
+  /**
+   * Calculate focused node id from focusPath and navPath.
+   *  - input:  focusPath='AddToDo#', navPath='AddToDo#steps[0]'
+   *  - output: '$.steps[0]'
+   *
+   *  - input:  focusPath = 'AddToDo#, navPath='AddToDo#'
+   *  - output: ''
+   */
+  const normalizeFocusedId = (focusPath, navPath) => {
+    let id = focusPath;
+    if (id.indexOf(navPath) === 0) {
+      id = id.replace(navPath, '');
+    }
 
-    return (
-      <div data-testid="visualdesigner-container">
-        <ObiEditor
-          path={navPath}
-          data={data}
-          onSelect={x => focusTo(this.normalizeDataPath(x))}
-          onExpand={x => navDown(this.normalizeDataPath(x))}
-          onOpen={x => navTo(this.normalizeDataPath(x) + '#')}
-          onChange={x => onChange(x)}
-        />
-      </div>
-    );
-  }
-}
+    if (id) {
+      return JSON_PATH_PREFIX + id;
+    }
+    return '';
+  };
+
+  const data = dataCache.current;
+  const { navDown, focusTo, navTo } = shellApi;
+  return (
+    <div data-testid="visualdesigner-container">
+      <ObiEditor
+        key={navPath + '?version=' + layoutVersion.current}
+        path={navPath}
+        focusedId={normalizeFocusedId(focusPath, navPath)}
+        data={data}
+        onSelect={x => focusTo(normalizeDataPath(x))}
+        onExpand={x => navDown(normalizeDataPath(x))}
+        onOpen={x => navTo(normalizeDataPath(x) + '#')}
+        onChange={x => onChange(x)}
+      />
+    </div>
+  );
+};
 
 VisualDesigner.propTypes = {
   navPath: PropType.string.isRequired,
+  focusPath: PropType.string.isRequired,
   data: PropType.object.isRequired,
+  onChange: PropType.func.isRequired,
   shellApi: PropType.object.isRequired,
 };
 
 VisualDesigner.defaultProps = {
   navPath: '.',
+  focusPath: '',
   data: {},
-  shellApi: {},
+  onChange: () => {},
+  shellApi: {
+    navDown: () => {},
+    focusTo: () => {},
+    navTo: () => {},
+  },
 };
+
+export default VisualDesigner;

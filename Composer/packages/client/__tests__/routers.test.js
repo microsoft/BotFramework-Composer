@@ -30,9 +30,6 @@ describe('<Router/> router test', () => {
 
     await navigate('/setting');
     expect(appContainer.innerHTML).toMatch('Setting');
-
-    await navigate('/content');
-    expect(appContainer.innerHTML).toMatch('Content');
   });
 
   test('landing on a not found', () => {

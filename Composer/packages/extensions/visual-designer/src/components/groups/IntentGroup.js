@@ -3,11 +3,12 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
+import { InitNodeSize } from '../../shared/elementSizes';
 
 const IntentPaddingX = 18;
 const IntentPaddingY = 20;
-const IntentElementHeight = 50;
-const IntentElementWidth = 170;
+const IntentElementHeight = InitNodeSize.height;
+const IntentElementWidth = InitNodeSize.width;
 const IntentBlockWidth = IntentElementWidth + 2 * IntentPaddingX;
 const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
 const BonusHeight = 50;

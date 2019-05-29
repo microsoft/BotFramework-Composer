@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -9,14 +10,15 @@ import { NavItem } from './components/NavItem';
 import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
-import { main, sideBar, content } from './styles';
+import { main, sideBar, content, divider, globalNav } from './styles';
 
 initializeIcons(/* optional base url */);
 
 export function App() {
   const { state, actions } = useContext(Store);
+  const [sideBarExpand, setSideBarExpand] = useState('');
   const { botStatus } = state;
-  const { toggleBot, setStorageExplorerStatus } = actions;
+  const { connectBot, reloadBot, setStorageExplorerStatus } = actions;
   useEffect(() => {
     actions.fetchProject();
   }, []);
@@ -25,17 +27,31 @@ export function App() {
     <Fragment>
       <Header
         botStatus={botStatus}
-        setBotStatus={status => {
-          toggleBot(status);
-        }}
+        connectBot={connectBot}
+        reloadBot={reloadBot}
         openStorageExplorer={setStorageExplorerStatus}
       />
       <StorageExplorer />
       <div css={main}>
-        <div css={sideBar}>
-          <NavItem to="/" exact={true} iconName="SplitObject" label={formatMessage('Design')} />
-          <NavItem to="content" iconName="CollapseMenu" label={formatMessage('Content')} />
-          <NavItem to="setting" iconName="Settings" label={formatMessage('Settings')} />
+        <div css={sideBar(sideBarExpand)}>
+          <IconButton
+            iconProps={{ iconName: 'GlobalNavButton' }}
+            css={globalNav}
+            onClick={() => {
+              setSideBarExpand(!sideBarExpand);
+            }}
+          />
+          <div css={divider} />
+          <NavItem
+            to="/"
+            exact={true}
+            iconName="SplitObject"
+            labelName={formatMessage('Flow design')}
+            labelHide={!sideBarExpand}
+          />
+          <NavItem to="lg" iconName="Robot" labelName={formatMessage('Bot says')} labelHide={!sideBarExpand} />
+          <NavItem to="lu" iconName="People" labelName={formatMessage('User says')} labelHide={!sideBarExpand} />
+          <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} />
         </div>
         <div css={content}>
           <Routes />

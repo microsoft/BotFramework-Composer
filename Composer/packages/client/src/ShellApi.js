@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, replace, startsWith, get } from 'lodash';
+import { debounce, get } from 'lodash';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -10,6 +10,9 @@ import { getDialogData, setDialogData } from './utils';
 
 const apiClient = new ApiClient();
 
+const VISUAL_EDITOR = 'VisualEditor';
+const FORM_EDITOR = 'FormEditor';
+
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, focusPath, schemas } = state;
@@ -18,7 +21,7 @@ export function ShellApi() {
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('getState', getState);
+    apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -39,35 +42,31 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
-      const data = getDialogData(dialogsMap, navPath) || '';
-      apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
+      apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, navPath]);
+  }, [dialogs, navPath, focusPath]);
 
   useEffect(() => {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
-      const data = getDialogData(dialogsMap, focusPath) || '';
-      apiClient.apiCallAt('reset', { data, dialogs, navPath, focusPath }, editorWindow);
+      apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, focusPath]);
 
   // api to return the data should be showed in this window
-  function getData(_, event) {
-    const sourceWindowName = event.source.name;
-
-    if (sourceWindowName === 'VisualEditor' && navPath !== '') {
+  function getData(sourceWindow) {
+    if (sourceWindow === VISUAL_EDITOR && navPath !== '') {
       return getDialogData(dialogsMap, navPath);
-    } else if (sourceWindowName === 'FormEditor' && focusPath !== '') {
+    } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
       return getDialogData(dialogsMap, focusPath);
     }
 
     return '';
   }
 
-  function getState(...args) {
+  function getState(sourceWindow) {
     return {
-      data: getData(...args),
+      data: getData(sourceWindow),
       dialogs,
       navPath,
       focusPath,
@@ -80,10 +79,10 @@ export function ShellApi() {
     const sourceWindowName = event.source.name;
     let path = '';
     switch (sourceWindowName) {
-      case 'VisualEditor':
+      case VISUAL_EDITOR:
         path = navPath;
         break;
-      case 'FormEditor':
+      case FORM_EDITOR:
         path = focusPath;
         break;
       default:
@@ -97,7 +96,7 @@ export function ShellApi() {
       const payload = { name: dialogName, content: updatedDialog };
       updateDialog(payload);
 
-      if (sourceWindowName === 'VisualEditor') {
+      if (sourceWindowName === VISUAL_EDITOR) {
         const data = get(updatedDialog, focusPath.split('#')[1]);
         if (typeof data === 'undefined') {
           actions.focusTo('');
@@ -124,15 +123,12 @@ export function ShellApi() {
   }
 
   function focusTo({ subPath }, event) {
-    let realSubPath = subPath;
-    if (event.source.name === 'FormEditor') {
-      realSubPath = `${replace(focusPath, navPath, '')}${subPath}`;
-      if (!startsWith(realSubPath, '.')) {
-        realSubPath = '.' + realSubPath;
-      }
-    }
     flushUpdates();
-    actions.focusTo(realSubPath);
+    let path = navPath;
+    if (event.source.name === FORM_EDITOR) {
+      path = focusPath;
+    }
+    actions.focusTo(path + subPath);
   }
 
   return null;

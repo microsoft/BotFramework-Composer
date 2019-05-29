@@ -7,11 +7,11 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
+import { NodeMenu } from '../shared/NodeMenu';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
 
 import { Diamond } from './templates/Diamond';
-import { NodeMenu } from './templates/NodeMenu';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
