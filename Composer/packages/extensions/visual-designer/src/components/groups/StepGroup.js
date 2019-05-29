@@ -7,10 +7,13 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
+import { ElementInterval, InitNodeSize, EdgeAddButtonSize } from '../../shared/elementSizes';
+import { EdgeMenu } from '../shared/EdgeMenu';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
-const StepInterval = 20;
-const InitStepWidth = 170;
-const InitStepHeight = 50;
+const StepInterval = ElementInterval.y;
+const InitStepWidth = InitNodeSize.width;
+const InitStepHeight = InitNodeSize.height;
 
 const calculateNodes = data => {
   if (data && data.children && Array.isArray(data.children)) {
@@ -47,6 +50,9 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
   const { boundary, nodes, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      {edges.map(x => (
+        <Edge key={x.id} {...x} />
+      ))}
       {nodes.map(x => (
         <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
           <NodeRenderer
@@ -61,8 +67,23 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
           />
         </OffsetContainer>
       ))}
-      {edges.map(x => (
-        <Edge key={x.id} {...x} />
+      <OffsetContainer
+        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
+        styles={{ zIndex: 100 }}
+      >
+        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.InsertBefore, { id: nodes[0].id, $type })} />
+      </OffsetContainer>
+      {nodes.map(x => (
+        <OffsetContainer
+          key={`stepGroup/${x.id}/footer/offset`}
+          offset={{
+            x: boundary.axisX - EdgeAddButtonSize.width / 2,
+            y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
+          }}
+          styles={{ zIndex: 100 }}
+        >
+          <EdgeMenu onClick={$type => onEvent(NodeEventTypes.InsertAfter, { id: x.id, $type })} />
+        </OffsetContainer>
       ))}
     </div>
   );

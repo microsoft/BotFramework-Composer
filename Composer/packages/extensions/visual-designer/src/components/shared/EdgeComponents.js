@@ -22,7 +22,7 @@ export const HorizontalEdge = ({ length, text, x, y }) => (
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2={length} y2="0" stroke="grey" strokeWidth="1" />
+    <line x1="0" y1="0" x2={length} y2="0" stroke="#979797" strokeWidth="1" />
   </svg>
 );
 
@@ -44,7 +44,7 @@ export const VerticalEdge = ({ length, text, x, y }) => (
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2="0" y2={length} stroke="grey" strokeWidth="1" />
+    <line x1="0" y1="0" x2="0" y2={length} stroke="#979797" strokeWidth="1" />
   </svg>
 );
 

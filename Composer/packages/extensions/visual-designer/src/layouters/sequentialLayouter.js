@@ -1,7 +1,12 @@
 import { Boundary } from '../components/shared/Boundary';
 
-export function sequentialLayouter(nodes, ElementInterval = 20) {
+export function sequentialLayouter(nodes, ElementInterval = 20, withHeadEdge = true, withTrailingEdge = true) {
   const box = new Boundary();
+
+  if (!Array.isArray(nodes) || nodes.length === 0) {
+    return { boundary: box, nodes: [], edges: [] };
+  }
+
   box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
   box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
   box.height =
@@ -24,6 +29,35 @@ export function sequentialLayouter(nodes, ElementInterval = 20) {
       x,
       y,
       length: ElementInterval,
+    });
+  }
+
+  const ExtraEdgeLength = ElementInterval / 2;
+  if (withHeadEdge) {
+    box.height += ExtraEdgeLength;
+    nodes.forEach(node => {
+      node.offset.y += ExtraEdgeLength;
+    });
+    edges.forEach(edge => {
+      edge.y += ExtraEdgeLength;
+    });
+    edges.unshift({
+      id: `edge/head/${nodes[0].id}--before`,
+      direction: 'y',
+      x: box.axisX,
+      y: 0,
+      length: ExtraEdgeLength,
+    });
+  }
+
+  if (withTrailingEdge) {
+    box.height += ExtraEdgeLength;
+    edges.push({
+      id: `edge/tail/${nodes[nodes.length - 1].id}--after`,
+      direction: 'y',
+      x: box.axisX,
+      y: box.height - ExtraEdgeLength,
+      length: ExtraEdgeLength,
     });
   }
 
