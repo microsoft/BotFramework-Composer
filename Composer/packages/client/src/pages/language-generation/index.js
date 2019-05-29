@@ -152,7 +152,7 @@ export const LGPage = props => {
           <PrimaryButton data-automation-id="Publish" text="Publish to Luis" />
         </div>
       </div>
-      <div css={ContentStyle}>
+      <div css={ContentStyle} data-testid="LGEditor">
         <Nav
           styles={{
             root: {

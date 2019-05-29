@@ -144,7 +144,7 @@ export const LUPage = props => {
           <PrimaryButton data-automation-id="Publish" text="Publish to Luis" />
         </div>
       </div>
-      <div css={ContentStyle}>
+      <div css={ContentStyle} data-testid="LUEditor">
         <Nav
           styles={{
             root: {
