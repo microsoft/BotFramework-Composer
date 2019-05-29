@@ -1,7 +1,9 @@
 {
-    "botConnector": {
-        "type": "CSharp",
-        "path": "../../../BotProject/CSharp"
-    },
+  "development": {
+    "botRuntime": "http://localhost:3979",
     "assetsLibray": "./assets"
+  },
+  "container": {
+    "botRuntime": "http://botruntime:80"
+  }
 }

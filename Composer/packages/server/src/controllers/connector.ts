@@ -1,20 +1,22 @@
 import BotConnectorService from '../services/connector';
 
-function start(req: any, res: any) {
+async function connect(req: any, res: any) {
   try {
-    BotConnectorService.start();
+    await BotConnectorService.connect();
     res.send('OK');
   } catch (error) {
-    res.status(400).json({ error: 'Start error' });
+    res.status(400).json({
+      error: 'cannot connect to a bot runtime, make sure you start the bot runtime }',
+    });
   }
 }
 
-function stop(req: any, res: any) {
+async function sync(req: any, res: any) {
   try {
-    BotConnectorService.stop();
+    BotConnectorService.sync();
     res.send('OK');
   } catch (error) {
-    res.status(400).json({ error: 'Stop error' });
+    res.status(400).json({ error: 'unable to sync content to bot runtime' });
   }
 }
 
@@ -23,7 +25,7 @@ function status(req: any, res: any) {
 }
 
 export const BotConnectorController = {
-  start: start,
-  stop: stop,
+  connect: connect,
+  sync: sync,
   status: status,
 };

@@ -7,12 +7,6 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
-    public class BotFile
-    {
-        public string provider { get; set; }
-        public string path { get; set; }
-    }
-
     public class BotProject
     {
         [JsonProperty("files")]
@@ -21,23 +15,14 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         public string entry { get; set; }
         public List<string> Folders{ get; set; }
 
-        public static async Task<BotProject> LoadAsync(BotFile botFile)
+        public static async Task<BotProject> LoadAsync(string file)
         {
-            string file = string.Empty;
-            if (botFile.provider == "localDisk")
-            {
-                file = botFile.path;
-            }
-            if (string.IsNullOrEmpty(file))
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
             string json = string.Empty;
             using (var stream = File.OpenText(file))
             {
                 json = await stream.ReadToEndAsync().ConfigureAwait(false);
             }
-            var currentFolder = Path.GetFullPath(Path.GetDirectoryName(botFile.path));          
+            var currentFolder = Path.GetFullPath(Path.GetDirectoryName(file));          
             var bot = JsonConvert.DeserializeObject<BotProject>(json);
             bot.Folders = new List<string>();
             bot.Folders.Add(currentFolder);
@@ -54,7 +39,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             return bot;
         }
 
-        public static BotProject Load(BotFile file)
+        public static BotProject Load(string file)
         {
             return BotProject.LoadAsync(file).GetAwaiter().GetResult();
         }
