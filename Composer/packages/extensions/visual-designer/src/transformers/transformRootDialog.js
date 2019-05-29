@@ -67,7 +67,7 @@ function transformRecognizerDialog(input) {
   }
 
   if (otherRuleNodes.length) {
-    result.ruleGroup = new IndexedNode('$.ruleGroup', {
+    result.ruleGroup = new IndexedNode('$.rules', {
       $type: ObiTypes.RuleGroup,
       children: otherRuleNodes,
     });
@@ -86,7 +86,7 @@ function transformSimpleDialog(input) {
 
   const result = {};
   if (Array.isArray(input.rules)) {
-    result.ruleGroup = new IndexedNode('$.ruleGroup', {
+    result.ruleGroup = new IndexedNode('$.rules', {
       $type: ObiTypes.RuleGroup,
       children: input.rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
     });
