@@ -1,17 +1,39 @@
 import React from 'react';
 
 import { IconMenu } from '../nodes/templates/IconMenu';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { EdgeAddButtonSize } from '../../shared/elementSizes';
+import { dialogGroups, DialogGroup } from '../../shared/appschema';
 
-export const EdgeMenu = ({ id, onEvent }) => {
-  const menuItems = [
-    {
-      key: 'delete',
-      name: 'Delete',
-      onClick: () => onEvent(NodeEventTypes.Delete, { id }),
-    },
+const createStepMenu = handleType => {
+  const stepLabels = [
+    DialogGroup.INPUT,
+    DialogGroup.RESPONSE,
+    DialogGroup.MEMORY,
+    DialogGroup.STEP,
+    DialogGroup.CODE,
+    DialogGroup.LOG,
   ];
+
+  const stepMenuItems = stepLabels.map(x => {
+    const item = dialogGroups[x];
+    return {
+      key: item.label,
+      text: item.label,
+      subMenuProps: {
+        items: item.types.map($type => ({
+          key: $type,
+          text: $type,
+          $type: $type,
+        })),
+        onItemClick: (e, item) => handleType(item.$type),
+      },
+    };
+  });
+
+  return stepMenuItems;
+};
+
+export const EdgeMenu = ({ onClick }) => {
   return (
     <div
       style={{
@@ -27,7 +49,7 @@ export const EdgeMenu = ({ id, onEvent }) => {
       <IconMenu
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6', transform: 'scale(0.5)' }}
-        menuItems={menuItems}
+        menuItems={createStepMenu($type => onClick($type))}
       />
     </div>
   );
