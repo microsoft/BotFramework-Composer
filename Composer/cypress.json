@@ -7,7 +7,7 @@
   "videoUploadOnPasses": false,
   "viewportWidth": 1600,
   "viewportHeight": 1200,
-  "defaultCommandTimeout": 60000,
+  "defaultCommandTimeout": 8000,
   "env": {
     "COMPOSER_URL": "http://localhost:3000"
   }

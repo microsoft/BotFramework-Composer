@@ -9,14 +9,14 @@ context('SwitchCondition', () => {
   it('can manage cases', () => {
     // Add switch condition
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Add New Step').click();
-      cy.getByText('Conversational flow and dialog management').click();
-      cy.getByText('Microsoft.SwitchCondition').click();
+      cy.getByText('Add New Step').click({ waitForAnimations: false });
+      cy.getByText('Conversational flow and dialog management').click({ waitForAnimations: false });
+      cy.getByText('Microsoft.SwitchCondition').click({ waitForAnimations: false });
     });
 
     // Focus switch condition in form editor
     cy.withinEditor('VisualEditor', () => {
-      cy.getByTestId('SwitchConditionDiamond').click({ force: true });
+      cy.getByTestId('SwitchConditionDiamond').click({ waitForAnimations: false });
     });
 
     // Add case and add/delete/edit steps
@@ -25,7 +25,7 @@ context('SwitchCondition', () => {
       cy.getByLabelText('Condition').type('user.age >= 21');
 
       // Add new case
-      cy.getByText('Add New Case').click();
+      cy.getByText('Add New Case').click({ waitForAnimations: false });
       cy.getByLabelText('Value')
         .type('Case1')
         .type('{enter}');
@@ -33,19 +33,19 @@ context('SwitchCondition', () => {
       // Add some steps
 
       // Send activity
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Sending a response').click();
-      cy.getByText('Microsoft.SendActivity').click();
+      cy.getByText('Add New Step for Case1').click({ waitForAnimations: false });
+      cy.getByText('Sending a response').click({ waitForAnimations: false });
+      cy.getByText('Microsoft.SendActivity').click({ waitForAnimations: false });
 
       // Edit array
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Memory manipulation').click();
-      cy.getByText('Microsoft.EditArray').click();
+      cy.getByText('Add New Step for Case1').click({ waitForAnimations: false });
+      cy.getByText('Memory manipulation').click({ waitForAnimations: false });
+      cy.getByText('Microsoft.EditArray').click({ waitForAnimations: false });
 
       // Log step
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Tracing and logging').click();
-      cy.getByText('Microsoft.LogStep').click();
+      cy.getByText('Add New Step for Case1').click({ waitForAnimations: false });
+      cy.getByText('Tracing and logging').click({ waitForAnimations: false });
+      cy.getByText('Microsoft.LogStep').click({ waitForAnimations: false });
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
@@ -56,24 +56,24 @@ context('SwitchCondition', () => {
         .get('@steps')
         .eq(0)
         .find('button')
-        .click();
-      // btn0.click();
+        .click({ waitForAnimations: false });
+      // btn0.click({waitForAnimations: false});
       btn0.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
-          .click();
+          .click({ waitForAnimations: false });
       });
 
       const btn2 = cy
         .get('@steps')
         .eq(2)
         .find('button')
-        .click();
-      // btn2.click();
+        .click({ waitForAnimations: false });
+      // btn2.click({waitForAnimations: false});
       btn2.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
-          .click();
+          .click({ waitForAnimations: false });
       });
 
       // assert that the steps are in correct order
@@ -88,7 +88,7 @@ context('SwitchCondition', () => {
         .should('contain.text', 'Microsoft.SendActivity');
 
       // Add another new case
-      cy.getByText('Add New Case').click();
+      cy.getByText('Add New Case').click({ waitForAnimations: false });
       cy.getByLabelText('Value')
         .type('Case2')
         .type('{enter}');
@@ -98,11 +98,11 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click();
+      btn.click({ waitForAnimations: false });
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
-          .click();
+          .click({ waitForAnimations: false });
       });
 
       cy.get('[role="separator"]')
@@ -115,11 +115,11 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click();
+      btn.click({ waitForAnimations: false });
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Remove')
-          .click();
+          .click({ waitForAnimations: false });
       });
 
       cy.get('[role="separator"]')
