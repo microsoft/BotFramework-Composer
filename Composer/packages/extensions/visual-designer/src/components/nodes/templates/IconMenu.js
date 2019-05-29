@@ -46,7 +46,7 @@ IconMenu.defaultProps = {
   iconName: 'More',
   iconStyles: {},
   menuItems: [],
-  menuWidth: 100,
+  menuWidth: 0,
 };
 
 IconMenu.propTypes = {
