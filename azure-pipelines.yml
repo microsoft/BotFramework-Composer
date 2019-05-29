@@ -10,7 +10,7 @@ jobs:
   - job: test
     displayName: Unit Tests
     pool:
-      name: Hosted macOS
+      vmImage: ubuntu-16.04
     steps:
     - task: NodeTool@0
       displayName: 'Use Node 10.15.3'
@@ -40,7 +40,8 @@ jobs:
         mergeTestResults: true
   - job: e2e
     displayName: E2E Tests
-    pool: Hosted macOS
+    pool:
+      vmImage: ubuntu-16.04
     steps:
     - task: NodeTool@0
       displayName: 'Use Node 10.15.3'
