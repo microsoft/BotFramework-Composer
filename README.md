@@ -15,17 +15,38 @@ It provides
   * Bot-building solutions for customers (MCS)
   * An extensible solution to enhance bot creation experience and support custom dialog types and editors 
 
-## Download and Install 
+## Get Started
 
-* After you download the source code, follow the [instructions here](https://github.com/Microsoft/BotFramework-Composer/tree/master/Composer#instructions) to install and run on local Desktop 
+### Prerequisites
 
-## Architecture 
-* [Composer architecture design](https://github.com/Microsoft/BotFramework-Composer/blob/master/Doc/architecure.md)
+* [docker-compose](https://docs.docker.com/compose/install/)
 
-## Components 
-* [Composer Shell](https://github.com/boydc2014/composer-prototype/)
-* Editor 
-* [Bot Project](https://github.com/Microsoft/BotFramework-Composer/tree/master/BotProject) 
+
+### Instructions
+
+* Run
+
+    Just run
+    ```
+    $ docker-compose up
+    ```
+    this will build two images for composer-app and bot-runtime if not exits, then start two containers based on these images
+
+* Build
+
+    If you made some changes after first run and you would like to rebuild the images by call
+
+    ```
+    $ docker-compose build
+    ```
+
+* Development
+
+    If you are developing some components and you want fast iteraction without re-building container images on every change, please refer to the document to each component for setup instuctions
+    
+    * [Composer App](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer)
+    * [Bot Runtime](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp)
+
 
 ## Related projects
 * [Microsoft Open Bot initiative (OBI)](https://github.com/Microsoft/botframework-obi)
