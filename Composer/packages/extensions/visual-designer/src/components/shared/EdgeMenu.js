@@ -18,11 +18,11 @@ const createStepMenu = handleType => {
     const item = dialogGroups[x];
     return {
       key: item.label,
-      text: item.label,
+      name: item.label,
       subMenuProps: {
         items: item.types.map($type => ({
           key: $type,
-          text: $type,
+          name: $type,
           $type: $type,
         })),
         onItemClick: (e, item) => handleType(item.$type),
