@@ -14,7 +14,7 @@ export function transformObiRules(input, jsonpath) {
   }
 
   if (Array.isArray(input.steps)) {
-    result.stepGroup = new IndexedNode(`${jsonpath}.stepGroup`, {
+    result.stepGroup = new IndexedNode(`${jsonpath}.steps`, {
       $type: ObiTypes.StepGroup,
       children: input.steps.map((x, index) => new IndexedNode(`${jsonpath}.steps[${index}]`, normalizeObiStep(x))),
     });

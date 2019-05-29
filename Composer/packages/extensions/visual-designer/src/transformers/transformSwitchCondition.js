@@ -18,7 +18,7 @@ export function transformSwitchCondition(input, jsonpath) {
 
   result.cases = cases.map(({ value, steps }, index) => {
     const prefix = `${jsonpath}.cases[${index}]`;
-    return new IndexedNode(`${prefix}.stepGroup`, {
+    return new IndexedNode(`${prefix}.steps`, {
       $type: ObiTypes.StepGroup,
       label: value,
       children: (steps || []).map((x, index) => new IndexedNode(`${prefix}.steps[${index}]`, x)),

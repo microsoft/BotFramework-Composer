@@ -73,7 +73,7 @@ function transformRecognizerDialog(input) {
     });
   }
   if (stepNodes.length) {
-    result.stepGroup = new IndexedNode('$.stepGroup', {
+    result.stepGroup = new IndexedNode('$.steps', {
       $type: ObiTypes.StepGroup,
       children: stepNodes,
     });
@@ -93,7 +93,7 @@ function transformSimpleDialog(input) {
   }
 
   if (Array.isArray(input.steps)) {
-    result.stepGroup = new IndexedNode('$.stepGroup', {
+    result.stepGroup = new IndexedNode('$.steps', {
       $type: ObiTypes.StepGroup,
       children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
     });
