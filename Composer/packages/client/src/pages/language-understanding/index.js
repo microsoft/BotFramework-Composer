@@ -14,13 +14,16 @@ import { OpenConfirmModal } from '../../components/Modal';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import NewLuFileModal from './create-new';
 import Content from './content';
+import PublishLuisModal from './publish-luis-modal';
 
 export const LUPage = props => {
   const fileId = props.fileId;
   const { state, actions } = useContext(Store);
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
+  const { publishLuis } = actions;
   const { luFiles } = state;
   const [modalOpen, setModalOpen] = useState(false);
+  const [publishModalOpen, setPublishModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(true);
   const [newContent, setNewContent] = useState(null);
 
@@ -76,6 +79,10 @@ export const LUPage = props => {
     });
     setModalOpen(false);
     navigate(`./${data.name}`);
+  }
+
+  async function handleLuisPublish(key) {
+    await publishLuis(key);
   }
 
   const groups = useMemo(() => {
@@ -142,7 +149,11 @@ export const LUPage = props => {
             onChange={() => setTextMode(!textMode)}
             offText="Text editor"
           />
-          <PrimaryButton data-automation-id="Publish" text="Publish to Luis" />
+          <PrimaryButton
+            data-automation-id="Publish"
+            onClick={() => setPublishModalOpen(true)}
+            text="Publish to Luis"
+          />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
@@ -166,6 +177,11 @@ export const LUPage = props => {
         {memoizedContent}
       </div>
       <NewLuFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLuFile} />
+      <PublishLuisModal
+        isOpen={publishModalOpen}
+        onDismiss={() => setPublishModalOpen(false)}
+        onPublish={handleLuisPublish}
+      />
     </Fragment>
   );
 };

@@ -1,5 +1,4 @@
-﻿using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
@@ -7,12 +6,12 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.LanguageGeneration.Renderer;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -98,8 +97,53 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 // locate the proj file
                 var projFile = FindBotProjFile(extractPath);
 
+                AddLuisConfig(extractPath);
+
                 var botProj = BotProject.Load(projFile);
                 SetCurrent(botProj);
+            }
+        }
+
+        private void AddLuisConfig(string extractPath)
+        {
+            string[] luconfigFiles = Directory.GetFiles(extractPath, "luconfig.json");
+
+            // No luis model
+            if (luconfigFiles.Length != 1)
+            {
+                return;
+            }
+
+            var luconfigPath = luconfigFiles[0];
+            var luconfigFile = JsonConvert.DeserializeObject<LuConfigFile>(File.ReadAllText(luconfigPath));
+            var settingsName = $"luis.settings.{luconfigFile.Environment}.{ luconfigFile.AuthoringRegion}.json";
+            var luisEndpoint = $"https://{luconfigFile.AuthoringRegion}.api.cognitive.microsoft.com";
+            this.Config["luis:endpoint"] = luisEndpoint;
+
+            // No luis settings
+            if (Directory.GetFiles(extractPath, settingsName).Length == 0)
+            {
+                return;
+            }
+
+            var luisPath = Path.Combine(extractPath, settingsName);
+
+            // No auth keys
+            if (Directory.GetFiles(extractPath, "key.json").Length == 0)
+            {
+                return;
+            }
+
+            var keyPath = Path.Combine(extractPath, "key.json");
+
+            var luisConfig = JsonConvert.DeserializeObject<LuisCustomConfig>(File.ReadAllText(luisPath));
+            var keyConfig = JsonConvert.DeserializeObject<LuisKey>(File.ReadAllText(keyPath));
+
+            luisConfig.Luis.Add("endpointKey", keyConfig.Key);
+
+            foreach (var item in luisConfig.Luis)
+            {
+                this.Config[$"luis:{item.Key}"] = item.Value;
             }
         }
 

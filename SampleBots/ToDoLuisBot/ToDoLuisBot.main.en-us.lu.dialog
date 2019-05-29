@@ -1,6 +1,6 @@
 {
-  "$type": "Microsoft.LuisRecognizer",
-  "applicationId": "ba8af2e3-35c5-4b49-8952-47e28fce8c34",
-  "endpoint": "https://westus.api.cognitive.microsoft.com",
-  "endpointKey": "736465dedefd479093d666ab661d7b31"
+    "$type": "Microsoft.LuisRecognizer",
+    "applicationId": "{settings.luis.ToDoLuis_en-us_lu}",
+    "endpoint": "{settings.luis.endpoint}",
+    "endpointKey": "{settings.luis.endpointKey}"
 }
