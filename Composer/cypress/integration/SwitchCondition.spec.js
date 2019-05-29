@@ -9,9 +9,9 @@ context('SwitchCondition', () => {
   it('can manage cases', () => {
     // Add switch condition
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Add New Step').click();
-      cy.getByText('Conversational flow and dialog management').click();
-      cy.getByText('Microsoft.SwitchCondition').click();
+      cy.contains('Add New Step').click();
+      cy.contains('Conversational flow and dialog management').click();
+      cy.contains('Microsoft.SwitchCondition').click();
     });
 
     // Focus switch condition in form editor
@@ -25,7 +25,7 @@ context('SwitchCondition', () => {
       cy.getByLabelText('Condition').type('user.age >= 21');
 
       // Add new case
-      cy.getByText('Add New Case').click();
+      cy.contains('Add New Case').click();
       cy.getByLabelText('Value')
         .type('Case1')
         .type('{enter}');
@@ -33,19 +33,19 @@ context('SwitchCondition', () => {
       // Add some steps
 
       // Send activity
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Sending a response').click();
-      cy.getByText('Microsoft.SendActivity').click();
+      cy.contains('Add New Step for Case1').click();
+      cy.contains('Sending a response').click();
+      cy.contains('Microsoft.SendActivity').click();
 
       // Edit array
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Memory manipulation').click();
-      cy.getByText('Microsoft.EditArray').click();
+      cy.contains('Add New Step for Case1').click();
+      cy.contains('Memory manipulation').click();
+      cy.contains('Microsoft.EditArray').click();
 
       // Log step
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Tracing and logging').click();
-      cy.getByText('Microsoft.LogStep').click();
+      cy.contains('Add New Step for Case1').click();
+      cy.contains('Tracing and logging').click();
+      cy.contains('Microsoft.LogStep').click();
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
@@ -88,7 +88,7 @@ context('SwitchCondition', () => {
         .should('contain.text', 'Microsoft.SendActivity');
 
       // Add another new case
-      cy.getByText('Add New Case').click();
+      cy.contains('Add New Case').click();
       cy.getByLabelText('Value')
         .type('Case2')
         .type('{enter}');
