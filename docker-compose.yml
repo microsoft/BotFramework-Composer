@@ -1,0 +1,23 @@
+version: "3"
+services:
+  composer:
+    build: Composer
+    ports:
+      - "3000:5000"
+      - "5000:5000"
+      # expose 9229 for debugging
+      # - "9229:9229"
+    volumes:
+      - ./SampleBots:/SampleBots
+    environment:
+      - NODE_ENV=container
+    # command:
+    #   - node
+    #   - "--inspect-brk=0.0.0.0"
+    #   - "build/server.js"
+  botruntime:
+    build: BotProject/CSharp
+    ports:
+      - "3979:80"
+    volumes:
+      - ./SampleBots:/app/SampleBots

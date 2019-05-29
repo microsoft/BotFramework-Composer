@@ -1,13 +1,10 @@
-import { LocationRef } from '../bot/interface';
-
 export enum BotStatus {
-  Running,
-  Stopped,
+  NotConnected,
+  Connected,
 }
 
 export interface IBotConnector {
   status: BotStatus;
-  start(proj: LocationRef): boolean; // maybe start should return address
-  stop(): boolean;
-  inspect(): any;
+  connect(): Promise<void>; // connect to a bot
+  sync(): Promise<void>; // sync content with bot
 }
