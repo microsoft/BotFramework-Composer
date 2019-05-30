@@ -7,19 +7,12 @@ test('should return safely when input null value', () => {
   expect(result).toEqual({});
 });
 
-test('should parse recognizerGroup when input TodoBotMain', () => {
-  const result = transformRootDialog(TodoBotMain);
-  expect(Object.values(result).length > 0).toBeTruthy();
-  expect(result.recognizerGroup).toBeTruthy();
-});
-
-test('should parse recognizerGroup and stepGroup when input TodoBotMain with steps', () => {
+test('should parse stepGroup when input TodoBotMain with steps', () => {
   const jsonWithSteps = {
     ...TodoBotMain,
     steps: [{ $type: 'any' }],
   };
   const result = transformRootDialog(jsonWithSteps);
-  expect(result.recognizerGroup).toBeTruthy();
   expect(result.stepGroup).toBeTruthy();
   expect(result.stepGroup.json.children.length === jsonWithSteps.steps.length).toBeTruthy();
 });
