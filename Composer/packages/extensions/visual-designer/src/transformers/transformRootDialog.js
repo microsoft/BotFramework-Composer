@@ -66,38 +66,34 @@ function transformRecognizerDialog(input) {
     result.recognizerGroup = new IndexedNode('$.recognizerGroup', payload);
   }
 
-  if (otherRuleNodes.length) {
-    result.ruleGroup = new IndexedNode('$.rules', {
-      $type: ObiTypes.RuleGroup,
-      children: otherRuleNodes,
-    });
-  }
-  if (stepNodes.length) {
-    result.stepGroup = new IndexedNode('$.steps', {
-      $type: ObiTypes.StepGroup,
-      children: stepNodes,
-    });
-  }
+  result.ruleGroup = new IndexedNode('$.rules', {
+    $type: ObiTypes.RuleGroup,
+    children: otherRuleNodes,
+  });
+
+  result.stepGroup = new IndexedNode('$.steps', {
+    $type: ObiTypes.StepGroup,
+    children: stepNodes,
+  });
   return result;
 }
 
 function transformSimpleDialog(input) {
   if (!input) return {};
 
-  const result = {};
-  if (Array.isArray(input.rules)) {
-    result.ruleGroup = new IndexedNode('$.rules', {
-      $type: ObiTypes.RuleGroup,
-      children: input.rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
-    });
-  }
+  const rules = input.rules || [];
+  const steps = input.steps || [];
 
-  if (Array.isArray(input.steps)) {
-    result.stepGroup = new IndexedNode('$.steps', {
-      $type: ObiTypes.StepGroup,
-      children: input.steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
-    });
-  }
+  const result = {};
+  result.ruleGroup = new IndexedNode('$.rules', {
+    $type: ObiTypes.RuleGroup,
+    children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
+  });
+
+  result.stepGroup = new IndexedNode('$.steps', {
+    $type: ObiTypes.StepGroup,
+    children: steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
+  });
   return result;
 }
 
