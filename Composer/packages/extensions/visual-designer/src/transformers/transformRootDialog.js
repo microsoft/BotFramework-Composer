@@ -66,10 +66,12 @@ function transformRecognizerDialog(input) {
     result.recognizerGroup = new IndexedNode('$.recognizerGroup', payload);
   }
 
-  result.ruleGroup = new IndexedNode('$.rules', {
-    $type: ObiTypes.RuleGroup,
-    children: otherRuleNodes,
-  });
+  if (otherRuleNodes.length) {
+    result.ruleGroup = new IndexedNode('$.rules', {
+      $type: ObiTypes.RuleGroup,
+      children: otherRuleNodes,
+    });
+  }
 
   result.stepGroup = new IndexedNode('$.steps', {
     $type: ObiTypes.StepGroup,
@@ -85,10 +87,12 @@ function transformSimpleDialog(input) {
   const steps = input.steps || [];
 
   const result = {};
-  result.ruleGroup = new IndexedNode('$.rules', {
-    $type: ObiTypes.RuleGroup,
-    children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
-  });
+  if (rules.length) {
+    result.ruleGroup = new IndexedNode('$.rules', {
+      $type: ObiTypes.RuleGroup,
+      children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
+    });
+  }
 
   result.stepGroup = new IndexedNode('$.steps', {
     $type: ObiTypes.StepGroup,
