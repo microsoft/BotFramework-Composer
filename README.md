@@ -20,7 +20,9 @@ It provides
 ### Prerequisites
 
 * [docker-compose](https://docs.docker.com/compose/install/)
+* [docker](https://www.docker.com/)
 
+  NOTE: If you follow the instructions of installing docker-compose, and install docker-desktop for your platform, you should already have docker-compose and docker. 
 
 ### Instructions
 
