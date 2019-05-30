@@ -1,6 +1,6 @@
 import React from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from 'react-jsonschema-form';
+import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 
 import { DialogGroup } from '../../schema/appschema';

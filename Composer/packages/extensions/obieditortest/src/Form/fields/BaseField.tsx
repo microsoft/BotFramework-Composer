@@ -5,7 +5,7 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
-import { IdSchema } from 'react-jsonschema-form';
+import { IdSchema } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
 
