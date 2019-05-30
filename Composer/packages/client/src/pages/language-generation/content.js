@@ -6,6 +6,8 @@ import lodash from 'lodash';
 import CodeEditor from './code-editor';
 import FormEditor from './form-editor';
 
+// TODO: validate here,
+// both form editor and code editor
 export default function Content(props) {
   const lgFile = props.file;
   const onChange = props.onChange;

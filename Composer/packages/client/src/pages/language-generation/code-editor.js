@@ -21,7 +21,7 @@ export default function CodeEditor(props) {
     <div css={contentEditor}>
       <div css={codeEditor}>
         <MonacoEditor
-          height="400"
+          height="100%"
           language="markdown"
           theme="vs"
           value={luFile.content || codePlaceHolder}

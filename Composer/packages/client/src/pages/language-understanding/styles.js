@@ -45,4 +45,5 @@ export const codeEditorContainer = css`
 
 export const codeEditor = css`
   border: 1px solid #dddddd;
+  height: calc(100vh - 200px);
 `;

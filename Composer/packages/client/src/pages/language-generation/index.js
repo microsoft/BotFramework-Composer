@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import lodash from 'lodash';
-import { useContext, Fragment, useEffect, useRef, useState } from 'react';
+import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { LGParser } from 'botbuilder-lg';
 
@@ -23,10 +23,8 @@ export const LGPage = props => {
   const { lgFiles } = state;
   const [modalOpen, setModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(false);
-  const [contentChanged, setContentChanged] = useState(false);
+  const [newContent, setNewContent] = useState(null);
   const [groups, setGroups] = useState([]);
-
-  let changedNewContent = '';
 
   const [lgFile, setLgFile] = useState(null);
 
@@ -46,11 +44,16 @@ export const LGPage = props => {
     });
 
     const links = lgFiles.map(file => {
-      const subNav = file.templates.map(template => {
-        return {
-          name: template.Name,
-        };
-      });
+      let subNav = [];
+
+      // in case of unvalid LGParser templates
+      if (Array.isArray(file.templates)) {
+        subNav = file.templates.map(template => {
+          return {
+            name: template.Name,
+          };
+        });
+      }
 
       return {
         key: file.id,
@@ -76,25 +79,22 @@ export const LGPage = props => {
 
     setLgFile({ ...lgFile });
 
-    setContentChanged(false);
+    setNewContent(null);
   }, [lgFiles, fileId]);
 
   function onChange(newContent) {
-    changedNewContent = newContent;
-    if (contentChanged === false) {
-      setContentChanged(true);
-    }
+    setNewContent(newContent);
   }
 
   function discardChanges() {
     setLgFile({ ...lgFile });
-    setContentChanged(false);
+    setNewContent(null);
   }
 
   function onSave() {
     const payload = {
       id: fileId,
-      content: changedNewContent,
+      content: newContent,
     };
     updateLgFile(payload);
   }
@@ -120,12 +120,17 @@ export const LGPage = props => {
     navigate(`./${data.name}`);
   }
 
+  // performance optimization, component update should only trigger by lgFile change.
+  const memoizedContent = useMemo(() => {
+    return <Content file={lgFile} textMode={textMode} onChange={onChange} />;
+  }, [lgFile, textMode]);
+
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>Language gereration</div>
+        <div>Language generation</div>
         <div css={flexContent}>
-          {contentChanged && (
+          {newContent && (
             <Fragment>
               <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={() => onSave()}>
                 Save file
@@ -149,7 +154,6 @@ export const LGPage = props => {
             checked={textMode}
             onChange={() => setTextMode(!textMode)}
           />
-          <PrimaryButton data-automation-id="Publish" text="Publish to Luis" />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
@@ -170,7 +174,7 @@ export const LGPage = props => {
           groups={groups}
         />
 
-        <Content file={lgFile} textMode={textMode} onChange={onChange} />
+        {memoizedContent}
       </div>
       <NewLgFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLgFile} />
     </Fragment>

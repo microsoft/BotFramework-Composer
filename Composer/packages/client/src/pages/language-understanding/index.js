@@ -22,9 +22,7 @@ export const LUPage = props => {
   const { luFiles } = state;
   const [modalOpen, setModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(true);
-  const [contentChanged, setContentChanged] = useState(false);
-
-  let changedNewContent = '';
+  const [newContent, setNewContent] = useState(null);
 
   const [luFile, setLuFile] = useState(null);
 
@@ -38,25 +36,22 @@ export const LUPage = props => {
 
     setLuFile({ ...luFile });
 
-    setContentChanged(false);
+    setNewContent(null);
   }, [luFiles, fileId]);
 
   function onChange(newContent) {
-    changedNewContent = newContent;
-    if (contentChanged === false) {
-      setContentChanged(true);
-    }
+    setNewContent(newContent);
   }
 
   function discardChanges() {
     setLuFile({ ...luFile });
-    setContentChanged(false);
+    setNewContent(null);
   }
 
   function onSave() {
     const payload = {
       id: fileId,
-      content: changedNewContent,
+      content: newContent,
     };
     updateLuFile(payload);
   }
@@ -94,7 +89,7 @@ export const LUPage = props => {
         isExpanded: true,
         links: [
           {
-            name: `${file.id}Intent`,
+            name: `PlaceHolderIntent`,
             // url: `./${file.id}#ToDoIntent`,
           },
         ],
@@ -112,12 +107,17 @@ export const LUPage = props => {
     ];
   }, [luFiles]);
 
+  // performance optimization, component update should only trigger by luFile change.
+  const memoizedContent = useMemo(() => {
+    return <Content file={luFile} textMode={textMode} onChange={onChange} />;
+  }, [luFile, textMode]);
+
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
         <div>Understanding what users say</div>
         <div css={flexContent}>
-          {contentChanged && (
+          {newContent && (
             <Fragment>
               <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={() => onSave()}>
                 Save file
@@ -162,7 +162,7 @@ export const LUPage = props => {
           groups={groups}
         />
 
-        <Content file={luFile} textMode={textMode} onChange={onChange} />
+        {memoizedContent}
       </div>
       <NewLuFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLuFile} />
     </Fragment>
