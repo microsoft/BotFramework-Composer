@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import { WidgetProps } from 'react-jsonschema-form';
+import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;

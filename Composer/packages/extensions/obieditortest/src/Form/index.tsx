@@ -1,5 +1,5 @@
 import React from 'react';
-import JSONForm, { UiSchema, Widget, FormProps as JSONFormProps } from 'react-jsonschema-form';
+import JSONForm, { UiSchema, Widget, FormProps as JSONFormProps } from '@bfdesigner/react-jsonschema-form';
 import { JSONSchema6 } from 'json-schema';
 
 import * as widgets from './widgets';

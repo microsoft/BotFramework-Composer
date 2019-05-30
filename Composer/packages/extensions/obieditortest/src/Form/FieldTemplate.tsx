@@ -1,6 +1,6 @@
 import React from 'react';
 import get from 'lodash.get';
-import { FieldTemplateProps } from 'react-jsonschema-form';
+import { FieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 
 import { FIELDS_TO_HIDE } from '../schema/appschema';
 
