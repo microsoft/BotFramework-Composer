@@ -56,7 +56,7 @@ context('SwitchCondition', () => {
         .get('@steps')
         .eq(0)
         .find('button')
-        .click({ waitForAnimations: false });
+        .click();
       // btn0.click({waitForAnimations: false});
       btn0.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
@@ -68,12 +68,12 @@ context('SwitchCondition', () => {
         .get('@steps')
         .eq(2)
         .find('button')
-        .click({ waitForAnimations: false });
+        .click();
       // btn2.click({waitForAnimations: false});
       btn2.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
-          .click({ waitForAnimations: false });
+          .click();
       });
 
       // assert that the steps are in correct order
@@ -98,11 +98,11 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click({ waitForAnimations: false });
+      btn.click();
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
-          .click({ waitForAnimations: false });
+          .click();
       });
 
       cy.get('[role="separator"]')
@@ -115,11 +115,11 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click({ waitForAnimations: false });
+      btn.click();
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Remove')
-          .click({ waitForAnimations: false });
+          .click();
       });
 
       cy.get('[role="separator"]')

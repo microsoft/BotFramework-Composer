@@ -24,7 +24,6 @@ export class LocalDiskStorage implements IFileStorage {
         size: fstat.isFile() ? fstat.size.toString() : '',
       };
     } catch (error) {
-      console.log(`STAT ${error}`);
       throw error;
     }
   }
