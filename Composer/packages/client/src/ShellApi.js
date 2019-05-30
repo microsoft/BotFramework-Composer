@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, get } from 'lodash';
+import { debounce } from 'lodash';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -94,15 +94,16 @@ export function ShellApi() {
       const updatedDialog = setDialogData(dialogsMap, path, newData);
       const dialogName = path.split('#')[0];
       const payload = { name: dialogName, content: updatedDialog };
+      dialogsMap[dialogName] = updatedDialog;
       updateDialog(payload);
-
-      if (sourceWindowName === VISUAL_EDITOR) {
-        const data = get(updatedDialog, focusPath.split('#')[1]);
-        if (typeof data === 'undefined') {
-          actions.focusTo('');
-        }
-      }
     }
+
+    //make sure focusPath always valid
+    const data = getDialogData(dialogsMap, focusPath);
+    if (typeof data === 'undefined') {
+      actions.focusTo(navPath);
+    }
+
     return true;
   }
 
