@@ -57,7 +57,7 @@ context('SwitchCondition', () => {
         .eq(0)
         .find('button')
         .click();
-      // btn0.click({waitForAnimations: false});
+      // btn0.click();
       btn0.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
@@ -69,7 +69,7 @@ context('SwitchCondition', () => {
         .eq(2)
         .find('button')
         .click();
-      // btn2.click({waitForAnimations: false});
+      // btn2.click();
       btn2.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
