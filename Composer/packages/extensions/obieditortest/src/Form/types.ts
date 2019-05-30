@@ -1,4 +1,4 @@
-import { WidgetProps } from 'react-jsonschema-form';
+import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
 
 import { ShellApi } from '../types';
 

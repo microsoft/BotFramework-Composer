@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
-import { WidgetProps } from 'react-jsonschema-form';
+import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
 
 export function CheckboxWidget(props: WidgetProps) {
   const { label, onChange, onBlur, onFocus, value, ...rest } = props;
