@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import { getUiOptions } from 'react-jsonschema-form/lib/utils';
+import { getUiOptions } from '@bfdesigner/react-jsonschema-form/lib/utils';
 import omit from 'lodash.omit';
-import { ObjectFieldTemplateProps } from 'react-jsonschema-form';
+import { ObjectFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 import formatMessage from 'format-message';
 
 import { BaseField } from '../fields/BaseField';

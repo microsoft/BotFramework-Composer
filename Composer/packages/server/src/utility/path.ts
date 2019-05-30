@@ -14,10 +14,10 @@ class PathHandler {
     return path.relative(from, to).replace(/\\/g, '/');
   }
   basename(param: string, ext: string | undefined = undefined) {
-    return path.posix.basename(param, ext);
+    return path.basename(param, ext).replace(/\\/g, '/');
   }
   dirname(param: string) {
-    return path.posix.dirname(param);
+    return path.dirname(param).replace(/\\/g, '/');
   }
   join(...params: string[]) {
     return path.join(...params).replace(/\\/g, '/');

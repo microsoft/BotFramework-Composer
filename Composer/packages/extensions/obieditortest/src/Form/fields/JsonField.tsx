@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { FieldProps } from 'react-jsonschema-form';
+import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
