@@ -4,9 +4,9 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
+import { RuleGroup } from '../components/groups/index';
 
 import { StepEditor } from './StepEditor';
-import { TriggerEditor } from './TriggerEditor';
 
 const calculateNodeMap = (_, data) => {
   const { ruleGroup, stepGroup } = transformRootDialog(data);
@@ -31,8 +31,16 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       }}
     >
       {ruleGroup ? (
-        <div style={{ margin: '10px 0' }}>
-          <TriggerEditor
+        <div
+          style={{
+            margin: '10px 0',
+            paddingBottom: '31px',
+            border: '1px solid #000000',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <RuleGroup
             key={ruleGroup.id}
             id={ruleGroup.id}
             data={ruleGroup.data}
