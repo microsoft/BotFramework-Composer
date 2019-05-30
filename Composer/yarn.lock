@@ -1023,6 +1023,17 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@bfdesigner/react-jsonschema-form@1.4.2-1":
+  version "1.4.2-1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfdesigner/react-jsonschema-form/-/@bfdesigner/react-jsonschema-form-1.4.2-1.tgz#eb9bb4078ad778e0070eb9c1ac328ced59c378d7"
+  integrity sha1-65u0B4rXeOAHDrnBrDKM7VnDeNc=
+  dependencies:
+    ajv "^6.7.0"
+    babel-runtime "^6.26.0"
+    core-js "^2.5.7"
+    lodash.topath "^4.5.2"
+    prop-types "^15.5.8"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -1785,10 +1796,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.7":
-  version "16.8.18"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.18.tgz#fe66fb748b0b6ca9709d38b87b2d1356d960a511"
-  integrity sha512-lUXdKzRqWR4FebR5tGHkLCqnvQJS4fdXKCBrNGGbglqZg2gpU+J82pMONevQODUotATs9fc9k66bx3/St8vReg==
+"@types/react@*", "@types/react@^16.8.13", "@types/react@^16.8.7":
+  version "16.8.19"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.19.tgz#629154ef05e2e1985cdde94477deefd823ad9be3"
+  integrity sha512-QzEzjrd1zFzY9cDlbIiFvdr+YUmefuuRYrPxmkwG0UQv5XF35gFIi7a95m1bNVcFU0VimxSZ5QVGSiBmlggQXQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -15964,16 +15975,6 @@ react-is@^16.6.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
-
-"react-jsonschema-form@git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#v1.4.0-9":
-  version "1.4.0-1"
-  resolved "git+https://git@github.com/a-b-r-o-w-n/react-jsonschema-form#47611fe572628e1153e901c59d52e75818113510"
-  dependencies:
-    ajv "^6.7.0"
-    babel-runtime "^6.26.0"
-    core-js "^2.5.7"
-    lodash.topath "^4.5.2"
-    prop-types "^15.5.8"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
