@@ -27,9 +27,9 @@
 import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
-  cy.getByText('Open').click();
-  cy.getByText(botName).click();
-  cy.getByText('bot.botproj').click();
+  cy.contains('Open').click();
+  cy.contains(botName).click();
+  cy.contains('bot.botproj').click();
   cy.wait(500);
 });
 
@@ -41,15 +41,15 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
 
 Cypress.Commands.add('openDialog', dialogName => {
   cy.get('[data-testid="ProjectTree"]').within(() => {
-    cy.getByText(dialogName).click();
+    cy.contains(dialogName).click();
     cy.wait(500);
   });
 });
 
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
-  cy.getByText('Save as').click();
+  cy.contains('Save as').click();
 
   cy.get('input[data-testid="NewBotProjectInput"]').type(`__Test${name}`);
-  cy.getByText('Save').click();
+  cy.contains('Save').click();
 });
