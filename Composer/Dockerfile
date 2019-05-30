@@ -3,6 +3,7 @@ WORKDIR /src/Composer
 
 # yes, docker copy is really this stupid, https://github.com/moby/moby/issues/15858
 COPY yarn.lock .
+COPY .npmrc .
 COPY package.json .
 COPY packages/client/package.json ./packages/client/
 COPY packages/server/package.json ./packages/server/
@@ -13,8 +14,6 @@ COPY packages/extensions/obieditortest/package.json ./packages/extensions/obiedi
 COPY packages/extensions/sample-json-editor/package.json ./packages/extensions/sample-json-editor/
 COPY packages/extensions/visual-designer/package.json ./packages/extensions/visual-designer/
 
-# install git because yarn install requires git
-RUN apk add git
 # run yarn install as a distinct layer
 RUN yarn install
 
