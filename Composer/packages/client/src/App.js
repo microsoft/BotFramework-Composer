@@ -49,8 +49,18 @@ export function App() {
             labelName={formatMessage('Flow design')}
             labelHide={!sideBarExpand}
           />
-          <NavItem to="lg" iconName="Robot" labelName={formatMessage('Bot says')} labelHide={!sideBarExpand} />
-          <NavItem to="lu" iconName="People" labelName={formatMessage('User says')} labelHide={!sideBarExpand} />
+          <NavItem
+            to="language-generation/all"
+            iconName="Robot"
+            labelName={formatMessage('Bot says')}
+            labelHide={!sideBarExpand}
+          />
+          <NavItem
+            to="language-understanding/all"
+            iconName="People"
+            labelName={formatMessage('User says')}
+            labelHide={!sideBarExpand}
+          />
           <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} />
         </div>
         <div css={content}>

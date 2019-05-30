@@ -5,9 +5,10 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent, LGTemplate } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
+import { LUIndexer } from './indexers/luIndexer';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -22,6 +23,7 @@ export class BotProject {
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
   public lgIndexer: LGIndexer;
+  public luIndexer: LUIndexer;
 
   constructor(ref: LocationRef) {
     this.ref = ref;
@@ -32,18 +34,21 @@ export class BotProject {
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage);
     this.lgIndexer = new LGIndexer(this.fileStorage);
+    this.luIndexer = new LUIndexer(this.fileStorage);
   }
 
   public index = async () => {
     this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
+    this.luIndexer.index(this.files);
   };
 
   public getIndexes = () => {
     return {
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
+      luFiles: this.luIndexer.getLuFiles(),
       botFile: this.getBotFile(),
       schemas: this.getSchemas(),
     };
@@ -83,7 +88,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public updateLgFile = async (id: string, content: LGTemplate[]) => {
+  public updateLgFile = async (id: string, content: string) => {
     const newFileContent = await this.lgIndexer.updateLgFile(id, content);
     this._updateFile(`${id.trim()}.lg`, newFileContent);
     return this.lgIndexer.getLgFiles();
@@ -101,6 +106,26 @@ export class BotProject {
     await this._removeFile(absolutePath);
     this.lgIndexer.removeLgFile(id);
     return this.lgIndexer.getLgFiles();
+  };
+
+  public updateLuFile = async (id: string, content: string) => {
+    const newFileContent = await this.luIndexer.updateLuFile(id, content);
+    this._updateFile(`${id.trim()}.lu`, newFileContent);
+    return this.luIndexer.getLuFiles();
+  };
+
+  public createLuFile = async (id: string) => {
+    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
+    const newFileContent = await this._createFile(absolutePath, id, '');
+    this.luIndexer.createLuFile(id, newFileContent, absolutePath);
+    return this.luIndexer.getLuFiles();
+  };
+
+  public removeLuFile = async (id: string) => {
+    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
+    await this._removeFile(absolutePath);
+    this.luIndexer.removeLuFile(id);
+    return this.luIndexer.getLuFiles();
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {

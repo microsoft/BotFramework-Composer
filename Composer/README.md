@@ -16,6 +16,8 @@ $ yarn start // start client and server at the same time
 ```
 then go to http://localhost:3000/, best experienced in Chrome
 
+If you want to test bot, you should have your bot runtime running for composer to connect to. Please refer to the [instructions](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp) here to start your runtime. Usually that only means, run `dotnet run` at that particular folder. 
+
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ## Extension Framework

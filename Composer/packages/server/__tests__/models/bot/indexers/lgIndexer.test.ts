@@ -29,14 +29,10 @@ describe('Index lg files', () => {
         relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/a.dialog')),
       },
     ];
-    const aTemplate = {
-      name: 'greet',
-      body: '- Hello!',
-    };
+
     await proj.lgIndexer.index(initFiles);
 
     const lgFiles = await proj.lgIndexer.getLgFiles();
     expect(lgFiles.length).toEqual(1);
-    expect(aTemplate).toEqual(lgFiles[0].templates[0]);
   });
 });
