@@ -8,3 +8,4 @@ export * from './RulesField';
 export * from './SelectorField';
 export * from './StepsField';
 export * from './UnsupportedField';
+export * from './NullField';

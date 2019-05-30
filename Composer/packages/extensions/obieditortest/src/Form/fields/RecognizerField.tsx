@@ -27,12 +27,12 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     }
   };
 
-  const newLabel = formatMessage('Add Recognizer');
+  const newLabel = formatMessage('Add Language Understanding');
 
   const menuItems: IContextualMenuItem[] = [
     {
       key: 'edit',
-      text: formatMessage('Change Recognizer'),
+      text: formatMessage('Change Language Understanding'),
       iconProps: { iconName: 'Edit' },
       onClick: () => {
         setNewRecognizer(formData.$type);
@@ -54,11 +54,16 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   } = registry;
 
   const recognizerSchema = formData ? (props.schema.oneOf as JSONSchema6[]).find(s => s.title === formData.$type) : {};
+  console.log('r', recognizerSchema, props);
   return (
     <div className="RecognizerField">
       {formData && (
         <>
-          <ObjectField {...props} schema={recognizerSchema as JSONSchema6} />
+          <ObjectField
+            {...props}
+            formData={{ $type: 'Language Understanding' }}
+            schema={recognizerSchema as JSONSchema6}
+          />
           <div className="RecognizerFieldMenu">
             <DefaultButton menuProps={{ items: menuItems }} />
           </div>

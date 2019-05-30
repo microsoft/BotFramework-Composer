@@ -6,8 +6,18 @@ import {
   RulesField,
   SelectorField,
   StepsField,
+  NullField,
 } from '../Form/fields';
 import { DialogSelectWidget } from '../Form/widgets';
+
+const globalFields = {
+  property: {
+    'ui:field': NullField,
+  },
+  outputProperty: {
+    'ui:field': NullField,
+  },
+};
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
@@ -23,17 +33,23 @@ export const uiSchema = {
     steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'recognizer', 'selector'],
+    autoEndDialog: {
+      'ui:field': NullField,
+    },
+    ...globalFields,
+    'ui:order': ['property', 'outputProperty', 'recognizer', '*', 'selector'],
   },
   'Microsoft.BeginDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
     },
+    ...globalFields,
   },
   'Microsoft.CodeStep': {
     codeHandler: {
       'ui:field': CodeField,
     },
+    ...globalFields,
   },
   'Microsoft.ConditionalSelector': {
     ifFalse: {
@@ -42,17 +58,20 @@ export const uiSchema = {
     ifTrue: {
       'ui:field': SelectorField,
     },
+    ...globalFields,
   },
   'Microsoft.EventRule': {
     steps: {
       'ui:field': StepsField,
     },
+    ...globalFields,
     'ui:order': ['*', 'steps'],
   },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
+    ...globalFields,
     'ui:order': ['*', 'body'],
   },
   'Microsoft.IfCondition': {
@@ -62,6 +81,7 @@ export const uiSchema = {
     steps: {
       'ui:field': StepsField,
     },
+    ...globalFields,
   },
   'Microsoft.IfPropertyRule': {
     conditionals: {
@@ -71,27 +91,32 @@ export const uiSchema = {
         },
       },
     },
+    ...globalFields,
   },
   'Microsoft.IntentRule': {
     steps: {
       'ui:field': StepsField,
     },
+    ...globalFields,
     'ui:order': ['intent', 'constraint', 'entities', '*'],
   },
   'Microsoft.MostSpecificSelector': {
     selector: {
       'ui:field': SelectorField,
     },
+    ...globalFields,
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
     },
+    ...globalFields,
   },
   'Microsoft.Rule': {
     steps: {
       'ui:field': StepsField,
     },
+    ...globalFields,
   },
   'Microsoft.SwitchCondition': {
     cases: {
@@ -100,10 +125,12 @@ export const uiSchema = {
     default: {
       'ui:field': StepsField,
     },
+    ...globalFields,
   },
   'Microsoft.UnknownIntentRule': {
     steps: {
       'ui:field': StepsField,
     },
+    ...globalFields,
   },
 };
