@@ -21,9 +21,9 @@ export class RuleGroup extends React.Component {
     this.props.onResize(new Boundary(scrollWidth, scrollHeight));
   }
 
-  renderRule(Rule) {
+  renderRule(rule) {
     const { focusedId, onEvent } = this.props;
-    const data = Rule.json;
+    const data = rule.json;
     return (
       <NodeRenderer
         id={rule.id}
