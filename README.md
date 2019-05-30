@@ -42,6 +42,11 @@ It provides
     $ docker-compose build
     ```
 
+* Test Bot With Emulator
+
+    When using Emulator to test your bot, make sure you use ngrok and *uncheck* 'bypass ngrok for local addresses', because container is considered as remote, even the address looks like local. 
+   
+
 * Development
 
     If you are developing some components and you want fast iteraction without re-building container images on every change, please refer to the document to each component for setup instuctions
