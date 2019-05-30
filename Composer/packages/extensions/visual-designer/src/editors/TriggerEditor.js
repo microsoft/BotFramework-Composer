@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { TaskGroup } from '../components/groups';
+import { RuleGroup } from '../components/groups';
 
 export const TriggerEditor = ({ id, data, focusedId, onEvent }) => {
   return (
@@ -20,7 +20,7 @@ export const TriggerEditor = ({ id, data, focusedId, onEvent }) => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      <TaskGroup id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
+      <RuleGroup id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
     </div>
   );
 };

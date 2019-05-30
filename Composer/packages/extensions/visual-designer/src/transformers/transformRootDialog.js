@@ -15,61 +15,6 @@ import { normalizeObiStep } from './helpers/elementBuilder';
  *      |   +   |
  *      ---------
  */
-// function transformRecognizerDialog(input) {
-//   if (!input) return {};
-//   const { rules, steps, recognizer } = input;
-
-//   const recognizerNode = recognizer ? new IndexedNode(`$.recognizer`, recognizer) : null;
-//   const ruleNodes = rules ? rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)) : [];
-//   const stepNodes = steps ? steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))) : [];
-
-//   const taskNodes = [],
-//     otherRuleNodes = [];
-
-//   for (const node of ruleNodes) {
-//     switch (node.json.$type) {
-//       case ObiTypes.UnknownIntentRule:
-//       case ObiTypes.EventRule:
-//       case ObiTypes.IntentRule:
-//         taskNodes.push(node);
-//         break;
-//       default:
-//         otherRuleNodes.push(node);
-//         break;
-//     }
-//   }
-
-//   const result = {};
-//   if (recognizerNode) {
-//     const payload = {
-//       $type: ObiTypes.RecognizerGroup,
-//       recognizer: recognizerNode,
-//     };
-
-//     if (taskNodes.length) {
-//       payload.taskGroup = new IndexedNode('$.taskGroup', {
-//         $type: ObiTypes.TaskGroup,
-//         children: taskNodes,
-//       });
-//     }
-
-//     result.recognizerGroup = new IndexedNode('$.recognizerGroup', payload);
-//   }
-
-//   if (otherRuleNodes.length) {
-//     result.ruleGroup = new IndexedNode('$.rules', {
-//       $type: ObiTypes.RuleGroup,
-//       children: otherRuleNodes,
-//     });
-//   }
-
-//   result.stepGroup = new IndexedNode('$.steps', {
-//     $type: ObiTypes.StepGroup,
-//     children: stepNodes,
-//   });
-//   return result;
-// }
-
 function transformSimpleDialog(input) {
   if (!input) return {};
 

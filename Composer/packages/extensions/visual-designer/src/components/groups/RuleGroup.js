@@ -4,14 +4,14 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
 
-const TaskElementHeight = 36;
-const TaskElementWidth = 227;
-const TaskPaddingX = 28;
-const TaskPaddingY = 31;
-const TaskBlockWidth = TaskElementWidth + TaskPaddingX;
-const TaskBlockHeight = TaskElementHeight + TaskPaddingY;
+const RuleElementHeight = 36;
+const RuleElementWidth = 227;
+const RulePaddingX = 28;
+const RulePaddingY = 31;
+const RuleBlockWidth = RuleElementWidth + RulePaddingX;
+const RuleBlockHeight = RuleElementHeight + RulePaddingY;
 
-export class TaskGroup extends React.Component {
+export class RuleGroup extends React.Component {
   containerElement;
 
   propagateBoundary() {
@@ -21,12 +21,12 @@ export class TaskGroup extends React.Component {
     this.props.onResize(new Boundary(scrollWidth, scrollHeight));
   }
 
-  renderTask(task) {
+  renderRule(Rule) {
     const { focusedId, onEvent } = this.props;
-    const data = task.json;
+    const data = Rule.json;
     return (
       <NodeRenderer
-        id={task.id}
+        id={rule.id}
         data={data}
         focusedId={focusedId}
         onEvent={onEvent}
@@ -39,10 +39,10 @@ export class TaskGroup extends React.Component {
 
   render() {
     const { data } = this.props;
-    const tasks = data.children || [];
+    const rules = data.children || [];
 
-    const width = TaskBlockWidth * 2;
-    const height = TaskBlockHeight * Math.round(tasks.length / 2);
+    const width = RuleBlockWidth * 2;
+    const height = RuleBlockHeight * Math.round(rules.length / 2);
 
     return (
       <div>
@@ -59,17 +59,17 @@ export class TaskGroup extends React.Component {
             this.propagateBoundary();
           }}
         >
-          {tasks.map(x => (
+          {rules.map(x => (
             <div
               key={x.id + 'block'}
               style={{
-                padding: `${TaskPaddingY}px ${TaskPaddingX}px 0 0`,
-                width: TaskBlockWidth,
-                height: TaskBlockHeight,
+                padding: `${RulePaddingY}px ${RulePaddingX}px 0 0`,
+                width: RuleBlockWidth,
+                height: RuleBlockHeight,
                 boxSizing: 'border-box',
               }}
             >
-              {this.renderTask(x)}
+              {this.renderRule(x)}
             </div>
           ))}
         </div>
@@ -78,5 +78,5 @@ export class TaskGroup extends React.Component {
   }
 }
 
-TaskGroup.propTypes = NodeProps;
-TaskGroup.defaultProps = defaultNodeProps;
+RuleGroup.propTypes = NodeProps;
+RuleGroup.defaultProps = defaultNodeProps;

@@ -1,3 +1,2 @@
-export { TaskGroup } from './TaskGroup';
+export { RuleGroup } from './RuleGroup';
 export { StepGroup } from './StepGroup';
-export { RecognizerGroup } from './RecognizerGroup';
