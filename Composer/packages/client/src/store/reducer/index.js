@@ -14,6 +14,7 @@ const getProjectSuccess = (state, { response }) => {
   state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
+  state.luFiles = response.data.luFiles;
   return state;
 };
 
@@ -29,6 +30,11 @@ const createDialogSuccess = (state, { response }) => {
 
 const updateLgTemplate = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
+  return state;
+};
+
+const updateLuTemplate = (state, { response }) => {
+  state.luFiles = response.data.luFiles;
   return state;
 };
 
@@ -131,6 +137,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
+  [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
 });

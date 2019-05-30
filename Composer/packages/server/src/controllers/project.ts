@@ -118,7 +118,7 @@ async function createDialogFromTemplate(req: Request, res: Response) {
 
 async function updateLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.lgTemplates);
+    const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -127,7 +127,7 @@ async function updateLgFile(req: Request, res: Response) {
 
 async function createLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name);
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id);
     res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -143,14 +143,44 @@ async function removeLgFile(req: Request, res: Response) {
   }
 }
 
+async function updateLuFile(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
+    res.status(200).json({ luFiles });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
+async function createLuFile(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id);
+    res.status(200).json({ luFiles });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
+async function removeLuFile(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const luFiles = await ProjectService.currentBotProject.removeLuFile(req.params.luFileId);
+    res.status(200).json({ luFiles });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 export const ProjectController = {
   getProject: getProject,
   openProject: openProject,
   updateDialog: updateDialog,
   createDialogFromTemplate: createDialogFromTemplate,
-  updateLgFile: updateLgFile,
+  updateLgFile,
   createLgFile,
   removeLgFile,
+  updateLuFile,
+  createLuFile,
+  removeLuFile,
   updateBotFile: updateBotFile,
   saveProjectAs: saveProjectAs,
   createProject: createProject,
