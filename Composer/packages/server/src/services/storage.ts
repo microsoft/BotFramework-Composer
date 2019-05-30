@@ -75,21 +75,26 @@ class StorageService {
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
     const children = (await storage.readDir(dirPath)).map(async childName => {
-      if (childName === '') {
+      try {
+        if (childName === '') {
+          return;
+        }
+        const childAbsPath = Path.join(dirPath, childName);
+        const childStat = await storage.stat(childAbsPath);
+        return {
+          name: childName,
+          type: childStat.isDir ? 'folder' : 'file',
+          path: childAbsPath,
+          lastModified: childStat.lastModified, // just keep the previous interface
+          size: childStat.size, // just keep the previous interface
+        };
+      } catch (error) {
         return;
       }
-      const childAbsPath = Path.join(dirPath, childName);
-      const childStat = await storage.stat(childAbsPath);
-      return {
-        name: childName,
-        type: childStat.isDir ? 'folder' : 'file',
-        path: childAbsPath,
-        lastModified: childStat.lastModified, // just keep the previous interface
-        size: childStat.size, // just keep the previous interface
-      };
     });
-
-    return await Promise.all(children);
+    // filter no access permission folder, witch value is null in children array
+    const result = await Promise.all(children);
+    return result.filter(item => !!item);
   };
 }
 

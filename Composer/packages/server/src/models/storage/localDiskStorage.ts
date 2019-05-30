@@ -15,13 +15,17 @@ const mkDir = promisify(fs.mkdir);
 
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
-    const fstat = await stat(path);
-    return {
-      isDir: fstat.isDirectory(),
-      isFile: fstat.isFile(),
-      lastModified: fstat.ctime.toString(),
-      size: fstat.isFile() ? fstat.size.toString() : '',
-    };
+    try {
+      const fstat = await stat(path);
+      return {
+        isDir: fstat.isDirectory(),
+        isFile: fstat.isFile(),
+        lastModified: fstat.ctime.toString(),
+        size: fstat.isFile() ? fstat.size.toString() : '',
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   async readFile(path: string): Promise<string> {
