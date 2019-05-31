@@ -35,5 +35,12 @@ export interface LGTemplate {
 export interface LGFile {
   id: string;
   absolutePath: string;
-  templates: LGTemplate[];
+  content: any;
+}
+
+export interface LUFile {
+  id: string;
+  absolutePath: string;
+  // templates: Array;
+  content: any;
 }
