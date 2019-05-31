@@ -2,12 +2,13 @@ import React from 'react';
 
 import { IconMenu } from '../nodes/templates/IconMenu';
 import { EdgeAddButtonSize } from '../../shared/elementSizes';
-import { dialogGroups, DialogGroup } from '../../shared/appschema';
+import { dialogGroups, DialogGroup, DialogGroupLabels } from '../../shared/appschema';
 
 const createStepMenu = handleType => {
   const stepLabels = [
-    DialogGroup.INPUT,
     DialogGroup.RESPONSE,
+    DialogGroup.INPUT,
+    DialogGroup.BRANCHING,
     DialogGroup.MEMORY,
     DialogGroup.STEP,
     DialogGroup.CODE,
@@ -22,7 +23,7 @@ const createStepMenu = handleType => {
       subMenuProps: {
         items: item.types.map($type => ({
           key: $type,
-          name: $type,
+          name: DialogGroupLabels[$type] ? DialogGroupLabels[$type] : $type,
           $type: $type,
         })),
         onItemClick: (e, item) => handleType(item.$type),
