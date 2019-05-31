@@ -15,20 +15,17 @@ export function transformIfCondtion(input, jsonpath) {
     }),
   };
 
-  const ifTrue = input[IfBranchKey];
-  const ifFalse = input[ElseBranchKey];
-  if (Array.isArray(ifTrue) && ifTrue.length) {
-    result.ifGroup = new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
-      $type: ObiTypes.StepGroup,
-      children: ifTrue.map((x, index) => new IndexedNode(`${jsonpath}.${IfBranchKey}[${index}]`, x)),
-    });
-  }
-  if (Array.isArray(ifFalse) && ifFalse.length) {
-    result.elseGroup = new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
-      $type: ObiTypes.StepGroup,
-      children: ifFalse.map((x, index) => new IndexedNode(`${jsonpath}.${ElseBranchKey}[${index}]`, x)),
-    });
-  }
+  const ifTrue = input[IfBranchKey] || [];
+  const ifFalse = input[ElseBranchKey] || [];
+
+  result.ifGroup = new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
+    $type: ObiTypes.StepGroup,
+    children: ifTrue.map((x, index) => new IndexedNode(`${jsonpath}.${IfBranchKey}[${index}]`, x)),
+  });
+  result.elseGroup = new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
+    $type: ObiTypes.StepGroup,
+    children: ifFalse.map((x, index) => new IndexedNode(`${jsonpath}.${ElseBranchKey}[${index}]`, x)),
+  });
 
   return result;
 }
