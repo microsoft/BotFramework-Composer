@@ -1,9 +1,12 @@
 {
-    "services": [
-    ],
-    "files": [
-       "*.dialog",
-       "*.lg"
-    ],
-    "entry": "root.dialog"
+  "services": [
+  ],
+  "schemas": {
+    "editor": "editor.schema"
+  },
+  "files": [
+    "*.dialog",
+    "*.lg"
+  ],
+  "entry": "EchoBot.main.dialog"
 }
