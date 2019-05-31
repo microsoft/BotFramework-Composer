@@ -21,6 +21,7 @@ export const StepsField: React.FC<FieldProps> = props => {
     >
       {({ createNewItemAtIndex }) => (
         <PrimaryButton
+          data-testid="StepsFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
             items: buildDialogOptions({

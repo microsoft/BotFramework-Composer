@@ -38,6 +38,7 @@ export function RulesField(props: FieldProps) {
     >
       {({ createNewItemAtIndex }) => (
         <PrimaryButton
+          data-testid="RulesFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
             items: buildDialogOptions({ include: [DialogGroup.RULE], subMenu: false, onClick: createNewItemAtIndex() }),
