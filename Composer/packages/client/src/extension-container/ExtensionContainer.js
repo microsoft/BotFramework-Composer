@@ -68,6 +68,10 @@ function ExtensionContainer() {
     focusTo: subPath => {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
+
+    shellNavigate: (shellPage, opts = {}) => {
+      return apiClient.apiCall('shellNavigate', { shellPage, opts });
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;
