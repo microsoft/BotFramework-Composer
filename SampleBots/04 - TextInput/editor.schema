@@ -3,6 +3,13 @@
     "BaseField": {
       "title": false,
       "description": false
+    },
+    "RulesField": {
+      "name": "Tasks",
+      "description": "Tasks describe the capabilities of the bot/dialog."
+    },
+    "StepsField": {
+      "description": "Steps describe the process involved in code to accomplish the functionality of the dialog."
     }
   },
   "SDKOverrides": {

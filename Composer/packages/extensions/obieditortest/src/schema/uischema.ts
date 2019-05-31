@@ -37,7 +37,7 @@ export const uiSchema = {
       'ui:field': NullField,
     },
     ...globalFields,
-    'ui:order': ['property', 'outputProperty', 'recognizer', '*', 'selector'],
+    'ui:order': ['property', 'outputProperty', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
   'Microsoft.BeginDialog': {
     dialog: {

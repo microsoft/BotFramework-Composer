@@ -54,7 +54,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   } = registry;
 
   const recognizerSchema = formData ? (props.schema.oneOf as JSONSchema6[]).find(s => s.title === formData.$type) : {};
-  console.log('r', recognizerSchema, props);
   return (
     <div className="RecognizerField">
       {formData && (

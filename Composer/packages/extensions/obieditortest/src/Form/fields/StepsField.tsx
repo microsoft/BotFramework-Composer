@@ -4,14 +4,18 @@ import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 
 import { DialogGroup } from '../../schema/appschema';
-import { buildDialogOptions } from '../utils';
+import { buildDialogOptions, setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
 
 export const StepsField: React.FC<FieldProps> = props => {
+  const { formContext } = props;
+  const overrides = setOverridesOnField(formContext, 'StepsField');
+
   return (
     <TableField<MicrosoftIDialog>
       {...props}
+      {...overrides}
       dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       navPrefix={props.name}
     >
@@ -28,7 +32,7 @@ export const StepsField: React.FC<FieldProps> = props => {
           }}
           type="button"
         >
-          {formatMessage('Add New Step')}
+          {formatMessage('Add..')}
         </PrimaryButton>
       )}
     </TableField>
