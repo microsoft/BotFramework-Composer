@@ -5,9 +5,10 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
-import { IdSchema } from '@bfdesigner/react-jsonschema-form';
+import { IdSchema, UiSchema } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
+import { FontSizes, FontWeights } from '@uifabric/styling';
 
 import { FormContext } from '../types';
 
@@ -18,11 +19,12 @@ import { DesignerField } from './DesignerField';
 const fieldHeaderTheme = createTheme({
   fonts: {
     medium: {
-      fontSize: '18px',
+      fontSize: FontSizes.large,
+      fontWeight: FontWeights.semibold,
     },
   },
   palette: {
-    neutralLighter: NeutralColors.gray60,
+    neutralLighter: NeutralColors.gray120,
   },
 });
 
@@ -36,6 +38,7 @@ interface BaseFieldProps<T> {
   name?: string;
   schema: JSONSchema6;
   title?: string;
+  uiSchema: UiSchema;
 }
 
 const overrideDefaults = {
@@ -64,7 +67,7 @@ function RootDialog(props) {
       {templateOverrides.description === false
         ? null
         : (description || schema.description) && (
-            <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
+            <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
               {description || schema.description}
             </p>
           )}
@@ -75,7 +78,7 @@ function RootDialog(props) {
 }
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
-  const { children, title, name, description, schema, idSchema, formContext, className } = props;
+  const { children, title, name, description, schema, uiSchema, idSchema, formContext, className } = props;
   const isRoot = idSchema.__id === formContext.rootId;
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
@@ -93,12 +96,16 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     </RootDialog>
   ) : (
     <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
-      <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-        {titleOverride || title || schema.title || startCase(name)}
+      <Separator
+        theme={fieldHeaderTheme}
+        alignContent="start"
+        styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
+      >
+        titleOverride{title || uiSchema['ui:title'] || schema.title || startCase(name)}
       </Separator>
-      {(descriptionOverride || description || schema.description) && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>
-          {descriptionOverride || description || schema.description}
+      {(description || schema.description) && (
+        <p className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}>
+          {description || uiSchema['ui:description'] || schema.description}
         </p>
       )}
       {children}
