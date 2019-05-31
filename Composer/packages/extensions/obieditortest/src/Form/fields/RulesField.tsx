@@ -47,7 +47,7 @@ export function RulesField(props: FieldProps) {
           }}
           type="button"
         >
-          {formatMessage('Add..')}
+          {formatMessage('Add')}
         </PrimaryButton>
       )}
     </TableField>

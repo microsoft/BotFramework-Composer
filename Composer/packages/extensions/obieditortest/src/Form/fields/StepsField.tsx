@@ -33,7 +33,7 @@ export const StepsField: React.FC<FieldProps> = props => {
           }}
           type="button"
         >
-          {formatMessage('Add..')}
+          {formatMessage('Add')}
         </PrimaryButton>
       )}
     </TableField>
