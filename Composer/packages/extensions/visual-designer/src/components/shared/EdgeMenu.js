@@ -1,4 +1,5 @@
 import React from 'react';
+import formatMessage from 'format-message';
 
 import { IconMenu } from '../nodes/templates/IconMenu';
 import { EdgeAddButtonSize } from '../../shared/elementSizes';
@@ -23,7 +24,7 @@ const createStepMenu = handleType => {
       subMenuProps: {
         items: item.types.map($type => ({
           key: $type,
-          name: DialogGroupLabels[$type] ? DialogGroupLabels[$type] : $type,
+          name: DialogGroupLabels[$type] ? formatMessage(DialogGroupLabels[$type]) : $type,
           $type: $type,
         })),
         onItemClick: (e, item) => handleType(item.$type),
