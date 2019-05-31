@@ -77,6 +77,15 @@ function RootDialog(props) {
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const { children, title, name, description, schema, idSchema, formContext, className } = props;
   const isRoot = idSchema.__id === formContext.rootId;
+  const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
+  let titleOverride = undefined;
+  let descriptionOverride = undefined;
+
+  if (schema.title) {
+    const SDKOverrides = fieldOverrides[`${schema.title}`];
+    titleOverride = get(SDKOverrides, 'title');
+    descriptionOverride = get(SDKOverrides, 'description');
+  }
 
   return isRoot ? (
     <RootDialog {...props} key={idSchema.__id} id={idSchema.__id} formContext={formContext}>
@@ -85,11 +94,11 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   ) : (
     <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
       <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-        {title || schema.title || startCase(name)}
+        {titleOverride || title || schema.title || startCase(name)}
       </Separator>
-      {(description || schema.description) && (
+      {(descriptionOverride || description || schema.description) && (
         <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>
-          {description || schema.description}
+          {descriptionOverride || description || schema.description}
         </p>
       )}
       {children}

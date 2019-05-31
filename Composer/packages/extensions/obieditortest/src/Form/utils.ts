@@ -6,6 +6,7 @@ import {
 } from 'office-ui-fabric-react';
 import { useState } from 'react';
 import merge from 'lodash.merge';
+import get from 'lodash.get';
 
 import { dialogGroups, DialogGroup, DialogGroupItem } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
@@ -155,4 +156,29 @@ export function useFormState<T extends object>(initialData?: T): [T, FormUpdater
 
 export function getTimestamp(): string {
   return new Date().toISOString();
+}
+
+export function sweepUndefinedFields(fields) {
+  const definedFields = {};
+
+  for (const elem in fields) {
+    if (fields[elem] !== null && fields[elem] !== undefined) {
+      definedFields[elem] = fields[elem];
+    }
+  }
+
+  return definedFields;
+}
+
+export function overriddenFieldsTemplate(fieldOverrides) {
+  return {
+    name: fieldOverrides.name,
+    description: fieldOverrides.description,
+  };
+}
+
+export function setOverridesOnField(formContext: any, fieldName: string) {
+  const templateOverrides = get(formContext.editorSchema, `content.fieldTemplateOverrides.${fieldName}`);
+  const overrides = overriddenFieldsTemplate(templateOverrides);
+  return sweepUndefinedFields(overrides);
 }
