@@ -13,16 +13,29 @@ const apiClient = new ApiClient();
 const VISUAL_EDITOR = 'VisualEditor';
 const FORM_EDITOR = 'FormEditor';
 
+const isEventSourceValid = event => {
+  const sourceWindowName = event.source.name;
+  return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
+};
+
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
   const updateDialog = useRef(debounce(actions.updateDialog, 750)).current;
+  const updateLuFile = useRef(debounce(actions.updateLuFile, 750)).current;
+  const updateLgFile = useRef(debounce(actions.updateLgFile, 750)).current;
+  const createLuFile = useRef(debounce(actions.createLuFile, 750)).current;
+  const createLgFile = useRef(debounce(actions.createLgFile, 750)).current;
 
   useEffect(() => {
     apiClient.connect();
 
     apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('updateLuFile', handleLuUpdate);
+    apiClient.registerApi('updateLgFile', handleLgUpdate);
+    apiClient.registerApi('createLuFile', handleLuCreate);
+    apiClient.registerApi('createLgFile', handleLgCreate);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -106,6 +119,58 @@ export function ShellApi() {
       actions.focusTo(navPath);
     }
 
+    return true;
+  }
+
+  // create lu file
+  function handleLuCreate(newData, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const payload = {
+      id: newData.id,
+      content: newData.content,
+    };
+
+    createLuFile(payload);
+    return true;
+  }
+
+  // create lg file
+  function handleLgCreate(newData, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const payload = {
+      id: newData.id,
+      content: newData.content,
+    };
+
+    createLgFile(payload);
+    return true;
+  }
+
+  // update lu update
+  function handleLuUpdate(newData, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const payload = {
+      id: newData.id,
+      content: newData.content,
+    };
+
+    updateLuFile(payload);
+    return true;
+  }
+
+  // update lg update
+  function handleLgUpdate(newData, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const payload = {
+      id: newData.id,
+      content: newData.content,
+    };
+
+    updateLgFile(payload);
     return true;
   }
 
