@@ -8,9 +8,9 @@ const createStepMenu = handleType => {
   const stepLabels = [
     DialogGroup.RESPONSE,
     DialogGroup.INPUT,
-    DialogGroup.BRANCHING,
-    DialogGroup.MEMORY,
     DialogGroup.STEP,
+    // DialogGroup.BRANCHING,
+    DialogGroup.MEMORY,
     DialogGroup.CODE,
     DialogGroup.LOG,
   ];

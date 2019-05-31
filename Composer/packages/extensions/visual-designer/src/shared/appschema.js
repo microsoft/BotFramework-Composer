@@ -12,22 +12,27 @@ export const DialogGroup = {
   OTHER: 'OTHER',
 };
 
+/**
+ * These labels will be used when rendering the EdgeMenu
+ * EXPERIMENTAL: Added by Ben Brown on 5/31 because I don't know how to do this the right way.
+ * TODO: Use the appropriate mechanism to re-label items
+ */
 export const DialogGroupLabels = {
   'Microsoft.ChoiceInput': 'Type: Multiple Choice',
-  'Microsoft.ConfirmInput': 'Type: Confirmation',
+  'Microsoft.ConfirmInput': 'Type: Yes/No Confirm',
   'Microsoft.FloatInput': 'Type: Floating Point Number',
   'Microsoft.IntegerInput': 'Type: Integer',
   'Microsoft.NumberInput': 'Type: Any Number',
   'Microsoft.TextInput': 'Type: Text',
   'Microsoft.SendActivity': 'Send a single message',
   'Microsoft.BeginDialog': 'Begin a child dialog',
-  'Microsoft.IfCondition': 'If/Else',
-  'Microsoft.SwitchCondition': 'Multi-branch Switch',
+  'Microsoft.IfCondition': 'Branch: If/Else',
+  'Microsoft.SwitchCondition': 'Branch: Multi-path Switch',
 
-  'Microsoft.EndDialog': 'End this dialog',
+  'Microsoft.EndDialog': 'End this dialog (and resume parent)',
   'Microsoft.CancelAllDialogs': 'End all active dialogs',
   'Microsoft.EndTurn': 'End this turn',
-  'Microsoft.RepeatDialog': 'Repeat this dialog',
+  'Microsoft.RepeatDialog': 'Restart this dialog',
   'Microsoft.ReplaceDialog': 'Start a new dialog (and do not resume)',
   'Microsoft.EmitEvent': 'Emit an event',
 
@@ -77,6 +82,8 @@ export const dialogGroups = {
   [DialogGroup.STEP]: {
     label: 'Flow',
     types: [
+      'Microsoft.IfCondition',
+      'Microsoft.SwitchCondition',
       'Microsoft.BeginDialog',
       'Microsoft.EndDialog',
       'Microsoft.CancelAllDialogs',
