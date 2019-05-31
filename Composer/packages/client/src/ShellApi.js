@@ -15,7 +15,7 @@ const FORM_EDITOR = 'FormEditor';
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPath, focusPath, schemas } = state;
+  const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
   const updateDialog = useRef(debounce(actions.updateDialog, 750)).current;
 
   useEffect(() => {
@@ -71,6 +71,8 @@ export function ShellApi() {
       navPath,
       focusPath,
       schemas,
+      lgFiles,
+      luFiles,
     };
   }
 
