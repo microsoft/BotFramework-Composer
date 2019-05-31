@@ -56,6 +56,7 @@ export const visualEditor = css`
 
 export const formEditor = css`
   height: 100%;
+  max-width: 600px;
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
