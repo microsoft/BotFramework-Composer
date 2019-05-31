@@ -71,7 +71,7 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
-        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.InsertBefore, { id: nodes[0].id, $type })} />
+        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type })} />
       </OffsetContainer>
       {nodes.map(x => (
         <OffsetContainer
