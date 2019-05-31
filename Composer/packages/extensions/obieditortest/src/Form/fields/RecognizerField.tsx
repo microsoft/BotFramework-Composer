@@ -1,104 +1,127 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
-import { PrimaryButton, IDropdownOption, IContextualMenuItem } from 'office-ui-fabric-react';
-import { Dropdown } from 'office-ui-fabric-react';
+import {
+  DefaultButton,
+  IContextualMenuItem,
+  Label,
+  Link,
+  TextField,
+  ContextualMenuItemType,
+} from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
-import { DefaultButton } from 'office-ui-fabric-react';
-import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode';
-
-import { buildDialogOptions } from '../utils';
-import Modal from '../../Modal';
-import { DialogGroup } from '../../schema/appschema';
+import classnames from 'classnames';
+import { FontSizes } from '@uifabric/styling';
 
 import './styles.scss';
+import { BaseField } from './BaseField';
+
+function LuEditor(props) {
+  const [showEditor, setShowEditor] = useState(true);
+
+  if (!props.formData) {
+    return null;
+  }
+
+  return (
+    <>
+      <Link
+        onClick={() => setShowEditor(!showEditor)}
+        styles={{ root: { fontSize: FontSizes.smallPlus, marginBottom: '10px' } }}
+      >
+        {showEditor
+          ? formatMessage('Hide {title}', { title: props.title })
+          : formatMessage('View {title}', { title: props.title })}
+      </Link>
+      {showEditor && props.children()}
+    </>
+  );
+}
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const [showModal, setShowModal] = useState(false);
-  const [newRecognizer, setNewRecognizer] = useState<string | undefined>(undefined);
   const { formData, registry } = props;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    formContext: { luFiles, shellApi },
+    onChange,
+  } = props;
 
-    setShowModal(false);
-    if (!formData || formData.$type !== newRecognizer) {
-      props.onChange({ $type: newRecognizer });
+  const changeLuFile = (e, item) => {
+    if (item) {
+      onChange(`${item.key}.lu`);
     }
   };
 
-  const newLabel = formatMessage('Add Language Understanding');
+  const selectedFile =
+    typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
 
-  const menuItems: IContextualMenuItem[] = [
-    {
-      key: 'edit',
-      text: formatMessage('Change Language Understanding'),
-      iconProps: { iconName: 'Edit' },
-      onClick: () => {
-        setNewRecognizer(formData.$type);
-        setShowModal(true);
+  const menuItems: IContextualMenuItem[] = luFiles
+    .filter(f => f !== selectedFile)
+    .map(f => ({
+      key: f.id,
+      text: f.id,
+      iconProps: { iconName: 'People' },
+    }));
+
+  if (selectedFile || !formData) {
+    menuItems.push(
+      {
+        key: 'divider',
+        itemType: ContextualMenuItemType.Divider,
       },
-    },
-    {
-      key: 'remove',
-      text: formatMessage('Remove'),
-      iconProps: { iconName: 'Cancel' },
-      onClick: () => {
-        props.onChange(undefined);
-      },
-    },
-  ];
+      {
+        key: 'regex',
+        text: formatMessage('Use Regex Recognizer'),
+        iconProps: { iconName: 'Code' },
+        onClick: () => {
+          onChange({ $type: 'Microsoft.RegexRecognizer' });
+        },
+      }
+    );
+  }
 
-  const {
-    fields: { ObjectField },
-  } = registry;
-
-  const recognizerSchema = formData ? (props.schema.oneOf as JSONSchema6[]).find(s => s.title === formData.$type) : {};
   return (
-    <div className="RecognizerField">
-      {formData && (
-        <>
-          <ObjectField
-            {...props}
-            formData={{ $type: 'Language Understanding' }}
-            schema={recognizerSchema as JSONSchema6}
-          />
-          <div className="RecognizerFieldMenu">
-            <DefaultButton menuProps={{ items: menuItems }} />
-          </div>
-        </>
-      )}
-      {!formData && <PrimaryButton onClick={() => setShowModal(true)}>{newLabel}</PrimaryButton>}
-      {showModal && (
-        <Modal onDismiss={() => setShowModal(false)}>
-          <form onSubmit={handleSubmit}>
-            <Dropdown
-              label={formatMessage('Recognizer Type')}
-              options={
-                buildDialogOptions({
-                  include: [DialogGroup.RECOGNIZER],
-                  asDropdown: true,
-                }) as IDropdownOption[]
+    <BaseField {...props}>
+      <div className="LuFileSelector">
+        <Label className={classnames('LuFileSelectorLabel')}>{formatMessage('LU File Name')}</Label>
+        <div className="LuFileSelectorFile">
+          <Link
+            onClick={() => {
+              if (selectedFile) {
+                shellApi.shellNavigate('lu', { id: selectedFile.id });
               }
-              selectedKey={newRecognizer}
-              responsiveMode={ResponsiveMode.large}
-              onChange={(_, option) => {
-                if (option) {
-                  setNewRecognizer(option.text);
-                }
-              }}
-              componentRef={ref => {
-                if (ref) {
-                  ref.focus();
-                }
-              }}
-            />
-            <PrimaryButton type="submit" styles={{ root: { width: '100%', marginTop: '20px' } }}>
-              {newLabel}
-            </PrimaryButton>
-          </form>
-        </Modal>
-      )}
-    </div>
+            }}
+            styles={{ root: { fontSize: FontSizes.medium, padding: '5px 10px' } }}
+            disabled={!selectedFile}
+          >
+            {selectedFile ? props.formData : 'No Lu File Selected'}
+          </Link>
+        </div>
+        <div className="LuFileSelectorMenu">
+          <DefaultButton
+            menuIconProps={{ iconName: 'More' }}
+            menuProps={{ items: menuItems, isBeakVisible: true, onItemClick: changeLuFile }}
+            styles={{ root: { minWidth: '40px' } }}
+            ariaLabel={formatMessage('Select another .lu file')}
+          />
+        </div>
+      </div>
+      <LuEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
+        {() => {
+          if (selectedFile) {
+            return <TextField value={selectedFile.content} rows={20} multiline />;
+          }
+
+          const {
+            fields: { ObjectField },
+          } = registry;
+          const recognizerSchema =
+            formData && typeof formData === 'object'
+              ? (props.schema.oneOf as JSONSchema6[]).find(s => s.title === formData.$type)
+              : {};
+          return <ObjectField {...props} schema={recognizerSchema as JSONSchema6} uiSchema={{}} />;
+        }}
+      </LuEditor>
+    </BaseField>
   );
 };
