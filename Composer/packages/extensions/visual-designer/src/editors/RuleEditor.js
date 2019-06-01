@@ -3,8 +3,9 @@ import React, { useMemo } from 'react';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
-import { StepGroup } from '../components/groups';
 import { transformObiRules } from '../transformers/transformObiRules';
+
+import { StepEditor } from './StepEditor';
 
 const ColMargin = 10;
 
@@ -35,7 +36,7 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
     >
       {stepGroup ? (
         <div style={{ margin: ColMargin }}>
-          <StepGroup
+          <StepEditor
             key={stepGroup.id}
             id={stepGroup.id}
             data={stepGroup.data}
@@ -46,7 +47,7 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
       ) : null}
       {ruleGroup ? (
         <div style={{ margin: ColMargin }}>
-          <StepGroup
+          <StepEditor
             key={ruleGroup.id}
             id={ruleGroup.id}
             data={ruleGroup.data}
