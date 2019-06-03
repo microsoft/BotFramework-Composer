@@ -18,7 +18,7 @@ export const IconMenu = ({ iconName, iconStyles, menuItems, menuWidth }) => {
         padding: '0 4px',
         alignSelf: 'stretch',
         height: 'auto',
-        color: 'white',
+        color: '#000000',
         ...iconStyles,
       },
     };

@@ -37,7 +37,7 @@ export class IntentRule extends React.Component {
     const { steps } = data;
     return (
       <IconCard
-        themeColor="#0078D4"
+        themeColor="#BFEAE9"
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.getDetails()}
         icon="MessageBot"

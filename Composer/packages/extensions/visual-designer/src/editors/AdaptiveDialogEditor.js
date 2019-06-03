@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import { Panel } from '../components/nodes/templates/Panel';
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
@@ -17,6 +18,7 @@ const calculateNodeMap = (_, data) => {
 };
 
 export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
+  const { rules } = data;
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -31,15 +33,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       }}
     >
       {ruleGroup ? (
-        <div
-          style={{
-            margin: '10px 0',
-            paddingBottom: '31px',
-            border: '1px solid #000000',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
+        <Panel text="Triggers" count={rules.length}>
           <RuleGroup
             key={ruleGroup.id}
             id={ruleGroup.id}
@@ -47,7 +41,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
             focusedId={focusedId}
             onEvent={onEvent}
           />
-        </div>
+        </Panel>
       ) : null}
       {stepGroup ? (
         <div style={{ margin: '10px 0' }}>

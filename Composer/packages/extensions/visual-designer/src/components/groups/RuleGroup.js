@@ -4,10 +4,10 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
 
-const RuleElementHeight = 36;
-const RuleElementWidth = 227;
+const RuleElementHeight = 32;
+const RuleElementWidth = 180;
 const RulePaddingX = 28;
-const RulePaddingY = 31;
+const RulePaddingY = 28;
 const RuleBlockWidth = RuleElementWidth + RulePaddingX;
 const RuleBlockHeight = RuleElementHeight + RulePaddingY;
 
@@ -41,15 +41,11 @@ export class RuleGroup extends React.Component {
     const { data } = this.props;
     const rules = data.children || [];
 
-    const width = RuleBlockWidth * 2;
-    const height = RuleBlockHeight * Math.round(rules.length / 2);
-
     return (
       <div>
         <div
           style={{
-            width,
-            height,
+            margin: '0 40px',
             boxSizing: 'border-box',
             display: 'flex',
             flexWrap: 'wrap',
@@ -59,11 +55,11 @@ export class RuleGroup extends React.Component {
             this.propagateBoundary();
           }}
         >
-          {rules.map(x => (
+          {rules.map((x, index) => (
             <div
               key={x.id + 'block'}
               style={{
-                padding: `${RulePaddingY}px ${RulePaddingX}px 0 0`,
+                margin: `0 ${(index + 1) % 3 === 0 ? 0 : RulePaddingX}px, ${RulePaddingY}px 0`,
                 width: RuleBlockWidth,
                 height: RuleBlockHeight,
                 boxSizing: 'border-box',
