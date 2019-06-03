@@ -10,7 +10,7 @@ jobs:
   - job: botproject
     displayName: BotProject Build&Test
     pool:
-      name: Hosted macOS
+      name: ubuntu-16.04
     steps:
     - task: DotNetCoreCLI@2
       inputs:
