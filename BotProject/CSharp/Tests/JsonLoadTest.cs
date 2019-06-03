@@ -16,14 +16,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CSharpTest
+namespace Tests
 {
     [TestClass]
     public class JsonLoadTest
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\SampleBots");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\SampleBots");
 
         private static string getSingleSample(string path)
         {
