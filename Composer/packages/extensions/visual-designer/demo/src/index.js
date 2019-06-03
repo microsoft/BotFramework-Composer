@@ -3,12 +3,17 @@ import { render } from 'react-dom';
 import { Nav } from 'office-ui-fabric-react';
 
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
+import { StepEditorDemo } from './stories/StepEditorDemo';
 import './index.css';
 
 const DemoMaps = {
   VisualEditorDemo: {
     key: 'VisualEditorDemo',
     component: VisualEditorDemo,
+  },
+  StepEditorDemo: {
+    key: 'StepEditorDemo',
+    component: StepEditorDemo,
   },
 };
 
@@ -35,6 +40,10 @@ class Demo extends Component {
               {
                 key: DemoMaps.VisualEditorDemo.key,
                 name: 'Visual Editor',
+              },
+              {
+                key: DemoMaps.StepEditorDemo.key,
+                name: 'Step Editor',
               },
             ],
           },
