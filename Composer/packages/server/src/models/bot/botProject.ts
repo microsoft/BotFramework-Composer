@@ -32,9 +32,9 @@ export class BotProject {
     this.name = Path.basename(this.absolutePath);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
-    this.dialogIndexer = new DialogIndexer(this.fileStorage);
-    this.lgIndexer = new LGIndexer(this.fileStorage);
-    this.luIndexer = new LUIndexer(this.fileStorage);
+    this.dialogIndexer = new DialogIndexer(this.fileStorage, this.dir);
+    this.lgIndexer = new LGIndexer(this.fileStorage, this.dir);
+    this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
   }
 
   public index = async () => {
@@ -80,11 +80,12 @@ export class BotProject {
   };
 
   public createDialogFromTemplate = async (name: string) => {
-    const absolutePath: string = Path.join(this.dir, `${name.trim()}.dialog`);
+    const relativePath = `${name.trim()}.dialog`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
     const newDialog = merge({}, DIALOG_TEMPLATE);
 
     const newFileContent = await this._createFile(absolutePath, name, JSON.stringify(newDialog, null, 2) + '\n');
-    this.dialogIndexer.addDialog(name, newFileContent, absolutePath);
+    this.dialogIndexer.addDialog(name, newFileContent, relativePath);
     return this.dialogIndexer.getDialogs();
   };
 
@@ -95,9 +96,10 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
+    const relativePath = `${id.trim()}.lg`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
     const newFileContent = await this._createFile(absolutePath, id, '');
-    this.lgIndexer.createLgFile(id, newFileContent, absolutePath);
+    this.lgIndexer.createLgFile(id, newFileContent, relativePath);
     return this.lgIndexer.getLgFiles();
   };
 
@@ -115,9 +117,10 @@ export class BotProject {
   };
 
   public createLuFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
+    const relativePath = `${id.trim()}.lu`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
     const newFileContent = await this._createFile(absolutePath, id, '');
-    this.luIndexer.createLuFile(id, newFileContent, absolutePath);
+    this.luIndexer.createLuFile(id, newFileContent, relativePath);
     return this.luIndexer.getLuFiles();
   };
 

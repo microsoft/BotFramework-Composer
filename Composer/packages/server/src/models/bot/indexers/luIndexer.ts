@@ -7,9 +7,11 @@ import { FileInfo, LUFile } from '../interface';
 export class LUIndexer {
   private luFiles: LUFile[] = [];
   private storage: IFileStorage;
+  private dir: string;
 
-  constructor(storage: IFileStorage) {
+  constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
+    this.dir = dir;
   }
 
   public index(files: FileInfo[]) {
@@ -21,8 +23,7 @@ export class LUIndexer {
       if (extName === '.lu') {
         this.luFiles.push({
           id: path.basename(file.name, extName),
-          absolutePath: file.path,
-          // templates: [],
+          relativePath: path.relative(this.dir, file.path),
           content: file.content,
         });
       }
@@ -35,7 +36,8 @@ export class LUIndexer {
 
   public async updateLuFile(id: string, content: string) {
     const updatedIndex = this.luFiles.findIndex(file => id === file.id);
-    const absolutePath = this.luFiles[updatedIndex].absolutePath;
+    const relativePath = this.luFiles[updatedIndex].relativePath;
+    const absolutePath = path.join(this.dir, relativePath);
 
     this.luFiles[updatedIndex].content = content;
 
@@ -44,8 +46,8 @@ export class LUIndexer {
   }
 
   // id is file name
-  public createLuFile = (id: string, content: string, absolutePath: string) => {
-    this.luFiles.push({ id, content: '', absolutePath });
+  public createLuFile = (id: string, content: string, relativePath: string) => {
+    this.luFiles.push({ id, content: '', relativePath });
     return content;
   };
 

@@ -7,9 +7,11 @@ import { FileInfo, LGFile } from '../interface';
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
   private storage: IFileStorage;
+  private dir: string;
 
-  constructor(storage: IFileStorage) {
+  constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
+    this.dir = dir;
   }
 
   public index(files: FileInfo[]) {
@@ -21,7 +23,7 @@ export class LGIndexer {
       if (extName === '.lg') {
         this.lgFiles.push({
           id: path.basename(file.name, extName),
-          absolutePath: file.path,
+          relativePath: path.relative(this.dir, file.path),
           content: file.content,
         });
       }
@@ -34,7 +36,8 @@ export class LGIndexer {
 
   public async updateLgFile(id: string, content: string) {
     const updatedIndex = this.lgFiles.findIndex(file => id === file.id);
-    const absolutePath = this.lgFiles[updatedIndex].absolutePath;
+    const relativePath = this.lgFiles[updatedIndex].relativePath;
+    const absolutePath = path.join(this.dir, relativePath);
 
     this.lgFiles[updatedIndex].content = content;
 
@@ -43,8 +46,8 @@ export class LGIndexer {
   }
 
   // id is file name
-  public createLgFile = (id: string, content: string, absolutePath: string) => {
-    this.lgFiles.push({ id, content: '', absolutePath });
+  public createLgFile = (id: string, content: string, relativePath: string) => {
+    this.lgFiles.push({ id, content: '', relativePath });
     return content;
   };
 
