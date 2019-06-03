@@ -47,9 +47,9 @@ export class VisualEditorDemo extends Component {
     const { selectedFile, obiJson, focusPath } = this.state;
 
     return (
-      <div>
-        <h1>visual-designer Demo</h1>
-        <div className="demo-container">
+      <div className="ve-container">
+        <h1 className="ve-title">visual-designer Demo</h1>
+        <div className="ve-content">
           <div className="block block--left">
             <div>Select built-in schemas:</div>
             <select
@@ -69,8 +69,11 @@ export class VisualEditorDemo extends Component {
             <p>Or input your OBI json here.</p>
             <JsonBlock
               key={`jsonblock-${selectedFile}`}
-              width={800}
-              height={800}
+              styles={{
+                width: '95%',
+                height: 'calc(100% - 150px)',
+                minHeight: '500px',
+              }}
               defaultValue={obiJson}
               onSubmit={this.onJsonChanged.bind(this)}
             />

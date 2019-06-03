@@ -1,10 +1,21 @@
-.demo-container {
+.ve-container {
+    height: 100%;
+}
+
+.ve-title {
+    height: 50px;
+    margin: 0;
+}
+
+.ve-content {
     display: flex;
     flex-direction: row;
+    height: calc(100% - 60px);
 }
 
 .block {
     border: 1px solid grey;
     margin: 10px;
     width: 50%;
+    overflow: auto;
 }

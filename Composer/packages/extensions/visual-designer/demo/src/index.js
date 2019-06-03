@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Nav } from 'office-ui-fabric-react';
 
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
+import './index.css';
 
 const DemoMaps = {
   VisualEditorDemo: {
