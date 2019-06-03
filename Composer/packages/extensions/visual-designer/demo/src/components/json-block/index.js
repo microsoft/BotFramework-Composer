@@ -46,7 +46,7 @@ export class JsonBlock extends Component {
     return (
       <Fragment>
         <textarea
-          style={{ width: this.props.width, height: this.props.height, font: 'initial', fontSize: '20px' }}
+          style={{ ...this.props.styles, font: 'initial', fontSize: '20px' }}
           value={this.state.displayedText}
           onChange={this.onEditText.bind(this)}
         />
@@ -61,13 +61,11 @@ export class JsonBlock extends Component {
 
 JsonBlock.defaultProps = {
   defaultValue: {},
-  width: 400,
-  height: 500,
+  styles: {},
 };
 
 JsonBlock.propTypes = {
   defaultValue: PropTypes.object,
   onSubmit: PropTypes.func,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  styles: PropTypes.object,
 };
