@@ -1,6 +1,7 @@
 export const DialogGroup = {
-  INPUT: 'INPUT',
   RESPONSE: 'RESPONSE',
+  INPUT: 'INPUT',
+  BRANCHING: 'BRANCHING',
   MEMORY: 'MEMORY',
   STEP: 'STEP',
   CODE: 'CODE',
@@ -11,53 +12,93 @@ export const DialogGroup = {
   OTHER: 'OTHER',
 };
 
+/**
+ * These labels will be used when rendering the EdgeMenu
+ * EXPERIMENTAL: Added by Ben Brown on 5/31 because I don't know how to do this the right way.
+ * TODO: Use the appropriate mechanism to re-label items
+ */
+export const DialogGroupLabels = {
+  'Microsoft.ChoiceInput': 'Type: Multiple Choice',
+  'Microsoft.ConfirmInput': 'Type: Yes/No Confirm',
+  'Microsoft.FloatInput': 'Type: Floating Point Number',
+  'Microsoft.IntegerInput': 'Type: Integer',
+  'Microsoft.NumberInput': 'Type: Any Number',
+  'Microsoft.TextInput': 'Type: Text',
+  'Microsoft.SendActivity': 'Send a single message',
+  'Microsoft.BeginDialog': 'Begin a child dialog',
+  'Microsoft.IfCondition': 'Branch: If/Else',
+  'Microsoft.SwitchCondition': 'Branch: Multi-path Switch',
+
+  'Microsoft.EndDialog': 'End this dialog (and resume parent)',
+  'Microsoft.CancelAllDialogs': 'End all active dialogs',
+  'Microsoft.EndTurn': 'End this turn',
+  'Microsoft.RepeatDialog': 'Restart this dialog',
+  'Microsoft.ReplaceDialog': 'Start a new dialog (and do not resume)',
+  'Microsoft.EmitEvent': 'Emit an event',
+
+  'Microsoft.SetProperty': 'Set a value',
+  'Microsoft.SaveEntity': 'Convert LU entity to a property',
+  'Microsoft.InitProperty': 'Create a new property',
+  'Microsoft.DeleteProperty': 'Delete a property',
+  'Microsoft.EditArray': 'Edit an array property',
+
+  'Microsoft.CodeStep': 'Run custom code',
+  'Microsoft.HttpRequest': 'Make an HTTP request',
+
+  'Microsoft.LogStep': 'Log a message to the console',
+  'Microsoft.TraceActivity': 'Emit a trace event',
+};
+
 export const dialogGroups = {
+  [DialogGroup.RESPONSE]: {
+    label: 'Send Messages',
+    types: ['Microsoft.SendActivity', 'Microsoft.BeginDialog'],
+  },
   [DialogGroup.INPUT]: {
-    label: 'Input/Prompt Dialogs',
+    label: 'Ask a Question',
     types: [
-      'Microsoft.ChoiceInput',
-      'Microsoft.ConfirmInput',
-      'Microsoft.FloatInput',
-      'Microsoft.IntegerInput',
-      'Microsoft.NumberInput',
       'Microsoft.TextInput',
+      'Microsoft.NumberInput',
+      'Microsoft.IntegerInput',
+      'Microsoft.FloatInput',
+      'Microsoft.ConfirmInput',
+      'Microsoft.ChoiceInput',
     ],
   },
-  [DialogGroup.RESPONSE]: {
-    label: 'Sending a response',
-    types: ['Microsoft.SendActivity'],
+  [DialogGroup.BRANCHING]: {
+    label: 'Decisions',
+    types: ['Microsoft.IfCondition', 'Microsoft.SwitchCondition'],
   },
   [DialogGroup.MEMORY]: {
     label: 'Memory manipulation',
     types: [
+      'Microsoft.SetProperty',
+      'Microsoft.SaveEntity',
+      'Microsoft.InitProperty',
       'Microsoft.DeleteProperty',
       'Microsoft.EditArray',
-      'Microsoft.InitProperty',
-      'Microsoft.SaveEntity',
-      'Microsoft.SetProperty',
     ],
   },
   [DialogGroup.STEP]: {
-    label: 'Conversational flow and dialog management',
+    label: 'Flow',
     types: [
-      'Microsoft.BeginDialog',
-      'Microsoft.CancelAllDialogs',
-      'Microsoft.EmitEvent',
-      'Microsoft.EndDialog',
-      'Microsoft.EndTurn',
       'Microsoft.IfCondition',
+      'Microsoft.SwitchCondition',
+      'Microsoft.BeginDialog',
+      'Microsoft.EndDialog',
+      'Microsoft.CancelAllDialogs',
+      'Microsoft.EndTurn',
       'Microsoft.RepeatDialog',
       'Microsoft.ReplaceDialog',
-      'Microsoft.SendActivity',
-      'Microsoft.SwitchCondition',
+      'Microsoft.EmitEvent',
     ],
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: ['Microsoft.CodeStep', 'Microsoft.HttpRequest'],
+    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep'],
   },
   [DialogGroup.LOG]: {
-    label: 'Tracing and logging',
+    label: 'Debugging',
     types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
   },
   [DialogGroup.RULE]: {

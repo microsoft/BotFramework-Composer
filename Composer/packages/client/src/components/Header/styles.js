@@ -20,7 +20,6 @@ export const headerSub = css`
 `;
 
 export const aside = css`
-  width: 200px;
   margin-left: 50px;
 `;
 

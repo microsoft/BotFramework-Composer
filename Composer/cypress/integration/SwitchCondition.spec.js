@@ -9,7 +9,7 @@ context('SwitchCondition', () => {
   it('can manage cases', () => {
     // Add switch condition
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Add New Step').click();
+      cy.get('[data-testid="StepsFieldAdd"]').click();
       cy.getByText('Conversational flow and dialog management').click();
       cy.getByText('Microsoft.SwitchCondition').click();
     });

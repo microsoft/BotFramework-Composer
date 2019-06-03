@@ -7,6 +7,23 @@ trigger:
 - master
 
 jobs:
+  - job: botproject
+    displayName: BotProject Build&Test
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'BotProject/CSharp/BotProject.csproj'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'BotProject/CSharpTest/CSharpTest.csproj'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        projects: 'BotProject/CSharpTest/CSharpTest.csproj'
   - job: test
     displayName: Unit Tests
     pool:
