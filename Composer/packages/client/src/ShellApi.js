@@ -13,16 +13,45 @@ const apiClient = new ApiClient();
 const VISUAL_EDITOR = 'VisualEditor';
 const FORM_EDITOR = 'FormEditor';
 
+const isEventSourceValid = event => {
+  const sourceWindowName = event.source.name;
+  return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
+};
+
+const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
+
+const FileChangeTypes = {
+  CREATE: 'create',
+  UPDATE: 'update',
+  DELETE: 'delete',
+};
+
+const FileTargetTypes = {
+  LU: 'lu',
+  LG: 'lg',
+};
+
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPath, focusPath, schemas } = state;
-  const updateDialog = useRef(debounce(actions.updateDialog, 750)).current;
+  const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
+  const updateDialog = useDebouncedFunc(actions.updateDialog);
+  const updateLuFile = useDebouncedFunc(actions.updateLuFile);
+  const updateLgFile = useDebouncedFunc(actions.updateLgFile);
+  const createLuFile = actions.createLuFile;
+  const createLgFile = actions.createLgFile;
+
+  const { LG, LU } = FileTargetTypes;
+  const { CREATE, UPDATE } = FileChangeTypes;
 
   useEffect(() => {
     apiClient.connect();
 
     apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('updateLuFile', fileHandler(LU, UPDATE));
+    apiClient.registerApi('updateLgFile', fileHandler(LG, UPDATE));
+    apiClient.registerApi('createLuFile', fileHandler(LU, CREATE));
+    apiClient.registerApi('createLgFile', fileHandler(LG, CREATE));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -71,6 +100,8 @@ export function ShellApi() {
       navPath,
       focusPath,
       schemas,
+      lgFiles,
+      luFiles,
     };
   }
 
@@ -105,6 +136,38 @@ export function ShellApi() {
     }
 
     return true;
+  }
+
+  function fileHandler(fileTargetType, fileChangeType) {
+    return (newData, event) => {
+      if (isEventSourceValid(event) === false) return false;
+
+      const payload = {
+        id: newData.id,
+        content: newData.content,
+      };
+
+      switch ([fileTargetType, fileChangeType].join(',')) {
+        case [LU, UPDATE].join(','):
+          updateLuFile(payload);
+          break;
+
+        case [LG, UPDATE].join(','):
+          updateLgFile(payload);
+          break;
+
+        case [LU, CREATE].join(','):
+          createLuFile(payload);
+          break;
+
+        case [LG, CREATE].join(','):
+          createLgFile(payload);
+          break;
+        default:
+          throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
+      }
+      return true;
+    };
   }
 
   function flushUpdates() {
