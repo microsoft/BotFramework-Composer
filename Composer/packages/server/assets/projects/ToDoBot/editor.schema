@@ -14,122 +14,122 @@
     },
     "SDKOverrides": {
       "Microsoft.AdaptiveDialog": {
-        "title": "AdaptiveDialog"
+        "name": "AdaptiveDialog"
       },
       "Microsoft.BeginDialog": {
-        "title": "BeginDialog"
+        "name": "BeginDialog"
       },
       "Microsoft.CancelAllDialogs": {
-        "title": "CancelAllDialogs"
+        "name": "CancelAllDialogs"
       },
       "Microsoft.ChoiceInput": {
-        "title": "ChoiceInput"
+        "name": "ChoiceInput"
       },
       "Microsoft.ConditionalSelector": {
-        "title": "ConditionalSelector"
+        "name": "ConditionalSelector"
       },
       "Microsoft.ConfirmInput": {
-        "title": "ConfirmInput"
+        "name": "ConfirmInput"
       },
       "Microsoft.DebugBreak": {
-        "title": "DebugBreak"
+        "name": "DebugBreak"
       },
       "Microsoft.DeleteProperty": {
-        "title": "DeleteProperty"
+        "name": "DeleteProperty"
       },
       "Microsoft.EditArray": {
-        "title": "EditArray"
+        "name": "EditArray"
       },
       "Microsoft.EmitEvent": {
-        "title": "EmitEvent"
+        "name": "EmitEvent"
       },
       "Microsoft.EndDialog": {
-        "title": "EndDialog"
+        "name": "EndDialog"
       },
       "Microsoft.EndTurn": {
-        "title": "EndTurn"
+        "name": "EndTurn"
       },
       "Microsoft.EventRule": {
-        "title": "EventRule"
+        "name": "EventRule"
       },
       "Microsoft.FirstSelector": {
-        "title": "FirstSelector"
+        "name": "FirstSelector"
       },
       "Microsoft.HttpRequest": {
-        "title": "HttpRequest"
+        "name": "HttpRequest"
       },
       "Microsoft.IfCondition": {
-        "title": "IfCondition"
+        "name": "IfCondition"
       },
       "Microsoft.InitProperty": {
-        "title": "InitProperty"
+        "name": "InitProperty"
       },
       "Microsoft.IntentRule": {
-        "title": "IntentRule"
+        "name": "IntentRule"
       },
       "Microsoft.LanguagePolicy": {
-        "title": "LanguagePolicy"
+        "name": "LanguagePolicy"
       },
       "Microsoft.LogStep": {
-        "title": "LogStep"
+        "name": "LogStep"
       },
       "Microsoft.LuisRecognizer": {
         "title": "Language Understanding",
         "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
       },
       "Microsoft.MostSpecificSelector": {
-        "title": "MostSpecificSelector"
+        "name": "MostSpecificSelector"
       },
       "Microsoft.MultiLanguageRecognizer": {
         "title": "Language Understanding",
         "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
       },
       "Microsoft.NumberInput": {
-        "title": "NumberInput"
+        "name": "NumberInput"
       },
       "Microsoft.QnAMakerDialog": {
-        "title": "QnAMakerDialog"
+        "name": "QnAMakerDialog"
       },
       "Microsoft.RandomSelector": {
-        "title": "RandomSelector"
+        "name": "RandomSelector"
       },
       "Microsoft.RegexRecognizer": {
         "title": "Language Understanding",
         "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
       },
       "Microsoft.RepeatDialog": {
-        "title": "RepeatDialog"
+        "name": "RepeatDialog"
       },
       "Microsoft.ReplaceDialog": {
-        "title": "ReplaceDialog"
+        "name": "ReplaceDialog"
       },
       "Microsoft.Rule": {
-        "title": "Rule"
+        "name": "Rule"
       },
       "Microsoft.SaveEntity": {
-        "title": "SaveEntity"
+        "name": "SaveEntity"
       },
       "Microsoft.SendActivity": {
-        "title": "SendActivity"
+        "name": "SendActivity"
       },
       "Microsoft.SetProperty": {
-        "title": "SetProperty"
+        "name": "SetProperty"
       },
       "Microsoft.SwitchCondition": {
-        "title": "SwitchCondition"
+        "name": "SwitchCondition"
       },
       "Microsoft.TextInput": {
-        "title": "TextInput"
+        "name": "TextInput"
       },
       "Microsoft.TraceActivity": {
-        "title": "TraceActivity"
+        "name": "TraceActivity"
       },
       "Microsoft.TrueSelector": {
-        "title": "TrueSelector"
+        "name": "TrueSelector"
       },
       "Microsoft.UnknownIntentRule": {
-        "title": "UnknownIntentRule"
+        "name": "UnknownIntentRule"
       }
     }
   }
-  
+ 
