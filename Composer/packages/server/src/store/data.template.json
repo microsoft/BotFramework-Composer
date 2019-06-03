@@ -12,5 +12,11 @@
       "storageId": "default",
       "path": "../../../SampleBots/ToDoBot/bot.botproj"
     }
-  ]
+  ],
+  "errorCollectionStorage": {
+    "id": "errorCollection",
+    "name": "This PC",
+    "type": "LocalDisk",
+    "path": "../../../error.txt"
+  }
 }

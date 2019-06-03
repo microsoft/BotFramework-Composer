@@ -1,7 +1,8 @@
 {
   "development": {
     "botRuntime": "http://localhost:3979",
-    "assetsLibray": "./assets"
+    "assetsLibray": "./assets",
+    "instrumentationKey": "61f5bf80-190e-4ab0-9a4d-e081069e1eac"
   },
   "container": {
     "botRuntime": "http://botruntime:80"
