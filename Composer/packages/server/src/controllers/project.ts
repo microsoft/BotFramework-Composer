@@ -127,7 +127,7 @@ async function updateLgFile(req: Request, res: Response) {
 
 async function createLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id);
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -154,7 +154,7 @@ async function updateLuFile(req: Request, res: Response) {
 
 async function createLuFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id);
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, req.body.content);
     res.status(200).json({ luFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
