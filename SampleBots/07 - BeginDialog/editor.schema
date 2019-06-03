@@ -3,6 +3,13 @@
     "BaseField": {
       "title": false,
       "description": false
+    },
+    "RulesField": {
+      "name": "Tasks",
+      "description": "Tasks describe the capabilities of the bot/dialog."
+    },
+    "StepsField": {
+      "description": "Steps describe the process involved in code to accomplish the functionality of the dialog."
     }
   },
   "SDKOverrides": {
@@ -67,13 +74,15 @@
       "name": "LogStep"
     },
     "Microsoft.LuisRecognizer": {
-      "name": "LuisRecognizer"
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
     },
     "Microsoft.MostSpecificSelector": {
       "name": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
-      "name": "MultiLanguageRecognizer"
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
     },
     "Microsoft.NumberInput": {
       "name": "NumberInput"
@@ -85,7 +94,8 @@
       "name": "RandomSelector"
     },
     "Microsoft.RegexRecognizer": {
-      "name": "RegexRecognizer"
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
     },
     "Microsoft.RepeatDialog": {
       "name": "RepeatDialog"

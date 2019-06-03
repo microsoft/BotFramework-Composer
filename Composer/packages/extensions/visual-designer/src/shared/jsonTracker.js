@@ -107,7 +107,7 @@ export function insertAfter(inputDialog, path, $type) {
   return dialog;
 }
 
-export function appendToArray(inputDialog, path, $type) {
+export function unshiftArray(inputDialog, path, $type) {
   const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
 
@@ -116,7 +116,7 @@ export function appendToArray(inputDialog, path, $type) {
   const { parentData, currentKey, currentData } = target;
   const newStep = { $type };
   if (Array.isArray(currentData)) {
-    currentData.push(newStep);
+    currentData.unshift(newStep);
   } else {
     parentData[currentKey] = [{ $type }];
   }

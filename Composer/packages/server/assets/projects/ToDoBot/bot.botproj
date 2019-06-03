@@ -1,9 +1,12 @@
 {
-    "services": [
-    ],
-    "files": [
-       "*.dialog",
-       "*.lg"
-    ],
-    "entry": "ToDoBot.main.dialog"
+  "schemas": {
+    "editor": "editor.schema"
+  },
+  "services": [
+  ],
+  "files": [
+    "*.dialog",
+    "*.lg"
+  ],
+  "entry": "ToDoBot.main.dialog"
 }
