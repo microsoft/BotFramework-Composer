@@ -19,11 +19,11 @@ jobs:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: 'BotProject/CSharpTest/CSharpTest.csproj'
+        projects: 'BotProject/CSharp/Tests/Tests.csproj'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
-        projects: 'BotProject/CSharpTest/CSharpTest.csproj'
+        projects: 'BotProject/CSharp/Tests/Tests.csproj'
   - job: test
     displayName: Unit Tests
     pool:
