@@ -5,7 +5,7 @@ import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 
 import { DialogGroup } from '../../schema/appschema';
-import { buildDialogOptions } from '../utils';
+import { buildDialogOptions, setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
 
@@ -25,9 +25,12 @@ const renderTitle = (item: MicrosoftIRule) => {
 };
 
 export function RulesField(props: FieldProps) {
+  const overrides = setOverridesOnField(props.formContext, 'RulesField');
+
   return (
     <TableField<MicrosoftIRule>
       {...props}
+      {...overrides}
       dialogOptionsOpts={{ include: [DialogGroup.RULE], subMenu: false }}
       label={formatMessage('Add New Rule')}
       navPrefix="rules"
@@ -35,6 +38,7 @@ export function RulesField(props: FieldProps) {
     >
       {({ createNewItemAtIndex }) => (
         <PrimaryButton
+          data-testid="RulesFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
             items: buildDialogOptions({ include: [DialogGroup.RULE], subMenu: false, onClick: createNewItemAtIndex() }),
@@ -43,7 +47,7 @@ export function RulesField(props: FieldProps) {
           }}
           type="button"
         >
-          {formatMessage('Add New Rule')}
+          {formatMessage('Add')}
         </PrimaryButton>
       )}
     </TableField>
