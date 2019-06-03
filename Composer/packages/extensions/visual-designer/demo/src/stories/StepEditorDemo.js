@@ -14,10 +14,12 @@ const defaultFile = sampleFileNames[1];
 // Simulate the condition that json is always mutated.
 const copyJson = json => JSON.parse(JSON.stringify(json));
 
+const getStepData = obiJson => transformRootDialog(obiJson).stepGroup;
+
 export class StepEditorDemo extends Component {
   state = {
     selectedFile: defaultFile,
-    obiJson: ObiExamples[defaultFile],
+    stepData: getStepData(ObiExamples[defaultFile]),
     focusPath: '',
     focusedStep: '',
   };
@@ -29,7 +31,7 @@ export class StepEditorDemo extends Component {
   onFileSelected(file) {
     this.setState({
       selectedFile: file,
-      obiJson: copyJson(ObiExamples[file]),
+      stepData: getStepData(copyJson(ObiExamples[file])),
       focusPath: file,
       focusedStep: '',
     });
@@ -44,17 +46,16 @@ export class StepEditorDemo extends Component {
     console.log('focus node', id);
     this.setState({
       focusPath: this.state.selectedFile + id,
-      obiJson: copyJson(this.state.obiJson),
+      stepData: getStepData(copyJson(this.state.stepData)),
     });
   }
 
   render() {
-    const { selectedFile, obiJson, focusPath } = this.state;
-    const { stepGroup } = transformRootDialog(obiJson);
+    const { selectedFile, stepData, focusPath } = this.state;
 
     return (
       <div className="se-container">
-        <h1 className="se-title">visual-designer Demo</h1>
+        <h1 className="se-title">Step Editor Demo</h1>
         <div className="se-content">
           <div className="block block--left">
             <div>Select built-in schemas:</div>
@@ -72,7 +73,7 @@ export class StepEditorDemo extends Component {
                 </option>
               ))}
             </select>
-            <p>Or input your OBI json here.</p>
+            <p>Step data:</p>
             <JsonBlock
               key={`jsonblock-${selectedFile}`}
               styles={{
@@ -80,16 +81,16 @@ export class StepEditorDemo extends Component {
                 height: 'calc(100% - 150px)',
                 minHeight: '500px',
               }}
-              defaultValue={obiJson}
+              defaultValue={stepData}
               onSubmit={this.onJsonChanged.bind(this)}
             />
           </div>
           <div className="block block--right">
             <StepEditor
               key={this.state.focusPath}
-              id={stepGroup.id}
+              id={stepData.id}
               focusedId={this.state.focusedStep}
-              data={stepGroup.json}
+              data={stepData.json}
               focusPath={focusPath}
               onEvent={(eventName, data) => {
                 switch (eventName) {
