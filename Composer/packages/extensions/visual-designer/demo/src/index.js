@@ -1,114 +1,64 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { Nav } from 'office-ui-fabric-react';
 
-import VisualDesigner from '../../src';
+import { VisualEditorDemo } from './stories/VisualEditorDemo';
 
-import { JsonBlock } from './components/json-block';
-import { ObiExamples } from './samples';
-import './style.css';
-
-const sampleFileNames = Object.keys(ObiExamples);
-const defaultFile = sampleFileNames[1];
-
-// Simulate the condition that json is always mutated.
-const copyJson = json => JSON.parse(JSON.stringify(json));
+const DemoMaps = {
+  VisualEditorDemo: {
+    key: 'VisualEditorDemo',
+    component: VisualEditorDemo,
+  },
+};
 
 class Demo extends Component {
   state = {
-    selectedFile: defaultFile,
-    obiJson: ObiExamples[defaultFile],
-    focusPath: '',
+    selectedItem: DemoMaps.VisualEditorDemo.key,
   };
 
-  constructor(props) {
-    super(props);
+  renderNav() {
+    return (
+      <Nav
+        styles={{ root: { width: 300 } }}
+        expandButtonAriaLabel="Expand or collapse"
+        selectedKey={this.state.selectedItem}
+        onLinkClick={(e, item) => {
+          this.setState({
+            selectedItem: item.key,
+          });
+        }}
+        groups={[
+          {
+            name: 'Editor Demos',
+            links: [
+              {
+                key: DemoMaps.VisualEditorDemo.key,
+                name: 'Visual Editor',
+              },
+            ],
+          },
+          {
+            name: 'Component Demos',
+            links: [],
+          },
+        ]}
+      />
+    );
   }
 
-  onFileSelected(file) {
-    this.setState({
-      selectedFile: file,
-      obiJson: copyJson(ObiExamples[file]),
-      focusPath: file,
-    });
-  }
-
-  onJsonChanged(json) {
-    console.log('json changed:', json);
-    this.setState({ obiJson: json });
-  }
-
-  onFocus(id) {
-    console.log('focus node', id);
-    this.setState({
-      focusPath: this.state.selectedFile + id,
-      obiJson: copyJson(this.state.obiJson),
-    });
+  renderContent() {
+    const SelectedComponent = DemoMaps[this.state.selectedItem].component;
+    return <SelectedComponent />;
   }
 
   render() {
-    const { selectedFile, obiJson, focusPath } = this.state;
-
     return (
-      <div>
-        <h1>visual-designer Demo</h1>
-        <div className="demo-container">
-          <div className="block block--left">
-            <div>Select built-in schemas:</div>
-            <select
-              style={{ width: 200, height: 30, fontSize: 20 }}
-              value={this.state.selectedFile}
-              onChange={e => {
-                const val = e.target.value;
-                this.onFileSelected(val);
-              }}
-            >
-              {sampleFileNames.map(x => (
-                <option key={x} value={x}>
-                  {x}
-                </option>
-              ))}
-            </select>
-            <p>Or input your OBI json here.</p>
-            <JsonBlock
-              key={`jsonblock-${selectedFile}`}
-              width={800}
-              height={800}
-              defaultValue={obiJson}
-              onSubmit={this.onJsonChanged.bind(this)}
-            />
-          </div>
-          <div className="block block--right">
-            <VisualDesigner
-              data={obiJson}
-              navPath={selectedFile}
-              focusPath={focusPath}
-              shellApi={{
-                navDown: e => {
-                  console.log('navDown', e);
-                  this.onFocus(e);
-                },
-                navTo: e => {
-                  console.log('navTo', e);
-                  this.onFocus(e);
-                },
-                focusTo: e => {
-                  console.log('focusTo', e);
-                  this.onFocus(e);
-                },
-              }}
-              onChange={json => {
-                this.setState({
-                  obiJson: json,
-                });
-              }}
-            />
-          </div>
-        </div>
+      <div className="demo-container">
+        <div className="demo-nav">{this.renderNav()}</div>
+        <div className="demo-content">{this.renderContent()}</div>
       </div>
     );
   }
 }
 
 render(<Demo />, document.querySelector('#demo'));
-
-// TODO: import babel plugin to auto bind 'this' pointer
