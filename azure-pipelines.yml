@@ -6,8 +6,26 @@
 trigger:
 - master
 
+variables:
+  ComposerUpdate: False
+  BotProjectUpdate: False
+
 jobs:
+  - job: judge
+    displayName: Check Changes
+    steps:
+    - task: InlinePowershell@1
+      inputs:
+        Script: '$editedFiles = git diff HEAD HEAD~ --name-only
+          $editedFiles | ForEach-Object {
+              Switch -Wildcard ($_ ) {
+                  ''Composer/*'' { Write-Output "##vso[task.setvariable variable=ComposerUpdate]True" }
+                  ''BotProject/*'' { Write-Output "##vso[task.setvariable variable=BotProjectUpdate]True" }
+              }
+          }'
+
   - job: botproject
+    condition: and(succeeded(), eq(variables['BotProjectUpdate'], 'True'))
     displayName: BotProject Build&Test
     pool:
       vmImage: ubuntu-16.04
@@ -24,7 +42,9 @@ jobs:
       inputs:
         command: 'test'
         projects: 'BotProject/CSharp/Tests/Tests.csproj'
+
   - job: test
+    condition: and(succeeded(), eq(variables['ComposerUpdate'], 'True'))
     displayName: Unit Tests
     pool:
       vmImage: ubuntu-16.04
@@ -56,6 +76,7 @@ jobs:
         testRunTitle: Unit Tests
         mergeTestResults: true
   - job: e2e
+    condition: and(succeeded(), eq(variables['ComposerUpdate'], 'True'))
     displayName: E2E Tests
     pool:
       vmImage: ubuntu-16.04
