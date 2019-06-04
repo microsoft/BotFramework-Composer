@@ -5,7 +5,7 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 
 export const EventMenu = ({ id, onEvent }) => {
-  const eventTypes = [ObiTypes.EventRule, ObiTypes.IntentRule, ObiTypes.UnknownIntentRule];
+  const eventTypes = [ObiTypes.IntentRule, ObiTypes.UnknownIntentRule, ObiTypes.EventRule];
   const menuItems = eventTypes.map(x => ({
     key: x,
     name: x,
