@@ -24,6 +24,9 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
     <div
       style={{
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
       onClick={e => {
         e.stopPropagation();
@@ -39,16 +42,15 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
           onEvent={onEvent}
         />
       ) : null}
+      <div style={{ height: 50 }} />
       {stepGroup ? (
-        <div style={{ margin: '10px 0' }}>
-          <StepEditor
-            key={stepGroup.id}
-            id={stepGroup.id}
-            data={stepGroup.data}
-            focusedId={focusedId}
-            onEvent={onEvent}
-          />
-        </div>
+        <StepEditor
+          key={stepGroup.id}
+          id={stepGroup.id}
+          data={stepGroup.data}
+          focusedId={focusedId}
+          onEvent={onEvent}
+        />
       ) : null}
     </div>
   );
