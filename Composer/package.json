@@ -73,8 +73,5 @@
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.0",
     "wsrun": "^3.6.4"
-  },
-  "dependencies": {
-    "@microsoft/applicationinsights-web": "^2.0.0"
   }
 }

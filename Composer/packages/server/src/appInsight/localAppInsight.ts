@@ -15,7 +15,10 @@ class LocalAppInsight implements IAppInsight {
   }
   trackException(exception: Error) {
     if (this.errorStorage) {
-      this.errorStorage.writeFile(this.collectLocation.path, exception);
+      this.errorStorage.writeFile(this.collectLocation.path, {
+        exception: exception,
+        time: new Date(),
+      });
     }
   }
 }
