@@ -3,6 +3,7 @@ import { IconButton } from 'office-ui-fabric-react';
 
 import { Panel } from '../components/nodes/templates/Panel';
 import { RuleGroup } from '../components/groups';
+import { EventMenu } from '../components/shared/EventMenu';
 
 export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
   return (
@@ -13,7 +14,7 @@ export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
           style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
         >
           <div className="events-title__left" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <IconButton iconProps={{ iconName: 'CircleAddition' }} style={{ color: '#0078D4' }} />
+            <EventMenu id={id} onEvent={onEvent} />
             <span
               style={{
                 flex: 1,
