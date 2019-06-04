@@ -10,7 +10,7 @@ import { IconCard } from './templates/IconCard';
 
 export class IntentRule extends React.Component {
   getDetails() {
-    const { steps } = this.props.data;
+    const { intent, steps } = this.props.data;
     if (Array.isArray(steps) && steps.length === 1) {
       const normalizedStep = normalizeObiStep(steps[0]);
       if (normalizedStep.$type === ObiTypes.BeginDialog) {
@@ -29,7 +29,7 @@ export class IntentRule extends React.Component {
         );
       }
     }
-    return 'Task';
+    return intent;
   }
 
   render() {

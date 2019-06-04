@@ -12,7 +12,7 @@ export class UnknownIntentRule extends React.Component {
     const { steps } = data;
     return (
       <IconCard
-        themeColor="#B2D20E"
+        themeColor="#BFEAE9"
         label={data.$type.split('.')[1]}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         onClick={() => {
