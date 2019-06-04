@@ -24,7 +24,6 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
   return (
     <div
       style={{
-        margin: 20,
         position: 'relative',
         display: 'flex',
         flexDirection: 'row',

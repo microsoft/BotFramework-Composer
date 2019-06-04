@@ -63,7 +63,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
   const data = dataCache.current;
   const { navDown, focusTo, navTo } = shellApi;
   return (
-    <div data-testid="visualdesigner-container">
+    <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
       <ObiEditor
         key={navPath + '?version=' + layoutVersion.current}
         path={navPath}
