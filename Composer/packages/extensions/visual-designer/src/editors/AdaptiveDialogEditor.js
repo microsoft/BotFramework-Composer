@@ -1,13 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, Fragment } from 'react';
 
-import { Panel } from '../components/nodes/templates/Panel';
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
-import { RuleGroup } from '../components/groups/index';
 
 import { StepEditor } from './StepEditor';
+import { EventsEditor } from './EventsEditor';
 
 const calculateNodeMap = (_, data) => {
   const { ruleGroup, stepGroup } = transformRootDialog(data);
@@ -18,7 +17,6 @@ const calculateNodeMap = (_, data) => {
 };
 
 export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
-  const { rules } = data;
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -33,15 +31,13 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       }}
     >
       {ruleGroup ? (
-        <Panel text="Triggers" count={rules.length}>
-          <RuleGroup
-            key={ruleGroup.id}
-            id={ruleGroup.id}
-            data={ruleGroup.data}
-            focusedId={focusedId}
-            onEvent={onEvent}
-          />
-        </Panel>
+        <EventsEditor
+          key={ruleGroup.id}
+          id={ruleGroup.id}
+          data={ruleGroup.data}
+          focusedId={focusedId}
+          onEvent={onEvent}
+        />
       ) : null}
       {stepGroup ? (
         <div style={{ margin: '10px 0' }}>

@@ -3,18 +3,6 @@ import { ObiTypes } from '../shared/ObiTypes';
 import { IndexedNode } from './models/IndexedNode';
 import { normalizeObiStep } from './helpers/elementBuilder';
 
-/**
- *      Recognizer    Rules     Steps
- *          |
- *       Events
- *          |
- *      ---------
- *      |intent1|
- *      |intent2|
- *      |intent3|
- *      |   +   |
- *      ---------
- */
 function transformSimpleDialog(input) {
   if (!input) return {};
 
@@ -22,12 +10,10 @@ function transformSimpleDialog(input) {
   const steps = input.steps || [];
 
   const result = {};
-  if (rules.length) {
-    result.ruleGroup = new IndexedNode('$.rules', {
-      $type: ObiTypes.RuleGroup,
-      children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
-    });
-  }
+  result.ruleGroup = new IndexedNode('$.rules', {
+    $type: ObiTypes.RuleGroup,
+    children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
+  });
 
   result.stepGroup = new IndexedNode('$.steps', {
     $type: ObiTypes.StepGroup,
