@@ -4,6 +4,7 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
+import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
@@ -44,13 +45,15 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
       ) : null}
       <div style={{ height: 50 }} />
       {stepGroup ? (
-        <StepEditor
-          key={stepGroup.id}
-          id={stepGroup.id}
-          data={stepGroup.data}
-          focusedId={focusedId}
-          onEvent={onEvent}
-        />
+        <Collapse text="Steps">
+          <StepEditor
+            key={stepGroup.id}
+            id={stepGroup.id}
+            data={stepGroup.data}
+            focusedId={focusedId}
+            onEvent={onEvent}
+          />
+        </Collapse>
       ) : null}
     </div>
   );
