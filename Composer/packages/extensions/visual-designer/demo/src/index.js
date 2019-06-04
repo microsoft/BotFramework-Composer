@@ -4,6 +4,7 @@ import { Nav } from 'office-ui-fabric-react';
 
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
 import { StepEditorDemo } from './stories/StepEditorDemo';
+import { EventsEditorDemo } from './stories/EventsEditorDemo';
 import './index.css';
 
 const DemoMaps = {
@@ -14,6 +15,10 @@ const DemoMaps = {
   StepEditorDemo: {
     key: 'StepEditorDemo',
     component: StepEditorDemo,
+  },
+  EventsEditorDemo: {
+    key: 'EventsEditorDemo',
+    component: EventsEditorDemo,
   },
 };
 
@@ -44,6 +49,10 @@ class Demo extends Component {
               {
                 key: DemoMaps.StepEditorDemo.key,
                 name: 'Step Editor',
+              },
+              {
+                key: DemoMaps.EventsEditorDemo.key,
+                name: 'Event Editor',
               },
             ],
           },
