@@ -3,6 +3,11 @@ export const InitNodeSize = {
   height: 80,
 };
 
+export const EventNodeSize = {
+  width: 180,
+  height: 32,
+};
+
 export const ElementInterval = {
   x: 50,
   y: 60,

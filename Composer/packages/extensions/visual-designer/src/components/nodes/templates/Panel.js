@@ -35,7 +35,7 @@ export const Panel = ({ title, children }) => {
           onClick={collapseFuc}
         />
       </div>
-      {collapsed ? <div style={{ height: 10, overflow: 'hidden' }}>{children}</div> : <div>{children}</div>}
+      {collapsed ? <div style={{ height: 5, overflow: 'hidden' }}>{children}</div> : <div>{children}</div>}
     </div>
   );
 };
