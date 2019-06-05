@@ -12,7 +12,7 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { List, ScrollToMode } from 'office-ui-fabric-react/lib/List';
+import { ScrollToMode } from 'office-ui-fabric-react/lib/List';
 import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
 
