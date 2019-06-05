@@ -56,12 +56,9 @@ export default function FormEditor(props) {
 
   useEffect(() => {
     if (selectedTemplate) {
-      console.log(selectedTemplate);
-      console.log(templates);
       listRef.current.scrollToIndex(
         7,
-        idx => {
-          console.log(idx);
+        () => {
           return 50;
         },
         ScrollToMode.top
