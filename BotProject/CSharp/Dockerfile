@@ -4,6 +4,7 @@ WORKDIR /app/botproject/csharp
 
 COPY *.sln .
 COPY *.csproj .
+COPY Tests/*.csproj Tests/
 COPY NuGet.Config .
 
 # run restore to create a distinct layer
