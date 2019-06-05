@@ -96,14 +96,16 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     </RootDialog>
   ) : (
     <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
-      <Separator
-        theme={fieldHeaderTheme}
-        alignContent="start"
-        styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
-      >
-        {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
-      </Separator>
-      {(descriptionOverride || description || schema.description) && (
+      {titleOverride === false ? null : (
+        <Separator
+          theme={fieldHeaderTheme}
+          alignContent="start"
+          styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
+        >
+          {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
+        </Separator>
+      )}
+      {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
         <p className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}>
           {descriptionOverride || description || uiSchema['ui:description'] || schema.description}
         </p>
