@@ -22,6 +22,7 @@ export const ObiTypes = {
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
   TextInput: 'Microsoft.TextInput',
+  LogStep: 'Microsoft.LogStep',
 
   // virtual
   StepGroup: 'VisualSDK.StepGroup',

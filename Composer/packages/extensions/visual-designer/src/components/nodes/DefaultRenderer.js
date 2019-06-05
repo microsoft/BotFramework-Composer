@@ -36,6 +36,9 @@ const ContentKeyByTypes = {
     label: 'property',
     details: 'prompt',
   },
+  [ObiTypes.LogStep]: {
+    label: 'text',
+  },
 };
 
 /**

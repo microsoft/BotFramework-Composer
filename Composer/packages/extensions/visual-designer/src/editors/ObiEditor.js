@@ -60,12 +60,16 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       tabIndex="0"
       className="obi-editor-container"
       data-testid="obi-editor-container"
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
       onKeyUp={e => {
         const keyString = e.key;
         if (keyString === 'Delete' && focusedId) {
           dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
         }
+      }}
+      onClick={e => {
+        e.stopPropagation();
+        dispatchEvent(NodeEventTypes.Focus, '');
       }}
     >
       <ChosenEditor

@@ -4,6 +4,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>ade3d9c2-1633-4922-89e5-a4a50ccb3bc8</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\**" />
+    <Content Remove="Tests\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <None Remove="Tests\**" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
@@ -14,6 +21,7 @@
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.0-Preview-2019-04-30-01" />
     <PackageReference Include="Microsoft.Bot.Builder.LanguageGeneration.Renderer" Version="4.5.0-Preview-2019-04-30-01" />
     <PackageReference Include="Microsoft.Bot.Connector" Version="4.5.0-Preview-2019-04-30-01" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
   </ItemGroup>
 
 </Project>
