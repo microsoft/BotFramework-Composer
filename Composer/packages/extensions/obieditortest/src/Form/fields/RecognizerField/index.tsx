@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import {
@@ -9,37 +9,17 @@ import {
   TextField,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react';
-import { JSONSchema6 } from 'json-schema';
 import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
 
+import { BaseField } from '../BaseField';
+
+import LuEditor from './LuEditor';
+import RegexEditor from './RegexEditor';
 import './styles.scss';
-import { BaseField } from './BaseField';
-
-function LuEditor(props) {
-  const [showEditor, setShowEditor] = useState(true);
-
-  if (!props.formData) {
-    return null;
-  }
-
-  return (
-    <>
-      <Link
-        onClick={() => setShowEditor(!showEditor)}
-        styles={{ root: { fontSize: FontSizes.smallPlus, marginBottom: '10px' } }}
-      >
-        {showEditor
-          ? formatMessage('Hide {title}', { title: props.title })
-          : formatMessage('View {title}', { title: props.title })}
-      </Link>
-      {showEditor && props.children()}
-    </>
-  );
-}
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { formData, registry } = props;
+  const { formData } = props;
 
   const {
     formContext: { luFiles, shellApi },
@@ -109,17 +89,12 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       <LuEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
         {() => {
           if (selectedFile) {
-            return <TextField value={selectedFile.content} rows={20} multiline />;
+            return <TextField value={selectedFile.content} rows={20} multiline readOnly />;
           }
 
-          const {
-            fields: { ObjectField },
-          } = registry;
-          const recognizerSchema =
-            formData && typeof formData === 'object'
-              ? (props.schema.oneOf as JSONSchema6[]).find(s => s.title === formData.$type)
-              : {};
-          return <ObjectField {...props} schema={recognizerSchema as JSONSchema6} uiSchema={{}} />;
+          if (typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer') {
+            return <RegexEditor {...props} />;
+          }
         }}
       </LuEditor>
     </BaseField>

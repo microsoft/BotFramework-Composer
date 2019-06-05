@@ -19,7 +19,7 @@
   grid-row-gap: 20px;
 }
 
-.RecognizerField, .CasesFieldConditions {
+.CasesFieldConditions {
   display: flex;
 
   .ObjectFieldTemplate {
@@ -30,7 +30,7 @@
     flex: 1;
   }
 
-  .RecognizerFieldMenu, .CasesFieldConditionsMenu {
+  .CasesFieldConditionsMenu {
     flex-grow: 0;
     margin-left: 20px;
     margin-top: 30px;
@@ -61,17 +61,3 @@
   max-width: 300px;
 }
 
-.LuFileSelector {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .LuFileSelectorLabel {
-    flex-grow: 0;
-  }
-
-  .LuFileSelectorFile {
-    flex: 1;
-    margin: 0 10px;
-  }
-}
