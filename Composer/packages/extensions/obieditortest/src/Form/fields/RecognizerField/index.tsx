@@ -19,7 +19,7 @@ import RegexEditor from './RegexEditor';
 import './styles.scss';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { formData } = props;
+  const { formData, formContext } = props;
 
   const {
     formContext: { luFiles, shellApi },
@@ -89,7 +89,12 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       <LuEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
         {() => {
           if (selectedFile) {
-            return <TextField value={selectedFile.content} rows={20} multiline readOnly />;
+            const updateLuFile = (_, newValue?: string) => {
+              const { updateLuFile } = formContext.shellApi;
+              updateLuFile({ id: selectedFile.id, content: newValue });
+            };
+
+            return <TextField value={selectedFile.content || ''} rows={20} multiline onChange={updateLuFile} />;
           }
 
           if (typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer') {

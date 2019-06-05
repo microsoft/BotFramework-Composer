@@ -72,6 +72,10 @@ function ExtensionContainer() {
     shellNavigate: (shellPage, opts = {}) => {
       return apiClient.apiCall('shellNavigate', { shellPage, opts });
     },
+
+    updateLuFile: luFile => {
+      return apiClient.apiCall('updateLuFile', luFile);
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;

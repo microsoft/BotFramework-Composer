@@ -116,6 +116,10 @@ const mockShellApi = [
   'navDown',
   'focusTo',
   'shellNavigate',
+  'updateLuFile',
+  'updateLgFile',
+  'createLuFile',
+  'createLgFile',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {
