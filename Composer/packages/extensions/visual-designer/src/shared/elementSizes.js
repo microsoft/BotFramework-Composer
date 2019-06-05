@@ -32,5 +32,5 @@ export const RuleColCount = 3;
 
 export const PanelSize = {
   width: (EventNodeSize.width + EventNodeLayout.marginX) * RuleColCount + 24 * 2,
-  maxHeight: (EventNodeSize.height + EventNodeLayout.marginY) * 3 + 44 + 24 + 12,
+  maxHeight: (EventNodeSize.height + EventNodeLayout.marginY) * 3 + 44 + 24 + 12 + 2, // title: 44, padding: 24 + 12, border: 2
 };
