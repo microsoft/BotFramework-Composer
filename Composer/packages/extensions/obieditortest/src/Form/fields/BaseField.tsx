@@ -117,4 +117,5 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
 
 BaseField.defaultProps = {
   formContext: {},
+  uiSchema: {},
 };
