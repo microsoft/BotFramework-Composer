@@ -32,9 +32,9 @@ export class BotProject {
     this.name = Path.basename(this.absolutePath);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
-    this.dialogIndexer = new DialogIndexer(this.fileStorage);
-    this.lgIndexer = new LGIndexer(this.fileStorage);
-    this.luIndexer = new LUIndexer(this.fileStorage);
+    this.dialogIndexer = new DialogIndexer(this.fileStorage, this.dir);
+    this.lgIndexer = new LGIndexer(this.fileStorage, this.dir);
+    this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
   }
 
   public index = async () => {
@@ -80,11 +80,12 @@ export class BotProject {
   };
 
   public createDialogFromTemplate = async (name: string) => {
-    const absolutePath: string = Path.join(this.dir, `${name.trim()}.dialog`);
+    const relativePath = `${name.trim()}.dialog`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
     const newDialog = merge({}, DIALOG_TEMPLATE);
 
     const newFileContent = await this._createFile(absolutePath, name, JSON.stringify(newDialog, null, 2) + '\n');
-    this.dialogIndexer.addDialog(name, newFileContent, absolutePath);
+    this.dialogIndexer.addDialog(name, newFileContent, relativePath);
     return this.dialogIndexer.getDialogs();
   };
 
@@ -95,15 +96,16 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string, content: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
-    const newFileContent = await this._createFile(absolutePath, id, content || '');
-    this.lgIndexer.createLgFile(id, newFileContent, absolutePath);
+    const relativePath = `${id.trim()}.lg`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
+    const newFileContent = await this._createFile(absolutePath, `${id}.lg`, content || '');
+    this.lgIndexer.createLgFile(id, newFileContent, relativePath);
+
     return this.lgIndexer.getLgFiles();
   };
 
   public removeLgFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
-    await this._removeFile(absolutePath);
+    await this._removeFile(`${id.trim()}.lg`);
     this.lgIndexer.removeLgFile(id);
     return this.lgIndexer.getLgFiles();
   };
@@ -115,15 +117,15 @@ export class BotProject {
   };
 
   public createLuFile = async (id: string, content: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
-    const newFileContent = await this._createFile(absolutePath, id, content || '');
-    this.luIndexer.createLuFile(id, newFileContent, absolutePath);
+    const relativePath = `${id.trim()}.lu`;
+    const absolutePath: string = Path.join(this.dir, relativePath);
+    const newFileContent = await this._createFile(absolutePath, `${id}.lu`, content || '');
+    this.luIndexer.createLuFile(id, newFileContent, relativePath);
     return this.luIndexer.getLuFiles();
   };
 
   public removeLuFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
-    await this._removeFile(absolutePath);
+    await this._removeFile(`${id.trim()}.lu`);
     this.luIndexer.removeLuFile(id);
     return this.luIndexer.getLuFiles();
   };
@@ -163,8 +165,14 @@ export class BotProject {
     return fileContent;
   };
 
-  private _removeFile = async (absolutePath: string) => {
-    await this.fileStorage.removeFile(absolutePath);
+  private _removeFile = async (name: string) => {
+    const targetFile = this.files.find(file => {
+      return file.name === name;
+    });
+    if (targetFile) {
+      const absolutePath = targetFile.path;
+      await this.fileStorage.removeFile(absolutePath);
+    }
   };
 
   private _updateFile = async (name: string, content: string) => {
@@ -215,7 +223,7 @@ export class BotProject {
           if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
             fileList.push({
-              name: filePath,
+              name: Path.basename(filePath),
               content: content,
               path: realFilePath,
               relativePath: Path.relative(this.dir, realFilePath),
