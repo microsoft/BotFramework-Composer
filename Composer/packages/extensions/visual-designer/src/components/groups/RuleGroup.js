@@ -13,7 +13,6 @@ const RuleBlockWidth = RuleElementWidth + RulePaddingX;
 const RuleBlockHeight = RuleElementHeight + RulePaddingY;
 const ColCount = RuleColCount;
 const BoxWidth = RuleBlockWidth * ColCount;
-const BoxMaxHeight = RuleBlockHeight * 3;
 
 export class RuleGroup extends React.Component {
   containerElement;
