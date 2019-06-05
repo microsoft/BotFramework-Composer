@@ -105,8 +105,7 @@ export class BotProject {
   };
 
   public removeLgFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lg`);
-    await this._removeFile(absolutePath);
+    await this._removeFile(`${id.trim()}.lg`);
     this.lgIndexer.removeLgFile(id);
     return this.lgIndexer.getLgFiles();
   };
@@ -126,8 +125,7 @@ export class BotProject {
   };
 
   public removeLuFile = async (id: string) => {
-    const absolutePath: string = Path.join(this.dir, `${id.trim()}.lu`);
-    await this._removeFile(absolutePath);
+    await this._removeFile(`${id.trim()}.lu`);
     this.luIndexer.removeLuFile(id);
     return this.luIndexer.getLuFiles();
   };
@@ -167,8 +165,14 @@ export class BotProject {
     return fileContent;
   };
 
-  private _removeFile = async (absolutePath: string) => {
-    await this.fileStorage.removeFile(absolutePath);
+  private _removeFile = async (name: string) => {
+    const targetFile = this.files.find(file => {
+      return file.name === name;
+    });
+    if (targetFile) {
+      const absolutePath = targetFile.path;
+      await this.fileStorage.removeFile(absolutePath);
+    }
   };
 
   private _updateFile = async (name: string, content: string) => {
