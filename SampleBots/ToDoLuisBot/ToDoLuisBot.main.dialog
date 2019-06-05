@@ -1,59 +1,54 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "$id": "root",
-    "autoEndDialog": false,
-    "recognizer": {
-    	"$type": "Microsoft.LuisRecognizer",
-    	"applicationId": "e4b3cf81-d69c-4323-9374-707655ba9703",
-    	"endpointKey": "95140545afd44a1997e2eaf47007fa7b",
-    	"endpoint": "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/e4b3cf81-d69c-4323-9374-707655ba9703?verbose=true&timezoneOffset=-360&subscription-key=95140545afd44a1997e2eaf47007fa7b&q="
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$id": "root",
+  "autoEndDialog": false,
+  "recognizer": "ToDoLuis.lu",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Hi"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "AddToDo",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ToDoLuisBot.AddItem"
+        }
+      ]
     },
-    "steps": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "DeleteToDo",
+      "steps": [
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hi"
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ToDoLuisBot.DeleteItem"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowToDo",
+      "steps": [
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "AddToDo",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.AddItem"
-                }               
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "DeleteToDo",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.DeleteItem"
-                }             
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ShowToDo",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ToDoLuisBot.ShowItems"
-                }                
-            ]
-        },
-        {
-            "$type": "Microsoft.UnknownIntentRule",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "[LuisToDoHelp]"
-                }
-            ]
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ToDoLuisBot.ShowItems"
         }
-    ]
+      ]
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[LuisToDoHelp]"
+        }
+      ]
+    }
+  ]
 }
