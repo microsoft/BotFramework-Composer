@@ -1,6 +1,6 @@
 import { IFileStorage } from 'src/models/storage/interface';
-import { Path } from '../../../utility/path';
 
+import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
 
 export class LGIndexer {
@@ -46,7 +46,7 @@ export class LGIndexer {
 
   // id is file name
   public createLgFile = (id: string, content: string, relativePath: string) => {
-    this.lgFiles.push({ id, content: '', relativePath });
+    this.lgFiles.push({ id, content, relativePath });
     return content;
   };
 

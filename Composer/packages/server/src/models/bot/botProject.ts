@@ -98,8 +98,8 @@ export class BotProject {
   public createLgFile = async (id: string, content: string) => {
     const relativePath = `${id.trim()}.lg`;
     const absolutePath: string = Path.join(this.dir, relativePath);
-    const newFileContent = await this._createFile(absolutePath, id, content || '');
-    this.lgIndexer.createLgFile(id, newFileContent, absolutePath);
+    const newFileContent = await this._createFile(absolutePath, `${id}.lg`, content || '');
+    this.lgIndexer.createLgFile(id, newFileContent, relativePath);
 
     return this.lgIndexer.getLgFiles();
   };
@@ -120,8 +120,8 @@ export class BotProject {
   public createLuFile = async (id: string, content: string) => {
     const relativePath = `${id.trim()}.lu`;
     const absolutePath: string = Path.join(this.dir, relativePath);
-    const newFileContent = await this._createFile(absolutePath, id, content || '');
-    this.luIndexer.createLuFile(id, newFileContent, absolutePath);
+    const newFileContent = await this._createFile(absolutePath, `${id}.lu`, content || '');
+    this.luIndexer.createLuFile(id, newFileContent, relativePath);
     return this.luIndexer.getLuFiles();
   };
 

@@ -1,6 +1,6 @@
 import { IFileStorage } from 'src/models/storage/interface';
-import { Path } from '../../../utility/path';
 
+import { Path } from '../../../utility/path';
 import { FileInfo, LUFile } from '../interface';
 
 export class LUIndexer {
@@ -46,7 +46,7 @@ export class LUIndexer {
 
   // id is file name
   public createLuFile = (id: string, content: string, relativePath: string) => {
-    this.luFiles.push({ id, content: '', relativePath });
+    this.luFiles.push({ id, content, relativePath });
     return content;
   };
 
