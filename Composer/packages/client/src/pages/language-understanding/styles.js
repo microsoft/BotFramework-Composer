@@ -25,6 +25,7 @@ export const ContentHeaderStyle = css`
 `;
 
 export const ContentStyle = css`
+  margin-left: 2px;
   display: flex;
   border-top: 1px solid #dddddd;
   flex: 1;
@@ -39,6 +40,9 @@ export const ContentStyle = css`
 export const contentEditor = css`
   flex: 4;
   margin: 20px;
+  height: calc(100vh - 200px);
+  position: relative;
+  overflow: auto;
 `;
 
 export const codeEditorContainer = css`
@@ -47,5 +51,31 @@ export const codeEditorContainer = css`
 
 export const codeEditor = css`
   border: 1px solid #dddddd;
-  height: calc(100vh - 200px);
+  padding-bottom: 10px;
+  height: calc(100% - 20px);
 `;
+
+export const formCell = css`
+  white-space: normal;
+  font-size: 14px;
+`;
+
+// styles override, should use '@uifabric/fluent-theme' later
+export const whiteButton = css`
+  background: transparent;
+  button {
+    background: transparent;
+    &:hover {
+      background: rgb(234, 234, 234);
+    }
+  }
+`;
+
+export const navLinkText = css`
+  width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+`;
+
+export const navLinkBtns = css``;

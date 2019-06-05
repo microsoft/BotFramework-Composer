@@ -8,10 +8,18 @@ import { navigate } from '@reach/router';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { LGParser } from 'botbuilder-lg';
+import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 
 import { Store } from '../../store/index';
 import { OpenConfirmModal } from '../../components/Modal';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
+import {
+  ContentHeaderStyle,
+  ContentStyle,
+  flexContent,
+  actionButton,
+  navLinkText,
+  navLinkBtns,
+} from '../language-understanding/styles';
 
 import NewLgFileModal from './create-new';
 import Content from './content';
@@ -27,6 +35,7 @@ export const LGPage = props => {
   const [groups, setGroups] = useState([]);
 
   const [lgFile, setLgFile] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   useEffect(() => {
     const lgFile = lgFiles.find(file => file.id === fileId);
@@ -38,19 +47,35 @@ export const LGPage = props => {
 
     lgFiles.forEach(file => {
       const parseResult = LGParser.TryParse(file.content);
+
       if (parseResult.isValid) {
-        file.templates = parseResult.templates;
+        file.templates = parseResult.templates.map((template, templateIndex) => {
+          return {
+            ...template,
+            fileId: file.id,
+            index: templateIndex,
+          };
+        });
       }
     });
 
+    // side nav links
     const links = lgFiles.map(file => {
       let subNav = [];
 
       // in case of unvalid LGParser templates
       if (Array.isArray(file.templates)) {
-        subNav = file.templates.map(template => {
+        subNav = file.templates.map((template, templateIndex) => {
           return {
             name: template.Name,
+            url: `#${template.Name}`,
+            onClick: () => {
+              setSelectedTemplate({
+                fileId: file.id,
+                index: templateIndex,
+                name: template.Name,
+              });
+            },
           };
         });
       }
@@ -63,16 +88,26 @@ export const LGPage = props => {
         altText: file.id,
         title: file.id,
         isExpanded: true,
+        forceAnchor: true,
+        file: file,
         links: subNav,
-        forceAnchor: false,
         onClick: event => {
           event.preventDefault();
           navigate(`./${file.id}`);
         },
       };
     });
+
     setGroups([
       {
+        key: 'all',
+        name: 'all',
+        collapseByDefault: false,
+        ariaLabel: 'all',
+        altText: 'all',
+        title: 'all',
+        isExpanded: true,
+        forceAnchor: true,
         links: links,
       },
     ]);
@@ -99,7 +134,18 @@ export const LGPage = props => {
     updateLgFile(payload);
   }
 
-  async function onRemove() {
+  async function onCopy(file) {
+    const newfileId = `${file.id}.Copy`;
+    await actions.createLgFile({
+      id: newfileId,
+      content: file.content,
+    });
+
+    navigate(`./${newfileId}`);
+  }
+
+  async function onRemove(file) {
+    const fileId = file.id;
     const title = formatMessage(`Confirm delete ${fileId}.lg file?`);
     const confirm = await OpenConfirmModal(title);
     if (confirm === false) {
@@ -109,7 +155,7 @@ export const LGPage = props => {
       id: fileId,
     };
     await actions.removeLgFile(payload);
-    navigate(`./`);
+    // navigate(`./all`);
   }
 
   async function onCreateLgFile(data) {
@@ -120,10 +166,74 @@ export const LGPage = props => {
     navigate(`./${data.name}`);
   }
 
+  function getNavAllMoreButtons() {
+    return [
+      {
+        key: 'add',
+        name: 'Add new LG file',
+        onClick: () => {
+          setModalOpen(true);
+        },
+      },
+    ];
+  }
+
+  function getNavLinkMoreButtons(file) {
+    return [
+      {
+        key: 'delete',
+        name: 'Delete',
+        onClick: () => {
+          onRemove(file);
+        },
+      },
+      {
+        key: 'copy',
+        name: 'Make a copy',
+        onClick: () => {
+          onCopy(file);
+        },
+      },
+    ];
+  }
+
+  function onRenderNavLink(props, defaultRender) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div css={navLinkText}>{defaultRender(props)}</div>
+        {Array.isArray(props.links) && (
+          <div css={navLinkBtns}>
+            <CommandBar
+              overflowItems={getNavLinkMoreButtons(props.file)}
+              overflowButtonProps={{ ariaLabel: 'More commands' }}
+              ariaLabel={'Use left and right arrow keys to navigate between commands'}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function onRenderNavGroupHeader(props, defaultRender) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div css={navLinkText}>{defaultRender(props)}</div>
+
+        <div css={navLinkBtns}>
+          <CommandBar
+            overflowItems={getNavAllMoreButtons()}
+            overflowButtonProps={{ ariaLabel: 'More commands' }}
+            ariaLabel={'Use left and right arrow keys to navigate between commands'}
+          />
+        </div>
+      </div>
+    );
+  }
+
   // performance optimization, component update should only trigger by lgFile change.
   const memoizedContent = useMemo(() => {
-    return <Content file={lgFile} textMode={textMode} onChange={onChange} />;
-  }, [lgFile, textMode]);
+    return <Content file={lgFile} selectedTemplate={selectedTemplate} textMode={textMode} onChange={onChange} />;
+  }, [lgFile, selectedTemplate, textMode]);
 
   return (
     <Fragment>
@@ -140,13 +250,6 @@ export const LGPage = props => {
               </ActionButton>
             </Fragment>
           )}
-
-          <ActionButton iconProps={{ iconName: 'Delete' }} onClick={() => onRemove()}>
-            Delete file
-          </ActionButton>
-          <ActionButton iconProps={{ iconName: 'AddTo' }} onClick={() => setModalOpen(true)}>
-            Add new LG file
-          </ActionButton>
           <Toggle
             css={actionButton}
             onText="Text editor"
@@ -158,10 +261,11 @@ export const LGPage = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <Nav
+          onRenderGroupHeader={onRenderNavGroupHeader}
+          onRenderLink={onRenderNavLink}
           styles={{
             root: {
               width: 255,
-              height: 400,
               boxSizing: 'border-box',
               borderTop: '2px solid #41bdf4',
               fontWeight: 600,
