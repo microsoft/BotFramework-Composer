@@ -1,6 +1,5 @@
-import path from 'path';
-
 import { IFileStorage } from 'src/models/storage/interface';
+import { Path } from '../../../utility/path';
 
 import { FileInfo, LGFile } from '../interface';
 
@@ -18,12 +17,12 @@ export class LGIndexer {
     if (files.length === 0) return [];
     this.lgFiles = [];
     for (const file of files) {
-      const extName = path.extname(file.name);
+      const extName = Path.extname(file.name);
       // todo: use lg parser.
       if (extName === '.lg') {
         this.lgFiles.push({
-          id: path.basename(file.name, extName),
-          relativePath: path.relative(this.dir, file.path),
+          id: Path.basename(file.name, extName),
+          relativePath: Path.relative(this.dir, file.path),
           content: file.content,
         });
       }
@@ -37,7 +36,7 @@ export class LGIndexer {
   public async updateLgFile(id: string, content: string) {
     const updatedIndex = this.lgFiles.findIndex(file => id === file.id);
     const relativePath = this.lgFiles[updatedIndex].relativePath;
-    const absolutePath = path.join(this.dir, relativePath);
+    const absolutePath = Path.join(this.dir, relativePath);
 
     this.lgFiles[updatedIndex].content = content;
 

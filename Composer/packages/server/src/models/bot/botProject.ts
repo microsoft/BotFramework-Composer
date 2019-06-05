@@ -218,7 +218,7 @@ export class BotProject {
           if ((await this.fileStorage.stat(realFilePath)).isFile) {
             const content: string = await this.fileStorage.readFile(realFilePath);
             fileList.push({
-              name: filePath,
+              name: Path.basename(filePath),
               content: content,
               path: realFilePath,
               relativePath: Path.relative(this.dir, realFilePath),
