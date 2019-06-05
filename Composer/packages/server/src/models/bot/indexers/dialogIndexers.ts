@@ -1,15 +1,17 @@
-import path from 'path';
-
 import { IFileStorage } from 'src/models/storage/interface';
+
+import { Path } from '../../../utility/path';
 
 import { FileInfo, Dialog } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
   public storage: IFileStorage;
+  private dir: string;
 
-  constructor(storage: IFileStorage) {
+  constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
+    this.dir = dir;
   }
 
   public index = (files: FileInfo[]): Dialog[] => {
@@ -19,14 +21,14 @@ export class DialogIndexer {
       let count = 1;
 
       for (const file of files) {
-        const extName = path.extname(file.name);
+        const extName = Path.extname(file.name);
         try {
           if (extName === '.dialog') {
             const dialog = {
               id: 0,
-              name: path.basename(file.name, extName),
+              name: Path.basename(file.name, extName),
               content: JSON.parse(file.content),
-              path: file.path,
+              relativePath: Path.relative(this.dir, file.path),
             };
 
             if (file.name === entry) {
@@ -55,15 +57,23 @@ export class DialogIndexer {
     });
 
     const dialog = this.dialogs[index];
-    await this.storage.writeFile(dialog.path, JSON.stringify(content, null, 2) + '\n');
-    const dialogContent = await this.storage.readFile(dialog.path);
+
+    const absolutePath = Path.join(this.dir, dialog.relativePath);
+
+    await this.storage.writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
+    const dialogContent = await this.storage.readFile(absolutePath);
     this.dialogs[index].content = JSON.parse(dialogContent);
 
     return this.dialogs[index].content;
   };
 
-  public addDialog = (name: string, content: string, path: string) => {
-    this.dialogs.push({ name, content: JSON.parse(content), id: this.dialogs.length, path: path });
+  public addDialog = (name: string, content: string, relativePath: string) => {
+    this.dialogs.push({
+      name,
+      content: JSON.parse(content),
+      id: this.dialogs.length,
+      relativePath: relativePath,
+    });
     return content;
   };
 }

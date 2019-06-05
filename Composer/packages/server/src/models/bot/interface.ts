@@ -24,7 +24,7 @@ export interface Dialog {
   id: number;
   name: string;
   content: any;
-  path: string;
+  relativePath: string;
 }
 
 export interface LGTemplate {
@@ -34,13 +34,12 @@ export interface LGTemplate {
 
 export interface LGFile {
   id: string;
-  absolutePath: string;
+  relativePath: string;
   content: any;
 }
 
 export interface LUFile {
   id: string;
-  absolutePath: string;
-  // templates: Array;
+  relativePath: string;
   content: any;
 }
