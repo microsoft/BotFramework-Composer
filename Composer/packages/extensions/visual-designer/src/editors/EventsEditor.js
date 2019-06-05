@@ -1,11 +1,12 @@
 import React from 'react';
-import { IconButton } from 'office-ui-fabric-react';
 
 import { Panel } from '../components/nodes/templates/Panel';
-import { RuleGroup } from '../components/groups';
+import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { EventMenu } from '../components/shared/EventMenu';
 
 export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
+  const ruleCount = data.children.length;
+
   return (
     <Panel
       title={
@@ -13,7 +14,10 @@ export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
           className="events-title"
           style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <div className="events-title__left" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <div
+            className="events-title__left"
+            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: '-8px' }}
+          >
             <EventMenu id={id} onEvent={onEvent} />
             <span
               style={{
@@ -24,16 +28,12 @@ export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
                 height: '22px',
               }}
             >
-              {`Triggers(${data.children.length})`}
+              {`Triggers(${ruleCount})`}
             </span>
           </div>
-          <IconButton
-            iconProps={{
-              iconName: 'ErrorBadge',
-            }}
-          />
         </div>
       }
+      collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
     >
       <RuleGroup key={id} id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
     </Panel>

@@ -35,7 +35,11 @@ export const Collapse = ({ text, children }) => {
         >
           {text}
         </div>
-        <IconButton iconProps={{ iconName: collapsed ? 'ChevronDown' : 'ChevronUp' }} onClick={collapseFuc} />
+        <IconButton
+          onClick={collapseFuc}
+          iconProps={{ iconName: 'PageRight' }}
+          style={{ transform: collapsed ? 'none' : 'rotate(90deg)' }}
+        />
       </div>
       <div style={{ display: collapsed ? 'none' : 'block' }}>{children}</div>
     </div>

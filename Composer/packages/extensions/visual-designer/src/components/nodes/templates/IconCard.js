@@ -20,6 +20,7 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '9px',
+    boxSizing: 'border-box',
   };
   return (
     <div
@@ -33,7 +34,7 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
       <div
         style={{
           lineHeight: '29px',
-          width: 'calc(100% - 20px)',
+          width: 'calc(100% - 60px)',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           overflow: 'hidden',
