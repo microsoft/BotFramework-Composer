@@ -101,11 +101,11 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
         alignContent="start"
         styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
       >
-        titleOverride{title || uiSchema['ui:title'] || schema.title || startCase(name)}
+        {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
       </Separator>
-      {(description || schema.description) && (
+      {(descriptionOverride || description || schema.description) && (
         <p className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}>
-          {description || uiSchema['ui:description'] || schema.description}
+          {descriptionOverride || description || uiSchema['ui:description'] || schema.description}
         </p>
       )}
       {children}
