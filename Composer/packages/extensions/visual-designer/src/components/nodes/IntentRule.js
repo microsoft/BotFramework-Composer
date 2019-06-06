@@ -33,8 +33,7 @@ export class IntentRule extends React.Component {
   }
 
   render() {
-    const { id, data, onEvent } = this.props;
-    const { steps } = data;
+    const { id, focusedId, onEvent } = this.props;
     return (
       <IconCard
         themeColor="#BFEAE9"
@@ -42,11 +41,14 @@ export class IntentRule extends React.Component {
         label={this.getDetails()}
         icon="MessageBot"
         onClick={() => {
-          if (Array.isArray(steps) && steps.length) {
+          if (focusedId === id) {
             onEvent(NodeEventTypes.Expand, id);
           } else {
             onEvent(NodeEventTypes.Focus, id);
           }
+        }}
+        onClickIcon={() => {
+          onEvent(NodeEventTypes.Expand, id);
         }}
       />
     );

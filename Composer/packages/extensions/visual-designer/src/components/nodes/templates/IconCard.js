@@ -6,7 +6,7 @@ import { Icon } from '../icons/icon';
 const boxWidth = 180;
 const boxHeight = 32;
 
-export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
+export const IconCard = ({ corner, label, icon, themeColor, onClick, onClickIcon }) => {
   const containerStyle = {
     width: boxWidth,
     height: boxHeight,
@@ -43,10 +43,21 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
       >
         {label}
       </div>
-      <div style={{ position: 'absolute', top: 9, right: 26 }}>
+      <div
+        style={{ position: 'absolute', top: 9, right: 26 }}
+        onClick={e => {
+          e.stopPropagation();
+          onClickIcon(e);
+        }}
+      >
         <FabricIcon iconName="OpenSource" />
       </div>
       <div style={{ position: 'absolute', top: 9, right: 0 }}>{corner}</div>
     </div>
   );
+};
+
+IconCard.defaultProps = {
+  onClick: () => {},
+  onClickIcon: () => {},
 };

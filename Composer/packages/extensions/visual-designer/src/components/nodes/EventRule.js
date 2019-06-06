@@ -8,19 +8,21 @@ import { IconCard } from './templates/IconCard';
 
 export class EventRule extends React.Component {
   render() {
-    const { id, data, onEvent } = this.props;
-    const { steps } = data;
+    const { id, data, focusedId, onEvent } = this.props;
     return (
       <IconCard
         themeColor="#B2D20E"
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.events}
         onClick={() => {
-          if (Array.isArray(steps) && steps.length) {
+          if (focusedId === id) {
             onEvent(NodeEventTypes.Expand, id);
           } else {
             onEvent(NodeEventTypes.Focus, id);
           }
+        }}
+        onClickIcon={() => {
+          onEvent(NodeEventTypes.Expand, id);
         }}
       />
     );
