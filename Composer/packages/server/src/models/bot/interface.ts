@@ -4,7 +4,6 @@ export interface LocationRef {
 }
 
 export interface BotProjectFileContent {
-  files: string[];
   services: string[];
   entry: string;
   schemas?: {

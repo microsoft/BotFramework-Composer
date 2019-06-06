@@ -3,10 +3,5 @@
   "schemas": {
     "editor": "editor.schema"
   },
-  "files": [
-    "*.dialog",
-    "*.lg",
-    "*.lu"
-  ],
   "entry": "ToDoLuisBot.main.dialog"
 }
