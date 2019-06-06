@@ -1,3 +1,6 @@
-import CodeEditor from '../../src';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-CodeEditor();
+import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('demo'));
