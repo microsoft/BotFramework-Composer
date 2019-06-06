@@ -3,17 +3,16 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
-import { InitNodeSize } from '../../shared/elementSizes';
+import { EventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
 
-const IntentPaddingX = 18;
-const IntentPaddingY = 20;
-const IntentElementHeight = InitNodeSize.height;
-const IntentElementWidth = InitNodeSize.width;
-const IntentBlockWidth = IntentElementWidth + 2 * IntentPaddingX;
-const IntentBlockHeight = IntentElementHeight + 2 * IntentPaddingY;
-const BonusHeight = 50;
+const RuleElementHeight = EventNodeSize.height;
+const RuleElementWidth = EventNodeSize.width;
+const RulePaddingX = EventNodeLayout.marginX;
+const RulePaddingY = EventNodeLayout.marginY;
+const RuleBlockWidth = RuleElementWidth + RulePaddingX;
+const RuleBlockHeight = RuleElementHeight + RulePaddingY;
 
-export class IntentGroup extends React.Component {
+export class RuleGroup extends React.Component {
   containerElement;
 
   propagateBoundary() {
@@ -23,12 +22,12 @@ export class IntentGroup extends React.Component {
     this.props.onResize(new Boundary(scrollWidth, scrollHeight));
   }
 
-  renderIntent(intent) {
+  renderRule(rule) {
     const { focusedId, onEvent } = this.props;
-    const data = intent.json;
+    const data = rule.json;
     return (
       <NodeRenderer
-        id={intent.id}
+        id={rule.id}
         data={data}
         focusedId={focusedId}
         onEvent={onEvent}
@@ -41,34 +40,32 @@ export class IntentGroup extends React.Component {
 
   render() {
     const { data } = this.props;
-    const intents = data.children || [];
-
-    const width = IntentBlockWidth;
-    const height = IntentBlockHeight * intents.length + BonusHeight;
+    const rules = data.children || [];
 
     return (
       <div
         style={{
-          width,
-          height,
-          border: '0.25px solid #000000',
           boxSizing: 'border-box',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          marginLeft: '-28px',
         }}
         ref={el => {
           this.containerElement = el;
           this.propagateBoundary();
         }}
       >
-        {intents.map(x => (
+        {rules.map(x => (
           <div
             key={x.id + 'block'}
             style={{
-              padding: `${IntentPaddingY}px ${IntentPaddingX}px`,
-              height: IntentBlockHeight,
+              width: RuleBlockWidth,
+              height: RuleBlockHeight,
               boxSizing: 'border-box',
             }}
           >
-            {this.renderIntent(x)}
+            {this.renderRule(x)}
           </div>
         ))}
       </div>
@@ -76,5 +73,5 @@ export class IntentGroup extends React.Component {
   }
 }
 
-IntentGroup.propTypes = NodeProps;
-IntentGroup.defaultProps = defaultNodeProps;
+RuleGroup.propTypes = NodeProps;
+RuleGroup.defaultProps = defaultNodeProps;
