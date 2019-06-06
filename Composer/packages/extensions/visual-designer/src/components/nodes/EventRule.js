@@ -1,31 +1,13 @@
 import React from 'react';
 
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeMenu } from '../shared/NodeMenu';
 
-import { IconCard } from './templates/IconCard';
+import { RuleCard } from './templates/RuleCard';
 
-export class EventRule extends React.Component {
-  render() {
-    const { id, data, onEvent } = this.props;
-    const { steps } = data;
-    return (
-      <IconCard
-        themeColor="#B2D20E"
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
-        label={data.events}
-        onClick={() => {
-          if (Array.isArray(steps) && steps.length) {
-            onEvent(NodeEventTypes.Expand, id);
-          } else {
-            onEvent(NodeEventTypes.Focus, id);
-          }
-        }}
-      />
-    );
-  }
-}
-
+export const EventRule = ({ id, data, focusedId, onEvent }) => {
+  return (
+    <RuleCard id={id} data={data} themeColor="#B2D20E" label={data.events} focusedId={focusedId} onEvent={onEvent} />
+  );
+};
 EventRule.propTypes = NodeProps;
 EventRule.defaultProps = defaultNodeProps;

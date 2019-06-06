@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { Icon } from '../icons/icon';
 
@@ -34,7 +33,7 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
       <div
         style={{
           lineHeight: '29px',
-          width: 'calc(100% - 60px)',
+          width: 'calc(100% - 68px)',
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           overflow: 'hidden',
@@ -43,10 +42,12 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
       >
         {label}
       </div>
-      <div style={{ position: 'absolute', top: 9, right: 26 }}>
-        <FabricIcon iconName="OpenSource" />
-      </div>
       <div style={{ position: 'absolute', top: 9, right: 0 }}>{corner}</div>
     </div>
   );
+};
+
+IconCard.defaultProps = {
+  onClick: () => {},
+  onClickIcon: () => {},
 };
