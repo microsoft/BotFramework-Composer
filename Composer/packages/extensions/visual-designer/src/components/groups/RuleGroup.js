@@ -3,7 +3,7 @@ import React from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../shared/Boundary';
-import { EventNodeSize, RuleColCount, EventNodeLayout } from '../../shared/elementSizes';
+import { EventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
 
 const RuleElementHeight = EventNodeSize.height;
 const RuleElementWidth = EventNodeSize.width;
@@ -11,8 +11,6 @@ const RulePaddingX = EventNodeLayout.marginX;
 const RulePaddingY = EventNodeLayout.marginY;
 const RuleBlockWidth = RuleElementWidth + RulePaddingX;
 const RuleBlockHeight = RuleElementHeight + RulePaddingY;
-const ColCount = RuleColCount;
-const BoxWidth = RuleBlockWidth * ColCount;
 
 export class RuleGroup extends React.Component {
   containerElement;
@@ -50,7 +48,6 @@ export class RuleGroup extends React.Component {
           boxSizing: 'border-box',
           display: 'flex',
           flexWrap: 'wrap',
-          width: BoxWidth,
         }}
         ref={el => {
           this.containerElement = el;
