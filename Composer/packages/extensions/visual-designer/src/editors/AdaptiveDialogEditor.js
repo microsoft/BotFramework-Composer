@@ -4,16 +4,14 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../components/shared/GraphNode';
-import { RecognizerGroup } from '../components/groups';
+import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { StepEditor } from './StepEditor';
-
-const ColMargin = 10;
+import { EventsEditor } from './EventsEditor';
 
 const calculateNodeMap = (_, data) => {
-  const { recognizerGroup, ruleGroup, stepGroup } = transformRootDialog(data);
+  const { ruleGroup, stepGroup } = transformRootDialog(data);
   return {
-    dialog: GraphNode.fromIndexedJson(recognizerGroup),
     ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
@@ -21,27 +19,33 @@ const calculateNodeMap = (_, data) => {
 
 export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { dialog, stepGroup, ruleGroup } = nodeMap;
+  const { stepGroup, ruleGroup } = nodeMap;
 
   return (
     <div
       style={{
         position: 'relative',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {dialog ? (
-        <div style={{ margin: ColMargin }}>
-          <RecognizerGroup key={dialog.id} id={dialog.id} data={dialog.data} focusedId={focusedId} onEvent={onEvent} />
-        </div>
+      {ruleGroup ? (
+        <EventsEditor
+          key={ruleGroup.id}
+          id={ruleGroup.id}
+          data={ruleGroup.data}
+          focusedId={focusedId}
+          onEvent={onEvent}
+        />
       ) : null}
+      <div style={{ height: 50 }} />
       {stepGroup ? (
-        <div style={{ margin: ColMargin }}>
+        <Collapse text="Steps">
           <StepEditor
             key={stepGroup.id}
             id={stepGroup.id}
@@ -49,18 +53,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
             focusedId={focusedId}
             onEvent={onEvent}
           />
-        </div>
-      ) : null}
-      {ruleGroup ? (
-        <div style={{ margin: ColMargin }}>
-          <StepEditor
-            key={ruleGroup.id}
-            id={ruleGroup.id}
-            data={ruleGroup.data}
-            focusedId={focusedId}
-            onEvent={onEvent}
-          />
-        </div>
+        </Collapse>
       ) : null}
     </div>
   );

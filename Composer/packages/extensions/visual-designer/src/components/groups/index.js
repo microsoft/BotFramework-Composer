@@ -1,4 +1,3 @@
-export { EventGroup } from './EventGroup';
-export { IntentGroup } from './IntentGroup';
+export { RuleGroup } from './RuleGroup';
 export { StepGroup } from './StepGroup';
-export { RecognizerGroup } from './RecognizerGroup';
+export { CollapsedRuleGroup } from './CollapsedRuleGroup';
