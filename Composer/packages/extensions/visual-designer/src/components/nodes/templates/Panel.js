@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react';
 
 import { PanelSize } from '../../../shared/elementSizes';
@@ -11,7 +11,7 @@ export const Panel = ({ title, children, collapsedItems }) => {
     setCollapsed(!collapsed);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const PanelWidthList = [
       { condition: window.matchMedia('(min-width: 1051px)'), length: PanelSize.maxWidth },
       { condition: window.matchMedia('(max-width: 1050px) and (min-width: 852px)'), length: 824 },
@@ -20,6 +20,10 @@ export const Panel = ({ title, children, collapsedItems }) => {
     ];
 
     PanelWidthList.forEach(panelWidth => {
+      const query = panelWidth.condition;
+      if (query.matches) {
+        setWidth(panelWidth.length);
+      }
       panelWidth.condition.addListener(e => {
         if (e.matches) {
           setWidth(panelWidth.length);
