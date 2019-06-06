@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'office-ui-fabric-react';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../shared/NodeMenu';
@@ -51,11 +52,23 @@ export const RuleCard = ({ id, data, themeColor, label, focusedId, onEvent }) =>
   return (
     <IconCard
       themeColor={themeColor}
-      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      corner={
+        <div style={{ display: 'flex' }}>
+          <Icon
+            style={{ lineHeight: '16px', fontSize: '16px' }}
+            onClick={e => {
+              e.stopPropagation();
+              onCardNavClick();
+            }}
+            iconName="OpenSource"
+          />
+
+          <NodeMenu id={id} onEvent={onEvent} />
+        </div>
+      }
       label={label}
       icon="MessageBot"
       onClick={onCardBodyClick}
-      onClickIcon={onCardNavClick}
     />
   );
 };
