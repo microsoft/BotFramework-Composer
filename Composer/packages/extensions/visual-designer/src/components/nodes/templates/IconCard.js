@@ -49,5 +49,4 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
 
 IconCard.defaultProps = {
   onClick: () => {},
-  onClickIcon: () => {},
 };
