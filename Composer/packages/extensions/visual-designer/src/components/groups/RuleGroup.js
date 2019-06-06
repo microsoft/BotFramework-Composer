@@ -48,8 +48,6 @@ export class RuleGroup extends React.Component {
           boxSizing: 'border-box',
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center',
-          marginLeft: '-28px',
         }}
         ref={el => {
           this.containerElement = el;
