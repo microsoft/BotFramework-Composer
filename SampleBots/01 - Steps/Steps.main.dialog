@@ -18,6 +18,8 @@
   "$designer": {
     "createdAt": "2019-05-19T16:07:43.086Z",
     "updatedAt": "2019-05-19T16:07:43.117Z",
-    "id": "744569"
+    "id": "744569",
+    "name": "01 - Steps",
+    "description": "This is bot demonstrates the Steps concept in Adaptive Dialogs."
   }
 }

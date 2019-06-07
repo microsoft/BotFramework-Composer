@@ -53,6 +53,8 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
       <div className="DesignerFieldSection">
         <TextField value={get(data, 'name')} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
         <TextField
+          multiline
+          autoAdjustHeight
           value={get(data, 'description')}
           label={formatMessage('Description')}
           onChange={(_, val) => update('description', val)}
@@ -72,13 +74,14 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
           readOnly
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
         />
-        <TextField
+        {/* HIDE ID UNTIL WE ACTUALLY HAVE A USE FOR IT */}
+        {/* <TextField
           value={get(data, 'id')}
           label={formatMessage('ID number')}
           borderless
           readOnly
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
-        />
+        /> */}
       </div>
     </div>
   );

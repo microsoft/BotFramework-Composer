@@ -1,0 +1,46 @@
+{
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "$designer": {
+    "name": "15 - Advanced Github Bot",
+    "description": "This is a bot that demonstrates the ability to collect different pieces of information from Github."
+  },
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "GetIssueIntent": "(?i)(?:show|get) .*(?:issue|bug)(?: )?(?<issuenumber>.*)?",
+      "GetUserIntent": "(?i)(?:show|get) .*(?:user)(?: )?(?<username>.*)?",
+      "HelpIntent": "(?i)help"
+    }
+  },
+
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Hi, I'm a github bot. I can show users or issues!"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "GetIssueIntent",
+      "steps": ["GetIssue"]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "GetUserIntent",
+      "steps": ["GetUser"]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HelpIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "I can show users or issues!\n"
+        }
+      ]
+    }
+  ]
+}

@@ -112,6 +112,8 @@
   "$designer": {
     "createdAt": "2019-05-06T20:58:45.201Z",
     "updatedAt": "2019-05-06T20:58:45.289Z",
-    "id": "612830"
+    "id": "612830",
+    "name": "ToDoBot",
+    "description": "This is a demonstration of a multi-turn Bot that can create and manage a ToDo list."
   }
 }

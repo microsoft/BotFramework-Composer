@@ -1,6 +1,10 @@
 {
   "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "EchoBot",
+    "description": "<Fill in the description of your bot here>"
+  },
   "steps": [
     {
       "$type": "Microsoft.TextInput",

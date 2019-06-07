@@ -1,5 +1,4 @@
-﻿{
-  "$schema": "../../app.schema",
+{
   "$type": "Microsoft.AdaptiveDialog",
   "steps": [
     {
@@ -20,5 +19,11 @@
       "$type": "Microsoft.SendActivity",
       "activity": "[Greeting.GreetUser]"
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-06-07T15:58:44.404Z",
+    "updatedAt": "2019-06-07T15:58:44.425Z",
+    "id": "031174"
+  }
 }

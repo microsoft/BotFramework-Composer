@@ -1,6 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": false,
+  "$designer": {
+    "name": "ToDoBot",
+    "description": "<Fill in the description of your bot here>"
+  },
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
