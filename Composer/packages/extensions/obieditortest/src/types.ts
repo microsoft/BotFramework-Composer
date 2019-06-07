@@ -19,6 +19,12 @@ export interface DialogInfo {
   name: string;
 }
 
+export interface LuFile {
+  id: string;
+  absolutePath: string;
+  content: string;
+}
+
 export interface FormData {
   $type?: string;
   [key: string]: any;

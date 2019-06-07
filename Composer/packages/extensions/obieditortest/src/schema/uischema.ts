@@ -23,6 +23,9 @@ export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     recognizer: {
       'ui:field': RecognizerField,
+      'ui:title': 'Language Understanding',
+      'ui:description':
+        'To understand what the user says, your dialog needs a ‘Recognizer’ that includes example words and sentences that users may use.',
     },
     rules: {
       'ui:field': RulesField,

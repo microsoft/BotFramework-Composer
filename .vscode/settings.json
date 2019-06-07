@@ -6,6 +6,7 @@
   },
   "eslint.enable": true,
   "eslint.autoFixOnSave": true,
+  "eslint.packageManager": "yarn",
   "eslint.validate": [
     "javascript",
     "javascriptreact",

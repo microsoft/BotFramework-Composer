@@ -68,6 +68,14 @@ function ExtensionContainer() {
     focusTo: subPath => {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
+
+    shellNavigate: (shellPage, opts = {}) => {
+      return apiClient.apiCall('shellNavigate', { shellPage, opts });
+    },
+
+    updateLuFile: luFile => {
+      return apiClient.apiCall('updateLuFile', luFile);
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;

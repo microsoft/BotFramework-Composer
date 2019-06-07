@@ -1,5 +1,6 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce } from 'lodash';
+import { navigate } from '@reach/router';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -31,6 +32,16 @@ const FileTargetTypes = {
   LG: 'lg',
 };
 
+const shellNavigator = (shellPage, opts = {}) => {
+  switch (shellPage) {
+    case 'lu':
+      navigate(`/language-understanding/${opts.id}`);
+      return;
+    default:
+      return;
+  }
+};
+
 export function ShellApi() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
@@ -55,6 +66,7 @@ export function ShellApi() {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
+    apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
 
     return () => {
       apiClient.disconnect();

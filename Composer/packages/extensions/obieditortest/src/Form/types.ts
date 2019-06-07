@@ -1,11 +1,13 @@
 import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
 
-import { ShellApi } from '../types';
+import { ShellApi, LuFile } from '../types';
 
 export interface FormContext {
   editorSchema: any;
   shellApi: ShellApi;
   rootId: string;
+  luFiles: LuFile[];
+  dialogOptions: string[];
 }
 
 interface EnumOption {

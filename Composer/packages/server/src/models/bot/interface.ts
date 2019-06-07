@@ -40,5 +40,5 @@ export interface LGFile {
 export interface LUFile {
   id: string;
   relativePath: string;
-  content: any;
+  content: string;
 }
