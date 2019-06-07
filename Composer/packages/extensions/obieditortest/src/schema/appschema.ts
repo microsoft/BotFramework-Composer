@@ -578,7 +578,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           choicesProperty: {
             type: 'string',
             title: 'Choices Property',
-            decription: 'unknown ??? ',
+            description: 'unknown ??? ',
           },
           choices: {
             type: 'array',
@@ -1335,7 +1335,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
           header: {
             type: 'object',
-            additionProperties: true,
+            additionalProperties: true,
             title: 'Http headers',
             description: 'Http headers to include with the HTTP request (supports data binding)',
           },
@@ -2743,7 +2743,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           cases: {
             type: 'array',
             title: 'Cases',
-            desc: 'Cases to evaluate against condition',
+            description: 'Cases to evaluate against condition',
             items: {
               type: 'object',
               properties: {

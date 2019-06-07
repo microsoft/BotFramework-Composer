@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { forwardRef } from 'react';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -13,6 +14,9 @@ import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav } from './styles';
 
 initializeIcons(/* optional base url */);
+
+// eslint-disable-next-line react/display-name
+const Content = forwardRef((props, ref) => <div css={content} {...props} ref={ref} />);
 
 export function App() {
   const { state, actions } = useContext(Store);
@@ -63,9 +67,8 @@ export function App() {
           />
           <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} />
         </div>
-        <div css={content}>
-          <Routes />
-        </div>
+
+        <Routes component={Content} />
       </div>
     </Fragment>
   );

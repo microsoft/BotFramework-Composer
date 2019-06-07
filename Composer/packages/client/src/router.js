@@ -7,8 +7,8 @@ import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
 
-const Routes = () => (
-  <Router>
+const Routes = props => (
+  <Router {...props}>
     <DesignPage path="/" />
     <SettingPage path="setting/*" />
     <LUPage path="language-understanding/:fileId" />

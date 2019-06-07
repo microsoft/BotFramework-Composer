@@ -2,8 +2,10 @@
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import lodash from 'lodash';
+import { LgEditor } from 'code-editor';
 
-import CodeEditor from './code-editor';
+import { contentEditor } from '../language-understanding/styles';
+
 import FormEditor from './form-editor';
 
 // TODO: validate here,
@@ -15,7 +17,9 @@ export default function Content(props) {
 
   return lodash.isEmpty(lgFile) === false ? (
     textMode ? (
-      <CodeEditor file={lgFile} onChange={onChange} />
+      <div css={contentEditor}>
+        <LgEditor value={lgFile.content} onChange={onChange} />
+      </div>
     ) : (
       <FormEditor file={lgFile} onChange={onChange} />
     )

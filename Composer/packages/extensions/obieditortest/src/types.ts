@@ -46,3 +46,15 @@ export interface EditorSchema {
     };
   };
 }
+
+declare module 'json-schema' {
+  interface OBISchema {
+    $role?: string;
+    $type?: string;
+  }
+
+  interface JSONSchema6 extends OBISchema {
+    title?: string;
+    __additional_property?: boolean;
+  }
+}

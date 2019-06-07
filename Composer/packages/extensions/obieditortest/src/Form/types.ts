@@ -26,14 +26,3 @@ export interface RadioWidgetProps extends WidgetProps {
     enumOptions: EnumOption[];
   };
 }
-
-export interface OBISchema {
-  $role?: string;
-}
-
-declare module 'json-schema' {
-  interface JSONSchema6 extends OBISchema {
-    title?: string;
-    __additional_property?: boolean;
-  }
-}

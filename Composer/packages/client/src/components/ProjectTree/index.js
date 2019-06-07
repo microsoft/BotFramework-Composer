@@ -35,7 +35,7 @@ export const ProjectTree = props => {
       onLinkExpandClick={(ev, item) => {
         onSelect(item.id);
       }}
-      groups={[{ links: links, collapseByDefault: true }]}
+      groups={[{ links: links }]}
       selectedKey={activeNode}
     />
   );

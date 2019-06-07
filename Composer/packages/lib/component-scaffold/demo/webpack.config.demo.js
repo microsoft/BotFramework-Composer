@@ -1,10 +1,20 @@
+/* eslint-disable */
 const path = require('path');
 
+const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: path.resolve(__dirname, 'src/index.tsx'),
+  mode: 'development',
   devtool: 'inline-source-map',
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 3002,
+    stats: 'errors-only',
+  },
   module: {
     rules: [
       {
@@ -84,34 +94,22 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    alias: {
-      react: path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-    },
+    plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
   },
 
   output: {
-    path: path.join(__dirname, './dist'),
-    filename: 'myUnflappableComponent.js',
-    library: 'demo',
-    libraryTarget: 'umd',
-    publicPath: '/dist/',
-    umdNamedDefine: true,
+    filename: '[name].[chunkhash:8].js',
+    chunkFilename: '[name].[chunkhash:8].js',
+    path: path.resolve('./demo/dist'),
   },
 
-  externals: {
-    // Don't bundle react or react-dom
-    react: {
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'React',
-      root: 'React',
-    },
-    'react-dom': {
-      commonjs: 'react-dom',
-      commonjs2: 'react-dom',
-      amd: 'ReactDOM',
-      root: 'ReactDOM',
-    },
-  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+    new HtmlWebpackPlugin({
+      chunksSortMode: 'dependency',
+      template: path.join(__dirname, 'index.html'),
+    }),
+  ],
 };
