@@ -31,9 +31,7 @@
           "name": "string"
         },
         "name": "{dialog.petname}",
-        "photoUrls": [
-          "string"
-        ],
+        "photoUrls": ["string"],
         "tags": [
           {
             "id": 0,
@@ -68,6 +66,8 @@
   "$designer": {
     "createdAt": "2019-05-18T22:37:53.053Z",
     "updatedAt": "2019-05-18T22:37:53.060Z",
-    "id": "351884"
+    "id": "351884",
+    "name": "11 - HttpRequest",
+    "description": "This is a bot that demonstrates the HttpRequest concept in Adaptive Dialogs."
   }
 }

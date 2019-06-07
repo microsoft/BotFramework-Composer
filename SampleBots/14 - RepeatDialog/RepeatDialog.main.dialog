@@ -1,22 +1,26 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "$id": "root",
-    "steps": [
-        {
-            "$type":"Microsoft.TextInput",
-            "prompt" : "Hello, what is your name?", 
-            "property": "user.name"
-        },
-        {
-            "$type":"Microsoft.SendActivity",
-            "activity": "Hello {user.name}, nice to meet you!"
-        },
-        {
-            "$type":"Microsoft.EndTurn"
-        },
-        {
-            "$type":"Microsoft.RepeatDialog"
-        }
-   ]
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$id": "root",
+  "$designer": {
+    "name": "14 - RepeatDialog",
+    "description": "This is a bot that demonstrates use of the RepeatDialog concept in Adaptive Dialogs."
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Hello, what is your name?",
+      "property": "user.name"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Hello {user.name}, nice to meet you!"
+    },
+    {
+      "$type": "Microsoft.EndTurn"
+    },
+    {
+      "$type": "Microsoft.RepeatDialog"
+    }
+  ]
 }

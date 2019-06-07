@@ -50,5 +50,12 @@
         }
       ]
     }
-  ]
+  ],
+  "$designer": {
+    "createdAt": "2019-06-07T15:38:05.573Z",
+    "updatedAt": "2019-06-07T15:38:05.580Z",
+    "id": "507277",
+    "name": "ToDoLuisBot",
+    "description": "This is an example bot that uses LUIS to determine intents gathered from user input in managing a ToDo list."
+  }
 }

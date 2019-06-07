@@ -1,61 +1,68 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-06-07T16:18:34.824Z",
+    "updatedAt": "2019-06-07T16:18:34.852Z",
+    "id": "039096",
+    "name": "13 - SwitchCondition",
+    "description": "This is a bot that demonstrates use of the SwitchCondition in Adaptive Dialogs."
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "property": "user.style",
+      "choices": [
         {
-            "$type": "Microsoft.ChoiceInput",
-            "property": "user.style",
-            "choices": [
-                {
-                    "value": "Test1"
-                },
-                {
-                    "value": "Test2"
-                },
-                {
-                    "value": "Test3"
-                }
-            ],
-            "prompt": "Please select a value from below:",
-            "style": "List",
-            "alwaysPrompt": true
+          "value": "Test1"
         },
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "You select: {user.style}"
+          "value": "Test2"
         },
-	    {
-            "$type": "Microsoft.SwitchCondition",
-            "condition": "user.style",
-            "cases": [
-                {
-                    "value": "'Test1'",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You select: 1"
-                        }
-                    ]
-                },
-                {
-                    "value": "'Test2'",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You select: 2"
-                        }
-                    ]
-                },
-                {
-                    "value": "'Test3'",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You select: 3"
-                        }
-                    ]
-                }
-            ]
+        {
+          "value": "Test3"
         }
-    ]
+      ],
+      "prompt": "Please select a value from below:",
+      "style": "List",
+      "alwaysPrompt": true
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "You select: {user.style}"
+    },
+    {
+      "$type": "Microsoft.SwitchCondition",
+      "condition": "user.style",
+      "cases": [
+        {
+          "value": "'Test1'",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "You select: 1"
+            }
+          ]
+        },
+        {
+          "value": "'Test2'",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "You select: 2"
+            }
+          ]
+        },
+        {
+          "value": "'Test3'",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "You select: 3"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
 }
