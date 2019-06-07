@@ -8,9 +8,11 @@ jest.mock('azure-storage', () => {
   return {};
 });
 
+const botDir = '../../mocks/samplebots/bot1';
+
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, '../../mocks/1.botproj'), //Path.join().replace(/\\/g, '/'),
+  path: Path.join(__dirname, `${botDir}/1.botproj`), //Path.join().replace(/\\/g, '/'),
 };
 
 const proj = new BotProject(mockLocationRef);
@@ -20,9 +22,10 @@ beforeEach(async () => {
 });
 
 describe('index', () => {
-  it('should get project', async () => {
+  it('should index successfully', async () => {
     const project: { [key: string]: any } = await proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
+    expect(project.lgFiles.length).toBe(1);
   });
 });
 
@@ -40,8 +43,8 @@ describe('updateDialog', () => {
 
 describe('updateBotFile', () => {
   it('should update a file at a path', async () => {
-    const initValue = { services: [], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
-    const newValue = { services: ['test'], files: ['*.dialog', '*.lg'], entry: 'main.dialog' };
+    const initValue = { services: [], entry: 'main.dialog' };
+    const newValue = { services: ['test'], entry: 'main.dialog' };
     const botFile = await proj.updateBotFile('1', newValue);
     // @ts-ignore
     expect(botFile.content).toEqual(newValue);
@@ -54,7 +57,7 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `../../mocks/${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
     } catch (err) {
       // ignore
     }
@@ -73,12 +76,12 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = Path.join(__dirname, `../../copy`);
+const copyDir = Path.join(__dirname, `${botDir}/../copy`);
 
 describe('copyTo', () => {
   const locationRef: LocationRef = {
     storageId: 'default',
-    path: Path.join(__dirname, '../../copy/1.botproj'),
+    path: `${copyDir}/1.botproj`,
   };
 
   afterEach(() => {
@@ -106,7 +109,7 @@ describe('copyTo', () => {
     }
   });
 
-  it('should create a dialog file with given steps', async () => {
+  it('should copy successfully', async () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.index();
     const project: { [key: string]: any } = await newBotProject.getIndexes();
@@ -116,21 +119,12 @@ describe('copyTo', () => {
 
 describe('update lg template', () => {
   it('should update the lg template.', async () => {
-    const initFiles = [
-      {
-        name: 'test.lg',
-        content: '# greet\n- Hello!',
-        path: Path.join(__dirname, '../../mocks/test.lg'),
-        relativePath: Path.relative(proj.dir, Path.join(__dirname, '../../mocks/test.lg')),
-      },
-    ];
     const initValue = `# greet
     - Hello!`;
 
     const newValue = `# updated
     - Hi!`;
 
-    await proj.lgIndexer.index(initFiles);
     const lgFiles = await proj.updateLgFile('test', newValue);
     const aFile = lgFiles.find(f => f.id === 'test');
     // @ts-ignore

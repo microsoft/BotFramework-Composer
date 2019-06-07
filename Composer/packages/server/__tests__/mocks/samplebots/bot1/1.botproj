@@ -1,8 +1,4 @@
 {
   "services": [],
-  "files": [
-    "*.dialog",
-    "*.lg"
-  ],
   "entry": "main.dialog"
 }

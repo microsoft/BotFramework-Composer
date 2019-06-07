@@ -189,7 +189,7 @@ export class BotProject {
     // get 'files' from .bot file
     const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
 
-    if (botConfig !== undefined && Array.isArray(botConfig.files)) {
+    if (botConfig !== undefined) {
       fileList.push({
         name: this.name,
         content: botConfig,
@@ -214,7 +214,9 @@ export class BotProject {
         }
       }
 
-      for (const pattern of botConfig.files) {
+      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+
+      for (const pattern of patterns) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
 
         for (const filePath of paths.sort()) {

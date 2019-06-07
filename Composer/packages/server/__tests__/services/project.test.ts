@@ -27,8 +27,16 @@ jest.mock('../../src/store/store', () => {
     },
   };
 });
+
 jest.mock('azure-storage', () => {});
-const projPath = Path.resolve(__dirname, '../mocks/1.botproj');
+
+const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1/1.botproj');
+
+const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
+// TODO: this is a singal that our save as api and copy to feature is not the right design
+// the saveAsPath should be dir, not a filepath
+const saveAsPath = `${saveAsDir}/1.botproj`;
+
 describe('test BotProjectService', () => {
   it('openProject', async () => {
     expect(projectService.currentBotProject).toBeUndefined();
@@ -44,15 +52,13 @@ describe('test BotProjectService', () => {
   it('saveProjectAs', async () => {
     const botProj = {
       storageId: 'default',
-      path: Path.resolve(__dirname, '../mocks/saveas/1.botproj'),
+      path: saveAsPath,
     };
     await projectService.saveProjectAs(botProj);
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(
-      Path.resolve(__dirname, '../mocks/saveas/1.botproj')
-    );
+    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(saveAsPath);
     // remove the saveas files
     try {
-      rimraf.sync(Path.resolve(__dirname, '../mocks/saveas'));
+      rimraf.sync(saveAsDir);
     } catch (error) {
       //ignore
     }

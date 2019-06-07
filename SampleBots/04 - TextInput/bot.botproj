@@ -3,6 +3,5 @@
   "schemas": {
     "editor": "editor.schema"
   },
-  "files": ["*.dialog", "*.lg"],
   "entry": "TextInput.main.dialog"
 }
