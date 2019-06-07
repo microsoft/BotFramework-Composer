@@ -69,6 +69,24 @@ const dialogFiles = [
   },
 ];
 
+const luFiles = [
+  {
+    id: 'FirstLuFile',
+    absolutePath: '/Some/Path/FirstLuFile',
+    content: '## Hello\n-Hi',
+  },
+  {
+    id: 'SecondLuFile',
+    absolutePath: '/Some/Path/FirstLuFile',
+    content: '## Hello\n-Good morning',
+  },
+  {
+    id: 'ThirdLuFile',
+    absolutePath: '/Some/Path/FirstLuFile',
+    content: '## Hello\n-Hello',
+  },
+];
+
 function getDefaultData() {
   const storage = window.sessionStorage.getItem('formData');
 
@@ -89,17 +107,27 @@ function getDefaultMemory() {
   return defaultMemory;
 }
 
-const mockShellApi = ['getState', 'getData', 'getDialogs', 'saveData', 'navTo', 'navDown', 'focusTo'].reduce(
-  (mock, api) => {
-    mock[api] = (...args) =>
-      new Promise(resolve => {
-        console.info(`shellApi.${api} called with`, args);
-        resolve();
-      });
-    return mock;
-  },
-  {}
-);
+const mockShellApi = [
+  'getState',
+  'getData',
+  'getDialogs',
+  'saveData',
+  'navTo',
+  'navDown',
+  'focusTo',
+  'shellNavigate',
+  'updateLuFile',
+  'updateLgFile',
+  'createLuFile',
+  'createLgFile',
+].reduce((mock, api) => {
+  mock[api] = (...args) =>
+    new Promise(resolve => {
+      console.info(`shellApi.${api} called with`, ...args);
+      resolve();
+    });
+  return mock;
+}, {});
 
 const Demo: React.FC = () => {
   const [dirtyFormData, setDirtyFormData] = useState(null);
@@ -273,6 +301,7 @@ const Demo: React.FC = () => {
           onChange={debouncedOnChange}
           schemas={{ editor: editorSchemaFormData }}
           shellApi={mockShellApi as ShellApi}
+          luFiles={luFiles}
         />
       </div>
     </div>

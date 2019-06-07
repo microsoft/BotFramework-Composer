@@ -23,7 +23,7 @@ export class DialogIndexer {
       for (const file of files) {
         const extName = Path.extname(file.name);
         try {
-          if (extName === '.dialog') {
+          if (extName === '.dialog' && !file.name.endsWith('.lu.dialog')) {
             const dialog = {
               id: 0,
               name: Path.basename(file.name, extName),

@@ -108,7 +108,7 @@ interface RegexRecognizer extends BaseSchema {
   intents: OpenObject;
 }
 
-type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer;
+type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
 
 /**
  * Rules
