@@ -27,6 +27,7 @@ export const ContentHeaderStyle = css`
 export const ContentStyle = css`
   display: flex;
   border-top: 1px solid #dddddd;
+  flex: 1;
   nav {
     width: 200px;
     ul {
@@ -39,6 +40,7 @@ export const contentEditor = css`
   flex: 4;
   margin: 20px;
 `;
+
 export const codeEditorContainer = css`
   width: 100%;
 `;

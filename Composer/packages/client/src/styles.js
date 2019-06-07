@@ -33,8 +33,9 @@ export const globalNav = css`
 `;
 
 export const content = css`
+  outline: none;
   height: 100%;
-  overflow: hidden;
-  z-index: 2;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
