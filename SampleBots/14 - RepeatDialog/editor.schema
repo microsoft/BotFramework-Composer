@@ -94,8 +94,8 @@
       "title": "RandomSelector"
     },
     "Microsoft.RegexRecognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "title": false,
+      "description": false
     },
     "Microsoft.RepeatDialog": {
       "title": "RepeatDialog"

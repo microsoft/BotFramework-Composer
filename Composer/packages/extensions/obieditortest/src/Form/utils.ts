@@ -172,7 +172,7 @@ export function sweepUndefinedFields(fields) {
 
 export function overriddenFieldsTemplate(fieldOverrides) {
   return {
-    name: fieldOverrides.name,
+    title: fieldOverrides.title,
     description: fieldOverrides.description,
   };
 }
