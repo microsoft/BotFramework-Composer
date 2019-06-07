@@ -11,13 +11,13 @@ const defaultOptions = {
   },
 };
 
-interface CodeEditorProps extends Omit<MonacoEditorProps, 'height'> {
+export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
 }
 
-export default function CodeEditor(props: CodeEditorProps) {
+export function BaseEditor(props: BaseEditorProps) {
   const { onChange, placeholder, value } = props;
   const options = Object.assign({}, defaultOptions, props.options);
 
@@ -59,7 +59,7 @@ export default function CodeEditor(props: CodeEditorProps) {
   );
 }
 
-CodeEditor.defaultProps = {
+BaseEditor.defaultProps = {
   height: '100%',
   language: 'markdown',
   theme: 'vs',
