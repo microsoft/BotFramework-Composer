@@ -5,7 +5,7 @@ import throttle from 'lodash.throttle';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
-  wordWrap: 'bounded',
+  wordWrap: 'on',
   minimap: {
     enabled: false,
   },
@@ -52,7 +52,7 @@ export default function CodeEditor(props: CodeEditorProps) {
     <div
       className="CodeEditor"
       ref={containerRef}
-      style={{ height: '100%', border: `1px solid ${NeutralColors.gray90}`, overflow: 'hidden' }}
+      style={{ height: '100%', border: `1px solid ${NeutralColors.gray30}`, overflow: 'hidden' }}
     >
       <MonacoEditor {...props} {...rect} value={value || placeholder} onChange={onChange} options={options} />
     </div>
