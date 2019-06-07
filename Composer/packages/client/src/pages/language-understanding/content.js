@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import lodash from 'lodash';
-import CodeEditor from 'composer-libs/code-editor';
+import CodeEditor from 'code-editor';
 
 import FormEditor from './form-editor';
 import { contentEditor } from './styles';
