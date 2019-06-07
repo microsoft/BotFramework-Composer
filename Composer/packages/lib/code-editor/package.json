@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "yarn clean && yarn build:css && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
