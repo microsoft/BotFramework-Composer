@@ -61,6 +61,7 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       onClick: () => {
         formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
 
+        // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
         if (COMPOUND_TYPES.includes(item.$type)) {
           formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
         }

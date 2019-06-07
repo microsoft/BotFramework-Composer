@@ -1534,6 +1534,9 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
         $role: 'unionType',
         oneOf: [
           {
+            type: 'string',
+          },
+          {
             title: 'Microsoft.LuisRecognizer',
             description: 'LUIS recognizer.',
             $ref: '#/definitions/Microsoft.LuisRecognizer',
