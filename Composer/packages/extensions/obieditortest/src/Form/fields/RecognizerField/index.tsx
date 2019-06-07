@@ -1,20 +1,14 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
-import {
-  DefaultButton,
-  IContextualMenuItem,
-  Label,
-  Link,
-  TextField,
-  ContextualMenuItemType,
-} from 'office-ui-fabric-react';
+import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
 import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
+import { LuEditor } from 'code-editor';
 
 import { BaseField } from '../BaseField';
 
-import LuEditor from './LuEditor';
+import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 import './styles.scss';
 
@@ -86,7 +80,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           />
         </div>
       </div>
-      <LuEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
+      <ToggleEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
         {() => {
           if (selectedFile) {
             const updateLuFile = (_, newValue?: string) => {
@@ -94,14 +88,18 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
               updateLuFile({ id: selectedFile.id, content: newValue });
             };
 
-            return <TextField value={selectedFile.content || ''} rows={20} multiline onChange={updateLuFile} />;
+            return (
+              <div style={{ height: '500px' }}>
+                <LuEditor value={selectedFile.content} onChange={updateLuFile} />
+              </div>
+            );
           }
 
           if (typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer') {
             return <RegexEditor {...props} />;
           }
         }}
-      </LuEditor>
+      </ToggleEditor>
     </BaseField>
   );
 };

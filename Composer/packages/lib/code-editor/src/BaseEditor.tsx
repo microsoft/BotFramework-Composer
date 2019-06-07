@@ -17,7 +17,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   value?: string;
 }
 
-export function BaseEditor(props: BaseEditorProps) {
+export default function BaseEditor(props: BaseEditorProps) {
   const { onChange, placeholder, value } = props;
   const options = Object.assign({}, defaultOptions, props.options);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BaseEditorProps, BaseEditor } from './BaseEditor';
+import BaseEditor, { BaseEditorProps } from './BaseEditor';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
