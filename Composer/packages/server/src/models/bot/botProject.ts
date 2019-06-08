@@ -10,9 +10,6 @@ import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 
-// TODO:
-// 1. refactor this class to use on IFileStorage instead of operating on fs
-// 2. refactor this layer, to operate on dialogs, not files
 export class BotProject {
   public ref: LocationRef;
 
@@ -32,9 +29,9 @@ export class BotProject {
     this.name = Path.basename(this.absolutePath);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
-    this.dialogIndexer = new DialogIndexer(this.fileStorage, this.dir);
-    this.lgIndexer = new LGIndexer(this.fileStorage, this.dir);
-    this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
+    this.dialogIndexer = new DialogIndexer();
+    this.lgIndexer = new LGIndexer();
+    this.luIndexer = new LUIndexer();
   }
 
   public index = async () => {
@@ -73,60 +70,72 @@ export class BotProject {
     return botFile;
   };
 
-  public updateDialog = async (name: string, content: any) => {
-    await this.dialogIndexer.updateDialogs(name, content);
-    this._updateFile(`${name.trim()}.dialog`, JSON.stringify(content, null, 2) + '\n');
+  public updateDialog = async (name: string, dialogContent: any) => {
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.name === name);
+    if (dialog === undefined) {
+      throw new Error(`no such dialog ${name}`);
+    }
+
+    const relativePath = dialog.relativePath;
+    const content = JSON.stringify(dialogContent, null, 2) + '\n';
+    await this._updateFile(relativePath, content);
+
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialogFromTemplate = async (name: string) => {
-    const relativePath = `${name.trim()}.dialog`;
-    const absolutePath: string = Path.join(this.dir, relativePath);
-    const newDialog = merge({}, DIALOG_TEMPLATE);
+  public createDialogFromTemplate = async (name: string, dir: string = '') => {
+    const relativePath = Path.join(dir, `${name.trim()}.dialog`);
+    const content = JSON.stringify(merge({}, DIALOG_TEMPLATE), null, 2) + '\n';
 
-    const newFileContent = await this._createFile(absolutePath, name, JSON.stringify(newDialog, null, 2) + '\n');
-    this.dialogIndexer.addDialog(name, newFileContent, relativePath);
+    await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
 
   public updateLgFile = async (id: string, content: string) => {
-    const newFileContent = await this.lgIndexer.updateLgFile(id, content);
-    this._updateFile(`${id.trim()}.lg`, newFileContent);
+    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+    if (lgFile === undefined) {
+      throw new Error(`no such lg file ${id}`);
+    }
+    await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string) => {
-    const relativePath = `${id.trim()}.lg`;
-    const absolutePath: string = Path.join(this.dir, relativePath);
-    const newFileContent = await this._createFile(absolutePath, `${id}.lg`, content || '');
-    this.lgIndexer.createLgFile(id, newFileContent, relativePath);
-
+  public createLgFile = async (id: string, content: string, dir: string = '') => {
+    const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
   public removeLgFile = async (id: string) => {
-    await this._removeFile(`${id.trim()}.lg`);
-    this.lgIndexer.removeLgFile(id);
+    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+    if (lgFile === undefined) {
+      throw new Error(`no such lg file ${id}`);
+    }
+    await this._removeFile(lgFile.relativePath);
     return this.lgIndexer.getLgFiles();
   };
 
   public updateLuFile = async (id: string, content: string) => {
-    const newFileContent = await this.luIndexer.updateLuFile(id, content);
-    this._updateFile(`${id.trim()}.lu`, newFileContent);
+    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+    if (luFile === undefined) {
+      throw new Error(`no such lu file ${id}`);
+    }
+    await this._updateFile(luFile.relativePath, content);
     return this.luIndexer.getLuFiles();
   };
 
-  public createLuFile = async (id: string, content: string) => {
-    const relativePath = `${id.trim()}.lu`;
-    const absolutePath: string = Path.join(this.dir, relativePath);
-    const newFileContent = await this._createFile(absolutePath, `${id}.lu`, content || '');
-    this.luIndexer.createLuFile(id, newFileContent, relativePath);
+  public createLuFile = async (id: string, content: string, dir: string = '') => {
+    const relativePath = Path.join(dir, `${id.trim()}.lu`);
+    await this._createFile(relativePath, content);
     return this.luIndexer.getLuFiles();
   };
 
   public removeLuFile = async (id: string) => {
-    await this._removeFile(`${id.trim()}.lu`);
-    this.luIndexer.removeLuFile(id);
+    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+    if (luFile === undefined) {
+      throw new Error(`no such lu file ${id}`);
+    }
+    this._removeFile(luFile.relativePath);
     return this.luIndexer.getLuFiles();
   };
 
@@ -153,33 +162,84 @@ export class BotProject {
     return this.fileStorage.exists(this.absolutePath);
   }
 
-  private _createFile = async (absolutePath: string, name: string, content: string) => {
+  // create file in this project
+  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  private _createFile = async (relativePath: string, content: string) => {
+    const absolutePath = `${this.dir}/${relativePath}`;
+    await this.ensureDirExists(Path.dirname(relativePath));
     await this.fileStorage.writeFile(absolutePath, content);
-    const fileContent: string = await this.fileStorage.readFile(absolutePath);
+
+    // update this.files which is memory cache of all files
     this.files.push({
-      name: name,
+      name: Path.basename(relativePath),
       content: content,
       path: absolutePath,
-      relativePath: Path.relative(this.dir, absolutePath),
+      relativePath: relativePath,
     });
-    return fileContent;
+
+    this.reindex(relativePath);
   };
 
-  private _removeFile = async (name: string) => {
-    const targetFile = this.files.find(file => {
-      return file.name === name;
-    });
-    if (targetFile) {
-      const absolutePath = targetFile.path;
-      await this.fileStorage.removeFile(absolutePath);
+  // update file in this project
+  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  private _updateFile = async (relativePath: string, content: string) => {
+    const absolutePath = `${this.dir}/${relativePath}`;
+    await this.fileStorage.writeFile(absolutePath, content);
+
+    const index = this.files.findIndex(f => f.relativePath === relativePath);
+    this.files[index].content = content;
+
+    this.reindex(relativePath);
+  };
+
+  // remove file in this project
+  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  private _removeFile = async (relativePath: string) => {
+    const absolutePath = `${this.dir}/${relativePath}`;
+    await this.fileStorage.removeFile(absolutePath);
+
+    const index = this.files.findIndex(f => f.relativePath === relativePath);
+    this.files.splice(index, 1);
+
+    this.reindex(relativePath);
+  };
+
+  // re index according to file change in a certain path
+  private reindex = (filePath: string) => {
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
+    // only call the specific indexer to re-index
+    switch (fileExtension) {
+      case 'dialog':
+        this.dialogIndexer.index(this.files);
+        break;
+      case 'lg':
+        this.lgIndexer.index(this.files);
+        break;
+      case 'lu':
+        this.luIndexer.index(this.files);
+        break;
+      default:
+        throw new Error(`${filePath} is not dialog or lg or lu file`);
     }
   };
 
-  private _updateFile = async (name: string, content: string) => {
-    const index = this.files.findIndex(file => {
-      return file.name === name;
+  // ensure dir exist, dir is a relative dir path to root
+  private ensureDirExists = async (dir: string) => {
+    if (dir === '' || dir === '.' || !dir) {
+      return;
+    }
+    const parts = dir.split('/');
+    // intermidate paths down to the eventual dir
+    const paths = parts.map((_, idx) => {
+      return Path.join(this.dir, ...parts.slice(0, idx + 1));
     });
-    this.files[index].content = content;
+
+    for (const p of paths) {
+      const exist = await this.fileStorage.exists(p);
+      if (!exist) {
+        await this.fileStorage.mkDir(p);
+      }
+    }
   };
 
   private _getFiles = async () => {
