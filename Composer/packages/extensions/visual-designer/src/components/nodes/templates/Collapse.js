@@ -6,7 +6,8 @@ const Width = 660;
 export const Collapse = ({ text, children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
-  const collapseFuc = () => {
+  const collapseFuc = e => {
+    e.stopPropagation();
     setCollapsed(!collapsed);
   };
   return (
