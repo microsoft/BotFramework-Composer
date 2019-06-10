@@ -1,5 +1,4 @@
 import React from 'react';
-import { node } from 'prop-types';
 
 import { Icon } from '../icons/icon';
 import { InitNodeSize } from '../../../shared/elementSizes';
