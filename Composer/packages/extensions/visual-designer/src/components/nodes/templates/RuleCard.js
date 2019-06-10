@@ -5,6 +5,8 @@ import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../shared/NodeMenu';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { normalizeObiStep } from '../../../transformers/helpers/elementBuilder';
+import { getElementColor } from '../../../shared/elementColors';
+import { DialogGroup } from '../../../shared/appschema';
 
 import { IconCard } from './IconCard';
 
@@ -17,7 +19,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, themeColor, label, focusedId, onEvent }) => {
+export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   const focusNode = () => {
     return onEvent(NodeEventTypes.Focus, id);
   };
@@ -51,7 +53,7 @@ export const RuleCard = ({ id, data, themeColor, label, focusedId, onEvent }) =>
 
   return (
     <IconCard
-      themeColor={themeColor}
+      themeColor={getElementColor(DialogGroup.RULE).expanded}
       corner={
         <div style={{ display: 'flex' }}>
           <Icon

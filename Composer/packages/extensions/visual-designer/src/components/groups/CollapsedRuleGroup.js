@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { CollapsedEventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
+import { getElementColor } from '../../shared/elementColors';
+import { DialogGroup } from '../../shared/appschema';
 
 const ElementWidth = CollapsedEventNodeSize.width;
 const ElementHeight = CollapsedEventNodeSize.height;
@@ -16,7 +18,7 @@ export const CollapsedRuleGroup = ({ count }) => {
         style={{
           width: ElementWidth,
           height: ElementHeight,
-          background: '#00B7C3',
+          background: getElementColor(DialogGroup.RULE).collapsed,
           margin: `0 ${ElementMarginX}px ${ElementMarginY}px 0`,
         }}
       />
