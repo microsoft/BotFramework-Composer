@@ -73,6 +73,10 @@ function ExtensionContainer() {
       return apiClient.apiCall('shellNavigate', { shellPage, opts });
     },
 
+    createLuFile: id => {
+      return apiClient.apiCall('createLuFile', { id });
+    },
+
     updateLuFile: luFile => {
       return apiClient.apiCall('updateLuFile', luFile);
     },

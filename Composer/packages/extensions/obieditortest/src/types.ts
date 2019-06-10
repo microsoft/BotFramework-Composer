@@ -1,3 +1,5 @@
+import { FormContext } from './Form/types';
+
 export enum MemoryScope {
   user = 'user',
   conversation = 'conversation',
@@ -37,6 +39,8 @@ export interface ShellApi {
   navTo: (path: string) => Promise<void>;
   navDown: (path: string) => Promise<void>;
   focusTo: (path: string) => Promise<void>;
+  createLuFile: (id: string) => Promise<void>;
+  updateLuFile: (id: string, content: string) => Promise<void>;
 }
 export interface EditorSchema {
   editor: {
@@ -56,5 +60,9 @@ declare module 'json-schema' {
   interface JSONSchema6 extends OBISchema {
     title?: string;
     __additional_property?: boolean;
+  }
+
+  interface FieldProps<T = any> {
+    formContext: FormContext;
   }
 }
