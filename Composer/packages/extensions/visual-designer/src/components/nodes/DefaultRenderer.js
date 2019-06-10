@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ConceptLabels } from '../../shared/labelMap';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -33,8 +34,34 @@ const ContentKeyByTypes = {
     label: 'property',
   },
   [ObiTypes.TextInput]: {
-    label: 'property',
-    details: 'prompt',
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.NumberInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.IntegerInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.FloatInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.ConfirmInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.ChoiceInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.EndDialog]: {
+    details: 'property',
+  },
+  [ObiTypes.CancelAllDialogs]: {
+    label: 'eventName',
   },
   [ObiTypes.LogStep]: {
     label: 'text',
@@ -60,6 +87,15 @@ export class DefaultRenderer extends React.Component {
       label = data[keyMap.label] || label;
       details = data[keyMap.details] || details;
     }
+
+    // does a static label exist for this
+    if (!label && data.$type && ConceptLabels[data.$type]) {
+      label = ConceptLabels[data.$type];
+    }
+
+    // if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
+    //   label = ContentKeyByTypes[data.$type].text;
+    // }
 
     if (!header) {
       header = truncateType(data.$type);

@@ -22,6 +22,16 @@ export const ObiTypes = {
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
   TextInput: 'Microsoft.TextInput',
+  NumberInput: 'Microsoft.NumberInput',
+  IntegerInput: 'Microsoft.IntegerInput',
+  FloatInput: 'Microsoft.FloatInput',
+  ConfirmInput: 'Microsoft.ConfirmInput',
+  ChoiceInput: 'Microsoft.ChoiceInput',
+
+  EndDialog: 'Microsoft.EndDialog',
+  CancelAllDialogs: 'Microsoft.CancelAllDialogs',
+  ReplaceDialog: 'Microsoft.ReplaceDialog',
+
   LogStep: 'Microsoft.LogStep',
 
   // virtual

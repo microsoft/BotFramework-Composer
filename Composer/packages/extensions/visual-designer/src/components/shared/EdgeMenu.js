@@ -1,9 +1,9 @@
 import React from 'react';
-import formatMessage from 'format-message';
 
 import { IconMenu } from '../nodes/templates/IconMenu';
 import { EdgeAddButtonSize } from '../../shared/elementSizes';
-import { dialogGroups, DialogGroup, DialogGroupLabels } from '../../shared/appschema';
+import { dialogGroups, DialogGroup } from '../../shared/appschema';
+import { ConceptLabels } from '../../shared/labelMap';
 
 const createStepMenu = handleType => {
   const stepLabels = [
@@ -24,7 +24,7 @@ const createStepMenu = handleType => {
       subMenuProps: {
         items: item.types.map($type => ({
           key: $type,
-          name: DialogGroupLabels[$type] ? formatMessage(DialogGroupLabels[$type]) : $type,
+          name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
           $type: $type,
         })),
         onItemClick: (e, item) => handleType(item.$type),
