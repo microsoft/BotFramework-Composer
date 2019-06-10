@@ -187,8 +187,11 @@ export class BotProject {
     await this.fileStorage.writeFile(absolutePath, content);
 
     const index = this.files.findIndex(f => f.relativePath === relativePath);
-    this.files[index].content = content;
+    if (index === -1) {
+      throw new Error(`no such file at ${relativePath}`);
+    }
 
+    this.files[index].content = content;
     this.reindex(relativePath);
   };
 
@@ -199,8 +202,11 @@ export class BotProject {
     await this.fileStorage.removeFile(absolutePath);
 
     const index = this.files.findIndex(f => f.relativePath === relativePath);
-    this.files.splice(index, 1);
+    if (index === -1) {
+      throw new Error(`no such file at ${relativePath}`);
+    }
 
+    this.files.splice(index, 1);
     this.reindex(relativePath);
   };
 

@@ -115,6 +115,17 @@ describe('copyTo', () => {
   });
 });
 
+describe('modify non exist files', () => {
+  it('should throw error on delete/update non-exist lu/lg files', async () => {
+    const id = 'non-exist-file';
+    const content = 'blabla';
+    await expect(proj.removeLgFile(id)).rejects.toThrow();
+    await expect(proj.removeLuFile(id)).rejects.toThrow();
+    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+  });
+});
+
 describe('lg operation', () => {
   afterEach(() => {
     try {
