@@ -2,6 +2,8 @@ import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
+import { getDialogGroupByType } from '../../shared/appschema';
+import { getElementColor } from '../../shared/elementColors';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
@@ -55,6 +57,7 @@ export class DefaultRenderer extends React.Component {
       details = '';
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
+    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
     if (keyMap) {
       header = header || data[keyMap.header] || header;
       label = data[keyMap.label] || label;
@@ -67,7 +70,7 @@ export class DefaultRenderer extends React.Component {
 
     return (
       <FormCard
-        themeColor="#00B294"
+        nodeColors={nodeColors}
         header={header}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={label}
