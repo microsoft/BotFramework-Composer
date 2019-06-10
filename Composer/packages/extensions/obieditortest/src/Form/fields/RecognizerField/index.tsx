@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
@@ -6,17 +6,20 @@ import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
 import { LuEditor } from 'code-editor';
 
+import { LuFile } from '../../../types';
 import { BaseField } from '../BaseField';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
+
 import './styles.scss';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData, formContext } = props;
+  const [selectedFile, setSelectedFile] = useState<LuFile | null>(null);
 
   const {
-    formContext: { luFiles, shellApi },
+    formContext: { luFiles, shellApi, dialogName },
     onChange,
   } = props;
 
@@ -27,10 +30,13 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   };
 
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
-  const selectedFile =
-    typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
+  useEffect(() => {
+    setSelectedFile(
+      typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null
+    );
+  }, [props.formData, luFiles]);
 
-  const menuItems: IContextualMenuItem[] = luFiles.map(f => ({
+  const menuItems: IContextualMenuItem[] = luFiles.sort().map(f => ({
     key: f.id,
     text: f.id,
     canCheck: true,
@@ -39,10 +45,30 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     iconProps: { iconName: 'People' },
   }));
 
-  if (selectedFile || !formData) {
+  if (!luFiles.includes(dialogName)) {
     menuItems.push(
       {
         key: 'divider1',
+        itemType: ContextualMenuItemType.Divider,
+      },
+      {
+        key: 'add',
+        text: formatMessage('Add Luis Recognizer'),
+        iconProps: { iconName: 'Add' },
+        onClick: () => {
+          const { createLuFile } = shellApi;
+          createLuFile(dialogName).then(() => {
+            onChange(`${dialogName}.lu`);
+          });
+        },
+      }
+    );
+  }
+
+  if (selectedFile || !formData) {
+    menuItems.push(
+      {
+        key: 'divider2',
         itemType: ContextualMenuItemType.Divider,
       },
       {
@@ -59,7 +85,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   if (selectedFile || isRegex) {
     menuItems.push(
       {
-        key: 'divider2',
+        key: 'divider3',
         itemType: ContextualMenuItemType.Divider,
       },
       {

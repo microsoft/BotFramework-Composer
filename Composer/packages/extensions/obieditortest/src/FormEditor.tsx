@@ -23,6 +23,7 @@ export interface FormEditorProps {
   focusPath: string;
   data: FormData;
   dialogs: DialogInfo[];
+  dialogName: string;
   luFiles: LuFile[];
   schemas: EditorSchema;
   memory: FormMemory;
@@ -116,6 +117,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             editorSchema: schemas.editor,
             rootId: props.focusPath,
             luFiles: props.luFiles,
+            dialogName: props.dialogName,
           }}
           idPrefix={props.focusPath}
         >

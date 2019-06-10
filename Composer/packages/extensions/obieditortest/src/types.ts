@@ -61,8 +61,4 @@ declare module 'json-schema' {
     title?: string;
     __additional_property?: boolean;
   }
-
-  interface FieldProps<T = any> {
-    formContext: FormContext;
-  }
 }
