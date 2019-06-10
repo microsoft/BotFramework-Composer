@@ -101,7 +101,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       <ToggleEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
         {() => {
           if (selectedFile) {
-            const updateLuFile = (_, newValue?: string) => {
+            const updateLuFile = (newValue?: string) => {
               const { updateLuFile } = formContext.shellApi;
               updateLuFile({ id: selectedFile.id, content: newValue });
             };
