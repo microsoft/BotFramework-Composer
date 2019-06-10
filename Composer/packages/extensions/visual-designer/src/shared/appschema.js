@@ -124,3 +124,30 @@ export const dialogGroups = {
     types: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
   },
 };
+
+export function getDialogGroupByType(type) {
+  let dialogType = DialogGroup.OTHER;
+
+  Object.keys(dialogGroups).forEach(key => {
+    if (dialogGroups[key].types.indexOf(type) > -1) {
+      switch (key) {
+        case DialogGroup.INPUT:
+        case DialogGroup.RESPONSE:
+        case DialogGroup.BRANCHING:
+        case DialogGroup.RULE:
+          dialogType = key;
+          break;
+        case DialogGroup.STEP:
+          if (type.indexOf('Condition') > -1) {
+            dialogType = key;
+          }
+          break;
+        default:
+          dialogType = DialogGroup.OTHER;
+          break;
+      }
+    }
+  });
+
+  return dialogType;
+}

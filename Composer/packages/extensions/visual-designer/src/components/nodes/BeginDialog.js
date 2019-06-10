@@ -3,6 +3,8 @@ import React from 'react';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
+import { getDialogGroupByType } from '../../shared/appschema';
+import { getElementColor } from '../../shared/elementColors';
 
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
@@ -31,9 +33,10 @@ export class BeginDialog extends React.Component {
 
   render() {
     const { id, data, onEvent } = this.props;
+    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
     return (
       <FormCard
-        themeColor="#107C10"
+        nodeColors={nodeColors}
         header={getFriendlyName(data) || 'BeginDialog'}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
