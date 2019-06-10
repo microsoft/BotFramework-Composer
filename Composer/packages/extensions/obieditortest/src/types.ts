@@ -1,5 +1,3 @@
-import { FormContext } from './Form/types';
-
 export enum MemoryScope {
   user = 'user',
   conversation = 'conversation',
