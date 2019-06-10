@@ -26,6 +26,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     }
   };
 
+  const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
   const selectedFile =
     typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
 
@@ -40,7 +41,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   if (selectedFile || !formData) {
     menuItems.push(
       {
-        key: 'divider',
+        key: 'divider1',
         itemType: ContextualMenuItemType.Divider,
       },
       {
@@ -49,6 +50,23 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
         iconProps: { iconName: 'Code' },
         onClick: () => {
           onChange({ $type: 'Microsoft.RegexRecognizer' });
+        },
+      }
+    );
+  }
+
+  if (selectedFile || isRegex) {
+    menuItems.push(
+      {
+        key: 'divider2',
+        itemType: ContextualMenuItemType.Divider,
+      },
+      {
+        key: 'remove',
+        text: formatMessage('Remove Recognizer'),
+        iconProps: { iconName: 'Delete' },
+        onClick: () => {
+          onChange(undefined);
         },
       }
     );
@@ -95,7 +113,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
             );
           }
 
-          if (typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer') {
+          if (isRegex) {
             return <RegexEditor {...props} />;
           }
         }}
