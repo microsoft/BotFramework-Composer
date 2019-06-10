@@ -29,6 +29,7 @@ export const ContentStyle = css`
   display: flex;
   border-top: 1px solid #dddddd;
   flex: 1;
+  position: relative;
   nav {
     width: 200px;
     ul {
@@ -56,8 +57,12 @@ export const codeEditor = css`
 `;
 
 export const formCell = css`
-  white-space: normal;
+  white-space: pre-wrap;
   font-size: 14px;
+  textarea,
+  input {
+    border: 1px solid #dddddd;
+  }
 `;
 
 // styles override, should use '@uifabric/fluent-theme' later
@@ -72,7 +77,7 @@ export const whiteButton = css`
 `;
 
 export const navLinkText = css`
-  width: 160px;
+  width: 140px;
   text-overflow: ellipsis;
   overflow: hidden;
   text-align: left;

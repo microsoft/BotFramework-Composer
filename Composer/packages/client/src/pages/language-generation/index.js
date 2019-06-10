@@ -8,7 +8,7 @@ import { navigate } from '@reach/router';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { LGParser } from 'botbuilder-lg';
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { IconButton } from 'office-ui-fabric-react';
 
 import { Store } from '../../store/index';
 import { OpenConfirmModal } from '../../components/Modal';
@@ -21,6 +21,7 @@ import {
   navLinkBtns,
 } from '../language-understanding/styles';
 
+import '../language-understanding/style.css';
 import NewLgFileModal from './create-new';
 import Content from './content';
 
@@ -62,10 +63,10 @@ export const LGPage = props => {
     // side nav links
     const links = lgFiles.map(file => {
       let subNav = [];
+      const parseResult = LGParser.TryParse(file.content);
 
-      // in case of unvalid LGParser templates
-      if (Array.isArray(file.templates)) {
-        subNav = file.templates.map((template, templateIndex) => {
+      if (parseResult.isValid) {
+        subNav = parseResult.templates.map((template, templateIndex) => {
           return {
             name: template.Name,
             url: `#${template.Name}`,
@@ -101,7 +102,7 @@ export const LGPage = props => {
     setGroups([
       {
         key: 'all',
-        name: 'all',
+        name: 'All',
         collapseByDefault: false,
         ariaLabel: 'all',
         altText: 'all',
@@ -203,10 +204,12 @@ export const LGPage = props => {
         <div css={navLinkText}>{defaultRender(props)}</div>
         {Array.isArray(props.links) && (
           <div css={navLinkBtns}>
-            <CommandBar
-              overflowItems={getNavLinkMoreButtons(props.file)}
-              overflowButtonProps={{ ariaLabel: 'More commands' }}
-              ariaLabel={'Use left and right arrow keys to navigate between commands'}
+            <IconButton
+              menuIconProps={{ iconName: 'More' }}
+              menuProps={{
+                shouldFocusOnMount: true,
+                items: getNavLinkMoreButtons(props.file),
+              }}
             />
           </div>
         )}
@@ -220,10 +223,12 @@ export const LGPage = props => {
         <div css={navLinkText}>{defaultRender(props)}</div>
 
         <div css={navLinkBtns}>
-          <CommandBar
-            overflowItems={getNavAllMoreButtons()}
-            overflowButtonProps={{ ariaLabel: 'More commands' }}
-            ariaLabel={'Use left and right arrow keys to navigate between commands'}
+          <IconButton
+            menuIconProps={{ iconName: 'More' }}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: getNavAllMoreButtons(),
+            }}
           />
         </div>
       </div>
@@ -238,7 +243,7 @@ export const LGPage = props => {
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>Language generation</div>
+        <div>Bot says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
@@ -252,8 +257,8 @@ export const LGPage = props => {
           )}
           <Toggle
             css={actionButton}
-            onText="Text editor"
-            offText="Text editor"
+            onText="Edit mode"
+            offText="Edit mode"
             checked={textMode}
             onChange={() => setTextMode(!textMode)}
           />

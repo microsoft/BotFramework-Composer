@@ -3,12 +3,12 @@
 import { jsx } from '@emotion/core';
 import lodash from 'lodash';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef, useEffect, useState } from 'react';
+import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { IconButton } from 'office-ui-fabric-react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -49,8 +49,19 @@ export default function FormEditor(props) {
   const listRef = useRef(null);
 
   useEffect(() => {
-    if (lodash.isEmpty(lgFile) === false && Array.isArray(lgFile.templates)) {
-      setTemplates([...lgFile.templates]);
+    if (lodash.isEmpty(lgFile) === false) {
+      const parseResult = LGParser.TryParse(lgFile.content);
+
+      if (parseResult.isValid) {
+        const newTemplates = parseResult.templates.map((template, templateIndex) => {
+          return {
+            ...template,
+            index: templateIndex,
+          };
+        });
+
+        setTemplates(newTemplates);
+      }
     }
   }, [lgFile]);
 
@@ -72,8 +83,13 @@ export default function FormEditor(props) {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          const newItems = [...templates];
-          newItems[index].editing = true;
+          const newItems = templates.map((t, idx) => {
+            if (idx === index) {
+              return { ...t, editing: true };
+            }
+
+            return t;
+          });
           setTemplates(newItems);
         },
       },
@@ -96,17 +112,6 @@ export default function FormEditor(props) {
 
   const tableColums = [
     {
-      key: 'fileName',
-      name: 'File',
-      fieldName: 'fileName',
-      minWidth: 50,
-      maxWidth: 100,
-      data: 'string',
-      onRender: (template, index) => {
-        return index === 0 ? <div css={formCell}>{`${template.fileId}.lg`}</div> : <div />;
-      },
-    },
-    {
       key: 'name',
       name: formatMessage('Name'),
       fieldName: 'name',
@@ -115,27 +120,32 @@ export default function FormEditor(props) {
       isResizable: true,
       data: 'string',
       onRender: (item, index) => {
-        return item.editing ? (
-          <TextField
-            borderless
-            placeholder={formatMessage('Template Name.')}
-            value={item.Name}
-            validateOnLoad={false}
-            onGetErrorMessage={newName => {
-              return validateNameMessage(newName);
-            }}
-            onBlur={() => submitTemplateChange(index)}
-            onChange={(event, newName) => updateTemplateContent(item, newName, item.Body)}
-          />
-        ) : (
-          <div css={formCell}>{item.Name}</div>
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }} css={formCell}>
+            <div>#</div>
+            {item.editing ? (
+              <TextField
+                borderless
+                placeholder={formatMessage('Template Name.')}
+                value={item.Name}
+                validateOnLoad={false}
+                onGetErrorMessage={newName => {
+                  return validateNameMessage(newName);
+                }}
+                onBlur={() => submitTemplateChange(index)}
+                onChange={(event, newName) => updateTemplateContent(index, newName, item.Body)}
+              />
+            ) : (
+              <div>{item.Name}</div>
+            )}
+          </div>
         );
       },
     },
     {
-      key: 'details',
-      name: formatMessage('Details'),
-      fieldName: 'details',
+      key: 'responses',
+      name: formatMessage('Responses'),
+      fieldName: 'responses',
       minWidth: 500,
       isResizable: true,
       data: 'string',
@@ -144,10 +154,10 @@ export default function FormEditor(props) {
     },
     {
       key: 'usedIn',
-      name: formatMessage('Used in'),
+      name: formatMessage('Used in:'),
       fieldName: 'usedIn',
-      minWidth: 50,
-      maxWidth: 100,
+      minWidth: 100,
+      maxWidth: 200,
       data: 'string',
       onRender: () => {
         return <Link>PlaceHolder</Link>;
@@ -156,14 +166,18 @@ export default function FormEditor(props) {
     {
       key: 'buttons',
       name: '',
+      minWidth: 50,
+      maxWidth: 50,
       fieldName: 'buttons',
       data: 'string',
       onRender: (item, index) => {
         return (
-          <CommandBar
-            overflowItems={getTemplatesMoreButtons(item, index)}
-            overflowButtonProps={{ ariaLabel: 'More commands' }}
-            ariaLabel={'Use left and right arrow keys to navigate between commands'}
+          <IconButton
+            menuIconProps={{ iconName: 'More' }}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: getTemplatesMoreButtons(item, index),
+            }}
           />
         );
       },
@@ -175,7 +189,7 @@ export default function FormEditor(props) {
       return formatMessage('name can not be empty');
     }
 
-    if (templates.filter(item => item.Name === name).length > 1) {
+    if (templates.findIndex(item => item.Name === name).length > -1) {
       return formatMessage('name has been taken');
     }
 
@@ -190,9 +204,6 @@ export default function FormEditor(props) {
     return (
       <div data-testid="formHeader">
         <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
-          <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
-            {formatMessage('New template')}
-          </ActionButton>
           {defaultRender({
             ...props,
             onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
@@ -201,24 +212,36 @@ export default function FormEditor(props) {
       </div>
     );
   }
-
+  function onRenderDetailsFooter() {
+    return (
+      <div data-testid="formFooter">
+        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
+          {formatMessage('New template')}
+        </ActionButton>
+      </div>
+    );
+  }
   function getTemplateDetailCell(item, index) {
-    return item.editing ? (
-      <TextField
-        borderless
-        multiline
-        autoAdjustHeight
-        placeholder={formatMessage('Template Content.')}
-        value={item.Body}
-        validateOnLoad={false}
-        onGetErrorMessage={newBody => {
-          return validateBodyMessage(newBody);
-        }}
-        onBlur={() => submitTemplateChange(index)}
-        onChange={(event, newBody) => updateTemplateContent(item, item.Name, newBody)}
-      />
-    ) : (
-      <div css={formCell}>{item.Body}</div>
+    return (
+      <div css={formCell}>
+        {item.editing ? (
+          <TextField
+            borderless
+            multiline
+            autoAdjustHeight
+            placeholder={formatMessage('Template Content.')}
+            value={item.Body}
+            validateOnLoad={false}
+            onGetErrorMessage={newBody => {
+              return validateBodyMessage(newBody);
+            }}
+            onBlur={() => submitTemplateChange(index)}
+            onChange={(event, newBody) => updateTemplateContent(index, item.Name, newBody)}
+          />
+        ) : (
+          <div css={formCell}>{item.Body}</div>
+        )}
+      </div>
     );
   }
 
@@ -227,11 +250,17 @@ export default function FormEditor(props) {
     const templateInState = templates[templateIndex];
     const { Name, Body, changed } = templateInState;
     const isValid = lgParserValidate(Name, Body);
-
-    // if no change, reject
-    // if is not valid, reject
-    if (changed !== true || isValid !== '') return;
     const templateInLgFile = lgFile.templates[templateIndex];
+
+    // if no change, set editing status to false
+    if (changed !== true) {
+      templateInLgFile.editing = false;
+      setTemplates(lgFile.templates);
+      return;
+    }
+
+    // if is not valid, reject
+    if (isValid !== '') return;
 
     templateInLgFile.Name = Name;
     templateInLgFile.Body = Body;
@@ -242,17 +271,15 @@ export default function FormEditor(props) {
     updateLgFile(payload);
   }
 
-  // update template in component state
-  function updateTemplateContent(currentTemplate, newName, newBody) {
-    const template = templates.find(item => currentTemplate.Name === item.Name);
-    template.Name = newName;
-    template.Body = newBody;
-    template.changed = true;
+  // update local templates
+  function updateTemplateContent(index, newName, newBody) {
+    const newTemplates = [...templates];
+    newTemplates.splice(index, 1, { ...templates[index], Name: newName, Body: newBody, changed: true });
+    setTemplates(newTemplates);
   }
 
   function onCreateNewTemplate() {
-    const newItems = [...templates];
-    newItems.push({
+    const newItems = templates.concat({
       Name: randomName(), // need optimize
       Body: '-TemplateValue',
     });
@@ -290,7 +317,7 @@ export default function FormEditor(props) {
   }
 
   return (
-    <Fragment>
+    <div className={'form-list-editor'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           componentRef={listRef}
@@ -298,11 +325,12 @@ export default function FormEditor(props) {
           compact={false}
           columns={tableColums}
           getKey={item => item.Name}
-          layoutMode={DetailsListLayoutMode.fixedColumns}
+          layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
+          onRenderDetailsFooter={onRenderDetailsFooter}
           selectionMode={SelectionMode.none}
         />
       </ScrollablePane>
-    </Fragment>
+    </div>
   );
 }
