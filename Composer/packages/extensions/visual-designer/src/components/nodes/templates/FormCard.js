@@ -39,10 +39,10 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
           fontFamily: 'Segoe UI',
           fontSize: '14px',
           lineHeight: '19px',
-          color: '#ffffff',
+          color: 'black',
         }}
       >
-        <div style={{ padding: '5px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>
+        <div style={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>
           {header}
         </div>
         <div style={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
@@ -62,6 +62,7 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
+            alignItems: 'center',
           }}
         >
           <div style={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
