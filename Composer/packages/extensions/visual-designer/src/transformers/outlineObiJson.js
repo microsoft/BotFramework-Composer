@@ -2,7 +2,7 @@ import { ObiTypes } from '../shared/ObiTypes';
 
 const DEFAULT_CHILDREN_KEYS = ['steps'];
 const childrenMap = {
-  [ObiTypes.AdaptiveDialog]: ['steps', 'rules'],
+  [ObiTypes.AdaptiveDialog]: ['steps'],
   [ObiTypes.IfCondition]: ['steps', 'elseSteps'],
   [ObiTypes.SwitchCondition]: ['cases'],
 };
