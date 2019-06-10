@@ -19,7 +19,7 @@ function onRenderNavigationContent() {
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
   const { storageExplorerStatus } = state;
-  const { setStorageExplorerStatus, closeCurrentProject, openBotProject, saveProjectAs } = actions;
+  const { setStorageExplorerStatus, closeCurrentProject, openBotProject, saveProjectAs, reloadBot } = actions;
 
   useEffect(() => {
     actions.fetchStorages();
@@ -42,6 +42,7 @@ export function StorageExplorer() {
     closeCurrentProject();
     openBotProject(storageId, path);
     closeExplorer();
+    reloadBot();
   };
 
   return (

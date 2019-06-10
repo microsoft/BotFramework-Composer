@@ -3,6 +3,7 @@ import { jsx } from '@emotion/core';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
+import { useEffect } from 'react';
 
 import { headerMain, headerSub, aside, bot, botButton, actionButton } from './styles';
 import { OpenStatus } from './../../constants';
@@ -20,6 +21,11 @@ const openInEmulator = url => {
 export const Header = props => {
   const { botStatus, connectBot, reloadBot, openStorageExplorer } = props;
   const connected = botStatus === 'connected';
+
+  useEffect(() => {
+    connectBot();
+  }, []);
+
   return (
     <header>
       <div css={headerMain}>
