@@ -30,13 +30,14 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const selectedFile =
     typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
 
-  const menuItems: IContextualMenuItem[] = luFiles
-    .filter(f => f !== selectedFile)
-    .map(f => ({
-      key: f.id,
-      text: f.id,
-      iconProps: { iconName: 'People' },
-    }));
+  const menuItems: IContextualMenuItem[] = luFiles.map(f => ({
+    key: f.id,
+    text: f.id,
+    canCheck: true,
+    checked: f === selectedFile,
+    disabled: f === selectedFile,
+    iconProps: { iconName: 'People' },
+  }));
 
   if (selectedFile || !formData) {
     menuItems.push(
