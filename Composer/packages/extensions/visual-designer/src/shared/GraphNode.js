@@ -1,3 +1,5 @@
+import { measureNodeBoundary } from '../layouters/measureNodeBoundary';
+
 import { Boundary } from './Boundary';
 
 export class GraphNode {
@@ -14,5 +16,7 @@ export class GraphNode {
 
 GraphNode.fromIndexedJson = indexedJson => {
   if (!indexedJson) return null;
-  return new GraphNode(indexedJson.id, indexedJson.json);
+  const node = new GraphNode(indexedJson.id, indexedJson.json);
+  node.boundary = measureNodeBoundary(indexedJson.json);
+  return node;
 };

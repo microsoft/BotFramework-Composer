@@ -11,8 +11,8 @@ import {
   IfCondition,
   SwitchCondition,
 } from '../nodes/index';
+import { Boundary } from '../../shared/Boundary';
 
-import { Boundary } from './Boundary';
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
 
@@ -25,6 +25,7 @@ const rendererByObiType = {
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
   [ObiTypes.SwitchCondition]: SwitchCondition,
+  [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
