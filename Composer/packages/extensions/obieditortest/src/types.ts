@@ -37,6 +37,8 @@ export interface ShellApi {
   navTo: (path: string) => Promise<void>;
   navDown: (path: string) => Promise<void>;
   focusTo: (path: string) => Promise<void>;
+  createLuFile: (id: string) => Promise<void>;
+  updateLuFile: (id: string, content: string) => Promise<void>;
 }
 export interface EditorSchema {
   editor: {

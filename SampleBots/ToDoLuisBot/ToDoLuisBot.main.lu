@@ -594,5 +594,7 @@ $ShopVerb:purchase=
 $ShopVerb:shop=
 - shops
 
-
+## New Intent
+- How are you?
+- What are you up to?
 
