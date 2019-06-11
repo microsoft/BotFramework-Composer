@@ -21,6 +21,7 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  loadBotStatus: 'loaded',
 };
 
 export function StoreProvider(props) {

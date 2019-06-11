@@ -21,7 +21,7 @@ const openInEmulator = url => {
 };
 
 export const Header = props => {
-  const { botStatus, connectBot, reloadBot, openStorageExplorer } = props;
+  const { botStatus, loadBotStatus, connectBot, reloadBot, openStorageExplorer } = props;
   const connected = botStatus === 'connected';
 
   useEffect(() => {
@@ -72,8 +72,15 @@ export const Header = props => {
           {!connected && <Text css={warning}>{formatMessage('Lack of Bot runtime')}</Text>}
           <PrimaryButton
             css={botButton}
-            text={connected ? formatMessage('Reload') : formatMessage('Connect')}
+            text={
+              connected
+                ? loadBotStatus === 'loading'
+                  ? formatMessage('Reloading')
+                  : formatMessage('Reload')
+                : formatMessage('Connect')
+            }
             onClick={() => (connected ? reloadBot() : connectBot())}
+            disabled={loadBotStatus === 'loading' || botStatus === 'connecting'}
           />
         </div>
       </div>
@@ -83,6 +90,7 @@ export const Header = props => {
 
 Header.propTypes = {
   botStatus: PropTypes.string,
+  loadBotStatus: PropTypes.string,
   connectBot: PropTypes.func,
   reloadBot: PropTypes.func,
   openStorageExplorer: PropTypes.func,

@@ -47,6 +47,10 @@ const setBotStatus = (state, { status }) => {
   return (state.botStatus = status);
 };
 
+const setLoadBotStatus = (state, { status }) => {
+  return (state.loadBotStatus = status);
+};
+
 const getStoragesSuccess = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -142,4 +146,7 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
+  [ActionTypes.RELOAD_BOT_SUCCESS]: setLoadBotStatus,
+  [ActionTypes.RELOADING_BOT]: setLoadBotStatus,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setLoadBotStatus,
 });

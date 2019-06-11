@@ -30,13 +30,25 @@ export async function connectBot(dispatch) {
 export async function reloadBot(dispatch) {
   const path = `${BASEURL}/launcher/sync`;
   try {
+    dispatch({
+      type: ActionTypes.RELOADING_BOT,
+      payload: {
+        status: 'loading',
+      },
+    });
     await axios.get(path);
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
+      payload: {
+        status: 'loaded',
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.RELOAD_BOT_FAILURE,
+      payload: {
+        status: 'unloaded',
+      },
     });
   }
 }
