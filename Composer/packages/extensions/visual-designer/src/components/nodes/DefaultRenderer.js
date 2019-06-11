@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { ConceptLabels } from '../../shared/labelMap';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
+import { getDialogGroupByType } from '../../shared/appschema';
+import { getElementColor } from '../../shared/elementColors';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
@@ -14,6 +15,24 @@ const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsof
 const DefaultKeyMap = {
   label: 'property',
 };
+
+/**
+ * Create labels out of compound values
+ */
+function makeLabel(data) {
+  switch (data.$type) {
+    case ObiTypes.SetProperty:
+      return `${data.property || '?'} = ${data.value || '?'}`;
+    case ObiTypes.SaveEntity:
+      return `${data.property || '?'} = ${data.entity || '?'}`;
+    case ObiTypes.InitProperty:
+      return `${data.property || '?'} = new ${data.type || '?'}`;
+    case ObiTypes.EditArray:
+      return `${data.changeType} ${data.arrayProperty || '?'}`;
+    default:
+      return '';
+  }
+}
 
 const ContentKeyByTypes = {
   [ObiTypes.SendActivity]: {
@@ -27,11 +46,20 @@ const ContentKeyByTypes = {
     label: 'entity',
     details: 'property',
   },
-  [ObiTypes.IfCondition]: {
-    label: 'condition',
+  [ObiTypes.InitProperty]: {
+    label: 'property',
+  },
+  [ObiTypes.SetProperty]: {
+    label: 'property',
   },
   [ObiTypes.DeleteProperty]: {
     label: 'property',
+  },
+  [ObiTypes.IfCondition]: {
+    label: 'condition',
+  },
+  [ObiTypes.SwitchCondition]: {
+    label: 'condition',
   },
   [ObiTypes.TextInput]: {
     label: 'prompt',
@@ -59,9 +87,29 @@ const ContentKeyByTypes = {
   },
   [ObiTypes.EndDialog]: {
     details: 'property',
+    text: 'End this dialog',
   },
   [ObiTypes.CancelAllDialogs]: {
     label: 'eventName',
+    text: 'Cancel all active dialogs',
+  },
+  [ObiTypes.EndTurn]: {
+    text: 'End turn, then wait for another message',
+  },
+  [ObiTypes.RepeatDialog]: {
+    text: 'Restart this dialog',
+  },
+  [ObiTypes.EmitEvent]: {
+    label: 'eventName',
+  },
+  [ObiTypes.CodeStep]: {
+    text: 'Run custom code',
+  },
+  [ObiTypes.HttpRequest]: {
+    label: 'url',
+  },
+  [ObiTypes.TraceEvent]: {
+    label: 'valueProperty',
   },
   [ObiTypes.LogStep]: {
     label: 'text',
@@ -82,20 +130,20 @@ export class DefaultRenderer extends React.Component {
       details = '';
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
+    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
     if (keyMap) {
       header = header || data[keyMap.header] || header;
       label = data[keyMap.label] || label;
       details = data[keyMap.details] || details;
     }
 
-    // does a static label exist for this
-    if (!label && data.$type && ConceptLabels[data.$type]) {
-      label = ConceptLabels[data.$type];
+    if (makeLabel(data)) {
+      label = makeLabel(data);
     }
 
-    // if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
-    //   label = ContentKeyByTypes[data.$type].text;
-    // }
+    if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
+      label = ContentKeyByTypes[data.$type].text;
+    }
 
     if (!header) {
       header = truncateType(data.$type);
@@ -103,7 +151,7 @@ export class DefaultRenderer extends React.Component {
 
     return (
       <FormCard
-        themeColor={color}
+        nodeColors={nodeColors}
         header={header}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={label}
