@@ -5,8 +5,8 @@ import { Header } from '../../src/components/Header';
 
 describe('<Header />', () => {
   it('should render the header', () => {
-    const { container } = render(<Header />);
-
+    const mockConnectBot = jest.fn(() => null);
+    const { container } = render(<Header connectBot={mockConnectBot} />);
     expect(container).toHaveTextContent('Bot Framework Designer');
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
@@ -15,8 +15,9 @@ describe('<Header />', () => {
   });
 
   it('should open storage explorer', async () => {
+    const mockConnectBot = jest.fn(() => null);
     const mockOpenStorageExplorer = jest.fn(() => null);
-    const { findByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
+    const { findByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} connectBot={mockConnectBot} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);
