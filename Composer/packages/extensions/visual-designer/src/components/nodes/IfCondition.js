@@ -6,7 +6,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
-import { Boundary, areBoundariesEqual } from '../shared/Boundary';
+import { areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
@@ -26,7 +26,7 @@ const calculateNodeMap = (path, data) => {
 const calculateLayout = (nodeMap, boundaryMap) => {
   Object.values(nodeMap)
     .filter(x => !!x)
-    .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
+    .forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
 
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };

@@ -5,7 +5,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepGroup } from '../groups';
-import { Boundary, areBoundariesEqual } from '../shared/Boundary';
+import { areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
@@ -25,7 +25,7 @@ const calculateNodeMap = (path, data) => {
 const calculateLayout = (nodeMap, boundaryMap) => {
   [nodeMap.conditionNode, nodeMap.choiceNode, ...nodeMap.branchNodes]
     .filter(x => !!x)
-    .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
+    .forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
 
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };

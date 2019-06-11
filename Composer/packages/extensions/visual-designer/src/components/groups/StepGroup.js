@@ -5,15 +5,13 @@ import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
-import { Boundary, areBoundariesEqual } from '../shared/Boundary';
+import { areBoundariesEqual } from '../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
-import { ElementInterval, InitNodeSize, EdgeAddButtonSize } from '../../shared/elementSizes';
+import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { EdgeMenu } from '../shared/EdgeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 const StepInterval = ElementInterval.y;
-const InitStepWidth = InitNodeSize.width;
-const InitStepHeight = InitNodeSize.height;
 
 const calculateNodes = data => {
   if (data && data.children && Array.isArray(data.children)) {
@@ -23,7 +21,7 @@ const calculateNodes = data => {
 };
 
 const calculateLayout = (nodes, boundaryMap) => {
-  nodes.forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary(InitStepWidth, InitStepHeight)));
+  nodes.forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
   return sequentialLayouter(nodes, StepInterval);
 };
 
