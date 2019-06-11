@@ -40,6 +40,7 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
           fontSize: '14px',
           lineHeight: '19px',
           color: 'black',
+          position: 'relative',
         }}
       >
         <div style={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>

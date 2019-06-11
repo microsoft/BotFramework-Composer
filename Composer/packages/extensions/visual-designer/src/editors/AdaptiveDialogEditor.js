@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
-import { GraphNode } from '../components/shared/GraphNode';
+import { GraphNode } from '../shared/GraphNode';
 import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { StepEditor } from './StepEditor';
