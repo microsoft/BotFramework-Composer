@@ -72,6 +72,7 @@ export const LUPage = props => {
   async function onCreateLuFile(data) {
     await actions.createLuFile({
       id: data.name,
+      content: '',
     });
     setModalOpen(false);
     navigate(`./${data.name}`);

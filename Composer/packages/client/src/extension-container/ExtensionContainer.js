@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import ApiClient from '../messenger/ApiClient';
+import { getDialogName } from '../utils';
 
 import getEditor from './EditorMap';
 
@@ -73,6 +74,10 @@ function ExtensionContainer() {
       return apiClient.apiCall('shellNavigate', { shellPage, opts });
     },
 
+    createLuFile: id => {
+      return apiClient.apiCall('createLuFile', { id });
+    },
+
     updateLuFile: luFile => {
       return apiClient.apiCall('updateLuFile', luFile);
     },
@@ -85,7 +90,16 @@ function ExtensionContainer() {
     window.parent.extensionData[RealEditor.name] = shellData.data;
   }
 
-  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
+  return (
+    RealEditor && (
+      <RealEditor
+        {...shellData}
+        onChange={shellApi.saveData}
+        shellApi={shellApi}
+        dialogName={getDialogName(shellData.navPath)}
+      />
+    )
+  );
 }
 
 export default ExtensionContainer;
