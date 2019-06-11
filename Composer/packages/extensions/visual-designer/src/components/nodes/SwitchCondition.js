@@ -23,7 +23,7 @@ const calculateNodeMap = (path, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  Object.values(nodeMap)
+  [nodeMap.conditionNode, nodeMap.choiceNode, ...nodeMap.branchNodes]
     .filter(x => !!x)
     .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
 

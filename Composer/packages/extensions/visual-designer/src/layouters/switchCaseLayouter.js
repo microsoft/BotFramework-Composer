@@ -1,5 +1,5 @@
 import { Boundary } from '../components/shared/Boundary';
-import { ElementInterval } from '../shared/elementSizes';
+import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
 
 import { measureSwitchCaseBoundary } from './boundaryMeasurer';
 
@@ -16,6 +16,9 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
   if (!conditionNode) {
     return { boundary: new Boundary() };
   }
+
+  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
+  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
 
   const containerBoundary = measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
 
