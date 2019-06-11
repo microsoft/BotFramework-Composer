@@ -26,4 +26,6 @@ export const ObiTypes = {
 
   // virtual
   StepGroup: 'VisualSDK.StepGroup',
+  ChoiceDiamond: 'VisualSDK.ChoiceDiamond',
+  ConditionNode: 'VisualSDK.ConditionNode',
 };

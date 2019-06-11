@@ -5,20 +5,21 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { NodeMenu } from '../shared/NodeMenu';
 import { StepGroup } from '../groups';
 import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 
 import { Diamond } from './templates/Diamond';
+import { DefaultRenderer } from './DefaultRenderer';
 
 const ChoiceNodeWidth = 50;
 const ChoiceNodeHeight = 20;
 
 const calculateNodeMap = (path, data) => {
-  const { choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
+  const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
+    conditionNode: GraphNode.fromIndexedJson(condition),
     choiceNode: GraphNode.fromIndexedJson(choice),
     ifGroupNode: GraphNode.fromIndexedJson(ifGroup),
     elseGroupNode: GraphNode.fromIndexedJson(elseGroup),
@@ -31,7 +32,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
     .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
   if (nodeMap.choiceNode) nodeMap.choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
 
-  return ifElseLayouter(nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
+  return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
 export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) {
@@ -57,6 +58,15 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
   const { boundary, nodeMap, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <OffsetContainer>
+        <DefaultRenderer
+          key={nodeMap.condition.id}
+          id={nodeMap.condition.id}
+          data={nodeMap.condition.data}
+          focusedId={focusedId}
+          onEvent={onEvent}
+        />
+      </OffsetContainer>
       <OffsetContainer offset={nodeMap.choice.offset}>
         <Diamond
           onClick={() => {
@@ -83,9 +93,6 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
       {edges.map(x => (
         <Edge key={x.id} {...x} />
       ))}
-      <div style={{ position: 'absolute', top: 0, right: 0 }}>
-        <NodeMenu id={id} onEvent={onEvent} />
-      </div>
     </div>
   );
 };
