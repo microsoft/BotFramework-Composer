@@ -66,7 +66,7 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
           onEvent={onEvent}
         />
       </OffsetContainer>
-      <OffsetContainer offset={nodeMap.choiceNode.offset}>
+      <OffsetContainer offset={nodeMap.choiceNode.offset} styles={{ zIndex: 100 }}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
