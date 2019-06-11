@@ -183,13 +183,13 @@ export class BotProject {
   // update file in this project
   // this function will gurantee the memory cache (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
-    const absolutePath = `${this.dir}/${relativePath}`;
-    await this.fileStorage.writeFile(absolutePath, content);
-
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
+
+    const absolutePath = `${this.dir}/${relativePath}`;
+    await this.fileStorage.writeFile(absolutePath, content);
 
     this.files[index].content = content;
     this.reindex(relativePath);
@@ -212,7 +212,7 @@ export class BotProject {
 
   // re index according to file change in a certain path
   private reindex = (filePath: string) => {
-    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1);
+    const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case 'dialog':
@@ -231,7 +231,7 @@ export class BotProject {
 
   // ensure dir exist, dir is a relative dir path to root
   private ensureDirExists = async (dir: string) => {
-    if (dir === '' || dir === '.' || !dir) {
+    if (!dir || dir === '.') {
       return;
     }
     const parts = dir.split('/');
