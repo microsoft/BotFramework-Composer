@@ -85,14 +85,14 @@ export function ShellApi() {
       const editorWindow = window.frames[0];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, navPath, focusPath]);
+  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
     if (window.frames[1]) {
       const editorWindow = window.frames[1];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, focusPath]);
+  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
