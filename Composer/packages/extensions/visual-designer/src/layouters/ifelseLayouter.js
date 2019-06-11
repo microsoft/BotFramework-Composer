@@ -2,7 +2,7 @@ import { Boundary } from '../components/shared/Boundary';
 import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
 import { GraphNode } from '../components/shared/GraphNode';
 
-import { measureIfElseBoundary } from './boundaryMeasurer';
+import { measureIfElseBoundary } from './containerBoundaryMeasurer';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;

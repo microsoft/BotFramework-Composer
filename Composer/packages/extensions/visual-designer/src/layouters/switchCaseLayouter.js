@@ -1,7 +1,7 @@
 import { Boundary } from '../components/shared/Boundary';
 import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
 
-import { measureSwitchCaseBoundary } from './boundaryMeasurer';
+import { measureSwitchCaseBoundary } from './containerBoundaryMeasurer';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
