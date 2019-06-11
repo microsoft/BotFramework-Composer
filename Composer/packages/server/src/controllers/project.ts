@@ -71,11 +71,6 @@ async function saveProjectAs(req: Request, res: Response) {
     path: req.body.path,
   };
 
-  if (!locationRef.path.endsWith('.botproj')) {
-    res.status(400).json('unsupported project file type, expect .botproj');
-    return;
-  }
-
   try {
     await ProjectService.saveProjectAs(locationRef);
     if (ProjectService.currentBotProject !== undefined) {

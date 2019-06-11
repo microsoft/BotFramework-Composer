@@ -82,7 +82,7 @@ export function LocationSelectContent(props) {
       parent = '';
     }
     const dir = `${parent}/${focusedStorageFolder.name}`;
-    const absolutePath = `${dir}/${value}/bot.botproj`;
+    const absolutePath = `${dir}/${value}`;
     await onSaveAs(storages[currentStorageIndex.current].id, absolutePath);
     updateCurrentPath(dir, storages[currentStorageIndex.current].id);
   };
