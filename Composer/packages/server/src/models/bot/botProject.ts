@@ -215,13 +215,13 @@ export class BotProject {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
-      case 'dialog':
+      case '.dialog':
         this.dialogIndexer.index(this.files);
         break;
-      case 'lg':
+      case '.lg':
         this.lgIndexer.index(this.files);
         break;
-      case 'lu':
+      case '.lu':
         this.luIndexer.index(this.files);
         break;
       default:
