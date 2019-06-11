@@ -25,7 +25,7 @@ const rendererByObiType = {
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
   [ObiTypes.SwitchCondition]: SwitchCondition,
-  [ObiTypes.ChoiceDiamond]: DefaultRenderer,
+  [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
