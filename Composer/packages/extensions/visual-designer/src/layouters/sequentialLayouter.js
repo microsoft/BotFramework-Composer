@@ -1,4 +1,4 @@
-import { Boundary } from '../components/shared/Boundary';
+import { Boundary } from '../shared/Boundary';
 
 export function sequentialLayouter(nodes, ElementInterval = 20, withHeadEdge = true, withTrailingEdge = true) {
   const box = new Boundary();
