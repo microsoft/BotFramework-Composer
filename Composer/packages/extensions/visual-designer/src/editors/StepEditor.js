@@ -5,7 +5,7 @@ import { EdgeMenu } from '../components/shared/EdgeMenu';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
 import { Boundary } from '../shared/Boundary';
-import { EdgeAddButtonSize, ElementInterval } from '../shared/elementSizes';
+import { ElementInterval, InitNodeSize } from '../shared/elementSizes';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 
@@ -34,9 +34,7 @@ const TailSize = {
 };
 
 export const StepEditor = ({ id, data, focusedId, onEvent }) => {
-  const [contentBoundary, setContentBoundary] = useState(
-    new Boundary(EdgeAddButtonSize.width, EdgeAddButtonSize.height)
-  );
+  const [contentBoundary, setContentBoundary] = useState(new Boundary(InitNodeSize.width, InitNodeSize.height));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -54,8 +52,10 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
   );
 
   const editorWidth =
-    Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.axisX) +
-    Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.width - contentBoundary.axisX);
+    Math.min(
+      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.axisX),
+      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.width - contentBoundary.axisX)
+    ) * 2;
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
   const editorAxisX = editorWidth / 2;
 
