@@ -8,42 +8,49 @@ const BranchIntervalY = ElementInterval.y / 2;
 export function measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
-  const leftNode = ifNode || new GraphNode();
-  const rightNode = elseNode || new GraphNode();
+  const branchNodes = [ifNode || new GraphNode(), elseNode || new GraphNode()];
 
-  return measureBranchingNodeBoundary(conditionNode, choiceNode, [leftNode, rightNode]);
+  return measureBranchingContainerBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    branchNodes.map(x => x.boundary)
+  );
 }
 
 export function measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes = []) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
-  return measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes);
+  return measureBranchingContainerBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    branchNodes.map(x => x.boundary)
+  );
 }
 
-function measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes = []) {
-  if (!conditionNode || !choiceNode) return new Boundary();
+function measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries = []) {
+  if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
-  const firstBranchNode = branchNodes[0] || new GraphNode();
+  const firstBranchBoundary = branchBoundaries[0] || new Boundary();
 
   const branchGroupBoundary = new Boundary();
-  branchGroupBoundary.width = branchNodes.reduce((acc, x) => acc + x.boundary.width + BranchIntervalX, 0);
-  branchGroupBoundary.height = Math.max(...branchNodes.map(x => x.boundary.height));
-  branchGroupBoundary.axisX = firstBranchNode.boundary.axisX;
+  branchGroupBoundary.width = branchBoundaries.reduce((acc, x) => acc + x.width + BranchIntervalX, 0);
+  branchGroupBoundary.height = Math.max(...branchBoundaries.map(x => x.height));
+  branchGroupBoundary.axisX = firstBranchBoundary.axisX;
 
   /** Calculate boundary */
-  const containerAxisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, branchGroupBoundary.axisX);
+  const containerAxisX = Math.max(conditionBoundary.axisX, choiceBoundary.axisX, branchGroupBoundary.axisX);
   const containerHeight =
-    conditionNode.boundary.height +
+    conditionBoundary.height +
     BranchIntervalY +
-    choiceNode.boundary.height +
+    choiceBoundary.height +
     BranchIntervalY +
     branchGroupBoundary.height +
     BranchIntervalY;
   const containerWidth =
     containerAxisX +
     Math.max(
-      conditionNode.boundary.width - conditionNode.boundary.axisX,
-      choiceNode.boundary.width - choiceNode.boundary.axisX,
+      conditionBoundary.width - conditionBoundary.axisX,
+      choiceBoundary.width - choiceBoundary.axisX,
       branchGroupBoundary.width - branchGroupBoundary.axisX
     );
 
