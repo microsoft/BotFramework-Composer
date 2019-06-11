@@ -8,30 +8,29 @@ const BranchIntervalY = ElementInterval.y / 2;
 function measureContainerBoundary(conditionNode, choiceNode, ifNode, elseNode) {
   if (!choiceNode) return new Boundary();
 
-  const containerBoundary = new Boundary();
   const leftNode = ifNode || new GraphNode();
   const rightNode = elseNode || new GraphNode();
 
-  containerBoundary.axisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, leftNode.boundary.axisX);
-  containerBoundary.width =
-    containerBoundary.axisX +
+  const branchGroupBoundary = new Boundary();
+  branchGroupBoundary.width = leftNode.boundary.width + BranchIntervalX + rightNode.boundary.width + BranchIntervalX;
+  branchGroupBoundary.height = Math.max(leftNode.boundary.height, rightNode.boundary.height) + 2 * BranchIntervalY;
+  branchGroupBoundary.axisX = leftNode.boundary.axisX;
+
+  const containerAxisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, leftNode.boundary.axisX);
+  const containerHeight =
+    conditionNode.boundary.height + BranchIntervalY + choiceNode.boundary.height + branchGroupBoundary.height;
+  const containerWidth =
+    containerAxisX +
     Math.max(
       conditionNode.boundary.width - conditionNode.boundary.axisX,
-      Math.max(
-        choiceNode.boundary.width - choiceNode.boundary.axisX,
-        leftNode.boundary.width - leftNode.boundary.axisX
-      ) +
-        BranchIntervalX +
-        rightNode.boundary.width
-    ) +
-    BranchIntervalX;
-  containerBoundary.height =
-    conditionNode.boundary.height +
-    BranchIntervalY +
-    Math.max(
-      choiceNode.boundary.height + BranchIntervalY + leftNode.boundary.height + BranchIntervalY,
-      choiceNode.boundary.axisY + BranchIntervalY + rightNode.boundary.height + BranchIntervalY
+      choiceNode.boundary.width - choiceNode.boundary.axisX,
+      branchGroupBoundary.width - branchGroupBoundary.axisX
     );
+
+  const containerBoundary = new Boundary();
+  containerBoundary.axisX = containerAxisX;
+  containerBoundary.height = containerHeight;
+  containerBoundary.width = containerWidth;
   return containerBoundary;
 }
 
