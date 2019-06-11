@@ -108,7 +108,7 @@ const ContentKeyByTypes = {
   [ObiTypes.HttpRequest]: {
     label: 'url',
   },
-  [ObiTypes.TraceEvent]: {
+  [ObiTypes.TraceActivity]: {
     label: 'valueProperty',
   },
   [ObiTypes.LogStep]: {
