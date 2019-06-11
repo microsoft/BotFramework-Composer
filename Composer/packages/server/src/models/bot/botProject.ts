@@ -166,7 +166,7 @@ export class BotProject {
   // this function will gurantee the memory cache (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
-    await this.ensureDirExists(Path.dirname(relativePath));
+    await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
     // update this.files which is memory cache of all files
@@ -229,23 +229,12 @@ export class BotProject {
     }
   };
 
-  // ensure dir exist, dir is a relative dir path to root
+  // ensure dir exist, dir is a absolute dir path
   private ensureDirExists = async (dir: string) => {
     if (!dir || dir === '.') {
       return;
     }
-    const parts = dir.split('/');
-    // intermidate paths down to the eventual dir
-    const paths = parts.map((_, idx) => {
-      return Path.join(this.dir, ...parts.slice(0, idx + 1));
-    });
-
-    for (const p of paths) {
-      const exist = await this.fileStorage.exists(p);
-      if (!exist) {
-        await this.fileStorage.mkDir(p);
-      }
-    }
+    await this.fileStorage.mkDir(dir, { recursive: true });
   };
 
   private _getFiles = async () => {
