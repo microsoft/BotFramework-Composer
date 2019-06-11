@@ -101,13 +101,6 @@ export class DefaultRenderer extends React.Component {
       header = truncateType(data.$type);
     }
 
-    // change color of header based on type of node
-    // message nodes are green, other nodes are gray
-    let color = '#656565';
-    if (isMessageNode(data.$type)) {
-      color = '#00A989';
-    }
-
     return (
       <FormCard
         themeColor={color}
@@ -121,20 +114,6 @@ export class DefaultRenderer extends React.Component {
       />
     );
   }
-}
-
-function isMessageNode(type) {
-  const messageNodes = [
-    'Microsoft.SendActivity',
-    'Microsoft.TextInput',
-    'Microsoft.NumberInput',
-    'Microsoft.IntegerInput',
-    'Microsoft.FloatInput',
-    'Microsoft.ChoiceInput',
-    'Microsoft.ConfirmInput',
-  ];
-
-  return messageNodes.indexOf(type) > -1;
 }
 
 DefaultRenderer.propTypes = NodeProps;
