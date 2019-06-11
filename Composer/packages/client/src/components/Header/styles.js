@@ -53,3 +53,9 @@ export const fileInput = css`
   opacity: 0;
   cursor: pointer;
 `;
+
+export const warning = css`
+  font-size: 16px;
+  margin-right: 4px;
+  color: ${SharedColors.red10};
+`;

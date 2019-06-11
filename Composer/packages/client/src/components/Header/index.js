@@ -1,11 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Text } from 'office-ui-fabric-react/lib/Text';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import { useEffect } from 'react';
 
-import { headerMain, headerSub, aside, bot, botButton, actionButton } from './styles';
+import { headerMain, headerSub, aside, bot, botButton, actionButton, warning } from './styles';
 import { OpenStatus } from './../../constants';
 
 const openInEmulator = url => {
@@ -66,6 +68,8 @@ export const Header = props => {
               {formatMessage('Test in Emulator')}
             </ActionButton>
           )}
+          <Icon iconName="IncidentTriangle" css={warning} />
+          {!connected && <Text css={warning}>{formatMessage('Lack of Bot runtime')}</Text>}
           <PrimaryButton
             css={botButton}
             text={connected ? formatMessage('Reload') : formatMessage('Connect')}
