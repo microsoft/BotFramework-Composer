@@ -1,41 +1,53 @@
 import { Boundary } from '../components/shared/Boundary';
-import { ElementInterval, InitNodeSize } from '../shared/elementSizes';
+import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
+import { GraphNode } from '../components/shared/GraphNode';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
+function measureContainerBoundary(conditionNode, choiceNode, ifNode, elseNode) {
+  if (!choiceNode) return new Boundary();
+
   const containerBoundary = new Boundary();
-  if (!choiceNode) return { boundary: containerBoundary };
+  const leftNode = ifNode || new GraphNode();
+  const rightNode = elseNode || new GraphNode();
 
-  const leftNode = ifNode;
-  const rightNode = elseNode;
-  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
-
-  const leftNodeBoundary = leftNode ? leftNode.boundary : new Boundary();
-  const rightNodeBoundary = rightNode ? rightNode.boundary : new Boundary();
-
-  const leftNodeText = 'True';
-  const rightNodeText = 'False';
-
-  // Container
-  containerBoundary.axisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, leftNodeBoundary.axisX);
+  containerBoundary.axisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, leftNode.boundary.axisX);
   containerBoundary.width =
     containerBoundary.axisX +
     Math.max(
       conditionNode.boundary.width - conditionNode.boundary.axisX,
-      Math.max(choiceNode.boundary.width - choiceNode.boundary.axisX, leftNodeBoundary.width - leftNodeBoundary.axisX) +
+      Math.max(
+        choiceNode.boundary.width - choiceNode.boundary.axisX,
+        leftNode.boundary.width - leftNode.boundary.axisX
+      ) +
         BranchIntervalX +
-        rightNodeBoundary.width
+        rightNode.boundary.width
     ) +
     BranchIntervalX;
   containerBoundary.height =
     conditionNode.boundary.height +
     BranchIntervalY +
     Math.max(
-      choiceNode.boundary.height + BranchIntervalY + leftNodeBoundary.height + BranchIntervalY,
-      choiceNode.boundary.axisY + BranchIntervalY + rightNodeBoundary.height + BranchIntervalY
+      choiceNode.boundary.height + BranchIntervalY + leftNode.boundary.height + BranchIntervalY,
+      choiceNode.boundary.axisY + BranchIntervalY + rightNode.boundary.height + BranchIntervalY
     );
+  return containerBoundary;
+}
+
+export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
+  if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
+
+  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
+  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
+
+  const containerBoundary = measureContainerBoundary(conditionNode, choiceNode, ifNode, elseNode);
+
+  const leftNode = ifNode || new GraphNode();
+  const rightNode = elseNode || new GraphNode();
+
+  const leftNodeText = 'True';
+  const rightNodeText = 'False';
 
   // Condition
   conditionNode.offset = {
@@ -66,7 +78,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
       };
       rightNode.offset = {
         x:
-          Math.max(choiceNode.offset.x + choiceNode.boundary.width, leftNode.offset.x + leftNodeBoundary.width) +
+          Math.max(choiceNode.offset.x + choiceNode.boundary.width, leftNode.offset.x + leftNode.boundary.width) +
           BranchIntervalX,
         y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };

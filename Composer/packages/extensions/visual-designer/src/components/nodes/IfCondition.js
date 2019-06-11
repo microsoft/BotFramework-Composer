@@ -13,9 +13,6 @@ import { ifElseLayouter } from '../../layouters/ifelseLayouter';
 import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
 
-const ChoiceNodeWidth = 50;
-const ChoiceNodeHeight = 20;
-
 const calculateNodeMap = (path, data) => {
   const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
   return {
@@ -30,7 +27,6 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   Object.values(nodeMap)
     .filter(x => !!x)
     .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
-  if (nodeMap.choiceNode) nodeMap.choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
 
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
