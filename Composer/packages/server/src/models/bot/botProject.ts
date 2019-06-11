@@ -1,4 +1,5 @@
 import { merge } from 'lodash';
+import { isWhile } from '@babel/types';
 
 import { Path } from '../../utility/path';
 import StorageService from '../../services/storage';
@@ -130,36 +131,31 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public copyFilesToDes = async (locationRef: LocationRef): Promise<LocationRef> => {
+  public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
     // get destination storage client
-    let desStorage: IFileStorage;
-    if (locationRef.storageId !== this.ref.storageId) {
-      desStorage = StorageService.getStorageClient(locationRef.storageId);
-    } else {
-      desStorage = this.fileStorage;
-    }
-    // make dir in destination storage
-    const desDir = locationRef.path;
-    if (await desStorage.exists(desDir)) {
+    const dstStorage = StorageService.getStorageClient(locationRef.storageId);
+    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up existed bot proj
+    if (await dstStorage.exists(locationRef.path)) {
       throw new Error('already have this folder, please give another name');
     }
-    await desStorage.mkDir(desDir);
+    const dstDir = locationRef.path;
+    await dstStorage.mkDir(dstDir);
 
     // copy files to locationRef
     const prevFiles = await this._getFiles();
     for (const index in prevFiles) {
       const file = prevFiles[index];
-      const absolutePath = Path.join(desDir, file.relativePath);
+      const absolutePath = Path.join(dstDir, file.relativePath);
       const content =
         index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      await desStorage.writeFile(absolutePath, content);
+      await dstStorage.writeFile(absolutePath, content);
     }
     // return new proj ref
-    const desBotProj = await desStorage.glob('**/*.botproj', locationRef.path);
-    if (desBotProj && desBotProj.length > 0) {
+    const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
+    if (dstBotProj && dstBotProj.length === 1) {
       return {
         storageId: locationRef.storageId,
-        path: Path.join(locationRef.path, desBotProj[0]),
+        path: Path.join(locationRef.path, dstBotProj[0]),
       };
     } else {
       throw new Error('new bot porject have not botproj file');
@@ -167,8 +163,7 @@ export class BotProject {
   };
 
   public copyTo = async (locationRef: LocationRef) => {
-    const newProjRef = await this.copyFilesToDes(locationRef);
-    // skip to new bot project
+    const newProjRef = await this.cloneFiles(locationRef);
     return new BotProject(newProjRef);
   };
 

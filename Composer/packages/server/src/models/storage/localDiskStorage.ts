@@ -8,7 +8,6 @@ import { IFileStorage, Stat } from './interface';
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
-const exists = promisify(fs.exists);
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
@@ -38,7 +37,12 @@ export class LocalDiskStorage implements IFileStorage {
   }
 
   async exists(path: string): Promise<boolean> {
-    return await exists(path);
+    try {
+      await stat(path);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   async writeFile(path: string, content: any): Promise<void> {
@@ -50,7 +54,7 @@ export class LocalDiskStorage implements IFileStorage {
   }
 
   async mkDir(path: string): Promise<void> {
-    await mkDir(path);
+    await mkDir(path, { recursive: true });
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {

@@ -21,6 +21,6 @@ export interface IFileStorage {
   exists(path: string): Promise<boolean>;
   writeFile(path: string, content: any): Promise<void>;
   removeFile(path: string): Promise<void>;
-  mkDir(path: string): Promise<void>;
+  mkDir(path: string): Promise<void>; // TODO. make sure mkDir recursive can work in diff types of storage
   glob(pattern: string, path: string): Promise<string[]>;
 }
