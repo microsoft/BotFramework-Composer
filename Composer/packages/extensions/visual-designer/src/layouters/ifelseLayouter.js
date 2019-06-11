@@ -68,7 +68,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
         x:
           Math.max(choiceNode.offset.x + choiceNode.boundary.width, leftNode.offset.x + leftNodeBoundary.width) +
           BranchIntervalX,
-        y: choiceNode.offset.y + choiceNode.boundary.axisY + BranchIntervalY,
+        y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };
       break;
     case '01':
