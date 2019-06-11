@@ -1,6 +1,6 @@
-import { Boundary } from '../components/shared/Boundary';
+import { Boundary } from '../shared/Boundary';
 import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
-import { GraphNode } from '../components/shared/GraphNode';
+import { GraphNode } from '../shared/GraphNode';
 
 import { measureIfElseBoundary } from './containerBoundaryMeasurer';
 

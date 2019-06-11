@@ -1,4 +1,4 @@
-import { Boundary } from '../components/shared/Boundary';
+import { Boundary } from '../shared/Boundary';
 import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
 
 import { measureSwitchCaseBoundary } from './containerBoundaryMeasurer';

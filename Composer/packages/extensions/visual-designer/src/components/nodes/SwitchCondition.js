@@ -2,10 +2,10 @@ import React, { useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { GraphNode } from '../shared/GraphNode';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { GraphNode } from '../../shared/GraphNode';
+import { OffsetContainer } from '../../shared/OffsetContainer';
 import { StepGroup } from '../groups';
-import { areBoundariesEqual } from '../shared/Boundary';
+import { areBoundariesEqual } from '../../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';

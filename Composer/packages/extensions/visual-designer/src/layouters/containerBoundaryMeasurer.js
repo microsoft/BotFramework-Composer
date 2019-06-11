@@ -1,5 +1,5 @@
-import { Boundary } from '../components/shared/Boundary';
-import { GraphNode } from '../components/shared/GraphNode';
+import { Boundary } from '../shared/Boundary';
+import { GraphNode } from '../shared/GraphNode';
 import { ElementInterval } from '../shared/elementSizes';
 
 const BranchIntervalX = ElementInterval.x;

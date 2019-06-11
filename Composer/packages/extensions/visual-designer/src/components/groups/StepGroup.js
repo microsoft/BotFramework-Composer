@@ -2,10 +2,10 @@ import React, { useState, useMemo, useEffect } from 'react';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
-import { GraphNode } from '../shared/GraphNode';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { GraphNode } from '../../shared/GraphNode';
+import { OffsetContainer } from '../../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
-import { areBoundariesEqual } from '../shared/Boundary';
+import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { EdgeMenu } from '../shared/EdgeMenu';

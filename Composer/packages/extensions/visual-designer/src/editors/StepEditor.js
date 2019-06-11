@@ -4,9 +4,9 @@ import { StepGroup } from '../components/groups';
 import { EdgeMenu } from '../components/shared/EdgeMenu';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
-import { Boundary } from '../components/shared/Boundary';
+import { Boundary } from '../shared/Boundary';
 import { EdgeAddButtonSize, ElementInterval } from '../shared/elementSizes';
-import { OffsetContainer } from '../components/shared/OffsetContainer';
+import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 
 const TriggerSize = { width: 280, height: 40 };
