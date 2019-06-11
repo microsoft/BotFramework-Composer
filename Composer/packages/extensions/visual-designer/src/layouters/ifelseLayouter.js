@@ -2,37 +2,10 @@ import { Boundary } from '../components/shared/Boundary';
 import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
 import { GraphNode } from '../components/shared/GraphNode';
 
+import { measureIfElseBoundary } from './boundaryMeasurer';
+
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
-
-function measureContainerBoundary(conditionNode, choiceNode, ifNode, elseNode) {
-  if (!choiceNode) return new Boundary();
-
-  const leftNode = ifNode || new GraphNode();
-  const rightNode = elseNode || new GraphNode();
-
-  const branchGroupBoundary = new Boundary();
-  branchGroupBoundary.width = leftNode.boundary.width + BranchIntervalX + rightNode.boundary.width + BranchIntervalX;
-  branchGroupBoundary.height = Math.max(leftNode.boundary.height, rightNode.boundary.height) + 2 * BranchIntervalY;
-  branchGroupBoundary.axisX = leftNode.boundary.axisX;
-
-  const containerAxisX = Math.max(conditionNode.boundary.axisX, choiceNode.boundary.axisX, leftNode.boundary.axisX);
-  const containerHeight =
-    conditionNode.boundary.height + BranchIntervalY + choiceNode.boundary.height + branchGroupBoundary.height;
-  const containerWidth =
-    containerAxisX +
-    Math.max(
-      conditionNode.boundary.width - conditionNode.boundary.axisX,
-      choiceNode.boundary.width - choiceNode.boundary.axisX,
-      branchGroupBoundary.width - branchGroupBoundary.axisX
-    );
-
-  const containerBoundary = new Boundary();
-  containerBoundary.axisX = containerAxisX;
-  containerBoundary.height = containerHeight;
-  containerBoundary.width = containerWidth;
-  return containerBoundary;
-}
 
 export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
   if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
@@ -40,7 +13,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
   choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
   conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
 
-  const containerBoundary = measureContainerBoundary(conditionNode, choiceNode, ifNode, elseNode);
+  const containerBoundary = measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode);
 
   const leftNode = ifNode || new GraphNode();
   const rightNode = elseNode || new GraphNode();
