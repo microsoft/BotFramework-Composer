@@ -8,14 +8,14 @@ export function ifElseLayouter(choiceNode, ifNode, elseNode) {
   const containerBoundary = new Boundary();
   if (!choiceNode) return { boundary: containerBoundary };
 
-  const leftNode = elseNode;
-  const rightNode = ifNode;
+  const leftNode = ifNode;
+  const rightNode = elseNode;
 
   const leftNodeSize = leftNode ? leftNode.boundary : new Boundary();
   const rightNodeSize = rightNode ? rightNode.boundary : new Boundary();
 
-  const leftNodeText = 'N';
-  const rightNodeText = 'Y';
+  const leftNodeText = 'True';
+  const rightNodeText = 'False';
 
   const flag = (leftNode ? '1' : '0') + (rightNode ? '1' : '0');
   switch (flag) {
