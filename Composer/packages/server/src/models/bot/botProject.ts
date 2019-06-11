@@ -1,5 +1,4 @@
 import { merge } from 'lodash';
-import { isWhile } from '@babel/types';
 
 import { Path } from '../../utility/path';
 import StorageService from '../../services/storage';
