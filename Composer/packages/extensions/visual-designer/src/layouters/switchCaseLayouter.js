@@ -1,7 +1,7 @@
 import { Boundary } from '../components/shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 
-import { measureBranchingNodeBoundary } from './boundaryMeasurer';
+import { measureSwitchCaseBoundary } from './boundaryMeasurer';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -17,7 +17,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
     return { boundary: new Boundary() };
   }
 
-  const containerBoundary = measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes);
+  const containerBoundary = measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
 
   /** Calulate nodes position */
   conditionNode.offset = {

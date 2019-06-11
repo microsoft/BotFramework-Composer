@@ -14,15 +14,13 @@ export function measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNod
   return measureBranchingNodeBoundary(conditionNode, choiceNode, [leftNode, rightNode]);
 }
 
-export function measureSwitchCaseBoundary(conditionNode, choiceNode, defaultNode, caseNodes = []) {
+export function measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes = []) {
   if (!conditionNode || !choiceNode) return new Boundary();
-
-  const branchNodes = [defaultNode, ...caseNodes].map(x => x || new GraphNode());
 
   return measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes);
 }
 
-export function measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes = []) {
+function measureBranchingNodeBoundary(conditionNode, choiceNode, branchNodes = []) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   const firstBranchNode = branchNodes[0] || new GraphNode();

@@ -9,13 +9,9 @@ import { Boundary, areBoundariesEqual } from '../shared/Boundary';
 import { Edge } from '../shared/EdgeComponents';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
-import { InitNodeSize } from '../../shared/elementSizes';
 
 import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
-
-const ChoiceNodeWidth = 50;
-const ChoiceNodeHeight = 20;
 
 const calculateNodeMap = (path, data) => {
   const { condition, choice, branches } = transformSwitchCondition(data, path);
@@ -27,9 +23,9 @@ const calculateNodeMap = (path, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  nodeMap.branchNodes.forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
-  if (nodeMap.choiceNode) nodeMap.choiceNode.boundary = new Boundary(ChoiceNodeWidth, ChoiceNodeHeight);
-  if (nodeMap.conditionNode) nodeMap.conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
+  Object.values(nodeMap)
+    .filter(x => !!x)
+    .forEach(x => (x.boundary = boundaryMap[x.id] || new Boundary()));
 
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };
