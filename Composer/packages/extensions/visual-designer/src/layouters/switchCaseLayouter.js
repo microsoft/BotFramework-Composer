@@ -8,19 +8,8 @@ const BaselineToBranch = ElementInterval.y / 2;
 const BranchToBottom = ElementInterval.y / 2;
 const BranchIntervalX = ElementInterval.x;
 
-/**
- *        [switch]
- *           |
- *           ------------
- *           |   |  |   |
- */
-export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) {
-  if (!conditionNode) {
-    return { boundary: new Boundary() };
-  }
-
+function measureContainerBoundary(conditionNode, choiceNode, branchNodes = []) {
   const firstBranchNode = branchNodes[0] || new GraphNode();
-  const lastBranchNode = branchNodes[branchNodes.length - 1] || new GraphNode();
 
   const branchGroupBoundary = new Boundary();
   branchGroupBoundary.width = branchNodes.reduce((acc, x) => acc + x.boundary.width + BranchIntervalX, 0);
@@ -47,27 +36,43 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
   containerBoundary.width = containerWidth;
   containerBoundary.height = containerHeight;
   containerBoundary.axisX = containerAxisX;
+  return containerBoundary;
+}
+
+/**
+ *        [switch]
+ *           |
+ *           ------------
+ *           |   |  |   |
+ */
+export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) {
+  if (!conditionNode) {
+    return { boundary: new Boundary() };
+  }
+
+  const containerBoundary = measureContainerBoundary(conditionNode, choiceNode, branchNodes);
 
   /** Calulate nodes position */
   conditionNode.offset = {
-    x: containerAxisX - conditionNode.boundary.axisX,
+    x: containerBoundary.axisX - conditionNode.boundary.axisX,
     y: 0,
   };
   choiceNode.offset = {
-    x: containerAxisX - choiceNode.boundary.axisX,
+    x: containerBoundary.axisX - choiceNode.boundary.axisX,
     y: conditionNode.offset.y + conditionNode.boundary.height + ConditionToSwitch,
   };
 
   const BaselinePositionY = choiceNode.offset.y + choiceNode.boundary.height + SwitchToBaseline;
-  const BottomelinePositionY = containerHeight;
+  const BottomelinePositionY = containerBoundary.height;
 
+  const firstBranchNode = branchNodes[0] || new GraphNode();
   branchNodes.reduce((accOffsetX, x) => {
     x.offset = {
       x: accOffsetX,
       y: BaselinePositionY + BaselineToBranch,
     };
     return accOffsetX + BranchIntervalX + x.boundary.width;
-  }, containerAxisX - branchGroupBoundary.axisX);
+  }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
   const edges = [];
@@ -75,14 +80,14 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
     {
       id: `edge/${conditionNode.id}/switch/condition->switch`,
       direction: 'y',
-      x: containerAxisX,
+      x: containerBoundary.axisX,
       y: conditionNode.offset.y + conditionNode.boundary.height,
       length: ConditionToSwitch,
     },
     {
       id: `edge/${choiceNode.id}/switch/switch->baseline`,
       direction: 'y',
-      x: containerAxisX,
+      x: containerBoundary.axisX,
       y: choiceNode.offset.y + choiceNode.boundary.height,
       length: SwitchToBaseline,
     }
@@ -109,20 +114,21 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
   });
 
   if (branchNodes.length > 1) {
-    const baseLineLength = lastBranchNode.offset.x + lastBranchNode.boundary.axisX - containerAxisX;
+    const lastBranchNode = branchNodes[branchNodes.length - 1] || new GraphNode();
+    const baseLineLength = lastBranchNode.offset.x + lastBranchNode.boundary.axisX - containerBoundary.axisX;
 
     edges.push(
       {
         id: `edge/${conditionNode.id}/baseline`,
         direction: 'x',
-        x: containerAxisX,
+        x: containerBoundary.axisX,
         y: BaselinePositionY,
         length: baseLineLength,
       },
       {
         id: `edge/${conditionNode.id}/bottomline`,
         direction: 'x',
-        x: containerAxisX,
+        x: containerBoundary.axisX,
         y: BottomelinePositionY,
         length: baseLineLength,
       }
