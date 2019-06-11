@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
 import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
 
-import { LuFile } from '../../../types';
 import { BaseField } from '../BaseField';
 
 import ToggleEditor from './ToggleEditor';
@@ -15,7 +14,6 @@ import './styles.scss';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData, formContext } = props;
-  const [selectedFile, setSelectedFile] = useState<LuFile | null>(null);
 
   const {
     formContext: { luFiles, shellApi, dialogName },
@@ -29,11 +27,8 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   };
 
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
-  useEffect(() => {
-    setSelectedFile(
-      typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null
-    );
-  }, [props.formData, luFiles]);
+  const selectedFile =
+    typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
 
   const menuItems: IContextualMenuItem[] = luFiles.sort().map(f => ({
     key: f.id,
