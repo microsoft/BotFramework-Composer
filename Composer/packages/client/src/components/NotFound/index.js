@@ -4,7 +4,12 @@ import formatMessage from 'format-message';
 
 import { notfoundbody, notfoundcontainer, description, notfoundicon } from './style';
 
-export const NotFound = () => {
+export const NotFound = props => {
+  const { uri } = props;
+  if (uri === '/') {
+    return null;
+  }
+
   return (
     <div css={notfoundbody}>
       <div css={notfoundcontainer}>

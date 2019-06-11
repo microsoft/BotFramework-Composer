@@ -39,3 +39,7 @@ export const content = css`
   display: flex;
   flex-direction: column;
 `;
+
+export const showDesign = show => css`
+  display: ${show ? 'block' : 'none'} !important;
+`;
