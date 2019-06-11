@@ -4,7 +4,6 @@ import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
 import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
-import { LuEditor } from 'code-editor';
 
 import { LuFile } from '../../../types';
 import { BaseField } from '../BaseField';
@@ -13,6 +12,7 @@ import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 
 import './styles.scss';
+import InlineLuEditor from './InlineLuEditor';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData, formContext } = props;
@@ -45,7 +45,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     iconProps: { iconName: 'People' },
   }));
 
-  if (!luFiles.includes(dialogName)) {
+  if (luFiles.findIndex(f => f.id === dialogName) === -1) {
     menuItems.push(
       {
         key: 'divider1',
@@ -133,11 +133,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
               updateLuFile({ id: selectedFile.id, content: newValue });
             };
 
-            return (
-              <div style={{ height: '500px' }}>
-                <LuEditor value={selectedFile.content} onChange={updateLuFile} />
-              </div>
-            );
+            return <InlineLuEditor file={selectedFile} onSave={updateLuFile} />;
           }
 
           if (isRegex) {
