@@ -54,7 +54,7 @@ export const IfCondition = function({ id, data, focusedId, onEvent, onResize }) 
   const { boundary, nodeMap, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <OffsetContainer>
+      <OffsetContainer offset={nodeMap.condition.offset}>
         <DefaultRenderer
           key={nodeMap.condition.id}
           id={nodeMap.condition.id}
