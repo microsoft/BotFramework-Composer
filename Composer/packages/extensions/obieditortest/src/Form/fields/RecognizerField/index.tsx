@@ -4,19 +4,19 @@ import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
 import classnames from 'classnames';
 import { FontSizes } from '@uifabric/styling';
-import { LuEditor } from 'code-editor';
 
 import { BaseField } from '../BaseField';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
+import InlineLuEditor from './InlineLuEditor';
 import './styles.scss';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData, formContext } = props;
 
   const {
-    formContext: { luFiles, shellApi },
+    formContext: { luFiles, shellApi, dialogName },
     onChange,
   } = props;
 
@@ -26,21 +26,43 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     }
   };
 
+  const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
   const selectedFile =
     typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
 
-  const menuItems: IContextualMenuItem[] = luFiles
-    .filter(f => f !== selectedFile)
-    .map(f => ({
-      key: f.id,
-      text: f.id,
-      iconProps: { iconName: 'People' },
-    }));
+  const menuItems: IContextualMenuItem[] = luFiles.sort().map(f => ({
+    key: f.id,
+    text: f.id,
+    canCheck: true,
+    checked: f === selectedFile,
+    disabled: f === selectedFile,
+    iconProps: { iconName: 'People' },
+  }));
+
+  if (luFiles.findIndex(f => f.id === dialogName) === -1) {
+    menuItems.push(
+      {
+        key: 'divider1',
+        itemType: ContextualMenuItemType.Divider,
+      },
+      {
+        key: 'add',
+        text: formatMessage('Add Luis Recognizer'),
+        iconProps: { iconName: 'Add' },
+        onClick: () => {
+          const { createLuFile } = shellApi;
+          createLuFile(dialogName).then(() => {
+            onChange(`${dialogName}.lu`);
+          });
+        },
+      }
+    );
+  }
 
   if (selectedFile || !formData) {
     menuItems.push(
       {
-        key: 'divider',
+        key: 'divider2',
         itemType: ContextualMenuItemType.Divider,
       },
       {
@@ -49,6 +71,23 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
         iconProps: { iconName: 'Code' },
         onClick: () => {
           onChange({ $type: 'Microsoft.RegexRecognizer' });
+        },
+      }
+    );
+  }
+
+  if (selectedFile || isRegex) {
+    menuItems.push(
+      {
+        key: 'divider3',
+        itemType: ContextualMenuItemType.Divider,
+      },
+      {
+        key: 'remove',
+        text: formatMessage('Remove Recognizer'),
+        iconProps: { iconName: 'Delete' },
+        onClick: () => {
+          onChange(undefined);
         },
       }
     );
@@ -83,19 +122,15 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       <ToggleEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
         {() => {
           if (selectedFile) {
-            const updateLuFile = (_, newValue?: string) => {
+            const updateLuFile = (newValue?: string) => {
               const { updateLuFile } = formContext.shellApi;
               updateLuFile({ id: selectedFile.id, content: newValue });
             };
 
-            return (
-              <div style={{ height: '500px' }}>
-                <LuEditor value={selectedFile.content} onChange={updateLuFile} />
-              </div>
-            );
+            return <InlineLuEditor file={selectedFile} onSave={updateLuFile} />;
           }
 
-          if (typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer') {
+          if (isRegex) {
             return <RegexEditor {...props} />;
           }
         }}

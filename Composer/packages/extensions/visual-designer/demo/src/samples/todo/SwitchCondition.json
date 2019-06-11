@@ -26,6 +26,12 @@
     {
       "$type": "Microsoft.SwitchCondition",
       "condition": "user.style",
+      "default": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "You select: default"
+        }
+      ],
       "cases": [
         {
           "value": "'Test1'",

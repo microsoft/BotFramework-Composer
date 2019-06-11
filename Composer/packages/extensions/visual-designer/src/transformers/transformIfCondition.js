@@ -9,8 +9,12 @@ export function transformIfCondtion(input, jsonpath) {
   if (!input || input.$type !== ObiTypes.IfCondition) return {};
 
   const result = {
+    condition: new IndexedNode(`${jsonpath}`, {
+      ...input,
+      $type: ObiTypes.ConditionNode,
+    }),
     choice: new IndexedNode(`${jsonpath}`, {
-      $type: 'Choice',
+      $type: ObiTypes.ChoiceDiamond,
       text: input.condition,
     }),
   };

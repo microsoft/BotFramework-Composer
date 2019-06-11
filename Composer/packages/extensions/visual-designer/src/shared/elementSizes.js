@@ -3,6 +3,11 @@ export const InitNodeSize = {
   height: 80,
 };
 
+export const DiamondSize = {
+  width: 50,
+  height: 20,
+};
+
 export const EventNodeSize = {
   width: 180,
   height: 32,
