@@ -68,7 +68,7 @@ export const Header = props => {
               {formatMessage('Test in Emulator')}
             </ActionButton>
           )}
-          <Icon iconName="IncidentTriangle" css={warning} />
+          {!connected && <Icon iconName="IncidentTriangle" css={warning} />}
           {!connected && <Text css={warning}>{formatMessage('Lack of Bot runtime')}</Text>}
           <PrimaryButton
             css={botButton}
