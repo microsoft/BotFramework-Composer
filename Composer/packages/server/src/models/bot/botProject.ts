@@ -70,8 +70,9 @@ export class BotProject {
     return botFile;
   };
 
-  public updateDialog = async (name: string, dialogContent: any) => {
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.name === name);
+  public updateDialog = async (id: string, dialogContent: any) => {
+    // TODO: replace name with id with dialog in next pass, to make in consistent across dialog, lg, lu
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.name === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${name}`);
     }
@@ -83,8 +84,8 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialogFromTemplate = async (name: string, dir: string = '') => {
-    const relativePath = Path.join(dir, `${name.trim()}.dialog`);
+  public createDialogFromTemplate = async (id: string, dir: string = '') => {
+    const relativePath = Path.join(dir, `${id.trim()}.dialog`);
     const content = JSON.stringify(merge({}, DIALOG_TEMPLATE), null, 2) + '\n';
 
     await this._createFile(relativePath, content);
@@ -198,13 +199,13 @@ export class BotProject {
   // remove file in this project
   // this function will gurantee the memory cache (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
-    const absolutePath = `${this.dir}/${relativePath}`;
-    await this.fileStorage.removeFile(absolutePath);
-
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
+
+    const absolutePath = `${this.dir}/${relativePath}`;
+    await this.fileStorage.removeFile(absolutePath);
 
     this.files.splice(index, 1);
     this.reindex(relativePath);
