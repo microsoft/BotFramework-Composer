@@ -35,16 +35,22 @@ export class AzureBlobStorage implements IFileStorage {
       if (!isFile) {
         // if not a file, try to find dir with this prefix, if path is wrong, throw error.
         await new Promise((resolve, reject) => {
-          this.client.listBlobDirectoriesSegmentedWithPrefix(container, blobPrefix, null as any, (err, data) => {
-            if (err) {
-              reject(err);
-            } else {
-              if (data.entries.length <= 0) reject(new Error('path is not exists'));
-              lastModified = '';
-              size = '';
-              resolve(true);
+          this.client.listBlobDirectoriesSegmentedWithPrefix(
+            container,
+            blobPrefix,
+            null as any,
+            { delimiter: '/' },
+            (err, data) => {
+              if (err) {
+                reject(err);
+              } else {
+                if (data.entries.length <= 0) reject(new Error('path is not exists'));
+                lastModified = '';
+                size = '';
+                resolve(true);
+              }
             }
-          });
+          );
         });
       }
     }
