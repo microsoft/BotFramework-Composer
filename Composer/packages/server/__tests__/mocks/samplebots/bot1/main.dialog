@@ -1,3 +1,25 @@
 {
-  "old": "value"
+  "old": "value",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[hello] I'm a ToDo bot",
+      "$designer": {
+        "createdAt": "2019-05-06T20:59:09.555Z",
+        "updatedAt": "2019-05-06T20:59:18.580Z",
+        "id": "446871",
+        "name": "Welcome User"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[bye] See you again",
+      "$designer": {
+        "createdAt": "2019-05-06T20:59:09.555Z",
+        "updatedAt": "2019-05-06T20:59:18.580Z",
+        "id": "446871",
+        "name": "Thanks User"
+      }
+    }
+  ]
 }

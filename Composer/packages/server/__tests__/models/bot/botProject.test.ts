@@ -26,6 +26,10 @@ describe('index', () => {
     const project: { [key: string]: any } = await proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
     expect(project.lgFiles.length).toBe(1);
+
+    // find out lg templates used in
+    expect(project.dialogs[0].lgTemplates.length).toBe(2);
+    expect(project.dialogs[0].lgTemplates.join(',')).toBe(['hello', 'bye'].join(','));
   });
 });
 
