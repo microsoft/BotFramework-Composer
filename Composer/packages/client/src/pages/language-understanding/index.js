@@ -145,14 +145,14 @@ export const LUPage = props => {
           <Toggle
             css={actionButton}
             checked={textMode}
-            onText="Text editor"
+            onText={formatMessage('Text editor')}
             onChange={() => setTextMode(!textMode)}
-            offText="Text editor"
+            offText={formatMessage('Text editor')}
           />
           <PrimaryButton
             data-automation-id="Publish"
             onClick={() => setPublishModalOpen(true)}
-            text="Publish to Luis"
+            text={formatMessage('Publish to Luis')}
           />
         </div>
       </div>

@@ -124,21 +124,17 @@ export class BotProject {
     const absolutePath: string = Path.join(this.dir, relativePath);
     const newFileContent = await this._createFile(absolutePath, `${id}.lu`, content || '');
     this.luIndexer.createLuFile(id, newFileContent, relativePath);
-    await this.luPublisher.add(absolutePath);
     return this.luIndexer.getLuFiles();
   };
 
   public removeLuFile = async (id: string) => {
-    const relativePath = `${id.trim()}.lu`;
-    const absolutePath: string = Path.join(this.dir, relativePath);
-    await this._removeFile(relativePath);
+    await this._removeFile(`${id.trim()}.lu`);
     this.luIndexer.removeLuFile(id);
-    await this.luPublisher.remove(absolutePath);
     return this.luIndexer.getLuFiles();
   };
 
   public publishLuis = async (authoringKey: string) => {
-    return await this.luPublisher.publish(authoringKey);
+    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {

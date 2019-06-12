@@ -50,48 +50,46 @@ export default function PublishLuisModal(props) {
   };
 
   return (
-    <div>
-      <Dialog
-        hidden={!isOpen}
-        onDismiss={onDismiss}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: formatMessage('Publish LUIS models'),
-          subText: formatMessage(
-            'To use your language model, first publish the latest intents and examples to your LUIS instance.'
-          ),
-          styles: {
-            title: { fontWeight: FontWeights.bold },
-            subText: { fontSize: FontSizes.medium, fontWeight: FontWeights.semibold },
-          },
-        }}
-        modalProps={{
-          isBlocking: false,
-          styles: { main: { maxWidth: '450px !important' } },
-        }}
-      >
-        <form onSubmit={handlePublish}>
-          <TextField
-            label={formatMessage('Authoring key:')}
-            onChange={updateKey}
-            defaultValue={authoringKey}
-            required
-            errorMessage={formatMessage(errorMessage)}
-            componentRef={ref => {
-              if (ref) {
-                ref.focus();
-              }
-            }}
-          />
-        </form>
-        <DialogFooter>
-          <PrimaryButton onClick={handlePublish} text="Publish">
-            {fetchState === FETCHSTATE.PENDING ? <Spinner size={SpinnerSize.small} /> : null}
-          </PrimaryButton>
-          <DefaultButton onClick={onDismiss} text="Cancel" />
-        </DialogFooter>
-      </Dialog>
-    </div>
+    <Dialog
+      hidden={!isOpen}
+      onDismiss={onDismiss}
+      dialogContentProps={{
+        type: DialogType.normal,
+        title: formatMessage('Publish LUIS models'),
+        subText: formatMessage(
+          'To use your language model, first publish the latest intents and examples to your LUIS instance.'
+        ),
+        styles: {
+          title: { fontWeight: FontWeights.bold },
+          subText: { fontSize: FontSizes.medium, fontWeight: FontWeights.semibold },
+        },
+      }}
+      modalProps={{
+        isBlocking: false,
+        styles: { main: { maxWidth: '450px !important' } },
+      }}
+    >
+      <form onSubmit={handlePublish}>
+        <TextField
+          label={formatMessage('Authoring key:')}
+          onChange={updateKey}
+          defaultValue={authoringKey}
+          required
+          errorMessage={formatMessage(errorMessage)}
+          componentRef={ref => {
+            if (ref) {
+              ref.focus();
+            }
+          }}
+        />
+      </form>
+      <DialogFooter>
+        <PrimaryButton onClick={handlePublish} text={formatMessage('Publish')}>
+          {fetchState === FETCHSTATE.PENDING ? <Spinner size={SpinnerSize.small} /> : null}
+        </PrimaryButton>
+        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+      </DialogFooter>
+    </Dialog>
   );
 }
 
