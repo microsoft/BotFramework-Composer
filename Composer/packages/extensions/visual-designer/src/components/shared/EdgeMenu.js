@@ -50,7 +50,8 @@ export const EdgeMenu = ({ onClick }) => {
     >
       <IconMenu
         iconName="Add"
-        iconStyles={{ background: 'white', color: '#005CE6', transform: 'scale(0.5)' }}
+        iconStyles={{ background: 'white', color: '#005CE6' }}
+        iconSize={10}
         menuItems={createStepMenu($type => onClick($type))}
       />
     </div>

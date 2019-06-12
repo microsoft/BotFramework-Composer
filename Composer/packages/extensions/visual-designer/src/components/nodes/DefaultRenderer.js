@@ -134,7 +134,9 @@ export class DefaultRenderer extends React.Component {
       details = '';
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
-    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+    const dialogGroup = getDialogGroupByType(data.$type);
+    const nodeColors = getElementColor(dialogGroup);
+    const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
     if (keyMap) {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;
@@ -158,6 +160,7 @@ export class DefaultRenderer extends React.Component {
         nodeColors={nodeColors}
         header={header}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
+        icon={icon}
         label={label}
         details={details}
         onClick={() => {

@@ -2,19 +2,20 @@ import * as React from 'react';
 import { render } from 'react-testing-library';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
-import Routes from '../src/router';
 import { StoreProvider } from '../src/store';
 
-export function renderWithRouter(ui, { route = '/', history = createHistory(createMemorySource(route)) } = {}) {
+import { App } from './../src/App';
+
+function renderWithRouter(ui, { route = '/', history = createHistory(createMemorySource(route)) } = {}) {
   return {
     ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
     history,
   };
 }
 
-const App = () => (
+const AppTest = () => (
   <StoreProvider>
-    <Routes />
+    <App />
   </StoreProvider>
 );
 
@@ -23,7 +24,7 @@ describe('<Router/> router test', () => {
     const {
       container,
       history: { navigate },
-    } = renderWithRouter(<App />);
+    } = renderWithRouter(<AppTest />);
 
     const appContainer = container;
     expect(appContainer.innerHTML).toMatch('Dialogs');
@@ -33,7 +34,7 @@ describe('<Router/> router test', () => {
   });
 
   test('landing on a not found', () => {
-    const { container } = renderWithRouter(<App />, {
+    const { container } = renderWithRouter(<AppTest />, {
       route: '/something-that-does-not-match',
     });
 
