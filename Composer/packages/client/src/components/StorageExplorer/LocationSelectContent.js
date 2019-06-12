@@ -68,7 +68,9 @@ export function LocationSelectContent(props) {
 
   const checkDuplicate = value => {
     if (focusedStorageFolder.children) {
-      const index = findindex(focusedStorageFolder.children, { name: value });
+      const index = findindex(focusedStorageFolder.children, function(child) {
+        return child.name.toLowerCase() === value.toLowerCase();
+      });
       if (index >= 0) {
         return 'Duplicate folder name';
       }

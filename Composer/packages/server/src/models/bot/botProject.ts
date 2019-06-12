@@ -156,8 +156,10 @@ export class BotProject {
         storageId: locationRef.storageId,
         path: Path.join(locationRef.path, dstBotProj[0]),
       };
+    } else if (dstBotProj && dstBotProj.length > 1) {
+      throw new Error('new bot porject have more than one botproj file');
     } else {
-      throw new Error('new bot porject have not botproj file');
+      throw new Error('new bot porject have no botproj file');
     }
   };
 
