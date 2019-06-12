@@ -34,7 +34,7 @@ const TailSize = {
 };
 
 export const StepEditor = ({ id, data, focusedId, onEvent }) => {
-  const [contentBoundary, setContentBoundary] = useState(new Boundary(InitNodeSize.width, InitNodeSize.height));
+  const [stepGroupBoundary, setStepGroupBoundary] = useState(new Boundary(InitNodeSize.width, InitNodeSize.height));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -46,10 +46,11 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
       focusedId={focusedId}
       onEvent={onEvent}
       onResize={boundary => {
-        setContentBoundary(boundary);
+        setStepGroupBoundary(boundary);
       }}
     />
   );
+  const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;
 
   const editorWidth =
     Math.min(
