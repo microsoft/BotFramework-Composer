@@ -48,6 +48,8 @@ export default function FormEditor(props) {
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
 
+  console.log(props);
+
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
       const parseResult = LGParser.TryParse(lgFile.content);

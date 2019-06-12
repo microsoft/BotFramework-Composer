@@ -14,6 +14,7 @@ export default function Content(props) {
   const lgFile = props.file;
   const onChange = props.onChange;
   const textMode = props.textMode;
+  const activeDialog = props.activeDialog;
 
   return (
     <div css={contentEditor}>
@@ -21,7 +22,7 @@ export default function Content(props) {
         textMode ? (
           <LgEditor value={lgFile.content} onChange={onChange} />
         ) : (
-          <FormEditor file={lgFile} onChange={onChange} />
+          <FormEditor file={lgFile} activeDialog={activeDialog} onChange={onChange} />
         )
       ) : (
         <Fragment />
