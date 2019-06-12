@@ -106,7 +106,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         private void AddLuisConfig(string extractPath)
         {
-            string[] luconfigFiles = Directory.GetFiles(extractPath, "luconfig.json");
+            string[] luconfigFiles = Directory.GetFiles(extractPath, "luconfig.json", SearchOption.AllDirectories);
 
             // No luis model
             if (luconfigFiles.Length != 1)
@@ -121,20 +121,22 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             this.Config["luis:endpoint"] = luisEndpoint;
 
             // No luis settings
-            if (Directory.GetFiles(extractPath, settingsName).Length == 0)
+            var luisPaths = Directory.GetFiles(extractPath, settingsName, SearchOption.AllDirectories);
+            if (luisPaths.Length == 0)
             {
                 return;
             }
 
-            var luisPath = Path.Combine(extractPath, settingsName);
+            var luisPath = luisPaths[0];
 
             // No auth keys
-            if (Directory.GetFiles(extractPath, "key.json").Length == 0)
+            var keyPaths = Directory.GetFiles(extractPath, "key.json", SearchOption.AllDirectories);
+            if (keyPaths.Length == 0)
             {
                 return;
             }
 
-            var keyPath = Path.Combine(extractPath, "key.json");
+            var keyPath = keyPaths[0];
 
             var luisConfig = JsonConvert.DeserializeObject<LuisCustomConfig>(File.ReadAllText(luisPath));
             var keyConfig = JsonConvert.DeserializeObject<LuisKey>(File.ReadAllText(keyPath));
