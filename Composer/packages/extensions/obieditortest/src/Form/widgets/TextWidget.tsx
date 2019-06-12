@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
@@ -36,16 +37,23 @@ export function TextWidget(props: WidgetProps) {
     const step = type === 'integer' ? 1 : 0.1;
 
     return (
-      <SpinButton
-        label={label}
-        labelPosition={Position.top}
-        onDecrement={updateValue(-step)}
-        onIncrement={updateValue(step)}
-        onValidate={updateValue(0)}
-        disabled={Boolean(schema.const) || readonly || disabled}
-        step={step}
-        value={value}
-      />
+      <>
+        <SpinButton
+          label={label}
+          labelPosition={Position.top}
+          onDecrement={updateValue(-step)}
+          onIncrement={updateValue(step)}
+          onValidate={updateValue(0)}
+          disabled={Boolean(schema.const) || readonly || disabled}
+          step={step}
+          value={value}
+        />
+        {description && (
+          <span style={{ fontSize: '14px' }}>
+            <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
+          </span>
+        )}
+      </>
     );
   }
 
