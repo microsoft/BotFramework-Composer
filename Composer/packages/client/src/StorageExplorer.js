@@ -38,9 +38,9 @@ export function StorageExplorer() {
     closeExplorer();
   };
 
-  const handleOpenBot = (path, storageId) => {
+  const handleOpenBot = async (path, storageId) => {
     closeCurrentProject();
-    openBotProject(storageId, path);
+    await openBotProject(storageId, path);
     closeExplorer();
     reloadBot();
   };
