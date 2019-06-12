@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { getUiOptions } from '@bfdesigner/react-jsonschema-form/lib/utils';
+import get from 'lodash.get';
 import omit from 'lodash.omit';
 import { ObjectFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 import formatMessage from 'format-message';
@@ -33,7 +34,10 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
   const [editableProperty, setEditableProperty] = useState('');
 
   const handlePropertyEdit = (newName: string, newValue: string): void => {
-    props.onChange({ ...omit(props.formData, editableProperty), [newName]: newValue });
+    props.onChange({
+      ...omit(props.formData, editableProperty),
+      [newName]: newValue || get(props.formData, newName || editableProperty, ''),
+    });
     setShowModal(false);
     setEditableProperty('');
   };

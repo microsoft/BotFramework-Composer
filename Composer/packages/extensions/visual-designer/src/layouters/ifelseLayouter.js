@@ -1,153 +1,156 @@
-import { Boundary } from '../components/shared/Boundary';
-import { ElementInterval } from '../shared/elementSizes';
+import { Boundary } from '../shared/Boundary';
+import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
+import { GraphNode } from '../shared/GraphNode';
+
+import { measureIfElseBoundary } from './containerBoundaryMeasurer';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function ifElseLayouter(choiceNode, ifNode, elseNode) {
-  const containerBoundary = new Boundary();
-  if (!choiceNode) return { boundary: containerBoundary };
+export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
+  if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
 
-  const { width: ifWidth, height: ifHeight } = ifNode ? ifNode.boundary : new Boundary();
-  const { width: elseWith, height: elseHeight } = elseNode ? elseNode.boundary : new Boundary();
+  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
+  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
 
-  const flag = (ifNode ? '1' : '0') + (elseNode ? '1' : '0');
+  const containerBoundary = measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode);
+
+  const leftNode = ifNode || new GraphNode();
+  const rightNode = elseNode || new GraphNode();
+
+  const leftNodeText = 'True';
+  const rightNodeText = 'False';
+
+  // Condition
+  conditionNode.offset = {
+    x: containerBoundary.axisX - conditionNode.boundary.axisX,
+    y: 0,
+  };
+
+  // Diamond
+  choiceNode.offset = {
+    x: containerBoundary.axisX - choiceNode.boundary.axisX,
+    y: conditionNode.offset.y + conditionNode.boundary.height + BranchIntervalY,
+  };
+
+  const flag = (leftNode ? '1' : '0') + (rightNode ? '1' : '0');
   switch (flag) {
     case '11':
       /**
+       *     <Condition>
+       *          |
        *      <Choice>  --------
        *          |            |
-       *        [else]        [if]
+       *        [left]        [right]
        *          |-------------
        */
-      containerBoundary.axisX = Math.max(choiceNode.boundary.axisX, elseNode.boundary.axisX);
-      containerBoundary.width =
-        containerBoundary.axisX +
-        Math.max(
-          elseNode.boundary.width - elseNode.boundary.axisX,
-          choiceNode.boundary.width - choiceNode.boundary.axisX
-        ) +
-        BranchIntervalX +
-        ifWidth;
-      containerBoundary.height = Math.max(
-        choiceNode.boundary.height + BranchIntervalY + elseHeight + BranchIntervalY,
-        choiceNode.boundary.axisY + BranchIntervalY + ifHeight + BranchIntervalY
-      );
-
-      choiceNode.offset = {
-        x: containerBoundary.axisX - choiceNode.boundary.axisX,
-        y: 0,
+      leftNode.offset = {
+        x: containerBoundary.axisX - leftNode.boundary.axisX,
+        y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };
-      elseNode.offset = {
-        x: containerBoundary.axisX - elseNode.boundary.axisX,
-        y: choiceNode.boundary.height + BranchIntervalY,
+      rightNode.offset = {
+        x:
+          Math.max(choiceNode.offset.x + choiceNode.boundary.width, leftNode.offset.x + leftNode.boundary.width) +
+          BranchIntervalX,
+        y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };
-      ifNode.offset = {
-        x: Math.max(choiceNode.boundary.width, elseWith) + BranchIntervalX,
-        y: choiceNode.boundary.axisY + BranchIntervalY,
+      break;
+    case '01':
+      /**
+       *     <Condition>
+       *         |
+       *      <Choice>------
+       *         |        [right]
+       *         |         |
+       *         |----------
+       */
+      rightNode.offset = {
+        x: choiceNode.offset.x + choiceNode.boundary.width + BranchIntervalX,
+        y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };
       break;
     case '10':
       /**
-       *      <Choice>------
-       *         |        [if]
-       *         |         |
-       *         |----------
-       */
-      ifNode.offset = {
-        x: choiceNode.boundary.width + BranchIntervalX,
-        y: choiceNode.boundary.axisY + BranchIntervalY,
-      };
-      containerBoundary.width = ifNode.offset.x + ifWidth;
-      containerBoundary.height = Math.max(choiceNode.boundary.height, ifNode.offset.y + ifHeight) + BranchIntervalY;
-      containerBoundary.axisX = choiceNode.boundary.axisX;
-
-      choiceNode.offset = { x: 0, y: 0 };
-      break;
-    case '01':
-      /**
        *      <Choice> ----
        *          |       |
-       *        [else]    |
+       *        [left]    |
        *          |--------
        */
-      containerBoundary.width = Math.max(choiceNode.boundary.width, elseWith) + BranchIntervalX;
-      containerBoundary.height = choiceNode.boundary.height + elseHeight + BranchIntervalY * 2;
-      containerBoundary.axisX = Math.max(choiceNode.boundary.axisX, elseNode.boundary.axisX);
-
-      choiceNode.offset = {
-        x: containerBoundary.axisX - choiceNode.boundary.axisX,
-        y: 0,
-      };
-      elseNode.offset = {
-        x: containerBoundary.axisX - elseNode.boundary.axisX,
-        y: choiceNode.boundary.height + BranchIntervalY,
+      leftNode.offset = {
+        x: containerBoundary.axisX - leftNode.boundary.axisX,
+        y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
       };
       break;
     case '00':
       /**
+       *   <Condition>
+       *       |
        *    <Choice>
        */
-      containerBoundary.width = choiceNode.boundary.width;
-      containerBoundary.height = choiceNode.boundary.height;
-      containerBoundary.axisX = choiceNode.boundary.axisX;
-      choiceNode.offset = { x: 0, y: 0 };
       break;
     default:
       break;
   }
 
   const edgeList = [];
-  if (ifNode) {
+  edgeList.push({
+    id: `edge/${conditionNode.id}/condition->choice`,
+    direction: 'y',
+    x: containerBoundary.axisX,
+    y: conditionNode.offset.y + conditionNode.boundary.height,
+    length: BranchIntervalY,
+  });
+
+  if (rightNode) {
     edgeList.push(
       {
-        id: `edge/${ifNode.id}/if/choice->top}`,
+        id: `edge/${rightNode.id}/right/choice->top}`,
         direction: 'x',
         x: choiceNode.offset.x + choiceNode.boundary.width,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
-        length: ifNode.offset.x + ifNode.boundary.axisX - choiceNode.boundary.width - choiceNode.offset.x,
-        text: 'Y',
+        length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.width - choiceNode.offset.x,
+        text: rightNodeText,
       },
       {
-        id: `edge/${ifNode.id}/if/top->if}`,
+        id: `edge/${rightNode.id}/right/top->node}`,
         direction: 'y',
-        x: ifNode.offset.x + ifNode.boundary.axisX,
+        x: rightNode.offset.x + rightNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
       },
       {
-        id: `edge/${ifNode.id}/if/if->border.bottom`,
+        id: `edge/${rightNode.id}/right/node->border.bottom`,
         direction: 'y',
-        x: ifNode.offset.x + ifNode.boundary.axisX,
-        y: ifNode.offset.y + ifNode.boundary.height,
-        length: containerBoundary.height - (ifNode.offset.y + ifNode.boundary.height),
+        x: rightNode.offset.x + rightNode.boundary.axisX,
+        y: rightNode.offset.y + rightNode.boundary.height,
+        length: containerBoundary.height - (rightNode.offset.y + rightNode.boundary.height),
       },
       {
-        id: `edge/${ifNode.id}/if/border.bottom->out`,
+        id: `edge/${rightNode.id}/right/border.bottom->axis`,
         direction: 'x',
         x: containerBoundary.axisX,
         y: containerBoundary.height,
-        length: ifNode.offset.x + ifNode.boundary.axisX - containerBoundary.axisX,
+        length: rightNode.offset.x + rightNode.boundary.axisX - containerBoundary.axisX,
       }
     );
   } else {
     edgeList.push(
       {
-        id: `edge/${choiceNode.id}/if/choice->border.right`,
+        id: `edge/${choiceNode.id}/right/choice->border.right`,
         direction: 'x',
         x: choiceNode.offset.x + choiceNode.boundary.width,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: containerBoundary.width - (choiceNode.offset.x + choiceNode.boundary.width),
       },
       {
-        id: `edge/${choiceNode.id}/if/border.top->border.bottom`,
+        id: `edge/${choiceNode.id}/right/border.top->border.bottom`,
         direction: 'y',
         x: containerBoundary.width,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.axisY),
       },
       {
-        id: `edge/${choiceNode.id}/if/border.bottom->out`,
+        id: `edge/${choiceNode.id}/right/border.bottom->out`,
         direction: 'x',
         x: containerBoundary.axisX,
         y: containerBoundary.height,
@@ -156,37 +159,38 @@ export function ifElseLayouter(choiceNode, ifNode, elseNode) {
     );
   }
 
-  if (elseNode) {
+  if (leftNode) {
     edgeList.push(
       {
-        id: `edge/${elseNode.id}/else/choice->else`,
+        id: `edge/${leftNode.id}/left/choice->else`,
         direction: 'y',
         x: containerBoundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.height,
         length: BranchIntervalY,
-        text: 'N',
+        text: leftNodeText,
       },
       {
-        id: `edge/${elseNode.id}/else/else->out`,
+        id: `edge/${leftNode.id}/left/else->out`,
         direction: 'y',
         x: containerBoundary.axisX,
-        y: elseNode.offset.y + elseNode.boundary.height,
-        length: containerBoundary.height - (elseNode.offset.y + elseNode.boundary.height),
+        y: leftNode.offset.y + leftNode.boundary.height,
+        length: containerBoundary.height - (leftNode.offset.y + leftNode.boundary.height),
       }
     );
   } else {
     edgeList.push({
-      id: `edge/${choiceNode.id}/else/choice->out`,
+      id: `edge/${choiceNode.id}/left/choice->out`,
       x: containerBoundary.axisX,
       y: choiceNode.offset.y + choiceNode.boundary.height,
       length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
-      text: 'N',
+      text: leftNodeText,
     });
   }
 
   return {
     boundary: containerBoundary,
     nodeMap: {
+      condition: conditionNode,
       choice: choiceNode,
       if: ifNode,
       else: elseNode,

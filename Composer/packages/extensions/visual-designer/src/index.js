@@ -2,11 +2,15 @@ import React, { useRef } from 'react';
 import PropType from 'prop-types';
 import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { isLayoutEqual } from './shared/isLayoutEqual';
 
 initializeIcons(/* optional base url */);
+formatMessage.setup({
+  missingTranslation: 'ignore',
+});
 
 const JSON_PATH_PREFIX = '$';
 

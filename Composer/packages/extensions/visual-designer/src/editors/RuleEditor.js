@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
-import { GraphNode } from '../components/shared/GraphNode';
+import { GraphNode } from '../shared/GraphNode';
 import { transformObiRules } from '../transformers/transformObiRules';
 
 import { StepEditor } from './StepEditor';

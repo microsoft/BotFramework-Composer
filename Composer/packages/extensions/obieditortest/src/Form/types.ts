@@ -8,6 +8,7 @@ export interface FormContext {
   rootId: string;
   luFiles: LuFile[];
   dialogOptions: string[];
+  dialogName: string;
 }
 
 interface EnumOption {
