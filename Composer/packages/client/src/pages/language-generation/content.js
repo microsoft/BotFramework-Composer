@@ -15,15 +15,17 @@ export default function Content(props) {
   const onChange = props.onChange;
   const textMode = props.textMode;
 
-  return lodash.isEmpty(lgFile) === false ? (
-    textMode ? (
-      <div css={contentEditor}>
-        <LgEditor value={lgFile.content} onChange={onChange} />
-      </div>
-    ) : (
-      <FormEditor file={lgFile} onChange={onChange} />
-    )
-  ) : (
-    <Fragment />
+  return (
+    <div css={contentEditor}>
+      {lodash.isEmpty(lgFile) === false ? (
+        textMode ? (
+          <LgEditor value={lgFile.content} onChange={onChange} />
+        ) : (
+          <FormEditor file={lgFile} onChange={onChange} />
+        )
+      ) : (
+        <Fragment />
+      )}
+    </div>
   );
 }

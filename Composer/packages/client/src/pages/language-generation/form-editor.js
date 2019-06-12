@@ -1,17 +1,23 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import lodash from 'lodash';
 import debounce from 'lodash.debounce';
-import { Fragment, useContext, useRef } from 'react';
-import { DetailsList, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { useContext, useRef, useEffect, useState } from 'react';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IconButton } from 'office-ui-fabric-react';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { ScrollToMode } from 'office-ui-fabric-react/lib/List';
 import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
 
 import { Store } from '../../store/index';
-
-import { actionButton } from './styles';
+import { actionButton, formCell } from '../language-understanding/styles';
 
 const lgParserValidate = (name, body) => {
   const text = ['#', name, '\n', body].join('');
@@ -37,59 +43,142 @@ const randomName = () => {
 export default function FormEditor(props) {
   const { actions } = useContext(Store);
   const lgFile = props.file;
+  const selectedTemplate = props.selectedTemplate;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const [templates, setTemplates] = useState([]);
+  const listRef = useRef(null);
 
-  const items = [...lgFile.templates];
+  useEffect(() => {
+    if (lodash.isEmpty(lgFile) === false) {
+      const parseResult = LGParser.TryParse(lgFile.content);
+
+      if (parseResult.isValid) {
+        const newTemplates = parseResult.templates.map((template, templateIndex) => {
+          return {
+            ...template,
+            index: templateIndex,
+          };
+        });
+
+        setTemplates(newTemplates);
+      }
+    }
+  }, [lgFile]);
+
+  useEffect(() => {
+    if (selectedTemplate) {
+      listRef.current.scrollToIndex(
+        7,
+        () => {
+          return 50;
+        },
+        ScrollToMode.top
+      );
+    }
+  }, [selectedTemplate]);
+
+  const getTemplatesMoreButtons = (item, index) => {
+    return [
+      {
+        key: 'edit',
+        name: 'Edit',
+        onClick: () => {
+          const newItems = templates.map((t, idx) => {
+            if (idx === index) {
+              return { ...t, editing: true };
+            }
+
+            return t;
+          });
+          setTemplates(newItems);
+        },
+      },
+      {
+        key: 'delete',
+        name: 'Delete',
+        onClick: () => {
+          onRemoveTemplate(index);
+        },
+      },
+      {
+        key: 'copy',
+        name: 'Make a copy',
+        onClick: () => {
+          onCopyTemplate(index);
+        },
+      },
+    ];
+  };
 
   const tableColums = [
     {
       key: 'name',
       name: formatMessage('Name'),
       fieldName: 'name',
-      minWidth: 150,
-      maxWidth: 200,
-      isRowHeader: true,
+      minWidth: 100,
+      maxWidth: 150,
       isResizable: true,
       data: 'string',
-      onRender: item => {
+      onRender: (item, index) => {
         return (
-          <TextField
-            borderless
-            placeholder={formatMessage('Template Name.')}
-            value={item.Name}
-            validateOnLoad={false}
-            onGetErrorMessage={newName => {
-              return validateNameMessage(newName);
-            }}
-            onBlur={() => submitTemplateChange(item)}
-            onChange={(event, newName) => updateTemplateContent(item, newName, item.Body)}
-          />
+          <div style={{ display: 'flex', alignItems: 'center' }} css={formCell}>
+            <div>#</div>
+            {item.editing ? (
+              <TextField
+                borderless
+                placeholder={formatMessage('Template Name.')}
+                value={item.Name}
+                validateOnLoad={false}
+                onGetErrorMessage={newName => {
+                  return validateNameMessage(newName);
+                }}
+                onBlur={() => submitTemplateChange(index)}
+                onChange={(event, newName) => updateTemplateContent(index, newName, item.Body)}
+              />
+            ) : (
+              <div>{item.Name}</div>
+            )}
+          </div>
         );
       },
     },
     {
-      key: 'phrase',
-      name: formatMessage('Sample phrase'),
-      fieldName: 'samplePhrase',
+      key: 'responses',
+      name: formatMessage('Responses'),
+      fieldName: 'responses',
       minWidth: 500,
       isResizable: true,
       data: 'string',
       isPadded: true,
-      onRender: item => {
-        return <span>{getTemplatePhrase(item)}</span>;
+      onRender: getTemplateDetailCell,
+    },
+    {
+      key: 'usedIn',
+      name: formatMessage('Used in:'),
+      fieldName: 'usedIn',
+      minWidth: 100,
+      maxWidth: 200,
+      data: 'string',
+      onRender: () => {
+        return <Link>PlaceHolder</Link>;
       },
     },
     {
       key: 'buttons',
-      name: formatMessage('Delete template'),
-      fieldName: 'buttons',
+      name: '',
       minWidth: 50,
-      maxWidth: 100,
+      maxWidth: 50,
+      fieldName: 'buttons',
       data: 'string',
-      isPadded: true,
-      onRender: item => {
+      onRender: (item, index) => {
         return (
-          <ActionButton css={actionButton} iconProps={{ iconName: 'Delete' }} onClick={() => onRemoveTemplate(item)} />
+          <IconButton
+            menuIconProps={{ iconName: 'More' }}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: getTemplatesMoreButtons(item, index),
+            }}
+          />
         );
       },
     },
@@ -100,7 +189,7 @@ export default function FormEditor(props) {
       return formatMessage('name can not be empty');
     }
 
-    if (items.filter(item => item.Name === name).length > 1) {
+    if (templates.findIndex(item => item.Name === name).length > -1) {
       return formatMessage('name has been taken');
     }
 
@@ -111,35 +200,67 @@ export default function FormEditor(props) {
     return lgParserValidate('name', body);
   };
 
-  function getTemplatePhrase(item) {
+  function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <TextField
-        borderless
-        multiline
-        autoAdjustHeight
-        placeholder={formatMessage('Template Content.')}
-        value={item.Body}
-        validateOnLoad={false}
-        onGetErrorMessage={newBody => {
-          return validateBodyMessage(newBody);
-        }}
-        onBlur={() => submitTemplateChange(item)}
-        onChange={(event, newBody) => updateTemplateContent(item, item.Name, newBody)}
-      />
+      <div data-testid="formHeader">
+        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+          {defaultRender({
+            ...props,
+            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          })}
+        </Sticky>
+      </div>
+    );
+  }
+  function onRenderDetailsFooter() {
+    return (
+      <div data-testid="formFooter">
+        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
+          {formatMessage('New template')}
+        </ActionButton>
+      </div>
+    );
+  }
+  function getTemplateDetailCell(item, index) {
+    return (
+      <div css={formCell}>
+        {item.editing ? (
+          <TextField
+            borderless
+            multiline
+            autoAdjustHeight
+            placeholder={formatMessage('Template Content.')}
+            value={item.Body}
+            validateOnLoad={false}
+            onGetErrorMessage={newBody => {
+              return validateBodyMessage(newBody);
+            }}
+            onBlur={() => submitTemplateChange(index)}
+            onChange={(event, newBody) => updateTemplateContent(index, item.Name, newBody)}
+          />
+        ) : (
+          <div css={formCell}>{item.Body}</div>
+        )}
+      </div>
     );
   }
 
   // submit template change in component state
-  function submitTemplateChange(currentTemplate) {
-    const templateInState = items.find(item => currentTemplate.Name === item.Name);
-    const templateIndex = items.findIndex(item => currentTemplate.Name === item.Name);
+  function submitTemplateChange(templateIndex) {
+    const templateInState = templates[templateIndex];
     const { Name, Body, changed } = templateInState;
     const isValid = lgParserValidate(Name, Body);
-
-    // if no change, reject
-    // if is not valid, reject
-    if (changed !== true || isValid !== '') return;
     const templateInLgFile = lgFile.templates[templateIndex];
+
+    // if no change, set editing status to false
+    if (changed !== true) {
+      templateInLgFile.editing = false;
+      setTemplates(lgFile.templates);
+      return;
+    }
+
+    // if is not valid, reject
+    if (isValid !== '') return;
 
     templateInLgFile.Name = Name;
     templateInLgFile.Body = Body;
@@ -150,17 +271,15 @@ export default function FormEditor(props) {
     updateLgFile(payload);
   }
 
-  // update template in component state
-  function updateTemplateContent(currentTemplate, newName, newBody) {
-    const template = items.find(item => currentTemplate.Name === item.Name);
-    template.Name = newName;
-    template.Body = newBody;
-    template.changed = true;
+  // update local templates
+  function updateTemplateContent(index, newName, newBody) {
+    const newTemplates = [...templates];
+    newTemplates.splice(index, 1, { ...templates[index], Name: newName, Body: newBody, changed: true });
+    setTemplates(newTemplates);
   }
 
   function onCreateNewTemplate() {
-    const newItems = [...items];
-    newItems.push({
+    const newItems = templates.concat({
       Name: randomName(), // need optimize
       Body: '-TemplateValue',
     });
@@ -171,13 +290,24 @@ export default function FormEditor(props) {
     updateLgFile(payload);
   }
 
-  function onRemoveTemplate(item) {
-    const newItems = [...items];
-    const templateIndex = items.findIndex(template => {
-      return item.Name === template.Name;
-    });
+  function onRemoveTemplate(index) {
+    const newItems = [...templates];
+    newItems.splice(index, 1);
+    const payload = {
+      id: lgFile.id,
+      content: textFromTemplates(newItems),
+    };
 
-    newItems.splice(templateIndex, 1);
+    updateLgFile(payload);
+  }
+
+  function onCopyTemplate(index) {
+    const newItems = [...templates];
+
+    newItems.push({
+      Name: `${newItems[index].Name}.Copy`,
+      Body: newItems[index].Body,
+    });
     const payload = {
       id: lgFile.id,
       content: textFromTemplates(newItems),
@@ -187,21 +317,20 @@ export default function FormEditor(props) {
   }
 
   return (
-    <Fragment>
-      <div>
-        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
-          {formatMessage('New template')}
-        </ActionButton>
+    <div className={'form-list-editor'}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
-          items={lgFile.templates}
+          componentRef={listRef}
+          items={templates}
           compact={false}
           columns={tableColums}
           getKey={item => item.Name}
-          // layoutMode={DetailsListLayoutMode.fixedColumns}
-          // onRenderDetailsHeader={onRenderDetailsHeader}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          onRenderDetailsFooter={onRenderDetailsFooter}
           selectionMode={SelectionMode.none}
         />
-      </div>
-    </Fragment>
+      </ScrollablePane>
+    </div>
   );
 }
