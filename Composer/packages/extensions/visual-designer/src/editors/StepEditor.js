@@ -4,9 +4,9 @@ import { StepGroup } from '../components/groups';
 import { EdgeMenu } from '../components/shared/EdgeMenu';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
-import { Boundary } from '../components/shared/Boundary';
-import { EdgeAddButtonSize, ElementInterval } from '../shared/elementSizes';
-import { OffsetContainer } from '../components/shared/OffsetContainer';
+import { Boundary } from '../shared/Boundary';
+import { ElementInterval, InitNodeSize } from '../shared/elementSizes';
+import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 
 const TriggerSize = { width: 280, height: 40 };
@@ -34,9 +34,7 @@ const TailSize = {
 };
 
 export const StepEditor = ({ id, data, focusedId, onEvent }) => {
-  const [contentBoundary, setContentBoundary] = useState(
-    new Boundary(EdgeAddButtonSize.width, EdgeAddButtonSize.height)
-  );
+  const [stepGroupBoundary, setStepGroupBoundary] = useState(new Boundary(InitNodeSize.width, InitNodeSize.height));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -48,14 +46,17 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
       focusedId={focusedId}
       onEvent={onEvent}
       onResize={boundary => {
-        setContentBoundary(boundary);
+        setStepGroupBoundary(boundary);
       }}
     />
   );
+  const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;
 
   const editorWidth =
-    Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.axisX) +
-    Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.width - contentBoundary.axisX);
+    Math.min(
+      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.axisX),
+      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.width - contentBoundary.axisX)
+    ) * 2;
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
   const editorAxisX = editorWidth / 2;
 

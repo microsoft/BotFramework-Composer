@@ -3,7 +3,7 @@ import { IconButton } from 'office-ui-fabric-react';
 
 import { PanelSize } from '../../../shared/elementSizes';
 
-export const Panel = ({ title, children, collapsedItems }) => {
+export const Panel = ({ title, children, collapsedItems, addMenu }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [width, setWidth] = useState(PanelSize.defaultWidth);
 
@@ -42,35 +42,52 @@ export const Panel = ({ title, children, collapsedItems }) => {
     };
   });
   return (
-    <div
-      style={{
-        border: '1px solid #656565',
-        boxSizing: 'border-box',
-        padding: '24px 0px 12px 24px',
-        maxHeight: PanelSize.maxHeight,
-        width: width,
-        minWidth: PanelSize.minWidth,
-        maxWidth: PanelSize.maxWidth,
-        overflow: 'auto',
-        margin: '0 auto',
-        position: 'relative',
-      }}
-    >
+    <div style={{ width: '100%' }}>
       <div
         style={{
           display: 'flex',
-          marginBottom: '12px',
           alignItems: 'center',
+          justifyContent: 'space-between',
+          width: width,
+          margin: '0 auto',
+          minWidth: PanelSize.minWidth,
+          maxWidth: PanelSize.maxWidth,
         }}
       >
-        <div style={{ width: 'calc(100% - 30px)' }}>{title}</div>
+        <div
+          style={{
+            flex: 1,
+            color: '#656565',
+            fontSize: '12px',
+            lineHeight: '19px',
+            height: '22px',
+          }}
+        >
+          {title}
+        </div>
         <IconButton
           iconProps={{ iconName: 'PageRight' }}
-          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginRight: '18px' }}
+          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginRight: '-15px' }}
           onClick={collapseFuc}
         />
       </div>
-      {collapsed ? <div>{collapsedItems}</div> : <div>{children}</div>}
+      <div
+        style={{
+          border: '1px solid #656565',
+          boxSizing: 'border-box',
+          padding: '24px 0px 12px 24px',
+          maxHeight: PanelSize.maxHeight,
+          width: width,
+          minWidth: PanelSize.minWidth,
+          maxWidth: PanelSize.maxWidth,
+          overflow: 'auto',
+          margin: '0 auto',
+          position: 'relative',
+        }}
+      >
+        {collapsed ? <div>{collapsedItems}</div> : <div>{children}</div>}
+        <div>{addMenu}</div>
+      </div>
     </div>
   );
 };

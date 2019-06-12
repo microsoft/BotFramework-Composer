@@ -1,0 +1,110 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$designer": {
+    "createdAt": "2019-06-07T15:34:42.559Z",
+    "updatedAt": "2019-06-07T15:34:42.563Z",
+    "id": "718203"
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "elseSteps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.TextInput"
+            },
+            {
+              "$type": "Microsoft.BeginDialog"
+            },
+            {
+              "$type": "Microsoft.CancelAllDialogs"
+            }
+          ],
+          "$designer": {
+            "createdAt": "2019-06-07T15:35:32.791Z",
+            "updatedAt": "2019-06-07T15:35:32.814Z",
+            "id": "323876"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity"
+            },
+            {
+              "$type": "Microsoft.SendActivity"
+            },
+            {
+              "$type": "Microsoft.SwitchCondition",
+              "$designer": {
+                "createdAt": "2019-06-07T15:36:09.048Z",
+                "updatedAt": "2019-06-07T15:36:17.196Z",
+                "id": "100183"
+              },
+              "cases": [
+                {
+                  "value": "a",
+                  "steps": [
+                    {
+                      "$type": "Microsoft.SetProperty"
+                    }
+                  ]
+                },
+                {
+                  "value": "b",
+                  "steps": [
+                    {
+                      "$type": "Microsoft.IfCondition",
+                      "elseSteps": [
+                        {
+                          "$type": "Microsoft.SendActivity"
+                        }
+                      ],
+                      "steps": [
+                        {
+                          "$type": "Microsoft.SendActivity"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "value": "c",
+                  "steps": [
+                    {
+                      "$type": "Microsoft.SendActivity"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity"
+            },
+            {
+              "$type": "Microsoft.SendActivity"
+            }
+          ],
+          "$designer": {
+            "createdAt": "2019-06-07T15:35:34.911Z",
+            "updatedAt": "2019-06-07T15:35:34.934Z",
+            "id": "997205"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -52,6 +52,10 @@ const ContentKeyByTypes = {
   [ObiTypes.SetProperty]: {
     label: 'property',
   },
+  [ObiTypes.ConditionNode]: {
+    header: 'Branch',
+    label: 'condition',
+  },
   [ObiTypes.DeleteProperty]: {
     label: 'property',
   },
@@ -132,7 +136,7 @@ export class DefaultRenderer extends React.Component {
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
     const nodeColors = getElementColor(getDialogGroupByType(data.$type));
     if (keyMap) {
-      header = header || data[keyMap.header] || header;
+      header = header || keyMap.header || '';
       label = data[keyMap.label] || label;
       details = data[keyMap.details] || details;
     }
