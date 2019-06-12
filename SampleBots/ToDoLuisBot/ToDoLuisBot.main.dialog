@@ -3,7 +3,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "autoEndDialog": false,
-  "recognizer": "ToDoLuis.lu",
+  "recognizer": "ToDoLuisBot.main.lu",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
@@ -19,7 +19,7 @@ import Content from './content';
 export const LGPage = props => {
   const fileId = props.fileId;
   const { state, actions } = useContext(Store);
-  const updateLgFile = useRef(lodash.debounce(actions.updateLgFile, 500)).current;
+  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const { lgFiles } = state;
   const [modalOpen, setModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(false);
@@ -29,21 +29,22 @@ export const LGPage = props => {
   const [lgFile, setLgFile] = useState(null);
 
   useEffect(() => {
-    const lgFile = lgFiles.find(file => file.id === fileId);
+    const lgCloneFiles = cloneDeep(lgFiles);
+    const lgFile = lgCloneFiles.find(file => file.id === fileId);
 
     // if not found, redirect to first lg file
-    if (lgFiles.length !== 0 && lgFile === undefined) {
-      navigate(`./${lgFiles[0].id}`);
+    if (lgCloneFiles.length !== 0 && lgFile === undefined) {
+      navigate(`./${lgCloneFiles[0].id}`);
     }
 
-    lgFiles.forEach(file => {
+    lgCloneFiles.forEach(file => {
       const parseResult = LGParser.TryParse(file.content);
       if (parseResult.isValid) {
         file.templates = parseResult.templates;
       }
     });
 
-    const links = lgFiles.map(file => {
+    const links = lgCloneFiles.map(file => {
       let subNav = [];
 
       // in case of unvalid LGParser templates

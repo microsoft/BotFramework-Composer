@@ -21,25 +21,32 @@ export const Collapse = ({ text, children }) => {
       <div
         style={{
           display: 'flex',
+          alignItems: 'center',
           width: Width,
         }}
       >
         <div
           style={{
-            flex: 1,
             color: '#605E5C',
             fontSize: '12px',
             lineHeight: '19px',
             height: '22px',
-            borderBottom: '1px solid #000000',
+            marginRight: '20px',
           }}
         >
           {text}
         </div>
+        <div
+          style={{
+            flex: 1,
+            border: '0.5px solid #000000',
+            transform: 'rotate(0.01deg)',
+          }}
+        />
         <IconButton
           onClick={collapseFuc}
           iconProps={{ iconName: 'PageRight' }}
-          style={{ transform: collapsed ? 'none' : 'rotate(90deg)' }}
+          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginLeft: '12px' }}
         />
       </div>
       <div style={{ display: collapsed ? 'none' : 'block' }}>{children}</div>

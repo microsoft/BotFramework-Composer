@@ -1,5 +1,12 @@
 import { get, set, cloneDeep, replace } from 'lodash';
 
+export function getDialogName(path) {
+  const realPath = replace(path, '#.', '#');
+  const [dialogName] = realPath.split('#');
+
+  return dialogName;
+}
+
 export function getDialogData(dialogsMap, path) {
   if (path === '') return '';
   const realPath = replace(path, '#.', '#');
