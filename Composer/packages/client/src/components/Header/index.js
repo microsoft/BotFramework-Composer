@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { PropTypes } from 'prop-types';
@@ -23,6 +24,8 @@ const openInEmulator = url => {
 export const Header = props => {
   const { botStatus, loadBotStatus, connectBot, reloadBot, openStorageExplorer } = props;
   const connected = botStatus === 'connected';
+  const connecting = botStatus === 'connecting';
+  const loading = loadBotStatus === 'loading';
 
   useEffect(() => {
     connectBot();
@@ -69,19 +72,17 @@ export const Header = props => {
             </ActionButton>
           )}
           {!connected && <Icon iconName="IncidentTriangle" css={warning} />}
-          {!connected && <Text css={warning}>{formatMessage('Lack of Bot runtime')}</Text>}
+          {!connected && <Text css={warning}>{formatMessage('Nothing is runing at localhost:3979')}</Text>}
           <PrimaryButton
             css={botButton}
             text={
-              connected
-                ? loadBotStatus === 'loading'
-                  ? formatMessage('Reloading')
-                  : formatMessage('Reload')
-                : formatMessage('Connect')
+              connected ? (loading ? formatMessage('Reloading') : formatMessage('Reload')) : formatMessage('Connect')
             }
             onClick={() => (connected ? reloadBot() : connectBot())}
-            disabled={loadBotStatus === 'loading' || botStatus === 'connecting'}
-          />
+            disabled={connecting || loading}
+          >
+            {loading && <Spinner size={SpinnerSize.small} />}
+          </PrimaryButton>
         </div>
       </div>
     </header>

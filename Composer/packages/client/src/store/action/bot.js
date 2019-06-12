@@ -11,7 +11,6 @@ export async function connectBot(dispatch) {
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
         status: 'connected',
-        msg: 'Connect Successfully',
       },
     });
     await reloadBot(dispatch);
@@ -21,7 +20,6 @@ export async function connectBot(dispatch) {
       payload: {
         error: err,
         status: 'unconnected',
-        msg: 'No bot runtime, pls run it',
       },
     });
   }
@@ -48,6 +46,14 @@ export async function reloadBot(dispatch) {
       type: ActionTypes.RELOAD_BOT_FAILURE,
       payload: {
         status: 'unloaded',
+      },
+    });
+
+    dispatch({
+      type: ActionTypes.CONNECT_BOT_FAILURE,
+      payload: {
+        error: err,
+        status: 'unconnected',
       },
     });
   }
