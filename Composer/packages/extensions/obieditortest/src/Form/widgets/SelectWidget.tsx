@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dropdown, IDropdownOption, ColorClassNames, FontClassNames, autobind } from 'office-ui-fabric-react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
 import { ResponsiveMode } from 'office-ui-fabric-react/lib/utilities/decorators/withResponsiveMode';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { SelectWidgetProps } from '../types';
 
