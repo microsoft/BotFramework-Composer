@@ -269,14 +269,11 @@ export class BotProject {
 
   // ensure dir exist, dir is a absolute dir path
   private ensureDirExists = async (dir: string) => {
-    try {
+    if (!dir || dir === '.') {
+      return;
+    }
+    if (!(await this.fileStorage.exists(dir))) {
       await this.fileStorage.mkDir(dir, { recursive: true });
-    } catch (error) {
-      // if dir already exists, ignore. and throw other errors
-      // error code equals EEXIST in localDisk, but not sure other storage
-      if (error.code && error.code !== 'EEXIST') {
-        throw error;
-      }
     }
   };
 
