@@ -5,25 +5,17 @@ import lodash from 'lodash';
 import debounce from 'lodash.debounce';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollToMode } from 'office-ui-fabric-react/lib/List';
 import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
 
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
-
-const lgParserValidate = (name, body) => {
-  const text = ['#', name, '\n', body].join('');
-  const res = LGParser.TryParse(text);
-  return res.isValid ? '' : res.error.Message;
-};
 
 const textFromTemplates = templates => {
   let text = '';
@@ -41,46 +33,46 @@ const randomName = () => {
 };
 
 export default function FormEditor(props) {
-  const { actions } = useContext(Store);
+  const { state, actions } = useContext(Store);
+  const { dialogs } = state;
   const lgFile = props.file;
-  const selectedTemplate = props.selectedTemplate;
+  const activeDialog = props.activeDialog;
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
-
-  console.log(props);
 
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
       const parseResult = LGParser.TryParse(lgFile.content);
 
       if (parseResult.isValid) {
-        const newTemplates = parseResult.templates.map((template, templateIndex) => {
+        const allTemplates = parseResult.templates.map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,
           };
         });
 
-        setTemplates(newTemplates);
+        if (!activeDialog) {
+          setTemplates(allTemplates);
+        } else {
+          const dialogsReferenceThisTemplate = activeDialog.lgTemplates.reduce((result, item) => {
+            const template = allTemplates.find(t => t.Name === item);
+            if (!template) {
+              new Error(`lg template ${item} not found`);
+            } else {
+              result.push(template);
+            }
+            return result;
+          }, []);
+          setTemplates(dialogsReferenceThisTemplate);
+        }
       }
     }
-  }, [lgFile]);
-
-  useEffect(() => {
-    if (selectedTemplate) {
-      listRef.current.scrollToIndex(
-        7,
-        () => {
-          return 50;
-        },
-        ScrollToMode.top
-      );
-    }
-  }, [selectedTemplate]);
+  }, [lgFile, activeDialog]);
 
   const getTemplatesMoreButtons = (item, index) => {
-    return [
+    const buttons = [
       {
         key: 'edit',
         name: 'Edit',
@@ -110,96 +102,97 @@ export default function FormEditor(props) {
         },
       },
     ];
-  };
 
-  const tableColums = [
-    {
-      key: 'name',
-      name: formatMessage('Name'),
-      fieldName: 'name',
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true,
-      data: 'string',
-      onRender: (item, index) => {
-        return (
-          <div style={{ display: 'flex', alignItems: 'center' }} css={formCell}>
-            <div>#</div>
-            {item.editing ? (
-              <TextField
-                borderless
-                placeholder={formatMessage('Template Name.')}
-                value={item.Name}
-                validateOnLoad={false}
-                onGetErrorMessage={newName => {
-                  return validateNameMessage(newName);
-                }}
-                onBlur={() => submitTemplateChange(index)}
-                onChange={(event, newName) => updateTemplateContent(index, newName, item.Body)}
-              />
-            ) : (
-              <div>{item.Name}</div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      key: 'responses',
-      name: formatMessage('Responses'),
-      fieldName: 'responses',
-      minWidth: 500,
-      isResizable: true,
-      data: 'string',
-      isPadded: true,
-      onRender: getTemplateDetailCell,
-    },
-    {
-      key: 'usedIn',
-      name: formatMessage('Used in:'),
-      fieldName: 'usedIn',
-      minWidth: 100,
-      maxWidth: 200,
-      data: 'string',
-      onRender: () => {
-        return <Link>PlaceHolder</Link>;
-      },
-    },
-    {
-      key: 'buttons',
-      name: '',
-      minWidth: 50,
-      maxWidth: 50,
-      fieldName: 'buttons',
-      data: 'string',
-      onRender: (item, index) => {
-        return (
-          <IconButton
-            menuIconProps={{ iconName: 'More' }}
-            menuProps={{
-              shouldFocusOnMount: true,
-              items: getTemplatesMoreButtons(item, index),
-            }}
-          />
-        );
-      },
-    },
-  ];
-
-  const validateNameMessage = name => {
-    if (name === '') {
-      return formatMessage('name can not be empty');
+    // do not allow delete/copy template in particular dialog
+    if (activeDialog) {
+      buttons.splice(1, 2);
     }
 
-    if (templates.findIndex(item => item.Name === name).length > -1) {
-      return formatMessage('name has been taken');
-    }
-
-    return lgParserValidate(name, '- body');
+    return buttons;
   };
 
-  const validateBodyMessage = body => {
-    return lgParserValidate('name', body);
+  const getTableColums = () => {
+    const tableColums = [
+      {
+        key: 'name',
+        name: formatMessage('Name'),
+        fieldName: 'name',
+        minWidth: 100,
+        maxWidth: 150,
+        isResizable: true,
+        data: 'string',
+        onRender: item => {
+          return <div css={formCell}>#{item.Name}</div>;
+        },
+      },
+      {
+        key: 'responses',
+        name: formatMessage('Responses'),
+        fieldName: 'responses',
+        minWidth: 500,
+        isResizable: true,
+        data: 'string',
+        isPadded: true,
+        onRender: item => {
+          return <div css={formCell}>{item.Body}</div>;
+        },
+      },
+
+      {
+        key: 'buttons',
+        name: '',
+        minWidth: 50,
+        maxWidth: 50,
+        fieldName: 'buttons',
+        data: 'string',
+        onRender: (item, index) => {
+          return (
+            <IconButton
+              menuIconProps={{ iconName: 'More' }}
+              menuProps={{
+                shouldFocusOnMount: true,
+                items: getTemplatesMoreButtons(item, index),
+              }}
+            />
+          );
+        },
+      },
+    ];
+
+    // all view, show used in column
+    if (!activeDialog) {
+      const templateUsedInDialogMap = {};
+
+      // build usedIn map
+      templates.forEach(template => {
+        templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
+          if (dialog.lgTemplates.indexOf(template.Name) !== -1) {
+            result.push(dialog.name);
+          }
+          return result;
+        }, []);
+      });
+
+      const usedInColumn = {
+        key: 'usedIn',
+        name: formatMessage('Used in:'),
+        fieldName: 'usedIn',
+        minWidth: 100,
+        maxWidth: 200,
+        data: 'string',
+        onRender: item => {
+          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(name => {
+            return <Link key={name}>{name}</Link>;
+          });
+
+          return <div>{usedDialogsLinks}</div>;
+        },
+      };
+
+      tableColums.splice(2, 0, usedInColumn);
+    }
+
+    return tableColums;
   };
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -215,6 +208,10 @@ export default function FormEditor(props) {
     );
   }
   function onRenderDetailsFooter() {
+    // do not allow add template in particular dialog
+    // cause new tempalte is not used by this dialog yet.
+    if (activeDialog) return <div />;
+
     return (
       <div data-testid="formFooter">
         <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
@@ -222,62 +219,6 @@ export default function FormEditor(props) {
         </ActionButton>
       </div>
     );
-  }
-  function getTemplateDetailCell(item, index) {
-    return (
-      <div css={formCell}>
-        {item.editing ? (
-          <TextField
-            borderless
-            multiline
-            autoAdjustHeight
-            placeholder={formatMessage('Template Content.')}
-            value={item.Body}
-            validateOnLoad={false}
-            onGetErrorMessage={newBody => {
-              return validateBodyMessage(newBody);
-            }}
-            onBlur={() => submitTemplateChange(index)}
-            onChange={(event, newBody) => updateTemplateContent(index, item.Name, newBody)}
-          />
-        ) : (
-          <div css={formCell}>{item.Body}</div>
-        )}
-      </div>
-    );
-  }
-
-  // submit template change in component state
-  function submitTemplateChange(templateIndex) {
-    const templateInState = templates[templateIndex];
-    const { Name, Body, changed } = templateInState;
-    const isValid = lgParserValidate(Name, Body);
-    const templateInLgFile = lgFile.templates[templateIndex];
-
-    // if no change, set editing status to false
-    if (changed !== true) {
-      templateInLgFile.editing = false;
-      setTemplates(lgFile.templates);
-      return;
-    }
-
-    // if is not valid, reject
-    if (isValid !== '') return;
-
-    templateInLgFile.Name = Name;
-    templateInLgFile.Body = Body;
-    const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(lgFile.templates),
-    };
-    updateLgFile(payload);
-  }
-
-  // update local templates
-  function updateTemplateContent(index, newName, newBody) {
-    const newTemplates = [...templates];
-    newTemplates.splice(index, 1, { ...templates[index], Name: newName, Body: newBody, changed: true });
-    setTemplates(newTemplates);
   }
 
   function onCreateNewTemplate() {
@@ -325,7 +266,7 @@ export default function FormEditor(props) {
           componentRef={listRef}
           items={templates}
           compact={false}
-          columns={tableColums}
+          columns={getTableColums()}
           getKey={item => item.Name}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}

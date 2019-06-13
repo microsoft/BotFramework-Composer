@@ -54,7 +54,7 @@ export function App() {
             labelHide={!sideBarExpand}
           />
           <NavItem
-            to="language-generation/all"
+            to="language-generation/"
             iconName="Robot"
             labelName={formatMessage('Bot says')}
             labelHide={!sideBarExpand}
