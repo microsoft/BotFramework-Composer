@@ -1,6 +1,5 @@
 import { Path } from '../../../utility/path';
 
-import { IFileStorage } from './../../storage/interface';
 import { FileInfo, LUFile } from './../interface';
 
 export class LUIndexer {
