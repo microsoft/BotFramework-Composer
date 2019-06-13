@@ -9,6 +9,7 @@ import { LocationRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
+import { LuPublisher } from './luPublisher';
 
 // TODO:
 // 1. refactor this class to use on IFileStorage instead of operating on fs
@@ -24,7 +25,7 @@ export class BotProject {
   public dialogIndexer: DialogIndexer;
   public lgIndexer: LGIndexer;
   public luIndexer: LUIndexer;
-
+  public luPublisher: LuPublisher;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -34,6 +35,7 @@ export class BotProject {
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
     this.dialogIndexer = new DialogIndexer(this.fileStorage, this.dir);
     this.lgIndexer = new LGIndexer(this.fileStorage, this.dir);
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
     this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
   }
 
@@ -112,7 +114,8 @@ export class BotProject {
 
   public updateLuFile = async (id: string, content: string) => {
     const newFileContent = await this.luIndexer.updateLuFile(id, content);
-    this._updateFile(`${id.trim()}.lu`, newFileContent);
+    const index = this._updateFile(`${id.trim()}.lu`, newFileContent);
+    await this.luPublisher.update(this.files[index].path);
     return this.luIndexer.getLuFiles();
   };
 
@@ -128,6 +131,10 @@ export class BotProject {
     await this._removeFile(`${id.trim()}.lu`);
     this.luIndexer.removeLuFile(id);
     return this.luIndexer.getLuFiles();
+  };
+
+  public publishLuis = async (authoringKey: string) => {
+    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {
@@ -175,11 +182,12 @@ export class BotProject {
     }
   };
 
-  private _updateFile = async (name: string, content: string) => {
+  private _updateFile = (name: string, content: string) => {
     const index = this.files.findIndex(file => {
       return file.name === name;
     });
     this.files[index].content = content;
+    return index;
   };
 
   private _getFiles = async () => {

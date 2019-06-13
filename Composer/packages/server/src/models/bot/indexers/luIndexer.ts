@@ -1,7 +1,7 @@
-import { IFileStorage } from 'src/models/storage/interface';
-
 import { Path } from '../../../utility/path';
-import { FileInfo, LUFile } from '../interface';
+
+import { IFileStorage } from './../../storage/interface';
+import { FileInfo, LUFile } from './../interface';
 
 export class LUIndexer {
   private luFiles: LUFile[] = [];

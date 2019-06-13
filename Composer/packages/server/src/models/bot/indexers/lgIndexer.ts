@@ -1,7 +1,7 @@
-import { IFileStorage } from 'src/models/storage/interface';
-
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
+
+import { IFileStorage } from './../../storage/interface';
 
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
