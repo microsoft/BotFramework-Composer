@@ -389,3 +389,7 @@ typings/
 # Local sample bots
 SampleBots/Local*
 SampleBots/__Test*
+SampleBots/*/generated/
+
+#tmp.zip
+*.zip

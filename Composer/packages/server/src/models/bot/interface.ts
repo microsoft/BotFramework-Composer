@@ -42,3 +42,23 @@ export interface LUFile {
   relativePath: string;
   content: string;
 }
+
+export enum FileState {
+  UPDATED,
+  LATEST,
+}
+
+export interface ILuisSettings {
+  luis: {
+    [key: string]: string;
+    endpoint: string;
+    endpointKey: string;
+  };
+  status: {
+    [key: string]: {
+      version: string | undefined;
+      checksum: string;
+      status: FileState;
+    };
+  };
+}

@@ -9,6 +9,7 @@ import { LocationRef, FileInfo, BotProjectFileContent } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
+import { LuPublisher } from './luPublisher';
 
 export class BotProject {
   public ref: LocationRef;
@@ -21,7 +22,7 @@ export class BotProject {
   public dialogIndexer: DialogIndexer;
   public lgIndexer: LGIndexer;
   public luIndexer: LUIndexer;
-
+  public luPublisher: LuPublisher;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -29,9 +30,11 @@ export class BotProject {
     this.name = Path.basename(this.absolutePath);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
+
     this.dialogIndexer = new DialogIndexer();
     this.lgIndexer = new LGIndexer();
     this.luIndexer = new LUIndexer();
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
   public index = async () => {
@@ -122,6 +125,7 @@ export class BotProject {
       throw new Error(`no such lu file ${id}`);
     }
     await this._updateFile(luFile.relativePath, content);
+    this.luPublisher.update(luFile.relativePath);
     return this.luIndexer.getLuFiles();
   };
 
@@ -138,6 +142,10 @@ export class BotProject {
     }
     this._removeFile(luFile.relativePath);
     return this.luIndexer.getLuFiles();
+  };
+
+  public publishLuis = async (authoringKey: string) => {
+    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
   };
 
   public copyFiles = async (prevFiles: FileInfo[]) => {

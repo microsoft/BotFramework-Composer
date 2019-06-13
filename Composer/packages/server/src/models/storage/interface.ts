@@ -25,4 +25,5 @@ export interface IFileStorage {
   removeFile(path: string): Promise<void>;
   mkDir(path: string, options?: MakeDirectoryOptions): Promise<void>;
   glob(pattern: string, path: string): Promise<string[]>;
+  copyFile(src: string, dest: string): Promise<void>;
 }
