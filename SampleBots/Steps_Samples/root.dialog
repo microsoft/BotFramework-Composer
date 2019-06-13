@@ -1,0 +1,150 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "recognizer": {
+      "$type": "Microsoft.RegexRecognizer",
+      "intents": {
+        "Steps": "(?i)Steps|01",
+        "EndTurn": "(?i)EndTurn|02",
+        "IfCondition": "(?i)IfCondition|03",
+        "EditArray": "(?i)EditArray|04",
+        "EndDialog": "(?i)EndDialog|05",
+        "HttpRequest": "(?i)HttpRequest|06",
+        "SwitchCondition": "(?i)SwitchCondition|07",
+        "RepeatDialog": "(?i)RepeatDialog|08",
+        "TraceAndLog": "(?i)TraceAndLog|trace|log|09",
+        "EditSteps": "(?i)EditSteps|10",
+        "ReplaceDialog": "(?i)ReplaceDialog|11",
+        "EmitEvent": "(?i)EmitEvent|12",
+        "CancelIntent":"(?i)cancel"
+      }
+    },
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "Steps",
+      "steps": [
+        "Steps"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "EndTurn",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EndTurn"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "IfCondition",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "IfCondition"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "EndDialog",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HttpRequest",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "HttpRequest"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "SwitchCondition",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SwitchCondition"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "RepeatDialog",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "RepeatDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "TraceAndLog",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "TraceAndLog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "EditSteps",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EditSteps"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ReplaceDialog",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Replace"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "EmitEvent",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EmitEvent"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Hi, I am root dialog, you can try samples like: steps, endturn, ifCondition, editarray"
+        }
+      ]
+    }
+  ]
+}

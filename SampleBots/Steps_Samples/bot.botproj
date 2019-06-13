@@ -1,0 +1,7 @@
+{
+  "services": [],
+  "schemas": {
+    "editor": "editor.schema"
+  },
+  "entry": "root.dialog"
+}

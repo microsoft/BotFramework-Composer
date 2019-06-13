@@ -6,7 +6,6 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.LanguageGeneration.Renderer;
 using Microsoft.Bot.Builder.TestBot.Json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -311,7 +310,6 @@ namespace Tests
         private TestFlow BuildTestFlow(string resourceName, bool sendTrace = false)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().Build();
-            var lg = new LGLanguageGenerator(resourceExplorer);
             var storage = new MemoryStorage();
             var convoState = new ConversationState(storage);
             var userState = new UserState(storage);
@@ -319,7 +317,7 @@ namespace Tests
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
-                .UseLanguageGenerator(lg)
+                .UseLanguageGeneration(resourceExplorer)
                 .UseResourceExplorer(resourceExplorer)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 

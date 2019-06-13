@@ -1,0 +1,49 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.ids == null",
+      "steps": [
+        {
+          "$type": "Microsoft.InitProperty",
+          "property": "user.ids",
+          "type": "array"
+        }
+      ]
+    },
+
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "user.ids",
+      "value": "10000+1000+100+10+1",
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "user.ids",
+      "value": "200*200",
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "user.ids",
+      "value": "888888/4",
+    },
+    {
+      "$type": "Microsoft.Foreach",
+      "ListProperty": "user.ids"
+      "Steps":[
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "{dialog.index}: {dialog.value}"
+        }
+      ]   
+    }
+
+
+  ]
+
+
+}
