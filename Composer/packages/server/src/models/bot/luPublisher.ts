@@ -66,7 +66,7 @@ export class LuPublisher {
     return await this._updateStatus(config.authoringKey, config);
   };
 
-  public getAppsInfo = () => {};
+  public getLuisConfig = () => this.config;
 
   private _copyDialogsToTargetFolder = async (config: any) => {
     if (this.config == null) return '';

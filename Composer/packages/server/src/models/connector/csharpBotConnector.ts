@@ -35,11 +35,15 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
+    const luisConfig = BotProjectService.currentBotProject.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
+    if (luisConfig !== null) {
+      form.append('config', JSON.stringify(luisConfig));
+    }
     try {
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
