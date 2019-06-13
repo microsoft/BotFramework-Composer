@@ -144,6 +144,10 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
+  public publishLuis = async (authoringKey: string) => {
+    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
+  };
+
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
     // get destination storage client
     const dstStorage = StorageService.getStorageClient(locationRef.storageId);
@@ -199,7 +203,7 @@ export class BotProject {
   // create file in this project
   // this function will gurantee the memory cache (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
-    const absolutePath = `${this.dir}/${relativePath}`;
+    const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
@@ -265,10 +269,15 @@ export class BotProject {
 
   // ensure dir exist, dir is a absolute dir path
   private ensureDirExists = async (dir: string) => {
-    if (!dir || dir === '.') {
-      return;
+    try {
+      await this.fileStorage.mkDir(dir, { recursive: true });
+    } catch (error) {
+      // if dir already exists, ignore. and throw other errors
+      // error code equals EEXIST in localDisk, but not sure other storage
+      if (error.code && error.code !== 'EEXIST') {
+        throw error;
+      }
     }
-    await this.fileStorage.mkDir(dir, { recursive: true });
   };
 
   private _getFiles = async () => {
