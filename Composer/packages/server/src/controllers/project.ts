@@ -107,10 +107,12 @@ async function updateBotFile(req: Request, res: Response) {
   }
 }
 
-async function createDialogFromTemplate(req: Request, res: Response) {
+async function createDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.createDialogFromTemplate(req.body.name);
-    res.status(200).json({ dialogs });
+    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.name);
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name, '');
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.name, '');
+    res.status(200).json({ dialogs, lgFiles, luFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
@@ -184,10 +186,10 @@ async function publishLuis(req: Request, res: Response) {
 }
 
 export const ProjectController = {
-  getProject: getProject,
-  openProject: openProject,
-  updateDialog: updateDialog,
-  createDialogFromTemplate: createDialogFromTemplate,
+  getProject,
+  openProject,
+  updateDialog,
+  createDialog,
   updateLgFile,
   createLgFile,
   removeLgFile,
@@ -195,7 +197,7 @@ export const ProjectController = {
   createLuFile,
   removeLuFile,
   publishLuis,
-  updateBotFile: updateBotFile,
-  saveProjectAs: saveProjectAs,
-  createProject: createProject,
+  updateBotFile,
+  saveProjectAs,
+  createProject,
 };
