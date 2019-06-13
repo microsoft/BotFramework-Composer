@@ -60,6 +60,16 @@
     },
     {
       "$type": "Microsoft.IntentRule",
+      "intent": "EditArray",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EditArray"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
       "intent": "HttpRequest",
       "steps": [
         {

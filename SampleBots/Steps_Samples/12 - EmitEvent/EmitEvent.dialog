@@ -4,10 +4,10 @@
     "autoEndDialog": false,
     "steps": [
         {
-            {
                 "$type": "Microsoft.SendActivity",
                 "activity": "Say moo to get a response, say emit to emit a event."
-            }  
+        },
+        {    
             "$type": "Microsoft.BeginDialog",
             "Dialog": {
                 "$type": "Microsoft.AdaptiveDialog",

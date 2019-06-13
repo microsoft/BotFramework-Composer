@@ -12,33 +12,58 @@
         }
       ]
     },
-
     {
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.ids",
-      "value": "10000+1000+100+10+1",
+      "value": "10000+1000+100+10+1"
     },
     {
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.ids",
-      "value": "200*200",
+      "value": "200*200"
     },
     {
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.ids",
-      "value": "888888/4",
+      "value": "888888/4"
+    },
+    {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Here are the index and values in the array."
     },
     {
       "$type": "Microsoft.Foreach",
-      "ListProperty": "user.ids"
+      "ListProperty": "user.ids",
       "Steps":[
         {
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
+      ]   
+    },
+    {
+          "$type": "Microsoft.SendActivity",
+          "activity": "If each page shows two items, here are the index and values"
+    },
+    {
+      "$type": "Microsoft.ForeachPage",
+      "ListProperty": "user.ids",
+      "PageSize": "2",
+      "ValueProperty" : "dialog.page",
+      "Steps":[
+        {
+          "$type": "Microsoft.Foreach",
+          "ListProperty": "dialog.page",
+          "Steps":[
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "{dialog.index}: {dialog.value}"
+            }
+          ]  
+        } 
       ]   
     }
 
