@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 import glob from 'globby';
 
-import { IFileStorage, Stat } from './interface';
+import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
@@ -50,8 +50,8 @@ export class LocalDiskStorage implements IFileStorage {
     await removeFile(path);
   }
 
-  async mkDir(path: string): Promise<void> {
-    await mkDir(path);
+  async mkDir(path: string, options?: MakeDirectoryOptions): Promise<void> {
+    await mkDir(path, options);
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
