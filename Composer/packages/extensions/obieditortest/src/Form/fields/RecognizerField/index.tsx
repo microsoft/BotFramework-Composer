@@ -45,7 +45,8 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
              * 1. allows the store to update with the luFile creation
              * 2. allows the debounced onChange to be invoked
              *
-             * This is a hack, and will need to be worked on later.
+             * This is a hack, but dialogs will be created along with
+             * lu and lg files so this code path shouldn't be executed.
              */
             setLoading(true);
             createLuFile(dialogName).then(() => {
