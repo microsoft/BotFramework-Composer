@@ -76,7 +76,7 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = Path.join(__dirname, `${botDir}/../copy`);
+const copyDir = Path.join(__dirname, botDir, '../copy');
 
 describe('copyTo', () => {
   const locationRef: LocationRef = {
