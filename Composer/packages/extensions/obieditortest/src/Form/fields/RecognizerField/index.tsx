@@ -28,7 +28,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   );
 
   const handleChange = (_, option?: IDropdownOption) => {
-    console.log('changing', option);
     if (option) {
       switch (option.key) {
         case 'none': {
