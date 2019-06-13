@@ -7,6 +7,7 @@ import {
   SelectorField,
   StepsField,
   NullField,
+  EditorField,
 } from '../Form/fields';
 import { DialogSelectWidget } from '../Form/widgets';
 
@@ -135,5 +136,10 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
+  },
+  'Microsoft.SendActivity': {
+    activity: {
+      'ui:field': EditorField,
+    },
   },
 };

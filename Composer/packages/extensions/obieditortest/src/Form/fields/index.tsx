@@ -9,3 +9,4 @@ export * from './SelectorField';
 export * from './StepsField';
 export * from './UnsupportedField';
 export * from './NullField';
+export * from './EditorField';

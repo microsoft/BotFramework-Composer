@@ -28,6 +28,10 @@ const fieldHeaderTheme = createTheme({
   },
 });
 
+const descriptionMarkup = description => {
+  return { __html: description };
+};
+
 interface BaseFieldProps<T> {
   children?: React.ReactNode;
   className?: string;
@@ -106,9 +110,12 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
         </Separator>
       )}
       {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-        <p className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}>
-          {descriptionOverride || description || uiSchema['ui:description'] || schema.description}
-        </p>
+        <p
+          className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
+          dangerouslySetInnerHTML={descriptionMarkup(
+            descriptionOverride || description || uiSchema['ui:description'] || schema.description
+          )}
+        />
       )}
       {children}
     </div>
