@@ -1,7 +1,7 @@
-import { BotProject } from 'src/models/bot/botProject';
 import rimraf from 'rimraf';
 
 import { Path } from '../../src/utility/path';
+import { BotProject } from '../../src/models/bot/botProject';
 import projectService from '../../src/services/project';
 // offer a bot project ref which to open
 jest.mock('../../src/store/store', () => {

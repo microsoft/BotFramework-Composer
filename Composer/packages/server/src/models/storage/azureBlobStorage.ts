@@ -232,4 +232,11 @@ export class AzureBlobStorage implements IFileStorage {
     }
     return containers;
   }
+
+  //ToDo
+  async copyFile(src: string, dest: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  }
 }

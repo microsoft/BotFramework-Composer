@@ -1,7 +1,13 @@
 {
   "development": {
     "botRuntime": "http://localhost:3979",
-    "assetsLibray": "./assets"
+    "assetsLibray": "./assets",
+    "luisConfig": {
+      "name": "MyBot",
+      "defaultLanguage": "en-us",
+      "environment": "composer",
+      "authoringRegion": "westus"
+    }
   },
   "container": {
     "botRuntime": "http://botruntime:80"

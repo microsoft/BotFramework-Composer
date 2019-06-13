@@ -238,3 +238,19 @@ export async function removeLuFile(dispatch, { id }) {
     });
   }
 }
+
+export async function publishLuis(dispatch, authoringKey) {
+  try {
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { authoringKey });
+    dispatch({
+      type: ActionTypes.PUBLISH_LU_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.PUBLISH_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
