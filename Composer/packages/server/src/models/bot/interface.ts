@@ -63,3 +63,11 @@ export interface ILuisSettings {
     };
   };
 }
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}

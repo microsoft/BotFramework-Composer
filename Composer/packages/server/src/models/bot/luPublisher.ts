@@ -7,10 +7,9 @@ import { LuisAuthoring } from 'luis-apis';
 import * as msRest from '@azure/ms-rest-js';
 import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
-import settings from './../../settings/settings.json';
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, FileState, LUFile } from './interface';
+import { ILuisSettings, FileState, LUFile, ILuisConfig } from './interface';
 
 const CONFIGNAME = 'luconfig.json';
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
@@ -20,6 +19,7 @@ export class LuPublisher {
   public luPath: string;
   public generatedFolderPath: string;
   public storage: IFileStorage;
+  public config: ILuisConfig | null = null;
 
   constructor(path: string, storage: IFileStorage) {
     this.luPath = path;
@@ -51,8 +51,9 @@ export class LuPublisher {
     }
   };
 
-  public publish = async (authoringKey: string, luFiles: LUFile[]) => {
-    const config = this._getConfig(authoringKey, luFiles);
+  public publish = async (luisConfig: ILuisConfig, luFiles: LUFile[]) => {
+    this.config = luisConfig;
+    const config = this._getConfig(luisConfig, luFiles);
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
@@ -60,15 +61,16 @@ export class LuPublisher {
     //const settings: ILuisSettings = await this._getSettings();
     await runBuild(config);
     await this._setConfig(config);
-    await this._setKey(authoringKey);
+    await this._setKey(config.authoringKey);
     await this._copyDialogsToTargetFolder(config);
-    return await this._updateStatus(authoringKey, config);
+    return await this._updateStatus(config.authoringKey, config);
   };
 
   public getAppsInfo = () => {};
 
   private _copyDialogsToTargetFolder = async (config: any) => {
-    const defaultLanguage = settings.development.luisConfig.defaultLanguage;
+    if (this.config == null) return '';
+    const defaultLanguage = this.config.defaultLanguage;
     await config.models.forEach(async (filePath: string) => {
       const baseName = Path.basename(filePath, '.lu');
       const rootPath = Path.dirname(filePath);
@@ -116,14 +118,16 @@ export class LuPublisher {
   };
 
   private _getSettingPath = () => {
-    const config = settings.development.luisConfig;
-
-    return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
+    if (this.config == null) return '';
+    return Path.join(
+      this.generatedFolderPath,
+      `luis.settings.${this.config.environment}.${this.config.authoringRegion}.json`
+    );
   };
 
   private _getAppName = async (path: string) => {
-    const config = settings.development.luisConfig;
-    const culture = this._getCultureFromPath(path) || config.defaultLanguage;
+    if (this.config == null) return '';
+    const culture = this._getCultureFromPath(path) || this.config.defaultLanguage;
     let name = `${Path.basename(path, '.lu')}.${culture}.lu`;
     name = name.split('.').join('_');
     return name;
@@ -169,14 +173,13 @@ export class LuPublisher {
     }
   };
 
-  private _getConfig = (authoringKey: string, luFiles: LUFile[]) => {
-    const luConfig: any = settings.development.luisConfig as any;
+  private _getConfig = (config: ILuisConfig, luFiles: LUFile[]) => {
+    const luConfig: any = config;
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;
     luConfig.force = true;
     luConfig.folder = this.generatedFolderPath;
-    luConfig.authoringKey = authoringKey;
     luFiles.forEach(file => {
       luConfig.models.push(Path.resolve(this.luPath, file.relativePath));
     });

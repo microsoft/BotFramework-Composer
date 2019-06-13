@@ -170,7 +170,7 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const status = await ProjectService.currentBotProject.publishLuis(req.body.authoringKey);
+      const status = await ProjectService.currentBotProject.publishLuis(req.body);
       res.status(200).json({ status });
     } catch (error) {
       res.status(400).json({ error: error.message });

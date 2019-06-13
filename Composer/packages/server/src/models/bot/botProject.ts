@@ -5,7 +5,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -144,8 +144,8 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public publishLuis = async (authoringKey: string) => {
-    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
+  public publishLuis = async (config: ILuisConfig) => {
+    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles());
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

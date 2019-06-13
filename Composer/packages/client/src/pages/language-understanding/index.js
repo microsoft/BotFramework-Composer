@@ -81,8 +81,8 @@ export const LUPage = props => {
     navigate(`./${data.name}`);
   }
 
-  async function handleLuisPublish(key) {
-    await publishLuis(key);
+  async function handleLuisPublish(config) {
+    return await publishLuis(config);
   }
 
   const groups = useMemo(() => {
@@ -177,11 +177,13 @@ export const LUPage = props => {
         {memoizedContent}
       </div>
       <NewLuFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLuFile} />
-      <PublishLuisModal
-        isOpen={publishModalOpen}
-        onDismiss={() => setPublishModalOpen(false)}
-        onPublish={handleLuisPublish}
-      />
+      {publishModalOpen && (
+        <PublishLuisModal
+          isOpen={publishModalOpen}
+          onDismiss={() => setPublishModalOpen(false)}
+          onPublish={handleLuisPublish}
+        />
+      )}
     </Fragment>
   );
 };
