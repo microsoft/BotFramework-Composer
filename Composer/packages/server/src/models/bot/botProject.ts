@@ -144,9 +144,19 @@ export class BotProject {
     const prevFiles = await this._getFiles();
     for (const index in prevFiles) {
       const file = prevFiles[index];
+      // update main dialog file name and entry in botproj file
+      const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
+      if (file.relativePath.indexOf('.main.dialog') >= 0) {
+        file.relativePath = Path.join(Path.dirname(file.relativePath), newMainDialogName);
+      }
       const absolutePath = Path.join(dstDir, file.relativePath);
-      const content =
+      let content =
         index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
+      if (file.name.indexOf('.botproj') >= 0) {
+        content = JSON.parse(content);
+        content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
+        content = JSON.stringify(content);
+      }
       await dstStorage.writeFile(absolutePath, content);
     }
     // return new proj ref
