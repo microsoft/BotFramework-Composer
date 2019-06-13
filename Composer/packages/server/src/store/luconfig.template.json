@@ -1,0 +1,15 @@
+{
+    "name": "MyBot",
+    "defaultLanguage": "en-us",
+    "models": [],
+    "authoringKey": "",
+    "dialogs": true,
+    "environment": "composer",
+    "autodelete": true,
+    "authoringRegion": "westus",
+    "folder": "",
+    "help": false, 
+    "force":true, 
+    "config":"",
+    "endpointKeys":""
+}

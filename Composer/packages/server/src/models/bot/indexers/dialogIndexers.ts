@@ -1,7 +1,6 @@
-import { IFileStorage } from 'src/models/storage/interface';
-
 import { Path } from '../../../utility/path';
 
+import { IFileStorage } from './../../storage/interface';
 import { FileInfo, Dialog } from './../interface';
 
 export class DialogIndexer {
