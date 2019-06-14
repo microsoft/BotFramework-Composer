@@ -4,11 +4,6 @@ import { ActionTypes, FileTypes } from './../../constants/index';
 
 const projectFiles = ['bot', 'botproj'];
 
-const closeCurrentProject = state => {
-  state.editors = [];
-  return state;
-};
-
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botProjFile = response.data.botFile;
@@ -122,7 +117,6 @@ const clearNavHistory = (state, { fromIndex }) => {
 };
 
 export const reducer = createReducer({
-  [ActionTypes.INIT_PROJECT_STATE]: closeCurrentProject,
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,

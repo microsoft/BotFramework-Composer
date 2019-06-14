@@ -21,7 +21,6 @@ export function SaveAction(props) {
     } else {
       setLoadingStatus(true);
       await onSave(value);
-      setLoadingStatus(false);
     }
   };
 
