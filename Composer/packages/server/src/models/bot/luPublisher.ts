@@ -11,7 +11,6 @@ import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisSettings, FileState, LUFile, ILuisConfig } from './interface';
 
-const CONFIGNAME = 'luconfig.json';
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
 
@@ -60,8 +59,6 @@ export class LuPublisher {
 
     //const settings: ILuisSettings = await this._getSettings();
     await runBuild(config);
-    await this._setConfig(config);
-    await this._setKey(config.authoringKey);
     await this._copyDialogsToTargetFolder(config);
     return await this._updateStatus(config.authoringKey, config);
   };
@@ -83,16 +80,6 @@ export class LuPublisher {
       await this.storage.removeFile(currentPath);
       await this.storage.removeFile(currentVariantPath);
     });
-  };
-
-  //remove this function next PR
-  private _setKey = async (authoringKey: string) => {
-    const keyPath = Path.join(this.generatedFolderPath, `key.json`);
-    if (await this.storage.exists(keyPath)) {
-      await this.storage.removeFile(keyPath);
-    }
-
-    await this.storage.writeFile(keyPath, JSON.stringify({ key: authoringKey }, null, 4));
   };
 
   private _updateStatus = async (authoringKey: string, config: IConfig) => {
@@ -185,11 +172,6 @@ export class LuPublisher {
     });
 
     return luConfig;
-  };
-
-  private _setConfig = async (config: {}) => {
-    const configPath = Path.join(this.generatedFolderPath, CONFIGNAME);
-    await this.storage.writeFile(configPath, JSON.stringify(config, null, 4));
   };
 
   private _getSettings = async () => {

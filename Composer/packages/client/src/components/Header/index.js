@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, PrimaryButton, Icon } from 'office-ui-fabric-react';
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
-import { headerMain, headerSub, aside, bot, botButton, actionButton } from './styles';
+import { headerMain, headerSub, aside, bot, botButton, actionButton, warningContiner, warningIcon } from './styles';
 import { OpenStatus } from './../../constants';
 
 const openInEmulator = url => {
@@ -18,7 +18,7 @@ const openInEmulator = url => {
 };
 
 export const Header = props => {
-  const { botStatus, connectBot, reloadBot, openStorageExplorer } = props;
+  const { botStatus, connectBot, reloadBot, openStorageExplorer, botLoadErrorMsg } = props;
   const connected = botStatus === 'connected';
   return (
     <header>
@@ -50,16 +50,22 @@ export const Header = props => {
           </ActionButton>
         </div>
         <div css={bot}>
-          {connected && (
-            <ActionButton
-              iconProps={{ iconName: 'OpenInNewTab' }}
-              css={actionButton}
-              style={{ marginTop: '3px' }}
-              onClick={() => openInEmulator('http://localhost:3979/api/messages')}
-            >
-              {formatMessage('Test in Emulator')}
-            </ActionButton>
-          )}
+          {connected &&
+            (botLoadErrorMsg === '' ? (
+              <ActionButton
+                iconProps={{ iconName: 'OpenInNewTab' }}
+                css={actionButton}
+                style={{ marginTop: '3px' }}
+                onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+              >
+                {formatMessage('Test in Emulator')}
+              </ActionButton>
+            ) : (
+              <div css={warningContiner}>
+                <Icon iconName="warning" css={warningIcon} />
+                {formatMessage(botLoadErrorMsg)}
+              </div>
+            ))}
           <PrimaryButton
             css={botButton}
             text={connected ? formatMessage('Reload') : formatMessage('Connect')}
@@ -73,6 +79,7 @@ export const Header = props => {
 
 Header.propTypes = {
   botStatus: PropTypes.string,
+  botLoadErrorMsg: PropTypes.string,
   connectBot: PropTypes.func,
   reloadBot: PropTypes.func,
   openStorageExplorer: PropTypes.func,

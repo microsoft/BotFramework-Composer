@@ -36,18 +36,21 @@ export class CSharpBotConnector implements IBotConnector {
     }
     const dir = BotProjectService.currentBotProject.dir;
     const luisConfig = BotProjectService.currentBotProject.getLuisConfig();
+    const luFiles = BotProjectService.currentBotProject.getIndexes().luFiles;
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (luisConfig !== null) {
-      form.append('config', JSON.stringify(luisConfig));
+    if (luisConfig === null && luFiles.length !== 0) {
+      throw new Error('Please publish your Luis models first');
     }
+
+    form.append('config', JSON.stringify(luisConfig));
     try {
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
-      throw new Error(err);
+      throw new Error('Unable to sync content to bot runtime');
     }
   };
 
