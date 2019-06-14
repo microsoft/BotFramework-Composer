@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { Link, FontSizes } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
-export default function ToggleEditor(props) {
+interface ToggleEditorProps {
+  loaded: boolean;
+  title: string;
+  children: () => ReactNode;
+}
+
+export default function ToggleEditor(props: ToggleEditorProps) {
   const [showEditor, setShowEditor] = useState(false);
 
-  if (!props.formData) {
+  if (!props.loaded) {
     return null;
   }
 
