@@ -27,6 +27,8 @@ import NewDialogModal from './NewDialogModal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 
+const BASEURL = process.env.PUBLIC_URL || '';
+
 function DesignPage() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
@@ -107,8 +109,18 @@ function DesignPage() {
                 styles={breadcrumbClass}
               />
               <div css={editorWrapper}>
-                <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
-                <iframe key="FormEditor" name="FormEditor" css={formEditor} src="/extensionContainer.html" />
+                <iframe
+                  key="VisualEditor"
+                  name="VisualEditor"
+                  css={visualEditor}
+                  src={`${BASEURL}/extensionContainer.html`}
+                />
+                <iframe
+                  key="FormEditor"
+                  name="FormEditor"
+                  css={formEditor}
+                  src={`${BASEURL}/extensionContainer.html`}
+                />
               </div>
             </Fragment>
           </Conversation>

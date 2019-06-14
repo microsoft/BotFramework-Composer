@@ -1,0 +1,16 @@
+{
+  "storageConnections": [
+    {
+      "id": "default",
+      "name": "Azure bot hosted",
+      "type": "LocalDisk",
+      "path": "/home/site/artifacts/bot"
+    }
+  ],
+  "recentBotProjects": [
+    {
+      "storageId": "default",
+      "path": "/home/site/artifacts/bot/bot.json"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-export const BASEURL = 'http://localhost:5000/api';
+export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
 
 /**
  * Global ActionTypes Defination Instruction.

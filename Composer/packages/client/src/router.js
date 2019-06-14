@@ -7,8 +7,9 @@ import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
 
+const BASEURL = process.env.PUBLIC_URL || '';
 const Routes = () => (
-  <Router>
+  <Router basepath={BASEURL}>
     <DesignPage path="/" />
     <SettingPage path="setting/*" />
     <LUPage path="language-understanding/:fileId" />
