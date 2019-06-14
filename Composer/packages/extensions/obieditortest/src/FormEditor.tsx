@@ -8,7 +8,7 @@ import isEqual from 'lodash.isequal';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { getMergedSchema } from './schema/appschema';
+import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile } from './types';
 
@@ -53,9 +53,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     );
   }
 
-  const mergedSchema = getMergedSchema(dialogs);
-
-  const definitions = mergedSchema.definitions || {};
+  const definitions = appschema.definitions || {};
   const typeDef: JSONSchema6Definition = definitions[type];
 
   if (!typeDef) {

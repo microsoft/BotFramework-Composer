@@ -49,9 +49,13 @@ body {
 }
 
 .DemoForm {
-  padding: 10px;
   overflow-y: scroll;
   height: 100%;
+  width: 100%;
+
+  .App {
+    padding-top: 20px;
+  }
 }
 
 .DemoJSONContainer {

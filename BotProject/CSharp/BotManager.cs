@@ -3,7 +3,6 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Builder.LanguageGeneration.Renderer;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -69,7 +68,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             adapter
                 .UseStorage(storage)
                 .UseState(userState, conversationState)
-                .UseLanguageGenerator(new LGLanguageGenerator(resourceExplorer))
+                .UseLanguageGeneration(resourceExplorer)
                 .UseDebugger(4712)
                 .UseResourceExplorer(resourceExplorer);
             adapter.OnTurnError = async (turnContext, exception) =>
