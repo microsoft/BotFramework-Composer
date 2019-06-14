@@ -29,10 +29,27 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
         handler = e => onChange(insertBefore(data, e.id, e.$type));
         break;
       case NodeEventTypes.InsertAfter:
-        handler = e => onChange(insertAfter(data, e.id, e.$type));
+        handler = e => {
+          return new Promise(resolve => {
+            onChange(insertAfter(data, e.id, e.$type));
+            resolve();
+          }).then(() => {
+            const matchResult = e.id.match(/^(.+)\[(\d+)\]$/);
+            const selectedPath = `${matchResult[1]}[${parseInt(matchResult[2]) + 1}]`;
+            onSelect(selectedPath);
+          });
+        };
         break;
       case NodeEventTypes.Insert:
-        handler = e => onChange(unshiftArray(data, e.id, e.$type));
+        handler = e => {
+          return new Promise(resolve => {
+            onChange(unshiftArray(data, e.id, e.$type));
+            resolve();
+          }).then(() => {
+            const selectedPath = `${e.id}[0]`;
+            onSelect(selectedPath);
+          });
+        };
         break;
       default:
         handler = onSelect;
