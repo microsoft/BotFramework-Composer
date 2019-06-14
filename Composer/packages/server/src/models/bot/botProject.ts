@@ -173,7 +173,7 @@ export class BotProject {
       if (file.name.indexOf('.botproj') >= 0) {
         content = JSON.parse(content);
         content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
-        content = JSON.stringify(content);
+        content = JSON.stringify(content, null, 2) + '\n';
       }
       await dstStorage.writeFile(absolutePath, content);
     }
