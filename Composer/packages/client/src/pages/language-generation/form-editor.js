@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { PropTypes } from 'prop-types';
 import lodash from 'lodash';
 import debounce from 'lodash.debounce';
 import { useContext, useRef, useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
+import { navigate } from '@reach/router';
 
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
@@ -34,6 +36,7 @@ const randomName = () => {
 
 export default function FormEditor(props) {
   const { state, actions } = useContext(Store);
+  const { clearNavHistory, navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
@@ -71,20 +74,19 @@ export default function FormEditor(props) {
     }
   }, [lgFile, activeDialog]);
 
+  function navigateToDialog(name) {
+    clearNavHistory();
+    navTo(`${name}#`);
+    navigate('/');
+  }
+
   const getTemplatesMoreButtons = (item, index) => {
     const buttons = [
       {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          const newItems = templates.map((t, idx) => {
-            if (idx === index) {
-              return { ...t, editing: true };
-            }
-
-            return t;
-          });
-          setTemplates(newItems);
+          props.onEdit(templates[index]);
         },
       },
       {
@@ -182,7 +184,11 @@ export default function FormEditor(props) {
         data: 'string',
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(name => {
-            return <Link key={name}>{name}</Link>;
+            return (
+              <div key={name} onClick={() => navigateToDialog(name)}>
+                <Link>{name}</Link>
+              </div>
+            );
           });
 
           return <div>{usedDialogsLinks}</div>;
@@ -277,3 +283,10 @@ export default function FormEditor(props) {
     </div>
   );
 }
+
+FormEditor.propTypes = {
+  file: PropTypes.object,
+  onChange: PropTypes.func,
+  activeDialog: PropTypes.object,
+  onEdit: PropTypes.func,
+};

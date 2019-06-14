@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { debounce, findIndex } from 'lodash';
+import { debounce } from 'lodash';
 import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -43,7 +43,11 @@ export const LGPage = props => {
       };
 
       if (file.id === 0) {
-        result[0] = { ...result[0], ...item, isExpanded: true };
+        result[0] = {
+          ...result[0],
+          ...item,
+          isExpanded: true,
+        };
       } else {
         result[0].links.push(item);
       }
@@ -57,9 +61,6 @@ export const LGPage = props => {
             id: '_all',
             key: '_all',
             name: 'All',
-            ariaLabel: 'All',
-            altText: 'All',
-            title: 'All',
             isExpanded: true,
             links: subLinks,
           },
@@ -100,10 +101,13 @@ export const LGPage = props => {
     updateLgFile(payload);
   }
 
-  // performance optimization, component update should only trigger by lgFile change.
-  const memoizedContent = useMemo(() => {
-    return <Content file={lgFile} activeDialog={activeDialog} textMode={textMode} onChange={onChange} />;
-  }, [lgFile, activeDialog, textMode]);
+  //#TODO:
+  // get line number from lg parser,
+  // then deep link to code editor this Line
+  function onTableViewWantEdit(template) {
+    console.log(template);
+    setTextMode(true);
+  }
 
   return (
     <Fragment>
@@ -125,7 +129,7 @@ export const LGPage = props => {
             onText="Edit mode"
             offText="Edit mode"
             checked={textMode}
-            disabled={activePath !== '_all'}
+            disabled={activePath !== '_all' && textMode === false}
             onChange={() => setTextMode(!textMode)}
           />
         </div>
@@ -139,10 +143,17 @@ export const LGPage = props => {
             }}
             selectedKey={activePath}
             groups={navLinks}
+            className={'dialogNavTree'}
+            data-testid={'dialogNavTree'}
           />
         </div>
-
-        {memoizedContent}
+        <Content
+          file={lgFile}
+          activeDialog={activeDialog}
+          onEdit={onTableViewWantEdit}
+          textMode={textMode}
+          onChange={onChange}
+        />
       </div>
     </Fragment>
   );
