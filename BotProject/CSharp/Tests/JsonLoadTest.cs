@@ -53,161 +53,186 @@ namespace Tests
         [TestMethod]
         public async Task JsonDialogLoad_01Steps()
         {
-            await BuildTestFlow(getSingleSample("01 - Steps"))
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
                 .SendConversationUpdate()
+                .Send("01")
                 .AssertReply("Step 1")
                 .AssertReply("Step 2")
                 .AssertReply("Step 3")
+                .AssertReply("user.age is set to 18")
+                .AssertReply("user.age is set to null")
             .StartTestAsync();
         }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_02EndTurn()
-        //{
-        //    await BuildTestFlow(getSingleSample("02 - EndTurn"))
-        //    .Send("hello")
-        //        .AssertReply("What's up?")
-        //    .Send("Nothing")
-        //        .AssertReply("Oh I see!")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_02EndTurn()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .Send("02")
+                .AssertReply("What's up?")
+            .Send("Nothing")
+                .AssertReply("Oh I see!")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_03IfCondition()
-        //{
-        //    await BuildTestFlow(getSingleSample("03 - IfCondition"))
-        //    .SendConversationUpdate()
-        //    .AssertReply("Hello, I'm Zoidberg. What is your name?")
-        //    .Send("Carlos")
-        //    .AssertReply("Hello Carlos, nice to talk to you!")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_03IfCondition()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("03")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("Carlos")
+                .AssertReply("Hello Carlos, nice to talk to you!")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_04TextInput()
-        //{
-        //    await BuildTestFlow(getSingleSample("04 - TextInput"))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hello, I'm Zoidberg. What is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply("Hello Carlos, nice to talk to you!")
-        //    .Send("hi")
-        //        .AssertReply("Hello Carlos, nice to talk to you!")
-        //        .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_04EditArray()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("04")
+                .AssertReply("Here are the index and values in the array.")
+                .AssertReply("0: 11111")
+                .AssertReply("1: 40000")
+                .AssertReply("2: 222222")
+                .AssertReply("If each page shows two items, here are the index and values")
+                .AssertReply("0: 11111")
+                .AssertReply("1: 40000")
+                .AssertReply("0: 222222")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_05NumberInput()
-        //{
-        //    await BuildTestFlow(getSingleSample("05 - NumberInput"))
-        //    .SendConversationUpdate()
-        //        .AssertReply("What is your age?")
-        //    .Send("Blablabla")
-        //        .AssertReply("What is your age?")
-        //    .Send("4")
-        //        .AssertReply("Hello, your age is 4!")
-        //        .AssertReply("2 * 2.2 equals?")
-        //    .Send("4.4")
-        //        .AssertReply("2 * 2.2 equals 4.4, that's right!")
-        //        .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_05EndDialog()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("05")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("luhan")
+                .AssertReply("Hello luhan, nice to talk to you!")
+                .AssertReply("I'm a joke bot. To get started say \"joke\".")
+            .Send("joke")
+                .AssertReply("Why did the chicken cross the road?")
+            .Send("I don't know")
+                .AssertReply("To get to the other side")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_14RepeatDialog()
-        //{
-        //    await BuildTestFlow(getSingleSample("14 - RepeatDialog"))
-        //    .SendConversationUpdate()
-        //        .AssertReply("RepeatDialog.main.dialog starting")
-        //        .AssertReply("Hello, what is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply("Hello Carlos, nice to meet you! (type cancel to end this)")
-        //    .Send("hi")
-        //        .AssertReply("RepeatDialog.main.dialog starting")
-        //        .AssertReply("Hello Carlos, nice to meet you! (type cancel to end this)")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_06HttpRequest()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
+            .Send("06")
+            .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
+            .Send("TestPetName")
+            .AssertReply("Great! Your pet's name is TestPetName")
+            .AssertReply("Now please enter the id of your pet, this could help you find your pet later.")
+            .Send("88888")
+            .AssertReply("Done! You have added a pet named \"TestPetName\" with id \"88888\"")
+            .AssertReply("Now try to specify the id of your pet, and I will help your find it out from the store.")
+            .Send("88888")
+            .AssertReply("Great! I found your pet named \"TestPetName\"")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_15TraceAndLog()
-        //{
-        //    await BuildTestFlow(getSingleSample("15 - TraceAndLog"), sendTrace: true)
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hello, what is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply(activity =>
-        //        {
-        //            var trace = (Activity)activity;
-        //            Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
-        //            Assert.AreEqual("memory", trace.ValueType, "value type should be memory");
-        //        })
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_07SwitchCondition()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("07")
+                .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
+            .Send("Test1")
+                .AssertReply("You select: Test1")
+                .AssertReply("You select: 1")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_06DoSteps()
-        //{
-        //    await BuildTestFlow(getSingleSample("06 - DoSteps"))
-        //    .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hello, I'm Zoidberg. What is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply("Hello Carlos, nice to talk to you!")
-        //        .AssertReply("Hey, I can tell you a joke, or tell your fortune")
-        //    .Send("Do you know a joke?")
-        //        .AssertReply("Why did the chicken cross the road?")
-        //    .Send("Why?")
-        //        .AssertReply("To get to the other side")
-        //    .Send("What happened in the future?")
-        //        .AssertReply("Seeing into the future...")
-        //        .AssertReply("I see great things happening...")
-        //        .AssertReply("Perhaps even a successful bot demo")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_08RepeatDialog()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("08")
+                .AssertReply("Hello, what is your name?")
+            .Send("luhan")
+                .AssertReply("Hello luhan, nice to meet you!")
+            .Send("hi")
+                 .AssertReply("Hello, what is your name?")
+            .Send("luhan")
+                .AssertReply("Hello luhan, nice to meet you!")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_07BeginDialog()
-        //{
-        //    await BuildTestFlow(getSingleSample("07 - BeginDialog"))
-        //    .Send(new Activity(ActivityTypes.ConversationUpdate,
-        //        membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hello, I'm Zoidberg. What is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply("Hello Carlos, nice to talk to you!")
-        //        .AssertReply("Hey, I can tell you a joke, or tell your fortune")
-        //    .Send("Do you know a joke?")
-        //        .AssertReply("Why did the chicken cross the road?")
-        //    .Send("Why?")
-        //        .AssertReply("To get to the other side")
-        //    .Send("What happened in the future?")
-        //        .AssertReply("Seeing into the future...")
-        //        .AssertReply("I see great things in your future...")
-        //        .AssertReply("Potentially a successful demo")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_09TraceAndLog()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"), sendTrace: true)
+            .SendConversationUpdate()
+            .Send("09")
+                .AssertReply("Hello, what is your name?")
+            .Send("luhan")
+                .AssertReply(activity =>
+                {
+                    var trace = (Activity)activity;
+                    Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
+                    Assert.AreEqual("memory", trace.ValueType, "value type should be memory");
+                })
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_10ChoiceInputDialog()
-        //{
-        //    await BuildTestFlow(getSingleSample("10 - ChoiceInput"))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
-        //    .Send("Test1")
-        //        .AssertReply("You select: Test1")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_10EditSteps()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("10")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("luhan")
+                .AssertReply("Hello luhan, nice to talk to you!")
+                .AssertReply("Goodbye!")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_13SwitchCondition()
-        //{
-        //    await BuildTestFlow(getSingleSample("13 - SwitchCondition"))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
-        //    .Send("Test1")
-        //        .AssertReply("You select: Test1")
-        //        .AssertReply("You select: 1")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task JsonDialogLoad_11ReplaceDialog()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("11")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("luhan")
+                .AssertReply("Hello luhan, nice to talk to you!")
+            .Send("joke")
+                .AssertReply("Why did the chicken cross the road?")
+            .Send("Why?")
+                .AssertReply("To get to the other side")
+            .Send("future")
+                .AssertReply("Seeing into the future...")
+                .AssertReply("I see great things in your future...")
+                .AssertReply("Potentially a successful demo")
+            .StartTestAsync();
+        }
+
+        [TestMethod]
+        public async Task JsonDialogLoad_12EmitEvent()
+        {
+            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            .SendConversationUpdate()
+            .Send("12")
+                .AssertReply("Say moo to get a response, say emit to emit a event.")
+            .Send("moo")
+                .AssertReply("Yippee ki-yay!")
+            .Send("emit")
+                .AssertReply("CustomEvent Fired.")
+            .StartTestAsync();
+        }
+
+
 
         //[TestMethod]
         //public async Task JsonDialogLoad_09EndDialog()
@@ -290,22 +315,7 @@ namespace Tests
         //    .StartTestAsync();
         //}
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_11HttpRequest()
-        //{
-        //    await BuildTestFlow(getSingleSample("11 - HttpRequest"))
-        //    .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
-        //    .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
-        //    .Send("TestPetName")
-        //    .AssertReply("Great! Your pet's name is TestPetName")
-        //    .AssertReply("Now please enter the id of your pet, this could help you find your pet later.")
-        //    .Send("12121")
-        //    .AssertReply("Done! You have added a pet named \"TestPetName\" with id \"12121\"")
-        //    .AssertReply("Now try to specify the id of your pet, and I will help your find it out from the store.")
-        //    .Send("12121")
-        //    .AssertReply("Great! I found your pet named \"TestPetName\"")
-        //    .StartTestAsync();
-        //}
+
 
         private TestFlow BuildTestFlow(string resourceName, bool sendTrace = false)
         {

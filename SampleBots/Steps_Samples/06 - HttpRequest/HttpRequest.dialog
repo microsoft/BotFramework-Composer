@@ -4,16 +4,16 @@
     {
       "$type": "Microsoft.TextInput",
       "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
-      "property": "dialog.petname"
+      "property": "user.petname"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Great! Your pet's name is {dialog.petname}"
+      "activity": "Great! Your pet's name is {user.petname}"
     },
     {
       "$type": "Microsoft.TextInput",
       "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
-      "property": "dialog.petid"
+      "property": "user.petid"
     },
     {
       "$type": "Microsoft.HttpRequest",
@@ -24,12 +24,12 @@
         "test2": "test2"
       },
       "body": {
-        "id": "{dialog.petid}",
+        "id": "{user.petid}",
         "category": {
           "id": 0,
           "name": "string"
         },
-        "name": "{dialog.petname}",
+        "name": "{user.petname}",
         "photoUrls": ["string"],
         "tags": [
           {
@@ -39,26 +39,26 @@
         ],
         "status": "available"
       },
-      "property": "dialog.postResponse"
+      "property": "user.postResponse"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Done! You have added a pet named \"{dialog.postResponse.name}\" with id \"{dialog.postResponse.id}\""
+      "activity": "Done! You have added a pet named \"{user.postResponse.name}\" with id \"{user.postResponse.id}\""
     },
     {
       "$type": "Microsoft.TextInput",
       "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",
-      "property": "dialog.id"
+      "property": "user.id"
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "http://petstore.swagger.io/v2/pet/{dialog.id}",
+      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
       "method": "GET",
-      "property": "dialog.getResponse"
+      "property": "user.getResponse"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Great! I found your pet named \"{dialog.getResponse.name}\""
+      "activity": "Great! I found your pet named \"{user.getResponse.name}\""
     }
   ],
   "$schema": "../../app.schema",

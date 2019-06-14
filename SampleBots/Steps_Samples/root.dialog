@@ -2,22 +2,23 @@
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
+    "generator": "main.lg",
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
       "intents": {
-        "Steps": "(?i)Steps|01",
-        "EndTurn": "(?i)EndTurn|02",
-        "IfCondition": "(?i)IfCondition|03",
-        "EditArray": "(?i)EditArray|04",
-        "EndDialog": "(?i)EndDialog|05",
-        "HttpRequest": "(?i)HttpRequest|06",
-        "SwitchCondition": "(?i)SwitchCondition|07",
-        "RepeatDialog": "(?i)RepeatDialog|08",
-        "TraceAndLog": "(?i)TraceAndLog|trace|log|09",
-        "EditSteps": "(?i)EditSteps|10",
-        "ReplaceDialog": "(?i)ReplaceDialog|11",
-        "EmitEvent": "(?i)EmitEvent|12",
-        "CancelIntent":"(?i)cancel"
+        "Steps": "Steps|01",
+        "EndTurn": "EndTurn|02",
+        "IfCondition": "IfCondition|03",
+        "EditArray": "EditArray|04",
+        "EndDialog": "EndDialog|05",
+        "HttpRequest": "HttpRequest|06",
+        "SwitchCondition": "SwitchCondition|07",
+        "RepeatDialog": "RepeatDialog|08",
+        "TraceAndLog": "TraceAndLog|trace|log|09",
+        "EditSteps": "EditSteps|10",
+        "ReplaceDialog": "ReplaceDialog|11",
+        "EmitEvent": "EmitEvent|12",
+        "CancelIntent":"cancel"
       }
     },
   "rules": [
@@ -152,7 +153,7 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Hi, I am root dialog, you can try samples like: steps, endturn, ifCondition, editarray"
+          "activity": "[help]"
         }
       ]
     }
