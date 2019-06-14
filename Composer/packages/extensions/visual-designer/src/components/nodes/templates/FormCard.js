@@ -58,7 +58,7 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
         <div
           style={{
             fontWeight: '400',
-            paddingLeft: '5px',
+            paddingLeft: '10px',
             margin: '5px',
             fontSize: '14px',
             lineHeight: '19px',

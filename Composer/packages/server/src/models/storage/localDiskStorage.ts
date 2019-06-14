@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 import glob from 'globby';
 
-import { IFileStorage, Stat } from './interface';
+import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
@@ -12,6 +12,7 @@ const exists = promisify(fs.exists);
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
+const copyFile = promisify(fs.copyFile);
 
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
@@ -49,11 +50,15 @@ export class LocalDiskStorage implements IFileStorage {
     await removeFile(path);
   }
 
-  async mkDir(path: string): Promise<void> {
-    await mkDir(path);
+  async mkDir(path: string, options?: MakeDirectoryOptions): Promise<void> {
+    await mkDir(path, options);
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
     return await glob(pattern, { cwd: path });
+  }
+
+  async copyFile(src: string, dest: string): Promise<void> {
+    return await copyFile(src, dest);
   }
 }

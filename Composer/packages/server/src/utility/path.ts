@@ -16,11 +16,11 @@ class PathHandler {
   basename(param: string, ext: string | undefined = undefined) {
     return path.basename(param, ext).replace(/\\/g, '/');
   }
-  extname(param: string) {
-    return path.extname(param).replace(/\\/g, '/');
-  }
   dirname(param: string) {
     return path.dirname(param).replace(/\\/g, '/');
+  }
+  extname(param: string) {
+    return path.extname(param).replace(/\\/g, '/');
   }
   join(...params: string[]) {
     return path.join(...params).replace(/\\/g, '/');

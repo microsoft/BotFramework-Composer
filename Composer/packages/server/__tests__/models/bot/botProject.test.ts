@@ -68,12 +68,10 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialogFromTemplate(dialogName);
+    const dialogs = await proj.createDialog(dialogName);
     const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
 
-    if (!newFile) {
-      expect(newFile).toBeTruthy();
-    }
+    expect(newFile).not.toBeUndefined();
 
     const fileContent = ((newFile as unknown) as FileInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
@@ -121,18 +119,67 @@ describe('copyTo', () => {
   });
 });
 
-describe('update lg template', () => {
-  it('should update the lg template.', async () => {
-    const initValue = `# greet
-    - Hello!`;
+describe('modify non exist files', () => {
+  it('should throw error on delete/update non-exist lu/lg files', async () => {
+    const id = 'non-exist-file';
+    const content = 'blabla';
+    await expect(proj.removeLgFile(id)).rejects.toThrow();
+    await expect(proj.removeLuFile(id)).rejects.toThrow();
+    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+  });
+});
 
-    const newValue = `# updated
-    - Hi!`;
+describe('lg operation', () => {
+  afterEach(() => {
+    try {
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+    } catch (err) {
+      // ignore
+    }
+  });
 
-    const lgFiles = await proj.updateLgFile('test', newValue);
-    const aFile = lgFiles.find(f => f.id === 'test');
-    // @ts-ignore
-    expect(aFile.content).toEqual(newValue);
-    await proj.updateLgFile('test', initValue);
+  it('should create lg file and update index', async () => {
+    const id = 'root';
+    const dir = 'root';
+    const content = '# hello \n - hello';
+    const lgFiles = await proj.createLgFile(id, content, dir);
+    const result = lgFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(6);
+    expect(lgFiles.length).toEqual(2);
+
+    expect(result).not.toBeUndefined();
+    if (result !== undefined) {
+      expect(result.relativePath).toEqual('root/root.lg');
+      expect(result.content).toEqual(content);
+    }
+  });
+
+  it('should update lg file and update index', async () => {
+    const id = 'root';
+    const content = '# hello \n - hello2';
+    const lgFiles = await proj.updateLgFile(id, content);
+    const result = lgFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(6);
+    expect(lgFiles.length).toEqual(2);
+
+    expect(result).not.toBeUndefined();
+    if (result !== undefined) {
+      expect(result.relativePath).toEqual('root/root.lg');
+      expect(result.content).toEqual(content);
+    }
+  });
+
+  it('should delete lg file and update index', async () => {
+    const id = 'root';
+    const lgFiles = await proj.removeLgFile(id);
+    const result = lgFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(5);
+    expect(lgFiles.length).toEqual(1);
+
+    expect(result).toBeUndefined();
   });
 });
