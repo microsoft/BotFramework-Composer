@@ -27,6 +27,51 @@ export function App() {
     actions.fetchProject();
   }, []);
 
+  const links = [
+    {
+      //index: 0,
+      to: '/',
+      iconName: 'SplitObject',
+      labelName: formatMessage('Flow design'),
+      labelHide: !sideBarExpand,
+      selected: true,
+    },
+    {
+      //index: 1,
+      to: 'language-understanding/all',
+      iconName: 'People',
+      labelName: formatMessage('User says'),
+      labelHide: !sideBarExpand,
+      selected: false,
+    },
+    {
+      //index: 2,
+      to: 'language-generation/all',
+      iconName: 'Robot',
+      labelName: formatMessage('Bot says'),
+      labelHide: !sideBarExpand,
+      selected: false,
+    },
+    {
+      //index: 3,
+      to: 'setting',
+      iconName: 'Settings',
+      labelName: formatMessage('Settings'),
+      labelHide: !sideBarExpand,
+      selected: false,
+    },
+  ];
+
+  const onClickLink = clickedLinkIndex => {
+    links.forEach((link, index) => {
+      if (index === clickedLinkIndex) {
+        link.selected = true;
+      } else {
+        link.selected = false;
+      }
+    });
+  };
+  console.log(links);
   return (
     <Fragment>
       <Header
@@ -47,7 +92,20 @@ export function App() {
             }}
           />
           <div css={divider} />
-          <NavItem
+          {links.map((link, index) => {
+            return (
+              <NavItem
+                key={index}
+                to={link.to}
+                iconName={link.iconName}
+                labelName={link.labelName}
+                labelHide={!sideBarExpand}
+                onClick={onClickLink}
+                selected={link.selected}
+              />
+            );
+          })}
+          {/* <NavItem
             to="/"
             exact={true}
             iconName="SplitObject"
@@ -66,9 +124,8 @@ export function App() {
             labelName={formatMessage('User says')}
             labelHide={!sideBarExpand}
           />
-          <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} />
+          <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} /> */}
         </div>
-
         <Routes component={Content} />
       </div>
     </Fragment>

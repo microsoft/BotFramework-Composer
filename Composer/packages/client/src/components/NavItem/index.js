@@ -4,27 +4,37 @@ import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment } from 'react';
 
-import { link, outer, iconButton, commandBarButton } from './styles';
+import { link, outer, iconButton, commandBarButton, lockedBar } from './styles';
 
 export const NavItem = props => {
-  const { to, exact, labelHide, iconName, labelName } = props;
+  const { to, labelHide, iconName, labelName, selected, onClick, index } = props;
   return (
     <Link
       to={to}
       tabIndex={-1}
       style={link}
-      getProps={({ isCurrent, isPartiallyCurrent }) => {
-        const activeStyle = { style: { ...link, color: '#0083cb' } };
-        const isActive = exact ? isCurrent : isPartiallyCurrent;
-        return isActive ? activeStyle : null;
-      }}
+      // getProps={({ isCurrent, isPartiallyCurrent }) => {
+      //   const activeStyle = { style: { ...link, backgroundColor: '#E1DFDD' } };
+      //   const isActive = exact ? isCurrent : isPartiallyCurrent;
+      //   return isActive ? activeStyle : null;
+      // }}
     >
-      <div tabIndex={-1} css={outer(!labelHide)}>
+      <div
+        tabIndex={-1}
+        css={outer(!labelHide)}
+        onClick={() => {
+          onClick(index);
+        }}
+      >
         {labelHide ? (
           <IconButton iconProps={{ iconName }} styles={iconButton} />
         ) : (
-          <CommandBarButton iconProps={{ iconName }} text={labelName} styles={commandBarButton} />
+          <Fragment>
+            {selected && <div css={lockedBar} />}
+            <CommandBarButton iconProps={{ iconName }} text={labelName} styles={commandBarButton} />
+          </Fragment>
         )}
       </div>
     </Link>
@@ -37,4 +47,7 @@ NavItem.propTypes = {
   labelName: PropTypes.string,
   exact: PropTypes.bool,
   labelHide: PropTypes.bool,
+  selected: PropTypes.bool,
+  onClick: PropTypes.func,
+  index: PropTypes.number,
 };

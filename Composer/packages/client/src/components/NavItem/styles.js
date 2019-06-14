@@ -47,3 +47,9 @@ export const commandBarButton = {
     zIndex: '1',
   },
 };
+
+export const lockedBar = {
+  backgroundColor: '#0078D4',
+  width: '2px',
+  height: '40px',
+};
