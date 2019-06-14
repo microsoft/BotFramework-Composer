@@ -12,7 +12,7 @@ router.post('/projects', ProjectController.createProject);
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
 router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
-router.post('/projects/opened/dialogs', ProjectController.createDialogFromTemplate);
+router.post('/projects/opened/dialogs', ProjectController.createDialog);
 router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
 router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFile);
 router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
