@@ -19,7 +19,7 @@ const calculateNodeMap = (_, data) => {
 
 export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { stepGroup, ruleGroup } = nodeMap;
+  const { stepGroup } = nodeMap;
 
   return (
     <div
@@ -39,17 +39,6 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
             key={stepGroup.id}
             id={stepGroup.id}
             data={stepGroup.data}
-            focusedId={focusedId}
-            onEvent={onEvent}
-          />
-        </div>
-      ) : null}
-      {ruleGroup ? (
-        <div style={{ margin: ColMargin }}>
-          <StepEditor
-            key={ruleGroup.id}
-            id={ruleGroup.id}
-            data={ruleGroup.data}
             focusedId={focusedId}
             onEvent={onEvent}
           />

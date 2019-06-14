@@ -1,7 +1,0 @@
-{
-  "$type": "Microsoft.MultiLanguageRecognizer",
-  "recognizers": {
-    "en-us": "ToDoLuis.main.en-us.lu",
-    "": "ToDoLuis.main.en-us.lu"
-  }
-}

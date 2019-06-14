@@ -4,7 +4,7 @@ The web app that can edit bots in OBI format, and can use Bot Launcher to run bo
 ### Instructions
 
 Prerequisite:
-* node > 8.0
+* node > 10.0
 * yarn         // npm install -g yarn
 
 Commands:
