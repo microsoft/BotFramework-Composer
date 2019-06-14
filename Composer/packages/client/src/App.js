@@ -5,6 +5,7 @@ import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import lodash from 'lodash';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
@@ -27,7 +28,7 @@ export function App() {
     actions.fetchProject();
   }, []);
 
-  const links = [
+  const initLinks = [
     {
       //index: 0,
       to: '/',
@@ -62,16 +63,16 @@ export function App() {
     },
   ];
 
+  const [links, setLinks] = useState(initLinks);
+
   const onClickLink = clickedLinkIndex => {
-    links.forEach((link, index) => {
-      if (index === clickedLinkIndex) {
-        link.selected = true;
-      } else {
-        link.selected = false;
-      }
+    const newLinks = lodash.cloneDeep(links);
+    newLinks.forEach(link => {
+      link.selected = false;
     });
+    newLinks[clickedLinkIndex].selected = true;
+    setLinks(newLinks);
   };
-  console.log(links);
   return (
     <Fragment>
       <Header
@@ -101,10 +102,12 @@ export function App() {
                 labelName={link.labelName}
                 labelHide={!sideBarExpand}
                 onClick={onClickLink}
+                index={index}
                 selected={link.selected}
               />
             );
           })}
+<<<<<<< HEAD
           {/* <NavItem
             to="/"
             exact={true}
@@ -125,6 +128,8 @@ export function App() {
             labelHide={!sideBarExpand}
           />
           <NavItem to="setting" iconName="Settings" labelName={formatMessage('Settings')} labelHide={!sideBarExpand} /> */}
+=======
+>>>>>>> create local state to record the selected link
         </div>
         <Routes component={Content} />
       </div>
