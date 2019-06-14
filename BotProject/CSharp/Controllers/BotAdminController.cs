@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -34,14 +34,23 @@ namespace Microsoft.Bot.Builder.TestBot.Json
            
 
         [HttpPost]
-        public IActionResult PostAsync(IFormFile file)
+        public IActionResult PostAsync(IFormFile file, [FromForm]string config)
         {
             if (file == null)
             {
                 return BadRequest();
             }
 
-            BotManager.SetCurrent(file.OpenReadStream());
+            if (!string.IsNullOrEmpty(config))
+            {
+                var luisConfigObj = JsonConvert.DeserializeObject<LuConfigFile>(config);
+                BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj);
+            }
+            else
+            {
+                BotManager.SetCurrent(file.OpenReadStream());
+            }
+
             return Ok();
         }
     }
