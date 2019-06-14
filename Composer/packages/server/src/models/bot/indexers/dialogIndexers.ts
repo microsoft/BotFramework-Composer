@@ -2,38 +2,46 @@ import { Path } from '../../../utility/path';
 
 import { FileInfo, Dialog } from './../interface';
 
+const jsonWalker = (node: any, selector: Function) => {
+  if (node === null || Array.isArray(node) || typeof node !== 'object') return;
+
+  Object.keys(node).forEach(key => {
+    const nodeValue = node[key];
+    if (typeof nodeValue === 'string') {
+      selector.call({}, key, nodeValue);
+    } else if (Array.isArray(nodeValue)) {
+      nodeValue.forEach(child => {
+        jsonWalker(child, selector);
+      });
+    } else if (typeof nodeValue === 'object') {
+      const child = nodeValue;
+      jsonWalker(child, selector);
+    }
+  });
+};
+
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
 
   // find out all lg templates given dialog
-  private lgTemplateWalker(dialogJsonString: string): string[] {
+  private getLgTemplatesInDialog(dialogJsonString: string): string[] {
     const templates: string[] = [];
     const dialogJson = JSON.parse(dialogJsonString);
 
-    const walker = function(node: any) {
-      if (node === null || Array.isArray(node) || typeof node !== 'object') return;
+    // selector search fields
+    const searchFields = ['activity', 'prompt'];
 
-      Object.keys(node).forEach(key => {
-        const nodeValue = node[key];
-        if (typeof nodeValue === 'string') {
-          const templateRegExp = /\[(\w+)\]/g;
-          let matchResult;
-          while ((matchResult = templateRegExp.exec(nodeValue)) !== null) {
-            const templateName = matchResult[1];
-            templates.push(templateName);
-          }
-        } else if (Array.isArray(nodeValue)) {
-          nodeValue.forEach(child => {
-            walker(child);
-          });
-        } else if (typeof nodeValue === 'object') {
-          const child = nodeValue;
-          walker(child);
-        }
-      });
+    const templateSelector = function(key: string, value: string) {
+      if (searchFields.indexOf(key) === -1) return;
+      const templateRegExp = /\[(\w+)\]/g;
+      let matchResult;
+      while ((matchResult = templateRegExp.exec(value)) !== null) {
+        const templateName = matchResult[1];
+        templates.push(templateName);
+      }
     };
 
-    walker(dialogJson);
+    jsonWalker(dialogJson, templateSelector);
 
     return templates;
   }
@@ -52,7 +60,7 @@ export class DialogIndexer {
               id: 0,
               name: Path.basename(file.name, extName),
               content: JSON.parse(file.content),
-              lgTemplates: this.lgTemplateWalker(file.content),
+              lgTemplates: this.getLgTemplatesInDialog(file.content),
               relativePath: file.relativePath,
             };
 
