@@ -33,9 +33,6 @@ jest.mock('azure-storage', () => {});
 const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1/1.botproj');
 
 const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
-// TODO: this is a singal that our save as api and copy to feature is not the right design
-// the saveAsPath should be dir, not a filepath
-const saveAsPath = `${saveAsDir}/1.botproj`;
 
 describe('test BotProjectService', () => {
   it('openProject', async () => {
@@ -52,10 +49,10 @@ describe('test BotProjectService', () => {
   it('saveProjectAs', async () => {
     const botProj = {
       storageId: 'default',
-      path: saveAsPath,
+      path: saveAsDir,
     };
     await projectService.saveProjectAs(botProj);
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(saveAsPath);
+    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(`${saveAsDir}/1.botproj`);
     // remove the saveas files
     try {
       rimraf.sync(saveAsDir);
