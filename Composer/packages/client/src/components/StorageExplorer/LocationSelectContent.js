@@ -68,7 +68,9 @@ export function LocationSelectContent(props) {
 
   const checkDuplicate = value => {
     if (focusedStorageFolder.children) {
-      const index = findindex(focusedStorageFolder.children, { name: value });
+      const index = findindex(focusedStorageFolder.children, function(child) {
+        return child.name.toLowerCase() === value.toLowerCase();
+      });
       if (index >= 0) {
         return 'Duplicate folder name';
       }
@@ -82,7 +84,7 @@ export function LocationSelectContent(props) {
       parent = '';
     }
     const dir = `${parent}/${focusedStorageFolder.name}`;
-    const absolutePath = `${dir}/${value}/bot.botproj`;
+    const absolutePath = `${dir}/${value}`;
     await onSaveAs(storages[currentStorageIndex.current].id, absolutePath);
     updateCurrentPath(dir, storages[currentStorageIndex.current].id);
   };

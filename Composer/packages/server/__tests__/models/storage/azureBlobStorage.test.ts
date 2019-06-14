@@ -82,7 +82,7 @@ describe('test Azure Blob Storage', () => {
   it('test file exists function', async () => {
     const client = new AzureBlobStorage(mockStorageConnect);
     let result = await client.exists('/container');
-    expect(result).toBe(false);
+    expect(result).toBe(true);
     result = await client.exists('/container/blobname');
     expect(result).toBeTruthy();
   });

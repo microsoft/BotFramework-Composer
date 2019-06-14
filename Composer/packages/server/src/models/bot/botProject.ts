@@ -148,23 +148,52 @@ export class BotProject {
     return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
   };
 
-  public copyFiles = async (prevFiles: FileInfo[]) => {
-    if (!(await this.fileStorage.exists(this.dir))) {
-      await this.fileStorage.mkDir(this.dir);
+  public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
+    // get destination storage client
+    const dstStorage = StorageService.getStorageClient(locationRef.storageId);
+    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up existed bot proj
+    if (await dstStorage.exists(locationRef.path)) {
+      throw new Error('already have this folder, please give another name');
     }
+    const dstDir = locationRef.path;
+    await dstStorage.mkDir(dstDir, { recursive: true });
+
+    // copy files to locationRef
+    const prevFiles = await this._getFiles();
     for (const index in prevFiles) {
       const file = prevFiles[index];
-      const absolutePath = Path.join(this.dir, file.relativePath);
-      const content =
+      // update main dialog file name and entry in botproj file
+      const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
+      if (file.relativePath.indexOf('.main.dialog') >= 0) {
+        file.relativePath = Path.join(Path.dirname(file.relativePath), newMainDialogName);
+      }
+      const absolutePath = Path.join(dstDir, file.relativePath);
+      let content =
         index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      await this.fileStorage.writeFile(absolutePath, content);
+      if (file.name.indexOf('.botproj') >= 0) {
+        content = JSON.parse(content);
+        content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
+        content = JSON.stringify(content, null, 2) + '\n';
+      }
+      await dstStorage.writeFile(absolutePath, content);
+    }
+    // return new proj ref
+    const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
+    if (dstBotProj && dstBotProj.length === 1) {
+      return {
+        storageId: locationRef.storageId,
+        path: Path.join(locationRef.path, dstBotProj[0]),
+      };
+    } else if (dstBotProj && dstBotProj.length > 1) {
+      throw new Error('new bot porject have more than one botproj file');
+    } else {
+      throw new Error('new bot porject have no botproj file');
     }
   };
 
-  public copyTo = async (locationRef: LocationRef): Promise<BotProject> => {
-    const newBotProject = new BotProject(locationRef);
-    await newBotProject.copyFiles(await this._getFiles());
-    return newBotProject;
+  public copyTo = async (locationRef: LocationRef) => {
+    const newProjRef = await this.cloneFiles(locationRef);
+    return new BotProject(newProjRef);
   };
 
   public exists(): Promise<boolean> {
@@ -174,7 +203,7 @@ export class BotProject {
   // create file in this project
   // this function will gurantee the memory cache (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
-    const absolutePath = `${this.dir}/${relativePath}`;
+    const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
@@ -243,7 +272,9 @@ export class BotProject {
     if (!dir || dir === '.') {
       return;
     }
-    await this.fileStorage.mkDir(dir, { recursive: true });
+    if (!(await this.fileStorage.exists(dir))) {
+      await this.fileStorage.mkDir(dir, { recursive: true });
+    }
   };
 
   private _getFiles = async () => {
