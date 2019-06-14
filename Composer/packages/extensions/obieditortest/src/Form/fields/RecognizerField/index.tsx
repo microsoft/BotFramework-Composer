@@ -1,135 +1,141 @@
-import React from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
-import { DefaultButton, IContextualMenuItem, Label, Link, ContextualMenuItemType } from 'office-ui-fabric-react';
-import classnames from 'classnames';
-import { FontSizes } from '@uifabric/styling';
+import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 
 import { BaseField } from '../BaseField';
+import { LuFile } from '../../../types';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 import InlineLuEditor from './InlineLuEditor';
+
 import './styles.scss';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { formData, formContext } = props;
+  const { formData } = props;
+  const [loading, setLoading] = useState(false);
 
   const {
     formContext: { luFiles, shellApi, dialogName },
     onChange,
   } = props;
 
-  const changeLuFile = (e, item) => {
-    if (item) {
-      onChange(`${item.key}.lu`);
+  const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
+  const selectedFile: LuFile | void = luFiles.find(f => f.id === dialogName);
+  const isLuFileSelected = Boolean(
+    selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
+  );
+
+  const handleChange = (_, option?: IDropdownOption) => {
+    if (option) {
+      switch (option.key) {
+        case 'none': {
+          onChange(undefined);
+          return;
+        }
+        case 'luis': {
+          if (selectedFile) {
+            onChange(`${dialogName}.lu`);
+          } else {
+            const { createLuFile } = shellApi;
+
+            /**
+             * The setTimeouts are used to get around the
+             * 1. allows the store to update with the luFile creation
+             * 2. allows the debounced onChange to be invoked
+             *
+             * This is a hack, but dialogs will be created along with
+             * lu and lg files so this code path shouldn't be executed.
+             */
+            setLoading(true);
+            createLuFile(dialogName).then(() => {
+              setTimeout(() => {
+                onChange(`${dialogName}.lu`);
+                setTimeout(() => {
+                  setLoading(false);
+                }, 750);
+              }, 500);
+            });
+          }
+          return;
+        }
+        case 'regex': {
+          onChange({ $type: 'Microsoft.RegexRecognizer' });
+          return;
+        }
+        default:
+          return;
+      }
     }
   };
+  const options = [
+    {
+      key: 'none',
+      text: formatMessage('None'),
+    },
+    {
+      key: 'luis',
+      text: 'BF Language Understanding',
+    },
+    {
+      key: 'regex',
+      text: formatMessage('Regular Expression'),
+    },
+  ];
 
-  const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
-  const selectedFile =
-    typeof props.formData === 'string' ? luFiles.find(f => (props.formData as string).startsWith(f.id)) : null;
+  const getSelectedType = () => {
+    if (typeof props.formData === 'string') {
+      return 'luis';
+    }
 
-  const menuItems: IContextualMenuItem[] = luFiles.sort().map(f => ({
-    key: f.id,
-    text: f.id,
-    canCheck: true,
-    checked: f === selectedFile,
-    disabled: f === selectedFile,
-    iconProps: { iconName: 'People' },
-  }));
+    if (isRegex) {
+      return 'regex';
+    }
 
-  if (luFiles.findIndex(f => f.id === dialogName) === -1) {
-    menuItems.push(
-      {
-        key: 'divider1',
-        itemType: ContextualMenuItemType.Divider,
-      },
-      {
-        key: 'add',
-        text: formatMessage('Add Luis Recognizer'),
-        iconProps: { iconName: 'Add' },
-        onClick: () => {
-          const { createLuFile } = shellApi;
-          createLuFile(dialogName).then(() => {
-            onChange(`${dialogName}.lu`);
-          });
-        },
-      }
-    );
-  }
+    return 'none';
+  };
 
-  if (selectedFile || !formData) {
-    menuItems.push(
-      {
-        key: 'divider2',
-        itemType: ContextualMenuItemType.Divider,
-      },
-      {
-        key: 'regex',
-        text: formatMessage('Use Regex Recognizer'),
-        iconProps: { iconName: 'Code' },
-        onClick: () => {
-          onChange({ $type: 'Microsoft.RegexRecognizer' });
-        },
-      }
-    );
-  }
+  const onRenderTitle = (options?: IDropdownOption[]) => {
+    if (loading || !options) {
+      return (
+        <div style={{ height: '100%', display: 'flex' }}>
+          <Spinner size={SpinnerSize.small} />
+        </div>
+      );
+    }
 
-  if (selectedFile || isRegex) {
-    menuItems.push(
-      {
-        key: 'divider3',
-        itemType: ContextualMenuItemType.Divider,
-      },
-      {
-        key: 'remove',
-        text: formatMessage('Remove Recognizer'),
-        iconProps: { iconName: 'Delete' },
-        onClick: () => {
-          onChange(undefined);
-        },
-      }
-    );
-  }
+    const selectedOption = options.find(o => o.key === getSelectedType());
+
+    if (selectedOption) {
+      return <span>{selectedOption.text}</span>;
+    }
+
+    return <span />;
+  };
 
   return (
     <BaseField {...props}>
-      <div className="LuFileSelector">
-        <Label className={classnames('LuFileSelectorLabel')}>{formatMessage('LU File Name')}</Label>
-        <div className="LuFileSelectorFile">
-          <Link
-            onClick={() => {
-              if (selectedFile) {
-                shellApi.shellNavigate('lu', { id: selectedFile.id });
-              }
-            }}
-            styles={{ root: { fontSize: FontSizes.medium, padding: '5px 10px' } }}
-            disabled={!selectedFile}
-          >
-            {selectedFile ? props.formData : 'No Lu File Selected'}
-          </Link>
-        </div>
-        <div className="LuFileSelectorMenu">
-          <DefaultButton
-            menuIconProps={{ iconName: 'More' }}
-            menuProps={{ items: menuItems, isBeakVisible: true, onItemClick: changeLuFile }}
-            styles={{ root: { minWidth: '40px' } }}
-            ariaLabel={formatMessage('Select another .lu file')}
-          />
-        </div>
-      </div>
-      <ToggleEditor title={selectedFile ? 'text editor' : 'regex editor'} formData={formData}>
+      <Dropdown
+        label={formatMessage('Recognizer Type')}
+        onChange={handleChange}
+        options={options}
+        selectedKey={getSelectedType()}
+        responsiveMode={ResponsiveMode.large}
+        onRenderTitle={onRenderTitle}
+      />
+      <ToggleEditor
+        key={getSelectedType()}
+        title={isLuFileSelected ? 'text editor' : 'regular expression editor'}
+        loaded={Boolean(!loading && formData)}
+      >
         {() => {
-          if (selectedFile) {
+          if (selectedFile && isLuFileSelected) {
             const updateLuFile = (newValue?: string) => {
-              const { updateLuFile } = formContext.shellApi;
-              updateLuFile({ id: selectedFile.id, content: newValue });
+              shellApi.updateLuFile({ id: selectedFile.id, content: newValue });
             };
-
             return <InlineLuEditor file={selectedFile} onSave={updateLuFile} />;
           }
-
           if (isRegex) {
             return <RegexEditor {...props} />;
           }

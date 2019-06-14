@@ -64,7 +64,7 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialogFromTemplate(dialogName);
+    const dialogs = await proj.createDialog(dialogName);
     const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
 
     expect(newFile).not.toBeUndefined();

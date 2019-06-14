@@ -302,6 +302,7 @@ const Demo: React.FC = () => {
           schemas={{ editor: editorSchemaFormData }}
           shellApi={mockShellApi as ShellApi}
           luFiles={luFiles}
+          dialogName="FirstLuFile"
         />
       </div>
     </div>

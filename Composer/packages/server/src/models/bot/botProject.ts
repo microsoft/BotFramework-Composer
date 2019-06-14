@@ -5,7 +5,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -73,7 +73,7 @@ export class BotProject {
     return botFile;
   };
 
-  public updateDialog = async (id: string, dialogContent: any) => {
+  public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
     // TODO: replace name with id with dialog in next pass, to make in consistent across dialog, lg, lu
     const dialog = this.dialogIndexer.getDialogs().find(d => d.name === id);
     if (dialog === undefined) {
@@ -87,7 +87,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialogFromTemplate = async (id: string, dir: string = '') => {
+  public createDialog = async (id: string, dir: string = ''): Promise<Dialog[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
     const content = JSON.stringify(merge({}, DIALOG_TEMPLATE), null, 2) + '\n';
 
@@ -95,7 +95,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public updateLgFile = async (id: string, content: string) => {
+  public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
@@ -104,13 +104,13 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = '') => {
+  public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
-  public removeLgFile = async (id: string) => {
+  public removeLgFile = async (id: string): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
@@ -119,7 +119,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public updateLuFile = async (id: string, content: string) => {
+  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -129,13 +129,13 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public createLuFile = async (id: string, content: string, dir: string = '') => {
+  public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
     await this._createFile(relativePath, content);
     return this.luIndexer.getLuFiles();
   };
 
-  public removeLuFile = async (id: string) => {
+  public removeLuFile = async (id: string): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -196,7 +196,7 @@ export class BotProject {
     return new BotProject(newProjRef);
   };
 
-  public exists() {
+  public exists(): Promise<boolean> {
     return this.fileStorage.exists(this.absolutePath);
   }
 
