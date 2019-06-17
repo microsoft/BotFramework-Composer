@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cci-graph-lib": "*",
+    "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
