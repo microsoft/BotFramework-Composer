@@ -2,13 +2,17 @@ import { Path } from '../../../utility/path';
 
 import { FileInfo, Dialog } from './../interface';
 
-const jsonWalker = (node: any, selector: Function) => {
+interface SelectorFunc {
+  (key: string, value: any): void;
+}
+
+const jsonWalker = (node: any, selector: SelectorFunc) => {
   if (node === null || Array.isArray(node) || typeof node !== 'object') return;
 
   Object.keys(node).forEach(key => {
     const nodeValue = node[key];
     if (typeof nodeValue === 'string') {
-      selector.call({}, key, nodeValue);
+      selector.call(null, key, nodeValue);
     } else if (Array.isArray(nodeValue)) {
       nodeValue.forEach(child => {
         jsonWalker(child, selector);
@@ -31,7 +35,7 @@ export class DialogIndexer {
     // selector search fields
     const searchFields = ['activity', 'prompt'];
 
-    const templateSelector = function(key: string, value: string) {
+    const templateSelector: SelectorFunc = function(key: string, value: string) {
       if (searchFields.indexOf(key) === -1) return;
       const templateRegExp = /\[(\w+)\]/g;
       let matchResult;
