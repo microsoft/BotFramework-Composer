@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useMemo, useState } from 'react';
+import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { navigate } from '@reach/router';
 
@@ -54,8 +54,6 @@ export function ShellApi() {
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
 
-  const [changedEditor, setChangedEditor] = useState('');
-
   useEffect(() => {
     apiClient.connect();
 
@@ -89,25 +87,17 @@ export function ShellApi() {
    * so we need send `reset` api to visual & form editor when data changed.
    */
   useEffect(() => {
-    if (window.frames[0]) {
-      const editorWindow = window.frames[0];
-      apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
-    }
+    Array.from(window.frames).forEach(frame => {
+      try {
+        if (frame.name) {
+          const editorWindow = frame;
+          apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
+        }
+      } catch (err) {
+        // TODO
+      }
+    });
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
-
-  useEffect(() => {
-    if (window.frames[1] && changedEditor !== VISUAL_EDITOR) {
-      const editorWindow = window.frames[1];
-      apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }, [changedEditor, dialogs, lgFiles, luFiles, navPath, focusPath]);
-
-  useEffect(() => {
-    if (window.frames[2] && changedEditor !== FORM_EDITOR) {
-      const editorWindow = window.frames[2];
-      apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }, [changedEditor, dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
@@ -136,7 +126,6 @@ export function ShellApi() {
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
     let path = '';
-    setChangedEditor(sourceWindowName);
     switch (sourceWindowName) {
       case VISUAL_EDITOR:
         path = navPath;
@@ -220,7 +209,6 @@ export function ShellApi() {
     if (event.source.name === FORM_EDITOR) {
       path = focusPath;
     }
-    setChangedEditor('');
     actions.focusTo(path + subPath);
   }
 
