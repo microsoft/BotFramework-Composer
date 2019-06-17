@@ -20,7 +20,7 @@ export const iconButton = {
   root: {
     color: 'currentColor',
     height: '40px',
-    width: '40px',
+    width: '38px',
     fontSize: `${FontSizes.size14}`,
   },
   icon: {
