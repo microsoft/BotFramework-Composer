@@ -1,51 +1,53 @@
 import { Path } from '../../../utility/path';
+import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 
 import { FileInfo, Dialog } from './../interface';
-
-interface SelectorFunc {
-  (key: string, value: any): void;
-}
-
-const jsonWalker = (node: any, selector: SelectorFunc) => {
-  if (node === null || Array.isArray(node) || typeof node !== 'object') return;
-
-  Object.keys(node).forEach(key => {
-    const nodeValue = node[key];
-    if (typeof nodeValue === 'string') {
-      selector.call(null, key, nodeValue);
-    } else if (Array.isArray(nodeValue)) {
-      nodeValue.forEach(child => {
-        jsonWalker(child, selector);
-      });
-    } else if (typeof nodeValue === 'object') {
-      const child = nodeValue;
-      jsonWalker(child, selector);
-    }
-  });
-};
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
 
   // find out all lg templates given dialog
-  private getLgTemplatesInDialog(dialogJsonString: string): string[] {
+  private ExtractLgTemplates(dialog: Dialog): string[] {
     const templates: string[] = [];
-    const dialogJson = JSON.parse(dialogJsonString);
 
-    // selector search fields
-    const searchFields = ['activity', 'prompt'];
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's not a valid schema dialog node, stop.
+      if (typeof value !== 'object' || value.hasOwnProperty('$type') === false) return true;
 
-    const templateSelector: SelectorFunc = function(key: string, value: string) {
-      if (searchFields.indexOf(key) === -1) return;
-      const templateRegExp = /\[(\w+)\]/g;
-      let matchResult;
-      while ((matchResult = templateRegExp.exec(value)) !== null) {
-        const templateName = matchResult[1];
-        templates.push(templateName);
+      let target;
+      switch (value.$type) {
+        case 'Microsoft.SendActivity':
+          target = value.activity;
+          break;
+        case 'Microsoft.TextInput':
+          target = value.prompt;
+          break;
+
+        // if we want stop at some $type, do here
+        case 'location':
+          return true;
       }
+
+      if (target && typeof target === 'string') {
+        const reg = /\[(\w+)\]/g;
+        let result;
+        while ((result = reg.exec(target)) !== null) {
+          const name = result[1];
+          templates.push(name);
+        }
+      }
+
+      return false;
     };
 
-    jsonWalker(dialogJson, templateSelector);
+    JsonWalk('$', dialog, visitor);
 
     return templates;
   }
@@ -60,11 +62,12 @@ export class DialogIndexer {
         const extName = Path.extname(file.name);
         try {
           if (extName === '.dialog' && !file.name.endsWith('.lu.dialog')) {
+            const dialogJson = JSON.parse(file.content);
             const dialog = {
               id: 0,
               name: Path.basename(file.name, extName),
-              content: JSON.parse(file.content),
-              lgTemplates: this.getLgTemplatesInDialog(file.content),
+              content: dialogJson,
+              lgTemplates: this.ExtractLgTemplates(dialogJson),
               relativePath: file.relativePath,
             };
 
