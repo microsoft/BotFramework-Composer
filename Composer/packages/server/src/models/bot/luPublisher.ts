@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 import { IConfig } from 'lubuild/typings/lib/IConfig';
-import { keys } from 'lodash';
+import { keys, replace } from 'lodash';
 import { runBuild } from 'lubuild';
 import { LuisAuthoring } from 'luis-apis';
 import * as msRest from '@azure/ms-rest-js';
@@ -61,6 +61,18 @@ export class LuPublisher {
     await runBuild(config);
     await this._copyDialogsToTargetFolder(config);
     return await this._updateStatus(config.authoringKey, config);
+  };
+
+  public checkLuisDeployed = async () => {
+    const setting: ILuisSettings = await this._getSettings();
+    if (setting === null) return false;
+    const appNames = keys(setting.luis);
+    return appNames.every(async name => {
+      if (ENDPOINT_KEYS.indexOf(name) < 0) {
+        return await this.storage.exists(`${replace(name, '_', '.')}.dialog`);
+      }
+      return true;
+    });
   };
 
   public getLuisConfig = () => this.config;
@@ -176,6 +188,7 @@ export class LuPublisher {
 
   private _getSettings = async () => {
     const settingPath = this._getSettingPath();
+    if (settingPath === null) return null;
     return await this._getJsonObject(settingPath);
   };
 

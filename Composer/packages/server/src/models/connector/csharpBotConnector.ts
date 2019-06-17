@@ -35,14 +35,13 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    const luisConfig = BotProjectService.currentBotProject.getLuisConfig();
-    const luFiles = BotProjectService.currentBotProject.getIndexes().luFiles;
+    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (luisConfig === null && luFiles.length !== 0) {
+    if (!(await BotProjectService.currentBotProject.luPublisher.checkLuisDeployed())) {
       throw new Error('Please publish your Luis models first');
     }
 
