@@ -4,6 +4,7 @@ import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
+import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
 
 import Form from './Form';
@@ -25,6 +26,7 @@ export interface FormEditorProps {
   dialogs: DialogInfo[];
   dialogName: string;
   luFiles: LuFile[];
+  lgFiles: any;
   schemas: EditorSchema;
   memory: FormMemory;
   shellApi: ShellApi;
@@ -117,7 +119,11 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             editorSchema: schemas.editor,
             rootId: props.focusPath,
             luFiles: props.luFiles,
+            lgFiles: props.lgFiles,
             dialogName: props.dialogName,
+            getDialogId: () => {
+              return get(data, '$designer.id');
+            },
           }}
           idPrefix={props.focusPath}
         >

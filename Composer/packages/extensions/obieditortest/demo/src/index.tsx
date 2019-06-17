@@ -87,6 +87,24 @@ const luFiles = [
   },
 ];
 
+const lgFiles = [
+  {
+    id: 'FirstLgFile',
+    absolutePath: '/Some/Path/FirstLgFile',
+    content: '# Hello1\n- Hi',
+  },
+  {
+    id: 'SecondLgFile',
+    absolutePath: '/Some/Path/SecondLgFile',
+    content: '# Hello2\n- Good morning',
+  },
+  {
+    id: 'main',
+    absolutePath: '/Some/Path/ThirsLgFile',
+    content: '# TestActivity\n- Hello',
+  },
+];
+
 function getDefaultData() {
   const storage = window.sessionStorage.getItem('formData');
 
@@ -302,6 +320,7 @@ const Demo: React.FC = () => {
           schemas={{ editor: editorSchemaFormData }}
           shellApi={mockShellApi as ShellApi}
           luFiles={luFiles}
+          lgFiles={lgFiles}
           dialogName="FirstLuFile"
         />
       </div>

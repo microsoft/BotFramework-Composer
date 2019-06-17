@@ -7,8 +7,10 @@ export interface FormContext {
   shellApi: ShellApi;
   rootId: string;
   luFiles: LuFile[];
+  lgFiles: any;
   dialogOptions: string[];
   dialogName: string;
+  getDialogId: any;
 }
 
 interface EnumOption {

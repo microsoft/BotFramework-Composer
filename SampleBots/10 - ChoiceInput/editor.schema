@@ -110,8 +110,8 @@
       "title": "SaveEntity"
     },
     "Activity": {
-      "title": "Send Activity",
-      "description": "What your Bot says to the User. Powered by Language Generation. Visit <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> the documentation</a> a reference of capabilities."
+      "title": "Response",
+      "description": "What your Bot says to the User. Powered by Language Generation. <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> Learn more</a>."
     },
     "Microsoft.SetProperty": {
       "title": "SetProperty"

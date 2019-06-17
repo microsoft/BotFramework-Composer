@@ -81,6 +81,10 @@ function ExtensionContainer() {
     updateLuFile: luFile => {
       return apiClient.apiCall('updateLuFile', luFile);
     },
+
+    updateLgFile: lgFile => {
+      return apiClient.apiCall('updateLgFile', lgFile);
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;
