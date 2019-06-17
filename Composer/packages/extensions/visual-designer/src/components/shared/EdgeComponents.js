@@ -15,6 +15,7 @@ export const HorizontalEdge = ({ length, text, x, y }) => (
       height: BAR_SIZE,
       transitionDuration: '50ms',
       transitionProperty: 'left, right, top, bottom, length',
+      zIndex: '-1',
     }}
   >
     {text ? (
@@ -33,10 +34,11 @@ export const VerticalEdge = ({ length, text, x, y }) => (
       overflow: 'visible',
       left: x,
       top: y,
-      width: BAR_SIZE,
+      width: '1px',
       height: length,
       transitionDuration: '50ms',
       transitionProperty: 'left, right, top, bottom, length',
+      zIndex: '-1',
     }}
   >
     {text ? (

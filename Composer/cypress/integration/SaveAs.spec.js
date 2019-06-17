@@ -10,8 +10,7 @@ context('Saving As', () => {
     cy.getByText('Save as').click();
 
     cy.get('input[data-testid="NewBotProjectInput"]').type('__TestSaveAs');
-    cy.getByText('Save').click();
-    // cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
+    cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('__TestSaveAs.main').should('exist');

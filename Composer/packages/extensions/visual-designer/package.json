@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "cci-graph-lib": "*",
+    "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
     "lodash": "^4.17.11",
-    "lodash.get": "^4.4.2",
     "office-ui-fabric-react": "^6.180.0",
     "prop-types": "^15.7.2"
   },

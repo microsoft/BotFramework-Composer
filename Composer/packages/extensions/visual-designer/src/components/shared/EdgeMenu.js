@@ -53,6 +53,7 @@ export const EdgeMenu = ({ onClick }) => {
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
         menuItems={createStepMenu($type => onClick($type))}
+        label={formatMessage('Add')}
       />
     </div>
   );
