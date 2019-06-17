@@ -14,7 +14,7 @@ context('Saving As', () => {
     // cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('BeginDialog.main').should('exist');
+      cy.getByText('__TestSaveAs.main').should('exist');
       cy.getByText('BeginDialog.FortuneTellerDialog').should('exist');
       cy.getByText('BeginDialog.TellJokeDialog').should('exist');
     });
