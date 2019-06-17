@@ -18,6 +18,37 @@ initializeIcons(/* optional base url */);
 // eslint-disable-next-line react/display-name
 const Content = forwardRef((props, ref) => <div css={content} {...props} ref={ref} />);
 
+const links = [
+  {
+    to: '/',
+    iconName: 'SplitObject',
+    labelName: formatMessage('Design Flow'),
+    activeIfUrlContains: '',
+    exact: true,
+  },
+  {
+    to: 'language-generation/all',
+    iconName: 'Robot',
+    labelName: formatMessage('Bot Says'),
+    activeIfUrlContains: 'language-generation',
+    exact: false,
+  },
+  {
+    to: 'language-understanding/all',
+    iconName: 'People',
+    labelName: formatMessage('User says'),
+    activeIfUrlContains: 'language-understanding',
+    exact: false,
+  },
+  {
+    to: 'setting',
+    iconName: 'Settings',
+    labelName: formatMessage('Settings'),
+    activeIfUrlContains: 'setting',
+    exact: false,
+  },
+];
+
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
@@ -26,37 +57,6 @@ export function App() {
   useEffect(() => {
     actions.fetchProject();
   }, []);
-
-  const links = [
-    {
-      to: '/',
-      iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
-      activeIfUrlContains: '',
-      exact: true,
-    },
-    {
-      to: 'language-generation/all',
-      iconName: 'Robot',
-      labelName: formatMessage('Manage input'),
-      activeIfUrlContains: 'language-generation',
-      exact: false,
-    },
-    {
-      to: 'language-understanding/all',
-      iconName: 'Code',
-      labelName: formatMessage('Manage output'),
-      activeIfUrlContains: 'language-understanding',
-      exact: false,
-    },
-    {
-      to: 'setting',
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      activeIfUrlContains: 'setting',
-      exact: false,
-    },
-  ];
 
   return (
     <Fragment>
