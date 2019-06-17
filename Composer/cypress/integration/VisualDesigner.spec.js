@@ -3,7 +3,7 @@
 context('Visual Designer', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('01 - Steps');
+    cy.copyBot('01 - Steps', 'VisualDesignerTest');
   });
 
   it('can add a step from the visual designer', () => {
