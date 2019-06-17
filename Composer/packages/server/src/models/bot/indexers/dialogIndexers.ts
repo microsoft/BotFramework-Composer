@@ -18,32 +18,31 @@ export class DialogIndexer {
      * @return boolean, true to stop walk
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
-      // it's not a valid schema dialog node, stop.
-      if (typeof value !== 'object' || value.hasOwnProperty('$type') === false) return true;
+      // it's a valid schema dialog node.
+      if (typeof value === 'object' && value.hasOwnProperty('$type')) {
+        let target;
+        switch (value.$type) {
+          case 'Microsoft.SendActivity':
+            target = value.activity;
+            break;
+          case 'Microsoft.TextInput':
+            target = value.prompt;
+            break;
 
-      let target;
-      switch (value.$type) {
-        case 'Microsoft.SendActivity':
-          target = value.activity;
-          break;
-        case 'Microsoft.TextInput':
-          target = value.prompt;
-          break;
+          // if we want stop at some $type, do here
+          case 'location':
+            return true;
+        }
 
-        // if we want stop at some $type, do here
-        case 'location':
-          return true;
-      }
-
-      if (target && typeof target === 'string') {
-        const reg = /\[(\w+)\]/g;
-        let result;
-        while ((result = reg.exec(target)) !== null) {
-          const name = result[1];
-          templates.push(name);
+        if (target && typeof target === 'string') {
+          const reg = /\[(\w+)\]/g;
+          let result;
+          while ((result = reg.exec(target)) !== null) {
+            const name = result[1];
+            templates.push(name);
+          }
         }
       }
-
       return false;
     };
 
