@@ -76,6 +76,7 @@ export function App() {
             onClick={() => {
               setSideBarExpand(!sideBarExpand);
             }}
+            data-testid={'LeftNavButton'}
           />
           <div css={divider} />
           {links.map((link, index) => {

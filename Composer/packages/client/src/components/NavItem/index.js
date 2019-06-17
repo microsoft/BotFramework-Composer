@@ -9,7 +9,7 @@ import { Fragment, useState } from 'react';
 import { link, outer, iconButton, commandBarButton, lockedBar } from './styles';
 
 export const NavItem = props => {
-  const { to, exact, labelHide, iconName, labelName, targetUrl } = props;
+  const { to, exact, labelHide, iconName, labelName, targetUrl, index } = props;
   const [active, setActive] = useState(false);
 
   const isPartial = (targetUrl, currentUrl) => {
@@ -36,7 +36,12 @@ export const NavItem = props => {
         ) : (
           <Fragment>
             {active && <div css={lockedBar} />}
-            <CommandBarButton iconProps={{ iconName }} text={labelName} styles={commandBarButton(active)} />
+            <CommandBarButton
+              iconProps={{ iconName }}
+              text={labelName}
+              styles={commandBarButton(active)}
+              data-testid={'LeftNav-CommandBarButton' + index}
+            />
           </Fragment>
         )}
       </div>
