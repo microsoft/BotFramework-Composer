@@ -74,15 +74,15 @@
       "title": "LogStep"
     },
     "Microsoft.LuisRecognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "title": false,
+      "description": false
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "title": false,
+      "description": false
     },
     "Microsoft.NumberInput": {
       "title": "NumberInput"
