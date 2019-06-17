@@ -23,6 +23,7 @@ export interface Dialog {
   id: number;
   name: string;
   content: any;
+  lgTemplates: string[];
   relativePath: string;
 }
 
