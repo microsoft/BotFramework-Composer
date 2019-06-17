@@ -178,6 +178,7 @@ export default function PublishLuisModal(props) {
                 defaultValue={formData.name}
                 onRenderLabel={onRenderLabel(formatMessage(Tips.PROJECTNAME))}
                 errorMessage={formatMessage(formData.errors.name || '')}
+                data-testid="ProjectNameInput"
               />
               <TextField
                 label={formatMessage('Environment')}
@@ -185,12 +186,14 @@ export default function PublishLuisModal(props) {
                 defaultValue={formData.environment}
                 onRenderLabel={onRenderLabel(formatMessage(Tips.ENVIRONMENT))}
                 errorMessage={formatMessage(formData.errors.environment || '')}
+                data-testid="EnvironmentInput"
               />
               <TextField
                 label={formatMessage('Authoring key')}
                 onChange={updateForm('authoringKey')}
                 defaultValue={formData.authoringKey}
                 errorMessage={formatMessage(formData.errors.authoringKey || '')}
+                data-testid="AuthoringKeyInput"
               />
               <TextField
                 label={formatMessage('Authoring Region')}
