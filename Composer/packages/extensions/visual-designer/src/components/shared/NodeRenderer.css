@@ -5,3 +5,12 @@
 .node-renderer-container:hover > .node-renderer-toolbar {
   opacity: 1;
 }
+
+.node-renderer-container {
+  display: inline-block;
+  position: relative;
+}
+
+.node-renderer-container--focused {
+  outline: 2px solid grey;
+}
