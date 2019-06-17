@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useMemo } from 'react';
+import { useEffect, useContext, useRef, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 import { navigate } from '@reach/router';
 
@@ -54,6 +54,8 @@ export function ShellApi() {
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
 
+  const [changedEditor, setChangedEditor] = useState('');
+
   useEffect(() => {
     apiClient.connect();
 
@@ -80,6 +82,12 @@ export function ShellApi() {
     }, {});
   }, [dialogs]);
 
+  /* window.frames has 3 frame
+   * 1. global
+   * 2. visual editor iframe
+   * 3. form editor iframe
+   * so we need send `reset` api to visual & form editor when data changed.
+   */
   useEffect(() => {
     if (window.frames[0]) {
       const editorWindow = window.frames[0];
@@ -88,11 +96,18 @@ export function ShellApi() {
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
-    if (window.frames[1]) {
+    if (window.frames[1] && changedEditor !== VISUAL_EDITOR) {
       const editorWindow = window.frames[1];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+  }, [changedEditor, dialogs, lgFiles, luFiles, navPath, focusPath]);
+
+  useEffect(() => {
+    if (window.frames[2] && changedEditor !== FORM_EDITOR) {
+      const editorWindow = window.frames[2];
+      apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
+    }
+  }, [changedEditor, dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
@@ -121,6 +136,7 @@ export function ShellApi() {
   function handleValueChange(newData, event) {
     const sourceWindowName = event.source.name;
     let path = '';
+    setChangedEditor(sourceWindowName);
     switch (sourceWindowName) {
       case VISUAL_EDITOR:
         path = navPath;
@@ -204,6 +220,7 @@ export function ShellApi() {
     if (event.source.name === FORM_EDITOR) {
       path = focusPath;
     }
+    setChangedEditor('');
     actions.focusTo(path + subPath);
   }
 

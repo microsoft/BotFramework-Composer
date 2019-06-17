@@ -55,6 +55,7 @@ function ExtensionContainer() {
     },
 
     saveData: newData => {
+      setShellData(Object.assign({}, shellData, { data: newData }));
       return apiClient.apiCall('saveData', newData);
     },
 
