@@ -62,11 +62,21 @@ export class AssetManager {
   private _copy = async (src: string, dstDir: string, dstStorage: IFileStorage) => {
     const storage = this.templateStorage;
     const paths = await storage.readDir(src);
-    for (const path of paths) {
+    const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
+    for (let path of paths) {
       const _src = `${src}/${path}`;
+      // change bot name to user given
+      if (path.indexOf('.main.dialog') >= 0) {
+        path = Path.join(Path.dirname(path), newMainDialogName);
+      }
       const _dst = `${dstDir}/${path}`;
       if ((await storage.stat(_src)).isFile) {
-        const content = await storage.readFile(_src);
+        let content: any = await storage.readFile(_src);
+        if (_src.indexOf('.botproj') >= 0) {
+          content = JSON.parse(content);
+          content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
+          content = JSON.stringify(content, null, 2) + '\n';
+        }
         await storage.writeFile(_dst, content);
       } else {
         await this._copy(_src, _dst, dstStorage);
