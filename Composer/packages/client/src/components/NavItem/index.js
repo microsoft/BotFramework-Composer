@@ -17,8 +17,6 @@ export const NavItem = props => {
     return urlPaths.indexOf(targetUrl) !== -1;
   };
 
-  // const activeStyle = { style: { ...link, backgroundColor: '#E1DFDD' } };
-
   return (
     <Link
       to={to}
@@ -27,7 +25,6 @@ export const NavItem = props => {
       getProps={({ isCurrent, location }) => {
         const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
         setActive(isActive);
-        // return active ? { style: { ...link, backgroundColor: 'red' } } : null;
       }}
     >
       <div tabIndex={-1} css={outer(!labelHide, active)}>
