@@ -23,7 +23,7 @@ const data = {
 
 describe('run json walk', () => {
   it('visitor should walk through every node', async () => {
-    let visitedPath: string[] = [];
+    const visitedPath: string[] = [];
     const visitor: VisitorFunc = (path: string, value: any) => {
       visitedPath.push(path);
       return false;
@@ -35,7 +35,7 @@ describe('run json walk', () => {
   });
 
   it('if visitor stop, its children should not be visited', async () => {
-    let visitedPath: string[] = [];
+    const visitedPath: string[] = [];
     const visitor: VisitorFunc = (path: string, value: any) => {
       // jump over phoneNumbers
       if (path.match('phoneNumbers')) {
