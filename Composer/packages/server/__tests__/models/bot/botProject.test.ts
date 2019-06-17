@@ -12,7 +12,7 @@ const botDir = '../../mocks/samplebots/bot1';
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}/1.botproj`), //Path.join().replace(/\\/g, '/'),
+  path: Path.join(__dirname, `${botDir}/1.botproj`),
 };
 
 const proj = new BotProject(mockLocationRef);
@@ -78,12 +78,12 @@ describe('createFromTemplate', () => {
   });
 });
 
-const copyDir = Path.join(__dirname, `${botDir}/../copy`);
+const copyDir = Path.join(__dirname, botDir, '../copy');
 
 describe('copyTo', () => {
   const locationRef: LocationRef = {
     storageId: 'default',
-    path: `${copyDir}/1.botproj`,
+    path: copyDir,
   };
 
   afterEach(() => {

@@ -44,6 +44,7 @@ class BotProjectService {
     if (typeof this.currentBotProject !== 'undefined') {
       this.currentBotProject = await this.currentBotProject.copyTo(locationRef);
       await this.currentBotProject.index();
+      this.updateRecentBotProjects();
     }
   };
 }

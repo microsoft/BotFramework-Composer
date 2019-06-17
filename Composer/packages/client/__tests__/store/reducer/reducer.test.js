@@ -11,10 +11,6 @@ const mockResponse = {
 };
 
 describe('test all reducer handlers', () => {
-  it('test closeCurrentProject reducer', () => {
-    const result = reducer({}, { type: ActionTypes.INIT_PROJECT_STATE });
-    expect(result.editors.length).toBe(0);
-  });
   it('test getProjectSuccess reducer', () => {
     const result = reducer({}, { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } });
     expect(result.dialogs).toBe('test dialogs');
