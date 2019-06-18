@@ -80,10 +80,6 @@ export function ShellApi() {
     }, {});
   }, [dialogs]);
 
-  // replace window.frames[num] with window.frames[name].
-  // reason:
-  // 1. iframe position may be changed.
-  // 2. Some Plugins in Chrome cause window.frames contain a global window.
   useEffect(() => {
     if (window.frames[VISUAL_EDITOR]) {
       const editorWindow = window.frames[VISUAL_EDITOR];
