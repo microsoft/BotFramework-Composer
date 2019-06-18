@@ -19,6 +19,10 @@ class Messenger {
     if (message.type && message.type === 'api_result') {
       const callback = this.onceSubscribers[message.id];
 
+      if (!callback || typeof callback !== 'function') {
+        throw new Error(`callback is null or not a function`);
+      }
+
       if (!message.error) {
         message.error = null;
       }
@@ -28,37 +32,48 @@ class Messenger {
 
     if (message.type && message.type === 'api_call') {
       const callback = this.subscribers[message.name];
-      const result = callback(message.args, event); // we pass args and the original event
+      try {
+        const result = callback(message.args, event); // we pass args and the original event
 
-      // if result is a promise, wait for it to resolve or reject
-      if (result && typeof result.then === 'function') {
-        result
-          .then(res => {
-            event.source.postMessage(
-              {
-                type: 'api_result',
-                id: message.id,
-                result: res,
-              },
-              '*'
-            );
-          })
-          .catch(err => {
-            event.source.postMessage(
-              {
-                type: 'api_result',
-                id: message.id,
-                error: err,
-              },
-              '*'
-            );
-          });
-      } else {
+        // if result is a promise, wait for it to resolve or reject
+        if (result && typeof result.then === 'function') {
+          result
+            .then(res => {
+              event.source.postMessage(
+                {
+                  type: 'api_result',
+                  id: message.id,
+                  result: res,
+                },
+                '*'
+              );
+            })
+            .catch(err => {
+              event.source.postMessage(
+                {
+                  type: 'api_result',
+                  id: message.id,
+                  error: err,
+                },
+                '*'
+              );
+            });
+        } else {
+          event.source.postMessage(
+            {
+              type: 'api_result',
+              id: message.id,
+              result: result,
+            },
+            '*'
+          );
+        }
+      } catch (err) {
         event.source.postMessage(
           {
             type: 'api_result',
             id: message.id,
-            result: result,
+            error: err,
           },
           '*'
         );
