@@ -1,11 +1,14 @@
 import React from 'react';
+import formatMessage from 'format-message';
+import { ConceptLabels } from './labelMap';
+import { IconMenu } from './templates/IconMenu';
+import { EdgeAddButtonSize } from './elementSizes';
+import { dialogGroups, DialogGroup } from './appschema';
+import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
 
-import { IconMenu } from '../nodes/templates/IconMenu';
-import { EdgeAddButtonSize } from '../../shared/elementSizes';
-import { dialogGroups, DialogGroup } from '../../shared/appschema';
-import { ConceptLabels } from '../../shared/labelMap';
+export const createStepMenu = (handleType: (e: any, item: IContextualMenuItem) => void): IContextualMenuItem[] => {
+  console.log('GOT A CALLBACK TO MENU', handleType);
 
-const createStepMenu = handleType => {
   const stepLabels = [
     DialogGroup.RESPONSE,
     DialogGroup.INPUT,
@@ -20,16 +23,23 @@ const createStepMenu = handleType => {
     const item = dialogGroups[x];
     return {
       key: item.label,
+      text: item.label,
       name: item.label,
       subMenuProps: {
         items: item.types.map($type => ({
           key: $type,
           name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
           $type: $type,
+          data: {
+            $type: $type, // used by the steps field to create the item
+          },
         })),
-        onItemClick: (e, item) => handleType(item.$type),
-      },
-    };
+        onItemClick: (e, item: IContextualMenuItem) => {
+          console.log('calling handler with ', item);
+          return handleType(e, item);
+        },
+      } as IContextualMenuProps,
+    } as IContextualMenuItem;
   });
 
   return stepMenuItems;
@@ -52,7 +62,7 @@ export const EdgeMenu = ({ onClick }) => {
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
-        menuItems={createStepMenu($type => onClick($type))}
+        menuItems={createStepMenu((e, item) => onClick(item.$type))}
         label={formatMessage('Add')}
       />
     </div>

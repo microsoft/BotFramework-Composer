@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { EdgeMenu } from 'shared-menus';
 
 import { StepGroup } from '../components/groups';
-import { EdgeMenu } from '../components/shared/EdgeMenu';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
 import { Boundary } from '../shared/Boundary';

@@ -1,15 +1,10 @@
 {
-  "name": "obieditortest",
-  "version": "1.0.0",
-  "description": "obieditortest React component",
+  "name": "shared-menus",
+  "version": "0.0.0",
+  "description": "<description>",
   "main": "lib/index.js",
-  "module": "es/index.js",
-  "files": [
-    "css",
-    "es",
-    "lib",
-    "umd"
-  ],
+  "repository": "https://github.com/microsoft/BotFramework-Composer",
+  "license": "MIT",
   "scripts": {
     "build": "yarn clean && yarn build:css && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
@@ -23,25 +18,9 @@
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
   },
-  "dependencies": {
-    "@bfdesigner/react-jsonschema-form": "1.4.2-1",
-    "@uifabric/fluent-theme": "^0.16.2",
-    "@uifabric/styling": "^6.45.3",
-    "classnames": "^2.2.6",
-    "code-editor": "*",
-    "format-message": "^6.2.1",
-    "lodash.debounce": "^4.0.8",
-    "lodash.get": "^4.4.2",
-    "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.1",
-    "lodash.omit": "^4.5.0",
-    "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "^6.165.1",
-    "react-error-boundary": "^1.2.5",
-    "shared-menus": "0.0.0"
-  },
   "peerDependencies": {
     "react": "^16.8.4",
+    "format-message": "^6.2.1",
     "react-dom": "^16.8.4"
   },
   "devDependencies": {
@@ -50,23 +29,12 @@
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "@types/codemirror": "^0.0.74",
     "@types/jest": "^24.0.11",
-    "@types/json-schema": "^7.0.3",
-    "@types/lodash": "^4.14.123",
-    "@types/lodash.debounce": "^4.0.6",
-    "@types/lodash.get": "^4.4.6",
-    "@types/lodash.isequal": "^4.5.5",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/lodash.omit": "^4.5.6",
-    "@types/lodash.startcase": "^4.4.6",
-    "@types/nanoid": "^1.2.1",
     "@types/react": "^16.8.13",
     "@types/react-dom": "^16.8.4",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "autoprefixer": "^9.5.1",
-    "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
@@ -75,7 +43,6 @@
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
     "react": "^16.8.4",
-    "react-codemirror2": "^5.1.0",
     "react-dom": "^16.8.4",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
@@ -83,18 +50,10 @@
     "style-loader": "^0.23.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "^5.3.3",
-    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.5.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.1"
-  },
-  "author": "",
-  "homepage": "https://github.com/Microsoft/BotFramework-Composer",
-  "license": "MIT",
-  "repository": "",
-  "keywords": [
-    "react-component"
-  ]
+  }
 }

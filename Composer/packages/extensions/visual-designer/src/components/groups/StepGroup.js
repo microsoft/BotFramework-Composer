@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { EdgeMenu } from 'shared-menus';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
@@ -8,7 +9,6 @@ import { Edge } from '../shared/EdgeComponents';
 import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
-import { EdgeMenu } from '../shared/EdgeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 const StepInterval = ElementInterval.y;
