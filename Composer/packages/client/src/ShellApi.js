@@ -68,6 +68,32 @@ export function ShellApi() {
     apiClient.registerApi('focusTo', focusTo);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
 
+    /*
+    # Shell Api for LG templates to support generate template in SendActivity/Prompt
+
+    interface LGTemplate {
+      name: string;
+      parameters: string[];
+      content: string;
+    }
+
+    // fileId is the lg file name without the extenstion, like "common" stands for "common.lg" 
+    1. getLgTemplates(fileId:string): LGTemplate[];
+    
+    // template is a structure described above
+    2. createLgTemplate(fileId:string, template:LGTemplate): LGTemplate[]
+
+    // use templateName as identifier for delete
+    3. deleteLgTemplate(fileId:string, templateName:string): LGTemplate[]
+
+    // use templateName as identifier for update, this allows you to rename an template
+    4. updateLgTemplate(fileId:string, templateName:string, template:LGTemplate): LGTemplate[]
+
+    * In implementation, all those parameters will be packed into one single object as other api parameters
+    * All api returns the templates in that file after the api call
+    
+    */
+
     return () => {
       apiClient.disconnect();
     };
