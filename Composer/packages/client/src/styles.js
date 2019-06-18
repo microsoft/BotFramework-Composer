@@ -12,6 +12,9 @@ export const sideBar = isExpand => css`
   height: 100%;
   box-shadow: ${Depths.depth8};
   transition: width 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const divider = css`
@@ -42,4 +45,8 @@ export const content = css`
 
 export const showDesign = show => css`
   display: ${show ? 'block' : 'none'} !important;
+`;
+
+export const leftNavBottom = () => css`
+  height: 102px;
 `;
