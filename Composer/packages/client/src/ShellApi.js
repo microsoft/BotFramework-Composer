@@ -80,16 +80,20 @@ export function ShellApi() {
     }, {});
   }, [dialogs]);
 
+  // replace window.frames[num] with window.frames[name].
+  // reason:
+  // 1. iframe position may be changed.
+  // 2. Some Plugins in Chrome cause window.frames contain a global window.
   useEffect(() => {
-    if (window.frames[0]) {
-      const editorWindow = window.frames[0];
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
-    if (window.frames[1]) {
-      const editorWindow = window.frames[1];
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
