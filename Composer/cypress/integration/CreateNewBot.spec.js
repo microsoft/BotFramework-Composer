@@ -7,7 +7,6 @@ context('Creating a new bot', () => {
 
   it('can create a bot from the ToDo template', () => {
     cy.getByText('New').click();
-    // cy.pause();
     cy.getByText('ToDoBot').click();
     cy.get('input[data-testid="NewBotProjectInput"]').type('__TestNewProject');
     cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');

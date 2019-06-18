@@ -52,4 +52,5 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 
   cy.get('input[data-testid="NewBotProjectInput"]').type(`__Test${name}`);
   cy.getByText('Save').click();
+  cy.wait(1000);
 });
