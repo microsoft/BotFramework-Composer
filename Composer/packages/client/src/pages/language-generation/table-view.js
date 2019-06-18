@@ -34,7 +34,7 @@ const randomName = () => {
   return `TemplateName${Math.floor(Math.random() * 1000)}`;
 };
 
-export default function FormEditor(props) {
+export default function TableView(props) {
   const { state, actions } = useContext(Store);
   const { clearNavHistory, navTo } = actions;
   const { dialogs } = state;
@@ -203,7 +203,7 @@ export default function FormEditor(props) {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <div data-testid="formHeader">
+      <div data-testid="tableHeader">
         <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
           {defaultRender({
             ...props,
@@ -219,7 +219,7 @@ export default function FormEditor(props) {
     if (activeDialog) return <div />;
 
     return (
-      <div data-testid="formFooter">
+      <div data-testid="tableFooter">
         <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
           {formatMessage('New template')}
         </ActionButton>
@@ -266,7 +266,7 @@ export default function FormEditor(props) {
   }
 
   return (
-    <div className={'form-list-editor'} data-testid={'table-view'}>
+    <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           componentRef={listRef}
@@ -284,7 +284,7 @@ export default function FormEditor(props) {
   );
 }
 
-FormEditor.propTypes = {
+TableView.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
   activeDialog: PropTypes.object,

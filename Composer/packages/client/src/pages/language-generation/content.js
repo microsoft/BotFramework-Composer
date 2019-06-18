@@ -7,7 +7,7 @@ import { LgEditor } from 'code-editor';
 
 import { contentEditor } from '../language-understanding/styles';
 
-import FormEditor from './form-editor';
+import TableView from './table-view';
 
 Content.propTypes = {
   file: PropTypes.object,
@@ -37,7 +37,7 @@ export default function Content(props) {
         textMode ? (
           memoizedEditor
         ) : (
-          <FormEditor file={lgFile} activeDialog={activeDialog} onEdit={onEdit} onChange={onChange} />
+          <TableView file={lgFile} activeDialog={activeDialog} onEdit={onEdit} onChange={onChange} />
         )
       ) : (
         <Fragment />

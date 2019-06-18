@@ -1,6 +1,6 @@
 
 /* override hover */
-.form-list-editor .ms-List div[role='row']:hover {
+.table-view .ms-List div[role='row']:hover {
   background: none
 }
 
