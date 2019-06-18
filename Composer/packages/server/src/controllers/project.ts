@@ -10,8 +10,8 @@ async function createProject(req: Request, res: Response) {
     path: req.body.path,
   };
   try {
-    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
-    await ProjectService.openProject(locationRef);
+    const newProjRef = await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    await ProjectService.openProject(newProjRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
