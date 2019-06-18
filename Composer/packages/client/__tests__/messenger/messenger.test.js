@@ -16,7 +16,7 @@ describe('messenger', () => {
     expect(messageRecieved.text).toEqual('hi');
   });
 
-  it('should be able to subscribe message', () => {
+  it('should be able to subscribe message', async () => {
     let messageRecieved = 0;
     const onMessage = () => {
       messageRecieved = messageRecieved + 1;
@@ -34,13 +34,13 @@ describe('messenger', () => {
       },
     };
 
-    messenger.receiveMessage(mockEvent);
+    await messenger.receiveMessage(mockEvent);
     expect(messageRecieved).toBe(1);
-    messenger.receiveMessage(mockEvent);
+    await messenger.receiveMessage(mockEvent);
     expect(messageRecieved).toBe(2);
   });
 
-  it('should be able to subscribe message only once', () => {
+  it('should be able to subscribe message only once', async () => {
     let messageRecived = 0;
     const onMessage = () => {
       messageRecived = messageRecived + 1;
@@ -58,9 +58,15 @@ describe('messenger', () => {
 
     messenger.subscribeOnce('test', onMessage);
 
-    messenger.receiveMessage(mockEvent);
+    await messenger.receiveMessage(mockEvent);
     expect(messageRecived).toBe(1);
 
-    expect(() => messenger.receiveMessage(mockEvent)).toThrow();
+    try {
+      await messenger.receiveMessage(mockEvent);
+      // error should be thrown.
+      expect(true).toBe(false);
+    } catch (err) {
+      expect(err.message).toEqual('callback is null or not a function');
+    }
   });
 });
