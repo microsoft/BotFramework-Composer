@@ -116,6 +116,10 @@ const clearNavHistory = (state, { fromIndex }) => {
   return state;
 };
 
+const setBotLoadErrorMsg = (state, { error }) => {
+  return (state.botLoadErrorMsg = error);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
@@ -138,4 +142,6 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
+  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
 });

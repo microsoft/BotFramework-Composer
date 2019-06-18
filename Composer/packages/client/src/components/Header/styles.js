@@ -53,3 +53,13 @@ export const fileInput = css`
   opacity: 0;
   cursor: pointer;
 `;
+
+export const warningContiner = css`
+  margin-right: 20px;
+  font-size: 14px;
+`;
+
+export const warningIcon = css`
+  margin-right: 5px;
+  color: ${SharedColors.orange20};
+`;

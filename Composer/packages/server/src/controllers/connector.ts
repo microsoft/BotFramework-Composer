@@ -13,10 +13,10 @@ async function connect(req: any, res: any) {
 
 async function sync(req: any, res: any) {
   try {
-    BotConnectorService.sync();
+    await BotConnectorService.sync();
     res.send('OK');
   } catch (error) {
-    res.status(400).json({ error: 'unable to sync content to bot runtime' });
+    res.status(400).json({ error: error.message });
   }
 }
 

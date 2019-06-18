@@ -29,10 +29,16 @@ export async function reloadBot(dispatch) {
     await axios.get(path);
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
+      payload: {
+        error: '',
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.RELOAD_BOT_FAILURE,
+      payload: {
+        error: err.response.data.error,
+      },
     });
   }
 }
