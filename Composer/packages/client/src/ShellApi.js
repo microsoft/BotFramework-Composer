@@ -81,7 +81,9 @@ export function ShellApi() {
     1. getLgTemplates(fileId:string): LGTemplate[];
     
     // template is a structure described above
-    2. createLgTemplate(fileId:string, template:LGTemplate): LGTemplate[]
+    // position = 0 means top, -1 means bottom, we may only support those two at first pass
+    // then support any position later 
+    2. createLgTemplate(fileId:string, template:LGTemplate, position:int): LGTemplate[]
 
     // use templateName as identifier for delete
     3. deleteLgTemplate(fileId:string, templateName:string): LGTemplate[]
