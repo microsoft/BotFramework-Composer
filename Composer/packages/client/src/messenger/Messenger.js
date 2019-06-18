@@ -13,52 +13,44 @@ class Messenger {
     window.postMessage(message, '*');
   };
 
-  receiveMessage = event => {
+  receiveMessage = async event => {
     const message = event.data;
 
     if (message.type && message.type === 'api_result') {
       const callback = this.onceSubscribers[message.id];
 
+      if (!callback || typeof callback !== 'function') {
+        throw new Error('callback is null or not a function');
+      }
+
       if (!message.error) {
         message.error = null;
       }
-      callback(message.result, message.error);
+      await callback(message.result, message.error);
       delete this.onceSubscribers[message.id];
+      return;
     }
 
     if (message.type && message.type === 'api_call') {
       const callback = this.subscribers[message.name];
-      const result = callback(message.args, event); // we pass args and the original event
 
-      // if result is a promise, wait for it to resolve or reject
-      if (result && typeof result.then === 'function') {
-        result
-          .then(res => {
-            event.source.postMessage(
-              {
-                type: 'api_result',
-                id: message.id,
-                result: res,
-              },
-              '*'
-            );
-          })
-          .catch(err => {
-            event.source.postMessage(
-              {
-                type: 'api_result',
-                id: message.id,
-                error: err,
-              },
-              '*'
-            );
-          });
-      } else {
+      try {
+        const result = await callback(message.args, event); // we pass args and the original event
+
         event.source.postMessage(
           {
             type: 'api_result',
             id: message.id,
-            result: result,
+            result,
+          },
+          '*'
+        );
+      } catch (err) {
+        event.source.postMessage(
+          {
+            type: 'api_result',
+            id: message.id,
+            error: err,
           },
           '*'
         );
