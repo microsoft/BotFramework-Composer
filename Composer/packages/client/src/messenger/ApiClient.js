@@ -14,11 +14,15 @@ class ApiClient {
 
   // helper function for any api call to shell
   apiCallAt = (apiName, args, endpoint) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const messageId = nanoid();
 
-      messenger.subscribeOnce(messageId, result => {
-        resolve(result);
+      messenger.subscribeOnce(messageId, (result, error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
       });
 
       messenger.postMessage(
