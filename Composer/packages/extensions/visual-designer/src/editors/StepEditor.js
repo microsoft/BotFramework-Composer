@@ -38,7 +38,7 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
-    <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type })} />
+    <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
   ) : (
     <StepGroup
       id={id}
