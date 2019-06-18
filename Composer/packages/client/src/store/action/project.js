@@ -11,6 +11,7 @@ export async function fetchProject(dispatch) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -35,6 +36,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -59,6 +61,7 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -84,6 +87,7 @@ export async function createProject(dispatch, storageId, absolutePath, templateI
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -233,6 +237,22 @@ export async function removeLuFile(dispatch, { id }) {
   } catch (err) {
     dispatch({
       type: ActionTypes.REMOVE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
+export async function publishLuis(dispatch, authoringKey) {
+  try {
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { authoringKey });
+    dispatch({
+      type: ActionTypes.PUBLISH_LU_SUCCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.PUBLISH_LU_FAILURE,
       payload: null,
       error: err,
     });

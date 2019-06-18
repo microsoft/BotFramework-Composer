@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
 import {
@@ -45,12 +46,7 @@ export class NodeRenderer extends React.Component {
     const ChosenRenderer = chooseRendererByType(data.$type);
     return (
       <div
-        className="node-renderer-container"
-        style={{
-          outline: focusedId && focusedId === id ? '2px solid grey' : null,
-          display: 'inline-block',
-          position: 'relative',
-        }}
+        className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}
         ref={el => {
           if (el && !this.interactive) {
             onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');

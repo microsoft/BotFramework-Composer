@@ -81,15 +81,15 @@ export function ShellApi() {
   }, [dialogs]);
 
   useEffect(() => {
-    if (window.frames[0]) {
-      const editorWindow = window.frames[0];
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
-    if (window.frames[1]) {
-      const editorWindow = window.frames[1];
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
@@ -151,7 +151,7 @@ export function ShellApi() {
   }
 
   function fileHandler(fileTargetType, fileChangeType) {
-    return (newData, event) => {
+    return async (newData, event) => {
       if (isEventSourceValid(event) === false) return false;
 
       const payload = {
@@ -161,19 +161,19 @@ export function ShellApi() {
 
       switch ([fileTargetType, fileChangeType].join(',')) {
         case [LU, UPDATE].join(','):
-          updateLuFile(payload);
+          await updateLuFile(payload);
           break;
 
         case [LG, UPDATE].join(','):
-          updateLgFile(payload);
+          await updateLgFile(payload);
           break;
 
         case [LU, CREATE].join(','):
-          createLuFile(payload);
+          await createLuFile(payload);
           break;
 
         case [LG, CREATE].join(','):
-          createLgFile(payload);
+          await createLgFile(payload);
           break;
         default:
           throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);

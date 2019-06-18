@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { clearNavHistory } from './navigation';
 
 export async function connectBot(dispatch) {
   const path = `${BASEURL}/launcher/connect`;
@@ -36,11 +35,4 @@ export async function reloadBot(dispatch) {
       type: ActionTypes.RELOAD_BOT_FAILURE,
     });
   }
-}
-
-export function closeCurrentProject(dispatch) {
-  clearNavHistory(dispatch);
-  dispatch({
-    type: ActionTypes.INIT_PROJECT_STATE,
-  });
 }

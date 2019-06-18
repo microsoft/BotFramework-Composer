@@ -10,8 +10,8 @@ async function createProject(req: Request, res: Response) {
     path: req.body.path,
   };
   try {
-    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
-    await ProjectService.openProject(locationRef);
+    const newProjRef = await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    await ProjectService.openProject(newProjRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -71,11 +71,6 @@ async function saveProjectAs(req: Request, res: Response) {
     path: req.body.path,
   };
 
-  if (!locationRef.path.endsWith('.botproj')) {
-    res.status(400).json('unsupported project file type, expect .botproj');
-    return;
-  }
-
   try {
     await ProjectService.saveProjectAs(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
@@ -107,10 +102,12 @@ async function updateBotFile(req: Request, res: Response) {
   }
 }
 
-async function createDialogFromTemplate(req: Request, res: Response) {
+async function createDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.createDialogFromTemplate(req.body.name);
-    res.status(200).json({ dialogs });
+    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.name);
+    const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.name, '');
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.name, '');
+    res.status(200).json({ dialogs, lgFiles, luFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
@@ -170,18 +167,32 @@ async function removeLuFile(req: Request, res: Response) {
   }
 }
 
+async function publishLuis(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    try {
+      const status = await ProjectService.currentBotProject.publishLuis(req.body.authoringKey);
+      res.status(200).json({ status });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 export const ProjectController = {
-  getProject: getProject,
-  openProject: openProject,
-  updateDialog: updateDialog,
-  createDialogFromTemplate: createDialogFromTemplate,
+  getProject,
+  openProject,
+  updateDialog,
+  createDialog,
   updateLgFile,
   createLgFile,
   removeLgFile,
   updateLuFile,
   createLuFile,
   removeLuFile,
-  updateBotFile: updateBotFile,
-  saveProjectAs: saveProjectAs,
-  createProject: createProject,
+  publishLuis,
+  updateBotFile,
+  saveProjectAs,
+  createProject,
 };
