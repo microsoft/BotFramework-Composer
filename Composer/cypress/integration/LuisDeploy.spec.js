@@ -16,8 +16,13 @@ context('Luis Deploy', () => {
     cy.get('[data-testid="ProjectNameInput"]').type('MyProject');
     cy.get('[data-testid="EnvironmentInput"]').type('composer');
     cy.get('[data-testid="AuthoringKeyInput"]').type('0d4991873f334685a9686d1b48e0ff48');
+    cy.server()
+      .route('POST', /api/)
+      .as('publish');
     cy.getByText('Publish').click();
-    cy.wait(30000);
+    cy.wait('@publish', { timeout: 300000 })
+      .its('status')
+      .should('be', 200);
     cy.getByText('Return').should('exist');
 
     cy.getByText('Return').click();
