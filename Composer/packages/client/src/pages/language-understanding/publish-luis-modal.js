@@ -176,35 +176,36 @@ export default function PublishLuisModal(props) {
                 label={formatMessage('Project Name')}
                 onChange={updateForm('name')}
                 defaultValue={formData.name}
-                onRenderLabel={onRenderLabel(formatMessage(Tips.PROJECTNAME))}
-                errorMessage={formatMessage(formData.errors.name || '')}
+                onRenderLabel={onRenderLabel(Tips.PROJECTNAME)}
+                errorMessage={formData.errors.name || ''}
                 data-testid="ProjectNameInput"
               />
               <TextField
                 label={formatMessage('Environment')}
                 onChange={updateForm('environment')}
                 defaultValue={formData.environment}
-                onRenderLabel={onRenderLabel(formatMessage(Tips.ENVIRONMENT))}
-                errorMessage={formatMessage(formData.errors.environment || '')}
+                onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
+                errorMessage={formData.errors.environment || ''}
                 data-testid="EnvironmentInput"
               />
               <TextField
                 label={formatMessage('Authoring key')}
                 onChange={updateForm('authoringKey')}
                 defaultValue={formData.authoringKey}
-                errorMessage={formatMessage(formData.errors.authoringKey || '')}
+                onRenderLabel={onRenderLabel(Tips.AUTHORINGKAY)}
+                errorMessage={formData.errors.authoringKey || ''}
                 data-testid="AuthoringKeyInput"
               />
               <TextField
                 label={formatMessage('Authoring Region')}
                 defaultValue="westus"
-                onRenderLabel={onRenderLabel(formatMessage(Tips.AUTHORINGREGION))}
+                onRenderLabel={onRenderLabel(Tips.AUTHORINGREGION)}
                 disabled
               />
               <TextField
                 label={formatMessage('Default Language')}
                 defaultValue="en-us"
-                onRenderLabel={onRenderLabel(formatMessage(Tips.DEFAULTLANGUAGE))}
+                onRenderLabel={onRenderLabel(Tips.DEFAULTLANGUAGE)}
                 disabled
               />
             </Stack>

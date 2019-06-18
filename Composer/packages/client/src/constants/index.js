@@ -68,10 +68,13 @@ export const ActionTypes = {
 };
 
 export const Tips = {
-  PROJECTNAME: formatMessage('project name'),
+  PROJECTNAME: formatMessage(
+    'create a name for the project, which will be used to name the application: (projectname-environment-LUfilename)'
+  ),
   ENVIRONMENT: formatMessage(
     'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
   ),
+  AUTHORINGKAY: formatMessage('An authoring key is created automatically when you create a LUIS accoun.'),
   AUTHORINGREGION: formatMessage('authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULTLANGUAGE: formatMessage(
     'configures default language model to use if there is no culture code in the file name (Default:en-us)'
