@@ -86,7 +86,6 @@ export function LocationSelectContent(props) {
     const dir = `${parent}/${focusedStorageFolder.name}`;
     const absolutePath = `${dir}/${value}`;
     await onSaveAs(storages[currentStorageIndex.current].id, absolutePath);
-    updateCurrentPath(dir, storages[currentStorageIndex.current].id);
   };
 
   const handleAddStorage = async storageData => {
