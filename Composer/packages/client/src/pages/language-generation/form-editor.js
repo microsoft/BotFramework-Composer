@@ -266,7 +266,7 @@ export default function FormEditor(props) {
   }
 
   return (
-    <div className={'form-list-editor'}>
+    <div className={'form-list-editor'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           componentRef={listRef}

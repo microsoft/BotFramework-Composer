@@ -125,6 +125,7 @@ export const LGPage = props => {
             </Fragment>
           )}
           <Toggle
+            className={'toggleEditMode'}
             css={actionButton}
             onText="Edit mode"
             offText="Edit mode"
