@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 import { Modal, IconButton, TextField, Button } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
@@ -77,3 +78,9 @@ export default function NewLgFileModal(props) {
     </Modal>
   );
 }
+
+NewLgFileModal.propTypes = {
+  isOpen: PropTypes.bool,
+  onDismiss: PropTypes.func,
+  onSubmit: PropTypes.func,
+};

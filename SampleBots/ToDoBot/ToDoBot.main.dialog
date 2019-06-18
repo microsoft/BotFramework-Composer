@@ -15,6 +15,10 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
+      "activity": "[Hello]"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
       "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started. test reload",
       "$designer": {
         "createdAt": "2019-05-06T20:59:09.555Z",
@@ -101,6 +105,10 @@
     {
       "$type": "Microsoft.UnknownIntentRule",
       "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[Greeting]"
+        },
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
