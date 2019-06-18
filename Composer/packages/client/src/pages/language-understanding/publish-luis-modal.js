@@ -38,7 +38,7 @@ const STATE = {
 // eslint-disable-next-line react/display-name
 const onRenderLabel = info => props => (
   <Stack horizontal verticalAlign="center">
-    <span css={textFieldLabel}>{props.label}</span>
+    <span css={textFieldLabel}>{formatMessage(props.label)}</span>
     <TooltipHost content={info} calloutProps={{ gapSpace: 0 }}>
       <IconButton iconProps={{ iconName: 'Info' }} styles={{ root: { marginBottom: -3 } }} />
     </TooltipHost>
@@ -65,7 +65,7 @@ const validateForm = data => {
   dataKeys.forEach(key => {
     const value = data[key];
     if (key !== 'errors' && (!value || !nameRegex.test(value))) {
-      errors[key] = 'must only use letters, numbers, -, and _';
+      errors[key] = formatMessage('must only use letters, numbers, -, and _');
     }
   });
 
@@ -79,18 +79,16 @@ const DeploySuccess = props => {
     <Fragment>
       <div css={consoleStyle}>
         {appNames.map(item => {
-          return (
-            <div key={item}>
-              {item}:{status[item].version}
-            </div>
-          );
+          return <div key={item}>{formatMessage(`${item}:${status[item].version}`)}</div>;
         })}
       </div>
       <div css={dialogSubTitle}>
         {Text.LUISDEPLOYSUCCESS}
-        <span>Work on it in </span>
-        <Link href={Links.LUIS}>Luis</Link>
-        <span> or return to your previous task</span>
+        <span>{formatMessage('Work on it in ')}</span>
+        <Link href={Links.LUIS} target="_blank">
+          {formatMessage('Luis')}
+        </Link>
+        <span>{formatMessage(' or return to your previous task')}</span>
       </div>
       <DialogFooter>
         <PrimaryButton onClick={props.onDismiss} text={formatMessage('Return')} />
@@ -102,7 +100,7 @@ const DeploySuccess = props => {
 const DeployFailure = props => {
   return (
     <Fragment>
-      <div css={consoleStyle}>{props.error}</div>
+      <div css={consoleStyle}>{formatMessage(props.error)}</div>
       <div css={dialogSubTitle}>{Text.LUISDEPLOYFAILURE}</div>
       <DialogFooter>
         <PrimaryButton onClick={props.tryAgain} text={formatMessage('Try again')} />
@@ -115,7 +113,7 @@ const DeployFailure = props => {
 export default function PublishLuisModal(props) {
   const { isOpen, onDismiss, onPublish } = props;
   const [formData, setFormData] = useState(getDefaultData());
-  const [state, setState] = useState(STATE.INPUT);
+  const [workState, setWorkState] = useState(STATE.INPUT);
   const [response, setResponse] = useState({});
 
   const updateForm = field => (e, newValue) => {
@@ -136,13 +134,13 @@ export default function PublishLuisModal(props) {
       return;
     }
 
-    setState(STATE.PUBLISHPENDING);
+    setWorkState(STATE.PUBLISHPENDING);
     const response = await onPublish({ ...formData });
     setResponse(response);
     if (response.error === '') {
-      setState(STATE.PUBLISHSUCCESS);
+      setWorkState(STATE.PUBLISHSUCCESS);
     } else {
-      setState(STATE.PUBLISHFAILURE);
+      setWorkState(STATE.PUBLISHFAILURE);
     }
   };
 
@@ -160,15 +158,17 @@ export default function PublishLuisModal(props) {
         styles: dialogModal,
       }}
     >
-      {state === STATE.PUBLISHSUCCESS && <DeploySuccess onDismiss={handleDismiss} status={response.status} />}
-      {state === STATE.PUBLISHFAILURE && (
-        <DeployFailure onDismiss={handleDismiss} tryAgain={() => setState(STATE.INPUT)} error={response.error} />
+      {workState === STATE.PUBLISHSUCCESS && <DeploySuccess onDismiss={handleDismiss} status={response.status} />}
+      {workState === STATE.PUBLISHFAILURE && (
+        <DeployFailure onDismiss={handleDismiss} tryAgain={() => setWorkState(STATE.INPUT)} error={response.error} />
       )}
-      {(state === STATE.INPUT || state === STATE.PUBLISHPENDING) && (
+      {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
         <Fragment>
           <div css={dialogSubTitle}>
             {formatMessage(Text.LUISDEPLOY)}
-            <Link href={Links.LUIS}>Where can I find this?</Link>
+            <Link href={Links.LUIS} target="_blank">
+              Where can I find this?
+            </Link>
           </div>
           <form onSubmit={handlePublish} css={dialogContent}>
             <Stack gap={20}>
@@ -210,8 +210,12 @@ export default function PublishLuisModal(props) {
             </Stack>
           </form>
           <DialogFooter>
-            <PrimaryButton onClick={handlePublish} text={formatMessage('Publish')}>
-              {state === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
+            <PrimaryButton
+              onClick={handlePublish}
+              text={formatMessage('Publish')}
+              disabled={workState === STATE.PUBLISHPENDING}
+            >
+              {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
             </PrimaryButton>
             <DefaultButton onClick={handleDismiss} text={formatMessage('Cancel')} />
           </DialogFooter>

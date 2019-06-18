@@ -1,3 +1,5 @@
+import formatMessage from 'format-message';
+
 export const BASEURL = 'http://localhost:5000/api';
 
 /**
@@ -66,12 +68,14 @@ export const ActionTypes = {
 };
 
 export const Tips = {
-  PROJECTNAME: 'project name',
-  ENVIRONMENT:
-    'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.',
-  AUTHORINGREGION: 'authoring region to use [westus,westeurope,australiaeast]',
-  DEFAULTLANGUAGE:
-    'configures default language model to use if there is no culture code in the file name (Default:en-us)',
+  PROJECTNAME: formatMessage('project name'),
+  ENVIRONMENT: formatMessage(
+    'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
+  ),
+  AUTHORINGREGION: formatMessage('authoring region to use [westus,westeurope,australiaeast]'),
+  DEFAULTLANGUAGE: formatMessage(
+    'configures default language model to use if there is no culture code in the file name (Default:en-us)'
+  ),
 };
 
 export const Links = {
@@ -79,9 +83,11 @@ export const Links = {
 };
 
 export const Text = {
-  LUISDEPLOY: 'To use your language model, first publish the latest intents and examples to your LUIS instance.',
-  LUISDEPLOYSUCCESS: 'Congratulations! Your model is successfully published.',
-  LUISDEPLOYFAILURE: 'Sorry, something went wrong with publishing. Try again or exit out of this task',
+  LUISDEPLOY: formatMessage(
+    'To use your language model, first publish the latest intents and examples to your LUIS instance.'
+  ),
+  LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
+  LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task'),
 };
 
 export const FileTypes = {
