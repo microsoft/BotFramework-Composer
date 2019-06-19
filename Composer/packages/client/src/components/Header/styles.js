@@ -54,8 +54,9 @@ export const fileInput = css`
 `;
 
 export const warningContiner = css`
-  margin-right: 20px;
-  font-size: 14px;
+  font-size: 16px;
+  margin-right: 15px;
+  line-height: 40px;
 `;
 
 export const warningIcon = css`

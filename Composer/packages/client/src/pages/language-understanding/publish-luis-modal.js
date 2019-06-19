@@ -23,10 +23,7 @@ import storage from './../../utils/storage';
 import { Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 import { Text } from './../../constants/index';
-
-const AUTHORINGKEY = 'authoringKey';
-const ENVIRONMENT = 'environment';
-const PROJECTNAME = 'name';
+import { getDefaultLuisConfig } from './../../utils/luisUtil';
 
 const STATE = {
   INPUT: 0,
@@ -44,17 +41,6 @@ const onRenderLabel = info => props => (
     </TooltipHost>
   </Stack>
 );
-
-const getDefaultData = () => {
-  return {
-    name: storage.get(PROJECTNAME, ''),
-    environment: storage.get(ENVIRONMENT, ''),
-    authoringKey: storage.get(AUTHORINGKEY, ''),
-    authoringRegion: 'westus',
-    defaultLanguage: 'en-us',
-    errors: {},
-  };
-};
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
@@ -112,7 +98,7 @@ const DeployFailure = props => {
 
 export default function PublishLuisModal(props) {
   const { isOpen, onDismiss, onPublish } = props;
-  const [formData, setFormData] = useState(getDefaultData());
+  const [formData, setFormData] = useState({ ...getDefaultLuisConfig(), errors: {} });
   const [workState, setWorkState] = useState(STATE.INPUT);
   const [response, setResponse] = useState({});
 

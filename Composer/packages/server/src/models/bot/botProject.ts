@@ -148,6 +148,14 @@ export class BotProject {
     return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content));
   };
 
+  public checkNeedLuisDeploy = async () => {
+    if (this.luIndexer.getLuFiles().length <= 0) {
+      return false;
+    } else {
+      return !(await this.luPublisher.checkLuisDeployed());
+    }
+  };
+
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
     // get destination storage client
     const dstStorage = StorageService.getStorageClient(locationRef.storageId);

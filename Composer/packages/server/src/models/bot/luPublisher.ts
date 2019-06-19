@@ -77,6 +77,10 @@ export class LuPublisher {
 
   public getLuisConfig = () => this.config;
 
+  public setLuisConfig = (config: ILuisConfig) => {
+    this.config = config;
+  };
+
   private _copyDialogsToTargetFolder = async (config: any) => {
     if (this.config == null) return '';
     const defaultLanguage = this.config.defaultLanguage;
