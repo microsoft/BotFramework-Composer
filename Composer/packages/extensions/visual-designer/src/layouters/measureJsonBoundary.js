@@ -5,11 +5,15 @@ import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { GraphNode } from '../shared/GraphNode';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 
-import { measureIfElseBoundary, measureSeqenceBoundary, measureSwitchCaseBoundary } from './containerBoundaryMeasurer';
+import {
+  calculateIfElseBoundary,
+  calculateSequenceBoundary,
+  calculateSwitchCaseBoundary,
+} from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup) {
   const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
-  return measureSeqenceBoundary(nodes);
+  return calculateSequenceBoundary(nodes);
 }
 
 function measureIfConditionBoundary(json) {
@@ -17,13 +21,13 @@ function measureIfConditionBoundary(json) {
   const inputs = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
   inputs[2].boundary = measureStepGroupBoundary(ifGroup.json);
   inputs[3].boundary = measureStepGroupBoundary(elseGroup.json);
-  const result = measureIfElseBoundary(...inputs);
+  const result = calculateIfElseBoundary(...inputs);
   return result;
 }
 
 function measureSwitchConditionBoundary(json) {
   const { condition, choice, branches } = transformSwitchCondition(json, '');
-  return measureSwitchCaseBoundary(
+  return calculateSwitchCaseBoundary(
     GraphNode.fromIndexedJson(condition),
     GraphNode.fromIndexedJson(choice),
     branches.map(x => GraphNode.fromIndexedJson(x))

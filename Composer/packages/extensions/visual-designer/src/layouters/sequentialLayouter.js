@@ -1,7 +1,7 @@
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 
-import { measureSeqenceBoundary } from './containerBoundaryMeasurer';
+import { calculateSequenceBoundary } from './calculateNodeBoundary';
 
 const StepInterval = ElementInterval.y;
 const ExtraEdgeLength = ElementInterval.y / 2;
@@ -11,7 +11,7 @@ export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge 
     return { boundary: new Boundary(), nodes: [], edges: [] };
   }
 
-  const box = measureSeqenceBoundary(nodes, withHeadEdge, withTrailingEdge);
+  const box = calculateSequenceBoundary(nodes, withHeadEdge, withTrailingEdge);
 
   nodes.reduce((offsetY, node) => {
     node.offset = { x: box.axisX - node.boundary.axisX, y: offsetY };
