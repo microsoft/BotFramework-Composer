@@ -24,12 +24,12 @@
         },
         "resultProperty": {
             "$role": "memoryPath",
-            "title": "Array Property",
+            "title": "Result Property",
             "description": "Memory expression of the result of this action."
         },
         "value": {
             "$role": "expression",
-            "title": "value of the item",
+            "title": "Value of the Item",
             "description": "Expression to evaluate.",
             "examples": [
                 "dialog.todo"

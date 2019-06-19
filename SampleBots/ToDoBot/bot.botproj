@@ -1,7 +1,8 @@
 {
   "services": [],
   "schemas": {
-    "editor": "editor.schema"
+    "editor": ".schemas/editor.schema",
+    "sdk": ".schemas/sdk.schema"
   },
-  "entry": "ToDoBot.main.dialog"
+  "entry": "ToDoBot.dialog"
 }
