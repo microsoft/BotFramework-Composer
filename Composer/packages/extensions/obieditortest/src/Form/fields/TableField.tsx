@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   ContextualMenuItemType,
-  DefaultButton,
   DetailsList,
   IContextualMenuItem,
   SelectionMode,
   DetailsListLayoutMode,
+  IconButton,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
@@ -111,7 +111,7 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
     },
   ];
 
-  return <DefaultButton menuProps={{ items: menuItems }} />;
+  return <IconButton iconProps={{ iconName: 'More' }} menuProps={{ items: menuItems }} />;
 }
 
 export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
