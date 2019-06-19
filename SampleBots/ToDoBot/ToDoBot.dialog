@@ -2,7 +2,7 @@
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
-    "generator": "todo.lg",
+    "generator": "todobot.lg",
     "recognizer": {
         "$type": "Microsoft.RegexRecognizer",
         "intents": {
