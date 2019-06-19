@@ -1,21 +1,21 @@
 import { Boundary } from '../shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
-export function sequentialLayouter(nodes, ElementInterval = 20, withHeadEdge = true, withTrailingEdge = true) {
-  const box = new Boundary();
+import { measureSeqenceBoundary } from './containerBoundaryMeasurer';
 
+const StepInterval = ElementInterval.y;
+const ExtraEdgeLength = ElementInterval.y / 2;
+
+export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge = true) {
   if (!Array.isArray(nodes) || nodes.length === 0) {
-    return { boundary: box, nodes: [], edges: [] };
+    return { boundary: new Boundary(), nodes: [], edges: [] };
   }
 
-  box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
-  box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
-  box.height =
-    nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
-    ElementInterval * Math.max(nodes.length - 1, 0);
+  const box = measureSeqenceBoundary(nodes, withHeadEdge, withTrailingEdge);
 
   nodes.reduce((offsetY, node) => {
     node.offset = { x: box.axisX - node.boundary.axisX, y: offsetY };
-    return offsetY + node.boundary.height + ElementInterval;
+    return offsetY + node.boundary.height + StepInterval;
   }, 0);
 
   const edges = [];
@@ -28,13 +28,11 @@ export function sequentialLayouter(nodes, ElementInterval = 20, withHeadEdge = t
       direction: 'y',
       x,
       y,
-      length: ElementInterval,
+      length: StepInterval,
     });
   }
 
-  const ExtraEdgeLength = ElementInterval / 2;
   if (withHeadEdge) {
-    box.height += ExtraEdgeLength;
     nodes.forEach(node => {
       node.offset.y += ExtraEdgeLength;
     });
@@ -51,7 +49,6 @@ export function sequentialLayouter(nodes, ElementInterval = 20, withHeadEdge = t
   }
 
   if (withTrailingEdge) {
-    box.height += ExtraEdgeLength;
     edges.push({
       id: `edge/tail/${nodes[nodes.length - 1].id}--after`,
       direction: 'y',

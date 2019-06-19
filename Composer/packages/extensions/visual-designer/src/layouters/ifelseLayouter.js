@@ -1,5 +1,5 @@
 import { Boundary } from '../shared/Boundary';
-import { ElementInterval, InitNodeSize, DiamondSize } from '../shared/elementSizes';
+import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 
 import { measureIfElseBoundary } from './containerBoundaryMeasurer';
@@ -9,9 +9,6 @@ const BranchIntervalY = ElementInterval.y / 2;
 
 export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
   if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
-
-  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
-  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
 
   const containerBoundary = measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode);
 

@@ -1,12 +1,23 @@
 import { ObiTypes } from '../shared/ObiTypes';
-import { DiamondSize, InitNodeSize, ElementInterval } from '../shared/elementSizes';
+import { DiamondSize, InitNodeSize } from '../shared/elementSizes';
 import { Boundary } from '../shared/Boundary';
+import { transformIfCondtion } from '../transformers/transformIfCondition';
+import { GraphNode } from '../shared/GraphNode';
+
+import { measureIfElseBoundary, measureSeqenceBoundary } from './containerBoundaryMeasurer';
 
 function measureStepGroupBoundary(stepGroup) {
-  const children = stepGroup.children || [];
-  const accumulatedHeight =
-    children.length * InitNodeSize.height + Math.max(0, children.length - 1) * ElementInterval.y;
-  return new Boundary(InitNodeSize.width, accumulatedHeight);
+  const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
+  return measureSeqenceBoundary(nodes);
+}
+
+function measureIfConditionBoundary(json) {
+  const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
+  const inputs = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
+  inputs[2].boundary = measureStepGroupBoundary(ifGroup.json);
+  inputs[3].boundary = measureStepGroupBoundary(elseGroup.json);
+  const result = measureIfElseBoundary(...inputs);
+  return result;
 }
 
 export function measureNodeBoundary(json) {
@@ -22,6 +33,9 @@ export function measureNodeBoundary(json) {
       break;
     case ObiTypes.StepGroup:
       boundary = measureStepGroupBoundary(json);
+      break;
+    case ObiTypes.IfCondition:
+      boundary = measureIfConditionBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);

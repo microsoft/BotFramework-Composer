@@ -5,6 +5,19 @@ import { ElementInterval } from '../shared/elementSizes';
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
+export function measureSeqenceBoundary(nodes, widthHeadEdge = true, widthTailEdge = true) {
+  const box = new Boundary();
+  box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
+  box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
+  box.height =
+    nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
+    ElementInterval.y * Math.max(nodes.length - 1, 0);
+
+  if (widthHeadEdge) box.height += ElementInterval.y / 2;
+  if (widthTailEdge) box.height += ElementInterval.y / 2;
+  return box;
+}
+
 export function measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
