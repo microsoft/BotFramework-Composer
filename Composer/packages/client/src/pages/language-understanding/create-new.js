@@ -62,6 +62,7 @@ export default function NewLuFileModal(props) {
                   ref.focus();
                 }
               }}
+              data-testid="NewLUFile"
             />
             <Button
               onClick={handleSubmit}

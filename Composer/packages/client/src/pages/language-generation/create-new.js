@@ -63,6 +63,7 @@ export default function NewLgFileModal(props) {
                   ref.focus();
                 }
               }}
+              data-testid="NewLGFile"
             />
             <Button
               onClick={handleSubmit}
