@@ -83,13 +83,13 @@ export function ShellApi() {
     // template is a structure described above
     // position = 0 means top, -1 means bottom, we may only support those two at first pass
     // then support any position later 
-    2. createLgTemplate(fileId:string, template:LGTemplate, position:int): LGTemplate[]
+    2. createLgTemplate(fileId:string, template:LGTemplate, position:int): LGTemplate
 
     // use templateName as identifier for delete
-    3. deleteLgTemplate(fileId:string, templateName:string): LGTemplate[]
+    3. deleteLgTemplate(fileId:string, templateName:string): void
 
     // use templateName as identifier for update, this allows you to rename an template
-    4. updateLgTemplate(fileId:string, templateName:string, template:LGTemplate): LGTemplate[]
+    4. updateLgTemplate(fileId:string, templateName:string, template:LGTemplate): LGTemplate
 
     * In implementation, all those parameters will be packed into one single object as other api parameters
     * All api returns the templates in that file after the api call
