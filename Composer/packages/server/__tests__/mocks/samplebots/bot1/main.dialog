@@ -1,3 +1,21 @@
 {
-  "old": "value"
+  "old": "value",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "[hello] I'm a ToDo bot"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[bye] See you again"
+    },
+    {
+      "$type": "Microsoft.Unknown",
+      "activity": "[bye2] See you again"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "activity": "[bye3] See you again"
+    }
+  ]
 }

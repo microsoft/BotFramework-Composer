@@ -21,7 +21,7 @@ const Content = forwardRef((props, ref) => <div css={content} {...props} ref={re
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botStatus } = state;
+  const { botStatus, botLoadErrorMsg } = state;
   const { connectBot, reloadBot, setStorageExplorerStatus } = actions;
   useEffect(() => {
     actions.fetchProject();
@@ -33,6 +33,7 @@ export function App() {
         botStatus={botStatus}
         connectBot={connectBot}
         reloadBot={reloadBot}
+        botLoadErrorMsg={botLoadErrorMsg}
         openStorageExplorer={setStorageExplorerStatus}
       />
       <StorageExplorer />
@@ -54,7 +55,7 @@ export function App() {
             labelHide={!sideBarExpand}
           />
           <NavItem
-            to="language-generation/all"
+            to="language-generation/"
             iconName="Robot"
             labelName={formatMessage('Bot says')}
             labelHide={!sideBarExpand}

@@ -10,8 +10,8 @@ async function createProject(req: Request, res: Response) {
     path: req.body.path,
   };
   try {
-    await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
-    await ProjectService.openProject(locationRef);
+    const newProjRef = await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    await ProjectService.openProject(newProjRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
@@ -170,7 +170,7 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const status = await ProjectService.currentBotProject.publishLuis(req.body.authoringKey);
+      const status = await ProjectService.currentBotProject.publishLuis(req.body);
       res.status(200).json({ status });
     } catch (error) {
       res.status(400).json({ error: error.message });

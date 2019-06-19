@@ -24,7 +24,7 @@ const Routes = props => {
             <Router {...parentProps}>
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/:fileId" />
-              <LGPage path="language-generation/:fileId" />
+              <LGPage path="language-generation/*" />
               <NotFound default />
             </Router>
           )}

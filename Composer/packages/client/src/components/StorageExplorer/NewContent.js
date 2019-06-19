@@ -14,7 +14,7 @@ export function NewContent(props) {
   const [templates, setTemplates] = useState([]);
   const { actions } = useContext(Store);
   const selectedTemplate = useRef();
-  const { fetchTemplates, createProject, clearNavHistory } = actions;
+  const { fetchTemplates, createProject } = actions;
   const { onCloseExplorer } = props;
 
   useEffect(() => {
@@ -32,7 +32,6 @@ export function NewContent(props) {
   };
 
   const handleSaveAs = async (storageId, absolutePath) => {
-    clearNavHistory();
     await createProject(storageId, absolutePath, selectedTemplate.current.id);
     onCloseExplorer();
   };

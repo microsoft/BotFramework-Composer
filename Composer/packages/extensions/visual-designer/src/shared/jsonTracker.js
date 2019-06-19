@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, get, set } from 'lodash';
 
 function locateNode(dialog, path) {
   if (!path) return null;
@@ -57,68 +57,16 @@ export function deleteNode(inputDialog, path) {
   return dialog;
 }
 
-function locateArrayInsertPoint(data, path) {
-  const matchResult = path.match(/^(.+)\[(\d+)\]$/);
-  if (!matchResult) {
-    console.warn('insert checking failed: invalid path', path);
-    return null;
-  }
-
-  const targetPath = matchResult[1];
-  const targetIndex = parseInt(matchResult[2]);
-
-  const targetArray = locateNode(data, targetPath).currentData;
-  if (!Array.isArray(targetArray)) {
-    console.warn('insert checking failed: invalid data, expect an array but got', targetArray);
-    return null;
-  }
-
-  return {
-    targetArray,
-    targetIndex,
-  };
-}
-
-export function insertBefore(inputDialog, path, $type) {
+export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
-  const insertLocation = locateArrayInsertPoint(dialog, path);
-
-  if (!insertLocation) {
-    return dialog;
-  }
-
-  const { targetArray, targetIndex } = insertLocation;
+  const current = get(dialog, path, []);
   const newStep = { $type };
-  targetArray.splice(targetIndex, 0, newStep);
-  return dialog;
-}
 
-export function insertAfter(inputDialog, path, $type) {
-  const dialog = cloneDeep(inputDialog);
-  const insertLocation = locateArrayInsertPoint(dialog, path);
+  const insertAt = typeof position === 'undefined' ? current.length : position;
 
-  if (!insertLocation) {
-    return dialog;
-  }
+  current.splice(insertAt, 0, newStep);
 
-  const { targetArray, targetIndex } = insertLocation;
-  const newStep = { $type };
-  targetArray.splice(targetIndex + 1, 0, newStep);
-  return dialog;
-}
+  set(dialog, path, current);
 
-export function unshiftArray(inputDialog, path, $type) {
-  const dialog = cloneDeep(inputDialog);
-  const target = locateNode(dialog, path);
-
-  if (!target) return dialog;
-
-  const { parentData, currentKey, currentData } = target;
-  const newStep = { $type };
-  if (Array.isArray(currentData)) {
-    currentData.unshift(newStep);
-  } else {
-    parentData[currentKey] = [{ $type }];
-  }
   return dialog;
 }

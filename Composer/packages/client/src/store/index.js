@@ -16,6 +16,7 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'unConnected',
+  botLoadErrorMsg: '',
   storageExplorerStatus: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
