@@ -1,5 +1,7 @@
 import { cloneDeep, get, set } from 'lodash';
 
+export const JSON_PATH_PREFIX = '$';
+
 function locateNode(dialog, path) {
   if (!path) return null;
 
@@ -59,14 +61,15 @@ export function deleteNode(inputDialog, path) {
 
 export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
-  const current = get(dialog, path, []);
+  const normalizedPath = path.startsWith(JSON_PATH_PREFIX) ? path.substr(1) : path;
+  const current = get(dialog, normalizedPath, []);
   const newStep = { $type };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 
   current.splice(insertAt, 0, newStep);
 
-  set(dialog, path, current);
+  set(dialog, normalizedPath, current);
 
   return dialog;
 }
