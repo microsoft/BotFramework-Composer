@@ -29,8 +29,8 @@ export default function TableView(props) {
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
-  const addLgTemplate = useRef(debounce(actions.addLgTemplate, 500)).current;
-  const deleteLgTemplate = useRef(debounce(actions.deleteLgTemplate, 500)).current;
+  const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
+  const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
 
@@ -219,33 +219,33 @@ export default function TableView(props) {
 
   function onCreateNewTemplate() {
     const payload = {
-      lgFile,
+      file: lgFile,
       template: {
         Name: randomName(), // need optimize
         Body: '-TemplateValue',
       },
     };
-    addLgTemplate(payload);
+    createLgTemplate(payload);
   }
 
   function onRemoveTemplate(index) {
     const payload = {
-      lgFile,
+      file: lgFile,
       templateName: templates[index].Name,
     };
 
-    deleteLgTemplate(payload);
+    removeLgTemplate(payload);
   }
 
   function onCopyTemplate(index) {
     const payload = {
-      lgFile,
+      file: lgFile,
       template: {
         Name: `${templates[index].Name}.Copy`,
         Body: templates[index].Body,
       },
     };
-    addLgTemplate(payload);
+    createLgTemplate(payload);
   }
 
   return (

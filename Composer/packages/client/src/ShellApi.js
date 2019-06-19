@@ -24,7 +24,7 @@ const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).curren
 const FileChangeTypes = {
   CREATE: 'create',
   UPDATE: 'update',
-  DELETE: 'delete',
+  REMOVE: 'remove',
 };
 
 const FileTargetTypes = {
@@ -48,11 +48,14 @@ export function ShellApi() {
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
+  const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
+  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
+  const removeLgTemplate = actions.removeLgTemplate;
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
   const { LG, LU } = FileTargetTypes;
-  const { CREATE, UPDATE } = FileChangeTypes;
+  const { CREATE, UPDATE, REMOVE } = FileChangeTypes;
 
   useEffect(() => {
     apiClient.connect();
@@ -63,6 +66,9 @@ export function ShellApi() {
     apiClient.registerApi('updateLgFile', fileHandler(LG, UPDATE));
     apiClient.registerApi('createLuFile', fileHandler(LU, CREATE));
     apiClient.registerApi('createLgFile', fileHandler(LG, CREATE));
+    apiClient.registerApi('createLgTemplate', lgTemplateHandler(CREATE));
+    apiClient.registerApi('updateLgTemplate', lgTemplateHandler(UPDATE));
+    apiClient.registerApi('removeLgTemplate', lgTemplateHandler(REMOVE));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -148,6 +154,40 @@ export function ShellApi() {
     }
 
     return true;
+  }
+
+  function lgTemplateHandler(fileChangeType) {
+    return async (newData, event) => {
+      if (isEventSourceValid(event) === false) return false;
+
+      const file = lgFiles.find(file => file.id === newData.id);
+
+      switch (fileChangeType) {
+        case UPDATE:
+          await updateLgTemplate({
+            file,
+            templateName: newData.templateName,
+            template: newData.template,
+          });
+          break;
+        case CREATE:
+          await createLgTemplate({
+            file,
+            template: newData.template,
+            position: newData.position === 0 ? 0 : -1,
+          });
+          break;
+        case REMOVE:
+          await removeLgTemplate({
+            file,
+            templateName: newData.templateName,
+          });
+          break;
+        default:
+          throw new Error(`unsupported method ${fileChangeType}`);
+      }
+      return true;
+    };
   }
 
   function fileHandler(fileTargetType, fileChangeType) {

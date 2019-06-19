@@ -76,19 +76,19 @@ export async function removeLgFile(dispatch, { id }) {
 /**
  *
  * @param {*} dispatch
- * @param {*} lgFile file take this update
+ * @param {*} file lg file take this update
  * @param {*} templateName name of template to update
  * @param {*} template updated template, expected {Name, Body}
  */
-export async function updateLgTemplate(dispatch, { lgFile, templateName, template }) {
+export async function updateLgTemplate(dispatch, { file, templateName, template }) {
   // validate template
   const validateResult = templateValidate(template);
   if (validateResult.isValid === false) {
     return new Error(validateResult.error.Message);
   }
 
-  const oldTemplates = templatesFromText(lgFile.content);
-  if (Array.isArray(oldTemplates) === false) return new Error('origin lgFile is not valid');
+  const oldTemplates = templatesFromText(file.content);
+  if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
   const newTemplates = oldTemplates.map(item => {
     if (item.Name === templateName) {
@@ -102,18 +102,18 @@ export async function updateLgTemplate(dispatch, { lgFile, templateName, templat
 
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: lgFile.id, content });
+  updateLgFile(dispatch, { id: file.id, content });
 }
 
 /**
  *
  * @param {*} dispatch
- * @param {*} lgFile file take this update
+ * @param {*} File lg file take this update
  * @param {*} template new template to add, expected {Name, Body}
  * @param {*} position 0 for insert at file start, -1 for insert at file end by default
  */
 
-export function addLgTemplate(dispatch, { lgFile, template, position }) {
+export function createLgTemplate(dispatch, { file, template, position }) {
   // validate template
   const validateResult = templateValidate(template);
   if (validateResult.isValid === false) {
@@ -121,11 +121,11 @@ export function addLgTemplate(dispatch, { lgFile, template, position }) {
   }
 
   // ToDo, here got an alternative implementation
-  // ```lgFile.content += textFromTemplates(template)```
+  // ```file.content += textFromTemplates(template)```
   // but maybe cannot handle comments correctly. not sure which is better
 
-  const oldTemplates = templatesFromText(lgFile.content);
-  if (Array.isArray(oldTemplates) === false) return new Error('origin lgFile is not valid');
+  const oldTemplates = templatesFromText(file.content);
+  if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
   const newTemplates = [...oldTemplates];
   if (position === 0) {
@@ -135,18 +135,18 @@ export function addLgTemplate(dispatch, { lgFile, template, position }) {
   }
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: lgFile.id, content });
+  updateLgFile(dispatch, { id: file.id, content });
 }
 
 /**
  *
  * @param {*} dispatch
- * @param {*} lgFile file take this update
+ * @param {*} file lg file take this update
  * @param {*} templateName name of template to delete
  */
-export async function deleteLgTemplate(dispatch, { lgFile, templateName }) {
-  const oldTemplates = templatesFromText(lgFile.content);
-  if (Array.isArray(oldTemplates) === false) return new Error('origin lgFile is not valid');
+export async function removeLgTemplate(dispatch, { file, templateName }) {
+  const oldTemplates = templatesFromText(file.content);
+  if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
   const newTemplates = oldTemplates.filter(item => {
     return item.Name !== templateName;
@@ -154,5 +154,5 @@ export async function deleteLgTemplate(dispatch, { lgFile, templateName }) {
 
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: lgFile.id, content });
+  updateLgFile(dispatch, { id: file.id, content });
 }
