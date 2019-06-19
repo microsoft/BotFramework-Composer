@@ -17,7 +17,7 @@ import Content from './content';
 import PublishLuisModal from './publish-luis-modal';
 
 export const LUPage = props => {
-  const fileId = props.fileId;
+  let fileId = props.fileId;
   const { state, actions } = useContext(Store);
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
   const { publishLuis } = actions;
@@ -26,15 +26,17 @@ export const LUPage = props => {
   const [publishModalOpen, setPublishModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(true);
   const [newContent, setNewContent] = useState(null);
-
   const [luFile, setLuFile] = useState(null);
-
   useEffect(() => {
-    const luFile = luFiles.find(file => file.id === fileId);
-
-    // if not found, redirect to first lu
+    let luFile = luFiles.find(file => file.id === fileId);
+    // if not found, it means fileId is undefined or a wrong id
+    //if it is undefined, set it the first luFile.id
+    //else redirect to the first luFile page
     if (luFiles.length !== 0 && luFile === undefined) {
-      navigate(`./${luFiles[0].id}`);
+      luFile = luFiles[0];
+      if (fileId !== undefined) {
+        navigate(`/language-understanding/${luFile.id}`);
+      }
     }
 
     setLuFile({ ...luFile });
@@ -42,6 +44,9 @@ export const LUPage = props => {
     setNewContent(null);
   }, [luFiles, fileId]);
 
+  if (luFiles.length !== 0 && fileId === undefined) {
+    fileId = luFiles[0].id;
+  }
   function onChange(newContent) {
     setNewContent(newContent);
   }
@@ -69,7 +74,7 @@ export const LUPage = props => {
       id: fileId,
     };
     await actions.removeLuFile(payload);
-    navigate(`./`);
+    navigate('/language-understanding');
   }
 
   async function onCreateLuFile(data) {
@@ -78,7 +83,7 @@ export const LUPage = props => {
       content: '',
     });
     setModalOpen(false);
-    navigate(`./${data.name}`);
+    navigate(`/language-understanding/${data.name}`);
   }
 
   async function handleLuisPublish(config) {
@@ -104,7 +109,7 @@ export const LUPage = props => {
         forceAnchor: false,
         onClick: event => {
           event.preventDefault();
-          navigate(`./${file.id}`);
+          navigate(`/language-understanding/${file.id}`);
         },
       };
     });

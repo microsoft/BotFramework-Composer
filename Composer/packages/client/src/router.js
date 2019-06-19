@@ -23,8 +23,14 @@ const Routes = props => {
           {!props.match && (
             <Router {...parentProps}>
               <SettingPage path="setting/*" />
+              <LUPage path="language-understanding/" />
               <LUPage path="language-understanding/:fileId" />
+<<<<<<< HEAD
               <LGPage path="language-generation/*" />
+=======
+              <LGPage path="language-generation/" />
+              <LGPage path="language-generation/:fileId" />
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
               <NotFound default />
             </Router>
           )}

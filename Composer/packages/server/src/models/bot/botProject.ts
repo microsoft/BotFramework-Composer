@@ -140,7 +140,7 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    this._removeFile(luFile.relativePath);
+    await this._removeFile(luFile.relativePath);
     return this.luIndexer.getLuFiles();
   };
 

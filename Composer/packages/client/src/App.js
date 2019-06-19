@@ -61,7 +61,7 @@ export function App() {
             labelHide={!sideBarExpand}
           />
           <NavItem
-            to="language-understanding/all"
+            to="language-understanding/"
             iconName="People"
             labelName={formatMessage('User says')}
             labelHide={!sideBarExpand}

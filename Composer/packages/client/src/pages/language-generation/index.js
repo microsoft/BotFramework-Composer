@@ -14,6 +14,10 @@ import '../language-understanding/style.css';
 import Content from './content';
 
 export const LGPage = props => {
+<<<<<<< HEAD
+=======
+  let fileId = props.fileId;
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
   const { state, actions } = useContext(Store);
   const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const { lgFiles, dialogs } = state;
@@ -22,6 +26,7 @@ export const LGPage = props => {
 
   const subPath = props['*'];
 
+<<<<<<< HEAD
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.name === subPath);
 
@@ -35,6 +40,23 @@ export const LGPage = props => {
     const subLinks = dialogs.reduce((result, file) => {
       if (result.length === 0) {
         result = [{ links: [] }];
+=======
+  useEffect(() => {
+    const lgCloneFiles = cloneDeep(lgFiles);
+    let lgFile = lgCloneFiles.find(file => file.id === fileId);
+
+    // if not found, redirect to first lg file
+    if (lgCloneFiles.length !== 0 && lgFile === undefined) {
+      lgFile = lgCloneFiles[0];
+      if (fileId !== undefined) {
+        navigate(`/language-generation/${lgFile.id}`);
+      }
+    }
+    lgCloneFiles.forEach(file => {
+      const parseResult = LGParser.TryParse(file.content);
+      if (parseResult.isValid) {
+        file.templates = parseResult.templates;
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
       }
       const item = {
         id: file.name,
@@ -54,7 +76,27 @@ export const LGPage = props => {
       return result;
     }, []);
 
+<<<<<<< HEAD
     return [
+=======
+      return {
+        key: file.id,
+        name: `${file.id}.lg`,
+        collapseByDefault: false,
+        ariaLabel: file.id,
+        altText: file.id,
+        title: file.id,
+        isExpanded: true,
+        links: subNav,
+        forceAnchor: false,
+        onClick: event => {
+          event.preventDefault();
+          navigate(`/language-generation/${file.id}`);
+        },
+      };
+    });
+    setGroups([
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
       {
         links: [
           {
@@ -66,6 +108,7 @@ export const LGPage = props => {
           },
         ],
       },
+<<<<<<< HEAD
     ];
   }, [dialogs]);
 
@@ -83,6 +126,12 @@ export const LGPage = props => {
       navigate(`/language-generation/${id}`);
     }
   }
+=======
+    ]);
+    setLgFile({ ...lgFile });
+    setNewContent(null);
+  }, [lgFiles, fileId]);
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
 
   function onChange(newContent) {
     setNewContent(newContent);
@@ -101,6 +150,7 @@ export const LGPage = props => {
     updateLgFile(payload);
   }
 
+<<<<<<< HEAD
   //#TODO:
   // get line number from lg parser,
   // then deep link to code editor this Line
@@ -109,6 +159,38 @@ export const LGPage = props => {
     setTextMode(true);
   }
 
+=======
+  async function onRemove() {
+    const title = formatMessage(`Confirm delete ${fileId}.lg file?`);
+    const confirm = await OpenConfirmModal(title);
+    if (confirm === false) {
+      return;
+    }
+    const payload = {
+      id: fileId,
+    };
+    await actions.removeLgFile(payload);
+    navigate(`/language-generation`);
+  }
+
+  async function onCreateLgFile(data) {
+    await actions.createLgFile({
+      id: data.name,
+    });
+    setModalOpen(false);
+    navigate(`/language-generation/${data.name}`);
+  }
+
+  // performance optimization, component update should only trigger by lgFile change.
+  const memoizedContent = useMemo(() => {
+    return <Content file={lgFile} textMode={textMode} onChange={onChange} />;
+  }, [lgFile, textMode]);
+
+  if (lgFiles.length !== 0 && fileId === undefined) {
+    fileId = lgFiles[0].id;
+  }
+
+>>>>>>> fix the bug on the back button and two other bugs which causes the white page bugs
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
