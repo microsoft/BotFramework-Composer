@@ -3,8 +3,9 @@ import { DiamondSize, InitNodeSize } from '../shared/elementSizes';
 import { Boundary } from '../shared/Boundary';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { GraphNode } from '../shared/GraphNode';
+import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 
-import { measureIfElseBoundary, measureSeqenceBoundary } from './containerBoundaryMeasurer';
+import { measureIfElseBoundary, measureSeqenceBoundary, measureSwitchCaseBoundary } from './containerBoundaryMeasurer';
 
 function measureStepGroupBoundary(stepGroup) {
   const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
@@ -18,6 +19,15 @@ function measureIfConditionBoundary(json) {
   inputs[3].boundary = measureStepGroupBoundary(elseGroup.json);
   const result = measureIfElseBoundary(...inputs);
   return result;
+}
+
+function measureSwitchConditionBoundary(json) {
+  const { condition, choice, branches } = transformSwitchCondition(json, '');
+  return measureSwitchCaseBoundary(
+    GraphNode.fromIndexedJson(condition),
+    GraphNode.fromIndexedJson(choice),
+    branches.map(x => GraphNode.fromIndexedJson(x))
+  );
 }
 
 export function measureNodeBoundary(json) {
@@ -36,6 +46,9 @@ export function measureNodeBoundary(json) {
       break;
     case ObiTypes.IfCondition:
       boundary = measureIfConditionBoundary(json);
+      break;
+    case ObiTypes.SwitchCondition:
+      boundary = measureSwitchConditionBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
