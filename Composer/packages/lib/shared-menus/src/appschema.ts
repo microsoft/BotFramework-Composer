@@ -1,18 +1,38 @@
-export const DialogGroup = {
-  RESPONSE: 'RESPONSE',
-  INPUT: 'INPUT',
-  BRANCHING: 'BRANCHING',
-  MEMORY: 'MEMORY',
-  STEP: 'STEP',
-  CODE: 'CODE',
-  LOG: 'LOG',
-  RULE: 'RULE',
-  RECOGNIZER: 'RECOGNIZER',
-  SELECTOR: 'SELECTOR',
-  OTHER: 'OTHER',
-};
+// export const DialogGroup = {
+//   RESPONSE: 'RESPONSE',
+//   INPUT: 'INPUT',
+//   BRANCHING: 'BRANCHING',
+//   MEMORY: 'MEMORY',
+//   STEP: 'STEP',
+//   CODE: 'CODE',
+//   LOG: 'LOG',
+//   RULE: 'RULE',
+//   RECOGNIZER: 'RECOGNIZER',
+//   SELECTOR: 'SELECTOR',
+//   OTHER: 'OTHER',
+// };
 
-export const dialogGroups = {
+export enum DialogGroup {
+  RESPONSE = 'RESPONSE',
+  INPUT = 'INPUT',
+  BRANCHING = 'BRANCHING',
+  MEMORY = 'MEMORY',
+  STEP = 'STEP',
+  CODE = 'CODE',
+  LOG = 'LOG',
+  RULE = 'RULE',
+  RECOGNIZER = 'RECOGNIZER',
+  SELECTOR = 'SELECTOR',
+  OTHER = 'OTHER',
+}
+
+export interface DialogGroupItem {
+  label: string;
+  types: string[];
+}
+export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
+
+export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
     label: 'Send Messages',
     types: ['Microsoft.SendActivity', 'Microsoft.BeginDialog'],

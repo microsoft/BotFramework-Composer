@@ -6,7 +6,7 @@ import get from 'lodash.get';
 
 import Modal from '../../Modal';
 import { buildDialogOptions, swap } from '../utils';
-import { DialogGroup } from '../../schema/appschema';
+import { DialogGroup } from 'shared-menus';
 
 import { TableField } from './TableField';
 

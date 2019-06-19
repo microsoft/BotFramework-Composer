@@ -1,17 +1,31 @@
+// export const DialogGroup = {
+//   RESPONSE: 'RESPONSE',
+//   INPUT: 'INPUT',
+//   BRANCHING: 'BRANCHING',
+//   MEMORY: 'MEMORY',
+//   STEP: 'STEP',
+//   CODE: 'CODE',
+//   LOG: 'LOG',
+//   RULE: 'RULE',
+//   RECOGNIZER: 'RECOGNIZER',
+//   SELECTOR: 'SELECTOR',
+//   OTHER: 'OTHER',
+// };
 var _a;
-export var DialogGroup = {
-  RESPONSE: 'RESPONSE',
-  INPUT: 'INPUT',
-  BRANCHING: 'BRANCHING',
-  MEMORY: 'MEMORY',
-  STEP: 'STEP',
-  CODE: 'CODE',
-  LOG: 'LOG',
-  RULE: 'RULE',
-  RECOGNIZER: 'RECOGNIZER',
-  SELECTOR: 'SELECTOR',
-  OTHER: 'OTHER',
-};
+export var DialogGroup;
+(function(DialogGroup) {
+  DialogGroup['RESPONSE'] = 'RESPONSE';
+  DialogGroup['INPUT'] = 'INPUT';
+  DialogGroup['BRANCHING'] = 'BRANCHING';
+  DialogGroup['MEMORY'] = 'MEMORY';
+  DialogGroup['STEP'] = 'STEP';
+  DialogGroup['CODE'] = 'CODE';
+  DialogGroup['LOG'] = 'LOG';
+  DialogGroup['RULE'] = 'RULE';
+  DialogGroup['RECOGNIZER'] = 'RECOGNIZER';
+  DialogGroup['SELECTOR'] = 'SELECTOR';
+  DialogGroup['OTHER'] = 'OTHER';
+})(DialogGroup || (DialogGroup = {}));
 export var dialogGroups = ((_a = {}),
 (_a[DialogGroup.RESPONSE] = {
   label: 'Send Messages',

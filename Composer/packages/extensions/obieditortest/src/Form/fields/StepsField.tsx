@@ -1,10 +1,9 @@
 import React from 'react';
-import { createStepMenu } from 'shared-menus';
+import { DialogGroup, createStepMenu } from 'shared-menus';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 
-import { DialogGroup } from '../../schema/appschema';
 import { setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
@@ -26,10 +25,6 @@ export const StepsField: React.FC<FieldProps> = props => {
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
             items: createStepMenu(createNewItemAtIndex()),
-            // buildDialogOptions({
-            //   exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER],
-            // onClick: createNewItemAtIndex(),
-            // }),
             calloutProps: { calloutMaxHeight: 500 },
             directionalHint: DirectionalHint.bottomLeftEdge,
           }}

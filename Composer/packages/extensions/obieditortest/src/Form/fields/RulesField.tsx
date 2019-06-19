@@ -4,7 +4,7 @@ import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 
-import { DialogGroup } from '../../schema/appschema';
+import { DialogGroup } from 'shared-menus';
 import { buildDialogOptions, setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
