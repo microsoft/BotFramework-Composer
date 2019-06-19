@@ -1,6 +1,7 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { navigate } from '@reach/router';
+import { LGParser } from 'botbuilder-lg';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -69,6 +70,7 @@ export function ShellApi() {
     apiClient.registerApi('createLgTemplate', lgTemplateHandler(CREATE));
     apiClient.registerApi('updateLgTemplate', lgTemplateHandler(UPDATE));
     apiClient.registerApi('removeLgTemplate', lgTemplateHandler(REMOVE));
+    apiClient.registerApi('getLgTemplates', getLgTemplates);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -154,6 +156,20 @@ export function ShellApi() {
     }
 
     return true;
+  }
+
+  function getLgTemplates(newData) {
+    if (newData.id === undefined) return new Error('must have a file id');
+    const file = lgFiles.find(file => file.id === newData.id);
+    if (!file) return new Error(`lg file ${newData.id} not found`);
+
+    const res = LGParser.TryParse(file.content);
+
+    if (res.isValid === false) {
+      return new Error(res.error.Message);
+    }
+
+    return res.templates;
   }
 
   function lgTemplateHandler(fileChangeType) {

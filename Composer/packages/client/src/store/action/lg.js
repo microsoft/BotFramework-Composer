@@ -102,7 +102,7 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
 
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(dispatch, { id: file.id, content });
 }
 
 /**
@@ -113,7 +113,7 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
  * @param {*} position 0 for insert at file start, -1 for insert at file end by default
  */
 
-export function createLgTemplate(dispatch, { file, template, position }) {
+export async function createLgTemplate(dispatch, { file, template, position }) {
   // validate template
   const validateResult = templateValidate(template);
   if (validateResult.isValid === false) {
@@ -135,7 +135,7 @@ export function createLgTemplate(dispatch, { file, template, position }) {
   }
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(dispatch, { id: file.id, content });
 }
 
 /**
@@ -154,5 +154,5 @@ export async function removeLgTemplate(dispatch, { file, templateName }) {
 
   const content = textFromTemplates(newTemplates);
 
-  updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(dispatch, { id: file.id, content });
 }
