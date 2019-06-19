@@ -145,7 +145,7 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles());
+    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content));
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
