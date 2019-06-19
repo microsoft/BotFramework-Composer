@@ -30,7 +30,7 @@ function measureSwitchConditionBoundary(json) {
   );
 }
 
-export function measureNodeBoundary(json) {
+export function measureJsonBoundary(json) {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
 
