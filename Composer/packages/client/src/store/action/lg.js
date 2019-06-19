@@ -110,7 +110,9 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
  * @param {*} dispatch
  * @param {*} File lg file take this update
  * @param {*} template new template to add, expected {Name, Body}
- * @param {*} position 0 for insert at file start, -1 for insert at file end by default
+ * @param {*} position
+ *   0 insert at file start
+ *  -1 insert at file end, by default
  */
 
 export async function createLgTemplate(dispatch, { file, template, position }) {

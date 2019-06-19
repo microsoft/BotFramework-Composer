@@ -177,32 +177,29 @@ export function ShellApi() {
       if (isEventSourceValid(event) === false) return false;
 
       const file = lgFiles.find(file => file.id === newData.id);
+      if (!file) return new Error(`lg file ${newData.id} not found`);
 
       switch (fileChangeType) {
         case UPDATE:
-          await updateLgTemplate({
+          return await updateLgTemplate({
             file,
             templateName: newData.templateName,
             template: newData.template,
           });
-          break;
         case CREATE:
-          await createLgTemplate({
+          return await createLgTemplate({
             file,
             template: newData.template,
             position: newData.position === 0 ? 0 : -1,
           });
-          break;
         case REMOVE:
-          await removeLgTemplate({
+          return await removeLgTemplate({
             file,
             templateName: newData.templateName,
           });
-          break;
         default:
-          throw new Error(`unsupported method ${fileChangeType}`);
+          return new Error(`unsupported method ${fileChangeType}`);
       }
-      return true;
     };
   }
 
@@ -217,24 +214,19 @@ export function ShellApi() {
 
       switch ([fileTargetType, fileChangeType].join(',')) {
         case [LU, UPDATE].join(','):
-          await updateLuFile(payload);
-          break;
+          return await updateLuFile(payload);
 
         case [LG, UPDATE].join(','):
-          await updateLgFile(payload);
-          break;
+          return await updateLgFile(payload);
 
         case [LU, CREATE].join(','):
-          await createLuFile(payload);
-          break;
+          return await createLuFile(payload);
 
         case [LG, CREATE].join(','):
-          await createLgFile(payload);
-          break;
+          return await createLgFile(payload);
         default:
-          throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
+          return new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
       }
-      return true;
     };
   }
 
