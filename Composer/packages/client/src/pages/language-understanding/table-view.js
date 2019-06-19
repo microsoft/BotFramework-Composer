@@ -11,6 +11,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { Store } from '../../store/index';
 
@@ -148,11 +149,12 @@ export default function TableView(props) {
         onRender: (item, index) => {
           return (
             <IconButton
-              menuIconProps={{ iconName: 'More' }}
+              menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
                 items: getTemplatesMoreButtons(item, index),
               }}
+              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
         },

@@ -15,6 +15,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { LGParser } from 'botbuilder-lg';
 import { navigate } from '@reach/router';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
@@ -136,11 +137,12 @@ export default function TableView(props) {
         onRender: (item, index) => {
           return (
             <IconButton
-              menuIconProps={{ iconName: 'More' }}
+              menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
                 items: getTemplatesMoreButtons(item, index),
               }}
+              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
         },
