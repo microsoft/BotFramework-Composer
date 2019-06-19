@@ -20,7 +20,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         IBotFrameworkHttpAdapter CurrentAdapter { get; }
         IBot CurrentBot { get;  }
 
-        void SetCurrent(Stream fileStream);
+        void SetCurrent(Stream fileStream, LuConfigFile luConfig = null);
     }
 
     public class BotManager : IBotManager
@@ -84,7 +84,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             CurrentBot = new TestBot(rootDialog, conversationState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
-        public void SetCurrent(Stream fileStream)
+        public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null)
         {
             lock (locker)
             {
@@ -97,25 +97,18 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 // locate the proj file
                 var projFile = FindBotProjFile(extractPath);
 
-                AddLuisConfig(extractPath);
+                if (luConfig != null)
+                {
+                    AddLuisConfig(extractPath, luConfig);
+                }
 
                 var botProj = BotProject.Load(projFile);
                 SetCurrent(botProj);
             }
         }
 
-        private void AddLuisConfig(string extractPath)
+        public void AddLuisConfig(string extractPath, LuConfigFile luconfigFile)
         {
-            string[] luconfigFiles = Directory.GetFiles(extractPath, "luconfig.json", SearchOption.AllDirectories);
-
-            // No luis model
-            if (luconfigFiles.Length != 1)
-            {
-                return;
-            }
-
-            var luconfigPath = luconfigFiles[0];
-            var luconfigFile = JsonConvert.DeserializeObject<LuConfigFile>(File.ReadAllText(luconfigPath));
             var settingsName = $"luis.settings.{luconfigFile.Environment}.{ luconfigFile.AuthoringRegion}.json";
             var luisEndpoint = $"https://{luconfigFile.AuthoringRegion}.api.cognitive.microsoft.com";
             this.Config["luis:endpoint"] = luisEndpoint;
@@ -129,19 +122,9 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             var luisPath = luisPaths[0];
 
-            // No auth keys
-            var keyPaths = Directory.GetFiles(extractPath, "key.json", SearchOption.AllDirectories);
-            if (keyPaths.Length == 0)
-            {
-                return;
-            }
-
-            var keyPath = keyPaths[0];
-
             var luisConfig = JsonConvert.DeserializeObject<LuisCustomConfig>(File.ReadAllText(luisPath));
-            var keyConfig = JsonConvert.DeserializeObject<LuisKey>(File.ReadAllText(keyPath));
 
-            luisConfig.Luis.Add("endpointKey", keyConfig.Key);
+            luisConfig.Luis.Add("endpointKey", luconfigFile.AuthoringKey);
 
             foreach (var item in luisConfig.Luis)
             {

@@ -11,3 +11,27 @@
 
 # Exit
 - Thanks for using todo bot.
+
+# Greeting
+-What's up bro
+
+# ShowTodo
+- IF: {count(user.todos) > 0}
+    - ```
+    Your most recent @{count(user.todos)} tasks are 
+    @{join(foreach(user.todos, x, lgTemplate('showSingleTodo', x)), '\n')}
+      ```
+- ELSE:
+    - You don't have any todos test reload lalala.
+
+# showSingleTodo(x)
+- * {x}
+
+# ShowGrocery
+- IF: {count(user.groceryList) > 0}
+    - ```
+    Your most recent @{count(user.groceryList)} tasks are 
+    @{join(foreach(user.groceryList, x, lgTemplate('showSingleTodo', x)), '\n')}
+      ```
+- ELSE:
+    - You don't have any todos in grocery.

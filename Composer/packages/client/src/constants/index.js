@@ -1,3 +1,5 @@
+import formatMessage from 'format-message';
+
 export const BASEURL = 'http://localhost:5000/api';
 
 /**
@@ -63,6 +65,32 @@ export const ActionTypes = {
   CONNECT_BOT_FAILURE: 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS: 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE: 'RELOAD_BOT_FAILURE',
+};
+
+export const Tips = {
+  PROJECTNAME: formatMessage(
+    'create a name for the project, which will be used to name the application: (projectname-environment-LUfilename)'
+  ),
+  ENVIRONMENT: formatMessage(
+    'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
+  ),
+  AUTHORINGKAY: formatMessage('An authoring key is created automatically when you create a LUIS accoun.'),
+  AUTHORINGREGION: formatMessage('authoring region to use [westus,westeurope,australiaeast]'),
+  DEFAULTLANGUAGE: formatMessage(
+    'configures default language model to use if there is no culture code in the file name (Default:en-us)'
+  ),
+};
+
+export const Links = {
+  LUIS: 'https://www.luis.ai/applications',
+};
+
+export const Text = {
+  LUISDEPLOY: formatMessage(
+    'To use your language model, first publish the latest intents and examples to your LUIS instance.'
+  ),
+  LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
+  LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task'),
 };
 
 export const FileTypes = {
