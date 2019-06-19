@@ -19,17 +19,6 @@ import { navigate } from '@reach/router';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-const textFromTemplates = templates => {
-  let text = '';
-  templates.forEach(template => {
-    if (template.Name && template.Body) {
-      text += `# ${template.Name.trim()}` + '\n';
-      text += `${template.Body.trim()}` + '\n\n';
-    }
-  });
-  return text;
-};
-
 const randomName = () => {
   return `TemplateName${Math.floor(Math.random() * 1000)}`;
 };
@@ -40,7 +29,8 @@ export default function TableView(props) {
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
-  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const addLgTemplate = useRef(debounce(actions.addLgTemplate, 500)).current;
+  const deleteLgTemplate = useRef(debounce(actions.deleteLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
 
@@ -228,41 +218,34 @@ export default function TableView(props) {
   }
 
   function onCreateNewTemplate() {
-    const newItems = templates.concat({
-      Name: randomName(), // need optimize
-      Body: '-TemplateValue',
-    });
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      lgFile,
+      template: {
+        Name: randomName(), // need optimize
+        Body: '-TemplateValue',
+      },
     };
-    updateLgFile(payload);
+    addLgTemplate(payload);
   }
 
   function onRemoveTemplate(index) {
-    const newItems = [...templates];
-    newItems.splice(index, 1);
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      lgFile,
+      templateName: templates[index].Name,
     };
 
-    updateLgFile(payload);
+    deleteLgTemplate(payload);
   }
 
   function onCopyTemplate(index) {
-    const newItems = [...templates];
-
-    newItems.push({
-      Name: `${newItems[index].Name}.Copy`,
-      Body: newItems[index].Body,
-    });
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      lgFile,
+      template: {
+        Name: `${templates[index].Name}.Copy`,
+        Body: templates[index].Body,
+      },
     };
-
-    updateLgFile(payload);
+    addLgTemplate(payload);
   }
 
   return (
