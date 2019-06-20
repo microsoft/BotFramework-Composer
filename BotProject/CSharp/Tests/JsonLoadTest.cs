@@ -53,7 +53,7 @@ namespace Tests
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public async Task JsonDialogLoad_01Steps()
+        public async Task Steps_01Steps()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
                 .SendConversationUpdate()
@@ -67,7 +67,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_02EndTurn()
+        public async Task Steps_02EndTurn()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .Send("02")
@@ -78,7 +78,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_03IfCondition()
+        public async Task Steps_03IfCondition()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -90,7 +90,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_04EditArray()
+        public async Task Steps_04EditArray()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -107,7 +107,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_05EndDialog()
+        public async Task Steps_05EndDialog()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -124,7 +124,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_06HttpRequest()
+        public async Task Steps_06HttpRequest()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
@@ -142,7 +142,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_07SwitchCondition()
+        public async Task Steps_07SwitchCondition()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -155,7 +155,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_08RepeatDialog()
+        public async Task Steps_08RepeatDialog()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -171,7 +171,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_09TraceAndLog()
+        public async Task Steps_09TraceAndLog()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"), sendTrace: true)
             .SendConversationUpdate()
@@ -188,7 +188,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_10EditSteps()
+        public async Task Steps_10EditSteps()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -201,7 +201,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_11ReplaceDialog()
+        public async Task Steps_11ReplaceDialog()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -221,7 +221,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task JsonDialogLoad_12EmitEvent()
+        public async Task Steps_12EmitEvent()
         {
             await BuildTestFlow(getSingleSample("Steps_Samples"))
             .SendConversationUpdate()
@@ -236,87 +236,64 @@ namespace Tests
 
 
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_09EndDialog()
-        //{
-        //    await BuildTestFlow(getSingleSample("09 - EndDialog"))
-        //    .Send(new Activity(ActivityTypes.ConversationUpdate,
-        //        membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hello, I'm Zoidberg. What is your name?")
-        //    .Send("Carlos")
-        //        .AssertReply("Hello Carlos, nice to talk to you!")
-        //        .AssertReply("I'm a joke bot. To get started say \"joke\".")
-        //    .Send("joke")
-        //        .AssertReply("Why did the chicken cross the road?")
-        //    .Send("never mind")
-        //        .AssertReply("ok.")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task Inputs_01TextInput()
+        {
+            await BuildTestFlow(getSingleSample("Inputs_Samples"))
+            .SendConversationUpdate()
+            .Send("01")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("02")
+                .AssertReply("Hello 02, nice to talk to you!")
+                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+            .Send("02")
+                .AssertReply("What is your age?")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_08ExternalLanguage()
-        //{
-        //    await BuildTestFlow(getSingleSample("08 - ExternalLanguage"))
-        //    .SendConversationUpdate()
-        //        .AssertReplyOneOf(new string[]
-        //        {
-        //            "Zoidberg here, welcome to my world!",
-        //            "Hello, my name is Zoidberg and I'll be your guide.",
-        //            "Hail Zoidberg!"
-        //        })
-        //        .AssertReplyOneOf(new string[]
-        //        {
-        //            "Hello. What is your name?",
-        //            "I would like to know you better, what's your name?"
-        //        })
-        //    .Send("Carlos")
-        //        .AssertReplyOneOf(new string[]
-        //        {
-        //            "Hello Carlos, nice to talk to you!",
-        //            "Hi Carlos, you seem nice!",
-        //            "Whassup Carlos?"
-        //        })
-        //    .Send("Help")
-        //        .AssertReply("I can tell jokes and also forsee the future!\n")
-        //    .Send("Do you know a joke?")
-        //        .AssertReply("Why did the chicken cross the road?")
-        //    .Send("Why?")
-        //        .AssertReply("To get to the other side")
-        //    .Send("What happened in the future?")
-        //        .AssertReply("I see great things in your future...")
-        //        .AssertReply("Potentially a successful demo")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task Inputs_02NumberInput()
+        {
+            await BuildTestFlow(getSingleSample("Inputs_Samples"))
+            .SendConversationUpdate()
+            .Send("02")
+                .AssertReply("What is your age?")
+            .Send("18")
+                .AssertReply("Hello, your age is 18!")
+                .AssertReply("2 * 2.2 equals?")
+            .Send("4.4")
+                .AssertReply("2 * 2.2 equals 4.4, that's right!")
+            .StartTestAsync();
+        }
 
-        //[TestMethod]
-        //public async Task JsonDialogLoad_ToDoBot()
-        //{
-        //    await BuildTestFlow(getSingleSample("ToDoBot"))
-        //    .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
-        //    .SendConversationUpdate()
-        //        .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
-        //    .Send("add a todo named first")
-        //        .AssertReply("Successfully added a todo named \"first\"")
-        //    .Send("add a todo named second")
-        //        .AssertReply("Successfully added a todo named \"second\"")
-        //    .Send("add a todo")
-        //        .AssertReply("OK, please enter the title of your todo.")
-        //    .Send("third")
-        //        .AssertReply("Successfully added a todo named \"third\"")
-        //    .Send("show todos")
-        //        .AssertReply("Your most recent 3 tasks are\n* first\n* second\n* third\n")
-        //    .Send("delete todo named second")
-        //        .AssertReply("Successfully removed a todo named \"second\"")
-        //    .Send("show todos")
-        //        .AssertReply("Your most recent 2 tasks are\n* first\n* third\n")
-        //    .Send("add a todo")
-        //        .AssertReply("OK, please enter the title of your todo.")
-        //    .Send("cancel")
-        //        .AssertReply("ok.")
-        //    .StartTestAsync();
-        //}
+        [TestMethod]
+        public async Task Inputs_03ConfirmInput()
+        {
+            await BuildTestFlow(getSingleSample("Inputs_Samples"))
+            .SendConversationUpdate()
+            .Send("03")
+                .AssertReply("yes or no (1) Yes or (2) No")
+            .Send("asdasd")
+                .AssertReply("I need a yes or no. (1) Yes or (2) No")
+            .Send("yes")
+                .AssertReply("confirmation: True")
+                .AssertReply("yes or no (1) Yes or (2) No")
+            .Send("nope")
+                .AssertReply("confirmation: False")
+            .StartTestAsync();
+        }
 
+        [TestMethod]
+        public async Task Inputs_04ChoiceInput()
+        {
+            await BuildTestFlow(getSingleSample("Inputs_Samples"))
+            .SendConversationUpdate()
+            .Send("04")
+                .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
+            .Send("Test1")
+                .AssertReply("You select: Test1")
+            .StartTestAsync();
+        }
 
 
         private TestFlow BuildTestFlow(string resourceName, bool sendTrace = false)
