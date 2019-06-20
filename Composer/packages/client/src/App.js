@@ -76,7 +76,7 @@ const bottomLinks = [
   {
     to: '/help',
     iconName: 'unknown',
-    labelName: 'Help',
+    labelName: 'Info',
     activeIfUrlContains: '/help',
     exact: false,
     underTest: true, // will delete
@@ -121,7 +121,6 @@ export function App() {
               }}
               data-testid={'LeftNavButton'}
             />
-            <div css={divider} />
             {topLinks.map((link, index) => {
               return (
                 <NavItem
@@ -139,7 +138,7 @@ export function App() {
             })}
           </div>
           <div css={leftNavBottom}>
-            <div css={divider} />
+            <div css={divider(sideBarExpand)} />
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem

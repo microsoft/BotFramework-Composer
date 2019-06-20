@@ -17,9 +17,10 @@ export const sideBar = isExpand => css`
   justify-content: space-between;
 `;
 
-export const divider = css`
-  width: 100%;
+export const divider = isExpand => css`
+  width: ${isExpand ? '85%' : '40%'};
   border-bottom: 1px solid ${NeutralColors.gray40};
+  margin: 0 auto;
 `;
 
 export const globalNav = css`

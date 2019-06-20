@@ -27,7 +27,7 @@ export const NavItem = props => {
         {labelHide ? (
           <Fragment>
             {active && <div css={lockedBar} />}
-            <IconButton iconProps={{ iconName }} styles={iconButton} disabled={underTest} />
+            <IconButton iconProps={{ iconName }} styles={iconButton(active)} disabled={underTest} />
           </Fragment>
         ) : (
           <Fragment>
@@ -60,7 +60,7 @@ export const NavItem = props => {
           {labelHide ? (
             <Fragment>
               {active && <div css={lockedBar} />}
-              <IconButton iconProps={{ iconName }} styles={iconButton} disabled={underTest} />
+              <IconButton iconProps={{ iconName }} styles={iconButton(active)} disabled={underTest} />
             </Fragment>
           ) : (
             <Fragment>
