@@ -1,0 +1,84 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "generator": "inputs_samples.lg",
+    "recognizer": {
+      "$type": "Microsoft.RegexRecognizer",
+        "intents": {
+            "TextInput": "TextInput|01",
+            "NumberInput": "NumberInput|02",
+            "ConfirmInput": "ConfirmInput|03",
+            "ChoiceInput": "ChoiceInput|04",
+            "AttachmentInput": "AttachmentInput|05",
+            "CancelIntent": "cancel"
+        }
+    },
+    "rules": [
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "TextInput",
+            "steps": [
+                "TextInput"
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "NumberInput",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "NumberInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "ConfirmInput",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ConfirmInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "ChoiceInput",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ChoiceInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "AttachmentInput",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "AttachmentInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "CancelIntent",
+            "steps": [
+                {
+                    "$type": "Microsoft.CancelAllDialogs"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.UnknownIntentRule",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "[help]"
+                }
+            ]
+        }
+    ]
+}
