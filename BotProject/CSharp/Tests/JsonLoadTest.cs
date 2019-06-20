@@ -26,7 +26,9 @@ namespace Tests
 
         private static string getSingleSample(string path)
         {
-            var botPath = Path.Combine(samplesDirectory, path, @"bot.botproj");
+            var botProjPath = Directory.GetFiles(Path.Combine(samplesDirectory, path), "*.botproj");
+            Assert.IsTrue(botProjPath.Length == 1);
+            var botPath = botProjPath[0];
             var botProj = BotProject.Load(botPath);
             return botProj.entry;
         }
