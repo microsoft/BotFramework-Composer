@@ -1,7 +1,7 @@
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
 
-import { measureSwitchCaseBoundary } from './containerBoundaryMeasurer';
+import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -20,7 +20,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
   choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
   conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
 
-  const containerBoundary = measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
+  const containerBoundary = calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
 
   /** Calulate nodes position */
   conditionNode.offset = {
@@ -61,7 +61,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
         direction: 'y',
         x: x.offset.x + x.boundary.axisX,
         y: BaselinePositionY,
-        length: BranchIntervalY,
+        length: x.offset.y - BaselinePositionY,
         text: x.data.label,
       },
       {
