@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const headerMain = css`
   position: relative;
@@ -25,9 +26,12 @@ export const aside = css`
 export const bot = css`
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
-export const botButton = css``;
+export const botButton = css`
+  width: 120px;
+`;
 
 export const botMessage = css`
   margin-left: 5px;
@@ -53,13 +57,16 @@ export const fileInput = css`
   cursor: pointer;
 `;
 
-export const warningContiner = css`
-  font-size: 16px;
-  margin-right: 15px;
-  line-height: 40px;
+export const calloutContainer = css`
+  width: 400px;
+  padding: 10px;
 `;
 
-export const warningIcon = css`
-  margin-right: 5px;
-  color: ${SharedColors.orange20};
+export const calloutLabel = css`
+  font-size: ${FontSizes.large};
+  font-weight: ${FontWeights.bold};
 `;
+
+export const calloutDescription = css``;
+
+export const calloutAction = css``;

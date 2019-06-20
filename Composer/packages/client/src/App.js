@@ -95,11 +95,15 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botStatus, botLoadErrorMsg } = state;
-  const { connectBot, reloadBot, setStorageExplorerStatus } = actions;
+  const { botStatus, luFiles, luStatus } = state;
+  const { connectBot, reloadBot, setStorageExplorerStatus, publishLuis } = actions;
   useEffect(() => {
     actions.fetchProject();
   }, []);
+
+  async function handlePublish(config) {
+    return await publishLuis(config);
+  }
 
   return (
     <Fragment>
@@ -107,7 +111,9 @@ export function App() {
         botStatus={botStatus}
         connectBot={connectBot}
         reloadBot={reloadBot}
-        botLoadErrorMsg={botLoadErrorMsg}
+        onPublish={handlePublish}
+        luFiles={luFiles}
+        luStatus={luStatus}
         openStorageExplorer={setStorageExplorerStatus}
       />
       <StorageExplorer />

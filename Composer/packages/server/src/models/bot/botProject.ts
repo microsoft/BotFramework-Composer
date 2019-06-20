@@ -42,6 +42,7 @@ export class BotProject {
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     this.luIndexer.index(this.files);
+    await this.luPublisher.getLuisStatus();
   };
 
   public getIndexes = () => {
@@ -51,6 +52,7 @@ export class BotProject {
       luFiles: this.luIndexer.getLuFiles(),
       botFile: this.getBotFile(),
       schemas: this.getSchemas(),
+      luStatus: this.luPublisher.status,
     };
   };
 

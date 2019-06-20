@@ -3,9 +3,9 @@ import storage from './storage';
 
 export const getDefaultLuisConfig = () => {
   return {
-    name: storage.get(LuisConfig.PROJECTNAME, ''),
-    environment: storage.get(LuisConfig.ENVIRONMENT, ''),
-    authoringKey: storage.get(LuisConfig.AUTHORINGKEY, ''),
+    [LuisConfig.PROJECTNAME]: storage.get(LuisConfig.PROJECTNAME, ''),
+    [LuisConfig.ENVIRONMENT]: storage.get(LuisConfig.ENVIRONMENT, ''),
+    [LuisConfig.AUTHORINGKEY]: storage.get(LuisConfig.AUTHORINGKEY, ''),
     authoringRegion: 'westus',
     defaultLanguage: 'en-us',
   };
