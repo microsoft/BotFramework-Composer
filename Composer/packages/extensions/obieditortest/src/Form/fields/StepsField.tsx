@@ -16,7 +16,7 @@ export const StepsField: React.FC<FieldProps> = props => {
     <TableField<MicrosoftIDialog>
       {...props}
       {...overrides}
-      dialogOptionsOpts={{ exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
+      dialogOptionsOpts={{ exclude: [DialogGroup.EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
       navPrefix={props.name}
     >
       {({ createNewItemAtIndex }) => (
@@ -24,7 +24,11 @@ export const StepsField: React.FC<FieldProps> = props => {
           data-testid="StepsFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
-            items: createStepMenu(createNewItemAtIndex()),
+            items: createStepMenu(
+              [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+              true,
+              createNewItemAtIndex()
+            ),
             calloutProps: { calloutMaxHeight: 500 },
             directionalHint: DirectionalHint.bottomLeftEdge,
           }}

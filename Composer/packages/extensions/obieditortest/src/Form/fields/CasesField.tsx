@@ -136,7 +136,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
                 styles={{ root: { marginTop: '20px' } }}
                 menuProps={{
                   items: buildDialogOptions({
-                    exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER],
+                    exclude: [DialogGroup.EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER],
                     onClick: createNewItemAtIndex(),
                   }),
                   calloutProps: { calloutMaxHeight: 500 },

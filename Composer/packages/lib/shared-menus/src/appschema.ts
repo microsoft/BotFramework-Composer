@@ -1,16 +1,5 @@
-// export const DialogGroup = {
-//   RESPONSE: 'RESPONSE',
-//   INPUT: 'INPUT',
-//   BRANCHING: 'BRANCHING',
-//   MEMORY: 'MEMORY',
-//   STEP: 'STEP',
-//   CODE: 'CODE',
-//   LOG: 'LOG',
-//   RULE: 'RULE',
-//   RECOGNIZER: 'RECOGNIZER',
-//   SELECTOR: 'SELECTOR',
-//   OTHER: 'OTHER',
-// };
+import { ConceptLabels } from './labelMap';
+import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
 
 export enum DialogGroup {
   RESPONSE = 'RESPONSE',
@@ -20,7 +9,7 @@ export enum DialogGroup {
   STEP = 'STEP',
   CODE = 'CODE',
   LOG = 'LOG',
-  RULE = 'RULE',
+  EVENTS = 'EVENTS',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
   OTHER = 'OTHER',
@@ -84,8 +73,8 @@ export const dialogGroups: DialogGroupsMap = {
     label: 'Debugging',
     types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
   },
-  [DialogGroup.RULE]: {
-    label: 'Rules',
+  [DialogGroup.EVENTS]: {
+    label: 'Events',
     types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
   },
   [DialogGroup.RECOGNIZER]: {
@@ -108,6 +97,54 @@ export const dialogGroups: DialogGroupsMap = {
   },
 };
 
+export const createStepMenu = (
+  stepLabels,
+  subMenu: boolean = true,
+  handleType: (e: any, item: IContextualMenuItem) => void
+): IContextualMenuItem[] => {
+  if (subMenu) {
+    const stepMenuItems = stepLabels.map(x => {
+      const item = dialogGroups[x];
+      return {
+        key: item.label,
+        text: item.label,
+        name: item.label,
+        subMenuProps: {
+          items: item.types.map($type => ({
+            key: $type,
+            name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+            $type: $type,
+            data: {
+              $type: $type, // used by the steps field to create the item
+            },
+          })),
+          onItemClick: (e, item: IContextualMenuItem) => {
+            return handleType(e, item);
+          },
+        } as IContextualMenuProps,
+      } as IContextualMenuItem;
+    });
+
+    return stepMenuItems;
+  } else {
+    const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
+      return {
+        key: item,
+        text: ConceptLabels[item],
+        name: ConceptLabels[item],
+        $type: item,
+        data: {
+          $type: item,
+        },
+        onClick: (e, item: IContextualMenuItem) => {
+          return handleType(e, item);
+        },
+      } as IContextualMenuItem;
+    });
+    return stepMenuItems;
+  }
+};
+
 export function getDialogGroupByType(type) {
   let dialogType = DialogGroup.OTHER;
 
@@ -117,7 +154,7 @@ export function getDialogGroupByType(type) {
         case DialogGroup.INPUT:
         case DialogGroup.RESPONSE:
         case DialogGroup.BRANCHING:
-        case DialogGroup.RULE:
+        case DialogGroup.EVENTS:
           dialogType = key;
           break;
         case DialogGroup.STEP:

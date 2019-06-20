@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Panel } from '../components/nodes/templates/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
-import { EventMenu } from '../components/shared/EventMenu';
+import { EventMenu } from 'shared-menus';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 
 export const EventsEditor = ({ id, data, focusedId, onEvent }) => {

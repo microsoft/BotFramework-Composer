@@ -28,5 +28,8 @@ export var ConceptLabels = {
   'Microsoft.HttpRequest': formatMessage('Make an HTTP request'),
   'Microsoft.LogStep': formatMessage('Log a message to the console'),
   'Microsoft.TraceActivity': formatMessage('Emit a trace event'),
+  'Microsoft.EventRule': formatMessage('Handle an event'),
+  'Microsoft.IntentRule': formatMessage('Handle an intent'),
+  'Microsoft.UnknownIntentRule': formatMessage('Provide a fallback handler'),
 };
 //# sourceMappingURL=labelMap.js.map

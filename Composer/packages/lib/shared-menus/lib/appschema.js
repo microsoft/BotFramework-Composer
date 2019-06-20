@@ -1,17 +1,5 @@
-// export const DialogGroup = {
-//   RESPONSE: 'RESPONSE',
-//   INPUT: 'INPUT',
-//   BRANCHING: 'BRANCHING',
-//   MEMORY: 'MEMORY',
-//   STEP: 'STEP',
-//   CODE: 'CODE',
-//   LOG: 'LOG',
-//   RULE: 'RULE',
-//   RECOGNIZER: 'RECOGNIZER',
-//   SELECTOR: 'SELECTOR',
-//   OTHER: 'OTHER',
-// };
 var _a;
+import { ConceptLabels } from './labelMap';
 export var DialogGroup;
 (function(DialogGroup) {
   DialogGroup['RESPONSE'] = 'RESPONSE';
@@ -21,7 +9,7 @@ export var DialogGroup;
   DialogGroup['STEP'] = 'STEP';
   DialogGroup['CODE'] = 'CODE';
   DialogGroup['LOG'] = 'LOG';
-  DialogGroup['RULE'] = 'RULE';
+  DialogGroup['EVENTS'] = 'EVENTS';
   DialogGroup['RECOGNIZER'] = 'RECOGNIZER';
   DialogGroup['SELECTOR'] = 'SELECTOR';
   DialogGroup['OTHER'] = 'OTHER';
@@ -78,8 +66,8 @@ export var dialogGroups = ((_a = {}),
   label: 'Debugging',
   types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
 }),
-(_a[DialogGroup.RULE] = {
-  label: 'Rules',
+(_a[DialogGroup.EVENTS] = {
+  label: 'Events',
   types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
 }),
 (_a[DialogGroup.RECOGNIZER] = {
@@ -101,6 +89,55 @@ export var dialogGroups = ((_a = {}),
   types: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
 }),
 _a);
+export var createStepMenu = function(stepLabels, subMenu, handleType) {
+  if (subMenu === void 0) {
+    subMenu = true;
+  }
+  if (subMenu) {
+    var stepMenuItems = stepLabels.map(function(x) {
+      var item = dialogGroups[x];
+      return {
+        key: item.label,
+        text: item.label,
+        name: item.label,
+        subMenuProps: {
+          items: item.types.map(function($type) {
+            return {
+              key: $type,
+              name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+              $type: $type,
+              data: {
+                $type: $type,
+              },
+            };
+          }),
+          onItemClick: function(e, item) {
+            console.log('HANDLE CLICK ON SUB MENU', item);
+            return handleType(e, item);
+          },
+        },
+      };
+    });
+    return stepMenuItems;
+  } else {
+    var stepMenuItems = dialogGroups[stepLabels[0]].types.map(function(item) {
+      return {
+        key: item,
+        text: ConceptLabels[item],
+        name: ConceptLabels[item],
+        $type: item,
+        data: {
+          $type: item,
+        },
+        onClick: function(e, item) {
+          console.log('HANDLE CLICK ON STEP MENU', item);
+          return handleType(e, item);
+        },
+      };
+    });
+    return stepMenuItems;
+  }
+};
 export function getDialogGroupByType(type) {
   var dialogType = DialogGroup.OTHER;
   Object.keys(dialogGroups).forEach(function(key) {
@@ -109,7 +146,7 @@ export function getDialogGroupByType(type) {
         case DialogGroup.INPUT:
         case DialogGroup.RESPONSE:
         case DialogGroup.BRANCHING:
-        case DialogGroup.RULE:
+        case DialogGroup.EVENTS:
           dialogType = key;
           break;
         case DialogGroup.STEP:

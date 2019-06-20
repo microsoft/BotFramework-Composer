@@ -27,4 +27,7 @@ export declare const ConceptLabels: {
   'Microsoft.HttpRequest': string;
   'Microsoft.LogStep': string;
   'Microsoft.TraceActivity': string;
+  'Microsoft.EventRule': string;
+  'Microsoft.IntentRule': string;
+  'Microsoft.UnknownIntentRule': string;
 };

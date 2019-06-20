@@ -1,0 +1,8 @@
+{
+  "services": [],
+  "files": [
+    "*.dialog",
+    "*.lg"
+  ],
+  "entry": "1.botproj.main.dialog"
+}

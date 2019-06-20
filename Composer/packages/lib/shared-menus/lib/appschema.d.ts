@@ -1,3 +1,4 @@
+import { IContextualMenuItem } from 'office-ui-fabric-react';
 export declare enum DialogGroup {
   RESPONSE = 'RESPONSE',
   INPUT = 'INPUT',
@@ -6,7 +7,7 @@ export declare enum DialogGroup {
   STEP = 'STEP',
   CODE = 'CODE',
   LOG = 'LOG',
-  RULE = 'RULE',
+  EVENTS = 'EVENTS',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
   OTHER = 'OTHER',
@@ -17,4 +18,9 @@ export interface DialogGroupItem {
 }
 export declare type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 export declare const dialogGroups: DialogGroupsMap;
+export declare const createStepMenu: (
+  stepLabels: any,
+  subMenu: boolean | undefined,
+  handleType: (e: any, item: IContextualMenuItem) => void
+) => IContextualMenuItem[];
 export declare function getDialogGroupByType(type: any): DialogGroup.OTHER;
