@@ -7,6 +7,10 @@ const BranchIntervalY = ElementInterval.y / 2;
 
 export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTailEdge = true) {
   const box = new Boundary();
+  if (!Array.isArray(nodes) || nodes.length === 0) {
+    return box;
+  }
+
   box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
   box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
   box.height =
