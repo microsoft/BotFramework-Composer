@@ -59,9 +59,15 @@ export function deleteNode(inputDialog, path) {
   return dialog;
 }
 
+const normalizePath = path => {
+  if (path.startsWith(JSON_PATH_PREFIX)) return normalizePath(path.substr(1));
+  if (path.startsWith('.')) return normalizePath(path.substr(1));
+  return path;
+};
+
 export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
-  const normalizedPath = path.startsWith(JSON_PATH_PREFIX) ? path.substr(1) : path;
+  const normalizedPath = normalizePath(path);
   const current = get(dialog, normalizedPath, []);
   const newStep = { $type };
 
