@@ -1,5 +1,6 @@
-import { ConceptLabels } from './labelMap';
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
+
+import { ConceptLabels } from './labelMap';
 
 export enum DialogGroup {
   RESPONSE = 'RESPONSE',
@@ -105,30 +106,33 @@ export const createStepMenu = (
   if (subMenu) {
     const stepMenuItems = stepLabels.map(x => {
       const item = dialogGroups[x];
-      return {
+      const subMenu: IContextualMenuProps = {
+        items: item.types.map($type => ({
+          key: $type,
+          name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+          $type: $type,
+          data: {
+            $type: $type, // used by the steps field to create the item
+          },
+        })),
+        onItemClick: (e, item: IContextualMenuItem) => {
+          return handleType(e, item);
+        },
+      };
+
+      const menuItem: IContextualMenuItem = {
         key: item.label,
         text: item.label,
         name: item.label,
-        subMenuProps: {
-          items: item.types.map($type => ({
-            key: $type,
-            name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
-            $type: $type,
-            data: {
-              $type: $type, // used by the steps field to create the item
-            },
-          })),
-          onItemClick: (e, item: IContextualMenuItem) => {
-            return handleType(e, item);
-          },
-        } as IContextualMenuProps,
-      } as IContextualMenuItem;
+        subMenuProps: subMenu,
+      };
+      return menuItem;
     });
 
     return stepMenuItems;
   } else {
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
-      return {
+      const menuItem: IContextualMenuItem = {
         key: item,
         text: ConceptLabels[item],
         name: ConceptLabels[item],
@@ -139,7 +143,8 @@ export const createStepMenu = (
         onClick: (e, item: IContextualMenuItem) => {
           return handleType(e, item);
         },
-      } as IContextualMenuItem;
+      };
+      return menuItem;
     });
     return stepMenuItems;
   }

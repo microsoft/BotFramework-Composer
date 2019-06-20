@@ -1,5 +1,6 @@
 import React from 'react';
 import formatMessage from 'format-message';
+
 import { IconMenu } from './templates/IconMenu';
 import { EdgeAddButtonSize } from './elementSizes';
 import { createStepMenu, DialogGroup } from './appschema';

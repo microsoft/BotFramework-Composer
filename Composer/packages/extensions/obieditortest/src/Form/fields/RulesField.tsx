@@ -3,8 +3,8 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
-
 import { createStepMenu, DialogGroup } from 'shared-menus';
+
 import { setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';

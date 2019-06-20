@@ -3,10 +3,10 @@ import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import Modal from '../../Modal';
 import { swap } from '../utils';
-import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import { TableField } from './TableField';
 
