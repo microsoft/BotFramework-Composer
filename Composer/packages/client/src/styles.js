@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, Depths, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 export const main = css`
-  height: calc(100vh - 105px);
+  height: calc(100vh - 50px);
   display: flex;
 `;
 
