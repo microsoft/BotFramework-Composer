@@ -42,6 +42,7 @@ export interface LUFile {
   id: string;
   relativePath: string;
   content: string;
+  parsedContent: any;
 }
 
 export enum FileState {
