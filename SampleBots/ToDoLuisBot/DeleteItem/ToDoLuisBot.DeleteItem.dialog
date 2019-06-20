@@ -4,13 +4,13 @@
     "generator": "ToDoLuisBot.lg",
     "steps": [
         {
-            "$type": "Microsoft.SaveEntity",
-            "entity": "promptContentML",
+            "$type": "Microsoft.SetProperty",
+            "value": "@promptContentML",
             "property": "dialog.item"
         },
         {
-            "$type": "Microsoft.SaveEntity",
-            "entity": "ListType",
+            "$type": "Microsoft.SetProperty",
+            "value": "@ListType[0]",
             "property": "dialog.listName"
         },
         {
@@ -30,43 +30,44 @@
             "$type": "Microsoft.IfCondition",
             "condition": "dialog.listName == null",
             "steps": [
-                {
-                    "$type": "Microsoft.ChoiceInput",
-                    "property": "dialog.listName",
-                    "choices": [
-                        {
-                            "value": "shopping",
-                            "synonyms": [
-                                "1",
-                                "first",
-                                "shopping",
-                                "first one"
-                            ]
-                        },
-                        {
-                            "value": "grocery",
-                            "synonyms": [
-                                "2",
-                                "second",
-                                "grocery",
-                                "second one"
-                            ]
-                        },
-                        {
-                            "value": "todo",
-                            "synonyms": [
-                                "3",
-                                "third",
-                                "todo",
-                                "third one",
-                                "to do"
-                            ]
-                        }
-                    ],
-                    "prompt": "Which list do you want to remove?",
-                    "style": "SuggestedAction",
-                    "alwaysPrompt": true
-                }
+              {
+                "$type": "Microsoft.ChoiceInput",
+                "property": "dialog.listName",
+                "choices": [
+                  {
+                    "value": "shopping",
+                    "synonyms": [
+                      "1",
+                      "first",
+                      "shopping",
+                      "first one"
+                    ]
+                  },
+                  {
+                    "value": "grocery",
+                    "synonyms": [
+                      "2",
+                      "second",
+                      "grocery",
+                      "second one"
+                    ]
+                  },
+                  {
+                    "value": "todo",
+                    "synonyms": [
+                      "3",
+                      "third",
+                      "todo",
+                      "third one",
+                      "to do"
+                    ]
+                  }
+                ],
+                "prompt": "Which list do you want to remove?",
+                "style": "SuggestedAction",
+                "alwaysPrompt": true,
+                "allowInterruptions": false
+              }
             ]
         },
         {
@@ -106,7 +107,7 @@
             "$type": "Microsoft.EditArray",
             "changeType": "Remove",
             "arrayProperty": "user.lists.{dialog.listName}",
-            "itemProperty": "dialog.item"
+            "value": "dialog.item"
         },
         {
             "$type": "Microsoft.SendActivity",

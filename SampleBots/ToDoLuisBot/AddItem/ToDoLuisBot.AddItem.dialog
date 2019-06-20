@@ -4,9 +4,27 @@
     "generator": "ToDoLuisBot.lg",
     "steps": [
         {
-            "$type": "Microsoft.SaveEntity",
-            "entity": "ListType",
+            "$type": "Microsoft.SetProperty",
+            "value": "@promptContentML",
+            "property": "dialog.item"
+        },
+        {
+            "$type": "Microsoft.SetProperty",
+            "value": "@ListType[0]",
             "property": "dialog.listName"
+        },
+        {
+            "$type": "Microsoft.IfCondition",
+            "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "The list name must be shopping, grocery or todo."
+                },
+                {
+                    "$type": "Microsoft.EndDialog"
+                }
+            ]
         },
         {
             "$type": "Microsoft.IfCondition",
@@ -56,9 +74,21 @@
                             ]
                         }
                     ],
-                    "prompt": "Which list do you want to show?",
+                    "prompt": "Which list do you want to expand?",
                     "style": "SuggestedAction",
-                    "alwaysPrompt": true
+                    "alwaysPrompt": true,
+                    "allowInterruptions": false
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IfCondition",
+            "condition": "dialog.item == null",
+            "steps": [
+                {
+                    "$type": "Microsoft.TextInput",
+                    "prompt": "Please enter the title of your item.",
+                    "property": "dialog.item"
                 }
             ]
         },
@@ -67,16 +97,21 @@
             "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
             "steps": [
                 {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Your have no items in your {dialog.listName} list."
-                }
-            ],
-            "elseSteps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "[ShowItems(user, dialog.listName)]"
+                    "$type": "Microsoft.InitProperty",
+                    "property": "user.lists.{dialog.listName}",
+                    "type": "array"
                 }
             ]
+        },
+        {
+            "$type": "Microsoft.EditArray",
+            "changeType": "Push",
+            "arrayProperty": "user.lists.{dialog.listName}",
+            "value": "dialog.item"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Successfully added {dialog.item} to {dialog.listName} list."
         }
     ]
 }
