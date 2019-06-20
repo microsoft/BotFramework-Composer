@@ -5,8 +5,8 @@ import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMe
 import get from 'lodash.get';
 
 import Modal from '../../Modal';
-import { buildDialogOptions, swap } from '../utils';
-import { DialogGroup } from 'shared-menus';
+import { swap } from '../utils';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import { TableField } from './TableField';
 
@@ -135,10 +135,11 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
               <PrimaryButton
                 styles={{ root: { marginTop: '20px' } }}
                 menuProps={{
-                  items: buildDialogOptions({
-                    exclude: [DialogGroup.EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER],
-                    onClick: createNewItemAtIndex(),
-                  }),
+                  items: createStepMenu(
+                    [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+                    true,
+                    createNewItemAtIndex()
+                  ),
                   calloutProps: { calloutMaxHeight: 500 },
                   directionalHint: DirectionalHint.bottomLeftEdge,
                 }}

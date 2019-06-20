@@ -112,7 +112,6 @@ export var createStepMenu = function(stepLabels, subMenu, handleType) {
             };
           }),
           onItemClick: function(e, item) {
-            console.log('HANDLE CLICK ON SUB MENU', item);
             return handleType(e, item);
           },
         },
@@ -130,7 +129,6 @@ export var createStepMenu = function(stepLabels, subMenu, handleType) {
           $type: item,
         },
         onClick: function(e, item) {
-          console.log('HANDLE CLICK ON STEP MENU', item);
           return handleType(e, item);
         },
       };
