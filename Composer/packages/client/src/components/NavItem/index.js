@@ -19,7 +19,8 @@ export const NavItem = props => {
   };
 
   //Need to show the gray button without any functionality
-  //Need to remove the <Link> wrapper
+  //When a link is active, go back to use developed()
+  //when all links are active, remove testOnly()
   const testOnly = () => {
     return (
       <div tabIndex={-1} css={outer(!labelHide, active)}>

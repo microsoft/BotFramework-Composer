@@ -42,7 +42,7 @@ const topLinks = [
     underTest: true, // will delete
   },
   {
-    to: 'language-generation/all',
+    to: 'language-generation/',
     iconName: 'Robot',
     labelName: 'Bot Says',
     activeIfUrlContains: 'language-generation',
