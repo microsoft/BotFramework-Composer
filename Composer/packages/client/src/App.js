@@ -6,11 +6,12 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Header } from './components/Header';
+import { ToolBar } from './components/ToolBar';
 import { NavItem } from './components/NavItem';
 import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
-import { main, sideBar, content, divider, globalNav, leftNavBottom } from './styles';
+import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel } from './styles';
 
 initializeIcons(/* optional base url */);
 
@@ -156,7 +157,16 @@ export function App() {
             })}
           </div>
         </div>
-        <Routes component={Content} />
+        <div css={rightPanel}>
+          <ToolBar
+            botStatus={botStatus}
+            connectBot={connectBot}
+            reloadBot={reloadBot}
+            botLoadErrorMsg={botLoadErrorMsg}
+            openStorageExplorer={setStorageExplorerStatus}
+          />
+          <Routes component={Content} />
+        </div>
       </div>
     </Fragment>
   );

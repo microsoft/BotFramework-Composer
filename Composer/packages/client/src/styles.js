@@ -51,3 +51,8 @@ export const showDesign = show => css`
 export const leftNavBottom = () => css`
   height: 102px;
 `;
+
+export const rightPanel = () => css`
+  display: flex-column;
+  width: 100%;
+`;
