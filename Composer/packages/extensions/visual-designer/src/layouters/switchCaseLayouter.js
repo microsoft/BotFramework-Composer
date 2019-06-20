@@ -61,7 +61,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes = []) 
         direction: 'y',
         x: x.offset.x + x.boundary.axisX,
         y: BaselinePositionY,
-        length: BranchIntervalY,
+        length: x.offset.y - BaselinePositionY,
         text: x.data.label,
       },
       {
