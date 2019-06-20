@@ -25,7 +25,14 @@ export const StepsField: React.FC<FieldProps> = props => {
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
             items: createStepMenu(
-              [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+              [
+                DialogGroup.RESPONSE,
+                DialogGroup.INPUT,
+                DialogGroup.STEP,
+                DialogGroup.MEMORY,
+                DialogGroup.CODE,
+                DialogGroup.LOG,
+              ],
               true,
               createNewItemAtIndex()
             ),

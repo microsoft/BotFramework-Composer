@@ -23,7 +23,14 @@ export const EdgeMenu = ({ onClick }) => {
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
         menuItems={createStepMenu(
-          [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+          [
+            DialogGroup.RESPONSE,
+            DialogGroup.INPUT,
+            DialogGroup.STEP,
+            DialogGroup.MEMORY,
+            DialogGroup.CODE,
+            DialogGroup.LOG,
+          ],
           true,
           (e, item) => onClick(item ? item.$type : null)
         )}

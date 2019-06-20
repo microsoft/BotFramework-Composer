@@ -23,7 +23,14 @@ export var EdgeMenu = function(_a) {
       iconStyles: { background: 'white', color: '#005CE6' },
       iconSize: 10,
       menuItems: createStepMenu(
-        [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+        [
+          DialogGroup.RESPONSE,
+          DialogGroup.INPUT,
+          DialogGroup.STEP,
+          DialogGroup.MEMORY,
+          DialogGroup.CODE,
+          DialogGroup.LOG,
+        ],
         true,
         function(e, item) {
           return onClick(item ? item.$type : null);

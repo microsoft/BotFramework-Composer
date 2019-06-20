@@ -21,7 +21,14 @@ const IDialogArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => 
           type="button"
           menuProps={{
             items: createStepMenu(
-              [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
+              [
+                DialogGroup.RESPONSE,
+                DialogGroup.INPUT,
+                DialogGroup.STEP,
+                DialogGroup.MEMORY,
+                DialogGroup.CODE,
+                DialogGroup.LOG,
+              ],
               true,
               onAddClick
             ),
