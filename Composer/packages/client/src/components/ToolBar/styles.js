@@ -1,15 +1,6 @@
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
-
-export const headerMain = css`
-  position: relative;
-  line-height: 50px;
-  background: ${SharedColors.cyanBlue10};
-  font-size: 20px;
-  color: #fff;
-  height: 50px;
-  display: flex;
-`;
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const headerSub = css`
   padding: 5px 20px 5px 0px;
@@ -19,16 +10,15 @@ export const headerSub = css`
   border-bottom: 1px solid ${NeutralColors.gray30};
 `;
 
-export const aside = css`
-  margin-left: 50px;
-`;
-
 export const bot = css`
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
-export const botButton = css``;
+export const botButton = css`
+  margin-left: 15px;
+`;
 
 export const botMessage = css`
   margin-left: 5px;
@@ -54,12 +44,16 @@ export const fileInput = css`
   cursor: pointer;
 `;
 
-export const warningContiner = css`
-  margin-right: 20px;
-  font-size: 14px;
+export const calloutContainer = css`
+  width: 400px;
+  padding: 10px;
 `;
 
-export const warningIcon = css`
-  margin-right: 5px;
-  color: ${SharedColors.orange20};
+export const calloutLabel = css`
+  font-size: ${FontSizes.large};
+  font-weight: ${FontWeights.bold};
 `;
+
+export const calloutDescription = css``;
+
+export const calloutAction = css``;

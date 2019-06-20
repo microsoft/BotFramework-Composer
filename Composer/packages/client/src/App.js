@@ -107,27 +107,21 @@ export function App() {
 
   return (
     <Fragment>
-      <Header
-        botStatus={botStatus}
-        connectBot={connectBot}
-        reloadBot={reloadBot}
-        onPublish={handlePublish}
-        luFiles={luFiles}
-        luStatus={luStatus}
-        openStorageExplorer={setStorageExplorerStatus}
-      />
+      <Header />
       <StorageExplorer />
       <div css={main}>
         <div css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
-              iconProps={{ iconName: 'GlobalNavButton' }}
+              iconProps={{
+                iconName: 'GlobalNavButton',
+              }}
               css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
               data-testid={'LeftNavButton'}
-            />
+            />{' '}
             {topLinks.map((link, index) => {
               return (
                 <NavItem
@@ -145,7 +139,7 @@ export function App() {
             })}
           </div>
           <div css={leftNavBottom}>
-            <div css={divider(sideBarExpand)} />
+            <div css={divider(sideBarExpand)} />{' '}
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem
@@ -168,7 +162,9 @@ export function App() {
             botStatus={botStatus}
             connectBot={connectBot}
             reloadBot={reloadBot}
-            botLoadErrorMsg={botLoadErrorMsg}
+            onPublish={handlePublish}
+            luFiles={luFiles}
+            luStatus={luStatus}
             openStorageExplorer={setStorageExplorerStatus}
           />
           <Routes component={Content} />
