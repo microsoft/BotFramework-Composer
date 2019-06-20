@@ -49,7 +49,7 @@ export const showDesign = show => css`
 `;
 
 export const leftNavBottom = () => css`
-  height: 102px;
+  height: 90px;
 `;
 
 export const rightPanel = () => css`
