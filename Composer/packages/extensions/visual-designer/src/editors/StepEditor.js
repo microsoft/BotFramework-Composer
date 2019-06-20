@@ -5,9 +5,10 @@ import { StepGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
 import { Boundary } from '../shared/Boundary';
-import { ElementInterval, InitNodeSize } from '../shared/elementSizes';
+import { ElementInterval } from '../shared/elementSizes';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };
@@ -34,7 +35,7 @@ const TailSize = {
 };
 
 export const StepEditor = ({ id, data, focusedId, onEvent }) => {
-  const [stepGroupBoundary, setStepGroupBoundary] = useState(new Boundary(InitNodeSize.width, InitNodeSize.height));
+  const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (

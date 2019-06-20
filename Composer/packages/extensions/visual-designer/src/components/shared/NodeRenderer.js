@@ -13,7 +13,6 @@ import {
   IfCondition,
   SwitchCondition,
 } from '../nodes/index';
-import { Boundary } from '../../shared/Boundary';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
@@ -39,27 +38,18 @@ function chooseRendererByType($type) {
 
 export class NodeRenderer extends React.Component {
   containerRef = React.createRef();
-  interactive = false;
 
   render() {
     const { id, data, focusedId, onEvent, onResize } = this.props;
     const ChosenRenderer = chooseRendererByType(data.$type);
     return (
-      <div
-        className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}
-        ref={el => {
-          if (el && !this.interactive) {
-            onResize(new Boundary(el.scrollWidth, el.scrollHeight), 'nodeRenderer');
-          }
-        }}
-      >
+      <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}>
         <ChosenRenderer
           id={id}
           data={data}
           focusedId={focusedId}
           onEvent={onEvent}
           onResize={size => {
-            this.interactive = true;
             onResize(size, 'node');
           }}
         />
