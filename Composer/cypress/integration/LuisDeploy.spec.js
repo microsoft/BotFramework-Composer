@@ -38,6 +38,6 @@ context('Luis Deploy', () => {
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
     cy.getByText('Publish').click();
     cy.wait(500);
-    cy.getByText('Try again').should('exist');
+    cy.getByText(/Sorry, something went wrong with publishing./).should('exist');
   });
 });
