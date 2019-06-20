@@ -34,7 +34,7 @@ export const VerticalEdge = ({ length, text, x, y }) => (
       overflow: 'visible',
       left: x,
       top: y,
-      width: '1px',
+      width: BAR_SIZE,
       height: length,
       transitionDuration: '50ms',
       transitionProperty: 'left, right, top, bottom, length',
