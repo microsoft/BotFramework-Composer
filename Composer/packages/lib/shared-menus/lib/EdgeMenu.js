@@ -26,7 +26,7 @@ export var EdgeMenu = function(_a) {
         [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
         true,
         function(e, item) {
-          return onClick(item.$type);
+          return onClick(item ? item.$type : null);
         }
       ),
       label: formatMessage('Add'),

@@ -8,7 +8,7 @@ export var EventMenu = function(_a) {
     label: '',
     iconStyles: { color: '#0078D4' },
     menuItems: createStepMenu([DialogGroup.EVENTS], false, function(e, item) {
-      return onClick(item.$type);
+      return onClick(item ? item.$type : null);
     }),
   });
 };

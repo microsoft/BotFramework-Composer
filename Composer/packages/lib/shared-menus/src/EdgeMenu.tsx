@@ -25,7 +25,7 @@ export const EdgeMenu = ({ onClick }) => {
         menuItems={createStepMenu(
           [DialogGroup.RESPONSE, DialogGroup.INPUT, DialogGroup.STEP, DialogGroup.CODE, DialogGroup.LOG],
           true,
-          (e, item) => onClick(item.$type)
+          (e, item) => onClick(item ? item.$type : null)
         )}
         label={formatMessage('Add')}
       />

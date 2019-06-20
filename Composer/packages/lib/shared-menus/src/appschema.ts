@@ -115,8 +115,10 @@ export const createStepMenu = (
             $type: $type, // used by the steps field to create the item
           },
         })),
-        onItemClick: (e, item: IContextualMenuItem) => {
-          return handleType(e, item);
+        onItemClick: (e, item: IContextualMenuItem | undefined) => {
+          if (item) {
+            return handleType(e, item);
+          }
         },
       };
 
@@ -140,8 +142,10 @@ export const createStepMenu = (
         data: {
           $type: item,
         },
-        onClick: (e, item: IContextualMenuItem) => {
-          return handleType(e, item);
+        onClick: (e, item: IContextualMenuItem | undefined) => {
+          if (item) {
+            return handleType(e, item);
+          }
         },
       };
       return menuItem;

@@ -96,31 +96,35 @@ export var createStepMenu = function(stepLabels, subMenu, handleType) {
   if (subMenu) {
     var stepMenuItems = stepLabels.map(function(x) {
       var item = dialogGroups[x];
-      return {
+      var subMenu = {
+        items: item.types.map(function($type) {
+          return {
+            key: $type,
+            name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+            $type: $type,
+            data: {
+              $type: $type,
+            },
+          };
+        }),
+        onItemClick: function(e, item) {
+          if (item) {
+            return handleType(e, item);
+          }
+        },
+      };
+      var menuItem = {
         key: item.label,
         text: item.label,
         name: item.label,
-        subMenuProps: {
-          items: item.types.map(function($type) {
-            return {
-              key: $type,
-              name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
-              $type: $type,
-              data: {
-                $type: $type,
-              },
-            };
-          }),
-          onItemClick: function(e, item) {
-            return handleType(e, item);
-          },
-        },
+        subMenuProps: subMenu,
       };
+      return menuItem;
     });
     return stepMenuItems;
   } else {
     var stepMenuItems = dialogGroups[stepLabels[0]].types.map(function(item) {
-      return {
+      var menuItem = {
         key: item,
         text: ConceptLabels[item],
         name: ConceptLabels[item],
@@ -129,9 +133,12 @@ export var createStepMenu = function(stepLabels, subMenu, handleType) {
           $type: item,
         },
         onClick: function(e, item) {
-          return handleType(e, item);
+          if (item) {
+            return handleType(e, item);
+          }
         },
       };
+      return menuItem;
     });
     return stepMenuItems;
   }
