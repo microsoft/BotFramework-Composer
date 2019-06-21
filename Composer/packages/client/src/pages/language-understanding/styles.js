@@ -32,7 +32,7 @@ export const ContentStyle = css`
   flex: 1;
   position: relative;
   nav {
-    width: 200px;
+    width: 255px;
     ul {
       margin-top: 0px;
     }

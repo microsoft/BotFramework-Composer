@@ -74,7 +74,9 @@ export const LGPage = props => {
     if (!activeDialog && subPath && dialogs.length) {
       navigate('/language-generation');
     }
-  });
+
+    setNewContent(null);
+  }, [activePath, dialogs, lgFiles]);
 
   function onSelect(id) {
     if (id === '_all') {

@@ -15,9 +15,8 @@ import Content from './content';
 import PublishLuisModal from './publish-luis-modal';
 
 export const LUPage = props => {
-  const fileId = props.fileId;
   const { actions, state } = useContext(Store);
-  const { dialogs } = state;
+  const { dialogs, luFiles } = state;
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
   const { publishLuis } = actions;
   const [publishModalOpen, setPublishModalOpen] = useState(false);
@@ -77,7 +76,9 @@ export const LUPage = props => {
     if (!activeDialog && subPath && dialogs.length) {
       navigate('/language-understanding');
     }
-  }, [activePath, dialogs]);
+
+    setNewContent(null);
+  }, [activePath, dialogs, luFiles]);
 
   function onSelect(id) {
     if (id === '_all') {
@@ -92,13 +93,12 @@ export const LUPage = props => {
   }
 
   function discardChanges() {
-    // setLuFile({ ...luFile });
     setNewContent(null);
   }
 
   function onSave() {
     const payload = {
-      id: fileId,
+      id: activeDialog.name, // current opened lu file
       content: newContent,
     };
     updateLuFile(payload);
@@ -108,7 +108,7 @@ export const LUPage = props => {
   // get line number from lu parser,
   // then deep link to code editor this Line
   function onTableViewWantEdit(template) {
-    console.log(template);
+    navigate(`/language-understanding/${template.fileId}`);
     setTextMode(true);
   }
 
@@ -119,7 +119,7 @@ export const LUPage = props => {
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>Users say..</div>
+        <div>User say..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
@@ -160,13 +160,7 @@ export const LUPage = props => {
             data-testid={'dialogNavTree'}
           />
         </div>
-        <Content
-          // file={luFile}
-          activeDialog={activeDialog}
-          onEdit={onTableViewWantEdit}
-          textMode={textMode}
-          onChange={onChange}
-        />
+        <Content activeDialog={activeDialog} onEdit={onTableViewWantEdit} textMode={textMode} onChange={onChange} />
       </div>
       {publishModalOpen && (
         <PublishLuisModal

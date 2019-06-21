@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
-import lodash from 'lodash';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -25,15 +24,6 @@ export default function TableView(props) {
   const [intents, setIntents] = useState([]);
   const listRef = useRef(null);
 
-  const intents1 = [
-    {
-      name: 'sdfsfd',
-      phrases: 'sdfsfd',
-      fileId: 'sdfsfd',
-      used: 'sdfsfd',
-    },
-  ];
-
   useEffect(() => {
     // make up intents data
     const allIntents = luFiles.reduce((result, luFile) => {
@@ -55,30 +45,19 @@ export default function TableView(props) {
       });
       return result.concat(items);
     }, []);
-    console.log(allIntents);
 
-    setIntents(allIntents);
+    // all view, show all lu intents
+    if (!activeDialog) {
+      setIntents(allIntents);
+      // dialog view, show dialog intents
+    } else {
+      const dialogIntents = allIntents.filter(item => {
+        return item.fileId === activeDialog.name;
+      });
 
-    // // all view, show all lu intents
-    // if (!activeDialog) {
-    //   // setIntents(allIntents);
-    //   // dialog view, show dialog intents
-    // } else {
-    //   console.log(activeDialog);
-    //   const dialogIntents = allIntents.filter(item => {
-    //     return item.fileId === activeDialog.name;
-    //   });
-
-    //   console.log(dialogIntents);
-    //   // setIntents(allIntents);
-    // }
-
-    // console.log(intents);
-
-    return () => {
-      console.log('unmount');
-    };
-  }, [luFiles, activeDialog]);
+      setIntents(dialogIntents);
+    }
+  }, [luFiles, activeDialog, dialogs]);
 
   function navigateToDialog(name) {
     clearNavHistory();
@@ -107,7 +86,6 @@ export default function TableView(props) {
         fieldName: 'name',
         minWidth: 100,
         maxWidth: 150,
-        isResizable: true,
         data: 'string',
         onRender: item => {
           return <div css={formCell}>#{item.name}</div>;
@@ -120,7 +98,6 @@ export default function TableView(props) {
         minWidth: 500,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: item => {
           const phraseLines = item.phrases.map((text, idx) => {
             return <p key={idx}>{text}</p>;
@@ -145,14 +122,14 @@ export default function TableView(props) {
         },
       },
       {
-        key: 'usedIn',
-        name: formatMessage('Used in:'),
-        fieldName: 'usedIn',
+        key: 'beenUsed',
+        name: formatMessage('Been used'),
+        fieldName: 'beenUsed',
         minWidth: 100,
-        maxWidth: 200,
+        maxWidth: 100,
         data: 'string',
         onRender: item => {
-          return <div>{item.used ? 'Yes' : ''}</div>;
+          return item.used ? <IconButton iconProps={{ iconName: 'Accept' }} /> : <div />;
         },
       },
       {
@@ -203,7 +180,12 @@ export default function TableView(props) {
         <DetailsList
           componentRef={listRef}
           items={intents}
-          compact={false}
+          styles={{
+            root: {
+              overflowX: 'hidden',
+            },
+          }}
+          className="table-view-list"
           columns={getTableColums()}
           getKey={item => item.Name}
           layoutMode={DetailsListLayoutMode.justified}
