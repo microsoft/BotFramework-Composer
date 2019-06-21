@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
+import DragScroll from '../components/DragScroll';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
@@ -73,13 +74,15 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
         dispatchEvent(NodeEventTypes.Focus, '');
       }}
     >
-      <ChosenEditor
-        id={path}
-        data={data}
-        expanded={true}
-        focusedId={focusedId}
-        onEvent={(...args) => dispatchEvent(...args)}
-      />
+      <DragScroll>
+        <ChosenEditor
+          id={path}
+          data={data}
+          expanded={true}
+          focusedId={focusedId}
+          onEvent={(...args) => dispatchEvent(...args)}
+        />
+      </DragScroll>
     </div>
   );
 };
