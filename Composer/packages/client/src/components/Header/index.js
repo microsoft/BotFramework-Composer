@@ -7,11 +7,9 @@ import { headerMain, aside } from './styles';
 
 export const Header = () => {
   return (
-    <header>
-      <div css={headerMain}>
-        <div css={aside}>{formatMessage('Bot Framework Designer')}</div>
-      </div>
-    </header>
+    <div css={headerMain}>
+      <div css={aside}>{formatMessage('Bot Framework Designer')}</div>
+    </div>
   );
 };
 

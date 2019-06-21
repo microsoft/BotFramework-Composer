@@ -53,6 +53,10 @@ export const leftNavBottom = () => css`
 `;
 
 export const rightPanel = () => css`
-  display: flex-column;
   width: 100%;
+  height: 100%;
+`;
+
+export const data = css`
+  height: calc(100vh - 105px);
 `;
