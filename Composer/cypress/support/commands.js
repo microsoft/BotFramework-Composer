@@ -29,7 +29,7 @@ import 'cypress-testing-library/add-commands';
 Cypress.Commands.add('openBot', botName => {
   cy.getByText('Open').click();
   cy.getByText(botName).click();
-  cy.getByText('bot.botproj').click();
+  cy.getByText(/.botproj/).click();
   cy.wait(500);
 });
 
