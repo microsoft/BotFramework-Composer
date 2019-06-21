@@ -5,7 +5,24 @@ import { ElementInterval } from '../shared/elementSizes';
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode) {
+export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTailEdge = true) {
+  const box = new Boundary();
+  if (!Array.isArray(nodes) || nodes.length === 0) {
+    return box;
+  }
+
+  box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
+  box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
+  box.height =
+    nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
+    ElementInterval.y * Math.max(nodes.length - 1, 0);
+
+  if (widthHeadEdge) box.height += ElementInterval.y / 2;
+  if (widthTailEdge) box.height += ElementInterval.y / 2;
+  return box;
+}
+
+export function calculateIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   const branchNodes = [ifNode || new GraphNode(), elseNode || new GraphNode()];
@@ -17,7 +34,7 @@ export function measureIfElseBoundary(conditionNode, choiceNode, ifNode, elseNod
   );
 }
 
-export function measureSwitchCaseBoundary(conditionNode, choiceNode, branchNodes = []) {
+export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes = []) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   return measureBranchingContainerBoundary(
