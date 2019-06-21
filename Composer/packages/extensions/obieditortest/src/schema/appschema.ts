@@ -11,98 +11,6 @@ export const COMPOUND_TYPES = [
   'Microsoft.UnknownIntentRule',
 ];
 
-export enum DialogGroup {
-  INPUT = 'INPUT',
-  RESPONSE = 'RESPONSE',
-  MEMORY = 'MEMORY',
-  STEP = 'STEP',
-  CODE = 'CODE',
-  LOG = 'LOG',
-  RULE = 'RULE',
-  RECOGNIZER = 'RECOGNIZER',
-  SELECTOR = 'SELECTOR',
-  OTHER = 'OTHER',
-}
-
-export interface DialogGroupItem {
-  label: string;
-  types: string[];
-}
-
-export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
-export const dialogGroups: DialogGroupsMap = {
-  [DialogGroup.INPUT]: {
-    label: 'Input/Prompt Dialogs',
-    types: [
-      'Microsoft.ChoiceInput',
-      'Microsoft.ConfirmInput',
-      'Microsoft.FloatInput',
-      'Microsoft.IntegerInput',
-      'Microsoft.NumberInput',
-      'Microsoft.TextInput',
-    ],
-  },
-  [DialogGroup.RESPONSE]: {
-    label: 'Sending a response',
-    types: ['Microsoft.SendActivity'],
-  },
-  [DialogGroup.MEMORY]: {
-    label: 'Memory manipulation',
-    types: [
-      'Microsoft.DeleteProperty',
-      'Microsoft.EditArray',
-      'Microsoft.InitProperty',
-      'Microsoft.SaveEntity',
-      'Microsoft.SetProperty',
-    ],
-  },
-  [DialogGroup.STEP]: {
-    label: 'Conversational flow and dialog management',
-    types: [
-      'Microsoft.BeginDialog',
-      'Microsoft.CancelAllDialogs',
-      'Microsoft.EmitEvent',
-      'Microsoft.EndDialog',
-      'Microsoft.EndTurn',
-      'Microsoft.IfCondition',
-      'Microsoft.RepeatDialog',
-      'Microsoft.ReplaceDialog',
-      'Microsoft.SendActivity',
-      'Microsoft.SwitchCondition',
-    ],
-  },
-  [DialogGroup.CODE]: {
-    label: 'Roll your own code',
-    types: ['Microsoft.CodeStep', 'Microsoft.HttpRequest'],
-  },
-  [DialogGroup.LOG]: {
-    label: 'Tracing and logging',
-    types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
-  },
-  [DialogGroup.RULE]: {
-    label: 'Rules',
-    types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
-  },
-  [DialogGroup.RECOGNIZER]: {
-    label: 'Recognizers',
-    types: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
-  },
-  [DialogGroup.SELECTOR]: {
-    label: 'Selectors',
-    types: [
-      'Microsoft.ConditionalSelector',
-      'Microsoft.FirstSelector',
-      'Microsoft.MostSpecificSelector',
-      'Microsoft.RandomSelector',
-      'Microsoft.TrueSelector',
-    ],
-  },
-  [DialogGroup.OTHER]: {
-    label: 'Other',
-    types: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
-  },
-};
-
 export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
   const dialogNames = dialogFiles.map(f => {
     return f.name.includes('.') ? f.name.substring(0, f.name.lastIndexOf('.')) : f.name;
@@ -228,7 +136,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       },
       {
         title: 'Microsoft.SendActivity',
-        description: 'This is a step which sends an activity to the user',
+        description: 'Send an activity to the user',
         $ref: '#/definitions/Microsoft.SendActivity',
       },
       {
@@ -287,7 +195,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           property: {
             $role: 'memoryPath',
             title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            description: 'Property in memory used to store user input',
             examples: ['value.birthday'],
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -356,7 +264,8 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       'Microsoft.BeginDialog': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Begin Dialog',
-        description: 'Step which begins another dialog (and when that dialog is done, it will return the caller).',
+        description:
+          'Begin a child dialog. When the child dialog completes, the parent dialog continues from this point.',
         type: 'object',
         properties: {
           $type: {
@@ -387,13 +296,14 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           dialog: {
             $type: 'Microsoft.IDialog',
             title: 'Dialog',
-            description: 'This is the dialog to call.',
+            description: 'Select an different dialog to call at this point.',
             ...dialogEnum,
           },
           options: {
             type: 'object',
             title: 'Options',
-            description: 'Options to pass to the dialog.',
+            description:
+              'Options to pass to this dialog. These will be available in the child dialog as dialog.options.<name>.',
             additionalProperties: true,
           },
           property: {
@@ -478,11 +388,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
                 title: 'Value',
                 description: 'the value to return when selected.',
               },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-              },
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
@@ -523,31 +433,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
-          property: {
-            $role: 'memoryPath',
-            title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
-          inputProperties: {
-            type: 'object',
-            title: 'Input Properties',
-            description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['value.birthday'],
-            additionalProperties: {
-              type: 'string',
-            },
-          },
-          outputProperty: {
-            $role: 'memoryPath',
-            title: 'Output Property',
-            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Initial Prompt',
@@ -568,6 +453,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'The message to send to when then input was not recognized or not valid for the input type.',
             examples: ["I didn't recognize a yes/no response"],
             $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'Property in memory used to store user input',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           style: {
             type: 'string',
@@ -590,11 +500,11 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
                   title: 'Value',
                   description: 'the value to return when selected.',
                 },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
+                // action: {
+                //   title: 'Action',
+                //   description: 'Card action for the choice',
+                //   type: 'object',
+                // },
                 synonyms: {
                   type: 'array',
                   title: 'Synonyms',
@@ -717,31 +627,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
-          property: {
-            $role: 'memoryPath',
-            title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
-          inputProperties: {
-            type: 'object',
-            title: 'Input Properties',
-            description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['value.birthday'],
-            additionalProperties: {
-              type: 'string',
-            },
-          },
-          outputProperty: {
-            $role: 'memoryPath',
-            title: 'Output Property',
-            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Initial Prompt',
@@ -762,6 +647,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'The message to send to when then input was not recognized or not valid for the input type.',
             examples: ["I didn't recognize a yes/no response"],
             $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'Property in memory used to store user input',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
         },
         additionalProperties: false,
@@ -1209,31 +1119,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
-          property: {
-            $role: 'memoryPath',
-            title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
-          inputProperties: {
-            type: 'object',
-            title: 'Input Properties',
-            description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['value.birthday'],
-            additionalProperties: {
-              type: 'string',
-            },
-          },
-          outputProperty: {
-            $role: 'memoryPath',
-            title: 'Output Property',
-            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Initial Prompt',
@@ -1254,6 +1139,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'The message to send to when then input was not recognized or not valid for the input type.',
             examples: ["I didn't recognize a number"],
             $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'Property in memory used to store user input',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           minValue: {
             type: 'number',
@@ -1306,6 +1216,12 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
+          url: {
+            type: 'string',
+            title: 'URL',
+            description: 'The url to call (supports data binding)',
+            examples: ['https://contoso.com'],
+          },
           method: {
             type: 'string',
             title: 'Method',
@@ -1313,16 +1229,10 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             enum: ['GET', 'POST'],
             examples: ['GET', 'POST'],
           },
-          url: {
-            type: 'string',
-            title: 'Url',
-            description: 'The url to call (supports data binding)',
-            examples: ['https://contoso.com'],
-          },
           body: {
             type: 'object',
             title: 'Body',
-            description: 'The body to send in the HTTP call  (supports data binding)',
+            description: 'The body to send in the HTTP call (supports data binding)',
             additionalProperties: true,
           },
           property: {
@@ -1482,7 +1392,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           },
           {
             title: 'Microsoft.SendActivity',
-            description: 'This is a step which sends an activity to the user',
+            description: 'Send an activity to the user',
             $ref: '#/definitions/Microsoft.SendActivity',
           },
           {
@@ -1768,31 +1678,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
-          property: {
-            $role: 'memoryPath',
-            title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
-          inputProperties: {
-            type: 'object',
-            title: 'Input Properties',
-            description: 'This defines properties which be passed as arguments to this dialog',
-            examples: ['value.birthday'],
-            additionalProperties: {
-              type: 'string',
-            },
-          },
-          outputProperty: {
-            $role: 'memoryPath',
-            title: 'Output Property',
-            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-            examples: ['value.birthday'],
-            type: 'string',
-            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
           prompt: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Initial Prompt',
@@ -1813,6 +1698,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             description: 'The message to send to when then input was not recognized or not valid for the input type.',
             examples: ['No date was recognized'],
             $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          property: {
+            $role: 'memoryPath',
+            title: 'Property',
+            description: 'Property in memory used to store user input',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          },
+          inputProperties: {
+            type: 'object',
+            title: 'Input Properties',
+            description: 'This defines properties which be passed as arguments to this dialog',
+            examples: ['value.birthday'],
+            additionalProperties: {
+              type: 'string',
+            },
+          },
+          outputProperty: {
+            $role: 'memoryPath',
+            title: 'Output Property',
+            description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+            examples: ['value.birthday'],
+            type: 'string',
+            pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
           minValue: {
             type: 'integer',
@@ -2140,7 +2050,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       'Microsoft.NumberInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Number prompt',
-        description: 'This represents a dialog which gathers a decimal number in a specified range',
+        description: 'Prompt the user to provide a number.',
         type: 'object',
         properties: {
           $type: {
@@ -2168,10 +2078,31 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
+          prompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Initial Prompt',
+            description: 'First message to send as a prompt for this input. Can include language generation rules.',
+            examples: ['How many do you want?'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          retryPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Retry Prompt',
+            description: "Message to send if no number is found in the user's response.",
+            examples: ["Let's try again. How many do you want?"],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          invalidPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Invalid Prompt',
+            description: "Message to send if the user's response fails the validation rules.",
+            examples: ['That number is out of range. Please try again.'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
           property: {
             $role: 'memoryPath',
             title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+            description: 'Property in memory used to store user input',
             examples: ['value.birthday'],
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2193,37 +2124,16 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
-          prompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Initial Prompt',
-            description: 'The message to send to as prompt for this input.',
-            examples: ['What is your birth date?'],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
-          retryPrompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Retry Prompt',
-            description: 'The message to send to prompt again.',
-            examples: ["Let's try again. What is your birth date?"],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
-          invalidPrompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Invalid Prompt',
-            description: 'The message to send to when then input was not recognized or not valid for the input type.',
-            examples: ['No date was recognized'],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
           minValue: {
             type: 'number',
             title: 'Mininum value',
-            description: 'The minimum value that is acceptable.  ',
+            description: 'The minimum acceptable value.',
             examples: ['0.1'],
           },
           maxValue: {
             type: 'number',
             title: 'Maximum value',
-            description: 'The maximum value that is acceptable.  ',
+            description: 'The maximum acceptable value.',
             examples: ['12.5'],
           },
         },
@@ -2605,8 +2515,8 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       },
       'Microsoft.SendActivity': {
         $role: 'unionType(Microsoft.IDialog)',
-        title: 'Send Activity Step',
-        description: 'This is a step which sends an activity to the user',
+        title: 'Send Activity',
+        description: 'Send a message to the user',
         type: 'object',
         properties: {
           $type: {
@@ -2637,7 +2547,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           activity: {
             $type: 'Microsoft.IActivityTemplate',
             title: 'Activity',
-            description: 'Activity to send to the user',
+            description: 'Message to send to the user. Can include language generation rules.',
             $ref: '#/definitions/Microsoft.IActivityTemplate',
           },
         },
@@ -2650,8 +2560,8 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       },
       'Microsoft.SetProperty': {
         $role: 'unionType(Microsoft.IDialog)',
-        title: 'Set Property Step',
-        description: 'This step allows you to set memory to the value of an expression',
+        title: 'Set Property',
+        description: 'Set or update a property to the value of an expression.',
         type: 'object',
         properties: {
           $type: {
@@ -2682,7 +2592,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           property: {
             $role: 'memoryPath',
             title: 'Property',
-            description: 'The property to set the value of',
+            description: 'The property to set the value of.',
             examples: ['user.age'],
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2690,7 +2600,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
           value: {
             $role: 'expression',
             title: 'Value',
-            description: 'Expression against memory to use to get the value.',
+            description: 'An expression to evaluate to get the value.',
             examples: ['dialog.result'],
             type: 'string',
           },
@@ -2785,7 +2695,7 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
       'Microsoft.TextInput': {
         $role: 'unionType(Microsoft.IDialog)',
         title: 'Text prompt',
-        description: 'This represents a dialog which gathers a text from the user',
+        description: 'Prompt the user to provide a response that will be treated as text.',
         type: 'object',
         properties: {
           $type: {
@@ -2813,11 +2723,40 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             type: 'object',
             description: 'Extra information for the Bot Framework Designer.',
           },
+          prompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Initial Prompt',
+            description: 'First message to send as a prompt for this input. Can include language generation rules.',
+            examples: ['What is your name?'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
+          // hide retry prompt since on a text prompt, the only way for this to fire is if the message is blank, which is an edge case.
+          // any other fail would be the result of a failed validation, handled by invalid prompt below.
+          // retryPrompt: {
+          //   $type: 'Microsoft.IActivityTemplate',
+          //   title: 'Retry Prompt',
+          //   description: 'Message to send when an appropriate value was not found in the user\'s previous reply',
+          //   examples: ["Let's try again. What is your birth date?"],
+          //   $ref: '#/definitions/Microsoft.IActivityTemplate',
+          // },
+          pattern: {
+            type: 'string',
+            title: 'Validation Pattern',
+            description: 'A regular expression pattern used to validate the input.',
+            examples: ['\\w{3,30}'],
+          },
+          invalidPrompt: {
+            $type: 'Microsoft.IActivityTemplate',
+            title: 'Invalid Prompt',
+            description: "Message to send if the user's response fails the validation pattern.",
+            examples: ['Sorry but that was too long. Please try again.'],
+            $ref: '#/definitions/Microsoft.IActivityTemplate',
+          },
           property: {
             $role: 'memoryPath',
             title: 'Property',
-            description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-            examples: ['value.birthday'],
+            description: 'Property in memory used to store user input',
+            examples: ['dialog.name'],
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           },
@@ -2837,33 +2776,6 @@ export function getMergedSchema(dialogFiles: DialogInfo[] = []): JSONSchema6 {
             examples: ['value.birthday'],
             type: 'string',
             pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          },
-          prompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Initial Prompt',
-            description: 'The message to send to as prompt for this input.',
-            examples: ['What is your birth date?'],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
-          retryPrompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Retry Prompt',
-            description: 'The message to send to prompt again.',
-            examples: ["Let's try again. What is your birth date?"],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
-          invalidPrompt: {
-            $type: 'Microsoft.IActivityTemplate',
-            title: 'Invalid Prompt',
-            description: 'The message to send to when then input was not recognized or not valid for the input type.',
-            examples: ['No date was recognized'],
-            $ref: '#/definitions/Microsoft.IActivityTemplate',
-          },
-          pattern: {
-            type: 'string',
-            title: 'Pattern',
-            description: 'A regular expression pattern which must match',
-            examples: ['\\w{3,30}'],
           },
         },
         additionalProperties: false,

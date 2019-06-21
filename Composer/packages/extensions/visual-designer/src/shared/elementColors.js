@@ -49,6 +49,18 @@ const NodeColors = {
     themeColor: Colors.AzureGray3,
     iconColor: Colors.AzureGray2,
   },
+  [DialogGroup.MEMORY]: {
+    themeColor: Colors.AzureGray3,
+    iconColor: Colors.AzureGray2,
+  },
+  [DialogGroup.CODE]: {
+    themeColor: Colors.AzureGray3,
+    iconColor: Colors.AzureGray2,
+  },
+  [DialogGroup.LOG]: {
+    themeColor: Colors.AzureGray3,
+    iconColor: Colors.AzureGray2,
+  },
   [DialogGroup.RESPONSE]: {
     themeColor: Colors.BlueMagenta20,
     iconColor: Colors.BlueMagenta30,
@@ -63,5 +75,9 @@ const NodeColors = {
 };
 
 export function getElementColor(type) {
-  return NodeColors[type];
+  if (NodeColors[type]) {
+    return NodeColors[type];
+  } else {
+    return NodeColors[DialogGroup.STEP];
+  }
 }
