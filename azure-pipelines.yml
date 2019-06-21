@@ -33,7 +33,7 @@ jobs:
       displayName: 'Use Node 10.15.3'
       inputs:
         versionSpec: 10.15.3
-    - script: cd Composer && yarn install --network-concurrency 1
+    - script: cd Composer && yarn install
       displayName: 'yarn install'
     - script: cd Composer && yarn build
       displayName: 'yarn build'
@@ -66,7 +66,7 @@ jobs:
       displayName: 'Use Node 10.15.3'
       inputs:
         versionSpec: 10.15.3
-    - script: cd Composer && yarn install --network-concurrency 1
+    - script: cd Composer && yarn install
       displayName: 'yarn install'
     - script: cd Composer && yarn build
       displayName: 'yarn build'
