@@ -66,6 +66,13 @@ export const formCell = css`
   }
 `;
 
+export const luPhraseCell = css`
+  white-space: pre-wrap;
+  font-size: 14px;
+  max-height: 200px;
+  overflow: auto;
+`;
+
 // styles override, should use '@uifabric/fluent-theme' later
 export const whiteButton = css`
   background: transparent;

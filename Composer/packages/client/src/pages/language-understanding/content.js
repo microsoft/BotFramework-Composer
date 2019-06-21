@@ -3,8 +3,9 @@ import { jsx } from '@emotion/core';
 import { Fragment, useMemo, useContext } from 'react';
 import { PropTypes } from 'prop-types';
 import lodash from 'lodash';
-import { Store } from '../../store/index';
 import { LuEditor } from 'code-editor';
+
+import { Store } from '../../store/index';
 
 import TableView from './table-view';
 import { contentEditor } from './styles';
@@ -41,11 +42,7 @@ export default function Content(props) {
 
   return (
     <div css={contentEditor}>
-      {textMode ? (
-        memoizedEditor
-      ) : (
-        <TableView file={luFile} activeDialog={activeDialog} onEdit={onEdit} onChange={onChange} />
-      )}
+      {textMode ? memoizedEditor : <TableView activeDialog={activeDialog} onEdit={onEdit} onChange={onChange} />}
     </div>
   );
 }

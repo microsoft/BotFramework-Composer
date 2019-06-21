@@ -51,6 +51,30 @@ export class DialogIndexer {
     return templates;
   }
 
+  // find out all lu intents given dialog
+  private ExtractLuIntents(dialog: Dialog): string[] {
+    const intents: string[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (typeof value === 'object' && value.hasOwnProperty('$type') && value.$type === 'Microsoft.IntentRule') {
+        intents.push(value.intent);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return intents;
+  }
+
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
@@ -67,6 +91,7 @@ export class DialogIndexer {
               name: Path.basename(file.name, extName),
               content: dialogJson,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
+              luIntents: this.ExtractLuIntents(dialogJson),
               relativePath: file.relativePath,
             };
 

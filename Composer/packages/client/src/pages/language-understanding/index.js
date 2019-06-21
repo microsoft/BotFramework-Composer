@@ -21,7 +21,7 @@ export const LUPage = props => {
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
   const { publishLuis } = actions;
   const [publishModalOpen, setPublishModalOpen] = useState(false);
-  const [textMode, setTextMode] = useState(true);
+  const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
 
   const subPath = props['*'];
@@ -119,7 +119,7 @@ export const LUPage = props => {
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>Understanding what users say</div>
+        <div>Users say..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
