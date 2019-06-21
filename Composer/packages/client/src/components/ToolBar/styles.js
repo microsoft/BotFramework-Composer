@@ -5,9 +5,10 @@ export const headerMain = css`
   position: relative;
   line-height: 50px;
   background: ${SharedColors.cyanBlue10};
-  font-size: 16px;
+  font-size: 20px;
   color: #fff;
   height: 50px;
+  display: flex;
 `;
 
 export const headerSub = css`
