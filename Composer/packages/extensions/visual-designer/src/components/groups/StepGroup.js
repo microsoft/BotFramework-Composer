@@ -22,7 +22,7 @@ const calculateNodes = data => {
 
 const calculateLayout = (nodes, boundaryMap) => {
   nodes.forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
-  return sequentialLayouter(nodes, StepInterval);
+  return sequentialLayouter(nodes);
 };
 
 export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
