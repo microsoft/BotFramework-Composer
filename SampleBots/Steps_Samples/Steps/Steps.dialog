@@ -41,6 +41,6 @@
             "activity": "user.age is set to null"
           }
       ]
-    },
-  ],
+    }
+  ]
 }
