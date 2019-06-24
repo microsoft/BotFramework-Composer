@@ -3,9 +3,9 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
-import { DialogGroup } from '../../schema/appschema';
-import { buildDialogOptions, setOverridesOnField } from '../utils';
+import { setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
 
@@ -31,7 +31,7 @@ export function RulesField(props: FieldProps) {
     <TableField<MicrosoftIRule>
       {...props}
       {...overrides}
-      dialogOptionsOpts={{ include: [DialogGroup.RULE], subMenu: false }}
+      dialogOptionsOpts={{ include: [DialogGroup.EVENTS], subMenu: false }}
       label={formatMessage('Add New Rule')}
       navPrefix="rules"
       renderTitle={renderTitle}
@@ -41,7 +41,7 @@ export function RulesField(props: FieldProps) {
           data-testid="RulesFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
-            items: buildDialogOptions({ include: [DialogGroup.RULE], subMenu: false, onClick: createNewItemAtIndex() }),
+            items: createStepMenu([DialogGroup.EVENTS], false, createNewItemAtIndex()),
             calloutProps: { calloutMaxHeight: 500 },
             directionalHint: DirectionalHint.bottomLeftEdge,
           }}

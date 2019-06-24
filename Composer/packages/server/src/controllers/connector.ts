@@ -13,7 +13,7 @@ async function connect(req: any, res: any) {
 
 async function sync(req: any, res: any) {
   try {
-    await BotConnectorService.sync();
+    await BotConnectorService.sync(req.body);
     res.send('OK');
   } catch (error) {
     res.status(400).json({ error: error.message });

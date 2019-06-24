@@ -22,6 +22,7 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  luStatus: [],
 };
 
 export function StoreProvider(props) {

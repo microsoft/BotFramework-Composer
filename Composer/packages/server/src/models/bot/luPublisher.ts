@@ -19,6 +19,7 @@ export class LuPublisher {
   public generatedFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
+  public status: { [key: string]: string }[] = [];
 
   constructor(path: string, storage: IFileStorage) {
     this.luPath = path;
@@ -69,16 +70,32 @@ export class LuPublisher {
     const appNames = keys(setting.luis);
     return appNames.every(async name => {
       if (ENDPOINT_KEYS.indexOf(name) < 0) {
-        return await this.storage.exists(`${replace(name, '_', '.')}.dialog`);
+        return await this.storage.exists(`${name.split('_').join('.')}.dialog`);
       }
       return true;
     });
   };
 
+  public getLuisStatus = async () => {
+    const settings = await this._getSettings();
+    if (settings === null) return [];
+    const status = settings.status;
+    this.status = keys(status).reduce((result: { [key: string]: string }[], item) => {
+      let name = item.split('_').join('.');
+      name = replace(name, '.en-us', '');
+      result.push({ name, ...status[item] });
+      return result;
+    }, []);
+  };
+
   public getLuisConfig = () => this.config;
 
+  public setLuisConfig = (config: ILuisConfig) => {
+    this.config = config;
+  };
+
   private _copyDialogsToTargetFolder = async (config: any) => {
-    if (this.config == null) return '';
+    if (this.config === null) return '';
     const defaultLanguage = this.config.defaultLanguage;
     await config.models.forEach(async (filePath: string) => {
       const baseName = Path.basename(filePath, '.lu');
@@ -116,16 +133,25 @@ export class LuPublisher {
     return setting.status;
   };
 
-  private _getSettingPath = () => {
-    if (this.config == null) return '';
-    return Path.join(
-      this.generatedFolderPath,
-      `luis.settings.${this.config.environment}.${this.config.authoringRegion}.json`
-    );
+  private _getSettingPath = async () => {
+    if (this.config !== null) {
+      return Path.join(
+        this.generatedFolderPath,
+        `luis.settings.${this.config.environment}.${this.config.authoringRegion}.json`
+      );
+    } else {
+      const filePaths = await this.storage.glob('**/luis.settings.*.json', this.luPath);
+      if (filePaths.length > 0) {
+        //TODO: maybe more than one
+        return Path.join(this.luPath, filePaths[0]);
+      }
+    }
+
+    return '';
   };
 
   private _getAppName = async (path: string) => {
-    if (this.config == null) return '';
+    if (this.config === null) return '';
     const culture = this._getCultureFromPath(path) || this.config.defaultLanguage;
     let name = `${Path.basename(path, '.lu')}.${culture}.lu`;
     name = name.split('.').join('_');
@@ -187,13 +213,13 @@ export class LuPublisher {
   };
 
   private _getSettings = async () => {
-    const settingPath = this._getSettingPath();
-    if (settingPath === null) return null;
+    const settingPath = await this._getSettingPath();
+    if (settingPath === '') return null;
     return await this._getJsonObject(settingPath);
   };
 
   private _setSettings = async (settings: ILuisSettings) => {
-    const settingPath = this._getSettingPath();
+    const settingPath = await this._getSettingPath();
     return await this.storage.writeFile(settingPath, JSON.stringify(settings, null, 4));
   };
 }

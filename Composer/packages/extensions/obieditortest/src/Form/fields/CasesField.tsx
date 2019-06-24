@@ -3,10 +3,10 @@ import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import Modal from '../../Modal';
-import { buildDialogOptions, swap } from '../utils';
-import { DialogGroup } from '../../schema/appschema';
+import { swap } from '../utils';
 
 import { TableField } from './TableField';
 
@@ -135,10 +135,18 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
               <PrimaryButton
                 styles={{ root: { marginTop: '20px' } }}
                 menuProps={{
-                  items: buildDialogOptions({
-                    exclude: [DialogGroup.RULE, DialogGroup.OTHER],
-                    onClick: createNewItemAtIndex(),
-                  }),
+                  items: createStepMenu(
+                    [
+                      DialogGroup.RESPONSE,
+                      DialogGroup.INPUT,
+                      DialogGroup.STEP,
+                      DialogGroup.MEMORY,
+                      DialogGroup.CODE,
+                      DialogGroup.LOG,
+                    ],
+                    true,
+                    createNewItemAtIndex()
+                  ),
                   calloutProps: { calloutMaxHeight: 500 },
                   directionalHint: DirectionalHint.bottomLeftEdge,
                 }}

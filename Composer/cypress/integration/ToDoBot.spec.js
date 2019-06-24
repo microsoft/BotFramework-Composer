@@ -45,7 +45,7 @@ context('ToDo Bot', () => {
       cy.get('[title="DeleteToDo"]').click();
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Remove').should('exist');
+      cy.getByText('EditArray').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('Microsoft.SetProperty').should('exist');

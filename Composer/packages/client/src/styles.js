@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 import { NeutralColors, Depths, SharedColors, FontSizes } from '@uifabric/fluent-theme';
 
 export const main = css`
-  height: calc(100vh - 105px);
+  height: calc(100vh - 50px);
   display: flex;
 `;
 
@@ -12,11 +12,15 @@ export const sideBar = isExpand => css`
   height: 100%;
   box-shadow: ${Depths.depth8};
   transition: width 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
-export const divider = css`
-  width: 100%;
+export const divider = isExpand => css`
+  width: ${isExpand ? '85%' : '40%'};
   border-bottom: 1px solid ${NeutralColors.gray40};
+  margin: 0 auto;
 `;
 
 export const globalNav = css`
@@ -42,4 +46,17 @@ export const content = css`
 
 export const showDesign = show => css`
   display: ${show ? 'block' : 'none'} !important;
+`;
+
+export const leftNavBottom = () => css`
+  height: 90px;
+`;
+
+export const rightPanel = () => css`
+  width: 100%;
+  height: 100%;
+`;
+
+export const data = css`
+  height: calc(100vh - 105px);
 `;
