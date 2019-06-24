@@ -36,6 +36,7 @@ export const dialogGroups: DialogGroupsMap = {
       'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
+      'Microsoft.OAuthInput',
     ],
   },
   [DialogGroup.BRANCHING]: {
@@ -46,7 +47,7 @@ export const dialogGroups: DialogGroupsMap = {
     label: 'Memory manipulation',
     types: [
       'Microsoft.SetProperty',
-      'Microsoft.SaveEntity',
+      // 'Microsoft.SaveEntity',
       'Microsoft.InitProperty',
       'Microsoft.DeleteProperty',
       'Microsoft.EditArray',
@@ -57,12 +58,15 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       'Microsoft.IfCondition',
       'Microsoft.SwitchCondition',
+      'Microsoft.Foreach',
+      'Microsoft.ForeachPage',
       'Microsoft.BeginDialog',
       'Microsoft.EndDialog',
       'Microsoft.CancelAllDialogs',
       'Microsoft.EndTurn',
       'Microsoft.RepeatDialog',
       'Microsoft.ReplaceDialog',
+      'Microsoft.EditSteps',
       'Microsoft.EmitEvent',
     ],
   },
@@ -72,7 +76,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.LOG]: {
     label: 'Debugging',
-    types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
+    types: ['Microsoft.LogStep', 'Microsoft.DebugBreak', 'Microsoft.TraceActivity'],
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',

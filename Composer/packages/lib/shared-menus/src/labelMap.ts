@@ -37,4 +37,11 @@ export const ConceptLabels = {
   'Microsoft.EventRule': formatMessage('Handle an event'),
   'Microsoft.IntentRule': formatMessage('Handle an intent'),
   'Microsoft.UnknownIntentRule': formatMessage('Provide a fallback handler'),
+
+  'Microsoft.AttachmentInput': formatMessage('Type: Attachment'),
+  'Microsoft.Foreach': formatMessage('Branch: For each'),
+  'Microsoft.ForeachPage': formatMessage('Branch: For each with paging'),
+  'Microsoft.EditSteps': formatMessage('Edit dialog steps'),
+  'Microsoft.OAuthInput': formatMessage('Type: OAuth'),
+  'Microsoft.DebugBreak': formatMessage('Debugging Breakpoint'),
 };
