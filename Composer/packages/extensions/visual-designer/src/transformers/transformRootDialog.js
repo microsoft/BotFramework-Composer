@@ -10,14 +10,14 @@ function transformSimpleDialog(input) {
   const steps = input.steps || [];
 
   const result = {};
-  result.ruleGroup = new IndexedNode('rules', {
+  result.ruleGroup = new IndexedNode('$.rules', {
     $type: ObiTypes.RuleGroup,
-    children: rules.map((x, index) => new IndexedNode(`rules[${index}]`, x)),
+    children: rules.map((x, index) => new IndexedNode(`$.rules[${index}]`, x)),
   });
 
-  result.stepGroup = new IndexedNode('steps', {
+  result.stepGroup = new IndexedNode('$.steps', {
     $type: ObiTypes.StepGroup,
-    children: steps.map((x, index) => new IndexedNode(`steps[${index}]`, normalizeObiStep(x))),
+    children: steps.map((x, index) => new IndexedNode(`$.steps[${index}]`, normalizeObiStep(x))),
   });
   return result;
 }

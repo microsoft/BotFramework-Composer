@@ -23,10 +23,7 @@ import storage from './../../utils/storage';
 import { Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 import { Text } from './../../constants/index';
-
-const AUTHORINGKEY = 'authoringKey';
-const ENVIRONMENT = 'environment';
-const PROJECTNAME = 'name';
+import { getDefaultLuisConfig } from './../../utils/luisUtil';
 
 const STATE = {
   INPUT: 0,
@@ -44,17 +41,6 @@ const onRenderLabel = info => props => (
     </TooltipHost>
   </Stack>
 );
-
-const getDefaultData = () => {
-  return {
-    name: storage.get(PROJECTNAME, ''),
-    environment: storage.get(ENVIRONMENT, ''),
-    authoringKey: storage.get(AUTHORINGKEY, ''),
-    authoringRegion: 'westus',
-    defaultLanguage: 'en-us',
-    errors: {},
-  };
-};
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
@@ -110,19 +96,13 @@ const DeployFailure = props => {
   );
 };
 
-export default function PublishLuisModal(props) {
-  const { isOpen, onDismiss, onPublish } = props;
-  const [formData, setFormData] = useState(getDefaultData());
-  const [workState, setWorkState] = useState(STATE.INPUT);
-  const [response, setResponse] = useState({});
+export const PublishLuis = props => {
+  const [formData, setFormData] = useState({ ...getDefaultLuisConfig(), errors: {} });
+  const { onPublish, onDismiss, workState } = props;
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
     storage.set(field, newValue);
-  };
-
-  const handleDismiss = () => {
-    onDismiss();
   };
 
   const handlePublish = async e => {
@@ -134,6 +114,81 @@ export default function PublishLuisModal(props) {
       return;
     }
 
+    await onPublish({ ...formData });
+  };
+
+  return (
+    <Fragment>
+      <div css={dialogSubTitle}>
+        {formatMessage(Text.LUISDEPLOY)}
+        <Link href={Links.LUIS} target="_blank">
+          Where can I find this?
+        </Link>
+      </div>
+      <form onSubmit={handlePublish} css={dialogContent}>
+        <Stack gap={20}>
+          <TextField
+            label={formatMessage('Project Name')}
+            onChange={updateForm('name')}
+            defaultValue={formData.name}
+            onRenderLabel={onRenderLabel(Tips.PROJECTNAME)}
+            errorMessage={formData.errors.name || ''}
+            data-testid="ProjectNameInput"
+          />
+          <TextField
+            label={formatMessage('Environment')}
+            onChange={updateForm('environment')}
+            defaultValue={formData.environment}
+            onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
+            errorMessage={formData.errors.environment || ''}
+            data-testid="EnvironmentInput"
+          />
+          <TextField
+            label={formatMessage('Authoring key')}
+            onChange={updateForm('authoringKey')}
+            defaultValue={formData.authoringKey}
+            onRenderLabel={onRenderLabel(Tips.AUTHORINGKAY)}
+            errorMessage={formData.errors.authoringKey || ''}
+            data-testid="AuthoringKeyInput"
+          />
+          <TextField
+            label={formatMessage('Authoring Region')}
+            defaultValue="westus"
+            onRenderLabel={onRenderLabel(Tips.AUTHORINGREGION)}
+            disabled
+          />
+          <TextField
+            label={formatMessage('Default Language')}
+            defaultValue="en-us"
+            onRenderLabel={onRenderLabel(Tips.DEFAULTLANGUAGE)}
+            disabled
+          />
+        </Stack>
+      </form>
+      <DialogFooter>
+        <PrimaryButton
+          onClick={handlePublish}
+          text={formatMessage('Publish')}
+          disabled={workState === STATE.PUBLISHPENDING}
+        >
+          {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
+        </PrimaryButton>
+        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+      </DialogFooter>
+    </Fragment>
+  );
+};
+
+export function PublishLuisModal(props) {
+  const { isOpen, onDismiss, onPublish } = props;
+  const [workState, setWorkState] = useState(STATE.INPUT);
+  const [response, setResponse] = useState({});
+
+  const handleDismiss = () => {
+    onDismiss();
+  };
+
+  const handlePublish = async formData => {
     setWorkState(STATE.PUBLISHPENDING);
     const response = await onPublish({ ...formData });
     setResponse(response);
@@ -163,64 +218,7 @@ export default function PublishLuisModal(props) {
         <DeployFailure onDismiss={handleDismiss} tryAgain={() => setWorkState(STATE.INPUT)} error={response.error} />
       )}
       {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
-        <Fragment>
-          <div css={dialogSubTitle}>
-            {formatMessage(Text.LUISDEPLOY)}
-            <Link href={Links.LUIS} target="_blank">
-              Where can I find this?
-            </Link>
-          </div>
-          <form onSubmit={handlePublish} css={dialogContent}>
-            <Stack gap={20}>
-              <TextField
-                label={formatMessage('Project Name')}
-                onChange={updateForm('name')}
-                defaultValue={formData.name}
-                onRenderLabel={onRenderLabel(Tips.PROJECTNAME)}
-                errorMessage={formData.errors.name || ''}
-                data-testid="ProjectNameInput"
-              />
-              <TextField
-                label={formatMessage('Environment')}
-                onChange={updateForm('environment')}
-                defaultValue={formData.environment}
-                onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
-                errorMessage={formData.errors.environment || ''}
-                data-testid="EnvironmentInput"
-              />
-              <TextField
-                label={formatMessage('Authoring key')}
-                onChange={updateForm('authoringKey')}
-                defaultValue={formData.authoringKey}
-                onRenderLabel={onRenderLabel(Tips.AUTHORINGKAY)}
-                errorMessage={formData.errors.authoringKey || ''}
-                data-testid="AuthoringKeyInput"
-              />
-              <TextField
-                label={formatMessage('Authoring Region')}
-                defaultValue="westus"
-                onRenderLabel={onRenderLabel(Tips.AUTHORINGREGION)}
-                disabled
-              />
-              <TextField
-                label={formatMessage('Default Language')}
-                defaultValue="en-us"
-                onRenderLabel={onRenderLabel(Tips.DEFAULTLANGUAGE)}
-                disabled
-              />
-            </Stack>
-          </form>
-          <DialogFooter>
-            <PrimaryButton
-              onClick={handlePublish}
-              text={formatMessage('Publish')}
-              disabled={workState === STATE.PUBLISHPENDING}
-            >
-              {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
-            </PrimaryButton>
-            <DefaultButton onClick={handleDismiss} text={formatMessage('Cancel')} />
-          </DialogFooter>
-        </Fragment>
+        <PublishLuis onPublish={handlePublish} onDismiss={handleDismiss} workState={workState} />
       )}
     </Dialog>
   );

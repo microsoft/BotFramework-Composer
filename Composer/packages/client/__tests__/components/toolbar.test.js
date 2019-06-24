@@ -5,7 +5,7 @@ import { ToolBar } from '../../src/components/ToolBar';
 
 describe('<ToolBar />', () => {
   it('should render the ToolBar', () => {
-    const { container } = render(<ToolBar />);
+    const { container } = render(<ToolBar luFiles={[]} luStatus={[]} />);
 
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
@@ -15,7 +15,7 @@ describe('<ToolBar />', () => {
 
   it('should open storage explorer', async () => {
     const mockOpenStorageExplorer = jest.fn(() => null);
-    const { findByText } = render(<ToolBar openStorageExplorer={mockOpenStorageExplorer} />);
+    const { findByText } = render(<ToolBar openStorageExplorer={mockOpenStorageExplorer} luFiles={[]} luStatus={[]} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);
@@ -27,7 +27,9 @@ describe('<ToolBar />', () => {
 
   it('should set bot status', async () => {
     const mockConnectBot = jest.fn(() => null);
-    const { findByText } = render(<ToolBar connectBot={mockConnectBot} botStatus={'unConnected'} />);
+    const { findByText } = render(
+      <ToolBar connectBot={mockConnectBot} botStatus={'unConnected'} luFiles={[]} luStatus={[]} />
+    );
 
     const connectButton = await findByText(/Connect/);
     fireEvent.click(connectButton);
