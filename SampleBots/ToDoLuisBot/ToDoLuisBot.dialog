@@ -3,8 +3,8 @@
     "$type": "Microsoft.AdaptiveDialog",
     "$id": "root",
     "autoEndDialog": false,
-    "generator": "ToDoLuisBot.lg",
-    "recognizer": "ToDoLuisBot.main.lu",
+    "generator": "common.lg",
+    "recognizer": "ToDoLuisBotlu",
     "steps": [
         {
             "$type": "Microsoft.SendActivity",
@@ -16,21 +16,21 @@
             "$type": "Microsoft.IntentRule",
             "intent": "AddToDo",
             "steps": [
-                "ToDoLuisBot.AddItem"
+                "AddItem"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "DeleteToDo",
             "steps": [
-                "ToDoLuisBot.DeleteItem"
+                "DeleteItem"
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ShowToDo",
             "steps": [
-                "ToDoLuisBot.ShowItems"
+                "ShowItems"
             ]
         },
         {

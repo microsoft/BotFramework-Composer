@@ -2,7 +2,7 @@
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
-    "generator": "steps_samples.lg",
+    "generator": "common.lg",
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
       "intents": {

@@ -2,7 +2,7 @@
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
-    "generator": "inputs_samples.lg",
+    "generator": "common.lg",
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
         "intents": {
@@ -19,7 +19,10 @@
             "$type": "Microsoft.IntentRule",
             "intent": "TextInput",
             "steps": [
-                "TextInput"
+                 {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "TextInput"
+                }
             ]
         },
         {
