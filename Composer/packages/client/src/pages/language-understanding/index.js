@@ -14,7 +14,7 @@ import { OpenConfirmModal } from '../../components/Modal';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import NewLuFileModal from './create-new';
 import Content from './content';
-import PublishLuisModal from './publish-luis-modal';
+import { PublishLuisModal } from './publish-luis-modal';
 
 export const LUPage = props => {
   const fileId = props.fileId;

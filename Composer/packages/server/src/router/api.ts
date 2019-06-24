@@ -34,7 +34,7 @@ router.get('/storages/:storageId/blobs/:path(*)', ErrorHandler(StorageController
 
 // connector
 router.get('/launcher/connect', ErrorHandler(BotConnectorController.connect));
-router.get('/launcher/sync', ErrorHandler(BotConnectorController.sync));
+router.post('/launcher/sync', ErrorHandler(BotConnectorController.sync));
 router.get('/launcher/status', ErrorHandler(BotConnectorController.status));
 
 //assets

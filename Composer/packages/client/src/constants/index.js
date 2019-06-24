@@ -93,6 +93,12 @@ export const Text = {
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
 };
 
+export const LuisConfig = {
+  AUTHORINGKEY: 'authoringKey',
+  ENVIRONMENT: 'environment',
+  PROJECTNAME: 'name',
+};
+
 export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
