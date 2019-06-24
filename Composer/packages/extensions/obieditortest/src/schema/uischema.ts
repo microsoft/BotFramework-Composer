@@ -74,7 +74,7 @@ export const uiSchema = {
     body: {
       'ui:field': JsonField,
     },
-    ...globalFields,
+    // ...globalFields,  // we do not want to exclude the property field here
     'ui:order': ['*', 'body'],
   },
   'Microsoft.IfCondition': {
