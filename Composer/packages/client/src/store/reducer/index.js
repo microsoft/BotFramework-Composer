@@ -21,7 +21,6 @@ const updateDialog = (state, { response }) => {
 
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.lgFiles = response.data.lgFiles;
   state.luFiles = response.data.luFiles;
   return state;
 };
