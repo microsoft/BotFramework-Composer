@@ -159,14 +159,14 @@ export function ShellApi() {
   }
 
   function getLgTemplates(newData) {
-    if (newData.id === undefined) return new Error('must have a file id');
+    if (newData.id === undefined) throw new Error('must have a file id');
     const file = lgFiles.find(file => file.id === newData.id);
-    if (!file) return new Error(`lg file ${newData.id} not found`);
+    if (!file) throw new Error(`lg file ${newData.id} not found`);
 
     const res = LGParser.TryParse(file.content);
 
     if (res.isValid === false) {
-      return new Error(res.error.Message);
+      throw new Error(res.error.Message);
     }
 
     return res.templates;
@@ -177,7 +177,7 @@ export function ShellApi() {
       if (isEventSourceValid(event) === false) return false;
 
       const file = lgFiles.find(file => file.id === newData.id);
-      if (!file) return new Error(`lg file ${newData.id} not found`);
+      if (!file) throw new Error(`lg file ${newData.id} not found`);
 
       switch (fileChangeType) {
         case UPDATE:
@@ -198,7 +198,7 @@ export function ShellApi() {
             templateName: newData.templateName,
           });
         default:
-          return new Error(`unsupported method ${fileChangeType}`);
+          throw new Error(`unsupported method ${fileChangeType}`);
       }
     };
   }
@@ -225,7 +225,7 @@ export function ShellApi() {
         case [LG, CREATE].join(','):
           return await createLgFile(payload);
         default:
-          return new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
+          throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
       }
     };
   }
