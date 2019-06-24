@@ -28,21 +28,22 @@ export class CSharpBotConnector implements IBotConnector {
     this.status = BotStatus.NotConnected;
   };
 
-  sync = async () => {
+  sync = async (config: any) => {
     // archive the project
     // send to bot runtime service
     if (BotProjectService.currentBotProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
+    BotProjectService.currentBotProject.luPublisher.setLuisConfig(config);
+    const luisConfig = config;
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (!(await BotProjectService.currentBotProject.luPublisher.checkLuisDeployed())) {
-      throw new Error('Please publish your Luis models first');
+    if (luisConfig.authoringKey !== null && (await BotProjectService.currentBotProject.checkNeedLuisDeploy())) {
+      throw new Error('Please publish your Luis models');
     }
 
     form.append('config', JSON.stringify(luisConfig));
