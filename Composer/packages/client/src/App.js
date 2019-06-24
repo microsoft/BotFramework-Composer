@@ -52,7 +52,7 @@ const topLinks = [
   {
     to: 'language-understanding/all',
     iconName: 'People',
-    labelName: 'User says',
+    labelName: 'User Says',
     activeIfUrlContains: 'language-understanding',
     exact: false,
   },

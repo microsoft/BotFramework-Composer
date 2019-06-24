@@ -26,6 +26,7 @@ export const NavItem = props => {
           const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
           setActive(isActive);
         }}
+        data-testid={'LeftNav-CommandBarButton' + labelName}
       >
         <div css={outer(!labelHide, active)}>
           {labelHide ? (
@@ -43,7 +44,6 @@ export const NavItem = props => {
               }}
               text={formatMessage(labelName)}
               styles={commandBarButton}
-              data-testid={'LeftNav-CommandBarButton' + labelName}
               disabled={underTest}
             />
           )}
