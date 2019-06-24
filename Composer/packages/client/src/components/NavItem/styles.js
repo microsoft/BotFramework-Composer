@@ -27,12 +27,8 @@ export const link = (active, underTest) => css`
       .ms-Fabric--isFocusVisible &::after {
         content: "";
         position: absolute;
-        left: 1px;
-        top: 1px;
-        bottom: 1px;
-        right: 1px;
         z-index: 1;
-        border: 1px solid rgb(255, 255, 255);
+        border: 1px solid ${NeutralColors.white};
         border-image: initial;
         outline: rgb(102, 102, 102) solid 1px;
       }
@@ -46,7 +42,6 @@ export const link = (active, underTest) => css`
 
       &::after {
         border-left: 3px solid ${CommunicationColors.primary};
-        left: 0px;
       }`}
   `}
 `;
