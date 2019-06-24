@@ -9,93 +9,6 @@ export const COMPOUND_TYPES = [
   'Microsoft.UnknownIntentRule',
 ];
 
-export enum DialogGroup {
-  INPUT = 'INPUT',
-  RESPONSE = 'RESPONSE',
-  MEMORY = 'MEMORY',
-  STEP = 'STEP',
-  CODE = 'CODE',
-  LOG = 'LOG',
-  RULE = 'RULE',
-  RECOGNIZER = 'RECOGNIZER',
-  OTHER = 'OTHER',
-}
-
-export interface DialogGroupItem {
-  label: string;
-  types: string[];
-}
-
-export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
-export const dialogGroups: DialogGroupsMap = {
-  [DialogGroup.INPUT]: {
-    label: 'Input/Prompt Dialogs',
-    types: [
-      'Microsoft.AttachmentInput',
-      'Microsoft.ChoiceInput',
-      'Microsoft.ConfirmInput',
-      'Microsoft.NumberInput',
-      'Microsoft.OAuthInput',
-      'Microsoft.TextInput',
-    ],
-  },
-  [DialogGroup.RESPONSE]: {
-    label: 'Sending a response',
-    types: ['Microsoft.SendActivity'],
-  },
-  [DialogGroup.MEMORY]: {
-    label: 'Memory manipulation',
-    types: [
-      'Microsoft.DeleteProperty',
-      'Microsoft.EditArray',
-      'Microsoft.InitProperty',
-      'Microsoft.SaveEntity',
-      'Microsoft.SetProperty',
-    ],
-  },
-  [DialogGroup.STEP]: {
-    label: 'Conversational flow and dialog management',
-    types: [
-      'Microsoft.BeginDialog',
-      'Microsoft.CancelAllDialogs',
-      'Microsoft.EditSteps',
-      'Microsoft.EmitEvent',
-      'Microsoft.EndDialog',
-      'Microsoft.EndTurn',
-      'Microsoft.Foreach',
-      'Microsoft.ForeachPage',
-      'Microsoft.IfCondition',
-      'Microsoft.RepeatDialog',
-      'Microsoft.ReplaceDialog',
-      'Microsoft.SendActivity',
-      'Microsoft.SwitchCondition',
-    ],
-  },
-  [DialogGroup.CODE]: {
-    label: 'Roll your own code',
-    types: [
-      // 'Microsoft.CodeStep',
-      'Microsoft.HttpRequest',
-    ],
-  },
-  [DialogGroup.LOG]: {
-    label: 'Tracing and logging',
-    types: ['Microsoft.DebugBreak', 'Microsoft.LogStep', 'Microsoft.TraceActivity'],
-  },
-  [DialogGroup.RULE]: {
-    label: 'Rules',
-    types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
-  },
-  [DialogGroup.RECOGNIZER]: {
-    label: 'Recognizers',
-    types: ['Microsoft.LuisRecognizer', /* 'Microsoft.MultiLanguageRecognizers', */ 'Microsoft.RegexRecognizer'],
-  },
-  [DialogGroup.OTHER]: {
-    label: 'Other',
-    types: ['Microsoft.AdaptiveDialog', 'Microsoft.LanguagePolicy', 'Microsoft.QnAMakerDialog'],
-  },
-};
-
 export const appschema: JSONSchema6 = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
@@ -571,21 +484,13 @@ export const appschema: JSONSchema6 = {
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Value to return',
+          description: 'The expression that you evaluated for input.',
           type: 'string',
-        },
-        valueProperty: {
-          $role: 'memoryPath',
-          title: 'Value Property',
-          description: 'The property to store the result of the value',
-          examples: ['user.name'],
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "value to return if the value expression can't be evaluated.",
+          description: "Value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
@@ -603,6 +508,53 @@ export const appschema: JSONSchema6 = {
           default: true,
           examples: ['true'],
         },
+        outputFormat: {
+          type: 'string',
+          enum: ['value', 'index'],
+          title: 'Output Format',
+          description: 'The output format.',
+          default: 'value',
+        },
+        choices: {
+          type: 'array',
+          items: [
+            {
+              type: 'object',
+              properties: {
+                value: {
+                  type: 'string',
+                  title: 'Value',
+                  description: 'the value to return when selected.',
+                },
+                action: {
+                  title: 'Action',
+                  description: 'Card action for the choice',
+                  type: 'object',
+                },
+                synonyms: {
+                  type: 'array',
+                  title: 'Synonyms',
+                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                  items: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          ],
+        },
+        appendChoices: {
+          type: 'boolean',
+          title: 'Append Choices',
+          description: 'Compose an output activity containing a set of choices',
+          default: 'true',
+        },
+        defaultLocale: {
+          type: 'string',
+          title: 'Default Locale',
+          description: 'The prompts default locale that should be recognized.',
+          default: 'en-us',
+        },
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
@@ -610,36 +562,51 @@ export const appschema: JSONSchema6 = {
           description: 'The kind of choice list style to generate',
           default: 'Auto',
         },
-        choicesProperty: {
-          type: 'string',
-          title: 'Choices Property',
+        choiceOptions: {
+          type: 'object',
+          title: 'Choice Options',
+          properties: {
+            inlineSeparator: {
+              type: 'string',
+              title: 'Inline Seperator',
+              description: 'Character used to separate individual choices when there are more than 2 choices',
+              default: ', ',
+            },
+            inlineOr: {
+              type: 'string',
+              title: 'Inline Or',
+              description: 'Separator inserted between the choices when their are only 2 choices',
+              default: ' or ',
+            },
+            inlineOrMore: {
+              type: 'string',
+              title: 'Inline OrMore',
+              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
+              default: ', or ',
+            },
+            includeNumbers: {
+              type: 'boolean',
+              title: 'Include Numbers',
+              description: 'if true, inline and list style choices will be prefixed with the index of the choice.',
+              default: true,
+            },
+          },
         },
-        choices: {
-          title: 'Choices',
-          type: 'array',
-          items: {
-            type: 'object',
-            title: 'Choice',
-            properties: {
-              value: {
-                type: 'string',
-                title: 'Value',
-                description: 'the value to return when selected.',
-              },
-              // TODO: Need an example of this
-              // action: {
-              //   title: 'Action',
-              //   description: 'Card action for the choice',
-              //   type: 'object',
-              // },
-              synonyms: {
-                type: 'array',
-                title: 'Synonyms',
-                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-                items: {
-                  type: 'string',
-                },
-              },
+        recognizerOptions: {
+          type: 'object',
+          title: 'Recognizer Options',
+          properties: {
+            noValue: {
+              type: 'boolean',
+              title: 'No Value',
+              description: 'If true, the choices value field will NOT be search over',
+              default: false,
+            },
+            noAction: {
+              type: 'boolean',
+              title: 'No Action',
+              description: 'If true, the the choices action.title field will NOT be searched over',
+              default: false,
             },
           },
         },
@@ -686,7 +653,7 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Property',
           description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          examples: ['value.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -729,11 +696,11 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
-          type: 'number',
+          type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: '2147483647',
-          examples: ['3'],
+          default: 2147483647,
+          examples: [3],
         },
         validations: {
           type: 'array',
@@ -748,21 +715,13 @@ export const appschema: JSONSchema6 = {
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Value to return',
+          description: 'The expression that you evaluated for input.',
           type: 'string',
-        },
-        valueProperty: {
-          $role: 'memoryPath',
-          title: 'Value Property',
-          description: 'The property to store the result of the value',
-          examples: ['user.name'],
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "value to return if the value expression can't be evaluated.",
+          description: "Value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
@@ -771,14 +730,84 @@ export const appschema: JSONSchema6 = {
           description:
             'If set to true this will always prompt the user regardless if you already have the value or not.',
           default: false,
-          examples: ['false'],
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
+          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
           default: true,
-          examples: ['true'],
+          examples: [true],
+        },
+        defaultLocale: {
+          type: 'string',
+          title: 'Default Locale',
+          description: 'The prompts default locale that should be recognized.',
+          default: 'en-us',
+        },
+        style: {
+          type: 'string',
+          enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
+          title: 'List Style',
+          description: 'The kind of choice list style to generate',
+          default: 'Auto',
+        },
+        choiceOptions: {
+          type: 'object',
+          properties: {
+            inlineSeparator: {
+              type: 'string',
+              title: 'Inline Seperator',
+              description: 'Character used to separate individual choices when there are more than 2 choices',
+              default: ', ',
+            },
+            inlineOr: {
+              type: 'string',
+              title: 'Inline Or',
+              description: 'Separator inserted between the choices when their are only 2 choices',
+              default: ' or ',
+            },
+            inlineOrMore: {
+              type: 'string',
+              title: 'Inline OrMore',
+              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
+              default: ', or ',
+            },
+            includeNumbers: {
+              type: 'boolean',
+              title: 'Include Numbers',
+              description: 'if true, inline and list style choices will be prefixed with the index of the choice.',
+              default: true,
+            },
+          },
+        },
+        confirmChoices: {
+          type: 'array',
+          items: [
+            {
+              type: 'object',
+              properties: {
+                value: {
+                  type: 'string',
+                  title: 'Value',
+                  description: 'the value to return when selected.',
+                },
+                action: {
+                  title: 'Action',
+                  description: 'Card action for the choice',
+                  type: 'object',
+                },
+                synonyms: {
+                  type: 'array',
+                  title: 'Synonyms',
+                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                  items: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       additionalProperties: false,
@@ -972,7 +1001,7 @@ export const appschema: JSONSchema6 = {
           type: 'string',
           title: 'Change Type',
           description: 'The change type to apply to current dialog',
-          enum: ['NewPlan', 'DoSteps', 'DoStepsBeforeTags', 'DoStepsLater', 'EndPlan', 'ReplacePlan'],
+          enum: ['InsertSteps', 'InsertStepsBeforeTags', 'AppendSteps', 'EndSequence', 'ReplaceSequence'],
         },
         Steps: {
           type: 'array',
@@ -1250,7 +1279,7 @@ export const appschema: JSONSchema6 = {
         ListProperty: {
           $role: 'expression',
           title: 'ListProperty',
-          description: 'Expression to evaluate',
+          description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
@@ -1321,7 +1350,7 @@ export const appschema: JSONSchema6 = {
         ListProperty: {
           $role: 'expression',
           title: 'ListProperty',
-          description: 'Expression to evaluate',
+          description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
@@ -1446,7 +1475,6 @@ export const appschema: JSONSchema6 = {
       title: 'Microsoft IDialog',
       description: 'Union of components which implement the IDialog interface',
       $role: 'unionType',
-      type: 'object',
       oneOf: [
         {
           title: 'Microsoft.AdaptiveDialog',
@@ -1517,7 +1545,7 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.Foreach',
-          description: 'Step which execute steps per item in a collection.',
+          description: 'Step which executes steps per item in a collection.',
           $ref: '#/definitions/Microsoft.Foreach',
         },
         {
@@ -2106,7 +2134,7 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Property',
           description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          examples: ['value.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2157,8 +2185,8 @@ export const appschema: JSONSchema6 = {
         },
         validations: {
           type: 'array',
-          title: 'validation expressions',
-          description: 'Expressions to valid an input.',
+          title: 'Validation Expressions',
+          description: 'Expressions to validate an input.',
           items: {
             $role: 'expression',
             type: 'string',
@@ -2168,21 +2196,13 @@ export const appschema: JSONSchema6 = {
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Value to return',
+          description: 'The expression that you evaluated for input.',
           type: 'string',
-        },
-        valueProperty: {
-          $role: 'memoryPath',
-          title: 'Value Property',
-          description: 'The property to store the result of the value',
-          examples: ['user.name'],
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "value to return if the value expression can't be evaluated.",
+          description: "Value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
@@ -2190,36 +2210,28 @@ export const appschema: JSONSchema6 = {
           title: 'Always Prompt',
           description:
             'If set to true this will always prompt the user regardless if you already have the value or not.',
-          default: 'false',
-          examples: ['false'],
+          default: false,
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
-          default: 'true',
-          examples: ['true'],
+          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
+          default: true,
+          examples: [true],
         },
-        minValue: {
-          type: 'number',
-          title: 'Mininum value',
-          description: 'The minimum value that is acceptable.  ',
-          default: -2147483648,
-          examples: [0.1],
+        outputFormat: {
+          type: 'string',
+          enum: ['float', 'interger'],
+          title: 'Output Format',
+          description: 'The NumberInput output format.',
+          default: 'float',
         },
-        maxValue: {
-          type: 'number',
-          title: 'Maximum value',
-          description: 'The maximum value that is acceptable.  ',
-          default: 2147483647,
-          examples: [12.5],
-        },
-        precision: {
-          type: 'integer',
-          title: 'Precision',
-          description: 'The precision of decimal points you want. Default is zero, which integers.',
-          default: 0,
-          examples: [2],
+        defaultLocale: {
+          type: 'string',
+          title: 'Default Locale',
+          description: 'The prompts default locale that should be recognized.',
+          default: 'en-us',
         },
       },
       additionalProperties: false,
@@ -2500,57 +2512,6 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.SaveEntity': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'SaveEntity Step',
-      description: 'This is a step which allows you to save a memory property as an entity',
-      type: 'object',
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SaveEntity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
-        },
-        entity: {
-          type: 'string',
-          title: 'Entity',
-          description: 'name of the entity to save',
-        },
-        property: {
-          $role: 'memoryPath',
-          title: 'Property',
-          description: 'Memory expression of the property to save as an entity.',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-    },
     'Microsoft.SendActivity': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Send Activity Step',
@@ -2766,7 +2727,7 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Property',
           description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          examples: ['value.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2794,25 +2755,48 @@ export const appschema: JSONSchema6 = {
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
-        retryPrompt: {
+        unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
-          title: 'Retry Prompt',
-          description: 'The message to send to prompt again.',
+          title: 'Unrecognized Prompt',
+          description: 'The message to send if the last input is not recognized.',
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not recognized or not valid for the input type.',
+          description: 'The message to send to when then input was not valid for the input type.',
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
-        pattern: {
+        maxTurnCount: {
+          type: 'integer',
+          title: 'Max Turn Count',
+          description: 'The max retry count for this prompt.',
+          default: 2147483647,
+          examples: [3],
+        },
+        validations: {
+          type: 'array',
+          title: 'Validation Expressions',
+          description: 'Expressions to validate an input.',
+          items: {
+            $role: 'expression',
+            type: 'string',
+            description: 'String must contain an expression.',
+          },
+        },
+        value: {
+          $role: 'expression',
+          title: 'Value',
+          description: 'The expression that you evaluated for input.',
           type: 'string',
-          title: 'Pattern',
-          description: 'A regular expression pattern which must match',
-          examples: ['\\w{3,30}'],
+        },
+        defaultValue: {
+          $role: 'expression',
+          title: 'Default Value',
+          description: "Value to return if the value expression can't be evaluated.",
+          type: 'string',
         },
         alwaysPrompt: {
           type: 'boolean',
@@ -2821,6 +2805,20 @@ export const appschema: JSONSchema6 = {
             'If set to true this will always prompt the user regardless if you already have the value or not.',
           default: false,
           examples: [false],
+        },
+        allowInterruptions: {
+          type: 'boolean',
+          title: 'Allow Interruptions',
+          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
+          default: true,
+          examples: [true],
+        },
+        outputFormat: {
+          type: 'string',
+          enum: ['none', 'trim', 'lowercase', 'uppercase'],
+          title: 'Output Format',
+          description: 'The TextInput output format.',
+          default: 'none',
         },
       },
       additionalProperties: false,
@@ -2871,9 +2869,9 @@ export const appschema: JSONSchema6 = {
           title: 'Value Type',
           description: 'Value type of the trace activity',
         },
-        valueProperty: {
+        value: {
           $role: 'memoryPath',
-          title: 'Value Property',
+          title: 'Value',
           description: 'Property path to memory object to send as the value of the trace activity',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
