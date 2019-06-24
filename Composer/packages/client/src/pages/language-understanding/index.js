@@ -13,7 +13,7 @@ import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
-import PublishLuisModal from './publish-luis-modal';
+import { PublishLuisModal } from './publish-luis-modal';
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);

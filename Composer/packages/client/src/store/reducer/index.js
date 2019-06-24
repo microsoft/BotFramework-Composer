@@ -10,6 +10,7 @@ const getProjectSuccess = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.luStatus = response.data.luStatus;
   return state;
 };
 
@@ -20,7 +21,6 @@ const updateDialog = (state, { response }) => {
 
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.lgFiles = response.data.lgFiles;
   state.luFiles = response.data.luFiles;
   return state;
 };

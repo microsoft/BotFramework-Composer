@@ -42,6 +42,7 @@ export class BotProject {
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
+    await this.luPublisher.getLuisStatus();
   };
 
   public getIndexes = () => {
@@ -51,6 +52,7 @@ export class BotProject {
       luFiles: this.luIndexer.getLuFiles(),
       botFile: this.getBotFile(),
       schemas: this.getSchemas(),
+      luStatus: this.luPublisher.status,
     };
   };
 
@@ -147,6 +149,14 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content));
+  };
+
+  public checkNeedLuisDeploy = async () => {
+    if (this.luIndexer.getLuFiles().length <= 0) {
+      return false;
+    } else {
+      return !(await this.luPublisher.checkLuisDeployed());
+    }
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

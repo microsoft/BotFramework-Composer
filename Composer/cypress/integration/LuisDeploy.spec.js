@@ -37,7 +37,5 @@ context('Luis Deploy', () => {
     cy.getByText('Publish to Luis').click();
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
     cy.getByText('Publish').click();
-    cy.wait(500);
-    cy.getByText('Try again').should('exist');
   });
 });
