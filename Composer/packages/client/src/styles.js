@@ -7,7 +7,7 @@ export const main = css`
 `;
 
 export const sideBar = isExpand => css`
-  width: ${isExpand ? '200' : '40'}px;
+  width: ${isExpand ? '220' : '45'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
   box-shadow: ${Depths.depth8};
@@ -24,10 +24,10 @@ export const divider = isExpand => css`
 `;
 
 export const globalNav = css`
-  height: 40px;
-  width: 40px;
+  height: 36px;
+  width: 45px;
   text-align: center;
-  line-height: 40px;
+  line-height: 36px;
   cursor: pointer;
   font-size: ${FontSizes.size16};
   color: ${SharedColors.cyanBlue10};
