@@ -39,7 +39,6 @@ export class VisualEditorDemo extends Component {
     console.log('focus node', id);
     this.setState({
       focusPath: this.state.selectedFile + id,
-      obiJson: copyJson(this.state.obiJson),
     });
   }
 
