@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
+import { getDefaultLuisConfig } from './../../utils/luisUtil';
 
 export async function connectBot(dispatch) {
   const path = `${BASEURL}/launcher/connect`;
@@ -26,7 +27,7 @@ export async function connectBot(dispatch) {
 export async function reloadBot(dispatch) {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.get(path);
+    await axios.post(path, getDefaultLuisConfig());
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

@@ -95,33 +95,33 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botStatus, botLoadErrorMsg } = state;
-  const { connectBot, reloadBot, setStorageExplorerStatus } = actions;
+  const { botStatus, luFiles, luStatus } = state;
+  const { connectBot, reloadBot, setStorageExplorerStatus, publishLuis } = actions;
   useEffect(() => {
     actions.fetchProject();
   }, []);
 
+  async function handlePublish(config) {
+    return await publishLuis(config);
+  }
+
   return (
     <Fragment>
-      <Header
-        botStatus={botStatus}
-        connectBot={connectBot}
-        reloadBot={reloadBot}
-        botLoadErrorMsg={botLoadErrorMsg}
-        openStorageExplorer={setStorageExplorerStatus}
-      />
+      <Header />
       <StorageExplorer />
       <div css={main}>
         <div css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
-              iconProps={{ iconName: 'GlobalNavButton' }}
+              iconProps={{
+                iconName: 'GlobalNavButton',
+              }}
               css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
               data-testid={'LeftNavButton'}
-            />
+            />{' '}
             {topLinks.map((link, index) => {
               return (
                 <NavItem
@@ -139,7 +139,7 @@ export function App() {
             })}
           </div>
           <div css={leftNavBottom}>
-            <div css={divider(sideBarExpand)} />
+            <div css={divider(sideBarExpand)} />{' '}
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem
@@ -162,7 +162,9 @@ export function App() {
             botStatus={botStatus}
             connectBot={connectBot}
             reloadBot={reloadBot}
-            botLoadErrorMsg={botLoadErrorMsg}
+            onPublish={handlePublish}
+            luFiles={luFiles}
+            luStatus={luStatus}
             openStorageExplorer={setStorageExplorerStatus}
           />
           <Routes component={Content} />
