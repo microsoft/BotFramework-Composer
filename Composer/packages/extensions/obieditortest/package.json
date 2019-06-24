@@ -37,7 +37,8 @@
     "lodash.omit": "^4.5.0",
     "nanoid": "^2.0.1",
     "office-ui-fabric-react": "^6.165.1",
-    "react-error-boundary": "^1.2.5"
+    "react-error-boundary": "^1.2.5",
+    "shared-menus": "0.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.4",

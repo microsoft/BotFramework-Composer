@@ -40,7 +40,7 @@ context('ToDo Bot', () => {
   it('can open the DeleteToDo dialog', () => {
     cy.openDialog('DeleteToDo');
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Remove').should('exist');
+      cy.getByText('EditArray').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('Microsoft.DeleteProperty').should('exist');

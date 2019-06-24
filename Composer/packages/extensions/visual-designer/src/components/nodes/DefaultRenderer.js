@@ -16,6 +16,24 @@ const DefaultKeyMap = {
   label: 'property',
 };
 
+/**
+ * Create labels out of compound values
+ */
+function makeLabel(data) {
+  switch (data.$type) {
+    case ObiTypes.SetProperty:
+      return `${data.property || '?'} = ${data.value || '?'}`;
+    case ObiTypes.SaveEntity:
+      return `${data.property || '?'} = ${data.entity || '?'}`;
+    case ObiTypes.InitProperty:
+      return `${data.property || '?'} = new ${data.type || '?'}`;
+    case ObiTypes.EditArray:
+      return `${data.changeType} ${data.arrayProperty || '?'}`;
+    default:
+      return '';
+  }
+}
+
 const ContentKeyByTypes = {
   [ObiTypes.SendActivity]: {
     label: 'activity',
@@ -28,6 +46,12 @@ const ContentKeyByTypes = {
     label: 'entity',
     details: 'property',
   },
+  [ObiTypes.InitProperty]: {
+    label: 'property',
+  },
+  [ObiTypes.SetProperty]: {
+    label: 'property',
+  },
   [ObiTypes.ConditionNode]: {
     header: 'Branch',
     label: 'condition',
@@ -35,9 +59,61 @@ const ContentKeyByTypes = {
   [ObiTypes.DeleteProperty]: {
     label: 'property',
   },
+  [ObiTypes.IfCondition]: {
+    label: 'condition',
+  },
+  [ObiTypes.SwitchCondition]: {
+    label: 'condition',
+  },
   [ObiTypes.TextInput]: {
-    label: 'property',
-    details: 'prompt',
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.NumberInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.IntegerInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.FloatInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.ConfirmInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.ChoiceInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
+  [ObiTypes.EndDialog]: {
+    details: 'property',
+    text: 'End this dialog',
+  },
+  [ObiTypes.CancelAllDialogs]: {
+    label: 'eventName',
+    text: 'Cancel all active dialogs',
+  },
+  [ObiTypes.EndTurn]: {
+    text: 'End turn, then wait for another message',
+  },
+  [ObiTypes.RepeatDialog]: {
+    text: 'Restart this dialog',
+  },
+  [ObiTypes.EmitEvent]: {
+    label: 'eventName',
+  },
+  [ObiTypes.CodeStep]: {
+    text: 'Run custom code',
+  },
+  [ObiTypes.HttpRequest]: {
+    label: 'url',
+  },
+  [ObiTypes.TraceActivity]: {
+    label: 'valueProperty',
   },
   [ObiTypes.LogStep]: {
     label: 'text',
@@ -65,6 +141,14 @@ export class DefaultRenderer extends React.Component {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;
       details = data[keyMap.details] || details;
+    }
+
+    if (makeLabel(data)) {
+      label = makeLabel(data);
+    }
+
+    if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
+      label = ContentKeyByTypes[data.$type].text;
     }
 
     if (!header) {

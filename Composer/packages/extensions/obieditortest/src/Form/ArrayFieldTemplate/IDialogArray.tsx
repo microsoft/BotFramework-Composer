@@ -2,8 +2,7 @@ import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { ArrayFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 import formatMessage from 'format-message';
-
-import { buildDialogOptions } from '../utils';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import ArrayItem from './ArrayItem';
 
@@ -21,10 +20,22 @@ const IDialogArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => 
         <PrimaryButton
           type="button"
           menuProps={{
-            items: buildDialogOptions({
-              filter: item => !item.includes('Rule'),
-              onClick: (e, item) => onAddClick(e, item.data),
-            }),
+            items: createStepMenu(
+              [
+                DialogGroup.RESPONSE,
+                DialogGroup.INPUT,
+                DialogGroup.STEP,
+                DialogGroup.MEMORY,
+                DialogGroup.CODE,
+                DialogGroup.LOG,
+              ],
+              true,
+              onAddClick
+            ),
+            // items: buildDialogOptions({
+            //   filter: item => !item.includes('Rule'),
+            //   onClick: (e, item) => onAddClick(e, item.data),
+            // }),
             onItemClick: (e, item) => {
               const newItem = item && item.data;
 
