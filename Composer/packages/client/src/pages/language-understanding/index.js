@@ -8,6 +8,7 @@ import { navigate } from '@reach/router';
 import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
+import { OpenAlertModal } from '../../components/Modal/Alert';
 import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
@@ -22,11 +23,18 @@ export const LUPage = props => {
   const [publishModalOpen, setPublishModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
+  const [luFile, setLuFile] = useState(null);
 
   const subPath = props['*'];
 
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.name === subPath);
+
+  useEffect(() => {
+    if (luFiles.length && activeDialog) {
+      setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
+    }
+  }, [luFiles, activeDialog]);
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
@@ -81,6 +89,10 @@ export const LUPage = props => {
   }, [activePath, dialogs, luFiles]);
 
   function onSelect(id) {
+    if (newContent) {
+      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
+      return;
+    }
     if (id === '_all') {
       navigate(`/language-understanding`);
     } else {
@@ -93,6 +105,7 @@ export const LUPage = props => {
   }
 
   function discardChanges() {
+    setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
     setNewContent(null);
   }
 
@@ -119,7 +132,7 @@ export const LUPage = props => {
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>User say..</div>
+        <div>User says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
@@ -160,7 +173,13 @@ export const LUPage = props => {
             data-testid={'dialogNavTree'}
           />
         </div>
-        <Content activeDialog={activeDialog} onEdit={onTableViewWantEdit} textMode={textMode} onChange={onChange} />
+        <Content
+          file={luFile}
+          activeDialog={activeDialog}
+          onEdit={onTableViewWantEdit}
+          textMode={textMode}
+          onChange={onChange}
+        />
       </div>
       {publishModalOpen && (
         <PublishLuisModal

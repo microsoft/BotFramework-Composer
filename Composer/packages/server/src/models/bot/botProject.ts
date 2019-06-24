@@ -126,6 +126,7 @@ export class BotProject {
     }
     await this._updateFile(luFile.relativePath, content);
     this.luPublisher.update(luFile.relativePath);
+    await this.luIndexer.index(this.files); // ludown parser need re-index
     return this.luIndexer.getLuFiles();
   };
 

@@ -2,11 +2,13 @@
 import { jsx } from '@emotion/core';
 import { debounce } from 'lodash';
 import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
+import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
+import { OpenAlertModal } from '../../components/Modal/Alert';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 
@@ -19,6 +21,7 @@ export const LGPage = props => {
   const { lgFiles, dialogs } = state;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
+  const [lgFile, setLgFile] = useState(null);
 
   const subPath = props['*'];
 
@@ -27,8 +30,10 @@ export const LGPage = props => {
 
   // for now, one bot only have one lg file by default.
   // all dialog share one lg file.
-  const lgFile = useMemo(() => {
-    return lgFiles.length ? lgFiles[0] : null;
+  useEffect(() => {
+    if (lgFiles.length) {
+      setLgFile({ ...lgFiles[0] });
+    }
   }, [lgFiles]);
 
   const navLinks = useMemo(() => {
@@ -79,11 +84,16 @@ export const LGPage = props => {
   }, [activePath, dialogs, lgFiles]);
 
   function onSelect(id) {
+    if (newContent) {
+      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
+      return;
+    }
     if (id === '_all') {
       navigate(`/language-generation`);
     } else {
       navigate(`/language-generation/${id}`);
     }
+    setTextMode(false); // back to table view
   }
 
   function onChange(newContent) {
@@ -91,7 +101,7 @@ export const LGPage = props => {
   }
 
   function discardChanges() {
-    setLgFile({ ...lgFile });
+    setLgFile({ ...lgFiles[0] });
     setNewContent(null);
   }
 
