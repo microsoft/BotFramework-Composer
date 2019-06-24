@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "allowJs": true,
+    "noImplicitAny": false,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*",
+    "./__tests__/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+}

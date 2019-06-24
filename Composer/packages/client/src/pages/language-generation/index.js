@@ -89,7 +89,6 @@ export const LGPage = props => {
   }
 
   function discardChanges() {
-    setLgFile({ ...lgFile });
     setNewContent(null);
   }
 
