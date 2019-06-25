@@ -151,7 +151,7 @@ export class BotProject {
   };
 
   public checkNeedLuisDeploy = async () => {
-    if (this.luIndexer.getLuFiles().length <= 0) {
+    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
       return false;
     } else {
       return !(await this.luPublisher.checkLuisDeployed());
