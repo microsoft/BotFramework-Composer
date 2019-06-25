@@ -5,7 +5,7 @@ import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'reac
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal } from '../../components/Modal/Alert';
@@ -152,11 +152,6 @@ export const LUPage = props => {
             checked={textMode}
             disabled={activePath === '_all'}
             onChange={() => setTextMode(!textMode)}
-          />
-          <PrimaryButton
-            data-automation-id="Publish"
-            onClick={() => setPublishModalOpen(true)}
-            text={formatMessage('Publish to Luis')}
           />
         </div>
       </div>
