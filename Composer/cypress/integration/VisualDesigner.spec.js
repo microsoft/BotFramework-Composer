@@ -24,9 +24,7 @@ context('Visual Designer', () => {
       cy.getByText('Flow').click();
       cy.getByText('End this turn').click();
 
-      cy.get('.node-renderer-container--focused').within(() => {
-        cy.getByText('EndTurn').should('exist');
-      });
+      cy.getByText('EndTurn').should('exist');
     });
   });
 });

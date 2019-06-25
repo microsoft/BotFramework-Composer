@@ -13,8 +13,8 @@ context('Saving As', () => {
     cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoLuisBot.main').should('exist');
-      cy.getByText('ToDoLuisBot.ShowItems').should('exist');
+      cy.getByText('ToDoLuisBot').should('exist');
+      cy.getByText('ShowItems').should('exist');
     });
   });
 });
