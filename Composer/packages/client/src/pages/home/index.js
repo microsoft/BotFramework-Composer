@@ -101,7 +101,7 @@ const templates = [
 export const Home = () => {
   return (
     <div css={outline}>
-      <div css={title}>Are you real? </div>
+      <div css={title}>&quot;Are you real?&quot;</div>
       <div css={introduction}>
         <div css={introTitle}>
           <div css={introTitleLeft}> Creating real conversations for real people. </div>
