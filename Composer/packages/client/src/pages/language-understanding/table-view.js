@@ -95,7 +95,8 @@ export default function TableView(props) {
         key: 'phrases',
         name: formatMessage('Sample Phrases'),
         fieldName: 'phrases',
-        minWidth: 500,
+        minWidth: 100,
+        maxWidth: 500,
         isResizable: true,
         data: 'string',
         onRender: item => {
@@ -111,6 +112,8 @@ export default function TableView(props) {
         fieldName: 'definedIn',
         minWidth: 100,
         maxWidth: 200,
+        isResizable: true,
+        isCollapsable: true,
         data: 'string',
         onRender: item => {
           const name = item.fileId;
@@ -127,6 +130,8 @@ export default function TableView(props) {
         fieldName: 'beenUsed',
         minWidth: 100,
         maxWidth: 100,
+        isResizable: true,
+        isCollapsable: true,
         data: 'string',
         onRender: item => {
           return item.used ? <IconButton iconProps={{ iconName: 'Accept' }} /> : <div />;
@@ -137,6 +142,7 @@ export default function TableView(props) {
         name: '',
         minWidth: 50,
         maxWidth: 50,
+        isResizable: false,
         fieldName: 'buttons',
         data: 'string',
         onRender: (item, index) => {
