@@ -34,7 +34,6 @@ export const IconMenu = ({ iconName, iconSize, iconStyles, label, menuItems, men
 
   return (
     <OverflowSet
-      styles={{ position: 'absolute', top: 0 }}
       vertical
       overflowItems={menuItems}
       onRenderOverflowButton={_onRenderOverflowButton}

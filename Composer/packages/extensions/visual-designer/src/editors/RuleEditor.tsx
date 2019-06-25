@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
+import { defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { transformObiRules } from '../transformers/transformObiRules';
 
@@ -48,5 +48,4 @@ export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
   );
 };
 
-RuleEditor.propTypes = NodeProps;
 RuleEditor.defaultProps = defaultNodeProps;

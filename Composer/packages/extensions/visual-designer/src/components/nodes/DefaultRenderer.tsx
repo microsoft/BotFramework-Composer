@@ -4,6 +4,7 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { getDialogGroupByType } from '../../shared/appschema';
 import { getElementColor } from '../../shared/elementColors';
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 
@@ -34,7 +35,11 @@ function makeLabel(data) {
   }
 }
 
-const ContentKeyByTypes = {
+const ContentKeyByTypes: {
+  [key: string]: {
+    [key: string]: string;
+  };
+} = {
   [ObiTypes.SendActivity]: {
     label: 'activity',
   },
@@ -126,21 +131,21 @@ const ContentKeyByTypes = {
  * more events like 'Expand' or 'Open', it should define a renderer it self to
  * control its behavior.
  */
-export class DefaultRenderer extends React.Component {
+
+export class DefaultRenderer extends React.Component<NodeProps, {}> {
+  defaultProps = defaultNodeProps;
   render() {
     const { id, data, onEvent } = this.props;
     let header = getFriendlyName(data),
-      label = '',
-      details = '';
+      label = '';
 
-    const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
+    const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : { label: '', details: '' };
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
     if (keyMap) {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;
-      details = data[keyMap.details] || details;
     }
 
     if (makeLabel(data)) {
@@ -162,7 +167,6 @@ export class DefaultRenderer extends React.Component {
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         icon={icon}
         label={label}
-        details={details}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);
         }}
@@ -170,6 +174,3 @@ export class DefaultRenderer extends React.Component {
     );
   }
 }
-
-DefaultRenderer.propTypes = NodeProps;
-DefaultRenderer.defaultProps = defaultNodeProps;

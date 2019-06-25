@@ -51,7 +51,7 @@ const svgByIconName = {
   User: UserSVG,
 };
 
-export const Icon = ({ icon, color, size, fill = 'white' }) =>
+export const Icon = ({ icon, color, size = 18, fill = 'white' }) =>
   svgByIconName[icon] ? (
     <span
       style={{

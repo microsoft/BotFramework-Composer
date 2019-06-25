@@ -5,7 +5,7 @@ function getScrollParent(node) {
 
   const isNodeOverflow = node.scrollHeight > node.clientHeight || node.scrollWidth > node.clientWidth;
   // REF: https://github.com/jquery/jquery-ui/blob/master/ui/scroll-parent.js
-  const isNodeScrollable = getComputedStyle(node).overflow.match(/(auto|scroll|hidden)/);
+  const isNodeScrollable = (getComputedStyle(node).overflow || '').match(/(auto|scroll|hidden)/);
 
   if (isNodeOverflow && isNodeScrollable) {
     return node;

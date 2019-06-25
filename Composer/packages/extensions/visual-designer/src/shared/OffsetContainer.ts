@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export class OffsetContainer extends React.Component {
+type Props = {
+  offset: any;
+  styles: object;
+};
+
+export class OffsetContainer extends React.Component<Props, object> {
+  static defaultProps = {
+    styles: {},
+  };
   render() {
     const { offset, children, styles } = this.props;
     if (!offset) return children;

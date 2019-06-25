@@ -5,7 +5,7 @@ import { normalizeObiStep } from './helpers/elementBuilder';
 
 export function transformObiRules(input, parentPath = '') {
   if (!input) return {};
-  const result = {};
+  const result: any = {};
 
   const prefix = parentPath ? parentPath + '.' : '';
   const steps = input.steps || [];

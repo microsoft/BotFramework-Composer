@@ -8,7 +8,7 @@ const ElseBranchKey = 'elseSteps';
 export function transformIfCondtion(input, jsonpath) {
   if (!input || input.$type !== ObiTypes.IfCondition) return {};
 
-  const result = {
+  const result: any = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
       $type: ObiTypes.ConditionNode,

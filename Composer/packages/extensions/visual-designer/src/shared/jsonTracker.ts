@@ -1,6 +1,6 @@
 import { cloneDeep, get, set } from 'lodash';
 
-function locateNode(dialog, path) {
+function locateNode(dialog: { [key: string]: number }, path) {
   if (!path) return null;
 
   const selectors = path.split('.');
@@ -13,8 +13,8 @@ function locateNode(dialog, path) {
   }
 
   // Locate the manipulated json node
-  let parentData = null;
-  let currentKey = null;
+  let parentData: object = {};
+  let currentKey: number = 0;
   let currentData = dialog;
 
   for (const selector of selectors) {

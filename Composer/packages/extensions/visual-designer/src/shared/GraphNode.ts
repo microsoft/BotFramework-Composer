@@ -12,11 +12,11 @@ export class GraphNode {
     this.id = id;
     this.data = data;
   }
-}
 
-GraphNode.fromIndexedJson = indexedJson => {
-  if (!indexedJson) return null;
-  const node = new GraphNode(indexedJson.id, indexedJson.json);
-  node.boundary = measureJsonBoundary(indexedJson.json);
-  return node;
-};
+  static fromIndexedJson(indexedJson) {
+    if (!indexedJson) return null;
+    const node = new GraphNode(indexedJson.id, indexedJson.json);
+    node.boundary = measureJsonBoundary(indexedJson.json);
+    return node;
+  }
+}

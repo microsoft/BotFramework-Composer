@@ -19,7 +19,7 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '9px',
-    boxSizing: 'border-box',
+    boxSizing: 'border-box' as 'border-box',
   };
   return (
     <div

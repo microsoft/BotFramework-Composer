@@ -19,7 +19,7 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) => {
+export const FormCard = ({ header, corner, label, icon = 'MessageBot', nodeColors, onClick }) => {
   const { themeColor, iconColor } = nodeColors;
   return (
     <div
@@ -57,7 +57,7 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
       >
         <div
           style={{
-            fontWeight: '400',
+            fontWeight: 400,
             paddingLeft: '10px',
             margin: '5px',
             fontSize: '14px',
@@ -67,7 +67,7 @@ export const FormCard = ({ header, corner, label, icon, nodeColors, onClick }) =
           }}
         >
           <div style={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon || 'MessageBot'} color={iconColor} size={30} />
+            <Icon icon={icon} color={iconColor} size={30} />
           </div>
           <div
             style={{
