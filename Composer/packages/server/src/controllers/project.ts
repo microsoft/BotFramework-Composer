@@ -3,17 +3,30 @@ import { Request, Response } from 'express';
 import ProjectService from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
+import StorageService from '../services/storage';
+import settings from '../settings/settings.json';
+
+import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
+  let { templateId } = req.body;
+  const { name, description, storageId } = req.body;
+  if (templateId === '') {
+    templateId = 'EmptyBot';
+  }
+
   const locationRef: LocationRef = {
-    storageId: req.body.storageId,
-    path: req.body.path,
+    storageId,
+    path: Path.resolve(settings.development.defaultFolder, name),
   };
+
   try {
-    const newProjRef = await AssectService.manager.copyProjectTemplateTo(req.body.templateId, locationRef);
+    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef);
     await ProjectService.openProject(newProjRef);
     if (ProjectService.currentBotProject !== undefined) {
-      const project = await ProjectService.currentBotProject.getIndexes();
+      await ProjectService.currentBotProject.updateBotInfo(name, description);
+      await ProjectService.currentBotProject.index();
+      const project = ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
     }
   } catch (err) {
@@ -37,15 +50,19 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
-  const locationRef: LocationRef = {
-    storageId: req.body.storageId,
-    path: req.body.path,
-  };
+  //find *.botproj
+  const storage = StorageService.getStorageClient(req.body.storageId);
+  const botprojPaths = await storage.glob('**/*.botproj', req.body.path);
 
-  if (!locationRef.path.endsWith('.botproj')) {
+  if (botprojPaths.length !== 1) {
     res.status(400).json('unsupported project file type, expect .botproj');
     return;
   }
+
+  const locationRef: LocationRef = {
+    storageId: req.body.storageId,
+    path: Path.join(req.body.path, botprojPaths[0]),
+  };
 
   try {
     await ProjectService.openProject(locationRef);
@@ -61,19 +78,23 @@ async function openProject(req: Request, res: Response) {
 }
 
 async function saveProjectAs(req: Request, res: Response) {
-  if (!req.body.storageId || !req.body.path) {
+  if (!req.body.storageId || !req.body.name) {
     res.status(400).json('parameters not provided, require stoarge id and path');
     return;
   }
 
+  const { name, description, storageId } = req.body;
+
   const locationRef: LocationRef = {
-    storageId: req.body.storageId,
-    path: req.body.path,
+    storageId,
+    path: Path.resolve(settings.development.defaultFolder, name),
   };
 
   try {
     await ProjectService.saveProjectAs(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
+      await ProjectService.currentBotProject.updateBotInfo(name, description);
+      await ProjectService.currentBotProject.index();
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({ ...project });
     } else {

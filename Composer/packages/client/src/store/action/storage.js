@@ -2,13 +2,6 @@ import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-export async function setStorageExplorerStatus(dispatch, status) {
-  dispatch({
-    type: ActionTypes.SET_STORAGEEXPLORER_STATUS,
-    payload: { status },
-  });
-}
-
 export async function fetchStorages(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
@@ -85,5 +78,13 @@ export async function fetchFolderItemsByPath(dispatch, id, path) {
       payload: { status: 'failure' },
       error: err,
     });
+  }
+}
+
+export async function getAllBotsFromFixedLocation() {
+  try {
+    return (await axios.get(`${BASEURL}/storages/fixed`)).data.children;
+  } catch (err) {
+    console.log(err);
   }
 }

@@ -1,26 +1,24 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "generator": "common.lg",
-    "recognizer": {
-      "$type": "Microsoft.RegexRecognizer",
-      "intents": {
-        "Steps": "Steps|01",
-        "EndTurn": "EndTurn|02",
-        "IfCondition": "IfCondition|03",
-        "EditArray": "EditArray|04",
-        "EndDialog": "EndDialog|05",
-        "HttpRequest": "HttpRequest|06",
-        "SwitchCondition": "SwitchCondition|07",
-        "RepeatDialog": "RepeatDialog|08",
-        "TraceAndLog": "TraceAndLog|trace|log|09",
-        "EditSteps": "EditSteps|10",
-        "ReplaceDialog": "ReplaceDialog|11",
-        "EmitEvent": "EmitEvent|12",
-        "CancelIntent":"cancel"
-      }
-    },
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "Steps": "Steps|01",
+      "EndTurn": "EndTurn|02",
+      "IfCondition": "IfCondition|03",
+      "EditArray": "EditArray|04",
+      "EndDialog": "EndDialog|05",
+      "HttpRequest": "HttpRequest|06",
+      "SwitchCondition": "SwitchCondition|07",
+      "RepeatDialog": "RepeatDialog|08",
+      "TraceAndLog": "TraceAndLog|trace|log|09",
+      "EditSteps": "EditSteps|10",
+      "ReplaceDialog": "ReplaceDialog|11",
+      "EmitEvent": "EmitEvent|12",
+      "CancelIntent": "cancel"
+    }
+  },
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
@@ -157,5 +155,12 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "generator": "common.lg",
+  "$designer": {
+    "createdAt": "2019-06-27T04:55:41.170Z",
+    "updatedAt": "2019-06-27T04:55:41.192Z",
+    "id": "748886"
+  }
 }

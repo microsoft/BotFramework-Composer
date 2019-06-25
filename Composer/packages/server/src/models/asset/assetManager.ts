@@ -47,11 +47,17 @@ export class AssetManager {
 
       await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
 
-      const botprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
-      if (botprojPaths && botprojPaths.length === 1) {
+      const oldBotprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
+
+      if (oldBotprojPaths && oldBotprojPaths.length === 1) {
+        const oldBotprojPath = Path.join(ref.path, oldBotprojPaths[0]);
+        const botPath = Path.dirname(oldBotprojPath);
+        const botName = Path.basename(ref.path);
+        const newBotprojPath = Path.join(botPath, `${botName}.botproj`);
+        await dstStorage.rename(oldBotprojPath, newBotprojPath);
         return {
           storageId: ref.storageId,
-          path: Path.join(ref.path, botprojPaths[0]),
+          path: newBotprojPath,
         };
       } else {
         throw new Error('more than one botproj');

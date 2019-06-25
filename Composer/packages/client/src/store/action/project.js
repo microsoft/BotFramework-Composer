@@ -24,10 +24,12 @@ export async function fetchProject(dispatch) {
   }
 }
 
-export async function openBotProject(dispatch, storageId, absolutePath) {
+export async function openBotProject(dispatch, absolutePath) {
+  //set storageId = 'default' now. Some other storages will be added later.
+  const storageId = 'default';
   try {
     const data = {
-      storageId: storageId,
+      storageId,
       path: absolutePath,
     };
     const response = await axios.put(`${BASEURL}/projects/opened`, data);
@@ -49,11 +51,14 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
   }
 }
 
-export async function saveProjectAs(dispatch, storageId, absolutePath) {
+export async function saveProjectAs(dispatch, name, description) {
+  //set storageId = 'default' now. Some other storages will be added later.
+  const storageId = 'default';
   try {
     const data = {
-      storageId: storageId,
-      path: absolutePath,
+      storageId,
+      name,
+      description,
     };
     const response = await axios.post(`${BASEURL}/projects/opened/project/saveAs`, data);
     const dialogs = response.data.dialogs;
@@ -74,12 +79,15 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
   }
 }
 
-export async function createProject(dispatch, storageId, absolutePath, templateId) {
+export async function createProject(dispatch, templateId, name, description) {
+  //set storageId = 'default' now. Some other storages will be added later.
+  const storageId = 'default';
   try {
     const data = {
-      storageId: storageId,
-      path: absolutePath,
+      storageId,
       templateId,
+      name,
+      description,
     };
     const response = await axios.post(`${BASEURL}/projects`, data);
     const dialogs = response.data.dialogs;

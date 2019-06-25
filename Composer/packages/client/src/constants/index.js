@@ -59,7 +59,6 @@ export const ActionTypes = {
   SET_STORAGE: 'SET_STORAGE',
   GET_STORAGE_SUCCESS: 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE: 'GET_STORAGE_FAILURE',
-  SET_STORAGEEXPLORER_STATUS: 'SET_STORAGEEXPLORER_STATUS',
   SET_STORAGEFILE_FETCHING_STATUS: 'SET_STORAGEFILE_FETCHING_STATUS',
   GET_STORAGEFILE_SUCCESS: 'GET_STORAGEFILE_SUCCESS',
   GET_STORAGEFILE_FAILURE: 'GET_STORAGEFILE_FAILURE',
@@ -78,7 +77,8 @@ export const Tips = {
     'Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)'
   ),
   ENVIRONMENT: formatMessage(
-    'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
+    'When multiple people are working with models you want to be able to work with mo' +
+      'dels independently from each other tied to the source control.'
   ),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
@@ -93,7 +93,7 @@ export const Links = {
 
 export const Text = {
   LUISDEPLOY: formatMessage(
-    'To use your language model, first publish the latest intents and examples to your LUIS instance.'
+    'To use your language model, first publish the latest intents and examples to you' + 'r LUIS instance.'
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
@@ -117,6 +117,26 @@ export const OpenStatus = {
   SAVEAS: 'Save as',
   OPEN: 'Open',
   CLOSE: '',
+};
+
+export const Steps = {
+  CREATE: 'CREATE',
+  DEFINE: 'DEFINE',
+  LOCATION: 'LOCATION',
+  NONE: 'NONE',
+};
+
+export const DialogInfo = {
+  CREATE_NEW_BOT: {
+    title: formatMessage('Create from scratch?'),
+    subText: formatMessage('You can create a new skill from scratch with Designer, or import an existing ski' + 'll.'),
+  },
+  DEFINE_CONVERSATION_OBJECTIVE: {
+    title: formatMessage('Define conversation objective'),
+    subText: formatMessage(
+      'What can the user accomplish through this conversation? For example, booka table' + ', order a coffee etc.'
+    ),
+  },
 };
 
 export const SupportedFileTypes = [

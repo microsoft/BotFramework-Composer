@@ -31,7 +31,7 @@ router.post('/projects/opened/project/saveAs', ErrorHandler(ProjectController.sa
 router.get('/storages', ErrorHandler(StorageController.getStorageConnections));
 router.post('/storages', ErrorHandler(StorageController.createStorageConnection));
 router.get('/storages/:storageId/blobs/:path(*)', ErrorHandler(StorageController.getBlob));
-
+router.get('/storages/fixed', ErrorHandler(StorageController.getAllBots));
 // connector
 router.get('/launcher/connect', ErrorHandler(BotConnectorController.connect));
 router.post('/launcher/sync', ErrorHandler(BotConnectorController.sync));

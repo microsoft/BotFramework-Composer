@@ -49,10 +49,6 @@ const getStoragesSuccess = (state, { response }) => {
   return (state.storages = response.data);
 };
 
-const setStorageExplorerStatus = (state, { status }) => {
-  return (state.storageExplorerStatus = status);
-};
-
 const getStorageFileSuccess = (state, { response }) => {
   const focusedStorageFolder = response.data;
   focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
@@ -126,7 +122,6 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
-  [ActionTypes.SET_STORAGEEXPLORER_STATUS]: setStorageExplorerStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
