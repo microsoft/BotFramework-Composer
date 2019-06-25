@@ -11,6 +11,7 @@
             "ConfirmInput": "ConfirmInput|03",
             "ChoiceInput": "ChoiceInput|04",
             "AttachmentInput": "AttachmentInput|05",
+            "DateTimeInput": "DateTimeInput|06",
             "CancelIntent": "cancel"
         }
     },
@@ -32,6 +33,16 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "NumberInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "DateTimeInput",
+            "steps": [
+                 {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "DateTimeInput"
                 }
             ]
         },

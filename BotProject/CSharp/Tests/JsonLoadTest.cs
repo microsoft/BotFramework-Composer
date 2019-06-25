@@ -234,8 +234,6 @@ namespace Tests
             .StartTestAsync();
         }
 
-
-
         [TestMethod]
         public async Task Inputs_01TextInput()
         {
@@ -295,6 +293,17 @@ namespace Tests
             .StartTestAsync();
         }
 
+        [TestMethod]
+        public async Task Inputs_06DateTimeInput()
+        {
+            await BuildTestFlow(getSingleSample("Inputs_Samples"))
+            .SendConversationUpdate()
+            .Send("06")
+                .AssertReply("Please enter a date.")
+            .Send("June 1st 2019")
+                .AssertReply("You entered: 2019-06-01")
+            .StartTestAsync();
+        }
 
         private TestFlow BuildTestFlow(string resourceName, bool sendTrace = false)
         {
@@ -312,12 +321,13 @@ namespace Tests
 
             var resource = resourceExplorer.GetResource(resourceName);
             var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
+            DialogManager dm = new DialogManager(dialog);
 
             return new TestFlow(adapter, async (turnContext, cancellationToken) =>
             {
                 if (dialog is AdaptiveDialog planningDialog)
                 {
-                    await planningDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+                    await dm.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
                 }
             });
         }

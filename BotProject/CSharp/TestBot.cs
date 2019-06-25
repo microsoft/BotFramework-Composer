@@ -25,6 +25,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private AdaptiveDialog rootDialog;
         private readonly ResourceExplorer resourceExplorer;
         private UserState userState;
+        private DialogManager dialogManager;
         private ConversationState conversationState;
         private IStatePropertyAccessor<DialogState> dialogState;
         private Source.IRegistry registry;
@@ -52,16 +53,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
             rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, registry);
+            this.dialogManager = new DialogManager(rootDialog);
         }
 
-        protected override Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
+        public override Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return rootDialog.OnTurnAsync((ITurnContext)turnContext, null, cancellationToken);
-        }
-
-        protected async override Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
-        {
-            await rootDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+            return this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
         }
     }
 }

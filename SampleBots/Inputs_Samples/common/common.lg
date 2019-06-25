@@ -1,11 +1,12 @@
 # help
 - ```
     I can show you examples on how to use Steps, You can enter number 01-04
-    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput]
+    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput]
 	01 - TextInput
 	02 - NumberInput
 	03 - ConfirmInput
 	04 - ChoiceInput
 	05 - AttachmentInput
+	06 - DateTimeInput
     ```
 
