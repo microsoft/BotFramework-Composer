@@ -128,7 +128,6 @@ export class BotProject {
     }
     await this._updateFile(luFile.relativePath, content);
     this.luPublisher.update(luFile.relativePath);
-    await this.luIndexer.index(this.files); // ludown parser need re-index
     return this.luIndexer.getLuFiles();
   };
 
@@ -226,7 +225,7 @@ export class BotProject {
       relativePath: relativePath,
     });
 
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // update file in this project
@@ -241,7 +240,7 @@ export class BotProject {
     await this.fileStorage.writeFile(absolutePath, content);
 
     this.files[index].content = content;
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // remove file in this project
@@ -256,11 +255,11 @@ export class BotProject {
     await this.fileStorage.removeFile(absolutePath);
 
     this.files.splice(index, 1);
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // re index according to file change in a certain path
-  private reindex = (filePath: string) => {
+  private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
@@ -271,7 +270,7 @@ export class BotProject {
         this.lgIndexer.index(this.files);
         break;
       case '.lu':
-        this.luIndexer.index(this.files);
+        await this.luIndexer.index(this.files); // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);

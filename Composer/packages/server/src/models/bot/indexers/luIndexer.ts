@@ -7,16 +7,11 @@ import { FileInfo, LUFile } from './../interface';
 const parseContent = async (content: string) => {
   const log = false;
   const locale = 'en-us';
-  return new Promise((resolve, reject) => {
-    ludown.parser
-      .parseFile(content, log, locale)
-      .then((res: any) => {
-        resolve(res);
-      })
-      .catch((err: any) => {
-        reject(err);
-      });
-  });
+  try {
+    return await ludown.parser.parseFile(content, log, locale);
+  } catch (e) {
+    return e;
+  }
 };
 
 export class LUIndexer {
