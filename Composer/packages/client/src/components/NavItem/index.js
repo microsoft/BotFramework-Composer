@@ -2,11 +2,10 @@
 import { jsx } from '@emotion/core';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
-import { IconButton, CommandBarButton, FocusZone } from 'office-ui-fabric-react';
+import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
 import { useState } from 'react';
-import formatMessage from 'format-message';
 
-import { link, outer, iconButton, commandBarButton } from './styles';
+import { link, outer, commandBarButton } from './styles';
 
 export const NavItem = props => {
   const { to, exact, labelHide, iconName, labelName, targetUrl, underTest } = props;
@@ -26,32 +25,21 @@ export const NavItem = props => {
           const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
           setActive(isActive);
         }}
-        aria-pressed="false"
-        aria-hidden="true"
-        aria-disable="true"
         data-testid={'LeftNav-CommandBarButton' + labelName}
+        disabled={underTest}
+        aria-disabled={underTest}
+        aria-label={labelName}
       >
-        <div css={outer(!labelHide, active)}>
-          {labelHide ? (
-            <IconButton
-              iconProps={{
-                iconName,
-              }}
-              ariaLabel={labelName}
-              styles={iconButton}
-              disabled={underTest}
-            />
-          ) : (
-            <CommandBarButton
-              iconProps={{
-                iconName,
-              }}
-              ariaHidden={underTest}
-              text={formatMessage(labelName)}
-              styles={commandBarButton}
-              disabled={underTest}
-            />
-          )}
+        <div css={outer} aria-hidden="true">
+          <CommandBarButton
+            iconProps={{
+              iconName,
+            }}
+            text={labelName}
+            styles={commandBarButton(!labelHide)}
+            disabled={underTest}
+            ariaHidden
+          />
         </div>
       </Link>
     </FocusZone>

@@ -21,7 +21,7 @@ export const link = (active, underTest) => css`
     &:hover {
       background-color: ${NeutralColors.gray30};
     }
-    
+
     &:focus {
       outline: none;
       .ms-Fabric--isFocusVisible &::after {
@@ -33,7 +33,7 @@ export const link = (active, underTest) => css`
         outline: rgb(102, 102, 102) solid 1px;
       }
     }
-    
+
     ${active &&
       `background-color: ${NeutralColors.gray40};
       &:hover {
@@ -46,42 +46,26 @@ export const link = (active, underTest) => css`
   `}
 `;
 
-export const outer = isExpand => css`
+export const outer = css`
   display: flex;
   width: 220px;
-  justify-content: flex-end;
-  transform: translateX(${isExpand ? '0px' : '-175px'});
-  transition: transform 0.3s ease-in-out;
   background-color: transparent;
 `;
 
-export const iconButton = {
-  root: {
-    color: 'currentColor',
-    height: '36px',
-    width: '45px',
-    fontSize: `${FontSizes.size14}`,
-    backgroundColor: 'transparent',
-  },
-  icon: {
-    fontSize: `${FontSizes.size16}`,
-  },
-};
-
-export const commandBarButton = {
+export const commandBarButton = () => ({
   root: {
     color: '#000000',
     height: '36px',
     width: '220px',
     fontSize: `${FontSizes.size14}`,
     paddingLeft: '0px',
+    paddingRight: '0px',
     marginLeft: '0px',
     backgroundColor: 'transparent',
   },
   icon: {
     color: '#000000',
-    width: '45px',
-    paddingLeft: '0px',
+    padding: '0 13px',
     marginLeft: '0px',
     boxSizing: 'border-box',
     fontSize: `${FontSizes.size16}`,
@@ -89,5 +73,6 @@ export const commandBarButton = {
   textContainer: {
     textAlign: 'left',
     zIndex: '1',
+    // display: isExpand ? 'inline-block' : 'none',
   },
-};
+});
