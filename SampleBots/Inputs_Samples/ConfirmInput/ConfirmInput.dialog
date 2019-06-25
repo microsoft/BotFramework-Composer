@@ -1,0 +1,20 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.ConfirmInput",
+            "property": "user.confirmed",        
+            "prompt": "yes or no",
+	        "unrecognizedPrompt": "I need a yes or no.",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "confirmation: {user.confirmed}"
+        },
+	    {
+            "$type": "Microsoft.RepeatDialog"
+        }
+    ]
+}

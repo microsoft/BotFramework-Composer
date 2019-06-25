@@ -7,9 +7,9 @@ context('check language understanding page', () => {
   });
 
   it('can open language understanding page', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuis');
+    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot');
     cy.get('[data-testid="LUEditor"]').within(() => {
-      cy.getByText('ToDoLuisBot.main.lu').should('exist');
+      cy.getByText('ToDoLuisBot.lu').should('exist');
     });
   });
 });

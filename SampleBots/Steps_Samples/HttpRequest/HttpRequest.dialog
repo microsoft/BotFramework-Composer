@@ -1,0 +1,72 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
+      "property": "user.petname"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Great! Your pet's name is {user.petname}"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
+      "property": "user.petid"
+    },
+    {
+      "$type": "Microsoft.HttpRequest",
+      "url": "http://petstore.swagger.io/v2/pet",
+      "method": "POST",
+      "header": {
+        "test": "test",
+        "test2": "test2"
+      },
+      "body": {
+        "id": "{user.petid}",
+        "category": {
+          "id": 0,
+          "name": "string"
+        },
+        "name": "{user.petname}",
+        "photoUrls": ["string"],
+        "tags": [
+          {
+            "id": 0,
+            "name": "string"
+          }
+        ],
+        "status": "available"
+      },
+      "property": "user.postResponse"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Done! You have added a pet named \"{user.postResponse.name}\" with id \"{user.postResponse.id}\""
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",
+      "property": "user.id"
+    },
+    {
+      "$type": "Microsoft.HttpRequest",
+      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
+      "method": "GET",
+      "property": "user.getResponse"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Great! I found your pet named \"{user.getResponse.name}\""
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-05-18T22:37:53.053Z",
+    "updatedAt": "2019-05-18T22:37:53.060Z",
+    "id": "351884",
+    "name": "11 - HttpRequest",
+    "description": "This is a bot that demonstrates the HttpRequest concept in Adaptive Dialogs."
+  }
+}
