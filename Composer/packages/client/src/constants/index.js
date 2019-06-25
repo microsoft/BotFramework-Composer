@@ -68,15 +68,15 @@ export const ActionTypes = {
 };
 
 export const Tips = {
-  PROJECTNAME: formatMessage(
+  PROJECT_NAME: formatMessage(
     'Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)'
   ),
   ENVIRONMENT: formatMessage(
     'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
   ),
-  AUTHORINGKAY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  AUTHORINGREGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
-  DEFAULTLANGUAGE: formatMessage(
+  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
+  AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
+  DEFAULT_LANGUAGE: formatMessage(
     'Configures default language model to use if there is no culture code in the file name (Default:en-us)'
   ),
 };
@@ -94,9 +94,10 @@ export const Text = {
 };
 
 export const LuisConfig = {
-  AUTHORINGKEY: 'authoringKey',
+  STORAGE_KEY: 'luisConfig',
+  AUTHORING_KEY: 'authoringKey',
   ENVIRONMENT: 'environment',
-  PROJECTNAME: 'name',
+  PROJECT_NAME: 'name',
 };
 
 export const FileTypes = {

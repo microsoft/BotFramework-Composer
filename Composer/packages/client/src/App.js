@@ -96,7 +96,7 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botStatus, luFiles, luStatus } = state;
+  const { botName, botStatus, luFiles, luStatus } = state;
   const { connectBot, reloadBot, setStorageExplorerStatus, publishLuis } = actions;
   useEffect(() => {
     actions.fetchProject();
@@ -161,6 +161,7 @@ export function App() {
         </nav>
         <div css={rightPanel}>
           <ToolBar
+            botName={botName}
             botStatus={botStatus}
             connectBot={connectBot}
             reloadBot={reloadBot}

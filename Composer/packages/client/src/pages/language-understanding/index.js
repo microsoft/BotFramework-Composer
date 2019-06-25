@@ -13,14 +13,11 @@ import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
-import { PublishLuisModal } from './publish-luis-modal';
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
   const { dialogs, luFiles } = state;
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
-  const { publishLuis } = actions;
-  const [publishModalOpen, setPublishModalOpen] = useState(false);
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [luFile, setLuFile] = useState(null);
@@ -125,10 +122,6 @@ export const LUPage = props => {
     setTextMode(true);
   }
 
-  async function handleLuisPublish(config) {
-    return await publishLuis(config);
-  }
-
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
@@ -176,13 +169,6 @@ export const LUPage = props => {
           onChange={onChange}
         />
       </div>
-      {publishModalOpen && (
-        <PublishLuisModal
-          isOpen={publishModalOpen}
-          onDismiss={() => setPublishModalOpen(false)}
-          onPublish={handleLuisPublish}
-        />
-      )}
     </Fragment>
   );
 };

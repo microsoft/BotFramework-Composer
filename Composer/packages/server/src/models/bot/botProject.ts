@@ -27,7 +27,7 @@ export class BotProject {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
-    this.name = Path.basename(this.absolutePath);
+    this.name = Path.basename(this.dir);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -47,6 +47,7 @@ export class BotProject {
 
   public getIndexes = () => {
     return {
+      botName: this.name,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
@@ -147,7 +148,7 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content));
+    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content.trim()));
   };
 
   public checkNeedLuisDeploy = async () => {
@@ -296,7 +297,7 @@ export class BotProject {
 
     if (botConfig !== undefined) {
       fileList.push({
-        name: this.name,
+        name: Path.basename(this.absolutePath),
         content: botConfig,
         path: this.absolutePath,
         relativePath: Path.relative(this.dir, this.absolutePath),

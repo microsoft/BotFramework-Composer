@@ -203,7 +203,7 @@ export class LuPublisher {
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;
-    luConfig.force = true;
+    luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
     luFiles.forEach(file => {
       luConfig.models.push(Path.resolve(this.luPath, file.relativePath));

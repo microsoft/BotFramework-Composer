@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { getDefaultLuisConfig } from './../../utils/luisUtil';
+import LuisStorage from './../../utils/luisStorage';
 
-export async function connectBot(dispatch) {
+export async function connectBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/connect`;
   try {
     await axios.get(path);
@@ -13,7 +13,7 @@ export async function connectBot(dispatch) {
         status: 'connected',
       },
     });
-    await reloadBot(dispatch);
+    await reloadBot(dispatch, botName);
   } catch (err) {
     dispatch({
       type: ActionTypes.CONNECT_BOT_FAILURE,
@@ -24,10 +24,10 @@ export async function connectBot(dispatch) {
   }
 }
 
-export async function reloadBot(dispatch) {
+export async function reloadBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, getDefaultLuisConfig());
+    await axios.post(path, LuisStorage.get(botName));
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
