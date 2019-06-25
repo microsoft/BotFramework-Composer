@@ -26,6 +26,9 @@ export const NavItem = props => {
           const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
           setActive(isActive);
         }}
+        aria-pressed="false"
+        aria-hidden="true"
+        aria-disable="true"
         data-testid={'LeftNav-CommandBarButton' + labelName}
       >
         <div css={outer(!labelHide, active)}>
@@ -34,6 +37,7 @@ export const NavItem = props => {
               iconProps={{
                 iconName,
               }}
+              ariaLabel={labelName}
               styles={iconButton}
               disabled={underTest}
             />
@@ -42,6 +46,7 @@ export const NavItem = props => {
               iconProps={{
                 iconName,
               }}
+              ariaHidden={underTest}
               text={formatMessage(labelName)}
               styles={commandBarButton}
               disabled={underTest}
@@ -52,7 +57,6 @@ export const NavItem = props => {
     </FocusZone>
   );
 };
-
 NavItem.propTypes = {
   to: PropTypes.string,
   iconName: PropTypes.string,
