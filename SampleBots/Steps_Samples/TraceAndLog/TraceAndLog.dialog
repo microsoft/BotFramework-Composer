@@ -1,0 +1,25 @@
+{
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$id": "root",
+  "$designer": {
+    "name": "15 - TraceAndLog",
+    "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Hello, what is your name?",
+      "outputBinding": "user.name"
+    },
+    {
+      "$type": "Microsoft.TraceActivity",
+      "valueType": "memory",
+      "value": "{user}"
+    },
+    {
+      "$type": "Microsoft.LogStep",
+      "text": "{user.name}"
+    }
+  ]
+}

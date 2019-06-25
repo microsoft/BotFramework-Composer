@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/master/packages/DialogSchema/src/dialogSchema.schema",
     "$role": "unionType(Microsoft.IDialog)",
     "type": "object",
     "title": "Http Request",
@@ -40,7 +40,7 @@
                 "dialog.contosodata"
             ]
         },
-        "header": {
+        "headers": {
             "type": "object",
             "additionProperties": true,
             "title": "Http headers",
@@ -55,7 +55,8 @@
                 "json",
                 "activity",
                 "activities"
-            ]
+            ],
+            "default": "json"
         }
     },
     "required": [

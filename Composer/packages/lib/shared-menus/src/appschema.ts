@@ -44,20 +44,17 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MEMORY]: {
     label: 'Memory manipulation',
-    types: [
-      'Microsoft.SetProperty',
-      'Microsoft.SaveEntity',
-      'Microsoft.InitProperty',
-      'Microsoft.DeleteProperty',
-      'Microsoft.EditArray',
-    ],
+    types: ['Microsoft.SetProperty', 'Microsoft.InitProperty', 'Microsoft.DeleteProperty', 'Microsoft.EditArray'],
   },
   [DialogGroup.STEP]: {
     label: 'Flow',
     types: [
       'Microsoft.IfCondition',
       'Microsoft.SwitchCondition',
+      'Microsoft.Foreach',
+      'Microsoft.ForeachPage',
       'Microsoft.BeginDialog',
+      'Microsoft.EditSteps',
       'Microsoft.EndDialog',
       'Microsoft.CancelAllDialogs',
       'Microsoft.EndTurn',
@@ -68,11 +65,11 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep'],
+    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep', 'Microsoft.OAuthInput'],
   },
   [DialogGroup.LOG]: {
     label: 'Debugging',
-    types: ['Microsoft.LogStep', 'Microsoft.TraceActivity'],
+    types: [/* 'Microsoft.DebugBreak', */ 'Microsoft.LogStep', 'Microsoft.TraceActivity'],
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
