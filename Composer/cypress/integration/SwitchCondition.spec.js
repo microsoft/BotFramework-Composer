@@ -3,7 +3,7 @@
 context('SwitchCondition', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('01 - Steps', 'SwitchConditionSpec');
+    cy.copyBot('ToDoLuisBot', 'SwitchConditionSpec');
   });
 
   it('can manage cases', () => {
