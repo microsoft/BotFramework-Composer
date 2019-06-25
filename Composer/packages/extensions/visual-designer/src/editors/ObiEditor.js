@@ -26,7 +26,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       case NodeEventTypes.Delete:
         handler = e => {
           onChange(deleteNode(data, e.id));
-          onSelect(e);
+          onSelect(e.id);
         };
         break;
       case NodeEventTypes.Insert:
