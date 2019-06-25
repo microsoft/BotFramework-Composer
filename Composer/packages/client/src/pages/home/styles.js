@@ -87,29 +87,30 @@ export const moreOptions = css`
   margin-left: 63px;
 `;
 
-export const myBotContainer = css`
+export const botArea = css`
   display: block;
   height: 236px;
   margin-top: 8px;
 `;
 
-export const myBotTitle = css`
+export const botTitle = css`
   font-size: 24px;
   color: #000000;
   line-height: 32px;
   margin-left: 33px;
 `;
 
-export const myBots = css`
+export const botContainer = css`
   display: flex;
   line-height: 32px;
   margin-left: 33px;
   margin-right: 33px;
-  height: 200px;
+  margin-top: 24px;
+  height: 156px;
   justify-content: space-between;
 `;
 
-export const myBot = css`
+export const botContent = css`
   height: 156px;
   width: 200px;
 `;
@@ -124,6 +125,52 @@ export const actionName = css`
   font-size: 18px;
   line-height: 32px;
   color: #000000;
+`;
+
+export const templateArea = css`
+  display: block;
+  height: 365px;
+  margin-top: 8px;
+`;
+
+export const templateTitle = css`
+  font-size: 24px;
+  color: #000000;
+  line-height: 32px;
+  margin-left: 33px;
+`;
+
+export const templateContainer = css`
+  display: flex;
+  line-height: 32px;
+  margin-left: 33px;
+  margin-right: 33px;
+  margin-top: 24px;
+  height: 272px;
+  justify-content: space-between;
+`;
+
+export const templateContent = css`
+  display: block;
+  height: 242px;
+  width: 242px;
+  font-size: 24px;
+  line-height: 32px;
+  border-top: 10px solid #50e6ff;
+  background: #ebebeb;
+`;
+
+export const templateText = css`
+  position: relative;
+  top: 38px;
+  left: 15px;
+  width: 60%;
+`;
+
+export const footer = css`
+  font-size: 18px;
+  color: #000000;
+  margin-left: 33px;
 `;
 
 export const button = () => {

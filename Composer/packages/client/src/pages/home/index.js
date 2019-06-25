@@ -15,14 +15,89 @@ import {
   linkLeft,
   linkRight,
   moreOptions,
-  myBotContainer,
-  myBotTitle,
-  myBots,
-  myBot,
+  botArea,
+  botTitle,
+  botContainer,
+  botContent,
   action,
   actionName,
   button,
+  templateArea,
+  templateTitle,
+  templateContainer,
+  templateContent,
+  templateText,
+  footer,
 } from './styles';
+
+const linksLeft = [
+  {
+    to: '/home',
+    text: 'See how it works',
+    css: linkInfo,
+  },
+  {
+    to: '/home',
+    text: 'View interactive tutorial',
+    css: linkInfo,
+  },
+];
+
+const linksRight = [
+  {
+    to: '/home',
+    text: 'Create, test and deploy your bot',
+    css: linkInfo,
+  },
+  {
+    to: '/home',
+    text: 'Create a PowerApps environment',
+    css: linkInfo,
+  },
+  {
+    to: '/home',
+    text: 'See more options',
+    css: moreOptions,
+  },
+];
+
+const bots = [
+  {
+    iconName: 'Add',
+    actionName: 'New',
+  },
+  {
+    iconName: 'Code',
+    actionName: 'ToDo - LUIS',
+  },
+  {
+    iconName: 'AllApps',
+    actionName: 'Add - ToDo',
+  },
+  {
+    iconName: 'AddFriend',
+    actionName: 'More ToDo',
+  },
+  {
+    iconName: 'Car',
+    actionName: 'Less - ToDo',
+  },
+];
+
+const templates = [
+  {
+    text: 'Get Started with a Basic Conversation',
+  },
+  {
+    text: 'Customer Care Solutions',
+  },
+  {
+    text: 'Retail and Sales Conversations',
+  },
+  {
+    text: 'Personal Assistant Experiences',
+  },
+];
 export const Home = () => {
   return (
     <div css={outline}>
@@ -34,61 +109,54 @@ export const Home = () => {
         </div>
         <div css={linkContainer}>
           <div css={linkLeft}>
-            <Link to={'/home'} tabIndex={-1}>
-              <div css={linkInfo}>See how it works</div>
-            </Link>
-            <Link to={'/home'} tabIndex={-1}>
-              <div css={linkInfo}>View interactive tutorial</div>
-            </Link>
+            {linksLeft.map((link, index) => {
+              return (
+                <Link to={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index}>
+                  <div css={link.css}>{link.text}</div>
+                </Link>
+              );
+            })}
           </div>
           <div css={linkRight}>
-            <Link to={'/home'} tabIndex={-1}>
-              <div css={linkInfo}>Create, test and deploy your bot</div>
-            </Link>
-            <Link to={'/home'} tabIndex={-1}>
-              <div css={linkInfo}>Create a PowerApps environment</div>
-            </Link>
-            <Link to={'/home'} tabIndex={-1}>
-              <div css={moreOptions}>see more options</div>
-            </Link>
+            {linksRight.map((link, index) => {
+              return (
+                <Link to={link.to} tabIndex={-1} key={'homePageRightLinks-' + index}>
+                  <div css={link.css}>{link.text}</div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
-      <div css={myBotContainer}>
-        <div css={myBotTitle}>Start from scratch, or pick up where you left off... </div>
-        <div css={myBots}>
-          <div css={myBot}>
-            <div css={action}>
-              <IconButton styles={button()} iconProps={{ iconName: 'Add' }} />
-            </div>
-            <div css={actionName}> New </div>
-          </div>
-          <div css={myBot}>
-            <div css={action}>
-              <IconButton styles={button()} iconProps={{ iconName: 'Code' }} />
-            </div>
-            <div css={actionName}> ToDo - LUIS </div>
-          </div>
-          <div css={myBot}>
-            <div css={action}>
-              <IconButton styles={button()} iconProps={{ iconName: 'AllApps' }} />
-            </div>
-            <div css={actionName}> Add - To Do </div>
-          </div>
-          <div css={myBot}>
-            <div css={action}>
-              <IconButton styles={button()} iconProps={{ iconName: 'AddFriend' }} />
-            </div>
-            <div css={actionName}> More ToDo </div>
-          </div>
-          <div css={myBot}>
-            <div css={action}>
-              <IconButton styles={button()} iconProps={{ iconName: 'Car' }} />
-            </div>
-            <div css={actionName}> Less ToDo </div>
-          </div>
+      <div css={botArea}>
+        <div css={botTitle}>Start from scratch, or pick up where you left off... </div>
+        <div css={botContainer}>
+          {bots.map((bot, index) => {
+            return (
+              <div css={botContent} key={'homePageBot-' + index}>
+                <div css={action}>
+                  <IconButton styles={button()} iconProps={{ iconName: bot.iconName }} />
+                </div>
+                <div css={actionName}> {bot.actionName} </div>
+              </div>
+            );
+          })}
         </div>
       </div>
+      <div css={templateArea}>
+        <div css={templateTitle}> Or start with a conversation template </div>
+        <div css={templateContainer}>
+          {templates.map((template, index) => {
+            return (
+              <div css={templateContent} key={'homePageTemplate-' + index}>
+                <div css={templateText}>{template.text}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div css={footer}> Learn More </div>
     </div>
   );
 };
