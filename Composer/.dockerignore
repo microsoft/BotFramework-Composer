@@ -2,3 +2,7 @@
 **/package-lock.json
 **/dist
 **/build
+**/es
+# not ignore all lib folder because packages/lib, so probably we should rename that to libs
+packages/lib/**/lib
+packages/extensions/**/lib
