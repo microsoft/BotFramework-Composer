@@ -20,7 +20,6 @@ context('ToDo Bot', () => {
       cy.get('[title="AddToDo"]').click();
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Push').should('exist');
       cy.getByText(/Successfully added a todo named/).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
