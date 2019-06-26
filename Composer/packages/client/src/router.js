@@ -22,7 +22,7 @@ const Routes = props => {
           {!props.match && (
             <Router {...parentProps}>
               <SettingPage path="setting/*" />
-              <LUPage path="language-understanding/:fileId" />
+              <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
               <NotFound default />
             </Router>

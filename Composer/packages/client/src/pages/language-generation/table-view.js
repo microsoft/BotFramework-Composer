@@ -271,7 +271,12 @@ export default function TableView(props) {
         <DetailsList
           componentRef={listRef}
           items={templates}
-          compact={false}
+          styles={{
+            root: {
+              overflowX: 'hidden',
+            },
+          }}
+          className="table-view-list"
           columns={getTableColums()}
           getKey={item => item.Name}
           layoutMode={DetailsListLayoutMode.justified}

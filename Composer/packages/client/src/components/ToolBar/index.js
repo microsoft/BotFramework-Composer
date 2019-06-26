@@ -13,7 +13,7 @@ import {
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
-import { getDefaultLuisConfig } from '../../utils/luisUtil';
+import LuisStorage from '../../utils/luisStorage';
 
 import { headerSub, bot, botButton, actionButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
 import { OpenStatus, LuisConfig, Text } from './../../constants';
@@ -41,11 +41,11 @@ export const ToolBar = props => {
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const botActionRef = useRef(null);
-  const { botStatus, openStorageExplorer, onPublish, reloadBot, connectBot, luFiles, luStatus } = props;
+  const { botName, botStatus, openStorageExplorer, onPublish, reloadBot, connectBot, luFiles, luStatus } = props;
   const connected = botStatus === 'connected';
 
   function handleClick() {
-    const config = getDefaultLuisConfig();
+    const config = LuisStorage.get(botName);
     const files = luFiles.filter(f => !!f.content);
     const updated =
       luStatus.length !== luFiles.length ||
@@ -53,9 +53,9 @@ export const ToolBar = props => {
         if (item.status === 1) return true;
         return false;
       }) ||
-      config[LuisConfig.AUTHORINGKEY] === '';
+      config[LuisConfig.AUTHORING_KEY] === '';
     if (files.length !== 0 && updated) {
-      if (config[LuisConfig.AUTHORINGKEY] === '') {
+      if (config[LuisConfig.AUTHORING_KEY] === '') {
         setModalOpen(true);
         return;
       } else {
@@ -81,7 +81,7 @@ export const ToolBar = props => {
 
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
-    await (connected ? reloadBot() : connectBot());
+    await (connected ? reloadBot(botName) : connectBot(botName));
     setFetchState(STATE.SUCCESS);
   }
 
@@ -178,6 +178,7 @@ export const ToolBar = props => {
           handlePublish(config);
           setModalOpen(false);
         }}
+        botName={botName}
       />
     </Fragment>
   );
