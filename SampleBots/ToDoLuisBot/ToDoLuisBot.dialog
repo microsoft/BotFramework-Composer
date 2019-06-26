@@ -1,9 +1,10 @@
 {
+  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "autoEndDialog": false,
-  "recognizer": "ToDoLuisBotlu",
   "generator": "common.lg",
+  "recognizer": "ToDoLuisBotlu",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
@@ -41,11 +42,5 @@
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-06-26T12:56:39.618Z",
-    "updatedAt": "2019-06-26T12:56:39.700Z",
-    "id": "299220"
-  }
+  ]
 }
