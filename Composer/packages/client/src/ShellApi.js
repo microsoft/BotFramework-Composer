@@ -63,14 +63,18 @@ export function ShellApi() {
 
     apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
-    apiClient.registerApi('updateLuFile', fileHandler(LU, UPDATE));
-    apiClient.registerApi('updateLgFile', fileHandler(LG, UPDATE));
-    apiClient.registerApi('createLuFile', fileHandler(LU, CREATE));
-    apiClient.registerApi('createLgFile', fileHandler(LG, CREATE));
-    apiClient.registerApi('createLgTemplate', lgTemplateHandler(CREATE));
-    apiClient.registerApi('updateLgTemplate', lgTemplateHandler(UPDATE));
-    apiClient.registerApi('removeLgTemplate', lgTemplateHandler(REMOVE));
-    apiClient.registerApi('getLgTemplates', getLgTemplates);
+    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
+    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
+    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) =>
+      lgTemplateHandler(CREATE, { id, template, position }, event)
+    );
+    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
+      lgTemplateHandler(UPDATE, { id, templateName, template }, event)
+    );
+    apiClient.registerApi('removeLgTemplate', ({ id }, event) => lgTemplateHandler(REMOVE, { id }, event));
+    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -158,10 +162,12 @@ export function ShellApi() {
     return true;
   }
 
-  function getLgTemplates(newData) {
-    if (newData.id === undefined) throw new Error('must have a file id');
-    const file = lgFiles.find(file => file.id === newData.id);
-    if (!file) throw new Error(`lg file ${newData.id} not found`);
+  function getLgTemplates({ id }, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    if (id === undefined) throw new Error('must have a file id');
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
 
     const res = LGParser.TryParse(file.content);
 
@@ -172,62 +178,58 @@ export function ShellApi() {
     return res.templates;
   }
 
-  function lgTemplateHandler(fileChangeType) {
-    return async (newData, event) => {
-      if (isEventSourceValid(event) === false) return false;
+  async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
+    if (isEventSourceValid(event) === false) return false;
 
-      const file = lgFiles.find(file => file.id === newData.id);
-      if (!file) throw new Error(`lg file ${newData.id} not found`);
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
 
-      switch (fileChangeType) {
-        case UPDATE:
-          return await updateLgTemplate({
-            file,
-            templateName: newData.templateName,
-            template: newData.template,
-          });
-        case CREATE:
-          return await createLgTemplate({
-            file,
-            template: newData.template,
-            position: newData.position === 0 ? 0 : -1,
-          });
-        case REMOVE:
-          return await removeLgTemplate({
-            file,
-            templateName: newData.templateName,
-          });
-        default:
-          throw new Error(`unsupported method ${fileChangeType}`);
-      }
-    };
+    switch (fileChangeType) {
+      case UPDATE:
+        return await updateLgTemplate({
+          file,
+          templateName,
+          template,
+        });
+      case CREATE:
+        return await createLgTemplate({
+          file,
+          template,
+          position: position === 0 ? 0 : -1,
+        });
+      case REMOVE:
+        return await removeLgTemplate({
+          file,
+          templateName,
+        });
+      default:
+        throw new Error(`unsupported method ${fileChangeType}`);
+    }
   }
 
-  function fileHandler(fileTargetType, fileChangeType) {
-    return async (newData, event) => {
-      if (isEventSourceValid(event) === false) return false;
+  async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
+    if (isEventSourceValid(event) === false) return false;
 
-      const payload = {
-        id: newData.id,
-        content: newData.content,
-      };
-
-      switch ([fileTargetType, fileChangeType].join(',')) {
-        case [LU, UPDATE].join(','):
-          return await updateLuFile(payload);
-
-        case [LG, UPDATE].join(','):
-          return await updateLgFile(payload);
-
-        case [LU, CREATE].join(','):
-          return await createLuFile(payload);
-
-        case [LG, CREATE].join(','):
-          return await createLgFile(payload);
-        default:
-          throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
-      }
+    const payload = {
+      id,
+      content,
     };
+
+    switch ([fileTargetType, fileChangeType].join(',')) {
+      case [LU, UPDATE].join(','):
+        return await updateLuFile(payload);
+
+      case [LG, UPDATE].join(','):
+        return await updateLgFile(payload);
+
+      case [LU, CREATE].join(','):
+        return await createLuFile(payload);
+
+      case [LG, CREATE].join(','):
+        return await createLgFile(payload);
+      default:
+        throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
+    }
   }
 
   function flushUpdates() {
