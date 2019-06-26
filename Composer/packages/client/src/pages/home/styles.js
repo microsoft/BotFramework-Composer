@@ -5,7 +5,8 @@ export const outline = css`
   flex-direction: column;
   height: 100%;
   margin: 32px 50px 32px 32px;
-  border: 1px solid #000000;
+  border: 1px solid #979797;
+  overflow-x: auto;
 `;
 
 export const title = css`
@@ -68,6 +69,7 @@ export const linkInfo = css`
   margin-left: 63px;
   width: 50%;
   color: #000000;
+  text-decoration: underline;
 `;
 
 export const linkLeft = css`
@@ -171,6 +173,7 @@ export const footer = css`
   font-size: 18px;
   color: #000000;
   margin-left: 33px;
+  text-decoration: underline;
 `;
 
 export const button = () => {
