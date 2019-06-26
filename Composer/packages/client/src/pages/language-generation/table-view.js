@@ -19,24 +19,14 @@ import { navigate } from '@reach/router';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-const textFromTemplates = templates => {
-  let text = '';
-  templates.forEach(template => {
-    if (template.Name && template.Body) {
-      text += `# ${template.Name.trim()}` + '\n';
-      text += `${template.Body.trim()}` + '\n\n';
-    }
-  });
-  return text;
-};
-
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
   const { clearNavHistory, navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
-  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
+  const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
 
@@ -233,27 +223,23 @@ export default function TableView(props) {
       repeatIndex += 1;
       newName = copyName + repeatIndex.toString();
     }
-
-    const newItems = templates.concat({
-      Name: newName,
-      Body: '-TemplateValue',
-    });
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      file: lgFile,
+      template: {
+        Name: newName,
+        Body: '-TemplateValue',
+      },
     };
-    updateLgFile(payload);
+    createLgTemplate(payload);
   }
 
   function onRemoveTemplate(index) {
-    const newItems = [...templates];
-    newItems.splice(index, 1);
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      file: lgFile,
+      templateName: templates[index].Name,
     };
 
-    updateLgFile(payload);
+    removeLgTemplate(payload);
   }
 
   function onCopyTemplate(index) {
@@ -263,21 +249,20 @@ export default function TableView(props) {
     // if duplicate, increse name with Copy1 Copy2 ...
     let repeatIndex = 0;
     let newName = copyName;
+
     while (templates.findIndex(item => item.Name === newName) !== -1) {
       repeatIndex += 1;
       newName = copyName + repeatIndex.toString();
     }
 
-    newItems.push({
-      Name: newName,
-      Body: newItems[index].Body,
-    });
     const payload = {
-      id: lgFile.id,
-      content: textFromTemplates(newItems),
+      file: lgFile,
+      template: {
+        Name: newName,
+        Body: newItems[index].Body,
+      },
     };
-
-    updateLgFile(payload);
+    createLgTemplate(payload);
   }
 
   return (
