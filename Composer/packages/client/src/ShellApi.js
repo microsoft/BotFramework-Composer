@@ -1,6 +1,7 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { navigate } from '@reach/router';
+import { LGParser } from 'botbuilder-lg';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -24,7 +25,7 @@ const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).curren
 const FileChangeTypes = {
   CREATE: 'create',
   UPDATE: 'update',
-  DELETE: 'delete',
+  REMOVE: 'remove',
 };
 
 const FileTargetTypes = {
@@ -48,21 +49,32 @@ export function ShellApi() {
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
+  const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
+  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
+  const removeLgTemplate = actions.removeLgTemplate;
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
   const { LG, LU } = FileTargetTypes;
-  const { CREATE, UPDATE } = FileChangeTypes;
+  const { CREATE, UPDATE, REMOVE } = FileChangeTypes;
 
   useEffect(() => {
     apiClient.connect();
 
     apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
-    apiClient.registerApi('updateLuFile', fileHandler(LU, UPDATE));
-    apiClient.registerApi('updateLgFile', fileHandler(LG, UPDATE));
-    apiClient.registerApi('createLuFile', fileHandler(LU, CREATE));
-    apiClient.registerApi('createLgFile', fileHandler(LG, CREATE));
+    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
+    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
+    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) =>
+      lgTemplateHandler(CREATE, { id, template, position }, event)
+    );
+    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
+      lgTemplateHandler(UPDATE, { id, templateName, template }, event)
+    );
+    apiClient.registerApi('removeLgTemplate', ({ id }, event) => lgTemplateHandler(REMOVE, { id }, event));
+    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
@@ -150,36 +162,74 @@ export function ShellApi() {
     return true;
   }
 
-  function fileHandler(fileTargetType, fileChangeType) {
-    return async (newData, event) => {
-      if (isEventSourceValid(event) === false) return false;
+  function getLgTemplates({ id }, event) {
+    if (isEventSourceValid(event) === false) return false;
 
-      const payload = {
-        id: newData.id,
-        content: newData.content,
-      };
+    if (id === undefined) throw new Error('must have a file id');
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
 
-      switch ([fileTargetType, fileChangeType].join(',')) {
-        case [LU, UPDATE].join(','):
-          await updateLuFile(payload);
-          break;
+    const res = LGParser.TryParse(file.content);
 
-        case [LG, UPDATE].join(','):
-          await updateLgFile(payload);
-          break;
+    if (res.isValid === false) {
+      throw new Error(res.error.Message);
+    }
 
-        case [LU, CREATE].join(','):
-          await createLuFile(payload);
-          break;
+    return res.templates;
+  }
 
-        case [LG, CREATE].join(','):
-          await createLgFile(payload);
-          break;
-        default:
-          throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
-      }
-      return true;
+  async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+
+    switch (fileChangeType) {
+      case UPDATE:
+        return await updateLgTemplate({
+          file,
+          templateName,
+          template,
+        });
+      case CREATE:
+        return await createLgTemplate({
+          file,
+          template,
+          position: position === 0 ? 0 : -1,
+        });
+      case REMOVE:
+        return await removeLgTemplate({
+          file,
+          templateName,
+        });
+      default:
+        throw new Error(`unsupported method ${fileChangeType}`);
+    }
+  }
+
+  async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
+    if (isEventSourceValid(event) === false) return false;
+
+    const payload = {
+      id,
+      content,
     };
+
+    switch ([fileTargetType, fileChangeType].join(',')) {
+      case [LU, UPDATE].join(','):
+        return await updateLuFile(payload);
+
+      case [LG, UPDATE].join(','):
+        return await updateLgFile(payload);
+
+      case [LU, CREATE].join(','):
+        return await createLuFile(payload);
+
+      case [LG, CREATE].join(','):
+        return await createLgFile(payload);
+      default:
+        throw new Error(`unsupported method ${fileTargetType} - ${fileChangeType}`);
+    }
   }
 
   function flushUpdates() {

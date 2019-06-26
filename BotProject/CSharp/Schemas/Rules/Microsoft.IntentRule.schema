@@ -1,5 +1,5 @@
-﻿{
-    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema",
+{
+    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/master/packages/DialogSchema/src/dialogSchema.schema",
     "$ref": "./Microsoft.EventRule.schema#",
     "$role": "unionType(Microsoft.IRule)",
     "title": "Intent Rule",
@@ -19,7 +19,10 @@
                 "entities": {
                     "type": "array",
                     "title": "Entities",
-                    "description": "The entities required to trigger this rule"
+                    "description": "The entities required to trigger this rule",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
             "required": [

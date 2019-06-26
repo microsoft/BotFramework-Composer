@@ -27,7 +27,7 @@ export class BotProject {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
-    this.name = Path.basename(this.absolutePath);
+    this.name = Path.basename(this.dir);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -41,12 +41,13 @@ export class BotProject {
     this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
-    this.luIndexer.index(this.files);
+    await this.luIndexer.index(this.files); // ludown parser is async
     await this.luPublisher.getLuisStatus();
   };
 
   public getIndexes = () => {
     return {
+      botName: this.name,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
@@ -147,11 +148,11 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content));
+    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content.trim()));
   };
 
   public checkNeedLuisDeploy = async () => {
-    if (this.luIndexer.getLuFiles().length <= 0) {
+    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
       return false;
     } else {
       return !(await this.luPublisher.checkLuisDeployed());
@@ -225,7 +226,7 @@ export class BotProject {
       relativePath: relativePath,
     });
 
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // update file in this project
@@ -240,7 +241,7 @@ export class BotProject {
     await this.fileStorage.writeFile(absolutePath, content);
 
     this.files[index].content = content;
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // remove file in this project
@@ -255,11 +256,11 @@ export class BotProject {
     await this.fileStorage.removeFile(absolutePath);
 
     this.files.splice(index, 1);
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // re index according to file change in a certain path
-  private reindex = (filePath: string) => {
+  private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
@@ -270,7 +271,7 @@ export class BotProject {
         this.lgIndexer.index(this.files);
         break;
       case '.lu':
-        this.luIndexer.index(this.files);
+        await this.luIndexer.index(this.files); // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -296,7 +297,7 @@ export class BotProject {
 
     if (botConfig !== undefined) {
       fileList.push({
-        name: this.name,
+        name: Path.basename(this.absolutePath),
         content: botConfig,
         path: this.absolutePath,
         relativePath: Path.relative(this.dir, this.absolutePath),

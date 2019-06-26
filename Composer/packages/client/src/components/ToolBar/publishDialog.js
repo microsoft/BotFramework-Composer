@@ -8,7 +8,7 @@ import { dialog, dialogModal } from './../../pages/language-understanding/styles
 import { PublishLuis } from './../../pages/language-understanding/publish-luis-modal';
 
 export function PublishLuisDialog(props) {
-  const { isOpen, onDismiss, onPublish } = props;
+  const { isOpen, onDismiss, onPublish, botName } = props;
 
   return (
     <Dialog
@@ -24,7 +24,7 @@ export function PublishLuisDialog(props) {
         styles: dialogModal,
       }}
     >
-      <PublishLuis onPublish={onPublish} onDismiss={onDismiss} />
+      <PublishLuis onPublish={onPublish} onDismiss={onDismiss} botName={botName} />
     </Dialog>
   );
 }

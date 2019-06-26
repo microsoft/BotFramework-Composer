@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { ToolBar } from './components/ToolBar';
@@ -52,7 +53,7 @@ const topLinks = [
   {
     to: 'language-understanding/all',
     iconName: 'People',
-    labelName: 'User says',
+    labelName: 'User Says',
     activeIfUrlContains: 'language-understanding',
     exact: false,
   },
@@ -95,7 +96,7 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botStatus, luFiles, luStatus } = state;
+  const { botName, botStatus, luFiles, luStatus } = state;
   const { connectBot, reloadBot, setStorageExplorerStatus, publishLuis } = actions;
   useEffect(() => {
     actions.fetchProject();
@@ -110,7 +111,7 @@ export function App() {
       <Header />
       <StorageExplorer />
       <div css={main}>
-        <div css={sideBar(sideBarExpand)}>
+        <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
               iconProps={{
@@ -121,6 +122,7 @@ export function App() {
                 setSideBarExpand(!sideBarExpand);
               }}
               data-testid={'LeftNavButton'}
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />{' '}
             {topLinks.map((link, index) => {
               return (
@@ -156,9 +158,10 @@ export function App() {
               );
             })}
           </div>
-        </div>
+        </nav>
         <div css={rightPanel}>
           <ToolBar
+            botName={botName}
             botStatus={botStatus}
             connectBot={connectBot}
             reloadBot={reloadBot}

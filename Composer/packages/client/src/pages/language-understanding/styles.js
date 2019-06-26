@@ -32,7 +32,7 @@ export const ContentStyle = css`
   flex: 1;
   position: relative;
   nav {
-    width: 200px;
+    width: 255px;
     ul {
       margin-top: 0px;
     }
@@ -64,6 +64,11 @@ export const formCell = css`
   input {
     border: 1px solid #dddddd;
   }
+`;
+
+export const luPhraseCell = css`
+  white-space: pre-wrap;
+  font-size: 14px;
 `;
 
 // styles override, should use '@uifabric/fluent-theme' later

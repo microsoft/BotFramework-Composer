@@ -1,0 +1,18 @@
+# help
+- ```
+    I can show you examples on how to use Steps, You can enter number 01-12
+    [Suggestions=Steps|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|EditSteps|ReplaceDialog|EmitEvent]
+	01 - Steps
+	02 - EndTurn
+	03 - IfCondiftion
+	04 - EditArray, Foreach
+	05 - EndDialog
+	06 - HttpRequest
+	07 - SwitchCondition
+	08 - RepeatDialog
+	09 - TraceAndLog
+	10 - EditSteps
+	11 - ReplaceDialog
+	12 - EmitEvent
+    ```
+

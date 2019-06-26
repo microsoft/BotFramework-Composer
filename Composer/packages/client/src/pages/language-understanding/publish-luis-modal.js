@@ -19,11 +19,10 @@ import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
 import { keys } from 'lodash';
 
-import storage from './../../utils/storage';
 import { Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 import { Text } from './../../constants/index';
-import { getDefaultLuisConfig } from './../../utils/luisUtil';
+import LuisStorage from './../../utils/luisStorage';
 
 const STATE = {
   INPUT: 0,
@@ -97,12 +96,13 @@ const DeployFailure = props => {
 };
 
 export const PublishLuis = props => {
-  const [formData, setFormData] = useState({ ...getDefaultLuisConfig(), errors: {} });
-  const { onPublish, onDismiss, workState } = props;
+  const { onPublish, onDismiss, workState, botName } = props;
+  const [formData, setFormData] = useState({ ...LuisStorage.get(botName), errors: {} });
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
-    storage.set(field, newValue);
+    // storage.set(field, newValue);
+    LuisStorage.set(botName, field, newValue);
   };
 
   const handlePublish = async e => {
@@ -120,9 +120,9 @@ export const PublishLuis = props => {
   return (
     <Fragment>
       <div css={dialogSubTitle}>
-        {formatMessage(Text.LUISDEPLOY)}
+        {formatMessage(Text.LUISDEPLOY)}{' '}
         <Link href={Links.LUIS} target="_blank">
-          Where can I find this?
+          {formatMessage('Where can I find this?')}
         </Link>
       </div>
       <form onSubmit={handlePublish} css={dialogContent}>
@@ -131,7 +131,7 @@ export const PublishLuis = props => {
             label={formatMessage('Project Name')}
             onChange={updateForm('name')}
             defaultValue={formData.name}
-            onRenderLabel={onRenderLabel(Tips.PROJECTNAME)}
+            onRenderLabel={onRenderLabel(Tips.PROJECT_NAME)}
             errorMessage={formData.errors.name || ''}
             data-testid="ProjectNameInput"
           />
@@ -147,20 +147,20 @@ export const PublishLuis = props => {
             label={formatMessage('Authoring key')}
             onChange={updateForm('authoringKey')}
             defaultValue={formData.authoringKey}
-            onRenderLabel={onRenderLabel(Tips.AUTHORINGKAY)}
+            onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
             errorMessage={formData.errors.authoringKey || ''}
             data-testid="AuthoringKeyInput"
           />
           <TextField
             label={formatMessage('Authoring Region')}
             defaultValue="westus"
-            onRenderLabel={onRenderLabel(Tips.AUTHORINGREGION)}
+            onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
             disabled
           />
           <TextField
             label={formatMessage('Default Language')}
             defaultValue="en-us"
-            onRenderLabel={onRenderLabel(Tips.DEFAULTLANGUAGE)}
+            onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
             disabled
           />
         </Stack>
@@ -180,7 +180,7 @@ export const PublishLuis = props => {
 };
 
 export function PublishLuisModal(props) {
-  const { isOpen, onDismiss, onPublish } = props;
+  const { isOpen, onDismiss, onPublish, botName } = props;
   const [workState, setWorkState] = useState(STATE.INPUT);
   const [response, setResponse] = useState({});
 
@@ -218,7 +218,7 @@ export function PublishLuisModal(props) {
         <DeployFailure onDismiss={handleDismiss} tryAgain={() => setWorkState(STATE.INPUT)} error={response.error} />
       )}
       {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
-        <PublishLuis onPublish={handlePublish} onDismiss={handleDismiss} workState={workState} />
+        <PublishLuis onPublish={handlePublish} onDismiss={handleDismiss} workState={workState} botName={botName} />
       )}
     </Dialog>
   );

@@ -6,6 +6,7 @@ const projectFiles = ['bot', 'botproj'];
 
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  state.botName = response.data.botName;
   state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;

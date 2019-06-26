@@ -23,7 +23,6 @@ export const ConceptLabels = {
   'Microsoft.EmitEvent': formatMessage('Emit an event'),
 
   'Microsoft.SetProperty': formatMessage('Set a value'),
-  'Microsoft.SaveEntity': formatMessage('Convert LU entity to a property'),
   'Microsoft.InitProperty': formatMessage('Create a new property'),
   'Microsoft.DeleteProperty': formatMessage('Delete a property'),
   'Microsoft.EditArray': formatMessage('Edit an array property'),

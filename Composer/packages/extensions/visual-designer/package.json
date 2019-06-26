@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "visual-designer React component",
   "main": "lib/index.js",
-  "module": "es/index.js",
   "files": [
     "css",
     "es",
