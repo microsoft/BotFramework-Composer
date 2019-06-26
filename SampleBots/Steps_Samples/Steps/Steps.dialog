@@ -1,0 +1,46 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Step 1"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Step 2"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Step 3"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "property": "user.age",
+      "value": "9+9"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "user.age is set to {user.age}"
+    },
+    {
+      "$type": "Microsoft.DeleteProperty",
+      "property": "user.age"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.age != null",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "user.age is set to {user.age}"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "user.age is set to null"
+        }
+      ]
+    }
+  ]
+}

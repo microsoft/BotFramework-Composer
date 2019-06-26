@@ -19,10 +19,6 @@ import { navigate } from '@reach/router';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-const randomName = () => {
-  return `TemplateName${Math.floor(Math.random() * 1000)}`;
-};
-
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
   const { clearNavHistory, navTo } = actions;
@@ -218,10 +214,19 @@ export default function TableView(props) {
   }
 
   function onCreateNewTemplate() {
+    const copyName = 'TemplateName';
+
+    // if duplicate, increse name with TemplateName1 TemplateName2 ...
+    let repeatIndex = 0;
+    let newName = copyName;
+    while (templates.findIndex(item => item.Name === newName) !== -1) {
+      repeatIndex += 1;
+      newName = copyName + repeatIndex.toString();
+    }
     const payload = {
       file: lgFile,
       template: {
-        Name: randomName(), // need optimize
+        Name: newName,
         Body: '-TemplateValue',
       },
     };
@@ -238,11 +243,23 @@ export default function TableView(props) {
   }
 
   function onCopyTemplate(index) {
+    const newItems = [...templates];
+    const copyName = `${newItems[index].Name}.Copy`;
+
+    // if duplicate, increse name with Copy1 Copy2 ...
+    let repeatIndex = 0;
+    let newName = copyName;
+
+    while (templates.findIndex(item => item.Name === newName) !== -1) {
+      repeatIndex += 1;
+      newName = copyName + repeatIndex.toString();
+    }
+
     const payload = {
       file: lgFile,
       template: {
-        Name: `${templates[index].Name}.Copy`,
-        Body: templates[index].Body,
+        Name: newName,
+        Body: newItems[index].Body,
       },
     };
     createLgTemplate(payload);

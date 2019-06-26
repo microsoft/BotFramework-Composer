@@ -3,7 +3,7 @@
 context('Visual Designer', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('01 - Steps', 'VisualDesignerTest');
+    cy.copyBot('ToDoLuisBot', 'VisualDesignerTest');
   });
 
   it('can add a step from the visual designer', () => {
@@ -24,9 +24,7 @@ context('Visual Designer', () => {
       cy.getByText('Flow').click();
       cy.getByText('End this turn').click();
 
-      cy.get('.node-renderer-container--focused').within(() => {
-        cy.getByText('EndTurn').should('exist');
-      });
+      cy.getByText('EndTurn').should('exist');
     });
   });
 });

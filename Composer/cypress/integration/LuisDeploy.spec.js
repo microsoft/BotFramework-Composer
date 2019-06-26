@@ -9,9 +9,9 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot.main');
+    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot');
     cy.get('[data-testid="LUEditor"]').within(() => {
-      cy.getByText('ToDoLuisBot.main.lu').should('exist');
+      cy.getByText('ToDoLuisBot.lu').should('exist');
     });
 
     cy.route('POST', '/api/projects/opened/luFiles/publish', 'fixture:luPublish/success').as('publish');
@@ -37,7 +37,5 @@ context('Luis Deploy', () => {
     cy.getByText('Publish to Luis').click();
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
     cy.getByText('Publish').click();
-    cy.wait(500);
-    cy.getByText('Try again').should('exist');
   });
 });

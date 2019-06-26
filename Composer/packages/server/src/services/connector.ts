@@ -13,8 +13,8 @@ class BotConnectorService {
     return await this.connector.connect();
   };
 
-  public sync = async () => {
-    return await this.connector.sync();
+  public sync = async (config: any) => {
+    return await this.connector.sync(config);
   };
 
   public status = (): BotStatus => {
