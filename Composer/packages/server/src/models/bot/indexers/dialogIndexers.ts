@@ -86,12 +86,14 @@ export class DialogIndexer {
         try {
           if (extName === '.dialog' && !file.name.endsWith('.lu.dialog')) {
             const dialogJson = JSON.parse(file.content);
+            const luFile = typeof dialogJson.recognizer === 'string' ? dialogJson.recognizer : '';
             const dialog = {
               id: 0,
               name: Path.basename(file.name, extName),
               content: dialogJson,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
+              luFile: Path.basename(luFile, '.lu'),
               relativePath: file.relativePath,
             };
 
