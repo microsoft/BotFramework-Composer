@@ -4,7 +4,7 @@
   "$id": "root",
   "autoEndDialog": false,
   "generator": "common.lg",
-  "recognizer": "ToDoLuisBotlu",
+  "recognizer": "ToDoLuisBot.lu",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
