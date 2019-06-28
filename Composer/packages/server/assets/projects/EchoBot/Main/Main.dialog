@@ -5,6 +5,7 @@
     "name": "EchoBot",
     "description": "<Fill in the description of your bot here>"
   },
+  "generator": "common.lg",
   "steps": [
     {
       "$type": "Microsoft.TextInput",

@@ -3,8 +3,8 @@ import { find } from 'lodash';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
+import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { IFileStorage } from '../storage/interface';
 
 import { IProjectTemplate } from './interface';
 
@@ -44,8 +44,9 @@ export class AssetManager {
       if (await dstStorage.exists(dstDir)) {
         throw new Error('already have this folder, please give another name');
       }
-      await dstStorage.mkDir(dstDir, { recursive: true });
-      await this._copy(template.path, dstDir, dstStorage);
+
+      await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+
       const botprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
       if (botprojPaths && botprojPaths.length === 1) {
         return {
@@ -58,29 +59,4 @@ export class AssetManager {
     }
     throw new Error('no template botproject');
   }
-
-  private _copy = async (src: string, dstDir: string, dstStorage: IFileStorage) => {
-    const storage = this.templateStorage;
-    const paths = await storage.readDir(src);
-    const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
-    for (let path of paths) {
-      const _src = `${src}/${path}`;
-      // change bot name to user given
-      if (path.indexOf('.main.dialog') >= 0) {
-        path = Path.join(Path.dirname(path), newMainDialogName);
-      }
-      const _dst = `${dstDir}/${path}`;
-      if ((await storage.stat(_src)).isFile) {
-        let content: any = await storage.readFile(_src);
-        if (_src.indexOf('.botproj') >= 0) {
-          content = JSON.parse(content);
-          content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
-          content = JSON.stringify(content, null, 2) + '\n';
-        }
-        await storage.writeFile(_dst, content);
-      } else {
-        await this._copy(_src, _dst, dstStorage);
-      }
-    }
-  };
 }
