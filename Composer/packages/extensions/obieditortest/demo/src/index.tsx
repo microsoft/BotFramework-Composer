@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce';
 import nanoid from 'nanoid';
 
 import Example from '../../src';
-import { ShellApi } from '../../src/types';
+import { ShellApi, LuFile } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -69,21 +69,47 @@ const dialogFiles = [
   },
 ];
 
-const luFiles = [
+const luFiles: LuFile[] = [
   {
     id: 'FirstLuFile',
-    absolutePath: '/Some/Path/FirstLuFile',
-    content: '## Hello\n-Hi',
+    relativePath: 'SomePath/FirstLuFile',
+    content: '## FirstHello\n-Hi',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'FirstHello' }],
+        utterances: [{ intent: 'FirstHello', text: 'Hi' }],
+      },
+    },
   },
   {
     id: 'SecondLuFile',
-    absolutePath: '/Some/Path/FirstLuFile',
-    content: '## Hello\n-Good morning',
+    relativePath: 'SomePath/SecondLuFile',
+    content: '## SecondHello\n-Good morning',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'SecondHello' }],
+        utterances: [{ intent: 'SecondHello', text: 'Good morning' }],
+      },
+    },
   },
   {
     id: 'ThirdLuFile',
-    absolutePath: '/Some/Path/FirstLuFile',
-    content: '## Hello\n-Hello',
+    relativePath: 'SomePath/ThirdLuFile',
+    content: '## ThirdHello\n-Hello',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'ThirdHello' }],
+        utterances: [{ intent: 'ThirdHello', text: 'Hello' }],
+      },
+    },
+  },
+];
+
+const lgFiles = [
+  {
+    id: 'common',
+    relativePath: 'common/common.lg',
+    content: '',
   },
 ];
 
@@ -138,6 +164,9 @@ const mockShellApi = [
   'updateLgFile',
   'createLuFile',
   'createLgFile',
+  'getLgTemplates',
+  'createLgTemplate',
+  'updateLgTemplate',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {

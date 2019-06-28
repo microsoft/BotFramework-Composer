@@ -11,7 +11,7 @@ import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
-import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile } from './types';
+import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 
 import './App.css';
 
@@ -26,7 +26,7 @@ export interface FormEditorProps {
   dialogs: DialogInfo[];
   dialogName: string;
   luFiles: LuFile[];
-  lgFiles: any;
+  lgFiles: LgFile[];
   schemas: EditorSchema;
   memory: FormMemory;
   shellApi: ShellApi;

@@ -82,8 +82,16 @@ function ExtensionContainer() {
       return apiClient.apiCall('updateLuFile', luFile);
     },
 
-    updateLgFile: lgFile => {
-      return apiClient.apiCall('updateLgFile', lgFile);
+    getLgTemplates: id => {
+      return apiClient.apiCall('getLgTemplates', { id });
+    },
+
+    createLgTemplate: (id, template, position) => {
+      return apiClient.apiCall('createLgTemplate', { id, template, position });
+    },
+
+    updateLgTemplate: (id, templateName, template) => {
+      return apiClient.apiCall('updateLgTemplate', { id, templateName, template });
     },
   };
 
