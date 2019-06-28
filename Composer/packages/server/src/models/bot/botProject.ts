@@ -1,6 +1,7 @@
 import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
+import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
@@ -169,25 +170,8 @@ export class BotProject {
     const dstDir = locationRef.path;
     await dstStorage.mkDir(dstDir, { recursive: true });
 
-    // copy files to locationRef
-    const prevFiles = await this._getFiles();
-    for (const index in prevFiles) {
-      const file = prevFiles[index];
-      // update main dialog file name and entry in botproj file
-      const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
-      if (file.relativePath.indexOf('.main.dialog') >= 0) {
-        file.relativePath = Path.join(Path.dirname(file.relativePath), newMainDialogName);
-      }
-      const absolutePath = Path.join(dstDir, file.relativePath);
-      let content =
-        index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      if (file.name.indexOf('.botproj') >= 0) {
-        content = JSON.parse(content);
-        content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
-        content = JSON.stringify(content, null, 2) + '\n';
-      }
-      await dstStorage.writeFile(absolutePath, content);
-    }
+    await copyDir(this.dir, this.fileStorage, dstDir, dstStorage);
+
     // return new proj ref
     const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
     if (dstBotProj && dstBotProj.length === 1) {
