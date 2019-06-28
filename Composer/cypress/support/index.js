@@ -24,5 +24,6 @@ beforeEach(() => {
 });
 
 after(() => {
+  cy.wait(500);
   cy.exec('yarn test:integration:clean');
 });

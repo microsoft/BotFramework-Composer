@@ -1,4 +1,14 @@
 import createReducer from '../../../src/store/reducer/createReducer';
+
+jest.mock('../../../src/constants/index', () => {
+  return {
+    ActionTypes: {
+      mockActionType: 'mockActionType',
+      newActionTypeWithoutReducer: 'newActionTypeWithoutReducer',
+    },
+  };
+});
+
 describe('test create reducer', () => {
   it('test create reducer with mock action and handler', () => {
     const mockActionHandler = jest.fn((state, payload) => {

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "visual-designer React component",
   "main": "lib/index.js",
-  "module": "es/index.js",
   "files": [
     "css",
     "es",
@@ -11,8 +10,10 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component --copy-files",
-    "clean": "nwb clean-module && nwb clean-demo",
+    "build": "yarn clean && yarn build:css && yarn build:ts",
+    "build:ts": "tsc --build tsconfig.build.json",
+    "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
+    "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo",
     "test": "jest",
@@ -20,15 +21,18 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
+    "@types/react": "^16.8.21",
     "cci-graph-lib": "*",
+    "classnames": "^2.2.6",
     "create-react-class": "^15.6.3",
     "d3": "^5.9.1",
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
     "lodash": "^4.17.11",
-    "lodash.get": "^4.4.2",
     "office-ui-fabric-react": "^6.180.0",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.0.3"
   },
   "peerDependencies": {
     "react": "16.x"
@@ -46,7 +50,8 @@
     "nwb": "0.23.x",
     "react": "^16.8.4",
     "react-dom": "16.8.2",
-    "react-testing-library": "^6.0.1"
+    "react-testing-library": "^6.0.1",
+    "shared-menus": "0.0.0"
   },
   "author": "",
   "homepage": "",

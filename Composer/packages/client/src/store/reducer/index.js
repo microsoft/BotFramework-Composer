@@ -6,10 +6,12 @@ const projectFiles = ['bot', 'botproj'];
 
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  state.botName = response.data.botName;
   state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.luStatus = response.data.luStatus;
   return state;
 };
 
@@ -20,7 +22,6 @@ const updateDialog = (state, { response }) => {
 
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.lgFiles = response.data.lgFiles;
   state.luFiles = response.data.luFiles;
   return state;
 };
@@ -116,6 +117,10 @@ const clearNavHistory = (state, { fromIndex }) => {
   return state;
 };
 
+const setBotLoadErrorMsg = (state, { error }) => {
+  return (state.botLoadErrorMsg = error);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
@@ -138,4 +143,6 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
+  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
 });

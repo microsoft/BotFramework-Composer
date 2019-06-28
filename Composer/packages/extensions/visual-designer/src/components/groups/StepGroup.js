@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { EdgeMenu } from 'shared-menus';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
@@ -8,7 +9,6 @@ import { Edge } from '../shared/EdgeComponents';
 import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
-import { EdgeMenu } from '../shared/EdgeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 const StepInterval = ElementInterval.y;
@@ -22,7 +22,7 @@ const calculateNodes = data => {
 
 const calculateLayout = (nodes, boundaryMap) => {
   nodes.forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
-  return sequentialLayouter(nodes, StepInterval);
+  return sequentialLayouter(nodes);
 };
 
 export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
@@ -69,9 +69,9 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
-        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type })} />
+        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
       </OffsetContainer>
-      {nodes.map(x => (
+      {nodes.map((x, idx) => (
         <OffsetContainer
           key={`stepGroup/${x.id}/footer/offset`}
           offset={{
@@ -80,7 +80,7 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
           }}
           styles={{ zIndex: 100 }}
         >
-          <EdgeMenu onClick={$type => onEvent(NodeEventTypes.InsertAfter, { id: x.id, $type })} />
+          <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })} />
         </OffsetContainer>
       ))}
     </div>

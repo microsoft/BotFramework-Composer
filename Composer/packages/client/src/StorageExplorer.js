@@ -13,13 +13,19 @@ import { LocationSelectContent } from './components/StorageExplorer/LocationSele
 import { NewContent } from './components/StorageExplorer/NewContent';
 // this empty div tag is used to replace the default panel header.
 function onRenderNavigationContent() {
-  return <div style={{ height: '0px' }} />;
+  return (
+    <div
+      style={{
+        height: '0px',
+      }}
+    />
+  );
 }
 
 export function StorageExplorer() {
   const { state, actions } = useContext(Store);
   const { storageExplorerStatus } = state;
-  const { setStorageExplorerStatus, clearNavHistory, openBotProject, saveProjectAs } = actions;
+  const { setStorageExplorerStatus, openBotProject, saveProjectAs } = actions;
 
   useEffect(() => {
     actions.fetchStorages();
@@ -34,13 +40,11 @@ export function StorageExplorer() {
   };
 
   const handleSaveAs = async (storageId, absolutePath) => {
-    clearNavHistory();
     await saveProjectAs(storageId, absolutePath);
     closeExplorer();
   };
 
   const handleOpenBot = (path, storageId) => {
-    clearNavHistory();
     openBotProject(storageId, path);
     closeExplorer();
   };
@@ -55,7 +59,7 @@ export function StorageExplorer() {
       onDismiss={closeExplorer}
       onRenderNavigation={onRenderNavigationContent}
     >
-      <div css={body}>
+      <div css={body} data-testid="StorageExplorer">
         <ActionSelector selectedKey={storageExplorerStatus} onLinkClick={onLinkClick} onCloseExplorer={closeExplorer} />
         <div css={content}>
           <div css={title}>{formatMessage(storageExplorerStatus)}</div>

@@ -20,12 +20,12 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
-    public class TestBot : IBot
+    public class TestBot : ActivityHandler
     {
-        private DialogSet _dialogs;
-        private IDialog rootDialog;
+        private AdaptiveDialog rootDialog;
         private readonly ResourceExplorer resourceExplorer;
         private UserState userState;
+        private DialogManager dialogManager;
         private ConversationState conversationState;
         private IStatePropertyAccessor<DialogState> dialogState;
         private Source.IRegistry registry;
@@ -38,53 +38,27 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
             // auto reload dialogs when file changes
-            this.resourceExplorer.Changed += ResourceExplorer_Changed;
+            this.resourceExplorer.Changed += (resources) =>
+            {
+                if (resources.Any(resource => resource.Id == ".dialog"))
+                {
+                    Task.Run(() => this.LoadRootDialogAsync());
+                }
+            };
 
             LoadRootDialogAsync();
-        }
-
-        private void ResourceExplorer_Changed(string[] paths)
-        {
-            if (paths.Any(p => Path.GetExtension(p) == ".dialog"))
-            {
-                Task.Run(() => this.LoadRootDialogAsync());
-            }
         }
 
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<IDialog>(rootFile, resourceExplorer, registry);
-            _dialogs = new DialogSet(this.dialogState);
-            _dialogs.Add(rootDialog);
+            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, registry);
+            this.dialogManager = new DialogManager(rootDialog);
         }
 
-        public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (rootDialog is AdaptiveDialog adaptiveDialog)
-            {
-                await adaptiveDialog.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
-            }
-            else
-            {
-                if (turnContext.Activity.Type == ActivityTypes.Message && turnContext.Activity.Text == "throw")
-                {
-                    throw new Exception("oh dear");
-                }
-
-                if (turnContext.Activity.Type == ActivityTypes.Message)
-                {
-                    // run the DialogSet - let the framework identify the current state of the dialog from 
-                    // the dialog stack and figure out what (if any) is the active dialog
-                    var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
-                    var results = await dialogContext.ContinueDialogAsync(cancellationToken);
-
-                    if (results.Status == DialogTurnStatus.Empty || results.Status == DialogTurnStatus.Complete)
-                    {
-                        await dialogContext.BeginDialogAsync(rootDialog.Id, null, cancellationToken);
-                    }
-                }
-            }
+            return this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
         }
     }
 }

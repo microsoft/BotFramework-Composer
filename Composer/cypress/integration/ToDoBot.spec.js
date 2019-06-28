@@ -8,19 +8,19 @@ context('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Welcome User').should('exist');
+      cy.getByText(/Hi! I'm a ToDo bot./).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Welcome User').should('exist');
+      cy.getByText('Tasks').should('exist');
     });
   });
 
   it('can open the AddToDo dialog', () => {
-    cy.openDialog('AddToDo');
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.get('[title="AddToDo"]').click();
+    });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Get Todo Title').should('exist');
-      cy.getByText('Initialize Todos').should('exist');
-      cy.getByText('Add To Todos').should('exist');
+      cy.getByText(/Successfully added a todo named/).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('Steps').should('exist');
@@ -28,32 +28,38 @@ context('ToDo Bot', () => {
   });
 
   it('can open the ClearToDos dialog', () => {
-    cy.openDialog('ClearToDos');
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.get('[title="ClearToDos"]').click();
+    });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Clear Todos').should('exist');
+      cy.getByText('Successfully cleared items in the Todo List.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Clear Todos').should('exist');
+      cy.getByText('Microsoft.EditArray').should('exist');
     });
   });
 
   it('can open the DeleteToDo dialog', () => {
-    cy.openDialog('DeleteToDo');
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.get('[title="DeleteToDo"]').click();
+    });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Remove').should('exist');
+      cy.getByText('EditArray').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Microsoft.DeleteProperty').should('exist');
+      cy.getByText('Microsoft.SetProperty').should('exist');
     });
   });
 
   it('can open the ShowToDos dialog', () => {
-    cy.openDialog('ShowToDos');
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.get('[title="ShowToDos"]').click();
+    });
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('[ShowTodo]').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Steps').should('exist');
+      cy.getByText('Microsoft.IfCondition').should('exist');
     });
   });
 });

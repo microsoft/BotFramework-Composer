@@ -11,6 +11,7 @@ export async function fetchProject(dispatch) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -35,6 +36,7 @@ export async function openBotProject(dispatch, storageId, absolutePath) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -59,6 +61,7 @@ export async function saveProjectAs(dispatch, storageId, absolutePath) {
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
@@ -84,28 +87,13 @@ export async function createProject(dispatch, storageId, absolutePath, templateI
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: { response },
     });
+    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
     dispatch({
       type: ActionTypes.GET_PROJECT_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function updateDialog(dispatch, { name, content }) {
-  try {
-    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${name}`, { name, content });
-    dispatch({
-      type: ActionTypes.UPDATE_DIALOG,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_DIALOG_FAILURE,
       payload: null,
       error: err,
     });
@@ -122,133 +110,6 @@ export async function updateProjFile(dispatch, { name, content }) {
   } catch (err) {
     dispatch({
       type: ActionTypes.UPDATE_PROJFILE__FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function createDialog(dispatch, { name, steps }) {
-  try {
-    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, { name, steps });
-    dispatch({
-      type: ActionTypes.CREATE_DIALOG_SUCCESS,
-      payload: { response },
-    });
-    clearNavHistory(dispatch);
-    navTo(dispatch, `${name}#`);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  }
-}
-
-export async function updateLgFile(dispatch, { id, content }) {
-  try {
-    const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
-    dispatch({
-      type: ActionTypes.UPDATE_LG_SUCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_LG_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function createLgFile(dispatch, { id, content }) {
-  try {
-    const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
-    dispatch({
-      type: ActionTypes.CREATE_LG_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.CREATE_LG_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function removeLgFile(dispatch, { id }) {
-  try {
-    const response = await axios.delete(`${BASEURL}/projects/opened/lgFiles/${id}`);
-    dispatch({
-      type: ActionTypes.REMOVE_LG_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.REMOVE_LG_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function updateLuFile(dispatch, { id, content }) {
-  try {
-    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
-    dispatch({
-      type: ActionTypes.UPDATE_LU_SUCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function createLuFile(dispatch, { id, content }) {
-  try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id, content });
-    dispatch({
-      type: ActionTypes.CREATE_LU_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.CREATE_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function removeLuFile(dispatch, { id }) {
-  try {
-    const response = await axios.delete(`${BASEURL}/projects/opened/luFiles/${id}`);
-    dispatch({
-      type: ActionTypes.REMOVE_LU_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.REMOVE_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-}
-
-export async function publishLuis(dispatch, authoringKey) {
-  try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { authoringKey });
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_FAILURE,
       payload: null,
       error: err,
     });

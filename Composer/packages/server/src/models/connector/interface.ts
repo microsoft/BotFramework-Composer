@@ -6,5 +6,5 @@ export enum BotStatus {
 export interface IBotConnector {
   status: BotStatus;
   connect(): Promise<void>; // connect to a bot
-  sync(): Promise<void>; // sync content with bot
+  sync(config: any): Promise<void>; // sync content with bot
 }

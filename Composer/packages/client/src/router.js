@@ -1,13 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
 import { Router, Match } from '@reach/router';
 
 import DesignPage from './pages/design';
 import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
-import { showDesign } from './styles';
+import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
 
 const Routes = props => {
@@ -16,19 +15,19 @@ const Routes = props => {
   return (
     <Match path="/" {...props}>
       {props => (
-        <Fragment>
+        <div css={data}>
           <Content css={showDesign(props.match)}>
             <DesignPage {...props} />
           </Content>
           {!props.match && (
             <Router {...parentProps}>
               <SettingPage path="setting/*" />
-              <LUPage path="language-understanding/:fileId" />
-              <LGPage path="language-generation/:fileId" />
+              <LUPage path="language-understanding/*" />
+              <LGPage path="language-generation/*" />
               <NotFound default />
             </Router>
           )}
-        </Fragment>
+        </div>
       )}
     </Match>
   );

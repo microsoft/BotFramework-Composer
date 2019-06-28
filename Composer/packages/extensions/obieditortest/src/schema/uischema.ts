@@ -15,7 +15,10 @@ const globalFields = {
   property: {
     'ui:field': NullField,
   },
-  outputProperty: {
+  inputBindings: {
+    'ui:field': NullField,
+  },
+  outputBinding: {
     'ui:field': NullField,
   },
 };
@@ -41,12 +44,19 @@ export const uiSchema = {
       'ui:field': NullField,
     },
     ...globalFields,
-    'ui:order': ['property', 'outputProperty', 'recognizer', 'rules', 'steps', '*', 'selector'],
+    'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
+  },
+  'Microsoft.AttachmentInput': {
+    ...globalFields,
+    'ui:order': ['*', 'validations'],
   },
   'Microsoft.BeginDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
     },
+    ...globalFields,
+  },
+  'Microsoft.ChoiceInput': {
     ...globalFields,
   },
   'Microsoft.CodeStep': {
@@ -64,6 +74,11 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.EditSteps': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+  },
   'Microsoft.EventRule': {
     steps: {
       'ui:field': StepsField,
@@ -71,11 +86,23 @@ export const uiSchema = {
     ...globalFields,
     'ui:order': ['*', 'steps'],
   },
+  'Microsoft.Foreach': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+    'ui:order': ['*', 'ListProperty', 'IndexProperty', 'ValueProperty', 'Steps'],
+  },
+  'Microsoft.ForeachPage': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+    'ui:order': ['*', 'ListProperty', 'PageSize', 'ValueProperty', 'Steps'],
+  },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
-    ...globalFields,
+    // ...globalFields,  // we do not want to exclude the property field here
     'ui:order': ['*', 'body'],
   },
   'Microsoft.IfCondition': {

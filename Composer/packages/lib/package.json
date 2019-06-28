@@ -1,13 +1,14 @@
 {
-    "name": "composer-libs",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "build:cci-graph-lib": "cd cci-graph-lib && yarn build",
-      "build:code-editor": "cd code-editor && yarn build",
-      "build:all": "concurrently --kill-others-on-fail \"yarn:build:cci-graph-lib\" \"yarn:build:code-editor\""
-    },
-    "author": "",
-    "license": "ISC"
-  }
+  "name": "composer-libs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:cci-graph-lib": "cd cci-graph-lib && yarn build",
+    "build:code-editor": "cd code-editor && yarn build",
+    "build:shared-menus": "cd shared-menus && yarn build",
+    "build:all": "concurrently --kill-others-on-fail \"yarn:build:cci-graph-lib\" \"yarn:build:code-editor\" \"yarn:build:shared-menus\""
+  },
+  "author": "",
+  "license": "ISC"
+}

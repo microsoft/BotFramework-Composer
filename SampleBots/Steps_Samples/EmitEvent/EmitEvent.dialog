@@ -1,0 +1,60 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "steps": [
+        {
+                "$type": "Microsoft.SendActivity",
+                "activity": "Say moo to get a response, say emit to emit a event."
+        },
+        {    
+            "$type": "Microsoft.BeginDialog",
+            "Dialog": {
+                "$type": "Microsoft.AdaptiveDialog",
+                "autoEndDialog": false,
+                "recognizer": {
+                    "$type": "Microsoft.RegexRecognizer",
+                    "intents": {
+                        "EmitEvent": "emit",
+                        "CowboyIntent": "moo"
+                    }
+                },
+                "rules": [
+                    {   
+                        "$type": "Microsoft.IntentRule",
+                        "intent": "EmitEvent",
+                        "steps": [
+                            {
+                                "$type": "Microsoft.EmitEvent",
+                                "EventName": "CustomEvent",
+                                "BubbleEvent": true
+                            }                
+                        ]
+                    },
+                    {
+                        "$type": "Microsoft.IntentRule",
+                        "intent": "CowboyIntent",
+                        "steps": [
+                            {
+                                "$type": "Microsoft.SendActivity",
+                                "activity": "Yippee ki-yay!"
+                            }              
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "rules": [
+        {
+            "$type": "Microsoft.EventRule",
+            "Events": ["CustomEvent"],
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "CustomEvent Fired."
+                }                 
+            ]
+        }
+    ]
+}

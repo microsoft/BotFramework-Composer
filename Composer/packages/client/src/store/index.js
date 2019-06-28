@@ -9,6 +9,7 @@ export const Store = React.createContext();
 
 const initialState = {
   dialogs: [],
+  botName: '',
   botProjFile: {},
   navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
@@ -16,11 +17,13 @@ const initialState = {
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'unConnected',
+  botLoadErrorMsg: '',
   storageExplorerStatus: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  luStatus: [],
 };
 
 export function StoreProvider(props) {

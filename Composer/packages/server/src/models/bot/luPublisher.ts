@@ -1,18 +1,16 @@
 import crypto from 'crypto';
 
 import { IConfig } from 'lubuild/typings/lib/IConfig';
-import { keys } from 'lodash';
+import { keys, replace } from 'lodash';
 import { runBuild } from 'lubuild';
 import { LuisAuthoring } from 'luis-apis';
 import * as msRest from '@azure/ms-rest-js';
 import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
-import settings from './../../settings/settings.json';
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, FileState, LUFile } from './interface';
+import { ILuisSettings, FileState, LUFile, ILuisConfig } from './interface';
 
-const CONFIGNAME = 'luconfig.json';
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
 
@@ -20,6 +18,8 @@ export class LuPublisher {
   public luPath: string;
   public generatedFolderPath: string;
   public storage: IFileStorage;
+  public config: ILuisConfig | null = null;
+  public status: { [key: string]: string }[] = [];
 
   constructor(path: string, storage: IFileStorage) {
     this.luPath = path;
@@ -51,24 +51,52 @@ export class LuPublisher {
     }
   };
 
-  public publish = async (authoringKey: string, luFiles: LUFile[]) => {
-    const config = this._getConfig(authoringKey, luFiles);
+  public publish = async (luisConfig: ILuisConfig, luFiles: LUFile[]) => {
+    this.config = luisConfig;
+    const config = this._getConfig(luisConfig, luFiles);
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
 
     //const settings: ILuisSettings = await this._getSettings();
     await runBuild(config);
-    await this._setConfig(config);
-    await this._setKey(authoringKey);
     await this._copyDialogsToTargetFolder(config);
-    return await this._updateStatus(authoringKey, config);
+    return await this._updateStatus(config.authoringKey, config);
   };
 
-  public getAppsInfo = () => {};
+  public checkLuisDeployed = async () => {
+    const setting: ILuisSettings = await this._getSettings();
+    if (setting === null) return false;
+    const appNames = keys(setting.luis);
+    return appNames.every(async name => {
+      if (ENDPOINT_KEYS.indexOf(name) < 0) {
+        return await this.storage.exists(`${name.split('_').join('.')}.dialog`);
+      }
+      return true;
+    });
+  };
+
+  public getLuisStatus = async () => {
+    const settings = await this._getSettings();
+    if (settings === null) return [];
+    const status = settings.status;
+    this.status = keys(status).reduce((result: { [key: string]: string }[], item) => {
+      let name = item.split('_').join('.');
+      name = replace(name, '.en-us', '');
+      result.push({ name, ...status[item] });
+      return result;
+    }, []);
+  };
+
+  public getLuisConfig = () => this.config;
+
+  public setLuisConfig = (config: ILuisConfig) => {
+    this.config = config;
+  };
 
   private _copyDialogsToTargetFolder = async (config: any) => {
-    const defaultLanguage = settings.development.luisConfig.defaultLanguage;
+    if (this.config === null) return '';
+    const defaultLanguage = this.config.defaultLanguage;
     await config.models.forEach(async (filePath: string) => {
       const baseName = Path.basename(filePath, '.lu');
       const rootPath = Path.dirname(filePath);
@@ -81,16 +109,6 @@ export class LuPublisher {
       await this.storage.removeFile(currentPath);
       await this.storage.removeFile(currentVariantPath);
     });
-  };
-
-  //remove this function next PR
-  private _setKey = async (authoringKey: string) => {
-    const keyPath = Path.join(this.generatedFolderPath, `key.json`);
-    if (await this.storage.exists(keyPath)) {
-      await this.storage.removeFile(keyPath);
-    }
-
-    await this.storage.writeFile(keyPath, JSON.stringify({ key: authoringKey }, null, 4));
   };
 
   private _updateStatus = async (authoringKey: string, config: IConfig) => {
@@ -115,15 +133,26 @@ export class LuPublisher {
     return setting.status;
   };
 
-  private _getSettingPath = () => {
-    const config = settings.development.luisConfig;
+  private _getSettingPath = async () => {
+    if (this.config !== null) {
+      return Path.join(
+        this.generatedFolderPath,
+        `luis.settings.${this.config.environment}.${this.config.authoringRegion}.json`
+      );
+    } else {
+      const filePaths = await this.storage.glob('**/luis.settings.*.json', this.luPath);
+      if (filePaths.length > 0) {
+        //TODO: maybe more than one
+        return Path.join(this.luPath, filePaths[0]);
+      }
+    }
 
-    return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
+    return '';
   };
 
   private _getAppName = async (path: string) => {
-    const config = settings.development.luisConfig;
-    const culture = this._getCultureFromPath(path) || config.defaultLanguage;
+    if (this.config === null) return '';
+    const culture = this._getCultureFromPath(path) || this.config.defaultLanguage;
     let name = `${Path.basename(path, '.lu')}.${culture}.lu`;
     name = name.split('.').join('_');
     return name;
@@ -169,14 +198,13 @@ export class LuPublisher {
     }
   };
 
-  private _getConfig = (authoringKey: string, luFiles: LUFile[]) => {
-    const luConfig: any = settings.development.luisConfig as any;
+  private _getConfig = (config: ILuisConfig, luFiles: LUFile[]) => {
+    const luConfig: any = config;
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;
-    luConfig.force = true;
+    luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
-    luConfig.authoringKey = authoringKey;
     luFiles.forEach(file => {
       luConfig.models.push(Path.resolve(this.luPath, file.relativePath));
     });
@@ -184,18 +212,14 @@ export class LuPublisher {
     return luConfig;
   };
 
-  private _setConfig = async (config: {}) => {
-    const configPath = Path.join(this.generatedFolderPath, CONFIGNAME);
-    await this.storage.writeFile(configPath, JSON.stringify(config, null, 4));
-  };
-
   private _getSettings = async () => {
-    const settingPath = this._getSettingPath();
+    const settingPath = await this._getSettingPath();
+    if (settingPath === '') return null;
     return await this._getJsonObject(settingPath);
   };
 
   private _setSettings = async (settings: ILuisSettings) => {
-    const settingPath = this._getSettingPath();
+    const settingPath = await this._getSettingPath();
     return await this.storage.writeFile(settingPath, JSON.stringify(settings, null, 4));
   };
 }

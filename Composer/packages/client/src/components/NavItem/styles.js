@@ -1,49 +1,78 @@
 import { css } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 
-export const link = {
-  display: 'block',
-  textDecoration: 'none',
-  color: '#4f4f4f',
-};
+export const link = (active, underTest) => css`
+  display: block;
+  text-decoration: none;
+  color: #4f4f4f;
+  position: relative;
+  ${underTest && `pointer-events: none;`}
+  ${!underTest &&
+    `&::after {
+      content: '';
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+    }
 
-export const outer = isExpand => css`
-  display: flex;
-  width: 200px;
-  justify-content: flex-end;
-  transform: translateX(${isExpand ? '0px' : '-160px'});
-  transition: transform 0.3s ease-in-out;
+    &:hover {
+      background-color: ${NeutralColors.gray30};
+    }
+
+    &:focus {
+      outline: none;
+      .ms-Fabric--isFocusVisible &::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        border: 1px solid ${NeutralColors.white};
+        border-image: initial;
+        outline: rgb(102, 102, 102) solid 1px;
+      }
+    }
+
+    ${active &&
+      `background-color: ${NeutralColors.gray40};
+      &:hover {
+        background-color: ${NeutralColors.gray50} !important;
+      }
+
+      &::after {
+        border-left: 3px solid ${CommunicationColors.primary};
+      }`}
+  `}
 `;
 
-export const iconButton = {
-  root: {
-    color: 'currentColor',
-    height: '40px',
-    width: '40px',
-    fontSize: `${FontSizes.size16}`,
-  },
-  icon: {
-    fontSize: `${FontSizes.size16}`,
-  },
-};
+export const outer = css`
+  display: flex;
+  width: 220px;
+  background-color: transparent;
+`;
 
-export const commandBarButton = {
+export const commandBarButton = () => ({
   root: {
-    color: 'currentColor',
-    height: '40px',
-    width: '200px',
-    fontSize: `${FontSizes.size16}`,
+    color: '#000000',
+    height: '36px',
+    width: '220px',
+    fontSize: `${FontSizes.size14}`,
     paddingLeft: '0px',
+    paddingRight: '0px',
+    marginLeft: '0px',
+    backgroundColor: 'transparent',
   },
   icon: {
-    color: 'currentColor',
-    width: '40px',
-    paddingRight: '10px',
+    color: '#000000',
+    padding: '0 13px',
+    marginLeft: '0px',
     boxSizing: 'border-box',
     fontSize: `${FontSizes.size16}`,
   },
   textContainer: {
     textAlign: 'left',
     zIndex: '1',
+    // display: isExpand ? 'inline-block' : 'none',
   },
-};
+});

@@ -2,39 +2,55 @@
 import { jsx } from '@emotion/core';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
+import { useState } from 'react';
 
-import { link, outer, iconButton, commandBarButton } from './styles';
+import { link, outer, commandBarButton } from './styles';
 
 export const NavItem = props => {
-  const { to, exact, labelHide, iconName, labelName } = props;
+  const { to, exact, labelHide, iconName, labelName, targetUrl, underTest } = props;
+  const [active, setActive] = useState(false);
+
+  const isPartial = (targetUrl, currentUrl) => {
+    const urlPaths = currentUrl.split('/');
+    return urlPaths.indexOf(targetUrl) !== -1;
+  };
+
   return (
-    <Link
-      to={to}
-      tabIndex={-1}
-      style={link}
-      getProps={({ isCurrent, isPartiallyCurrent }) => {
-        const activeStyle = { style: { ...link, color: '#0083cb' } };
-        const isActive = exact ? isCurrent : isPartiallyCurrent;
-        return isActive ? activeStyle : null;
-      }}
-    >
-      <div tabIndex={-1} css={outer(!labelHide)}>
-        {labelHide ? (
-          <IconButton iconProps={{ iconName }} styles={iconButton} />
-        ) : (
-          <CommandBarButton iconProps={{ iconName }} text={labelName} styles={commandBarButton} />
-        )}
-      </div>
-    </Link>
+    <FocusZone allowFocusRoot={true} disabled={underTest}>
+      <Link
+        to={to}
+        css={link(active, underTest)}
+        getProps={({ isCurrent, location }) => {
+          const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
+          setActive(isActive);
+        }}
+        data-testid={'LeftNav-CommandBarButton' + labelName}
+        disabled={underTest}
+        aria-disabled={underTest}
+        aria-label={labelName}
+      >
+        <div css={outer} aria-hidden="true">
+          <CommandBarButton
+            iconProps={{
+              iconName,
+            }}
+            text={labelName}
+            styles={commandBarButton(!labelHide)}
+            disabled={underTest}
+            ariaHidden
+          />
+        </div>
+      </Link>
+    </FocusZone>
   );
 };
-
 NavItem.propTypes = {
   to: PropTypes.string,
   iconName: PropTypes.string,
   labelName: PropTypes.string,
   exact: PropTypes.bool,
   labelHide: PropTypes.bool,
+  index: PropTypes.number,
+  targetUrl: PropTypes.string,
 };

@@ -1,11 +1,12 @@
 import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
+import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile } from './interface';
+import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -27,7 +28,7 @@ export class BotProject {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
-    this.name = Path.basename(this.absolutePath);
+    this.name = Path.basename(this.dir);
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -41,16 +42,19 @@ export class BotProject {
     this.files = await this._getFiles();
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
-    this.luIndexer.index(this.files);
+    await this.luIndexer.index(this.files); // ludown parser is async
+    await this.luPublisher.getLuisStatus();
   };
 
   public getIndexes = () => {
     return {
+      botName: this.name,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
       botFile: this.getBotFile(),
       schemas: this.getSchemas(),
+      luStatus: this.luPublisher.status,
     };
   };
 
@@ -144,8 +148,16 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public publishLuis = async (authoringKey: string) => {
-    return await this.luPublisher.publish(authoringKey, this.luIndexer.getLuFiles());
+  public publishLuis = async (config: ILuisConfig) => {
+    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content.trim()));
+  };
+
+  public checkNeedLuisDeploy = async () => {
+    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
+      return false;
+    } else {
+      return !(await this.luPublisher.checkLuisDeployed());
+    }
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
@@ -158,25 +170,8 @@ export class BotProject {
     const dstDir = locationRef.path;
     await dstStorage.mkDir(dstDir, { recursive: true });
 
-    // copy files to locationRef
-    const prevFiles = await this._getFiles();
-    for (const index in prevFiles) {
-      const file = prevFiles[index];
-      // update main dialog file name and entry in botproj file
-      const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
-      if (file.relativePath.indexOf('.main.dialog') >= 0) {
-        file.relativePath = Path.join(Path.dirname(file.relativePath), newMainDialogName);
-      }
-      const absolutePath = Path.join(dstDir, file.relativePath);
-      let content =
-        index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      if (file.name.indexOf('.botproj') >= 0) {
-        content = JSON.parse(content);
-        content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
-        content = JSON.stringify(content, null, 2) + '\n';
-      }
-      await dstStorage.writeFile(absolutePath, content);
-    }
+    await copyDir(this.dir, this.fileStorage, dstDir, dstStorage);
+
     // return new proj ref
     const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
     if (dstBotProj && dstBotProj.length === 1) {
@@ -215,7 +210,7 @@ export class BotProject {
       relativePath: relativePath,
     });
 
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // update file in this project
@@ -230,7 +225,7 @@ export class BotProject {
     await this.fileStorage.writeFile(absolutePath, content);
 
     this.files[index].content = content;
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // remove file in this project
@@ -245,11 +240,11 @@ export class BotProject {
     await this.fileStorage.removeFile(absolutePath);
 
     this.files.splice(index, 1);
-    this.reindex(relativePath);
+    await this.reindex(relativePath);
   };
 
   // re index according to file change in a certain path
-  private reindex = (filePath: string) => {
+  private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
@@ -260,7 +255,7 @@ export class BotProject {
         this.lgIndexer.index(this.files);
         break;
       case '.lu':
-        this.luIndexer.index(this.files);
+        await this.luIndexer.index(this.files); // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -286,7 +281,7 @@ export class BotProject {
 
     if (botConfig !== undefined) {
       fileList.push({
-        name: this.name,
+        name: Path.basename(this.absolutePath),
         content: botConfig,
         path: this.absolutePath,
         relativePath: Path.relative(this.dir, this.absolutePath),

@@ -23,6 +23,7 @@ export interface Dialog {
   id: number;
   name: string;
   content: any;
+  lgTemplates: string[];
   relativePath: string;
 }
 
@@ -41,6 +42,7 @@ export interface LUFile {
   id: string;
   relativePath: string;
   content: string;
+  parsedContent: any;
 }
 
 export enum FileState {
@@ -61,4 +63,12 @@ export interface ILuisSettings {
       status: FileState;
     };
   };
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
 }

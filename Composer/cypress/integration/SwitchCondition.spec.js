@@ -3,15 +3,15 @@
 context('SwitchCondition', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('01 - Steps', 'SwitchConditionSpec');
+    cy.copyBot('ToDoLuisBot', 'SwitchConditionSpec');
   });
 
   it('can manage cases', () => {
     // Add switch condition
     cy.withinEditor('FormEditor', () => {
       cy.get('[data-testid="StepsFieldAdd"]').click();
-      cy.getByText('Conversational flow and dialog management').click();
-      cy.getByText('Microsoft.SwitchCondition').click();
+      cy.getByText('Flow').click();
+      cy.getByText('Branch: Multi-path Switch').click();
     });
     // Focus switch condition in form editor
     cy.withinEditor('VisualEditor', () => {
@@ -32,18 +32,18 @@ context('SwitchCondition', () => {
 
       // Send activity
       cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Sending a response').click();
-      cy.getByText('Microsoft.SendActivity').click();
+      cy.getByText('Send Messages').click();
+      cy.getByText('Send a single message').click();
 
       // Edit array
       cy.getByText('Add New Step for Case1').click();
       cy.getByText('Memory manipulation').click();
-      cy.getByText('Microsoft.EditArray').click();
+      cy.getByText('Edit an array property').click();
 
       // Log step
       cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Tracing and logging').click();
-      cy.getByText('Microsoft.LogStep').click();
+      cy.getByText('Debugging').click();
+      cy.getByText('Log a message to the console').click();
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')

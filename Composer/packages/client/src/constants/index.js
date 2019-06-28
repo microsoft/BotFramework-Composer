@@ -1,3 +1,5 @@
+import formatMessage from 'format-message';
+
 export const BASEURL = 'http://localhost:5000/api';
 
 /**
@@ -42,6 +44,12 @@ export const ActionTypes = {
   CREATE_LG_FAILURE: 'CREATE_LG_FAILURE',
   REMOVE_LG_SUCCCESS: 'REMOVE_LG_SUCCCESS',
   REMOVE_LG_FAILURE: 'REMOVE_LG_FAILURE',
+  UPDATE_LU_SUCCESS: 'UPDATE_LU_SUCCESS',
+  UPDATE_LU_FAILURE: 'UPDATE_LU_FAILURE',
+  CREATE_LU_SUCCCESS: 'CREATE_LU_SUCCCESS',
+  CREATE_LU_FAILURE: 'CREATE_LU_FAILURE',
+  REMOVE_LU_SUCCCESS: 'REMOVE_LU_SUCCCESS',
+  REMOVE_LU_FAILURE: 'REMOVE_LU_FAILURE',
   PUBLISH_LU_SUCCCESS: 'PUBLISH_LU_SUCCCESS',
   PUBLISH_LU_FAILURE: 'PUBLISH_LU_FAILURE',
   SET_BOT_STATUS_SUCCESS: 'SET_BOT_STATUS_SUCCESS',
@@ -63,6 +71,39 @@ export const ActionTypes = {
   CONNECT_BOT_FAILURE: 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS: 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE: 'RELOAD_BOT_FAILURE',
+};
+
+export const Tips = {
+  PROJECT_NAME: formatMessage(
+    'Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)'
+  ),
+  ENVIRONMENT: formatMessage(
+    'When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.'
+  ),
+  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
+  AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
+  DEFAULT_LANGUAGE: formatMessage(
+    'Configures default language model to use if there is no culture code in the file name (Default:en-us)'
+  ),
+};
+
+export const Links = {
+  LUIS: 'https://www.luis.ai/applications',
+};
+
+export const Text = {
+  LUISDEPLOY: formatMessage(
+    'To use your language model, first publish the latest intents and examples to your LUIS instance.'
+  ),
+  LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
+  LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
+};
+
+export const LuisConfig = {
+  STORAGE_KEY: 'luisConfig',
+  AUTHORING_KEY: 'authoringKey',
+  ENVIRONMENT: 'environment',
+  PROJECT_NAME: 'name',
 };
 
 export const FileTypes = {

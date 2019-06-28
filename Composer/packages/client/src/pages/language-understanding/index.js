@@ -5,125 +5,127 @@ import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'reac
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
+import { OpenAlertModal } from '../../components/Modal/Alert';
 import { Store } from '../../store/index';
-import { OpenConfirmModal } from '../../components/Modal';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
-import NewLuFileModal from './create-new';
 import Content from './content';
-import PublishLuisModal from './publish-luis-modal';
 
 export const LUPage = props => {
-  const fileId = props.fileId;
-  const { state, actions } = useContext(Store);
+  const { actions, state } = useContext(Store);
+  const { dialogs, luFiles } = state;
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
-  const { publishLuis } = actions;
-  const { luFiles } = state;
-  const [modalOpen, setModalOpen] = useState(false);
-  const [publishModalOpen, setPublishModalOpen] = useState(false);
-  const [textMode, setTextMode] = useState(true);
+  const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
-
   const [luFile, setLuFile] = useState(null);
 
-  useEffect(() => {
-    const luFile = luFiles.find(file => file.id === fileId);
+  const subPath = props['*'];
 
-    // if not found, redirect to first lu
-    if (luFiles.length !== 0 && luFile === undefined) {
-      navigate(`./${luFiles[0].id}`);
+  const activePath = subPath === '' ? '_all' : subPath;
+  const activeDialog = dialogs.find(item => item.name === subPath);
+
+  useEffect(() => {
+    if (luFiles.length && activeDialog) {
+      setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
+    }
+  }, [luFiles, activeDialog]);
+
+  const navLinks = useMemo(() => {
+    const subLinks = dialogs.reduce((result, file) => {
+      if (result.length === 0) {
+        result = [{ links: [] }];
+      }
+      const item = {
+        id: file.name,
+        key: file.name,
+        name: file.name,
+      };
+
+      if (file.id === 0) {
+        result[0] = {
+          ...result[0],
+          ...item,
+          isExpanded: true,
+        };
+      } else {
+        result[0].links.push(item);
+      }
+      return result;
+    }, []);
+
+    return [
+      {
+        links: [
+          {
+            id: '_all',
+            key: '_all',
+            name: 'All',
+            isExpanded: true,
+            links: subLinks,
+          },
+        ],
+      },
+    ];
+  }, [dialogs]);
+
+  // if dialog not find, navigate to all.
+  // if all dialog selected, disable textMode
+  useEffect(() => {
+    if (activePath === '_all') {
+      setTextMode(false);
     }
 
-    setLuFile({ ...luFile });
+    if (!activeDialog && subPath && dialogs.length) {
+      navigate('/language-understanding');
+    }
 
     setNewContent(null);
-  }, [luFiles, fileId]);
+  }, [activePath, dialogs, luFiles]);
+
+  function onSelect(id) {
+    if (newContent) {
+      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
+      return;
+    }
+    if (id === '_all') {
+      navigate(`/language-understanding`);
+    } else {
+      navigate(`/language-understanding/${id}`);
+    }
+  }
 
   function onChange(newContent) {
     setNewContent(newContent);
   }
 
   function discardChanges() {
-    setLuFile({ ...luFile });
+    setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
     setNewContent(null);
   }
 
   function onSave() {
     const payload = {
-      id: fileId,
+      id: activeDialog.name, // current opened lu file
       content: newContent,
     };
     updateLuFile(payload);
   }
 
-  async function onRemove() {
-    const title = formatMessage(`Confirm delete ${fileId}.lu file?`);
-    const confirm = await OpenConfirmModal(title);
-    if (confirm === false) {
-      return;
-    }
-    const payload = {
-      id: fileId,
-    };
-    await actions.removeLuFile(payload);
-    navigate(`./`);
+  //#TODO:
+  // get line number from lu parser,
+  // then deep link to code editor this Line
+  function onTableViewWantEdit(template) {
+    navigate(`/language-understanding/${template.fileId}`);
+    setTextMode(true);
   }
-
-  async function onCreateLuFile(data) {
-    await actions.createLuFile({
-      id: data.name,
-      content: '',
-    });
-    setModalOpen(false);
-    navigate(`./${data.name}`);
-  }
-
-  async function handleLuisPublish(key) {
-    await publishLuis(key);
-  }
-
-  const groups = useMemo(() => {
-    const links = luFiles.map(file => {
-      return {
-        key: file.id,
-        name: `${file.id}.lu`,
-        collapseByDefault: false,
-        ariaLabel: file.id,
-        altText: file.id,
-        title: file.id,
-        isExpanded: true,
-        links: [
-          {
-            name: `PlaceHolderIntent`,
-            // url: `./${file.id}#ToDoIntent`,
-          },
-        ],
-        forceAnchor: false,
-        onClick: event => {
-          event.preventDefault();
-          navigate(`./${file.id}`);
-        },
-      };
-    });
-    return [
-      {
-        links: links,
-      },
-    ];
-  }, [luFiles]);
-
-  // performance optimization, component update should only trigger by luFile change.
-  const memoizedContent = useMemo(() => {
-    return <Content file={luFile} textMode={textMode} onChange={onChange} />;
-  }, [luFile, textMode]);
 
   return (
     <Fragment>
       <div css={ContentHeaderStyle}>
-        <div>Understanding what users say</div>
+        <div>User says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
@@ -135,53 +137,38 @@ export const LUPage = props => {
               </ActionButton>
             </Fragment>
           )}
-
-          <ActionButton iconProps={{ iconName: 'Delete' }} onClick={() => onRemove()}>
-            Delete file
-          </ActionButton>
-          <ActionButton iconProps={{ iconName: 'AddTo' }} onClick={() => setModalOpen(true)}>
-            Add new LU file
-          </ActionButton>
           <Toggle
+            className={'toggleEditMode'}
             css={actionButton}
+            onText={formatMessage('Edit mode')}
+            offText={formatMessage('Edit mode')}
             checked={textMode}
-            onText={formatMessage('Text editor')}
+            disabled={activePath === '_all'}
             onChange={() => setTextMode(!textMode)}
-            offText={formatMessage('Text editor')}
-          />
-          <PrimaryButton
-            data-automation-id="Publish"
-            onClick={() => setPublishModalOpen(true)}
-            text={formatMessage('Publish to Luis')}
           />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
-        <Nav
-          styles={{
-            root: {
-              width: 255,
-              height: 400,
-              boxSizing: 'border-box',
-              borderTop: '2px solid #41bdf4',
-              fontWeight: 600,
-              overflowY: 'auto',
-            },
-            linkText: { color: '#000' },
-          }}
-          selectedKey={fileId}
-          expandButtonAriaLabel="Expand or collapse"
-          groups={groups}
+        <div>
+          <Nav
+            onLinkClick={(ev, item) => {
+              onSelect(item.id);
+              ev.preventDefault();
+            }}
+            selectedKey={activePath}
+            groups={navLinks}
+            className={'dialogNavTree'}
+            data-testid={'dialogNavTree'}
+          />
+        </div>
+        <Content
+          file={luFile}
+          activeDialog={activeDialog}
+          onEdit={onTableViewWantEdit}
+          textMode={textMode}
+          onChange={onChange}
         />
-
-        {memoizedContent}
       </div>
-      <NewLuFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLuFile} />
-      <PublishLuisModal
-        isOpen={publishModalOpen}
-        onDismiss={() => setPublishModalOpen(false)}
-        onPublish={handleLuisPublish}
-      />
     </Fragment>
   );
 };

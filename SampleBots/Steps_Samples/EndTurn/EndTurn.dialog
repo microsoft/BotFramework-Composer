@@ -1,0 +1,24 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "What's up?"
+    },
+    {
+      "$type": "Microsoft.EndTurn"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Oh I see!"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-05-18T23:11:05.833Z",
+    "updatedAt": "2019-05-18T23:11:05.841Z",
+    "id": "570040",
+    "name": "02 - EndTurn",
+    "description": "This is a bot that demonstrates the EndTurn concept in Adaptive Dialogs."
+  }
+}
