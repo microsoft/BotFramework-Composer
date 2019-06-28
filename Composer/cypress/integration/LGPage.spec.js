@@ -24,8 +24,8 @@ context('check language generation page', () => {
     // back to table view
     cy.get('@switchButton').click();
 
-    // nav to ToDoBot.main dialog
-    cy.get('.dialogNavTree button[title="ToDoBot"]').click();
+    // nav to Main dialog
+    cy.get('.dialogNavTree button[title="Main"]').click();
     cy.wait(300);
 
     // dialog filter, edit mode button is disabled.
