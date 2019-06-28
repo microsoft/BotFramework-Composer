@@ -76,14 +76,17 @@ context('SwitchCondition', () => {
 
       // assert that the steps are in correct order
       cy.get('@steps')
+        .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(0)
-        .should('contain.text', 'Microsoft.EditArray');
+        .should('contain.text', 'Microsoft.EditArray');
       cy.get('@steps')
+        .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(1)
-        .should('contain.text', 'Microsoft.LogStep');
+        .should('contain.text', 'Microsoft.LogStep');
       cy.get('@steps')
+        .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(2)
-        .should('contain.text', 'Microsoft.SendActivity');
+        .should('contain.text', 'Microsoft.SendActivity');
 
       // Add another new case
       cy.getByText('Add New Case').click();
