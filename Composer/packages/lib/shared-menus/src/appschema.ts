@@ -36,6 +36,8 @@ export const dialogGroups: DialogGroupsMap = {
       'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
+      'Microsoft.OAuthInput',
+      'Microsoft.AttachmentInput',
     ],
   },
   [DialogGroup.BRANCHING]: {
@@ -65,7 +67,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep', 'Microsoft.OAuthInput'],
+    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep'],
   },
   [DialogGroup.LOG]: {
     label: 'Debugging',
