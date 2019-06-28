@@ -10,7 +10,7 @@ import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
-import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile } from './types';
+import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 
 import './App.css';
 
@@ -25,6 +25,7 @@ export interface FormEditorProps {
   dialogs: DialogInfo[];
   dialogName: string;
   luFiles: LuFile[];
+  lgFiles: LgFile[];
   schemas: EditorSchema;
   memory: FormMemory;
   shellApi: ShellApi;
@@ -115,6 +116,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             editorSchema: schemas.editor,
             rootId: props.focusPath,
             luFiles: props.luFiles,
+            lgFiles: props.lgFiles,
             dialogName: props.dialogName,
           }}
           idPrefix={props.focusPath}
