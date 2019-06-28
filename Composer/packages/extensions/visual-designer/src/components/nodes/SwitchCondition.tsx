@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
 import { OffsetContainer } from '../../shared/OffsetContainer';
@@ -30,7 +32,13 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };
 
-export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize }) {
+export const SwitchCondition: FunctionComponent<NodeProps> = ({
+  id,
+  data,
+  focusedId,
+  onEvent,
+  onResize,
+} = defaultNodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -53,16 +61,16 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
   const { boundary, nodeMap, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <OffsetContainer offset={nodeMap.conditionNode.offset}>
+      <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <DefaultRenderer
-          key={nodeMap.conditionNode.id}
-          id={nodeMap.conditionNode.id}
-          data={nodeMap.conditionNode.data}
+          key={nodeMap && nodeMap.conditionNode.id}
+          id={nodeMap && nodeMap.conditionNode.id}
+          data={nodeMap && nodeMap.conditionNode.data}
           focusedId={focusedId}
           onEvent={onEvent}
         />
       </OffsetContainer>
-      <OffsetContainer offset={nodeMap.choiceNode.offset} styles={{ zIndex: 100 }}>
+      <OffsetContainer offset={nodeMap && nodeMap.choiceNode.offset} styles={{ zIndex: 100 }}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
@@ -70,7 +78,7 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
           }}
         />
       </OffsetContainer>
-      {(nodeMap.branchNodes || []).map(x => (
+      {((nodeMap && nodeMap.branchNodes) || []).map(x => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <StepGroup
             key={x.id}
@@ -88,6 +96,3 @@ export const SwitchCondition = function({ id, data, focusedId, onEvent, onResize
     </div>
   );
 };
-
-SwitchCondition.propTypes = NodeProps;
-SwitchCondition.defaultProps = defaultNodeProps;

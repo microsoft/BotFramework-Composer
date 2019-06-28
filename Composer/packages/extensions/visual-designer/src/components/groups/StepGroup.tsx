@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -25,7 +26,13 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
+export const StepGroup: FunctionComponent<NodeProps> = ({
+  id,
+  data,
+  focusedId,
+  onEvent,
+  onResize,
+} = defaultNodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -86,6 +93,3 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
     </div>
   );
 };
-
-StepGroup.propTypes = NodeProps;
-StepGroup.defaultProps = defaultNodeProps;

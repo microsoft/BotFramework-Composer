@@ -14,6 +14,7 @@ import {
   SwitchCondition,
 } from '../nodes/index';
 
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
 
@@ -36,7 +37,8 @@ function chooseRendererByType($type) {
   return renderer;
 }
 
-export class NodeRenderer extends React.Component {
+export class NodeRenderer extends React.Component<NodeProps, {}> {
+  static defaultProps = defaultNodeProps;
   containerRef = React.createRef();
 
   render() {
@@ -57,6 +59,3 @@ export class NodeRenderer extends React.Component {
     );
   }
 }
-
-NodeRenderer.propTypes = NodeProps;
-NodeRenderer.defaultProps = defaultNodeProps;

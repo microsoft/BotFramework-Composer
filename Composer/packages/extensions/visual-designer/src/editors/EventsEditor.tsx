@@ -17,7 +17,7 @@ export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
     <Panel
       title={title}
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
-      addMenu={<EventMenu id={id} onClick={onClick} />}
+      addMenu={<EventMenu onClick={onClick} />}
     >
       <RuleGroup key={id} id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
     </Panel>

@@ -11,7 +11,7 @@ import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
 export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, onChange }) => {
-  const dispatchEvent = (eventName, eventData) => {
+  const dispatchEvent = (eventName?, eventData?) => {
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
@@ -59,7 +59,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
   const ChosenEditor = chooseEditor(data.$type);
   return (
     <div
-      tabIndex="0"
+      tabIndex={0}
       className="obi-editor-container"
       data-testid="obi-editor-container"
       style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
@@ -75,13 +75,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       }}
     >
       <DragScroll>
-        <ChosenEditor
-          id={path}
-          data={data}
-          expanded={true}
-          focusedId={focusedId}
-          onEvent={(...args) => dispatchEvent(...args)}
-        />
+        <ChosenEditor id={path} data={data} focusedId={focusedId} onEvent={(...args) => dispatchEvent(...args)} />
       </DragScroll>
     </div>
   );

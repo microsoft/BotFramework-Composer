@@ -9,7 +9,7 @@ function transformSimpleDialog(input) {
   const rules = input.rules || [];
   const steps = input.steps || [];
 
-  const result = {};
+  const result: { [key: string]: any } = {};
   result.ruleGroup = new IndexedNode('rules', {
     $type: ObiTypes.RuleGroup,
     children: rules.map((x, index) => new IndexedNode(`rules[${index}]`, x)),

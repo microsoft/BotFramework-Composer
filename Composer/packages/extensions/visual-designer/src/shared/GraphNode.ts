@@ -14,7 +14,7 @@ export class GraphNode {
   }
 
   static fromIndexedJson(indexedJson) {
-    if (!indexedJson) return null;
+    if (!indexedJson) return new GraphNode('', {});
     const node = new GraphNode(indexedJson.id, indexedJson.json);
     node.boundary = measureJsonBoundary(indexedJson.json);
     return node;

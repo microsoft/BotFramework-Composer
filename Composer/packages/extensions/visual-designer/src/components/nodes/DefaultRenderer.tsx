@@ -133,7 +133,7 @@ const ContentKeyByTypes: {
  */
 
 export class DefaultRenderer extends React.Component<NodeProps, {}> {
-  defaultProps = defaultNodeProps;
+  static defaultProps = defaultNodeProps;
   render() {
     const { id, data, onEvent } = this.props;
     let header = getFriendlyName(data),

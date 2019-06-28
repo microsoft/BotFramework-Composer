@@ -18,7 +18,7 @@ export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge 
     return offsetY + node.boundary.height + StepInterval;
   }, 0);
 
-  const edges = [];
+  const edges: { [key: string]: any } = [];
   for (let i = 0; i < nodes.length - 1; i++) {
     const { id, boundary, offset } = nodes[i];
     const x = box.axisX;

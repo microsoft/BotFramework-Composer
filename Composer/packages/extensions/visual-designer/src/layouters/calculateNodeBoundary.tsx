@@ -22,10 +22,10 @@ export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTail
   return box;
 }
 
-export function calculateIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode) {
+export function calculateIfElseBoundary(conditionNode?, choiceNode?, ifNode?, elseNode?) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
-  const branchNodes = [ifNode || new GraphNode(), elseNode || new GraphNode()];
+  const branchNodes: { [key: string]: any } = [ifNode || new GraphNode(), elseNode || new GraphNode()];
 
   return measureBranchingContainerBoundary(
     conditionNode.boundary,
@@ -34,7 +34,7 @@ export function calculateIfElseBoundary(conditionNode, choiceNode, ifNode, elseN
   );
 }
 
-export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes = []) {
+export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes: { [key: string]: any } = []) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   return measureBranchingContainerBoundary(
@@ -44,7 +44,11 @@ export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNod
   );
 }
 
-function measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries = []) {
+function measureBranchingContainerBoundary(
+  conditionBoundary,
+  choiceBoundary,
+  branchBoundaries: { [key: string]: any } = []
+) {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
   const firstBranchBoundary = branchBoundaries[0] || new Boundary();

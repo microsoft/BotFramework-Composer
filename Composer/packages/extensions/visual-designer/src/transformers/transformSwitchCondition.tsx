@@ -14,7 +14,7 @@ export function transformSwitchCondition(input, jsonpath) {
   const defaultSteps = input[DefaultBranchKey] || [];
   const cases = input[CasesKey] || [];
 
-  const result = {
+  const result: { [key: string]: any } = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
       $type: ObiTypes.ConditionNode,

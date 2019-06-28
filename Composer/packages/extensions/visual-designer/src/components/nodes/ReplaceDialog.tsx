@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { getDialogGroupByType } from '../../shared/appschema';
@@ -9,7 +10,8 @@ import { getElementColor } from '../../shared/elementColors';
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
 
-export class ReplaceDialog extends React.Component {
+export class ReplaceDialog extends React.Component<NodeProps, {}> {
+  static defaultProps = defaultNodeProps;
   renderCallDialogLink() {
     const { data, onEvent } = this.props;
     if (!data || !data.dialog) return null;
@@ -47,6 +49,3 @@ export class ReplaceDialog extends React.Component {
     );
   }
 }
-
-ReplaceDialog.propTypes = NodeProps;
-ReplaceDialog.defaultProps = defaultNodeProps;

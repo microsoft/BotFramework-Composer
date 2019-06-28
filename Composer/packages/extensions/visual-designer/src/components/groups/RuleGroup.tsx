@@ -1,5 +1,6 @@
 import React from 'react';
 
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Boundary } from '../../shared/Boundary';
@@ -12,7 +13,8 @@ const RulePaddingY = EventNodeLayout.marginY;
 const RuleBlockWidth = RuleElementWidth + RulePaddingX;
 const RuleBlockHeight = RuleElementHeight + RulePaddingY;
 
-export class RuleGroup extends React.Component {
+export class RuleGroup extends React.Component<NodeProps> {
+  static defaultProps = defaultNodeProps;
   containerElement;
 
   propagateBoundary() {
@@ -70,6 +72,3 @@ export class RuleGroup extends React.Component {
     );
   }
 }
-
-RuleGroup.propTypes = NodeProps;
-RuleGroup.defaultProps = defaultNodeProps;

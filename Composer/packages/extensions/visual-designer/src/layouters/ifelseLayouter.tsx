@@ -89,7 +89,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
       break;
   }
 
-  const edgeList = [];
+  const edgeList: { [key: string]: any } = [];
   edgeList.push({
     id: `edge/${conditionNode.id}/condition->choice`,
     direction: 'y',

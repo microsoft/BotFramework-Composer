@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// eslint-disable-next-line no-unused-vars
+import React, { ReactNode } from 'react';
 
 type Props = {
-  offset: any;
+  offset?: { [key: string]: number };
+  children: ReactNode;
   styles: object;
 };
 
@@ -10,9 +11,10 @@ export class OffsetContainer extends React.Component<Props, object> {
   static defaultProps = {
     styles: {},
   };
-  render() {
+  render(): ReactNode {
     const { offset, children, styles } = this.props;
     if (!offset) return children;
+
     return (
       <div
         style={{
@@ -29,15 +31,3 @@ export class OffsetContainer extends React.Component<Props, object> {
     );
   }
 }
-
-OffsetContainer.defaultProps = {
-  styles: {},
-};
-
-OffsetContainer.propTypes = {
-  offset: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-  }),
-  children: PropTypes.element,
-};

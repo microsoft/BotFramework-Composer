@@ -1,14 +1,11 @@
-import React from 'react';
+// eslint-disable-next-line no-unused-vars
+import React, { FunctionComponent } from 'react';
 
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { RuleCard } from './templates/RuleCard';
 
-export const IntentRule = ({ id, data, focusedId, onEvent }) => {
-  return (
-    <RuleCard id={id} data={data} themeColor="#BFEAE9" label={data.intent} focusedId={focusedId} onEvent={onEvent} />
-  );
+export const IntentRule: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent } = defaultNodeProps) => {
+  return <RuleCard id={id} data={data} label={data.intent} focusedId={focusedId} onEvent={onEvent} />;
 };
-
-IntentRule.propTypes = NodeProps;
-IntentRule.defaultProps = defaultNodeProps;
