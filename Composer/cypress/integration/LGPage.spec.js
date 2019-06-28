@@ -10,7 +10,7 @@ context('check language generation page', () => {
     cy.visit(Cypress.env('COMPOSER_URL') + '/language-generation');
 
     // left nav tree
-    cy.contains('ToDoBot');
+    cy.contains('Main');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
