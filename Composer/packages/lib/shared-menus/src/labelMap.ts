@@ -4,8 +4,6 @@ import formatMessage from 'format-message';
  * These labels will be used when rendering the EdgeMenu
  */
 export const ConceptLabels = {
-  // TODO: update label
-  'Microsoft.AttachmentInput': 'Microsoft.AttachmentInput',
   'Microsoft.ChoiceInput': formatMessage('Type: Multiple Choice'),
   'Microsoft.ConfirmInput': formatMessage('Type: Yes/No Confirm'),
   'Microsoft.FloatInput': formatMessage('Type: Floating Point Number'),
@@ -16,15 +14,9 @@ export const ConceptLabels = {
   'Microsoft.BeginDialog': formatMessage('Begin a child dialog'),
   'Microsoft.IfCondition': formatMessage('Branch: If/Else'),
   'Microsoft.SwitchCondition': formatMessage('Branch: Multi-path Switch'),
-  // TODO: update label
-  'Microsoft.Foreach': 'Microsoft.Foreach',
-  // TODO: update label
-  'Microsoft.ForeachPage': 'Microsoft.ForeachPage',
 
   'Microsoft.EndDialog': formatMessage('End this dialog (and resume parent)'),
   'Microsoft.CancelAllDialogs': formatMessage('End all active dialogs'),
-  // TODO: update label
-  'Microsoft.EditSteps': 'Microsoft.EditSteps',
   'Microsoft.EndTurn': formatMessage('End this turn'),
   'Microsoft.RepeatDialog': formatMessage('Restart this dialog'),
   'Microsoft.ReplaceDialog': formatMessage('Start a new dialog (and do not resume)'),
@@ -37,15 +29,18 @@ export const ConceptLabels = {
 
   'Microsoft.CodeStep': formatMessage('Run custom code'),
   'Microsoft.HttpRequest': formatMessage('Make an HTTP request'),
-  // TODO: update label
-  'Microsoft.OAuthInput': 'Microsoft.OAuthInput',
 
-  // TODO: update label
-  'Microsoft.DebugBreak': 'Microsoft.DebugBreak',
   'Microsoft.LogStep': formatMessage('Log a message to the console'),
   'Microsoft.TraceActivity': formatMessage('Emit a trace event'),
 
   'Microsoft.EventRule': formatMessage('Handle an event'),
   'Microsoft.IntentRule': formatMessage('Handle an intent'),
   'Microsoft.UnknownIntentRule': formatMessage('Provide a fallback handler'),
+
+  'Microsoft.AttachmentInput': formatMessage('Type: Attachment'),
+  'Microsoft.Foreach': formatMessage('Branch: For each'),
+  'Microsoft.ForeachPage': formatMessage('Branch: For each with paging'),
+  'Microsoft.EditSteps': formatMessage('Edit dialog steps'),
+  'Microsoft.OAuthInput': formatMessage('Type: OAuth'),
+  'Microsoft.DebugBreak': formatMessage('Debugging Breakpoint'),
 };
