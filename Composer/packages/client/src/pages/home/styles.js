@@ -9,6 +9,10 @@ export const outline = css`
   overflow-x: auto;
 `;
 
+export const content = css`
+  min-width: 1300px;
+`;
+
 export const title = css`
   display: block;
   height: 36px;

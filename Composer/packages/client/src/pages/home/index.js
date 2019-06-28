@@ -27,6 +27,7 @@ import {
   templateContent,
   templateText,
   footer,
+  content,
 } from './styles';
 
 const linksLeft = [
@@ -100,7 +101,7 @@ const templates = [
 export const Home = () => {
   return (
     <div css={outline}>
-      <div style={{ width: '1300px' }}>
+      <div css={content}>
         <div css={title}>&quot;Are you real?&quot;</div>
         <div css={introduction}>
           <div css={introTitle}>
