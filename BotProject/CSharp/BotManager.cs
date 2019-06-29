@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.Bot.Builder.BotFramework;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -63,7 +64,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 resourceExplorer.AddFolder(folder);
             }
 
-            var adapter = new BotFrameworkHttpAdapter();
+            var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
             adapter
                 .UseStorage(storage)
