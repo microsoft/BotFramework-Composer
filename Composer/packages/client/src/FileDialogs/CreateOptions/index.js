@@ -31,7 +31,12 @@ export function CreateOptionsDialog(props) {
           <ChoiceGroup
             defaultSelectedKey={templates.length > 0 && templates[0].id}
             styles={choiceGroup}
-            options={templates.map(item => ({ key: item.id, text: item.name, onRenderField: TemplateItem }))} // onChange={handleChange}}
+            options={templates.map(item => ({
+              ariaLabel: item.id,
+              key: item.id,
+              text: item.name,
+              onRenderField: TemplateItem,
+            }))}
             onChange={handleItemChange}
             required={true}
           />
@@ -86,6 +91,7 @@ export function CreateOptionsDialog(props) {
           disabled={option === 'import' && templates.length <= 0}
           onClick={handleJumpToNext}
           text={formatMessage('Next')}
+          data-testid="NextStepButton"
         />
       </DialogFooter>
     </DialogWrapper>

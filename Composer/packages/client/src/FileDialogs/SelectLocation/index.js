@@ -38,10 +38,11 @@ export function SelectLocationDialog(props) {
         }}
         required={true}
         styles={choice}
+        data-testid="SelectLocation"
       />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={handleOpen} text={formatMessage('Open')} />
+        <PrimaryButton onClick={handleOpen} text={formatMessage('Open')} data-testid="SelectLocationOpen" />
       </DialogFooter>
     </DialogWrapper>
   );

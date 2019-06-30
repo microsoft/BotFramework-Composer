@@ -1,7 +1,6 @@
-import settings from '../settings/settings.json';
-
 import { Request, Response } from 'express';
 
+import settings from '../settings/settings.json';
 import StorageService from '../services/storage';
 import { Path } from '../utility/path.js';
 

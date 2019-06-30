@@ -61,6 +61,7 @@ export function DefineConversationDialog(props) {
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
             onGetErrorMessage={onGetErrorMessage}
+            data-testid="NewDialogName"
           />
           <TextField
             styles={description}
