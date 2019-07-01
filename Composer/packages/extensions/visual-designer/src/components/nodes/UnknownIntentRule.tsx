@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent } from 'react';
 
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { RuleCard } from './templates/RuleCard';

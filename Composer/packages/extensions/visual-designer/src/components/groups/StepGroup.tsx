@@ -1,6 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphNode } from '../../shared/GraphNode';
@@ -25,7 +27,7 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const stepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }: NodeProps) => {
+export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }: NodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -86,4 +88,4 @@ export const stepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, o
     </div>
   );
 };
-stepGroup.defaultProps = defaultNodeProps;
+StepGroup.defaultProps = defaultNodeProps;

@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useMemo, FunctionComponent } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { Collapse } from '../components/nodes/templates/Collapse';

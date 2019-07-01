@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
+// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { getDialogGroupByType } from '../../shared/appschema';
