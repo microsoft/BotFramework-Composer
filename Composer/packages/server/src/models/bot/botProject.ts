@@ -44,6 +44,7 @@ export class BotProject {
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this.luPublisher.getLuisStatus();
+    await this._checkProjectStructure();
   };
 
   public getIndexes = () => {
@@ -326,5 +327,20 @@ export class BotProject {
     }
 
     return fileList;
+  };
+
+  // check project stracture is valid or not, if not, try fix it.
+  private _checkProjectStructure = async () => {
+    const dialogs: Dialog[] = this.dialogIndexer.getDialogs();
+    const luFiles: LUFile[] = this.luIndexer.getLuFiles();
+    // ensure each dialog got a lu file
+    for (const dialog of dialogs) {
+      // dialog/lu should in the same path folder
+      const targetLuFilePath = `${Path.basename(dialog.relativePath)}.lu`;
+      const exist = luFiles.findIndex((luFile: { [key: string]: any }) => luFile.relativePath === targetLuFilePath);
+      if (exist === -1) {
+        await this._createFile(targetLuFilePath, '');
+      }
+    }
   };
 }
