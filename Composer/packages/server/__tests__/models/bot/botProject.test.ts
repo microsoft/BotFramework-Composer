@@ -146,7 +146,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.createLgFile(id, content, dir);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(6);
+    expect(proj.files.length).toEqual(9);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -162,7 +162,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.updateLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(6);
+    expect(proj.files.length).toEqual(9);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -177,7 +177,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.removeLgFile(id);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(5);
+    expect(proj.files.length).toEqual(8);
     expect(lgFiles.length).toEqual(1);
 
     expect(result).toBeUndefined();
