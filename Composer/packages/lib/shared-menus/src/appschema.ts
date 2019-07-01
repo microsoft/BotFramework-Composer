@@ -32,8 +32,8 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       'Microsoft.TextInput',
       'Microsoft.NumberInput',
-      'Microsoft.IntegerInput',
-      'Microsoft.FloatInput',
+      // 'Microsoft.IntegerInput',
+      // 'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
       'Microsoft.OAuthInput',
