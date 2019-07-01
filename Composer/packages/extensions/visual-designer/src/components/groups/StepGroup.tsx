@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
@@ -26,13 +25,7 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  onEvent,
-  onResize,
-} = defaultNodeProps) => {
+export const stepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }: NodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -93,3 +86,4 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
     </div>
   );
 };
+stepGroup.defaultProps = defaultNodeProps;

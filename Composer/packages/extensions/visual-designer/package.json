@@ -21,6 +21,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
+    "@types/jest": "^24.0.11",
     "@types/react": "^16.8.21",
     "cci-graph-lib": "*",
     "classnames": "^2.2.6",
@@ -32,6 +33,7 @@
     "office-ui-fabric-react": "^6.180.0",
     "prop-types": "^15.7.2",
     "source-map-loader": "^0.2.4",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.3"
   },
   "peerDependencies": {

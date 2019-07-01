@@ -1,9 +1,7 @@
-// eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
 import { OffsetContainer } from '../../shared/OffsetContainer';
@@ -33,13 +31,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export const IfCondition: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  onEvent,
-  onResize,
-} = defaultNodeProps) => {
+export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -102,3 +94,5 @@ export const IfCondition: FunctionComponent<NodeProps> = ({
     </div>
   );
 };
+
+IfCondition.defaultProps = defaultNodeProps;

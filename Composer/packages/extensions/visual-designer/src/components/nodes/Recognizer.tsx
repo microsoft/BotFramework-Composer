@@ -10,7 +10,7 @@ import { getElementColor } from '../../shared/elementColors';
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
 
-export class Recognizer extends React.Component<NodeProps, {}> {
+export class Recognizer extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;
   render() {
     const { id, data, onEvent } = this.props;

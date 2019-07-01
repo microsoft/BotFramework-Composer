@@ -1,8 +1,6 @@
-// eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
 import { OffsetContainer } from '../../shared/OffsetContainer';
@@ -32,13 +30,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };
 
-export const SwitchCondition: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  onEvent,
-  onResize,
-} = defaultNodeProps) => {
+export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -96,3 +88,5 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({
     </div>
   );
 };
+
+SwitchCondition.defaultProps = defaultNodeProps;

@@ -1,9 +1,7 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useMemo, FunctionComponent } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { Collapse } from '../components/nodes/templates/Collapse';
@@ -19,12 +17,7 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  onEvent,
-} = defaultNodeProps): JSX.Element => {
+export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent }): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -65,3 +58,5 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
     </div>
   );
 };
+
+AdaptiveDialogEditor.defaultProps = defaultNodeProps;

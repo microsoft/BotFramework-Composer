@@ -1,4 +1,4 @@
-import { transformRootDialog } from '../../src/transformers/transformRootDialog.js';
+import { transformRootDialog } from '../../src/transformers/transformRootDialog';
 
 import * as TodoBotMain from './todoBot.main.json';
 
