@@ -1,30 +1,61 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Step 1"
+      "$designer": {
+        "createdAt": "2019-07-01T21:55:00.865Z",
+        "updatedAt": "2019-07-01T21:55:02.336Z",
+        "id": "522200"
+      },
+      "activity": "[activity-522200]"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Step 2"
+      "$designer": {
+        "createdAt": "2019-07-01T21:54:55.777Z",
+        "updatedAt": "2019-07-01T21:54:57.132Z",
+        "id": "350559"
+      },
+      "activity": "[activity-350559]"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Step 3"
+      "$designer": {
+        "createdAt": "2019-07-01T21:54:47.248Z",
+        "updatedAt": "2019-07-01T21:54:48.798Z",
+        "id": "309397"
+      },
+      "activity": "[activity-309397]"
     },
     {
       "$type": "Microsoft.SetProperty",
       "property": "user.age",
-      "value": "9+9"
+      "value": "9+9",
+      "$designer": {
+        "createdAt": "2019-07-01T21:54:48.182Z",
+        "updatedAt": "2019-07-01T21:54:48.190Z",
+        "id": "026341"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "user.age is set to {user.age}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:54:34.003Z",
+        "updatedAt": "2019-07-01T21:54:36.119Z",
+        "id": "797905"
+      },
+      "activity": "[activity-797905]"
     },
     {
       "$type": "Microsoft.DeleteProperty",
-      "property": "user.age"
+      "property": "user.age",
+      "$designer": {
+        "createdAt": "2019-07-01T21:54:35.399Z",
+        "updatedAt": "2019-07-01T21:54:35.403Z",
+        "id": "948500"
+      }
     },
     {
       "$type": "Microsoft.IfCondition",
@@ -32,15 +63,35 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "user.age is set to {user.age}"
+          "$designer": {
+            "createdAt": "2019-07-01T21:47:08.296Z",
+            "updatedAt": "2019-07-01T21:53:59.644Z",
+            "id": "166131"
+          },
+          "activity": "[activity-166131]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "user.age is set to null"
+          "$designer": {
+            "createdAt": "2019-07-01T21:54:15.926Z",
+            "updatedAt": "2019-07-01T21:54:18.873Z",
+            "id": "643043"
+          },
+          "activity": "[activity-643043]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:47:07.036Z",
+        "updatedAt": "2019-07-01T21:47:07.065Z",
+        "id": "634904"
+      }
     }
-  ]
+  ],
+  "$designer": {
+    "createdAt": "2019-07-01T21:43:43.118Z",
+    "updatedAt": "2019-07-01T21:43:43.206Z",
+    "id": "962966"
+  }
 }

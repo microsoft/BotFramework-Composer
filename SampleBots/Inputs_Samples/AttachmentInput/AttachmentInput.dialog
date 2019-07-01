@@ -1,16 +1,35 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-        {
-            "$type": "Microsoft.AttachmentInput",
-            "property": "dialog.attachments",
-            "prompt": "Please send an image or music.",
-            "outputFormat": "All"
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
-        }
-    ]
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.AttachmentInput",
+      "property": "dialog.attachments",
+      "prompt": "Please send an image or music.",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "All",
+      "$designer": {
+        "createdAt": "2019-07-01T21:58:52.225Z",
+        "updatedAt": "2019-07-01T21:58:52.233Z",
+        "id": "957704"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:58:31.495Z",
+        "updatedAt": "2019-07-01T21:58:53.644Z",
+        "id": "587377"
+      },
+      "activity": "[activity-587377]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:58:25.775Z",
+    "updatedAt": "2019-07-01T21:58:25.798Z",
+    "id": "335276"
+  }
 }

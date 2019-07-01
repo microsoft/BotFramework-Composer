@@ -1,51 +1,70 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "recognizer": {
-        "$type": "Microsoft.RegexRecognizer",
-        "intents": {
-            "JokeIntent": "(?i)joke",
-            "FortuneTellerIntent": "(?i)fortune|future"
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "JokeIntent": "(?i)joke",
+      "FortuneTellerIntent": "(?i)fortune|future"
+    }
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.name == null",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "property": "user.name",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none",
+          "$designer": {
+            "createdAt": "2019-07-01T21:42:01.159Z",
+            "updatedAt": "2019-07-01T21:42:01.165Z",
+            "id": "823146"
+          }
         }
+      ]
     },
-    "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:41:59.475Z",
+        "updatedAt": "2019-07-01T21:42:01.939Z",
+        "id": "120128"
+      },
+      "activity": "[activity-120128]"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "JokeIntent",
+      "steps": [
         {
-            "$type": "Microsoft.IfCondition",
-            "condition": "user.name == null",
-            "steps": [
-                {
-                    "$type": "Microsoft.TextInput",
-                    "property": "user.name",
-                    "prompt": "Hello, I'm Zoidberg. What is your name?"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hello {user.name}, nice to talk to you!"
+          "$type": "Microsoft.ReplaceDialog",
+          "dialog": "TellJokeDialog"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "FortuneTellerIntent",
+      "steps": [
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "JokeIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.ReplaceDialog",
-                    "dialog": "TellJokeDialog"
-                }                
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "FortuneTellerIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.ReplaceDialog",
-                    "dialog": "FortuneTellerDialog"
-                }              
-            ]
+          "$type": "Microsoft.ReplaceDialog",
+          "dialog": "FortuneTellerDialog"
         }
-    ]
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:41:42.141Z",
+    "updatedAt": "2019-07-01T21:41:42.175Z",
+    "id": "714288"
+  }
 }

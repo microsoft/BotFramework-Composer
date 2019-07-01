@@ -1,42 +1,67 @@
 # Hello
-- [Welcome(time)] {name}
+-[Welcome(time)] {name}
 
-# Welcome(time)
-- IF: {time == 'morning'}
- - Good morning
-- ELSEIF: {time == 'evening'}
- - Good evening
-- ELSE:
- - How are you doing,
+# Welcome
+-IF:{time == 'morning'}
+-Good morning
+-ELSEIF:{time == 'evening'}
+-Good evening
+-ELSE:
+-How are you doing,
 
 # Exit
-- Thanks for using todo bot.
+-Thanks for using todo bot.
 
 # Greeting
 -What's up bro
 
 # ShowTodo
-- IF: {count(user.todos) > 0}
-    - ```
+-IF:{count(user.todos) > 0}
+-```
     Your most recent @{count(user.todos)} tasks are 
     @{join(foreach(user.todos, x, lgTemplate('showSingleTodo', x)), '\n')}
       ```
-- ELSE:
-    - You don't have any todos.
+-ELSE:
+-You don't have any todos.
 
-# showSingleTodo(x)
-- * {x}
+# showSingleTodo
+-* {x}
 
 # ShowGrocery
-- IF: {count(user.groceryList) > 0}
-    - ```
+-IF:{count(user.groceryList) > 0}
+-```
     Your most recent @{count(user.groceryList)} tasks are 
     @{join(foreach(user.groceryList, x, lgTemplate('showSingleTodo', x)), '\n')}
       ```
-- ELSE:
-    - You don't have any todos in grocery.
+-ELSE:
+-You don't have any todos in grocery.
 
 # help
-- I can add a todo, show todos, remove a todo, and clear all todos
-- I can hep you yes I can
-- Help, we don't need no stinkin' help!
+-I can add a todo, show todos, remove a todo, and clear all todos
+-I can hep you yes I can
+-Help, we don't need no stinkin' help!
+
+# activity-376720
+-Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.
+
+# activity-116673
+-Successfully added a todo named \"{dialog.todo}\"
+
+# activity-832307
+-Successfully cleared items in the Todo List.
+
+# activity-983761
+-You don't have any items in the Todo List.
+
+# activity-725469
+-Successfully removed a todo named \"{dialog.todo}\"
+
+# activity-549615
+-\"{dialog.todo}\" is not in the Todo List
+
+# activity-339580
+-You have no todos.
+
+# activity-662084
+-[ShowToDo]
+

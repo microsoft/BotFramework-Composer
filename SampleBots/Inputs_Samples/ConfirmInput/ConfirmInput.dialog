@@ -1,20 +1,51 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.ConfirmInput",
+      "property": "user.confirmed",
+      "prompt": "yes or no",
+      "unrecognizedPrompt": "I need a yes or no.",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "confirmChoices": [
         {
-            "$type": "Microsoft.ConfirmInput",
-            "property": "user.confirmed",        
-            "prompt": "yes or no",
-	        "unrecognizedPrompt": "I need a yes or no.",
-            "alwaysPrompt": true
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "confirmation: {user.confirmed}"
-        },
-	    {
-            "$type": "Microsoft.RepeatDialog"
+          "action": {}
         }
-    ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:15.892Z",
+        "updatedAt": "2019-07-01T21:59:15.898Z",
+        "id": "647929"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:14.563Z",
+        "updatedAt": "2019-07-01T21:59:16.680Z",
+        "id": "458458"
+      },
+      "activity": "[activity-458458]"
+    },
+    {
+      "$type": "Microsoft.RepeatDialog"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:59:12.432Z",
+    "updatedAt": "2019-07-01T21:59:12.455Z",
+    "id": "337300"
+  }
 }

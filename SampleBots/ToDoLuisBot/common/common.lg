@@ -74,7 +74,25 @@
 -test
 
 # activity-526152
-- test
-- test2
-- test3
+-test
+-test2
+-test3
+
+# activity-920820
+-Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.
+
+# activity-911222
+-The list name must be shopping, grocery or todo.
+
+# activity-398112
+-Successfully added {dialog.item} to {dialog.listName} list.
+
+# activity-192360
+-Successfully removed {dialog.item} from {dialog.listName} list.
+
+# activity-199536
+-You have no items in your {dialog.listName} list.
+
+# activity-136653
+-[ShowItems(user, dialog.listName)]
 

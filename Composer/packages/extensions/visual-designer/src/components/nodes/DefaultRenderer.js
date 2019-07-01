@@ -34,6 +34,9 @@ function makeLabel(data, getLgTemplates, setRenderedLabel) {
       if (data.activity && data.$designer && data.$designer.id) {
         if (data.activity.indexOf('activity-') !== -1) {
           // this is an LG template, go get it's content
+          if (!getLgTemplates || typeof getLgTemplates !== 'function') {
+            return data.activity;
+          }
           const templateName = data.activity.slice(1, data.activity.length - 1);
           getLgTemplates('common', `${templateName}`).then(templates => {
             const [template] = templates.filter(template => {

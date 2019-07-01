@@ -1,60 +1,72 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "steps": [
-        {
-                "$type": "Microsoft.SendActivity",
-                "activity": "Say moo to get a response, say emit to emit a event."
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:33:40.722Z",
+        "updatedAt": "2019-07-01T21:33:43.763Z",
+        "id": "879639"
+      },
+      "activity": "[activity-879639]"
+    },
+    {
+      "$type": "Microsoft.BeginDialog",
+      "Dialog": {
+        "$type": "Microsoft.AdaptiveDialog",
+        "autoEndDialog": false,
+        "recognizer": {
+          "$type": "Microsoft.RegexRecognizer",
+          "intents": {
+            "EmitEvent": "emit",
+            "CowboyIntent": "moo"
+          }
         },
-        {    
-            "$type": "Microsoft.BeginDialog",
-            "Dialog": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "autoEndDialog": false,
-                "recognizer": {
-                    "$type": "Microsoft.RegexRecognizer",
-                    "intents": {
-                        "EmitEvent": "emit",
-                        "CowboyIntent": "moo"
-                    }
-                },
-                "rules": [
-                    {   
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "EmitEvent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.EmitEvent",
-                                "EventName": "CustomEvent",
-                                "BubbleEvent": true
-                            }                
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CowboyIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "Yippee ki-yay!"
-                            }              
-                        ]
-                    }
-                ]
-            }
-        }
-    ],
-    "rules": [
-        {
-            "$type": "Microsoft.EventRule",
-            "Events": ["CustomEvent"],
+        "rules": [
+          {
+            "$type": "Microsoft.IntentRule",
+            "intent": "EmitEvent",
             "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "CustomEvent Fired."
-                }                 
+              {
+                "$type": "Microsoft.EmitEvent",
+                "EventName": "CustomEvent",
+                "BubbleEvent": true
+              }
             ]
+          },
+          {
+            "$type": "Microsoft.IntentRule",
+            "intent": "CowboyIntent",
+            "steps": [
+              {
+                "$type": "Microsoft.SendActivity",
+                "activity": "Yippee ki-yay!"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "Events": [
+        "CustomEvent"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "CustomEvent Fired."
         }
-    ]
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:33:24.264Z",
+    "updatedAt": "2019-07-01T21:33:24.299Z",
+    "id": "701087"
+  }
 }

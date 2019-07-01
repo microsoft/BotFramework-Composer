@@ -1,5 +1,5 @@
 # help
-- ```
+-```
     I can show you examples on how to use Steps, You can enter number 01-04
     [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput]
 	01 - TextInput
@@ -10,10 +10,39 @@
 	06 - DateTimeInput
     ```
 
-
-# ShowImage(contentUrl, contentType)
-- ```
+# ShowImage
+-```
 You sent:
 [attachment=@{contentUrl} @{contentType}]
 ```
+
+# activity-068558
+-[help]
+
+# activity-587377
+-[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
+
+# activity-004212
+-You select: {user.style}
+
+# activity-458458
+-confirmation: {user.confirmed}
+
+# activity-828009
+-You entered: {user.date[0].value}
+
+# activity-303304
+-Hello, your age is {user.age}!
+
+# activity-284482
+-2 * 2.2 equals {user.result}, that's right!
+
+# activity-172233
+-2 * 2.2 equals {user.result}, that's wrong!
+
+# activity-538962
+-Hello {user.name}, nice to talk to you!
+
+# activity-118486
+-Hello {user.name}, nice to talk to you!
 

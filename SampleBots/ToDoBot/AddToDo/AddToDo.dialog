@@ -1,37 +1,53 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "@title",
+      "property": "dialog.todo"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "OK, please enter the title of your todo.",
+      "property": "dialog.todo"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.todos == null",
+      "steps": [
         {
-            "$type": "Microsoft.SetProperty",
-            "value": "@title",
-            "property": "dialog.todo"
-        },
-        {
-            "$type": "Microsoft.TextInput",
-            "prompt": "OK, please enter the title of your todo.",
-            "property": "dialog.todo"
-        },
-        {
-            "$type": "Microsoft.IfCondition",
-            "condition": "user.todos == null",
-            "steps": [
-                {
-                    "$type": "Microsoft.InitProperty",
-                    "property": "user.todos",
-                    "type": "array"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.EditArray",
-            "changeType": "Push",
-            "arrayProperty": "user.todos",
-            "value": "dialog.todo"
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Successfully added a todo named \"{dialog.todo}\""
+          "$type": "Microsoft.InitProperty",
+          "property": "user.todos",
+          "type": "array"
         }
-    ]
+      ]
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "user.todos",
+      "value": "dialog.todo",
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:54.672Z",
+        "updatedAt": "2019-07-01T22:02:54.677Z",
+        "id": "567087"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:53.545Z",
+        "updatedAt": "2019-07-01T22:02:55.317Z",
+        "id": "116673"
+      },
+      "activity": "[activity-116673]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T22:02:25.608Z",
+    "updatedAt": "2019-07-01T22:02:25.638Z",
+    "id": "098939"
+  }
 }

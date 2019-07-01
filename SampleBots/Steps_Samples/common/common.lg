@@ -16,3 +16,114 @@
 	12 - EmitEvent
     ```
 
+# activity-666135
+-Here are the index and values in the array.
+
+# activity-763672
+-If each page shows two items, here are the index and values
+
+# activity-644042
+-Hello {user.name}, nice to talk to you!
+
+# activity-879639
+-Say moo to get a response, say emit to emit a event.
+
+# activity-604381
+-Hello {user.name}, nice to talk to you!
+
+# activity-338063
+-I'm a joke bot. To get started say \"joke\".
+
+# activity-150220
+-Why did the chicken cross the road?
+
+# activity-451180
+-To get to the other side!
+
+# activity-423305
+-What's up?
+
+# activity-448895
+-Oh I see!
+
+# activity-229784
+-Great! Your pet's name is {user.petname}
+
+# activity-200761
+-Done! You have added a pet named \"{user.postResponse.name}\" with id \"{user.postResponse.id}\"
+
+# activity-212615
+-Great! I found your pet named \"{user.getResponse.name}\"
+
+# activity-485963
+-Hello {user.name}, nice to talk to you!
+
+# activity-839941
+-Hello {user.name}, nice to meet you!
+
+# activity-554030
+-Seeing into your future...
+
+# activity-302405
+-I see great things in your future!
+
+# activity-322106
+-Potentially a successful demo
+
+# activity-120128
+-Hello {user.name}, nice to talk to you!
+
+# activity-577618
+-Why did the chicken cross the road?
+
+# activity-286023
+-To get to the other side!
+
+# activity-166189
+-Step 1
+
+# activity-069635
+-Step 2
+
+# activity-851726
+-Step 3
+
+# activity-116995
+-user.age is set to {user.age}
+
+# activity-934639
+
+
+# activity-166131
+-user.age is set to {user.age}
+
+# activity-643043
+-user.age is set to null
+
+# activity-797905
+-user.age is set to {user.age}
+
+# activity-309397
+-Step 3
+
+# activity-350559
+-Step 2
+
+# activity-522200
+-Step 1
+
+# activity-160914
+-You select: {user.style}
+
+# activity-576002
+-You select: 1
+
+# activity-677412
+-You select: 2
+
+# activity-700082
+-You select: 3
+
+# activity-347762
+-[help]
+

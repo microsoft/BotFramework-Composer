@@ -1,11 +1,14 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "$designer": {
+    "createdAt": "2019-07-01T21:57:42.645Z",
+    "updatedAt": "2019-07-01T21:57:42.705Z",
+    "id": "222300",
     "name": "15 - TraceAndLog",
     "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
   },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
@@ -21,5 +24,6 @@
       "$type": "Microsoft.LogStep",
       "text": "{user.name}"
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

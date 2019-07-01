@@ -1,19 +1,30 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-        {
-            "$type": "Microsoft.DateTimeInput",
-            "property": "user.date",
-            "alwaysPrompt": true,
-            "maxTurnCount":  2,
-            "allowInterruptions": false,
-            "prompt": "Please enter a date.",
-            "invalidPrompt": "Please enter a date."
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "You entered: {user.date[0].value}"
-        }
-    ]
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.DateTimeInput",
+      "property": "user.date",
+      "alwaysPrompt": true,
+      "maxTurnCount": 2,
+      "allowInterruptions": false,
+      "prompt": "Please enter a date.",
+      "invalidPrompt": "Please enter a date."
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:41.571Z",
+        "updatedAt": "2019-07-01T21:59:42.925Z",
+        "id": "828009"
+      },
+      "activity": "[activity-828009]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:59:25.102Z",
+    "updatedAt": "2019-07-01T21:59:25.123Z",
+    "id": "904968"
+  }
 }

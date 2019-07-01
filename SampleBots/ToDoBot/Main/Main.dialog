@@ -1,85 +1,95 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "generator": "common.lg",
-    "recognizer": {
-        "$type": "Microsoft.RegexRecognizer",
-        "intents": {
-            "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-            "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
-            "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-            "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
-            "HelpIntent": "(?i)help",
-            "CancelIntent": "(?i)cancel|never mind"
-        }
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+      "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
+      "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
+      "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
+      "HelpIntent": "(?i)help",
+      "CancelIntent": "(?i)cancel|never mind"
+    }
+  },
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:14.960Z",
+        "updatedAt": "2019-07-01T22:02:16.191Z",
+        "id": "376720"
+      },
+      "activity": "[activity-376720]"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "AddIntent",
+      "steps": [
+        "AddToDo"
+      ]
     },
-    "steps": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "DeleteIntent",
+      "steps": [
+        "DeleteToDo"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ClearIntent",
+      "steps": [
+        "ClearToDos"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowIntent",
+      "steps": [
+        "ShowToDos"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HelpIntent",
+      "steps": [
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "AddIntent",
-            "steps": [
-                "AddToDo"
-            ]
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
         },
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "DeleteIntent",
-            "steps": [
-                "DeleteToDo"
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ClearIntent",
-            "steps": [
-                "ClearToDos"
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ShowIntent",
-            "steps": [
-                "ShowToDos"
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "HelpIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "[help]"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "ok."
-                },
-                {
-                    "$type": "Microsoft.EndDialog"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.UnknownIntentRule",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
-                }
-            ]
+          "$type": "Microsoft.EndDialog"
         }
-    ]
+      ]
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T22:01:24.464Z",
+    "updatedAt": "2019-07-01T22:01:24.503Z",
+    "id": "357758"
+  }
 }
