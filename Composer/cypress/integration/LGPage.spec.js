@@ -10,7 +10,7 @@ context('check language generation page', () => {
     cy.visit(Cypress.env('COMPOSER_URL') + '/language-generation');
 
     // left nav tree
-    cy.contains('Main');
+    cy.contains('ToDoBot');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -25,7 +25,7 @@ context('check language generation page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.get('.dialogNavTree button[title="Main"]').click();
+    cy.get('.dialogNavTree button[title="ToDoBot"]').click();
     cy.wait(300);
 
     // dialog filter, edit mode button is disabled.

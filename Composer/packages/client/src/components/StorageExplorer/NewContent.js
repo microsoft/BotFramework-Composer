@@ -53,7 +53,12 @@ export function NewContent(props) {
         <div css={sampleList}>
           {templates.map(item => {
             return (
-              <div key={item.id} css={sampleItem} onClick={() => handleSampleClick(item)}>
+              <div
+                key={item.id}
+                data-testid={`NewBotTemplate_${item.id}`}
+                css={sampleItem}
+                onClick={() => handleSampleClick(item)}
+              >
                 {`${item.name}`}
               </div>
             );
