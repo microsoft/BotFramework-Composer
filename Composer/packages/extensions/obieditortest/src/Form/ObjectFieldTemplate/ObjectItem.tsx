@@ -1,8 +1,10 @@
 import React from 'react';
-import { DefaultButton, IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react';
+import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import './styles.scss';
+
 import { FIELDS_TO_HIDE } from '../../schema/appschema';
 
 interface ObjectItemProps {
@@ -57,7 +59,12 @@ export default function ObjectItem(props: ObjectItemProps) {
       <div className="ObjectItemField">{content}</div>
       {contextItems.length > 0 && (
         <div className="ObjectItemContext">
-          <DefaultButton ariaLabel={formatMessage('Edit Property')} menuProps={{ items: contextItems }} />
+          <IconButton
+            ariaLabel={formatMessage('Edit Property')}
+            menuProps={{ items: contextItems }}
+            menuIconProps={{ iconName: 'MoreVertical' }}
+            styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+          />
         </div>
       )}
     </div>
