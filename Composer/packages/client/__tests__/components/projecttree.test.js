@@ -8,7 +8,7 @@ describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
     const { findByText } = render(<ProjectTree files={dialogs} />);
 
-    await findByText('ToDoBot.main');
+    await findByText('ToDoBot');
   });
 
   it('should handle project tree item click', async () => {

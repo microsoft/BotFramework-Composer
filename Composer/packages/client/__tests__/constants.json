@@ -2,7 +2,8 @@
     "dialogs": [
         {
             "id": 0,
-            "name": "ToDoBot.main",
+            "name": "Main",
+            "displayName": "ToDoBot",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
                 "autoEndDialog": false,
@@ -125,6 +126,7 @@
         {
             "id": 1,
             "name": "AddToDo",
+            "displayName": "AddToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
                 "steps": [
@@ -231,6 +233,7 @@
         {
             "id": 2,
             "name": "ClearToDos",
+            "displayName": "ClearToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
                 "steps": [
@@ -273,6 +276,7 @@
         {
             "id": 3,
             "name": "DeleteToDo",
+            "displayName": "DeleteToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
                 "steps": [
@@ -330,6 +334,7 @@
         {
             "id": 4,
             "name": "ShowToDos",
+            "displayName": "ShowToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
                 "steps": [
