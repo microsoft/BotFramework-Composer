@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 
 import { CreationFlowStatus } from '../constants';
 
@@ -65,21 +65,21 @@ export function CreationFlow(props) {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
-  const handleCreateNew = async formDate => {
-    await createProject(template.current || '', formDate.name, formDate.description);
+  const handleCreateNew = async formData => {
+    await createProject(template.current || '', formData.name, formData.description);
   };
 
-  const handleSaveAs = async formDate => {
-    await saveProjectAs(formDate.name, formDate.description);
+  const handleSaveAs = async formData => {
+    await saveProjectAs(formData.name, formData.description);
   };
 
-  const handleSubmit = formDate => {
+  const handleSubmit = formData => {
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW:
-        handleCreateNew(formDate);
+        handleCreateNew(formData);
         break;
       case CreationFlowStatus.SAVEAS:
-        handleSaveAs(formDate);
+        handleSaveAs(formData);
         break;
       default:
         setStep(Steps.NONE);
@@ -105,9 +105,9 @@ export function CreationFlow(props) {
   };
 
   return (
-    <Fragment>
+    <>
       {creationFlowStatus === CreationFlowStatus.CLOSE ? null : (
-        <Fragment>
+        <>
           <CreateOptionsDialog
             title={DialogInfo.CREATE_NEW_BOT.title}
             subText={DialogInfo.CREATE_NEW_BOT.subText}
@@ -131,8 +131,8 @@ export function CreationFlow(props) {
             onSubmit={handleSubmit}
             onGetErrorMessage={getErrorMessage}
           />
-        </Fragment>
+        </>
       )}
-    </Fragment>
+    </>
   );
 }

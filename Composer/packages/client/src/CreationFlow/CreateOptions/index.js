@@ -35,7 +35,7 @@ export function CreateOptionsDialog(props) {
     const { checked } = props;
     return (
       <div>
-        {SelectOption(props)}
+        <SelectOption {...props} />
         {checked && (
           <ChoiceGroup
             defaultSelectedKey={templates.length > 0 && templates[0].id}
@@ -78,14 +78,12 @@ export function CreateOptionsDialog(props) {
         options={[
           {
             key: 'create',
-            ariaLabel: 'Create from scratch',
             text: formatMessage('Create from scratch'),
             onRenderField: SelectOption,
           },
           {
             key: 'import',
-            ariaLabel: 'Create from templates',
-            text: formatMessage('Create from templates'),
+            text: formatMessage('Create from template'),
             onRenderField,
           },
         ]}

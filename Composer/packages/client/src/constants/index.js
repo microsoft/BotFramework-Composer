@@ -130,7 +130,7 @@ export const Steps = {
 export const DialogInfo = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create from scratch?'),
-    subText: formatMessage(`You can create a new bot from scratch with Designer, or create from templates.`),
+    subText: formatMessage('You can create a new bot from scratch with Designer, or start with a template.'),
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
