@@ -12,7 +12,7 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
 };
 
 export function LgEditorField(props) {
-  const [template, setTemplate] = useState({ Name: '', Body: '' });
+  const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
   const hasExistingTemplate = async () => {
     const templates = await props.formContext.shellApi.getLgTemplates('common');
     const [template] = templates.filter(template => {
@@ -27,9 +27,11 @@ export function LgEditorField(props) {
         );
         props.onChange(`[activity-${props.formContext.getDialogId()}]`);
       }
-      setTemplate({ Name: `# activity-${props.formContext.getDialogId()}`, Body: '' });
+      setTemplateToRender({ Name: `# activity-${props.formContext.getDialogId()}`, Body: '' });
     } else {
-      setTemplate({ Name: `# activity-${props.formContext.getDialogId()}`, Body: template.body });
+      if (templateToRender.Name === '') {
+        setTemplateToRender({ Name: `# activity-${props.formContext.getDialogId()}`, Body: template.body });
+      }
     }
   };
 
@@ -40,6 +42,7 @@ export function LgEditorField(props) {
       if (dataToEmit.length > 0 && dataToEmit[0] !== '-') {
         dataToEmit = `-${dataToEmit}`;
       }
+      setTemplateToRender({ Name: templateToRender.Name, Body: data });
       props.formContext.shellApi.updateLgTemplate('common', `activity-${props.formContext.getDialogId()}`, dataToEmit);
     }
   };
@@ -48,8 +51,7 @@ export function LgEditorField(props) {
     hasExistingTemplate();
   }, []);
 
-  const { Body } = template;
-
+  const { Body } = templateToRender;
   return (
     <div>
       <BaseField {...props} />

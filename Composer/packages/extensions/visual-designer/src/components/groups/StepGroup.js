@@ -25,7 +25,7 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
+export const StepGroup = function({ id, data, focusedId, onEvent, onResize, getLgTemplates }) {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -62,6 +62,7 @@ export const StepGroup = function({ id, data, focusedId, onEvent, onResize }) {
             onResize={size => {
               patchBoundary(x.id, size);
             }}
+            getLgTemplates={getLgTemplates}
           />
         </OffsetContainer>
       ))}

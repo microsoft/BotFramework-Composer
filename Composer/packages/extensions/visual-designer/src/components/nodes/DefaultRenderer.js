@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { ObiTypes } from '../../shared/ObiTypes';
@@ -19,7 +20,7 @@ const DefaultKeyMap = {
 /**
  * Create labels out of compound values
  */
-function makeLabel(data) {
+function makeLabel(data, getLgTemplates, setRenderedLabel) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
       return `${data.property || '?'} = ${data.value || '?'}`;
@@ -29,6 +30,26 @@ function makeLabel(data) {
       return `${data.property || '?'} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
       return `${data.changeType} ${data.arrayProperty || '?'}`;
+    case ObiTypes.SendActivity: {
+      if (data.activity && data.$designer && data.$designer.id) {
+        if (data.activity[0] === '[' && data.activity[data.activity.length - 1] === ']') {
+          // this is an LG template, go get it's content
+          const templateName = data.activity.slice(1, data.activity.length - 1);
+          getLgTemplates('common', `${templateName}`).then(templates => {
+            const [template] = templates.filter(template => {
+              return template.name === templateName;
+            });
+            if (template) {
+              setRenderedLabel(template.body);
+              return;
+            } else {
+              return data.activity;
+            }
+          });
+        }
+      }
+      return data.activity ? `${data.activity}` : '';
+    }
     default:
       return '';
   }
@@ -126,49 +147,49 @@ const ContentKeyByTypes = {
  * more events like 'Expand' or 'Open', it should define a renderer it self to
  * control its behavior.
  */
-export class DefaultRenderer extends React.Component {
-  render() {
-    const { id, data, onEvent } = this.props;
-    let header = getFriendlyName(data),
-      label = '',
-      details = '';
+export function DefaultRenderer(props) {
+  const { id, data, onEvent, getLgTemplates } = props;
+  const [renderedLabel, setRenderedLabel] = useState(null);
 
-    const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
-    const dialogGroup = getDialogGroupByType(data.$type);
-    const nodeColors = getElementColor(dialogGroup);
-    const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
-    if (keyMap) {
-      header = header || keyMap.header || '';
-      label = data[keyMap.label] || label;
-      details = data[keyMap.details] || details;
-    }
+  let header = getFriendlyName(data),
+    label = '',
+    details = '';
 
-    if (makeLabel(data)) {
-      label = makeLabel(data);
-    }
-
-    if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
-      label = ContentKeyByTypes[data.$type].text;
-    }
-
-    if (!header) {
-      header = truncateType(data.$type);
-    }
-
-    return (
-      <FormCard
-        nodeColors={nodeColors}
-        header={header}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
-        icon={icon}
-        label={label}
-        details={details}
-        onClick={() => {
-          onEvent(NodeEventTypes.Focus, id);
-        }}
-      />
-    );
+  const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : null;
+  const dialogGroup = getDialogGroupByType(data.$type);
+  const nodeColors = getElementColor(dialogGroup);
+  const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
+  if (keyMap) {
+    header = header || keyMap.header || '';
+    label = data[keyMap.label] || label;
+    details = data[keyMap.details] || details;
   }
+
+  if (makeLabel(data, getLgTemplates, setRenderedLabel)) {
+    label = makeLabel(data, getLgTemplates, setRenderedLabel);
+  }
+
+  if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
+    label = ContentKeyByTypes[data.$type].text;
+  }
+
+  if (!header) {
+    header = truncateType(data.$type);
+  }
+
+  return (
+    <FormCard
+      nodeColors={nodeColors}
+      header={header}
+      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      icon={icon}
+      label={renderedLabel || label}
+      details={details}
+      onClick={() => {
+        onEvent(NodeEventTypes.Focus, id);
+      }}
+    />
+  );
 }
 
 DefaultRenderer.propTypes = NodeProps;

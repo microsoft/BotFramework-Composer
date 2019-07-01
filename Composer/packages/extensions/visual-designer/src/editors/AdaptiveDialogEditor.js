@@ -17,7 +17,7 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
+export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -52,6 +52,7 @@ export const AdaptiveDialogEditor = ({ id, data, focusedId, onEvent }) => {
             data={stepGroup.data}
             focusedId={focusedId}
             onEvent={onEvent}
+            getLgTemplates={getLgTemplates}
           />
         </Collapse>
       ) : null}
