@@ -150,7 +150,12 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content.trim()));
+    const referedLuFile = this.luIndexer.getLuFiles().filter(this.referedByDialog);
+    const waitedToPublish = referedLuFile.filter(f => !!f.content.trim()).filter(this.keepLogicallyNonEmptyLufile);
+    if (referedLuFile.length !== waitedToPublish.length) {
+      throw new Error('Your Dialog used an Empty Lu File');
+    }
+    return await this.luPublisher.publish(config, waitedToPublish);
   };
 
   public checkNeedLuisDeploy = async () => {
@@ -342,5 +347,27 @@ export class BotProject {
         await this._createFile(targetLuFilePath, '');
       }
     }
+  };
+
+  private keepLogicallyNonEmptyLufile = (LUFile: LUFile) => {
+    if (LUFile === undefined) return false;
+    if (LUFile.parsedContent === undefined) return false;
+    if (LUFile.parsedContent.LUISJsonStructure === undefined) return false;
+    for (const key in LUFile.parsedContent.LUISJsonStructure) {
+      if (LUFile.parsedContent.LUISJsonStructure[key].length !== 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  private referedByDialog = (LUFile: LUFile) => {
+    const dialogs = this.dialogIndexer.getDialogs();
+    for (let index = 0; index < dialogs.length; index++) {
+      if (LUFile.id === dialogs[index].luFile) {
+        return true;
+      }
+    }
+    return false;
   };
 }
