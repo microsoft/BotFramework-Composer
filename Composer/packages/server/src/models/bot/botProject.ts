@@ -336,7 +336,7 @@ export class BotProject {
     // ensure each dialog got a lu file
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
-      const targetLuFilePath = `${Path.basename(dialog.relativePath)}.lu`;
+      const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
       const exist = luFiles.findIndex((luFile: { [key: string]: any }) => luFile.relativePath === targetLuFilePath);
       if (exist === -1) {
         await this._createFile(targetLuFilePath, '');
