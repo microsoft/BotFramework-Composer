@@ -44,7 +44,7 @@ export const LGPage = props => {
       const item = {
         id: file.name,
         key: file.name,
-        name: file.name,
+        name: file.displayName,
       };
 
       if (file.id === 0) {

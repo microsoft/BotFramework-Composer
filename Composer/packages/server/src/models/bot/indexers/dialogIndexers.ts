@@ -5,6 +5,12 @@ import { FileInfo, Dialog } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
+  private botName: string;
+  private entry: string = 'Main.dialog';
+
+  constructor(botName: string) {
+    this.botName = botName;
+  }
 
   // find out all lg templates given dialog
   private ExtractLgTemplates(dialog: Dialog): string[] {
@@ -78,8 +84,8 @@ export class DialogIndexer {
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
-      const entry = 'Main.dialog';
-      const botName = files[0].name;
+      const entry = this.entry;
+      const botName = this.botName;
       let count = 1;
 
       for (const file of files) {
