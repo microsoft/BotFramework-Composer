@@ -1,4 +1,5 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
+import nanoid from 'nanoid/generate';
 
 import { ConceptLabels } from './labelMap';
 
@@ -110,8 +111,14 @@ export const createStepMenu = (
           key: $type,
           name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
           $type: $type,
+          $designer: {
+            id: nanoid('1234567890', 6),
+          },
           data: {
             $type: $type, // used by the steps field to create the item
+            $designer: {
+              id: nanoid('1234567890', 6),
+            },
           },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
@@ -138,8 +145,14 @@ export const createStepMenu = (
         text: ConceptLabels[item],
         name: ConceptLabels[item],
         $type: item,
+        $designer: {
+          id: nanoid('1234567890', 6),
+        },
         data: {
           $type: item,
+          $designer: {
+            id: nanoid('1234567890', 6),
+          },
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {

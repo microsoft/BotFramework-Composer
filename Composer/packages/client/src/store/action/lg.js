@@ -17,11 +17,12 @@ const textFromTemplates = templates => {
   let text = '';
 
   templates.forEach(template => {
-    if (template.Name && template.Body) {
+    if (template.Name && (template.Body !== null && template.Body !== undefined)) {
       text += `# ${template.Name.trim()}` + '\n';
       text += `${template.Body.trim()}` + '\n\n';
     }
   });
+
   return text;
 };
 
@@ -86,7 +87,6 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   if (validateResult.isValid === false) {
     return new Error(validateResult.error.Message);
   }
-
   const oldTemplates = templatesFromText(file.content);
   if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
@@ -101,7 +101,6 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   });
 
   const content = textFromTemplates(newTemplates);
-
   return await updateLgFile(dispatch, { id: file.id, content });
 }
 
@@ -136,7 +135,6 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
     newTemplates.push(template);
   }
   const content = textFromTemplates(newTemplates);
-
   return await updateLgFile(dispatch, { id: file.id, content });
 }
 

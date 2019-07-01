@@ -91,7 +91,11 @@ function ExtensionContainer() {
     },
 
     updateLgTemplate: (id, templateName, template) => {
-      return apiClient.apiCall('updateLgTemplate', { id, templateName, template });
+      return apiClient.apiCall('updateLgTemplate', {
+        id,
+        templateName,
+        template: { Name: templateName, Body: template },
+      });
     },
   };
 

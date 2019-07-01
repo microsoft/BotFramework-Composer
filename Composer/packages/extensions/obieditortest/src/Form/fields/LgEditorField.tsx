@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -11,33 +12,43 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
 };
 
 export function LgEditorField(props) {
-  const onChange = data => {
-    // find the template definition
-    // replace its content with data
-    if (data.length > 0 && data[0] !== '-') {
-      props.formContext.shellApi.updateLgFile({
-        id: 'main',
-        content: `# ${props.name.charAt(0).toUpperCase() +
-          props.name.slice(1)}-${props.formContext.getDialogId()}\n${data}`,
-      });
+  const [template, setTemplate] = useState({ Name: '', Body: '' });
+  const hasExistingTemplate = async () => {
+    const templates = await props.formContext.shellApi.getLgTemplates('common');
+    const [template] = templates.filter(template => {
+      return template.name === `activity-${props.formContext.getDialogId()}`;
+    });
+    if (template === null || template === undefined) {
+      if (props.formContext.getDialogId()) {
+        props.formContext.shellApi.createLgTemplate(
+          'common',
+          { Name: `activity-${props.formContext.getDialogId()}`, Body: '' },
+          -1
+        );
+      }
+      setTemplate({ Name: `# activity-${props.formContext.getDialogId()}`, Body: '' });
     } else {
-      props.formContext.shellApi.updateLgFile({
-        id: 'main',
-        content: `# ${props.name.charAt(0).toUpperCase() +
-          props.name.slice(1)}-${props.formContext.getDialogId()}\n${data}`,
-      });
+      setTemplate({ Name: `# activity-${props.formContext.getDialogId()}`, Body: template.body });
     }
-    props.onChange(`[${props.name.charAt(0).toUpperCase() + props.name.slice(1)}-${props.formContext.getDialogId()}]`);
   };
 
-  const [lgContent] = props.formContext.lgFiles.filter(e => {
-    return e.id === 'main';
-  });
+  const onChange = data => {
+    // hit the lg api and replace it's Body with data
+    if (props.formContext.getDialogId()) {
+      let dataToEmit = data.trim();
+      if (dataToEmit.length > 0 && dataToEmit[0] !== '-') {
+        dataToEmit = `-${dataToEmit}`;
+      }
+      props.formContext.shellApi.updateLgTemplate('common', `activity-${props.formContext.getDialogId()}`, dataToEmit);
+      props.onChange(`[activity-${props.formContext.getDialogId()}]`);
+    }
+  };
 
-  const content = lgContent.content.replace(
-    `# ${props.name.charAt(0).toUpperCase() + props.name.slice(1)}-${props.formContext.getDialogId()}\n`,
-    ''
-  );
+  useEffect(() => {
+    hasExistingTemplate();
+  }, []);
+
+  const { Body } = template;
 
   return (
     <div>
@@ -45,7 +56,7 @@ export function LgEditorField(props) {
       <div style={{ height: '250px' }}>
         <LgEditor
           hidePlaceholder
-          value={content}
+          value={Body}
           onChange={onChange}
           editorDidMount={editor => {
             focusEditor(editor);
