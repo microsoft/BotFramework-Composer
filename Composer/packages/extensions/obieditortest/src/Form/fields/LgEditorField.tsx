@@ -25,6 +25,7 @@ export function LgEditorField(props) {
           { Name: `activity-${props.formContext.getDialogId()}`, Body: '' },
           -1
         );
+        props.onChange(`[activity-${props.formContext.getDialogId()}]`);
       }
       setTemplate({ Name: `# activity-${props.formContext.getDialogId()}`, Body: '' });
     } else {
@@ -40,7 +41,6 @@ export function LgEditorField(props) {
         dataToEmit = `-${dataToEmit}`;
       }
       props.formContext.shellApi.updateLgTemplate('common', `activity-${props.formContext.getDialogId()}`, dataToEmit);
-      props.onChange(`[activity-${props.formContext.getDialogId()}]`);
     }
   };
 
