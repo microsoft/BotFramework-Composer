@@ -32,7 +32,7 @@ function makeLabel(data, getLgTemplates, setRenderedLabel) {
       return `${data.changeType} ${data.arrayProperty || '?'}`;
     case ObiTypes.SendActivity: {
       if (data.activity && data.$designer && data.$designer.id) {
-        if (data.activity[0] === '[' && data.activity[data.activity.length - 1] === ']') {
+        if (data.activity.indexOf('activity-') !== -1) {
           // this is an LG template, go get it's content
           const templateName = data.activity.slice(1, data.activity.length - 1);
           getLgTemplates('common', `${templateName}`).then(templates => {
