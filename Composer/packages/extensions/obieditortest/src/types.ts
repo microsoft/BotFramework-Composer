@@ -19,9 +19,30 @@ export interface DialogInfo {
   name: string;
 }
 
+export interface Intent {
+  name: string;
+}
+
+export interface Utterance {
+  intent: string;
+  text: string;
+}
+
 export interface LuFile {
   id: string;
-  absolutePath: string;
+  relativePath: string;
+  content: string;
+  parsedContent: {
+    LUISJsonStructure: {
+      intents: Intent[];
+      utterances: Utterance[];
+    };
+  };
+}
+
+export interface LgFile {
+  id: string;
+  relativePath: string;
   content: string;
 }
 
@@ -39,6 +60,9 @@ export interface ShellApi {
   focusTo: (path: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;
+  getLgTemplates: (id: string) => Promise<{ Name: string }>;
+  createLgTemplate: (id: string, template: string, position: number) => Promise<void>;
+  updateLgTemplate: (id: string, templateName: string, template: string) => Promise<void>;
 }
 export interface EditorSchema {
   editor: {

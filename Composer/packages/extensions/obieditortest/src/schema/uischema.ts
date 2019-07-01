@@ -8,7 +8,7 @@ import {
   StepsField,
   NullField,
 } from '../Form/fields';
-import { DialogSelectWidget } from '../Form/widgets';
+import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
 const globalFields = {
   property: {
@@ -19,6 +19,18 @@ const globalFields = {
   },
   outputBinding: {
     'ui:field': NullField,
+  },
+};
+
+const activityFields = {
+  prompt: {
+    'ui:widget': TextareaWidget,
+  },
+  unrecognizedPrompt: {
+    'ui:widget': TextareaWidget,
+  },
+  invalidPrompt: {
+    'ui:widget': TextareaWidget,
   },
 };
 
@@ -46,7 +58,7 @@ export const uiSchema = {
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
   'Microsoft.AttachmentInput': {
-    ...globalFields,
+    ...activityFields,
     'ui:order': ['*', 'validations'],
   },
   'Microsoft.BeginDialog': {
@@ -57,6 +69,7 @@ export const uiSchema = {
   },
   'Microsoft.ChoiceInput': {
     ...globalFields,
+    ...activityFields,
   },
   'Microsoft.CodeStep': {
     codeHandler: {
@@ -72,6 +85,9 @@ export const uiSchema = {
       'ui:field': SelectorField,
     },
     ...globalFields,
+  },
+  'Microsoft.ConfirmInput': {
+    ...activityFields,
   },
   'Microsoft.EditSteps': {
     Steps: {
@@ -136,6 +152,9 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.NumberInput': {
+    ...activityFields,
+  },
   'Microsoft.ReplaceDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
@@ -156,6 +175,9 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
+  },
+  'Microsoft.TextInput': {
+    ...activityFields,
   },
   'Microsoft.UnknownIntentRule': {
     steps: {
