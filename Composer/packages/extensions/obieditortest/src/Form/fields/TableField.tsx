@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   ContextualMenuItemType,
-  DefaultButton,
   DetailsList,
   IContextualMenuItem,
   SelectionMode,
   DetailsListLayoutMode,
+  IconButton,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
@@ -13,6 +13,7 @@ import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
@@ -111,7 +112,13 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
     },
   ];
 
-  return <DefaultButton menuProps={{ items: menuItems }} />;
+  return (
+    <IconButton
+      menuProps={{ items: menuItems }}
+      menuIconProps={{ iconName: 'MoreVertical' }}
+      styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+    />
+  );
 }
 
 export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
@@ -152,8 +159,8 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
     {
       key: 'menu',
       name: '',
-      minWidth: 85,
-      maxWidth: 85,
+      minWidth: 50,
+      maxWidth: 50,
       // eslint-disable-next-line react/display-name
       onRender: (item, index) => {
         return (
