@@ -11,7 +11,7 @@ import { NavItem } from './components/NavItem';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
-import { FileDialogs } from './FileDialogs/index';
+import { CreationFlow } from './CreationFlow/index';
 
 initializeIcons(/* optional base url */);
 
@@ -156,7 +156,7 @@ export function App() {
           </div>
         </nav>
         <div css={rightPanel}>
-          <FileDialogs openStatus={openStatus} setOpenStatus={setOpenStatus} />
+          <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
           <Routes component={Content} />
         </div>
       </div>

@@ -9,18 +9,16 @@ export async function fetchProject(dispatch) {
     const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_PROJECT_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
 
@@ -36,18 +34,16 @@ export async function openBotProject(dispatch, absolutePath) {
     const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_PROJECT_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
 
@@ -64,18 +60,16 @@ export async function saveProjectAs(dispatch, name, description) {
     const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_PROJECT_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
 
@@ -93,18 +87,16 @@ export async function createProject(dispatch, templateId, name, description) {
     const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, `${dialogs[0].name}#`);
     }
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_PROJECT_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
 
@@ -113,13 +105,19 @@ export async function updateProjFile(dispatch, { name, content }) {
     const response = await axios.put(`${BASEURL}/projects/opened/botFile`, { name, content });
     dispatch({
       type: ActionTypes.UPDATE_PROJFILE__SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_PROJFILE__FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.UPDATE_PROJFILE__FAILURE, payload: null, error: err });
+  }
+}
+
+export async function getAllProjects() {
+  try {
+    return (await axios.get(`${BASEURL}/projects`)).data.children;
+  } catch (err) {
+    return err;
   }
 }

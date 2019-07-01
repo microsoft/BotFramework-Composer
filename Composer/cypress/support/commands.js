@@ -27,7 +27,7 @@ import 'cypress-testing-library/add-commands';
 Cypress.Commands.add('openBot', botName => {
   cy.getByText('Open').click();
   cy.get('[data-testid="SelectLocation"]').within(() => {
-    cy.getByText(botName).click();
+    cy.get(`input[aria-label="${botName}"]`).click();
   });
   cy.get('[data-testid="SelectLocationOpen"]').click();
   cy.wait(500);

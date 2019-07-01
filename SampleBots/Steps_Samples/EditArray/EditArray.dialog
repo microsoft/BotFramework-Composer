@@ -1,6 +1,5 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
@@ -32,45 +31,44 @@
       "value": "888888/4"
     },
     {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Here are the index and values in the array."
+          "$type": "Microsoft.SendActivity",
+          "activity": "Here are the index and values in the array."
     },
     {
       "$type": "Microsoft.Foreach",
       "ListProperty": "user.ids",
-      "Steps": [
+      "Steps":[
         {
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
-      ]
+      ]   
     },
     {
-      "$type": "Microsoft.SendActivity",
-      "activity": "If each page shows two items, here are the index and values"
+          "$type": "Microsoft.SendActivity",
+          "activity": "If each page shows two items, here are the index and values"
     },
     {
       "$type": "Microsoft.ForeachPage",
       "ListProperty": "user.ids",
       "PageSize": "2",
-      "ValueProperty": "dialog.page",
-      "Steps": [
+      "ValueProperty" : "dialog.page",
+      "Steps":[
         {
           "$type": "Microsoft.Foreach",
           "ListProperty": "dialog.page",
-          "Steps": [
+          "Steps":[
             {
               "$type": "Microsoft.SendActivity",
               "activity": "{dialog.index}: {dialog.value}"
             }
-          ]
-        }
-      ]
+          ]  
+        } 
+      ]   
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-06-26T15:15:36.119Z",
-    "updatedAt": "2019-06-26T15:15:36.195Z",
-    "id": "826986"
-  }
+
+
+  ]
+
+
 }

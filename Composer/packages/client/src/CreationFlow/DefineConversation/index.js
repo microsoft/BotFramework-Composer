@@ -4,8 +4,6 @@ import { useState } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
 
-import { DialogInfo } from '../../constants';
-
 import { DialogWrapper } from './../../components/DialogWrapper';
 import { name, description } from './styles';
 
@@ -23,11 +21,15 @@ const validateForm = data => {
 };
 
 export function DefineConversationDialog(props) {
-  const { onDismiss, onSubmit, hidden, onGetErrorMessage } = props;
+  const { onDismiss, onSubmit, hidden, onGetErrorMessage, title, subText } = props;
   const [formData, setFormData] = useState({ errors: {} });
 
   const updateForm = field => (e, newValue) => {
-    setFormData({ ...formData, errors: {}, [field]: newValue });
+    setFormData({
+      ...formData,
+      errors: {},
+      [field]: newValue,
+    });
   };
 
   const handleSubmit = e => {
@@ -35,20 +37,20 @@ export function DefineConversationDialog(props) {
     const errors = validateForm(formData);
 
     if (Object.keys(errors).length) {
-      setFormData({ ...formData, errors });
+      setFormData({
+        ...formData,
+        errors,
+      });
       return;
     }
 
-    onSubmit({ ...formData });
+    onSubmit({
+      ...formData,
+    });
   };
 
   return (
-    <DialogWrapper
-      hidden={hidden}
-      onDismiss={onDismiss}
-      title={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.title}
-      subText={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.subText}
-    >
+    <DialogWrapper hidden={hidden} onDismiss={onDismiss} title={title} subText={subText}>
       <form onSubmit={handleSubmit}>
         <Stack
           tokens={{
@@ -56,7 +58,7 @@ export function DefineConversationDialog(props) {
           }}
         >
           <TextField
-            label={formatMessage('Dialog name')}
+            label={formatMessage('Name')}
             styles={name}
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}

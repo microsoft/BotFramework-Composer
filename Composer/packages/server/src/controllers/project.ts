@@ -27,7 +27,9 @@ async function createProject(req: Request, res: Response) {
       await ProjectService.currentBotProject.updateBotInfo(name, description);
       await ProjectService.currentBotProject.index();
       const project = ProjectService.currentBotProject.getIndexes();
-      res.status(200).json({ ...project });
+      res.status(200).json({
+        ...project,
+      });
     }
   } catch (err) {
     res.status(404).json({ error: 'Create bot project error' });
@@ -38,7 +40,9 @@ async function getProject(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined && (await ProjectService.currentBotProject.exists())) {
     await ProjectService.currentBotProject.index();
     const project = await ProjectService.currentBotProject.getIndexes();
-    res.status(200).json({ ...project });
+    res.status(200).json({
+      ...project,
+    });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
@@ -68,7 +72,9 @@ async function openProject(req: Request, res: Response) {
     await ProjectService.openProject(locationRef);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
-      res.status(200).json({ ...project });
+      res.status(200).json({
+        ...project,
+      });
     } else {
       res.status(404).json({ error: 'No bot project opened' });
     }
@@ -96,7 +102,9 @@ async function saveProjectAs(req: Request, res: Response) {
       await ProjectService.currentBotProject.updateBotInfo(name, description);
       await ProjectService.currentBotProject.index();
       const project = await ProjectService.currentBotProject.getIndexes();
-      res.status(200).json({ ...project });
+      res.status(200).json({
+        ...project,
+      });
     } else {
       res.status(404).json({ error: 'No bot project opened' });
     }
@@ -200,6 +208,16 @@ async function publishLuis(req: Request, res: Response) {
   }
 }
 
+async function getAllProjects(req: Request, res: Response) {
+  const storageId = 'default';
+  const folderPath = Path.resolve(settings.development.defaultFolder);
+  try {
+    res.status(200).json(await StorageService.getBlob(storageId, folderPath));
+  } catch (e) {
+    res.status(400).json(e);
+  }
+}
+
 export const ProjectController = {
   getProject,
   openProject,
@@ -215,4 +233,5 @@ export const ProjectController = {
   updateBotFile,
   saveProjectAs,
   createProject,
+  getAllProjects,
 };

@@ -1,46 +1,28 @@
 import React, { Fragment, useState, useEffect, useRef, useContext } from 'react';
 
-import { OpenStatus } from '../constants';
+import { CreationFlowStatus } from '../constants';
 
 import { CreateOptionsDialog } from './CreateOptions/index';
 import { DefineConversationDialog } from './DefineConversation/index';
 import { Steps } from './../constants/index';
 import { SelectLocationDialog } from './SelectLocation';
 import { Store } from './../store/index';
+import { DialogInfo } from './../constants/index';
 
-export function FileDialogs(props) {
-  const { actions } = useContext(Store);
+export function CreationFlow(props) {
+  const { state, actions } = useContext(Store);
   const [templates, setTemplates] = useState([]);
   const [bots, setBots] = useState([]);
   const [step, setStep] = useState();
   const template = useRef(null);
   // eslint-disable-next-line react/prop-types
-  const { openStatus, setOpenStatus } = props;
-  const { fetchTemplates, getAllBotsFromFixedLocation, openBotProject, createProject, saveProjectAs } = actions;
+  const { creationFlowStatus, setCreationFlowStatus } = props;
+  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs } = actions;
+  const { botProjFile } = state;
 
   useEffect(() => {
-    if (openStatus !== OpenStatus.CLOSE) {
-      getTemplates();
-      getAllBots();
-    }
-  }, [openStatus]);
-
-  useEffect(() => {
-    switch (openStatus) {
-      case OpenStatus.NEW:
-        setStep(Steps.CREATE);
-        break;
-      case OpenStatus.OPEN:
-        setStep(Steps.LOCATION);
-        break;
-      case OpenStatus.SAVEAS:
-        setStep(Steps.DEFINE);
-        break;
-      default:
-        setStep(Steps.NONE);
-        break;
-    }
-  }, [openStatus]);
+    init();
+  }, [creationFlowStatus]);
 
   const getTemplates = async () => {
     const data = await fetchTemplates();
@@ -48,8 +30,30 @@ export function FileDialogs(props) {
   };
 
   const getAllBots = async () => {
-    const data = await getAllBotsFromFixedLocation();
+    const data = await getAllProjects();
     setBots(data);
+  };
+
+  const init = async () => {
+    if (creationFlowStatus !== CreationFlowStatus.CLOSE) {
+      getTemplates();
+      await getAllBots();
+    }
+
+    switch (creationFlowStatus) {
+      case CreationFlowStatus.NEW:
+        setStep(Steps.CREATE);
+        break;
+      case CreationFlowStatus.OPEN:
+        setStep(Steps.LOCATION);
+        break;
+      case CreationFlowStatus.SAVEAS:
+        setStep(Steps.DEFINE);
+        break;
+      default:
+        setStep(Steps.NONE);
+        break;
+    }
   };
 
   const openBot = async botFolder => {
@@ -58,7 +62,7 @@ export function FileDialogs(props) {
   };
 
   const handleDismiss = () => {
-    setOpenStatus(OpenStatus.CLOSE);
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
   const handleCreateNew = async formDate => {
@@ -70,11 +74,11 @@ export function FileDialogs(props) {
   };
 
   const handleSubmit = formDate => {
-    switch (openStatus) {
-      case OpenStatus.NEW:
+    switch (creationFlowStatus) {
+      case CreationFlowStatus.NEW:
         handleCreateNew(formDate);
         break;
-      case OpenStatus.SAVEAS:
+      case CreationFlowStatus.SAVEAS:
         handleSaveAs(formDate);
         break;
       default:
@@ -102,9 +106,11 @@ export function FileDialogs(props) {
 
   return (
     <Fragment>
-      {openStatus === OpenStatus.CLOSE ? null : (
+      {creationFlowStatus === CreationFlowStatus.CLOSE ? null : (
         <Fragment>
           <CreateOptionsDialog
+            title={DialogInfo.CREATE_NEW_BOT.title}
+            subText={DialogInfo.CREATE_NEW_BOT.subText}
             hidden={step !== Steps.CREATE}
             templates={templates}
             onDismiss={handleDismiss}
@@ -113,10 +119,13 @@ export function FileDialogs(props) {
           <SelectLocationDialog
             hidden={step !== Steps.LOCATION}
             onDismiss={handleDismiss}
+            defaultKey={botProjFile.path ? botProjFile.path.replace(`/${botProjFile.relativePath}`, '') : ''}
             folders={bots}
             onOpen={openBot}
           />
           <DefineConversationDialog
+            title={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.title}
+            subText={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.subText}
             hidden={step !== Steps.DEFINE}
             onDismiss={handleDismiss}
             onSubmit={handleSubmit}

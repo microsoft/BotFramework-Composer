@@ -1,17 +1,26 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup } from 'office-ui-fabric-react';
+import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
 import { useState, useRef } from 'react';
 
 import { DialogWrapper } from './../../components/DialogWrapper';
-import { choiceGroup, templateItem } from './styles';
-import { DialogInfo } from './../../constants/index';
+import { choiceGroup, templateItem, optionRoot, optionIcon } from './styles';
 
 export function CreateOptionsDialog(props) {
   const [option, setOption] = useState('create');
-  const { hidden, onNext, onDismiss, templates } = props;
+  const { hidden, onNext, onDismiss, templates, title, subText } = props;
   const template = useRef(null);
+
+  function SelectOption(props) {
+    const { checked, text, key } = props;
+    return (
+      <div key={key} css={optionRoot}>
+        <Icon iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} css={optionIcon(checked)} />
+        <span>{text}</span>
+      </div>
+    );
+  }
 
   function TemplateItem(props) {
     const { checked, text, key } = props;
@@ -22,11 +31,11 @@ export function CreateOptionsDialog(props) {
     );
   }
 
-  function onRenderField(props, render) {
+  function onRenderField(props) {
     const { checked } = props;
     return (
       <div>
-        {render(props)}
+        {SelectOption(props)}
         {checked && (
           <ChoiceGroup
             defaultSelectedKey={templates.length > 0 && templates[0].id}
@@ -63,22 +72,20 @@ export function CreateOptionsDialog(props) {
   };
 
   return (
-    <DialogWrapper
-      hidden={hidden}
-      onDismiss={onDismiss}
-      title={DialogInfo.CREATE_NEW_BOT.title}
-      subText={DialogInfo.CREATE_NEW_BOT.subText}
-    >
+    <DialogWrapper hidden={hidden} onDismiss={onDismiss} title={title} subText={subText}>
       <ChoiceGroup
         defaultSelectedKey="create"
         options={[
           {
             key: 'create',
+            ariaLabel: 'Create from scratch',
             text: formatMessage('Create from scratch'),
+            onRenderField: SelectOption,
           },
           {
             key: 'import',
-            text: formatMessage('Import existing bot'),
+            ariaLabel: 'Create from templates',
+            text: formatMessage('Create from templates'),
             onRenderField,
           },
         ]}

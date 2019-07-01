@@ -51,6 +51,6 @@ describe('<ToolBar />', () => {
     fireEvent.click(newButton);
     fireEvent.click(openButton);
     fireEvent.click(saveButton);
-    expect(mockSetOpenStatus).toHaveBeenCalledTimes(3);
+    expect(mockSetCreationFlowStatus).toHaveBeenCalledTimes(3);
   });
 });
