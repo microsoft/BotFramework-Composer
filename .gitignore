@@ -393,3 +393,6 @@ SampleBots/*/generated/
 
 #tmp.zip
 *.zip
+
+# VsCode
+Composer/.vscode/
