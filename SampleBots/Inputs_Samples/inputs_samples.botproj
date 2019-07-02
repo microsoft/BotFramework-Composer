@@ -3,6 +3,4 @@
   "schemas": {
     "editor": ".schemas/editor.schema",
     "sdk": ".schemas/sdk.schema"
-  },
-  "entry": "Main.dialog"
 }

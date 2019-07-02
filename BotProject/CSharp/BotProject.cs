@@ -9,8 +9,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 {
     public class BotProject
     {
-        [JsonProperty("entry")]
-        public string entry { get; set; }
         public List<string> Folders{ get; set; }
 
         public static async Task<BotProject> LoadAsync(string file)
