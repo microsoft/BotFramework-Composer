@@ -1,0 +1,11 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "generator": "common.lg",
+    "steps": [
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[TextWithLG]"
+        }
+    ]
+}

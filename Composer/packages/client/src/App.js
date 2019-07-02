@@ -51,7 +51,7 @@ const topLinks = [
     exact: false,
   },
   {
-    to: 'language-understanding/all',
+    to: 'language-understanding/',
     iconName: 'People',
     labelName: 'User Says',
     activeIfUrlContains: 'language-understanding',
@@ -108,7 +108,7 @@ export function App() {
 
   return (
     <Fragment>
-      <Header />
+      <Header botName={botName} />
       <StorageExplorer />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>

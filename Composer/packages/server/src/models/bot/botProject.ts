@@ -32,7 +32,7 @@ export class BotProject {
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
-    this.dialogIndexer = new DialogIndexer();
+    this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
     this.luIndexer = new LUIndexer();
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);

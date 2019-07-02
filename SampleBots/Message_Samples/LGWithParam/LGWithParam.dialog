@@ -1,0 +1,17 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "generator": "common.lg",
+    "steps": [
+        {
+            "$type": "Microsoft.TextInput",
+            "property": "user.name",
+            "allowInterruptions": false,
+            "prompt": "Hello, I'm Zoidberg. What is your name?"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[LGWithParam(user)]"
+        }
+    ]
+}

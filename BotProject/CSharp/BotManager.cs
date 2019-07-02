@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.Bot.Builder.BotFramework;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -54,7 +55,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             IStorage storage = new MemoryStorage();
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
-            var rootDialog = botProject.entry;
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer();
@@ -63,7 +63,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 resourceExplorer.AddFolder(folder);
             }
 
-            var adapter = new BotFrameworkHttpAdapter();
+            var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
             adapter
                 .UseStorage(storage)
@@ -80,7 +80,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot(rootDialog, conversationState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new TestBot("Main.dialog", conversationState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
         public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null)

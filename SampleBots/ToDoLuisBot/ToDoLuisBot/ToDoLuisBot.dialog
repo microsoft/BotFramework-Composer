@@ -1,18 +1,14 @@
 {
+  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "autoEndDialog": false,
-  "recognizer": "ToDoLuisBot.lu",
   "generator": "common.lg",
+  "recognizer": "ToDoLuisBot.lu",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:05:19.852Z",
-        "updatedAt": "2019-07-01T22:05:49.774Z",
-        "id": "920820"
-      },
-      "activity": "[activity-920820]"
+      "activity": "Hi"
     }
   ],
   "rules": [
@@ -46,11 +42,5 @@
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T22:05:16.540Z",
-    "updatedAt": "2019-07-01T22:05:16.572Z",
-    "id": "677995"
-  }
+  ]
 }

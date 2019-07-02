@@ -17,6 +17,8 @@ export const ProjectTree = props => {
         ...file,
       };
 
+      item.name = file.displayName;
+
       if (file.id === 0) {
         result[0] = { ...result[0], ...item, isExpanded: true };
       } else {
