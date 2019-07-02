@@ -376,6 +376,7 @@ export const appschema: JSONSchema6 = {
               title: 'Action',
               description: 'Card action for the choice',
               type: 'object',
+              additionalProperties: true,
             },
             synonyms: {
               type: 'array',
@@ -528,6 +529,7 @@ export const appschema: JSONSchema6 = {
                 title: 'Action',
                 description: 'Card action for the choice',
                 type: 'object',
+                additionalProperties: true,
               },
               synonyms: {
                 type: 'array',
