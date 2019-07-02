@@ -29,8 +29,8 @@ describe('index', () => {
     expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
-    expect(project.dialogs[0].lgTemplates.length).toBe(2);
-    expect(project.dialogs[0].lgTemplates.join(',')).toBe(['hello', 'bye'].join(','));
+    expect(project.dialogs[0].lgTemplates.length).toBe(3);
+    expect(project.dialogs[0].lgTemplates.join(',')).toBe(['hello', 'bye', 'ShowImage'].join(','));
   });
 });
 
