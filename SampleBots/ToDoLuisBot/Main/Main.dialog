@@ -1,10 +1,9 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "autoEndDialog": false,
-  "generator": "common.lg",
   "recognizer": "ToDoLuisBot.lu",
+  "generator": "common.lg",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
@@ -42,5 +41,11 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T10:00:39.032Z",
+    "updatedAt": "2019-07-01T10:00:39.054Z",
+    "id": "948970"
+  }
 }
