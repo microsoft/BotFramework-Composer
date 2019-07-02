@@ -50,7 +50,7 @@ const topLinks = [
     exact: false,
   },
   {
-    to: 'language-understanding/all',
+    to: 'language-understanding/',
     iconName: 'People',
     labelName: 'User Says',
     activeIfUrlContains: 'language-understanding',

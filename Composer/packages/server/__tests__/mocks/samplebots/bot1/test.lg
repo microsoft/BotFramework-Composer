@@ -6,3 +6,9 @@
 
 # bye
     - Good bye!
+
+# ShowImage(contentUrl, contentType)
+- ```
+You sent:
+[attachment=@{contentUrl} @{contentType}]
+```
