@@ -5,7 +5,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
 function itemList(action, index) {
-  if (action.isElement) {
+  if (action.type === 'element') {
     return action.element;
   } else {
     return (
@@ -23,7 +23,7 @@ function itemList(action, index) {
   }
 }
 // support ActionButton or React Elements, the display order is array index.
-// action = {isElement, iconName, text, onClick, align, element}
+// action = {type:action/element, iconName, text, onClick, align, element}
 export function ToolBar(props) {
   const { toolbarItems, ...rest } = props;
   let left = [];

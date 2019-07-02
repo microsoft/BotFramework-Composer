@@ -50,25 +50,28 @@ function DesignPage(props) {
 
   const toolbarItems = [
     {
+      type: 'action',
       text: formatMessage('New'),
       iconName: 'CirclePlus',
       onClick: () => setStorageExplorerStatus(OpenStatus.NEW),
       align: 'left',
     },
     {
+      type: 'action',
       text: formatMessage('Open'),
       iconName: 'OpenFolderHorizontal',
       onClick: () => setStorageExplorerStatus(OpenStatus.OPEN),
       align: 'left',
     },
     {
+      type: 'action',
       text: formatMessage('Save as'),
       iconName: 'Save',
       onClick: () => setStorageExplorerStatus(OpenStatus.SAVEAS),
       align: 'left',
     },
     {
-      isElement: true,
+      type: 'element',
       element: <TestController />,
       align: 'right',
     },

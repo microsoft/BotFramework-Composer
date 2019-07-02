@@ -132,7 +132,7 @@ export const LGPage = props => {
 
   const toolbarItems = [
     {
-      isElement: true,
+      type: 'element',
       element: <TestController />,
       align: 'right',
     },

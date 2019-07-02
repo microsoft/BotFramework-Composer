@@ -5,25 +5,28 @@ import { ToolBar } from '../../src/components/ToolBar';
 
 const toolbarItems = onClick => [
   {
+    type: 'action',
     text: 'New',
     iconName: 'CirclePlus',
     onClick: onClick,
     align: 'left',
   },
   {
+    type: 'action',
     text: 'Open',
     iconName: 'OpenFolderHorizontal',
     onClick: onClick,
     align: 'left',
   },
   {
+    type: 'action',
     text: 'Save as',
     iconName: 'Save',
     onClick: onClick,
     align: 'left',
   },
   {
-    isElement: true,
+    type: 'element',
     element: <div>Connect</div>,
     align: 'right',
   },
