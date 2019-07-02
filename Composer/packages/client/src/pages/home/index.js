@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { IconButton, Link } from 'office-ui-fabric-react/lib';
+import { useContext, useEffect, useMemo } from 'react';
+
+import { Store } from '../../store/index';
 
 import {
   outline,
@@ -61,29 +64,6 @@ const linksRight = [
   },
 ];
 
-const bots = [
-  {
-    iconName: 'Add',
-    actionName: 'New',
-  },
-  {
-    iconName: 'Code',
-    actionName: 'ToDo - LUIS',
-  },
-  {
-    iconName: 'AllApps',
-    actionName: 'Add - ToDo',
-  },
-  {
-    iconName: 'AddFriend',
-    actionName: 'More ToDo',
-  },
-  {
-    iconName: 'Car',
-    actionName: 'Less - ToDo',
-  },
-];
-
 const templates = [
   {
     text: 'Get Started with a Basic Conversation',
@@ -98,7 +78,30 @@ const templates = [
     text: 'Personal Assistant Experiences',
   },
 ];
+
 export const Home = () => {
+  const { state, actions } = useContext(Store);
+  const { openBotProject } = actions;
+  useEffect(() => {
+    actions.fetchRecentProjects();
+  }, []);
+  const bots = useMemo(() => {
+    const recentProjects = state.recentProjects || [];
+    const _bots = recentProjects.map(rp => {
+      const pathTokens = rp.path.split('/');
+      return {
+        iconName: 'Add',
+        actionName: pathTokens[pathTokens.length - 2],
+        path: rp.path,
+        storageId: rp.storageId,
+      };
+    });
+    _bots.splice(0, 0, {
+      iconName: 'Add',
+      actionName: 'New',
+    });
+    return _bots;
+  }, [state.recentProjects]);
   return (
     <div css={outline}>
       <div css={content}>
@@ -133,9 +136,15 @@ export const Home = () => {
           <div css={botTitle}>Start from scratch, or pick up where you left off... </div>
           <div css={botContainer}>
             {bots.map((bot, index) => {
+              if (index > 4) return null;
               return (
                 <div css={botContent} key={'homePageBot-' + index}>
-                  <div css={action}>
+                  <div
+                    css={action}
+                    onClick={() => {
+                      openBotProject(bot.storageId, bot.path);
+                    }}
+                  >
                     <IconButton styles={button()} iconProps={{ iconName: bot.iconName }} />
                   </div>
                   <div css={actionName}> {bot.actionName} </div>

@@ -125,6 +125,7 @@ export const action = css`
   height: 124px;
   width: 200px;
   background: #979797;
+  cursor: pointer;
 `;
 
 export const actionName = css`
