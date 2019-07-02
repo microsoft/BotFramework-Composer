@@ -14,7 +14,7 @@ function locateNode(dialog: { [key: string]: number }, path) {
 
   // Locate the manipulated json node
   let parentData: object = {};
-  let currentKey: number = 0;
+  let currentKey: number | string = '';
   let currentData = dialog;
 
   for (const selector of selectors) {

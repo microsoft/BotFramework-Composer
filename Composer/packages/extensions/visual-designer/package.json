@@ -21,7 +21,6 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@types/jest": "^24.0.11",
     "@types/react": "^16.8.21",
     "cci-graph-lib": "*",
     "classnames": "^2.2.6",
@@ -32,14 +31,13 @@
     "lodash": "^4.17.11",
     "office-ui-fabric-react": "^6.180.0",
     "prop-types": "^15.7.2",
-    "source-map-loader": "^0.2.4",
-    "ts-jest": "^24.0.2",
-    "ts-loader": "^6.0.3"
+    "source-map-loader": "^0.2.4"
   },
   "peerDependencies": {
     "react": "16.x"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
     "@babel/plugin-proposal-class-properties": "7.3.4",
@@ -53,7 +51,9 @@
     "react": "^16.8.4",
     "react-dom": "16.8.2",
     "react-testing-library": "^6.0.1",
-    "shared-menus": "0.0.0"
+    "shared-menus": "0.0.0",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.3"
   },
   "author": "",
   "homepage": "",

@@ -19,8 +19,8 @@ function measureStepGroupBoundary(stepGroup) {
 function measureIfConditionBoundary(json) {
   const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
   const inputs = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
-  inputs[2].boundary = measureStepGroupBoundary(ifGroup.json);
-  inputs[3].boundary = measureStepGroupBoundary(elseGroup.json);
+  inputs[2]!.boundary = measureStepGroupBoundary(ifGroup.json);
+  inputs[3]!.boundary = measureStepGroupBoundary(elseGroup.json);
   const result = calculateIfElseBoundary(...inputs);
   return result;
 }
