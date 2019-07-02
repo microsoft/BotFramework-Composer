@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 
 import { BaseField } from './BaseField';
 
@@ -11,26 +12,24 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
   }
 };
 
-export function LgEditorField(props) {
+export function LgEditorField(props: FieldProps) {
   const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
+  const lgId = `activity-${props.formContext.getDialogId()}`;
+
   const hasExistingTemplate = async () => {
     const templates = await props.formContext.shellApi.getLgTemplates('common');
     const [template] = templates.filter(template => {
-      return template.name === `activity-${props.formContext.getDialogId()}`;
+      return template.name === lgId;
     });
     if (template === null || template === undefined) {
       if (props.formContext.getDialogId()) {
-        props.formContext.shellApi.createLgTemplate(
-          'common',
-          { Name: `activity-${props.formContext.getDialogId()}`, Body: '' },
-          -1
-        );
-        props.onChange(`[activity-${props.formContext.getDialogId()}]`);
+        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: '' }, -1);
+        props.onChange(`[${lgId}]`);
       }
-      setTemplateToRender({ Name: `# activity-${props.formContext.getDialogId()}`, Body: '' });
+      setTemplateToRender({ Name: `# ${lgId}`, Body: '' });
     } else {
       if (templateToRender.Name === '') {
-        setTemplateToRender({ Name: `# activity-${props.formContext.getDialogId()}`, Body: template.body });
+        setTemplateToRender({ Name: `# ${lgId}`, Body: template.body });
       }
     }
   };
@@ -43,7 +42,8 @@ export function LgEditorField(props) {
         dataToEmit = `-${dataToEmit}`;
       }
       setTemplateToRender({ Name: templateToRender.Name, Body: data });
-      props.formContext.shellApi.updateLgTemplate('common', `activity-${props.formContext.getDialogId()}`, dataToEmit);
+      props.formContext.shellApi.updateLgTemplate('common', lgId, dataToEmit);
+      props.onChange(`[${lgId}]`);
     }
   };
 

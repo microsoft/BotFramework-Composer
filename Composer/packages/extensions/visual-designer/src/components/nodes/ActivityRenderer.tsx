@@ -16,7 +16,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   const { id, data, onEvent, getLgTemplates } = props;
   const [templateText, setTemplateText] = useState('');
 
-  useEffect(() => {
+  const updateTemplateText = async () => {
     if (data.activity && data.$designer && data.$designer.id) {
       if (isAnonymousTemplateReference(data.activity)) {
         // this is an LG template, go get it's content
@@ -25,17 +25,21 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
         }
 
         const templateName = data.activity.slice(1, data.activity.length - 1);
-        getLgTemplates('common', `${templateName}`).then(templates => {
-          const [template] = templates.filter(template => {
-            return template.name === templateName;
-          });
-          if (template) {
-            setTemplateText(template.body);
-          }
+        const templates = await getLgTemplates('common', `${templateName}`);
+        const [template] = templates.filter(template => {
+          return template.name === templateName;
         });
+        if (template && template.body) {
+          const [firstLine] = template.body.split('\n');
+          setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
+        }
       }
     }
-  }, [data]);
+  };
+
+  useEffect(() => {
+    updateTemplateText();
+  });
 
   return (
     <FormCard
