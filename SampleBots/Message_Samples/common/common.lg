@@ -1,0 +1,18 @@
+# Greeting
+- nice to talk to you!
+
+# LGComposition(user)
+- {user.name} [Greeting]
+
+# LGWithParam(user)
+- Hello {user.name}, nice to talk to you!
+
+# TextWithLG
+- Hi, this is a text with LG
+- Hey, this is a text with LG
+- Hello, this is a text with LG
+
+# help
+- ```
+    I can show you examples on sending messages. Restart the conversation to get started.
+```
