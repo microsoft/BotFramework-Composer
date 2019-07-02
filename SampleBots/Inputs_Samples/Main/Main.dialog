@@ -12,6 +12,7 @@
             "ChoiceInput": "ChoiceInput|04",
             "AttachmentInput": "AttachmentInput|05",
             "DateTimeInput": "DateTimeInput|06",
+            "OAuthInput": "OAuthInput|07",
             "CancelIntent": "cancel"
         }
     },
@@ -73,6 +74,16 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "AttachmentInput"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "OAuthInput",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "OAuthInput"
                 }
             ]
         },
