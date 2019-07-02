@@ -67,10 +67,6 @@ export const uiSchema = {
     },
     ...globalFields,
   },
-  'Microsoft.ChoiceInput': {
-    ...globalFields,
-    ...activityFields,
-  },
   'Microsoft.CodeStep': {
     codeHandler: {
       'ui:field': CodeField,
@@ -85,9 +81,6 @@ export const uiSchema = {
       'ui:field': SelectorField,
     },
     ...globalFields,
-  },
-  'Microsoft.ConfirmInput': {
-    ...activityFields,
   },
   'Microsoft.EditSteps': {
     Steps: {
@@ -152,8 +145,70 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.TextInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
   'Microsoft.NumberInput': {
     ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.ConfirmInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'style',
+      'confirmChoices',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.ChoiceInput': {
+    inputBindings: {
+      'ui:field': NullField,
+    },
+    outputBinding: {
+      'ui:field': NullField,
+    },
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'style',
+      'choices',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
@@ -175,9 +230,6 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
-  },
-  'Microsoft.TextInput': {
-    ...activityFields,
   },
   'Microsoft.UnknownIntentRule': {
     steps: {
