@@ -2,12 +2,13 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 
-import { headerMain, aside } from './styles';
+import { headerContainer, title, botName } from './styles';
 
-export const Header = () => {
+export const Header = props => {
   return (
-    <div css={headerMain}>
-      <div css={aside}>{formatMessage('Bot Framework Designer')}</div>
+    <div css={headerContainer}>
+      <span css={title}>{formatMessage('Bot Framework Designer')}</span>
+      <span css={botName}>{props.botName}</span>
     </div>
   );
 };
