@@ -1,0 +1,102 @@
+{
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "generator": "common.lg",
+    "steps": [
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.choice",
+            "choices": [
+                {
+                    "value": "Simple Text"
+                },
+                {
+                    "value": "Text With Memory"
+                },
+                {
+                    "value": "Text With LG"
+                },
+                {
+                    "value": "LGWithParam"
+                },
+                {
+                    "value": "LGComposition"
+                }
+            ],
+            "prompt": "What type of message would you like to send?",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.choice",
+            "cases": [
+                {
+                    "value": "'Simple Text'",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.BeginDialog",
+                            "dialog": "SimpleText"
+                        }
+                    ]
+                },
+                {
+                    "value": "'Text With Memory'",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.BeginDialog",
+                            "dialog": "TextWithMemory"
+                        }
+                    ]
+                },
+                {
+                    "value": "'Text With LG'",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.BeginDialog",
+                            "dialog": "TextWithLG"
+                        }
+                    ]
+                },
+                {
+                    "value": "'LGWithParam'",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.BeginDialog",
+                            "dialog": "LGWithParam"
+                        }
+                    ]
+                },
+                {
+                    "value": "'LGComposition'",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.BeginDialog",
+                            "dialog": "LGComposition"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.RepeatDialog"
+        }
+    ],
+    "rules": [
+      {
+        "$type": "Microsoft.UnknownIntentRule",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[help]"
+          }
+        ]
+      }
+    ],
+    "$schema": "../../app.schema",
+    "$designer": {
+        "createdAt": "2019-06-28T06:31:58.726Z",
+        "updatedAt": "2019-06-28T06:31:58.818Z",
+        "id": "937757"
+    }
+}
