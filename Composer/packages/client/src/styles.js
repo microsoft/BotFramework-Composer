@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
 import { NeutralColors, Depths, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const main = css`
   height: calc(100vh - 50px);
@@ -7,7 +8,7 @@ export const main = css`
 `;
 
 export const sideBar = isExpand => css`
-  width: ${isExpand ? '220' : '45'}px;
+  width: ${isExpand ? '220' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
   box-shadow: ${Depths.depth8};
@@ -18,6 +19,12 @@ export const sideBar = isExpand => css`
   overflow: hidden;
 `;
 
+export const dividerTop = css`
+  width: 100%;
+  border-bottom: 1px solid ${NeutralColors.gray40};
+  margin: 0 auto;
+`;
+
 export const divider = isExpand => css`
   width: ${isExpand ? '85%' : '40%'};
   border-bottom: 1px solid ${NeutralColors.gray40};
@@ -25,10 +32,10 @@ export const divider = isExpand => css`
 `;
 
 export const globalNav = css`
-  height: 36px;
-  width: 45px;
+  height: 44px;
+  width: 48px;
   text-align: center;
-  line-height: 36px;
+  line-height: 44px;
   cursor: pointer;
   font-size: ${FontSizes.size16};
   color: ${SharedColors.cyanBlue10};
@@ -61,3 +68,28 @@ export const rightPanel = () => css`
 export const data = css`
   height: calc(100vh - 105px);
 `;
+
+export const bot = css`
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+`;
+
+export const botButton = css`
+  margin-left: 15px;
+`;
+
+export const calloutLabel = css`
+  font-size: ${FontSizes.large};
+  font-weight: ${FontWeights.bold};
+`;
+
+export const calloutContainer = css`
+  width: 400px;
+  padding: 10px;
+`;
+
+export const calloutDescription = css``;
+
+export const calloutAction = css``;

@@ -5,6 +5,12 @@ import { FileInfo, Dialog } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
+  private botName: string;
+  private entry: string = 'Main.dialog';
+
+  constructor(botName: string) {
+    this.botName = botName;
+  }
 
   // find out all lg templates given dialog
   private ExtractLgTemplates(dialog: Dialog): string[] {
@@ -35,7 +41,9 @@ export class DialogIndexer {
         }
 
         if (target && typeof target === 'string') {
-          const reg = /\[(\w+)\]/g;
+          // match a template name
+          // match a temlate func  e.g. `showDate()`
+          const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
           let result;
           while ((result = reg.exec(target)) !== null) {
             const name = result[1];
@@ -78,7 +86,8 @@ export class DialogIndexer {
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
-      const entry = files[0].content.entry;
+      const entry = this.entry;
+      const botName = this.botName;
       let count = 1;
 
       for (const file of files) {
@@ -90,6 +99,7 @@ export class DialogIndexer {
             const dialog = {
               id: 0,
               name: Path.basename(file.name, extName),
+              displayName: file.name === entry ? botName : Path.basename(file.name, extName),
               content: dialogJson,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
