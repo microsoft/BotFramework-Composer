@@ -31,6 +31,8 @@ context('SwitchCondition', () => {
       // Add some steps
 
       // Send activity
+      // Use { force: true } can disable error checking like dom not visible or width and height '0 * 0' pixels.
+      // So if a button is in a popup window, using { force: true } to button click can make the tests more stable.
       cy.getByText('Add New Step for Case1').click({ force: true });
       cy.getByText('Send Messages').click({ force: true });
       cy.getByText('Send a single message').click({ force: true });
