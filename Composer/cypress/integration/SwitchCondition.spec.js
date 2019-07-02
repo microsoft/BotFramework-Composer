@@ -31,19 +31,19 @@ context('SwitchCondition', () => {
       // Add some steps
 
       // Send activity
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Send Messages').click();
-      cy.getByText('Send a single message').click();
+      cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.getByText('Send Messages').click({ force: true });
+      cy.getByText('Send a single message').click({ force: true });
 
       // Edit array
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Memory manipulation').click();
-      cy.getByText('Edit an array property').click();
+      cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.getByText('Memory manipulation').click({ force: true });
+      cy.getByText('Edit an array property').click({ force: true });
 
       // Log step
-      cy.getByText('Add New Step for Case1').click();
-      cy.getByText('Debugging').click();
-      cy.getByText('Log a message to the console').click();
+      cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.getByText('Debugging').click({ force: true });
+      cy.getByText('Log a message to the console').click({ force: true });
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
@@ -94,6 +94,8 @@ context('SwitchCondition', () => {
         .type('Case2')
         .type('{enter}');
 
+      cy.wait(100);
+
       // move first case
       let btn = cy
         .get('.CasesFieldConditionsMenu')
@@ -111,6 +113,8 @@ context('SwitchCondition', () => {
         .eq(1)
         .should('have.text', 'Case1');
 
+      cy.wait(100);
+
       // remove case1
       btn = cy
         .get('.CasesFieldConditionsMenu')
@@ -120,7 +124,7 @@ context('SwitchCondition', () => {
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Remove')
-          .click();
+          .click({ force: true });
       });
 
       cy.get('[role="separator"]')
