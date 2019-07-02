@@ -1,8 +1,9 @@
 import React from 'react';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { IconButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
 import { ArrayFieldItem } from '@bfdesigner/react-jsonschema-form';
 import formatMessage from 'format-message';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
   const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
@@ -41,10 +42,12 @@ const ArrayItem: React.FC<ArrayFieldItem> = props => {
     <div className="ArrayItem">
       <div className="ArrayItemField">{props.children}</div>
       <div className="ArrayItemContext">
-        <DefaultButton
+        <IconButton
           menuProps={{ items: contextItems }}
+          menuIconProps={{ iconName: 'MoreVertical' }}
           ariaLabel={formatMessage('Item Actions')}
           data-testid="ArrayItemContextMenu"
+          styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
         />
       </div>
     </div>

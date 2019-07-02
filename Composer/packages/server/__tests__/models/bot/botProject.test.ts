@@ -26,6 +26,7 @@ describe('index', () => {
     const project: { [key: string]: any } = await proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
     expect(project.lgFiles.length).toBe(1);
+    expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
     expect(project.dialogs[0].lgTemplates.length).toBe(2);
@@ -146,7 +147,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.createLgFile(id, content, dir);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(6);
+    expect(proj.files.length).toEqual(9);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -162,7 +163,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.updateLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(6);
+    expect(proj.files.length).toEqual(9);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -177,8 +178,62 @@ describe('lg operation', () => {
     const lgFiles = await proj.removeLgFile(id);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(5);
+    expect(proj.files.length).toEqual(8);
     expect(lgFiles.length).toEqual(1);
+
+    expect(result).toBeUndefined();
+  });
+});
+
+describe('lu operation', () => {
+  afterEach(() => {
+    try {
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+    } catch (err) {
+      // ignore
+    }
+  });
+
+  it('should create lu file and update index', async () => {
+    const id = 'root';
+    const dir = 'root';
+    const content = '## hello \n - hello';
+    const luFiles = await proj.createLuFile(id, content, dir);
+    const result = luFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(9);
+    expect(luFiles.length).toEqual(4);
+
+    expect(result).not.toBeUndefined();
+    if (result !== undefined) {
+      expect(result.relativePath).toEqual('root/root.lu');
+      expect(result.content).toEqual(content);
+    }
+  });
+
+  it('should update lu file and update index', async () => {
+    const id = 'root';
+    const content = '## hello \n - hello2';
+    const luFiles = await proj.updateLuFile(id, content);
+    const result = luFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(9);
+    expect(luFiles.length).toEqual(4);
+
+    expect(result).not.toBeUndefined();
+    if (result !== undefined) {
+      expect(result.relativePath).toEqual('root/root.lu');
+      expect(result.content).toEqual(content);
+    }
+  });
+
+  it('should delete lu file and update index', async () => {
+    const id = 'root';
+    const luFiles = await proj.removeLuFile(id);
+    const result = luFiles.find(f => f.id === id);
+
+    expect(proj.files.length).toEqual(8);
+    expect(luFiles.length).toEqual(3);
 
     expect(result).toBeUndefined();
   });
