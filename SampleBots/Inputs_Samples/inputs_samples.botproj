@@ -3,6 +3,5 @@
   "schemas": {
     "editor": ".schemas/editor.schema",
     "sdk": ".schemas/sdk.schema"
-  },
-  "entry": "inputs_samples.dialog"
+  }
 }
