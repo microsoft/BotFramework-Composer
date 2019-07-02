@@ -1,4 +1,4 @@
-using Microsoft.Bot.Builder;
+﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
@@ -18,18 +18,11 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class JsonLoadTest
+    public class StepsTests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
         private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\SampleBots");
-
-        private static string getSingleSample(string path)
-        {
-            var botProjPath = Directory.GetFiles(Path.Combine(samplesDirectory, path), "*.botproj");
-            Assert.IsTrue(botProjPath.Length == 1);
-            return "Main.dialog";
-        }
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 
@@ -38,7 +31,7 @@ namespace Tests
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
             TypeFactory.RegisterAdaptiveTypes();
-            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory));
+            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "Steps_Samples"));
             resourceExplorer.AddFolder(path);
         }
 
@@ -53,7 +46,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_01Steps()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
                 .SendConversationUpdate()
                 .Send("01")
                 .AssertReply("Step 1")
@@ -67,7 +60,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_02EndTurn()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .Send("02")
                 .AssertReply("What's up?")
             .Send("Nothing")
@@ -78,7 +71,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_03IfCondition()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("03")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
@@ -90,7 +83,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_04EditArray()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("04")
                 .AssertReply("Here are the index and values in the array.")
@@ -107,7 +100,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_05EndDialog()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("05")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
@@ -124,7 +117,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_06HttpRequest()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
             .Send("06")
             .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
@@ -142,7 +135,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_07SwitchCondition()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("07")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
@@ -155,7 +148,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_08RepeatDialog()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("08")
                 .AssertReply("Hello, what is your name?")
@@ -171,7 +164,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_09TraceAndLog()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"), sendTrace: true)
+            await BuildTestFlow(true)
             .SendConversationUpdate()
             .Send("09")
                 .AssertReply("Hello, what is your name?")
@@ -188,7 +181,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_10EditSteps()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("10")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
@@ -201,7 +194,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_11ReplaceDialog()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("11")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
@@ -221,7 +214,7 @@ namespace Tests
         [TestMethod]
         public async Task Steps_12EmitEvent()
         {
-            await BuildTestFlow(getSingleSample("Steps_Samples"))
+            await BuildTestFlow()
             .SendConversationUpdate()
             .Send("12")
                 .AssertReply("Say moo to get a response, say emit to emit a event.")
@@ -232,78 +225,7 @@ namespace Tests
             .StartTestAsync();
         }
 
-        [TestMethod]
-        public async Task Inputs_01TextInput()
-        {
-            await BuildTestFlow(getSingleSample("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("01")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
-            .Send("02")
-                .AssertReply("Hello 02, nice to talk to you!")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
-            .Send("02")
-                .AssertReply("What is your age?")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_02NumberInput()
-        {
-            await BuildTestFlow(getSingleSample("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("02")
-                .AssertReply("What is your age?")
-            .Send("18")
-                .AssertReply("Hello, your age is 18!")
-                .AssertReply("2 * 2.2 equals?")
-            .Send("4.4")
-                .AssertReply("2 * 2.2 equals 4.4, that's right!")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_03ConfirmInput()
-        {
-            await BuildTestFlow(getSingleSample("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("03")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("asdasd")
-                .AssertReply("I need a yes or no. (1) Yes or (2) No")
-            .Send("yes")
-                .AssertReply("confirmation: True")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("nope")
-                .AssertReply("confirmation: False")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_04ChoiceInput()
-        {
-            await BuildTestFlow(getSingleSample("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("04")
-                .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
-            .Send("Test1")
-                .AssertReply("You select: Test1")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_06DateTimeInput()
-        {
-            await BuildTestFlow(getSingleSample("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("06")
-                .AssertReply("Please enter a date.")
-            .Send("June 1st 2019")
-                .AssertReply("You entered: 2019-06-01")
-            .StartTestAsync();
-        }
-
-        private TestFlow BuildTestFlow(string resourceName, bool sendTrace = false)
+        private TestFlow BuildTestFlow(bool sendTrace = false)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().Build();
             var storage = new MemoryStorage();
@@ -317,7 +239,7 @@ namespace Tests
                 .UseResourceExplorer(resourceExplorer)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource(resourceName);
+            var resource = resourceExplorer.GetResource("Main.dialog");
             var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
             DialogManager dm = new DialogManager(dialog);
 
