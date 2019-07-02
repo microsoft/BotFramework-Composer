@@ -30,7 +30,7 @@ import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 
-function DesignPage() {
+function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
   const { clearNavHistory, navTo, setStorageExplorerStatus } = actions;
@@ -105,7 +105,7 @@ function DesignPage() {
 
   return (
     <Fragment>
-      <ToolBar toolbarItems={toolbarItems} />
+      {props.match && <ToolBar toolbarItems={toolbarItems} />}
       <MainContent>
         <Fragment>
           <div css={projectContainer}>

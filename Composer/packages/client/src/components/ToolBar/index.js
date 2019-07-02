@@ -25,7 +25,7 @@ function itemList(action, index) {
 // support ActionButton or React Elements, the display order is array index.
 // action = {isElement, iconName, text, onClick, align, element}
 export function ToolBar(props) {
-  const { toolbarItems } = props;
+  const { toolbarItems, ...rest } = props;
   let left = [];
   let right = [];
   if (toolbarItems && toolbarItems.length > 0) {
@@ -37,7 +37,7 @@ export function ToolBar(props) {
     });
   }
   return (
-    <div css={headerSub}>
+    <div css={headerSub} {...rest}>
       <div css={leftActions}>{left.map(itemList)}</div>
       <div css={rightActions}>{right.map(itemList)}</div>
     </div>
