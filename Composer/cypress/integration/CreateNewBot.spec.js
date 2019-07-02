@@ -11,7 +11,7 @@ context('Creating a new bot', () => {
     cy.get('input[data-testid="NewBotProjectInput"]').type('__TestNewProject');
     cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewProject.main').should('exist');
+      cy.getByText('Main').should('exist');
       cy.getByText('AddToDo').should('exist');
       cy.getByText('ClearToDos').should('exist');
       cy.getByText('DeleteToDo').should('exist');

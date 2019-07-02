@@ -1,0 +1,9 @@
+{
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "EmptyBot",
+    "description": "<Fill in the description of your bot here>"
+  },
+  "generator": "common.lg"
+}

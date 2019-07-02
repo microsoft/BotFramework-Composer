@@ -1,6 +1,7 @@
 import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
+import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
@@ -43,6 +44,7 @@ export class BotProject {
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this.luPublisher.getLuisStatus();
+    await this._checkProjectStructure();
   };
 
   public getIndexes = () => {
@@ -143,7 +145,7 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    this._removeFile(luFile.relativePath);
+    await this._removeFile(luFile.relativePath);
     return this.luIndexer.getLuFiles();
   };
 
@@ -169,25 +171,8 @@ export class BotProject {
     const dstDir = locationRef.path;
     await dstStorage.mkDir(dstDir, { recursive: true });
 
-    // copy files to locationRef
-    const prevFiles = await this._getFiles();
-    for (const index in prevFiles) {
-      const file = prevFiles[index];
-      // update main dialog file name and entry in botproj file
-      const newMainDialogName = `${Path.basename(dstDir)}.main.dialog`;
-      if (file.relativePath.indexOf('.main.dialog') >= 0) {
-        file.relativePath = Path.join(Path.dirname(file.relativePath), newMainDialogName);
-      }
-      const absolutePath = Path.join(dstDir, file.relativePath);
-      let content =
-        index === '0' || file.name === 'editorSchema' ? JSON.stringify(file.content, null, 2) + '\n' : file.content;
-      if (file.name.indexOf('.botproj') >= 0) {
-        content = JSON.parse(content);
-        content.entry = Path.join(Path.dirname(content.entry), newMainDialogName);
-        content = JSON.stringify(content, null, 2) + '\n';
-      }
-      await dstStorage.writeFile(absolutePath, content);
-    }
+    await copyDir(this.dir, this.fileStorage, dstDir, dstStorage);
+
     // return new proj ref
     const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
     if (dstBotProj && dstBotProj.length === 1) {
@@ -342,5 +327,20 @@ export class BotProject {
     }
 
     return fileList;
+  };
+
+  // check project stracture is valid or not, if not, try fix it.
+  private _checkProjectStructure = async () => {
+    const dialogs: Dialog[] = this.dialogIndexer.getDialogs();
+    const luFiles: LUFile[] = this.luIndexer.getLuFiles();
+    // ensure each dialog got a lu file
+    for (const dialog of dialogs) {
+      // dialog/lu should in the same path folder
+      const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
+      const exist = luFiles.findIndex((luFile: { [key: string]: any }) => luFile.relativePath === targetLuFilePath);
+      if (exist === -1) {
+        await this._createFile(targetLuFilePath, '');
+      }
+    }
   };
 }
