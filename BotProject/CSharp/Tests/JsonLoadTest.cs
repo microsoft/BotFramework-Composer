@@ -28,9 +28,7 @@ namespace Tests
         {
             var botProjPath = Directory.GetFiles(Path.Combine(samplesDirectory, path), "*.botproj");
             Assert.IsTrue(botProjPath.Length == 1);
-            var botPath = botProjPath[0];
-            var botProj = BotProject.Load(botPath);
-            return botProj.entry;
+            return "Main.dialog";
         }
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
