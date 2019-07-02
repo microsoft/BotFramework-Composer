@@ -1,5 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-01T22:01:24.464Z",
+    "updatedAt": "2019-07-02T00:02:06.046Z",
+    "id": "357758"
+  },
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
@@ -22,6 +27,14 @@
         "id": "376720"
       },
       "activity": "[activity-376720]"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "017170",
+        "updatedAt": "2019-07-02T00:02:10.678Z"
+      },
+      "activity": "[activity-017170]"
     }
   ],
   "rules": [
@@ -86,10 +99,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T22:01:24.464Z",
-    "updatedAt": "2019-07-01T22:01:24.503Z",
-    "id": "357758"
-  }
+  "$schema": "../../app.schema"
 }
