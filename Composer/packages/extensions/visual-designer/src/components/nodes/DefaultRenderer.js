@@ -17,6 +17,10 @@ const DefaultKeyMap = {
   label: 'property',
 };
 
+const isAnonymousTemplateReference = activity => {
+  return activity.indexOf('activity-') !== -1;
+};
+
 /**
  * Create labels out of compound values
  */
@@ -32,7 +36,7 @@ function makeLabel(data, getLgTemplates, setRenderedLabel) {
       return `${data.changeType} ${data.arrayProperty || '?'}`;
     case ObiTypes.SendActivity: {
       if (data.activity && data.$designer && data.$designer.id) {
-        if (data.activity.indexOf('activity-') !== -1) {
+        if (isAnonymousTemplateReference(data.activity)) {
           // this is an LG template, go get it's content
           if (!getLgTemplates || typeof getLgTemplates !== 'function') {
             return data.activity;
@@ -45,13 +49,12 @@ function makeLabel(data, getLgTemplates, setRenderedLabel) {
             if (template) {
               setRenderedLabel(template.body);
               return;
-            } else {
-              return data.activity;
             }
           });
         }
       }
-      return data.activity ? `${data.activity}` : '';
+
+      return data.activity && !isAnonymousTemplateReference(data.activity) ? `${data.activity}` : '';
     }
     default:
       return '';
@@ -152,7 +155,7 @@ const ContentKeyByTypes = {
  */
 export function DefaultRenderer(props) {
   const { id, data, onEvent, getLgTemplates } = props;
-  const [renderedLabel, setRenderedLabel] = useState(null);
+  const [renderedLabel, setRenderedLabel] = useState('');
 
   let header = getFriendlyName(data),
     label = '',
@@ -170,10 +173,16 @@ export function DefaultRenderer(props) {
 
   if (makeLabel(data, getLgTemplates, setRenderedLabel)) {
     label = makeLabel(data, getLgTemplates, setRenderedLabel);
+    if (label !== renderedLabel) {
+      setRenderedLabel(label);
+    }
   }
 
   if (data.$type && ContentKeyByTypes[data.$type] && ContentKeyByTypes[data.$type].text) {
     label = ContentKeyByTypes[data.$type].text;
+    if (label !== renderedLabel) {
+      setRenderedLabel(label);
+    }
   }
 
   if (!header) {
@@ -186,7 +195,7 @@ export function DefaultRenderer(props) {
       header={header}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
-      label={renderedLabel || label}
+      label={renderedLabel}
       details={details}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, id);
