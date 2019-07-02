@@ -25,13 +25,14 @@ export class RuleGroup extends React.Component<NodeProps> {
   }
 
   renderRule(rule) {
-    const { focusedId, onEvent } = this.props;
+    const { focusedId, getLgTemplates, onEvent } = this.props;
     const data = rule.json;
     return (
       <NodeRenderer
         id={rule.id}
         data={data}
         focusedId={focusedId}
+        getLgTemplates={getLgTemplates}
         onEvent={onEvent}
         onResize={() => {
           this.propagateBoundary();

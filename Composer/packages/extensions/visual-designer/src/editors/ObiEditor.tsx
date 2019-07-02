@@ -10,7 +10,7 @@ import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
-export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, onChange }) => {
+export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, onChange, getLgTemplates }) => {
   const dispatchEvent = (eventName?, eventData?) => {
     let handler;
     switch (eventName) {
@@ -75,7 +75,13 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       }}
     >
       <DragScroll>
-        <ChosenEditor id={path} data={data} focusedId={focusedId} onEvent={(...args) => dispatchEvent(...args)} />
+        <ChosenEditor
+          id={path}
+          data={data}
+          focusedId={focusedId}
+          getLgTemplates={getLgTemplates}
+          onEvent={(...args) => dispatchEvent(...args)}
+        />
       </DragScroll>
     </div>
   );
