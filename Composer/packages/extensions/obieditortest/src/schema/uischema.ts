@@ -57,10 +57,6 @@ export const uiSchema = {
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
-  'Microsoft.AttachmentInput': {
-    ...activityFields,
-    'ui:order': ['*', 'validations'],
-  },
   'Microsoft.BeginDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
@@ -202,6 +198,24 @@ export const uiSchema = {
       'outputFormat',
       'style',
       'choices',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.OAuthInput': {
+    ...activityFields,
+    'ui:order': ['connectionName', '*'],
+  },
+  'Microsoft.AttachmentInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
       'validations',
       'value',
       'defaultValue',
