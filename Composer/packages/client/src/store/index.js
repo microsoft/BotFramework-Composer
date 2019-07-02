@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
+import { CreationFlowStatus } from './../constants';
 
 export const Store = React.createContext();
 
@@ -18,7 +19,7 @@ const initialState = {
   focusedStorageFolder: {},
   botStatus: 'unConnected',
   botLoadErrorMsg: '',
-  storageExplorerStatus: '',
+  creationFlowStatus: CreationFlowStatus.CLOSE,
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},

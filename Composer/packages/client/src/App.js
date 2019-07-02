@@ -95,8 +95,8 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botName } = state;
-  const { fetchProject } = actions;
+  const { botName, creationFlowStatus } = state;
+  const { fetchProject, setCreationFlowStatus } = actions;
 
   useEffect(() => {
     fetchProject();

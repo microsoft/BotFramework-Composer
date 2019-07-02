@@ -3,6 +3,15 @@ import axios from 'axios';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
+export function setCreationFlowStatus(dispatch, creationFlowStatus) {
+  dispatch({
+    type: ActionTypes.SET_CREATION_FLOW_STATUS,
+    payload: {
+      creationFlowStatus,
+    },
+  });
+}
+
 export async function fetchProject(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);
