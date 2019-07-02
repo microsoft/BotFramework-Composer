@@ -13,6 +13,8 @@ import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
+import { ToolBar } from './../../components/ToolBar/index';
+import { TestController } from './../../TestController';
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
@@ -29,14 +31,20 @@ export const LUPage = props => {
 
   useEffect(() => {
     if (luFiles.length && activeDialog) {
-      setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
+      setLuFile({
+        ...luFiles.find(luFile => luFile.id === activeDialog.name),
+      });
     }
   }, [luFiles, activeDialog]);
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
       if (result.length === 0) {
-        result = [{ links: [] }];
+        result = [
+          {
+            links: [],
+          },
+        ];
       }
       const item = {
         id: file.name,
@@ -71,8 +79,7 @@ export const LUPage = props => {
     ];
   }, [dialogs]);
 
-  // if dialog not find, navigate to all.
-  // if all dialog selected, disable textMode
+  // if dialog not find, navigate to all. if all dialog selected, disable textMode
   useEffect(() => {
     if (activePath === '_all') {
       setTextMode(false);
@@ -102,7 +109,9 @@ export const LUPage = props => {
   }
 
   function discardChanges() {
-    setLuFile({ ...luFiles.find(luFile => luFile.id === activeDialog.name) });
+    setLuFile({
+      ...luFiles.find(luFile => luFile.id === activeDialog.name),
+    });
     setNewContent(null);
   }
 
@@ -114,25 +123,44 @@ export const LUPage = props => {
     updateLuFile(payload);
   }
 
-  //#TODO:
-  // get line number from lu parser,
-  // then deep link to code editor this Line
+  // #TODO: get line number from lu parser, then deep link to code editor this
+  // Line
   function onTableViewWantEdit(template) {
     navigate(`/language-understanding/${template.fileId}`);
     setTextMode(true);
   }
 
+  const toolbarItems = [
+    {
+      type: 'element',
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
+
   return (
     <Fragment>
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
-              <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={() => onSave()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Save',
+                }}
+                split={true}
+                onClick={() => onSave()}
+              >
                 Save file
               </ActionButton>
-              <ActionButton iconProps={{ iconName: 'Undo' }} onClick={() => discardChanges()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Undo',
+                }}
+                onClick={() => discardChanges()}
+              >
                 Discard changes
               </ActionButton>
             </Fragment>

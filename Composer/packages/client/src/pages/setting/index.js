@@ -3,6 +3,8 @@ import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import formatMessage from 'format-message';
 
+import { ToolBar } from '../../components/ToolBar';
+
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
@@ -13,6 +15,7 @@ import { MainContent } from './../../components/MainContent/index';
 export const SettingPage = () => {
   return (
     <Fragment>
+      <ToolBar />
       <MainContent>
         <Fragment>
           <div css={fileList}>
