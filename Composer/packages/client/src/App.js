@@ -108,7 +108,7 @@ export function App() {
 
   return (
     <Fragment>
-      <Header />
+      <Header botName={botName} />
       <StorageExplorer />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
