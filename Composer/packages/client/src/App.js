@@ -7,12 +7,11 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
-import { ToolBar } from './components/ToolBar';
 import { NavItem } from './components/NavItem';
 import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
-import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel } from './styles';
+import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 
 initializeIcons(/* optional base url */);
 
@@ -94,17 +93,13 @@ const bottomLinks = [
 ];
 
 export function App() {
-  const { state, actions } = useContext(Store);
+  const { actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botName, botStatus, luFiles, luStatus } = state;
-  const { connectBot, reloadBot, setStorageExplorerStatus, publishLuis } = actions;
-  useEffect(() => {
-    actions.fetchProject();
-  }, []);
+  const { fetchProject } = actions;
 
-  async function handlePublish(config) {
-    return await publishLuis(config);
-  }
+  useEffect(() => {
+    fetchProject();
+  }, []);
 
   return (
     <Fragment>
@@ -123,7 +118,8 @@ export function App() {
               }}
               data-testid={'LeftNavButton'}
               ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
-            />{' '}
+            />
+            <div css={dividerTop} />{' '}
             {topLinks.map((link, index) => {
               return (
                 <NavItem
@@ -160,16 +156,6 @@ export function App() {
           </div>
         </nav>
         <div css={rightPanel}>
-          <ToolBar
-            botName={botName}
-            botStatus={botStatus}
-            connectBot={connectBot}
-            reloadBot={reloadBot}
-            onPublish={handlePublish}
-            luFiles={luFiles}
-            luStatus={luStatus}
-            openStorageExplorer={setStorageExplorerStatus}
-          />
           <Routes component={Content} />
         </div>
       </div>

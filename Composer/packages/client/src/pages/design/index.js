@@ -6,6 +6,8 @@ import findindex from 'lodash.findindex';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
+import { TestController } from '../../TestController';
+import { OpenStatus } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -26,11 +28,12 @@ import {
 import NewDialogModal from './NewDialogModal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
+import { ToolBar } from './../../components/ToolBar/index';
 
 function DesignPage() {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo } = actions;
+  const { clearNavHistory, navTo, setStorageExplorerStatus } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
@@ -44,6 +47,32 @@ function DesignPage() {
       return result;
     }, {});
   }, [dialogs]);
+
+  const toolbarItems = [
+    {
+      text: formatMessage('New'),
+      iconName: 'CirclePlus',
+      onClick: () => setStorageExplorerStatus(OpenStatus.NEW),
+      align: 'left',
+    },
+    {
+      text: formatMessage('Open'),
+      iconName: 'OpenFolderHorizontal',
+      onClick: () => setStorageExplorerStatus(OpenStatus.OPEN),
+      align: 'left',
+    },
+    {
+      text: formatMessage('Save as'),
+      iconName: 'Save',
+      onClick: () => setStorageExplorerStatus(OpenStatus.SAVEAS),
+      align: 'left',
+    },
+    {
+      isElement: true,
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
 
   const breadcrumbItems = useMemo(() => {
     return navPathHistory.map((item, index) => {
@@ -76,6 +105,7 @@ function DesignPage() {
 
   return (
     <Fragment>
+      <ToolBar toolbarItems={toolbarItems} />
       <MainContent>
         <Fragment>
           <div css={projectContainer}>
@@ -85,7 +115,9 @@ function DesignPage() {
                   <div>{formatMessage('Dialogs')}</div>
                   {dialogs.length > 0 ? (
                     <IconButton
-                      iconProps={{ iconName: 'Add' }}
+                      iconProps={{
+                        iconName: 'Add',
+                      }}
                       title={formatMessage('New Dialog')}
                       ariaLabel={formatMessage('New Dialog')}
                       onClick={() => setModalOpen(true)}
