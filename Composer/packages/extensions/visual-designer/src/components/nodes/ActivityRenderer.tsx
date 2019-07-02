@@ -1,0 +1,52 @@
+import React, { useState, useEffect } from 'react';
+
+import { NodeProps } from '../shared/sharedProps';
+import { NodeMenu } from '../shared/NodeMenu';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { NodeColors } from '../../shared/elementColors';
+import { DialogGroup } from '../../shared/appschema';
+
+import { FormCard } from './templates/FormCard';
+
+const isAnonymousTemplateReference = activity => {
+  return activity.indexOf('activity-') !== -1;
+};
+
+export const ActivityRenderer: React.FC<NodeProps> = props => {
+  const { id, data, onEvent, getLgTemplates } = props;
+  const [templateText, setTemplateText] = useState('');
+
+  useEffect(() => {
+    if (data.activity && data.$designer && data.$designer.id) {
+      if (isAnonymousTemplateReference(data.activity)) {
+        // this is an LG template, go get it's content
+        if (!getLgTemplates || typeof getLgTemplates !== 'function') {
+          setTemplateText(data.activity);
+        }
+
+        const templateName = data.activity.slice(1, data.activity.length - 1);
+        getLgTemplates('common', `${templateName}`).then(templates => {
+          const [template] = templates.filter(template => {
+            return template.name === templateName;
+          });
+          if (template) {
+            setTemplateText(template.body);
+          }
+        });
+      }
+    }
+  }, [data]);
+
+  return (
+    <FormCard
+      nodeColors={NodeColors[DialogGroup.RESPONSE]}
+      header={'Activity'}
+      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      icon="MessageBot"
+      label={templateText}
+      onClick={() => {
+        onEvent(NodeEventTypes.Focus, id);
+      }}
+    />
+  );
+};

@@ -12,6 +12,7 @@ import {
   EventRule,
   IfCondition,
   SwitchCondition,
+  ActivityRenderer,
 } from '../nodes/index';
 
 // eslint-disable-next-line no-unused-vars
@@ -19,16 +20,17 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
 
 const rendererByObiType = {
-  [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
-  [ObiTypes.RegexRecognizer]: Recognizer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.BeginDialog]: BeginDialog,
-  [ObiTypes.ReplaceDialog]: ReplaceDialog,
+  [ObiTypes.ConditionNode]: DefaultRenderer,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
+  [ObiTypes.IntentRule]: IntentRule,
+  [ObiTypes.LuisRecognizer]: Recognizer,
+  [ObiTypes.RegexRecognizer]: Recognizer,
+  [ObiTypes.ReplaceDialog]: ReplaceDialog,
+  [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
+  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
