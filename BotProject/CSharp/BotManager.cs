@@ -55,7 +55,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             IStorage storage = new MemoryStorage();
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
-            var rootDialog = botProject.entry;
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer();
@@ -81,7 +80,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot(rootDialog, conversationState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new TestBot("Main.dialog", conversationState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
         public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null)
