@@ -4,5 +4,5 @@
         "editor": ".schemas/editor.schema",
         "sdk": ".schemas/sdk.schema"
     },
-    "entry": "cards_samples.dialog"
+    "entry": "Main.dialog"
 }
