@@ -49,11 +49,12 @@ function DesignPage() {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-
+      const botName = dialogs[0].displayName;
+      const displayText = text === 'Main' ? botName : text;
       return {
         key: index,
         path: item,
-        text: formatMessage(upperCaseName(text)),
+        text: formatMessage(upperCaseName(displayText)),
         onClick: (_event, { path, key }) => {
           clearNavHistory(key);
           navTo(path);

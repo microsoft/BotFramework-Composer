@@ -1,4 +1,4 @@
-using Microsoft.Bot.Builder;
+﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class JsonLoadTest
+    public class StepsTests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
@@ -318,7 +318,7 @@ namespace Tests
                 .UseResourceExplorer(resourceExplorer)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource(resourceName);
+            var resource = resourceExplorer.GetResource("Main.dialog");
             var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
             DialogManager dm = new DialogManager(dialog);
 
