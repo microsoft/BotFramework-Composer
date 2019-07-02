@@ -1,0 +1,15 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.SetProperty",
+            "value": "'This is a text saved in memory.'",
+            "property": "user.message"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.message}"
+        }
+    ]
+}
