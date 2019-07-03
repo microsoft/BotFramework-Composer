@@ -1,22 +1,21 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "generator": "common.lg",
-    "recognizer": {
-      "$type": "Microsoft.RegexRecognizer",
-        "intents": {
-            "TextInput": "TextInput|01",
-            "NumberInput": "NumberInput|02",
-            "ConfirmInput": "ConfirmInput|03",
-            "ChoiceInput": "ChoiceInput|04",
-            "AttachmentInput": "AttachmentInput|05",
-            "DateTimeInput": "DateTimeInput|06",
-            "OAuthInput": "OAuthInput|07",
-            "CancelIntent": "cancel"
-        }
-      }
-    },
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "generator": "common.lg",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "TextInput": "TextInput|01",
+      "NumberInput": "NumberInput|02",
+      "ConfirmInput": "ConfirmInput|03",
+      "ChoiceInput": "ChoiceInput|04",
+      "AttachmentInput": "AttachmentInput|05",
+      "DateTimeInput": "DateTimeInput|06",
+      "OAuthInput": "OAuthInput|07",
+      "CancelIntent": "cancel"
+    }
+  },
+  "rules": [
     {
       "$type": "Microsoft.IntentRule",
       "intent": "NumberInput",
@@ -72,23 +71,23 @@
       "intent": "CancelIntent",
       "steps": [
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "OAuthInput",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "OAuthInput"
-                }
-            ]
+          "$type": "Microsoft.IntentRule",
+          "intent": "OAuthInput",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "OAuthInput"
+            }
+          ]
         },
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.CancelAllDialogs"
-                }
-            ]
+          "$type": "Microsoft.IntentRule",
+          "intent": "CancelIntent",
+          "steps": [
+            {
+              "$type": "Microsoft.CancelAllDialogs"
+            }
+          ]
         },
         {
           "$type": "Microsoft.SendActivity",
