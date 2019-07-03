@@ -2,7 +2,7 @@
 > Define intents that trigger a dialog; Publish to LUIS; 
 > use intents to start a dialog;  
 
-# Further Reading
+## Further Reading
 
-# Next
+## Next
 
