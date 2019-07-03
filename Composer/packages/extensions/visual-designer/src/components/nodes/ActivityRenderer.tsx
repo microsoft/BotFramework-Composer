@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+// eslint-disable-next-line
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
