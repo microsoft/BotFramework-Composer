@@ -1,16 +1,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
-import { useState, useRef } from 'react';
 
-import { DialogWrapper } from './../../components/DialogWrapper';
-import { choiceGroup, templateItem, optionRoot, optionIcon } from './styles';
+import { choiceGroup, templateItem, optionRoot, optionIcon, placeholder } from './styles';
 
-export function CreateOptionsDialog(props) {
+export function CreateOptions(props) {
   const [option, setOption] = useState('create');
-  const { hidden, onNext, onDismiss, templates, title, subText } = props;
-  const template = useRef(null);
+  const [template, setTemplate] = useState(null);
+  const { templates, onDismiss, onNext } = props;
 
   function SelectOption(props) {
     const { checked, text, key } = props;
@@ -23,9 +22,9 @@ export function CreateOptionsDialog(props) {
   }
 
   function TemplateItem(props) {
-    const { checked, text, key } = props;
+    const { checked, text, key, disabled } = props;
     return (
-      <div key={key} css={templateItem(checked)}>
+      <div key={key} css={templateItem(checked, disabled)}>
         {text}
       </div>
     );
@@ -34,23 +33,25 @@ export function CreateOptionsDialog(props) {
   function onRenderField(props) {
     const { checked } = props;
     return (
-      <div>
+      <Fragment>
         <SelectOption {...props} />
-        {checked && (
-          <ChoiceGroup
-            defaultSelectedKey={templates.length > 0 && templates[0].id}
-            styles={choiceGroup}
-            options={templates.map(item => ({
-              ariaLabel: item.id,
-              key: item.id,
-              text: item.name,
-              onRenderField: TemplateItem,
-            }))}
-            onChange={handleItemChange}
-            required={true}
-          />
-        )}
-      </div>
+        <ChoiceGroup
+          styles={choiceGroup}
+          options={templates.map(item => ({
+            ariaLabel: item.id,
+            'data-testid': item.id,
+            key: item.id,
+            text: item.name,
+            onRenderField: TemplateItem,
+            disabled: !checked,
+          }))}
+          onChange={handleItemChange}
+          required={true}
+        />
+        <div css={placeholder}>
+          {checked && formatMessage(template ? `This is ${template.key}` : 'No template is selected')}
+        </div>
+      </Fragment>
     );
   }
 
@@ -59,30 +60,32 @@ export function CreateOptionsDialog(props) {
   };
 
   const handleItemChange = (event, option) => {
-    template.current = option;
+    setTemplate(option);
   };
 
   const handleJumpToNext = () => {
-    if (option === 'import') {
-      if (template.current === null) onNext(templates[0]);
-      else onNext(template.current.key);
+    if (option === 'Create from template') {
+      if (template === null) onNext(templates[0]);
+      else onNext(template.key);
     } else {
       onNext(null);
     }
   };
 
   return (
-    <DialogWrapper hidden={hidden} onDismiss={onDismiss} title={title} subText={subText}>
+    <Fragment>
       <ChoiceGroup
-        defaultSelectedKey="create"
+        defaultSelectedKey="Create from scratch"
         options={[
           {
-            key: 'create',
+            key: 'Create from scratch',
+            'data-testid': 'Create from scratch',
             text: formatMessage('Create from scratch'),
             onRenderField: SelectOption,
           },
           {
-            key: 'import',
+            key: 'Create from template',
+            'data-testid': 'Create from template',
             text: formatMessage('Create from template'),
             onRenderField,
           },
@@ -93,12 +96,12 @@ export function CreateOptionsDialog(props) {
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
         <PrimaryButton
-          disabled={option === 'import' && templates.length <= 0}
+          disabled={option === 'import' && (templates.length <= 0 || template === null)}
           onClick={handleJumpToNext}
           text={formatMessage('Next')}
           data-testid="NextStepButton"
         />
       </DialogFooter>
-    </DialogWrapper>
+    </Fragment>
   );
 }

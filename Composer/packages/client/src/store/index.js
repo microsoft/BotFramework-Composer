@@ -20,6 +20,7 @@ const initialState = {
   botStatus: 'unConnected',
   botLoadErrorMsg: '',
   creationFlowStatus: CreationFlowStatus.CLOSE,
+  templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},
@@ -30,7 +31,11 @@ const initialState = {
 export function StoreProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const boundActions = bindActions(dispatch, actions);
-  const value = { state, actions: boundActions, dispatch };
+  const value = {
+    state,
+    actions: boundActions,
+    dispatch,
+  };
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
 }
 

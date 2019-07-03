@@ -12,6 +12,15 @@ export function setCreationFlowStatus(dispatch, creationFlowStatus) {
   });
 }
 
+export function saveTemplateId(dispatch, templateId) {
+  dispatch({
+    type: ActionTypes.SAVE_TEMPLATE_ID,
+    payload: {
+      templateId,
+    },
+  });
+}
+
 export async function fetchProject(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);

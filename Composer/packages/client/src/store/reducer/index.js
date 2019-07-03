@@ -121,6 +121,10 @@ const setCreationFlowStatus = (state, { creationFlowStatus }) => {
   return (state.creationFlowStatus = creationFlowStatus);
 };
 
+const saveTemplateId = (state, { templateId }) => {
+  return (state.templateId = templateId);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
@@ -131,6 +135,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.UPDATE_PROJFILE__SUCCESS]: updateProjFile,
+  [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,

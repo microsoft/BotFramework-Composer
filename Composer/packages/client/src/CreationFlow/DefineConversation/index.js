@@ -4,7 +4,6 @@ import { useState } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
 
-import { DialogWrapper } from './../../components/DialogWrapper';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -20,8 +19,8 @@ const validateForm = data => {
   return errors;
 };
 
-export function DefineConversationDialog(props) {
-  const { onDismiss, onSubmit, hidden, onGetErrorMessage, title, subText } = props;
+export function DefineConversation(props) {
+  const { onSubmit, onGetErrorMessage, onDismiss } = props;
   const [formData, setFormData] = useState({ errors: {} });
 
   const updateForm = field => (e, newValue) => {
@@ -50,34 +49,32 @@ export function DefineConversationDialog(props) {
   };
 
   return (
-    <DialogWrapper hidden={hidden} onDismiss={onDismiss} title={title} subText={subText}>
-      <form onSubmit={handleSubmit}>
-        <Stack
-          tokens={{
-            childrenGap: 15,
-          }}
-        >
-          <TextField
-            label={formatMessage('Name')}
-            styles={name}
-            onChange={updateForm('name')}
-            errorMessage={formData.errors.name}
-            onGetErrorMessage={onGetErrorMessage}
-            data-testid="NewDialogName"
-          />
-          <TextField
-            styles={description}
-            label={formatMessage('Description')}
-            multiline
-            resizable={false}
-            onChange={updateForm('description')}
-          />
-        </Stack>
-        <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
-        </DialogFooter>
-      </form>
-    </DialogWrapper>
+    <form onSubmit={handleSubmit}>
+      <Stack
+        tokens={{
+          childrenGap: 15,
+        }}
+      >
+        <TextField
+          label={formatMessage('Name')}
+          styles={name}
+          onChange={updateForm('name')}
+          errorMessage={formData.errors.name}
+          onGetErrorMessage={onGetErrorMessage}
+          data-testid="NewDialogName"
+        />
+        <TextField
+          styles={description}
+          label={formatMessage('Description')}
+          multiline
+          resizable={false}
+          onChange={updateForm('description')}
+        />
+      </Stack>
+      <DialogFooter>
+        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+        <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+      </DialogFooter>
+    </form>
   );
 }

@@ -57,6 +57,7 @@ export const ActionTypes = {
   ADD_EDITOR: 'ADD_EDITOR',
   SET_EDITOR: 'SET_EDITOR',
   SET_STORAGE: 'SET_STORAGE',
+  SAVE_TEMPLATE_ID: 'SAVE_TEMPLATE_ID',
   GET_STORAGE_SUCCESS: 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE: 'GET_STORAGE_FAILURE',
   SET_STORAGEFILE_FETCHING_STATUS: 'SET_STORAGEFILE_FETCHING_STATUS',
@@ -74,18 +75,14 @@ export const ActionTypes = {
 };
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(
-    'Create a name for the project which will be used to name the application: (proje' +
-      'ctname-environment-LUfilename)'
-  ),
-  ENVIRONMENT: formatMessage(
-    'When multiple people are working with models you want to be able to work with mo' +
-      'dels independently from each other tied to the source control.'
-  ),
+  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application: 
+    (projectname-environment-LUfilename)`),
+  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with 
+    models independently from each other tied to the source control.`),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
-    'Configures default language model to use if there is no culture code in the file' + ' name (Default:en-us)'
+    `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
   ),
 };
 
@@ -116,6 +113,8 @@ export const FileTypes = {
 
 export const CreationFlowStatus = {
   NEW: 'New',
+  NEW_FROM_SCRATCH: 'Scratch',
+  NEW_FROM_TEMPLATE: 'Template',
   SAVEAS: 'Save as',
   OPEN: 'Open',
   CLOSE: '',
@@ -138,6 +137,10 @@ export const DialogInfo = {
     subText: formatMessage(
       `What can the user accomplish through this conversation? For example, book a table, order a coffee etc.`
     ),
+  },
+  SELECT_LOCATION: {
+    title: formatMessage('Select a location'),
+    subText: formatMessage('Which bot do you want to open?'),
   },
 };
 

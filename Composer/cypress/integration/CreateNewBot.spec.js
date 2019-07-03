@@ -7,7 +7,7 @@ context('Creating a new bot', () => {
 
   it('can create a new bot', () => {
     cy.getByText('New').click();
-    cy.get('input[aria-label="Create from scratch"]').click();
+    cy.get('input[data-testid="Create from scratch"]').click();
     cy.get('button[data-testid="NextStepButton"]').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
@@ -18,8 +18,9 @@ context('Creating a new bot', () => {
 
   it('can create a bot from the ToDo template', () => {
     cy.getByText('New').click();
-    cy.get('input[aria-label="Create from templates"]').click();
-    cy.get('input[aria-label="ToDoBot"]').click();
+    cy.wait(500);
+    cy.get('input[data-testid="Create from template"]').click({ force: true });
+    cy.get('[data-testid="ToDoBot"]').click();
     cy.get('button[data-testid="NextStepButton"]').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');

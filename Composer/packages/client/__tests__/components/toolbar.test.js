@@ -43,8 +43,8 @@ describe('<ToolBar />', () => {
   });
 
   it('should have item click event', async () => {
-    const mockOpenStorageExplorer = jest.fn(() => null);
-    const { findByText } = render(<ToolBar toolbarItems={toolbarItems(mockOpenStorageExplorer)} />);
+    const mockSetCreationFlowStatus = jest.fn(() => null);
+    const { findByText } = render(<ToolBar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);

@@ -4,17 +4,19 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 
 import { styles } from './styles';
 
-export function DialogWrapper(props) {
-  const { hidden, onDismiss, title, subText, children } = props;
+export function StepWizard(props) {
+  const { steps, step, onDismiss } = props;
+  const currentStep = steps[step];
 
+  const hidden = !currentStep;
   return (
     <Dialog
       hidden={hidden}
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
-        title,
-        subText,
+        title: hidden ? '' : currentStep.title,
+        subText: hidden ? '' : currentStep.subText,
         styles: styles.dialog,
       }}
       modalProps={{
@@ -22,7 +24,7 @@ export function DialogWrapper(props) {
         styles: styles.modal,
       }}
     >
-      {children}
+      {!hidden && currentStep.children}
     </Dialog>
   );
 }

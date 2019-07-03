@@ -15,7 +15,7 @@ export const styles = {
   },
   modal: {
     main: {
-      maxWidth: '450px !important',
+      maxWidth: '416px !important',
     },
   },
 };

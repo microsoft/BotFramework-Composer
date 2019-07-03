@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { CreationFlowStatus } from '../constants';
 
-import { CreateOptionsDialog } from './CreateOptions/index';
-import { DefineConversationDialog } from './DefineConversation/index';
+import { CreateOptions } from './CreateOptions/index';
+import { DefineConversation } from './DefineConversation/index';
 import { Steps } from './../constants/index';
-import { SelectLocationDialog } from './SelectLocation';
+import { SelectLocation } from './SelectLocation';
 import { Store } from './../store/index';
 import { DialogInfo } from './../constants/index';
+import { StepWizard } from './StepWizard/StepWizard';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(Store);
   const [templates, setTemplates] = useState([]);
   const [bots, setBots] = useState([]);
   const [step, setStep] = useState();
-  const template = useRef(null);
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs } = actions;
-  const { botProjFile } = state;
+  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs, saveTemplateId } = actions;
+  const { botName, templateId } = state;
 
   useEffect(() => {
     init();
@@ -47,6 +47,8 @@ export function CreationFlow(props) {
       case CreationFlowStatus.OPEN:
         setStep(Steps.LOCATION);
         break;
+      case CreationFlowStatus.NEW_FROM_SCRATCH:
+      case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.SAVEAS:
         setStep(Steps.DEFINE);
         break;
@@ -66,7 +68,7 @@ export function CreationFlow(props) {
   };
 
   const handleCreateNew = async formData => {
-    await createProject(template.current || '', formData.name, formData.description);
+    await createProject(templateId || '', formData.name, formData.description);
   };
 
   const handleSaveAs = async formData => {
@@ -75,6 +77,8 @@ export function CreationFlow(props) {
 
   const handleSubmit = formData => {
     switch (creationFlowStatus) {
+      case CreationFlowStatus.NEW_FROM_SCRATCH:
+      case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
         break;
@@ -89,7 +93,7 @@ export function CreationFlow(props) {
   };
 
   const handleCreateNext = data => {
-    template.current = data;
+    saveTemplateId(data);
     setStep(Steps.DEFINE);
   };
 
@@ -104,35 +108,22 @@ export function CreationFlow(props) {
     return '';
   };
 
-  return (
-    <>
-      {creationFlowStatus === CreationFlowStatus.CLOSE ? null : (
-        <>
-          <CreateOptionsDialog
-            title={DialogInfo.CREATE_NEW_BOT.title}
-            subText={DialogInfo.CREATE_NEW_BOT.subText}
-            hidden={step !== Steps.CREATE}
-            templates={templates}
-            onDismiss={handleDismiss}
-            onNext={handleCreateNext}
-          />
-          <SelectLocationDialog
-            hidden={step !== Steps.LOCATION}
-            onDismiss={handleDismiss}
-            defaultKey={botProjFile.path ? botProjFile.path.replace(`/${botProjFile.relativePath}`, '') : ''}
-            folders={bots}
-            onOpen={openBot}
-          />
-          <DefineConversationDialog
-            title={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.title}
-            subText={DialogInfo.DEFINE_CONVERSATION_OBJECTIVE.subText}
-            hidden={step !== Steps.DEFINE}
-            onDismiss={handleDismiss}
-            onSubmit={handleSubmit}
-            onGetErrorMessage={getErrorMessage}
-          />
-        </>
-      )}
-    </>
-  );
+  const steps = {
+    [Steps.CREATE]: {
+      ...DialogInfo.CREATE_NEW_BOT,
+      children: <CreateOptions templates={templates} onDismiss={handleDismiss} onNext={handleCreateNext} />,
+    },
+    [Steps.LOCATION]: {
+      ...DialogInfo.SELECT_LOCATION,
+      children: <SelectLocation folders={bots} defaultKey={botName || ''} onOpen={openBot} onDismiss={handleDismiss} />,
+    },
+    [Steps.DEFINE]: {
+      ...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE,
+      children: (
+        <DefineConversation onSubmit={handleSubmit} onGetErrorMessage={getErrorMessage} onDismiss={handleDismiss} />
+      ),
+    },
+  };
+
+  return <StepWizard steps={steps} step={step} onDismiss={handleDismiss} />;
 }
