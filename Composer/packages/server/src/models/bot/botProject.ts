@@ -150,12 +150,16 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    const referedLuFile = this.luIndexer.getLuFiles().filter(this.referedByDialog);
-    const waitedToPublish = referedLuFile.filter(f => !!f.content.trim()).filter(this.keepLogicallyNonEmptyLufile);
-    if (referedLuFile.length !== waitedToPublish.length) {
-      throw new Error('Your Dialog used an Empty Lu File');
+    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const emptyLuFiles = toPublish.filter(this.isEmpty);
+    if (emptyLuFiles.length !== 0) {
+      let msg = '';
+      for (let i = 0; i < emptyLuFiles.length; i++) {
+        msg += emptyLuFiles[i].id + ' ';
+      }
+      throw new Error('You have the following empty LuFile(s): ' + msg);
     }
-    return await this.luPublisher.publish(config, waitedToPublish);
+    return await this.luPublisher.publish(config, toPublish);
   };
 
   public checkNeedLuisDeploy = async () => {
@@ -349,24 +353,23 @@ export class BotProject {
     }
   };
 
-  private keepLogicallyNonEmptyLufile = (LUFile: LUFile) => {
-    if (LUFile === undefined) return false;
-    if (LUFile.parsedContent === undefined) return false;
-    if (LUFile.parsedContent.LUISJsonStructure === undefined) return false;
+  private isEmpty = (LUFile: LUFile) => {
+    if (LUFile === undefined) return true;
+    if (LUFile.content === undefined || LUFile.content === '') return true;
+    if (LUFile.parsedContent === undefined) return true;
+    if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
     for (const key in LUFile.parsedContent.LUISJsonStructure) {
       if (LUFile.parsedContent.LUISJsonStructure[key].length !== 0) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   };
 
-  private referedByDialog = (LUFile: LUFile) => {
+  private isReferred = (LUFile: LUFile) => {
     const dialogs = this.dialogIndexer.getDialogs();
-    for (let index = 0; index < dialogs.length; index++) {
-      if (LUFile.id === dialogs[index].luFile) {
-        return true;
-      }
+    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
+      return true;
     }
     return false;
   };
