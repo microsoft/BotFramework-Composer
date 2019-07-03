@@ -82,9 +82,16 @@ const templates = [
 export const Home = () => {
   const { state, actions } = useContext(Store);
   const { openBotProject } = actions;
+
+  const onClickRecentBotProject = async (storageId, path) => {
+    await openBotProject(storageId, path);
+    actions.fetchRecentProjects();
+  };
+
   useEffect(() => {
     actions.fetchRecentProjects();
   }, []);
+
   const bots = useMemo(() => {
     const recentProjects = state.recentProjects || [];
     const _bots = recentProjects.map(rp => {
@@ -142,7 +149,7 @@ export const Home = () => {
                   <div
                     css={action}
                     onClick={() => {
-                      openBotProject(bot.storageId, bot.path);
+                      onClickRecentBotProject(bot.storageId, bot.path);
                     }}
                   >
                     <IconButton styles={button()} iconProps={{ iconName: bot.iconName }} />

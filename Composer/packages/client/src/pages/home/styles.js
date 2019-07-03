@@ -113,12 +113,12 @@ export const botContainer = css`
   margin-right: 33px;
   margin-top: 24px;
   height: 156px;
-  justify-content: space-between;
 `;
 
 export const botContent = css`
   height: 156px;
   width: 200px;
+  margin-right: 40px;
 `;
 
 export const action = css`
