@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
@@ -24,11 +26,15 @@ export class BotProject {
   public lgIndexer: LGIndexer;
   public luIndexer: LUIndexer;
   public luPublisher: LuPublisher;
+  public defaultSDKSchema: { [key: string]: string };
+
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
     this.name = Path.basename(this.dir);
+
+    this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -66,6 +72,10 @@ export class BotProject {
   public getSchemas = () => {
     return {
       editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
+      sdk: {
+        name: 'defaultSDKSchema',
+        content: this.defaultSDKSchema,
+      },
     };
   };
 
