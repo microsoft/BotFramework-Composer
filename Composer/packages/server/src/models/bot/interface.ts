@@ -24,6 +24,7 @@ export interface Dialog {
   name: string;
   content: any;
   lgTemplates: string[];
+  luFile: string;
   relativePath: string;
 }
 
