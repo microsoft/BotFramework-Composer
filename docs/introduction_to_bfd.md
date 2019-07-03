@@ -51,10 +51,10 @@ Under the hood, Bot Framework Designer harnesses the power of many components fr
 
 After using Bot Framework Designer, the resulting bot project will contain reusable assets in the form of JSON and Markdown files that can be bundled and packaged with a bot's source code. These files can be used with a wide variety of compatible tools from the Bot Framework library.
 
-## Next
-
-* [Overview of Bot Framework Designer](overview_of_bfd.md) 
-
 ## Further Reading
 
 * [Bot Framework on Github](https://github.com/microsoft/botframework)
+
+## Next
+
+* [Overview of Bot Framework Designer](overview_of_bfd.md) 
