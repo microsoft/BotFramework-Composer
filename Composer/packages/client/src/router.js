@@ -6,7 +6,11 @@ import DesignPage from './pages/design';
 import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
+<<<<<<< HEAD
 import { Home } from './pages/home';
+=======
+import { About } from './pages/about';
+>>>>>>> about page design
 import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
 
@@ -25,7 +29,11 @@ const Routes = props => {
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
+<<<<<<< HEAD
               <Home path="home" />
+=======
+              <About path="about" />
+>>>>>>> about page design
               <NotFound default />
             </Router>
           )}
