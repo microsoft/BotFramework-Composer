@@ -42,6 +42,7 @@ export function CreateOptions(props) {
             'data-testid': item.id,
             key: item.id,
             text: item.name,
+            description: item.description,
             onRenderField: TemplateItem,
             disabled: !checked,
           }))}
@@ -49,7 +50,8 @@ export function CreateOptions(props) {
           required={true}
         />
         <div css={placeholder}>
-          {checked && formatMessage(template ? `This is ${template.key}` : 'No template is selected')}
+          {checked &&
+            formatMessage(template ? `${template.description}` : "Select a template to see it's description.")}
         </div>
       </Fragment>
     );

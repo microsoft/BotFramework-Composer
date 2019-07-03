@@ -139,7 +139,7 @@ export const DialogInfo = {
     ),
   },
   SELECT_LOCATION: {
-    title: formatMessage('Select a location'),
+    title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
   },
 };
