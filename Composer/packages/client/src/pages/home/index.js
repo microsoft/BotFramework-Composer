@@ -5,44 +5,18 @@ import { useContext, useEffect, useMemo } from 'react';
 
 import { Store } from '../../store/index';
 
-import {
-  outline,
-  title,
-  introduction,
-  introTitle,
-  introTitleLeft,
-  introTitleRight,
-  linkInfo,
-  linkContainer,
-  linkLeft,
-  linkRight,
-  moreOptions,
-  botArea,
-  botTitle,
-  botContainer,
-  botContent,
-  action,
-  actionName,
-  button,
-  templateArea,
-  templateTitle,
-  templateContainer,
-  templateContent,
-  templateText,
-  footer,
-  content,
-} from './styles';
+import * as home from './styles';
 
 const linksLeft = [
   {
     to: '/home',
     text: 'See how it works',
-    css: linkInfo,
+    css: home.linkInfo,
   },
   {
     to: '/home',
     text: 'View interactive tutorial',
-    css: linkInfo,
+    css: home.linkInfo,
   },
 ];
 
@@ -50,17 +24,17 @@ const linksRight = [
   {
     to: '/home',
     text: 'Create, test and deploy your bot',
-    css: linkInfo,
+    css: home.linkInfo,
   },
   {
     to: '/home',
     text: 'Create a PowerApps environment',
-    css: linkInfo,
+    css: home.linkInfo,
   },
   {
     to: '/home',
     text: 'See more options',
-    css: moreOptions,
+    css: home.moreOptions,
   },
 ];
 
@@ -110,16 +84,16 @@ export const Home = () => {
     return _bots;
   }, [state.recentProjects]);
   return (
-    <div css={outline}>
-      <div css={content}>
-        <div css={title}>&quot;Are you real?&quot;</div>
-        <div css={introduction}>
-          <div css={introTitle}>
-            <div css={introTitleLeft}> Creating real conversations for real people. </div>
-            <div css={introTitleRight}> Product Video </div>
+    <div css={home.outline}>
+      <div css={home.content}>
+        <div css={home.title}>&quot;Are you real?&quot;</div>
+        <div css={home.introduction}>
+          <div css={home.introTitle}>
+            <div css={home.introTitleLeft}> Creating real conversations for real people. </div>
+            <div css={home.introTitleRight}> Product Video </div>
           </div>
-          <div css={linkContainer}>
-            <div css={linkLeft}>
+          <div css={home.linkContainer}>
+            <div css={home.linkLeft}>
               {linksLeft.map((link, index) => {
                 return (
                   <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index}>
@@ -128,7 +102,7 @@ export const Home = () => {
                 );
               })}
             </div>
-            <div css={linkRight}>
+            <div css={home.linkRight}>
               {linksRight.map((link, index) => {
                 return (
                   <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index}>
@@ -139,41 +113,41 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        <div css={botArea}>
-          <div css={botTitle}>Start from scratch, or pick up where you left off... </div>
-          <div css={botContainer}>
+        <div css={home.botArea}>
+          <div css={home.botTitle}>Start from scratch, or pick up where you left off... </div>
+          <div css={home.botContainer}>
             {bots.map((bot, index) => {
               if (index > botNumLimit) return null;
               return (
-                <div css={botContent} key={'homePageBot-' + index}>
+                <div css={home.botContent} key={'homePageBot-' + index}>
                   <div
-                    css={action}
+                    css={home.action}
                     onClick={() => {
                       onClickRecentBotProject(bot.storageId, bot.path);
                     }}
                   >
-                    <IconButton styles={button()} iconProps={{ iconName: bot.iconName }} />
+                    <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />
                   </div>
-                  <div css={actionName}> {bot.actionName} </div>
+                  <div css={home.actionName}> {bot.actionName} </div>
                 </div>
               );
             })}
           </div>
         </div>
-        <div css={templateArea}>
-          <div css={templateTitle}> Or start with a conversation template </div>
-          <div css={templateContainer}>
+        <div css={home.templateArea}>
+          <div css={home.templateTitle}> Or start with a conversation template </div>
+          <div css={home.templateContainer}>
             {templates.map((template, index) => {
               return (
-                <div css={templateContent} key={'homePageTemplate-' + index}>
-                  <div css={templateText}>{template.text}</div>
+                <div css={home.templateContent} key={'homePageTemplate-' + index}>
+                  <div css={home.templateText}>{template.text}</div>
                 </div>
               );
             })}
           </div>
         </div>
 
-        <Link href="/home" css={footer}>
+        <Link href="/home" css={home.footer}>
           Learn More
         </Link>
       </div>
