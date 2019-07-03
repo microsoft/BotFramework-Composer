@@ -41,7 +41,7 @@
             "condition": "user.choice",
             "cases": [
                 {
-                    "value": "'HeroCard'",
+                    "value": "HeroCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -50,7 +50,7 @@
                     ]
                 },
                 {
-                    "value": "'ThumbnailCard'",
+                    "value": "ThumbnailCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -59,7 +59,7 @@
                     ]
                 },
                 {
-                    "value": "'SigninCard'",
+                    "value": "SigninCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -68,7 +68,7 @@
                     ]
                 },
                 {
-                    "value": "'AnimationCard'",
+                    "value": "AnimationCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -77,7 +77,7 @@
                     ]
                 },
                 {
-                    "value": "'VideoCard'",
+                    "value": "VideoCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -86,7 +86,7 @@
                     ]
                 },
                 {
-                    "value": "'AudioCard'",
+                    "value": "AudioCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -95,7 +95,7 @@
                     ]
                 },
                 {
-                    "value": "'AdaptiveCard'",
+                    "value": "AdaptiveCard",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
@@ -104,7 +104,7 @@
                     ]
                 },
                 {
-                    "value": "'AllCards'",
+                    "value": "AllCards",
                     "steps": [
                         {
                             "$type": "Microsoft.SendActivity",
