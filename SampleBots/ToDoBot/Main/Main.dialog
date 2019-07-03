@@ -27,14 +27,6 @@
         "id": "376720"
       },
       "activity": "[activity-376720]"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "id": "017170",
-        "updatedAt": "2019-07-02T00:02:10.678Z"
-      },
-      "activity": "[activity-017170]"
     }
   ],
   "rules": [

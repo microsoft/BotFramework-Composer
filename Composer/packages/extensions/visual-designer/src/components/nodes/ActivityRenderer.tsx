@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { NodeProps } from '../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeColors } from '../../shared/elementColors';
@@ -54,3 +54,5 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
     />
   );
 };
+
+ActivityRenderer.defaultProps = defaultNodeProps;
