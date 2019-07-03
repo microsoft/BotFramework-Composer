@@ -36,7 +36,7 @@ Creating grammatically correct, data driven responses that also use a consistent
 
 With LG, previously complex tasks can be quickly achieved:
 
-* include dynamic tokens in messages
+* include dynamic elements in messages
 * generate grammatically correct lists, pronouns, articles
 * provide context-sensitive variation in messages
 * create dynamic card attachments
