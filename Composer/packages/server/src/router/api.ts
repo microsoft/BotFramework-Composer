@@ -13,6 +13,7 @@ const router: Router = express.Router({});
 
 // projects
 router.post('/projects', ErrorHandler(ProjectController.createProject));
+router.get('/projects', ErrorHandler(ProjectController.getAllProjects));
 router.get('/projects/opened', ErrorHandler(ProjectController.getProject));
 router.put('/projects/opened', ErrorHandler(ProjectController.openProject));
 router.put('/projects/opened/dialogs/:dialogId', ErrorHandler(ProjectController.updateDialog));
