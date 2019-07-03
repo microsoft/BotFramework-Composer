@@ -3,11 +3,11 @@ import { IndexedNode } from './models/IndexedNode';
 
 const StepsKey = 'steps';
 export function transformForeach(input: any, jsonpath: string) {
-  if (!input || input.$type !== ObiTypes.Foreach) return {};
+  if (!input || (input.$type !== ObiTypes.Foreach && input.$type !== ObiTypes.ForeachPage)) return {};
 
   const foreachDetailNode = new IndexedNode(jsonpath, {
     ...input,
-    $type: ObiTypes.ForeachDetail,
+    $type: input.$type === ObiTypes.ForeachPage ? ObiTypes.ForeachPageDetail : ObiTypes.ForeachDetail,
   });
 
   const steps = input[StepsKey] || [];

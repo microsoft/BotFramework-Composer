@@ -57,4 +57,5 @@ export const ObiTypes = {
   ConditionNode: 'VisualSDK.ConditionNode',
   LoopIndicator: 'VisualSDK.LoopIndicator',
   ForeachDetail: 'VisualSDK.ForeachDetail',
+  ForeachPageDetail: 'VisualSDK.ForeachPageDetail',
 };

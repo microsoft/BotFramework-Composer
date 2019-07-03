@@ -74,6 +74,10 @@ const ContentKeyByTypes: {
     header: 'For Each',
     label: 'listProperty',
   },
+  [ObiTypes.ForeachPageDetail]: {
+    header: 'For Each Page',
+    label: 'listProperty',
+  },
   [ObiTypes.TextInput]: {
     label: 'prompt',
     details: 'property',

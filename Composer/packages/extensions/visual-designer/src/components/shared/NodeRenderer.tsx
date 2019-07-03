@@ -30,8 +30,8 @@ const rendererByObiType = {
   [ObiTypes.IfCondition]: IfCondition,
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.Foreach]: Foreach,
+  [ObiTypes.ForeachPage]: Foreach,
   [ObiTypes.ConditionNode]: DefaultRenderer,
-  [ObiTypes.ForeachDetail]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
