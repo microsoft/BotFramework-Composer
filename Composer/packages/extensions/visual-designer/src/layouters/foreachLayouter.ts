@@ -48,6 +48,7 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
       x: node.offset.x + node.boundary.width,
       y: node.offset.y + node.boundary.axisY,
       length: containerBoundary.width - containerBoundary.axisX - (node.boundary.width - node.boundary.axisX),
+      dashed: true,
     });
   });
 
@@ -57,6 +58,7 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
     x: containerBoundary.width,
     y: loopBeginNode.offset.y + loopBeginNode.boundary.axisY,
     length: loopEndNode.offset.y + loopEndNode.boundary.axisY - (loopBeginNode.offset.y + loopBeginNode.boundary.axisY),
+    dashed: true,
   });
 
   return {

@@ -4,7 +4,7 @@ const BAR_SIZE = 3;
 const TEXT_PADDING = 8;
 const FONT_SIZE = 14;
 
-export const HorizontalEdge = ({ length, text, x, y }) => (
+export const HorizontalEdge = ({ length, text, x, y, dashed }) => (
   <svg
     style={{
       position: 'absolute',
@@ -23,11 +23,11 @@ export const HorizontalEdge = ({ length, text, x, y }) => (
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2={length} y2="0" stroke="#979797" strokeWidth="1" />
+    <line x1="0" y1="0" x2={length} y2="0" stroke="#979797" strokeDasharray={dashed ? '4' : 'none'} strokeWidth="1" />
   </svg>
 );
 
-export const VerticalEdge = ({ length, text, x, y }) => (
+export const VerticalEdge = ({ length, text, x, y, dashed }) => (
   <svg
     style={{
       position: 'absolute',
@@ -46,13 +46,13 @@ export const VerticalEdge = ({ length, text, x, y }) => (
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2="0" y2={length} stroke="#979797" strokeWidth="1" />
+    <line x1="0" y1="0" x2="0" y2={length} stroke="#979797" strokeDasharray={dashed ? '4' : 'none'} strokeWidth="1" />
   </svg>
 );
 
-export const Edge = ({ direction, x, y, length, text = '' }) =>
+export const Edge = ({ direction, x, y, length, text = '', dashed = false }) =>
   direction === 'x' ? (
-    <HorizontalEdge x={x} y={y} length={length} text={text} />
+    <HorizontalEdge x={x} y={y} length={length} text={text} dashed={dashed} />
   ) : (
-    <VerticalEdge x={x} y={y} length={length} text={text} />
+    <VerticalEdge x={x} y={y} length={length} text={text} dashed={dashed} />
   );
