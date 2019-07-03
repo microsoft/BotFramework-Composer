@@ -32,15 +32,13 @@ As dialog are built in the main editor, developers can continuously add to their
 
 ## Bots with character
 
-Creating grammatically correct, data driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers! Bot Framework Designer's integrated language generation system allows developers (and the writers who work with them!) to create replies with a great deal of flexibility.
+Creating grammatically correct, data driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers! Bot Framework Designer's integrated language generation system allows developers - and the writers who work with them - to create replies with a great deal of flexibility.
 
 With LG, previously complex tasks can be quickly achieved:
 
 * include dynamic tokens in messages
 * generate grammatically correct lists, pronouns, articles
-* provide multiple versions of a given message
-* provide conditional variants of a message
-* create reusable, composable templates
+* provide context-sensitive variation in messages
 * create dynamic card attachments
 
 ## Unified Toolset
