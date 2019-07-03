@@ -1,9 +1,10 @@
 import { ObiTypes } from '../shared/ObiTypes';
-import { DiamondSize, InitNodeSize, LoopIconSize } from '../shared/elementSizes';
 import { Boundary } from '../shared/Boundary';
-import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { GraphNode } from '../shared/GraphNode';
+import { DiamondSize, InitNodeSize, LoopIconSize } from '../shared/elementSizes';
+import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
+import { transformForeach } from '../transformers/transformForeach';
 
 import {
   calculateIfElseBoundary,
@@ -11,7 +12,6 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
 } from './calculateNodeBoundary';
-import { transformForeach } from '../transformers/transformForeach';
 
 function measureStepGroupBoundary(stepGroup) {
   const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
