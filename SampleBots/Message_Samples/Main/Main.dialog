@@ -32,7 +32,7 @@
             "condition": "user.choice",
             "cases": [
                 {
-                    "value": "'Simple Text'",
+                    "value": "Simple Text",
                     "steps": [
                         {
                             "$type": "Microsoft.BeginDialog",
@@ -41,7 +41,7 @@
                     ]
                 },
                 {
-                    "value": "'Text With Memory'",
+                    "value": "Text With Memory",
                     "steps": [
                         {
                             "$type": "Microsoft.BeginDialog",
@@ -50,7 +50,7 @@
                     ]
                 },
                 {
-                    "value": "'Text With LG'",
+                    "value": "Text With LG",
                     "steps": [
                         {
                             "$type": "Microsoft.BeginDialog",
@@ -59,7 +59,7 @@
                     ]
                 },
                 {
-                    "value": "'LGWithParam'",
+                    "value": "LGWithParam",
                     "steps": [
                         {
                             "$type": "Microsoft.BeginDialog",
@@ -68,7 +68,7 @@
                     ]
                 },
                 {
-                    "value": "'LGComposition'",
+                    "value": "LGComposition",
                     "steps": [
                         {
                             "$type": "Microsoft.BeginDialog",

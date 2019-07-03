@@ -6,93 +6,100 @@
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
         "intents": {
-            "TextInput": "TextInput|01",
-            "NumberInput": "NumberInput|02",
-            "ConfirmInput": "ConfirmInput|03",
-            "ChoiceInput": "ChoiceInput|04",
-            "AttachmentInput": "AttachmentInput|05",
-            "DateTimeInput": "DateTimeInput|06",
-            "OAuthInput": "OAuthInput|07",
-            "CancelIntent": "cancel"
+            "IfCondition": "IfCondition|01",
+            "SwitchCondition": "SwitchCondition|02",
+            "ForeachStep": "ForeachStep|03",
+            "ForeachPageStep": "ForeachPageStep|04",
+            "Cancel": "Cancel|05",
+            "EndTurn": "EndTurn|06",
+            "RepeatDialog": "RepeatDialog|07"
         }
     },
+    "steps":[
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[help]"
+        }
+    ],
     "rules": [
         {
             "$type": "Microsoft.IntentRule",
-            "intent": "TextInput",
-            "steps": [
-                 {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "TextInput"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "NumberInput",
+            "intent": "IfCondition",
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "NumberInput"
+                    "dialog": "IfCondition"
                 }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
-            "intent": "DateTimeInput",
-            "steps": [
-                 {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "DateTimeInput"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ConfirmInput",
+            "intent": "SwitchCondition",
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ConfirmInput"
+                    "dialog": "SwitchCondition"
                 }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
-            "intent": "ChoiceInput",
+            "intent": "ForeachStep",
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "ChoiceInput"
+                    "dialog": "ForeachStep"
                 }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
-            "intent": "AttachmentInput",
+            "intent": "ForeachPageStep",
             "steps": [
                 {
                     "$type": "Microsoft.BeginDialog",
-                    "dialog": "AttachmentInput"
+                    "dialog": "ForeachPageStep"
                 }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
-            "intent": "OAuthInput",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "OAuthInput"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CancelIntent",
+            "intent": "Cancel",
             "steps": [
                 {
                     "$type": "Microsoft.CancelAllDialogs"
+                }
+            ]
+        },
+         {
+            "$type": "Microsoft.EventRule",
+            "events": [ "cancelDialog" ],
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Canceled."
+                },
+                {
+                    "$type": "Microsoft.EndDialog"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "EndTurn",
+            "steps": [
+                {
+                    "$type": "Microsoft.EndTurn"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "intent": "RepeatDialog",
+            "steps": [
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "RepeatDialog"
                 }
             ]
         },
