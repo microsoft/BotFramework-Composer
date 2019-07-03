@@ -25,15 +25,3 @@ Dialogs contain a series of actions that the bot will undertake to fulfill a use
 Dialogs also contain event handlers - rules that tell the bot how to process incoming messages. The most common use of event handlers is to launch a dialog in response to a request. However, they are also used to define a wide variety of bot behaviors such as providing context-specific help, and responding to a requests to quit or cancel, or handling custom, developer-defined events originating from the app itself.
 
 With a single click from within Designer, developers can launch the bot runtime, and connect to their bot in the Bot Framework Emulator. Once tested in the emulator, the bot runtime can be connected to the Bot Framework Channel service, and from their... the world!
-
-# Overview of Bot Framework Designer
-> Focus on BFD as a visual tool, explain the different knobs and their functionality
-> : Bot says; User says; visual flow; form editor; adding steps; etc. include Designer 
-> screenshot with detailed explanation to functionality and features
-
-
-
-
-# Define triggers and events (focus on LUIS)
-> Define intents that trigger a dialog; Publish to LUIS; 
-> use intents to start a dialog;  
