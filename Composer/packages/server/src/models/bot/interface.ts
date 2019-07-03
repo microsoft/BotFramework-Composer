@@ -28,7 +28,6 @@ export interface Dialog {
   luFile: string;
   luIntents: string[];
   lgTemplates: string[];
-  luFile: string;
   relativePath: string;
 }
 
@@ -47,7 +46,7 @@ export interface LUFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent: { [key: string]: string };
+  parsedContent: { [key: string]: any };
 }
 
 export enum FileState {
