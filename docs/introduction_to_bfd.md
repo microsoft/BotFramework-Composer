@@ -1,5 +1,5 @@
 # Introduction to Bot Framework Designer
-## How can I use Bot Framework Designer to build cutting edge conversational software?
+### How can I use Bot Framework Designer to build cutting edge conversational software?
 
 Bot Framework Designer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack. Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience:
 
