@@ -1,4 +1,5 @@
 import { cloneDeep, get, set } from 'lodash';
+import nanoid from 'nanoid/generate';
 
 function locateNode(dialog: { [key: string]: number }, path) {
   if (!path) return null;
@@ -60,7 +61,12 @@ export function deleteNode(inputDialog, path) {
 export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
   const current = get(dialog, path, []);
-  const newStep = { $type };
+  const newStep = {
+    $type,
+    $designer: {
+      id: nanoid('1234567890', 6),
+    },
+  };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 
