@@ -28,6 +28,7 @@ export interface Dialog {
   luFile: string;
   luIntents: string[];
   lgTemplates: string[];
+  luFile: string;
   relativePath: string;
 }
 

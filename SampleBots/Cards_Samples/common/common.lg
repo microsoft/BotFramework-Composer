@@ -68,7 +68,7 @@
 > Note: Chatdown already supports the ability to create any card type from its json definition. So you can apply this for not just Adaptive cards but to all card types.
 # AdaptiveCard
 - ```
-[Attachment=..\..\SampleBots\Cards_Samples\common\adaptiveCard.json adaptivecard]
+[Attachment=../../SampleBots/Cards_Samples/common/adaptiveCard.json adaptivecard]
 ```
 
 # PassengerName
