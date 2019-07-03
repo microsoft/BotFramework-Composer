@@ -14,6 +14,8 @@ import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../
 
 import '../language-understanding/style.css';
 import Content from './content';
+import { ToolBar } from './../../components/ToolBar/index';
+import { TestController } from './../../TestController';
 
 export const LGPage = props => {
   const { state, actions } = useContext(Store);
@@ -28,23 +30,29 @@ export const LGPage = props => {
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.name === subPath);
 
-  // for now, one bot only have one lg file by default.
-  // all dialog share one lg file.
+  // for now, one bot only have one lg file by default. all dialog share one lg
+  // file.
   useEffect(() => {
     if (lgFiles.length) {
-      setLgFile({ ...lgFiles[0] });
+      setLgFile({
+        ...lgFiles[0],
+      });
     }
   }, [lgFiles]);
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
       if (result.length === 0) {
-        result = [{ links: [] }];
+        result = [
+          {
+            links: [],
+          },
+        ];
       }
       const item = {
         id: file.name,
         key: file.name,
-        name: file.name,
+        name: file.displayName,
       };
 
       if (file.id === 0) {
@@ -101,7 +109,9 @@ export const LGPage = props => {
   }
 
   function discardChanges() {
-    setLgFile({ ...lgFiles[0] });
+    setLgFile({
+      ...lgFiles[0],
+    });
     setNewContent(null);
   }
 
@@ -113,25 +123,44 @@ export const LGPage = props => {
     updateLgFile(payload);
   }
 
-  //#TODO:
-  // get line number from lg parser,
-  // then deep link to code editor this Line
+  // #TODO: get line number from lg parser, then deep link to code editor this
+  // Line
   function onTableViewWantEdit(template) {
     console.log(template);
     setTextMode(true);
   }
 
+  const toolbarItems = [
+    {
+      type: 'element',
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
+
   return (
     <Fragment>
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <div>Bot says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
-              <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={() => onSave()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Save',
+                }}
+                split={true}
+                onClick={() => onSave()}
+              >
                 Save file
               </ActionButton>
-              <ActionButton iconProps={{ iconName: 'Undo' }} onClick={() => discardChanges()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Undo',
+                }}
+                onClick={() => discardChanges()}
+              >
                 Discard changes
               </ActionButton>
             </Fragment>

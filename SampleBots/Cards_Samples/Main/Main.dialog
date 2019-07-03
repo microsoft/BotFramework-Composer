@@ -1,0 +1,138 @@
+{
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "generator": "common.lg",
+    "steps": [
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.choice",
+            "choices": [
+                {
+                    "value": "HeroCard"
+                },
+                {
+                    "value": "ThumbnailCard"
+                },
+                {
+                    "value": "SigninCard"
+                },
+                {
+                    "value": "AnimationCard"
+                },
+                {
+                    "value": "VideoCard"
+                },
+                {
+                    "value": "AudioCard"
+                },
+                {
+                    "value": "AdaptiveCard"
+                },
+                {
+                    "value": "AllCards"
+                }
+            ],
+            "prompt": "Which card would you like to display?",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.choice",
+            "cases": [
+                {
+                    "value": "HeroCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[HeroCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "ThumbnailCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[ThumbnailCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "SigninCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[SigninCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "AnimationCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[AnimationCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "VideoCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[VideoCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "AudioCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[AudioCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "AdaptiveCard",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[AdaptiveCard]"
+                        }
+                    ]
+                },
+                {
+                    "value": "AllCards",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "[AllCards]"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.RepeatDialog"
+        }
+    ],
+    "rules": [
+      {
+        "$type": "Microsoft.UnknownIntentRule",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[help]"
+          }
+        ]
+      }
+    ],
+    "$schema": "../../app.schema",
+    "$designer": {
+        "createdAt": "2019-06-28T06:31:58.726Z",
+        "updatedAt": "2019-06-28T06:31:58.818Z",
+        "id": "937757"
+    }
+}
