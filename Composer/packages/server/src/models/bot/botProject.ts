@@ -151,12 +151,11 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    console.log(toPublish.length);
     const emptyLuFiles = toPublish.filter(this.isEmpty);
+    console.log(emptyLuFiles.length);
     if (emptyLuFiles.length !== 0) {
-      let msg = '';
-      for (let i = 0; i < emptyLuFiles.length; i++) {
-        msg += emptyLuFiles[i].id + ' ';
-      }
+      const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error('You have the following empty LuFile(s): ' + msg);
     }
     return await this.luPublisher.publish(config, toPublish);
