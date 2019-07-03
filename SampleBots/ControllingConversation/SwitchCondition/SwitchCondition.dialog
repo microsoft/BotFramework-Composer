@@ -1,0 +1,62 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.name",
+            "choices": [
+                {
+                    "value": "Susan"
+                },
+                {
+                    "value": "Nick"
+                },
+                {
+                    "value": "Tom"
+                }
+            ],
+            "prompt": "Please select a value from below:",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hello {user.name}."
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.name",
+            "cases": [
+                {
+                    "value": "Susan",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "You are the CEO."
+                        }
+                    ]
+                },
+                {
+                    "value": "Nick",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "You are the CFO."
+                        }
+                    ]
+                },
+                {
+                    "value": "Tom",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "You are the CTO."
+                        }
+                    ]
+                }
+            ]       
+        }
+    ]
+
+}

@@ -35,7 +35,7 @@
       "condition": "user.style",
       "cases": [
         {
-          "value": "'Test1'",
+          "value": "Test1",
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
@@ -44,7 +44,7 @@
           ]
         },
         {
-          "value": "'Test2'",
+          "value": "Test2",
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
@@ -53,7 +53,7 @@
           ]
         },
         {
-          "value": "'Test3'",
+          "value": "Test3",
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
