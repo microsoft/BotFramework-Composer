@@ -79,7 +79,6 @@ const bottomLinks = [
     labelName: 'Info',
     activeIfUrlContains: '/help',
     exact: false,
-    underTest: true, // will delete
   },
   {
     to: '/about',
