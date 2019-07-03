@@ -1,5 +1,5 @@
 # Introduction to Bot Framework Designer
-## How can I use Bot Framework Designer to build cutting edge conversational software?
+### How can I use Bot Framework Designer to build cutting edge conversational software?
 
 Bot Framework Designer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack. Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience:
 
@@ -36,7 +36,7 @@ Creating grammatically correct, data driven responses that also use a consistent
 
 With LG, previously complex tasks can be quickly achieved:
 
-* include dynamic tokens in messages
+* include dynamic elements in messages
 * generate grammatically correct lists, pronouns, articles
 * provide context-sensitive variation in messages
 * create dynamic card attachments
