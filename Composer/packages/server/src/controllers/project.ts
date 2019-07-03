@@ -105,12 +105,8 @@ async function saveProjectAs(req: Request, res: Response) {
 }
 
 async function getRecentProjects(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
-    const project = await ProjectService.recentBotProjects;
-    return res.status(200).json(project);
-  } else {
-    return res.status(200).json({ info: 'No recent project exist' });
-  }
+  const project = ProjectService.recentBotProjects;
+  return res.status(200).json(project);
 }
 
 async function updateDialog(req: Request, res: Response) {
