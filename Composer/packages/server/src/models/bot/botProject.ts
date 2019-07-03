@@ -64,9 +64,23 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    return {
-      editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
-    };
+    const editorSchemaFile = this.files.find(f => f.name === 'editor.schema');
+    if (editorSchemaFile === undefined) {
+      return { editor: undefined };
+    }
+
+    try {
+      const parsedContent = JSON.parse(editorSchemaFile.content);
+      return {
+        editor: {
+          ...editorSchemaFile,
+          name: 'editorSchema',
+          content: parsedContent,
+        },
+      };
+    } catch {
+      throw new Error('Attempt to parse editor schema as JSON failed');
+    }
   };
 
   public updateBotInfo = async (name: string, description: string) => {
@@ -305,24 +319,7 @@ export class BotProject {
         relativePath: Path.relative(this.dir, this.absolutePath),
       });
 
-      if (botConfig.schemas) {
-        if (botConfig.schemas.editor) {
-          const editorSchemaFile = await this.fileStorage.readFile(`${this.dir}/${botConfig.schemas.editor}`);
-          try {
-            const editorSchema = JSON.parse(editorSchemaFile);
-            fileList.push({
-              name: 'editorSchema',
-              content: editorSchema,
-              path: `${this.dir}/${botConfig.schemas.editor}`,
-              relativePath: botConfig.schemas.editor,
-            });
-          } catch {
-            throw new Error('Attempt to parse editor schema as JSON failed');
-          }
-        }
-      }
-
-      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
 
       for (const pattern of patterns) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
