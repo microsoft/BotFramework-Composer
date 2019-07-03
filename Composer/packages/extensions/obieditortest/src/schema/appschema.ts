@@ -376,6 +376,7 @@ export const appschema: JSONSchema6 = {
               title: 'Action',
               description: 'Card action for the choice',
               type: 'object',
+              additionalProperties: true,
             },
             synonyms: {
               type: 'array',
@@ -516,31 +517,30 @@ export const appschema: JSONSchema6 = {
         },
         choices: {
           type: 'array',
-          items: [
-            {
-              type: 'object',
-              properties: {
-                value: {
+          items: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'the value to return when selected.',
+              },
+              action: {
+                title: 'Action',
+                description: 'Card action for the choice',
+                type: 'object',
+                additionalProperties: true,
+              },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                items: {
                   type: 'string',
-                  title: 'Value',
-                  description: 'the value to return when selected.',
-                },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
-                synonyms: {
-                  type: 'array',
-                  title: 'Synonyms',
-                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-                  items: {
-                    type: 'string',
-                  },
                 },
               },
             },
-          ],
+          },
         },
         appendChoices: {
           type: 'boolean',
@@ -782,31 +782,30 @@ export const appschema: JSONSchema6 = {
         },
         confirmChoices: {
           type: 'array',
-          items: [
-            {
-              type: 'object',
-              properties: {
-                value: {
+          items: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'the value to return when selected.',
+              },
+              action: {
+                title: 'Action',
+                description: 'Card action for the choice',
+                type: 'object',
+                additionalProperties: true,
+              },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                items: {
                   type: 'string',
-                  title: 'Value',
-                  description: 'the value to return when selected.',
-                },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
-                synonyms: {
-                  type: 'array',
-                  title: 'Synonyms',
-                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-                  items: {
-                    type: 'string',
-                  },
                 },
               },
             },
-          ],
+          },
         },
       },
       additionalProperties: false,
@@ -2221,7 +2220,7 @@ export const appschema: JSONSchema6 = {
         },
         outputFormat: {
           type: 'string',
-          enum: ['float', 'interger'],
+          enum: ['float', 'integer'],
           title: 'Output Format',
           description: 'The NumberInput output format.',
           default: 'float',

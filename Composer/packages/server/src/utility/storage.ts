@@ -13,7 +13,7 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
   }
 
   if (!(await dstStorage.exists(dstDir))) {
-    dstStorage.mkDir(dstDir, { recursive: true });
+    await dstStorage.mkDir(dstDir, { recursive: true });
   }
 
   const paths = await srcStorage.readDir(srcDir);
@@ -21,7 +21,8 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
     const srcPath = `${srcDir}/${path}`;
     const dstPath = `${dstDir}/${path}`;
 
-    console.log(`copying ${srcPath}`);
+    // eslint-disable-next-line no-console
+    console.log(`copying ${srcPath} to ${dstPath}`);
 
     if ((await srcStorage.stat(srcPath)).isFile) {
       // copy files
@@ -29,7 +30,7 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
       await dstStorage.writeFile(dstPath, content);
     } else {
       // recursively copy dirs
-      copyDir(srcPath, srcStorage, dstPath, dstStorage);
+      await copyDir(srcPath, srcStorage, dstPath, dstStorage);
     }
   }
 }
