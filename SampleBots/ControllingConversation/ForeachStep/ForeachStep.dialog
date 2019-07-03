@@ -1,0 +1,48 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "dialog.ids == null",
+      "steps": [
+        {
+          "$type": "Microsoft.InitProperty",
+          "property": "dialog.ids",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "dialog.ids",
+      "value": "10000+1000+100+10+1"
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "dialog.ids",
+      "value": "200*200"
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Push",
+      "arrayProperty": "dialog.ids",
+      "value": "888888/4"
+    },
+    {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Here are the index and values in the array."
+    },
+    {
+      "$type": "Microsoft.Foreach",
+      "ListProperty": "dialog.ids",
+      "Steps":[
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "{dialog.index}: {dialog.value}"
+        }
+      ]   
+    }
+  ]
+}

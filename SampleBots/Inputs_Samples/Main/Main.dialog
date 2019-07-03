@@ -10,6 +10,7 @@
       "ChoiceInput": "ChoiceInput|04",
       "AttachmentInput": "AttachmentInput|05",
       "DateTimeInput": "DateTimeInput|06",
+      "OAuthInput": "OAuthInput|07",
       "CancelIntent": "cancel"
     }
   },
@@ -77,6 +78,16 @@
     },
     {
       "$type": "Microsoft.IntentRule",
+      "intent": "OAuthInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "OAuthInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
       "intent": "CancelIntent",
       "steps": [
         {
@@ -96,8 +107,8 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-03T06:30:51.078Z",
-    "updatedAt": "2019-07-03T06:30:52.051Z",
-    "id": "894706"
+    "createdAt": "2019-07-03T06:47:48.836Z",
+    "updatedAt": "2019-07-03T06:47:50.126Z",
+    "id": "848341"
   }
 }
