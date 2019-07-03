@@ -359,11 +359,9 @@ export class BotProject {
      * }
      */
     for (const dialog of dialogs) {
-      const dialogContent = dialog.content;
-      const lgFile = dialogContent.generator;
-      const luFile = typeof dialogContent.recognizer === 'string' ? dialogContent.recognizer : '';
-      const lgExist = lgFiles.findIndex((file: LGFile) => `${file.id}.lg` === lgFile);
-      const luExist = luFiles.findIndex((file: LUFile) => `${file.id}.lu` === luFile);
+      const { lgFile, luFile } = dialog;
+      const lgExist = lgFiles.findIndex((file: LGFile) => file.id === lgFile);
+      const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
 
       if (lgFile && lgExist === -1) {
         throw new Error(`${dialog.name}.dialog referred generator ${lgFile} not exist`);
