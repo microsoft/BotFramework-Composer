@@ -8,10 +8,10 @@ import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
-import { StorageExplorer } from './StorageExplorer';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
+import { CreationFlow } from './CreationFlow/index';
 
 initializeIcons(/* optional base url */);
 
@@ -95,8 +95,8 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botName } = state;
-  const { fetchProject } = actions;
+  const { botName, creationFlowStatus } = state;
+  const { fetchProject, setCreationFlowStatus } = actions;
 
   useEffect(() => {
     fetchProject();
@@ -105,7 +105,6 @@ export function App() {
   return (
     <Fragment>
       <Header botName={botName} />
-      <StorageExplorer />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
@@ -157,6 +156,7 @@ export function App() {
           </div>
         </nav>
         <div css={rightPanel}>
+          <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
           <Routes component={Content} />
         </div>
       </div>
