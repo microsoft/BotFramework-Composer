@@ -23,7 +23,7 @@ context('SwitchCondition', () => {
       cy.getByLabelText('Condition').type('user.age >= 21');
 
       // Add new case
-      cy.getByText('Add New Case').click({ force: true });
+      cy.getByText('Add New Case').click();
       cy.getByLabelText('Value')
         .type('Case1')
         .type('{enter}');
