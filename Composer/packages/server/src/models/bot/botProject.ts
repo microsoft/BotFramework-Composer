@@ -73,7 +73,7 @@ export class BotProject {
     return {
       editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
       sdk: {
-        name: 'defaultSDKSchema',
+        name: 'sdkSchema',
         content: this.defaultSDKSchema,
       },
     };
