@@ -1613,7 +1613,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ChangeType": {
+                "changeType": {
                     "type": "string",
                     "title": "Change Type",
                     "description": "The change type to apply to current dialog",
@@ -1625,7 +1625,7 @@
                         "ReplaceSequence"
                     ]
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -1651,8 +1651,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ChangeType",
-                        "Steps",
+                        "changeType",
+                        "steps",
                         "$type"
                     ]
                 }
@@ -1978,7 +1978,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ListProperty": {
+                "listProperty": {
                     "$role": "expression",
                     "title": "ListProperty",
                     "description": "Expression to evaluate.",
@@ -1987,7 +1987,7 @@
                     ],
                     "type": "string"
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -1996,7 +1996,7 @@
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
                 },
-                "IndexProperty": {
+                "indexProperty": {
                     "$role": "memoryPath",
                     "title": "Index Property",
                     "description": "The memory path which refers to the index of the item",
@@ -2004,7 +2004,7 @@
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
                 },
-                "ValueProperty": {
+                "valueProperty": {
                     "$role": "memoryPath",
                     "title": "Value Property",
                     "description": "The memory path which refers to the value of the item",
@@ -2029,8 +2029,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ListProperty",
-                        "Steps",
+                        "listProperty",
+                        "steps",
                         "$type"
                     ]
                 }
@@ -2066,7 +2066,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ListProperty": {
+                "listProperty": {
                     "$role": "expression",
                     "title": "ListProperty",
                     "description": "Expression to evaluate.",
@@ -2075,7 +2075,7 @@
                     ],
                     "type": "string"
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -2084,13 +2084,13 @@
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
                 },
-                "PageSize": {
+                "pageSize": {
                     "type": "integer",
                     "title": "Page Size",
                     "description": "The page size",
                     "default": 10
                 },
-                "ValueProperty": {
+                "valueProperty": {
                     "$role": "memoryPath",
                     "title": "Value Property",
                     "description": "The memory path which refers to the value of the item",
@@ -2115,8 +2115,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ListProperty",
-                        "Steps",
+                        "listProperty",
+                        "steps",
                         "$type"
                     ]
                 }
