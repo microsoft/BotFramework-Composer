@@ -262,7 +262,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.BeginDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Begin Dialog',
-      description: 'Step which begins another dialog (and when that dialog is done, it will return the caller).',
+      description: 'BeginDialog starts a child dialog that when completed, enables a parent dialog to continue. Included in this action are options to pass to this child dialog.',
       type: 'object',
       properties: {
         $type: {
