@@ -82,7 +82,7 @@ const templates = [
 export const Home = () => {
   const { state, actions } = useContext(Store);
   const { openBotProject } = actions;
-
+  const botNumLimit = 5;
   const onClickRecentBotProject = async (storageId, path) => {
     await openBotProject(storageId, path);
     actions.fetchRecentProjects();
@@ -97,14 +97,14 @@ export const Home = () => {
     const _bots = recentProjects.map(rp => {
       const pathTokens = rp.path.split('/');
       return {
-        iconName: 'Add',
+        iconName: 'Robot',
         actionName: pathTokens[pathTokens.length - 2],
         path: rp.path,
         storageId: rp.storageId,
       };
     });
     _bots.splice(0, 0, {
-      iconName: 'Add',
+      iconName: 'Robot',
       actionName: 'New',
     });
     return _bots;
@@ -143,7 +143,7 @@ export const Home = () => {
           <div css={botTitle}>Start from scratch, or pick up where you left off... </div>
           <div css={botContainer}>
             {bots.map((bot, index) => {
-              if (index > 4) return null;
+              if (index > botNumLimit) return null;
               return (
                 <div css={botContent} key={'homePageBot-' + index}>
                   <div

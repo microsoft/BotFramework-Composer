@@ -154,7 +154,6 @@ export const templateContainer = css`
   margin-right: 33px;
   margin-top: 24px;
   height: 272px;
-  justify-content: space-between;
 `;
 
 export const templateContent = css`
@@ -165,6 +164,7 @@ export const templateContent = css`
   line-height: 32px;
   border-top: 10px solid #50e6ff;
   background: #ebebeb;
+  margin-right: 60px;
 `;
 
 export const templateText = css`
