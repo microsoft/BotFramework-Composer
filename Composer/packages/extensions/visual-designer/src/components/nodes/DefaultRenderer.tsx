@@ -70,6 +70,10 @@ const ContentKeyByTypes: {
   [ObiTypes.SwitchCondition]: {
     label: 'condition',
   },
+  [ObiTypes.ForeachDetail]: {
+    header: 'For Each',
+    label: 'listProperty',
+  },
   [ObiTypes.TextInput]: {
     label: 'prompt',
     details: 'property',
