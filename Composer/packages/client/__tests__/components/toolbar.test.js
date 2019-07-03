@@ -3,9 +3,38 @@ import { fireEvent, render } from 'react-testing-library';
 
 import { ToolBar } from '../../src/components/ToolBar';
 
+const toolbarItems = onClick => [
+  {
+    type: 'action',
+    text: 'New',
+    iconName: 'CirclePlus',
+    onClick: onClick,
+    align: 'left',
+  },
+  {
+    type: 'action',
+    text: 'Open',
+    iconName: 'OpenFolderHorizontal',
+    onClick: onClick,
+    align: 'left',
+  },
+  {
+    type: 'action',
+    text: 'Save as',
+    iconName: 'Save',
+    onClick: onClick,
+    align: 'left',
+  },
+  {
+    type: 'element',
+    element: <div>Connect</div>,
+    align: 'right',
+  },
+];
+
 describe('<ToolBar />', () => {
   it('should render the ToolBar', () => {
-    const { container } = render(<ToolBar luFiles={[]} luStatus={[]} />);
+    const { container } = render(<ToolBar toolbarItems={toolbarItems(() => {})} />);
 
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
@@ -13,26 +42,15 @@ describe('<ToolBar />', () => {
     expect(container).toHaveTextContent('Connect');
   });
 
-  it('should open storage explorer', async () => {
-    const mockOpenStorageExplorer = jest.fn(() => null);
-    const { findByText } = render(<ToolBar openStorageExplorer={mockOpenStorageExplorer} luFiles={[]} luStatus={[]} />);
+  it('should have item click event', async () => {
+    const mockSetCreationFlowStatus = jest.fn(() => null);
+    const { findByText } = render(<ToolBar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);
     fireEvent.click(newButton);
     fireEvent.click(openButton);
     fireEvent.click(saveButton);
-    expect(mockOpenStorageExplorer).toHaveBeenCalledTimes(3);
-  });
-
-  it('should set bot status', async () => {
-    const mockConnectBot = jest.fn(() => null);
-    const { findByText } = render(
-      <ToolBar connectBot={mockConnectBot} botStatus={'unConnected'} luFiles={[]} luStatus={[]} />
-    );
-
-    const connectButton = await findByText(/Connect/);
-    fireEvent.click(connectButton);
-    expect(mockConnectBot).toHaveBeenCalled();
+    expect(mockSetCreationFlowStatus).toHaveBeenCalledTimes(3);
   });
 });

@@ -33,8 +33,8 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       'Microsoft.TextInput',
       'Microsoft.NumberInput',
-      'Microsoft.IntegerInput',
-      'Microsoft.FloatInput',
+      // 'Microsoft.IntegerInput',
+      // 'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
       'Microsoft.OAuthInput',
@@ -68,7 +68,10 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.CODE]: {
     label: 'Roll your own code',
-    types: ['Microsoft.HttpRequest', 'Microsoft.CodeStep'],
+    types: [
+      'Microsoft.HttpRequest',
+      //  'Microsoft.CodeStep'
+    ],
   },
   [DialogGroup.LOG]: {
     label: 'Debugging',

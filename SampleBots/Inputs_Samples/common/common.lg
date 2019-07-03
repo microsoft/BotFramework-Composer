@@ -1,20 +1,27 @@
 # help
--```
-    I can show you examples on how to use Steps, You can enter number 01-04
-    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput]
-	01 - TextInput
-	02 - NumberInput
-	03 - ConfirmInput
-	04 - ChoiceInput
-	05 - AttachmentInput
-	06 - DateTimeInput
-    ```
+
+-`I can show you examples on how to use Steps, You can enter number 01-04 [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput] 01 - TextInput 02 - NumberInput 03 - ConfirmInput 04 - ChoiceInput 05 - AttachmentInput 06 - DateTimeInput`
 
 # ShowImage
+
 -```
 You sent:
 [attachment=@{contentUrl} @{contentType}]
+
 ```
+
+# ShowEmailSummary(user)
+- IF: @{count(user.getGraphEmails.value) == 1}
+  - You have {count(user.getGraphEmails.value)} email. This email is [ShowEmail(user.getGraphEmails.value[0])].
+- ELSEIF: @{count(user.getGraphEmails.value) >= 2}
+  - You have {count(user.getGraphEmails.value)} emails, the first email is [ShowEmail(user.getGraphEmails.value[0])].
+- ELSEIF: @{count(user.getGraphEmails.value) == 0}
+  - You don't have any email.
+- ELSE:
+  - You should not be here.
+
+  # ShowEmail(email)
+- {email.subject}
 
 # activity-068558
 -[help]
@@ -45,4 +52,4 @@ You sent:
 
 # activity-118486
 -Hello {user.name}, nice to talk to you!
-
+```

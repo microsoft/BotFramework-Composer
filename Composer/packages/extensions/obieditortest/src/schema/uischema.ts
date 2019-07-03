@@ -58,19 +58,11 @@ export const uiSchema = {
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
-  'Microsoft.AttachmentInput': {
-    ...activityFields,
-    'ui:order': ['*', 'validations'],
-  },
   'Microsoft.BeginDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
     },
     ...globalFields,
-  },
-  'Microsoft.ChoiceInput': {
-    ...globalFields,
-    ...activityFields,
   },
   'Microsoft.CodeStep': {
     codeHandler: {
@@ -86,9 +78,6 @@ export const uiSchema = {
       'ui:field': SelectorField,
     },
     ...globalFields,
-  },
-  'Microsoft.ConfirmInput': {
-    ...activityFields,
   },
   'Microsoft.EditSteps': {
     Steps: {
@@ -153,8 +142,88 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.TextInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
   'Microsoft.NumberInput': {
     ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.ConfirmInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'style',
+      'confirmChoices',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.ChoiceInput': {
+    inputBindings: {
+      'ui:field': NullField,
+    },
+    outputBinding: {
+      'ui:field': NullField,
+    },
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'style',
+      'choices',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
+  },
+  'Microsoft.OAuthInput': {
+    ...activityFields,
+    'ui:order': ['connectionName', '*'],
+  },
+  'Microsoft.AttachmentInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'defaultValue',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      '*',
+    ],
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
@@ -176,9 +245,6 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
-  },
-  'Microsoft.TextInput': {
-    ...activityFields,
   },
   'Microsoft.UnknownIntentRule': {
     steps: {
