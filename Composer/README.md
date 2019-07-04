@@ -7,6 +7,12 @@ Prerequisite:
 * node > 8.0
 * yarn         // npm install -g yarn
 
+To build for hosting as site extension
+
+```cmd
+set PUBLIC_URL=/composer/
+```
+
 Commands:
 ```
 $ cd Composer // switch to Composer folder
@@ -16,25 +22,25 @@ $ yarn start // start client and server at the same time
 ```
 then go to http://localhost:3000/, best experienced in Chrome
 
-If you want to test bot, you should have your bot runtime running for composer to connect to. Please refer to the [instructions](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp) here to start your runtime. Usually that only means, run `dotnet run` at that particular folder. 
+If you want to test bot, you should have your bot runtime running for composer to connect to. Please refer to the [instructions](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp) here to start your runtime. Usually that only means, run `dotnet run` at that particular folder.
 
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ## Extension Framework
-Composer is built on top of an extension framework, which allows anyone to provide an extension as the editor of certain type of bot assets. 
+Composer is built on top of an extension framework, which allows anyone to provide an extension as the editor of certain type of bot assets.
 
-All editors, 1st party or 3rd party, are loaded in the same way by the extension framework. 
+All editors, 1st party or 3rd party, are loaded in the same way by the extension framework.
 
 Non-editor extensions are not supported at this time, though the mechanisms for providing extensions will scale outside the dialog editor's.
 
 ### What's an extension? what's in it
 Each extension is a standalone React component package ([why React component](#why-react-component)) under Composer's `/packages/extensions` folder, which implements the extension `interface`.
 
-Composer is managed via yarn workspaces, producing such a folder layout. 
+Composer is managed via yarn workspaces, producing such a folder layout.
 ```
 |- Composer
   |- package.json  // define the workspaces
-  |- packages      
+  |- packages
     |- client       // composer main app
     |- server       // composer api server
     |- extensions
@@ -42,15 +48,15 @@ Composer is managed via yarn workspaces, producing such a folder layout.
       |- sample-json-edior // sample extension package
 ```
 
-All extensions under `/extensions` folder will be eventually packed into one `extensions` package, then the `client` package will depends on this `extensions` package. 
+All extensions under `/extensions` folder will be eventually packed into one `extensions` package, then the `client` package will depends on this `extensions` package.
 
 ### Extension Interface
-The extension interface defines the way how an extension comminutes to the host. 
+The extension interface defines the way how an extension comminutes to the host.
 
 In React world, interface means the props passed into a component. An extension will be passed ino 3 props:
 - data:any. which is the data to be edited by this editor.
 - onChange: (newData) => void. which is the callback enables an editor to save the edited data.
-- [shellApi](#shell-api). which is a set of apis providing other capabilities than data in\out. 
+- [shellApi](#shell-api). which is a set of apis providing other capabilities than data in\out.
 
 The rendering code of an extension will be sth like this:
 ```
@@ -71,30 +77,30 @@ Shell api is a set of apis that provides other important functionalities that em
   ```
   openSubEditor(location:string, data:any, onChange:(newData:any) => void)
   ```
-  This is the most important api that support a [multiple editors](#multiple-editors) scenario, which allows an editor to delegate some editing task to another editor, and listen the changes. 
+  This is the most important api that support a [multiple editors](#multiple-editors) scenario, which allows an editor to delegate some editing task to another editor, and listen the changes.
 
   Note that, this api doesn't allow you to specify the type or the name of the sub editor. You only get to specify a data, the shell will use a centralized way to manage how editors are registered and picked up. See registration section in the below for more details.
 
-  We may suppport other forms of openSubEditor later, but we expect this is the mosted used one. 
+  We may suppport other forms of openSubEditor later, but we expect this is the mosted used one.
 
 * ObjectGraph
 
-  TBD, this will be an api that enable each extension have the knowledge of a global object graph. 
+  TBD, this will be an api that enable each extension have the knowledge of a global object graph.
 * Alert
 * ReadFile
 * Prompt
 
 ### Why React component
 
-There are many options to choose when picking an abstraction for an extension. Different level abstractions have different impacts on many aspects, like developing, testing, debuging and running the extension. 
+There are many options to choose when picking an abstraction for an extension. Different level abstractions have different impacts on many aspects, like developing, testing, debuging and running the extension.
 
-A low-level abstraction like HTML page will give us perfect isolation, great flexibilty (use whatever language you want to build that), but usually result in a relatively high amount of effort to develop a robust api between host and extension because it's using the low-level messaging primitives, and also not good for performance because of the extreme isolation. 
+A low-level abstraction like HTML page will give us perfect isolation, great flexibilty (use whatever language you want to build that), but usually result in a relatively high amount of effort to develop a robust api between host and extension because it's using the low-level messaging primitives, and also not good for performance because of the extreme isolation.
 
-A high-level abstraction like React component, will cost a little bit on isolation, but gain the best support from a mature and powerful framework, in every cycle of the development of extensions. It will help most of boosting the productivity, simplifying the architecure, and gain the best performance. 
+A high-level abstraction like React component, will cost a little bit on isolation, but gain the best support from a mature and powerful framework, in every cycle of the development of extensions. It will help most of boosting the productivity, simplifying the architecure, and gain the best performance.
 
 Based on our scenario, we will use React as a start point, and host the extension in an `<IFrame>` to gain a certain level of isolation, for two major reasons:
- 
-* we favor produtivity, simplicity, performance at this point over extreme isolation, more choices when developing extensions. We don't expect there are so many extension developers like VS Code . :)  
+
+* we favor produtivity, simplicity, performance at this point over extreme isolation, more choices when developing extensions. We don't expect there are so many extension developers like VS Code . :)
 * we can always go low-level whenever we see fit, all extensions will still work then, not but visa-verse
 
 
@@ -130,7 +136,7 @@ const EditorRegistration = [
 
 As you can see in above, editors are registered in such an registration table with each entry includes two properties:
 * when. A lamdba that tests whether this kind of data is interested or not
-* pick. The target extenion type to be picked up. 
+* pick. The target extenion type to be picked up.
 
 In this design, we treat file the same way as any json object, by wrapping it into an data object, such as
 ```
@@ -140,11 +146,11 @@ In this design, we treat file the same way as any json object, by wrapping it in
  }
 ```
 
-With this unification into a data object and a lambda on top of that, it's simple, powerful and flexible to define extension at any level of content. 
+With this unification into a data object and a lambda on top of that, it's simple, powerful and flexible to define extension at any level of content.
 
-#### discovery 
+#### discovery
 
-In the runtime, each time an data is to be edited, the shell will go through the table, run the condition of each entry, and pick a proper editor for that. 
+In the runtime, each time an data is to be edited, the shell will go through the table, run the condition of each entry, and pick a proper editor for that.
 
 #### loading
 
@@ -164,9 +170,9 @@ Loading an editor in the json-schema sense is the following:
 
 #### hosting
 
-Extensions are gauranteed to be hosted in an isolated (from the main composer window) container, like `<iframe />`. 
+Extensions are gauranteed to be hosted in an isolated (from the main composer window) container, like `<iframe />`.
 
-Communication between the Composer and the extension is using the React conventions: props, since we assume an extension is an React component. 
+Communication between the Composer and the extension is using the React conventions: props, since we assume an extension is an React component.
 
 
 ### Dialog editing
@@ -179,4 +185,4 @@ As designed, the Extension is sealed to its current React Component implementati
 
 ## multiple editors
 
-This section will explain how multiple editors are supported in details, including how editors are organized in a hierachy way, how data is bubbled up from children to parent, then to shell, etc. 
+This section will explain how multiple editors are supported in details, including how editors are organized in a hierachy way, how data is bubbled up from children to parent, then to shell, etc.
