@@ -165,13 +165,13 @@ export const templateContent = css`
   border-top: 10px solid #50e6ff;
   background: #ebebeb;
   margin-right: 60px;
+  cursor: pointer;
 `;
 
 export const templateText = css`
   position: relative;
-  top: 38px;
-  left: 15px;
-  width: 60%;
+  top: 88px;
+  left: 70px;
 `;
 
 export const footer = css`

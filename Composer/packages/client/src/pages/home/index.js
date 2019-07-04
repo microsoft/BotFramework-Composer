@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { IconButton, Link } from 'office-ui-fabric-react/lib';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Store } from '../../store/index';
+import { CreationFlowStatus } from '../../constants';
 
 import * as home from './styles';
-
 const linksLeft = [
   {
     to: '/home',
@@ -38,32 +38,28 @@ const linksRight = [
   },
 ];
 
-const templates = [
-  {
-    text: 'Get Started with a Basic Conversation',
-  },
-  {
-    text: 'Customer Care Solutions',
-  },
-  {
-    text: 'Retail and Sales Conversations',
-  },
-  {
-    text: 'Personal Assistant Experiences',
-  },
-];
-
 export const Home = () => {
   const { state, actions } = useContext(Store);
-  const { openBotProject } = actions;
+  const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId } = actions;
   const botNumLimit = 5;
+  const [templates, setTemplates] = useState([]);
   const onClickRecentBotProject = async (storageId, path) => {
     await openBotProject(path);
     actions.fetchRecentProjects();
   };
 
+  const onClickTemplate = Id => {
+    saveTemplateId(Id);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+  };
+  const fetchTemplatesAction = async () => {
+    const data = await fetchTemplates();
+    setTemplates(data);
+  };
+
   useEffect(() => {
     actions.fetchRecentProjects();
+    fetchTemplatesAction();
   }, []);
 
   const bots = useMemo(() => {
@@ -139,8 +135,14 @@ export const Home = () => {
           <div css={home.templateContainer}>
             {templates.map((template, index) => {
               return (
-                <div css={home.templateContent} key={'homePageTemplate-' + index}>
-                  <div css={home.templateText}>{template.text}</div>
+                <div
+                  css={home.templateContent}
+                  key={'homePageTemplate-' + index}
+                  onClick={() => {
+                    onClickTemplate(template.Id);
+                  }}
+                >
+                  <div css={home.templateText}>{template.name}</div>
                 </div>
               );
             })}
