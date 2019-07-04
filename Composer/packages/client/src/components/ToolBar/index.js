@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment } from 'react';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
 function itemList(action, index) {
   if (action.type === 'element') {
-    return action.element;
+    return <Fragment key={index}>{action.element}</Fragment>;
   } else {
     return (
       <ActionButton

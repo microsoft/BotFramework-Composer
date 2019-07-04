@@ -1,11 +1,13 @@
-﻿{
-  "$schema": "../../app.schema",
+{
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": false,
   "$designer": {
+    "createdAt": "2019-07-03T06:51:13.961Z",
+    "updatedAt": "2019-07-03T06:51:14.013Z",
+    "id": "727878",
     "name": "09 - EndDialog",
     "description": "This is a bot that demonstrates the EndDialog concept in Adaptive Dialogs."
   },
+  "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
@@ -37,7 +39,9 @@
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "events": ["cancelDialog"],
+      "events": [
+        "cancelDialog"
+      ],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -58,5 +62,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
