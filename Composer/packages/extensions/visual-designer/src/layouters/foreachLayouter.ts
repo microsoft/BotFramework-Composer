@@ -50,7 +50,6 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
       y: node.offset.y + node.boundary.axisY,
       length: containerBoundary.axisX - node.boundary.axisX,
       dashed: true,
-      color: '#038387',
     });
   });
 
@@ -61,7 +60,6 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
     y: loopBeginNode.offset.y + loopBeginNode.boundary.axisY,
     length: loopEndNode.offset.y + loopEndNode.boundary.axisY - (loopBeginNode.offset.y + loopBeginNode.boundary.axisY),
     dashed: true,
-    color: '#038387',
   });
 
   return {

@@ -8,7 +8,7 @@ export const LoopIndicator = ({ onClick }) => {
         width: 24,
         height: 24,
         borderRadius: 12,
-        background: '#038387',
+        background: '#656565',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
