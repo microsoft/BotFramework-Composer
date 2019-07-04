@@ -8,7 +8,7 @@ export const LoopIndicator = ({ onClick }) => {
         width: 24,
         height: 24,
         borderRadius: 12,
-        background: 'grey',
+        background: '#038387',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -18,7 +18,7 @@ export const LoopIndicator = ({ onClick }) => {
         onClick();
       }}
     >
-      <Icon iconName="Refresh" style={{ color: 'white' }} />
+      <Icon iconName="Sync" style={{ color: 'white' }} />
     </div>
   );
 };
