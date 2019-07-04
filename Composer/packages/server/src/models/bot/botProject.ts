@@ -74,23 +74,32 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    const editorSchemaFile = this.files.find(f => f.name === 'editor.schema');
-    if (editorSchemaFile === undefined) {
-      return { editor: undefined };
+    let editorSchema = this.defaultEditorSchema;
+    let sdkSchema = this.defaultSDKSchema;
+
+    const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
+    const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
+
+    if (userEditorSchemaFile !== undefined) {
+      try {
+        editorSchema = JSON.parse(userEditorSchemaFile.content);
+      } catch {
+        throw new Error('Attempt to parse editor schema as JSON failed');
+      }
     }
 
-    try {
-      const parsedContent = JSON.parse(editorSchemaFile.content);
-      return {
-        editor: {
-          ...editorSchemaFile,
-          name: 'editorSchema',
-          content: parsedContent,
-        },
-      };
-    } catch {
-      throw new Error('Attempt to parse editor schema as JSON failed');
+    if (userSDKSchemaFile !== undefined) {
+      try {
+        sdkSchema = JSON.parse(userSDKSchemaFile.content);
+      } catch {
+        throw new Error('Attempt to parse sdk schema as JSON failed');
+      }
     }
+
+    return {
+      editor: editorSchema,
+      sdk: sdkSchema,
+    };
   };
 
   public updateBotInfo = async (name: string, description: string) => {
