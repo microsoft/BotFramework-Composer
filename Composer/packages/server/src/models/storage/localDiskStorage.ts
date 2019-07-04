@@ -12,6 +12,7 @@ const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const copyFile = promisify(fs.copyFile);
+const rename = promisify(fs.rename);
 
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
@@ -64,5 +65,9 @@ export class LocalDiskStorage implements IFileStorage {
 
   async copyFile(src: string, dest: string): Promise<void> {
     return await copyFile(src, dest);
+  }
+
+  async rename(oldPath: string, newPath: string): Promise<void> {
+    return await rename(oldPath, newPath);
   }
 }

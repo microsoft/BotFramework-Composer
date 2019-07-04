@@ -1,8 +1,8 @@
-import path from 'path';
-
 import { Request, Response } from 'express';
 
 import StorageService from '../services/storage';
+import { Path } from '../utility/path.js';
+
 function getStorageConnections(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
@@ -16,7 +16,7 @@ async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
   const reqpath = decodeURI(req.params.path);
   try {
-    if (!path.isAbsolute(reqpath)) {
+    if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath));
@@ -26,7 +26,7 @@ async function getBlob(req: Request, res: Response) {
 }
 
 export const StorageController = {
-  getStorageConnections: getStorageConnections,
-  createStorageConnection: createStorageConnection,
-  getBlob: getBlob,
+  getStorageConnections,
+  createStorageConnection,
+  getBlob,
 };
