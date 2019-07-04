@@ -1,6 +1,6 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
@@ -13,5 +13,11 @@
       "$type": "Microsoft.SendActivity",
       "activity": "To get to the other side"
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:51:19.533Z",
+    "updatedAt": "2019-07-03T06:51:19.561Z",
+    "id": "873848"
+  }
 }
