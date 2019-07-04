@@ -997,13 +997,13 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           description: 'Extra information for the Bot Framework Designer.',
         },
-        ChangeType: {
+        changeType: {
           type: 'string',
           title: 'Change Type',
           description: 'The change type to apply to current dialog',
           enum: ['InsertSteps', 'InsertStepsBeforeTags', 'AppendSteps', 'EndSequence', 'ReplaceSequence'],
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute.',
@@ -1266,14 +1266,14 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           description: 'Extra information for the Bot Framework Designer.',
         },
-        ListProperty: {
+        listProperty: {
           $role: 'expression',
           title: 'ListProperty',
           description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute',
@@ -1282,7 +1282,7 @@ export const appschema: JSONSchema6 = {
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        IndexProperty: {
+        indexProperty: {
           $role: 'memoryPath',
           title: 'Index Property',
           description: 'The memory path which refers to the index of the item',
@@ -1290,7 +1290,7 @@ export const appschema: JSONSchema6 = {
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
-        ValueProperty: {
+        valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
           description: 'The memory path which refers to the value of the item',
@@ -1337,14 +1337,14 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           description: 'Extra information for the Bot Framework Designer.',
         },
-        ListProperty: {
+        listProperty: {
           $role: 'expression',
           title: 'ListProperty',
           description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute',
@@ -1353,13 +1353,13 @@ export const appschema: JSONSchema6 = {
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        PageSize: {
+        pageSize: {
           type: 'integer',
           title: 'Page Size',
           description: 'The page size',
           default: 10,
         },
-        ValueProperty: {
+        valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
           description: 'The memory path which refers to the value of the item',
