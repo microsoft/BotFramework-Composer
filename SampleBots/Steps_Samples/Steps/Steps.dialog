@@ -1,6 +1,5 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
@@ -43,10 +42,5 @@
         }
       ]
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:20.899Z",
-    "updatedAt": "2019-07-03T06:51:20.944Z",
-    "id": "126960"
-  }
+  ]
 }

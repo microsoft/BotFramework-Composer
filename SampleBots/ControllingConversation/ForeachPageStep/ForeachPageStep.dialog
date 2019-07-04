@@ -1,6 +1,5 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
@@ -32,31 +31,26 @@
       "value": "888888/4"
     },
     {
-      "$type": "Microsoft.SendActivity",
-      "activity": "If each page shows two items, here are the index and values"
+          "$type": "Microsoft.SendActivity",
+          "activity": "If each page shows two items, here are the index and values"
     },
     {
       "$type": "Microsoft.ForeachPage",
       "ListProperty": "dialog.ids",
       "PageSize": "2",
-      "ValueProperty": "dialog.page",
-      "Steps": [
+      "ValueProperty" : "dialog.page",
+      "Steps":[
         {
           "$type": "Microsoft.Foreach",
           "ListProperty": "dialog.page",
-          "Steps": [
+          "Steps":[
             {
               "$type": "Microsoft.SendActivity",
               "activity": "{dialog.index}: {dialog.value}"
             }
-          ]
-        }
-      ]
+          ]  
+        } 
+      ]   
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:33.882Z",
-    "updatedAt": "2019-07-03T06:49:33.913Z",
-    "id": "847208"
-  }
+  ]
 }

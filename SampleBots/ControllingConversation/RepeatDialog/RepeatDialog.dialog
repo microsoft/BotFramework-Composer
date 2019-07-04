@@ -1,33 +1,28 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.ConfirmInput",
-      "property": "user.confirmed",
-      "prompt": "Do you want to repeat this dialog, yes to repeat, no to end this dialog",
-      "unrecognizedPrompt": "I need a yes or no.",
-      "alwaysPrompt": true
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.confirmed",
-      "steps": [
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
         {
-          "$type": "Microsoft.RepeatDialog"
-        }
-      ],
-      "elseSteps": [
+            "$type": "Microsoft.ConfirmInput",
+            "property": "user.confirmed",
+            "prompt": "Do you want to repeat this dialog, yes to repeat, no to end this dialog",
+            "unrecognizedPrompt": "I need a yes or no.",
+            "alwaysPrompt": true
+        },
         {
-          "$type": "Microsoft.EndDialog"
+            "$type": "Microsoft.IfCondition",
+            "condition": "user.confirmed",
+            "steps": [
+                {
+                    "$type": "Microsoft.RepeatDialog"
+                }
+            ],
+            "elseSteps": [
+                {
+                    "$type": "Microsoft.EndDialog"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:41.680Z",
-    "updatedAt": "2019-07-03T06:49:41.706Z",
-    "id": "607738"
-  }
+    ]
+
 }

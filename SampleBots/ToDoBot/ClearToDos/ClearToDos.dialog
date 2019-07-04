@@ -1,34 +1,28 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.todos",
-      "resultProperty": "dialog.cleared"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.cleared",
-      "steps": [
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "Successfully cleared items in the Todo List."
-        }
-      ],
-      "elseSteps": [
+            "$type": "Microsoft.EditArray",
+            "changeType": "Clear",
+            "arrayProperty": "user.todos",
+            "resultProperty": "dialog.cleared"
+        },
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "You don't have any item in the Todo List."
+            "$type": "Microsoft.IfCondition",
+            "condition": "dialog.cleared",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Successfully cleared items in the Todo List."
+                }
+            ],
+            "elseSteps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "You don't have any item in the Todo List."
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:38.784Z",
-    "updatedAt": "2019-07-03T06:51:38.790Z",
-    "id": "316336"
-  }
+    ]
 }

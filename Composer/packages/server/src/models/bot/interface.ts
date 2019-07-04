@@ -22,12 +22,9 @@ export interface FileInfo {
 export interface Dialog {
   id: number;
   name: string;
-  displayName: string;
-  content: { [key: string]: any };
-  lgFile: string;
-  luFile: string;
-  luIntents: string[];
+  content: any;
   lgTemplates: string[];
+  luFile: string;
   relativePath: string;
 }
 
@@ -39,14 +36,14 @@ export interface LGTemplate {
 export interface LGFile {
   id: string;
   relativePath: string;
-  content: string;
+  content: any;
 }
 
 export interface LUFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent: { [key: string]: any };
+  parsedContent: any;
 }
 
 export enum FileState {

@@ -1,26 +1,20 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.ConfirmInput",
-      "property": "user.confirmed",
-      "prompt": "yes or no",
-      "unrecognizedPrompt": "I need a yes or no.",
-      "alwaysPrompt": true
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "confirmation: {user.confirmed}"
-    },
-    {
-      "$type": "Microsoft.RepeatDialog"
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:16.053Z",
-    "updatedAt": "2019-07-03T06:48:16.080Z",
-    "id": "556076"
-  }
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.ConfirmInput",
+            "property": "user.confirmed",        
+            "prompt": "yes or no",
+	        "unrecognizedPrompt": "I need a yes or no.",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "confirmation: {user.confirmed}"
+        },
+	    {
+            "$type": "Microsoft.RepeatDialog"
+        }
+    ]
 }

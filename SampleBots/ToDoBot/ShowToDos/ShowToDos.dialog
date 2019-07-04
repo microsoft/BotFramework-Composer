@@ -1,28 +1,22 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.todos == null",
-      "steps": [
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "You have no todos."
+            "$type": "Microsoft.IfCondition",
+            "condition": "user.todos == null",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "You have no todos."
+                }
+            ],
+            "elseSteps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "[ShowTodo]"
+                }
+            ]
         }
-      ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "[ShowTodo]"
-        }
-      ]
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:43.763Z",
-    "updatedAt": "2019-07-03T06:51:43.791Z",
-    "id": "709692"
-  }
+    ]
 }

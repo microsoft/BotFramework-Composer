@@ -1,6 +1,6 @@
 {
+  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
@@ -28,11 +28,5 @@
       "$type": "Microsoft.SendActivity",
       "activity": "[ShowEmailSummary(user)]"
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:21.955Z",
-    "updatedAt": "2019-07-03T06:48:21.981Z",
-    "id": "295682"
-  }
+  ]
 }

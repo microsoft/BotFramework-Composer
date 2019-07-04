@@ -74,23 +74,10 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    const editorSchemaFile = this.files.find(f => f.name === 'editor.schema');
-    if (editorSchemaFile === undefined) {
-      return { editor: undefined };
-    }
-
-    try {
-      const parsedContent = JSON.parse(editorSchemaFile.content);
-      return {
-        editor: {
-          ...editorSchemaFile,
-          name: 'editorSchema',
-          content: parsedContent,
-        },
-      };
-    } catch {
-      throw new Error('Attempt to parse editor schema as JSON failed');
-    }
+    return {
+      editor: this.defaultEditorSchema,
+      sdk: this.defaultSDKSchema,
+    };
   };
 
   public updateBotInfo = async (name: string, description: string) => {
@@ -329,7 +316,24 @@ export class BotProject {
         relativePath: Path.relative(this.dir, this.absolutePath),
       });
 
-      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
+      if (botConfig.schemas) {
+        if (botConfig.schemas.editor) {
+          const editorSchemaFile = await this.fileStorage.readFile(`${this.dir}/${botConfig.schemas.editor}`);
+          try {
+            const editorSchema = JSON.parse(editorSchemaFile);
+            fileList.push({
+              name: 'editorSchema',
+              content: editorSchema,
+              path: `${this.dir}/${botConfig.schemas.editor}`,
+              relativePath: botConfig.schemas.editor,
+            });
+          } catch {
+            throw new Error('Attempt to parse editor schema as JSON failed');
+          }
+        }
+      }
+
+      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
 
       for (const pattern of patterns) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
@@ -357,41 +361,13 @@ export class BotProject {
   private _checkProjectStructure = async () => {
     const dialogs: Dialog[] = this.dialogIndexer.getDialogs();
     const luFiles: LUFile[] = this.luIndexer.getLuFiles();
-    const lgFiles: LGFile[] = this.lgIndexer.getLgFiles();
-
-    // ensure each dialog folder have a lu file, e.g.
-    /**
-     * + AddToDo (folder)
-     *   - AddToDo.dialog
-     *   - AddToDo.lu                     // if not exist, auto create it
-     */
+    // ensure each dialog got a lu file
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      const exist = luFiles.findIndex((luFile: LUFile) => luFile.relativePath === targetLuFilePath);
+      const exist = luFiles.findIndex((luFile: { [key: string]: any }) => luFile.relativePath === targetLuFilePath);
       if (exist === -1) {
         await this._createFile(targetLuFilePath, '');
-      }
-    }
-
-    // ensure dialog referred *.lg, *.lu exist, e.g
-    /**
-     * ## AddToDo.dialog (file)
-     * {
-     *    "generator": "ToDoLuisBot.lg",  // must exist
-     *    "recognizer": "foo.lu",         // must exist
-     * }
-     */
-    for (const dialog of dialogs) {
-      const { lgFile, luFile } = dialog;
-      const lgExist = lgFiles.findIndex((file: LGFile) => file.id === lgFile);
-      const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
-
-      if (lgFile && lgExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred generator ${lgFile} not exist`);
-      }
-      if (luFile && luExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred recognizer ${luFile} not exist`);
       }
     }
   };

@@ -1,32 +1,26 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.TextInput",
-      "property": "user.name",
-      "allowInterruptions": false,
-      "prompt": "Hello, I'm Zoidberg. What is your name?"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}, nice to talk to you!"
-    },
-    {
-      "$type": "Microsoft.TextInput",
-      "property": "user.name",
-      "alwaysPrompt": true,
-      "prompt": "Hello, I'm Zoidberg. What is your name?"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}, nice to talk to you!"
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:24.389Z",
-    "updatedAt": "2019-07-03T06:48:24.419Z",
-    "id": "359753"
-  }
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.TextInput",
+            "property": "user.name",
+            "allowInterruptions": false,
+            "prompt": "Hello, I'm Zoidberg. What is your name?"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hello {user.name}, nice to talk to you!"
+        },
+        {
+            "$type": "Microsoft.TextInput",
+            "property": "user.name",
+            "alwaysPrompt":  true,
+            "prompt": "Hello, I'm Zoidberg. What is your name?"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hello {user.name}, nice to talk to you!"
+        }
+    ]
 }

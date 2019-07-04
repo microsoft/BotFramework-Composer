@@ -1,34 +1,28 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.ChoiceInput",
-      "property": "user.style",
-      "choices": [
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
         {
-          "value": "Test1"
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.style",
+            "choices": [
+                {
+                    "value": "Test1"
+                },
+                {
+                    "value": "Test2"
+                },
+                {
+                    "value": "Test3"
+                }
+            ],
+            "prompt": "Please select a value from below:",
+            "style": "List",
+            "alwaysPrompt": true
         },
         {
-          "value": "Test2"
-        },
-        {
-          "value": "Test3"
+            "$type": "Microsoft.SendActivity",
+            "activity": "You select: {user.style}"
         }
-      ],
-      "prompt": "Please select a value from below:",
-      "style": "List",
-      "alwaysPrompt": true
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "You select: {user.style}"
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:13.382Z",
-    "updatedAt": "2019-07-03T06:48:13.408Z",
-    "id": "952602"
-  }
+    ]
 }

@@ -1,33 +1,28 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.NumberInput",
-      "prompt": "Hello, What's your age?",
-      "property": "user.age"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.age >= 18",
-      "steps": [
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "You are an adult."
-        }
-      ],
-      "elseSteps": [
+            "$type": "Microsoft.NumberInput",
+            "prompt": "Hello, What's your age?",
+            "property": "user.age"
+        },
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "You are under 18."
+            "$type": "Microsoft.IfCondition",
+            "condition": "user.age >= 18",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "You are an adult."
+                }
+            ],
+            "elseSteps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "You are under 18."
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:39.154Z",
-    "updatedAt": "2019-07-03T06:49:39.178Z",
-    "id": "501534"
-  }
+    ]
+
 }
