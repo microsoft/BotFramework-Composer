@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 import { IconButton, Link } from 'office-ui-fabric-react/lib';
 import { useContext, useEffect, useMemo, useState } from 'react';
+import formatMessage from 'format-message';
 
 import { Store } from '../../store/index';
 import { CreationFlowStatus } from '../../constants';
@@ -10,12 +11,12 @@ import * as home from './styles';
 const linksLeft = [
   {
     to: '/home',
-    text: 'See how it works',
+    text: formatMessage('See how it works'),
     css: home.linkInfo,
   },
   {
     to: '/home',
-    text: 'View interactive tutorial',
+    text: formatMessage('View interactive tutorial'),
     css: home.linkInfo,
   },
 ];
@@ -23,17 +24,17 @@ const linksLeft = [
 const linksRight = [
   {
     to: '/home',
-    text: 'Create, test and deploy your bot',
+    text: formatMessage('Create, test and deploy your bot'),
     css: home.linkInfo,
   },
   {
     to: '/home',
-    text: 'Create a PowerApps environment',
+    text: formatMessage('Create a PowerApps environment'),
     css: home.linkInfo,
   },
   {
     to: '/home',
-    text: 'See more options',
+    text: formatMessage('See more options'),
     css: home.moreOptions,
   },
 ];
@@ -41,14 +42,18 @@ const linksRight = [
 export const Home = () => {
   const { state, actions } = useContext(Store);
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId } = actions;
-  const botNumLimit = 5;
+  const botNumLimit = 4;
   const [templates, setTemplates] = useState([]);
   const onClickRecentBotProject = async (storageId, path) => {
     await openBotProject(path);
     actions.fetchRecentProjects();
   };
 
-  const onClickTemplate = Id => {
+  const onClickNewBotProject = async () => {
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
+  };
+
+  const onClickTemplate = async Id => {
     saveTemplateId(Id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };
@@ -72,10 +77,6 @@ export const Home = () => {
         path: rp.path,
         storageId: rp.storageId,
       };
-    });
-    _bots.splice(0, 0, {
-      iconName: 'Robot',
-      actionName: 'New',
     });
     return _bots;
   }, [state.recentProjects]);
@@ -112,10 +113,21 @@ export const Home = () => {
         <div css={home.botArea}>
           <div css={home.botTitle}>Start from scratch, or pick up where you left off... </div>
           <div css={home.botContainer}>
+            <div css={home.botContent}>
+              <div
+                css={home.action}
+                onClick={() => {
+                  onClickNewBotProject();
+                }}
+              >
+                <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />
+              </div>
+              <div css={home.actionName}> {formatMessage('New')} </div>
+            </div>
             {bots.map((bot, index) => {
               if (index > botNumLimit) return null;
               return (
-                <div css={home.botContent} key={'homePageBot-' + index}>
+                <div css={home.botContent} key={'homePageBot-' + bot.Id}>
                   <div
                     css={home.action}
                     onClick={() => {
