@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "autoEndDialog": false,
-  "recognizer": "ToDoLuisBot.lu",
+  "recognizer": "Main.lu",
   "generator": "common.lg",
   "steps": [
     {
