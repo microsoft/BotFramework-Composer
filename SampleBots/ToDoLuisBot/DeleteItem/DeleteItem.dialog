@@ -1,7 +1,7 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
-    "generator": "ToDoLuisBot.lg",
+    "generator": "common.lg",
     "steps": [
         {
             "$type": "Microsoft.SetProperty",
@@ -10,7 +10,7 @@
         },
         {
             "$type": "Microsoft.SetProperty",
-            "value": "@ListType[0]",
+            "value": "@ListType",
             "property": "dialog.listName"
         },
         {
