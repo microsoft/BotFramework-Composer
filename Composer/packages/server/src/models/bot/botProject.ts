@@ -69,6 +69,17 @@ export class BotProject {
     };
   };
 
+  public updateBotInfo = async (name: string, description: string) => {
+    const dialogs = this.dialogIndexer.getDialogs();
+    const mainDialog = dialogs.find(item => {
+      return item.name === 'Main';
+    });
+    if (mainDialog !== undefined) {
+      mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
+      await this.updateDialog('Main', mainDialog.content);
+    }
+  };
+
   public updateBotFile = async (name: string, content: any) => {
     const botFile = this.files[0];
     await this.fileStorage.writeFile(botFile.path, JSON.stringify(content, null, 2) + '\n');

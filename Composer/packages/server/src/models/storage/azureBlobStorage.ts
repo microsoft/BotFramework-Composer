@@ -239,4 +239,10 @@ export class AzureBlobStorage implements IFileStorage {
       resolve();
     });
   }
+  //ToDo
+  async rename(oldPath: string, newPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  }
 }

@@ -8,6 +8,7 @@ import { AssetController } from '../controllers/asset';
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
+router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
 router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
