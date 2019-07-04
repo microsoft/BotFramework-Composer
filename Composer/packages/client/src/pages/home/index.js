@@ -58,7 +58,7 @@ export const Home = () => {
   const { openBotProject } = actions;
   const botNumLimit = 5;
   const onClickRecentBotProject = async (storageId, path) => {
-    await openBotProject(storageId, path);
+    await openBotProject(path);
     actions.fetchRecentProjects();
   };
 
@@ -72,7 +72,7 @@ export const Home = () => {
       const pathTokens = rp.path.split('/');
       return {
         iconName: 'Robot',
-        actionName: pathTokens[pathTokens.length - 2],
+        actionName: pathTokens[pathTokens.length - 1],
         path: rp.path,
         storageId: rp.storageId,
       };
