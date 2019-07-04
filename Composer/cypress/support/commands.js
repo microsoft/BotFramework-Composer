@@ -26,11 +26,11 @@ import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
   cy.getByText('Open').click();
-  cy.get('[data-testid="StorageExplorer"]').within(() => {
-    cy.getByText(botName).click();
-    cy.getByText(/.botproj/).click();
-    cy.wait(500);
+  cy.get('[data-testid="SelectLocation"]').within(() => {
+    cy.get(`input[aria-label="${botName}"]`).click();
   });
+  cy.get('[data-testid="SelectLocationOpen"]').click();
+  cy.wait(500);
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {
@@ -50,7 +50,7 @@ Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
   cy.getByText('Save as').click();
 
-  cy.get('input[data-testid="NewBotProjectInput"]').type(`__Test${name}`);
-  cy.getByText('Save').click();
+  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
+  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
   cy.wait(1000);
 });

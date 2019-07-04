@@ -226,7 +226,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -490,7 +490,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -516,6 +516,7 @@ export const appschema: JSONSchema6 = {
           default: 'value',
         },
         choices: {
+          title: 'Choices',
           type: 'array',
           items: {
             type: 'object',
@@ -525,12 +526,13 @@ export const appschema: JSONSchema6 = {
                 title: 'Value',
                 description: 'the value to return when selected.',
               },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-                additionalProperties: true,
-              },
+              // TODO: Re-enable card actions when we are better equipped to provide a UI that is foolproof
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              //   additionalProperties: true,
+              // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
@@ -720,7 +722,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -1052,18 +1054,8 @@ export const appschema: JSONSchema6 = {
         eventName: {
           title: 'Event Name',
           description: 'The name of event to emit.',
-          enum: [
-            'beginDialog',
-            'consultDialog',
-            'cancelDialog',
-            'activityReceived',
-            'recognizedIntent',
-            'unknownIntent',
-            'stepsStarted',
-            'stepsSaved',
-            'stepsEnded',
-            'stepsResumed',
-          ],
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         eventValue: {
           type: 'object',
@@ -2200,7 +2192,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -2793,7 +2785,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {

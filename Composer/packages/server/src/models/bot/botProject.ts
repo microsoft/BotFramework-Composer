@@ -79,6 +79,17 @@ export class BotProject {
     };
   };
 
+  public updateBotInfo = async (name: string, description: string) => {
+    const dialogs = this.dialogIndexer.getDialogs();
+    const mainDialog = dialogs.find(item => {
+      return item.name === 'Main';
+    });
+    if (mainDialog !== undefined) {
+      mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
+      await this.updateDialog('Main', mainDialog.content);
+    }
+  };
+
   public updateBotFile = async (name: string, content: any) => {
     const botFile = this.files[0];
     await this.fileStorage.writeFile(botFile.path, JSON.stringify(content, null, 2) + '\n');
@@ -160,7 +171,13 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
-    return await this.luPublisher.publish(config, this.luIndexer.getLuFiles().filter(f => !!f.content.trim()));
+    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const emptyLuFiles = toPublish.filter(this.isEmpty);
+    if (emptyLuFiles.length !== 0) {
+      const msg = emptyLuFiles.map(file => file.id).join(' ');
+      throw new Error('You have the following empty LuFile(s): ' + msg);
+    }
+    return await this.luPublisher.publish(config, toPublish);
   };
 
   public checkNeedLuisDeploy = async () => {
@@ -352,5 +369,26 @@ export class BotProject {
         await this._createFile(targetLuFilePath, '');
       }
     }
+  };
+
+  private isEmpty = (LUFile: LUFile) => {
+    if (LUFile === undefined) return true;
+    if (LUFile.content === undefined || LUFile.content === '') return true;
+    if (LUFile.parsedContent === undefined) return true;
+    if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
+    for (const key in LUFile.parsedContent.LUISJsonStructure) {
+      if (LUFile.parsedContent.LUISJsonStructure[key].length !== 0) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  private isReferred = (LUFile: LUFile) => {
+    const dialogs = this.dialogIndexer.getDialogs();
+    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
+      return true;
+    }
+    return false;
   };
 }
