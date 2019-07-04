@@ -23,7 +23,7 @@ export interface Dialog {
   id: number;
   name: string;
   displayName: string;
-  content: { [key: string]: string };
+  content: { [key: string]: any };
   lgFile: string;
   luFile: string;
   luIntents: string[];
