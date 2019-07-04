@@ -1,16 +1,22 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-        {
-            "$type": "Microsoft.TextInput",
-            "property": "user.name",
-            "allowInterruptions": false,
-            "prompt": "Hello, I'm Zoidberg. What is your name?"
-        },
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[LGComposition(user)]"
-        }
-    ]
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "property": "user.name",
+      "allowInterruptions": false,
+      "prompt": "Hello, I'm Zoidberg. What is your name?"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[LGComposition(user)]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:14.618Z",
+    "updatedAt": "2019-07-03T06:50:14.741Z",
+    "id": "662682"
+  }
 }

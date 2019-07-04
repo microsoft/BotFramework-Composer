@@ -96,6 +96,7 @@ export class DialogIndexer {
           if (extName === '.dialog' && !file.name.endsWith('.lu.dialog')) {
             const dialogJson = JSON.parse(file.content);
             const luFile = typeof dialogJson.recognizer === 'string' ? dialogJson.recognizer : '';
+            const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const dialog = {
               id: 0,
               name: Path.basename(file.name, extName),
@@ -104,6 +105,7 @@ export class DialogIndexer {
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),
+              lgFile: Path.basename(lgFile, '.lg'),
               relativePath: file.relativePath,
             };
 
