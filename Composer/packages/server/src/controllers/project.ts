@@ -219,9 +219,6 @@ export const ProjectController = {
   publishLuis,
   saveProjectAs,
   createProject,
-<<<<<<< HEAD
   getAllProjects,
-=======
   getRecentProjects,
->>>>>>> add history bot button
 };
