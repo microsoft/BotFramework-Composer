@@ -99,7 +99,11 @@ export class BotProject {
     const dialogs = this.dialogIndexer.getDialogs();
     const mainDialog = dialogs.find(item => item.isRoot);
     if (mainDialog !== undefined) {
-      mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
+      mainDialog.content.$designer = {
+        ...mainDialog.content.$designer,
+        name,
+        description,
+      };
       await this.updateDialog('Main', mainDialog.content);
     }
   };
@@ -117,9 +121,22 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, dir: string = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, description: string = '', dir: string = ''): Promise<Dialog[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    const content = JSON.stringify(merge({}, DIALOG_TEMPLATE), null, 2) + '\n';
+    const content =
+      JSON.stringify(
+        merge(
+          {
+            $designer: {
+              name: id,
+              description: description,
+            },
+          },
+          DIALOG_TEMPLATE
+        ),
+        null,
+        2
+      ) + '\n';
 
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
@@ -195,7 +212,8 @@ export class BotProject {
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
     // get destination storage client
     const dstStorage = StorageService.getStorageClient(locationRef.storageId);
-    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up existed bot proj
+    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up
+    // existed bot proj
     if (await dstStorage.exists(locationRef.path)) {
       throw new Error('already have this folder, please give another name');
     }
@@ -216,8 +234,8 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  // create file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // create file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
@@ -234,8 +252,8 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  // update file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // update file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {
@@ -249,8 +267,8 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  // remove file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // remove file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {

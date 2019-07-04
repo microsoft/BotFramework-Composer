@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo } from 'react';
-import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
+import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
@@ -24,7 +24,7 @@ import {
   formEditor,
   editorWrapper,
 } from './styles';
-import NewDialogModal from './NewDialogModal';
+import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -40,6 +40,17 @@ function DesignPage(props) {
     navTo(`${id}#`);
   }
 
+  const getErrorMessage = name => {
+    if (
+      dialogs.findIndex(dialog => {
+        return dialog.name === name;
+      }) >= 0
+    ) {
+      return 'duplication of name';
+    }
+    return '';
+  };
+
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
       result[dialog.id] = dialog.content;
@@ -51,22 +62,47 @@ function DesignPage(props) {
     {
       type: 'action',
       text: formatMessage('New'),
-      iconName: 'CirclePlus',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        menuProps: {
+          items: [
+            {
+              key: 'newBot',
+              text: formatMessage('New Bot'),
+              onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+            },
+            {
+              key: 'newDialog',
+              text: formatMessage('New Dialog'),
+              onClick: () => setModalOpen(true),
+            },
+          ],
+        },
+      },
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Open'),
-      iconName: 'OpenFolderHorizontal',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Save as'),
-      iconName: 'Save',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Save',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      },
       align: 'left',
     },
     {
@@ -115,24 +151,15 @@ function DesignPage(props) {
               <div css={projectWrapper}>
                 <div css={projectHeader}>
                   <div>{formatMessage('Dialogs')}</div>
-                  {dialogs.length > 0 ? (
-                    <IconButton
-                      iconProps={{
-                        iconName: 'Add',
-                      }}
-                      title={formatMessage('New Dialog')}
-                      ariaLabel={formatMessage('New Dialog')}
-                      onClick={() => setModalOpen(true)}
-                    />
-                  ) : (
-                    <div />
-                  )}
                 </div>
-                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
+                <ProjectTree
+                  files={dialogs}
+                  activeNode={activeDialog}
+                  onSelect={handleFileClick}
+                  onAdd={() => setModalOpen(true)}
+                />
               </div>
             </Tree>
-            {/* <div style={{ height: '20px' }} />
-          <Tree extraCss={assetTree} /> */}
           </div>
           <Conversation extraCss={editorContainer}>
             <Fragment>
@@ -149,7 +176,12 @@ function DesignPage(props) {
           </Conversation>
         </Fragment>
       </MainContent>
-      <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
+      <NewDialogModal
+        isOpen={modalOpen}
+        onDismiss={() => setModalOpen(false)}
+        onSubmit={onSubmit}
+        onGetErrorMessage={getErrorMessage}
+      />
     </Fragment>
   );
 }
