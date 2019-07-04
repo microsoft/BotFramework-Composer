@@ -45,7 +45,7 @@
 -Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.
 
 # activity-116673
--Successfully added a todo named \"{dialog.todo}\"
+-Successfully added a todo named {dialog.todo}
 
 # activity-832307
 -Successfully cleared items in the Todo List.
