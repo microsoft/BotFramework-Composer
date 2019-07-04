@@ -52,6 +52,11 @@
       "recognizerOptions": {
         "noValue": false,
         "noAction": false
+      },
+      "$designer": {
+        "createdAt": "2019-07-04T19:48:36.378Z",
+        "updatedAt": "2019-07-04T19:48:36.384Z",
+        "id": "378731"
       }
     },
     {
@@ -63,7 +68,12 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[HeroCard]"
+              "$designer": {
+                "createdAt": "2019-07-04T19:52:01.341Z",
+                "updatedAt": "2019-07-04T19:52:09.961Z",
+                "id": "068293"
+              },
+              "activity": "[activity-068293]"
             }
           ]
         },
@@ -72,7 +82,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[ThumbnailCard]"
+              "$designer": {
+                "id": "625345",
+                "updatedAt": "2019-07-04T19:52:22.680Z"
+              },
+              "activity": "[activity-625345]"
             }
           ]
         },
@@ -81,7 +95,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[SigninCard]"
+              "$designer": {
+                "id": "733841",
+                "updatedAt": "2019-07-04T19:52:35.608Z"
+              },
+              "activity": "[activity-733841]"
             }
           ]
         },
@@ -90,7 +108,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[AnimationCard]"
+              "$designer": {
+                "id": "545252",
+                "updatedAt": "2019-07-04T19:52:45.440Z"
+              },
+              "activity": "[activity-545252]"
             }
           ]
         },
@@ -99,7 +121,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[VideoCard]"
+              "$designer": {
+                "id": "808579",
+                "updatedAt": "2019-07-04T19:52:54.208Z"
+              },
+              "activity": "[activity-808579]"
             }
           ]
         },
@@ -108,7 +134,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[AudioCard]"
+              "$designer": {
+                "id": "117065",
+                "updatedAt": "2019-07-04T19:53:06.087Z"
+              },
+              "activity": "[activity-117065]"
             }
           ]
         },
@@ -117,7 +147,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[AdaptiveCard]"
+              "$designer": {
+                "id": "581350",
+                "updatedAt": "2019-07-04T19:53:17.329Z"
+              },
+              "activity": "[activity-581350]"
             }
           ]
         },
@@ -126,11 +160,20 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[AllCards]"
+              "$designer": {
+                "id": "654665",
+                "updatedAt": "2019-07-04T19:53:26.658Z"
+              },
+              "activity": "[activity-654665]"
             }
           ]
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-04T19:48:26.434Z",
+        "updatedAt": "2019-07-04T19:48:26.493Z",
+        "id": "403471"
+      }
     },
     {
       "$type": "Microsoft.RepeatDialog"

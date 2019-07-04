@@ -19,11 +19,8 @@
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
-        "createdAt": "2019-07-01T21:58:31.495Z",
-        "updatedAt": "2019-07-01T21:58:53.644Z",
-        "id": "587377"
-      },
-      "activity": "[activity-587377]"
+        "id": "045040"
+      }
     }
   ],
   "$schema": "../../app.schema",

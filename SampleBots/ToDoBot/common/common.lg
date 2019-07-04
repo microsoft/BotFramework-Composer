@@ -54,10 +54,10 @@
 -You don't have any items in the Todo List.
 
 # activity-725469
--Successfully removed a todo named \"{dialog.todo}\"
+-Successfully removed a todo named {dialog.todo}
 
 # activity-549615
--\"{dialog.todo}\" is not in the Todo List
+-{dialog.todo} is not in the Todo List
 
 # activity-339580
 -You have no todos.

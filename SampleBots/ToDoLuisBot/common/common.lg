@@ -49,40 +49,8 @@
 # PromptForItem
 -What item did you want?\n\n[ShowItems]
 
-# activity-637880
-
-
-# activity-186221
-
-
-# activity-066356
-
-
-# activity-645136
-
-
-# activity-956034
-
-
-# activity-391377
-
-
-# activity-125998
-
-
-# activity-867977
--test
-
-# activity-526152
--test
--test2
--test3
-
 # activity-920820
 -Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.
-
-# activity-911222
--The list name must be shopping, grocery or todo.
 
 # activity-398112
 -Successfully added {dialog.item} to {dialog.listName} list.
@@ -95,4 +63,13 @@
 
 # activity-136653
 -[ShowItems(user, dialog.listName)]
+
+# activity-636903
+-Hi! I'm a ToDoBot configured to use LUIS to understand you. Say \"add a todo named first\" to get started
+
+# activity-878434
+-The list name must be shopping, grocery or todo.
+
+# activity-326398
+-The list name must be shopping, grocery or todo.
 

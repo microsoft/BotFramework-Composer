@@ -20,11 +20,10 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-01T22:06:27.595Z",
-            "updatedAt": "2019-07-01T22:06:46.185Z",
-            "id": "911222"
+            "id": "326398",
+            "updatedAt": "2019-07-04T19:45:08.506Z"
           },
-          "activity": "[activity-911222]"
+          "activity": "[activity-326398]"
         },
         {
           "$type": "Microsoft.EndDialog",

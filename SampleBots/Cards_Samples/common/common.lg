@@ -1,11 +1,5 @@
-﻿> All cards can be defined and managed through .lg files.
-> All cards use the chatdown notation - see here - https://github.com/Microsoft/botbuilder-tools/tree/master/packages/Chatdown#message-commands
-> Multi-line text are enclosed in ```
-> Multi-line text can include inline expressions enclosed in @{expression}.
-> @{lgTemplate("TemplateName")} is an inline expression that uses the lgTemplate pre-built function to evaluate a template by name.
-
 # HeroCard
-- ```
+-```
 [Herocard   
     title = BotFramework Hero Card
     subtitle = Microsoft Bot Framework
@@ -15,7 +9,7 @@
 ```
 
 # ThumbnailCard
-- ```
+-```
 [ThumbnailCard
     title = BotFramework Thumbnail Card
     subtitle = Microsoft Bot Framework
@@ -25,14 +19,14 @@
 ```
 
 # SigninCard
-- ```
+-```
 [SigninCard
     text = BotFramework Sign-in Card
     buttons = Sign-in]
 ```
 
 # AnimationCard
-- ```
+-```
 [AnimationCard
     title = Microsoft Bot Framework
     subtitle = Animation Card
@@ -41,7 +35,7 @@
 ```
 
 # VideoCard
-- ```
+-```
 [VideoCard
     title = Big Buck Bunny
     subtitle = by the Blender Institute
@@ -52,7 +46,7 @@
 ```
 
 # AudioCard
-- ```
+-```
 [AudioCard
     title = I am your father
     subtitle = Star Wars: Episode V - The Empire Strikes Back
@@ -62,27 +56,23 @@
     buttons = Read More]
 ```
 
-> The external file reference here 'Resources\adaptiveCard.json' should be marked as 'copy to output directory'
-> Note: The external file will be read as text and any language generation templates/ expressions in the content will be evaluated. 
-> You can see this in Resources\adaptiveCard.json that pulls in a passenger name at random based on the call to 'PassengerName' template defined below.
-> Note: Chatdown already supports the ability to create any card type from its json definition. So you can apply this for not just Adaptive cards but to all card types.
 # AdaptiveCard
-- ```
+-```
 [Attachment=../../SampleBots/Cards_Samples/common/adaptiveCard.json adaptivecard]
 ```
 
 # PassengerName
-- Vishwac
-- Tom
-- Chris
-- Yochay
+-Vishwac
+-Tom
+-Chris
+-Yochay
 
 # AttachmentLayoutType
-- carousel
-- list
+-carousel
+-list
 
 # AllCards
-- ```
+-```
 [AttachmentLayout=@{lgTemplate("AttachmentLayoutType")}]
 @{lgTemplate("HeroCard")}
 @{lgTemplate("ThumbnailCard")}
@@ -94,7 +84,7 @@
 ```
 
 # help
-- ```
+-```
     I can show you examples on different Cards
     [Suggestions=HeroCard|ThumbnailCard|SigninCard|AnimationCard|VideoCard|AudioCard|AdaptiveCard|AllCards]
 	01 - HeroCard
@@ -105,4 +95,29 @@
 	06 - AudioCard
     07 - AdaptiveCard
     08 - AllCards
-    ```
+    ```<EOF>
+
+# activity-068293
+-You picked Hero Card
+
+# activity-625345
+-You picked ThumbnailCard
+
+# activity-733841
+-You picked SigninCard
+
+# activity-545252
+-You picked AnimationCard
+
+# activity-808579
+-You picked VideoCard
+
+# activity-117065
+-You picked AudioCard
+
+# activity-581350
+-You picked AdaptiveCard
+
+# activity-654665
+-You picked AllCards
+

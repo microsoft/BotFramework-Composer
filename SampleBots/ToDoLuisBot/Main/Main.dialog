@@ -1,15 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
+  "$designer": {
+    "createdAt": "2019-07-01T10:00:39.032Z",
+    "updatedAt": "2019-07-04T19:37:48.297Z",
+    "id": "948970"
+  },
   "autoEndDialog": false,
   "recognizer": "ToDoLuisBot.lu",
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Hi"
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
@@ -20,10 +19,15 @@
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "DeleteToDo",
       "steps": [
         "DeleteItem"
-      ]
+      ],
+      "intent": "DeleteToDo",
+      "$designer": {
+        "createdAt": "2019-07-04T19:39:42.915Z",
+        "updatedAt": "2019-07-04T19:39:42.930Z",
+        "id": "242349"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
@@ -37,15 +41,20 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[LuisToDoHelp]"
+          "$designer": {
+            "createdAt": "2019-07-04T19:37:50.422Z",
+            "updatedAt": "2019-07-04T19:38:13.175Z",
+            "id": "636903"
+          },
+          "activity": "[activity-636903]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-04T19:37:38.354Z",
+        "updatedAt": "2019-07-04T19:37:38.376Z",
+        "id": "265106"
+      }
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-07-01T10:00:39.054Z",
-    "id": "948970"
-  }
+  "$schema": "../../app.schema"
 }

@@ -1,62 +1,103 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "property": "user.name",
+      "prompt": "Please select a value from below:",
+      "maxTurnCount": "2147483647",
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "outputFormat": "value",
+      "choices": [
         {
-            "$type": "Microsoft.ChoiceInput",
-            "property": "user.name",
-            "choices": [
-                {
-                    "value": "Susan"
-                },
-                {
-                    "value": "Nick"
-                },
-                {
-                    "value": "Tom"
-                }
-            ],
-            "prompt": "Please select a value from below:",
-            "style": "List",
-            "alwaysPrompt": true
+          "value": "Susan"
         },
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hello {user.name}."
+          "value": "Nick"
         },
         {
-            "$type": "Microsoft.SwitchCondition",
-            "condition": "user.name",
-            "cases": [
-                {
-                    "value": "Susan",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You are the CEO."
-                        }
-                    ]
-                },
-                {
-                    "value": "Nick",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You are the CFO."
-                        }
-                    ]
-                },
-                {
-                    "value": "Tom",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.SendActivity",
-                            "activity": "You are the CTO."
-                        }
-                    ]
-                }
-            ]       
+          "value": "Tom"
         }
-    ]
-
+      ],
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
+      "style": "List",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      },
+      "$designer": {
+        "createdAt": "2019-07-04T19:56:49.850Z",
+        "updatedAt": "2019-07-04T19:56:49.855Z",
+        "id": "699003"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "097130",
+        "updatedAt": "2019-07-04T19:57:08.860Z"
+      },
+      "activity": "[activity-097130]"
+    },
+    {
+      "$type": "Microsoft.SwitchCondition",
+      "condition": "user.name",
+      "cases": [
+        {
+          "value": "Susan",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "040464",
+                "updatedAt": "2019-07-04T19:57:28.583Z"
+              },
+              "activity": "[activity-040464]"
+            }
+          ]
+        },
+        {
+          "value": "Nick",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "230206",
+                "updatedAt": "2019-07-04T19:58:22.053Z"
+              },
+              "activity": "[activity-230206]"
+            }
+          ]
+        },
+        {
+          "value": "Tom",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "604251",
+                "updatedAt": "2019-07-04T19:58:34.719Z"
+              },
+              "activity": "[activity-604251]"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-04T19:56:46.499Z",
+    "updatedAt": "2019-07-04T19:56:46.527Z",
+    "id": "853249"
+  }
 }

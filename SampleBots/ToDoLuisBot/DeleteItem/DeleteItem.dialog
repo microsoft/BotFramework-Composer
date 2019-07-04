@@ -19,12 +19,22 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "The list name must be shopping, grocery or todo."
+          "$designer": {
+            "createdAt": "2019-07-04T19:39:15.839Z",
+            "updatedAt": "2019-07-04T19:42:11.560Z",
+            "id": "878434"
+          },
+          "activity": "[activity-878434]"
         },
         {
           "$type": "Microsoft.EndDialog"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-04T19:39:57.709Z",
+        "updatedAt": "2019-07-04T19:39:57.728Z",
+        "id": "191097"
+      }
     },
     {
       "$type": "Microsoft.IfCondition",
