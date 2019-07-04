@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 import { merge } from 'lodash';
 
 import { Path } from '../../utility/path';
@@ -24,11 +26,19 @@ export class BotProject {
   public lgIndexer: LGIndexer;
   public luIndexer: LUIndexer;
   public luPublisher: LuPublisher;
+  public defaultSDKSchema: { [key: string]: string };
+  public defaultEditorSchema: { [key: string]: string };
+
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dir = Path.dirname(this.absolutePath);
     this.name = Path.basename(this.dir);
+
+    this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
+    this.defaultEditorSchema = JSON.parse(
+      fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
+    );
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -64,8 +74,31 @@ export class BotProject {
   };
 
   public getSchemas = () => {
+    let editorSchema = this.defaultEditorSchema;
+    let sdkSchema = this.defaultSDKSchema;
+
+    const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
+    const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
+
+    if (userEditorSchemaFile !== undefined) {
+      try {
+        editorSchema = JSON.parse(userEditorSchemaFile.content);
+      } catch {
+        throw new Error('Attempt to parse editor schema as JSON failed');
+      }
+    }
+
+    if (userSDKSchemaFile !== undefined) {
+      try {
+        sdkSchema = JSON.parse(userSDKSchemaFile.content);
+      } catch {
+        throw new Error('Attempt to parse sdk schema as JSON failed');
+      }
+    }
+
     return {
-      editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
+      editor: { content: editorSchema },
+      sdk: { content: sdkSchema },
     };
   };
 
@@ -305,24 +338,7 @@ export class BotProject {
         relativePath: Path.relative(this.dir, this.absolutePath),
       });
 
-      if (botConfig.schemas) {
-        if (botConfig.schemas.editor) {
-          const editorSchemaFile = await this.fileStorage.readFile(`${this.dir}/${botConfig.schemas.editor}`);
-          try {
-            const editorSchema = JSON.parse(editorSchemaFile);
-            fileList.push({
-              name: 'editorSchema',
-              content: editorSchema,
-              path: `${this.dir}/${botConfig.schemas.editor}`,
-              relativePath: botConfig.schemas.editor,
-            });
-          } catch {
-            throw new Error('Attempt to parse editor schema as JSON failed');
-          }
-        }
-      }
-
-      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
 
       for (const pattern of patterns) {
         const paths = await this.fileStorage.glob(pattern, this.dir);
