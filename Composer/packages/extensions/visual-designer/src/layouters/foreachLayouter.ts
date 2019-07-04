@@ -1,6 +1,7 @@
 import { Boundary } from '../shared/Boundary';
-import { calculateForeachBoundary } from './calculateNodeBoundary';
 import { ElementInterval } from '../shared/elementSizes';
+
+import { calculateForeachBoundary } from './calculateNodeBoundary';
 
 const ForeachIntervalY = ElementInterval.y / 2;
 

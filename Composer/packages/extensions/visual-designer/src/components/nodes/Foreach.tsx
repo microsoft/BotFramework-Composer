@@ -1,15 +1,17 @@
 import React, { useMemo, useEffect, useState, FunctionComponent } from 'react';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+
 import { transformForeach } from '../../transformers/transformForeach';
-import { GraphNode } from '../../shared/GraphNode';
 import { foreachLayouter } from '../../layouters/foreachLayouter';
 import { areBoundariesEqual } from '../../shared/Boundary';
-import { Edge } from '../shared/EdgeComponents';
+import { GraphNode } from '../../shared/GraphNode';
 import { OffsetContainer } from '../../shared/OffsetContainer';
+import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { Edge } from '../shared/EdgeComponents';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { StepGroup } from '../groups';
+
 import { DefaultRenderer } from './DefaultRenderer';
 import { LoopIndicator } from './templates/LoopIndicator';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
 const calculateNodeMap = (jsonpath, data) => {
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(data, jsonpath);
