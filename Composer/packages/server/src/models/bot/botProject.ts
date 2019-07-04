@@ -97,8 +97,8 @@ export class BotProject {
     }
 
     return {
-      editor: editorSchema,
-      sdk: sdkSchema,
+      editor: { content: editorSchema },
+      sdk: { content: sdkSchema },
     };
   };
 
