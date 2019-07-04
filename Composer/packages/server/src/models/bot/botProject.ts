@@ -347,13 +347,41 @@ export class BotProject {
   private _checkProjectStructure = async () => {
     const dialogs: Dialog[] = this.dialogIndexer.getDialogs();
     const luFiles: LUFile[] = this.luIndexer.getLuFiles();
-    // ensure each dialog got a lu file
+    const lgFiles: LGFile[] = this.lgIndexer.getLgFiles();
+
+    // ensure each dialog folder have a lu file, e.g.
+    /**
+     * + AddToDo (folder)
+     *   - AddToDo.dialog
+     *   - AddToDo.lu                     // if not exist, auto create it
+     */
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      const exist = luFiles.findIndex((luFile: { [key: string]: any }) => luFile.relativePath === targetLuFilePath);
+      const exist = luFiles.findIndex((luFile: LUFile) => luFile.relativePath === targetLuFilePath);
       if (exist === -1) {
         await this._createFile(targetLuFilePath, '');
+      }
+    }
+
+    // ensure dialog referred *.lg, *.lu exist, e.g
+    /**
+     * ## AddToDo.dialog (file)
+     * {
+     *    "generator": "ToDoLuisBot.lg",  // must exist
+     *    "recognizer": "foo.lu",         // must exist
+     * }
+     */
+    for (const dialog of dialogs) {
+      const { lgFile, luFile } = dialog;
+      const lgExist = lgFiles.findIndex((file: LGFile) => file.id === lgFile);
+      const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
+
+      if (lgFile && lgExist === -1) {
+        throw new Error(`${dialog.name}.dialog referred generator ${lgFile} not exist`);
+      }
+      if (luFile && luExist === -1) {
+        throw new Error(`${dialog.name}.dialog referred recognizer ${luFile} not exist`);
       }
     }
   };
