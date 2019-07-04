@@ -1,6 +1,6 @@
 import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
-import { ElementInterval, InitNodeSize, LoopEdgeMarginX } from '../shared/elementSizes';
+import { ElementInterval, InitNodeSize, LoopEdgeMarginLeft } from '../shared/elementSizes';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -27,10 +27,11 @@ export function calculateForeachBoundary(foreachNode?, stepsNode?, loopBeginNode
 
   if (!foreachNode || !stepsNode) return box;
 
-  box.axisX = Math.max(foreachNode.boundary.axisX, stepsNode.boundary.axisX);
+  box.axisX = Math.max(foreachNode.boundary.axisX, stepsNode.boundary.axisX) + LoopEdgeMarginLeft;
   box.width =
     box.axisX +
-    Math.max(foreachNode.boundary.width - box.axisX, stepsNode.boundary.width - box.axisX + LoopEdgeMarginX);
+    Math.max(foreachNode.boundary.width - box.axisX, stepsNode.boundary.width - box.axisX) +
+    LoopEdgeMarginLeft;
   box.height =
     InitNodeSize.height +
     BranchIntervalY +

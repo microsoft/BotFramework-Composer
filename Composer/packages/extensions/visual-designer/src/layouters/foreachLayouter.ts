@@ -5,7 +5,7 @@ import { calculateForeachBoundary } from './calculateNodeBoundary';
 
 const ForeachIntervalY = ElementInterval.y / 2;
 
-export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNode) => {
+export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNode): any => {
   if (!foreachNode || !stepsNode) return { boundary: new Boundary() };
 
   const containerBoundary = calculateForeachBoundary(foreachNode, stepsNode, loopBeginNode, loopEndNode);
@@ -44,11 +44,11 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
 
   [loopBeginNode, loopEndNode].forEach((node, index) => {
     edges.push({
-      id: `edge/${node.id}/loopIndicator[${index}]->right`,
+      id: `edge/${node.id}/loopIndicator[${index}]->left`,
       direction: 'x',
-      x: node.offset.x + node.boundary.width,
+      x: 0,
       y: node.offset.y + node.boundary.axisY,
-      length: containerBoundary.width - containerBoundary.axisX - (node.boundary.width - node.boundary.axisX),
+      length: containerBoundary.axisX - node.boundary.axisX,
       dashed: true,
     });
   });
@@ -56,7 +56,7 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
   edges.push({
     id: `edge/${foreachNode.id}/loopback-vertical`,
     direction: 'y',
-    x: containerBoundary.width,
+    x: 0,
     y: loopBeginNode.offset.y + loopBeginNode.boundary.axisY,
     length: loopEndNode.offset.y + loopEndNode.boundary.axisY - (loopBeginNode.offset.y + loopBeginNode.boundary.axisY),
     dashed: true,

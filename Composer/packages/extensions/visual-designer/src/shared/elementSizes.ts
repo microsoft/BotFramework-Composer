@@ -13,7 +13,7 @@ export const LoopIconSize = {
   height: 24,
 };
 
-export const LoopEdgeMarginX = 60;
+export const LoopEdgeMarginLeft = 20;
 
 export const EventNodeSize = {
   width: 180,
