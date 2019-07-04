@@ -27,6 +27,7 @@ export class BotProject {
   public luIndexer: LUIndexer;
   public luPublisher: LuPublisher;
   public defaultSDKSchema: { [key: string]: string };
+  public defaultEditorSchema: { [key: string]: string };
 
   constructor(ref: LocationRef) {
     this.ref = ref;
@@ -35,6 +36,9 @@ export class BotProject {
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
+    this.defaultEditorSchema = JSON.parse(
+      fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
+    );
 
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -71,11 +75,8 @@ export class BotProject {
 
   public getSchemas = () => {
     return {
-      editor: this.files[1] && this.files[1].name === 'editorSchema' ? this.files[1] : undefined,
-      sdk: {
-        name: 'sdkSchema',
-        content: this.defaultSDKSchema,
-      },
+      editor: this.defaultEditorSchema,
+      sdk: this.defaultSDKSchema,
     };
   };
 
