@@ -46,8 +46,10 @@ export class DialogIndexer {
           const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
           let result;
           while ((result = reg.exec(target)) !== null) {
-            const name = result[1];
-            templates.push(name);
+            const templateName = result[1];
+            if (templates.indexOf(templateName) === -1) {
+              templates.push(templateName);
+            }
           }
         }
       }
@@ -73,7 +75,10 @@ export class DialogIndexer {
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
       if (typeof value === 'object' && value.hasOwnProperty('$type') && value.$type === 'Microsoft.IntentRule') {
-        intents.push(value.intent);
+        const intentName = value.intent;
+        if (intents.indexOf(intentName) === -1) {
+          intents.push(intentName);
+        }
       }
       return false;
     };
