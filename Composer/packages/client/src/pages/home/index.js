@@ -5,6 +5,7 @@ import { jsx } from '@emotion/core';
 import { IconButton, Link } from 'office-ui-fabric-react/lib';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import formatMessage from 'format-message';
+import { navigate } from '@reach/router';
 
 import { Store } from '../../store/index';
 import { CreationFlowStatus } from '../../constants';
@@ -43,12 +44,12 @@ const linksRight = [
 
 export const Home = () => {
   const { state, actions } = useContext(Store);
-  const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId } = actions;
+  const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
   const [templates, setTemplates] = useState([]);
   const onClickRecentBotProject = async (storageId, path) => {
     await openBotProject(path);
-    actions.fetchRecentProjects();
+    navigate('/');
   };
 
   const onClickNewBotProject = async () => {
@@ -65,7 +66,7 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    actions.fetchRecentProjects();
+    fetchRecentProjects();
     fetchTemplatesAction();
   }, []);
 
@@ -84,89 +85,87 @@ export const Home = () => {
   }, [state.recentProjects]);
   return (
     <div css={home.outline}>
-      <div css={home.content}>
-        <div css={home.title}>&quot;Are you real?&quot;</div>
-        <div css={home.introduction}>
-          <div css={home.introTitle}>
-            <div css={home.introTitleLeft}> Creating real conversations for real people. </div>
-            <div css={home.linkLeft}>
-              {linksLeft.map((link, index) => {
-                return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index} target={'_blank'}>
-                    <div css={link.css}>{link.text}</div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-          <div css={home.introTitle}>
-            <div css={home.introTitleRight}> Product Video </div>
-            <div css={home.linkRight}>
-              {linksRight.map((link, index) => {
-                return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index} target={'_blank'}>
-                    <div css={link.css}>{link.text}</div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div css={home.botArea}>
-          <div css={home.botTitle}>Start from scratch, or pick up where you left off... </div>
-          <div css={home.botContainer}>
-            <div css={home.botContent}>
-              <div
-                css={home.action}
-                onClick={() => {
-                  onClickNewBotProject();
-                }}
-              >
-                <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />
-              </div>
-              <div css={home.actionName}> {formatMessage('New')} </div>
-            </div>
-            {bots.map((bot, index) => {
-              if (index >= botNumLimit) return null;
+      <div css={home.title}>&quot;Are you real?&quot;</div>
+      <div css={home.introduction}>
+        <div css={home.introTitle}>
+          <div css={home.introTitleLeft}> Creating real conversations for real people. </div>
+          <div css={home.linkLeft}>
+            {linksLeft.map((link, index) => {
               return (
-                <div css={home.botContent} key={'homePageBot-' + bot.path}>
-                  <div
-                    css={home.action}
-                    onClick={() => {
-                      onClickRecentBotProject(bot.storageId, bot.path);
-                    }}
-                  >
-                    <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />
-                  </div>
-                  <div css={home.actionName}> {bot.actionName} </div>
-                </div>
+                <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index} target={'_blank'}>
+                  <div css={link.css}>{link.text}</div>
+                </Link>
               );
             })}
           </div>
         </div>
-        <div css={home.templateArea}>
-          <div css={home.templateTitle}> Or start with a conversation template </div>
-          <div css={home.templateContainer}>
-            {templates.map((template, index) => {
+        <div css={home.introTitle}>
+          <div css={home.introTitleRight}> Product Video </div>
+          <div css={home.linkRight}>
+            {linksRight.map((link, index) => {
               return (
+                <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index} target={'_blank'}>
+                  <div css={link.css}>{link.text}</div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div css={home.botArea}>
+        <div css={home.botTitle}>Start from scratch, or pick up where you left off... </div>
+        <div css={home.botContainer}>
+          <div css={home.botContent}>
+            <div
+              css={home.action}
+              onClick={() => {
+                onClickNewBotProject();
+              }}
+            >
+              <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />
+            </div>
+            <div css={home.actionName}> {formatMessage('New')} </div>
+          </div>
+          {bots.map((bot, index) => {
+            if (index >= botNumLimit) return null;
+            return (
+              <div css={home.botContent} key={'homePageBot-' + bot.path}>
                 <div
-                  css={home.templateContent}
-                  key={'homePageTemplate-' + index}
+                  css={home.action}
                   onClick={() => {
-                    onClickTemplate(template.Id);
+                    onClickRecentBotProject(bot.storageId, bot.path);
                   }}
                 >
-                  <div css={home.templateText}>{template.name}</div>
+                  <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />
                 </div>
-              );
-            })}
-          </div>
+                <div css={home.actionName}> {bot.actionName} </div>
+              </div>
+            );
+          })}
         </div>
-        <div css={home.footerContainer}>
-          <Link css={home.footer} href="/home">
-            Learn More
-          </Link>
+      </div>
+      <div css={home.templateArea}>
+        <div css={home.templateTitle}> Or start with a conversation template </div>
+        <div css={home.templateContainer}>
+          {templates.map((template, index) => {
+            return (
+              <div
+                css={home.templateContent}
+                key={'homePageTemplate-' + index}
+                onClick={() => {
+                  onClickTemplate(template.Id);
+                }}
+              >
+                <div css={home.templateText}>{template.name}</div>
+              </div>
+            );
+          })}
         </div>
+      </div>
+      <div css={home.footerContainer}>
+        <Link css={home.footer} href="/home">
+          Learn More
+        </Link>
       </div>
     </div>
   );
