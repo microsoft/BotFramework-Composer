@@ -1,0 +1,37 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-05T03:55:29.396Z",
+    "updatedAt": "2019-07-05T03:55:29.400Z",
+    "id": "758305",
+    "name": "CafeBotD"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "createdAt": "2019-07-05T03:55:53.833Z",
+        "updatedAt": "2019-07-05T04:01:33.403Z",
+        "id": "527976"
+      },
+      "constraint": "",
+      "events": [
+        "activityReceived"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-05T03:56:39.725Z",
+        "updatedAt": "2019-07-05T04:01:42.015Z",
+        "id": "865277"
+      },
+      "activity": "You said {turn.activity.text}"
+    }
+  ]
+}
