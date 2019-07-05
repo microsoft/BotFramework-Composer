@@ -8,7 +8,7 @@ import StorageService from '../../services/storage';
 
 import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, BotProjectFileContent, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -18,7 +18,6 @@ export class BotProject {
   public ref: LocationRef;
 
   public name: string;
-  public absolutePath: string;
   public dir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
@@ -31,8 +30,7 @@ export class BotProject {
 
   constructor(ref: LocationRef) {
     this.ref = ref;
-    this.absolutePath = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
-    this.dir = Path.dirname(this.absolutePath);
+    this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
@@ -242,8 +240,8 @@ export class BotProject {
     return new BotProject(newProjRef);
   };
 
-  public exists(): Promise<boolean> {
-    return this.fileStorage.exists(this.absolutePath);
+  public async exists(): Promise<boolean> {
+    return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
   // create file in this project
@@ -324,41 +322,29 @@ export class BotProject {
   };
 
   private _getFiles = async () => {
+    if (!(await this.exists())) {
+      throw new Error(`${this.dir} is not a valid path`);
+    }
+
     const fileList: FileInfo[] = [];
-    // get .bot file
-    const botFileContent = await this.fileStorage.readFile(this.absolutePath);
-    // get 'files' from .bot file
-    const botConfig: BotProjectFileContent = JSON.parse(botFileContent);
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
+    for (const pattern of patterns) {
+      const paths = await this.fileStorage.glob(pattern, this.dir);
 
-    if (botConfig !== undefined) {
-      fileList.push({
-        name: Path.basename(this.absolutePath),
-        content: botConfig,
-        path: this.absolutePath,
-        relativePath: Path.relative(this.dir, this.absolutePath),
-      });
-
-      const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
-
-      for (const pattern of patterns) {
-        const paths = await this.fileStorage.glob(pattern, this.dir);
-
-        for (const filePath of paths.sort()) {
-          const realFilePath: string = Path.join(this.dir, filePath);
-          // skip lg files for now
-          if ((await this.fileStorage.stat(realFilePath)).isFile) {
-            const content: string = await this.fileStorage.readFile(realFilePath);
-            fileList.push({
-              name: Path.basename(filePath),
-              content: content,
-              path: realFilePath,
-              relativePath: Path.relative(this.dir, realFilePath),
-            });
-          }
+      for (const filePath of paths.sort()) {
+        const realFilePath: string = Path.join(this.dir, filePath);
+        // skip lg files for now
+        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+          const content: string = await this.fileStorage.readFile(realFilePath);
+          fileList.push({
+            name: Path.basename(filePath),
+            content: content,
+            path: realFilePath,
+            relativePath: Path.relative(this.dir, realFilePath),
+          });
         }
       }
     }
-
     return fileList;
   };
 
