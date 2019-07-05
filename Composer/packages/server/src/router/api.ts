@@ -15,14 +15,14 @@ router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog)
 router.post('/projects/opened/dialogs', ProjectController.createDialog);
 router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
 router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFile);
-router.post('/projects/opened/lgFiles', ErrorHandler(ProjectController.createLgFile));
-router.put('/projects/opened/luFiles/:luFileId', ErrorHandler(ProjectController.updateLuFile));
-router.delete('/projects/opened/luFiles/:luFileId', ErrorHandler(ProjectController.removeLuFile));
-router.post('/projects/opened/luFiles', ErrorHandler(ProjectController.createLuFile));
-router.post('/projects/opened/luFiles/publish', ErrorHandler(ProjectController.publishLuis));
-router.put('/projects/opened/botFile', ErrorHandler(ProjectController.updateBotFile));
-router.post('/projects/opened/project/saveAs', ErrorHandler(ProjectController.saveProjectAs));
-router.get('/projects/recent', ErrorHandler(ProjectController.getRecentProjects));
+router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
+router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
+router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
+router.post('/projects/opened/luFiles', ProjectController.createLuFile);
+router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
+router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
+router.get('/projects/recent', ProjectController.getRecentProjects);
+
 // storages
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
