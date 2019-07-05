@@ -1,12 +1,9 @@
 import fs from 'fs';
 
-import { merge } from 'lodash';
-
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
-import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
@@ -121,22 +118,8 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, description: string = '', dir: string = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    const content =
-      JSON.stringify(
-        merge(
-          {
-            $designer: {
-              name: id,
-              description: description,
-            },
-          },
-          DIALOG_TEMPLATE
-        ),
-        null,
-        2
-      ) + '\n';
 
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
