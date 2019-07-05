@@ -221,18 +221,7 @@ export class BotProject {
 
     await copyDir(this.dir, this.fileStorage, dstDir, dstStorage);
 
-    // return new proj ref
-    const dstBotProj = await dstStorage.glob('**/*.botproj', locationRef.path);
-    if (dstBotProj && dstBotProj.length === 1) {
-      return {
-        storageId: locationRef.storageId,
-        path: Path.join(locationRef.path, dstBotProj[0]),
-      };
-    } else if (dstBotProj && dstBotProj.length > 1) {
-      throw new Error('new bot porject have more than one botproj file');
-    } else {
-      throw new Error('new bot porject have no botproj file');
-    }
+    return locationRef;
   };
 
   public copyTo = async (locationRef: LocationRef) => {

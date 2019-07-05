@@ -54,22 +54,13 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
-  //find *.botproj
-  const storage = StorageService.getStorageClient(req.body.storageId);
-  const botprojPaths = await storage.glob('**/*.botproj', req.body.path);
-
-  if (botprojPaths.length !== 1) {
-    res.status(400).json('unsupported project file type, expect .botproj');
-    return;
-  }
-
-  const locationRef: LocationRef = {
+  const location: LocationRef = {
     storageId: req.body.storageId,
-    path: Path.join(req.body.path, botprojPaths[0]),
+    path: req.body.path,
   };
 
   try {
-    await ProjectService.openProject(locationRef);
+    await ProjectService.openProject(location);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({
