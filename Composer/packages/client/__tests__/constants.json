@@ -1,8 +1,7 @@
 {
     "dialogs": [
         {
-            "id": 0,
-            "name": "Main",
+            "id": "Main",
             "displayName": "ToDoBot",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -124,8 +123,7 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ToDoBot.main.dialog"
         },
         {
-            "id": 1,
-            "name": "AddToDo",
+            "id": "AddToDo",
             "displayName": "AddToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -231,8 +229,7 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/AddToDo.dialog"
         },
         {
-            "id": 2,
-            "name": "ClearToDos",
+            "id": "ClearToDos",
             "displayName": "ClearToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -274,8 +271,7 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ClearToDos.dialog"
         },
         {
-            "id": 3,
-            "name": "DeleteToDo",
+            "id": "DeleteToDo",
             "displayName": "DeleteToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -332,8 +328,7 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/DeleteToDo.dialog"
         },
         {
-            "id": 4,
-            "name": "ShowToDos",
+            "id": "ShowToDos",
             "displayName": "ShowToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
