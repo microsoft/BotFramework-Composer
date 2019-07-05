@@ -12,7 +12,7 @@ const botDir = '../../mocks/samplebots/bot1';
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}/1.botproj`),
+  path: Path.join(__dirname, `${botDir}`),
 };
 
 const proj = new BotProject(mockLocationRef);
@@ -46,23 +46,12 @@ describe('updateDialog', () => {
   });
 });
 
-describe('updateBotFile', () => {
-  it('should update a file at a path', async () => {
-    const initValue = { services: [], entry: 'main.dialog' };
-    const newValue = { services: ['test'], entry: 'main.dialog' };
-    const botFile = await proj.updateBotFile('1', newValue);
-    // @ts-ignore
-    expect(botFile.content).toEqual(newValue);
-    await proj.updateBotFile('1', initValue);
-  });
-});
-
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir} / ${dialogName}.dialog`));
     } catch (err) {
       // ignore
     }
@@ -134,7 +123,7 @@ describe('modify non exist files', () => {
 describe('lg operation', () => {
   afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
     } catch (err) {
       // ignore
     }
@@ -188,7 +177,7 @@ describe('lg operation', () => {
 describe('lu operation', () => {
   afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
     } catch (err) {
       // ignore
     }

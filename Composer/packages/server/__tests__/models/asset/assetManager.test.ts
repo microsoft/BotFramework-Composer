@@ -6,7 +6,7 @@ jest.mock('azure-storage', () => {
   return {};
 });
 const mockAssetLibraryPath = Path.join(__dirname, '../../mocks/asset');
-const mockCopyToPath = Path.join(__dirname, '../../mocks/new/1.botproj');
+const mockCopyToPath = Path.join(__dirname, '../../mocks/new');
 const locationRef = {
   storageId: 'default',
   path: mockCopyToPath,
