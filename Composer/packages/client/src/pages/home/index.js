@@ -163,7 +163,7 @@ export const Home = () => {
         </div>
       </div>
       <div css={home.footerContainer}>
-        <Link css={home.footer} href="/home">
+        <Link css={home.footer} href="/home" target={'_blank'}>
           Learn More
         </Link>
       </div>
