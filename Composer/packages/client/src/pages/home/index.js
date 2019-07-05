@@ -84,14 +84,14 @@ export const Home = () => {
   }, [state.recentProjects]);
   return (
     <div css={home.outline}>
-      <div css={home.title}>&quot;Are you real?&quot;</div>
+      <div css={home.title}>{formatMessage(`"Are you real?"`)}</div>
       <div css={home.introduction}>
         <div css={home.introTitle}>
-          <div css={home.introTitleLeft}> Creating real conversations for real people. </div>
+          <div css={home.introTitleLeft}> {formatMessage(`Creating real conversations for real people.`)} </div>
           <div css={home.linkLeft}>
-            {linksLeft.map((link, index) => {
+            {linksLeft.map(link => {
               return (
-                <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index} target={'_blank'}>
+                <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + link.text} target={'_blank'}>
                   <div css={link.css}>{link.text}</div>
                 </Link>
               );
@@ -99,11 +99,11 @@ export const Home = () => {
           </div>
         </div>
         <div css={home.introTitle}>
-          <div css={home.introTitleRight}> Product Video </div>
+          <div css={home.introTitleRight}> {formatMessage(`Product Video`)} </div>
           <div css={home.linkRight}>
-            {linksRight.map((link, index) => {
+            {linksRight.map(link => {
               return (
-                <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index} target={'_blank'}>
+                <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + link.text} target={'_blank'}>
                   <div css={link.css}>{link.text}</div>
                 </Link>
               );
@@ -112,7 +112,7 @@ export const Home = () => {
         </div>
       </div>
       <div css={home.botArea}>
-        <div css={home.botTitle}>Start from scratch, or pick up where you left off... </div>
+        <div css={home.botTitle}>{formatMessage(`Start from scratch, or pick up where you left off...`)} </div>
         <div css={home.botContainer}>
           <div css={home.botContent}>
             <div
@@ -144,13 +144,13 @@ export const Home = () => {
         </div>
       </div>
       <div css={home.templateArea}>
-        <div css={home.templateTitle}> Or start with a conversation template </div>
+        <div css={home.templateTitle}>{formatMessage(`Or start with a conversation template`)} </div>
         <div css={home.templateContainer}>
-          {templates.map((template, index) => {
+          {templates.map(template => {
             return (
               <div
                 css={home.templateContent}
-                key={'homePageTemplate-' + index}
+                key={'homePageTemplate-' + template.Id}
                 onClick={() => {
                   onClickTemplate(template.Id);
                 }}
@@ -163,7 +163,7 @@ export const Home = () => {
       </div>
       <div css={home.footerContainer}>
         <Link css={home.footer} href="/home" target={'_blank'}>
-          Learn More
+          {formatMessage(`Learn More`)}
         </Link>
       </div>
     </div>
