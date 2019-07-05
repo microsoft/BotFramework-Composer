@@ -10,7 +10,6 @@ export const outline = css`
 `;
 
 export const content = css`
-  min-width: 1300px;
   height: 100%;
 `;
 
@@ -47,7 +46,7 @@ export const part3 = css`
 `;
 
 export const part1Text = css`
-  width: 50%;
+  width: 60%;
   height: 100%;
   font-size: 24px;
 `;
