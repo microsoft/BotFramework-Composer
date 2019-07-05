@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 /** @jsx jsx */
+
 import { jsx } from '@emotion/core';
 import { IconButton, Link } from 'office-ui-fabric-react/lib';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -87,9 +89,6 @@ export const Home = () => {
         <div css={home.introduction}>
           <div css={home.introTitle}>
             <div css={home.introTitleLeft}> Creating real conversations for real people. </div>
-            <div css={home.introTitleRight}> Product Video </div>
-          </div>
-          <div css={home.linkContainer}>
             <div css={home.linkLeft}>
               {linksLeft.map((link, index) => {
                 return (
@@ -99,6 +98,9 @@ export const Home = () => {
                 );
               })}
             </div>
+          </div>
+          <div css={home.introTitle}>
+            <div css={home.introTitleRight}> Product Video </div>
             <div css={home.linkRight}>
               {linksRight.map((link, index) => {
                 return (
@@ -125,9 +127,9 @@ export const Home = () => {
               <div css={home.actionName}> {formatMessage('New')} </div>
             </div>
             {bots.map((bot, index) => {
-              if (index > botNumLimit) return null;
+              if (index >= botNumLimit) return null;
               return (
-                <div css={home.botContent} key={'homePageBot-' + bot.Id}>
+                <div css={home.botContent} key={'homePageBot-' + bot.path}>
                   <div
                     css={home.action}
                     onClick={() => {
@@ -160,10 +162,11 @@ export const Home = () => {
             })}
           </div>
         </div>
-
-        <Link href="/home" css={home.footer}>
-          Learn More
-        </Link>
+        <div css={home.footerContainer}>
+          <Link css={home.footer} href="/home">
+            Learn More
+          </Link>
+        </div>
       </div>
     </div>
   );

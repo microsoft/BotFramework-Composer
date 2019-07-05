@@ -10,7 +10,7 @@ export const outline = css`
 `;
 
 export const content = css`
-  min-width: 1300px;
+  min-width: 900px;
 `;
 
 export const title = css`
@@ -23,33 +23,36 @@ export const title = css`
 
 export const introduction = css`
   display: flex;
-  flex-direction: column;
-  height: 169px;
+  flex-wrap: wrap;
+  height: auto;
+  width: auto;
+  max-width: 2000px;
 `;
 
 export const introTitle = css`
   display: flex;
-  height: 37px;
-  width: 100%;
+  flex-direction: column;
   color: #0078d4;
-  margin-left: 33px;
-  margin-top: 26px;
+  width: 50%;
+  min-width: 700px;
 `;
 
 export const introTitleLeft = css`
   display: block;
   height: 37px;
-  width: 60%;
   font-size: 24px;
   line-height: 32px;
+  margin-left: 33px;
+  margin-top: 26px;
 `;
 
 export const introTitleRight = css`
   display: block;
   height: 37px;
-  width: 40%;
   font-size: 24px;
   line-height: 32px;
+  margin-left: 33px;
+  margin-top: 26px;
 `;
 
 export const introLink = css`
@@ -77,12 +80,12 @@ export const linkInfo = css`
 `;
 
 export const linkLeft = css`
-  width: 60%;
+  width: 100%;
   color: #000000;
 `;
 
 export const linkRight = css`
-  width: 40%;
+  width: 100%;
   color: #000000;
 `;
 
@@ -95,7 +98,6 @@ export const moreOptions = css`
 
 export const botArea = css`
   display: block;
-  height: 236px;
   margin-top: 8px;
 `;
 
@@ -108,16 +110,14 @@ export const botTitle = css`
 
 export const botContainer = css`
   display: flex;
+  flex-wrap: wrap;
   line-height: 32px;
   margin-left: 33px;
   margin-right: 33px;
   margin-top: 24px;
-  height: 156px;
 `;
 
 export const botContent = css`
-  height: 156px;
-  width: 200px;
   margin-right: 40px;
 `;
 
@@ -136,7 +136,6 @@ export const actionName = css`
 
 export const templateArea = css`
   display: block;
-  height: 365px;
   margin-top: 8px;
 `;
 
@@ -153,7 +152,6 @@ export const templateContainer = css`
   margin-left: 33px;
   margin-right: 33px;
   margin-top: 24px;
-  height: 272px;
 `;
 
 export const templateContent = css`
@@ -174,10 +172,14 @@ export const templateText = css`
   left: 70px;
 `;
 
+export const footerContainer = css`
+  margin-left: 33px;
+  margin-top: 30px;
+`;
+
 export const footer = css`
   font-size: 18px;
   color: #000000;
-  margin-left: 33px;
   text-decoration: underline;
 `;
 
