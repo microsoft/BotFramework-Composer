@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useState, useMemo } from 'react';
+import { Fragment, useContext, useState, useMemo, useEffect } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { globalHistory } from '@reach/router/lib/history';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
@@ -56,9 +57,14 @@ function getAllRef(targetId, dialogs) {
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPath, navPathHistory } = state;
+  const { dialogs, navPathHistory } = state;
   const { clearNavHistory, navTo, removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
+  const { match, location } = props;
+
+  useEffect(() => {
+    globalHistory._onTransitionComplete();
+  }, [location]);
 
   function handleFileClick(id) {
     clearNavHistory();
@@ -121,10 +127,7 @@ function DesignPage(props) {
     });
   }, [clearNavHistory, dialogs, navPathHistory, navTo]);
 
-  const activeDialog = useMemo(() => {
-    if (!navPath) return '';
-    return navPath.split('#')[0];
-  }, [navPath]);
+  const activeDialog = match ? match.dialogId : '';
 
   async function onSubmit(data) {
     const content = {
@@ -139,7 +142,10 @@ function DesignPage(props) {
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
-    let setting = { confirmBtnText: formatMessage('Yes'), cancelBtnText: formatMessage('Cancel') };
+    let setting = {
+      confirmBtnText: formatMessage('Yes'),
+      cancelBtnText: formatMessage('Cancel'),
+    };
     let title = '';
     let subTitle = '';
     if (refs.length > 0) {

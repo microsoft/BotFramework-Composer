@@ -15,13 +15,13 @@ const Routes = props => {
   const Content = props.component;
   const parentProps = props;
   return (
-    <Match path="/" {...props}>
-      {props => (
+    <Match path="/dialogs/:dialogId" {...props}>
+      {({ match, location }) => (
         <div css={data}>
-          <Content css={showDesign(props.match)}>
-            <DesignPage {...props} />
+          <Content css={showDesign(match)}>
+            <DesignPage match={match} location={location} />
           </Content>
-          {!props.match && (
+          {!match && (
             <Router {...parentProps}>
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />

@@ -5,6 +5,7 @@ import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { globalHistory } from '@reach/router';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
@@ -12,6 +13,7 @@ import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { CreationFlow } from './CreationFlow/index';
+import { NavigationOrigin } from './constants';
 
 initializeIcons(/* optional base url */);
 
@@ -27,7 +29,7 @@ const topLinks = [
     exact: true,
   },
   {
-    to: '/',
+    to: '/dialogs/Main',
     iconName: 'SplitObject',
     labelName: 'Design Flow',
     activeIfUrlContains: '',
@@ -94,10 +96,18 @@ export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
+  const { fetchProject, setCreationFlowStatus, navTo, focusTo, setNavPathHistory } = actions;
 
   useEffect(() => {
     fetchProject();
+    return globalHistory.listen(({ location, action }) => {
+      if (action === 'POP' && location.state && location.state.navPath) {
+        const { navPath, focusPath, navPathHistory } = location.state;
+        navTo(navPath, NavigationOrigin.HISTORY);
+        focusTo(focusPath, NavigationOrigin.HISTORY);
+        setNavPathHistory(navPathHistory);
+      }
+    });
   }, []);
 
   return (

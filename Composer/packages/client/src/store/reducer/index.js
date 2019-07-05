@@ -1,6 +1,8 @@
+import { navigate } from '@reach/router';
+
 import createReducer from './createReducer';
 import { getExtension } from './../../utils';
-import { ActionTypes, FileTypes } from './../../constants/index';
+import { ActionTypes, FileTypes, NavigationOrigin } from './../../constants/index';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -79,16 +81,27 @@ const setStorageFileFetchingStatus = (state, { status }) => {
   return state;
 };
 
-const navigateTo = (state, { path }) => {
+const saveHistory = (navPath, focusPath, navPathHistory) => {
+  const dialogId = navPath.split('#')[0];
+  navigate(`/dialogs/${dialogId}`, { state: { navPath, focusPath, navPathHistory: navPathHistory.map(item => item) } });
+};
+
+const navigateTo = (state, { path, origin }) => {
   if (state.navPath !== path) {
     state.navPath = path;
     state.focusPath = state.navPath; // fire up form editor on non-leaf node
 
-    state.navPathHistory.push(path);
+    if (origin === NavigationOrigin.COMPOSER) {
+      state.navPathHistory.push(path);
+    }
   }
 
   if (state.focusPath !== path) {
     state.focusPath = path;
+  }
+
+  if (origin === NavigationOrigin.COMPOSER) {
+    saveHistory(state.navPath, state.focusPath, state.navPathHistory);
   }
   return state;
 };
@@ -96,13 +109,23 @@ const navigateTo = (state, { path }) => {
 const navigateDown = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
   state.focusPath = state.navPath; // fire up form editor on non-leaf node
-  state.navPathHistory.push(state.navPath);
+  if (origin === NavigationOrigin.COMPOSER) {
+    state.navPathHistory.push(state.navPath);
+    saveHistory(state.navPath, state.focusPath, state.navPathHistory);
+  }
   return state;
 };
 
 const focusTo = (state, { path }) => {
   state.focusPath = path;
+  if (origin === NavigationOrigin.COMPOSER) {
+    saveHistory(state.navPath, state.focusPath, state.navPathHistory);
+  }
   return state.focusPath;
+};
+
+const setNavPathHistory = (state, { navPathHistory }) => {
+  return (state.navPathHistory = navPathHistory);
 };
 
 const clearNavHistory = (state, { fromIndex }) => {
@@ -157,6 +180,7 @@ export const reducer = createReducer({
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,
+  [ActionTypes.SET_NAV_PATH_HISTORY]: setNavPathHistory,
   [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,

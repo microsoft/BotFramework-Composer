@@ -70,6 +70,7 @@ export const ActionTypes = {
   NAVIGATE_TO: 'NAVIGATE_TO',
   NAVIGATE_DOWN: 'NAVIGATE_DOWN',
   FOCUS_TO: 'FOCUS_TO',
+  SET_NAV_PATH_HISTORY: 'SET_NAV_PATH_HISTORY',
   CLEAR_NAV_HISTORY: 'CLEAR_NAV_HISTORY',
   CONNECT_BOT_SUCCESS: 'CONNECT_BOT_SUCCESS',
   CONNECT_BOT_FAILURE: 'CONNECT_BOT_FAILURE',
@@ -158,6 +159,11 @@ export const DialogDeleting = {
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
   ),
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+};
+
+export const NavigationOrigin = {
+  COMPOSER: 'composer',
+  HISTORY: 'history',
 };
 
 export const SupportedFileTypes = [
