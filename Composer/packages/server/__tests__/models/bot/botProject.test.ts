@@ -51,9 +51,9 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir} / ${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 
