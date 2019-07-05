@@ -10,7 +10,7 @@ import { DialogGroup } from '../../shared/appschema';
 import { FormCard } from './templates/FormCard';
 
 const isAnonymousTemplateReference = activity => {
-  return activity.indexOf('activity-') !== -1;
+  return activity.indexOf('bfdactivity-') !== -1;
 };
 
 export const ActivityRenderer: React.FC<NodeProps> = props => {

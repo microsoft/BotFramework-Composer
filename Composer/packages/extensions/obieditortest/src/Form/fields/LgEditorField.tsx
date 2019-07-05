@@ -14,7 +14,7 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
 
 export function LgEditorField(props: FieldProps) {
   const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
-  const lgId = `activity-${props.formContext.getDialogId()}`;
+  const lgId = `bfdactivity-${props.formContext.getDialogId()}`;
 
   const hasExistingTemplate = async () => {
     const templates = await props.formContext.shellApi.getLgTemplates('common');

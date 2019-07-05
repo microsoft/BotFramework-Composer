@@ -1,7 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "generator": "ToDoLuisBot.lg",
+  "generator": "common.lg",
   "steps": [
     {
       "$type": "Microsoft.SetProperty",
@@ -10,7 +9,7 @@
     },
     {
       "$type": "Microsoft.SetProperty",
-      "value": "@ListType[0]",
+      "value": "@ListType",
       "property": "dialog.listName"
     },
     {
@@ -19,19 +18,10 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "id": "326398",
-            "updatedAt": "2019-07-04T19:45:08.506Z"
-          },
-          "activity": "[activity-326398]"
+          "activity": "The list name must be shopping, grocery or todo."
         },
         {
-          "$type": "Microsoft.EndDialog",
-          "$designer": {
-            "createdAt": "2019-07-01T22:06:45.586Z",
-            "updatedAt": "2019-07-01T22:06:45.591Z",
-            "id": "476989"
-          }
+          "$type": "Microsoft.EndDialog"
         }
       ]
     },
@@ -56,37 +46,20 @@
           "choices": [
             {
               "value": "shopping",
-              "synonyms": [
-                "1",
-                "first",
-                "shopping",
-                "first one"
-              ]
+              "synonyms": ["1", "first", "shopping", "first one"]
             },
             {
               "value": "grocery",
-              "synonyms": [
-                "2",
-                "second",
-                "grocery",
-                "second one"
-              ]
+              "synonyms": ["2", "second", "grocery", "second one"]
             },
             {
               "value": "todo",
-              "synonyms": [
-                "3",
-                "third",
-                "todo",
-                "third one",
-                "to do"
-              ]
+              "synonyms": ["3", "third", "todo", "third one", "to do"]
             }
           ],
           "prompt": "Which list do you want to expand?",
           "style": "SuggestedAction",
-          "alwaysPrompt": true,
-          "allowInterruptions": false
+          "alwaysPrompt": true
         }
       ]
     },
@@ -116,27 +89,11 @@
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.lists.{dialog.listName}",
-      "value": "dialog.item",
-      "$designer": {
-        "createdAt": "2019-07-01T22:07:07.923Z",
-        "updatedAt": "2019-07-01T22:07:07.932Z",
-        "id": "548680"
-      }
+      "value": "dialog.item"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:07:07.106Z",
-        "updatedAt": "2019-07-01T22:07:08.413Z",
-        "id": "398112"
-      },
-      "activity": "[activity-398112]"
+      "activity": "Successfully added {dialog.item} to {dialog.listName} list."
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T22:06:24.828Z",
-    "updatedAt": "2019-07-01T22:06:24.873Z",
-    "id": "117784"
-  }
+  ]
 }

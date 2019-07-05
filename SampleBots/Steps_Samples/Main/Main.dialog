@@ -24,9 +24,7 @@
     {
       "$type": "Microsoft.IntentRule",
       "intent": "Steps",
-      "steps": [
-        "Steps"
-      ]
+      "steps": ["Steps"]
     },
     {
       "$type": "Microsoft.IntentRule",
@@ -169,8 +167,8 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-01T21:30:36.210Z",
-    "updatedAt": "2019-07-01T21:30:36.340Z",
-    "id": "690663"
+    "createdAt": "2019-07-03T06:28:10.677Z",
+    "updatedAt": "2019-07-03T06:28:11.165Z",
+    "id": "892616"
   }
 }

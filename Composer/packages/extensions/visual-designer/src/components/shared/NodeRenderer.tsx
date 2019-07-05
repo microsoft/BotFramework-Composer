@@ -13,6 +13,7 @@ import {
   IfCondition,
   SwitchCondition,
   ActivityRenderer,
+  Foreach,
 } from '../nodes/index';
 
 // eslint-disable-next-line no-unused-vars
@@ -31,6 +32,9 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
+  [ObiTypes.Foreach]: Foreach,
+  [ObiTypes.ForeachPage]: Foreach,
+  [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

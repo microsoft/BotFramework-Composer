@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 import React, { ReactNode } from 'react';
 
-type Props = {
-  offset?: { [key: string]: number };
+interface OffsetContainerProps {
+  offset: { x: number; y: number };
   children: ReactNode;
   styles: object;
-};
+}
 
-export class OffsetContainer extends React.Component<Props, object> {
+export class OffsetContainer extends React.Component<OffsetContainerProps, object> {
   static defaultProps = {
     styles: {},
   };

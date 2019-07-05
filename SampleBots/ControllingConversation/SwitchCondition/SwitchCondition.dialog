@@ -5,11 +5,6 @@
     {
       "$type": "Microsoft.ChoiceInput",
       "property": "user.name",
-      "prompt": "Please select a value from below:",
-      "maxTurnCount": "2147483647",
-      "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "outputFormat": "value",
       "choices": [
         {
           "value": "Susan"
@@ -96,8 +91,8 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-04T19:56:46.499Z",
-    "updatedAt": "2019-07-04T19:56:46.527Z",
-    "id": "853249"
+    "createdAt": "2019-07-03T06:49:45.210Z",
+    "updatedAt": "2019-07-03T06:49:45.249Z",
+    "id": "122121"
   }
 }

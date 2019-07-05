@@ -22,17 +22,8 @@
     {
       "$type": "Microsoft.NumberInput",
       "property": "user.result",
-      "prompt": "2 * 2.2 equals?",
-      "maxTurnCount": 2147483647,
       "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "outputFormat": "float",
-      "defaultLocale": "en-us",
-      "$designer": {
-        "createdAt": "2019-07-01T22:00:04.807Z",
-        "updatedAt": "2019-07-01T22:00:04.813Z",
-        "id": "469726"
-      }
+      "prompt": "2 * 2.2 equals?"
     },
     {
       "$type": "Microsoft.IfCondition",
@@ -68,8 +59,8 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-01T21:59:46.629Z",
-    "updatedAt": "2019-07-01T21:59:46.661Z",
-    "id": "804607"
+    "createdAt": "2019-07-03T06:48:20.139Z",
+    "updatedAt": "2019-07-03T06:48:20.173Z",
+    "id": "183119"
   }
 }

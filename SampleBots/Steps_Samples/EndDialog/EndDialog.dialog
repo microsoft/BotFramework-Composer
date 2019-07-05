@@ -1,9 +1,9 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-01T21:33:51.289Z",
-    "updatedAt": "2019-07-01T21:33:51.348Z",
-    "id": "750424",
+    "createdAt": "2019-07-03T06:51:13.961Z",
+    "updatedAt": "2019-07-03T06:51:14.013Z",
+    "id": "727878",
     "name": "09 - EndDialog",
     "description": "This is a bot that demonstrates the EndDialog concept in Adaptive Dialogs."
   },
@@ -58,9 +58,7 @@
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "events": [
-        "cancelDialog"
-      ],
+      "events": ["cancelDialog"],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",

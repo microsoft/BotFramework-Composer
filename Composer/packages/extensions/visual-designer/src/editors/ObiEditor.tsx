@@ -10,7 +10,17 @@ import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
-export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, onChange, getLgTemplates }) => {
+export const ObiEditor = ({
+  path,
+  focusedId,
+  data,
+  onSelect,
+  onExpand,
+  onOpen,
+  onChange,
+  getLgTemplates,
+  removeLgTemplate,
+}) => {
   const dispatchEvent = (eventName?, eventData?) => {
     let handler;
     switch (eventName) {
@@ -25,7 +35,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id));
+          onChange(deleteNode(data, e.id, removeLgTemplate));
           onSelect('');
         };
         break;

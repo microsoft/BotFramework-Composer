@@ -90,6 +90,10 @@ function ExtensionContainer() {
       return apiClient.apiCall('createLgTemplate', { id, template, position });
     },
 
+    removeLgTemplate: (id, templateName) => {
+      return apiClient.apiCall('removeLgTemplate', { id, templateName });
+    },
+
     updateLgTemplate: (id, templateName, template) => {
       return apiClient.apiCall('updateLgTemplate', {
         id,

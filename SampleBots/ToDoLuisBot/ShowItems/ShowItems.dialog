@@ -1,28 +1,12 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "generator": "ToDoLuisBot.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SetProperty",
-      "value": "@ListType[0]",
-      "property": "dialog.listName"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.lists == null",
-      "steps": [
+    "$type": "Microsoft.AdaptiveDialog",
+    "generator": "common.lg",
+    "steps": [
         {
-          "$type": "Microsoft.InitProperty",
-          "property": "user.lists",
-          "type": "object"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.listName == null",
-      "steps": [
+            "$type": "Microsoft.SetProperty",
+            "value": "@ListType",
+            "property": "dialog.listName"
+        },
         {
           "$type": "Microsoft.ChoiceInput",
           "property": "dialog.listName",

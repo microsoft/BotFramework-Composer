@@ -1,39 +1,59 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
-  "$designer": {
-    "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-07-04T19:37:48.297Z",
-    "id": "948970"
-  },
   "autoEndDialog": false,
-  "recognizer": "ToDoLuisBot.lu",
+  "recognizer": "Main.lu",
   "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "Hi",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:10.665Z",
+        "updatedAt": "2019-07-04T07:31:10.670Z",
+        "id": "948777"
+      }
+    }
+  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "AddToDo",
       "steps": [
-        "AddItem"
-      ]
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AddItem"
+        }
+      ],
+      "intent": "AddToDo",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:13.192Z",
+        "updatedAt": "2019-07-04T07:31:13.209Z",
+        "id": "842277"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
       "steps": [
-        "DeleteItem"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteItem"
+        }
       ],
       "intent": "DeleteToDo",
       "$designer": {
-        "createdAt": "2019-07-04T19:39:42.915Z",
-        "updatedAt": "2019-07-04T19:39:42.930Z",
-        "id": "242349"
+        "createdAt": "2019-07-04T07:31:14.654Z",
+        "updatedAt": "2019-07-04T07:31:14.669Z",
+        "id": "905057"
       }
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "ShowToDo",
       "steps": [
-        "ShowItems"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowItems"
+        }
       ]
     },
     {
@@ -56,5 +76,10 @@
       }
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T10:00:39.032Z",
+    "updatedAt": "2019-07-01T10:00:39.054Z",
+    "id": "948970"
+  }
 }

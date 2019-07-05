@@ -51,7 +51,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
   };
 
   const data = dataCache.current;
-  const { navDown, focusTo, navTo, getLgTemplates } = shellApi;
+  const { navDown, focusTo, navTo, getLgTemplates, removeLgTemplate } = shellApi;
   return (
     <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
       <ObiEditor
@@ -64,6 +64,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
         onOpen={x => navTo(x + '#')}
         onChange={x => onChange(x)}
         getLgTemplates={getLgTemplates}
+        removeLgTemplate={removeLgTemplate}
       />
     </div>
   );

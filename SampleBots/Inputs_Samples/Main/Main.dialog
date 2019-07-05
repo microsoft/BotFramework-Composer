@@ -1,7 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": false,
-  "generator": "common.lg",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
@@ -15,7 +14,18 @@
       "CancelIntent": "cancel"
     }
   },
+  "generator": "common.lg",
   "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "TextInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "TextInput"
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "NumberInput",
@@ -108,8 +118,8 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-01T21:58:16.025Z",
-    "updatedAt": "2019-07-01T21:58:16.066Z",
-    "id": "021838"
+    "createdAt": "2019-07-03T08:57:58.939Z",
+    "updatedAt": "2019-07-03T08:57:58.996Z",
+    "id": "400830"
   }
 }

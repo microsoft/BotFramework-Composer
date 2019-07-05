@@ -1,10 +1,13 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+<<<<<<< HEAD
   "$designer": {
     "createdAt": "2019-07-01T22:01:24.464Z",
     "updatedAt": "2019-07-02T00:02:06.046Z",
     "id": "357758"
   },
+=======
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
@@ -21,12 +24,16 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
+<<<<<<< HEAD
       "$designer": {
         "createdAt": "2019-07-01T22:02:14.960Z",
         "updatedAt": "2019-07-01T22:02:16.191Z",
         "id": "376720"
       },
       "activity": "[activity-376720]"
+=======
+      "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
     }
   ],
   "rules": [
@@ -34,6 +41,7 @@
       "$type": "Microsoft.IntentRule",
       "intent": "AddIntent",
       "steps": [
+<<<<<<< HEAD
         "AddToDo"
       ]
     },
@@ -56,6 +64,52 @@
       "intent": "ShowIntent",
       "steps": [
         "ShowToDos"
+=======
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AddToDo"
+        }
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+<<<<<<< HEAD
+      "intent": "HelpIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+=======
+      "intent": "DeleteIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteToDo"
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+<<<<<<< HEAD
+=======
+      "intent": "ClearIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ClearToDos"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowToDos"
+        }
       ]
     },
     {
@@ -70,6 +124,7 @@
     },
     {
       "$type": "Microsoft.IntentRule",
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
       "intent": "CancelIntent",
       "steps": [
         {
@@ -91,5 +146,14 @@
       ]
     }
   ],
+<<<<<<< HEAD
   "$schema": "../../app.schema"
+=======
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-04T08:14:01.139Z",
+    "updatedAt": "2019-07-04T08:14:01.193Z",
+    "id": "288769"
+  }
+>>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
 }

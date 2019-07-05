@@ -51,7 +51,7 @@ export function ShellApi() {
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
-  const removeLgTemplate = actions.removeLgTemplate;
+  const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
@@ -73,7 +73,9 @@ export function ShellApi() {
     apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
       lgTemplateHandler(UPDATE, { id, templateName, template }, event)
     );
-    apiClient.registerApi('removeLgTemplate', ({ id }, event) => lgTemplateHandler(REMOVE, { id }, event));
+    apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
+      lgTemplateHandler(REMOVE, { id, templateName }, event)
+    );
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
