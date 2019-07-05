@@ -20,8 +20,7 @@ export interface FileInfo {
 }
 
 export interface Dialog {
-  id: number;
-  name: string;
+  id: string;
   displayName: string;
   content: { [key: string]: any };
   lgFile: string;

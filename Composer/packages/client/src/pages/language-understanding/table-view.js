@@ -29,7 +29,7 @@ export default function TableView(props) {
     // make up intents data
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
-      const luDialog = dialogs.find(dialog => luFile.id === dialog.name);
+      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
       luFile.parsedContent.LUISJsonStructure.utterances.forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
@@ -53,16 +53,16 @@ export default function TableView(props) {
       // dialog view, show dialog intents
     } else {
       const dialogIntents = allIntents.filter(item => {
-        return item.fileId === activeDialog.name;
+        return item.fileId === activeDialog.id;
       });
 
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog, dialogs]);
 
-  function navigateToDialog(name) {
+  function navigateToDialog(id) {
     clearNavHistory();
-    navTo(`${name}#`);
+    navTo(`${id}#`);
     navigate('/');
   }
 
@@ -117,10 +117,10 @@ export default function TableView(props) {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          const name = item.fileId;
+          const id = item.fileId;
           return (
-            <div key={name} onClick={() => navigateToDialog(name)}>
-              <Link>{name}</Link>
+            <div key={id} onClick={() => navigateToDialog(id)}>
+              <Link>{id}</Link>
             </div>
           );
         },

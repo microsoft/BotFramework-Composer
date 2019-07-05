@@ -2,7 +2,6 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo } from 'react';
 import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import findindex from 'lodash.findindex';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
@@ -36,14 +35,14 @@ function DesignPage(props) {
   const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
-  function handleFileClick(index) {
+  function handleFileClick(id) {
     clearNavHistory();
-    navTo(`${dialogs[index].name}#`);
+    navTo(`${id}#`);
   }
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
-      result[dialog.name] = dialog.content;
+      result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
@@ -81,8 +80,7 @@ function DesignPage(props) {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const botName = dialogs[0].displayName;
-      const displayText = text === 'Main' ? botName : text;
+      const displayText = text === 'Main' ? dialogs.find(d => d.id === 'Main').displayName : text;
       return {
         key: index,
         path: item,
@@ -97,8 +95,7 @@ function DesignPage(props) {
 
   const activeDialog = useMemo(() => {
     if (!navPath) return -1;
-    const dialogName = navPath.split('#')[0];
-    return findindex(dialogs, { name: dialogName });
+    return navPath.split('#')[0];
   }, [navPath]);
 
   async function onSubmit(data) {

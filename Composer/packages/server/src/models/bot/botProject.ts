@@ -105,7 +105,7 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogIndexer.getDialogs();
     const mainDialog = dialogs.find(item => {
-      return item.name === 'Main';
+      return item.id === 'Main';
     });
     if (mainDialog !== undefined) {
       mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
@@ -123,10 +123,9 @@ export class BotProject {
   };
 
   public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
-    // TODO: replace name with id with dialog in next pass, to make in consistent across dialog, lg, lu
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.name === id);
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog === undefined) {
-      throw new Error(`no such dialog ${name}`);
+      throw new Error(`no such dialog ${id}`);
     }
 
     const relativePath = dialog.relativePath;
@@ -397,10 +396,10 @@ export class BotProject {
       const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
 
       if (lgFile && lgExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred generator ${lgFile} not exist`);
+        throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
       }
       if (luFile && luExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred recognizer ${luFile} not exist`);
+        throw new Error(`${dialog.id}.dialog referred recognizer ${luFile} not exist`);
       }
     }
   };

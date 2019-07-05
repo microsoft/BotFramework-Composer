@@ -28,7 +28,7 @@ export const LGPage = props => {
   const subPath = props['*'];
 
   const activePath = subPath === '' ? '_all' : subPath;
-  const activeDialog = dialogs.find(item => item.name === subPath);
+  const activeDialog = dialogs.find(item => item.id === subPath);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
@@ -41,6 +41,7 @@ export const LGPage = props => {
   }, [lgFiles]);
 
   const navLinks = useMemo(() => {
+    const entryDialogId = 'Main';
     const subLinks = dialogs.reduce((result, file) => {
       if (result.length === 0) {
         result = [
@@ -50,12 +51,12 @@ export const LGPage = props => {
         ];
       }
       const item = {
-        id: file.name,
-        key: file.name,
+        id: file.id,
+        key: file.id,
         name: file.displayName,
       };
 
-      if (file.id === 0) {
+      if (file.id === entryDialogId) {
         result[0] = {
           ...result[0],
           ...item,

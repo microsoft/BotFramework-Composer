@@ -6,6 +6,7 @@ import { Nav } from 'office-ui-fabric-react';
 
 export const ProjectTree = props => {
   const { files, onSelect, activeNode } = props;
+  const entryDialogId = 'Main';
 
   const links = useMemo(() => {
     return files.reduce((result, file) => {
@@ -19,7 +20,7 @@ export const ProjectTree = props => {
 
       item.name = file.displayName;
 
-      if (file.id === 0) {
+      if (file.id === entryDialogId) {
         result[0] = { ...result[0], ...item, isExpanded: true };
       } else {
         result[0].links.push(item);

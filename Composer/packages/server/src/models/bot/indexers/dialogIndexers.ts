@@ -88,7 +88,6 @@ export class DialogIndexer {
     if (files.length !== 0) {
       const entry = this.entry;
       const botName = this.botName;
-      let count = 1;
 
       for (const file of files) {
         const extName = Path.extname(file.name);
@@ -98,8 +97,7 @@ export class DialogIndexer {
             const luFile = typeof dialogJson.recognizer === 'string' ? dialogJson.recognizer : '';
             const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const dialog = {
-              id: 0,
-              name: Path.basename(file.name, extName),
+              id: Path.basename(file.name, extName),
               displayName: file.name === entry ? botName : Path.basename(file.name, extName),
               content: dialogJson,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
@@ -112,7 +110,6 @@ export class DialogIndexer {
             if (file.name === entry) {
               this.dialogs.unshift(dialog);
             } else {
-              dialog.id = count++;
               this.dialogs.push(dialog);
             }
           }
