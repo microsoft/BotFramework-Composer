@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 /** @jsx jsx */
-
 import { jsx } from '@emotion/core';
-import { IconButton, Link } from 'office-ui-fabric-react/lib';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
