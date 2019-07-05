@@ -61,14 +61,9 @@ export class BotProject {
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
-      botFile: this.getBotFile(),
       schemas: this.getSchemas(),
       luStatus: this.luPublisher.status,
     };
-  };
-
-  public getBotFile = () => {
-    return this.files[0];
   };
 
   public getSchemas = () => {
@@ -109,15 +104,6 @@ export class BotProject {
       mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
       await this.updateDialog('Main', mainDialog.content);
     }
-  };
-
-  public updateBotFile = async (name: string, content: any) => {
-    const botFile = this.files[0];
-    await this.fileStorage.writeFile(botFile.path, JSON.stringify(content, null, 2) + '\n');
-    const botFileContent = await this.fileStorage.readFile(botFile.path);
-    botFile.content = JSON.parse(botFileContent);
-    this.files[0] = botFile;
-    return botFile;
   };
 
   public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
