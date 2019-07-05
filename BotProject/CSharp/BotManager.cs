@@ -36,8 +36,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             // set init bot
             var bot = Config.GetSection("bot").Get<string>();
-            var botProj = BotProject.Load(bot);
-            SetCurrent(botProj);
+            SetCurrent(bot);
         }
 
         public IConfiguration Config { get; }
@@ -50,19 +49,15 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         private static readonly object locker = new object();
 
-        public void SetCurrent(BotProject botProject)
+        public void SetCurrent(string botDir)
         {
             IStorage storage = new MemoryStorage();
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
 
             // manage all bot resources
-            var resourceExplorer = new ResourceExplorer();
-            foreach (var folder in botProject.Folders)
-            {
-                resourceExplorer.AddFolder(folder);
-            }
-
+            var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
+            
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
             adapter
@@ -93,16 +88,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 // extract to bot folder
                 var extractPath = ExtractFile(downloadPath, GenNewBotDir());
 
-                // locate the proj file
-                var projFile = FindBotProjFile(extractPath);
-
                 if (luConfig != null)
                 {
                     AddLuisConfig(extractPath, luConfig);
                 }
 
-                var botProj = BotProject.Load(projFile);
-                SetCurrent(botProj);
+                SetCurrent(extractPath);
             }
         }
 
