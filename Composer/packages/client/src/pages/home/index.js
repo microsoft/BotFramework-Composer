@@ -47,7 +47,7 @@ export const Home = () => {
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
   const [templates, setTemplates] = useState([]);
-  const onClickRecentBotProject = async (storageId, path) => {
+  const onClickRecentBotProject = async path => {
     await openBotProject(path);
     navigate('/');
   };
@@ -133,7 +133,7 @@ export const Home = () => {
                 <div
                   css={home.action}
                   onClick={() => {
-                    onClickRecentBotProject(bot.storageId, bot.path);
+                    onClickRecentBotProject(bot.path);
                   }}
                 >
                   <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />

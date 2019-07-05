@@ -9,10 +9,6 @@ export const outline = css`
   overflow-x: auto;
 `;
 
-export const content = css`
-  min-width: 900px;
-`;
-
 export const title = css`
   display: block;
   height: 36px;
@@ -148,10 +144,10 @@ export const templateTitle = css`
 
 export const templateContainer = css`
   display: flex;
+  flex-wrap: wrap;
   line-height: 32px;
   margin-left: 33px;
   margin-right: 33px;
-  margin-top: 24px;
 `;
 
 export const templateContent = css`
@@ -163,6 +159,7 @@ export const templateContent = css`
   border-top: 10px solid #50e6ff;
   background: #ebebeb;
   margin-right: 60px;
+  margin-top: 24px;
   cursor: pointer;
 `;
 
