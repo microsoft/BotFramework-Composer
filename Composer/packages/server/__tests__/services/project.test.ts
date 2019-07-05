@@ -30,7 +30,7 @@ jest.mock('../../src/store/store', () => {
 
 jest.mock('azure-storage', () => {});
 
-const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1/1.botproj');
+const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1');
 
 const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
 
@@ -44,7 +44,7 @@ describe('test BotProjectService', () => {
     };
     await projectService.openProject(botProj);
     expect(projectService.currentBotProject).toBeDefined();
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(projPath);
+    expect((projectService.currentBotProject as BotProject).dir).toBe(projPath);
   });
   it('saveProjectAs', async () => {
     const botProj = {
@@ -52,7 +52,7 @@ describe('test BotProjectService', () => {
       path: saveAsDir,
     };
     await projectService.saveProjectAs(botProj);
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(`${saveAsDir}/1.botproj`);
+    expect((projectService.currentBotProject as BotProject).dir).toBe(`${saveAsDir}`);
     // remove the saveas files
     try {
       rimraf.sync(saveAsDir);

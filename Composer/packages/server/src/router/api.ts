@@ -20,7 +20,6 @@ router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile)
 router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
-router.put('/projects/opened/botFile', ProjectController.updateBotFile);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
 
 // storages

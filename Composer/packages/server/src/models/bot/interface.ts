@@ -3,15 +3,6 @@ export interface LocationRef {
   path: string;
 }
 
-export interface BotProjectFileContent {
-  services: string[];
-  entry: string;
-  schemas?: {
-    editor?: string;
-    sdk?: string;
-  };
-}
-
 export interface FileInfo {
   name: string;
   content: any;

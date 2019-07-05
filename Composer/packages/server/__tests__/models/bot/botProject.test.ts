@@ -12,7 +12,7 @@ const botDir = '../../mocks/samplebots/bot1';
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}/1.botproj`),
+  path: Path.join(__dirname, `${botDir}`),
 };
 
 const proj = new BotProject(mockLocationRef);
@@ -48,17 +48,6 @@ describe('updateDialog', () => {
   });
 });
 
-describe('updateBotFile', () => {
-  it('should update a file at a path', async () => {
-    const initValue = { services: [], entry: 'main.dialog' };
-    const newValue = { services: ['test'], entry: 'main.dialog' };
-    const botFile = await proj.updateBotFile('1', newValue);
-    // @ts-ignore
-    expect(botFile.content).toEqual(newValue);
-    await proj.updateBotFile('1', initValue);
-  });
-});
-
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
 
@@ -66,7 +55,7 @@ describe('createFromTemplate', () => {
     try {
       fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 
@@ -136,7 +125,7 @@ describe('modify non exist files', () => {
 describe('lg operation', () => {
   afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
     } catch (err) {
       // ignore
     }
@@ -149,7 +138,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.createLgFile(id, content, dir);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(9);
+    expect(proj.files.length).toEqual(8);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -165,7 +154,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.updateLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(9);
+    expect(proj.files.length).toEqual(8);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -180,7 +169,7 @@ describe('lg operation', () => {
     const lgFiles = await proj.removeLgFile(id);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.files.length).toEqual(7);
     expect(lgFiles.length).toEqual(1);
 
     expect(result).toBeUndefined();
@@ -190,7 +179,7 @@ describe('lg operation', () => {
 describe('lu operation', () => {
   afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
     } catch (err) {
       // ignore
     }
@@ -203,7 +192,7 @@ describe('lu operation', () => {
     const luFiles = await proj.createLuFile(id, content, dir);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(9);
+    expect(proj.files.length).toEqual(8);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -219,7 +208,7 @@ describe('lu operation', () => {
     const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(9);
+    expect(proj.files.length).toEqual(8);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -234,7 +223,7 @@ describe('lu operation', () => {
     const luFiles = await proj.removeLuFile(id);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.files.length).toEqual(7);
     expect(luFiles.length).toEqual(3);
 
     expect(result).toBeUndefined();
