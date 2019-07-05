@@ -34,7 +34,7 @@ export const introTitle = css`
   flex-direction: column;
   color: #0078d4;
   width: 50%;
-  min-width: 700px;
+  min-width: 535px;
 `;
 
 export const introTitleLeft = css`
