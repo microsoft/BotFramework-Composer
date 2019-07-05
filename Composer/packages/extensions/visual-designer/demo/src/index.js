@@ -5,6 +5,7 @@ import { Nav } from 'office-ui-fabric-react';
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
 import { StepEditorDemo } from './stories/StepEditorDemo';
 import { EventsEditorDemo } from './stories/EventsEditorDemo';
+import { LogicFlowDemo } from './stories/LogicFlowDemo';
 import './index.css';
 
 const DemoMaps = {
@@ -19,6 +20,10 @@ const DemoMaps = {
   EventsEditorDemo: {
     key: 'EventsEditorDemo',
     component: EventsEditorDemo,
+  },
+  LogicFlowDemo: {
+    key: 'LogicFlowDemo',
+    component: LogicFlowDemo,
   },
 };
 
@@ -58,7 +63,12 @@ class Demo extends Component {
           },
           {
             name: 'Component Demos',
-            links: [],
+            links: [
+              {
+                key: DemoMaps.LogicFlowDemo.key,
+                name: 'Logicflow Component',
+              },
+            ],
           },
         ]}
       />

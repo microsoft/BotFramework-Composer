@@ -1,0 +1,47 @@
+{
+  "@": "Flow",
+  "id": "$.steps",
+  "data": {},
+  "flow": [
+    {
+      "@": "Element",
+      "id": "$.steps[0]",
+      "data": {
+        "$type": "Microsoft.SetProperty",
+        "text": "set a = b",
+        "renderer": "<NodeRenderer>"
+      }
+    },
+    {
+      "@": "Decision",
+      "id": "$.steps[1]",
+      "data": {
+        "$type": "Microsoft.IfCondition",
+        "condition": "a == b"
+      },
+      "branches": [
+        {
+          "@": "Decision/Branch",
+          "id": "$.steps[1].ifFalse",
+          "text": "False",
+          "flow": []
+        },
+        {
+          "@": "Decision/Branch",
+          "id": "$.steps[1].ifTrue",
+          "text": "True",
+          "flow": []
+        }
+      ]
+    },
+    {
+      "@": "Loop",
+      "id": "$.steps[2]",
+      "data": {
+        "$type": "Microsoft.Foreach",
+        "listProperty": "user.todos"
+      },
+      "flow": []
+    }
+  ]
+}
