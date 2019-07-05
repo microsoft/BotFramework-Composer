@@ -41,7 +41,6 @@ export const LGPage = props => {
   }, [lgFiles]);
 
   const navLinks = useMemo(() => {
-    const entryDialogId = 'Main';
     const subLinks = dialogs.reduce((result, file) => {
       if (result.length === 0) {
         result = [
@@ -56,7 +55,7 @@ export const LGPage = props => {
         name: file.displayName,
       };
 
-      if (file.id === entryDialogId) {
+      if (file.isRoot) {
         result[0] = {
           ...result[0],
           ...item,

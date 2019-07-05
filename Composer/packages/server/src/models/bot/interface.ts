@@ -12,6 +12,7 @@ export interface FileInfo {
 
 export interface Dialog {
   id: string;
+  isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
   lgFile: string;

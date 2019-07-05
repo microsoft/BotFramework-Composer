@@ -77,10 +77,12 @@ function DesignPage(props) {
   ];
 
   const breadcrumbItems = useMemo(() => {
+    const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const displayText = text === 'Main' ? dialogs.find(d => d.id === 'Main').displayName : text;
+      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text);
+      const displayText = isRoot ? botName : text;
       return {
         key: index,
         path: item,

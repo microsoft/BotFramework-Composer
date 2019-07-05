@@ -97,9 +97,7 @@ export class BotProject {
 
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogIndexer.getDialogs();
-    const mainDialog = dialogs.find(item => {
-      return item.id === 'Main';
-    });
+    const mainDialog = dialogs.find(item => item.isRoot);
     if (mainDialog !== undefined) {
       mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
       await this.updateDialog('Main', mainDialog.content);
