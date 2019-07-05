@@ -30,7 +30,7 @@
         "updatedAt": "2019-07-01T21:38:05.182Z",
         "id": "229784"
       },
-      "activity": "[activity-229784]"
+      "activity": "[bfdactivity-229784]"
     },
     {
       "$type": "Microsoft.TextInput",
@@ -48,9 +48,7 @@
           "name": "string"
         },
         "name": "{user.petname}",
-        "photoUrls": [
-          "string"
-        ],
+        "photoUrls": ["string"],
         "tags": [
           {
             "id": 0,
@@ -77,7 +75,7 @@
         "updatedAt": "2019-07-01T21:38:31.064Z",
         "id": "200761"
       },
-      "activity": "[activity-200761]"
+      "activity": "[bfdactivity-200761]"
     },
     {
       "$type": "Microsoft.TextInput",
@@ -102,7 +100,7 @@
         "updatedAt": "2019-07-01T21:38:58.832Z",
         "id": "212615"
       },
-      "activity": "[activity-212615]"
+      "activity": "[bfdactivity-212615]"
     }
   ],
   "$schema": "../../app.schema"

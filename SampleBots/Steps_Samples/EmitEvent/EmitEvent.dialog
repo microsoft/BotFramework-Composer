@@ -9,7 +9,7 @@
         "updatedAt": "2019-07-01T21:33:43.763Z",
         "id": "879639"
       },
-      "activity": "[activity-879639]"
+      "activity": "[bfdactivity-879639]"
     },
     {
       "$type": "Microsoft.BeginDialog",
@@ -52,9 +52,7 @@
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "Events": [
-        "CustomEvent"
-      ],
+      "Events": ["CustomEvent"],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",

@@ -17,7 +17,7 @@
         "updatedAt": "2019-07-01T22:00:05.463Z",
         "id": "303304"
       },
-      "activity": "[activity-303304]"
+      "activity": "[bfdactivity-303304]"
     },
     {
       "$type": "Microsoft.NumberInput",
@@ -36,7 +36,7 @@
             "updatedAt": "2019-07-01T22:00:35.972Z",
             "id": "284482"
           },
-          "activity": "[activity-284482]"
+          "activity": "[bfdactivity-284482]"
         }
       ],
       "elseSteps": [
@@ -47,7 +47,7 @@
             "updatedAt": "2019-07-01T22:00:49.773Z",
             "id": "172233"
           },
-          "activity": "[activity-172233]"
+          "activity": "[bfdactivity-172233]"
         }
       ],
       "$designer": {

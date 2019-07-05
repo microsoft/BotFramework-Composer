@@ -9,7 +9,7 @@
         "updatedAt": "2019-07-01T21:41:10.907Z",
         "id": "554030"
       },
-      "activity": "[activity-554030]"
+      "activity": "[bfdactivity-554030]"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -18,7 +18,7 @@
         "updatedAt": "2019-07-01T21:41:16.976Z",
         "id": "302405"
       },
-      "activity": "[activity-302405]"
+      "activity": "[bfdactivity-302405]"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -27,7 +27,7 @@
         "updatedAt": "2019-07-01T21:41:32.819Z",
         "id": "322106"
       },
-      "activity": "[activity-322106]"
+      "activity": "[bfdactivity-322106]"
     }
   ],
   "$schema": "../../app.schema",

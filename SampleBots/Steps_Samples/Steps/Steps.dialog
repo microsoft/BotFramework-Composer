@@ -9,7 +9,7 @@
         "updatedAt": "2019-07-01T21:55:02.336Z",
         "id": "522200"
       },
-      "activity": "[activity-522200]"
+      "activity": "[bfdactivity-522200]"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -18,7 +18,7 @@
         "updatedAt": "2019-07-01T21:54:57.132Z",
         "id": "350559"
       },
-      "activity": "[activity-350559]"
+      "activity": "[bfdactivity-350559]"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -27,7 +27,7 @@
         "updatedAt": "2019-07-01T21:54:48.798Z",
         "id": "309397"
       },
-      "activity": "[activity-309397]"
+      "activity": "[bfdactivity-309397]"
     },
     {
       "$type": "Microsoft.SetProperty",
@@ -46,7 +46,7 @@
         "updatedAt": "2019-07-01T21:54:36.119Z",
         "id": "797905"
       },
-      "activity": "[activity-797905]"
+      "activity": "[bfdactivity-797905]"
     },
     {
       "$type": "Microsoft.DeleteProperty",
@@ -68,7 +68,7 @@
             "updatedAt": "2019-07-01T21:53:59.644Z",
             "id": "166131"
           },
-          "activity": "[activity-166131]"
+          "activity": "[bfdactivity-166131]"
         }
       ],
       "elseSteps": [
@@ -79,7 +79,7 @@
             "updatedAt": "2019-07-01T21:54:18.873Z",
             "id": "643043"
           },
-          "activity": "[activity-643043]"
+          "activity": "[bfdactivity-643043]"
         }
       ],
       "$designer": {

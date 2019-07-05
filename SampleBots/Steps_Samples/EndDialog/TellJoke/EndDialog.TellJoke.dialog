@@ -15,7 +15,7 @@
         "updatedAt": "2019-07-01T21:35:48.468Z",
         "id": "150220"
       },
-      "activity": "[activity-150220]"
+      "activity": "[bfdactivity-150220]"
     },
     {
       "$type": "Microsoft.EndTurn",
@@ -32,7 +32,7 @@
         "updatedAt": "2019-07-01T21:35:57.840Z",
         "id": "451180"
       },
-      "activity": "[activity-451180]"
+      "activity": "[bfdactivity-451180]"
     }
   ],
   "rules": [

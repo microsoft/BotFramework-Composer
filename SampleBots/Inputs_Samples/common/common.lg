@@ -23,33 +23,33 @@ You sent:
   # ShowEmail(email)
 - {email.subject}
 
-# activity-068558
+bfdactivity-068558
 -[help]
 
-# activity-587377
+bfdactivity-587377
 -[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
 
-# activity-004212
+bfdactivity-004212
 -You select: {user.style}
 
-# activity-458458
+bfdactivity-458458
 -confirmation: {user.confirmed}
 
-# activity-828009
+bfdactivity-828009
 -You entered: {user.date[0].value}
 
-# activity-303304
+bfdactivity-303304
 -Hello, your age is {user.age}!
 
-# activity-284482
+bfdactivity-284482
 -2 * 2.2 equals {user.result}, that's right!
 
-# activity-172233
+bfdactivity-172233
 -2 * 2.2 equals {user.result}, that's wrong!
 
-# activity-538962
+bfdactivity-538962
 -Hello {user.name}, nice to talk to you!
 
-# activity-118486
+bfdactivity-118486
 -Hello {user.name}, nice to talk to you!
 ```

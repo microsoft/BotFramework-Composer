@@ -38,7 +38,7 @@
         "updatedAt": "2019-07-01T21:31:50.603Z",
         "id": "666135"
       },
-      "activity": "[activity-666135]"
+      "activity": "[bfdactivity-666135]"
     },
     {
       "$type": "Microsoft.Foreach",
@@ -64,7 +64,7 @@
         "updatedAt": "2019-07-01T21:32:24.606Z",
         "id": "763672"
       },
-      "activity": "[activity-763672]"
+      "activity": "[bfdactivity-763672]"
     },
     {
       "$type": "Microsoft.ForeachPage",

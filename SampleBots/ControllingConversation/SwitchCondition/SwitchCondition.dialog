@@ -41,7 +41,7 @@
         "id": "097130",
         "updatedAt": "2019-07-04T19:57:08.860Z"
       },
-      "activity": "[activity-097130]"
+      "activity": "[bfdactivity-097130]"
     },
     {
       "$type": "Microsoft.SwitchCondition",
@@ -56,7 +56,7 @@
                 "id": "040464",
                 "updatedAt": "2019-07-04T19:57:28.583Z"
               },
-              "activity": "[activity-040464]"
+              "activity": "[bfdactivity-040464]"
             }
           ]
         },
@@ -69,7 +69,7 @@
                 "id": "230206",
                 "updatedAt": "2019-07-04T19:58:22.053Z"
               },
-              "activity": "[activity-230206]"
+              "activity": "[bfdactivity-230206]"
             }
           ]
         },
@@ -82,7 +82,7 @@
                 "id": "604251",
                 "updatedAt": "2019-07-04T19:58:34.719Z"
               },
-              "activity": "[activity-604251]"
+              "activity": "[bfdactivity-604251]"
             }
           ]
         }

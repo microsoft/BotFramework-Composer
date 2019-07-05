@@ -9,7 +9,7 @@
         "updatedAt": "2019-07-01T21:42:11.108Z",
         "id": "577618"
       },
-      "activity": "[activity-577618]"
+      "activity": "[bfdactivity-577618]"
     },
     {
       "$type": "Microsoft.EndTurn",
@@ -26,7 +26,7 @@
         "updatedAt": "2019-07-01T21:42:19.602Z",
         "id": "286023"
       },
-      "activity": "[activity-286023]"
+      "activity": "[bfdactivity-286023]"
     }
   ],
   "$schema": "../../app.schema",

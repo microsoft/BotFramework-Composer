@@ -43,7 +43,7 @@
         "updatedAt": "2019-07-01T21:34:32.366Z",
         "id": "604381"
       },
-      "activity": "[activity-604381]"
+      "activity": "[bfdactivity-604381]"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -52,7 +52,7 @@
         "updatedAt": "2019-07-01T21:34:59.787Z",
         "id": "338063"
       },
-      "activity": "[activity-338063]"
+      "activity": "[bfdactivity-338063]"
     }
   ],
   "rules": [

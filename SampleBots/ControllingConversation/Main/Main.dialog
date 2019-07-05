@@ -71,9 +71,7 @@
     },
     {
       "$type": "Microsoft.EventRule",
-      "events": [
-        "cancelDialog"
-      ],
+      "events": ["cancelDialog"],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -117,7 +115,7 @@
             "id": "953339",
             "updatedAt": "2019-07-04T19:53:52.311Z"
           },
-          "activity": "[activity-953339]"
+          "activity": "[bfdactivity-953339]"
         }
       ]
     }

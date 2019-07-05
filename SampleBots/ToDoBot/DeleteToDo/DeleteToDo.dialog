@@ -30,7 +30,7 @@
             "updatedAt": "2019-07-01T22:04:06.711Z",
             "id": "725469"
           },
-          "activity": "[activity-725469]"
+          "activity": "[bfdactivity-725469]"
         }
       ],
       "elseSteps": [
@@ -41,7 +41,7 @@
             "updatedAt": "2019-07-01T22:04:47.071Z",
             "id": "549615"
           },
-          "activity": "[activity-549615]"
+          "activity": "[bfdactivity-549615]"
         }
       ],
       "$designer": {
