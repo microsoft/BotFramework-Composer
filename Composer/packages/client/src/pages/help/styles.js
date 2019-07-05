@@ -10,7 +10,6 @@ export const outline = css`
 `;
 
 export const content = css`
-  min-width: 1300px;
   height: 100%;
 `;
 
@@ -31,7 +30,7 @@ export const introduction = css`
 `;
 
 export const introText = css`
-  width: 50%;
+  width: 60%;
   height: 100%;
   font-size: 24px;
 `;
