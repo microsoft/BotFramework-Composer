@@ -15,18 +15,18 @@ export const appschema: JSONSchema6 = {
   $id: 'app.schema',
   type: 'object',
   title: 'Component types',
-  description: 'These are all of the types that can be created by the loader.',
+  description: 'These are all the types of components that the loader can create.',
   definitions: {
     'Microsoft.AdaptiveDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Adaptive Dialog',
-      description: 'Configures a data driven dialog via a collection of steps/dialogs.',
+      description: 'This configures a data driven dialog via a collection of steps/dialogs.',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.AdaptiveDialog',
@@ -77,7 +77,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Auto End Dialog',
           description:
-            'IF this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
+            'If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
           default: true,
         },
         recognizer: {
@@ -109,7 +109,7 @@ export const appschema: JSONSchema6 = {
         },
         rules: {
           type: 'array',
-          description: 'Array of rules to use to evaluate conversation',
+          description: 'This is the array of rules to use to evaluate conversation',
           items: {
             $type: 'Microsoft.IRule',
             $ref: '#/definitions/Microsoft.IRule',
@@ -126,13 +126,13 @@ export const appschema: JSONSchema6 = {
     'Microsoft.AttachmentInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ConfirmInput Dialog',
-      description: 'This represents a dialog which gathers a yes/no style responses',
+      description: 'This represents a dialog which gathers yes/no style responses',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.AttachmentInput',
@@ -196,14 +196,14 @@ export const appschema: JSONSchema6 = {
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: 'The message to send when input is not valid for the input type.',
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
+          description: 'The maximum retry count for this prompt.',
           default: 2147483647,
           examples: [3],
         },
@@ -226,21 +226,21 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: "The value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
           description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+            'If set to true, this will always prompt the user whether you already have the value or not.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
+          description: 'If set to true this will always consult the parent dialog whether it will be interrupted or not.',
           default: true,
           examples: [true],
         },
@@ -268,7 +268,7 @@ export const appschema: JSONSchema6 = {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.BeginDialog',
@@ -322,7 +322,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Cancel All Dialogs',
       description:
-        'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
+        'The command used to cancel all current dialogs running.',
       type: 'object',
       properties: {
         $type: {
@@ -361,7 +361,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ChoiceInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ChoiceInput Dialog',
-      description: 'This represents a dialog which gathers a choice response',
+      description: 'This represents a dialog that confirms multiple choices; for instance it might ask customers to select one from a list offered.',
       type: 'object',
       definitions: {
         choice: {
@@ -497,14 +497,14 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Always Prompt',
           description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+            'If set to true, this will always prompt the user whether you already have the value or not.',
           default: false,
           examples: ['false'],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
+          description: 'If set to true, this will always consult the parent dialog whether it will be interrupted or not',
           default: true,
           examples: ['true'],
         },
@@ -551,7 +551,7 @@ export const appschema: JSONSchema6 = {
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          description: 'This prompts the default locale that should be recognized.',
           default: 'en-us',
         },
         style: {
@@ -567,14 +567,14 @@ export const appschema: JSONSchema6 = {
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Seperator',
-              description: 'Character used to separate individual choices when there are more than 2 choices',
+              title: 'Inline Separator',
+              description: 'The character to use to separate individual choices when there are more than two choices',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
               title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
+              description: 'Separator inserted between choices when there are only two choices',
               default: ' or ',
             },
             inlineOrMore: {
@@ -620,7 +620,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ConfirmInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ConfirmInput Dialog',
-      description: 'This represents a dialog which gathers a yes/no style responses',
+      description: 'This represents a dialog which gathers yes/no style responses',
       type: 'object',
       properties: {
         $type: {
@@ -727,14 +727,14 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Always Prompt',
           description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+            'If set to true, this will always prompt the user whether you already have the value or not.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
+          description: 'If set to true, this will always consult the parent dialog whether it will be interupt or not.',
           default: true,
           examples: [true],
         },
@@ -757,13 +757,13 @@ export const appschema: JSONSchema6 = {
             inlineSeparator: {
               type: 'string',
               title: 'Inline Seperator',
-              description: 'Character used to separate individual choices when there are more than 2 choices',
+              description: 'Character used to separate individual choices when there are more than two choices',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
               title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
+              description: 'Separator inserted between the choices when there are only two choices',
               default: ' or ',
             },
             inlineOrMore: {
@@ -818,13 +818,13 @@ export const appschema: JSONSchema6 = {
     'Microsoft.DebugBreak': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Debugger Break Step',
-      description: 'If debugger is attached, do a debugger break at this point',
+      description: 'If the debugger is attached, do a debugger break at this point',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.DebugBreak',
@@ -857,7 +857,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.DeleteProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Delete PropertyS',
-      description: 'This is a step which allows you to remove a property from memory',
+      description: 'This action lets you remove a property from memory.',
       type: 'object',
       properties: {
         $type: {
@@ -903,7 +903,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EditArray': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Edit Array Step',
-      description: 'This is a step which allows you to modify an array in memory',
+      description: 'This lets you add or remove items from an array in the memory of the bot.',
       type: 'object',
       properties: {
         $type: {
@@ -1527,18 +1527,18 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.EmitEvent',
-          description: 'This is a step which allows you to emit an event',
+          description: 'This is the action that allows you to emit an event.',
           $ref: '#/definitions/Microsoft.EmitEvent',
         },
         {
           title: 'Microsoft.EndDialog',
           description:
-            'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+            'This is the command that ends the current dialog running, and returns the resultProperty as a result of that dialog.',
           $ref: '#/definitions/Microsoft.EndDialog',
         },
         {
           title: 'Microsoft.EndTurn',
-          description: 'End the current turn without ending the dialog.',
+          description: 'This will end the current turn without ending the dialog.',
           $ref: '#/definitions/Microsoft.EndTurn',
         },
         {
@@ -1553,28 +1553,28 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.HttpRequest',
-          description: 'This is a step which replaces the current dialog with the target dialog',
+          description: 'This action replaces the current dialog with a target dialog, which is a request for a URL.',
           $ref: '#/definitions/Microsoft.HttpRequest',
         },
         {
           title: 'Microsoft.IfCondition',
-          description: 'Step which conditionally decides which step to execute next.',
+          description: 'The action that conditionally decides which step to execute next in the line up of actions needed.',
           $ref: '#/definitions/Microsoft.IfCondition',
         },
         {
           title: 'Microsoft.InitProperty',
-          description: 'This step allows you to innitial a property to either an object or array',
+          description: 'This action lets you initialize a property to either an object or array.',
           $ref: '#/definitions/Microsoft.InitProperty',
         },
         {
           title: 'Microsoft.LogStep',
           description:
-            'This is a step which writes to console.log and optional creates a TraceActivity around a text binding',
+            'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
           $ref: '#/definitions/Microsoft.LogStep',
         },
         {
           title: 'Microsoft.NumberInput',
-          description: 'This represents a dialog which gathers a decimal number in a specified range',
+          description: 'This prompts the customer to provide a number.',
           $ref: '#/definitions/Microsoft.NumberInput',
         },
         {
@@ -1584,37 +1584,37 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.RepeatDialog',
-          description: 'This is a step which repeats the current dialog with the same dialog.',
+          description: 'An action that repeats the current dialog running.',
           $ref: '#/definitions/Microsoft.RepeatDialog',
         },
         {
           title: 'Microsoft.ReplaceDialog',
-          description: 'This is a step which replaces the current dialog with the target dialog',
+          description: 'An action that replaces the current dialog running with a target dialog',
           $ref: '#/definitions/Microsoft.ReplaceDialog',
         },
         {
           title: 'Microsoft.SendActivity',
-          description: 'This is a step which sends an activity to the user',
+          description: 'This will send a message to the user and may include language generation rules.',
           $ref: '#/definitions/Microsoft.SendActivity',
         },
         {
           title: 'Microsoft.SetProperty',
-          description: 'This step allows you to set memory to the value of an expression',
+          description: 'This will set or update a property to the value of an expression.',
           $ref: '#/definitions/Microsoft.SetProperty',
         },
         {
           title: 'Microsoft.SwitchCondition',
-          description: 'Step which conditionally decides which step to execute next.',
+          description: 'This is an action that decides which action to execute next, depending on certain conditions.',
           $ref: '#/definitions/Microsoft.SwitchCondition',
         },
         {
           title: 'Microsoft.TextInput',
-          description: 'This represents a dialog which gathers a text from the user',
-          $ref: '#/definitions/Microsoft.TextInput',
+          description: 'The prompt for the customer to provide a response in text format.',
+          $ref: '#/definitions/Microsoft.TextInput', 
         },
         {
           title: 'Microsoft.TraceActivity',
-          description: 'This is a step which sends an TraceActivity to the transcript',
+          description: 'This is a debugging message that is used to track progress through the code.',
           $ref: '#/definitions/Microsoft.TraceActivity',
         },
         {
@@ -1672,7 +1672,7 @@ export const appschema: JSONSchema6 = {
         // },
         {
           title: 'Microsoft.RegexRecognizer',
-          description: 'Recognizer which uses regex expressions to generate intents and entities.',
+          description: 'A Recognizer that uses regex expressions to generate intents and entities.',
           $ref: '#/definitions/Microsoft.RegexRecognizer',
         },
         {
@@ -1688,7 +1688,7 @@ export const appschema: JSONSchema6 = {
       oneOf: [
         {
           title: 'Microsoft.EventRule',
-          description: 'Defines a rule for an event which is triggered by some source',
+          description: 'This defines a rule for an event that is triggered by some source',
           $ref: '#/definitions/Microsoft.EventRule',
         },
         {
@@ -1722,7 +1722,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.IfCondition': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'If Condition Step',
-      description: 'Step which conditionally decides which step to execute next',
+      description: 'The action that conditionally decides which step to execute next in the line up of actions needed.',
       type: 'object',
       properties: {
         $type: {
