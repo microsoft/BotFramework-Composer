@@ -93,7 +93,7 @@ export const Home = () => {
             <div css={home.linkLeft}>
               {linksLeft.map((link, index) => {
                 return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index}>
+                  <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + index} target={'_blank'}>
                     <div css={link.css}>{link.text}</div>
                   </Link>
                 );
@@ -102,7 +102,7 @@ export const Home = () => {
             <div css={home.linkRight}>
               {linksRight.map((link, index) => {
                 return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index}>
+                  <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + index} target={'_blank'}>
                     <div css={link.css}>{link.text}</div>
                   </Link>
                 );
