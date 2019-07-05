@@ -1,3 +1,5 @@
+import { uniq } from 'lodash';
+
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 
@@ -44,10 +46,10 @@ export class DialogIndexer {
           // match a template name
           // match a temlate func  e.g. `showDate()`
           const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
-          let result;
-          while ((result = reg.exec(target)) !== null) {
-            const name = result[1];
-            templates.push(name);
+          let matchResult;
+          while ((matchResult = reg.exec(target)) !== null) {
+            const templateName = matchResult[1];
+            templates.push(templateName);
           }
         }
       }
@@ -56,7 +58,7 @@ export class DialogIndexer {
 
     JsonWalk('$', dialog, visitor);
 
-    return templates;
+    return uniq(templates);
   }
 
   // find out all lu intents given dialog
@@ -73,14 +75,15 @@ export class DialogIndexer {
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
       if (typeof value === 'object' && value.hasOwnProperty('$type') && value.$type === 'Microsoft.IntentRule') {
-        intents.push(value.intent);
+        const intentName = value.intent;
+        intents.push(intentName);
       }
       return false;
     };
 
     JsonWalk('$', dialog, visitor);
 
-    return intents;
+    return uniq(intents);
   }
 
   public index = (files: FileInfo[]): Dialog[] => {
