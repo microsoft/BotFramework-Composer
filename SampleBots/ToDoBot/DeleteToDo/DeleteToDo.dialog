@@ -25,22 +25,17 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-<<<<<<< HEAD
           "$designer": {
             "createdAt": "2019-07-01T22:04:05.322Z",
             "updatedAt": "2019-07-01T22:04:06.711Z",
             "id": "725469"
           },
           "activity": "[activity-725469]"
-=======
-          "activity": "Successfully removed a todo named \"{dialog.todo}\""
->>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-<<<<<<< HEAD
           "$designer": {
             "createdAt": "2019-07-01T22:04:45.788Z",
             "updatedAt": "2019-07-01T22:04:47.071Z",
@@ -54,23 +49,12 @@
         "updatedAt": "2019-07-01T22:04:06.144Z",
         "id": "462031"
       }
-=======
-          "activity": "\"{dialog.todo}\" is not in the Todo List"
-        }
-      ]
->>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
     }
   ],
   "$schema": "../../app.schema",
   "$designer": {
-<<<<<<< HEAD
-    "createdAt": "2019-07-01T22:03:45.887Z",
-    "updatedAt": "2019-07-01T22:03:45.913Z",
-    "id": "020198"
-=======
     "createdAt": "2019-07-03T06:51:41.186Z",
     "updatedAt": "2019-07-03T06:51:41.224Z",
     "id": "114909"
->>>>>>> fadc42c57ae034cc9b58f4b0cd8e2beaabf1c643
   }
 }

@@ -1,4 +1,5 @@
 {
+    "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "generator": "common.lg",
     "steps": [
@@ -8,81 +9,75 @@
             "property": "dialog.listName"
         },
         {
-          "$type": "Microsoft.ChoiceInput",
-          "property": "dialog.listName",
-          "choices": [
-            {
-              "value": "shopping",
-              "synonyms": [
-                "1",
-                "first",
-                "shopping",
-                "first one"
-              ]
-            },
-            {
-              "value": "grocery",
-              "synonyms": [
-                "2",
-                "second",
-                "grocery",
-                "second one"
-              ]
-            },
-            {
-              "value": "todo",
-              "synonyms": [
-                "3",
-                "third",
-                "todo",
-                "third one",
-                "to do"
-              ]
-            }
-          ],
-          "prompt": "Which list do you want to show?",
-          "style": "SuggestedAction",
-          "alwaysPrompt": true,
-          "allowInterruptions": false
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
-      "steps": [
+            "$type": "Microsoft.IfCondition",
+            "condition": "user.lists == null",
+            "steps": [
+                {
+                    "$type": "Microsoft.InitProperty",
+                    "property": "user.lists",
+                    "type": "object"
+                }
+            ]
+        },
         {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:07:50.209Z",
-            "updatedAt": "2019-07-01T22:07:52.603Z",
-            "id": "199536"
-          },
-          "activity": "[activity-199536]"
-        }
-      ],
-      "elseSteps": [
+            "$type": "Microsoft.IfCondition",
+            "condition": "dialog.listName == null",
+            "steps": [
+              {
+                "$type": "Microsoft.ChoiceInput",
+                "property": "dialog.listName",
+                "choices": [
+                  {
+                    "value": "shopping",
+                    "synonyms": [
+                      "1",
+                      "first",
+                      "shopping",
+                      "first one"
+                    ]
+                  },
+                  {
+                    "value": "grocery",
+                    "synonyms": [
+                      "2",
+                      "second",
+                      "grocery",
+                      "second one"
+                    ]
+                  },
+                  {
+                    "value": "todo",
+                    "synonyms": [
+                      "3",
+                      "third",
+                      "todo",
+                      "third one",
+                      "to do"
+                    ]
+                  }
+                ],
+                "prompt": "Which list do you want to show?",
+                "style": "SuggestedAction",
+                "alwaysPrompt": true,
+                "allowInterruptions": false
+              }
+            ]
+        },
         {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:08:08.976Z",
-            "updatedAt": "2019-07-01T22:08:12.401Z",
-            "id": "136653"
-          },
-          "activity": "[activity-136653]"
+            "$type": "Microsoft.IfCondition",
+            "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Your have no items in your {dialog.listName} list."
+                }
+            ],
+            "elseSteps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "[ShowItems(user, dialog.listName)]"
+                }
+            ]
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:07:51.916Z",
-        "updatedAt": "2019-07-01T22:07:51.943Z",
-        "id": "089905"
-      }
-    }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T22:07:31.586Z",
-    "updatedAt": "2019-07-01T22:07:31.619Z",
-    "id": "390323"
-  }
+    ]
 }

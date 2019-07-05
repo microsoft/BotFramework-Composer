@@ -1,121 +1,50 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "generator": "common.lg",
-    "steps": [
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "@promptContentML",
+      "property": "dialog.item"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "@ListType",
+      "property": "dialog.listName"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+      "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-04T19:39:15.839Z",
-            "updatedAt": "2019-07-04T19:42:11.560Z",
-            "id": "878434"
-          },
-          "activity": "[activity-878434]"
+          "activity": "The list name must be shopping, grocery or todo."
         },
         {
-            "$type": "Microsoft.SetProperty",
-            "value": "@ListType",
-            "property": "dialog.listName"
-        },
-        {
-            "$type": "Microsoft.IfCondition",
-            "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "The list name must be shopping, grocery or todo."
-                },
-                {
-                    "$type": "Microsoft.EndDialog"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IfCondition",
-            "condition": "dialog.listName == null",
-            "steps": [
-              {
-                "$type": "Microsoft.ChoiceInput",
-                "property": "dialog.listName",
-                "choices": [
-                  {
-                    "value": "shopping",
-                    "synonyms": [
-                      "1",
-                      "first",
-                      "shopping",
-                      "first one"
-                    ]
-                  },
-                  {
-                    "value": "grocery",
-                    "synonyms": [
-                      "2",
-                      "second",
-                      "grocery",
-                      "second one"
-                    ]
-                  },
-                  {
-                    "value": "todo",
-                    "synonyms": [
-                      "3",
-                      "third",
-                      "todo",
-                      "third one",
-                      "to do"
-                    ]
-                  }
-                ],
-                "prompt": "Which list do you want to remove?",
-                "style": "SuggestedAction",
-                "alwaysPrompt": true,
-                "allowInterruptions": false
-              }
-            ]
-        },
-        {
-            "$type": "Microsoft.IfCondition",
-            "condition": "user.lists == null",
-            "steps": [
-                {
-                    "$type": "Microsoft.InitProperty",
-                    "property": "user.lists",
-                    "type": "object"
-                }
-            ]
-        },
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "dialog.listName == null",
+      "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
           "property": "dialog.listName",
           "choices": [
             {
               "value": "shopping",
-              "synonyms": [
-                "1",
-                "first",
-                "shopping",
-                "first one"
-              ]
+              "synonyms": ["1", "first", "shopping", "first one"]
             },
             {
               "value": "grocery",
-              "synonyms": [
-                "2",
-                "second",
-                "grocery",
-                "second one"
-              ]
+              "synonyms": ["2", "second", "grocery", "second one"]
             },
             {
               "value": "todo",
-              "synonyms": [
-                "3",
-                "third",
-                "todo",
-                "third one",
-                "to do"
-              ]
+              "synonyms": ["3", "third", "todo", "third one", "to do"]
             }
           ],
           "prompt": "Which list do you want to remove?",
@@ -162,27 +91,11 @@
       "$type": "Microsoft.EditArray",
       "changeType": "Remove",
       "arrayProperty": "user.lists.{dialog.listName}",
-      "value": "dialog.item",
-      "$designer": {
-        "createdAt": "2019-07-01T22:07:25.549Z",
-        "updatedAt": "2019-07-01T22:07:25.555Z",
-        "id": "408425"
-      }
+      "value": "dialog.item"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:07:24.419Z",
-        "updatedAt": "2019-07-01T22:07:26.294Z",
-        "id": "192360"
-      },
-      "activity": "[activity-192360]"
+      "activity": "Successfully removed {dialog.item} from {dialog.listName} list."
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T22:07:12.403Z",
-    "updatedAt": "2019-07-01T22:07:12.458Z",
-    "id": "230713"
-  }
+  ]
 }
