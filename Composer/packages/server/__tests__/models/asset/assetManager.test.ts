@@ -23,7 +23,7 @@ describe('test assetManager', () => {
   it('test copyProjectTemplateTo', async () => {
     const assetManager = new AssetManager(mockAssetLibraryPath);
     await assetManager.getProjectTemplate();
-    await expect(async () => assetManager.copyProjectTemplateTo('SampleBot', locationRef)).not.toThrowError();
+    await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).rejects.not.toThrow();
     // remove the saveas files
     try {
       rimraf.sync(mockCopyToPath);
