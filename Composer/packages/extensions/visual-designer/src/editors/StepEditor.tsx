@@ -63,14 +63,12 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
 
   return (
     <div className="step-editor" style={{ position: 'relative', width: editorWidth, height: editorHeight }}>
-      <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2 }}>
+      <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" style={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>
             <Trigger />
           </OffsetContainer>
-          <OffsetContainer>
-            <Edge direction="y" x={TriggerSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
-          </OffsetContainer>
+          <Edge direction="y" x={TriggerSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
         </div>
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>

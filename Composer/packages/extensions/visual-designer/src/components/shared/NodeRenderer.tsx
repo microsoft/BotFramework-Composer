@@ -12,6 +12,7 @@ import {
   EventRule,
   IfCondition,
   SwitchCondition,
+  Foreach,
 } from '../nodes/index';
 
 // eslint-disable-next-line no-unused-vars
@@ -28,6 +29,8 @@ const rendererByObiType = {
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
   [ObiTypes.SwitchCondition]: SwitchCondition,
+  [ObiTypes.Foreach]: Foreach,
+  [ObiTypes.ForeachPage]: Foreach,
   [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;

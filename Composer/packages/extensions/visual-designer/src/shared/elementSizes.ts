@@ -8,6 +8,13 @@ export const DiamondSize = {
   height: 20,
 };
 
+export const LoopIconSize = {
+  width: 24,
+  height: 24,
+};
+
+export const LoopEdgeMarginLeft = 20;
+
 export const EventNodeSize = {
   width: 180,
   height: 32,
