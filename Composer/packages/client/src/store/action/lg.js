@@ -23,7 +23,7 @@ const textFromTemplates = templates => {
         text += '(' + template.Parameters.join(', ') + ')';
       }
       text += '\n';
-      text += `${template.Body.trim()}` + '\n\n';
+      text += `${template.Body.trim()}`;
     }
   });
 
@@ -94,17 +94,20 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   const oldTemplates = templatesFromText(file.content);
   if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
-  const newTemplates = oldTemplates.map(item => {
-    if (item.Name === templateName) {
-      return {
-        Name: template.Name,
-        Body: template.Body,
-      };
-    }
-    return item;
-  });
+  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
+  if (orignialTemplate === undefined) {
+    throw new Error(`no such template ${templateName} to update`);
+  }
+  const startLineNumber = orignialTemplate.ParseTree._start.line;
+  const endLineNumber = orignialTemplate.ParseTree._stop.line;
 
-  const content = textFromTemplates(newTemplates);
+  const lines = file.content.split('\n');
+  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+  const contentAfter = lines.slice(endLineNumber).join('\n');
+  const newTemplateContent = textFromTemplates([template]);
+
+  const content = [contentBefore, newTemplateContent, contentAfter].join('\n');
+
   return await updateLgFile(dispatch, { id: file.id, content });
 }
 
@@ -125,20 +128,13 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
     return new Error(validateResult.error.Message);
   }
 
-  // ToDo, here got an alternative implementation
-  // ```file.content += textFromTemplates(template)```
-  // but maybe cannot handle comments correctly. not sure which is better
-
-  const oldTemplates = templatesFromText(file.content);
-  if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
-
-  const newTemplates = [...oldTemplates];
+  let content = file.content;
   if (position === 0) {
-    newTemplates.unshift(template);
+    content = textFromTemplates([template]) + content + '\n\n';
   } else {
-    newTemplates.push(template);
+    content = content + '\n\n' + textFromTemplates([template]);
   }
-  const content = textFromTemplates(newTemplates);
+
   return await updateLgFile(dispatch, { id: file.id, content });
 }
 
