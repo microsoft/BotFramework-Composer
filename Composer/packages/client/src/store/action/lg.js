@@ -130,9 +130,9 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
 
   let content = file.content;
   if (position === 0) {
-    content = textFromTemplates([template]) + content + '\n\n';
+    content = textFromTemplates([template]) + '\n\n' + content;
   } else {
-    content = content + '\n\n' + textFromTemplates([template]);
+    content = content.trimEnd() + '\n\n' + textFromTemplates([template]) + '\n';
   }
 
   return await updateLgFile(dispatch, { id: file.id, content });
@@ -148,11 +148,18 @@ export async function removeLgTemplate(dispatch, { file, templateName }) {
   const oldTemplates = templatesFromText(file.content);
   if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
-  const newTemplates = oldTemplates.filter(item => {
-    return item.Name !== templateName;
-  });
+  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
+  if (orignialTemplate === undefined) {
+    throw new Error(`no such template ${templateName} to delete`);
+  }
+  const startLineNumber = orignialTemplate.ParseTree._start.line;
+  const endLineNumber = orignialTemplate.ParseTree._stop.line;
 
-  const content = textFromTemplates(newTemplates);
+  const lines = file.content.split('\n');
+  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+  const contentAfter = lines.slice(endLineNumber).join('\n');
+
+  const content = [contentBefore, contentAfter].join('\n');
 
   return await updateLgFile(dispatch, { id: file.id, content });
 }
