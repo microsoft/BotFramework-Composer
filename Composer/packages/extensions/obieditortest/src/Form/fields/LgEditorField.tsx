@@ -23,10 +23,10 @@ export function LgEditorField(props: FieldProps) {
     });
     if (template === null || template === undefined) {
       if (props.formContext.getDialogId()) {
-        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: '' }, -1);
+        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: '- Hi' }, -1);
         props.onChange(`[${lgId}]`);
       }
-      setTemplateToRender({ Name: `# ${lgId}`, Body: '' });
+      setTemplateToRender({ Name: `# ${lgId}`, Body: '- Hi' });
     } else {
       if (templateToRender.Name === '') {
         setTemplateToRender({ Name: `# ${lgId}`, Body: template.body });
