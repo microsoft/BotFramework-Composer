@@ -18,7 +18,11 @@ const textFromTemplates = templates => {
 
   templates.forEach(template => {
     if (template.Name && (template.Body !== null && template.Body !== undefined)) {
-      text += `# ${template.Name.trim()}` + '\n';
+      text += `# ${template.Name.trim()}`;
+      if (template.Parameters && template.Parameters.length > 0) {
+        text += '(' + template.Parameters.join(', ') + ')';
+      }
+      text += '\n';
       text += `${template.Body.trim()}` + '\n\n';
     }
   });
