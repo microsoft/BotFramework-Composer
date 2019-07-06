@@ -4,6 +4,7 @@
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
+      "prompt": "Please select a value from below:",
       "property": "user.style",
       "choices": [
         {

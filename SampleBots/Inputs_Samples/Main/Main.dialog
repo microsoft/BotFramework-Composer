@@ -76,11 +76,7 @@
         }
       ]
     },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
-      "steps": [
-        {
+	{
           "$type": "Microsoft.IntentRule",
           "intent": "OAuthInput",
           "steps": [
@@ -89,16 +85,11 @@
               "dialog": "OAuthInput"
             }
           ]
-        },
-        {
-          "$type": "Microsoft.IntentRule",
-          "intent": "CancelIntent",
-          "steps": [
-            {
-              "$type": "Microsoft.CancelAllDialogs"
-            }
-          ]
-        },
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {

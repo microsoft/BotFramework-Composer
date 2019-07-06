@@ -18,11 +18,6 @@
         "inlineOrMore": ", or ",
         "includeNumbers": true
       },
-      "confirmChoices": [
-        {
-          "action": {}
-        }
-      ],
       "$designer": {
         "createdAt": "2019-07-01T21:59:15.892Z",
         "updatedAt": "2019-07-01T21:59:15.898Z",
