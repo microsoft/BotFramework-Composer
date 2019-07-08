@@ -1,6 +1,8 @@
 ## Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. 
+
+If this is a bug fix, please describe the root cause and analysis of this problem. 
 
 ## Task Item
 
@@ -21,6 +23,5 @@ Please delete options that are not relevant.
 ## Checklist
 
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
