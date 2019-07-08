@@ -28,10 +28,10 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
         const templateName = data.activity.slice(1, data.activity.length - 1);
         const templates = await getLgTemplates('common', `${templateName}`);
         const [template] = templates.filter(template => {
-          return template.name === templateName;
+          return template.Name === templateName;
         });
-        if (template && template.body) {
-          const [firstLine] = template.body.split('\n');
+        if (template && template.Body) {
+          const [firstLine] = template.Body.split('\n');
           setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
         }
       }

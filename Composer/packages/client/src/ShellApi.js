@@ -177,7 +177,7 @@ export function ShellApi() {
       throw new Error(res.error.Message);
     }
 
-    return res.templates.map(t => ({ name: t.Name, body: t.Body }));
+    return res.templates.map(t => ({ Name: t.Name, Body: t.Body }));
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {

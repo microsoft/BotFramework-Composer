@@ -1,6 +1,6 @@
 interface LgTemplate {
-  name: string;
-  body: string;
+  Name: string;
+  Body: string;
 }
 
 export interface NodeProps {

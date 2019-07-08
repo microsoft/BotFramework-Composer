@@ -1,4 +1,4 @@
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps, FieldProps } from '@bfdesigner/react-jsonschema-form';
 
 import { ShellApi, LuFile, LgFile } from '../types';
 
@@ -10,12 +10,16 @@ export interface FormContext {
   lgFiles: LgFile[];
   dialogOptions: string[];
   dialogName: string;
-  getDialogId: any;
+  dialogId?: string;
 }
 
 interface EnumOption {
   label: string;
   value: string;
+}
+
+export interface BFDFieldProps extends FieldProps {
+  formContext: FormContext;
 }
 
 export interface SelectWidgetProps extends WidgetProps {

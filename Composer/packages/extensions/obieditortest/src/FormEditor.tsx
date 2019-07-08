@@ -119,9 +119,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             luFiles: props.luFiles,
             lgFiles: props.lgFiles,
             dialogName: props.dialogName,
-            getDialogId: () => {
-              return get(data, '$designer.id');
-            },
+            dialogId: get(data, '$designer.id'),
           }}
           idPrefix={props.focusPath}
         >
