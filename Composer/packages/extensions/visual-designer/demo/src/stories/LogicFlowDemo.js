@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { LogicFlow } from '../../../src/logicflow';
 import { parseAdaptiveDialog } from '../../../src/logicflow/parseObi';
 import AddToDo from '../samples/todo/AddToDo.json';
+import SimpleFlow from '../samples/logicflow/SimpleFlow.json';
+
+const flows = [{ name: 'SimpleFlow', data: SimpleFlow }, { name: 'AddToDo', data: parseAdaptiveDialog(AddToDo) }];
 
 export const LogicFlowDemo = () => {
-  const flow = parseAdaptiveDialog(AddToDo);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <div>
-      <LogicFlow flow={flow} />
+      <div className="flowdata-selector">
+        <select value={selectedIndex} onChange={e => setSelectedIndex(e.target.value)}>
+          {flows.map((x, index) => (
+            <option key={x.name} value={index}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <LogicFlow flow={flows[selectedIndex].data} />
     </div>
   );
 };
