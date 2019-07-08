@@ -106,6 +106,11 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 }
 
+async function getRecentProjects(req: Request, res: Response) {
+  const project = ProjectService.recentBotProjects;
+  return res.status(200).json(project);
+}
+
 async function updateDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.id, req.body.content);
@@ -232,4 +237,5 @@ export const ProjectController = {
   saveProjectAs,
   createProject,
   getAllProjects,
+  getRecentProjects,
 };
