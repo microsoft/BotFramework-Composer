@@ -1,3 +1,5 @@
+import { Boundary } from '../shared/Boundary';
+
 export enum FlowTypes {
   Flow = 'Flow',
   Element = 'Element',
@@ -20,18 +22,22 @@ export class FlowBaseNode {
 }
 
 export class ElementNode extends FlowBaseNode {
-  constructor(id: string, data: any) {
+  boundary: Boundary;
+  element?: JSX.Element;
+  constructor(id: string, data: any, boundary: Boundary, element?: JSX.Element) {
     super(FlowTypes.Element, id, data);
+    this.boundary = boundary;
+    this.element = element;
   }
 }
 
 export class FlowGroup extends FlowBaseNode {
   label: string;
   flow: FlowBaseNode[];
-  constructor(id: string, data: any, label: string, branchSteps: FlowBaseNode[]) {
+  constructor(id: string, data: any, label: string, flowSteps: FlowBaseNode[]) {
     super(FlowTypes.Branch, id, data);
     this.label = label;
-    this.flow = branchSteps || [];
+    this.flow = flowSteps || [];
   }
 }
 

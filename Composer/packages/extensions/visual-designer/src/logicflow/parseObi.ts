@@ -1,6 +1,8 @@
 import { ObiTypes } from '../shared/ObiTypes';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
 import { FlowBaseNode, FlowGroup, ElementNode, DecisionNode, LoopNode } from './LogicFlowNodes';
+import { renderObiData } from './obiRenderer';
 
 export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
   const steps = json.steps || [];
@@ -62,6 +64,6 @@ function parseObiJson(json: any, path: string): FlowBaseNode | undefined {
     case ObiTypes.ForeachPage:
       return parseForeach(json, path);
     default:
-      return new ElementNode(path, json);
+      return new ElementNode(path, json, measureJsonBoundary(json), renderObiData(path, json));
   }
 }

@@ -6,7 +6,7 @@ import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ObiTypes } from '../shared/ObiTypes';
 
-import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode } from './LogicFlowNodes';
+import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
 
 export interface LogicFlowProps {
   flow: FlowGroup;
@@ -20,12 +20,12 @@ const NodeContainer: React.SFC<{ boundary: Boundary }> = ({ boundary, children }
 );
 
 const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
-  if (flowNode instanceof FlowGroup) return renderFlowGroup(flowNode);
-  if (flowNode instanceof ElementNode) return renderElementNode(flowNode);
-  if (flowNode instanceof DecisionNode) return renderDecisionNode(flowNode);
-  if (flowNode instanceof LoopNode) return renderLoopNode(flowNode);
+  if (flowNode['@'] === FlowTypes.Flow) return renderFlowGroup(flowNode as FlowGroup);
+  if (flowNode['@'] === FlowTypes.Element) return renderElementNode(flowNode as ElementNode);
+  if (flowNode['@'] === FlowTypes.Decision) return renderDecisionNode(flowNode as DecisionNode);
+  if (flowNode['@'] === FlowTypes.Loop) return renderLoopNode(flowNode as LoopNode);
 
-  return renderElementNode(flowNode);
+  return <div>{JSON.stringify(flowNode)}</div>;
 };
 
 const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
@@ -56,11 +56,22 @@ const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
   );
 };
 
-const renderElementNode = (elementNode: ElementNode): JSX.Element => (
-  <p style={{ width: 200, height: 50, border: '1px solid blue', overflow: 'hidden' }}>
-    {JSON.stringify(elementNode.data)}
-  </p>
-);
+const defaultElementBoundary = new Boundary(100, 100);
+
+const renderElementNode = (elementNode: ElementNode): JSX.Element => {
+  const boundary = elementNode.boundary || defaultElementBoundary;
+  return (
+    <div
+      style={{
+        width: boundary.width,
+        height: boundary.height,
+        overflow: 'hidden',
+      }}
+    >
+      {elementNode.element || JSON.stringify(elementNode)}
+    </div>
+  );
+};
 
 const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => (
   <div>
