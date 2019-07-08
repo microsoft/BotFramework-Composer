@@ -5,6 +5,8 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ObiTypes } from '../shared/ObiTypes';
+import { sequentialLayouter } from '../layouters/sequentialLayouter';
+import { Edge } from '../components/shared/EdgeComponents';
 
 import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
 
@@ -29,26 +31,23 @@ const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
 };
 
 const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
-  const flowBoxes = flowGroup.flow.map(x => {
+  let flowBoxes = flowGroup.flow.map((x, index) => {
     return {
+      id: `${flowGroup.id}[${index}]`,
       boundary: measureJsonBoundary(x.data),
       offset: { x: 0, y: 0 },
     };
   });
-  const axisX = Math.max(...flowBoxes.map(x => x.boundary.axisX));
-
-  flowBoxes.forEach(x => {
-    x.offset.x = axisX - x.boundary.axisX;
-  });
-  flowBoxes.reduce((sumOffsetY, x: any, index: number) => {
-    x.offset.y = sumOffsetY + 20;
-    return x.offset.y + x.boundary.height;
-  }, 0);
+  const layout = sequentialLayouter(flowBoxes);
+  flowBoxes = layout.nodes;
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', width: layout.boundary.width, height: layout.boundary.height }}>
+      {(layout.edges || []).map(x => (
+        <Edge key={x.id} {...x} />
+      ))}
       {flowGroup.flow.map((x: any, index: number) => (
-        <OffsetContainer key={x.id} offset={flowBoxes[index].offset}>
+        <OffsetContainer key={`FlowGroup/${x.id}[${index}]/node/offset`} offset={flowBoxes[index].offset}>
           <NodeContainer boundary={flowBoxes[index].boundary}>{renderNode(x)}</NodeContainer>
         </OffsetContainer>
       ))}
