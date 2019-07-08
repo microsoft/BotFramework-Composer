@@ -4,7 +4,7 @@ export const outline = css`
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin: 32px 50px 32px 32px;
+  margin: 32px 50px 0px 32px;
   border: 1px solid #979797;
   overflow-x: auto;
 `;
