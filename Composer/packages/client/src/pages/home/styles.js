@@ -1,12 +1,16 @@
 import { css } from '@emotion/core';
 
 export const outline = css`
+  display: block;
+`;
+
+export const page = css`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 44px);
+  height: calc(100vh - 170px);
   margin: 32px 50px 32px 32px;
   border: 1px solid #979797;
-  overflow-x: auto;
+  overflow: auto;
 `;
 
 export const title = css`

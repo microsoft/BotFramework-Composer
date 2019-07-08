@@ -102,9 +102,9 @@ export const Home = () => {
   }, [state.recentProjects]);
 
   return (
-    <div>
+    <div css={home.outline}>
       <ToolBar toolbarItems={toolbarItems} />
-      <div css={home.outline}>
+      <div css={home.page}>
         <div css={home.title}>{formatMessage(`"Are you real?"`)}</div>
         <div css={home.introduction}>
           <div css={home.introTitle}>
