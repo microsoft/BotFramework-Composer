@@ -73,8 +73,8 @@ test('should jsonpath be passed down to children', () => {
   expect(result.choice.id).toEqual(currentPath);
 
   expect(result.ifGroup).toBeTruthy();
-  expect(result.ifGroup.json.children[0].id).toEqual(`${currentPath}.steps[0]`);
+  expect(result.ifGroup.id).toEqual(`${currentPath}.steps`);
 
   expect(result.elseGroup).toBeTruthy();
-  expect(result.elseGroup.json.children[0].id).toEqual(`${currentPath}.elseSteps[0]`);
+  expect(result.elseGroup.id).toEqual(`${currentPath}.elseSteps`);
 });

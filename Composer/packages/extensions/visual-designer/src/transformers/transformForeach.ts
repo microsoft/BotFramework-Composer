@@ -14,7 +14,7 @@ export function transformForeach(input: any, jsonpath: string) {
   const steps = input[StepsKey] || [];
   const stepsNode = new IndexedNode(`${jsonpath}.steps`, {
     $type: ObiTypes.StepGroup,
-    children: steps.map((x, index) => new IndexedNode(`${jsonpath}.steps[${index}]`, x)),
+    children: steps,
   });
 
   return {

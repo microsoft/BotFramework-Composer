@@ -30,7 +30,7 @@ export function transformSwitchCondition(input, jsonpath) {
     new IndexedNode(`${jsonpath}.${DefaultBranchKey}`, {
       $type: ObiTypes.StepGroup,
       label: DefaultBranchKey,
-      children: defaultSteps.map((x, index) => new IndexedNode(`${jsonpath}.${DefaultBranchKey}[${index}]`, x)),
+      children: defaultSteps,
     })
   );
 
@@ -42,7 +42,7 @@ export function transformSwitchCondition(input, jsonpath) {
       return new IndexedNode(`${prefix}.${CaseStepKey}`, {
         $type: ObiTypes.StepGroup,
         label: value,
-        children: (steps || []).map((x, index) => new IndexedNode(`${prefix}.${CaseStepKey}[${index}]`, x)),
+        children: steps || [],
       });
     })
   );
