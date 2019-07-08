@@ -95,18 +95,21 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   if (Array.isArray(oldTemplates) === false) return new Error('origin lg file is not valid');
 
   const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
+  let content = file.content.trimEnd();
+
   if (orignialTemplate === undefined) {
-    throw new Error(`no such template ${templateName} to update`);
+    content = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
+  } else {
+    const startLineNumber = orignialTemplate.ParseTree._start.line;
+    const endLineNumber = orignialTemplate.ParseTree._stop.line;
+
+    const lines = content.split('\n');
+    const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+    const contentAfter = lines.slice(endLineNumber).join('\n');
+    const newTemplateContent = textFromTemplates([template]);
+
+    content = [contentBefore, newTemplateContent, contentAfter].join('\n');
   }
-  const startLineNumber = orignialTemplate.ParseTree._start.line;
-  const endLineNumber = orignialTemplate.ParseTree._stop.line;
-
-  const lines = file.content.split('\n');
-  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-  const contentAfter = lines.slice(endLineNumber).join('\n');
-  const newTemplateContent = textFromTemplates([template]);
-
-  const content = [contentBefore, newTemplateContent, contentAfter].join('\n');
 
   return await updateLgFile(dispatch, { id: file.id, content });
 }
