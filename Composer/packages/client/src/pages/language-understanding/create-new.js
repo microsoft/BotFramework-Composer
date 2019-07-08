@@ -36,7 +36,7 @@ export default function NewLuFileModal(props) {
       return;
     }
 
-    onSubmit({ ...formData });
+    onSubmit({ ...formData, id: formData.name });
   };
 
   return (
