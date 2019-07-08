@@ -11,6 +11,10 @@
     },
     {
       "$type": "Microsoft.SendActivity",
+      "activity": "[bye] bye bye again"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
       "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
     },
     {

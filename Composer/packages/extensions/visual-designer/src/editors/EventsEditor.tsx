@@ -7,7 +7,7 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 
 export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
   const ruleCount = data.children.length;
-  const title = `Skills (${ruleCount})`;
+  const title = `Events (${ruleCount})`;
 
   const onClick = $type => {
     onEvent(NodeEventTypes.Insert, { id, $type, position: ruleCount });

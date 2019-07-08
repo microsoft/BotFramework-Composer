@@ -32,6 +32,9 @@ const activityFields = {
   invalidPrompt: {
     'ui:widget': TextareaWidget,
   },
+  value: {
+    'ui:widget': NullField,
+  },
 };
 
 export const uiSchema = {
@@ -94,20 +97,20 @@ export const uiSchema = {
     Steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'IndexProperty', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'steps', '*'],
   },
   'Microsoft.ForeachPage': {
     Steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'PageSize', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'steps', '*'],
   },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
     // ...globalFields,  // we do not want to exclude the property field here
-    'ui:order': ['*', 'body'],
+    'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   'Microsoft.IfCondition': {
     elseSteps: {
@@ -149,9 +152,10 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -163,24 +167,32 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
   'Microsoft.ConfirmInput': {
     ...activityFields,
+    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
+    // - must provide yes/no in special format along with alternatives that have to be handled
+    // TODO: Implement confirmChoices-specific widget with appropriate business rules.
+    confirmChoices: {
+      'ui:field': NullField,
+    },
     'ui:order': [
       'prompt',
       'property',
       'style',
-      'confirmChoices',
+      'defaultLocale',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -197,12 +209,14 @@ export const uiSchema = {
       'property',
       'outputFormat',
       'style',
+      'defaultLocale',
       'choices',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -218,9 +232,10 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },

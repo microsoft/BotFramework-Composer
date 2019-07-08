@@ -133,7 +133,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
         <div className="CasesFieldConditions" key={item.value}>
           <TableField<MicrosoftIDialog>
             {...props}
-            title={item.value}
+            title={`Branch: ${item.value}`}
             formData={item.steps}
             navPrefix={`cases[${itemIdx}].steps`}
             onChange={handleStepsUpdate(item.value)}

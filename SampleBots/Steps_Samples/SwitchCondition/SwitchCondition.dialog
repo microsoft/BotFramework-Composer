@@ -2,11 +2,12 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-06-07T16:18:34.824Z",
-    "updatedAt": "2019-06-07T16:18:34.852Z",
+    "updatedAt": "2019-07-03T06:51:22.177Z",
     "id": "039096",
     "name": "13 - SwitchCondition",
     "description": "This is a bot that demonstrates use of the SwitchCondition in Adaptive Dialogs."
   },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
