@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 export const outline = css`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 44px);
   margin: 32px 50px 32px 32px;
   border: 1px solid #979797;
   overflow-x: auto;
