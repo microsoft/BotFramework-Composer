@@ -25,7 +25,16 @@ const textFromTemplates = templates => {
   return text;
 };
 
+const contentValidate = text => {
+  return LGParser.TryParse(text);
+};
+
 export async function updateLgFile(dispatch, { id, content }) {
+  const validateResult = contentValidate(content);
+  if (validateResult.isValid === false) {
+    throw new Error(`lg content is invalid, ${validateResult.error.Message}`);
+  }
+
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
@@ -42,6 +51,11 @@ export async function updateLgFile(dispatch, { id, content }) {
 }
 
 export async function createLgFile(dispatch, { id, content }) {
+  const validateResult = contentValidate(content);
+  if (validateResult.isValid === false) {
+    throw new Error(`lg content is invalid, ${validateResult.error.Message}`);
+  }
+
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
     dispatch({

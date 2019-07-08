@@ -31,6 +31,7 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
+  isValid: boolean;
 }
 
 export interface LUFile {

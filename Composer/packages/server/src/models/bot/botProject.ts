@@ -130,12 +130,20 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
+    const validation = this.lgIndexer.validate(content);
+    if (validation.isValid === false) {
+      throw new Error(`update lg ${id} content is invalid, ${validation.error.Message}`);
+    }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    const validation = this.lgIndexer.validate(content);
+    if (validation.isValid === false) {
+      throw new Error(`create lg ${id} content is invalid, ${validation.error.Message}`);
+    }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };

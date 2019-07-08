@@ -1,3 +1,5 @@
+import { LGParser } from 'botbuilder-lg';
+
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
 
@@ -9,12 +11,13 @@ export class LGIndexer {
     this.lgFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
-      // todo: use lg parser.
+      const isValid = this.validate(file.content).isValid;
       if (extName === '.lg') {
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
+          isValid,
         });
       }
     }
@@ -22,5 +25,9 @@ export class LGIndexer {
 
   public getLgFiles() {
     return this.lgFiles;
+  }
+
+  public validate(content: string) {
+    return LGParser.TryParse(content);
   }
 }
