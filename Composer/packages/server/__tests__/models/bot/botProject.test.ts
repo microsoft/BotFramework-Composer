@@ -29,8 +29,10 @@ describe('index', () => {
     expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
-    expect(project.dialogs[0].lgTemplates.length).toBe(3);
-    expect(project.dialogs[0].lgTemplates.join(',')).toBe(['hello', 'bye', 'ShowImage'].join(','));
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.length).toBe(3);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
+      ['hello', 'bye', 'ShowImage'].join(',')
+    );
   });
 });
 
@@ -39,7 +41,7 @@ describe('updateDialog', () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
     const dialogs = await proj.updateDialog('a', newValue);
-    const aDialog = dialogs.find((f: { name: string }) => f.name.startsWith('a'));
+    const aDialog = dialogs.find((f: { id: string }) => f.id === 'a');
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
     await proj.updateDialog('a', initValue);
@@ -59,7 +61,7 @@ describe('createFromTemplate', () => {
 
   it('should create a dialog file with given steps', async () => {
     const dialogs = await proj.createDialog(dialogName);
-    const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
+    const newFile = dialogs.find((f: { id: string }) => f.id === dialogName);
 
     expect(newFile).not.toBeUndefined();
 
