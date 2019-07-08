@@ -24,6 +24,7 @@ export const FormCard = ({ header, corner, label, icon = 'MessageBot', nodeColor
   return (
     <div
       className="card"
+      data-testid="FormCard"
       style={containerStyle}
       onClick={e => {
         e.stopPropagation();
