@@ -5,6 +5,7 @@ import { DiamondSize, InitNodeSize, LoopIconSize } from '../shared/elementSizes'
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
+import { IndexedNode } from '../transformers/models/IndexedNode';
 
 import {
   calculateIfElseBoundary,
@@ -14,7 +15,7 @@ import {
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup) {
-  const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
+  const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(new IndexedNode('', x)));
   return calculateSequenceBoundary(nodes);
 }
 

@@ -17,30 +17,39 @@ export class RuleGroup extends React.Component<NodeProps> {
   static defaultProps = defaultNodeProps;
   containerElement;
 
-  propagateBoundary() {
+  propagateBoundary(): void {
     if (!this.containerElement) return;
 
     const { scrollWidth, scrollHeight } = this.containerElement;
     this.props.onResize(new Boundary(scrollWidth, scrollHeight));
   }
 
-  renderRule(rule) {
-    const { focusedId, onEvent } = this.props;
-    const data = rule.json;
+  renderRule(rule, index: number): JSX.Element {
+    const { id, focusedId, onEvent } = this.props;
+    const elementId = `${id}[${index}]`;
     return (
-      <NodeRenderer
-        id={rule.id}
-        data={data}
-        focusedId={focusedId}
-        onEvent={onEvent}
-        onResize={() => {
-          this.propagateBoundary();
+      <div
+        key={elementId + 'block'}
+        style={{
+          width: RuleBlockWidth,
+          height: RuleBlockHeight,
+          boxSizing: 'border-box',
         }}
-      />
+      >
+        <NodeRenderer
+          id={elementId}
+          data={rule}
+          focusedId={focusedId}
+          onEvent={onEvent}
+          onResize={() => {
+            this.propagateBoundary();
+          }}
+        />
+      </div>
     );
   }
 
-  render() {
+  render(): JSX.Element {
     const { data } = this.props;
     const rules = data.children || [];
 
@@ -56,18 +65,7 @@ export class RuleGroup extends React.Component<NodeProps> {
           this.propagateBoundary();
         }}
       >
-        {rules.map(x => (
-          <div
-            key={x.id + 'block'}
-            style={{
-              width: RuleBlockWidth,
-              height: RuleBlockHeight,
-              boxSizing: 'border-box',
-            }}
-          >
-            {this.renderRule(x)}
-          </div>
-        ))}
+        {rules.map((x, i) => this.renderRule(x, i))}
       </div>
     );
   }

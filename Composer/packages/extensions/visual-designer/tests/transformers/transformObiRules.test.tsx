@@ -14,7 +14,6 @@ test('should parse single rule correctly with empty parentPath', () => {
   expect(result.stepGroup).toBeTruthy();
   expect(result.stepGroup.id).toEqual('steps');
   expect(result.stepGroup.json.children.length === json.steps.length).toBeTruthy();
-  expect(result.stepGroup.json.children[0].id).toEqual('steps[0]');
 });
 
 test('should parse single rule correctly with real parentPath', () => {
@@ -26,5 +25,4 @@ test('should parse single rule correctly with real parentPath', () => {
   expect(result.stepGroup).toBeTruthy();
   expect(result.stepGroup.id).toEqual('rules[0].steps');
   expect(result.stepGroup.json.children.length === json.steps.length).toBeTruthy();
-  expect(result.stepGroup.json.children[0].id).toEqual('rules[0].steps[0]');
 });

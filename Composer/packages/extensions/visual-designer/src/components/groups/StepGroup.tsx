@@ -12,12 +12,13 @@ import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { IndexedNode } from '../../transformers/models/IndexedNode';
 
 const StepInterval = ElementInterval.y;
 
-const calculateNodes = data => {
+const calculateNodes = (groupId: string, data): GraphNode[] => {
   if (data && data.children && Array.isArray(data.children)) {
-    return data.children.map(indexedStep => GraphNode.fromIndexedJson(indexedStep));
+    return data.children.map((step, index) => GraphNode.fromIndexedJson(new IndexedNode(`${groupId}[${index}]`, step)));
   }
   return [];
 };
@@ -29,7 +30,7 @@ const calculateLayout = (nodes, boundaryMap) => {
 
 export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }: NodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
-  const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
+  const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
   const accumulatedPatches = {};
 

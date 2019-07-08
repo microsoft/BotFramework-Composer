@@ -9,7 +9,7 @@ test('should return {} when input is not IfCondition', () => {
 
 test('should return correct schema when input choice and empty branches', () => {
   const json = { $type: ObiTypes.IfCondition, conditon: 'a==b', steps: [], elseSteps: [] };
-  const result = transformIfCondtion(json);
+  const result = transformIfCondtion(json, '');
   expect(result.choice).toBeTruthy();
   expect(result.ifGroup).toBeTruthy();
   expect(result.ifGroup.json).toEqual({
@@ -25,7 +25,7 @@ test('should return correct schema when input choice and empty branches', () => 
 
 test('should return correct schema when input choice only json', () => {
   const json = { $type: ObiTypes.IfCondition, conditon: 'a==b' };
-  const result = transformIfCondtion(json);
+  const result = transformIfCondtion(json, '');
   expect(result.choice).toBeTruthy();
   expect(result.ifGroup).toBeTruthy();
   expect(result.ifGroup.json).toEqual({
@@ -46,7 +46,7 @@ test('should return correct schema when input complete json', () => {
     steps: [{ $type: 'any' }],
     elseSteps: [{ $type: 'any' }, { $type: 'any' }],
   };
-  const result = transformIfCondtion(json);
+  const result = transformIfCondtion(json, '');
 
   expect(result.choice).toBeTruthy();
 
