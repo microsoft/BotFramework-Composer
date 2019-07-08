@@ -75,7 +75,7 @@ export const Home = () => {
     },
     {
       type: 'action',
-      text: formatMessage('Import'),
+      text: formatMessage('Open'),
       iconName: 'OpenFolderHorizontal',
       onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
       align: 'left',
