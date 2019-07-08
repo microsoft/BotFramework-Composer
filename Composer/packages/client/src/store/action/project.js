@@ -40,6 +40,22 @@ export async function fetchProject(dispatch) {
   }
 }
 
+export async function fetchRecentProjects(dispatch) {
+  try {
+    const response = await axios.get(`${BASEURL}/projects/recent`);
+    dispatch({
+      type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
+      payload: null,
+      error: err,
+    });
+  }
+}
+
 export async function openBotProject(dispatch, absolutePath) {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';

@@ -17,6 +17,7 @@ export const sideBar = isExpand => css`
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  flex-shrink: 0;
 `;
 
 export const dividerTop = css`
