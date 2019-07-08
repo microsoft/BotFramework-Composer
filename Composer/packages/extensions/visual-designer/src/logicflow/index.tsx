@@ -7,19 +7,16 @@ import { Diamond } from '../components/nodes/templates/Diamond';
 import { ObiTypes } from '../shared/ObiTypes';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { Edge } from '../components/shared/EdgeComponents';
+import { DiamondSize } from '../shared/elementSizes';
+import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 
 import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
+import { GraphBox } from './GraphBox';
 
 export interface LogicFlowProps {
   flow: FlowGroup;
   onEvent: (id: string, event: any) => any;
 }
-
-const NodeContainer: React.SFC<{ boundary: Boundary }> = ({ boundary, children }) => (
-  <div style={{ width: boundary.width, height: boundary.height, border: '1px solid grey', overflow: 'hidden' }}>
-    {children}
-  </div>
-);
 
 const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
   if (flowNode['@'] === FlowTypes.Flow) return renderFlowGroup(flowNode as FlowGroup);
@@ -31,13 +28,9 @@ const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
 };
 
 const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
-  let flowBoxes = flowGroup.flow.map((x, index) => {
-    return {
-      id: `${flowGroup.id}[${index}]`,
-      boundary: measureJsonBoundary(x.data),
-      offset: { x: 0, y: 0 },
-    };
-  });
+  let flowBoxes = flowGroup.flow.map(
+    (x, index) => new GraphBox(`${flowGroup.id}[${index}]`, measureJsonBoundary(x.data))
+  );
   const layout = sequentialLayouter(flowBoxes);
   flowBoxes = layout.nodes;
 
@@ -48,7 +41,7 @@ const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
       ))}
       {flowGroup.flow.map((x: any, index: number) => (
         <OffsetContainer key={`FlowGroup/${x.id}[${index}]/node/offset`} offset={flowBoxes[index].offset}>
-          <NodeContainer boundary={flowBoxes[index].boundary}>{renderNode(x)}</NodeContainer>
+          {renderNode(x)}
         </OffsetContainer>
       ))}
     </div>
@@ -72,24 +65,40 @@ const renderElementNode = (elementNode: ElementNode): JSX.Element => {
   );
 };
 
-const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => (
-  <div>
-    <p style={{ width: 200, height: 50, border: '1px solid blue', overflow: 'hidden' }}>
-      {JSON.stringify(decisionNode.data)}
-    </p>
-    <Diamond onClick={() => {}} />
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {decisionNode.branches.map(x => {
-        const boundary = measureJsonBoundary({ $type: ObiTypes.StepGroup, children: x.data });
+const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => {
+  const conditionBox = new GraphBox(decisionNode.id, measureJsonBoundary(decisionNode.condition.data));
+  const diamondBox = new GraphBox(decisionNode.id, new Boundary(DiamondSize.width, DiamondSize.height));
+  const branchBoxes = decisionNode.branches.map(x => {
+    const box = new GraphBox(`${x.id}`, measureJsonBoundary({ $type: ObiTypes.StepGroup, children: x.data }));
+    box.data = x;
+    return box;
+  });
+
+  const layout = switchCaseLayouter(conditionBox, diamondBox, branchBoxes);
+  const { conditionNode, choiceNode, branchNodes } = layout.nodeMap as any;
+
+  return (
+    <div
+      className="LogicflowNode--decision"
+      style={{ width: layout.boundary.width, height: layout.boundary.height, position: 'relative' }}
+    >
+      {(layout.edges || []).map(x => (
+        <Edge key={x.id} {...x} />
+      ))}
+      <OffsetContainer offset={conditionNode.offset}>{renderNode(decisionNode.condition)}</OffsetContainer>
+      <OffsetContainer offset={choiceNode.offset}>
+        <Diamond onClick={() => {}} />
+      </OffsetContainer>
+      {decisionNode.branches.map((x, index) => {
         return (
-          <NodeContainer key={x.id} boundary={boundary}>
+          <OffsetContainer key={`Decision/${x.id}/offset`} offset={branchNodes[index].offset}>
             {renderFlowGroup(x)}
-          </NodeContainer>
+          </OffsetContainer>
         );
       })}
     </div>
-  </div>
-);
+  );
+};
 
 const renderLoopNode = (loopNode: LoopNode): JSX.Element => <p>{JSON.stringify(loopNode.data)}</p>;
 

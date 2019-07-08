@@ -10,26 +10,42 @@ export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
 };
 
 const parseIfCondition = (json: any, basePath: string): FlowBaseNode => {
-  return new DecisionNode(basePath, json, [
-    new FlowGroup(
-      `${basePath}.elseSteps`,
-      json.elseSteps || [],
-      'False',
-      (json.elseSteps || []).map((x, index) => parseObiJson(x, `${basePath}.elseSteps[${index}]`))
-    ),
-    new FlowGroup(
-      `${basePath}.steps`,
-      json.steps || [],
-      'True',
-      (json.steps || []).map((x, index) => parseObiJson(x, `${basePath}.steps[${index}]`))
-    ),
-  ]);
-};
+  const conditionData = {
+    ...json,
+    $type: ObiTypes.ConditionNode,
+  };
 
-const parseSwitchCondition = (json: any, basePath: string): FlowBaseNode => {
   return new DecisionNode(
     basePath,
     json,
+    new ElementNode(basePath, json, measureJsonBoundary(conditionData), renderObiData(basePath, conditionData)),
+    [
+      new FlowGroup(
+        `${basePath}.elseSteps`,
+        json.elseSteps || [],
+        'False',
+        (json.elseSteps || []).map((x, index) => parseObiJson(x, `${basePath}.elseSteps[${index}]`))
+      ),
+      new FlowGroup(
+        `${basePath}.steps`,
+        json.steps || [],
+        'True',
+        (json.steps || []).map((x, index) => parseObiJson(x, `${basePath}.steps[${index}]`))
+      ),
+    ]
+  );
+};
+
+const parseSwitchCondition = (json: any, basePath: string): FlowBaseNode => {
+  const conditionData = {
+    ...json,
+    $type: ObiTypes.ConditionNode,
+  };
+
+  return new DecisionNode(
+    basePath,
+    json,
+    new ElementNode(basePath, json, measureJsonBoundary(conditionData), renderObiData(basePath, conditionData)),
     (json.cases || []).map(
       (caseBranch, index) =>
         new FlowGroup(

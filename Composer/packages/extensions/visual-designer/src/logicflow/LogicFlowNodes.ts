@@ -43,10 +43,12 @@ export class FlowGroup extends FlowBaseNode {
 
 export class DecisionNode extends FlowBaseNode {
   data: any;
+  condition: ElementNode;
   branches: FlowGroup[] = [];
 
-  constructor(id: string, data: any, branches: FlowGroup[]) {
+  constructor(id: string, data: any, condition: ElementNode, branches: FlowGroup[]) {
     super(FlowTypes.Decision, id, data);
+    this.condition = condition;
     this.branches = branches;
   }
 }
