@@ -40,7 +40,6 @@ describe('<IconMenu />', () => {
     expect(getByTestId('iconMenu')).toBeTruthy();
   });
   it('menu items can be clicked', async () => {
-    iconName = iconNames[0];
     const { findByTestId } = render(<IconMenu iconName={iconName} menuItems={menuItems} />);
 
     const iconMenu = await findByTestId('iconMenu');
