@@ -33,7 +33,7 @@ export async function fetchProject(dispatch) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -58,7 +58,7 @@ export async function openBotProject(dispatch, absolutePath) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -84,7 +84,7 @@ export async function saveProjectAs(dispatch, name, description) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -111,7 +111,7 @@ export async function createProject(dispatch, templateId, name, description) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
