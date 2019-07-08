@@ -413,18 +413,5 @@
                 }
             ]
         }
-    ],
-    "botFile": {
-        "name": "bot.botproj",
-        "content": {
-            "services": [],
-            "files": [
-                "*.dialog",
-                "*.lg"
-            ],
-            "entry": "ToDoBot.main.dialog"
-        },
-        "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/bot.botproj",
-        "relativePath": "bot.botproj"
-    }
+    ]
 }
