@@ -87,7 +87,7 @@ export function ShellApi() {
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
-      result[dialog.name] = dialog.content;
+      result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
@@ -147,9 +147,9 @@ export function ShellApi() {
 
     if (path !== '') {
       const updatedDialog = setDialogData(dialogsMap, path, newData);
-      const dialogName = path.split('#')[0];
-      const payload = { name: dialogName, content: updatedDialog };
-      dialogsMap[dialogName] = updatedDialog;
+      const dialogId = path.split('#')[0];
+      const payload = { id: dialogId, content: updatedDialog };
+      dialogsMap[dialogId] = updatedDialog;
       updateDialog(payload);
     }
 
