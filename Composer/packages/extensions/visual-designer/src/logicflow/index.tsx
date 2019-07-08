@@ -3,6 +3,8 @@ import React from 'react';
 import { Boundary } from '../shared/Boundary';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { Diamond } from '../components/nodes/templates/Diamond';
+import { ObiTypes } from '../shared/ObiTypes';
 
 import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode } from './LogicFlowNodes';
 
@@ -54,9 +56,30 @@ const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
   );
 };
 
-const renderElementNode = (elementNode: ElementNode): JSX.Element => <p>{JSON.stringify(elementNode.data)}</p>;
+const renderElementNode = (elementNode: ElementNode): JSX.Element => (
+  <p style={{ width: 200, height: 50, border: '1px solid blue', overflow: 'hidden' }}>
+    {JSON.stringify(elementNode.data)}
+  </p>
+);
 
-const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => <p>{JSON.stringify(decisionNode.data)}</p>;
+const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => (
+  <div>
+    <p style={{ width: 200, height: 50, border: '1px solid blue', overflow: 'hidden' }}>
+      {JSON.stringify(decisionNode.data)}
+    </p>
+    <Diamond onClick={() => {}} />
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {decisionNode.branches.map(x => {
+        const boundary = measureJsonBoundary({ $type: ObiTypes.StepGroup, children: x.data });
+        return (
+          <NodeContainer key={x.id} boundary={boundary}>
+            {renderFlowGroup(x)}
+          </NodeContainer>
+        );
+      })}
+    </div>
+  </div>
+);
 
 const renderLoopNode = (loopNode: LoopNode): JSX.Element => <p>{JSON.stringify(loopNode.data)}</p>;
 
