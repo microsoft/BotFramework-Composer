@@ -22,11 +22,12 @@ export function LgEditorField(props: FieldProps) {
       return template.name === lgId;
     });
     if (template === null || template === undefined) {
+      const newTemplate = props.formData && props.formData.startsWith('-') ? props.formData : `-${props.formData}`;
       if (props.formContext.getDialogId()) {
-        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: '- Hi' }, -1);
+        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: newTemplate }, -1);
         props.onChange(`[${lgId}]`);
       }
-      setTemplateToRender({ Name: `# ${lgId}`, Body: '- Hi' });
+      setTemplateToRender({ Name: `# ${lgId}`, Body: newTemplate });
     } else {
       if (templateToRender.Name === '') {
         setTemplateToRender({ Name: `# ${lgId}`, Body: template.body });
