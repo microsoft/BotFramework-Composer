@@ -36,7 +36,7 @@ export default function NewDialogModal(props) {
       return;
     }
 
-    onSubmit({ ...formData });
+    onSubmit({ ...formData, id: formData.name });
   };
 
   return (

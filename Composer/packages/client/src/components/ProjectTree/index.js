@@ -19,7 +19,7 @@ export const ProjectTree = props => {
 
       item.name = file.displayName;
 
-      if (file.id === 0) {
+      if (file.isRoot) {
         result[0] = { ...result[0], ...item, isExpanded: true };
       } else {
         result[0].links.push(item);
