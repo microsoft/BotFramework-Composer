@@ -27,12 +27,12 @@ export const LUPage = props => {
   const subPath = props['*'];
 
   const activePath = subPath === '' ? '_all' : subPath;
-  const activeDialog = dialogs.find(item => item.name === subPath);
+  const activeDialog = dialogs.find(item => item.id === subPath);
 
   useEffect(() => {
     if (luFiles.length && activeDialog) {
       setLuFile({
-        ...luFiles.find(luFile => luFile.id === activeDialog.name),
+        ...luFiles.find(luFile => luFile.id === activeDialog.id),
       });
     }
   }, [luFiles, activeDialog]);
@@ -47,12 +47,12 @@ export const LUPage = props => {
         ];
       }
       const item = {
-        id: file.name,
-        key: file.name,
+        id: file.id,
+        key: file.id,
         name: file.displayName,
       };
 
-      if (file.id === 0) {
+      if (file.isRoot) {
         result[0] = {
           ...result[0],
           ...item,
@@ -110,14 +110,14 @@ export const LUPage = props => {
 
   function discardChanges() {
     setLuFile({
-      ...luFiles.find(luFile => luFile.id === activeDialog.name),
+      ...luFiles.find(luFile => luFile.id === activeDialog.id),
     });
     setNewContent(null);
   }
 
   function onSave() {
     const payload = {
-      id: activeDialog.name, // current opened lu file
+      id: activeDialog.id, // current opened lu file
       content: newContent,
     };
     updateLuFile(payload);
