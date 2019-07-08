@@ -87,6 +87,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
+  let key = idSchema.__id;
 
   if (schema.title) {
     const SDKOverrides = fieldOverrides[`${schema.title}`];
@@ -94,12 +95,17 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     descriptionOverride = get(SDKOverrides, 'description');
   }
 
+  // use dialogId as the key because the focusPath may not be enough
+  if (formContext.dialogId) {
+    key = `${key}-${formContext.dialogId}`;
+  }
+
   return isRoot ? (
-    <RootDialog {...props} key={idSchema.__id} id={idSchema.__id} formContext={formContext}>
+    <RootDialog {...props} key={key} id={key} formContext={formContext}>
       {children}
     </RootDialog>
   ) : (
-    <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
+    <div className={classnames('BaseField', className)} key={key} id={key}>
       {titleOverride === false ? null : (
         <Separator
           theme={fieldHeaderTheme}
