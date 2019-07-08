@@ -2,7 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+
+import { BFDFieldProps } from '../types';
 
 import { BaseField } from './BaseField';
 
@@ -12,45 +13,58 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
   }
 };
 
-export function LgEditorField(props: FieldProps) {
+const getInitialTemplate = (formData?: string): string => {
+  let newTemplate = formData || '';
+
+  if (newTemplate && !newTemplate.startsWith('-')) {
+    newTemplate = `-${newTemplate}`;
+  }
+
+  return newTemplate;
+};
+
+export function LgEditorField(props: BFDFieldProps) {
+  const { formContext } = props;
+
   const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
-  const lgId = `bfdactivity-${props.formContext.getDialogId()}`;
+  const lgId = `bfdactivity-${formContext.dialogId}`;
 
   const hasExistingTemplate = async () => {
-    const templates = await props.formContext.shellApi.getLgTemplates('common');
-    const [template] = templates.filter(template => {
-      return template.name === lgId;
+    const templates = await formContext.shellApi.getLgTemplates('common');
+    const template = templates.find(template => {
+      return template.Name === lgId;
     });
     if (template === null || template === undefined) {
-      const newTemplate = props.formData && props.formData.startsWith('-') ? props.formData : `-${props.formData}`;
-      if (props.formContext.getDialogId()) {
-        props.formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: newTemplate }, -1);
+      const newTemplate = getInitialTemplate(props.formData);
+
+      if (formContext.dialogId) {
+        formContext.shellApi.createLgTemplate('common', { Name: lgId, Body: newTemplate }, -1);
         props.onChange(`[${lgId}]`);
       }
       setTemplateToRender({ Name: `# ${lgId}`, Body: newTemplate });
     } else {
       if (templateToRender.Name === '') {
-        setTemplateToRender({ Name: `# ${lgId}`, Body: template.body });
+        setTemplateToRender({ Name: `# ${lgId}`, Body: template.Body });
       }
     }
   };
 
   const onChange = data => {
     // hit the lg api and replace it's Body with data
-    if (props.formContext.getDialogId()) {
+    if (formContext.dialogId) {
       let dataToEmit = data.trim();
       if (dataToEmit.length > 0 && dataToEmit[0] !== '-') {
         dataToEmit = `-${dataToEmit}`;
       }
       setTemplateToRender({ Name: templateToRender.Name, Body: data });
-      props.formContext.shellApi.updateLgTemplate('common', lgId, dataToEmit);
+      formContext.shellApi.updateLgTemplate('common', lgId, dataToEmit);
       props.onChange(`[${lgId}]`);
     }
   };
 
   useEffect(() => {
     hasExistingTemplate();
-  }, []);
+  }, [formContext.dialogId]);
 
   const { Body } = templateToRender;
   return (

@@ -10,7 +10,7 @@ import { DialogGroup } from '../../shared/appschema';
 import { FormCard } from './templates/FormCard';
 
 const isAnonymousTemplateReference = activity => {
-  return activity.indexOf('bfdactivity-') !== -1;
+  return activity && activity.indexOf('bfdactivity-') !== -1;
 };
 
 export const ActivityRenderer: React.FC<NodeProps> = props => {
@@ -18,23 +18,25 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   const [templateText, setTemplateText] = useState('');
 
   const updateTemplateText = async () => {
-    if (data.activity && data.$designer && data.$designer.id) {
-      if (isAnonymousTemplateReference(data.activity)) {
-        // this is an LG template, go get it's content
-        if (!getLgTemplates || typeof getLgTemplates !== 'function') {
-          setTemplateText(data.activity);
-        }
+    const isAnonActivity = isAnonymousTemplateReference(data.activity);
 
-        const templateName = data.activity.slice(1, data.activity.length - 1);
-        const templates = await getLgTemplates('common', `${templateName}`);
-        const [template] = templates.filter(template => {
-          return template.Name === templateName;
-        });
-        if (template && template.Body) {
-          const [firstLine] = template.Body.split('\n');
-          setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
-        }
+    if (isAnonActivity && data.$designer && data.$designer.id) {
+      // this is an LG template, go get it's content
+      if (!getLgTemplates || typeof getLgTemplates !== 'function') {
+        setTemplateText(data.activity);
       }
+
+      const templateName = data.activity.slice(1, data.activity.length - 1);
+      const templates = await getLgTemplates('common', `${templateName}`);
+      const [template] = templates.filter(template => {
+        return template.Name === templateName;
+      });
+      if (template && template.Body) {
+        const [firstLine] = template.Body.split('\n');
+        setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
+      }
+    } else if (!isAnonActivity) {
+      setTemplateText(data.activity);
     }
   };
 
