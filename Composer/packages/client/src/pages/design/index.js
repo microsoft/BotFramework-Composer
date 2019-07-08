@@ -132,7 +132,7 @@ function DesignPage(props) {
   }, [clearNavHistory, dialogs, navPathHistory, navTo]);
 
   const activeDialog = useMemo(() => {
-    if (!navPath) return -1;
+    if (!navPath) return '';
     return navPath.split('#')[0];
   }, [navPath]);
 

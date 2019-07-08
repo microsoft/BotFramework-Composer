@@ -5,6 +5,8 @@ import { PropTypes } from 'prop-types';
 import { Nav } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
+import { nav, addButton } from './styles';
+
 export const ProjectTree = props => {
   const { files, onSelect, activeNode, onAdd } = props;
 
@@ -31,35 +33,41 @@ export const ProjectTree = props => {
       }
       return result;
     }, []);
-    links.push({ name: formatMessage('New Dialog'), icon: 'Add', key: 'newDialog' });
     return links;
   }, [files]);
 
   return (
-    <Nav
-      onLinkClick={(ev, item) => {
-        if (item.key !== 'newDialog') {
+    <div>
+      <Nav
+        onLinkClick={(ev, item) => {
+          if (item.key !== 'newDialog') {
+            onSelect(item.id);
+          } else {
+            onAdd();
+          }
+          ev.preventDefault();
+        }}
+        onLinkExpandClick={(ev, item) => {
           onSelect(item.id);
-        } else {
-          onAdd();
-        }
-        ev.preventDefault();
-      }}
-      onLinkExpandClick={(ev, item) => {
-        onSelect(item.id);
-      }}
-      groups={[
-        {
-          links: links,
-        },
-      ]}
-      selectedKey={activeNode}
-    />
+        }}
+        groups={[
+          {
+            links: links,
+          },
+        ]}
+        selectedKey={activeNode}
+        styles={nav}
+      />
+      <div css={addButton} onClick={onAdd}>
+        {formatMessage('Add ..')}
+      </div>
+    </div>
   );
 };
 
 ProjectTree.propTypes = {
   files: PropTypes.array,
-  activeNode: PropTypes.number,
+  activeNode: PropTypes.string,
   onSelect: PropTypes.func,
+  onAdd: PropTypes.func,
 };
