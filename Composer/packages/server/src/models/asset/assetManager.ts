@@ -8,6 +8,12 @@ import StorageService from '../../services/storage';
 
 import { IProjectTemplate } from './interface';
 
+const templateDescriptions: { [key: string]: string } = {
+  EchoBot: 'This is bot that can echo back what you say to it.',
+  EmptyBot: 'This is a bot that can do nothing.',
+  ToDoBot: 'This is a bot that demonstrates management of a ToDo list.',
+};
+
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
   private assetsLibrayPath: string;
@@ -26,7 +32,7 @@ export class AssetManager {
     for (const name of folders) {
       const absPath = Path.join(path, name);
       if ((await this.templateStorage.stat(absPath)).isDir) {
-        const base = { id: name, name: name, description: '' };
+        const base = { id: name, name: name, description: templateDescriptions[name] };
         this.projectTemplates.push({ ...base, path: absPath });
         output.push(base);
       }
@@ -47,11 +53,17 @@ export class AssetManager {
 
       await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
 
-      const botprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
-      if (botprojPaths && botprojPaths.length === 1) {
+      const oldBotprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
+
+      if (oldBotprojPaths && oldBotprojPaths.length === 1) {
+        const oldBotprojPath = Path.join(ref.path, oldBotprojPaths[0]);
+        const botPath = Path.dirname(oldBotprojPath);
+        const botName = Path.basename(ref.path);
+        const newBotprojPath = Path.join(botPath, `${botName}.botproj`);
+        await dstStorage.rename(oldBotprojPath, newBotprojPath);
         return {
           storageId: ref.storageId,
-          path: Path.join(ref.path, botprojPaths[0]),
+          path: newBotprojPath,
         };
       } else {
         throw new Error('more than one botproj');

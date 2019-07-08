@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { OpenStatus } from '../../constants';
+import { CreationFlowStatus } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -33,7 +33,7 @@ import { ToolBar } from './../../components/ToolBar/index';
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, setStorageExplorerStatus } = actions;
+  const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(index) {
@@ -53,21 +53,21 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('New'),
       iconName: 'CirclePlus',
-      onClick: () => setStorageExplorerStatus(OpenStatus.NEW),
+      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Open'),
       iconName: 'OpenFolderHorizontal',
-      onClick: () => setStorageExplorerStatus(OpenStatus.OPEN),
+      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Save as'),
       iconName: 'Save',
-      onClick: () => setStorageExplorerStatus(OpenStatus.SAVEAS),
+      onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
       align: 'left',
     },
     {
