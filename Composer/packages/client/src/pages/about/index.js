@@ -1,4 +1,5 @@
 /** @jsx jsx */
+
 import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -11,39 +12,31 @@ export const About = () => {
     <div css={about.outline}>
       <div css={about.content}>
         <div css={about.title}> {formatMessage(`About`)} </div>
-        <div css={about.part1}>
-          <div css={about.part1Text}>
-            {formatMessage(`Version 1.1`)}
-            <br />
-            <br />
-            {formatMessage(` sssssssssss ssssssssss ssssssssssss sssssssss ssssssssssss sssssssss sssssssssss ssssssssss
-            ssssssss sssssss ssssssssssss ssssssssssssss sssssssssss ssssssssss ssssssssss sssssssssss sssssssssss ssssssssss
-            ssssss sssssssssssssss ssssssssssss sssssssss sssssssss ssssssssssss sssssssss ssssssssssss
-            sssssss ssssssssss ssss sssssssss ssssssssss ssssssssss ssssss sssssssss sssssssss ssssssss sssssssssssss
-            sssssssssssssss sssssssssssssss sssssss ssssssss sssssssssssssss sssssssssssssss
-            ssssssss sssss ssssssssss sssssssssss ssssssssssssssss ssssss sssssssssss ssssssss ssssssssssssss
-            sssssssssssssssssssss sssssssssss ssssssssss sssssssssss ssssssssss sssssssssssssssssssss
-            ssssssss sssssssssssss sssssssss ssssssssssss sssssssssss ssssssssss ssssssssssss ssssssss ssssssssss sssssssssss
-            sssssssss ssssssssssss ssss sssssssss ssssssss sssssss ssssssssssssss sssssssssssssssssssss
-            ssssssssssss sssssssss sssssssssssssssssssss ssssssssss sssssssssss ssss ssssssss sssssssss
-            sssssssss ssssssssssss ssssssss ssssssssssss ssssss ssssssssssssssss sssssssssss ssssssssss sssss ssssss sssssssss
-            ssssssssss sssss sssssssssssssss sssssssssssssss ssss ssssssssssssss ssssssssss sssssssss sssssssssssss`)}
+        <div css={about.body}>
+          <div css={about.version}>{formatMessage(`Version 0.1 - Alpha`)}</div>
+          <div css={about.description}>
+            {formatMessage(` Bot Framework Designer is an integrated development environment (IDE) for building 
+            bots and other types of conversational software with the Microsoft Bot Framework technology stack. 
+            Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience.
+            Bot Framework Designer enables teams working to create bots to build all kinds of conversational experiences that use the 
+            latest features from the Bot Framework SDK without writing code. The Designer app reads and writes from the Adaptive Dialog format, 
+            a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated 
+            like normal developer assets - files that can be committed to source control and deployed alongside code updates.`)}
           </div>
-        </div>
-        <div css={about.part2}>
+
           <div css={about.smallText}>
             {formatMessage(`The following session details may be requested by Technical Support`)}{' '}
           </div>
-          <div css={about.part2Text}> {formatMessage(`Diagnostics`)} </div>
-        </div>
-        <div css={about.part3}>
-          <div css={about.part3Text}>
-            <div css={about.part3TextAlignLeft}>{formatMessage(`Session ID`)} </div>
-            <div css={about.part3TextAlignLeft}>{formatMessage(`2039420394820934`)} </div>
-          </div>
-          <div css={about.part3Text}>
-            <div css={about.part3TextAlignLeft}>{formatMessage(`Build `)}</div>
-            <div css={about.part3TextAlignLeft}>{formatMessage(`23.4342q35.45 34`)} </div>
+          <div css={about.DiagnosticsText}> {formatMessage(`Diagnostics`)} </div>
+          <div css={about.DiagnosticsInfo}>
+            <div css={about.DiagnosticsInfoText}>
+              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`Session ID`)} </div>
+              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`2039420394820934`)} </div>
+            </div>
+            <div css={about.DiagnosticsInfoText}>
+              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`Build `)}</div>
+              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`23.4342q35.45 34`)} </div>
+            </div>
           </div>
         </div>
 

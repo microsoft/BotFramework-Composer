@@ -21,77 +21,48 @@ export const title = css`
   line-height: 32px;
 `;
 
-export const part1 = css`
+export const body = css`
   width: auto;
-  height: 30%;
-  margin-top: 26px;
-  margin-left: 60px;
-  overflow-y: auto;
-`;
-
-export const part2 = css`
-  width: auto;
-  height: 10%;
   margin-top: 26px;
   margin-left: 60px;
 `;
 
-export const part3 = css`
-  display: flex;
-  flex-direction: column;
-  width: auto;
-  height: 10%;
-  margin-top: 26px;
-  margin-left: 60px;
-`;
-
-export const part1Text = css`
-  width: 60%;
-  height: 100%;
+export const version = css`
   font-size: 24px;
+  line-height: 32px;
 `;
-export const part2Text = css`
+
+export const description = css`
+  font-size: 24px;
+  line-height: 32px;
   width: 50%;
-  height: 33%;
+  margin-top: 20px;
+`;
+
+export const DiagnosticsText = css`
+  width: 50%;
   font-size: 24px;
   margin-top: 20px;
 `;
 
 export const smallText = css`
+  margin-top: 20px;
   font-size: 13px;
 `;
-export const part3Text = css`
+export const DiagnosticsInfoText = css`
   display: flex;
   justify-content: space-between;
   width: 460px;
-  height: 33%;
   font-size: 24px;
 `;
 
-export const part3TextAlignLeft = css`
+export const DiagnosticsInfoTextAlignLeft = css`
   width: 50%;
   text-align: left;
 `;
-export const introTitleLeft = css`
-  display: block;
-  height: 37px;
-  width: 60%;
-  font-size: 24px;
-  line-height: 32px;
-`;
 
-export const introTitleRight = css`
-  display: block;
-  height: 37px;
-  width: 40%;
-  font-size: 24px;
-  line-height: 32px;
-`;
-
-export const introLink = css`
-  display: block;
-  height: 79px;
-  width: 100%;
+export const DiagnosticsInfo = css`
+  margin-top: 40px;
 `;
 
 export const linkContainer = css`
