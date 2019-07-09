@@ -57,5 +57,4 @@ export const calculateFlowNodeBoundary = (
       node.boundary = measureBoundary(node.id, node['@'], node.data);
       break;
   }
-  console.log('measure: ', node.id, node.boundary);
 };
