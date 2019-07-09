@@ -167,6 +167,7 @@ function DesignPage(props) {
                 items={breadcrumbItems}
                 ariaLabel={formatMessage('Navigation Path')}
                 styles={breadcrumbClass}
+                data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
                 <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
