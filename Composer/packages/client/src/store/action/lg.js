@@ -41,7 +41,7 @@ export async function updateLgFile(dispatch, { id, content }) {
     const msg = `start at line ${Start.Line} character ${Start.Character}, end at line ${End.Line} character ${
       End.Character
     }`;
-    throw new Error(`syntax error, ${validateResult.error.Message}, ${msg}`);
+    throw new Error(`${validateResult.error.Message},\n ${msg}`);
   }
 
   try {
