@@ -15,7 +15,6 @@ export const content = css`
 
 export const title = css`
   display: block;
-  height: 36px;
   margin: 33px 0px 0px 42px;
   font-size: 36px;
   line-height: 32px;
@@ -23,38 +22,15 @@ export const title = css`
 
 export const introduction = css`
   width: auto;
-  height: 45%;
   margin-top: 26px;
   margin-left: 42px;
   overflow-y: auto;
 `;
 
 export const introText = css`
-  width: 60%;
+  width: 50%;
   height: 100%;
   font-size: 24px;
-`;
-
-export const introTitleLeft = css`
-  display: block;
-  height: 37px;
-  width: 60%;
-  font-size: 24px;
-  line-height: 32px;
-`;
-
-export const introTitleRight = css`
-  display: block;
-  height: 37px;
-  width: 40%;
-  font-size: 24px;
-  line-height: 32px;
-`;
-
-export const introLink = css`
-  display: block;
-  height: 79px;
-  width: 100%;
 `;
 
 export const linkContainer = css`
@@ -73,10 +49,4 @@ export const link = css`
   font-size: 24px;
   color: #0078d4;
   text-decoration: underline;
-`;
-
-export const telephone = css`
-  margin-top: 40px;
-  margin-left: 42px;
-  font-size: 24px;
 `;
