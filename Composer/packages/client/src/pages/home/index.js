@@ -69,15 +69,23 @@ export const Home = () => {
     {
       type: 'action',
       text: formatMessage('New'),
-      iconName: 'CirclePlus',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      },
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Open'),
-      iconName: 'OpenFolderHorizontal',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
       align: 'left',
     },
   ];
