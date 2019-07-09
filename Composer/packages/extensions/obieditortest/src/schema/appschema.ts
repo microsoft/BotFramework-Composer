@@ -101,7 +101,8 @@ export const appschema: JSONSchema6 = {
         // },
         steps: {
           type: 'array',
-          description: 'Initial Sequence of steps or dialogs to execute when dialog is started',
+          title: 'Actions',
+          description: 'This is the initial sequence of steps to execute when this dialog is started.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
