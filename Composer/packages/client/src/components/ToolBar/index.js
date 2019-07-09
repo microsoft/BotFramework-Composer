@@ -10,7 +10,7 @@ function itemList(action, index) {
     return <Fragment key={index}>{action.element}</Fragment>;
   } else {
     return (
-      <ActionButton key={index} css={actionButton} {...action.buttonProps}>
+      <ActionButton key={index} css={actionButton} {...action.buttonProps} data-testid={action.dataTestid}>
         {action.text}
       </ActionButton>
     );
