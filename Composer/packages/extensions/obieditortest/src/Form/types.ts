@@ -22,13 +22,17 @@ export interface BFDFieldProps extends FieldProps {
   formContext: FormContext;
 }
 
-export interface SelectWidgetProps extends WidgetProps {
+export interface BFDWidgetProps extends WidgetProps {
+  formContext: FormContext;
+}
+
+export interface SelectWidgetProps extends BFDWidgetProps {
   options: {
     enumOptions: EnumOption[];
   };
 }
 
-export interface RadioWidgetProps extends WidgetProps {
+export interface RadioWidgetProps extends BFDWidgetProps {
   options: {
     enumOptions: EnumOption[];
   };
