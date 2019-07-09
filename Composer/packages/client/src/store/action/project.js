@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
@@ -36,6 +37,7 @@ export async function fetchProject(dispatch) {
       navTo(dispatch, 'Main#');
     }
   } catch (err) {
+    navigate('/home');
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
