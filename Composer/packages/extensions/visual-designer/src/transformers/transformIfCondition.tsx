@@ -5,7 +5,7 @@ import { IndexedNode } from './models/IndexedNode';
 const IfBranchKey = 'steps';
 const ElseBranchKey = 'elseSteps';
 
-export function transformIfCondtion(input, jsonpath) {
+export function transformIfCondtion(input, jsonpath?) {
   if (!input || input.$type !== ObiTypes.IfCondition) return {};
 
   const result: { [key: string]: IndexedNode } = {
