@@ -8,6 +8,15 @@ export enum FlowTypes {
   Loop = 'Loop',
 }
 
+export class BoundedJSXElement {
+  el: JSX.Element;
+  boundary: Boundary;
+  constructor(element: JSX.Element, boundary: Boundary) {
+    this.el = element;
+    this.boundary = boundary;
+  }
+}
+
 export class FlowBaseNode {
   '@': FlowTypes;
   id: string = '';
@@ -22,11 +31,9 @@ export class FlowBaseNode {
 }
 
 export class ElementNode extends FlowBaseNode {
-  boundary: Boundary;
-  element?: JSX.Element;
-  constructor(id: string, data: any, boundary: Boundary, element?: JSX.Element) {
+  element: BoundedJSXElement;
+  constructor(id: string, data: any, element: BoundedJSXElement) {
     super(FlowTypes.Element, id, data);
-    this.boundary = boundary;
     this.element = element;
   }
 }

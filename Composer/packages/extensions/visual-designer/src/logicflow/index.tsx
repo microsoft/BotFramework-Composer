@@ -51,7 +51,13 @@ const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
 const defaultElementBoundary = new Boundary(100, 100);
 
 const renderElementNode = (elementNode: ElementNode): JSX.Element => {
-  const boundary = elementNode.boundary || defaultElementBoundary;
+  let boundary = new Boundary(100, 100);
+  let el = <p>{JSON.stringify(elementNode)}</p>;
+
+  if (elementNode.element) {
+    boundary = elementNode.element.boundary;
+    el = elementNode.element.el;
+  }
   return (
     <div
       style={{
@@ -59,7 +65,7 @@ const renderElementNode = (elementNode: ElementNode): JSX.Element => {
         height: boundary.height,
       }}
     >
-      {elementNode.element || JSON.stringify(elementNode)}
+      {el}
     </div>
   );
 };

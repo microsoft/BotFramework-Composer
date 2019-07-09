@@ -1,7 +1,7 @@
 import { ObiTypes } from '../shared/ObiTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
-import { FlowBaseNode, FlowGroup, ElementNode, DecisionNode, LoopNode } from './LogicFlowNodes';
+import { FlowBaseNode, FlowGroup, ElementNode, DecisionNode, LoopNode, BoundedJSXElement } from './LogicFlowNodes';
 import { renderObiData } from './obiRenderer';
 
 export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
@@ -18,7 +18,11 @@ const parseIfCondition = (json: any, basePath: string): FlowBaseNode => {
   return new DecisionNode(
     basePath,
     json,
-    new ElementNode(basePath, json, measureJsonBoundary(conditionData), renderObiData(basePath, conditionData)),
+    new ElementNode(
+      basePath,
+      json,
+      new BoundedJSXElement(renderObiData(basePath, conditionData), measureJsonBoundary(conditionData))
+    ),
     [
       new FlowGroup(
         `${basePath}.elseSteps`,
@@ -45,7 +49,11 @@ const parseSwitchCondition = (json: any, basePath: string): FlowBaseNode => {
   return new DecisionNode(
     basePath,
     json,
-    new ElementNode(basePath, json, measureJsonBoundary(conditionData), renderObiData(basePath, conditionData)),
+    new ElementNode(
+      basePath,
+      json,
+      new BoundedJSXElement(renderObiData(basePath, conditionData), measureJsonBoundary(conditionData))
+    ),
     (json.cases || []).map(
       (caseBranch, index) =>
         new FlowGroup(
@@ -80,6 +88,6 @@ function parseObiJson(json: any, path: string): FlowBaseNode | undefined {
     case ObiTypes.ForeachPage:
       return parseForeach(json, path);
     default:
-      return new ElementNode(path, json, measureJsonBoundary(json), renderObiData(path, json));
+      return new ElementNode(path, json, new BoundedJSXElement(renderObiData(path, json), measureJsonBoundary(json)));
   }
 }
