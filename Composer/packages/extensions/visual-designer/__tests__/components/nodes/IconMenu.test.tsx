@@ -4,7 +4,7 @@ import { render, fireEvent, findByText } from 'react-testing-library';
 import { IconMenu } from '../../../src/components/nodes/templates/IconMenu';
 
 describe('<IconMenu />', () => {
-  let menuItems, iconName, iconNames, onClick;
+  let menuItems, iconName, onClick;
 
   beforeEach(() => {
     onClick = jest.fn();
