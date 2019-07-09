@@ -91,7 +91,7 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
-    'ui:order': ['*', 'steps'],
+    'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.Foreach': {
     Steps: {

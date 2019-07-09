@@ -862,7 +862,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.DeleteProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Delete PropertyS',
-      description: 'This action lets you remove a property from memory.',
+      description: 'Remove a property from memory.',
       type: 'object',
       properties: {
         $type: {
@@ -893,7 +893,7 @@ export const appschema: JSONSchema6 = {
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The Memory property path to delete.',
+          description: 'The property in memory to delete.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -939,26 +939,26 @@ export const appschema: JSONSchema6 = {
         changeType: {
           type: 'string',
           title: 'Change Type',
-          description: 'The array operation to perform.',
+          description: 'This specifies which operation to perform in the array, like adding or removing an item.',
           enum: ['Push', 'Pop', 'Take', 'Remove', 'Clear'],
         },
         arrayProperty: {
           $role: 'memoryPath',
           type: 'string',
           title: 'Array Property',
-          description: 'Memory expression of the array to manipulate.',
+          description: 'Property in memory containing the array to manipulate.',
         },
         resultProperty: {
           $role: 'memoryPath',
           type: 'string',
           title: 'Result Property',
-          description: 'Memory expression of the result of this action.',
+          description: 'Property in memory where the result of this action will be stored.',
         },
         value: {
           $role: 'expression',
           type: 'string',
           title: 'Value of the Item',
-          description: 'Expression to evaluate.',
+          description: 'Expression or property in memory that contains the item to add or remove.',
           examples: ['dialog.todo'],
         },
       },
@@ -971,8 +971,8 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EditSteps': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'EditSteps Step',
-      description: 'Edit current dialog with changeType and Steps.',
+      title: 'EditSteps',
+      description: 'This provides a mechanism to edit the content of the current dialog at run time.',
       type: 'object',
       properties: {
         $type: {
@@ -1003,13 +1003,13 @@ export const appschema: JSONSchema6 = {
         changeType: {
           type: 'string',
           title: 'Change Type',
-          description: 'The change type to apply to current dialog',
+          description: 'Specify the type of change to apply to this dialog.',
           enum: ['InsertSteps', 'InsertStepsBeforeTags', 'AppendSteps', 'EndSequence', 'ReplaceSequence'],
         },
         steps: {
           type: 'array',
           title: 'Actions',
-          description: 'Steps to execute.',
+          description: 'These new actions will be applied bas.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1026,7 +1026,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EmitEvent': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Emit Event Step',
-      description: 'This is a step which allows you to emit an event',
+      description: 'Emit a custom event.',
       type: 'object',
       properties: {
         $type: {
@@ -1056,20 +1056,20 @@ export const appschema: JSONSchema6 = {
         },
         eventName: {
           title: 'Event Name',
-          description: 'The name of event to emit.',
+          description: 'The name of the event to emit.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         eventValue: {
           type: 'object',
           title: 'Event Value',
-          description: 'Optional value to emit along with the event.',
+          description: 'An optional value to include in the custom event.',
           additionalProperties: true,
         },
         bubbleEvent: {
           type: 'boolean',
           title: 'Bubble Event',
-          description: 'If true this event should propagate to parent dialogs.',
+          description: 'If set, this event will propagate to parent dialogs.',
         },
       },
       additionalProperties: false,
@@ -1112,7 +1112,8 @@ export const appschema: JSONSchema6 = {
         },
         property: {
           $role: 'memoryPath',
-          description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
+          title: 'Return Value',
+          description: 'The property in memory that is returned to the parent dialog.',
           examples: ['dialog.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1128,7 +1129,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EndTurn': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'End Turn',
-      description: 'End the current turn without ending the dialog.',
+      description: 'End the current turn without ending the dialog, causing the bot to pause for additional input.',
       type: 'object',
       properties: {
         $type: {
@@ -1166,7 +1167,7 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EventRule': {
       title: 'Event Rule',
-      description: 'Defines a rule for an event which is triggered by some source',
+      description: 'Defines actions the bot will take in response to an event.',
       type: 'object',
       $role: 'unionType(Microsoft.IRule)',
       properties: {
@@ -1198,13 +1199,15 @@ export const appschema: JSONSchema6 = {
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1213,7 +1216,7 @@ export const appschema: JSONSchema6 = {
         events: {
           title: 'Events',
           type: 'array',
-          description: 'Events to trigger this rule for',
+          description: 'Select the types of event that will trigger this handler.',
           items: {
             type: 'string',
             enum: [
@@ -1381,8 +1384,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.HttpRequest': {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
-      title: 'Http Request',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      title: 'HTTP Request',
+      description: 'This is a step which makes a call to an external HTTP resource.',
       properties: {
         $type: {
           title: '$type',
@@ -1419,14 +1422,13 @@ export const appschema: JSONSchema6 = {
         url: {
           type: 'string',
           title: 'URL',
-          description: 'The url to call. This string may reference properties in memory as {property.name}.',
+          description: 'The url to call. This may reference properties in memory as {property.name}.',
           examples: ['https://contoso.com'],
         },
         body: {
           type: 'object',
           title: 'Body',
-          description:
-            'The body to send in the HTTP call. This string may reference properties in memory as {property.name}.',
+          description: 'The body of the HTTP request. This may reference properties in memory as {property.name}.',
           additionalProperties: true,
         },
         property: {
@@ -1441,13 +1443,14 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           additionalProperties: true,
           title: 'HTTP Headers',
-          description: 'Http headers to include with the HTTP request (supports data binding)',
+          description:
+            'Additional headers to include with the HTTP request. This may reference properties in memory as {property.name}.',
         },
         responseTypes: {
           type: 'string',
-          title: 'Response Types',
+          title: 'Expected Response Type',
           description:
-            'Method used to parse the response from the HTTP request. If Activity or Activities, the results will be forwarded immediately to the customer.',
+            'This specifies the method used to parse the response from the HTTP request. If Activity or Activities, the results will be forwarded immediately to the customer as messages.',
           enum: ['none', 'json', 'activity', 'activities'],
         },
       },
@@ -1784,7 +1787,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.InitProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Init Property Step',
-      description: 'This step allows you to initialize a property to either an object or array',
+      description: 'Create a new property to hold an object or array.',
       type: 'object',
       properties: {
         $type: {
@@ -1815,7 +1818,7 @@ export const appschema: JSONSchema6 = {
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'A property in memory.',
           examples: ['user.age'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1823,7 +1826,7 @@ export const appschema: JSONSchema6 = {
         type: {
           type: 'string',
           title: 'Type',
-          description: 'Type of value to set the property to, object or array',
+          description: 'The type of value this property will contain: an object or an array.',
           enum: ['object', 'array'],
         },
       },
@@ -1837,7 +1840,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.IntentRule': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'Intent Rule',
-      description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+      description:
+        'Defines the actions to take when an intent is identified by a recognizer service such as RegEx, or LUIS.',
       type: 'object',
       properties: {
         $type: {
@@ -1868,13 +1872,15 @@ export const appschema: JSONSchema6 = {
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1883,12 +1889,12 @@ export const appschema: JSONSchema6 = {
         intent: {
           type: 'string',
           title: 'Intent',
-          description: 'Intent name to trigger on',
+          description: 'The name of the intent that, when identified by a recognizer, causes this event to fire.',
         },
         entities: {
           type: 'array',
           title: 'Entities',
-          description: 'The entities required to trigger this rule',
+          description: 'A list of any entities that must be found by the recognizer in order for this event to fire.',
           items: {
             type: 'string',
           },
@@ -1944,7 +1950,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Log Step',
       description:
-        'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
+        "This is a debugging message that's used to track progress through the code by writing messages to the log.",
       type: 'object',
       properties: {
         $type: {
@@ -1975,12 +1981,12 @@ export const appschema: JSONSchema6 = {
         text: {
           type: 'string',
           title: 'Text',
-          description: 'LG Expression to write to the log',
+          description: 'This is the text to write to the log.  It may include language generation rules.',
         },
         traceActivity: {
           type: 'boolean',
-          title: 'Send Trace Activity',
-          description: 'Set to true to also create a TraceActivity with the log text',
+          title: 'Send TraceActivity',
+          description: 'If set, also create a TraceActivity with then same log text.',
           default: false,
         },
       },
@@ -2361,7 +2367,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
       title: 'Repeat Dialog',
-      description: 'This is a step which repeats the current dialog with the same dialog.',
+      description: 'Repeat the current dialog.',
       properties: {
         $type: {
           title: '$type',
@@ -2400,7 +2406,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
       title: 'Replace Dialog',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      description: 'Ends the current dialog and replaces it with a different one.',
       properties: {
         $type: {
           title: '$type',
@@ -2430,18 +2436,19 @@ export const appschema: JSONSchema6 = {
         dialog: {
           $type: 'Microsoft.IDialog',
           title: 'Dialog',
-          description: 'This is the dialog to switch to.',
+          description: 'Select a dialog to call at this point.',
           type: 'string',
         },
         options: {
           type: 'object',
           title: 'Options',
-          description: 'Options to pass to the dialog.',
+          description:
+            'Define options to pass to this dialog. These will be available in the child dialog as dialog.options.<name>.',
           additionalProperties: true,
         },
         property: {
           $role: 'memoryPath',
-          description: 'The property to bind to the dialog and store the result in',
+          description: 'The property in memory used to store the result of the child dialog.',
           examples: ['user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2488,13 +2495,15 @@ export const appschema: JSONSchema6 = {
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2556,7 +2565,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.SetProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Set Property Step',
-      description: 'This step allows you to set memory to the value of an expression',
+      description: 'Set a property in memory to the value of an expression.',
       type: 'object',
       properties: {
         $type: {
@@ -2587,7 +2596,7 @@ export const appschema: JSONSchema6 = {
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'The property in memory to set.',
           examples: ['user.age'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2595,7 +2604,7 @@ export const appschema: JSONSchema6 = {
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Expression against memory to use to get the value.',
+          description: 'This is the expression that will be evaluated to set the property.',
           examples: ['dialog.result'],
           type: 'string',
         },
@@ -2828,7 +2837,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.TraceActivity': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Trace Activity Step',
-      description: 'This is a step which sends an TraceActivity to the transcript',
+      description:
+        "This is a debugging message that's used to track progress through the code by emitting events visible in the emulator.",
       type: 'object',
       properties: {
         $type: {
@@ -2859,17 +2869,17 @@ export const appschema: JSONSchema6 = {
         name: {
           type: 'string',
           title: 'Name',
-          description: 'Name of the trace activity',
+          description: 'Name of the trace activity.',
         },
         valueType: {
           type: 'string',
           title: 'Value Type',
-          description: 'Value type of the trace activity',
+          description: 'Value type of the trace activity.',
         },
         value: {
           $role: 'memoryPath',
           title: 'Value',
-          description: 'Property path to memory object to send as the value of the trace activity',
+          description: 'This is the property in memory that contains the value of the trace activity.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2916,13 +2926,15 @@ export const appschema: JSONSchema6 = {
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
