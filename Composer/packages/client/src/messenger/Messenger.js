@@ -50,7 +50,7 @@ class Messenger {
           {
             type: 'api_result',
             id: message.id,
-            error: err,
+            error: err.message,
           },
           '*'
         );

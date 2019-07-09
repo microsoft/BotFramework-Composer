@@ -1,6 +1,7 @@
 import { cloneDeep, get, set } from 'lodash';
+import nanoid from 'nanoid/generate';
 
-function locateNode(dialog: { [key: string]: number }, path) {
+function locateNode(dialog: { [key: string]: any }, path) {
   if (!path) return null;
 
   const selectors = path.split('.');
@@ -41,12 +42,18 @@ function locateNode(dialog: { [key: string]: number }, path) {
   return { parentData, currentData, currentKey };
 }
 
-export function deleteNode(inputDialog, path) {
+export function deleteNode(inputDialog, path, removeLgTemplate) {
   const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
   if (!target) return dialog;
 
-  const { parentData, currentKey } = target;
+  const { parentData, currentData, currentKey } = target;
+  if (currentData.$type === 'Microsoft.SendActivity') {
+    if (currentData.activity && currentData.activity.indexOf('[bfdactivity-') !== -1) {
+      removeLgTemplate('common', currentData.activity.slice(1, currentData.activity.length - 1));
+    }
+  }
+
   // Remove targetKey
   if (Array.isArray(parentData) && typeof currentKey === 'number') {
     parentData.splice(currentKey, 1);
@@ -60,7 +67,12 @@ export function deleteNode(inputDialog, path) {
 export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
   const current = get(dialog, path, []);
-  const newStep = { $type };
+  const newStep = {
+    $type,
+    $designer: {
+      id: nanoid('1234567890', 6),
+    },
+  };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 

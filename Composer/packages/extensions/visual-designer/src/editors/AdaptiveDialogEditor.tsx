@@ -19,7 +19,13 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent }): JSX.Element => {
+export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
+  id,
+  data,
+  focusedId,
+  getLgTemplates,
+  onEvent,
+}): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -42,6 +48,7 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, f
           id={ruleGroup.id}
           data={ruleGroup.data}
           focusedId={focusedId}
+          getLgTemplates={getLgTemplates}
           onEvent={onEvent}
         />
       ) : null}
@@ -53,6 +60,7 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, f
             id={stepGroup.id}
             data={stepGroup.data}
             focusedId={focusedId}
+            getLgTemplates={getLgTemplates}
             onEvent={onEvent}
           />
         </Collapse>

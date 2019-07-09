@@ -50,11 +50,7 @@ export function DefineConversation(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack
-        tokens={{
-          childrenGap: 15,
-        }}
-      >
+      <Stack>
         <TextField
           label={formatMessage('Name')}
           styles={name}

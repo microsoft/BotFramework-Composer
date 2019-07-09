@@ -2,11 +2,12 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-06-07T15:50:40.307Z",
-    "updatedAt": "2019-06-07T15:50:40.316Z",
+    "updatedAt": "2019-07-01T21:39:53.400Z",
     "id": "708197",
     "name": "03 - IfCondition",
     "description": "This is a bot that demonstrates the IfCondition concept in Adaptive Dialogs."
   },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
@@ -14,14 +15,28 @@
       "steps": [
         {
           "$type": "Microsoft.TextInput",
+          "property": "user.name",
           "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "property": "user.name"
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none",
+          "$designer": {
+            "createdAt": "2019-07-01T21:40:16.578Z",
+            "updatedAt": "2019-07-01T21:40:16.584Z",
+            "id": "719594"
+          }
         }
       ]
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}, nice to talk to you!"
+      "$designer": {
+        "createdAt": "2019-07-01T21:40:15.216Z",
+        "updatedAt": "2019-07-01T21:40:17.529Z",
+        "id": "485963"
+      },
+      "activity": "[bfdactivity-485963]"
     }
   ],
   "$schema": "../../app.schema"
