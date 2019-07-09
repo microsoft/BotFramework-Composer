@@ -42,7 +42,6 @@ export class FlowGroup extends FlowBaseNode {
 }
 
 export class DecisionNode extends FlowBaseNode {
-  data: any;
   condition: ElementNode;
   branches: FlowGroup[] = [];
 
@@ -54,7 +53,6 @@ export class DecisionNode extends FlowBaseNode {
 }
 
 export class LoopNode extends FlowBaseNode {
-  data: any;
   flow: FlowBaseNode[];
 
   constructor(id: string, data: any, loopSteps: FlowBaseNode[]) {
