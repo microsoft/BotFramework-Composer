@@ -12,6 +12,7 @@ import {
   EventRule,
   IfCondition,
   SwitchCondition,
+  ActivityRenderer,
   Foreach,
 } from '../nodes/index';
 
@@ -20,15 +21,17 @@ import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
 
 const rendererByObiType = {
-  [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
-  [ObiTypes.RegexRecognizer]: Recognizer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
   [ObiTypes.BeginDialog]: BeginDialog,
-  [ObiTypes.ReplaceDialog]: ReplaceDialog,
+  [ObiTypes.ConditionNode]: DefaultRenderer,
   [ObiTypes.EventRule]: EventRule,
   [ObiTypes.IfCondition]: IfCondition,
+  [ObiTypes.IntentRule]: IntentRule,
+  [ObiTypes.LuisRecognizer]: Recognizer,
+  [ObiTypes.RegexRecognizer]: Recognizer,
+  [ObiTypes.ReplaceDialog]: ReplaceDialog,
+  [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
+  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
   [ObiTypes.ConditionNode]: DefaultRenderer,
@@ -45,7 +48,7 @@ export class NodeRenderer extends React.Component<NodeProps, {}> {
   containerRef = React.createRef();
 
   render() {
-    const { id, data, focusedId, onEvent, onResize } = this.props;
+    const { id, data, focusedId, onEvent, onResize, getLgTemplates } = this.props;
     const ChosenRenderer = chooseRendererByType(data.$type);
     return (
       <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}>
@@ -57,6 +60,7 @@ export class NodeRenderer extends React.Component<NodeProps, {}> {
           onResize={size => {
             onResize(size, 'node');
           }}
+          getLgTemplates={getLgTemplates}
         />
       </div>
     );

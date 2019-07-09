@@ -4,6 +4,8 @@ import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
 
+import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
+
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -50,6 +52,7 @@ describe('updateDialog', () => {
 
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
+  const content = JSON.stringify(DIALOG_TEMPLATE, null, 2) + '\n';
 
   afterEach(() => {
     try {
@@ -60,11 +63,10 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialog(dialogName);
+    const dialogs = await proj.createDialog(dialogName, content);
     const newFile = dialogs.find((f: { id: string }) => f.id === dialogName);
 
     expect(newFile).not.toBeUndefined();
-
     const fileContent = ((newFile as unknown) as FileInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
   });

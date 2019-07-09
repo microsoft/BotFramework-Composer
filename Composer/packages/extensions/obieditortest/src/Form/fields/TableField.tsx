@@ -93,6 +93,12 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       onClick: () => {
+        const item = formData[index];
+        // @ts-ignore
+        if (item.$type === 'Microsoft.SendActivity' && item.activity && item.activity.indexOf('bfdactivity-') !== -1) {
+          // @ts-ignore
+          formContext.shellApi.removeLgTemplate('common', item.activity.slice(1, item.activity.length - 1));
+        }
         const newItems = remove(formData, index);
         onChange(newItems);
       },

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { navigate } from '@reach/router';
 
 import { CreationFlowStatus } from '../constants';
 
@@ -81,6 +82,7 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
+        navigate('/');
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);

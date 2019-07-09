@@ -109,8 +109,9 @@
     "Microsoft.SaveEntity": {
       "title": "SaveEntity"
     },
-    "Microsoft.SendActivity": {
-      "title": "SendActivity"
+   "Activity": {
+      "title": "Language Generation",
+      "description": "What your Bot says to the User. Visit <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> the documentation</a> a reference of capabilities."  
     },
     "Microsoft.SetProperty": {
       "title": "SetProperty"

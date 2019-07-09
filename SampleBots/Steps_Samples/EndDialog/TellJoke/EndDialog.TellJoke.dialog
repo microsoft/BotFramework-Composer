@@ -1,6 +1,6 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
@@ -10,14 +10,29 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Why did the chicken cross the road?"
+      "$designer": {
+        "createdAt": "2019-07-01T21:35:45.065Z",
+        "updatedAt": "2019-07-01T21:35:48.468Z",
+        "id": "150220"
+      },
+      "activity": "[bfdactivity-150220]"
     },
     {
-      "$type": "Microsoft.EndTurn"
+      "$type": "Microsoft.EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-01T21:35:47.297Z",
+        "updatedAt": "2019-07-01T21:35:47.302Z",
+        "id": "889445"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "To get to the other side"
+      "$designer": {
+        "createdAt": "2019-07-01T21:35:55.897Z",
+        "updatedAt": "2019-07-01T21:35:57.840Z",
+        "id": "451180"
+      },
+      "activity": "[bfdactivity-451180]"
     }
   ],
   "rules": [
@@ -30,5 +45,11 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:35:16.406Z",
+    "updatedAt": "2019-07-01T21:35:16.439Z",
+    "id": "323744"
+  }
 }

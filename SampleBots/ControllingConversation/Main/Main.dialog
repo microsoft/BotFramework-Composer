@@ -1,116 +1,124 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "generator": "common.lg",
-    "recognizer": {
-      "$type": "Microsoft.RegexRecognizer",
-        "intents": {
-            "IfCondition": "IfCondition|01",
-            "SwitchCondition": "SwitchCondition|02",
-            "ForeachStep": "ForeachStep|03",
-            "ForeachPageStep": "ForeachPageStep|04",
-            "Cancel": "Cancel|05",
-            "EndTurn": "EndTurn|06",
-            "RepeatDialog": "RepeatDialog|07"
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-04T19:47:59.519Z",
+    "updatedAt": "2019-07-04T19:53:44.044Z",
+    "id": "864790"
+  },
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "IfCondition": "IfCondition|01",
+      "SwitchCondition": "SwitchCondition|02",
+      "ForeachStep": "ForeachStep|03",
+      "ForeachPageStep": "ForeachPageStep|04",
+      "Cancel": "Cancel|05",
+      "EndTurn": "EndTurn|06",
+      "RepeatDialog": "RepeatDialog|07"
+    }
+  },
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "IfCondition",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "IfCondition"
         }
+      ]
     },
-    "steps":[
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "SwitchCondition",
+      "steps": [
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[help]"
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SwitchCondition"
         }
-    ],
-    "rules": [
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ForeachStep",
+      "steps": [
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "IfCondition",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "IfCondition"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "SwitchCondition",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "SwitchCondition"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ForeachStep",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ForeachStep"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "ForeachPageStep",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ForeachPageStep"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "Cancel",
-            "steps": [
-                {
-                    "$type": "Microsoft.CancelAllDialogs"
-                }
-            ]
-        },
-         {
-            "$type": "Microsoft.EventRule",
-            "events": [ "cancelDialog" ],
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Canceled."
-                },
-                {
-                    "$type": "Microsoft.EndDialog"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "EndTurn",
-            "steps": [
-                {
-                    "$type": "Microsoft.EndTurn"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
-            "intent": "RepeatDialog",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "RepeatDialog"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.UnknownIntentRule",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "[help]"
-                }
-            ]
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ForeachStep"
         }
-    ]
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ForeachPageStep",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ForeachPageStep"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "Cancel",
+      "steps": [
+        {
+          "$type": "Microsoft.CancelAllDialogs"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "events": ["cancelDialog"],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Canceled."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "EndTurn",
+      "steps": [
+        {
+          "$type": "Microsoft.EndTurn"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "RepeatDialog",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "RepeatDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T19:53:46.534Z",
+        "updatedAt": "2019-07-04T19:53:49.708Z",
+        "id": "094908"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "953339",
+            "updatedAt": "2019-07-04T19:53:52.311Z"
+          },
+          "activity": "[bfdactivity-953339]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
 }

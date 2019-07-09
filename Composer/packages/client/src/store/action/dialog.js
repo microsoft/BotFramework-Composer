@@ -8,7 +8,9 @@ export async function createDialog(dispatch, { id, steps }) {
     const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, { id, steps });
     dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     clearNavHistory(dispatch);
     navTo(dispatch, `${id}#`);
@@ -23,13 +25,11 @@ export async function updateDialog(dispatch, { id, content }) {
     const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_DIALOG,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_DIALOG_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.UPDATE_DIALOG_FAILURE, payload: null, error: err });
   }
 }
