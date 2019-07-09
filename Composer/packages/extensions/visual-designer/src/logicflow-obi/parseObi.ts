@@ -1,6 +1,6 @@
 import { ObiTypes } from '../shared/ObiTypes';
 
-import { FlowBaseNode, FlowGroup, DecisionNode, LoopNode } from './models/LogicFlowNodes';
+import { FlowBaseNode, FlowGroup, DecisionNode, LoopNode } from '../logicflow/models/LogicFlowNodes';
 
 export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
   const steps = json.steps || [];

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { LogicFlow } from '../../../../src/logicflow/LogicFlow';
-import { parseAdaptiveDialog } from '../../../../src/logicflow/parseObi';
+import { parseAdaptiveDialog } from '../../../../src/logicflow-obi/parseObi';
 import { renderObiData, measureObiData, renderObiStepInsertionPoint } from '../../../../src/logicflow-obi';
 import AddToDo from '../../samples/todo/AddToDo.json';
 import ObiFlow from '../../samples/logicflow/ObiFlow.json';
