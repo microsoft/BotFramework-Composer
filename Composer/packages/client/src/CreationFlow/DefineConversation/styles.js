@@ -14,6 +14,9 @@ export const name = {
   fieldGroup: {
     width: 200,
   },
+  root: {
+    height: '90px',
+  },
   subComponentStyles: textFieldlabel,
 };
 
