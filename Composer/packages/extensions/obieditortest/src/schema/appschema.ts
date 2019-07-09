@@ -204,7 +204,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -465,11 +465,11 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
-          type: 'number',
+          type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: '2147483647',
-          examples: ['3'],
+          default: 0,
+          examples: [3],
         },
         validations: {
           type: 'array',
@@ -700,7 +700,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2170,7 +2170,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2763,7 +2763,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
