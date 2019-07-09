@@ -75,13 +75,13 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
         />
         {/* HIDE ID UNTIL WE ACTUALLY HAVE A USE FOR IT */}
-        {/* <TextField
+        <TextField
           value={get(data, 'id')}
           label={formatMessage('ID number')}
           borderless
           readOnly
           styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
-        /> */}
+        />
       </div>
     </div>
   );

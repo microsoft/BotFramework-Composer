@@ -27,11 +27,21 @@
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.todos",
-      "value": "dialog.todo"
+      "value": "dialog.todo",
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:54.672Z",
+        "updatedAt": "2019-07-01T22:02:54.677Z",
+        "id": "567087"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Successfully added a todo named \"{dialog.todo}\""
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:53.545Z",
+        "updatedAt": "2019-07-01T22:02:55.317Z",
+        "id": "116673"
+      },
+      "activity": "[bfdactivity-116673]"
     }
   ],
   "$schema": "../../app.schema",

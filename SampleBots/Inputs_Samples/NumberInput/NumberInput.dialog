@@ -12,7 +12,12 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hello, your age is {user.age}!"
+      "$designer": {
+        "createdAt": "2019-07-01T22:00:02.461Z",
+        "updatedAt": "2019-07-01T22:00:05.463Z",
+        "id": "303304"
+      },
+      "activity": "[bfdactivity-303304]"
     },
     {
       "$type": "Microsoft.NumberInput",
@@ -26,15 +31,30 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "2 * 2.2 equals {user.result}, that's right!"
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:33.141Z",
+            "updatedAt": "2019-07-01T22:00:35.972Z",
+            "id": "284482"
+          },
+          "activity": "[bfdactivity-284482]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "2 * 2.2 equals {user.result}, that's wrong!"
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:47.197Z",
+            "updatedAt": "2019-07-01T22:00:49.773Z",
+            "id": "172233"
+          },
+          "activity": "[bfdactivity-172233]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T22:00:35.159Z",
+        "updatedAt": "2019-07-01T22:00:35.189Z",
+        "id": "622462"
+      }
     }
   ],
   "$schema": "../../app.schema",

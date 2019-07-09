@@ -8,15 +8,30 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "You have no todos."
+          "$designer": {
+            "createdAt": "2019-07-01T22:04:54.741Z",
+            "updatedAt": "2019-07-01T22:04:56.521Z",
+            "id": "339580"
+          },
+          "activity": "[bfdactivity-339580]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[ShowTodo]"
+          "$designer": {
+            "createdAt": "2019-07-01T22:05:03.290Z",
+            "updatedAt": "2019-07-01T22:05:05.016Z",
+            "id": "662084"
+          },
+          "activity": "[bfdactivity-662084]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T22:04:55.922Z",
+        "updatedAt": "2019-07-01T22:04:55.949Z",
+        "id": "358464"
+      }
     }
   ],
   "$schema": "../../app.schema",

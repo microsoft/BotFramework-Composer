@@ -16,27 +16,42 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:14.960Z",
+        "updatedAt": "2019-07-01T22:02:16.191Z",
+        "id": "376720"
+      },
+      "activity": "[bfdactivity-376720]"
     }
   ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
       "intent": "AddIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "AddToDo"
-        }
-      ]
+      "steps": ["AddToDo"]
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "DeleteIntent",
+      "steps": ["DeleteToDo"]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ClearIntent",
+      "steps": ["ClearToDos"]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowIntent",
+      "steps": ["ShowToDos"]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HelpIntent",
       "steps": [
         {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "DeleteToDo"
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
         }
       ]
     },

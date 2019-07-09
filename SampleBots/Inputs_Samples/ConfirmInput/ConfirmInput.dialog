@@ -7,11 +7,31 @@
       "property": "user.confirmed",
       "prompt": "yes or no",
       "unrecognizedPrompt": "I need a yes or no.",
-      "alwaysPrompt": true
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:15.892Z",
+        "updatedAt": "2019-07-01T21:59:15.898Z",
+        "id": "647929"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "confirmation: {user.confirmed}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:14.563Z",
+        "updatedAt": "2019-07-01T21:59:16.680Z",
+        "id": "458458"
+      },
+      "activity": "[bfdactivity-458458]"
     },
     {
       "$type": "Microsoft.RepeatDialog"
