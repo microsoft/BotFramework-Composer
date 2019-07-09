@@ -1,19 +1,31 @@
 import { css } from '@emotion/core';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const fileList = css`
-  flex: 1;
+  width: 255px;
 `;
 
-export const contentEditor = css`
-  flex: 4;
-  margin-left: 20px;
-  height: calc(100% - 20px);
+export const linkItem = disabled => css`
+  display: block;
+  text-decoration: none;
+  color: ${disabled ? '#A6A6A6' : '#4f4f4f'};
+  position: relative;
+
+  &:focus {
+    outline: none;
+  }
 `;
+
+export const contentEditor = css``;
 
 export const title = css`
   font-weight: bold;
-  color: #5f5f5f;
-  font-size: 20px;
-  line-height: 40px;
-  padding-left: 15px;
+  padding: 7px 10px;
+  line-height: 14px;
+  font-size: ${FontSizes.medium};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${NeutralColors.gray20};
 `;
