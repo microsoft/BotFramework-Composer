@@ -1,6 +1,6 @@
 import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
-import { ElementInterval, InitNodeSize, LoopEdgeMarginLeft } from '../shared/elementSizes';
+import { ElementInterval, LoopEdgeMarginLeft } from '../shared/elementSizes';
 import { GraphBox } from '../logicflow/models/GraphBox';
 
 const BranchIntervalX = ElementInterval.x;
@@ -39,7 +39,7 @@ export function calculateForeachBoundary(
     Math.max(foreachNode.boundary.width - box.axisX, stepsNode.boundary.width - box.axisX) +
     LoopEdgeMarginLeft;
   box.height =
-    InitNodeSize.height +
+    foreachNode.boundary.height +
     BranchIntervalY +
     loopBeginNode.boundary.height +
     BranchIntervalY +
