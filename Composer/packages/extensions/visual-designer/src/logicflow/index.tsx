@@ -57,7 +57,6 @@ const renderElementNode = (elementNode: ElementNode): JSX.Element => {
       style={{
         width: boundary.width,
         height: boundary.height,
-        overflow: 'hidden',
       }}
     >
       {elementNode.element || JSON.stringify(elementNode)}

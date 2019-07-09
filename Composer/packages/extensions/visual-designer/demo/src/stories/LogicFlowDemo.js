@@ -20,7 +20,9 @@ export const LogicFlowDemo = () => {
           ))}
         </select>
       </div>
-      <LogicFlow flow={flows[selectedIndex].data} />
+      <div className="flowdata-visualizer" style={{ margin: 10 }}>
+        <LogicFlow flow={flows[selectedIndex].data} />
+      </div>
     </div>
   );
 };
