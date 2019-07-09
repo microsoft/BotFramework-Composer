@@ -11,13 +11,14 @@ export class LGIndexer {
     this.lgFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
-      const isValid = this.validate(file.content).isValid;
       if (extName === '.lg') {
+        const error = this.parse(file.content).error;
+
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          isValid,
+          diagostics: error === undefined ? [] : [error],
         });
       }
     }
@@ -27,7 +28,9 @@ export class LGIndexer {
     return this.lgFiles;
   }
 
-  public validate(content: string) {
+  public parse(content: string) {
+    // TODO update lg-parser, use new diagostic method
+
     return LGParser.TryParse(content);
   }
 }

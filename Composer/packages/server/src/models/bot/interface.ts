@@ -31,7 +31,7 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
-  isValid: boolean;
+  diagostics: any[]; // LGParser output, TODO:
 }
 
 export interface LUFile {
