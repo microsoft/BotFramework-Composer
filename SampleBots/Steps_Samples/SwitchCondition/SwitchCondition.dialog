@@ -29,7 +29,12 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "You select: {user.style}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:55:12.076Z",
+        "updatedAt": "2019-07-01T21:55:13.912Z",
+        "id": "160914"
+      },
+      "activity": "[bfdactivity-160914]"
     },
     {
       "$type": "Microsoft.SwitchCondition",
@@ -40,7 +45,12 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You select: 1"
+              "$designer": {
+                "createdAt": "2019-07-01T21:55:23.134Z",
+                "updatedAt": "2019-07-01T21:55:25.537Z",
+                "id": "576002"
+              },
+              "activity": "[bfdactivity-576002]"
             }
           ]
         },
@@ -49,7 +59,12 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You select: 2"
+              "$designer": {
+                "createdAt": "2019-07-01T21:57:26.930Z",
+                "updatedAt": "2019-07-01T21:57:28.948Z",
+                "id": "677412"
+              },
+              "activity": "[bfdactivity-677412]"
             }
           ]
         },
@@ -58,11 +73,21 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You select: 3"
+              "$designer": {
+                "createdAt": "2019-07-01T21:57:33.404Z",
+                "updatedAt": "2019-07-01T21:57:35.153Z",
+                "id": "700082"
+              },
+              "activity": "[bfdactivity-700082]"
             }
           ]
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:55:13.229Z",
+        "updatedAt": "2019-07-01T21:55:13.263Z",
+        "id": "448444"
+      }
     }
   ],
   "$schema": "../../app.schema"

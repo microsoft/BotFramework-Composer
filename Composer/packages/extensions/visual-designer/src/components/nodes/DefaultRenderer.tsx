@@ -40,9 +40,6 @@ const ContentKeyByTypes: {
     [key: string]: string;
   };
 } = {
-  [ObiTypes.SendActivity]: {
-    label: 'activity',
-  },
   [ObiTypes.EditArray]: {
     label: 'changeType',
     details: 'arrayProperty',

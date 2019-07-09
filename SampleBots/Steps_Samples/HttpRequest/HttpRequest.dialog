@@ -1,14 +1,36 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-05-18T22:37:53.053Z",
+    "updatedAt": "2019-07-01T21:37:47.307Z",
+    "id": "351884",
+    "name": "11 - HttpRequest",
+    "description": "This is a bot that demonstrates the HttpRequest concept in Adaptive Dialogs."
+  },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "property": "user.petname",
       "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
-      "property": "user.petname"
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "none",
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:04.412Z",
+        "updatedAt": "2019-07-01T21:38:04.419Z",
+        "id": "738240"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Great! Your pet's name is {user.petname}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:03.242Z",
+        "updatedAt": "2019-07-01T21:38:05.182Z",
+        "id": "229784"
+      },
+      "activity": "[bfdactivity-229784]"
     },
     {
       "$type": "Microsoft.TextInput",
@@ -17,12 +39,8 @@
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "http://petstore.swagger.io/v2/pet",
       "method": "POST",
-      "header": {
-        "test": "test",
-        "test2": "test2"
-      },
+      "url": "http://petstore.swagger.io/v2/pet",
       "body": {
         "id": "{user.petid}",
         "category": {
@@ -39,11 +57,25 @@
         ],
         "status": "available"
       },
-      "property": "user.postResponse"
+      "property": "user.postResponse",
+      "header": {
+        "test": "test",
+        "test2": "test2"
+      },
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:30.329Z",
+        "updatedAt": "2019-07-01T21:38:30.334Z",
+        "id": "845107"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Done! You have added a pet named \"{user.postResponse.name}\" with id \"{user.postResponse.id}\""
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:28.974Z",
+        "updatedAt": "2019-07-01T21:38:31.064Z",
+        "id": "200761"
+      },
+      "activity": "[bfdactivity-200761]"
     },
     {
       "$type": "Microsoft.TextInput",
@@ -52,21 +84,24 @@
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
       "method": "GET",
-      "property": "user.getResponse"
+      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
+      "property": "user.getResponse",
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:55.511Z",
+        "updatedAt": "2019-07-01T21:38:55.516Z",
+        "id": "705959"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Great! I found your pet named \"{user.getResponse.name}\""
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:56.964Z",
+        "updatedAt": "2019-07-01T21:38:58.832Z",
+        "id": "212615"
+      },
+      "activity": "[bfdactivity-212615]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-05-18T22:37:53.053Z",
-    "updatedAt": "2019-05-18T22:37:53.060Z",
-    "id": "351884",
-    "name": "11 - HttpRequest",
-    "description": "This is a bot that demonstrates the HttpRequest concept in Adaptive Dialogs."
-  }
+  "$schema": "../../app.schema"
 }

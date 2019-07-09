@@ -14,15 +14,30 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Successfully cleared items in the Todo List."
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:18.901Z",
+            "updatedAt": "2019-07-01T22:03:20.300Z",
+            "id": "832307"
+          },
+          "activity": "[bfdactivity-832307]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "You don't have any item in the Todo List."
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:36.091Z",
+            "updatedAt": "2019-07-01T22:03:39.000Z",
+            "id": "983761"
+          },
+          "activity": "[bfdactivity-983761]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T22:03:19.772Z",
+        "updatedAt": "2019-07-01T22:03:19.777Z",
+        "id": "815442"
+      }
     }
   ],
   "$schema": "../../app.schema",

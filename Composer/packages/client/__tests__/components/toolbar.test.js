@@ -7,22 +7,34 @@ const toolbarItems = onClick => [
   {
     type: 'action',
     text: 'New',
-    iconName: 'CirclePlus',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'Add',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
     type: 'action',
     text: 'Open',
-    iconName: 'OpenFolderHorizontal',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'OpenFolderHorizontal',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
     type: 'action',
     text: 'Save as',
-    iconName: 'Save',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'Save',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
