@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { EdgeMenu } from 'shared-menus';
 
 import { LogicFlow } from '../../../src/logicflow';
 import { FlowTypes } from '../../../src/logicflow/LogicFlowNodes';
@@ -36,6 +37,10 @@ const renderData = (id, type, data) => {
   return <DefaultRenderer id={id} data={data} onEvent={(e, id) => console.log('Event fired: ', e, id)} />;
 };
 
+const renderStepInsertionPoint = (arrayId, index) => {
+  return <EdgeMenu onClick={$type => console.log('Insert event fired:', $type, arrayId, index)} />;
+};
+
 export const LogicFlowDemo = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
@@ -50,7 +55,12 @@ export const LogicFlowDemo = () => {
         </select>
       </div>
       <div className="flowdata-visualizer" style={{ margin: 10 }}>
-        <LogicFlow flow={flows[selectedIndex].data} measureData={measureData} renderData={renderData} />
+        <LogicFlow
+          flow={flows[selectedIndex].data}
+          measureData={measureData}
+          renderData={renderData}
+          renderStepInsertionPoint={renderStepInsertionPoint}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { Boundary } from '../shared/Boundary';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { Edge } from '../components/shared/EdgeComponents';
-import { DiamondSize, LoopIconSize } from '../shared/elementSizes';
+import { DiamondSize, LoopIconSize, EdgeAddButtonSize, ElementInterval } from '../shared/elementSizes';
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 
 import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
@@ -17,10 +17,17 @@ export interface LogicFlowProps {
   flow: FlowGroup;
   measureData: (id: string, nodeType: FlowTypes, nodeData: any) => Boundary;
   renderData: (id: string, nodeType: FlowTypes, nodeData: any) => JSX.Element;
+  renderStepInsertionPoint: (arrayId: string, index: number) => JSX.Element;
   onEvent: (id: string, event: any) => any;
 }
 
-export const LogicFlow: React.SFC<LogicFlowProps> = ({ flow, renderData, measureData, onEvent }) => {
+export const LogicFlow: React.SFC<LogicFlowProps> = ({
+  flow,
+  renderData,
+  measureData,
+  renderStepInsertionPoint,
+  onEvent,
+}) => {
   const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
     if (flowNode['@'] === FlowTypes.Flow) return renderFlowGroup(flowNode as FlowGroup);
     if (flowNode['@'] === FlowTypes.Decision) return renderDecisionNode(flowNode as DecisionNode);
@@ -47,6 +54,31 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({ flow, renderData, measure
             {renderNode(x)}
           </OffsetContainer>
         ))}
+        {renderStepInsertionPoint ? (
+          <Fragment>
+            <OffsetContainer
+              offset={{ x: layout.boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
+              styles={{ zIndex: 100 }}
+            >
+              {renderStepInsertionPoint(flowGroup.id, 0)}
+            </OffsetContainer>
+            {flowSteps.map((x: any, index: number) => {
+              const box = flowBoxes[index];
+              return (
+                <OffsetContainer
+                  key={`FlowGroup/offset/${flowGroup.id}/footer/${x.id}`}
+                  offset={{
+                    x: layout.boundary.axisX - EdgeAddButtonSize.width / 2,
+                    y: box.offset.y + box.boundary.height + ElementInterval.y / 2 - EdgeAddButtonSize.height / 2,
+                  }}
+                  styles={{ zIndex: 100 }}
+                >
+                  {renderStepInsertionPoint(flowGroup.id, index + 1)}
+                </OffsetContainer>
+              );
+            })}
+          </Fragment>
+        ) : null}
       </div>
     );
   };
