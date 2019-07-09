@@ -76,6 +76,7 @@ export const Home = () => {
         onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
       },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-New',
     },
     {
       type: 'action',
@@ -87,6 +88,7 @@ export const Home = () => {
         onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
       },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-Open',
     },
   ];
 
@@ -146,6 +148,7 @@ export const Home = () => {
             <div css={home.botContent}>
               <div
                 css={home.action}
+                data-testid={'homePage-body-New'}
                 onClick={() => {
                   onClickNewBotProject();
                 }}
