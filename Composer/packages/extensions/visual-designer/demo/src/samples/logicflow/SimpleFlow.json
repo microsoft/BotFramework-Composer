@@ -2,7 +2,7 @@
   "@": "Flow",
   "id": "$.steps",
   "data": {},
-  "flow": [
+  "steps": [
     {
       "@": "Element",
       "id": "$.steps[0]",
@@ -17,20 +17,36 @@
       "id": "$.steps[1]",
       "data": {
         "$type": "Microsoft.IfCondition",
-        "condition": "a == b"
+        "condition": "a == b",
+        "elseSteps": [ { "$type": "Microsoft.SetProperty" }]
       },
       "branches": [
         {
-          "@": "Decision/Branch",
+          "@": "Flow",
           "id": "$.steps[1].ifFalse",
-          "text": "False",
-          "flow": []
+          "label": "False",
+          "data": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "text": "set a = b"
+            }
+          ],
+          "steps": [
+            {
+              "@": "Element",
+              "id": "$.steps[1].elseSteps[0]",
+              "data": {
+                "$type": "Microsoft.SetProperty",
+                "text": "set a = b"
+              }
+            }
+          ]
         },
         {
-          "@": "Decision/Branch",
+          "@": "Flow",
           "id": "$.steps[1].ifTrue",
-          "text": "True",
-          "flow": []
+          "label": "True",
+          "steps": []
         }
       ]
     },
@@ -39,9 +55,20 @@
       "id": "$.steps[2]",
       "data": {
         "$type": "Microsoft.Foreach",
-        "listProperty": "user.todos"
+        "listProperty": "user.todos",
+        "steps": [{ "$type": "Microsoft.SetProperty" }]
       },
-      "flow": []
+      "flow": {
+        "@": "Flow",
+        "data": [{ "$type": "Microsoft.SetProperty" }],
+        "steps": [
+          {
+            "@": "Element",
+            "id": "$.steps[3].steps[0]",
+            "data": { "$type": "Microsoft.SetProperty" }
+          }
+        ]
+      }
     }
   ]
 }

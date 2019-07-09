@@ -18,52 +18,48 @@ export class BoundedJSXElement {
 }
 
 export class FlowBaseNode {
-  '@': FlowTypes;
-  id: string = '';
+  '@': FlowTypes = FlowTypes.Element;
 
+  id: string = '';
   data: any = {};
 
-  constructor(type: FlowTypes, id: string, data: any) {
-    this['@'] = type;
+  constructor(id: string, data: any) {
     this.id = id;
     this.data = data;
   }
 }
 
-export class ElementNode extends FlowBaseNode {
-  element: BoundedJSXElement;
-  constructor(id: string, data: any, element: BoundedJSXElement) {
-    super(FlowTypes.Element, id, data);
-    this.element = element;
-  }
-}
-
 export class FlowGroup extends FlowBaseNode {
+  '@' = FlowTypes.Flow;
+
   label: string;
-  flow: FlowBaseNode[];
-  constructor(id: string, data: any, label: string, flowSteps: FlowBaseNode[]) {
-    super(FlowTypes.Branch, id, data);
+  steps: FlowBaseNode[];
+
+  constructor(id: string, data: any, label: string, steps: FlowBaseNode[]) {
+    super(id, data);
     this.label = label;
-    this.flow = flowSteps || [];
+    this.steps = steps || [];
   }
 }
 
 export class DecisionNode extends FlowBaseNode {
-  condition: ElementNode;
+  '@' = FlowTypes.Decision;
+
   branches: FlowGroup[] = [];
 
-  constructor(id: string, data: any, condition: ElementNode, branches: FlowGroup[]) {
-    super(FlowTypes.Decision, id, data);
-    this.condition = condition;
+  constructor(id: string, data: any, branches: FlowGroup[]) {
+    super(id, data);
     this.branches = branches;
   }
 }
 
 export class LoopNode extends FlowBaseNode {
-  flow: FlowBaseNode[];
+  '@' = FlowTypes.Loop;
 
-  constructor(id: string, data: any, loopSteps: FlowBaseNode[]) {
-    super(FlowTypes.Loop, id, data);
-    this.flow = loopSteps || [];
+  flow: FlowGroup;
+
+  constructor(id: string, data: any, loopSteps: FlowGroup) {
+    super(id, data);
+    this.flow = loopSteps;
   }
 }

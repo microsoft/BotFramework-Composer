@@ -2,112 +2,129 @@ import React from 'react';
 
 import { Boundary } from '../shared/Boundary';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Diamond } from '../components/nodes/templates/Diamond';
-import { ObiTypes } from '../shared/ObiTypes';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { Edge } from '../components/shared/EdgeComponents';
-import { DiamondSize } from '../shared/elementSizes';
+import { DiamondSize, LoopIconSize } from '../shared/elementSizes';
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 
-import { FlowGroup, ElementNode, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
+import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
 import { GraphBox } from './GraphBox';
+import { foreachLayouter } from '../layouters/foreachLayouter';
+import { LoopIndicator } from '../components/nodes/templates/LoopIndicator';
 
 export interface LogicFlowProps {
   flow: FlowGroup;
+  measureData: (id: string, nodeType: FlowTypes, nodeData: any) => Boundary;
+  renderData: (id: string, nodeType: FlowTypes, nodeData: any) => JSX.Element;
   onEvent: (id: string, event: any) => any;
 }
 
-const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
-  if (flowNode['@'] === FlowTypes.Flow) return renderFlowGroup(flowNode as FlowGroup);
-  if (flowNode['@'] === FlowTypes.Element) return renderElementNode(flowNode as ElementNode);
-  if (flowNode['@'] === FlowTypes.Decision) return renderDecisionNode(flowNode as DecisionNode);
-  if (flowNode['@'] === FlowTypes.Loop) return renderLoopNode(flowNode as LoopNode);
+export const LogicFlow: React.SFC<LogicFlowProps> = ({ flow, renderData, measureData, onEvent }) => {
+  const renderNode = (flowNode: FlowBaseNode): JSX.Element => {
+    if (flowNode['@'] === FlowTypes.Flow) return renderFlowGroup(flowNode as FlowGroup);
+    if (flowNode['@'] === FlowTypes.Decision) return renderDecisionNode(flowNode as DecisionNode);
+    if (flowNode['@'] === FlowTypes.Loop) return renderLoopNode(flowNode as LoopNode);
 
-  return <div>{JSON.stringify(flowNode)}</div>;
-};
+    return renderData(flowNode.id, flowNode['@'], flowNode.data);
+  };
 
-const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
-  let flowBoxes = flowGroup.flow.map(
-    (x, index) => new GraphBox(`${flowGroup.id}[${index}]`, measureJsonBoundary(x.data))
-  );
-  const layout = sequentialLayouter(flowBoxes);
-  flowBoxes = layout.nodes;
+  const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
+    const flowSteps = flowGroup.steps || [];
+    let flowBoxes = flowSteps.map(
+      (x, index) => new GraphBox(`${flowGroup.id}[${index}]`, measureData(x.id, x['@'], x.data))
+    );
+    const layout = sequentialLayouter(flowBoxes);
+    flowBoxes = layout.nodes;
 
-  return (
-    <div style={{ position: 'relative', width: layout.boundary.width, height: layout.boundary.height }}>
-      {(layout.edges || []).map(x => (
-        <Edge key={x.id} {...x} />
-      ))}
-      {flowGroup.flow.map((x: any, index: number) => (
-        <OffsetContainer key={`FlowGroup/${x.id}[${index}]/node/offset`} offset={flowBoxes[index].offset}>
-          {renderNode(x)}
-        </OffsetContainer>
-      ))}
-    </div>
-  );
-};
-
-const defaultElementBoundary = new Boundary(100, 100);
-
-const renderElementNode = (elementNode: ElementNode): JSX.Element => {
-  let boundary = new Boundary(100, 100);
-  let el = <p>{JSON.stringify(elementNode)}</p>;
-
-  if (elementNode.element) {
-    boundary = elementNode.element.boundary;
-    el = elementNode.element.el;
-  }
-  return (
-    <div
-      style={{
-        width: boundary.width,
-        height: boundary.height,
-      }}
-    >
-      {el}
-    </div>
-  );
-};
-
-const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => {
-  const conditionBox = new GraphBox(decisionNode.id, measureJsonBoundary(decisionNode.condition.data));
-  const diamondBox = new GraphBox(decisionNode.id, new Boundary(DiamondSize.width, DiamondSize.height));
-  const branchBoxes = decisionNode.branches.map(x => {
-    const box = new GraphBox(`${x.id}`, measureJsonBoundary({ $type: ObiTypes.StepGroup, children: x.data }));
-    box.data = x;
-    return box;
-  });
-
-  const layout = switchCaseLayouter(conditionBox, diamondBox, branchBoxes);
-  const { conditionNode, choiceNode, branchNodes } = layout.nodeMap as any;
-
-  return (
-    <div
-      className="LogicflowNode--decision"
-      style={{ width: layout.boundary.width, height: layout.boundary.height, position: 'relative' }}
-    >
-      {(layout.edges || []).map(x => (
-        <Edge key={x.id} {...x} />
-      ))}
-      <OffsetContainer offset={conditionNode.offset}>{renderNode(decisionNode.condition)}</OffsetContainer>
-      <OffsetContainer offset={choiceNode.offset}>
-        <Diamond onClick={() => {}} />
-      </OffsetContainer>
-      {decisionNode.branches.map((x, index) => {
-        return (
-          <OffsetContainer key={`Decision/${x.id}/offset`} offset={branchNodes[index].offset}>
-            {renderFlowGroup(x)}
+    return (
+      <div style={{ position: 'relative', width: layout.boundary.width, height: layout.boundary.height }}>
+        {(layout.edges || []).map(x => (
+          <Edge key={x.id} {...x} />
+        ))}
+        {flowSteps.map((x: any, index: number) => (
+          <OffsetContainer key={`FlowGroup/${x.id}[${index}]/node/offset`} offset={flowBoxes[index].offset}>
+            {renderNode(x)}
           </OffsetContainer>
-        );
-      })}
-    </div>
-  );
-};
+        ))}
+      </div>
+    );
+  };
 
-const renderLoopNode = (loopNode: LoopNode): JSX.Element => <p>{JSON.stringify(loopNode.data)}</p>;
+  const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => {
+    const conditionBox = new GraphBox(
+      decisionNode.id,
+      measureData(decisionNode.id, FlowTypes.Element, decisionNode.data)
+    );
+    const diamondBox = new GraphBox(decisionNode.id, new Boundary(DiamondSize.width, DiamondSize.height));
+    const branchBoxes = decisionNode.branches.map(x => {
+      const box = new GraphBox(`${x.id}`, measureData(x.id, x['@'], x.data));
+      box.data = x;
+      return box;
+    });
 
-export const LogicFlow: React.SFC<LogicFlowProps> = ({ flow, onEvent }) => {
+    const layout = switchCaseLayouter(conditionBox, diamondBox, branchBoxes);
+    const { conditionNode, choiceNode, branchNodes } = layout.nodeMap as any;
+
+    return (
+      <div
+        className="LogicflowNode--decision"
+        style={{ width: layout.boundary.width, height: layout.boundary.height, position: 'relative' }}
+      >
+        {(layout.edges || []).map(x => (
+          <Edge key={x.id} {...x} />
+        ))}
+        <OffsetContainer offset={conditionNode.offset}>
+          {renderData(decisionNode.id, decisionNode['@'], decisionNode.data)}
+        </OffsetContainer>
+        <OffsetContainer offset={choiceNode.offset}>
+          <Diamond onClick={() => {}} />
+        </OffsetContainer>
+        {decisionNode.branches.map((x, index) => {
+          return (
+            <OffsetContainer key={`Decision/${x.id}/offset`} offset={branchNodes[index].offset}>
+              {renderFlowGroup(x)}
+            </OffsetContainer>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderLoopNode = (loopNode: LoopNode): JSX.Element => {
+    const loopFlow = loopNode.flow || new FlowGroup(loopNode.id, [], '', []);
+    const loopStepBox = new GraphBox(loopFlow.id, measureData(loopFlow.id, loopFlow['@'], loopFlow.data));
+
+    const detailBox = new GraphBox(loopNode.id, measureData(loopNode.id, FlowTypes.Element, loopNode.data));
+    const loopBeginBox = new GraphBox(loopNode.id, new Boundary(LoopIconSize.width, LoopIconSize.height));
+    const loopEndBox = new GraphBox(loopNode.id, new Boundary(LoopIconSize.width, LoopIconSize.height));
+
+    const layout = foreachLayouter(detailBox, loopStepBox, loopBeginBox, loopEndBox);
+    const { foreachNode, stepsNode, loopBeginNode, loopEndNode } = layout.nodeMap as any;
+
+    return (
+      <div
+        className="LogicflowNode--loop"
+        style={{ width: layout.boundary.width, height: layout.boundary.height, position: 'relative' }}
+      >
+        {(layout.edges || []).map(x => (
+          <Edge key={x.id} {...x} />
+        ))}
+        <OffsetContainer offset={foreachNode.offset}>
+          {renderData(loopNode.id, loopNode['@'], loopNode.data)}
+        </OffsetContainer>
+        <OffsetContainer offset={stepsNode.offset}>{renderFlowGroup(loopFlow)}</OffsetContainer>
+        {[loopBeginNode, loopEndNode]
+          .filter(x => !!x)
+          .map((x, index) => (
+            <OffsetContainer key={`${loopNode.id}/loopicon-${index}/offset`} offset={x.offset}>
+              <LoopIndicator onClick={() => {}} />
+            </OffsetContainer>
+          ))}
+      </div>
+    );
+  };
+
   console.log('flow', flow);
   return <div>{renderFlowGroup(flow)}</div>;
 };

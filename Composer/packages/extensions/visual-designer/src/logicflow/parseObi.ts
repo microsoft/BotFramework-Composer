@@ -1,8 +1,6 @@
 import { ObiTypes } from '../shared/ObiTypes';
-import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
-import { FlowBaseNode, FlowGroup, ElementNode, DecisionNode, LoopNode, BoundedJSXElement } from './LogicFlowNodes';
-import { renderObiData } from './obiRenderer';
+import { FlowBaseNode, FlowGroup, DecisionNode, LoopNode } from './LogicFlowNodes';
 
 export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
   const steps = json.steps || [];
@@ -10,50 +8,26 @@ export const parseAdaptiveDialog = (json: any): FlowBaseNode => {
 };
 
 const parseIfCondition = (json: any, basePath: string): FlowBaseNode => {
-  const conditionData = {
-    ...json,
-    $type: ObiTypes.ConditionNode,
-  };
-
-  return new DecisionNode(
-    basePath,
-    json,
-    new ElementNode(
-      basePath,
-      json,
-      new BoundedJSXElement(renderObiData(basePath, conditionData), measureJsonBoundary(conditionData))
+  return new DecisionNode(basePath, json, [
+    new FlowGroup(
+      `${basePath}.elseSteps`,
+      json.elseSteps || [],
+      'False',
+      (json.elseSteps || []).map((x, index) => parseObiJson(x, `${basePath}.elseSteps[${index}]`))
     ),
-    [
-      new FlowGroup(
-        `${basePath}.elseSteps`,
-        json.elseSteps || [],
-        'False',
-        (json.elseSteps || []).map((x, index) => parseObiJson(x, `${basePath}.elseSteps[${index}]`))
-      ),
-      new FlowGroup(
-        `${basePath}.steps`,
-        json.steps || [],
-        'True',
-        (json.steps || []).map((x, index) => parseObiJson(x, `${basePath}.steps[${index}]`))
-      ),
-    ]
-  );
+    new FlowGroup(
+      `${basePath}.steps`,
+      json.steps || [],
+      'True',
+      (json.steps || []).map((x, index) => parseObiJson(x, `${basePath}.steps[${index}]`))
+    ),
+  ]);
 };
 
 const parseSwitchCondition = (json: any, basePath: string): FlowBaseNode => {
-  const conditionData = {
-    ...json,
-    $type: ObiTypes.ConditionNode,
-  };
-
   return new DecisionNode(
     basePath,
     json,
-    new ElementNode(
-      basePath,
-      json,
-      new BoundedJSXElement(renderObiData(basePath, conditionData), measureJsonBoundary(conditionData))
-    ),
     (json.cases || []).map(
       (caseBranch, index) =>
         new FlowGroup(
@@ -67,10 +41,11 @@ const parseSwitchCondition = (json: any, basePath: string): FlowBaseNode => {
 };
 
 const parseForeach = (json: any, basePath: string): FlowBaseNode => {
+  const steps = json.steps || [];
   return new LoopNode(
     basePath,
     json,
-    (json.steps || []).map((x, index) => parseObiJson(x, `${basePath}.steps[${index}]`))
+    new FlowGroup(`${basePath}.steps`, steps, '', steps.map((x, i) => parseObiJson(x, `${basePath}.steps[${i}]`)))
   );
 };
 
@@ -88,6 +63,6 @@ function parseObiJson(json: any, path: string): FlowBaseNode | undefined {
     case ObiTypes.ForeachPage:
       return parseForeach(json, path);
     default:
-      return new ElementNode(path, json, new BoundedJSXElement(renderObiData(path, json), measureJsonBoundary(json)));
+      return new FlowBaseNode(path, json);
   }
 }
