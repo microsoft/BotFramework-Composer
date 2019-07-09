@@ -8,8 +8,8 @@ import { Edge } from '../components/shared/EdgeComponents';
 import { DiamondSize, LoopIconSize, EdgeAddButtonSize, ElementInterval } from '../shared/elementSizes';
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 
-import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './LogicFlowNodes';
-import { GraphBox } from './GraphBox';
+import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './models/LogicFlowNodes';
+import { GraphBox } from './models/GraphBox';
 import { foreachLayouter } from '../layouters/foreachLayouter';
 import { LoopIndicator } from '../components/nodes/templates/LoopIndicator';
 

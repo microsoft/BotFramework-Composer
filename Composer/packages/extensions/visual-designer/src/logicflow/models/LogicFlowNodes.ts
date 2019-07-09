@@ -1,4 +1,4 @@
-import { Boundary } from '../shared/Boundary';
+import { Boundary } from '../../shared/Boundary';
 
 export enum FlowTypes {
   Flow = 'Flow',

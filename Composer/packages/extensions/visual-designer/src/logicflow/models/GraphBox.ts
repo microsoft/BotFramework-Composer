@@ -1,4 +1,4 @@
-import { Boundary } from '../shared/Boundary';
+import { Boundary } from '../../shared/Boundary';
 
 class CoordPoint {
   x: number;
