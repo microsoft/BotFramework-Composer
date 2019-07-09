@@ -79,6 +79,7 @@ export async function openBotProject(dispatch, absolutePath) {
       navTo(dispatch, 'Main#');
     }
   } catch (err) {
+    navigate('/home');
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
