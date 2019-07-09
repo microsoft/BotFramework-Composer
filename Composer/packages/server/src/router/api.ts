@@ -21,6 +21,7 @@ router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFi
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
+router.get('/projects/recent', ProjectController.getRecentProjects);
 
 // storages
 router.get('/storages', StorageController.getStorageConnections);
