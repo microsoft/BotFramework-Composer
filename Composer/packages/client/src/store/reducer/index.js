@@ -7,7 +7,6 @@ const projectFiles = ['bot', 'botproj'];
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botName = response.data.botName;
-  state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
@@ -38,11 +37,6 @@ const updateLgTemplate = (state, { response }) => {
 
 const updateLuTemplate = (state, { response }) => {
   state.luFiles = response.data.luFiles;
-  return state;
-};
-
-const updateProjFile = (state, { response }) => {
-  state.botProjFile = response.data.botFile;
   return state;
 };
 
@@ -140,7 +134,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
-  [ActionTypes.UPDATE_PROJFILE__SUCCESS]: updateProjFile,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
