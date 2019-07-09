@@ -1,0 +1,45 @@
+{
+  "@": "Flow",
+  "id": "$.steps",
+  "data": "",
+  "steps": [
+    { "@": "Element", "id": "1", "data": "/start" },
+    { "@": "Element", "id": "2", "data": "INPUT x..." },
+    {
+      "@": "Decision",
+      "id": "3",
+      "data": "x % 2 === 1 ?",
+      "branches": [
+        {
+          "@": "Flow",
+          "id": "3-false",
+          "label": "False",
+          "data": "odd",
+          "steps": [
+            { "@": "Element", "id": "3-false-1", "data": "odd" }
+          ]
+        },
+        {
+          "@": "Flow",
+          "id": "3-true",
+          "label": "True",
+          "steps": [
+            { "@": "Element", "id": "3-true-1", "data": "even" }
+          ]
+        }
+      ]
+    },
+    {
+      "@": "Loop",
+      "id": "4",
+      "data": "while(true)",
+      "flow": {
+        "@": "Flow",
+        "id": "$.steps[2].steps",
+        "steps": [
+          { "@": "Element", "id": "5", "data": "Learn" }
+        ]
+      }
+    }
+  ]
+}
