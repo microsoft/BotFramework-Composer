@@ -12,7 +12,7 @@ import { LoopIndicator } from '../components/nodes/templates/LoopIndicator';
 
 import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './models/LogicFlowNodes';
 import { GraphBox } from './models/GraphBox';
-import { dfsVisitLogicFlow, calculateNodeBoundary } from './logicFlowVisitor';
+import { dfsVisitLogicFlow, calculateFlowNodeBoundary } from './logicFlowVisitor';
 
 export interface LogicFlowProps {
   flow: FlowGroup;
@@ -156,6 +156,6 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
     );
   };
 
-  dfsVisitLogicFlow(flow, node => calculateNodeBoundary(node, measureData));
+  dfsVisitLogicFlow(flow, node => calculateFlowNodeBoundary(node, measureData));
   return <div>{renderFlowGroup(flow)}</div>;
 };

@@ -28,7 +28,7 @@ export const dfsVisitLogicFlow = (node: FlowBaseNode, visit: (node: FlowBaseNode
   visit(node);
 };
 
-export const calculateNodeBoundary = (
+export const calculateFlowNodeBoundary = (
   node: FlowBaseNode,
   measureBoundary: (id: string, nodeType: FlowTypes, data: any) => Boundary
 ): void => {
