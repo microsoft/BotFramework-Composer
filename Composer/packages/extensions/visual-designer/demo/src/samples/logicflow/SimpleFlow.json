@@ -1,6 +1,6 @@
 {
   "@": "Flow",
-  "id": "$.steps",
+  "id": "0",
   "data": "",
   "steps": [
     { "@": "Element", "id": "1", "data": "/start" },

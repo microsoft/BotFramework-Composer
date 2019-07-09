@@ -23,7 +23,7 @@
       "branches": [
         {
           "@": "Flow",
-          "id": "$.steps[1].ifFalse",
+          "id": "$.steps[1].elseSteps",
           "label": "False",
           "data": [
             {
@@ -34,7 +34,7 @@
           "steps": [
             {
               "@": "Element",
-              "id": "$.steps[1].elseSteps[0]",
+              "id": "$.steps[1].steps[0]",
               "data": {
                 "$type": "Microsoft.SetProperty",
                 "text": "set a = b"
@@ -65,7 +65,7 @@
         "steps": [
           {
             "@": "Element",
-            "id": "$.steps[3].steps[0]",
+            "id": "$.steps[2].steps[0]",
             "data": { "$type": "Microsoft.SetProperty" }
           }
         ]
