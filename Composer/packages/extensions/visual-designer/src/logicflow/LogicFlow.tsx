@@ -157,6 +157,5 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
   };
 
   dfsVisitLogicFlow(flow, node => calculateNodeBoundary(node, measureData));
-  console.log('flow', flow);
   return <div>{renderFlowGroup(flow)}</div>;
 };

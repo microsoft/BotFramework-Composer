@@ -60,6 +60,7 @@
       },
       "flow": {
         "@": "Flow",
+        "id": "$.steps[2].steps",
         "data": [{ "$type": "Microsoft.SetProperty" }],
         "steps": [
           {
