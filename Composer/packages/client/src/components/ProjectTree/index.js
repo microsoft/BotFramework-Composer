@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { PropTypes } from 'prop-types';
-import { Nav } from 'office-ui-fabric-react';
+import { Nav, Link } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { nav, addButton } from './styles';
@@ -58,9 +58,9 @@ export const ProjectTree = props => {
         selectedKey={activeNode}
         styles={nav}
       />
-      <div css={addButton} onClick={onAdd}>
+      <Link css={addButton} onClick={onAdd}>
         {formatMessage('Add ..')}
-      </div>
+      </Link>
     </div>
   );
 };

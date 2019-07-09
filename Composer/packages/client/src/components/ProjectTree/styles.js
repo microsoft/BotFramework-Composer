@@ -7,7 +7,5 @@ export const nav = {
 };
 
 export const addButton = css`
-  color: #0078d4;
   margin-left: 10px;
-  cursor: default;
 `;
