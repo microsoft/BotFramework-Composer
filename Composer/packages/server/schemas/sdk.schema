@@ -443,7 +443,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -767,7 +767,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -1065,7 +1065,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -2898,7 +2898,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -3652,7 +3652,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
