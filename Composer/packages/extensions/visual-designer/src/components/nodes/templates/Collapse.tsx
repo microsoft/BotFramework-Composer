@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { IconButton } from 'office-ui-fabric-react';
 
-const Width = 660;
-
 export const Collapse = ({ text, children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -16,13 +14,17 @@ export const Collapse = ({ text, children }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: '100%',
+        maxWidth: '1008px',
+        minWidth: '432px',
+        margin: '0 auto',
       }}
     >
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          width: Width,
+          width: '100%',
         }}
       >
         <div
