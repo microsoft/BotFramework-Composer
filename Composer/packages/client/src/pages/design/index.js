@@ -117,7 +117,7 @@ function DesignPage(props) {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text);
+      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
       const displayText = isRoot ? botName : text;
       return {
         key: index,
