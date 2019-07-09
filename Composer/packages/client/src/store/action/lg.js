@@ -37,7 +37,11 @@ const contentValidate = text => {
 export async function updateLgFile(dispatch, { id, content }) {
   const validateResult = contentValidate(content);
   if (validateResult.isValid === false) {
-    throw new Error(`lg content is invalid, ${validateResult.error.Message}`);
+    const { Start, End } = validateResult.error.Range;
+    const msg = `start at line ${Start.Line} character ${Start.Character}, end at line ${End.Line} character ${
+      End.Character
+    }`;
+    throw new Error(`syntax error, ${validateResult.error.Message}, ${msg}`);
   }
 
   try {

@@ -17,13 +17,28 @@ const AlertDialog = props => {
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
-        subText: subTitle,
+        // subText: subTitle,
       }}
       modalProps={{
         isBlocking: true,
-        styles: { main: { maxWidth: 450 } },
+        styles: {
+          main: { maxWidth: 450 },
+        },
       }}
     >
+      {subTitle && (
+        <div
+          style={{
+            background: '#000',
+            color: '#fff',
+            padding: '15px',
+            marginBottom: '20px',
+          }}
+        >
+          {subTitle}
+        </div>
+      )}
+
       <DialogFooter>
         <PrimaryButton onClick={onConfirm} text={confirmBtnText || 'Ok'} />
       </DialogFooter>
