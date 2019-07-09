@@ -1,11 +1,12 @@
 import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
 import { ElementInterval, InitNodeSize, LoopEdgeMarginLeft } from '../shared/elementSizes';
+import { GraphBox } from '../logicflow/models/GraphBox';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTailEdge = true) {
+export function calculateSequenceBoundary(nodes: GraphBox[], widthHeadEdge = true, widthTailEdge = true) {
   const box = new Boundary();
   if (!Array.isArray(nodes) || nodes.length === 0) {
     return box;
@@ -22,7 +23,12 @@ export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTail
   return box;
 }
 
-export function calculateForeachBoundary(foreachNode?, stepsNode?, loopBeginNode?, loopEndNode?) {
+export function calculateForeachBoundary(
+  foreachNode: GraphBox,
+  stepsNode: GraphBox,
+  loopBeginNode: GraphBox,
+  loopEndNode: GraphBox
+) {
   const box = new Boundary();
 
   if (!foreachNode || !stepsNode) return box;
@@ -44,7 +50,12 @@ export function calculateForeachBoundary(foreachNode?, stepsNode?, loopBeginNode
   return box;
 }
 
-export function calculateIfElseBoundary(conditionNode?, choiceNode?, ifNode?, elseNode?) {
+export function calculateIfElseBoundary(
+  conditionNode: GraphBox,
+  choiceNode: GraphBox,
+  ifNode: GraphBox,
+  elseNode: GraphBox
+) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   const branchNodes: { [key: string]: any } = [ifNode || new GraphNode(), elseNode || new GraphNode()];
@@ -56,7 +67,11 @@ export function calculateIfElseBoundary(conditionNode?, choiceNode?, ifNode?, el
   );
 }
 
-export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes: { [key: string]: any } = []) {
+export function calculateSwitchCaseBoundary(
+  conditionNode: GraphBox,
+  choiceNode: GraphBox,
+  branchNodes: GraphBox[] = []
+) {
   if (!conditionNode || !choiceNode) return new Boundary();
 
   return measureBranchingContainerBoundary(
@@ -67,9 +82,9 @@ export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNod
 }
 
 function measureBranchingContainerBoundary(
-  conditionBoundary,
-  choiceBoundary,
-  branchBoundaries: { [key: string]: any } = []
+  conditionBoundary: Boundary,
+  choiceBoundary: Boundary,
+  branchBoundaries: Boundary[] = []
 ) {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 

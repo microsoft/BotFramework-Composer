@@ -21,22 +21,21 @@ function measureStepGroupBoundary(stepGroup) {
 
 function measureForeachBoundary(json) {
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(json, '');
-  const inputs = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => GraphNode.fromIndexedJson(x));
-  return calculateForeachBoundary(...inputs);
+  const inputs: any[] = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => GraphNode.fromIndexedJson(x));
+  return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
 function measureIfConditionBoundary(json) {
   const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
-  const inputs = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
-  const result = calculateIfElseBoundary(...inputs);
-  return result;
+  const inputs: any[] = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
+  return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
 function measureSwitchConditionBoundary(json) {
   const { condition, choice, branches } = transformSwitchCondition(json, '');
   return calculateSwitchCaseBoundary(
-    GraphNode.fromIndexedJson(condition),
-    GraphNode.fromIndexedJson(choice),
+    GraphNode.fromIndexedJson(condition) as any,
+    GraphNode.fromIndexedJson(choice) as any,
     branches.map(x => GraphNode.fromIndexedJson(x))
   );
 }
