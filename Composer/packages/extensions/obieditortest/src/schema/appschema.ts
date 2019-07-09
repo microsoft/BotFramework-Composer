@@ -241,7 +241,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -737,7 +737,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         defaultLocale: {
@@ -2207,7 +2207,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -2800,7 +2800,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
