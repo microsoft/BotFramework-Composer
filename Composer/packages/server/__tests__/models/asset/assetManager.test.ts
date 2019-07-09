@@ -28,7 +28,7 @@ describe('test assetManager', () => {
     try {
       rimraf.sync(mockCopyToPath);
     } catch (error) {
-      //ignore
+      throw new Error(error);
     }
   });
 });

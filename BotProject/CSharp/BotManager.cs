@@ -16,9 +16,9 @@ using Microsoft.Bot.Builder.BotFramework;
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
     public interface IBotManager
-    { 
+    {
         IBotFrameworkHttpAdapter CurrentAdapter { get; }
-        IBot CurrentBot { get;  }
+        IBot CurrentBot { get; }
 
         void SetCurrent(Stream fileStream, LuConfigFile luConfig = null);
     }
@@ -57,15 +57,15 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
-            
+
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
             adapter
-                .UseStorage(storage)
-                .UseState(userState, conversationState)
-                .UseLanguageGeneration(resourceExplorer)
-                .UseDebugger(4712)
-                .UseResourceExplorer(resourceExplorer);
+              .UseStorage(storage)
+              .UseState(userState, conversationState)
+              .UseLanguageGeneration(resourceExplorer)
+              .UseDebugger(4712)
+              .UseResourceExplorer(resourceExplorer);
             adapter.OnTurnError = async (turnContext, exception) =>
             {
                 await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
@@ -149,17 +149,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             ZipFile.ExtractToDirectory(filePath, finalDstPath);
             return finalDstPath;
         }
-
-        private string FindBotProjFile(string dir)
-        {
-            string[] projFiles = Directory.GetFiles(dir, "*.botproj");
-            if (projFiles.Length != 1)
-            {
-                throw new Exception("no bot proj file in zip file");
-            }
-            return projFiles[0];
-        }
-
 
         public static string ConvertPath(string relativePath)
         {
