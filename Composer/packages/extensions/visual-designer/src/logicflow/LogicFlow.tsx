@@ -12,6 +12,7 @@ import { LoopIndicator } from '../components/nodes/templates/LoopIndicator';
 
 import { FlowGroup, FlowBaseNode, DecisionNode, LoopNode, FlowTypes } from './models/LogicFlowNodes';
 import { GraphBox } from './models/GraphBox';
+import { dfsVisitLogicFlow, calculateNodeBoundary } from './logicFlowVisitor';
 
 export interface LogicFlowProps {
   flow: FlowGroup;
@@ -38,9 +39,7 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
 
   const renderFlowGroup = (flowGroup: FlowGroup): JSX.Element => {
     const flowSteps = flowGroup.steps || [];
-    let flowBoxes = flowSteps.map(
-      (x, index) => new GraphBox(`${flowGroup.id}[${index}]`, measureData(x.id, x['@'], x.data))
-    );
+    let flowBoxes = flowSteps.map((x, index) => new GraphBox(`${flowGroup.id}[${index}]`, x.boundary));
     const layout = sequentialLayouter(flowBoxes);
     flowBoxes = layout.nodes;
 
@@ -86,11 +85,11 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
   const renderDecisionNode = (decisionNode: DecisionNode): JSX.Element => {
     const conditionBox = new GraphBox(
       decisionNode.id,
-      measureData(decisionNode.id, FlowTypes.Element, decisionNode.data)
+      measureData(decisionNode.id, decisionNode['@'], decisionNode.data)
     );
     const diamondBox = new GraphBox(decisionNode.id, new Boundary(DiamondSize.width, DiamondSize.height));
     const branchBoxes = decisionNode.branches.map(x => {
-      const box = new GraphBox(`${x.id}`, measureData(x.id, x['@'], x.data));
+      const box = new GraphBox(`${x.id}`, x.boundary);
       box.data = x;
       return box;
     });
@@ -125,7 +124,7 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
 
   const renderLoopNode = (loopNode: LoopNode): JSX.Element => {
     const loopFlow = loopNode.flow || new FlowGroup(loopNode.id, [], '', []);
-    const loopStepBox = new GraphBox(loopFlow.id, measureData(loopFlow.id, loopFlow['@'], loopFlow.data));
+    const loopStepBox = new GraphBox(loopFlow.id, loopFlow.boundary);
 
     const detailBox = new GraphBox(loopNode.id, measureData(loopNode.id, FlowTypes.Element, loopNode.data));
     const loopBeginBox = new GraphBox(loopNode.id, new Boundary(LoopIconSize.width, LoopIconSize.height));
@@ -157,6 +156,7 @@ export const LogicFlow: React.SFC<LogicFlowProps> = ({
     );
   };
 
+  dfsVisitLogicFlow(flow, node => calculateNodeBoundary(node, measureData));
   console.log('flow', flow);
   return <div>{renderFlowGroup(flow)}</div>;
 };

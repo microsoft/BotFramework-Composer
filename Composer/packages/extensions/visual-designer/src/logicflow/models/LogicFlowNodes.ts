@@ -4,17 +4,7 @@ export enum FlowTypes {
   Flow = 'Flow',
   Element = 'Element',
   Decision = 'Decision',
-  Branch = 'Branch',
   Loop = 'Loop',
-}
-
-export class BoundedJSXElement {
-  el: JSX.Element;
-  boundary: Boundary;
-  constructor(element: JSX.Element, boundary: Boundary) {
-    this.el = element;
-    this.boundary = boundary;
-  }
 }
 
 export class FlowBaseNode {
@@ -22,6 +12,8 @@ export class FlowBaseNode {
 
   id: string = '';
   data: any = {};
+
+  boundary = new Boundary();
 
   constructor(id: string, data: any) {
     this.id = id;
