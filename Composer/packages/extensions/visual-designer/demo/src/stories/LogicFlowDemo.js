@@ -7,6 +7,7 @@ import AddToDo from '../samples/todo/AddToDo.json';
 import SimpleFlow from '../samples/logicflow/SimpleFlow.json';
 import { measureJsonBoundary } from '../../../src/layouters/measureJsonBoundary';
 import { ObiTypes } from '../../../src/shared/ObiTypes';
+import { DefaultRenderer } from '../../../src/components/nodes/DefaultRenderer';
 
 const flows = [{ name: 'SimpleFlow', data: SimpleFlow }, { name: 'AddToDo', data: parseAdaptiveDialog(AddToDo) }];
 
@@ -32,11 +33,7 @@ const measureData = (id, type, data) => {
 };
 
 const renderData = (id, type, data) => {
-  return (
-    <div style={{ width: 280, height: 80, overflow: 'hidden', border: '1px solid lightgreen' }}>
-      {JSON.stringify(data)}
-    </div>
-  );
+  return <DefaultRenderer id={id} data={data} onEvent={(e, id) => console.log('Event fired: ', e, id)} />;
 };
 
 export const LogicFlowDemo = () => {
