@@ -125,11 +125,11 @@ describe('modify non exist files', () => {
 });
 
 describe('lg operation', () => {
-  afterEach(() => {
+  afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 
@@ -186,11 +186,11 @@ describe('lg operation', () => {
 });
 
 describe('lu operation', () => {
-  afterEach(() => {
+  afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 

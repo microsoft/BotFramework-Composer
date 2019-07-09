@@ -3,9 +3,12 @@ import axios from 'axios';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
-export async function createDialog(dispatch, { id, steps }) {
+export async function createDialog(dispatch, { id, content }) {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, { id, steps });
+    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, {
+      id,
+      content,
+    });
     dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: {
@@ -22,7 +25,10 @@ export async function createDialog(dispatch, { id, steps }) {
 
 export async function updateDialog(dispatch, { id, content }) {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
+    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, {
+      id,
+      content,
+    });
     dispatch({
       type: ActionTypes.UPDATE_DIALOG,
       payload: {
@@ -30,6 +36,10 @@ export async function updateDialog(dispatch, { id, content }) {
       },
     });
   } catch (err) {
-    dispatch({ type: ActionTypes.UPDATE_DIALOG_FAILURE, payload: null, error: err });
+    dispatch({
+      type: ActionTypes.UPDATE_DIALOG_FAILURE,
+      payload: null,
+      error: err,
+    });
   }
 }
