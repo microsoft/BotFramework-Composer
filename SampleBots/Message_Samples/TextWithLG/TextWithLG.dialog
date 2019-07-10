@@ -1,0 +1,17 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[TextWithLG]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:19.315Z",
+    "updatedAt": "2019-07-03T06:50:19.334Z",
+    "id": "620760"
+  }
+}

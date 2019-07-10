@@ -1,0 +1,20 @@
+{
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "EchoBot",
+    "description": "<Fill in the description of your bot here>"
+  },
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Hello, I'm the echo bot.",
+      "property": "user.input"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "your input is : {user.input}"
+    }
+  ]
+}

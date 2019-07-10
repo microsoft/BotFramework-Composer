@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
-import { PrimaryButton, TextField, DirectionalHint, DefaultButton, IContextualMenuItem } from 'office-ui-fabric-react';
+import { PrimaryButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
 import get from 'lodash.get';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import Modal from '../../Modal';
-import { buildDialogOptions, swap } from '../utils';
-import { DialogGroup } from '../../schema/appschema';
+import { swap } from '../utils';
 
 import { TableField } from './TableField';
 
@@ -53,7 +54,13 @@ function CaseConditionActions(props) {
     },
   ];
 
-  return <DefaultButton menuProps={{ items: menuItems }} />;
+  return (
+    <IconButton
+      menuProps={{ items: menuItems }}
+      menuIconProps={{ iconName: 'MoreVertical' }}
+      styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+    />
+  );
 }
 
 export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
@@ -135,10 +142,18 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
               <PrimaryButton
                 styles={{ root: { marginTop: '20px' } }}
                 menuProps={{
-                  items: buildDialogOptions({
-                    exclude: [DialogGroup.RULE, DialogGroup.SELECTOR, DialogGroup.OTHER],
-                    onClick: createNewItemAtIndex(),
-                  }),
+                  items: createStepMenu(
+                    [
+                      DialogGroup.RESPONSE,
+                      DialogGroup.INPUT,
+                      DialogGroup.STEP,
+                      DialogGroup.MEMORY,
+                      DialogGroup.CODE,
+                      DialogGroup.LOG,
+                    ],
+                    true,
+                    createNewItemAtIndex()
+                  ),
                   calloutProps: { calloutMaxHeight: 500 },
                   directionalHint: DirectionalHint.bottomLeftEdge,
                 }}

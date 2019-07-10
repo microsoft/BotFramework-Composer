@@ -1,182 +1,202 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
+import { debounce } from 'lodash';
 import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { navigate } from '@reach/router';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { LGParser } from 'botbuilder-lg';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { navigate } from '@reach/router';
 
+import { OpenAlertModal } from '../../components/Modal/Alert';
 import { Store } from '../../store/index';
-import { OpenConfirmModal } from '../../components/Modal';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 
-import NewLgFileModal from './create-new';
+import '../language-understanding/style.css';
 import Content from './content';
+import { ToolBar } from './../../components/ToolBar/index';
+import { TestController } from './../../TestController';
 
 export const LGPage = props => {
-  const fileId = props.fileId;
   const { state, actions } = useContext(Store);
-  const updateLgFile = useRef(lodash.debounce(actions.updateLgFile, 500)).current;
-  const { lgFiles } = state;
-  const [modalOpen, setModalOpen] = useState(false);
+  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
+  const { lgFiles, dialogs } = state;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
-  const [groups, setGroups] = useState([]);
-
   const [lgFile, setLgFile] = useState(null);
 
-  useEffect(() => {
-    const lgFile = lgFiles.find(file => file.id === fileId);
+  const subPath = props['*'];
 
-    // if not found, redirect to first lg file
-    if (lgFiles.length !== 0 && lgFile === undefined) {
-      navigate(`./${lgFiles[0].id}`);
+  const activePath = subPath === '' ? '_all' : subPath;
+  const activeDialog = dialogs.find(item => item.id === subPath);
+
+  // for now, one bot only have one lg file by default. all dialog share one lg
+  // file.
+  useEffect(() => {
+    if (lgFiles.length) {
+      setLgFile({
+        ...lgFiles[0],
+      });
+    }
+  }, [lgFiles]);
+
+  const navLinks = useMemo(() => {
+    const subLinks = dialogs.reduce((result, file) => {
+      if (result.length === 0) {
+        result = [
+          {
+            links: [],
+          },
+        ];
+      }
+      const item = {
+        id: file.id,
+        key: file.id,
+        name: file.displayName,
+      };
+
+      if (file.isRoot) {
+        result[0] = {
+          ...result[0],
+          ...item,
+          isExpanded: true,
+        };
+      } else {
+        result[0].links.push(item);
+      }
+      return result;
+    }, []);
+
+    return [
+      {
+        links: [
+          {
+            id: '_all',
+            key: '_all',
+            name: 'All',
+            isExpanded: true,
+            links: subLinks,
+          },
+        ],
+      },
+    ];
+  }, [dialogs]);
+
+  // if dialog not find, navigate to all.
+  useEffect(() => {
+    if (!activeDialog && subPath && dialogs.length) {
+      navigate('/language-generation');
     }
 
-    lgFiles.forEach(file => {
-      const parseResult = LGParser.TryParse(file.content);
-      if (parseResult.isValid) {
-        file.templates = parseResult.templates;
-      }
-    });
-
-    const links = lgFiles.map(file => {
-      let subNav = [];
-
-      // in case of unvalid LGParser templates
-      if (Array.isArray(file.templates)) {
-        subNav = file.templates.map(template => {
-          return {
-            name: template.Name,
-          };
-        });
-      }
-
-      return {
-        key: file.id,
-        name: `${file.id}.lg`,
-        collapseByDefault: false,
-        ariaLabel: file.id,
-        altText: file.id,
-        title: file.id,
-        isExpanded: true,
-        links: subNav,
-        forceAnchor: false,
-        onClick: event => {
-          event.preventDefault();
-          navigate(`./${file.id}`);
-        },
-      };
-    });
-    setGroups([
-      {
-        links: links,
-      },
-    ]);
-
-    setLgFile({ ...lgFile });
-
     setNewContent(null);
-  }, [lgFiles, fileId]);
+  }, [activePath, dialogs, lgFiles]);
+
+  function onSelect(id) {
+    if (newContent) {
+      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
+      return;
+    }
+    if (id === '_all') {
+      navigate(`/language-generation`);
+    } else {
+      navigate(`/language-generation/${id}`);
+    }
+    setTextMode(false); // back to table view
+  }
 
   function onChange(newContent) {
     setNewContent(newContent);
   }
 
   function discardChanges() {
-    setLgFile({ ...lgFile });
+    setLgFile({
+      ...lgFiles[0],
+    });
     setNewContent(null);
   }
 
   function onSave() {
     const payload = {
-      id: fileId,
+      id: lgFile.id,
       content: newContent,
     };
     updateLgFile(payload);
   }
 
-  async function onRemove() {
-    const title = formatMessage(`Confirm delete ${fileId}.lg file?`);
-    const confirm = await OpenConfirmModal(title);
-    if (confirm === false) {
-      return;
-    }
-    const payload = {
-      id: fileId,
-    };
-    await actions.removeLgFile(payload);
-    navigate(`./`);
+  // #TODO: get line number from lg parser, then deep link to code editor this
+  // Line
+  function onTableViewWantEdit(template) {
+    console.log(template);
+    setTextMode(true);
   }
 
-  async function onCreateLgFile(data) {
-    await actions.createLgFile({
-      id: data.name,
-    });
-    setModalOpen(false);
-    navigate(`./${data.name}`);
-  }
-
-  // performance optimization, component update should only trigger by lgFile change.
-  const memoizedContent = useMemo(() => {
-    return <Content file={lgFile} textMode={textMode} onChange={onChange} />;
-  }, [lgFile, textMode]);
+  const toolbarItems = [
+    {
+      type: 'element',
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
 
   return (
     <Fragment>
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>Language generation</div>
+        <div>Bot says..</div>
         <div css={flexContent}>
           {newContent && (
             <Fragment>
-              <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={() => onSave()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Save',
+                }}
+                split={true}
+                onClick={() => onSave()}
+              >
                 Save file
               </ActionButton>
-              <ActionButton iconProps={{ iconName: 'Undo' }} onClick={() => discardChanges()}>
+              <ActionButton
+                iconProps={{
+                  iconName: 'Undo',
+                }}
+                onClick={() => discardChanges()}
+              >
                 Discard changes
               </ActionButton>
             </Fragment>
           )}
-
-          <ActionButton iconProps={{ iconName: 'Delete' }} onClick={() => onRemove()}>
-            Delete file
-          </ActionButton>
-          <ActionButton iconProps={{ iconName: 'AddTo' }} onClick={() => setModalOpen(true)}>
-            Add new LG file
-          </ActionButton>
           <Toggle
+            className={'toggleEditMode'}
             css={actionButton}
-            onText="Text editor"
-            offText="Text editor"
+            onText="Edit mode"
+            offText="Edit mode"
             checked={textMode}
+            disabled={activePath !== '_all' && textMode === false}
             onChange={() => setTextMode(!textMode)}
           />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
-        <Nav
-          styles={{
-            root: {
-              width: 255,
-              height: 400,
-              boxSizing: 'border-box',
-              borderTop: '2px solid #41bdf4',
-              fontWeight: 600,
-              overflowY: 'auto',
-            },
-            linkText: { color: '#000' },
-          }}
-          selectedKey={fileId}
-          expandButtonAriaLabel="Expand or collapse"
-          groups={groups}
+        <div>
+          <Nav
+            onLinkClick={(ev, item) => {
+              onSelect(item.id);
+              ev.preventDefault();
+            }}
+            selectedKey={activePath}
+            groups={navLinks}
+            className={'dialogNavTree'}
+            data-testid={'dialogNavTree'}
+          />
+        </div>
+        <Content
+          file={lgFile}
+          activeDialog={activeDialog}
+          onEdit={onTableViewWantEdit}
+          textMode={textMode}
+          onChange={onChange}
         />
-
-        {memoizedContent}
       </div>
-      <NewLgFileModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onCreateLgFile} />
     </Fragment>
   );
 };

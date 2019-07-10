@@ -1,0 +1,47 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.EditSteps",
+      "changeType": "InsertSteps",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "property": "user.name"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EditSteps",
+      "changeType": "AppendSteps",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Goodbye!"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:33:10.633Z",
+        "updatedAt": "2019-07-01T21:33:10.638Z",
+        "id": "443878"
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:33:09.385Z",
+        "updatedAt": "2019-07-01T21:33:11.411Z",
+        "id": "644042"
+      },
+      "activity": "[bfdactivity-644042]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:32:33.179Z",
+    "updatedAt": "2019-07-01T21:32:33.208Z",
+    "id": "519891"
+  }
+}

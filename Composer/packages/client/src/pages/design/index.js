@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo } from 'react';
-import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import findindex from 'lodash.findindex';
+import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
+import { TestController } from '../../TestController';
+import { BASEPATH, CreationFlowStatus } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -23,39 +24,107 @@ import {
   formEditor,
   editorWrapper,
 } from './styles';
-import NewDialogModal from './NewDialogModal';
+import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
+import { ToolBar } from './../../components/ToolBar/index';
 
-const BASEURL = process.env.PUBLIC_URL || '';
+const rootPath = BASEPATH.replace(/\/+$/g, '');
 
-function DesignPage() {
+function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo } = actions;
+  const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
-  function handleFileClick(index) {
+  function handleFileClick(id) {
     clearNavHistory();
-    navTo(`${dialogs[index].name}#`);
+    navTo(`${id}#`);
   }
+
+  const getErrorMessage = name => {
+    if (
+      dialogs.findIndex(dialog => {
+        return dialog.name === name;
+      }) >= 0
+    ) {
+      return 'duplication of name';
+    }
+    return '';
+  };
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
-      result[dialog.name] = dialog.content;
+      result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
 
+  const toolbarItems = [
+    {
+      type: 'action',
+      text: formatMessage('New'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        menuProps: {
+          items: [
+            {
+              key: 'newBot',
+              text: formatMessage('New Bot'),
+              onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+            },
+            {
+              key: 'newDialog',
+              text: formatMessage('New Dialog'),
+              onClick: () => setModalOpen(true),
+            },
+          ],
+        },
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Open'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Save as'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Save',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      },
+      align: 'left',
+    },
+    {
+      type: 'element',
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
+
   const breadcrumbItems = useMemo(() => {
+    const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-
+      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
+      const displayText = isRoot ? botName : text;
       return {
         key: index,
         path: item,
-        text: formatMessage(upperCaseName(text)),
+        text: formatMessage(upperCaseName(displayText)),
         onClick: (_event, { path, key }) => {
           clearNavHistory(key);
           navTo(path);
@@ -65,18 +134,24 @@ function DesignPage() {
   }, [clearNavHistory, dialogs, navPathHistory, navTo]);
 
   const activeDialog = useMemo(() => {
-    if (!navPath) return -1;
-    const dialogName = navPath.split('#')[0];
-    return findindex(dialogs, { name: dialogName });
+    if (!navPath) return '';
+    return navPath.split('#')[0];
   }, [navPath]);
 
   async function onSubmit(data) {
-    await actions.createDialog(data);
+    const content = {
+      $designer: {
+        name: data.name,
+        description: data.description,
+      },
+    };
+    await actions.createDialog({ id: data.name, content });
     setModalOpen(false);
   }
 
   return (
     <Fragment>
+      {props.match && <ToolBar toolbarItems={toolbarItems} />}
       <MainContent>
         <Fragment>
           <div css={projectContainer}>
@@ -84,22 +159,15 @@ function DesignPage() {
               <div css={projectWrapper}>
                 <div css={projectHeader}>
                   <div>{formatMessage('Dialogs')}</div>
-                  {dialogs.length > 0 ? (
-                    <IconButton
-                      iconProps={{ iconName: 'Add' }}
-                      title={formatMessage('New Dialog')}
-                      ariaLabel={formatMessage('New Dialog')}
-                      onClick={() => setModalOpen(true)}
-                    />
-                  ) : (
-                    <div />
-                  )}
                 </div>
-                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
+                <ProjectTree
+                  files={dialogs}
+                  activeNode={activeDialog}
+                  onSelect={handleFileClick}
+                  onAdd={() => setModalOpen(true)}
+                />
               </div>
             </Tree>
-            {/* <div style={{ height: '20px' }} />
-          <Tree extraCss={assetTree} /> */}
           </div>
           <Conversation extraCss={editorContainer}>
             <Fragment>
@@ -107,26 +175,32 @@ function DesignPage() {
                 items={breadcrumbItems}
                 ariaLabel={formatMessage('Navigation Path')}
                 styles={breadcrumbClass}
+                data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
                 <iframe
                   key="VisualEditor"
                   name="VisualEditor"
                   css={visualEditor}
-                  src={`${BASEURL}/extensionContainer.html`}
+                  src={`${rootPath}/extensionContainer.html`}
                 />
                 <iframe
                   key="FormEditor"
                   name="FormEditor"
                   css={formEditor}
-                  src={`${BASEURL}/extensionContainer.html`}
+                  src={`${rootPath}/extensionContainer.html`}
                 />
               </div>
             </Fragment>
           </Conversation>
         </Fragment>
       </MainContent>
-      <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
+      <NewDialogModal
+        isOpen={modalOpen}
+        onDismiss={() => setModalOpen(false)}
+        onSubmit={onSubmit}
+        onGetErrorMessage={getErrorMessage}
+      />
     </Fragment>
   );
 }

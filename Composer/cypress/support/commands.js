@@ -1,24 +1,22 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
+// *********************************************** This example commands.js
+// shows you how to create various custom commands and overwrite existing
+// commands.
 //
-// For more comprehensive examples of custom
-// commands please read more here:
+// For more comprehensive examples of custom commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
 //
 //
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
+// -- This is a parent command -- Cypress.Commands.add("login", (email,
+// password) => { ... })
 //
 //
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+// -- This is a child command -- Cypress.Commands.add("drag", { prevSubject:
+// 'element'}, (subject, options) => { ... })
 //
 //
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
+// -- This is a dual command -- Cypress.Commands.add("dismiss", { prevSubject:
+// 'optional'}, (subject, options) => { ... })
 //
 //
 // -- This is will overwrite an existing command --
@@ -28,8 +26,10 @@ import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
   cy.getByText('Open').click();
-  cy.getByText(botName).click();
-  cy.getByText('bot.botproj').click();
+  cy.get('[data-testid="SelectLocation"]').within(() => {
+    cy.get(`input[aria-label="${botName}"]`).click();
+  });
+  cy.get('[data-testid="SelectLocationOpen"]').click();
   cy.wait(500);
 });
 
@@ -50,6 +50,7 @@ Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
   cy.getByText('Save as').click();
 
-  cy.get('input[data-testid="NewBotProjectInput"]').type(`__Test${name}`);
-  cy.getByText('Save').click();
+  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
+  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.wait(1000);
 });

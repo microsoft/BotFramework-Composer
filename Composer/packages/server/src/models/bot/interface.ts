@@ -3,16 +3,6 @@ export interface LocationRef {
   path: string;
 }
 
-export interface BotProjectFileContent {
-  files: string[];
-  services: string[];
-  entry: string;
-  schemas?: {
-    editor?: string;
-    sdk?: string;
-  };
-}
-
 export interface FileInfo {
   name: string;
   content: any;
@@ -21,9 +11,14 @@ export interface FileInfo {
 }
 
 export interface Dialog {
-  id: number;
-  name: string;
-  content: any;
+  id: string;
+  isRoot: boolean;
+  displayName: string;
+  content: { [key: string]: any };
+  lgFile: string;
+  luFile: string;
+  luIntents: string[];
+  lgTemplates: string[];
   relativePath: string;
 }
 
@@ -35,11 +30,40 @@ export interface LGTemplate {
 export interface LGFile {
   id: string;
   relativePath: string;
-  content: any;
+  content: string;
 }
 
 export interface LUFile {
   id: string;
   relativePath: string;
-  content: any;
+  content: string;
+  parsedContent: { [key: string]: any };
+}
+
+export enum FileState {
+  UPDATED,
+  LATEST,
+}
+
+export interface ILuisSettings {
+  luis: {
+    [key: string]: string;
+    endpoint: string;
+    endpointKey: string;
+  };
+  status: {
+    [key: string]: {
+      version: string | undefined;
+      checksum: string;
+      status: FileState;
+    };
+  };
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
 }

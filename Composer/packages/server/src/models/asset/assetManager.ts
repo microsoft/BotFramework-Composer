@@ -3,8 +3,16 @@ import { find } from 'lodash';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
+import { copyDir } from '../../utility/storage';
+import StorageService from '../../services/storage';
 
 import { IProjectTemplate } from './interface';
+
+const templateDescriptions: { [key: string]: string } = {
+  EchoBot: 'This is bot that can echo back what you say to it.',
+  EmptyBot: 'This is a bot that can do nothing.',
+  ToDoBot: 'This is a bot that demonstrates management of a ToDo list.',
+};
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -24,7 +32,7 @@ export class AssetManager {
     for (const name of folders) {
       const absPath = Path.join(path, name);
       if ((await this.templateStorage.stat(absPath)).isDir) {
-        const base = { id: name, name: name, description: '' };
+        const base = { id: name, name: name, description: templateDescriptions[name] };
         this.projectTemplates.push({ ...base, path: absPath });
         output.push(base);
       }
@@ -33,28 +41,19 @@ export class AssetManager {
     return output;
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef) {
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
     const template = find(this.projectTemplates, { id: templateId });
-    if (template !== undefined && template.path !== undefined) {
-      const dir = Path.dirname(Path.resolve(ref.path));
-      await this.templateStorage.mkDir(dir);
-      await this._copy(template.path, dir);
+    if (template === undefined || template.path === undefined) {
+      throw new Error(`no such template with id ${templateId}`);
     }
-  }
+    // user storage maybe diff from template storage
+    const dstStorage = StorageService.getStorageClient(ref.storageId);
+    const dstDir = Path.resolve(ref.path);
+    if (await dstStorage.exists(dstDir)) {
+      throw new Error('already have this folder, please give another name');
+    }
 
-  private _copy = async (src: string, dst: string) => {
-    const storage = this.templateStorage;
-    const paths = await storage.readDir(src);
-    for (const path of paths) {
-      const _src = `${src}/${path}`;
-      const _dst = `${dst}/${path}`;
-      if ((await storage.stat(_src)).isFile) {
-        const content = await storage.readFile(_src);
-        await storage.writeFile(_dst, content);
-      } else {
-        await storage.mkDir(_dst);
-        await this._copy(_src, _dst);
-      }
-    }
-  };
+    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+    return ref;
+  }
 }

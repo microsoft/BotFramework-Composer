@@ -1,7 +1,8 @@
 {
   "development": {
     "botRuntime": "http://localhost:3979",
-    "assetsLibray": "./assets"
+    "assetsLibray": "./assets",
+    "defaultFolder": "../../../SampleBots"
   },
   "container": {
     "botRuntime": "http://botruntime:80"

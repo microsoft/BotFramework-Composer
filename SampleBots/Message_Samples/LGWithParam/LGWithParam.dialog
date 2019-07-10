@@ -1,0 +1,23 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "property": "user.name",
+      "allowInterruptions": false,
+      "prompt": "Hello, I'm Zoidberg. What is your name?"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[LGWithParam(user)]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:15.750Z",
+    "updatedAt": "2019-07-03T06:50:15.755Z",
+    "id": "519863"
+  }
+}

@@ -7,8 +7,8 @@ import {
 import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
+import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared-menus';
 
-import { dialogGroups, DialogGroup, DialogGroupItem } from '../schema/appschema';
 import { FormMemory, MemoryScope } from '../types';
 
 export interface DialogOptionsOpts {
@@ -25,6 +25,11 @@ export interface DialogOptionsOpts {
   onClick?: (e: any, item: IContextualMenuItem) => void;
 }
 
+/**
+ * This method is used to build out the content of many popout menus in the form view
+ * like context menus, "+Add" buttons and others.
+ * @param opts
+ */
 export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMenuItem[] {
   const { filter = () => true, include, exclude, subMenu = true, onClick, asDropdown = false } = opts;
   let menuOptions: IContextualMenuItem[] = [];
@@ -172,7 +177,7 @@ export function sweepUndefinedFields(fields) {
 
 export function overriddenFieldsTemplate(fieldOverrides) {
   return {
-    name: fieldOverrides.name,
+    title: fieldOverrides.title,
     description: fieldOverrides.description,
   };
 }

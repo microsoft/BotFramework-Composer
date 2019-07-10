@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import ApiClient from '../messenger/ApiClient';
+import { getDialogName } from '../utils';
 
 import getEditor from './EditorMap';
 
@@ -68,6 +69,38 @@ function ExtensionContainer() {
     focusTo: subPath => {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
+
+    shellNavigate: (shellPage, opts = {}) => {
+      return apiClient.apiCall('shellNavigate', { shellPage, opts });
+    },
+
+    createLuFile: id => {
+      return apiClient.apiCall('createLuFile', { id });
+    },
+
+    updateLuFile: luFile => {
+      return apiClient.apiCall('updateLuFile', luFile);
+    },
+
+    getLgTemplates: id => {
+      return apiClient.apiCall('getLgTemplates', { id });
+    },
+
+    createLgTemplate: (id, template, position) => {
+      return apiClient.apiCall('createLgTemplate', { id, template, position });
+    },
+
+    removeLgTemplate: (id, templateName) => {
+      return apiClient.apiCall('removeLgTemplate', { id, templateName });
+    },
+
+    updateLgTemplate: (id, templateName, template) => {
+      return apiClient.apiCall('updateLgTemplate', {
+        id,
+        templateName,
+        template: { Name: templateName, Body: template },
+      });
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;
@@ -77,7 +110,16 @@ function ExtensionContainer() {
     window.parent.extensionData[RealEditor.name] = shellData.data;
   }
 
-  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
+  return (
+    RealEditor && (
+      <RealEditor
+        {...shellData}
+        onChange={shellApi.saveData}
+        shellApi={shellApi}
+        dialogName={getDialogName(shellData.navPath)}
+      />
+    )
+  );
 }
 
 export default ExtensionContainer;

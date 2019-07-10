@@ -4,21 +4,15 @@ import { reducer } from '../../../src/store/reducer/index';
 const mockResponse = {
   data: {
     dialogs: 'test dialogs',
-    botFile: 'test botFile',
     lgFiles: 'test lgFiles',
     schemas: 'test schemas',
   },
 };
 
 describe('test all reducer handlers', () => {
-  it('test closeCurrentProject reducer', () => {
-    const result = reducer({}, { type: ActionTypes.INIT_PROJECT_STATE });
-    expect(result.editors.length).toBe(0);
-  });
   it('test getProjectSuccess reducer', () => {
     const result = reducer({}, { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } });
     expect(result.dialogs).toBe('test dialogs');
-    expect(result.botProjFile).toBe('test botFile');
     expect(result.lgFiles).toBe('test lgFiles');
     expect(result.schemas).toBe('test schemas');
   });
@@ -34,10 +28,7 @@ describe('test all reducer handlers', () => {
     const result = reducer({}, { type: ActionTypes.UPDATE_LG_SUCCESS, payload: { response: mockResponse } });
     expect(result.lgFiles).toBe('test lgFiles');
   });
-  it('test updateProjFile reducer', () => {
-    const result = reducer({}, { type: ActionTypes.UPDATE_PROJFILE__SUCCESS, payload: { response: mockResponse } });
-    expect(result.botProjFile).toBe('test botFile');
-  });
+
   it('test setBotStatus reducer', () => {
     const result = reducer({}, { type: ActionTypes.SET_BOT_STATUS_SUCCESS, payload: { status: 'mock status' } });
     expect(result.botStatus).toBe('mock status');

@@ -1,0 +1,66 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.NumberInput",
+      "property": "user.age",
+      "alwaysPrompt": true,
+      "maxTurnCount": 2,
+      "prompt": "What is your age?",
+      "invalidPrompt": "Please input a number."
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T22:00:02.461Z",
+        "updatedAt": "2019-07-01T22:00:05.463Z",
+        "id": "303304"
+      },
+      "activity": "[bfdactivity-303304]"
+    },
+    {
+      "$type": "Microsoft.NumberInput",
+      "property": "user.result",
+      "alwaysPrompt": true,
+      "prompt": "2 * 2.2 equals?"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "(user.result - 4.4) < 0.0000001",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:33.141Z",
+            "updatedAt": "2019-07-01T22:00:35.972Z",
+            "id": "284482"
+          },
+          "activity": "[bfdactivity-284482]"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:47.197Z",
+            "updatedAt": "2019-07-01T22:00:49.773Z",
+            "id": "172233"
+          },
+          "activity": "[bfdactivity-172233]"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T22:00:35.159Z",
+        "updatedAt": "2019-07-01T22:00:35.189Z",
+        "id": "622462"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:20.139Z",
+    "updatedAt": "2019-07-03T06:48:20.173Z",
+    "id": "183119"
+  }
+}

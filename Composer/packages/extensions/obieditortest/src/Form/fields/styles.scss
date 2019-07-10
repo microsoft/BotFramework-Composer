@@ -19,7 +19,7 @@
   grid-row-gap: 20px;
 }
 
-.RecognizerField, .CasesFieldConditions {
+.CasesFieldConditions {
   display: flex;
 
   .ObjectFieldTemplate {
@@ -30,7 +30,7 @@
     flex: 1;
   }
 
-  .RecognizerFieldMenu, .CasesFieldConditionsMenu {
+  .CasesFieldConditionsMenu {
     flex-grow: 0;
     margin-left: 20px;
     margin-top: 30px;
@@ -60,3 +60,8 @@
   margin-bottom: 20px;
   max-width: 300px;
 }
+
+a {
+  color: black;
+}
+

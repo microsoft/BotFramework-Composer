@@ -30,6 +30,12 @@ app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
 
 app.use(`${BASEURL}/api`, apiRouter);
 
+app.use(function(err: Error, req: Request, res: Response, next: NextFunction) {
+  if (err) {
+    next(err);
+  }
+});
+
 app.get('*', function(req, res, next) {
   res.sendFile(path.resolve(__dirname, './public/index.html'));
 });

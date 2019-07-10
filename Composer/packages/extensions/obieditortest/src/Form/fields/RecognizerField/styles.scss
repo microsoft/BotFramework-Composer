@@ -1,0 +1,39 @@
+.RecognizerField {
+  display: flex;
+
+  .ObjectFieldTemplate {
+    flex: 1;
+  }
+
+  .BaseField {
+    flex: 1;
+  }
+
+  .RecognizerFieldMenu {
+    flex-grow: 0;
+    margin-left: 20px;
+    margin-top: 30px;
+    padding-top: 4px;
+  }
+}
+
+.ToggleEditor {
+  .BaseField {
+    margin-top: 5px;
+  }
+}
+
+.LuFileSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .LuFileSelectorLabel {
+    flex-grow: 0;
+  }
+
+  .LuFileSelectorFile {
+    flex: 1;
+    margin: 0 10px;
+  }
+}

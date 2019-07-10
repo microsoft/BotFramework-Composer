@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { clearNavHistory } from './navigation';
+import LuisStorage from './../../utils/luisStorage';
 
-export async function connectBot(dispatch) {
+export async function connectBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/connect`;
   try {
     await axios.get(path);
@@ -13,7 +13,7 @@ export async function connectBot(dispatch) {
         status: 'connected',
       },
     });
-    await reloadBot(dispatch);
+    await reloadBot(dispatch, botName);
   } catch (err) {
     dispatch({
       type: ActionTypes.CONNECT_BOT_FAILURE,
@@ -24,23 +24,22 @@ export async function connectBot(dispatch) {
   }
 }
 
-export async function reloadBot(dispatch) {
+export async function reloadBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.get(path);
+    await axios.post(path, LuisStorage.get(botName));
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
+      payload: {
+        error: '',
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.RELOAD_BOT_FAILURE,
+      payload: {
+        error: err.response.data.error,
+      },
     });
   }
-}
-
-export function closeCurrentProject(dispatch) {
-  clearNavHistory(dispatch);
-  dispatch({
-    type: ActionTypes.INIT_PROJECT_STATE,
-  });
 }

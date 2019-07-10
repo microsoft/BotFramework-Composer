@@ -1,55 +1,36 @@
 import { css } from '@emotion/core';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-export const headerMain = css`
+export const headerContainer = css`
   position: relative;
-  line-height: 50px;
   background: ${SharedColors.cyanBlue10};
-  font-size: 20px;
-  color: #fff;
   height: 50px;
-  display: flex;
+  line-height: 50px;
 `;
 
-export const headerSub = css`
-  padding: 5px 20px 5px 0px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${NeutralColors.gray30};
-`;
-
-export const aside = css`
+export const title = css`
+  position: relative;
   margin-left: 50px;
-`;
-
-export const bot = css`
-  display: flex;
-  align-items: center;
-`;
-
-export const botButton = css``;
-
-export const botMessage = css`
-  margin-left: 5px;
-  font-size: 18px;
-`;
-
-export const actionButton = css`
+  font-weight: ${FontWeights.semibold};
   font-size: 16px;
-  margin-top: 2px;
-
-  & + & {
-    margin-left: 15px;
+  color: #fff;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: -15px;
+    bottom: 0px;
+    width: 0px;
+    height: 24px;
+    border-right: 1px solid #005292;
+    border-image: initial;
+    outline: none;
   }
 `;
 
-export const fileInput = css`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
+export const botName = css`
+  margin-left: 30px;
+  font-size: 16px;
+  color: #fff;
 `;

@@ -6,7 +6,7 @@ jest.mock('azure-storage', () => {
   return {};
 });
 const mockAssetLibraryPath = Path.join(__dirname, '../../mocks/asset');
-const mockCopyToPath = Path.join(__dirname, '../../mocks/new/1.botproj');
+const mockCopyToPath = Path.join(__dirname, '../../mocks/new');
 const locationRef = {
   storageId: 'default',
   path: mockCopyToPath,
@@ -23,12 +23,12 @@ describe('test assetManager', () => {
   it('test copyProjectTemplateTo', async () => {
     const assetManager = new AssetManager(mockAssetLibraryPath);
     await assetManager.getProjectTemplate();
-    await expect(async () => assetManager.copyProjectTemplateTo('SampleBot', locationRef)).not.toThrowError();
+    await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);
     // remove the saveas files
     try {
-      rimraf.sync(Path.dirname(mockCopyToPath));
+      rimraf.sync(mockCopyToPath);
     } catch (error) {
-      //ignore
+      throw new Error(error);
     }
   });
 });

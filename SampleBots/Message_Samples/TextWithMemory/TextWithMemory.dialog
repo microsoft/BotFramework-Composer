@@ -1,0 +1,21 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "'This is a text saved in memory.'",
+      "property": "user.message"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "{user.message}"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:20.992Z",
+    "updatedAt": "2019-07-03T06:50:21.022Z",
+    "id": "593555"
+  }
+}

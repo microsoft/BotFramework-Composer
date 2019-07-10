@@ -1,7 +1,7 @@
-import { BotProject } from 'src/models/bot/botProject';
 import rimraf from 'rimraf';
 
 import { Path } from '../../src/utility/path';
+import { BotProject } from '../../src/models/bot/botProject';
 import projectService from '../../src/services/project';
 // offer a bot project ref which to open
 jest.mock('../../src/store/store', () => {
@@ -27,8 +27,13 @@ jest.mock('../../src/store/store', () => {
     },
   };
 });
+
 jest.mock('azure-storage', () => {});
-const projPath = Path.resolve(__dirname, '../mocks/1.botproj');
+
+const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1');
+
+const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
+
 describe('test BotProjectService', () => {
   it('openProject', async () => {
     expect(projectService.currentBotProject).toBeUndefined();
@@ -39,22 +44,20 @@ describe('test BotProjectService', () => {
     };
     await projectService.openProject(botProj);
     expect(projectService.currentBotProject).toBeDefined();
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(projPath);
+    expect((projectService.currentBotProject as BotProject).dir).toBe(projPath);
   });
   it('saveProjectAs', async () => {
     const botProj = {
       storageId: 'default',
-      path: Path.resolve(__dirname, '../mocks/saveas/1.botproj'),
+      path: saveAsDir,
     };
     await projectService.saveProjectAs(botProj);
-    expect((projectService.currentBotProject as BotProject).absolutePath).toBe(
-      Path.resolve(__dirname, '../mocks/saveas/1.botproj')
-    );
+    expect((projectService.currentBotProject as BotProject).dir).toBe(`${saveAsDir}`);
     // remove the saveas files
     try {
-      rimraf.sync(Path.resolve(__dirname, '../mocks/saveas'));
+      rimraf.sync(saveAsDir);
     } catch (error) {
-      //ignore
+      throw new Error(error);
     }
   });
 });

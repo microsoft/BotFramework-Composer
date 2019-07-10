@@ -29,14 +29,14 @@ class BotProjectService {
       return;
     }
 
-    const currRef = this.currentBotProject.ref;
-    const idx = this.recentBotProjects.findIndex(ref => currRef.path === ref.path);
-
+    const currDir = this.currentBotProject.dir;
+    const idx = this.recentBotProjects.findIndex(ref => currDir === ref.path);
     if (idx > -1) {
       this.recentBotProjects.splice(idx, 1);
     }
 
-    this.recentBotProjects.unshift(this.currentBotProject.ref);
+    const toSaveRecentProject = { storageId: 'default', path: currDir };
+    this.recentBotProjects.unshift(toSaveRecentProject);
     Store.set('recentBotProjects', this.recentBotProjects);
   }
 
@@ -44,6 +44,7 @@ class BotProjectService {
     if (typeof this.currentBotProject !== 'undefined') {
       this.currentBotProject = await this.currentBotProject.copyTo(locationRef);
       await this.currentBotProject.index();
+      this.updateRecentBotProjects();
     }
   };
 }

@@ -1,21 +1,39 @@
-import React from 'react';
-import { Router } from '@reach/router';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Router, Match } from '@reach/router';
 
-import { NotFound } from './components/NotFound';
 import DesignPage from './pages/design';
 import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
+import { Home } from './pages/home';
+import { showDesign, data } from './styles';
+import { NotFound } from './components/NotFound';
+import { BASEPATH } from './constants';
 
-const BASEURL = process.env.PUBLIC_URL || '';
-const Routes = () => (
-  <Router basepath={BASEURL}>
-    <DesignPage path="/" />
-    <SettingPage path="setting/*" />
-    <LUPage path="language-understanding/:fileId" />
-    <LGPage path="language-generation/:fileId" />
-    <NotFound default />
-  </Router>
-);
+const Routes = props => {
+  const Content = props.component;
+  const parentProps = props;
+  return (
+    <Match path={BASEPATH} {...props}>
+      {props => (
+        <div css={data}>
+          <Content css={showDesign(props.match)}>
+            <DesignPage {...props} />
+          </Content>
+          {!props.match && (
+            <Router basepath={BASEPATH} {...parentProps}>
+              <SettingPage path="setting/*" />
+              <LUPage path="language-understanding/*" />
+              <LGPage path="language-generation/*" />
+              <Home path="home" />
+              <NotFound default />
+            </Router>
+          )}
+        </div>
+      )}
+    </Match>
+  );
+};
 
 export default Routes;

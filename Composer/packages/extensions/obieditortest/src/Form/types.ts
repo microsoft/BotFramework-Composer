@@ -1,11 +1,16 @@
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps, FieldProps } from '@bfdesigner/react-jsonschema-form';
 
-import { ShellApi } from '../types';
+import { ShellApi, LuFile, LgFile } from '../types';
 
 export interface FormContext {
   editorSchema: any;
   shellApi: ShellApi;
   rootId: string;
+  luFiles: LuFile[];
+  lgFiles: LgFile[];
+  dialogOptions: string[];
+  dialogName: string;
+  dialogId?: string;
 }
 
 interface EnumOption {
@@ -13,25 +18,22 @@ interface EnumOption {
   value: string;
 }
 
-export interface SelectWidgetProps extends WidgetProps {
+export interface BFDFieldProps extends FieldProps {
+  formContext: FormContext;
+}
+
+export interface BFDWidgetProps extends WidgetProps {
+  formContext: FormContext;
+}
+
+export interface SelectWidgetProps extends BFDWidgetProps {
   options: {
     enumOptions: EnumOption[];
   };
 }
 
-export interface RadioWidgetProps extends WidgetProps {
+export interface RadioWidgetProps extends BFDWidgetProps {
   options: {
     enumOptions: EnumOption[];
   };
-}
-
-export interface OBISchema {
-  $role?: string;
-}
-
-declare module 'json-schema' {
-  interface JSONSchema6 extends OBISchema {
-    title?: string;
-    __additional_property?: boolean;
-  }
 }

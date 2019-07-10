@@ -9,6 +9,8 @@ COPY packages/client/package.json ./packages/client/
 COPY packages/server/package.json ./packages/server/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/lib/cci-graph-lib/package.json ./packages/lib/cci-graph-lib/
+COPY packages/lib/code-editor/package.json ./packages/lib/code-editor/
+COPY packages/lib/shared-menus/package.json ./packages/lib/shared-menus/
 COPY packages/extensions/package.json ./packages/extensions/
 COPY packages/extensions/obieditortest/package.json ./packages/extensions/obieditortest/
 COPY packages/extensions/sample-json-editor/package.json ./packages/extensions/sample-json-editor/

@@ -1,0 +1,29 @@
+{
+  "old": "value",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "[hello] I'm a ToDo bot"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[bye] See you again"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[bye] bye bye again"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "You entered: {user.date[0].value}"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "activity": "[bye3] See you again"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "TextInput": "TextInput|01",
+      "NumberInput": "NumberInput|02",
+      "ConfirmInput": "ConfirmInput|03",
+      "ChoiceInput": "ChoiceInput|04",
+      "AttachmentInput": "AttachmentInput|05",
+      "DateTimeInput": "DateTimeInput|06",
+      "OAuthInput": "OAuthInput|07",
+      "CancelIntent": "cancel"
+    }
+  },
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "TextInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "TextInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "NumberInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "NumberInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "DateTimeInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DateTimeInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ConfirmInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ConfirmInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ChoiceInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ChoiceInput"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "AttachmentInput",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AttachmentInput"
+        }
+      ]
+    },
+	{
+          "$type": "Microsoft.IntentRule",
+          "intent": "OAuthInput",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "OAuthInput"
+            }
+          ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "CancelIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:58:19.578Z",
+            "updatedAt": "2019-07-01T21:58:21.925Z",
+            "id": "068558"
+          },
+          "activity": "[bfdactivity-068558]"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:58:18.063Z",
+        "updatedAt": "2019-07-01T21:58:18.080Z",
+        "id": "566255"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T08:57:58.939Z",
+    "updatedAt": "2019-07-03T08:57:58.996Z",
+    "id": "400830"
+  }
+}

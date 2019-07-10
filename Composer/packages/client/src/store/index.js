@@ -4,29 +4,37 @@ import PropTypes from 'prop-types';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
+import { CreationFlowStatus } from './../constants';
 
 export const Store = React.createContext();
 
 const initialState = {
   dialogs: [],
-  botProjFile: {},
+  botName: '',
   navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
   navPathHistory: [],
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'unConnected',
-  storageExplorerStatus: '',
+  botLoadErrorMsg: '',
+  creationFlowStatus: CreationFlowStatus.CLOSE,
+  templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  luStatus: [],
 };
 
 export function StoreProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const boundActions = bindActions(dispatch, actions);
-  const value = { state, actions: boundActions, dispatch };
+  const value = {
+    state,
+    actions: boundActions,
+    dispatch,
+  };
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
 }
 

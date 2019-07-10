@@ -1,0 +1,41 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.NumberInput",
+      "prompt": "Hello, What's your age?",
+      "property": "user.age"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "user.age >= 18",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "164444",
+            "updatedAt": "2019-07-04T19:55:38.267Z"
+          },
+          "activity": "[bfdactivity-164444]"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "619321",
+            "updatedAt": "2019-07-04T19:56:28.408Z"
+          },
+          "activity": "[bfdactivity-619321]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:49:39.154Z",
+    "updatedAt": "2019-07-03T06:49:39.178Z",
+    "id": "501534"
+  }
+}

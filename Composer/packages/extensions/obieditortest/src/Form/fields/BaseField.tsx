@@ -5,9 +5,10 @@ import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
-import { IdSchema } from '@bfdesigner/react-jsonschema-form';
+import { IdSchema, UiSchema } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
+import { FontSizes, FontWeights } from '@uifabric/styling';
 
 import { FormContext } from '../types';
 
@@ -18,13 +19,18 @@ import { DesignerField } from './DesignerField';
 const fieldHeaderTheme = createTheme({
   fonts: {
     medium: {
-      fontSize: '18px',
+      fontSize: FontSizes.large,
+      fontWeight: FontWeights.semibold,
     },
   },
   palette: {
-    neutralLighter: NeutralColors.gray60,
+    neutralLighter: NeutralColors.gray120,
   },
 });
+
+const descriptionMarkup = description => {
+  return { __html: description };
+};
 
 interface BaseFieldProps<T> {
   children?: React.ReactNode;
@@ -36,6 +42,7 @@ interface BaseFieldProps<T> {
   name?: string;
   schema: JSONSchema6;
   title?: string;
+  uiSchema: UiSchema;
 }
 
 const overrideDefaults = {
@@ -64,7 +71,7 @@ function RootDialog(props) {
       {templateOverrides.description === false
         ? null
         : (description || schema.description) && (
-            <p className={classnames('RootFieldDescription', ColorClassNames.neutralSecondary, FontClassNames.medium)}>
+            <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
               {description || schema.description}
             </p>
           )}
@@ -75,11 +82,12 @@ function RootDialog(props) {
 }
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
-  const { children, title, name, description, schema, idSchema, formContext, className } = props;
+  const { children, title, name, description, schema, uiSchema, idSchema, formContext, className } = props;
   const isRoot = idSchema.__id === formContext.rootId;
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
+  let key = idSchema.__id;
 
   if (schema.title) {
     const SDKOverrides = fieldOverrides[`${schema.title}`];
@@ -87,19 +95,33 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     descriptionOverride = get(SDKOverrides, 'description');
   }
 
+  // use dialogId as the key because the focusPath may not be enough
+  if (formContext.dialogId) {
+    key = `${key}-${formContext.dialogId}`;
+  }
+
   return isRoot ? (
-    <RootDialog {...props} key={idSchema.__id} id={idSchema.__id} formContext={formContext}>
+    <RootDialog {...props} key={key} id={key} formContext={formContext}>
       {children}
     </RootDialog>
   ) : (
-    <div className={classnames('BaseField', className)} key={idSchema.__id} id={idSchema.__id}>
-      <Separator theme={fieldHeaderTheme} alignContent="start" styles={{ content: { paddingLeft: '0' } }}>
-        {titleOverride || title || schema.title || startCase(name)}
-      </Separator>
-      {(descriptionOverride || description || schema.description) && (
-        <p className={[ColorClassNames.neutralSecondary, FontClassNames.small].join(' ')}>
-          {descriptionOverride || description || schema.description}
-        </p>
+    <div className={classnames('BaseField', className)} key={key} id={key}>
+      {titleOverride === false ? null : (
+        <Separator
+          theme={fieldHeaderTheme}
+          alignContent="start"
+          styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
+        >
+          {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
+        </Separator>
+      )}
+      {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
+        <p
+          className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
+          dangerouslySetInnerHTML={descriptionMarkup(
+            descriptionOverride || description || uiSchema['ui:description'] || schema.description
+          )}
+        />
       )}
       {children}
     </div>
@@ -108,4 +130,5 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
 
 BaseField.defaultProps = {
   formContext: {},
+  uiSchema: {},
 };

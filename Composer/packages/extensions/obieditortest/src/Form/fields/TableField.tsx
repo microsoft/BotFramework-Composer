@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   ContextualMenuItemType,
-  DefaultButton,
   DetailsList,
   IContextualMenuItem,
   SelectionMode,
   DetailsListLayoutMode,
+  IconButton,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
@@ -13,6 +13,7 @@ import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
@@ -61,6 +62,7 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       onClick: () => {
         formContext.shellApi.focusTo(`.${navPrefix}[${index}]`);
 
+        // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
         if (COMPOUND_TYPES.includes(item.$type)) {
           formContext.shellApi.navDown(`.${navPrefix}[${index}]`);
         }
@@ -91,6 +93,12 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       onClick: () => {
+        const item = formData[index];
+        // @ts-ignore
+        if (item.$type === 'Microsoft.SendActivity' && item.activity && item.activity.indexOf('bfdactivity-') !== -1) {
+          // @ts-ignore
+          formContext.shellApi.removeLgTemplate('common', item.activity.slice(1, item.activity.length - 1));
+        }
         const newItems = remove(formData, index);
         onChange(newItems);
       },
@@ -110,7 +118,13 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
     },
   ];
 
-  return <DefaultButton menuProps={{ items: menuItems }} />;
+  return (
+    <IconButton
+      menuProps={{ items: menuItems }}
+      menuIconProps={{ iconName: 'MoreVertical' }}
+      styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+    />
+  );
 }
 
 export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
@@ -151,8 +165,8 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
     {
       key: 'menu',
       name: '',
-      minWidth: 85,
-      maxWidth: 85,
+      minWidth: 50,
+      maxWidth: 50,
       // eslint-disable-next-line react/display-name
       onRender: (item, index) => {
         return (

@@ -1,0 +1,22 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.AttachmentInput",
+      "property": "dialog.attachments",
+      "prompt": "Please send an image or music.",
+      "outputFormat": "All"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:00.744Z",
+    "updatedAt": "2019-07-03T06:48:00.782Z",
+    "id": "042284"
+  }
+}

@@ -5,14 +5,28 @@ context('Creating a new bot', () => {
     cy.visit(Cypress.env('COMPOSER_URL'));
   });
 
+  it('can create a new bot', () => {
+    cy.getByText('New').click();
+    cy.getByText('New Bot').click();
+    cy.get('input[data-testid="Create from scratch"]').click();
+    cy.get('button[data-testid="NextStepButton"]').click();
+    cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
+    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.getByText('__TestNewProject').should('exist');
+    });
+  });
+
   it('can create a bot from the ToDo template', () => {
     cy.getByText('New').click();
-    cy.getByText('ToDoBot').click();
-    cy.get('input[data-testid="NewBotProjectInput"]').type('__TestNewProject');
-    cy.getByText('Save').click();
-    // cy.get('input[data-testid="NewBotProjectInput"]').type('{enter}');
+    cy.getByText('New Bot').click();
+    cy.get('input[data-testid="Create from template"]').click({ force: true });
+    cy.get('[data-testid="ToDoBot"]').click();
+    cy.get('button[data-testid="NextStepButton"]').click();
+    cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
+    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoBot.main').should('exist');
+      cy.getByText('__TestNewProject').should('exist');
       cy.getByText('AddToDo').should('exist');
       cy.getByText('ClearToDos').should('exist');
       cy.getByText('DeleteToDo').should('exist');

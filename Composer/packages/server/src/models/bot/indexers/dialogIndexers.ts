@@ -1,42 +1,117 @@
-import { IFileStorage } from 'src/models/storage/interface';
+import { has, uniq } from 'lodash';
 
 import { Path } from '../../../utility/path';
+import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 
 import { FileInfo, Dialog } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
-  public storage: IFileStorage;
-  private dir: string;
+  private botName: string;
 
-  constructor(storage: IFileStorage, dir: string) {
-    this.storage = storage;
-    this.dir = dir;
+  constructor(botName: string) {
+    this.botName = botName;
+  }
+
+  // find out all lg templates given dialog
+  private ExtractLgTemplates(dialog: Dialog): string[] {
+    const templates: string[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type')) {
+        let target;
+        switch (value.$type) {
+          case 'Microsoft.SendActivity':
+            target = value.activity;
+            break;
+          case 'Microsoft.TextInput':
+            target = value.prompt;
+            break;
+
+          // if we want stop at some $type, do here
+          case 'location':
+            return true;
+        }
+
+        if (target && typeof target === 'string') {
+          // match a template name
+          // match a temlate func  e.g. `showDate()`
+          const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
+          let matchResult;
+          while ((matchResult = reg.exec(target)) !== null) {
+            const templateName = matchResult[1];
+            templates.push(templateName);
+          }
+        }
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(templates);
+  }
+
+  // find out all lu intents given dialog
+  private ExtractLuIntents(dialog: Dialog): string[] {
+    const intents: string[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && value.$type === 'Microsoft.IntentRule') {
+        const intentName = value.intent;
+        intents.push(intentName);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(intents);
   }
 
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
-      const entry = files[0].content.entry;
-      let count = 1;
+      const botName = this.botName;
 
       for (const file of files) {
         const extName = Path.extname(file.name);
         try {
-          if (extName === '.dialog') {
+          if (extName === '.dialog' && !file.name.endsWith('.lu.dialog')) {
+            const dialogJson = JSON.parse(file.content);
+            const luFile = typeof dialogJson.recognizer === 'string' ? dialogJson.recognizer : '';
+            const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
+            const id = Path.basename(file.name, extName);
+            const isRoot = id === 'Main';
             const dialog = {
-              id: 0,
-              name: Path.basename(file.name, extName),
-              content: JSON.parse(file.content),
-              relativePath: Path.relative(this.dir, file.path),
+              id,
+              isRoot,
+              displayName: isRoot ? botName : id,
+              content: dialogJson,
+              lgTemplates: this.ExtractLgTemplates(dialogJson),
+              luIntents: this.ExtractLuIntents(dialogJson),
+              luFile: Path.basename(luFile, '.lu'),
+              lgFile: Path.basename(lgFile, '.lg'),
+              relativePath: file.relativePath,
             };
 
-            if (file.name === entry) {
-              this.dialogs.unshift(dialog);
-            } else {
-              dialog.id = count++;
-              this.dialogs.push(dialog);
-            }
+            this.dialogs.push(dialog);
           }
         } catch (e) {
           throw new Error(`parse failed at ${file.name}, ${e}`);
@@ -49,31 +124,5 @@ export class DialogIndexer {
 
   public getDialogs = () => {
     return this.dialogs;
-  };
-
-  public updateDialogs = async (name: string, content: any): Promise<Dialog[]> => {
-    const index = this.dialogs.findIndex(dialog => {
-      return dialog.name === name;
-    });
-
-    const dialog = this.dialogs[index];
-
-    const absolutePath = Path.join(this.dir, dialog.relativePath);
-
-    await this.storage.writeFile(absolutePath, JSON.stringify(content, null, 2) + '\n');
-    const dialogContent = await this.storage.readFile(absolutePath);
-    this.dialogs[index].content = JSON.parse(dialogContent);
-
-    return this.dialogs[index].content;
-  };
-
-  public addDialog = (name: string, content: string, relativePath: string) => {
-    this.dialogs.push({
-      name,
-      content: JSON.parse(content),
-      id: this.dialogs.length,
-      relativePath: relativePath,
-    });
-    return content;
   };
 }

@@ -7,15 +7,34 @@ import {
   SelectorField,
   StepsField,
   NullField,
+  LgEditorField,
 } from '../Form/fields';
-import { DialogSelectWidget } from '../Form/widgets';
+import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
 const globalFields = {
   property: {
     'ui:field': NullField,
   },
-  outputProperty: {
+  inputBindings: {
     'ui:field': NullField,
+  },
+  outputBinding: {
+    'ui:field': NullField,
+  },
+};
+
+const activityFields = {
+  prompt: {
+    'ui:widget': TextareaWidget,
+  },
+  unrecognizedPrompt: {
+    'ui:widget': TextareaWidget,
+  },
+  invalidPrompt: {
+    'ui:widget': TextareaWidget,
+  },
+  value: {
+    'ui:widget': NullField,
   },
 };
 
@@ -23,6 +42,9 @@ export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     recognizer: {
       'ui:field': RecognizerField,
+      'ui:title': 'Language Understanding',
+      'ui:description':
+        'To understand what the user says, your dialog needs a ‘Recognizer’ that includes example words and sentences that users may use.',
     },
     rules: {
       'ui:field': RulesField,
@@ -37,7 +59,7 @@ export const uiSchema = {
       'ui:field': NullField,
     },
     ...globalFields,
-    'ui:order': ['property', 'outputProperty', 'recognizer', 'rules', 'steps', '*', 'selector'],
+    'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
   'Microsoft.BeginDialog': {
     dialog: {
@@ -60,6 +82,11 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.EditSteps': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+  },
   'Microsoft.EventRule': {
     steps: {
       'ui:field': StepsField,
@@ -67,11 +94,23 @@ export const uiSchema = {
     ...globalFields,
     'ui:order': ['*', 'steps'],
   },
+  'Microsoft.Foreach': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+    'ui:order': ['*', 'ListProperty', 'IndexProperty', 'ValueProperty', 'Steps'],
+  },
+  'Microsoft.ForeachPage': {
+    Steps: {
+      'ui:field': StepsField,
+    },
+    'ui:order': ['*', 'ListProperty', 'PageSize', 'ValueProperty', 'Steps'],
+  },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
-    ...globalFields,
+    // ...globalFields,  // we do not want to exclude the property field here
     'ui:order': ['*', 'body'],
   },
   'Microsoft.IfCondition': {
@@ -106,6 +145,101 @@ export const uiSchema = {
     },
     ...globalFields,
   },
+  'Microsoft.TextInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
+      '*',
+    ],
+  },
+  'Microsoft.NumberInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
+      '*',
+    ],
+  },
+  'Microsoft.ConfirmInput': {
+    ...activityFields,
+    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
+    // - must provide yes/no in special format along with alternatives that have to be handled
+    // TODO: Implement confirmChoices-specific widget with appropriate business rules.
+    confirmChoices: {
+      'ui:field': NullField,
+    },
+    'ui:order': [
+      'prompt',
+      'property',
+      'style',
+      'defaultLocale',
+      'validations',
+      'value',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
+      '*',
+    ],
+  },
+  'Microsoft.ChoiceInput': {
+    inputBindings: {
+      'ui:field': NullField,
+    },
+    outputBinding: {
+      'ui:field': NullField,
+    },
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'style',
+      'defaultLocale',
+      'choices',
+      'validations',
+      'value',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
+      '*',
+    ],
+  },
+  'Microsoft.OAuthInput': {
+    ...activityFields,
+    'ui:order': ['connectionName', '*'],
+  },
+  'Microsoft.AttachmentInput': {
+    ...activityFields,
+    'ui:order': [
+      'prompt',
+      'property',
+      'outputFormat',
+      'validations',
+      'value',
+      'unrecognizedPrompt',
+      'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
+      '*',
+    ],
+  },
   'Microsoft.ReplaceDialog': {
     dialog: {
       'ui:widget': DialogSelectWidget,
@@ -132,5 +266,10 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
+  },
+  'Microsoft.SendActivity': {
+    activity: {
+      'ui:field': LgEditorField,
+    },
   },
 };

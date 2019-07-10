@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce';
 import nanoid from 'nanoid';
 
 import Example from '../../src';
-import { ShellApi } from '../../src/types';
+import { ShellApi, LuFile } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -48,24 +48,72 @@ const defaultMemory = {
 
 const dialogFiles = [
   {
+    id: 'MyCustomDialog1',
     name: 'MyCustomDialog1.dialog',
     relativePath: 'MyCustomDialog1.dialog',
     path: '/Some/Cool/Path/MyCustomDialog1.dialog',
   },
   {
+    id: 'MyCustomDialog2',
     name: 'MyCustomDialog2.dialog',
     relativePath: 'MyCustomDialog2.dialog',
     path: '/Some/Cool/Path/MyCustomDialog2.dialog',
   },
   {
+    id: 'MyCustomDialog3',
     name: 'MyCustomDialog3.dialog',
     relativePath: 'MyCustomDialog3.dialog',
     path: '/Some/Cool/Path/MyCustomDialog3.dialog',
   },
   {
+    id: 'MyCustomDialog4',
     name: 'MyCustomDialog4.dialog',
     relativePath: 'MyCustomDialog4.dialog',
     path: '/Some/Cool/Path/MyCustomDialog4.dialog',
+  },
+];
+
+const luFiles: LuFile[] = [
+  {
+    id: 'MyCustomDialog1',
+    relativePath: 'SomePath/MyCustomDialog1',
+    content: '## FirstHello\n-Hi',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'FirstHello' }],
+        utterances: [{ intent: 'FirstHello', text: 'Hi' }],
+      },
+    },
+  },
+  {
+    id: 'MyCustomDialog2',
+    relativePath: 'SomePath/MyCustomDialog2',
+    content: '## SecondHello\n-Good morning',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'SecondHello' }],
+        utterances: [{ intent: 'SecondHello', text: 'Good morning' }],
+      },
+    },
+  },
+  {
+    id: 'MyCustomDialog3',
+    relativePath: 'SomePath/MyCustomDialog3',
+    content: '## ThirdHello\n-Hello',
+    parsedContent: {
+      LUISJsonStructure: {
+        intents: [{ name: 'ThirdHello' }],
+        utterances: [{ intent: 'ThirdHello', text: 'Hello' }],
+      },
+    },
+  },
+];
+
+const lgFiles = [
+  {
+    id: 'common',
+    relativePath: 'common/common.lg',
+    content: '',
   },
 ];
 
@@ -89,17 +137,30 @@ function getDefaultMemory() {
   return defaultMemory;
 }
 
-const mockShellApi = ['getState', 'getData', 'getDialogs', 'saveData', 'navTo', 'navDown', 'focusTo'].reduce(
-  (mock, api) => {
-    mock[api] = (...args) =>
-      new Promise(resolve => {
-        console.info(`shellApi.${api} called with`, args);
-        resolve();
-      });
-    return mock;
-  },
-  {}
-);
+const mockShellApi = [
+  'getState',
+  'getData',
+  'getDialogs',
+  'saveData',
+  'navTo',
+  'navDown',
+  'focusTo',
+  'shellNavigate',
+  'updateLuFile',
+  'updateLgFile',
+  'createLuFile',
+  'createLgFile',
+  'getLgTemplates',
+  'createLgTemplate',
+  'updateLgTemplate',
+].reduce((mock, api) => {
+  mock[api] = (...args) =>
+    new Promise(resolve => {
+      console.info(`shellApi.${api} called with`, ...args);
+      resolve();
+    });
+  return mock;
+}, {});
 
 const Demo: React.FC = () => {
   const [dirtyFormData, setDirtyFormData] = useState(null);
@@ -273,6 +334,9 @@ const Demo: React.FC = () => {
           onChange={debouncedOnChange}
           schemas={{ editor: editorSchemaFormData }}
           shellApi={mockShellApi as ShellApi}
+          luFiles={luFiles}
+          lgFiles={lgFiles}
+          dialogName="MyCustomDialog1"
         />
       </div>
     </div>
