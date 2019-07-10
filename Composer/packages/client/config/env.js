@@ -2,6 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
+
 const paths = require('./paths');
 
 // Make sure that including paths.js after env.js will read .env variables.
@@ -13,7 +15,7 @@ if (!NODE_ENV) {
 }
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
-var dotenvFiles = [
+const dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
   `${paths.dotenv}.${NODE_ENV}`,
   // Don't include `.env.local` for `test` environment
@@ -37,6 +39,10 @@ dotenvFiles.forEach(dotenvFile => {
     );
   }
 });
+
+function getGitSha() {
+  return execSync('git rev-parse --short master');
+}
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
@@ -75,6 +81,9 @@ function getClientEnvironment(publicUrl) {
         // This should only be used as an escape hatch. Normally you would put
         // images into the `src` and `import` them in code to get their paths.
         PUBLIC_URL: publicUrl,
+        GIT_SHA: getGitSha()
+          .toString()
+          .replace('\n', ''),
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

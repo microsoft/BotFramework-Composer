@@ -33,7 +33,7 @@ export const version = css`
 `;
 
 export const description = css`
-  font-size: 24px;
+  font-size: 20px;
   line-height: 32px;
   width: 50%;
   margin-top: 20px;
@@ -66,10 +66,11 @@ export const DiagnosticsInfo = css`
 `;
 
 export const linkContainer = css`
-  height: 126px;
   display: flex;
-  flex-direction: column;
   margin-left: 35px;
+  flex-direction: column;
+  height: 110px;
+  margin-top: 15px;
 `;
 
 export const linkTitle = css`
@@ -77,16 +78,22 @@ export const linkTitle = css`
 `;
 
 export const linkRow = css`
-  margin-top: 24px;
   display: flex;
   width: 400px;
 `;
 
 export const link = css`
-  font-size: 24px;
+  font-size: 20px;
   color: #0078d4;
   margin-left: 10px;
 `;
+
+export const helpLink = css`
+  font-size: 24px;
+  color: #0078d4;
+  margin-left: 60px;
+`;
+
 export const icon = {
   icon: {
     color: '#0078d4',
