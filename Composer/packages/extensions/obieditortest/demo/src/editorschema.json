@@ -107,6 +107,9 @@
     "Microsoft.SaveEntity": {
       "title": "SaveEntity"
     },
+    "Microsoft.SendActivity": {
+      "title": "SendActivity"
+    },
     "Activity": {
       "title": "Response",
       "description": "What your Bot says to the User. Powered by Language Generation. <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> Learn more</a>."
@@ -130,5 +133,4 @@
       "title": "UnknownIntentRule"
     }
   }
-}
 }
