@@ -76,7 +76,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     ...uiSchema[type],
   };
 
-  const dialogOptions = dialogs.map(f => f.name);
+  const dialogOptions = dialogs.map(f => f.id);
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {

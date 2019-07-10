@@ -24,6 +24,7 @@ export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
   return (
     <div
       style={containerStyle}
+      data-testid="IconCard"
       onClick={e => {
         e.stopPropagation();
         onClick();
