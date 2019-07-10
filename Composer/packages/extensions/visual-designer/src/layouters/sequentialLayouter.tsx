@@ -1,4 +1,5 @@
 import { Boundary } from '../shared/Boundary';
+import { GraphNode } from '../shared/GraphNode';
 import { ElementInterval } from '../shared/elementSizes';
 
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
@@ -6,12 +7,12 @@ import { calculateSequenceBoundary } from './calculateNodeBoundary';
 const StepInterval = ElementInterval.y;
 const ExtraEdgeLength = ElementInterval.y / 2;
 
-export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge = true) {
+export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, withTrailingEdge = true): any {
   if (!Array.isArray(nodes) || nodes.length === 0) {
     return { boundary: new Boundary(), nodes: [], edges: [] };
   }
 
-  const box = calculateSequenceBoundary(nodes, withHeadEdge, withTrailingEdge);
+  const box = calculateSequenceBoundary(nodes.map(x => x.boundary), withHeadEdge, withTrailingEdge);
 
   nodes.reduce((offsetY, node) => {
     node.offset = { x: box.axisX - node.boundary.axisX, y: offsetY };

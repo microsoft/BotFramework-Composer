@@ -1,14 +1,25 @@
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
+import { GraphNode } from '../shared/GraphNode';
 
 import { calculateForeachBoundary } from './calculateNodeBoundary';
 
 const ForeachIntervalY = ElementInterval.y / 2;
 
-export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNode): any => {
+export const foreachLayouter = (
+  foreachNode: GraphNode,
+  stepsNode: GraphNode,
+  loopBeginNode: GraphNode,
+  loopEndNode: GraphNode
+): any => {
   if (!foreachNode || !stepsNode) return { boundary: new Boundary() };
 
-  const containerBoundary = calculateForeachBoundary(foreachNode, stepsNode, loopBeginNode, loopEndNode);
+  const containerBoundary = calculateForeachBoundary(
+    foreachNode.boundary,
+    stepsNode.boundary,
+    loopBeginNode.boundary,
+    loopEndNode.boundary
+  );
 
   foreachNode.offset = {
     x: containerBoundary.axisX - foreachNode.boundary.axisX,

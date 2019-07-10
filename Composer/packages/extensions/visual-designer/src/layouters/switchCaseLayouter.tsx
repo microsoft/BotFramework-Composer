@@ -1,5 +1,5 @@
 import { Boundary } from '../shared/Boundary';
-import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
+import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
@@ -13,15 +13,20 @@ const BranchIntervalY = ElementInterval.y / 2;
  *           ------------
  *           |   |  |   |
  */
-export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: { [key: string]: any } = []) {
+export function switchCaseLayouter(
+  conditionNode: GraphNode,
+  choiceNode: GraphNode,
+  branchNodes: GraphNode[] = []
+): any {
   if (!conditionNode) {
     return { boundary: new Boundary() };
   }
 
-  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
-  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
-
-  const containerBoundary = calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
+  const containerBoundary = calculateSwitchCaseBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    branchNodes.map(x => x.boundary)
+  );
 
   /** Calulate nodes position */
   conditionNode.offset = {

@@ -1,76 +1,83 @@
 import { Boundary } from '../shared/Boundary';
-import { GraphNode } from '../shared/GraphNode';
-import { ElementInterval, InitNodeSize, LoopEdgeMarginLeft } from '../shared/elementSizes';
+import { ElementInterval, LoopEdgeMarginLeft } from '../shared/elementSizes';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function calculateSequenceBoundary(nodes, widthHeadEdge = true, widthTailEdge = true) {
+export function calculateSequenceBoundary(
+  boundaries: Boundary[],
+  widthHeadEdge = true,
+  widthTailEdge = true
+): Boundary {
   const box = new Boundary();
-  if (!Array.isArray(nodes) || nodes.length === 0) {
+  if (!Array.isArray(boundaries) || boundaries.length === 0) {
     return box;
   }
 
-  box.axisX = Math.max(0, ...nodes.map(x => x.boundary.axisX));
-  box.width = box.axisX + Math.max(0, ...nodes.map(x => x.boundary.width - x.boundary.axisX));
+  box.axisX = Math.max(0, ...boundaries.map(x => x.axisX));
+  box.width = box.axisX + Math.max(0, ...boundaries.map(x => x.width - x.axisX));
   box.height =
-    nodes.map(x => x.boundary.height).reduce((sum, val) => sum + val, 0) +
-    ElementInterval.y * Math.max(nodes.length - 1, 0);
+    boundaries.map(x => x.height).reduce((sum, val) => sum + val, 0) +
+    ElementInterval.y * Math.max(boundaries.length - 1, 0);
 
   if (widthHeadEdge) box.height += ElementInterval.y / 2;
   if (widthTailEdge) box.height += ElementInterval.y / 2;
   return box;
 }
 
-export function calculateForeachBoundary(foreachNode?, stepsNode?, loopBeginNode?, loopEndNode?) {
+export function calculateForeachBoundary(
+  foreachBoundary: Boundary,
+  stepsBoundary: Boundary,
+  loopBeginBoundary: Boundary,
+  loopEndBoundary: Boundary
+): Boundary {
   const box = new Boundary();
 
-  if (!foreachNode || !stepsNode) return box;
+  if (!foreachBoundary || !stepsBoundary) return box;
 
-  box.axisX = Math.max(foreachNode.boundary.axisX, stepsNode.boundary.axisX) + LoopEdgeMarginLeft;
+  box.axisX = Math.max(foreachBoundary.axisX, stepsBoundary.axisX) + LoopEdgeMarginLeft;
   box.width =
-    box.axisX +
-    Math.max(foreachNode.boundary.width - box.axisX, stepsNode.boundary.width - box.axisX) +
-    LoopEdgeMarginLeft;
+    box.axisX + Math.max(foreachBoundary.width - box.axisX, stepsBoundary.width - box.axisX) + LoopEdgeMarginLeft;
   box.height =
-    InitNodeSize.height +
+    foreachBoundary.height +
     BranchIntervalY +
-    loopBeginNode.boundary.height +
+    loopBeginBoundary.height +
     BranchIntervalY +
-    stepsNode.boundary.height +
+    stepsBoundary.height +
     BranchIntervalY +
-    loopEndNode.boundary.height;
+    loopEndBoundary.height;
 
   return box;
 }
 
-export function calculateIfElseBoundary(conditionNode?, choiceNode?, ifNode?, elseNode?) {
-  if (!conditionNode || !choiceNode) return new Boundary();
+export function calculateIfElseBoundary(
+  conditionBoundary: Boundary,
+  choiceBoundary: Boundary,
+  ifBoundary: Boundary,
+  elseBoundary: Boundary
+): Boundary {
+  if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
-  const branchNodes: { [key: string]: any } = [ifNode || new GraphNode(), elseNode || new GraphNode()];
+  const branchBoundaries: Boundary[] = [ifBoundary || new Boundary(), elseBoundary || new Boundary()];
 
-  return measureBranchingContainerBoundary(
-    conditionNode.boundary,
-    choiceNode.boundary,
-    branchNodes.map(x => x.boundary)
-  );
+  return measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries);
 }
 
-export function calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes: { [key: string]: any } = []) {
-  if (!conditionNode || !choiceNode) return new Boundary();
+export function calculateSwitchCaseBoundary(
+  conditionBoundary: Boundary,
+  choiceBoundary: Boundary,
+  branchBoundaries: Boundary[] = []
+): Boundary {
+  if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
-  return measureBranchingContainerBoundary(
-    conditionNode.boundary,
-    choiceNode.boundary,
-    branchNodes.map(x => x.boundary)
-  );
+  return measureBranchingContainerBoundary(conditionBoundary, choiceBoundary, branchBoundaries);
 }
 
 function measureBranchingContainerBoundary(
-  conditionBoundary,
-  choiceBoundary,
-  branchBoundaries: { [key: string]: any } = []
-) {
+  conditionBoundary: Boundary,
+  choiceBoundary: Boundary,
+  branchBoundaries: Boundary[] = []
+): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
 
   const firstBranchBoundary = branchBoundaries[0] || new Boundary();

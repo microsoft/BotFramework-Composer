@@ -1,46 +1,43 @@
 import { ObiTypes } from '../shared/ObiTypes';
 import { Boundary } from '../shared/Boundary';
-import { GraphNode } from '../shared/GraphNode';
 import { DiamondSize, InitNodeSize, LoopIconSize } from '../shared/elementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
 
 import {
-  calculateIfElseBoundary,
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
 } from './calculateNodeBoundary';
 
-function measureStepGroupBoundary(stepGroup) {
-  const nodes = (stepGroup.children || []).map(x => GraphNode.fromIndexedJson(x));
-  return calculateSequenceBoundary(nodes);
+function measureStepGroupBoundary(stepGroup): Boundary {
+  const boundaries = (stepGroup.children || []).map(x => measureJsonBoundary(x));
+  return calculateSequenceBoundary(boundaries);
 }
 
-function measureForeachBoundary(json) {
+function measureForeachBoundary(json): Boundary {
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(json, '');
-  const inputs = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => GraphNode.fromIndexedJson(x));
-  return calculateForeachBoundary(...inputs);
+  const inputs: Boundary[] = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => measureJsonBoundary(x.json));
+  return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
-function measureIfConditionBoundary(json) {
+function measureIfConditionBoundary(json): Boundary {
   const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
-  const inputs = [condition, choice, ifGroup, elseGroup].map(x => GraphNode.fromIndexedJson(x));
-  const result = calculateIfElseBoundary(...inputs);
-  return result;
+  const inputs: Boundary[] = [condition, choice, ifGroup, elseGroup].map(x => measureJsonBoundary(x.json));
+  return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
-function measureSwitchConditionBoundary(json) {
+function measureSwitchConditionBoundary(json): Boundary {
   const { condition, choice, branches } = transformSwitchCondition(json, '');
   return calculateSwitchCaseBoundary(
-    GraphNode.fromIndexedJson(condition),
-    GraphNode.fromIndexedJson(choice),
-    branches.map(x => GraphNode.fromIndexedJson(x))
+    measureJsonBoundary(condition.json),
+    measureJsonBoundary(choice.json),
+    branches.map(x => measureJsonBoundary(x.json))
   );
 }
 
-export function measureJsonBoundary(json) {
+export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
 
