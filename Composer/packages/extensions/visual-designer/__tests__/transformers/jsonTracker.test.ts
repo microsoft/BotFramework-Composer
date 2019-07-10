@@ -1,4 +1,4 @@
-import { insert } from './jsonTracker';
+import { insert } from '../../src/shared/jsonTracker';
 
 describe('insert', () => {
   const path = 'foo.bar';

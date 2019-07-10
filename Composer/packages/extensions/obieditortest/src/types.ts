@@ -16,7 +16,7 @@ export interface FormMemory {
 }
 
 export interface DialogInfo {
-  name: string;
+  id: string;
 }
 
 export interface Intent {
