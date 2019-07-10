@@ -1,12 +1,13 @@
-import { FlowGroup, FlowBaseNode, FlowTypes, DecisionNode, LoopNode } from './models/LogicFlowNodes';
 import { Boundary } from '../shared/Boundary';
 import {
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
 } from '../layouters/calculateNodeBoundary';
-import { GraphBox } from './models/GraphBox';
 import { DiamondSize, LoopIconSize } from '../shared/elementSizes';
+import { GraphNode } from '../shared/GraphNode';
+
+import { FlowGroup, FlowBaseNode, FlowTypes, DecisionNode, LoopNode } from './models/LogicFlowNodes';
 
 export const dfsVisitLogicFlow = (node: FlowBaseNode, visit: (node: FlowBaseNode) => void): void => {
   if (!node || !node['@']) return;
@@ -35,21 +36,23 @@ export const calculateFlowNodeBoundary = (
   if (!node || !node['@']) return;
   switch (node['@']) {
     case FlowTypes.Flow:
-      node.boundary = calculateSequenceBoundary((node as FlowGroup).steps.map(x => new GraphBox(x.id, x.boundary)));
+      node.boundary = calculateSequenceBoundary(
+        (node as FlowGroup).steps.map(x => new GraphNode(x.id, x.data, x.boundary))
+      );
       break;
     case FlowTypes.Decision:
       node.boundary = calculateSwitchCaseBoundary(
-        new GraphBox(node.id, measureBoundary(node.id, node['@'], node.data)),
-        new GraphBox(node.id, new Boundary(DiamondSize.width, DiamondSize.height)),
-        (node as DecisionNode).branches.map(x => new GraphBox(x.id, x.boundary))
+        new GraphNode(node.id, node.data, measureBoundary(node.id, node['@'], node.data)),
+        new GraphNode(node.id, {}, new Boundary(DiamondSize.width, DiamondSize.height)),
+        (node as DecisionNode).branches.map(x => new GraphNode(x.id, x.data, x.boundary))
       );
       break;
     case FlowTypes.Loop:
       node.boundary = calculateForeachBoundary(
-        new GraphBox(node.id, measureBoundary(node.id, node['@'], node.data)),
-        new GraphBox(node.id, (node as LoopNode).flow.boundary),
-        new GraphBox(node.id, new Boundary(LoopIconSize.width, LoopIconSize.height)),
-        new GraphBox(node.id, new Boundary(LoopIconSize.width, LoopIconSize.height))
+        new GraphNode(node.id, node.data, measureBoundary(node.id, node['@'], node.data)),
+        new GraphNode(node.id, {}, (node as LoopNode).flow.boundary),
+        new GraphNode(node.id, {}, new Boundary(LoopIconSize.width, LoopIconSize.height)),
+        new GraphNode(node.id, {}, new Boundary(LoopIconSize.width, LoopIconSize.height))
       );
       break;
     case FlowTypes.Element:

@@ -3,7 +3,6 @@ import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
-import { GraphBox } from '../logicflow/models/GraphBox';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -14,7 +13,7 @@ const BranchIntervalY = ElementInterval.y / 2;
  *           ------------
  *           |   |  |   |
  */
-export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: GraphBox[] = []) {
+export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: GraphNode[] = []) {
   if (!conditionNode) {
     return { boundary: new Boundary() };
   }
