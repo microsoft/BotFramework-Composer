@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
@@ -9,6 +9,8 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 
 import './style.css';
+import oauthStorage from './../../../utils/oauthStorage';
+import { Store } from './../../../store/index';
 
 window.jsonlint = jsonlint;
 
@@ -28,21 +30,25 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const [value, setValue] = useState('');
+  const { actions } = useContext(Store);
+
+  const { updateOAuth } = actions;
 
   useEffect(() => {
-    setValue({
-      OAuthInput: {
-        MicrosoftAppId: '',
-        MicrosoftAppPassword: '',
-      },
-    });
+    setValue(oauthStorage.get());
   }, []);
 
   const updateFormData = (editor, data, value) => {
     try {
-      JSON.parse(value);
+      const result = JSON.parse(value);
+      try {
+        oauthStorage.set(result);
+        updateOAuth(result);
+      } catch (err) {
+        console.log(err.message);
+      }
     } catch (err) {
-      //TODO
+      //Do Nothing
     }
   };
 

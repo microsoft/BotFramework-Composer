@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';
 
@@ -15,9 +15,9 @@ import { MainContent } from './../../components/MainContent/index';
 
 const links = [
   { key: 'dialog-settings', name: formatMessage('Dialog settings') },
-  { key: 'services', name: formatMessage('Services'), disabled: true },
-  { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
-  { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
+  // { key: 'services', name: formatMessage('Services') },
+  // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
+  // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
 
 export const SettingPage = () => {
@@ -34,6 +34,7 @@ export const SettingPage = () => {
             setActive(link.key);
           }
         }}
+        onClick={() => {}}
       >
         {link.name}
       </Link>
@@ -49,7 +50,14 @@ export const SettingPage = () => {
             <Tree variant="large">
               <div>
                 <div css={title}>{formatMessage('Settings')}</div>
-                <Nav groups={[{ links }]} onRenderLink={onRenderLink} selectedKey={active} />
+                <Nav
+                  groups={[{ links }]}
+                  onRenderLink={onRenderLink}
+                  selectedKey={active}
+                  onLinkClick={(e, item) => {
+                    navigate(item.key);
+                  }}
+                />
               </div>
             </Tree>
           </div>

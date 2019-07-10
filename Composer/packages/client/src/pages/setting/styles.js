@@ -17,7 +17,10 @@ export const linkItem = disabled => css`
   }
 `;
 
-export const contentEditor = css``;
+export const contentEditor = css`
+  margin: 0px 10px;
+  border: 1px solid rgb(237, 235, 233);
+`;
 
 export const title = css`
   font-weight: bold;
