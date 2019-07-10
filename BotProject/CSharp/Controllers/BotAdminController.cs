@@ -34,7 +34,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
            
 
         [HttpPost]
-        public IActionResult PostAsync(IFormFile file, [FromForm]string config)
+        public IActionResult PostAsync(IFormFile file, [FromForm]string config, [FromForm]string microsoftAppId, [FromForm]string microsoftAppPassword)
         {
             if (file == null)
             {
@@ -44,11 +44,26 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             if (!string.IsNullOrEmpty(config))
             {
                 var luisConfigObj = JsonConvert.DeserializeObject<LuConfigFile>(config);
-                BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj);
+                if (!string.IsNullOrEmpty(microsoftAppId) && !string.IsNullOrEmpty(microsoftAppPassword))
+                {
+                    BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj, microsoftAppId, microsoftAppPassword);
+
+                }
+                else
+                {
+                    BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj);
+                }
             }
             else
             {
-                BotManager.SetCurrent(file.OpenReadStream());
+                if (!string.IsNullOrEmpty(microsoftAppId) && !string.IsNullOrEmpty(microsoftAppPassword))
+                {
+                    BotManager.SetCurrent(file.OpenReadStream(), null, microsoftAppId, microsoftAppPassword);
+                }
+                else
+                {
+                    BotManager.SetCurrent(file.OpenReadStream());
+                }
             }
 
             return Ok();

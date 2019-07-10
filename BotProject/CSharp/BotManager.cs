@@ -20,7 +20,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         IBotFrameworkHttpAdapter CurrentAdapter { get; }
         IBot CurrentBot { get; }
 
-        void SetCurrent(Stream fileStream, LuConfigFile luConfig = null);
+        void SetCurrent(Stream fileStream, LuConfigFile luConfig = null, string appId = null, string appPwd = null);
     }
 
     public class BotManager : IBotManager
@@ -78,7 +78,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             CurrentBot = new TestBot("Main.dialog", conversationState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
-        public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null)
+        public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null, string appId = null, string appPwd = null)
         {
             lock (locker)
             {
@@ -91,6 +91,11 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 if (luConfig != null)
                 {
                     AddLuisConfig(extractPath, luConfig);
+                }
+
+                if (!string.IsNullOrEmpty(appId) && !string.IsNullOrEmpty(appPwd))
+                {
+                    AddOAuthConfig(appId, appPwd);
                 }
 
                 SetCurrent(extractPath);
@@ -120,6 +125,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 this.Config[$"luis:{item.Key}"] = item.Value;
             }
+        }
+
+        private void AddOAuthConfig(string appId, string appPwd)
+        {
+            this.Config["MicrosoftAppId"] = appId;
+            this.Config["MicrosoftAppPassword"] = appPwd;
         }
 
         private string GenNewBotDir()
