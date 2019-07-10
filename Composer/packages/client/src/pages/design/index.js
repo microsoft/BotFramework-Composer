@@ -137,7 +137,13 @@ function DesignPage(props) {
   }, [navPath]);
 
   async function onSubmit(data) {
-    await actions.createDialog(data);
+    const content = {
+      $designer: {
+        name: data.name,
+        description: data.description,
+      },
+    };
+    await actions.createDialog({ id: data.name, content });
     setModalOpen(false);
   }
 
