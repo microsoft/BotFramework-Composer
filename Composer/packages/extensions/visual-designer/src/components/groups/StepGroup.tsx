@@ -12,15 +12,13 @@ import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { IndexedNode } from '../../transformers/models/IndexedNode';
+import { transformStepGroup } from '../../transformers/transformStepGroup';
 
 const StepInterval = ElementInterval.y;
 
 const calculateNodes = (groupId: string, data): GraphNode[] => {
-  if (data && data.children && Array.isArray(data.children)) {
-    return data.children.map((step, index) => GraphNode.fromIndexedJson(new IndexedNode(`${groupId}[${index}]`, step)));
-  }
-  return [];
+  const steps = transformStepGroup(data, groupId);
+  return steps.map(x => GraphNode.fromIndexedJson(x));
 };
 
 const calculateLayout = (nodes, boundaryMap) => {
