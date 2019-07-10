@@ -58,10 +58,8 @@ test('should return correct schema when input empty cases', () => {
 
   expect(result.branches[0].id).toEqual('steps[0].default');
   expect(result.branches[0].json.children.length).toEqual(1);
-  expect(result.branches[0].json.children[0].id).toEqual('steps[0].default[0]');
 
   expect(result.branches[1].id).toEqual('steps[0].cases[0].steps');
   expect(result.branches[1].json.children.length).toEqual(1);
-  expect(result.branches[1].json.children[0].id).toEqual('steps[0].cases[0].steps[0]');
   expect(result.branches[1].json.label).toEqual(json.cases[0].value);
 });

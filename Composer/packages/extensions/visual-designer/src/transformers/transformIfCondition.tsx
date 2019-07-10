@@ -24,11 +24,11 @@ export function transformIfCondtion(input, jsonpath?) {
 
   result.ifGroup = new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
     $type: ObiTypes.StepGroup,
-    children: ifTrue.map((x, index) => new IndexedNode(`${jsonpath}.${IfBranchKey}[${index}]`, x)),
+    children: ifTrue,
   });
   result.elseGroup = new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
     $type: ObiTypes.StepGroup,
-    children: ifFalse.map((x, index) => new IndexedNode(`${jsonpath}.${ElseBranchKey}[${index}]`, x)),
+    children: ifFalse,
   });
 
   return result;
