@@ -3,9 +3,12 @@ import { debounce, isEqual } from 'lodash';
 import { navigate } from '@reach/router';
 import { LGParser } from 'botbuilder-lg';
 
+import { validateLgTemplate } from '../src/store/action/lg';
+
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -26,6 +29,7 @@ const FileChangeTypes = {
   CREATE: 'create',
   UPDATE: 'update',
   REMOVE: 'remove',
+  VALIDATE: 'validate',
 };
 
 const FileTargetTypes = {
@@ -50,7 +54,7 @@ export function ShellApi() {
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
-  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
+  const updateLgTemplate = actions.updateLgTemplate;
   const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
@@ -73,6 +77,7 @@ export function ShellApi() {
     apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
       lgTemplateHandler(UPDATE, { id, templateName, template }, event)
     );
+    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => validateLgTemplate({ Name, Body }));
     apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
       lgTemplateHandler(REMOVE, { id, templateName }, event)
     );

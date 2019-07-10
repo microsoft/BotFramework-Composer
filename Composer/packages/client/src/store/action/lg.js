@@ -34,6 +34,23 @@ const contentValidate = text => {
   return LGParser.TryParse(text);
 };
 
+/**
+ *
+ * @param {Name, Body} template
+ */
+export function validateLgTemplate(template) {
+  // validate template
+  const validateResult = templateValidate(template);
+  if (validateResult.isValid === false) {
+    throw new Error(validateResult.error.Message);
+  }
+
+  // should be a single template.
+  if (validateResult.templates.length !== 1) {
+    throw new Error('invalid single template');
+  }
+}
+
 export async function updateLgFile(dispatch, { id, content }) {
   const validateResult = contentValidate(content);
   if (validateResult.isValid === false) {
@@ -102,16 +119,7 @@ export async function removeLgFile(dispatch, { id }) {
  * @param {*} template updated template, expected {Name, Body}
  */
 export async function updateLgTemplate(dispatch, { file, templateName, template }) {
-  // validate template
-  const validateResult = templateValidate(template);
-  if (validateResult.isValid === false) {
-    throw new Error(validateResult.error.Message);
-  }
-
-  // should be a single template.
-  if (validateResult.templates.length !== 1) {
-    throw new Error('invalid single template');
-  }
+  validateLgTemplate(template);
 
   const oldTemplates = templatesFromText(file.content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
@@ -147,15 +155,7 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
  */
 
 export async function createLgTemplate(dispatch, { file, template, position }) {
-  // validate template
-  const validateResult = templateValidate(template);
-  if (validateResult.isValid === false) {
-    throw new Error(validateResult.error.Message);
-  }
-  // should be a single template.
-  if (validateResult.templates.length !== 1) {
-    throw new Error('invalid single template');
-  }
+  validateLgTemplate(template);
 
   let content = file.content;
   if (position === 0) {
