@@ -12,7 +12,6 @@ const ColMargin = 10;
 const calculateNodeMap = (_, data) => {
   const { ruleGroup, stepGroup } = transformObiRules(data);
   return {
-    ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
 };
