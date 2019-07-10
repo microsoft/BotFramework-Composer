@@ -41,7 +41,12 @@ dotenvFiles.forEach(dotenvFile => {
 });
 
 function getGitSha() {
-  return execSync('git rev-parse --short master');
+  try {
+    const sha = execSync('git rev-parse --short master');
+    return sha;
+  } catch {
+    return 'test';
+  }
 }
 
 // We support resolving modules according to `NODE_PATH`.
