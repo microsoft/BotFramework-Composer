@@ -1,11 +1,11 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 import { navigate } from '@reach/router';
 import { LGParser } from 'botbuilder-lg';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
-import { getDialogData, setDialogData } from './utils';
+import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -240,18 +240,28 @@ export function ShellApi() {
     }
   }
 
-  function navTo({ path }) {
+  function cleanData() {
+    const dialogId = navPath.split('#')[0];
+    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
+    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
+      const payload = { id: dialogId, content: cleanedData };
+      updateDialog(payload);
+    }
     flushUpdates();
+  }
+
+  function navTo({ path }) {
+    cleanData();
     actions.navTo(path);
   }
 
   function navDown({ subPath }) {
-    flushUpdates();
+    cleanData();
     actions.navDown(subPath);
   }
 
   function focusTo({ subPath }, event) {
-    flushUpdates();
+    cleanData();
     let path = navPath;
     if (event.source.name === FORM_EDITOR) {
       path = focusPath;

@@ -57,7 +57,7 @@ describe('test BotProjectService', () => {
     try {
       rimraf.sync(saveAsDir);
     } catch (error) {
-      //ignore
+      throw new Error(error);
     }
   });
 });

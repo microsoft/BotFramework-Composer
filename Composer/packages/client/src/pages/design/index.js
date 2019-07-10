@@ -117,7 +117,7 @@ function DesignPage(props) {
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text);
+      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
       const displayText = isRoot ? botName : text;
       return {
         key: index,
@@ -137,7 +137,13 @@ function DesignPage(props) {
   }, [navPath]);
 
   async function onSubmit(data) {
-    await actions.createDialog(data);
+    const content = {
+      $designer: {
+        name: data.name,
+        description: data.description,
+      },
+    };
+    await actions.createDialog({ id: data.name, content });
     setModalOpen(false);
   }
 
@@ -167,6 +173,7 @@ function DesignPage(props) {
                 items={breadcrumbItems}
                 ariaLabel={formatMessage('Navigation Path')}
                 styles={breadcrumbClass}
+                data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
                 <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />

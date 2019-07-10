@@ -171,20 +171,7 @@ async function updateDialog(req: Request, res: Response) {
 
 async function createDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const content =
-      JSON.stringify(
-        merge(
-          {
-            $designer: {
-              name: req.body.name,
-              description: req.body.description,
-            },
-          },
-          DIALOG_TEMPLATE
-        ),
-        null,
-        2
-      ) + '\n';
+    const content = JSON.stringify(merge(req.body.content, DIALOG_TEMPLATE), null, 2) + '\n';
     //dir = id
     const dialogs = await ProjectService.currentBotProject.createDialog(req.body.id, content, req.body.id);
     const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, '', req.body.id);
