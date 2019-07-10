@@ -4,9 +4,6 @@
   "generator": "common.lg",
   "steps": [
     {
-      "$type": "Microsoft.Foreach"
-    },
-    {
       "$type": "Microsoft.ChoiceInput",
       "property": "user.choice",
       "prompt": "Which card would you like to display?",
