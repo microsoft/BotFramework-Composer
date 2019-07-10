@@ -46,7 +46,7 @@ describe('<IconMenu />', () => {
     let menuItem;
 
     for (let i = 0; i < menuItems.length; i++) {
-      fireEvent.click(iconMenu);
+      fireEvent.click(iconMenu as any);
 
       menuItem = await findByText(document.body, menuItems[i].name);
 
