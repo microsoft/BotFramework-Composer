@@ -4,7 +4,14 @@
   "generator": "common.lg",
   "steps": [
     {
-      "$type": "Microsoft.Foreach"
+      "$type": "Microsoft.Foreach",
+      "indexProperty": "dialog.index",
+      "valueProperty": "dialog.value",
+      "$designer": {
+        "createdAt": "2019-07-10T05:55:30.928Z",
+        "updatedAt": "2019-07-10T05:55:30.937Z",
+        "id": "703223"
+      }
     },
     {
       "$type": "Microsoft.ChoiceInput",
