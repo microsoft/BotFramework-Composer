@@ -1,0 +1,245 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T07:49:52.243Z",
+    "updatedAt": "2019-07-08T08:44:18.946Z",
+    "id": "174199",
+    "name": "2"
+  },
+  "autoEndDialog": true,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "flight": "flight",
+      "hotel": "hotel",
+      "tourist_attraction_ticket": "ticket",
+      "cancel": "cancel"
+    }
+  },
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-08T08:01:31.319Z",
+        "updatedAt": "2019-07-08T08:07:10.874Z",
+        "id": "691508"
+      },
+      "activity": "welcome!"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-08T08:05:09.112Z",
+        "updatedAt": "2019-07-08T08:07:23.746Z",
+        "id": "665210"
+      },
+      "property": "user.ans",
+      "prompt": "what is your problem?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "none"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:07:33.670Z",
+        "updatedAt": "2019-07-08T08:10:32.083Z",
+        "id": "161879"
+      },
+      "intent": "flight",
+      "steps": [
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:10:42.436Z",
+            "updatedAt": "2019-07-08T08:41:27.706Z",
+            "id": "899193"
+          },
+          "property": "user.flight_date",
+          "prompt": "your flight day?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "integer",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:11:44.440Z",
+            "updatedAt": "2019-07-08T08:41:35.659Z",
+            "id": "308923"
+          },
+          "property": "user.flight_destination",
+          "prompt": "plan to where?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:12:23.937Z",
+            "updatedAt": "2019-07-08T08:41:38.567Z",
+            "id": "168243"
+          },
+          "property": "user.flight_place",
+          "prompt": "from where?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-08T08:12:40.250Z",
+            "updatedAt": "2019-07-08T08:41:53.523Z",
+            "id": "754349"
+          },
+          "activity": "get your flight from {user.flight_place} to {user.flight_destination} at {user.flight_date}"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:13:30.716Z",
+        "updatedAt": "2019-07-08T08:13:36.661Z",
+        "id": "530368"
+      },
+      "intent": "hotel",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:13:44.131Z",
+            "updatedAt": "2019-07-08T08:42:11.337Z",
+            "id": "110182"
+          },
+          "property": "user.hotel_place",
+          "prompt": "plan to where?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:14:03.852Z",
+            "updatedAt": "2019-07-08T08:42:18.519Z",
+            "id": "147851"
+          },
+          "property": "user.hotel_date",
+          "prompt": "date?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:14:19.174Z",
+            "updatedAt": "2019-07-08T08:42:22.297Z",
+            "id": "426667"
+          },
+          "property": "user.hotel_priority",
+          "prompt": "any priority?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-08T08:14:43.939Z",
+            "updatedAt": "2019-07-08T08:42:34.754Z",
+            "id": "116191"
+          },
+          "activity": "get the hotel in {user.hotel_place} at {user.hotel_date} with the priority of {user.hotel_priority}"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:15:56.612Z",
+        "updatedAt": "2019-07-08T08:16:09.769Z",
+        "id": "601871"
+      },
+      "intent": "tourist_attraction_ticket",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:16:18.608Z",
+            "updatedAt": "2019-07-08T08:42:51.817Z",
+            "id": "807587"
+          },
+          "property": "user.ticket_place",
+          "prompt": "where are you want to go?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:16:36.089Z",
+            "updatedAt": "2019-07-08T08:42:57.933Z",
+            "id": "424478"
+          },
+          "property": "user.ticket_date",
+          "prompt": "which day?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "createdAt": "2019-07-08T08:16:58.833Z",
+            "updatedAt": "2019-07-08T08:43:00.916Z",
+            "id": "463975"
+          },
+          "property": "user.ticket_number",
+          "prompt": "how many ticket?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-08T08:17:12.365Z",
+            "updatedAt": "2019-07-08T08:43:11.474Z",
+            "id": "605069"
+          },
+          "activity": "get the ticket at {user.ticket_place} at {user.ticket_date} with the number of {user.ticket_number}"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:44:25.767Z",
+        "updatedAt": "2019-07-08T08:44:28.303Z",
+        "id": "110732"
+      },
+      "intent": "cancel"
+    }
+  ],
+  "$schema": "../../app.schema"
+}
