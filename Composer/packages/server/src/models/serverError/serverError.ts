@@ -17,7 +17,7 @@ class ServerError extends Error {
       value: args.title ? args.title : this.constructor.name,
     });
     Object.defineProperty(this, 'statusCode', {
-      value: args.statusCode,
+      value: args.statusCode ? args.statusCode : 500,
     });
     this.message = args.message;
 
