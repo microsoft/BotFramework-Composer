@@ -1,4 +1,4 @@
-import { insert } from './jsonTracker';
+import { insert } from '../../src/shared/jsonTracker';
 
 describe('insert', () => {
   const path = 'foo.bar';
@@ -21,6 +21,7 @@ describe('insert', () => {
         },
         {
           $type: 'newOne',
+          $designer: { id: expect.any(String) },
         },
         {
           $type: 'secondOne',
@@ -33,6 +34,7 @@ describe('insert', () => {
       expect(updated.foo.bar).toEqual([
         {
           $type: 'newOne',
+          $designer: { id: expect.any(String) },
         },
         {
           $type: 'firstOne',
@@ -54,6 +56,7 @@ describe('insert', () => {
         },
         {
           $type: 'newOne',
+          $designer: { id: expect.any(String) },
         },
       ]);
     });
@@ -69,6 +72,7 @@ describe('insert', () => {
         },
         {
           $type: 'newOne',
+          $designer: { id: expect.any(String) },
         },
       ]);
     });
@@ -80,7 +84,7 @@ describe('insert', () => {
 
       const updated = insert(dialog, path, 0, 'newOne');
 
-      expect(updated.foo.bar).toEqual([{ $type: 'newOne' }]);
+      expect(updated.foo.bar).toEqual([{ $type: 'newOne', $designer: { id: expect.any(String) } }]);
     });
   });
 });

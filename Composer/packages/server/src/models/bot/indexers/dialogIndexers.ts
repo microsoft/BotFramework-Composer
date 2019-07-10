@@ -1,4 +1,4 @@
-import { uniq } from 'lodash';
+import { has, uniq } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
@@ -26,7 +26,7 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (typeof value === 'object' && value.hasOwnProperty('$type')) {
+      if (has(value, '$type')) {
         let target;
         switch (value.$type) {
           case 'Microsoft.SendActivity':
@@ -73,7 +73,7 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (typeof value === 'object' && value.hasOwnProperty('$type') && value.$type === 'Microsoft.IntentRule') {
+      if (has(value, '$type') && value.$type === 'Microsoft.IntentRule') {
         const intentName = value.intent;
         intents.push(intentName);
       }

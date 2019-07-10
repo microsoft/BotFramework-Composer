@@ -69,16 +69,26 @@ export const Home = () => {
     {
       type: 'action',
       text: formatMessage('New'),
-      iconName: 'CirclePlus',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-New',
     },
     {
       type: 'action',
       text: formatMessage('Open'),
-      iconName: 'OpenFolderHorizontal',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-Open',
     },
   ];
 
@@ -138,6 +148,7 @@ export const Home = () => {
             <div css={home.botContent}>
               <div
                 css={home.action}
+                data-testid={'homePage-body-New'}
                 onClick={() => {
                   onClickNewBotProject();
                 }}

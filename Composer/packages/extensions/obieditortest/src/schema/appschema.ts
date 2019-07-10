@@ -205,7 +205,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The maximum number of times this prompt will be presented.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -242,7 +242,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set, this prompt will allow interruptions.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -470,7 +470,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The maximum number of times this prompt will be presented.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -501,14 +501,14 @@ export const appschema: JSONSchema6 = {
           title: 'Always Prompt',
           description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
-          examples: ['false'],
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set, this prompt will allow interruptions.',
           default: true,
-          examples: ['true'],
+          examples: [true],
         },
         outputFormat: {
           type: 'string',
@@ -521,6 +521,7 @@ export const appschema: JSONSchema6 = {
           title: 'Choices',
           type: 'array',
           items: {
+            title: 'Choice',
             type: 'object',
             properties: {
               value: {
@@ -550,7 +551,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Append Choices',
           description: 'If set, the activity will automatically include choices in the specified format.',
-          default: 'true',
+          default: true,
         },
         defaultLocale: {
           type: 'string',
@@ -703,7 +704,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The maximum number of times this prompt will be presented.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -740,7 +741,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set, this prompt will allow interruptions.',
-          default: true,
+          default: false,
           examples: [true],
         },
         defaultLocale: {
@@ -2183,7 +2184,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The maximum number of times this prompt will be presented.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2220,7 +2221,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set, this prompt will allow interruptions.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -2780,7 +2781,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The maximum number of times this prompt will be presented.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2817,7 +2818,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set, this prompt will allow interruptions.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {

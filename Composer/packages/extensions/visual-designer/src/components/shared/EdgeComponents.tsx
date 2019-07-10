@@ -17,6 +17,7 @@ export const HorizontalEdge = ({ length, color, text, x, y, dashed }) => (
       transitionProperty: 'left, right, top, bottom, length',
       zIndex: -1,
     }}
+    data-testid="HorizontalEdge"
   >
     {text ? (
       <text x={TEXT_PADDING} y={-5} fontSize={FONT_SIZE}>
@@ -40,6 +41,7 @@ export const VerticalEdge = ({ length, color, text, x, y, dashed }) => (
       transitionProperty: 'left, right, top, bottom, length',
       zIndex: -1,
     }}
+    data-testid="VerticalEdge"
   >
     {text ? (
       <text x={TEXT_PADDING} y={FONT_SIZE + TEXT_PADDING} fontSize={FONT_SIZE}>

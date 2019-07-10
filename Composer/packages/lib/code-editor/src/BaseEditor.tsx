@@ -6,6 +6,7 @@ import throttle from 'lodash.throttle';
 const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'on',
+  lineNumbers: 'off',
   minimap: {
     enabled: false,
   },

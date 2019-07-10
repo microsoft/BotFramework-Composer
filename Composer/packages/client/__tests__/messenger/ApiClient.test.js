@@ -65,13 +65,13 @@ describe('ApiClient', () => {
     try {
       await client.apiCall('syncError');
     } catch (sErr) {
-      expect(sErr).toBe(err);
+      expect(sErr).toBe('SomeError');
     }
 
     try {
       await client.apiCall('asyncError');
     } catch (asErr) {
-      expect(asErr).toBe(err);
+      expect(asErr).toBe('SomeError');
     }
   });
 });
