@@ -33,6 +33,7 @@ const AlertDialog = props => {
             color: '#fff',
             padding: '15px',
             marginBottom: '20px',
+            whiteSpace: 'pre-line',
           }}
         >
           {subTitle}

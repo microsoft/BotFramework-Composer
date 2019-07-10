@@ -38,10 +38,8 @@ export async function updateLgFile(dispatch, { id, content }) {
   const validateResult = contentValidate(content);
   if (validateResult.isValid === false) {
     const { Start, End } = validateResult.error.Range;
-    const msg = `start at line ${Start.Line} character ${Start.Character}, end at line ${End.Line} character ${
-      End.Character
-    }`;
-    throw new Error(`${validateResult.error.Message},\n ${msg}`);
+    const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+    throw new Error(`${errorDetail},\n ${validateResult.error.Message}`);
   }
 
   try {
