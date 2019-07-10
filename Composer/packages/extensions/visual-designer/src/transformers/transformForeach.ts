@@ -3,7 +3,7 @@ import { ObiTypes } from '../shared/ObiTypes';
 import { IndexedNode } from './models/IndexedNode';
 
 const StepsKey = 'steps';
-export function transformForeach(input: any, jsonpath: string) {
+export function transformForeach(input: any, jsonpath: string): { [key: string]: IndexedNode } {
   if (!input || (input.$type !== ObiTypes.Foreach && input.$type !== ObiTypes.ForeachPage)) return {};
 
   const foreachDetailNode = new IndexedNode(jsonpath, {

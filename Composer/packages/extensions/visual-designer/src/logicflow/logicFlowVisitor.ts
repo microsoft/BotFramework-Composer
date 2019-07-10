@@ -5,7 +5,6 @@ import {
   calculateForeachBoundary,
 } from '../layouters/calculateNodeBoundary';
 import { DiamondSize, LoopIconSize } from '../shared/elementSizes';
-import { GraphNode } from '../shared/GraphNode';
 
 import { FlowGroup, FlowBaseNode, FlowTypes, DecisionNode, LoopNode } from './models/LogicFlowNodes';
 
@@ -36,23 +35,21 @@ export const calculateFlowNodeBoundary = (
   if (!node || !node['@']) return;
   switch (node['@']) {
     case FlowTypes.Flow:
-      node.boundary = calculateSequenceBoundary(
-        (node as FlowGroup).steps.map(x => new GraphNode(x.id, x.data, x.boundary))
-      );
+      node.boundary = calculateSequenceBoundary((node as FlowGroup).steps.map(x => x.boundary));
       break;
     case FlowTypes.Decision:
       node.boundary = calculateSwitchCaseBoundary(
-        new GraphNode(node.id, node.data, measureBoundary(node.id, node['@'], node.data)),
-        new GraphNode(node.id, {}, new Boundary(DiamondSize.width, DiamondSize.height)),
-        (node as DecisionNode).branches.map(x => new GraphNode(x.id, x.data, x.boundary))
+        measureBoundary(node.id, node['@'], node.data),
+        new Boundary(DiamondSize.width, DiamondSize.height),
+        (node as DecisionNode).branches.map(x => x.boundary)
       );
       break;
     case FlowTypes.Loop:
       node.boundary = calculateForeachBoundary(
-        new GraphNode(node.id, node.data, measureBoundary(node.id, node['@'], node.data)),
-        new GraphNode(node.id, {}, (node as LoopNode).flow.boundary),
-        new GraphNode(node.id, {}, new Boundary(LoopIconSize.width, LoopIconSize.height)),
-        new GraphNode(node.id, {}, new Boundary(LoopIconSize.width, LoopIconSize.height))
+        measureBoundary(node.id, node['@'], node.data),
+        (node as LoopNode).flow.boundary,
+        new Boundary(LoopIconSize.width, LoopIconSize.height),
+        new Boundary(LoopIconSize.width, LoopIconSize.height)
       );
       break;
     case FlowTypes.Element:

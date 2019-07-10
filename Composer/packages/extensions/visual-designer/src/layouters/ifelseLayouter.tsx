@@ -7,10 +7,20 @@ import { calculateIfElseBoundary } from './calculateNodeBoundary';
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
+export function ifElseLayouter(
+  conditionNode: GraphNode,
+  choiceNode: GraphNode,
+  ifNode: GraphNode,
+  elseNode: GraphNode
+): any {
   if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
 
-  const containerBoundary = calculateIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode);
+  const containerBoundary = calculateIfElseBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    ifNode.boundary,
+    elseNode.boundary
+  );
 
   const leftNode = ifNode || new GraphNode();
   const rightNode = elseNode || new GraphNode();

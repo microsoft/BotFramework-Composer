@@ -13,12 +13,20 @@ const BranchIntervalY = ElementInterval.y / 2;
  *           ------------
  *           |   |  |   |
  */
-export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: GraphNode[] = []) {
+export function switchCaseLayouter(
+  conditionNode: GraphNode,
+  choiceNode: GraphNode,
+  branchNodes: GraphNode[] = []
+): any {
   if (!conditionNode) {
     return { boundary: new Boundary() };
   }
 
-  const containerBoundary = calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
+  const containerBoundary = calculateSwitchCaseBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    branchNodes.map(x => x.boundary)
+  );
 
   /** Calulate nodes position */
   conditionNode.offset = {
