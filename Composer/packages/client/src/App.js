@@ -87,7 +87,6 @@ const bottomLinks = [
     labelName: 'About',
     activeIfUrlContains: '/about',
     exact: false,
-    underTest: true, // will delete
   },
 ];
 
