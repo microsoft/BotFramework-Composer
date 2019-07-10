@@ -6,6 +6,7 @@ import { transformSwitchCondition } from '../transformers/transformSwitchConditi
 import { transformForeach } from '../transformers/transformForeach';
 
 import {
+  calculateIfElseBoundary,
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
@@ -25,7 +26,7 @@ function measureForeachBoundary(json): Boundary {
 function measureIfConditionBoundary(json): Boundary {
   const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
   const inputs: Boundary[] = [condition, choice, ifGroup, elseGroup].map(x => measureJsonBoundary(x.json));
-  return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
+  return calculateIfElseBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
 function measureSwitchConditionBoundary(json): Boundary {
