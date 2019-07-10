@@ -499,14 +499,14 @@ export const appschema: JSONSchema6 = {
           description:
             'If set to true this will always prompt the user regardless if you already have the value or not.',
           default: false,
-          examples: ['false'],
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
           default: true,
-          examples: ['true'],
+          examples: [true],
         },
         outputFormat: {
           type: 'string',
@@ -519,6 +519,7 @@ export const appschema: JSONSchema6 = {
           title: 'Choices',
           type: 'array',
           items: {
+            title: 'Choice',
             type: 'object',
             properties: {
               value: {
@@ -548,7 +549,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Append Choices',
           description: 'Compose an output activity containing a set of choices',
-          default: 'true',
+          default: true,
         },
         defaultLocale: {
           type: 'string',
