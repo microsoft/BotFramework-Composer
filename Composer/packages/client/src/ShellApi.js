@@ -1,11 +1,11 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 import { navigate } from '@reach/router';
 import { LGParser } from 'botbuilder-lg';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
-import { getDialogData, setDialogData } from './utils';
+import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -51,7 +51,7 @@ export function ShellApi() {
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
-  const removeLgTemplate = actions.removeLgTemplate;
+  const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
@@ -73,7 +73,9 @@ export function ShellApi() {
     apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
       lgTemplateHandler(UPDATE, { id, templateName, template }, event)
     );
-    apiClient.registerApi('removeLgTemplate', ({ id }, event) => lgTemplateHandler(REMOVE, { id }, event));
+    apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
+      lgTemplateHandler(REMOVE, { id, templateName }, event)
+    );
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -87,7 +89,7 @@ export function ShellApi() {
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
-      result[dialog.name] = dialog.content;
+      result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
@@ -147,9 +149,9 @@ export function ShellApi() {
 
     if (path !== '') {
       const updatedDialog = setDialogData(dialogsMap, path, newData);
-      const dialogName = path.split('#')[0];
-      const payload = { name: dialogName, content: updatedDialog };
-      dialogsMap[dialogName] = updatedDialog;
+      const dialogId = path.split('#')[0];
+      const payload = { id: dialogId, content: updatedDialog };
+      dialogsMap[dialogId] = updatedDialog;
       updateDialog(payload);
     }
 
@@ -175,7 +177,7 @@ export function ShellApi() {
       throw new Error(res.error.Message);
     }
 
-    return res.templates.map(t => ({ name: t.Name, body: t.Body }));
+    return res.templates.map(t => ({ Name: t.Name, Body: t.Body }));
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
@@ -238,18 +240,28 @@ export function ShellApi() {
     }
   }
 
-  function navTo({ path }) {
+  function cleanData() {
+    const dialogId = navPath.split('#')[0];
+    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
+    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
+      const payload = { id: dialogId, content: cleanedData };
+      updateDialog(payload);
+    }
     flushUpdates();
+  }
+
+  function navTo({ path }) {
+    cleanData();
     actions.navTo(path);
   }
 
   function navDown({ subPath }) {
-    flushUpdates();
+    cleanData();
     actions.navDown(subPath);
   }
 
   function focusTo({ subPath }, event) {
-    flushUpdates();
+    cleanData();
     let path = navPath;
     if (event.source.name === FORM_EDITOR) {
       path = focusPath;

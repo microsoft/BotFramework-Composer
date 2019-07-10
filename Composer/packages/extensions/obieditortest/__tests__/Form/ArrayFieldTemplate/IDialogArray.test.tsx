@@ -70,8 +70,14 @@ describe('<IDialogArray />', () => {
 
     expect(onAddClick.mock.calls[0][1]).toEqual({
       $type: 'Microsoft.SendActivity',
+      $designer: {
+        id: expect.any(String),
+      },
       data: {
         $type: 'Microsoft.SendActivity',
+        $designer: {
+          id: expect.any(String),
+        },
       },
       key: 'Microsoft.SendActivity',
       name: 'Send a single message',

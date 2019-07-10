@@ -1,29 +1,24 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment } from 'react';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
 function itemList(action, index) {
   if (action.type === 'element') {
-    return action.element;
+    return <Fragment key={index}>{action.element}</Fragment>;
   } else {
     return (
-      <ActionButton
-        key={index}
-        css={actionButton}
-        iconProps={{
-          iconName: action.iconName,
-        }}
-        onClick={event => action.onClick(event, action)}
-      >
+      <ActionButton key={index} css={actionButton} {...action.buttonProps} data-testid={action.dataTestid}>
         {action.text}
       </ActionButton>
     );
   }
 }
 // support ActionButton or React Elements, the display order is array index.
-// action = {type:action/element, iconName, text, onClick, align, element}
+// action = {type:action/element, text, align, element, buttonProps: use
+// fabric-ui IButtonProps interface}
 export function ToolBar(props) {
   const { toolbarItems, ...rest } = props;
   let left = [];

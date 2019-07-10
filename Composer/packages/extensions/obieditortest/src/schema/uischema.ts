@@ -7,6 +7,7 @@ import {
   SelectorField,
   StepsField,
   NullField,
+  LgEditorField,
 } from '../Form/fields';
 import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
@@ -31,6 +32,9 @@ const activityFields = {
   },
   invalidPrompt: {
     'ui:widget': TextareaWidget,
+  },
+  value: {
+    'ui:widget': NullField,
   },
 };
 
@@ -149,9 +153,10 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -163,24 +168,32 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
   'Microsoft.ConfirmInput': {
     ...activityFields,
+    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
+    // - must provide yes/no in special format along with alternatives that have to be handled
+    // TODO: Implement confirmChoices-specific widget with appropriate business rules.
+    confirmChoices: {
+      'ui:field': NullField,
+    },
     'ui:order': [
       'prompt',
       'property',
       'style',
-      'confirmChoices',
+      'defaultLocale',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -197,12 +210,14 @@ export const uiSchema = {
       'property',
       'outputFormat',
       'style',
+      'defaultLocale',
       'choices',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -218,9 +233,10 @@ export const uiSchema = {
       'outputFormat',
       'validations',
       'value',
-      'defaultValue',
       'unrecognizedPrompt',
       'invalidPrompt',
+      'maxTurnCount',
+      'defaultValue',
       '*',
     ],
   },
@@ -250,5 +266,10 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
+  },
+  'Microsoft.SendActivity': {
+    activity: {
+      'ui:field': LgEditorField,
+    },
   },
 };

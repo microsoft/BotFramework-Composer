@@ -7,22 +7,34 @@ const toolbarItems = onClick => [
   {
     type: 'action',
     text: 'New',
-    iconName: 'CirclePlus',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'Add',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
     type: 'action',
     text: 'Open',
-    iconName: 'OpenFolderHorizontal',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'OpenFolderHorizontal',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
     type: 'action',
     text: 'Save as',
-    iconName: 'Save',
-    onClick: onClick,
+    buttonProps: {
+      iconProps: {
+        iconName: 'Save',
+      },
+      onClick: onClick,
+    },
     align: 'left',
   },
   {
@@ -43,14 +55,14 @@ describe('<ToolBar />', () => {
   });
 
   it('should have item click event', async () => {
-    const mockOpenStorageExplorer = jest.fn(() => null);
-    const { findByText } = render(<ToolBar toolbarItems={toolbarItems(mockOpenStorageExplorer)} />);
+    const mockSetCreationFlowStatus = jest.fn(() => null);
+    const { findByText } = render(<ToolBar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);
     fireEvent.click(newButton);
     fireEvent.click(openButton);
     fireEvent.click(saveButton);
-    expect(mockOpenStorageExplorer).toHaveBeenCalledTimes(3);
+    expect(mockSetCreationFlowStatus).toHaveBeenCalledTimes(3);
   });
 });

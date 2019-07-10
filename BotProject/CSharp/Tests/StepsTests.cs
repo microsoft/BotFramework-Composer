@@ -107,7 +107,7 @@ namespace Tests
             .Send("joke")
                 .AssertReply("Why did the chicken cross the road?")
             .Send("I don't know")
-                .AssertReply("To get to the other side")
+                .AssertReply("To get to the other side!")
             .StartTestAsync();
         }
 
@@ -200,10 +200,10 @@ namespace Tests
             .Send("joke")
                 .AssertReply("Why did the chicken cross the road?")
             .Send("Why?")
-                .AssertReply("To get to the other side")
+                .AssertReply("To get to the other side!")
             .Send("future")
-                .AssertReply("Seeing into the future...")
-                .AssertReply("I see great things in your future...")
+                .AssertReply("Seeing into your future...")
+                .AssertReply("I see great things in your future!")
                 .AssertReply("Potentially a successful demo")
             .StartTestAsync();
         }

@@ -1,11 +1,13 @@
-﻿{
-  "$schema": "../../app.schema",
+{
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": false,
   "$designer": {
+    "createdAt": "2019-07-03T06:51:13.961Z",
+    "updatedAt": "2019-07-03T06:51:14.013Z",
+    "id": "727878",
     "name": "09 - EndDialog",
     "description": "This is a bot that demonstrates the EndDialog concept in Adaptive Dialogs."
   },
+  "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
@@ -21,17 +23,36 @@
         {
           "$type": "Microsoft.TextInput",
           "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?"
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none",
+          "$designer": {
+            "createdAt": "2019-07-01T21:34:31.248Z",
+            "updatedAt": "2019-07-01T21:34:31.254Z",
+            "id": "543141"
+          }
         }
       ]
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}, nice to talk to you!"
+      "$designer": {
+        "createdAt": "2019-07-01T21:34:15.607Z",
+        "updatedAt": "2019-07-01T21:34:32.366Z",
+        "id": "604381"
+      },
+      "activity": "[bfdactivity-604381]"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "I'm a joke bot. To get started say \"joke\"."
+      "$designer": {
+        "createdAt": "2019-07-01T21:34:52.937Z",
+        "updatedAt": "2019-07-01T21:34:59.787Z",
+        "id": "338063"
+      },
+      "activity": "[bfdactivity-338063]"
     }
   ],
   "rules": [
@@ -58,5 +79,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

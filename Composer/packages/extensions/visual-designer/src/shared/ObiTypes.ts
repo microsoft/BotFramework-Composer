@@ -27,6 +27,9 @@ export const ObiTypes = {
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
 
+  Foreach: 'Microsoft.Foreach',
+  ForeachPage: 'Microsoft.ForeachPage',
+
   TextInput: 'Microsoft.TextInput',
   NumberInput: 'Microsoft.NumberInput',
   IntegerInput: 'Microsoft.IntegerInput',
@@ -52,4 +55,7 @@ export const ObiTypes = {
   StepGroup: 'VisualSDK.StepGroup',
   ChoiceDiamond: 'VisualSDK.ChoiceDiamond',
   ConditionNode: 'VisualSDK.ConditionNode',
+  LoopIndicator: 'VisualSDK.LoopIndicator',
+  ForeachDetail: 'VisualSDK.ForeachDetail',
+  ForeachPageDetail: 'VisualSDK.ForeachPageDetail',
 };

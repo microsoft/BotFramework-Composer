@@ -1,5 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
@@ -31,18 +32,27 @@
       "value": "888888/4"
     },
     {
-          "$type": "Microsoft.SendActivity",
-          "activity": "Here are the index and values in the array."
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "638869",
+        "updatedAt": "2019-07-04T19:55:21.344Z"
+      },
+      "activity": "[bfdactivity-638869]"
     },
     {
       "$type": "Microsoft.Foreach",
       "ListProperty": "dialog.ids",
-      "Steps":[
+      "Steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
-      ]   
+      ]
     }
-  ]
+  ],
+  "$designer": {
+    "createdAt": "2019-07-03T06:49:36.238Z",
+    "updatedAt": "2019-07-03T06:49:36.310Z",
+    "id": "178401"
+  }
 }

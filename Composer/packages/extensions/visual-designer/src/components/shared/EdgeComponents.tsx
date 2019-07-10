@@ -3,8 +3,8 @@ import React from 'react';
 const BAR_SIZE = 3;
 const TEXT_PADDING = 8;
 const FONT_SIZE = 14;
-
-export const HorizontalEdge = ({ length, text, x, y }) => (
+const DEFAULT_EDGE_COLOR = '#979797';
+export const HorizontalEdge = ({ length, color, text, x, y, dashed }) => (
   <svg
     style={{
       position: 'absolute',
@@ -17,17 +17,18 @@ export const HorizontalEdge = ({ length, text, x, y }) => (
       transitionProperty: 'left, right, top, bottom, length',
       zIndex: -1,
     }}
+    data-testid="HorizontalEdge"
   >
     {text ? (
       <text x={TEXT_PADDING} y={-5} fontSize={FONT_SIZE}>
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2={length} y2="0" stroke="#979797" strokeWidth="1" />
+    <line x1="0" y1="0" x2={length} y2="0" stroke={color} strokeDasharray={dashed ? '4' : 'none'} strokeWidth="1" />
   </svg>
 );
 
-export const VerticalEdge = ({ length, text, x, y }) => (
+export const VerticalEdge = ({ length, color, text, x, y, dashed }) => (
   <svg
     style={{
       position: 'absolute',
@@ -40,19 +41,20 @@ export const VerticalEdge = ({ length, text, x, y }) => (
       transitionProperty: 'left, right, top, bottom, length',
       zIndex: -1,
     }}
+    data-testid="VerticalEdge"
   >
     {text ? (
       <text x={TEXT_PADDING} y={FONT_SIZE + TEXT_PADDING} fontSize={FONT_SIZE}>
         {text}
       </text>
     ) : null}
-    <line x1="0" y1="0" x2="0" y2={length} stroke="#979797" strokeWidth="1" />
+    <line x1="0" y1="0" x2="0" y2={length} stroke={color} strokeDasharray={dashed ? '4' : 'none'} strokeWidth="1" />
   </svg>
 );
 
-export const Edge = ({ direction, x, y, length, text = '' }) =>
+export const Edge = ({ direction, x, y, length, color = DEFAULT_EDGE_COLOR, text = '', dashed = false }) =>
   direction === 'x' ? (
-    <HorizontalEdge x={x} y={y} length={length} text={text} />
+    <HorizontalEdge x={x} y={y} length={length} color={color} text={text} dashed={dashed} />
   ) : (
-    <VerticalEdge x={x} y={y} length={length} text={text} />
+    <VerticalEdge x={x} y={y} length={length} color={color} text={text} dashed={dashed} />
   );

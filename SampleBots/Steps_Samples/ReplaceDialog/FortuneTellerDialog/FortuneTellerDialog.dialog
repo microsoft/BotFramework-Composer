@@ -1,18 +1,39 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Seeing into the future..."
+      "$designer": {
+        "createdAt": "2019-07-01T21:41:08.120Z",
+        "updatedAt": "2019-07-01T21:41:10.907Z",
+        "id": "554030"
+      },
+      "activity": "[bfdactivity-554030]"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "I see great things in your future..."
+      "$designer": {
+        "createdAt": "2019-07-01T21:41:09.715Z",
+        "updatedAt": "2019-07-01T21:41:16.976Z",
+        "id": "302405"
+      },
+      "activity": "[bfdactivity-302405]"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Potentially a successful demo"
+      "$designer": {
+        "createdAt": "2019-07-01T21:41:30.793Z",
+        "updatedAt": "2019-07-01T21:41:32.819Z",
+        "id": "322106"
+      },
+      "activity": "[bfdactivity-322106]"
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-01T21:41:06.164Z",
+    "updatedAt": "2019-07-01T21:41:06.193Z",
+    "id": "682472"
+  }
 }
