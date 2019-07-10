@@ -1,6 +1,5 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "$id": "root",
   "$designer": {
     "createdAt": "2019-07-03T06:51:23.522Z",
     "updatedAt": "2019-07-03T06:51:23.602Z",

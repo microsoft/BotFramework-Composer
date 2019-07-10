@@ -33,7 +33,11 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "If each page shows two items, here are the index and values"
+      "$designer": {
+        "id": "623448",
+        "updatedAt": "2019-07-04T19:54:39.319Z"
+      },
+      "activity": "[bfdactivity-623448]"
     },
     {
       "$type": "Microsoft.ForeachPage",

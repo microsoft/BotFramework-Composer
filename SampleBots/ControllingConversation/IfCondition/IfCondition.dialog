@@ -13,13 +13,21 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "You are an adult."
+          "$designer": {
+            "id": "164444",
+            "updatedAt": "2019-07-04T19:55:38.267Z"
+          },
+          "activity": "[bfdactivity-164444]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "You are under 18."
+          "$designer": {
+            "id": "619321",
+            "updatedAt": "2019-07-04T19:56:28.408Z"
+          },
+          "activity": "[bfdactivity-619321]"
         }
       ]
     }

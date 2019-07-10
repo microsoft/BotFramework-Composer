@@ -1,0 +1,77 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$designer": {
+    "createdAt": "2019-06-28T19:51:35.838Z",
+    "updatedAt": "2019-06-28T19:51:35.846Z",
+    "id": "792326"
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-06-28T19:53:46.154Z",
+        "updatedAt": "2019-06-28T19:53:51.357Z",
+        "id": "511643"
+      },
+      "activity": "Let's add a new lunch spot."
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-06-28T19:53:54.545Z",
+        "updatedAt": "2019-06-28T20:20:20.708Z",
+        "id": "895686"
+      },
+      "property": "turn.spot",
+      "prompt": "What is the name of this new awesome place to eat lunch?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "outputFormat": "trim"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-06-28T19:54:25.714Z",
+        "updatedAt": "2019-06-28T20:57:30.497Z",
+        "id": "156472"
+      },
+      "condition": "conversation.spots == null",
+      "steps": [
+        {
+          "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "createdAt": "2019-06-28T19:54:43.026Z",
+            "updatedAt": "2019-06-28T19:54:50.992Z",
+            "id": "352790"
+          },
+          "property": "conversation.spots",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-06-28T19:54:58.650Z",
+        "updatedAt": "2019-06-28T19:55:14.012Z",
+        "id": "628111"
+      },
+      "changeType": "Push",
+      "arrayProperty": "conversation.spots",
+      "resultProperty": "",
+      "value": "turn.spot"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-06-28T19:55:21.863Z",
+        "updatedAt": "2019-06-28T19:55:39.701Z",
+        "id": "236318"
+      },
+      "activity": "I added {turn.spot} to the list!  Here is the complete list: [list(conversation.spots)]"
+    }
+  ]
+}

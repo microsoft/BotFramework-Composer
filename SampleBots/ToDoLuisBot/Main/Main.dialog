@@ -61,9 +61,19 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[LuisToDoHelp]"
+          "$designer": {
+            "createdAt": "2019-07-04T19:37:50.422Z",
+            "updatedAt": "2019-07-04T19:38:13.175Z",
+            "id": "636903"
+          },
+          "activity": "[bfdactivity-636903]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-04T19:37:38.354Z",
+        "updatedAt": "2019-07-04T19:37:38.376Z",
+        "id": "265106"
+      }
     }
   ],
   "$schema": "../../app.schema",

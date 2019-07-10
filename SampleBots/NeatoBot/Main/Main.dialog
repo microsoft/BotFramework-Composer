@@ -1,0 +1,22 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T21:15:35.212Z",
+    "updatedAt": "2019-07-08T21:20:38.360Z",
+    "id": "608404",
+    "name": "NeatoBot"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "createdAt": "2019-07-08T21:20:40.916Z",
+        "updatedAt": "2019-07-08T21:20:40.921Z",
+        "id": "050498"
+      }
+    }
+  ]
+}

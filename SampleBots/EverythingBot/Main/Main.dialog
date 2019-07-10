@@ -1,0 +1,348 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-01T19:36:43.895Z",
+    "updatedAt": "2019-07-09T18:20:27.834Z",
+    "id": "752879",
+    "name": "EmptyBot",
+    "description": "<Fill in the description of your bot here>"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T19:36:47.197Z",
+        "updatedAt": "2019-07-09T22:57:41.639Z",
+        "id": "089593"
+      },
+      "activity": "[bfdactivity-089593]"
+    },
+    {
+      "$type": "Microsoft.BeginDialog",
+      "$designer": {
+        "createdAt": "2019-07-01T19:36:50.057Z",
+        "updatedAt": "2019-07-08T20:16:27.393Z",
+        "id": "929060"
+      }
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-01T19:37:02.308Z",
+        "updatedAt": "2019-07-09T18:15:56.671Z",
+        "id": "507171"
+      },
+      "property": "user.name",
+      "prompt": "What is your name?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "none"
+    },
+    {
+      "$type": "Microsoft.EmitEvent",
+      "$designer": {
+        "createdAt": "2019-07-02T21:46:43.922Z",
+        "updatedAt": "2019-07-03T16:21:35.143Z",
+        "id": "642982"
+      },
+      "eventName": "bens-event",
+      "eventValue": {
+        "sdfsdf": "poo"
+      }
+    },
+    {
+      "$type": "Microsoft.NumberInput",
+      "$designer": {
+        "createdAt": "2019-07-01T19:37:04.676Z",
+        "updatedAt": "2019-07-09T18:18:10.822Z",
+        "id": "194567"
+      },
+      "property": "dialog.number",
+      "prompt": "great {user.name}!!!!!",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "float",
+      "defaultLocale": "en-us"
+    },
+    {
+      "$type": "Microsoft.ConfirmInput",
+      "$designer": {
+        "createdAt": "2019-07-01T19:37:13.868Z",
+        "updatedAt": "2019-07-08T20:33:59.506Z",
+        "id": "401722"
+      },
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      }
+    },
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "$designer": {
+        "createdAt": "2019-07-01T19:38:56.494Z",
+        "updatedAt": "2019-07-09T18:03:06.892Z",
+        "id": "577737"
+      },
+      "maxTurnCount": "2147483647",
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "value",
+      "choices": [
+        {
+          "value": "menu choice 1"
+        },
+        {
+          "value": "menu choice 2"
+        }
+      ],
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      },
+      "property": "turn.choice"
+    },
+    {
+      "$type": "Microsoft.OAuthInput",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:00.615Z",
+        "updatedAt": "2019-07-01T19:39:00.621Z",
+        "id": "391052"
+      }
+    },
+    {
+      "$type": "Microsoft.AttachmentInput",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "first",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:04.183Z",
+        "updatedAt": "2019-07-01T19:39:04.187Z",
+        "id": "325281"
+      }
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:23.879Z",
+        "updatedAt": "2019-07-01T19:39:23.883Z",
+        "id": "563337"
+      }
+    },
+    {
+      "$type": "Microsoft.SwitchCondition",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:28.684Z",
+        "updatedAt": "2019-07-08T21:32:07.247Z",
+        "id": "079225"
+      },
+      "cases": [
+        {
+          "value": "New Case",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity"
+            }
+          ]
+        }
+      ],
+      "default": [
+        {
+          "$type": "Microsoft.TextInput",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "none",
+          "$designer": {
+            "createdAt": "2019-07-08T21:32:11.228Z",
+            "updatedAt": "2019-07-08T21:32:11.235Z",
+            "id": "001293"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.Foreach",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:32.670Z",
+        "updatedAt": "2019-07-08T21:30:55.902Z",
+        "id": "851442"
+      },
+      "indexProperty": "dialog.index",
+      "valueProperty": "dialog.value",
+      "IndexProperty": "dialog.index",
+      "ValueProperty": "dialog.value"
+    },
+    {
+      "$type": "Microsoft.ForeachPage",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:36.123Z",
+        "updatedAt": "2019-07-08T16:09:32.349Z",
+        "id": "134385"
+      },
+      "pageSize": 10,
+      "valueProperty": "dialog.value",
+      "PageSize": 10,
+      "ValueProperty": "dialog.value"
+    },
+    {
+      "$type": "Microsoft.EditSteps",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:39.993Z",
+        "updatedAt": "2019-07-09T18:56:09.829Z",
+        "id": "159862"
+      },
+      "changeType": "InsertSteps"
+    },
+    {
+      "$type": "Microsoft.EndDialog",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:45.643Z",
+        "updatedAt": "2019-07-01T19:39:45.647Z",
+        "id": "616733"
+      }
+    },
+    {
+      "$type": "Microsoft.CancelAllDialogs",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:49.500Z",
+        "updatedAt": "2019-07-01T19:39:49.503Z",
+        "id": "445375"
+      }
+    },
+    {
+      "$type": "Microsoft.EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:54.355Z",
+        "updatedAt": "2019-07-01T19:39:54.358Z",
+        "id": "398277"
+      }
+    },
+    {
+      "$type": "Microsoft.RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-01T19:39:58.158Z",
+        "updatedAt": "2019-07-01T19:39:58.161Z",
+        "id": "598221"
+      }
+    },
+    {
+      "$type": "Microsoft.ReplaceDialog",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:01.894Z",
+        "updatedAt": "2019-07-01T19:40:01.900Z",
+        "id": "471566"
+      }
+    },
+    {
+      "$type": "Microsoft.EmitEvent",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:08.783Z",
+        "updatedAt": "2019-07-02T21:49:55.913Z",
+        "id": "295675"
+      },
+      "eventName": "beginDialog"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:12.085Z",
+        "updatedAt": "2019-07-01T19:40:12.088Z",
+        "id": "298706"
+      }
+    },
+    {
+      "$type": "Microsoft.InitProperty",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:15.638Z",
+        "updatedAt": "2019-07-01T19:40:15.645Z",
+        "id": "537485"
+      }
+    },
+    {
+      "$type": "Microsoft.DeleteProperty",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:19.844Z",
+        "updatedAt": "2019-07-01T19:40:19.848Z",
+        "id": "504211"
+      }
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:23.432Z",
+        "updatedAt": "2019-07-01T19:40:23.436Z",
+        "id": "641274"
+      }
+    },
+    {
+      "$type": "Microsoft.HttpRequest",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:26.097Z",
+        "updatedAt": "2019-07-08T21:57:29.202Z",
+        "id": "056538"
+      },
+      "responseTypes": "none"
+    },
+    {
+      "$type": "Microsoft.LogStep",
+      "traceActivity": false,
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:31.667Z",
+        "updatedAt": "2019-07-01T19:40:31.674Z",
+        "id": "401901"
+      }
+    },
+    {
+      "$type": "Microsoft.TraceActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T19:40:34.921Z",
+        "updatedAt": "2019-07-01T19:40:34.924Z",
+        "id": "942667"
+      }
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "createdAt": "2019-07-03T16:21:39.786Z",
+        "updatedAt": "2019-07-03T16:21:41.874Z",
+        "id": "282842"
+      },
+      "events": [
+        "beginDialog"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-09T22:39:46.353Z",
+        "updatedAt": "2019-07-09T22:39:46.361Z",
+        "id": "804779"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu"
+}

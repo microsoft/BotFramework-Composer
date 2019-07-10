@@ -1,0 +1,163 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-06-28T19:51:28.207Z",
+    "updatedAt": "2019-07-08T23:17:55.268Z",
+    "id": "567348",
+    "name": "EmptyBot",
+    "description": "<Fill in the description of your bot here>"
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T19:52:44.470Z",
+        "updatedAt": "2019-06-28T19:52:50.068Z",
+        "id": "379386"
+      },
+      "intent": "list",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-06-28T19:52:53.117Z",
+            "updatedAt": "2019-06-28T19:52:54.878Z",
+            "id": "240319"
+          },
+          "dialog": "listSpots"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T19:58:02.693Z",
+        "updatedAt": "2019-06-28T19:58:07.746Z",
+        "id": "954794"
+      },
+      "intent": "add",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-06-28T19:58:10.105Z",
+            "updatedAt": "2019-06-28T19:58:12.078Z",
+            "id": "983447"
+          },
+          "dialog": "addSpot"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T20:02:33.063Z",
+        "updatedAt": "2019-06-28T20:03:17.124Z",
+        "id": "880211"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-06-28T20:02:37.232Z",
+            "updatedAt": "2019-06-28T20:02:41.305Z",
+            "id": "938260"
+          },
+          "dialog": "lunch"
+        }
+      ],
+      "intent": "lunch"
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T20:16:47.624Z",
+        "updatedAt": "2019-06-28T20:16:47.627Z",
+        "id": "725448"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T20:16:51.559Z",
+            "updatedAt": "2019-06-28T20:17:08.892Z",
+            "id": "679235"
+          },
+          "activity": "Hi! I'm LunchBot!  I can help you decide where to eat lunch! "
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T20:23:56.255Z",
+        "updatedAt": "2019-06-28T20:24:06.814Z",
+        "id": "070559"
+      },
+      "intent": "quit",
+      "steps": [
+        {
+          "$type": "Microsoft.CancelAllDialogs"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T20:24:11.205Z",
+        "updatedAt": "2019-06-28T20:24:18.463Z",
+        "id": "635824"
+      },
+      "intent": "help",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-06-28T20:24:23.341Z",
+        "updatedAt": "2019-06-28T20:24:28.314Z",
+        "id": "593566"
+      },
+      "intent": "menu",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-06-28T20:33:12.016Z",
+            "updatedAt": "2019-06-28T20:33:14.019Z",
+            "id": "712555"
+          },
+          "dialog": "menu"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T23:18:06.729Z",
+        "updatedAt": "2019-07-08T23:19:42.261Z",
+        "id": "801452"
+      },
+      "intent": "remove",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-08T23:19:46.144Z",
+            "updatedAt": "2019-07-08T23:19:46.623Z",
+            "id": "737474"
+          },
+            "dialog": "removeSpot"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

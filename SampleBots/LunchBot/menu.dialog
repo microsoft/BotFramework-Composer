@@ -1,0 +1,69 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-06-28T20:31:48.545Z",
+    "updatedAt": "2019-07-01T16:24:30.073Z",
+    "id": "198757"
+  },
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-06-28T20:34:48.421Z",
+        "updatedAt": "2019-06-28T20:35:16.409Z",
+        "id": "685105"
+      },
+      "activity": "This is my menu!"
+    },
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "$designer": {
+        "createdAt": "2019-07-01T16:44:46.432Z",
+        "updatedAt": "2019-07-01T19:31:22.788Z",
+        "id": "373292"
+      },
+      "prompt": "What would you like to do?",
+      "maxTurnCount": "2147483647",
+      "value": "turn.choice",
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "value",
+      "choices": [
+        {
+          "action": {},
+          "value": "TEST",
+          "synonyms": [
+          ]
+        }
+      ],
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      }
+    },
+    {
+      "$type": "Microsoft.NumberInput",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "float",
+      "defaultLocale": "en-us",
+      "$designer": {
+        "createdAt": "2019-07-01T16:49:32.105Z",
+        "updatedAt": "2019-07-01T16:49:32.110Z",
+        "id": "058397"
+      }
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}

@@ -16,3 +16,110 @@
 	12 - EmitEvent
     ```
 
+# bfdactivity-666135
+-Here are the index and values in the array.
+
+# bfdactivity-763672
+-If each page shows two items, here are the index and values
+
+# bfdactivity-644042
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-879639
+-Say moo to get a response, say emit to emit a event.
+
+# bfdactivity-604381
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-338063
+-I'm a joke bot. To get started say "joke".
+
+# bfdactivity-150220
+-Why did the chicken cross the road?
+
+# bfdactivity-451180
+-To get to the other side!
+
+# bfdactivity-423305
+-What's up?
+
+# bfdactivity-448895
+-Oh I see!
+
+# bfdactivity-229784
+-Great! Your pet's name is {user.petname}
+
+# bfdactivity-200761
+-Done! You have added a pet named "{user.postResponse.name}" with id "{user.postResponse.id}"
+
+# bfdactivity-212615
+-Great! I found your pet named "{user.getResponse.name}"
+
+# bfdactivity-485963
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-839941
+-Hello {user.name}, nice to meet you!
+
+# bfdactivity-554030
+-Seeing into your future...
+
+# bfdactivity-302405
+-I see great things in your future!
+
+# bfdactivity-322106
+-Potentially a successful demo
+
+# bfdactivity-120128
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-577618
+-Why did the chicken cross the road?
+
+# bfdactivity-286023
+-To get to the other side!
+
+# bfdactivity-166189
+-Step 1
+
+# bfdactivity-069635
+-Step 2
+
+# bfdactivity-851726
+-Step 3
+
+# bfdactivity-116995
+-user.age is set to {user.age}
+
+# bfdactivity-166131
+-user.age is set to {user.age}
+
+# bfdactivity-643043
+-user.age is set to null
+
+# bfdactivity-797905
+-user.age is set to {user.age}
+
+# bfdactivity-309397
+-Step 3
+
+# bfdactivity-350559
+-Step 2
+
+# bfdactivity-522200
+-Step 1
+
+# bfdactivity-160914
+-You select: {user.style}
+
+# bfdactivity-576002
+-You select: 1
+
+# bfdactivity-677412
+-You select: 2
+
+# bfdactivity-700082
+-You select: 3
+
+# bfdactivity-347762 
+-[help]

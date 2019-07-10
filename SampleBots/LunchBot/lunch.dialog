@@ -1,0 +1,90 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$designer": {
+    "createdAt": "2019-06-28T20:00:34.465Z",
+    "updatedAt": "2019-06-28T20:00:34.469Z",
+    "id": "364667"
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-06-28T20:00:40.419Z",
+        "updatedAt": "2019-06-28T20:00:52.704Z",
+        "id": "793117"
+      },
+      "condition": "conversation.spots != null && count(conversation.spots) > 0",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T20:04:40.532Z",
+            "updatedAt": "2019-06-28T20:04:43.637Z",
+            "id": "579164"
+          },
+          "activity": "Let's see here..."
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-06-28T20:01:26.423Z",
+            "updatedAt": "2019-06-28T20:04:26.341Z",
+            "id": "363797"
+          },
+          "property": "turn.dice",
+          "value": "rand(0, count(conversation.spots))"
+        },
+        {
+          "$type": "Microsoft.LogStep",
+          "traceActivity": true,
+          "$designer": {
+            "createdAt": "2019-06-28T20:06:10.527Z",
+            "updatedAt": "2019-06-28T20:06:13.044Z",
+            "id": "208755"
+          },
+          "text": "You rolled a {turn.dice}"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-06-28T20:01:49.777Z",
+            "updatedAt": "2019-06-28T20:02:12.517Z",
+            "id": "830986"
+          },
+          "property": "turn.spot",
+          "value": "conversation.spots[turn.dice]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T20:00:56.237Z",
+            "updatedAt": "2019-06-28T20:02:07.669Z",
+            "id": "319025"
+          },
+          "activity": "You should go to {turn.spot} for lunch today!"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T20:00:59.117Z",
+            "updatedAt": "2019-06-28T20:01:12.828Z",
+            "id": "148601"
+          },
+          "activity": "I don't know any spots yet.  Say ADD to add some!"
+        },
+        {
+          "$type": "Microsoft.EndDialog",
+          "$designer": {
+            "createdAt": "2019-06-28T20:01:05.048Z",
+            "updatedAt": "2019-06-28T20:01:05.051Z",
+            "id": "513765"
+          }
+        }
+      ]
+    }
+  ]
+}

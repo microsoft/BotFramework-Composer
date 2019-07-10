@@ -1,0 +1,165 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$designer": {
+    "createdAt": "2019-07-08T23:12:43.315Z",
+    "updatedAt": "2019-07-08T23:12:43.321Z",
+    "id": "520169"
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-08T23:12:47.117Z",
+        "updatedAt": "2019-07-08T23:44:41.973Z",
+        "id": "810924"
+      },
+      "property": "turn.spot",
+      "prompt": "```What spot would you like to remove?\n\n[Suggestions=@{join(foreach(conversation.spots,spot,spot),\"|\",\"|\")}]\n```",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "outputFormat": "none"
+    },
+    {
+      "$type": "Microsoft.LogStep",
+      "traceActivity": false,
+      "$designer": {
+        "createdAt": "2019-07-08T23:45:54.819Z",
+        "updatedAt": "2019-07-08T23:46:06.314Z",
+        "id": "186976"
+      },
+      "text": "//  validate the choice is in the list using a foreach"
+    },
+    {
+      "$type": "Microsoft.Foreach",
+      "indexProperty": "dialog.index",
+      "valueProperty": "dialog.value",
+      "$designer": {
+        "createdAt": "2019-07-08T23:24:25.057Z",
+        "updatedAt": "2019-07-08T23:24:29.885Z",
+        "id": "399005"
+      },
+      "listProperty": "conversation.spots",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-08T23:24:37.125Z",
+            "updatedAt": "2019-07-08T23:24:47.234Z",
+            "id": "342792"
+          },
+          "condition": "turn.spot == dialog.value",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-08T23:24:50.274Z",
+                "updatedAt": "2019-07-08T23:24:54.105Z",
+                "id": "985569"
+              },
+              "activity": "FOUND IT."
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "createdAt": "2019-07-08T23:24:59.117Z",
+                "updatedAt": "2019-07-08T23:25:10.217Z",
+                "id": "180107"
+              },
+              "property": "turn.toRemove",
+              "value": "dialog.index"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.LogStep",
+              "traceActivity": false,
+              "$designer": {
+                "createdAt": "2019-07-08T23:58:06.052Z",
+                "updatedAt": "2019-07-08T23:58:14.341Z",
+                "id": "412342"
+              },
+              "text": "// not the match, do nothing"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-08T23:15:42.270Z",
+        "updatedAt": "2019-07-08T23:15:50.219Z",
+        "id": "955252"
+      },
+      "condition": "turn.toRemove != null",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-08T23:29:08.588Z",
+            "updatedAt": "2019-07-08T23:29:13.695Z",
+            "id": "442984"
+          },
+          "activity": "Remove spot {turn.toRemove}"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-08T23:15:57.630Z",
+            "updatedAt": "2019-07-08T23:33:41.996Z",
+            "id": "212040"
+          },
+          "changeType": "Remove",
+          "arrayProperty": "conversation.spots",
+          "resultProperty": "turn.removed",
+          "value": "turn.spot"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-08T23:34:50.571Z",
+            "updatedAt": "2019-07-08T23:34:54.953Z",
+            "id": "707415"
+          },
+          "condition": "turn.removed==true",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-08T23:35:10.938Z",
+                "updatedAt": "2019-07-08T23:35:14.791Z",
+                "id": "854113"
+              },
+              "activity": "Removed!"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-08T23:35:19.538Z",
+                "updatedAt": "2019-07-08T23:35:23.924Z",
+                "id": "126698"
+              },
+              "activity": "Failed to remove the item."
+            }
+          ]
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-08T23:16:29.745Z",
+            "updatedAt": "2019-07-08T23:16:34.414Z",
+            "id": "651095"
+          },
+          "activity": "Could not find that spot in the list."
+        }
+      ]
+    }
+  ]
+}

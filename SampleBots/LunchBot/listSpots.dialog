@@ -1,0 +1,43 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-06-28T19:51:42.030Z",
+    "updatedAt": "2019-06-28T19:58:49.275Z",
+    "id": "681265"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-06-28T19:58:53.399Z",
+        "updatedAt": "2019-06-28T19:59:07.036Z",
+        "id": "072786"
+      },
+      "condition": "conversation.spots != null && count(conversation.spots) > 0",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T19:59:11.727Z",
+            "updatedAt": "2019-06-28T19:59:31.467Z",
+            "id": "693231"
+          },
+          "activity": "Here are all the lunch spots I know about: [list(conversation.spots)]."
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-06-28T19:59:34.828Z",
+            "updatedAt": "2019-06-28T19:59:46.260Z",
+            "id": "917251"
+          },
+          "activity": "I don't know where to go yet! Add spots to my list by saying \"ADD\""
+        }
+      ]
+    }
+  ]
+}
