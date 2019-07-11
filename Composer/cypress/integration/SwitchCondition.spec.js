@@ -132,7 +132,7 @@ context('SwitchCondition', () => {
       cy.get('[role="separator"]')
         .should('have.length', 2)
         .eq(1)
-        .should('have.text', 'Default');
+        .should('have.text', 'Default Branch');
     });
   });
 });
