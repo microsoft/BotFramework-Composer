@@ -10,7 +10,7 @@ import { StepEditor } from './StepEditor';
 const ColMargin = 10;
 
 const calculateNodeMap = (_, data) => {
-  const { ruleGroup, stepGroup } = transformObiRules(data);
+  const { stepGroup } = transformObiRules(data);
   return {
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
