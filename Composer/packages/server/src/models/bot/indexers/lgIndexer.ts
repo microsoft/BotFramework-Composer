@@ -1,3 +1,5 @@
+import { LGParser } from 'botbuilder-lg';
+
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
 
@@ -9,12 +11,14 @@ export class LGIndexer {
     this.lgFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
-      // todo: use lg parser.
       if (extName === '.lg') {
+        const error = this.parse(file.content).error;
+
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
+          diagostics: error === undefined ? [] : [error],
         });
       }
     }
@@ -22,5 +26,11 @@ export class LGIndexer {
 
   public getLgFiles() {
     return this.lgFiles;
+  }
+
+  public parse(content: string) {
+    // TODO update lg-parser, use new diagostic method
+
+    return LGParser.TryParse(content);
   }
 }
