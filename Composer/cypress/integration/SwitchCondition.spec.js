@@ -88,7 +88,7 @@ context('SwitchCondition', () => {
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(2)
-        .should('contain.text', 'SendActivity');
+        .should('contain.text', 'Microsoft.SendActivity');
 
       // Add another new case
       cy.getByText('Add New Case').click();
