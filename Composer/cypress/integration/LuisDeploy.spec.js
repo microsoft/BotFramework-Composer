@@ -11,7 +11,7 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot');
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
     cy.get('[data-testid="LUEditor"]').within(() => {
       cy.getAllByText('ToDoLuisBot').should('exist');
     });
