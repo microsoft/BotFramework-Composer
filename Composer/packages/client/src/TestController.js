@@ -61,8 +61,9 @@ export const TestController = () => {
         setModalOpen(true);
         return;
       } else {
-        await handlePublish(config);
-        await handleLoadBot();
+        if (await handlePublish(config)) {
+          await handleLoadBot();
+        }
       }
     } else {
       await handleLoadBot();
@@ -73,9 +74,11 @@ export const TestController = () => {
     setFetchState(STATE.PUBLISHING);
     try {
       await publishLuis(config);
+      return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
+      return false;
     } finally {
       setFetchState(STATE.SUCCESS);
     }
