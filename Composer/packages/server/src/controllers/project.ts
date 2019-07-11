@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { merge } from 'lodash';
 
 import ProjectService from '../services/project';
 import AssectService from '../services/asset';
@@ -6,6 +7,7 @@ import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings/settings.json';
 
+import DIALOG_TEMPLATE from './../store/dialogTemplate.json';
 import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
@@ -104,9 +106,14 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 }
 
+async function getRecentProjects(req: Request, res: Response) {
+  const project = ProjectService.recentBotProjects;
+  return res.status(200).json(project);
+}
+
 async function updateDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.name, req.body.content);
+    const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.id, req.body.content);
     res.status(200).json({ dialogs });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -115,8 +122,10 @@ async function updateDialog(req: Request, res: Response) {
 
 async function createDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.name);
-    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.name, '');
+    const content = JSON.stringify(merge(req.body.content, DIALOG_TEMPLATE), null, 2) + '\n';
+    //dir = id
+    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.id, content, req.body.id);
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, '', req.body.id);
     res.status(200).json({ dialogs, luFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -215,4 +224,5 @@ export const ProjectController = {
   saveProjectAs,
   createProject,
   getAllProjects,
+  getRecentProjects,
 };

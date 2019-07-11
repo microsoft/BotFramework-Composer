@@ -23,9 +23,8 @@ const topLinks = [
     to: '/home',
     iconName: 'Home',
     labelName: 'Home',
-    activeIfUrlContains: '',
-    exact: false,
-    underTest: true, // will delete
+    activeIfUrlContains: 'home',
+    exact: true,
   },
   {
     to: '/',
@@ -88,7 +87,6 @@ const bottomLinks = [
     labelName: 'About',
     activeIfUrlContains: '/about',
     exact: false,
-    underTest: true, // will delete
   },
 ];
 

@@ -13,7 +13,12 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "You entered: {user.date[0].value}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:41.571Z",
+        "updatedAt": "2019-07-01T21:59:42.925Z",
+        "id": "828009"
+      },
+      "activity": "[bfdactivity-828009]"
     }
   ],
   "$schema": "../../app.schema",

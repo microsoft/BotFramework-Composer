@@ -8,10 +8,29 @@ import StorageService from '../../services/storage';
 
 import { IProjectTemplate } from './interface';
 
-const templateDescriptions: { [key: string]: string } = {
-  EchoBot: 'This is bot that can echo back what you say to it.',
-  EmptyBot: 'This is a bot that can do nothing.',
-  ToDoBot: 'This is a bot that demonstrates management of a ToDo list.',
+interface TemplateData {
+  [key: string]: {
+    name: string;
+    description: string;
+  };
+}
+const templates: TemplateData = {
+  EchoBot: {
+    name: 'Echo Bot',
+    description: 'A bot that echoes and respond back whatever message the user entered',
+  },
+  EmptyBot: {
+    name: 'Empty Bot',
+    description: 'The very basic bot template that is ready for your creativity',
+  },
+  ToDoBot: {
+    name: 'ToDo Bot',
+    description: 'A bot that allows you add, list, remove to do items',
+  },
+  SampleBot: {
+    name: 'SampleBot',
+    description: 'A sample bot used for testing',
+  },
 };
 
 export class AssetManager {
@@ -32,7 +51,7 @@ export class AssetManager {
     for (const name of folders) {
       const absPath = Path.join(path, name);
       if ((await this.templateStorage.stat(absPath)).isDir) {
-        const base = { id: name, name: name, description: templateDescriptions[name] };
+        const base = { id: name, name: templates[name].name, description: templates[name].description };
         this.projectTemplates.push({ ...base, path: absPath });
         output.push(base);
       }

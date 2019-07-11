@@ -11,8 +11,8 @@ export interface FileInfo {
 }
 
 export interface Dialog {
-  id: number;
-  name: string;
+  id: string;
+  isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
   lgFile: string;
@@ -31,6 +31,7 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
+  diagostics: any[]; // LGParser output, TODO:
 }
 
 export interface LUFile {

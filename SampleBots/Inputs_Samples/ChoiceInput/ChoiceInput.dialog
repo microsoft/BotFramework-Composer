@@ -4,7 +4,17 @@
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:01.752Z",
+        "updatedAt": "2019-07-11T06:04:06.880Z",
+        "id": "673028"
+      },
       "property": "user.style",
+      "prompt": "Please select a value from below:",
+      "maxTurnCount": "2147483647",
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "outputFormat": "value",
       "choices": [
         {
           "value": "Test1"
@@ -16,13 +26,28 @@
           "value": "Test3"
         }
       ],
-      "prompt": "Please select a value from below:",
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
       "style": "List",
-      "alwaysPrompt": true
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "You select: {user.style}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:01.216Z",
+        "updatedAt": "2019-07-01T21:59:03.940Z",
+        "id": "004212"
+      },
+      "activity": "[bfdactivity-004212]"
     }
   ],
   "$schema": "../../app.schema",

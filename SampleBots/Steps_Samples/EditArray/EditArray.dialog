@@ -33,7 +33,12 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Here are the index and values in the array."
+      "$designer": {
+        "createdAt": "2019-07-01T21:31:36.184Z",
+        "updatedAt": "2019-07-01T21:31:50.603Z",
+        "id": "666135"
+      },
+      "activity": "[bfdactivity-666135]"
     },
     {
       "$type": "Microsoft.Foreach",
@@ -43,11 +48,23 @@
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
-      ]
+      ],
+      "IndexProperty": "dialog.index",
+      "ValueProperty": "dialog.value",
+      "$designer": {
+        "createdAt": "2019-07-01T21:31:49.538Z",
+        "updatedAt": "2019-07-01T21:31:49.574Z",
+        "id": "995811"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "If each page shows two items, here are the index and values"
+      "$designer": {
+        "createdAt": "2019-07-01T21:32:15.722Z",
+        "updatedAt": "2019-07-01T21:32:24.606Z",
+        "id": "763672"
+      },
+      "activity": "[bfdactivity-763672]"
     },
     {
       "$type": "Microsoft.ForeachPage",

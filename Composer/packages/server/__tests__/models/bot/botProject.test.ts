@@ -4,6 +4,8 @@ import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
 
+import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
+
 jest.mock('azure-storage', () => {
   return {};
 });
@@ -29,8 +31,10 @@ describe('index', () => {
     expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
-    expect(project.dialogs[0].lgTemplates.length).toBe(3);
-    expect(project.dialogs[0].lgTemplates.join(',')).toBe(['hello', 'bye', 'ShowImage'].join(','));
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.length).toBe(3);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
+      ['hello', 'bye', 'ShowImage'].join(',')
+    );
   });
 });
 
@@ -39,7 +43,7 @@ describe('updateDialog', () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
     const dialogs = await proj.updateDialog('a', newValue);
-    const aDialog = dialogs.find((f: { name: string }) => f.name.startsWith('a'));
+    const aDialog = dialogs.find((f: { id: string }) => f.id === 'a');
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
     await proj.updateDialog('a', initValue);
@@ -48,6 +52,7 @@ describe('updateDialog', () => {
 
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
+  const content = JSON.stringify(DIALOG_TEMPLATE, null, 2) + '\n';
 
   afterEach(() => {
     try {
@@ -58,11 +63,10 @@ describe('createFromTemplate', () => {
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialog(dialogName);
-    const newFile = dialogs.find((f: { name: string }) => f.name.startsWith(dialogName));
+    const dialogs = await proj.createDialog(dialogName, content);
+    const newFile = dialogs.find((f: { id: string }) => f.id === dialogName);
 
     expect(newFile).not.toBeUndefined();
-
     const fileContent = ((newFile as unknown) as FileInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
   });
@@ -121,11 +125,11 @@ describe('modify non exist files', () => {
 });
 
 describe('lg operation', () => {
-  afterEach(() => {
+  afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 
@@ -162,6 +166,13 @@ describe('lg operation', () => {
     }
   });
 
+  it('should throw error when lg content is invalid', async () => {
+    const id = 'root';
+    const content = '# hello \n hello3';
+
+    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
+  });
+
   it('should delete lg file and update index', async () => {
     const id = 'root';
     const lgFiles = await proj.removeLgFile(id);
@@ -175,11 +186,11 @@ describe('lg operation', () => {
 });
 
 describe('lu operation', () => {
-  afterEach(() => {
+  afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir} / root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
     } catch (err) {
-      // ignore
+      throw new Error(err);
     }
   });
 

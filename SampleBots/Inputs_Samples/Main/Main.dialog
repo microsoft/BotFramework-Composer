@@ -78,22 +78,38 @@
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "OAuthInput",
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "OAuthInput"
         }
-      ]
+      ],
+      "intent": "OAuthInput",
+      "$designer": {
+        "createdAt": "2019-07-11T06:07:25.376Z",
+        "updatedAt": "2019-07-11T06:07:25.409Z",
+        "id": "268314"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "CancelIntent",
       "steps": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:58:19.578Z",
+            "updatedAt": "2019-07-01T21:58:21.925Z",
+            "id": "068558"
+          },
+          "activity": "[bfdactivity-068558]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:58:18.063Z",
+        "updatedAt": "2019-07-01T21:58:18.080Z",
+        "id": "566255"
+      }
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
@@ -102,7 +118,12 @@
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-11T06:53:07.521Z",
+        "updatedAt": "2019-07-11T06:53:07.546Z",
+        "id": "487768"
+      }
     }
   ],
   "$schema": "../../app.schema",

@@ -16,11 +16,11 @@ using Microsoft.Bot.Builder.BotFramework;
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
     public interface IBotManager
-    { 
+    {
         IBotFrameworkHttpAdapter CurrentAdapter { get; }
-        IBot CurrentBot { get;  }
+        IBot CurrentBot { get; }
 
-        void SetCurrent(Stream fileStream, LuConfigFile luConfig = null);
+        void SetCurrent(Stream fileStream, LuConfigFile luConfig = null, string appId = null, string appPwd = null);
     }
 
     public class BotManager : IBotManager
@@ -57,15 +57,15 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
-            
+
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
             adapter
-                .UseStorage(storage)
-                .UseState(userState, conversationState)
-                .UseLanguageGeneration(resourceExplorer)
-                .UseDebugger(4712)
-                .UseResourceExplorer(resourceExplorer);
+              .UseStorage(storage)
+              .UseState(userState, conversationState)
+              .UseLanguageGeneration(resourceExplorer)
+              .UseDebugger(4712)
+              .UseResourceExplorer(resourceExplorer);
             adapter.OnTurnError = async (turnContext, exception) =>
             {
                 await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
@@ -78,7 +78,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             CurrentBot = new TestBot("Main.dialog", conversationState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
-        public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null)
+        public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null, string appId = null, string appPwd = null)
         {
             lock (locker)
             {
@@ -92,6 +92,10 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 {
                     AddLuisConfig(extractPath, luConfig);
                 }
+
+                
+                AddOAuthConfig(appId, appPwd);
+                
 
                 SetCurrent(extractPath);
             }
@@ -122,6 +126,28 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             }
         }
 
+        private void AddOAuthConfig(string appId, string appPwd)
+        {
+            if (string.IsNullOrEmpty(appId))
+            {
+                this.Config["MicrosoftAppId"] = string.Empty;
+            }
+            else
+            {
+                this.Config["MicrosoftAppId"] = appId;
+            }
+
+            if (string.IsNullOrEmpty(appPwd))
+            {
+                this.Config["MicrosoftAppPassword"] = string.Empty;
+            }
+            else
+            {
+                this.Config["MicrosoftAppPassword"] = appPwd;
+            }
+
+        }
+
         private string GenNewBotDir()
         {
             return System.Guid.NewGuid().ToString("N");
@@ -149,17 +175,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             ZipFile.ExtractToDirectory(filePath, finalDstPath);
             return finalDstPath;
         }
-
-        private string FindBotProjFile(string dir)
-        {
-            string[] projFiles = Directory.GetFiles(dir, "*.botproj");
-            if (projFiles.Length != 1)
-            {
-                throw new Exception("no bot proj file in zip file");
-            }
-            return projFiles[0];
-        }
-
 
         public static string ConvertPath(string relativePath)
         {

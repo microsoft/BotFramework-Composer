@@ -1,12 +1,9 @@
 import fs from 'fs';
 
-import { merge } from 'lodash';
-
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
-import DIALOG_TEMPLATE from './../../store/dialogTemplate.json';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
@@ -97,20 +94,21 @@ export class BotProject {
 
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogIndexer.getDialogs();
-    const mainDialog = dialogs.find(item => {
-      return item.name === 'Main';
-    });
+    const mainDialog = dialogs.find(item => item.isRoot);
     if (mainDialog !== undefined) {
-      mainDialog.content.$designer = { ...mainDialog.content.$designer, name, description };
+      mainDialog.content.$designer = {
+        ...mainDialog.content.$designer,
+        name,
+        description,
+      };
       await this.updateDialog('Main', mainDialog.content);
     }
   };
 
   public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
-    // TODO: replace name with id with dialog in next pass, to make in consistent across dialog, lg, lu
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.name === id);
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog === undefined) {
-      throw new Error(`no such dialog ${name}`);
+      throw new Error(`no such dialog ${id}`);
     }
 
     const relativePath = dialog.relativePath;
@@ -120,9 +118,8 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, dir: string = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    const content = JSON.stringify(merge({}, DIALOG_TEMPLATE), null, 2) + '\n';
 
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
@@ -133,12 +130,20 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
+    const parseResult = this.lgIndexer.parse(content);
+    if (parseResult.isValid === false) {
+      throw new Error(`update lg ${id} content is invalid, ${parseResult.error.Message}`);
+    }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    const parseResult = this.lgIndexer.parse(content);
+    if (parseResult.isValid === false) {
+      throw new Error(`create lg ${id} content is invalid, ${parseResult.error.Message}`);
+    }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
@@ -198,7 +203,8 @@ export class BotProject {
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
     // get destination storage client
     const dstStorage = StorageService.getStorageClient(locationRef.storageId);
-    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up existed bot proj
+    // ensure saveAs path isn't existed in dst storage, in order to cover or mess up
+    // existed bot proj
     if (await dstStorage.exists(locationRef.path)) {
       throw new Error('already have this folder, please give another name');
     }
@@ -219,8 +225,8 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  // create file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // create file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
@@ -237,8 +243,8 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  // update file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // update file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {
@@ -252,8 +258,8 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  // remove file in this project
-  // this function will gurantee the memory cache (this.files, all indexes) also gets updated
+  // remove file in this project this function will gurantee the memory cache
+  // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
     const index = this.files.findIndex(f => f.relativePath === relativePath);
     if (index === -1) {
@@ -358,10 +364,10 @@ export class BotProject {
       const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
 
       if (lgFile && lgExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred generator ${lgFile} not exist`);
+        throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
       }
       if (luFile && luExist === -1) {
-        throw new Error(`${dialog.name}.dialog referred recognizer ${luFile} not exist`);
+        throw new Error(`${dialog.id}.dialog referred recognizer ${luFile} not exist`);
       }
     }
   };

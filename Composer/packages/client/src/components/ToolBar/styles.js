@@ -11,6 +11,8 @@ export const headerSub = css`
 
 export const leftActions = css`
   position: relative;
+  display: flex;
+  align-items: stretch;
   height: 44px;
 `;
 

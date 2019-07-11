@@ -25,15 +25,30 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Successfully removed a todo named \"{dialog.todo}\""
+          "$designer": {
+            "createdAt": "2019-07-01T22:04:05.322Z",
+            "updatedAt": "2019-07-01T22:04:06.711Z",
+            "id": "725469"
+          },
+          "activity": "[bfdactivity-725469]"
         }
       ],
       "elseSteps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "\"{dialog.todo}\" is not in the Todo List"
+          "$designer": {
+            "createdAt": "2019-07-01T22:04:45.788Z",
+            "updatedAt": "2019-07-01T22:04:47.071Z",
+            "id": "549615"
+          },
+          "activity": "[bfdactivity-549615]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T22:04:06.138Z",
+        "updatedAt": "2019-07-01T22:04:06.144Z",
+        "id": "462031"
+      }
     }
   ],
   "$schema": "../../app.schema",

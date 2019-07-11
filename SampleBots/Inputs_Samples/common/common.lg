@@ -1,20 +1,21 @@
 # help
-- ```
+-```
     I can show you examples on how to use Steps, You can enter number 01-04
-    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput]
+    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput|OAuthInput]
 	01 - TextInput
 	02 - NumberInput
 	03 - ConfirmInput
 	04 - ChoiceInput
 	05 - AttachmentInput
 	06 - DateTimeInput
+    07 - OAuthInput
     ```
 
-
 # ShowImage(contentUrl, contentType)
-- ```
+-```
 You sent:
-[attachment=@{contentUrl} @{contentType}]
+[attachment=@{contentUrl}, @{contentType}]
+
 ```
 
 # ShowEmailSummary(user)
@@ -27,5 +28,41 @@ You sent:
 - ELSE:
   - You should not be here.
 
-  # ShowEmail(email)
+# ShowEmail(email)
 - {email.subject}
+
+# bfdactivity-068558
+-[help]
+
+# bfdactivity-587377
+-[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
+
+# bfdactivity-004212
+-You select: {user.style}
+
+# bfdactivity-458458
+-confirmation: {user.confirmed}
+
+# bfdactivity-828009
+-You entered: {user.date[0].value}
+
+# bfdactivity-303304
+-Hello, your age is {user.age}!
+
+# bfdactivity-284482
+-2 * 2.2 equals {user.result}, that's right!
+
+# bfdactivity-172233
+-2 * 2.2 equals {user.result}, that's wrong!
+
+# bfdactivity-538962
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-118486
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-509484
+-[help]
+
+# bfdactivity-991558
+-[ShowEmailSummary(user)]
