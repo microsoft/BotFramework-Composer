@@ -11,7 +11,7 @@ context('SwitchCondition', () => {
     cy.withinEditor('FormEditor', () => {
       cy.get('[data-testid="StepsFieldAdd"]').click();
       cy.getByText('Flow').click();
-      cy.getByText('Branch: Multi-path Switch').click();
+      cy.getByText('Branch: Switch').click();
     });
     // Focus switch condition in form editor
     cy.withinEditor('VisualEditor', () => {
@@ -35,17 +35,17 @@ context('SwitchCondition', () => {
       // So if a button is in a popup window, using { force: true } to button click can make the tests more stable.
       cy.getByText('Add New Step for Case1').click({ force: true });
       cy.getByText('Send Messages').click({ force: true });
-      cy.getByText('Send a single message').click({ force: true });
+      cy.getByText('Send an Activity').click({ force: true });
 
       // Edit array
       cy.getByText('Add New Step for Case1').click({ force: true });
       cy.getByText('Memory manipulation').click({ force: true });
-      cy.getByText('Edit an array property').click({ force: true });
+      cy.getByText('Edit an Array Property').click({ force: true });
 
       // Log step
       cy.getByText('Add New Step for Case1').click({ force: true });
       cy.getByText('Debugging').click({ force: true });
-      cy.getByText('Log a message to the console').click({ force: true });
+      cy.getByText('Log to console').click({ force: true });
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
@@ -80,11 +80,11 @@ context('SwitchCondition', () => {
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(0)
-        .should('contain.text', 'Microsoft.EditArray');
+        .should('contain.text', 'EditArray');
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(1)
-        .should('contain.text', 'Microsoft.LogStep');
+        .should('contain.text', 'LogStep');
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(2)
@@ -113,7 +113,7 @@ context('SwitchCondition', () => {
       cy.get('[role="separator"]')
         .should('have.length', 3)
         .eq(1)
-        .should('have.text', 'Case1');
+        .should('have.text', 'Branch: Case1');
 
       cy.wait(100);
 
@@ -132,7 +132,7 @@ context('SwitchCondition', () => {
       cy.get('[role="separator"]')
         .should('have.length', 2)
         .eq(1)
-        .should('have.text', 'Default');
+        .should('have.text', 'Default Branch');
     });
   });
 });
