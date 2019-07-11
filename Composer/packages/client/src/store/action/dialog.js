@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { dialogValidator } from '../../utils/dialogUtil';
+
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
@@ -24,6 +26,8 @@ export async function createDialog(dispatch, { id, content }) {
 }
 
 export async function updateDialog(dispatch, { id, content }) {
+  dialogValidator(content);
+
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, {
       id,
