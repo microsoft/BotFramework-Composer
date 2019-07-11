@@ -18,8 +18,7 @@ context('Creating a new bot', () => {
   });
 
   it('can create a bot from the ToDo template', () => {
-    cy.getByText('New').click();
-    cy.getByText('New Bot').click();
+    cy.get('[data-testid="homePage-ToolBar-New"]').click();
     cy.get('input[data-testid="Create from template"]').click({ force: true });
     cy.get('[data-testid="ToDoBot"]').click();
     cy.get('button[data-testid="NextStepButton"]').click();

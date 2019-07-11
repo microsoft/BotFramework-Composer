@@ -1,13 +1,14 @@
 # help
 -```
     I can show you examples on how to use Steps, You can enter number 01-04
-    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput]
+    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput|OAuthInput]
 	01 - TextInput
 	02 - NumberInput
 	03 - ConfirmInput
 	04 - ChoiceInput
 	05 - AttachmentInput
 	06 - DateTimeInput
+    07 - OAuthInput
     ```
 
 # ShowImage(contentUrl, contentType)
@@ -60,3 +61,8 @@ You sent:
 # bfdactivity-118486
 -Hello {user.name}, nice to talk to you!
 
+# bfdactivity-509484
+-[help]
+
+# bfdactivity-991558
+-[ShowEmailSummary(user)]

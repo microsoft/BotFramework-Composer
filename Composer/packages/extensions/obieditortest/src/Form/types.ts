@@ -24,6 +24,10 @@ export interface BFDFieldProps extends FieldProps {
 
 export interface BFDWidgetProps extends WidgetProps {
   formContext: FormContext;
+  options: {
+    label?: string | false;
+    enumOptions?: EnumOption[];
+  };
 }
 
 export interface SelectWidgetProps extends BFDWidgetProps {

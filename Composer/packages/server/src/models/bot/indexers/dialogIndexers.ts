@@ -2,6 +2,7 @@ import { has, uniq } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
+import { DialogRules } from '../dialogRules';
 
 import { FileInfo, Dialog } from './../interface';
 
@@ -85,6 +86,39 @@ export class DialogIndexer {
     return uniq(intents);
   }
 
+  // check all fields
+  private CheckFields(dialog: Dialog): string[] {
+    const errors: string[] = [];
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && has(DialogRules, value.$type)) {
+        const matchedCheckers = DialogRules[value.$type];
+        matchedCheckers.forEach(checker => {
+          const checkRes = checker.apply(null, [
+            {
+              path,
+              value,
+            },
+          ]);
+          if (checkRes) {
+            errors.push(checkRes);
+          }
+        });
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+    return errors;
+  }
+
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
@@ -99,11 +133,13 @@ export class DialogIndexer {
             const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const id = Path.basename(file.name, extName);
             const isRoot = id === 'Main';
+            const diagostics = this.CheckFields(dialogJson);
             const dialog = {
               id,
               isRoot,
               displayName: isRoot ? botName : id,
               content: dialogJson,
+              diagostics,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),

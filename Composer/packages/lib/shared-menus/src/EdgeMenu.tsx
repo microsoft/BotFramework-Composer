@@ -26,6 +26,7 @@ export const EdgeMenu = ({ onClick }) => {
           [
             DialogGroup.RESPONSE,
             DialogGroup.INPUT,
+            DialogGroup.BRANCHING,
             DialogGroup.STEP,
             DialogGroup.MEMORY,
             DialogGroup.CODE,

@@ -5,10 +5,18 @@
     {
       "$type": "Microsoft.NumberInput",
       "property": "user.age",
-      "alwaysPrompt": true,
-      "maxTurnCount": 2,
       "prompt": "What is your age?",
-      "invalidPrompt": "Please input a number."
+      "invalidPrompt": "Please input a number.",
+      "maxTurnCount": 2,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "outputFormat": "float",
+      "defaultLocale": "en-us",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:25.809Z",
+        "updatedAt": "2019-07-11T06:04:25.849Z",
+        "id": "416094"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -22,8 +30,17 @@
     {
       "$type": "Microsoft.NumberInput",
       "property": "user.result",
+      "prompt": "2 * 2.2 equals?",
+      "maxTurnCount": 2147483647,
       "alwaysPrompt": true,
-      "prompt": "2 * 2.2 equals?"
+      "allowInterruptions": false,
+      "outputFormat": "float",
+      "defaultLocale": "en-us",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:28.145Z",
+        "updatedAt": "2019-07-11T06:04:28.176Z",
+        "id": "890316"
+      }
     },
     {
       "$type": "Microsoft.IfCondition",

@@ -4,11 +4,16 @@
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
-      "condition": "dialog.token == null",
+      "$designer": {
+        "createdAt": "2019-07-11T06:08:01.812Z",
+        "updatedAt": "2019-07-11T06:08:04.221Z",
+        "id": "245482"
+      },
+      "condition": "user.token == null",
       "steps": [
         {
           "$type": "Microsoft.OAuthPrompt",
-          "ConnectionName": "msgraph",
+          "ConnectionName": "Outlook",
           "Title": "Log in",
           "Text": "Please log in to your email account",
           "Property": "user.token"
@@ -17,16 +22,26 @@
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
       "method": "GET",
+      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
       "header": {
         "Authorization": "Bearer {user.token.token}"
       },
-      "Property": "user.getGraphEmails"
+      "Property": "user.getGraphEmails",
+      "$designer": {
+        "createdAt": "2019-07-11T06:07:53.618Z",
+        "updatedAt": "2019-07-11T06:07:53.643Z",
+        "id": "518974"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "[ShowEmailSummary(user)]"
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:32.777Z",
+        "updatedAt": "2019-07-11T06:04:33.801Z",
+        "id": "991558"
+      },
+      "activity": "[bfdactivity-991558]"
     }
   ],
   "$schema": "../../app.schema",
