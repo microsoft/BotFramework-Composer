@@ -96,7 +96,7 @@ With this option you need to use [Yarn](https://yarnpkg.com) to build the Compos
 
 * Build and run Composer
 
-Open a new terminal windows. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **Composer** folder. Run the following commands:
+Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **Composer** folder. Run the following commands:
 ```
 yarn install
 ```
