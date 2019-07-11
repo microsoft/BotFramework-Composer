@@ -4,9 +4,17 @@
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:39.354Z",
+        "updatedAt": "2019-07-11T06:04:41.172Z",
+        "id": "077848"
+      },
       "property": "user.name",
+      "prompt": "Hello, I'm Zoidberg. What is your name?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
       "allowInterruptions": false,
-      "prompt": "Hello, I'm Zoidberg. What is your name?"
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.SendActivity",

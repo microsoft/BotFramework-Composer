@@ -3,6 +3,15 @@ import axios from 'axios';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
+export function updateOAuth(dispatch, oAuth) {
+  dispatch({
+    type: ActionTypes.UPDATE_OAUTH,
+    payload: {
+      oAuth,
+    },
+  });
+}
+
 export function setCreationFlowStatus(dispatch, creationFlowStatus) {
   dispatch({
     type: ActionTypes.SET_CREATION_FLOW_STATUS,
