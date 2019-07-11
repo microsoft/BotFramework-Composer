@@ -4,8 +4,17 @@
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
-      "prompt": "Please select a value from below:",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:01.752Z",
+        "updatedAt": "2019-07-11T06:04:06.880Z",
+        "id": "673028"
+      },
       "property": "user.style",
+      "prompt": "Please select a value from below:",
+      "maxTurnCount": "2147483647",
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "outputFormat": "value",
       "choices": [
         {
           "value": "Test1"
