@@ -36,6 +36,9 @@ const activityFields = {
   value: {
     'ui:widget': NullField,
   },
+  allowInterruptions: {
+    'ui:field': NullField,
+  },
 };
 
 export const uiSchema = {
@@ -56,6 +59,9 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     autoEndDialog: {
+      'ui:field': NullField,
+    },
+    generator: {
       'ui:field': NullField,
     },
     ...globalFields,
@@ -92,26 +98,26 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
-    'ui:order': ['*', 'steps'],
+    'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.Foreach': {
     Steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'IndexProperty', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'steps', '*'],
   },
   'Microsoft.ForeachPage': {
     Steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'PageSize', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'steps', '*'],
   },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
     // ...globalFields,  // we do not want to exclude the property field here
-    'ui:order': ['*', 'body'],
+    'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   'Microsoft.IfCondition': {
     elseSteps: {
@@ -203,6 +209,15 @@ export const uiSchema = {
     },
     outputBinding: {
       'ui:field': NullField,
+    },
+    choices: {
+      items: {
+        value: {
+          'ui:options': {
+            label: false,
+          },
+        },
+      },
     },
     ...activityFields,
     'ui:order': [

@@ -26,7 +26,7 @@ export const ObiTypes = {
 
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
-
+  AttachmentInput: 'Microsoft.AttachmentInput',
   Foreach: 'Microsoft.Foreach',
   ForeachPage: 'Microsoft.ForeachPage',
 
@@ -42,6 +42,8 @@ export const ObiTypes = {
   ReplaceDialog: 'Microsoft.ReplaceDialog',
   RepeatDialog: 'Microsoft.RepeatDialog',
   EndTurn: 'Microsoft.EndTurn',
+
+  EditSteps: 'Microsoft.EditSteps',
 
   EmitEvent: 'Microsoft.EmitEvent',
 

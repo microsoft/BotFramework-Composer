@@ -44,7 +44,7 @@ function getGitSha() {
   try {
     const sha = execSync('git rev-parse --short master');
     return sha;
-  } catch {
+  } catch (e) {
     return 'test';
   }
 }

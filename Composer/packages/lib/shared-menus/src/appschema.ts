@@ -1,5 +1,6 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
 import nanoid from 'nanoid/generate';
+import formatMessage from 'format-message';
 
 import { ConceptLabels } from './labelMap';
 
@@ -37,40 +38,36 @@ export const dialogGroups: DialogGroupsMap = {
       // 'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
-      'Microsoft.OAuthInput',
       'Microsoft.AttachmentInput',
       'Microsoft.DateTimeInput',
     ],
   },
   [DialogGroup.BRANCHING]: {
-    label: 'Decisions',
-    types: ['Microsoft.IfCondition', 'Microsoft.SwitchCondition'],
+    label: 'Flow',
+    types: ['Microsoft.IfCondition', 'Microsoft.SwitchCondition', 'Microsoft.Foreach', 'Microsoft.ForeachPage'],
   },
   [DialogGroup.MEMORY]: {
     label: 'Memory manipulation',
     types: ['Microsoft.SetProperty', 'Microsoft.InitProperty', 'Microsoft.DeleteProperty', 'Microsoft.EditArray'],
   },
   [DialogGroup.STEP]: {
-    label: 'Flow',
+    label: 'Dialogs',
     types: [
-      'Microsoft.IfCondition',
-      'Microsoft.SwitchCondition',
-      'Microsoft.Foreach',
-      'Microsoft.ForeachPage',
       'Microsoft.BeginDialog',
-      'Microsoft.EditSteps',
       'Microsoft.EndDialog',
       'Microsoft.CancelAllDialogs',
       'Microsoft.EndTurn',
       'Microsoft.RepeatDialog',
       'Microsoft.ReplaceDialog',
-      'Microsoft.EmitEvent',
+      'Microsoft.EditSteps',
     ],
   },
   [DialogGroup.CODE]: {
-    label: 'Roll your own code',
+    label: 'Integrations',
     types: [
       'Microsoft.HttpRequest',
+      'Microsoft.EmitEvent',
+      'Microsoft.OAuthInput',
       //  'Microsoft.CodeStep'
     ],
   },
@@ -113,7 +110,7 @@ export const createStepMenu = (
       const subMenu: IContextualMenuProps = {
         items: item.types.map($type => ({
           key: $type,
-          name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+          name: ConceptLabels[$type] && ConceptLabels[$type].title ? formatMessage(ConceptLabels[$type].title) : $type,
           $type: $type,
           $designer: {
             id: nanoid('1234567890', 6),
@@ -146,8 +143,8 @@ export const createStepMenu = (
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
       const menuItem: IContextualMenuItem = {
         key: item,
-        text: ConceptLabels[item],
-        name: ConceptLabels[item],
+        text: ConceptLabels[item].title,
+        name: ConceptLabels[item].title,
         $type: item,
         $designer: {
           id: nanoid('1234567890', 6),
