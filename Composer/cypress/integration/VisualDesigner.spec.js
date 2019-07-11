@@ -21,7 +21,7 @@ context('Visual Designer', () => {
       btns = cy.get('button[aria-label="Add"]');
       btns.last().click();
 
-      cy.getByText('Flow').click();
+      cy.getByText('Dialogs').click();
       cy.getByText('End Turn').click();
 
       cy.getByText('End Turn').should('exist');

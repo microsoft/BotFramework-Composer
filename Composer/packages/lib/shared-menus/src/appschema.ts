@@ -142,8 +142,8 @@ export const createStepMenu = (
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
       const menuItem: IContextualMenuItem = {
         key: item,
-        text: ConceptLabels[item],
-        name: ConceptLabels[item],
+        text: ConceptLabels[item].title,
+        name: ConceptLabels[item].title,
         $type: item,
         $designer: {
           id: nanoid('1234567890', 6),
