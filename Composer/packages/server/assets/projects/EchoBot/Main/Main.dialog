@@ -8,13 +8,14 @@
   "generator": "common.lg",
   "steps": [
     {
-      "$type": "Microsoft.TextInput",
-      "prompt": "Hello, I'm the echo bot.",
-      "property": "user.input"
+      "$type": "Microsoft.EndTurn"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "your input is : {user.input}"
+      "activity": "Echo: {turn.Activity.Text}"
+    },
+    {
+      "$type": "Microsoft.RepeatDialog"
     }
   ]
 }
