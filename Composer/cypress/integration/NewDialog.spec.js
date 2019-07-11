@@ -3,7 +3,7 @@
 context('Creating a new Dialog', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.openBot('ToDoBot');
+    cy.copyBot('ToDoBot', 'ToDoBotCopy');
   });
 
   it('can create a new dialog from toolbar', () => {
