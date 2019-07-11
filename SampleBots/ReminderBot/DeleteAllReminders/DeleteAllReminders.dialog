@@ -1,0 +1,21 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T08:30:59.324Z",
+    "updatedAt": "2019-07-09T03:34:50.539Z",
+    "id": "019160"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:34:53.780Z",
+        "updatedAt": "2019-07-10T07:39:58.632Z",
+        "id": "834313"
+      },
+      "activity": "Never reached here."
+    }
+  ]
+}
