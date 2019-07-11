@@ -17,7 +17,7 @@ interface TemplateData {
 const templates: TemplateData = {
   EchoBot: {
     name: 'Echo Bot',
-    description: 'A bot that echoes and respond back whatever message the user entered',
+    description: 'A bot that echoes and responds with whatever message the user entered',
   },
   EmptyBot: {
     name: 'Empty Bot',

@@ -157,7 +157,7 @@ export const templateContainer = css`
 export const templateContent = css`
   display: block;
   height: 242px;
-  width: 242px;
+  width: 260px;
   font-size: 24px;
   line-height: 32px;
   border-top: 10px solid #50e6ff;
@@ -169,8 +169,15 @@ export const templateContent = css`
 
 export const templateText = css`
   position: relative;
-  top: 88px;
+  top: 60px;
   left: 70px;
+`;
+
+export const templateDescription = css`
+  position: relative;
+  top: 75px;
+  left: 7px;
+  font-size: 15px;
 `;
 
 export const footerContainer = css`
