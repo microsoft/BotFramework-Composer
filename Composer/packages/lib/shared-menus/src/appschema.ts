@@ -39,6 +39,7 @@ export const dialogGroups: DialogGroupsMap = {
       'Microsoft.ChoiceInput',
       'Microsoft.OAuthInput',
       'Microsoft.AttachmentInput',
+      'Microsoft.DateTimeInput',
     ],
   },
   [DialogGroup.BRANCHING]: {

@@ -9,6 +9,8 @@ export const ConceptLabels = {
   'Microsoft.FloatInput': formatMessage('Type: Floating Point Number'),
   'Microsoft.IntegerInput': formatMessage('Type: Integer'),
   'Microsoft.NumberInput': formatMessage('Type: Any Number'),
+  'Microsoft.DateTimeInput': formatMessage('Type: Date'),
+  'Microsoft.OAuthInput': formatMessage('Type: OAuth'),
   'Microsoft.TextInput': formatMessage('Type: Text'),
   'Microsoft.SendActivity': formatMessage('Send a single message'),
   'Microsoft.BeginDialog': formatMessage('Begin a child dialog'),
@@ -41,6 +43,5 @@ export const ConceptLabels = {
   'Microsoft.Foreach': formatMessage('Branch: For each'),
   'Microsoft.ForeachPage': formatMessage('Branch: For each with paging'),
   'Microsoft.EditSteps': formatMessage('Edit dialog steps'),
-  'Microsoft.OAuthInput': formatMessage('Type: OAuth'),
   'Microsoft.DebugBreak': formatMessage('Debugging Breakpoint'),
 };
