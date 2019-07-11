@@ -14,7 +14,8 @@ export async function connectBot(dispatch, botName) {
         status: 'connected',
       },
     });
-    await reloadBot(dispatch, botName);
+    const response = await reloadBot(dispatch, botName);
+    return response;
   } catch (err) {
     dispatch({
       type: ActionTypes.CONNECT_BOT_FAILURE,
@@ -22,6 +23,7 @@ export async function connectBot(dispatch, botName) {
         error: err,
       },
     });
+    return { error: 'failed in connect with bot runtime' };
   }
 }
 
@@ -35,6 +37,7 @@ export async function reloadBot(dispatch, botName) {
         error: '',
       },
     });
+    return { status: response.status, error: '' };
   } catch (err) {
     dispatch({
       type: ActionTypes.RELOAD_BOT_FAILURE,
@@ -42,5 +45,6 @@ export async function reloadBot(dispatch, botName) {
         error: err.response.data.error,
       },
     });
+    return { error: err.response.data.error };
   }
 }
