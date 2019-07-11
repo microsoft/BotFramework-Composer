@@ -166,6 +166,13 @@ describe('lg operation', () => {
     }
   });
 
+  it('should throw error when lg content is invalid', async () => {
+    const id = 'root';
+    const content = '# hello \n hello3';
+
+    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
+  });
+
   it('should delete lg file and update index', async () => {
     const id = 'root';
     const lgFiles = await proj.removeLgFile(id);
