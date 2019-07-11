@@ -7,7 +7,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 
@@ -121,7 +121,9 @@ export const LGPage = props => {
     try {
       await actions.updateLgFile(payload);
     } catch (error) {
-      OpenAlertModal('Save Failed', error.message);
+      OpenAlertModal('Save Failed', error.message, {
+        style: DialogStyle.Console,
+      });
     }
   }
 

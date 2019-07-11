@@ -54,7 +54,7 @@ export function ShellApi() {
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
-  const updateLgTemplate = actions.updateLgTemplate;
+  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
@@ -71,12 +71,17 @@ export function ShellApi() {
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) =>
-      lgTemplateHandler(CREATE, { id, template, position }, event)
-    );
-    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
-      lgTemplateHandler(UPDATE, { id, templateName, template }, event)
-    );
+    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) => {
+      // this validation error can pass to extensions in api callback
+      validateLgTemplate(template);
+      // this update operation error cannot pass to extensions, due to debounce
+      // then shell can push an error to extension
+      lgTemplateHandler(CREATE, { id, template, position }, event);
+    });
+    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) => {
+      validateLgTemplate(template);
+      lgTemplateHandler(UPDATE, { id, templateName, template }, event);
+    });
     apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => validateLgTemplate({ Name, Body }));
     apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
       lgTemplateHandler(REMOVE, { id, templateName }, event)
