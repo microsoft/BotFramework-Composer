@@ -207,6 +207,15 @@ export const uiSchema = {
     outputBinding: {
       'ui:field': NullField,
     },
+    choices: {
+      items: {
+        value: {
+          'ui:options': {
+            label: false,
+          },
+        },
+      },
+    },
     ...activityFields,
     'ui:order': [
       'prompt',
