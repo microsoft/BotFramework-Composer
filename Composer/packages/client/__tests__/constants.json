@@ -1,8 +1,8 @@
 {
     "dialogs": [
         {
-            "id": 0,
-            "name": "Main",
+            "id": "Main",
+            "isRoot": true,
             "displayName": "ToDoBot",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -124,8 +124,8 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ToDoBot.main.dialog"
         },
         {
-            "id": 1,
-            "name": "AddToDo",
+            "id": "AddToDo",
+            "isRoot": false,
             "displayName": "AddToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -231,8 +231,8 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/AddToDo.dialog"
         },
         {
-            "id": 2,
-            "name": "ClearToDos",
+            "id": "ClearToDos",
+            "isRoot": false,
             "displayName": "ClearToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -274,8 +274,8 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ClearToDos.dialog"
         },
         {
-            "id": 3,
-            "name": "DeleteToDo",
+            "id": "DeleteToDo",
+            "isRoot": false,
             "displayName": "DeleteToDo",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -332,8 +332,8 @@
             "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/DeleteToDo.dialog"
         },
         {
-            "id": 4,
-            "name": "ShowToDos",
+            "id": "ShowToDos",
+            "isRoot": false,
             "displayName": "ShowToDos",
             "content": {
                 "$type": "Microsoft.AdaptiveDialog",
@@ -413,18 +413,5 @@
                 }
             ]
         }
-    ],
-    "botFile": {
-        "name": "bot.botproj",
-        "content": {
-            "services": [],
-            "files": [
-                "*.dialog",
-                "*.lg"
-            ],
-            "entry": "ToDoBot.main.dialog"
-        },
-        "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/bot.botproj",
-        "relativePath": "bot.botproj"
-    }
+    ]
 }

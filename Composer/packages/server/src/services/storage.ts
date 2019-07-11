@@ -3,6 +3,10 @@ import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
 
+const fileBlacklist = ['.DS_Store'];
+const isValidFile = (file: string) => {
+  return fileBlacklist.filter(badFile => badFile === file).length === 0;
+};
 class StorageService {
   private STORE_KEY = 'storageConnections';
   private storageConnections: StorageConnection[] = [];
@@ -81,6 +85,9 @@ class StorageService {
         }
         const childAbsPath = Path.join(dirPath, childName);
         const childStat = await storage.stat(childAbsPath);
+        if (!isValidFile(childName)) {
+          return;
+        }
         return {
           name: childName,
           type: childStat.isDir ? 'folder' : 'file',

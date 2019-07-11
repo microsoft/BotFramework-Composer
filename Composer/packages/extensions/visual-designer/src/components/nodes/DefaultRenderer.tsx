@@ -40,9 +40,6 @@ const ContentKeyByTypes: {
     [key: string]: string;
   };
 } = {
-  [ObiTypes.SendActivity]: {
-    label: 'activity',
-  },
   [ObiTypes.EditArray]: {
     label: 'changeType',
     details: 'arrayProperty',
@@ -69,6 +66,14 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.SwitchCondition]: {
     label: 'condition',
+  },
+  [ObiTypes.ForeachDetail]: {
+    header: 'For Each',
+    label: 'listProperty',
+  },
+  [ObiTypes.ForeachPageDetail]: {
+    header: 'For Each Page',
+    label: 'listProperty',
   },
   [ObiTypes.TextInput]: {
     label: 'prompt',

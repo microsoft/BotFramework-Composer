@@ -37,7 +37,7 @@ export default function NewLgFileModal(props) {
       return;
     }
 
-    onSubmit({ ...formData });
+    onSubmit({ ...formData, id: formData.name });
   };
 
   return (

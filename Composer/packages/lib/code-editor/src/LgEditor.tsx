@@ -8,8 +8,10 @@ const placeholder = `> To learn more about the LG file format, read the document
 > ${LG_HELP}`;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LgEditorProps extends BaseEditorProps {}
+interface LgEditorProps extends BaseEditorProps {
+  hidePlaceholder: boolean;
+}
 
 export function LgEditor(props: LgEditorProps) {
-  return <BaseEditor placeholder={placeholder} {...props} />;
+  return <BaseEditor placeholder={props.hidePlaceholder ? undefined : placeholder} {...props} />;
 }

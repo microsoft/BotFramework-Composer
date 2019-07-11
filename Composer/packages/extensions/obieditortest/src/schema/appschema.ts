@@ -46,7 +46,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -152,7 +152,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -204,7 +204,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -226,7 +226,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -241,7 +241,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -288,7 +288,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         dialog: {
           $type: 'Microsoft.IDialog',
@@ -348,7 +348,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -416,7 +416,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -465,11 +465,11 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
-          type: 'number',
+          type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: '2147483647',
-          examples: ['3'],
+          default: 0,
+          examples: [3],
         },
         validations: {
           type: 'array',
@@ -490,7 +490,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -499,14 +499,14 @@ export const appschema: JSONSchema6 = {
           description:
             'If set to true this will always prompt the user regardless if you already have the value or not.',
           default: false,
-          examples: ['false'],
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
           default: true,
-          examples: ['true'],
+          examples: [true],
         },
         outputFormat: {
           type: 'string',
@@ -516,8 +516,10 @@ export const appschema: JSONSchema6 = {
           default: 'value',
         },
         choices: {
+          title: 'Choices',
           type: 'array',
           items: {
+            title: 'Choice',
             type: 'object',
             properties: {
               value: {
@@ -525,12 +527,13 @@ export const appschema: JSONSchema6 = {
                 title: 'Value',
                 description: 'the value to return when selected.',
               },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-                additionalProperties: true,
-              },
+              // TODO: Re-enable card actions when we are better equipped to provide a UI that is foolproof
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              //   additionalProperties: true,
+              // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
@@ -546,7 +549,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Append Choices',
           description: 'Compose an output activity containing a set of choices',
-          default: 'true',
+          default: true,
         },
         defaultLocale: {
           type: 'string',
@@ -646,7 +649,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -698,7 +701,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -720,7 +723,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -735,7 +738,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         defaultLocale: {
@@ -844,7 +847,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -883,7 +886,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -929,7 +932,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         changeType: {
           type: 'string',
@@ -993,15 +996,15 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
-        ChangeType: {
+        changeType: {
           type: 'string',
           title: 'Change Type',
           description: 'The change type to apply to current dialog',
           enum: ['InsertSteps', 'InsertStepsBeforeTags', 'AppendSteps', 'EndSequence', 'ReplaceSequence'],
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute.',
@@ -1047,23 +1050,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         eventName: {
           title: 'Event Name',
           description: 'The name of event to emit.',
-          enum: [
-            'beginDialog',
-            'consultDialog',
-            'cancelDialog',
-            'activityReceived',
-            'recognizedIntent',
-            'unknownIntent',
-            'stepsStarted',
-            'stepsSaved',
-            'stepsEnded',
-            'stepsResumed',
-          ],
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         eventValue: {
           type: 'object',
@@ -1113,7 +1106,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -1159,7 +1152,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -1198,7 +1191,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
@@ -1272,16 +1265,16 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
-        ListProperty: {
+        listProperty: {
           $role: 'expression',
           title: 'ListProperty',
           description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute',
@@ -1290,7 +1283,7 @@ export const appschema: JSONSchema6 = {
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        IndexProperty: {
+        indexProperty: {
           $role: 'memoryPath',
           title: 'Index Property',
           description: 'The memory path which refers to the index of the item',
@@ -1298,7 +1291,7 @@ export const appschema: JSONSchema6 = {
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
-        ValueProperty: {
+        valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
           description: 'The memory path which refers to the value of the item',
@@ -1343,16 +1336,16 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
-        ListProperty: {
+        listProperty: {
           $role: 'expression',
           title: 'ListProperty',
           description: 'Expression to evaluate.',
           examples: ['user.todoList'],
           type: 'string',
         },
-        Steps: {
+        steps: {
           type: 'array',
           title: 'Steps',
           description: 'Steps to execute',
@@ -1361,13 +1354,13 @@ export const appschema: JSONSchema6 = {
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        PageSize: {
+        pageSize: {
           type: 'integer',
           title: 'Page Size',
           description: 'The page size',
           default: 10,
         },
-        ValueProperty: {
+        valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
           description: 'The memory path which refers to the value of the item',
@@ -1412,7 +1405,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         method: {
           type: 'string',
@@ -1748,7 +1741,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         condition: {
           $role: 'expression',
@@ -1812,7 +1805,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -1865,7 +1858,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
@@ -1933,7 +1926,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       patternProperties: {
@@ -1972,7 +1965,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         text: {
           type: 'string',
@@ -2023,7 +2016,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         applicationId: {
           type: 'string',
@@ -2071,7 +2064,7 @@ export const appschema: JSONSchema6 = {
     //     $designer: {
     //       title: '$designer',
     //       type: 'object',
-    //       description: 'Extra information for the Bot Framework Designer.',
+    //       description: 'Extra information for the Bot Framework Composer.',
     //     },
     //     languagePolicy: {
     //       $type: 'Microsoft.ILanguagePolicy',
@@ -2126,7 +2119,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -2178,7 +2171,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2200,7 +2193,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -2215,7 +2208,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -2268,7 +2261,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -2338,7 +2331,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         intents: {
           type: 'object',
@@ -2388,7 +2381,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -2427,7 +2420,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         dialog: {
           $type: 'Microsoft.IDialog',
@@ -2485,7 +2478,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
@@ -2539,7 +2532,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         activity: {
           $type: 'Microsoft.IActivityTemplate',
@@ -2584,7 +2577,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -2638,7 +2631,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         condition: {
           $role: 'expression',
@@ -2719,7 +2712,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
@@ -2771,7 +2764,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 0,
           examples: [3],
         },
         validations: {
@@ -2793,7 +2786,7 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
@@ -2808,7 +2801,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         outputFormat: {
@@ -2855,7 +2848,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         name: {
           type: 'string',
@@ -2912,7 +2905,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',

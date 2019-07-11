@@ -7,11 +7,15 @@ const projectFiles = ['bot', 'botproj'];
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botName = response.data.botName;
-  state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.luStatus = response.data.luStatus;
+  return state;
+};
+
+const getRecentProjectsSuccess = (state, { response }) => {
+  state.recentProjects = response.data;
   return state;
 };
 
@@ -36,21 +40,12 @@ const updateLuTemplate = (state, { response }) => {
   return state;
 };
 
-const updateProjFile = (state, { response }) => {
-  state.botProjFile = response.data.botFile;
-  return state;
-};
-
 const setBotStatus = (state, { status }) => {
   return (state.botStatus = status);
 };
 
 const getStoragesSuccess = (state, { response }) => {
   return (state.storages = response.data);
-};
-
-const setStorageExplorerStatus = (state, { status }) => {
-  return (state.storageExplorerStatus = status);
 };
 
 const getStorageFileSuccess = (state, { response }) => {
@@ -121,16 +116,25 @@ const setBotLoadErrorMsg = (state, { error }) => {
   return (state.botLoadErrorMsg = error);
 };
 
+const setCreationFlowStatus = (state, { creationFlowStatus }) => {
+  return (state.creationFlowStatus = creationFlowStatus);
+};
+
+const saveTemplateId = (state, { templateId }) => {
+  return (state.templateId = templateId);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
-  [ActionTypes.SET_STORAGEEXPLORER_STATUS]: setStorageExplorerStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
-  [ActionTypes.UPDATE_PROJFILE__SUCCESS]: updateProjFile,
+  [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
+  [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
   [ActionTypes.FOCUS_TO]: focusTo,

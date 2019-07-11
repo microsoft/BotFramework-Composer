@@ -1,28 +1,50 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "prompt": "Please select a value from below:",
+      "property": "user.style",
+      "choices": [
         {
-            "$type": "Microsoft.ChoiceInput",
-            "property": "user.style",
-            "choices": [
-                {
-                    "value": "Test1"
-                },
-                {
-                    "value": "Test2"
-                },
-                {
-                    "value": "Test3"
-                }
-            ],
-            "prompt": "Please select a value from below:",
-            "style": "List",
-            "alwaysPrompt": true
+          "value": "Test1"
         },
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "You select: {user.style}"
+          "value": "Test2"
+        },
+        {
+          "value": "Test3"
         }
-    ]
+      ],
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
+      "style": "List",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      }
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:01.216Z",
+        "updatedAt": "2019-07-01T21:59:03.940Z",
+        "id": "004212"
+      },
+      "activity": "[bfdactivity-004212]"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:13.382Z",
+    "updatedAt": "2019-07-03T06:48:13.408Z",
+    "id": "952602"
+  }
 }

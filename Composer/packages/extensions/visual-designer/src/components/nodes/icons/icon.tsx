@@ -54,6 +54,7 @@ const svgByIconName = {
 export const Icon = ({ icon, color, size = 18, fill = 'white' }) =>
   svgByIconName[icon] ? (
     <span
+      role="icon"
       style={{
         transform: `scale(${size / 18})`,
         width: 18,

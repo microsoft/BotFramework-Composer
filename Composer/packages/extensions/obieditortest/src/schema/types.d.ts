@@ -7,7 +7,7 @@ interface BaseSchema {
   $id?: string;
   /** Copy the definition by id from a .dialog file. */
   $copy?: string;
-  /** Extra information for the Bot Framework Designer. */
+  /** Extra information for the Bot Framework Composer. */
   $designer?: OpenObject;
 }
 

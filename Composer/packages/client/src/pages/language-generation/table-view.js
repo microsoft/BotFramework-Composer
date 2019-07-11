@@ -61,9 +61,9 @@ export default function TableView(props) {
     }
   }, [lgFile, activeDialog]);
 
-  function navigateToDialog(name) {
+  function navigateToDialog(id) {
     clearNavHistory();
-    navTo(`${name}#`);
+    navTo(`${id}#`);
     navigate('/');
   }
 
@@ -157,7 +157,7 @@ export default function TableView(props) {
       templates.forEach(template => {
         templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
           if (dialog.lgTemplates.indexOf(template.Name) !== -1) {
-            result.push(dialog.name);
+            result.push(dialog.id);
           }
           return result;
         }, []);
@@ -171,10 +171,10 @@ export default function TableView(props) {
         maxWidth: 200,
         data: 'string',
         onRender: item => {
-          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(name => {
+          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={name} onClick={() => navigateToDialog(name)}>
-                <Link>{name}</Link>
+              <div key={id} onClick={() => navigateToDialog(id)}>
+                <Link>{id}</Link>
               </div>
             );
           });

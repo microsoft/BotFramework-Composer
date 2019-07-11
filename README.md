@@ -1,11 +1,11 @@
 
-# Microsoft Bot Framework Designer
+# Microsoft Bot Framework Composer
 
 [![Build Status](https://fuselabs.visualstudio.com/Composer/_apis/build/status/ComposerCI/Composer-CI?branchName=master)](https://fuselabs.visualstudio.com/Composer/_build/latest?definitionId=516&branchName=master)
 
 ## Overview 
 
-Bot Framework Designer provides a tool for 1st and 3rd party professional conversation creators with an extensible framework to build compelling Conversational AI solutions for Microsoft customers. 
+Bot Framework Composer provides a tool for 1st and 3rd party professional conversation creators with an extensible framework to build compelling Conversational AI solutions for Microsoft customers. 
 
 It provides 
 * a professional tool to enables multi-disciplinary team of professional conversation creators to create, edit and refine dialogs 

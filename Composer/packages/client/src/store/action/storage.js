@@ -2,27 +2,18 @@ import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-export async function setStorageExplorerStatus(dispatch, status) {
-  dispatch({
-    type: ActionTypes.SET_STORAGEEXPLORER_STATUS,
-    payload: { status },
-  });
-}
-
 export async function fetchStorages(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
     return response.data;
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_STORAGE_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
 }
 
@@ -40,14 +31,12 @@ export async function addNewStorage(dispatch, storageData) {
     const response = await axios.post(`${BASEURL}/storages`, storageData);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_STORAGE_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
 }
 
@@ -57,14 +46,12 @@ export async function fetchStorageByName(dispatch, fileName) {
     const response = await axios.get(`${BASEURL}/storage/${fileName}`);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_STORAGE_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
 }
 
@@ -72,17 +59,23 @@ export async function fetchFolderItemsByPath(dispatch, id, path) {
   try {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
-      payload: { status: 'pending' },
+      payload: {
+        status: 'pending',
+      },
     });
     const response = await axios.get(`${BASEURL}/storages/${id}/blobs/${path}`);
     dispatch({
       type: ActionTypes.GET_STORAGEFILE_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
-      payload: { status: 'failure' },
+      payload: {
+        status: 'failure',
+      },
       error: err,
     });
   }
