@@ -16,12 +16,7 @@ export async function connectBot(dispatch, botName) {
     });
     await reloadBot(dispatch, botName);
   } catch (err) {
-    dispatch({
-      type: ActionTypes.CONNECT_BOT_FAILURE,
-      payload: {
-        error: err,
-      },
-    });
+    throw new Error(err.response.data.error);
   }
 }
 
@@ -36,11 +31,6 @@ export async function reloadBot(dispatch, botName) {
       },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.RELOAD_BOT_FAILURE,
-      payload: {
-        error: err.response.data.error,
-      },
-    });
+    throw new Error(err.response.data.error);
   }
 }
