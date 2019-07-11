@@ -519,7 +519,7 @@ export const appschema: JSONSchema6 = {
           title: 'Choices',
           type: 'array',
           items: {
-            title: 'Choice',
+            title: 'Value',
             type: 'object',
             properties: {
               value: {

@@ -1,8 +1,8 @@
 # LuisToDoHelp
-
 -```
-You can add and remove items from any list - Add bananna to shopping list - Remove hat from packing list
-
+   You can add and remove items from any list 
+      - Add bananna to shopping list 
+      - Remove hat from packing list
 ```
 
 # showSingleList(x)

@@ -36,6 +36,9 @@ const activityFields = {
   value: {
     'ui:widget': NullField,
   },
+  allowInterruptions: {
+    'ui:field': NullField,
+  },
 };
 
 export const uiSchema = {
@@ -56,6 +59,9 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     autoEndDialog: {
+      'ui:field': NullField,
+    },
+    generator: {
       'ui:field': NullField,
     },
     ...globalFields,
@@ -203,6 +209,15 @@ export const uiSchema = {
     },
     outputBinding: {
       'ui:field': NullField,
+    },
+    choices: {
+      items: {
+        value: {
+          'ui:options': {
+            label: false,
+          },
+        },
+      },
     },
     ...activityFields,
     'ui:order': [
