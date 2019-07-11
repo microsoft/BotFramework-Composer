@@ -178,6 +178,7 @@ export const Home = () => {
                   }}
                 >
                   <div css={home.templateText}>{template.name}</div>
+                  <div css={home.templateDescription}>{template.description}</div>
                 </div>
               );
             })}
