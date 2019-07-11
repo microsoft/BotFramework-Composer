@@ -16,6 +16,7 @@ const AlertDialog = props => {
   return (
     <Dialog
       hidden={false}
+      minWidth={500}
       onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,

@@ -55,9 +55,12 @@ export const TestController = () => {
       return result;
     }, []);
     if (dialogErrors.length !== 0) {
-      const firstError = dialogErrors[0];
-      const title = `Error found in ${firstError.id}.dialog`;
-      const subTitle = firstError.diagostics.join('\n');
+      const title = `StaticValidationError`;
+      const subTitle = dialogErrors.reduce((msg, dialog) => {
+        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagostics.join('\n')} \n`;
+        return msg;
+      }, '');
+
       OpenAlertModal(title, subTitle, {
         style: DialogStyle.Console,
       });

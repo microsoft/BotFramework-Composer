@@ -7,7 +7,7 @@ interface CheckerFunc {
 function Exist(name: string): CheckerFunc {
   return node => {
     if (has(node.value, name)) return '';
-    return `Missing Required field at ${node.path}.${name}`;
+    return `In ${node.path}: "${node.value.$type}" field "${name}" is missing or empty`;
   };
 }
 
