@@ -142,7 +142,13 @@ export const TestController = () => {
               {errorMessage.type === 'luis' ? (
                 <PrimaryButton onClick={() => setModalOpen(true)} text={formatMessage('Try again')} />
               ) : (
-                <PrimaryButton onClick={() => handleLoadBot()} text={formatMessage('Try again')} />
+                <PrimaryButton
+                  onClick={() => {
+                    setCalloutVisible(false);
+                    handleLoadBot();
+                  }}
+                  text={formatMessage('Try again')}
+                />
               )}
               <DefaultButton onClick={() => setCalloutVisible(false)} text={formatMessage('Cancel')} />
             </Stack>
