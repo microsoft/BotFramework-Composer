@@ -40,13 +40,13 @@ export const TestController = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState({ error: '', type: '' });
+  const [error, setError] = useState({ title: '', message: '' });
   const botActionRef = useRef(null);
   const { botName, botStatus, luFiles, luStatus } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
   const connected = botStatus === 'connected';
 
-  function handleClick() {
+  async function handleClick() {
     const config = LuisStorage.get(botName);
     const files = luFiles.filter(f => !!f.content);
     const updated =
@@ -61,33 +61,36 @@ export const TestController = () => {
         setModalOpen(true);
         return;
       } else {
-        handlePublish(config);
+        await handlePublish(config);
+        await handleLoadBot();
       }
     } else {
-      handleLoadBot();
+      await handleLoadBot();
     }
   }
 
   async function handlePublish(config) {
     setFetchState(STATE.PUBLISHING);
-    const response = await publishLuis(config);
-    setFetchState(STATE.SUCCESS);
-    if (response.error === '') {
-      await handleLoadBot();
-    } else {
-      setErrorMessage(response);
+    try {
+      await publishLuis(config);
+    } catch (err) {
+      setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
+    } finally {
+      setFetchState(STATE.SUCCESS);
     }
   }
 
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
-    const response = await (connected ? reloadBot(botName) : connectBot(botName));
-    if (response && response.error !== '') {
-      setErrorMessage(response);
+    try {
+      await (connected ? reloadBot(botName) : connectBot(botName));
+    } catch (err) {
+      setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
+    } finally {
+      setFetchState(STATE.SUCCESS);
     }
-    setFetchState(STATE.SUCCESS);
   }
 
   return (
@@ -128,10 +131,10 @@ export const TestController = () => {
         >
           <div css={calloutContainer}>
             <p css={calloutLabel} id="callout-label-id">
-              {errorMessage.type === 'luis' ? Text.LUISDEPLOYFAILURE : Text.CONNECTBOTFAILURE}
+              {error.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {formatMessage(errorMessage.error)}
+              {formatMessage(error.message)}
             </p>
             <Stack
               horizontal
@@ -139,17 +142,13 @@ export const TestController = () => {
                 childrenGap: 'm',
               }}
             >
-              {errorMessage.type === 'luis' ? (
-                <PrimaryButton onClick={() => setModalOpen(true)} text={formatMessage('Try again')} />
-              ) : (
-                <PrimaryButton
-                  onClick={() => {
-                    setCalloutVisible(false);
-                    handleLoadBot();
-                  }}
-                  text={formatMessage('Try again')}
-                />
-              )}
+              <PrimaryButton
+                onClick={() => {
+                  setCalloutVisible(false);
+                  handleClick();
+                }}
+                text={formatMessage('Try again')}
+              />
               <DefaultButton onClick={() => setCalloutVisible(false)} text={formatMessage('Cancel')} />
             </Stack>
           </div>
