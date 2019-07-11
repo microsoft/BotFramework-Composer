@@ -26,21 +26,6 @@ const renderTitle = (item: MicrosoftIRule) => {
 
 export function RulesField(props: FieldProps) {
   const overrides = setOverridesOnField(props.formContext, 'RulesField');
-  const fieldOverrides = get(props.formContext.editorSchema, `content.SDKOverrides`);
-
-  // map SDK names to nicer labes from the editor schema
-  if (props && props.formData && props.formData.length) {
-    for (let i = 0; i < props.formData.length; i++) {
-      if (fieldOverrides[props.formData[i].$type] && fieldOverrides[props.formData[i].$type].title) {
-        if (!props.formData[i].$designer) {
-          props.formData[i].$designer = {};
-        }
-        if (!props.formData[i].$designer.name) {
-          props.formData[i].$designer.name = fieldOverrides[props.formData[i].$type].title;
-        }
-      }
-    }
-  }
 
   return (
     <TableField<MicrosoftIRule>
