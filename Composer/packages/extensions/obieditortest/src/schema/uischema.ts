@@ -89,7 +89,7 @@ export const uiSchema = {
     ...globalFields,
   },
   'Microsoft.EditSteps': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
   },
