@@ -61,6 +61,9 @@ export const uiSchema = {
     autoEndDialog: {
       'ui:field': NullField,
     },
+    generator: {
+      'ui:field': NullField,
+    },
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
@@ -206,6 +209,15 @@ export const uiSchema = {
     },
     outputBinding: {
       'ui:field': NullField,
+    },
+    choices: {
+      items: {
+        value: {
+          'ui:options': {
+            label: false,
+          },
+        },
+      },
     },
     ...activityFields,
     'ui:order': [
