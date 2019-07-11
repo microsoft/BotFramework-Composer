@@ -12,6 +12,7 @@ import { Tree } from './../../components/Tree/index';
 import { Conversation } from './../../components/Conversation/index';
 import { title, fileList, contentEditor, linkItem } from './styles';
 import { MainContent } from './../../components/MainContent/index';
+import { TestController } from './../../TestController';
 
 const links = [
   { key: 'dialog-settings', name: formatMessage('Dialog settings') },
@@ -41,9 +42,17 @@ export const SettingPage = () => {
     );
   }
 
+  const toolbarItems = [
+    {
+      type: 'element',
+      element: <TestController />,
+      align: 'right',
+    },
+  ];
+
   return (
     <Fragment>
-      <ToolBar />
+      <ToolBar toolbarItems={toolbarItems} />
       <MainContent>
         <Fragment>
           <div css={fileList}>
