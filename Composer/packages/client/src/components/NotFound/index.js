@@ -1,7 +1,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
+
 import { BASEPATH } from '../../constants';
+
 import { notfoundbody, notfoundcontainer, description, notfoundicon } from './style';
 
 export const NotFound = props => {
