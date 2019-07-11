@@ -7,7 +7,7 @@ context('check language understanding page', () => {
   });
 
   it('can open language understanding page', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding');
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
 
     // left nav tree
     cy.contains('ToDoLuisBot');
