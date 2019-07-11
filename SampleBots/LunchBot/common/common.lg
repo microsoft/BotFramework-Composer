@@ -1,5 +1,0 @@
-> To learn more about the LG file format, read the documentation at
-> https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md
-
-# list(spots)
-- { join(foreach(spots, spot, spot), "," , "and") }
