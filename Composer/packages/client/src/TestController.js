@@ -20,13 +20,16 @@ import { LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
-const openInEmulator = url => {
+const openInEmulator = (url, authSettings) => {
+  console.log('eyyyy', url, authSettings);
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
   // and start up the emulator
   const i = document.createElement('iframe');
   i.style.display = 'none';
   i.onload = () => i.parentNode.removeChild(i);
-  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}`;
+  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&MicrosoftAppId=${
+    authSettings.MicrosoftAppId
+  }&MicrosoftAppPassword=${authSettings.MicrosoftAppPassword}`;
   document.body.appendChild(i);
 };
 
@@ -44,7 +47,7 @@ export const TestController = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus, dialogs } = state;
+  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
   const connected = botStatus === 'connected';
 
@@ -131,7 +134,7 @@ export const TestController = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+            onClick={() => openInEmulator('http://localhost:3979/api/messages', oAuth)}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>
