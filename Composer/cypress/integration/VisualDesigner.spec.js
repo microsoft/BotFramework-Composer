@@ -12,19 +12,19 @@ context('Visual Designer', () => {
       btns.first().click();
 
       cy.getByText('Ask a Question').click();
-      cy.getByText('Type: Text').click();
+      cy.getByText('Prompt for text').click();
 
       cy.get('.node-renderer-container--focused').within(() => {
-        cy.getByText('TextInput').should('exist');
+        cy.getByText('Prompt for text').should('exist');
       });
 
       btns = cy.get('button[aria-label="Add"]');
       btns.last().click();
 
-      cy.getByText('Flow').click();
-      cy.getByText('End this turn').click();
+      cy.getByText('Dialogs').click();
+      cy.getByText('End Turn').click();
 
-      cy.getByText('EndTurn').should('exist');
+      cy.getByText('End Turn').should('exist');
     });
   });
 });
