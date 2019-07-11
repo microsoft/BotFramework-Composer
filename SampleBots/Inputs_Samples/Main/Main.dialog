@@ -110,6 +110,20 @@
         "updatedAt": "2019-07-01T21:58:18.080Z",
         "id": "566255"
       }
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-11T06:53:07.521Z",
+        "updatedAt": "2019-07-11T06:53:07.546Z",
+        "id": "487768"
+      }
     }
   ],
   "$schema": "../../app.schema",
@@ -117,15 +131,5 @@
     "createdAt": "2019-07-03T08:57:58.939Z",
     "updatedAt": "2019-07-03T08:57:58.996Z",
     "id": "400830"
-  },
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "id": "509484",
-        "updatedAt": "2019-07-11T06:03:03.398Z"
-      },
-      "activity": "[bfdactivity-509484]"
-    }
-  ]
+  }
 }
