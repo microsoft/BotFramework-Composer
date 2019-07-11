@@ -89,34 +89,36 @@ describe('insert', () => {
   });
 });
 
-describe('deleteNode', () => {
+describe('delete node flow', () => {
   let dialog, path, removeLgTemplate;
   beforeEach(() => {
     dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
     removeLgTemplate = jest.fn();
   });
 
-  it('when data does not exist', () => {
-    path = null;
-    const result = deleteNode(dialog, path, removeLgTemplate);
+  describe('when target node does not exist', () => {
+    it('should not change the data', () => {
+      path = null;
+      const result = deleteNode(dialog, path, removeLgTemplate);
 
-    expect(result).toEqual(dialog);
+      expect(result).toEqual(dialog);
+    });
   });
 
-  describe('when data exist', () => {
-    it('currentKey type is number', () => {
+  describe('when target node exists', () => {
+    it("should delete node successfully when targetNode's currentKey type is number", () => {
       path = 'foo.bar[0]';
       const result = deleteNode(dialog, path, removeLgTemplate);
 
       expect(result).toEqual({ foo: { bar: [{ $type: 'secondOne' }] } });
     });
-    it('currentKey type is string', () => {
+    it("should delete node successfully when targetNode's currentKey type is string", () => {
       path = 'foo.bar';
       const result = deleteNode(dialog, path, removeLgTemplate);
 
       expect(result).toEqual({ foo: {} });
     });
-    it("removeLgTemplate be called when deleteNode's $type is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
+    it("removeLgTemplate function should be called when targetNode's $type is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
       dialog.foo.activityNode = { $type: 'Microsoft.SendActivity', activity: '[bfdactivity-a]' };
       path = 'foo.activityNode';
       const result = deleteNode(dialog, path, removeLgTemplate);
