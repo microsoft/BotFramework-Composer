@@ -93,10 +93,9 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                     AddLuisConfig(extractPath, luConfig);
                 }
 
-                if (!string.IsNullOrEmpty(appId) && !string.IsNullOrEmpty(appPwd))
-                {
-                    AddOAuthConfig(appId, appPwd);
-                }
+                
+                AddOAuthConfig(appId, appPwd);
+                
 
                 SetCurrent(extractPath);
             }
@@ -129,8 +128,24 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         private void AddOAuthConfig(string appId, string appPwd)
         {
-            this.Config["MicrosoftAppId"] = appId;
-            this.Config["MicrosoftAppPassword"] = appPwd;
+            if (string.IsNullOrEmpty(appId))
+            {
+                this.Config["MicrosoftAppId"] = string.Empty;
+            }
+            else
+            {
+                this.Config["MicrosoftAppId"] = appId;
+            }
+
+            if (string.IsNullOrEmpty(appPwd))
+            {
+                this.Config["MicrosoftAppPassword"] = string.Empty;
+            }
+            else
+            {
+                this.Config["MicrosoftAppPassword"] = appPwd;
+            }
+
         }
 
         private string GenNewBotDir()

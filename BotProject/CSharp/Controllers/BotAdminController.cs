@@ -44,26 +44,12 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             if (!string.IsNullOrEmpty(config))
             {
                 var luisConfigObj = JsonConvert.DeserializeObject<LuConfigFile>(config);
-                if (!string.IsNullOrEmpty(microsoftAppId) && !string.IsNullOrEmpty(microsoftAppPassword))
-                {
-                    BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj, microsoftAppId, microsoftAppPassword);
-
-                }
-                else
-                {
-                    BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj);
-                }
+                BotManager.SetCurrent(file.OpenReadStream(), luisConfigObj,microsoftAppId, microsoftAppPassword);
+                
             }
             else
             {
-                if (!string.IsNullOrEmpty(microsoftAppId) && !string.IsNullOrEmpty(microsoftAppPassword))
-                {
-                    BotManager.SetCurrent(file.OpenReadStream(), null, microsoftAppId, microsoftAppPassword);
-                }
-                else
-                {
-                    BotManager.SetCurrent(file.OpenReadStream());
-                }
+                BotManager.SetCurrent(file.OpenReadStream(), null, microsoftAppId, microsoftAppPassword);
             }
 
             return Ok();
