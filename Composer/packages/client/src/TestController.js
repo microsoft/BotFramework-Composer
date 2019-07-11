@@ -18,6 +18,7 @@ import { Store } from './store/index';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
 import { LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
+import { OpenAlertModal, DialogStyle } from './components/Modal';
 
 const openInEmulator = url => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -42,11 +43,26 @@ export const TestController = () => {
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus } = state;
+  const { botName, botStatus, luFiles, luStatus, dialogs } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
   const connected = botStatus === 'connected';
 
   function handleClick() {
+    const dialogErrors = dialogs.reduce((result, dialog) => {
+      if (dialog.diagostics.length !== 0) {
+        return result.concat([dialog]);
+      }
+      return result;
+    }, []);
+    if (dialogErrors.length !== 0) {
+      const firstError = dialogErrors[0];
+      const title = `Error found in ${firstError.id}.dialog`;
+      const subTitle = firstError.diagostics.join('\n');
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+      return;
+    }
     const config = LuisStorage.get(botName);
     const files = luFiles.filter(f => !!f.content);
     const updated =
