@@ -116,7 +116,7 @@ This command runs the Composer app.
  
 * Run the Bot Project 
 
-To test the bot you are creating with the Composer. You need to run the Bot Project that comes with the Composer. 
+To test the bot you are creating with the Composer you need to run the Bot Project that comes with the Composer. 
 
 Open a new terminal windows. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **BotProject** folder. Run the following command:
 ```
