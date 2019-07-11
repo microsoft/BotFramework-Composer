@@ -220,7 +220,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -339,7 +339,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -491,7 +491,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "dialog": {
           "$type": "Microsoft.IDialog",
@@ -559,7 +559,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         }
       },
       "additionalProperties": false,
@@ -635,7 +635,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -915,7 +915,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -1137,7 +1137,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -1288,7 +1288,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         }
       },
       "additionalProperties": false,
@@ -1336,7 +1336,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -1391,7 +1391,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "changeType": {
           "type": "string",
@@ -1466,7 +1466,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "changeType": {
           "type": "string",
@@ -1535,7 +1535,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "eventName": {
           "title": "Event Name",
@@ -1617,7 +1617,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -1672,7 +1672,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         }
       },
       "additionalProperties": false,
@@ -1720,7 +1720,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "constraint": {
           "$role": "expression",
@@ -1802,7 +1802,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "listProperty": {
           "$role": "expression",
@@ -1882,7 +1882,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "listProperty": {
           "$role": "expression",
@@ -1960,7 +1960,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "method": {
           "type": "string",
@@ -2313,7 +2313,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "condition": {
           "$role": "expression",
@@ -2386,7 +2386,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -2448,7 +2448,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "constraint": {
           "$role": "expression",
@@ -2525,7 +2525,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         }
       },
       "patternProperties": {
@@ -2572,7 +2572,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "text": {
           "type": "string",
@@ -2632,7 +2632,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "applicationId": {
           "type": "string"
@@ -2688,7 +2688,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "languagePolicy": {
           "$type": "Microsoft.ILanguagePolicy",
@@ -2752,7 +2752,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -2910,7 +2910,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -3001,7 +3001,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "intents": {
           "type": "object",
@@ -3057,7 +3057,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         }
       },
       "additionalProperties": false,
@@ -3105,7 +3105,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "dialog": {
           "$type": "Microsoft.IDialog",
@@ -3172,7 +3172,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "constraint": {
           "$role": "expression",
@@ -3235,7 +3235,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "activity": {
           "$type": "Microsoft.IActivityTemplate",
@@ -3289,7 +3289,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -3352,7 +3352,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "condition": {
           "$role": "expression",
@@ -3442,7 +3442,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "property": {
           "$role": "memoryPath",
@@ -3594,7 +3594,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "name": {
           "type": "string",
@@ -3659,7 +3659,7 @@
         "$designer": {
           "title": "$designer",
           "type": "object",
-          "description": "Extra information for the Bot Framework Designer."
+          "description": "Extra information for the Bot Framework Composer."
         },
         "constraint": {
           "$role": "expression",
