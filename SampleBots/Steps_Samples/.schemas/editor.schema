@@ -5,87 +5,85 @@
       "description": false
     },
     "RulesField": {
-      "title": "Tasks",
-      "description": "Tasks describe the capabilities of the bot/dialog."
+      "title": "Events",
+      "description": "Define handlers for events that occur within the bot."
     },
-    "StepsField": {
-      "description": "Steps describe the process involved in code to accomplish the functionality of the dialog."
-    }
+    "StepsField": {}
   },
   "SDKOverrides": {
     "Microsoft.AdaptiveDialog": {
       "title": "AdaptiveDialog"
     },
     "Microsoft.BeginDialog": {
-      "title": "BeginDialog"
+      "title": "Begin a Dialog"
     },
     "Microsoft.CancelAllDialogs": {
-      "title": "CancelAllDialogs"
+      "title": "Cancel All Dialogs"
     },
     "Microsoft.ChoiceInput": {
-      "title": "ChoiceInput"
+      "title": "Prompt with multi-choice"
     },
     "Microsoft.ConditionalSelector": {
       "title": "ConditionalSelector"
     },
     "Microsoft.ConfirmInput": {
-      "title": "ConfirmInput"
+      "title": "Prompt for confirmation"
     },
     "Microsoft.DebugBreak": {
-      "title": "DebugBreak"
+      "title": "Debug Break"
     },
     "Microsoft.DeleteProperty": {
-      "title": "DeleteProperty"
+      "title": "Delete a Property"
     },
     "Microsoft.EditArray": {
-      "title": "EditArray"
+      "title": "Edit an Array Property"
     },
     "Microsoft.EmitEvent": {
-      "title": "EmitEvent"
+      "title": "Emit a custom event"
     },
     "Microsoft.EndDialog": {
-      "title": "EndDialog"
+      "title": "End Dialog"
     },
     "Microsoft.EndTurn": {
-      "title": "EndTurn"
+      "title": "End Turn"
     },
     "Microsoft.EventRule": {
-      "title": "EventRule"
+      "title": "Handle an Event"
     },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
     },
     "Microsoft.HttpRequest": {
-      "title": "HttpRequest"
+      "title": "HTTP Request"
     },
     "Microsoft.IfCondition": {
-      "title": "IfCondition"
+      "title": "Branch: If/Else"
     },
     "Microsoft.InitProperty": {
-      "title": "InitProperty"
+      "title": "Initialize Property"
     },
     "Microsoft.IntentRule": {
-      "title": "IntentRule"
+      "title": "Handle an Intent"
     },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
     "Microsoft.LogStep": {
-      "title": "LogStep"
+      "title": "Log to console"
     },
     "Microsoft.LuisRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
     },
     "Microsoft.NumberInput": {
-      "title": "NumberInput"
+      "title": "Prompt for a number"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog"
@@ -98,38 +96,55 @@
       "description": false
     },
     "Microsoft.RepeatDialog": {
-      "title": "RepeatDialog"
+      "title": "Repeat this Dialog"
     },
     "Microsoft.ReplaceDialog": {
-      "title": "ReplaceDialog"
+      "title": "Replace this Dialog"
     },
     "Microsoft.Rule": {
       "title": "Rule"
     },
     "Microsoft.SaveEntity": {
-      "title": "SaveEntity"
+      "title": "Save an Entity"
+    },
+    "Microsoft.SendActivity": {
+      "title": "Send an Activity"
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuth Login"
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Prompt for Attachment"
     },
     "Activity": {
-      "title": "Response",
-      "description": "What your Bot says to the User. Powered by Language Generation. <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> Learn more</a>."
+      "title": "Language Generation",
+      "description": "What your Bot says to the User. Visit <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> the documentation</a> a reference of capabilities."
     },
     "Microsoft.SetProperty": {
-      "title": "SetProperty"
+      "title": "Set a Property"
     },
     "Microsoft.SwitchCondition": {
-      "title": "SwitchCondition"
+      "title": "Branch: Switch"
     },
     "Microsoft.TextInput": {
-      "title": "TextInput"
+      "title": "Prompt for text"
     },
     "Microsoft.TraceActivity": {
-      "title": "TraceActivity"
+      "title": "Emit a trace event"
     },
     "Microsoft.TrueSelector": {
       "title": "TrueSelector"
     },
     "Microsoft.UnknownIntentRule": {
-      "title": "UnknownIntentRule"
+      "title": "Handle Unknown Intent"
+    },
+    "Microsoft.Foreach": {
+      "title": "Loop: For Each"
+    },
+    "Microsoft.ForeachPage": {
+      "title": "Loop: For Each Page"
+    },
+    "Microsoft.EditSteps": {
+      "title": "Modify active dialog"
     }
   }
-}
