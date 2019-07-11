@@ -89,7 +89,7 @@ export const uiSchema = {
     ...globalFields,
   },
   'Microsoft.EditSteps': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
   },
@@ -101,13 +101,13 @@ export const uiSchema = {
     'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.Foreach': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
     'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'steps', '*'],
   },
   'Microsoft.ForeachPage': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
     'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'steps', '*'],
