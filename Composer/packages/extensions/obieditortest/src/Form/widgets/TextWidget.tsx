@@ -1,8 +1,9 @@
 import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
 import { NeutralColors } from '@uifabric/fluent-theme';
+
+import { BFDWidgetProps } from '../types';
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
@@ -12,8 +13,8 @@ const getFloat = (value: string, step: number) => {
   return (parseFloat(value) + step).toFixed(step > 0 ? `${step}`.split('.')[1].length : step);
 };
 
-export function TextWidget(props: WidgetProps) {
-  const { label, onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled } = props;
+export function TextWidget(props: BFDWidgetProps) {
+  const { label, onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled, options } = props;
   const { description, examples = [], type } = schema;
 
   let placeholderText = placeholder;
@@ -21,6 +22,14 @@ export function TextWidget(props: WidgetProps) {
   if (!placeholderText && examples.length > 0) {
     placeholderText = `ex. ${examples.join(', ')}`;
   }
+
+  const getLabel = (): string | undefined => {
+    if (options.label === false) {
+      return;
+    }
+
+    return options.label || label;
+  };
 
   if (type === 'integer' || type === 'number') {
     const updateValue = (step: number) => (value: string) => {
@@ -39,7 +48,7 @@ export function TextWidget(props: WidgetProps) {
     return (
       <>
         <SpinButton
-          label={label}
+          label={getLabel()}
           labelPosition={Position.top}
           onDecrement={updateValue(-step)}
           onIncrement={updateValue(step)}
@@ -62,7 +71,7 @@ export function TextWidget(props: WidgetProps) {
       description={description}
       disabled={disabled}
       id={id}
-      label={label}
+      label={getLabel()}
       onBlur={() => onBlur(id, value)}
       onChange={(_, newValue?: string) => onChange(newValue)}
       onFocus={() => onFocus(id, value)}
