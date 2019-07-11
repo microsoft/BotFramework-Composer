@@ -40,7 +40,7 @@ export const TestController = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState({ error: '', type: '' });
   const botActionRef = useRef(null);
   const { botName, botStatus, luFiles, luStatus } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
@@ -71,19 +71,23 @@ export const TestController = () => {
   async function handlePublish(config) {
     setFetchState(STATE.PUBLISHING);
     const response = await publishLuis(config);
-    const error = response.error;
+    //const error = response.error;
     setFetchState(STATE.SUCCESS);
-    if (error === '') {
+    if (response.error === '') {
       await handleLoadBot();
     } else {
-      setErrorMessage(error);
+      setErrorMessage(response);
       setCalloutVisible(true);
     }
   }
 
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
-    await (connected ? reloadBot(botName) : connectBot(botName));
+    const response = await (connected ? reloadBot(botName) : connectBot(botName));
+    if (response && response.error !== '') {
+      setErrorMessage(response);
+      setCalloutVisible(true);
+    }
     setFetchState(STATE.SUCCESS);
   }
 
@@ -125,10 +129,10 @@ export const TestController = () => {
         >
           <div css={calloutContainer}>
             <p css={calloutLabel} id="callout-label-id">
-              {Text.LUISDEPLOYFAILURE}
+              {errorMessage.type === 'luis' ? Text.LUISDEPLOYFAILURE : Text.CONNECTBOTFAILURE}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {formatMessage(errorMessage)}
+              {formatMessage(errorMessage.error)}
             </p>
             <Stack
               horizontal
@@ -136,7 +140,11 @@ export const TestController = () => {
                 childrenGap: 'm',
               }}
             >
-              <PrimaryButton onClick={() => setModalOpen(true)} text={formatMessage('Try again')} />
+              {errorMessage.type === 'luis' ? (
+                <PrimaryButton onClick={() => setModalOpen(true)} text={formatMessage('Try again')} />
+              ) : (
+                <PrimaryButton onClick={() => handleLoadBot()} text={formatMessage('Try again')} />
+              )}
               <DefaultButton onClick={() => setCalloutVisible(false)} text={formatMessage('Cancel')} />
             </Stack>
           </div>

@@ -14,8 +14,8 @@ export async function connectBot(dispatch, botName) {
         status: 'connected',
       },
     });
-    const response = await reloadBot(dispatch, botName);
-    return response;
+    await reloadBot(dispatch, botName);
+    return { error: '', type: 'botRuntime' };
   } catch (err) {
     dispatch({
       type: ActionTypes.CONNECT_BOT_FAILURE,
@@ -23,21 +23,25 @@ export async function connectBot(dispatch, botName) {
         error: err,
       },
     });
-    return { error: 'failed in connect with bot runtime' };
+    return { error: 'failed in connect with bot runtime', type: 'botRuntime' };
   }
 }
 
 export async function reloadBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
+<<<<<<< HEAD
     await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
+=======
+    await axios.post(path, LuisStorage.get(botName));
+>>>>>>> show errors when failed in connecting or reloading bot runtime
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
         error: '',
       },
     });
-    return { status: response.status, error: '' };
+    return { error: '', type: 'botRuntime' };
   } catch (err) {
     dispatch({
       type: ActionTypes.RELOAD_BOT_FAILURE,
@@ -45,6 +49,6 @@ export async function reloadBot(dispatch, botName) {
         error: err.response.data.error,
       },
     });
-    return { error: err.response.data.error };
+    return { error: err.response.data.error, type: 'botRuntime' };
   }
 }
