@@ -21,6 +21,9 @@ export const ConceptLabels = {
   'Microsoft.ConfirmInput': {
     title: 'Prompt for confirmation',
   },
+  'Microsoft.DateTimeInput': {
+    title: 'Type: Date',
+  },
   'Microsoft.DebugBreak': {
     title: 'Debug Break',
   },

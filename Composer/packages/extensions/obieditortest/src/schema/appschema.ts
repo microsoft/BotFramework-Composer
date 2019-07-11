@@ -822,6 +822,159 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
+    'Microsoft.DateTimeInput': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'DateTimeInput Dialog',
+      description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+      type: 'object',
+      properties: {
+        $type: {
+          title: '$type',
+          description:
+            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.DateTimeInput',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Copy the definition by id from a .dialog file.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Inline id for reuse of an inline definition',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        $designer: {
+          title: '$designer',
+          type: 'object',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        property: {
+          $role: 'memoryPath',
+          title: 'Property',
+          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
+          examples: ['value.birthday'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
+        inputBindings: {
+          type: 'object',
+          title: 'Input Bindings',
+          description: 'This defines properties which be passed as arguments to this dialog',
+          examples: ['value.birthday'],
+          additionalProperties: {
+            type: 'string',
+          },
+        },
+        outputBinding: {
+          $role: 'memoryPath',
+          title: 'Output Property binding',
+          description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+          examples: ['value.birthday'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
+        prompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Initial Prompt',
+          description: 'The message to send to as prompt for this input.',
+          examples: ['What is your birth date?'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        unrecognizedPrompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Unrecognized Prompt',
+          description: 'The message to send if the last input is not recognized.',
+          examples: ["Let's try again. What is your birth date?"],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        invalidPrompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Invalid Prompt',
+          description: 'The message to send to when then input was not valid for the input type.',
+          examples: ['No date was recognized'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        maxTurnCount: {
+          type: 'integer',
+          title: 'Max Turn Count',
+          description: 'The max retry count for this prompt.',
+          default: 2147483647,
+          examples: [3],
+        },
+        validations: {
+          type: 'array',
+          title: 'Validation Expressions',
+          description: 'Expressions to validate an input.',
+          items: {
+            $role: 'expression',
+            type: 'string',
+            description: 'String must contain an expression.',
+          },
+        },
+        value: {
+          $role: 'expression',
+          title: 'Value',
+          description: 'The expression that you evaluated for input.',
+          type: 'string',
+        },
+        valueProperty: {
+          $role: 'memoryPath',
+          title: 'Value Property',
+          description: 'It is where you want to the putput of the input written to',
+          examples: ['user.name'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
+        defaultValue: {
+          $role: 'expression',
+          title: 'Default Value',
+          description: "Value to return if the value expression can't be evaluated.",
+          type: 'string',
+        },
+        alwaysPrompt: {
+          type: 'boolean',
+          title: 'Always Prompt',
+          description:
+            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          default: false,
+          examples: [false],
+        },
+        allowInterruptions: {
+          type: 'boolean',
+          title: 'Allow Interruptions',
+          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
+          default: false,
+          examples: [true],
+        },
+        defaultLocale: {
+          type: 'string',
+          title: 'Default Locale',
+          description: 'The prompts default locale that should be recognized.',
+          default: 'en-us',
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['$type'],
+        },
+      ],
+    },
     'Microsoft.DebugBreak': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Debugger Break Step',
@@ -1505,6 +1658,11 @@ export const appschema: JSONSchema6 = {
           title: 'Microsoft.ConfirmInput',
           description: 'This represents a dialog which gathers a yes/no style responses',
           $ref: '#/definitions/Microsoft.ConfirmInput',
+        },
+        {
+          title: 'Microsoft.DateTimeInput',
+          description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+          $ref: '#/definitions/Microsoft.DateTimeInput',
         },
         {
           title: 'Microsoft.DebugBreak',
