@@ -76,15 +76,20 @@
         }
       ]
     },
-	{
-          "$type": "Microsoft.IntentRule",
-          "intent": "OAuthInput",
-          "steps": [
-            {
-              "$type": "Microsoft.BeginDialog",
-              "dialog": "OAuthInput"
-            }
-          ]
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "OAuthInput"
+        }
+      ],
+      "intent": "OAuthInput",
+      "$designer": {
+        "createdAt": "2019-07-11T06:07:25.376Z",
+        "updatedAt": "2019-07-11T06:07:25.409Z",
+        "id": "268314"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
@@ -112,5 +117,15 @@
     "createdAt": "2019-07-03T08:57:58.939Z",
     "updatedAt": "2019-07-03T08:57:58.996Z",
     "id": "400830"
-  }
+  },
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "509484",
+        "updatedAt": "2019-07-11T06:03:03.398Z"
+      },
+      "activity": "[bfdactivity-509484]"
+    }
+  ]
 }
