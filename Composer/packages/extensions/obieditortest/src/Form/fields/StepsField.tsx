@@ -21,7 +21,9 @@ export const StepsField: React.FC<FieldProps> = props => {
         if (!props.formData[i].$designer) {
           props.formData[i].$designer = {};
         }
-        props.formData[i].$designer.name = fieldOverrides[props.formData[i].$type].title;
+        if (!props.formData[i].$designer.name) {
+          props.formData[i].$designer.name = fieldOverrides[props.formData[i].$type].title;
+        }
       }
     }
   }

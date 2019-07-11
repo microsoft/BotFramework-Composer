@@ -15,10 +15,10 @@
       "title": "AdaptiveDialog"
     },
     "Microsoft.BeginDialog": {
-      "title": "BeginDialog"
+      "title": "Begin a Dialog"
     },
     "Microsoft.CancelAllDialogs": {
-      "title": "CancelAllDialogs"
+      "title": "Cancel All Dialogs"
     },
     "Microsoft.ChoiceInput": {
       "title": "ChoiceInput"
@@ -131,6 +131,12 @@
     },
     "Microsoft.UnknownIntentRule": {
       "title": "UnknownIntentRule"
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuth Login"
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Attachment Input"
     }
   }
 }

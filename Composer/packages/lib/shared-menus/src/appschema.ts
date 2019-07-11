@@ -1,5 +1,6 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
 import nanoid from 'nanoid/generate';
+import formatMessage from 'format-message';
 
 import { ConceptLabels } from './labelMap';
 
@@ -112,7 +113,7 @@ export const createStepMenu = (
       const subMenu: IContextualMenuProps = {
         items: item.types.map($type => ({
           key: $type,
-          name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+          name: ConceptLabels[$type] && ConceptLabels[$type].title ? formatMessage(ConceptLabels[$type].title) : $type,
           $type: $type,
           $designer: {
             id: nanoid('1234567890', 6),
