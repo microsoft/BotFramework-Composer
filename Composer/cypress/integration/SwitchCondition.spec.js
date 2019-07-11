@@ -80,15 +80,15 @@ context('SwitchCondition', () => {
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(0)
-        .should('contain.text', 'EditArray');
+        .should('contain.text', 'Edit an Array Property');
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(1)
-        .should('contain.text', 'LogStep');
+        .should('contain.text', 'Log to console');
       cy.get('@steps')
         .get('[data-automationid="DetailsRowCell"][data-automation-key="name"]')
         .eq(2)
-        .should('contain.text', 'Microsoft.SendActivity');
+        .should('contain.text', 'Send an Activity');
 
       // Add another new case
       cy.getByText('Add New Case').click();

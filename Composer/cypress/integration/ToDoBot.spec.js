@@ -11,7 +11,7 @@ context('ToDo Bot', () => {
       cy.getByText(/Hi! I'm a ToDo bot./).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Tasks').should('exist');
+      cy.getByText('Actions').should('exist');
     });
   });
 
@@ -35,7 +35,7 @@ context('ToDo Bot', () => {
       cy.getByText('Successfully cleared items in the Todo List.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('EditArray').should('exist');
+      cy.getByText('Edit an Array Property').should('exist');
     });
   });
 
@@ -47,7 +47,7 @@ context('ToDo Bot', () => {
       cy.getByText('Edit an Array Property').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('SetProperty').should('exist');
+      cy.getByText('Set a Property').should('exist');
     });
   });
 
@@ -59,7 +59,7 @@ context('ToDo Bot', () => {
       cy.getByText('You have no todos.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('IfCondition').should('exist');
+      cy.getByText('Branch: If/Else').should('exist');
     });
   });
 });
