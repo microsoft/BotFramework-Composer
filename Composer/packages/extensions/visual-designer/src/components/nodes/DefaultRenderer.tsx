@@ -23,13 +23,18 @@ const DefaultKeyMap = {
 function makeLabel(data) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
-      return `${data.property || '?'} = ${data.value || '?'}`;
+      return `{${data.property || '?'}} = ${data.value || '?'}`;
     case ObiTypes.SaveEntity:
-      return `${data.property || '?'} = ${data.entity || '?'}`;
+      return `{${data.property || '?'}} = ${data.entity || '?'}`;
     case ObiTypes.InitProperty:
-      return `${data.property || '?'} = new ${data.type || '?'}`;
+      return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
-      return `${data.changeType} ${data.arrayProperty || '?'}`;
+      return `${data.changeType} {${data.arrayProperty || '?'}}`;
+    case ObiTypes.ForeachDetail:
+      return `Each {${data.valueProperty || '?'}} in {${data.listProperty || '?'}}`;
+    case ObiTypes.ForeachPageDetail:
+      return `Each page of ${data.pageSize || '?'} in {${data.listProperty || '?'}}`;
+
     default:
       return '';
   }
@@ -95,6 +100,10 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
+  [ObiTypes.AttachmentInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
   [ObiTypes.ChoiceInput]: {
     label: 'prompt',
     details: 'property',
@@ -108,10 +117,13 @@ const ContentKeyByTypes: {
     text: 'Cancel all active dialogs',
   },
   [ObiTypes.EndTurn]: {
-    text: 'End turn, then wait for another message',
+    text: 'Wait for another message',
   },
   [ObiTypes.RepeatDialog]: {
-    text: 'Restart this dialog',
+    text: 'Repeat this dialog',
+  },
+  [ObiTypes.ReplaceDialog]: {
+    text: 'Replace this dialog',
   },
   [ObiTypes.EmitEvent]: {
     label: 'eventName',
@@ -127,6 +139,9 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.LogStep]: {
     label: 'text',
+  },
+  [ObiTypes.EditSteps]: {
+    label: 'changeType',
   },
 };
 
