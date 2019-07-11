@@ -23,7 +23,7 @@ context('ToDo Bot', () => {
       cy.getByText(/Successfully added a todo named/).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Steps').should('exist');
+      cy.getByText('Actions').should('exist');
     });
   });
 
@@ -35,7 +35,7 @@ context('ToDo Bot', () => {
       cy.getByText('Successfully cleared items in the Todo List.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Microsoft.EditArray').should('exist');
+      cy.getByText('Edit an Array Property').should('exist');
     });
   });
 
@@ -44,10 +44,10 @@ context('ToDo Bot', () => {
       cy.get('[title="DeleteToDo"]').click();
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('EditArray').should('exist');
+      cy.getByText('Edit an Array Property').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Microsoft.SetProperty').should('exist');
+      cy.getByText('Set a Property').should('exist');
     });
   });
 
@@ -59,7 +59,7 @@ context('ToDo Bot', () => {
       cy.getByText('You have no todos.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Microsoft.IfCondition').should('exist');
+      cy.getByText('Branch: If/Else').should('exist');
     });
   });
 });
