@@ -54,7 +54,7 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
       ) : null}
       <div style={{ height: 50 }} />
       {stepGroup ? (
-        <Collapse text="Steps">
+        <Collapse text="Actions">
           <StepEditor
             key={stepGroup.id}
             id={stepGroup.id}

@@ -68,11 +68,11 @@ const ContentKeyByTypes: {
     label: 'condition',
   },
   [ObiTypes.ForeachDetail]: {
-    header: 'For Each',
+    header: 'Loop: For Each',
     label: 'listProperty',
   },
   [ObiTypes.ForeachPageDetail]: {
-    header: 'For Each Page',
+    header: 'Loop: For Each Page',
     label: 'listProperty',
   },
   [ObiTypes.TextInput]: {

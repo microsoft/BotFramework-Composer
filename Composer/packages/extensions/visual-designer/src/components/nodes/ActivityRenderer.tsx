@@ -6,6 +6,7 @@ import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeColors } from '../../shared/elementColors';
 import { DialogGroup } from '../../shared/appschema';
+import { getFriendlyName } from './utils';
 
 import { FormCard } from './templates/FormCard';
 
@@ -47,7 +48,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   return (
     <FormCard
       nodeColors={NodeColors[DialogGroup.RESPONSE]}
-      header={'Activity'}
+      header={getFriendlyName(data) || 'Activity'}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       icon="MessageBot"
       label={templateText}
