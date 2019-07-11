@@ -62,7 +62,7 @@ export const TestController = () => {
         setModalOpen(true);
         return;
       } else {
-        await PublishAndReload(config);
+        await publishAndReload(config);
       }
     } else {
       await handleLoadBot();
