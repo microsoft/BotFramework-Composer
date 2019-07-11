@@ -22,7 +22,7 @@ export const ConceptLabels = {
     title: 'Prompt for confirmation',
   },
   'Microsoft.DateTimeInput': {
-    title: 'Type: Date'
+    title: 'Type: Date',
   },
   'Microsoft.DebugBreak': {
     title: 'Debug Break',
