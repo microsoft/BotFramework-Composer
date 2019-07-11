@@ -17,6 +17,7 @@ import { LGParser } from 'botbuilder-lg';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
+import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
@@ -57,6 +58,18 @@ export default function TableView(props) {
           }, []);
           setTemplates(dialogsReferenceThisTemplate);
         }
+      } else {
+        const { Start, End } = parseResult.error.Range;
+        const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+        OpenConfirmModal('Templates parse failed', `${errorDetail},\n ${parseResult.error.Message}`, {
+          style: DialogStyle.Console,
+          confirmBtnText: 'Edit',
+        }).then(res => {
+          if (res) {
+            props.onEdit();
+          }
+        });
       }
     }
   }, [lgFile, activeDialog]);
