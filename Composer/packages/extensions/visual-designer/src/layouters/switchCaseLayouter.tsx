@@ -1,6 +1,7 @@
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
+import { GraphLayout } from '../shared/GraphLayout';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
@@ -17,7 +18,7 @@ export function switchCaseLayouter(
   conditionNode: GraphNode,
   choiceNode: GraphNode,
   branchNodes: GraphNode[] = []
-): any {
+): GraphLayout {
   if (!conditionNode) {
     return { boundary: new Boundary() };
   }
@@ -50,7 +51,7 @@ export function switchCaseLayouter(
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
-  const edges: { [key: string]: any } = [];
+  const edges: any[] = [];
   edges.push({
     id: `edge/${conditionNode.id}/switch/condition->switch`,
     direction: 'y',

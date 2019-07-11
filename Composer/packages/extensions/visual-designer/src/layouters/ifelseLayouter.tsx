@@ -1,6 +1,7 @@
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
+import { GraphLayout } from '../shared/GraphLayout';
 
 import { calculateIfElseBoundary } from './calculateNodeBoundary';
 
@@ -12,7 +13,7 @@ export function ifElseLayouter(
   choiceNode: GraphNode,
   ifNode: GraphNode,
   elseNode: GraphNode
-): any {
+): GraphLayout {
   if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
 
   const containerBoundary = calculateIfElseBoundary(
@@ -99,7 +100,7 @@ export function ifElseLayouter(
       break;
   }
 
-  const edgeList: { [key: string]: any } = [];
+  const edgeList: any[] = [];
   edgeList.push({
     id: `edge/${conditionNode.id}/condition->choice`,
     direction: 'y',
