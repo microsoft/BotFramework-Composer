@@ -72,7 +72,7 @@ Using a docker provides a more controled and isolated environment for you to run
 
     When using Emulator to test your bot, make sure you use ngrok and *uncheck* 'bypass ngrok for local addresses', because container is considered as remote, even the address looks like local. 
     
-    The bot is running on http://localhost:3978/api/messages. 
+    The bot is running on http://localhost:3979/api/messages. 
    
 
 * Advance use: Development
@@ -124,7 +124,7 @@ dotnet run
 ```
 This will build and run a Bot Framework bot that the Composer connects to.
 
-The bot is running on http://localhost:3978/api/messages.
+The bot is running on http://localhost:3979/api/messages.
 
 
 
