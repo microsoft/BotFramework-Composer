@@ -134,20 +134,6 @@ export async function createProject(dispatch, templateId, name, description) {
   }
 }
 
-export async function updateProjFile(dispatch, { name, content }) {
-  try {
-    const response = await axios.put(`${BASEURL}/projects/opened/botFile`, { name, content });
-    dispatch({
-      type: ActionTypes.UPDATE_PROJFILE__SUCCESS,
-      payload: {
-        response,
-      },
-    });
-  } catch (err) {
-    dispatch({ type: ActionTypes.UPDATE_PROJFILE__FAILURE, payload: null, error: err });
-  }
-}
-
 export async function getAllProjects() {
   try {
     return (await axios.get(`${BASEURL}/projects`)).data.children;

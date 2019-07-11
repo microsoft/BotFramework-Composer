@@ -24,9 +24,7 @@
     {
       "$type": "Microsoft.IntentRule",
       "intent": "Steps",
-      "steps": [
-        "Steps"
-      ]
+      "steps": ["Steps"]
     },
     {
       "$type": "Microsoft.IntentRule",
@@ -152,9 +150,19 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-07-01T21:57:59.272Z",
+            "updatedAt": "2019-07-01T21:58:02.036Z",
+            "id": "347762"
+          },
+          "activity": "[bfdactivity-347762]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:30:37.124Z",
+        "updatedAt": "2019-07-01T21:30:37.129Z",
+        "id": "560915"
+      }
     }
   ],
   "$schema": "../../app.schema",

@@ -63,6 +63,7 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
               onCardNavClick();
             }}
             iconName="OpenSource"
+            data-testid="OpenIcon"
           />
 
           <NodeMenu id={id} onEvent={onEvent} />

@@ -31,7 +31,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return foreachLayouter(nodeMap.foreachNode, nodeMap.stepGroupNode, nodeMap.loopBeginNode, nodeMap.loopEndNode);
 };
 
-export const Foreach: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }) => {
+export const Foreach: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize, getLgTemplates }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -66,6 +66,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, focusedId, onE
           data={foreachNode.data}
           focusedId={focusedId}
           onEvent={onEvent}
+          getLgTemplates={getLgTemplates}
         />
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>
@@ -78,6 +79,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, focusedId, onE
           onResize={size => {
             patchBoundary(stepsNode.id, size);
           }}
+          getLgTemplates={getLgTemplates}
         />
       </OffsetContainer>
       {[loopBeginNode, loopEndNode]

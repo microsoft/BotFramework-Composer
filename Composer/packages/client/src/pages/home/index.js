@@ -13,13 +13,13 @@ import { ToolBar } from './../../components/ToolBar/index';
 import * as home from './styles';
 const linksLeft = [
   {
-    to: '/home',
-    text: formatMessage('See how it works'),
+    to: 'https://github.com/microsoft/botframework-designer#get-started',
+    text: formatMessage('Getting Started'),
     css: home.linkInfo,
   },
   {
-    to: '/home',
-    text: formatMessage('View interactive tutorial'),
+    to: 'https://aka.ms/BotframeworkComposerGettingstarted',
+    text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
 ];
@@ -27,18 +27,8 @@ const linksLeft = [
 const linksRight = [
   {
     to: '/home',
-    text: formatMessage('Create, test and deploy your bot'),
+    text: formatMessage('Coming soon!'),
     css: home.linkInfo,
-  },
-  {
-    to: '/home',
-    text: formatMessage('Create a PowerApps environment'),
-    css: home.linkInfo,
-  },
-  {
-    to: '/home',
-    text: formatMessage('See more options'),
-    css: home.moreOptions,
   },
 ];
 
@@ -69,16 +59,26 @@ export const Home = () => {
     {
       type: 'action',
       text: formatMessage('New'),
-      iconName: 'CirclePlus',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-New',
     },
     {
       type: 'action',
-      text: formatMessage('Import'),
-      iconName: 'OpenFolderHorizontal',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      text: formatMessage('Open'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
       align: 'left',
+      dataTestid: 'homePage-ToolBar-Open',
     },
   ];
 
@@ -105,7 +105,7 @@ export const Home = () => {
     <div css={home.outline}>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
-        <div css={home.title}>{formatMessage(`"Are you real?"`)}</div>
+        <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
         <div css={home.introduction}>
           <div css={home.introTitle}>
             <div css={home.introTitleLeft}> {formatMessage(`Creating real conversations for real people.`)} </div>
@@ -120,7 +120,7 @@ export const Home = () => {
             </div>
           </div>
           <div css={home.introTitle}>
-            <div css={home.introTitleRight}> {formatMessage(`Product Video`)} </div>
+            <div css={home.introTitleRight}> {formatMessage(`Videos`)} </div>
             <div css={home.linkRight}>
               {linksRight.map(link => {
                 return (
@@ -138,6 +138,7 @@ export const Home = () => {
             <div css={home.botContent}>
               <div
                 css={home.action}
+                data-testid={'homePage-body-New'}
                 onClick={() => {
                   onClickNewBotProject();
                 }}

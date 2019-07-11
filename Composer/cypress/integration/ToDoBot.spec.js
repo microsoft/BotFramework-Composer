@@ -56,7 +56,7 @@ context('ToDo Bot', () => {
       cy.get('[title="ShowToDos"]').click();
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('[ShowTodo]').should('exist');
+      cy.getByText('You have no todos.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('Microsoft.IfCondition').should('exist');

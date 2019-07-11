@@ -36,7 +36,7 @@ const Colors = {
   YellewGreen40: 'rgba(140, 189, 24, 0.4)',
 };
 
-const NodeColors = {
+export const NodeColors = {
   [DialogGroup.RULE]: {
     expanded: Colors.CyanLight,
     collapsed: Colors.Cyan10,

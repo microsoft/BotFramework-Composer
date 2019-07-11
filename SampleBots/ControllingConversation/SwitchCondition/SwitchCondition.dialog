@@ -16,13 +16,32 @@
           "value": "Tom"
         }
       ],
-      "prompt": "Please select a value from below:",
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
       "style": "List",
-      "alwaysPrompt": true
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      },
+      "$designer": {
+        "createdAt": "2019-07-04T19:56:49.850Z",
+        "updatedAt": "2019-07-04T19:56:49.855Z",
+        "id": "699003"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}."
+      "$designer": {
+        "id": "097130",
+        "updatedAt": "2019-07-04T19:57:08.860Z"
+      },
+      "activity": "[bfdactivity-097130]"
     },
     {
       "$type": "Microsoft.SwitchCondition",
@@ -33,7 +52,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You are the CEO."
+              "$designer": {
+                "id": "040464",
+                "updatedAt": "2019-07-04T19:57:28.583Z"
+              },
+              "activity": "[bfdactivity-040464]"
             }
           ]
         },
@@ -42,7 +65,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You are the CFO."
+              "$designer": {
+                "id": "230206",
+                "updatedAt": "2019-07-04T19:58:22.053Z"
+              },
+              "activity": "[bfdactivity-230206]"
             }
           ]
         },
@@ -51,7 +78,11 @@
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "You are the CTO."
+              "$designer": {
+                "id": "604251",
+                "updatedAt": "2019-07-04T19:58:34.719Z"
+              },
+              "activity": "[bfdactivity-604251]"
             }
           ]
         }

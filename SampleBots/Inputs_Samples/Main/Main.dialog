@@ -76,33 +76,35 @@
         }
       ]
     },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "OAuthInput",
-      "steps": [
-        {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "OAuthInput"
-        }
-      ]
+	{
+          "$type": "Microsoft.IntentRule",
+          "intent": "OAuthInput",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "OAuthInput"
+            }
+          ]
     },
     {
       "$type": "Microsoft.IntentRule",
       "intent": "CancelIntent",
       "steps": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.UnknownIntentRule",
-      "steps": [
-        {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-07-01T21:58:19.578Z",
+            "updatedAt": "2019-07-01T21:58:21.925Z",
+            "id": "068558"
+          },
+          "activity": "[bfdactivity-068558]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-01T21:58:18.063Z",
+        "updatedAt": "2019-07-01T21:58:18.080Z",
+        "id": "566255"
+      }
     }
   ],
   "$schema": "../../app.schema",

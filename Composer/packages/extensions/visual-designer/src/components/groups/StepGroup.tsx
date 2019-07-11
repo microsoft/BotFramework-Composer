@@ -27,7 +27,14 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }: NodeProps) => {
+export const StepGroup: FunctionComponent<NodeProps> = ({
+  id,
+  data,
+  focusedId,
+  onEvent,
+  onResize,
+  getLgTemplates,
+}: NodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -60,6 +67,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, focusedId, o
             id={x.id}
             data={x.data}
             focusedId={focusedId}
+            getLgTemplates={getLgTemplates}
             onEvent={onEvent}
             onResize={size => {
               patchBoundary(x.id, size);

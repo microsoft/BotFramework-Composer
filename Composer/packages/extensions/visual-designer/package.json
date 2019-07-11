@@ -53,7 +53,7 @@
     "nwb": "0.23.x",
     "react": "^16.8.4",
     "react-dom": "16.8.2",
-    "react-testing-library": "^6.0.1",
+    "react-testing-library": "^6.0.2",
     "shared-menus": "0.0.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.3"
