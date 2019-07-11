@@ -15,7 +15,7 @@ context('Visual Designer', () => {
       cy.getByText('Prompt for text').click();
 
       cy.get('.node-renderer-container--focused').within(() => {
-        cy.getByText('TextInput').should('exist');
+        cy.getByText('Prompt for text').should('exist');
       });
 
       btns = cy.get('button[aria-label="Add"]');

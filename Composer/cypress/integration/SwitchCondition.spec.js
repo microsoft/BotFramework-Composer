@@ -113,7 +113,7 @@ context('SwitchCondition', () => {
       cy.get('[role="separator"]')
         .should('have.length', 3)
         .eq(1)
-        .should('have.text', 'Case1');
+        .should('have.text', 'Branch: Case1');
 
       cy.wait(100);
 
