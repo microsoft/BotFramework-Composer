@@ -27,11 +27,11 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 ```
 
 Next,you have two options for running Composer locally:
-* Using a docker image
-* building and compiling the Composer app on your local machine  
+* [Using a docker image](#Using-docker-image) (Recommended) 
+* [Build and run Composer](#Build-and-run-Composer)
 
 
-### Using a docker image (recomended) 
+### Using docker image 
 
 Using a docker provides a more controled and isolated environment for you to run the composer.  There are two docker images, one for the Composer web app and one for the bot project runtime. 
 
@@ -81,6 +81,51 @@ Using a docker provides a more controled and isolated environment for you to run
     
     * [Designer App](https://github.com/microsoft/BotFramework-Designer/tree/master/Composer)
     * [Bot Runtime](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp)
+
+
+### Build and run Composer
+With this option you need to use [Yarn](https://yarnpkg.com) to build the Composer app and run it locally.
+
+#### Prerequisites
+* [Node.js](https://nodejs.org/en/)
+* [Yarn](https://yarnpkg.com/en/docs/install)
+* [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+
+
+#### Instructions
+
+* Build and run Composer
+
+Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **Composer** folder. Run the following commands:
+```
+yarn install
+```
+This command gets all dependent packages.
+
+```
+yarn build
+```
+This command build the Composer app. The build process can take few minutes.
+
+```
+yarn start
+```
+This command runs the Composer app. 
+
+ To use Composer, open a browser and navigate to http://localhost:3000
+ 
+* Run the Bot Project 
+
+To test the bot you are creating with the Composer you need to run the Bot Project that comes with the Composer. 
+
+Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **BotProject** folder. Run the following command:
+```
+dotnet run
+```
+This will build and run a Bot Framework bot that the Composer connects to.
+
+The bot is running on http://localhost:3978/api/messages.
+
 
 
 ## Related projects

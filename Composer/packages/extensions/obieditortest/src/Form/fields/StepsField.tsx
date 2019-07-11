@@ -28,6 +28,7 @@ export const StepsField: React.FC<FieldProps> = props => {
               [
                 DialogGroup.RESPONSE,
                 DialogGroup.INPUT,
+                DialogGroup.BRANCHING,
                 DialogGroup.STEP,
                 DialogGroup.MEMORY,
                 DialogGroup.CODE,
