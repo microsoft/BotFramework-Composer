@@ -21,7 +21,6 @@ import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
 const openInEmulator = (url, authSettings) => {
-  console.log('eyyyy', url, authSettings);
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
   // and start up the emulator
   const i = document.createElement('iframe');
