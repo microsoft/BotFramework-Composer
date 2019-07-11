@@ -7,6 +7,10 @@
 
   .ArrayItemField {
     flex: 1;
+
+    .ObjectFieldTemplate > .BaseField {
+      margin-top: 0;
+    }
   }
 
   .ArrayItemContext {
@@ -17,4 +21,8 @@
   & + & {
     margin-top: 10px;
   }
+}
+
+.ObjectArray {
+  padding-left: 30px;
 }

@@ -57,13 +57,7 @@ export async function publishLuis(dispatch, config) {
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },
     });
-    return { status: response.data.status, error: '' };
   } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-    return { error: err.response.data.error };
+    throw new Error(err.response.data.error);
   }
 }
