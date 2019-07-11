@@ -41,6 +41,7 @@ export const TestController = () => {
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
+  const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
   const botActionRef = useRef(null);
   const { botName, botStatus, luFiles, luStatus } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
@@ -57,16 +58,23 @@ export const TestController = () => {
       }) ||
       config[LuisConfig.AUTHORING_KEY] === '';
     if (files.length !== 0 && updated) {
-      if (config[LuisConfig.AUTHORING_KEY] === '') {
+      if (!luisPublishSucceed) {
         setModalOpen(true);
         return;
       } else {
-        if (await handlePublish(config)) {
-          await handleLoadBot();
-        }
+        await PublishAndReload(config);
       }
     } else {
       await handleLoadBot();
+    }
+  }
+
+  async function publishAndReload(config) {
+    if (await handlePublish(config)) {
+      setLuisPublishSucceed(true);
+      await handleLoadBot();
+    } else {
+      setLuisPublishSucceed(false);
     }
   }
 
@@ -161,7 +169,7 @@ export const TestController = () => {
         isOpen={modalOpen}
         onDismiss={() => setModalOpen(false)}
         onPublish={config => {
-          handlePublish(config);
+          publishAndReload(config);
           setModalOpen(false);
         }}
         botName={botName}
