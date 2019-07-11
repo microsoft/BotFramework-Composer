@@ -146,6 +146,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
                     [
                       DialogGroup.RESPONSE,
                       DialogGroup.INPUT,
+                      DialogGroup.BRANCHING,
                       DialogGroup.STEP,
                       DialogGroup.MEMORY,
                       DialogGroup.CODE,
