@@ -124,6 +124,10 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
+const updateOAuth = (state, { oAuth }) => {
+  return (state.oAuth = oAuth);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -149,4 +153,5 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  [ActionTypes.UPDATE_OAUTH]: updateOAuth,
 });
