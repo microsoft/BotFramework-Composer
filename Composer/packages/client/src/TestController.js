@@ -71,7 +71,6 @@ export const TestController = () => {
   async function handlePublish(config) {
     setFetchState(STATE.PUBLISHING);
     const response = await publishLuis(config);
-    //const error = response.error;
     setFetchState(STATE.SUCCESS);
     if (response.error === '') {
       await handleLoadBot();
