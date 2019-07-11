@@ -11,6 +11,7 @@ services:
       - ./SampleBots:/SampleBots
     environment:
       - NODE_ENV=container
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
     # command:
     #   - node
     #   - "--inspect-brk=0.0.0.0"
