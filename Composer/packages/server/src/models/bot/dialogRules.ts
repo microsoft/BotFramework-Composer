@@ -20,6 +20,11 @@ export const DialogRules: { [key: string]: CheckerFunc[] } = {
   'Microsoft.SetProperty': [Exist('value')],
   'Microsoft.ForeachPage': [Exist('listProperty')],
   'Microsoft.Foreach': [Exist('listProperty')],
-  'Microsoft.EditArray': [Exist('value')],
+  'Microsoft.EditArray': [
+    node => {
+      if (has(node.value, 'value') || has(node.value, 'arrayProperty')) return '';
+      return `Missing Required field at ${node.path}`;
+    },
+  ],
   'Microsoft.InputDialog': [],
 };

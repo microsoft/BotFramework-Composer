@@ -1,6 +1,4 @@
-import { get, set, cloneDeep, replace, has } from 'lodash';
-
-import { JsonWalk } from './jsonWalk';
+import { get, set, cloneDeep, replace } from 'lodash';
 
 export function getDialogName(path) {
   const realPath = replace(path, '#.', '#');
