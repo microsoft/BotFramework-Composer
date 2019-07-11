@@ -15,6 +15,7 @@ export interface Dialog {
   isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
+  diagostics: string[];
   lgFile: string;
   luFile: string;
   luIntents: string[];
