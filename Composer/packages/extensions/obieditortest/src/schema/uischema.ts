@@ -58,6 +58,9 @@ export const uiSchema = {
     autoEndDialog: {
       'ui:field': NullField,
     },
+    generator: {
+      'ui:field': NullField,
+    },
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
