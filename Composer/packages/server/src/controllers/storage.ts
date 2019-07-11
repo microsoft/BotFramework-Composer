@@ -23,7 +23,7 @@ async function getBlob(req: Request, res: Response) {
   } catch (e) {
     res.status(400).json(
       new StorageError({
-        message: e.message,
+        message: e instanceof Error ? e.message : e,
         title: 'Get Blob Error',
         statusCode: 400,
       })

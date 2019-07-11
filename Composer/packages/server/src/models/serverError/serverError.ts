@@ -5,20 +5,15 @@ interface ErrorInput {
 }
 
 class ServerError extends Error {
+  type: string;
+  title: string;
+  statusCode: number | undefined;
   constructor(args: ErrorInput) {
     super(args.message);
-    Object.defineProperty(this, 'name', {
-      value: this.constructor.name,
-    });
-    Object.defineProperty(this, 'type', {
-      value: this.constructor.name,
-    });
-    Object.defineProperty(this, 'title', {
-      value: args.title ? args.title : this.constructor.name,
-    });
-    Object.defineProperty(this, 'statusCode', {
-      value: args.statusCode ? args.statusCode : 500,
-    });
+    this.name = this.constructor.name;
+    this.type = this.constructor.name;
+    this.title = args.title ? args.title : this.constructor.name;
+    this.statusCode = args.statusCode ? args.statusCode : 500;
     this.message = args.message;
 
     Error.captureStackTrace(this, this.constructor);

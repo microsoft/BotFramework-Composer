@@ -145,7 +145,13 @@ async function saveProjectAs(req: Request, res: Response) {
       );
     }
   } catch (e) {
-    res.status(400).json(e);
+    res.status(400).json(
+      new ProjectError({
+        message: e instanceof Error ? e.message : e,
+        title: 'SaveAs Project Error',
+        statusCode: 400,
+      })
+    );
   }
 }
 
