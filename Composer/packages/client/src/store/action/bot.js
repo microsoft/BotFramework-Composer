@@ -30,11 +30,7 @@ export async function connectBot(dispatch, botName) {
 export async function reloadBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
-<<<<<<< HEAD
     await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
-=======
-    await axios.post(path, LuisStorage.get(botName));
->>>>>>> show errors when failed in connecting or reloading bot runtime
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
