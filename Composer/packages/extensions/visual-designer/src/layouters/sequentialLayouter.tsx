@@ -29,6 +29,7 @@ export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge 
       x,
       y,
       length: StepInterval,
+      directed: true,
     });
   }
 
@@ -45,6 +46,7 @@ export function sequentialLayouter(nodes, withHeadEdge = true, withTrailingEdge 
       x: box.axisX,
       y: 0,
       length: ExtraEdgeLength,
+      directed: true,
     });
   }
 

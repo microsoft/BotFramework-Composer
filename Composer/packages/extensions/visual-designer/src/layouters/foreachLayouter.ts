@@ -50,6 +50,7 @@ export const foreachLayouter = (foreachNode, stepsNode, loopBeginNode, loopEndNo
       y: node.offset.y + node.boundary.axisY,
       length: containerBoundary.axisX - node.boundary.axisX,
       dashed: true,
+      directed: index === 0 ? true : false,
     });
   });
 
