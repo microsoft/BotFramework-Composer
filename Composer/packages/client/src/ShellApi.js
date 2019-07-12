@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual } from 'lodash';
+import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 import { LGParser } from 'botbuilder-lg';
 
@@ -8,6 +8,7 @@ import { validateLgTemplate } from '../src/store/action/lg';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import { OpenAlertModal, DialogStyle } from './components/Modal';
 
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
@@ -117,6 +118,17 @@ export function ShellApi() {
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+
+  useEffect(() => {
+    const schemaError = get(schemas, 'diagostics', []);
+    if (schemaError.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = schemaError.join('\n');
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
+  }, [schemas]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
