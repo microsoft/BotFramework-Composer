@@ -1,32 +1,16 @@
 import React from 'react';
-import { createTheme } from 'office-ui-fabric-react';
-import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
-import { FontSizes, FontWeights } from '@uifabric/styling';
 
 import { FormContext } from '../types';
-
-import './styles.scss';
+import SectionSeparator from '../SectionSeparator';
 
 import { DesignerField } from './DesignerField';
-
-const fieldHeaderTheme = createTheme({
-  fonts: {
-    medium: {
-      fontSize: FontSizes.large,
-      fontWeight: FontWeights.semibold,
-    },
-  },
-  palette: {
-    neutralLighter: NeutralColors.gray120,
-  },
-});
+import './styles.scss';
 
 const descriptionMarkup = description => {
   return { __html: description };
@@ -107,13 +91,9 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key}>
       {titleOverride === false ? null : (
-        <Separator
-          theme={fieldHeaderTheme}
-          alignContent="start"
-          styles={{ content: { paddingLeft: '0', paddingRight: '32px' } }}
-        >
+        <SectionSeparator>
           {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
-        </Separator>
+        </SectionSeparator>
       )}
       {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
         <p

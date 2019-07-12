@@ -103,12 +103,12 @@
 - ```
     I can show you examples on different Cards
     [Suggestions=HeroCard|ThumbnailCard|SigninCard|AnimationCard|VideoCard|AudioCard|AdaptiveCard|AllCards]
-  d
-  d
-  d
-  d
-  d
-  d
+    01 - HeroCard
+    02 - ThumbnailCard
+    03 - SigninCard
+    04 - AnimationCard
+    05 - VideoCard
+    06 - AudioCard
     07 - AdaptiveCard
     08 - AllCards
   ```

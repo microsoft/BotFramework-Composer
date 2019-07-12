@@ -18,14 +18,17 @@ import { Store } from './store/index';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
 import { LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
+import { OpenAlertModal, DialogStyle } from './components/Modal';
 
-const openInEmulator = url => {
+const openInEmulator = (url, authSettings) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
   // and start up the emulator
   const i = document.createElement('iframe');
   i.style.display = 'none';
   i.onload = () => i.parentNode.removeChild(i);
-  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}`;
+  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&MicrosoftAppId=${
+    authSettings.MicrosoftAppId
+  }&MicrosoftAppPassword=${authSettings.MicrosoftAppPassword}`;
   document.body.appendChild(i);
 };
 
@@ -40,13 +43,32 @@ export const TestController = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState({ title: '', message: '' });
+  const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus } = state;
+  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth } = state;
   const { connectBot, reloadBot, publishLuis } = actions;
   const connected = botStatus === 'connected';
 
-  function handleClick() {
+  async function handleClick() {
+    const dialogErrors = dialogs.reduce((result, dialog) => {
+      if (dialog.diagostics.length !== 0) {
+        return result.concat([dialog]);
+      }
+      return result;
+    }, []);
+    if (dialogErrors.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = dialogErrors.reduce((msg, dialog) => {
+        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagostics.join('\n')} \n`;
+        return msg;
+      }, '');
+
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+      return;
+    }
     const config = LuisStorage.get(botName);
     const files = luFiles.filter(f => !!f.content);
     const updated =
@@ -57,34 +79,50 @@ export const TestController = () => {
       }) ||
       config[LuisConfig.AUTHORING_KEY] === '';
     if (files.length !== 0 && updated) {
-      if (config[LuisConfig.AUTHORING_KEY] === '') {
+      if (!luisPublishSucceed) {
         setModalOpen(true);
         return;
       } else {
-        handlePublish(config);
+        await publishAndReload(config);
       }
     } else {
-      handleLoadBot();
+      await handleLoadBot();
+    }
+  }
+
+  async function publishAndReload(config) {
+    if (await handlePublish(config)) {
+      setLuisPublishSucceed(true);
+      await handleLoadBot();
+    } else {
+      setLuisPublishSucceed(false);
     }
   }
 
   async function handlePublish(config) {
     setFetchState(STATE.PUBLISHING);
-    const response = await publishLuis(config);
-    const error = response.error;
-    setFetchState(STATE.SUCCESS);
-    if (error === '') {
-      await handleLoadBot();
-    } else {
-      setErrorMessage(error);
+    try {
+      await publishLuis(config);
+      return true;
+    } catch (err) {
+      setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
+      return false;
+    } finally {
+      setFetchState(STATE.SUCCESS);
     }
   }
 
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
-    await (connected ? reloadBot(botName) : connectBot(botName));
-    setFetchState(STATE.SUCCESS);
+    try {
+      await (connected ? reloadBot(botName) : connectBot(botName));
+    } catch (err) {
+      setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
+      setCalloutVisible(true);
+    } finally {
+      setFetchState(STATE.SUCCESS);
+    }
   }
 
   return (
@@ -95,7 +133,7 @@ export const TestController = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages')}
+            onClick={() => openInEmulator('http://localhost:3979/api/messages', oAuth)}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>
@@ -125,10 +163,10 @@ export const TestController = () => {
         >
           <div css={calloutContainer}>
             <p css={calloutLabel} id="callout-label-id">
-              {Text.LUISDEPLOYFAILURE}
+              {error.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {formatMessage(errorMessage)}
+              {formatMessage(error.message)}
             </p>
             <Stack
               horizontal
@@ -136,7 +174,13 @@ export const TestController = () => {
                 childrenGap: 'm',
               }}
             >
-              <PrimaryButton onClick={() => setModalOpen(true)} text={formatMessage('Try again')} />
+              <PrimaryButton
+                onClick={() => {
+                  setCalloutVisible(false);
+                  handleClick();
+                }}
+                text={formatMessage('Try again')}
+              />
               <DefaultButton onClick={() => setCalloutVisible(false)} text={formatMessage('Cancel')} />
             </Stack>
           </div>
@@ -146,7 +190,7 @@ export const TestController = () => {
         isOpen={modalOpen}
         onDismiss={() => setModalOpen(false)}
         onPublish={config => {
-          handlePublish(config);
+          publishAndReload(config);
           setModalOpen(false);
         }}
         botName={botName}

@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { debounce } from 'lodash';
-import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
+import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 
@@ -19,7 +18,6 @@ import { TestController } from './../../TestController';
 
 export const LGPage = props => {
   const { state, actions } = useContext(Store);
-  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const { lgFiles, dialogs } = state;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
@@ -115,12 +113,18 @@ export const LGPage = props => {
     setNewContent(null);
   }
 
-  function onSave() {
+  async function onSave() {
     const payload = {
       id: lgFile.id,
       content: newContent,
     };
-    updateLgFile(payload);
+    try {
+      await actions.updateLgFile(payload);
+    } catch (error) {
+      OpenAlertModal('Save Failed', error.message, {
+        style: DialogStyle.Console,
+      });
+    }
   }
 
   // #TODO: get line number from lg parser, then deep link to code editor this
