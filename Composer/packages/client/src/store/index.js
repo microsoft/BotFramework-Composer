@@ -25,6 +25,7 @@ const initialState = {
   schemas: {},
   luFiles: [],
   luStatus: [],
+  errorMessages: [],
 };
 
 export function StoreProvider(props) {

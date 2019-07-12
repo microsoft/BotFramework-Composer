@@ -289,7 +289,13 @@ async function publishLuis(req: Request, res: Response) {
       const status = await ProjectService.currentBotProject.publishLuis(req.body);
       res.status(200).json({ status });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json(
+        new ProjectError({
+          message: error instanceof Error ? error.message : error,
+          title: 'Publish LU File Error',
+          statusCode: 400,
+        })
+      );
     }
   } else {
     res.status(404).json(

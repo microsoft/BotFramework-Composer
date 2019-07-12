@@ -8,6 +8,7 @@ class ServerError extends Error {
   type: string;
   title: string;
   statusCode: number | undefined;
+  error: string;
   constructor(args: ErrorInput) {
     super(args.message);
     this.name = this.constructor.name;
@@ -15,7 +16,7 @@ class ServerError extends Error {
     this.title = args.title ? args.title : this.constructor.name;
     this.statusCode = args.statusCode ? args.statusCode : 500;
     this.message = args.message;
-
+    this.error = args.message;
     Error.captureStackTrace(this, this.constructor);
   }
 }

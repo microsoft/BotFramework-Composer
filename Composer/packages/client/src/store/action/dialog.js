@@ -18,8 +18,12 @@ export async function createDialog(dispatch, { id, content }) {
     clearNavHistory(dispatch);
     navTo(dispatch, `${id}#`);
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
+    dispatch({
+      type: ActionTypes.CREATE_DIALOG_FAILURE,
+      payload: {
+        error: err.response ? err.response.data : err,
+      },
+    });
   }
 }
 

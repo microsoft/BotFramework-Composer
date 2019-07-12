@@ -40,8 +40,13 @@ const updateLuTemplate = (state, { response }) => {
   return state;
 };
 
-const setBotStatus = (state, { status }) => {
-  return (state.botStatus = status);
+const setBotStatus = (state, { status, error }) => {
+  state.botStatus = status;
+  // connect fail
+  if (status !== 'connected') {
+    state.errorMessages.push(error);
+  }
+  return state;
 };
 
 const getStoragesSuccess = (state, { response }) => {
@@ -113,7 +118,7 @@ const clearNavHistory = (state, { fromIndex }) => {
 };
 
 const setBotLoadErrorMsg = (state, { error }) => {
-  return (state.botLoadErrorMsg = error);
+  return (state.botLoadErrorMsg = error ? error.error : '');
 };
 
 const setCreationFlowStatus = (state, { creationFlowStatus }) => {
@@ -124,10 +129,21 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
+const handleAllFailure = (state, payload, error) => {
+  if (payload && payload.error) {
+    state.errorMessages.push(payload.error);
+  } else if ((!payload || !payload.error) && error) {
+    state.errorMessages.push(error);
+  } else if (error && payload.error && error !== payload.error) {
+    state.errorMessages.push(error);
+  }
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
+  [ActionTypes.CREATE_DIALOG_FAILURE]: handleAllFailure,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
