@@ -15,23 +15,8 @@ export async function connectBot(dispatch, botName) {
       },
     });
     await reloadBot(dispatch, botName);
-  } catch (error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      dispatch({
-        type: ActionTypes.CONNECT_BOT_FAILURE,
-        payload: {
-          error: error.response.data,
-        },
-      });
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.log(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log('Error', error.message);
-    }
+  } catch (err) {
+    throw new Error(err.response.data.error);
   }
 }
 
@@ -46,11 +31,6 @@ export async function reloadBot(dispatch, botName) {
       },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.RELOAD_BOT_FAILURE,
-      payload: {
-        error: err.response ? err.response.data : null,
-      },
-    });
+    throw new Error(err.response.data.error);
   }
 }

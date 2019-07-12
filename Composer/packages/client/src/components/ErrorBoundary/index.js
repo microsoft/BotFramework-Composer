@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
 
-import { PopUpError } from '../PopUpError/index';
+import { ErrorPopup } from '../ErrorPopup/index';
 
 // only class component can be a error boundary
 export class ErrorBoundary extends Component {
@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component {
   render() {
     const { hasError, info, title } = this.state;
     return (
-      <div>{hasError ? <PopUpError title={title} error={info} onDismiss={this.reset} /> : this.props.children}</div>
+      <div>{hasError ? <ErrorPopup title={title} error={info} onDismiss={this.reset} /> : this.props.children}</div>
     );
   }
 }

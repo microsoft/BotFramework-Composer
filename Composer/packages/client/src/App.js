@@ -12,7 +12,7 @@ import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { CreationFlow } from './CreationFlow/index';
-import { PopUpError } from './components/PopUpError';
+import { ErrorPopup } from './components/ErrorPopup';
 
 initializeIcons(/* optional base url */);
 
@@ -109,7 +109,7 @@ export function App() {
   return (
     <Fragment>
       {currentError ? (
-        <PopUpError
+        <ErrorPopup
           error={currentError.error}
           title={currentError.title}
           onDismiss={() => {

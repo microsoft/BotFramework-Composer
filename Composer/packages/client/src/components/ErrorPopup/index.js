@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 
 import { consoleStyle, dialog } from './styles';
 
-export const PopUpError = props => {
+export const ErrorPopup = props => {
   const [isShow, setIsShow] = useState(true);
 
   const _closeDialog = () => {
