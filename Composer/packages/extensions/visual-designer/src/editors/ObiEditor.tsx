@@ -21,6 +21,8 @@ export const ObiEditor = ({
   getLgTemplates,
   removeLgTemplate,
 }) => {
+  let divRef;
+
   const dispatchEvent = (eventName?, eventData?) => {
     let handler;
     switch (eventName) {
@@ -73,6 +75,7 @@ export const ObiEditor = ({
       className="obi-editor-container"
       data-testid="obi-editor-container"
       style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
+      ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;
         if (keyString === 'Delete' && focusedId) {
@@ -90,7 +93,10 @@ export const ObiEditor = ({
           data={data}
           focusedId={focusedId}
           getLgTemplates={getLgTemplates}
-          onEvent={(...args) => dispatchEvent(...args)}
+          onEvent={(...args) => {
+            divRef.focus();
+            dispatchEvent(...args);
+          }}
         />
       </DragScroll>
     </div>
