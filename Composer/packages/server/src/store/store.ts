@@ -4,9 +4,11 @@ import path from 'path';
 import localInitData from './data.template.json';
 import abhInitData from './abh-template.json';
 
-const dataStorePath = process.env.HOME
-  ? path.resolve(process.env.HOME, './site/data.json')
-  : path.resolve(__dirname, '../../data.json');
+const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
+const dataStorePath =
+  isHostedInAzure && process.env.HOME
+    ? path.resolve(process.env.HOME, './site/data.json')
+    : path.resolve(__dirname, '../../data.json');
 
 const initData = process.env.HOME ? abhInitData : localInitData;
 

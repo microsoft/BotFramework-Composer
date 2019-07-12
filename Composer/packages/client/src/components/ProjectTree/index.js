@@ -53,7 +53,6 @@ export const ProjectTree = props => {
         groups={[
           {
             links: links,
-            collapseByDefault: true,
           },
         ]}
         selectedKey={activeNode}

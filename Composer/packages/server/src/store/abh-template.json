@@ -10,7 +10,17 @@
   "recentBotProjects": [
     {
       "storageId": "default",
-      "path": "/home/site/artifacts/bot/bot.json"
+      "path": "/home/site/artifacts/bot/editing"
+    },
+    {
+      "storageId": "integration",
+      "path": "/home/site/artifacts/bot/integration",
+      "readOnly": true
+    },
+    {
+      "storageId": "production",
+      "path": "/home/site/artifacts/bot/production",
+      "readOnly": true
     }
   ]
 }
