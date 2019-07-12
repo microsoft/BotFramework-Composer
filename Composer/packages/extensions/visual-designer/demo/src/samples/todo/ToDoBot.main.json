@@ -27,8 +27,8 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "AddToDo"
-                }  
-                
+                }
+
             ]
         },
         {
@@ -38,7 +38,7 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "DeleteToDo"
-                }                 
+                }
             ]
         },
         {
@@ -48,7 +48,7 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "ClearToDos"
-                }                 
+                }
             ]
         },
         {
@@ -58,7 +58,7 @@
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "ShowToDos"
-                }                  
+                }
             ]
         },
         {

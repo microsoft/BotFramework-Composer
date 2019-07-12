@@ -3,6 +3,10 @@
 
   .ObjectItemField {
     flex: 1;
+
+    .BaseField {
+      margin-top: 10px;
+    }
   }
 
   .ObjectItemContext {

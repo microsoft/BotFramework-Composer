@@ -66,6 +66,7 @@ export class BotProject {
   public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
+    const diagostics: string[] = [];
 
     const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
@@ -73,22 +74,27 @@ export class BotProject {
     if (userEditorSchemaFile !== undefined) {
       try {
         editorSchema = JSON.parse(userEditorSchemaFile.content);
-      } catch {
-        throw new Error('Attempt to parse editor schema as JSON failed');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Attempt to parse editor schema as JSON failed');
+        diagostics.push(`Error in editor.schema, ${error.message}`);
       }
     }
 
     if (userSDKSchemaFile !== undefined) {
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
-      } catch {
-        throw new Error('Attempt to parse sdk schema as JSON failed');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Attempt to parse sdk schema as JSON failed');
+        diagostics.push(`Error in sdk.schema, ${error.message}`);
       }
     }
 
     return {
       editor: { content: editorSchema },
       sdk: { content: sdkSchema },
+      diagostics,
     };
   };
 
@@ -130,12 +136,20 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
+    const parseResult = this.lgIndexer.parse(content);
+    if (parseResult.isValid === false) {
+      throw new Error(`update lg ${id} content is invalid, ${parseResult.error.Message}`);
+    }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    const parseResult = this.lgIndexer.parse(content);
+    if (parseResult.isValid === false) {
+      throw new Error(`create lg ${id} content is invalid, ${parseResult.error.Message}`);
+    }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };

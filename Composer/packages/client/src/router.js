@@ -7,6 +7,7 @@ import { SettingPage } from './pages/setting';
 import { LUPage } from './pages/language-understanding';
 import { LGPage } from './pages/language-generation';
 import { Home } from './pages/home';
+import { About } from './pages/about';
 import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
@@ -27,6 +28,7 @@ const Routes = props => {
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
               <Home path="home" />
+              <About path="about" />
               <NotFound default />
             </Router>
           )}

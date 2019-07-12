@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 
+import oauthStorage from '../utils/oauthStorage';
+
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
@@ -14,6 +16,7 @@ const initialState = {
   navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
   navPathHistory: [],
+  recentProjects: [],
   storages: [],
   focusedStorageFolder: {},
   botStatus: 'unConnected',
@@ -25,6 +28,7 @@ const initialState = {
   schemas: {},
   luFiles: [],
   luStatus: [],
+  oAuth: oauthStorage.get(),
 };
 
 export function StoreProvider(props) {

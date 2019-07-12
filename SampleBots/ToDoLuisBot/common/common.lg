@@ -1,19 +1,19 @@
 # LuisToDoHelp
-
 -```
-You can add and remove items from any list - Add bananna to shopping list - Remove hat from packing list
+   You can add and remove items from any list 
+      - Add bananna to shopping list 
+      - Remove hat from packing list
+```
 
-````
-
-# showSingleList
+# showSingleList(x)
 -* {x} list
 
-# showSingleItem
+# showSingleItem(x)
 -* {x}
 
-# ShowItems
+# ShowItems(user, listName)
 -IF:{listName == "shopping"}
--```
+- ```
   You most recent @{count(user.lists.shopping)} shopping items are
 
   @{join(foreach(user.lists.shopping, x, lgTemplate('showSingleItem', x)), '\n')}
@@ -49,27 +49,20 @@ You can add and remove items from any list - Add bananna to shopping list - Remo
 # PromptForItem
 -What item did you want?\n\n[ShowItems]
 
-bfdactivity-920820
--Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.
+# bfdactivity-920820
+-Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 
-bfdactivity-398112
+# bfdactivity-398112
 -Successfully added {dialog.item} to {dialog.listName} list.
 
-bfdactivity-192360
+# bfdactivity-192360
 -Successfully removed {dialog.item} from {dialog.listName} list.
 
-bfdactivity-199536
+# bfdactivity-199536
 -You have no items in your {dialog.listName} list.
 
-bfdactivity-136653
+# bfdactivity-136653
 -[ShowItems(user, dialog.listName)]
 
-bfdactivity-636903
--Hi! I'm a ToDoBot configured to use LUIS to understand you. Say \"add a todo named first\" to get started
-
-bfdactivity-878434
--The list name must be shopping, grocery or todo.
-
-bfdactivity-326398
--The list name must be shopping, grocery or todo.
-````
+# bfdactivity-636903
+-Hi! I'm a ToDoBot configured to use LUIS to understand you. Say "add a todo named first" to get started

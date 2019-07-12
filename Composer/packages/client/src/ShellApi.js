@@ -1,11 +1,15 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual } from 'lodash';
+import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 import { LGParser } from 'botbuilder-lg';
+
+import { validateLgTemplate } from '../src/store/action/lg';
 
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import { OpenAlertModal, DialogStyle } from './components/Modal';
+
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
 // this is where all side effects (like directly calling api of extensions) happened
@@ -26,6 +30,7 @@ const FileChangeTypes = {
   CREATE: 'create',
   UPDATE: 'update',
   REMOVE: 'remove',
+  VALIDATE: 'validate',
 };
 
 const FileTargetTypes = {
@@ -67,12 +72,18 @@ export function ShellApi() {
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) =>
-      lgTemplateHandler(CREATE, { id, template, position }, event)
-    );
-    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) =>
-      lgTemplateHandler(UPDATE, { id, templateName, template }, event)
-    );
+    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) => {
+      // this validation error can pass to extensions in api callback
+      validateLgTemplate(template);
+      // this update operation error cannot pass to extensions, due to debounce
+      // then shell can push an error to extension
+      lgTemplateHandler(CREATE, { id, template, position }, event);
+    });
+    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) => {
+      validateLgTemplate(template);
+      lgTemplateHandler(UPDATE, { id, templateName, template }, event);
+    });
+    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => validateLgTemplate({ Name, Body }));
     apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
       lgTemplateHandler(REMOVE, { id, templateName }, event)
     );
@@ -107,6 +118,17 @@ export function ShellApi() {
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+
+  useEffect(() => {
+    const schemaError = get(schemas, 'diagostics', []);
+    if (schemaError.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = schemaError.join('\n');
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
+  }, [schemas]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {

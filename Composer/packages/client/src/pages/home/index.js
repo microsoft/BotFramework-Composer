@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 
@@ -13,13 +13,13 @@ import { ToolBar } from './../../components/ToolBar/index';
 import * as home from './styles';
 const linksLeft = [
   {
-    to: '/home',
-    text: formatMessage('See how it works'),
+    to: 'https://github.com/microsoft/botframework-designer#get-started',
+    text: formatMessage('Getting Started'),
     css: home.linkInfo,
   },
   {
-    to: '/home',
-    text: formatMessage('View interactive tutorial'),
+    to: 'https://aka.ms/BotframeworkComposerGettingstarted',
+    text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
 ];
@@ -27,26 +27,18 @@ const linksLeft = [
 const linksRight = [
   {
     to: '/home',
-    text: formatMessage('Create, test and deploy your bot'),
+    text: formatMessage('Coming soon!'),
     css: home.linkInfo,
-  },
-  {
-    to: '/home',
-    text: formatMessage('Create a PowerApps environment'),
-    css: home.linkInfo,
-  },
-  {
-    to: '/home',
-    text: formatMessage('See more options'),
-    css: home.moreOptions,
   },
 ];
 
 export const Home = () => {
   const { state, actions } = useContext(Store);
+  const { recentProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
   const [templates, setTemplates] = useState([]);
+
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
     navigate('/');
@@ -97,25 +89,11 @@ export const Home = () => {
     fetchTemplatesAction();
   }, []);
 
-  const bots = useMemo(() => {
-    const recentProjects = state.recentProjects || [];
-    const _bots = recentProjects.map(rp => {
-      const pathTokens = rp.path.split('/');
-      return {
-        iconName: 'Robot',
-        actionName: pathTokens[pathTokens.length - 1],
-        path: rp.path,
-        storageId: rp.storageId,
-      };
-    });
-    return _bots;
-  }, [state.recentProjects]);
-
   return (
     <div css={home.outline}>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
-        <div css={home.title}>{formatMessage(`"Are you real?"`)}</div>
+        <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
         <div css={home.introduction}>
           <div css={home.introTitle}>
             <div css={home.introTitleLeft}> {formatMessage(`Creating real conversations for real people.`)} </div>
@@ -130,7 +108,7 @@ export const Home = () => {
             </div>
           </div>
           <div css={home.introTitle}>
-            <div css={home.introTitleRight}> {formatMessage(`Product Video`)} </div>
+            <div css={home.introTitleRight}> {formatMessage(`Videos`)} </div>
             <div css={home.linkRight}>
               {linksRight.map(link => {
                 return (
@@ -157,19 +135,20 @@ export const Home = () => {
               </div>
               <div css={home.actionName}> {formatMessage('New')} </div>
             </div>
-            {bots.map((bot, index) => {
+            {recentProjects.map((item, index) => {
               if (index >= botNumLimit) return null;
+              const { name, path } = item;
               return (
-                <div css={home.botContent} key={'homePageBot-' + bot.path}>
+                <div css={home.botContent} key={'homePageBot-' + path}>
                   <div
                     css={home.action}
                     onClick={() => {
-                      onClickRecentBotProject(bot.path);
+                      onClickRecentBotProject(path);
                     }}
                   >
-                    <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />
+                    <IconButton styles={home.button()} iconProps={{ iconName: 'Robot' }} />
                   </div>
-                  <div css={home.actionName}> {bot.actionName} </div>
+                  <div css={home.actionName}> {name} </div>
                 </div>
               );
             })}
@@ -188,6 +167,7 @@ export const Home = () => {
                   }}
                 >
                   <div css={home.templateText}>{template.name}</div>
+                  <div css={home.templateDescription}>{template.description}</div>
                 </div>
               );
             })}

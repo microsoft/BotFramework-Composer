@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import oauthStorage from './../../utils/oauthStorage';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import LuisStorage from './../../utils/luisStorage';
 
@@ -15,19 +16,14 @@ export async function connectBot(dispatch, botName) {
     });
     await reloadBot(dispatch, botName);
   } catch (err) {
-    dispatch({
-      type: ActionTypes.CONNECT_BOT_FAILURE,
-      payload: {
-        error: err,
-      },
-    });
+    throw new Error(err.response.data.error);
   }
 }
 
 export async function reloadBot(dispatch, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, LuisStorage.get(botName));
+    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
@@ -35,11 +31,6 @@ export async function reloadBot(dispatch, botName) {
       },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.RELOAD_BOT_FAILURE,
-      payload: {
-        error: err.response.data.error,
-      },
-    });
+    throw new Error(err.response.data.error);
   }
 }
