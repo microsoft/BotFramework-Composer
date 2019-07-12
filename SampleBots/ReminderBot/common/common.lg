@@ -10,8 +10,7 @@
     Your have following reminders:
     @{join(foreach(singlepage, x, lgTemplate('showSingleReminder', x)), '\n')}
       ```
-- ELSE:
-    - You don't have any reminders.
+
 
 # showSingleReminder(x)
 - * {x.content} at {x.reminderDateTime}

@@ -13,22 +13,12 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Reminder Bot start",
       "$designer": {
         "createdAt": "2019-07-08T08:29:34.449Z",
-        "updatedAt": "2019-07-08T08:29:41.063Z",
+        "updatedAt": "2019-07-12T04:06:09.739Z",
         "id": "134916"
-      }
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "$designer": {
-        "createdAt": "2019-07-10T02:29:00.591Z",
-        "updatedAt": "2019-07-10T02:29:12.759Z",
-        "id": "107158"
       },
-      "property": "user.index",
-      "value": "0"
+      "activity": "Welcome to reminder bot. Try say \"add reminder for today\"."
     }
   ],
   "rules": [

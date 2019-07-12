@@ -145,9 +145,9 @@
         {
           "$type": "Microsoft.EndDialog",
           "$designer": {
-            "createdAt": "2019-07-10T07:58:50.931Z",
-            "updatedAt": "2019-07-10T07:58:50.937Z",
-            "id": "433543"
+            "createdAt": "2019-07-12T04:08:27.343Z",
+            "updatedAt": "2019-07-12T04:08:27.347Z",
+            "id": "450749"
           }
         }
       ]
@@ -236,10 +236,10 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-09T03:49:01.511Z",
-        "updatedAt": "2019-07-09T03:49:08.006Z",
+        "updatedAt": "2019-07-12T04:06:32.355Z",
         "id": "077390"
       },
-      "activity": "Never reached here."
+      "activity": "End."
     }
   ]
 }
