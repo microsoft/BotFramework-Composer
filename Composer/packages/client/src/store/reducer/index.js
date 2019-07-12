@@ -42,9 +42,8 @@ const updateLuTemplate = (state, { response }) => {
 
 const setBotStatus = (state, { status, error }) => {
   state.botStatus = status;
-  // connect fail
-  if (status !== 'connected') {
-    state.errorMessages.push(error);
+  if (error) {
+    handleAllFailure(state, { error });
   }
   return state;
 };
