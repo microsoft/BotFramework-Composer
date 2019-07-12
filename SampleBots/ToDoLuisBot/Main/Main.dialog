@@ -18,21 +18,27 @@
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:13.192Z",
+        "updatedAt": "2019-07-12T10:35:12.951Z",
+        "id": "842277"
+      },
+      "constraint": "#AddToDo.score>0.6",
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddItem"
         }
       ],
-      "intent": "AddToDo",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:13.192Z",
-        "updatedAt": "2019-07-04T07:31:13.209Z",
-        "id": "842277"
-      }
+      "intent": "AddToDo"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:14.654Z",
+        "updatedAt": "2019-07-12T10:35:25.481Z",
+        "id": "905057"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -40,21 +46,23 @@
         }
       ],
       "intent": "DeleteToDo",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:14.654Z",
-        "updatedAt": "2019-07-04T07:31:14.669Z",
-        "id": "905057"
-      }
+      "constraint": "#DeleteToDo.score>0.6"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ShowToDo",
+      "$designer": {
+        "createdAt": "2019-07-12T10:35:27.396Z",
+        "updatedAt": "2019-07-12T10:35:45.821Z",
+        "id": "624737"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowItems"
         }
-      ]
+      ],
+      "intent": "ShowToDo",
+      "constraint": "#ShowToDo.score>0.6"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
