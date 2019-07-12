@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 
+import oauthStorage from '../utils/oauthStorage';
+
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
@@ -26,6 +28,7 @@ const initialState = {
   luFiles: [],
   luStatus: [],
   errorMessages: [],
+  oAuth: oauthStorage.get(),
 };
 
 export function StoreProvider(props) {
