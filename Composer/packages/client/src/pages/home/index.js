@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 
@@ -34,9 +34,11 @@ const linksRight = [
 
 export const Home = () => {
   const { state, actions } = useContext(Store);
+  const { recentProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
   const [templates, setTemplates] = useState([]);
+
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
     navigate('/');
@@ -87,20 +89,6 @@ export const Home = () => {
     fetchTemplatesAction();
   }, []);
 
-  const bots = useMemo(() => {
-    const recentProjects = state.recentProjects || [];
-    const _bots = recentProjects.map(rp => {
-      const pathTokens = rp.path.split('/');
-      return {
-        iconName: 'Robot',
-        actionName: pathTokens[pathTokens.length - 1],
-        path: rp.path,
-        storageId: rp.storageId,
-      };
-    });
-    return _bots;
-  }, [state.recentProjects]);
-
   return (
     <div css={home.outline}>
       <ToolBar toolbarItems={toolbarItems} />
@@ -147,19 +135,20 @@ export const Home = () => {
               </div>
               <div css={home.actionName}> {formatMessage('New')} </div>
             </div>
-            {bots.map((bot, index) => {
+            {recentProjects.map((item, index) => {
               if (index >= botNumLimit) return null;
+              const { name, path } = item;
               return (
-                <div css={home.botContent} key={'homePageBot-' + bot.path}>
+                <div css={home.botContent} key={'homePageBot-' + path}>
                   <div
                     css={home.action}
                     onClick={() => {
-                      onClickRecentBotProject(bot.path);
+                      onClickRecentBotProject(path);
                     }}
                   >
-                    <IconButton styles={home.button()} iconProps={{ iconName: bot.iconName }} />
+                    <IconButton styles={home.button()} iconProps={{ iconName: 'Robot' }} />
                   </div>
-                  <div css={home.actionName}> {bot.actionName} </div>
+                  <div css={home.actionName}> {name} </div>
                 </div>
               );
             })}
