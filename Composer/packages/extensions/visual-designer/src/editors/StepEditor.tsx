@@ -77,7 +77,7 @@ export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => 
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
         <div className="step-editor__tail" style={{ ...TailSize, position: 'relative' }}>
-          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} />
+          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} directed={true} />
           <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
             <Circle />
           </OffsetContainer>
