@@ -17,8 +17,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(`${BASEURL}/static`, express.static(path.join(__dirname, './public/static')));
-app.use(`${BASEURL}/extensionContainer.html`, express.static(path.join(__dirname, './public/extensionContainer.html')));
+app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
 app.use(morgan('dev'));
 
 app.use(bodyParser.json());
