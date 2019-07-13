@@ -56,42 +56,44 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
   const { boundary, nodes, edges } = layout;
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      {edges.map(x => (
-        <Edge key={x.id} {...x} />
-      ))}
-      {nodes.map(x => (
-        <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
-          <NodeRenderer
-            key={`stepGroup/${x.id}]`}
-            id={x.id}
-            data={x.data}
-            focusedId={focusedId}
-            getLgTemplates={getLgTemplates}
-            onEvent={onEvent}
-            onResize={size => {
-              patchBoundary(x.id, size);
-            }}
-          />
-        </OffsetContainer>
-      ))}
+      {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      {nodes
+        ? nodes.map(x => (
+            <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
+              <NodeRenderer
+                key={`stepGroup/${x.id}]`}
+                id={x.id}
+                data={x.data}
+                focusedId={focusedId}
+                getLgTemplates={getLgTemplates}
+                onEvent={onEvent}
+                onResize={size => {
+                  patchBoundary(x.id, size);
+                }}
+              />
+            </OffsetContainer>
+          ))
+        : null}
       <OffsetContainer
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
         <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
       </OffsetContainer>
-      {nodes.map((x, idx) => (
-        <OffsetContainer
-          key={`stepGroup/${x.id}/footer/offset`}
-          offset={{
-            x: boundary.axisX - EdgeAddButtonSize.width / 2,
-            y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
-          }}
-          styles={{ zIndex: 100 }}
-        >
-          <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })} />
-        </OffsetContainer>
-      ))}
+      {nodes
+        ? nodes.map((x, idx) => (
+            <OffsetContainer
+              key={`stepGroup/${x.id}/footer/offset`}
+              offset={{
+                x: boundary.axisX - EdgeAddButtonSize.width / 2,
+                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
+              }}
+              styles={{ zIndex: 100 }}
+            >
+              <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })} />
+            </OffsetContainer>
+          ))
+        : null}
     </div>
   );
 };
