@@ -15,7 +15,7 @@ const BranchIntervalY = ElementInterval.y / 2;
  *           |   |  |   |
  */
 export function switchCaseLayouter(
-  conditionNode: GraphNode,
+  conditionNode: GraphNode | null,
   choiceNode: GraphNode,
   branchNodes: GraphNode[] = []
 ): GraphLayout {

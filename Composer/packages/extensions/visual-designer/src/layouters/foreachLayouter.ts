@@ -8,8 +8,8 @@ import { calculateForeachBoundary } from './calculateNodeBoundary';
 const ForeachIntervalY = ElementInterval.y / 2;
 
 export const foreachLayouter = (
-  foreachNode: GraphNode,
-  stepsNode: GraphNode,
+  foreachNode: GraphNode | null,
+  stepsNode: GraphNode | null,
   loopBeginNode: GraphNode,
   loopEndNode: GraphNode
 ): GraphLayout => {
