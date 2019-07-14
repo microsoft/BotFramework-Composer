@@ -9,8 +9,8 @@ const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
 export function ifElseLayouter(
-  conditionNode: GraphNode,
-  choiceNode: GraphNode,
+  conditionNode: GraphNode | null,
+  choiceNode: GraphNode | null,
   ifNode: GraphNode,
   elseNode: GraphNode
 ): GraphLayout {
