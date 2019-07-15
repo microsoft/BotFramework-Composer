@@ -13,7 +13,7 @@ import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 
-import './App.css';
+import './FormEditor.css';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
