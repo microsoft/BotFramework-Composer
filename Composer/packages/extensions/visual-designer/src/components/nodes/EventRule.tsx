@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent } from 'react';
+import formatMessage from 'format-message';
 
 // eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -14,9 +15,9 @@ function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.events && data.events.length) {
-    return 'Handle ' + data.events.join(', ');
+    return formatMessage('Handle ' + data.events.join(', '));
   } else {
-    return 'Handle Event...';
+    return formatMessage('Handle Event...');
   }
 }
 

@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent } from 'react';
+import formatMessage from 'format-message';
 
 // eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -14,7 +15,7 @@ function renderTitle(data) {
     return data.$designer.name;
   } else {
     // data.$type.split('.')[1]
-    return 'Handle Unknown Intent';
+    return formatMessage('Handle Unknown Intent');
   }
 }
 
