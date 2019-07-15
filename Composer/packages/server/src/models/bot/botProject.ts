@@ -190,10 +190,17 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const invalidLuFile = toPublish.filter(file => file.err.text !== '');
+    if (invalidLuFile.length !== 0) {
+      const msg = invalidLuFile.map(file => {
+        return file.id + ': ' + file.err.text + `\n`;
+      });
+      throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
+    }
     const emptyLuFiles = toPublish.filter(this.isEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
-      throw new Error('You have the following empty LuFile(s): ' + msg);
+      throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
     return await this.luPublisher.publish(config, toPublish);
   };
