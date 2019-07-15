@@ -1,0 +1,123 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-09T03:35:01.900Z",
+    "updatedAt": "2019-07-09T03:35:06.945Z",
+    "id": "295341"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "steps": [
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-10T07:22:22.187Z",
+        "updatedAt": "2019-07-10T07:22:28.682Z",
+        "id": "548776"
+      },
+      "property": "user.content",
+      "value": "@Content"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-10T07:22:00.425Z",
+        "updatedAt": "2019-07-10T07:22:11.066Z",
+        "id": "944876"
+      },
+      "property": "user.remindtime",
+      "value": "@RemindTime"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-10T07:26:55.157Z",
+        "updatedAt": "2019-07-10T07:27:00.692Z",
+        "id": "767754"
+      },
+      "condition": "user.remindtime != null",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T07:27:37.427Z",
+            "updatedAt": "2019-07-10T07:27:41.848Z",
+            "id": "173768"
+          },
+          "property": "user.requesttime",
+          "value": "user.remindtime.datetime[0].timex[0]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T07:28:25.135Z",
+            "updatedAt": "2019-07-10T07:28:29.796Z",
+            "id": "609489"
+          },
+          "property": "user.endtime",
+          "value": "addDays(formatDateTime(user.requesttime), 1)"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T07:27:49.439Z",
+            "updatedAt": "2019-07-10T07:37:53.886Z",
+            "id": "043822"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/DeleteReminder?UID={turn.activity.from.id}&StartDate={user.requesttime}&EndDate={user.endtime}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none",
+          "$designer": {
+            "createdAt": "2019-07-10T07:32:32.211Z",
+            "updatedAt": "2019-07-10T07:32:46.912Z",
+            "id": "575714"
+          },
+          "prompt": "What is the content of your reminder which you want to delete?",
+          "unrecognizedPrompt": "Sorry I don't understand. What is the content of your reminder which you want to delete?",
+          "invalidPrompt": "Sorry I don't understand. What is the content of your reminder which you want to delete?",
+          "property": "user.content"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T07:33:03.203Z",
+            "updatedAt": "2019-07-10T07:38:00.513Z",
+            "id": "522076"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/DeleteReminder?UID={turn.activity.from.id}&Content={user.content}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.BeginDialog",
+      "$designer": {
+        "createdAt": "2019-07-10T07:29:40.698Z",
+        "updatedAt": "2019-07-10T07:29:42.006Z",
+        "id": "912506"
+      },
+      "dialog": "ClearUserData"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:36:40.655Z",
+        "updatedAt": "2019-07-09T03:36:47.560Z",
+        "id": "984106"
+      },
+      "activity": "Delete succeed!"
+    }
+  ]
+}

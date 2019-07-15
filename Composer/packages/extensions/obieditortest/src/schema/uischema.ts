@@ -35,9 +35,6 @@ const activityFields = {
   value: {
     'ui:widget': NullField,
   },
-  allowInterruptions: {
-    'ui:field': NullField,
-  },
 };
 
 export const uiSchema = {
