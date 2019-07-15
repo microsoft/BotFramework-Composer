@@ -20,18 +20,19 @@ const getType = (data: FormData): string | undefined => {
 };
 
 export interface FormEditorProps {
-  navPath: string;
-  focusPath: string;
   data: FormData;
-  dialogs: DialogInfo[];
   dialogName: string;
-  luFiles: LuFile[];
+  dialogs: DialogInfo[];
+  focusPath: string;
+  isRoot: boolean;
   lgFiles: LgFile[];
-  schemas: EditorSchema;
+  luFiles: LuFile[];
   memory: FormMemory;
-  shellApi: ShellApi;
-  onChange: (newData: object) => void;
+  navPath: string;
   onBlur?: () => void;
+  onChange: (newData: object) => void;
+  schemas: EditorSchema;
+  shellApi: ShellApi;
 }
 
 function updateDesigner(data) {
@@ -120,6 +121,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             lgFiles: props.lgFiles,
             dialogName: props.dialogName,
             dialogId: get(data, '$designer.id'),
+            isRoot: props.isRoot,
           }}
           idPrefix={props.focusPath}
         >
