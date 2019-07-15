@@ -15,7 +15,7 @@ function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.events && data.events.length) {
-    return formatMessage('Handle ' + data.events.join(', '));
+    return formatMessage('Handle events: {events}', { events: data.events.join(', ') });
   } else {
     return formatMessage('Handle Event...');
   }

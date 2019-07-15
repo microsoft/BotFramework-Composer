@@ -15,7 +15,7 @@ function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.intent) {
-    return formatMessage(`Handle ${data.intent}`);
+    return formatMessage('Handle intent: {intent}', { intent: data.intent });
   } else {
     return formatMessage('Handle Intent...');
   }
