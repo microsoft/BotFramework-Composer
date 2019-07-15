@@ -1,0 +1,245 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T08:29:21.579Z",
+    "updatedAt": "2019-07-09T03:36:32.843Z",
+    "id": "215192"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:39:41.698Z",
+        "updatedAt": "2019-07-09T03:39:50.312Z",
+        "id": "529601"
+      },
+      "condition": "user.index == null",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-09T03:40:00.515Z",
+            "updatedAt": "2019-07-09T03:40:08.037Z",
+            "id": "494041"
+          },
+          "property": "user.index",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-10T06:41:27.397Z",
+        "updatedAt": "2019-07-10T06:41:40.205Z",
+        "id": "384323"
+      },
+      "property": "user.remindtime",
+      "value": "@RemindTime"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-10T06:42:04.663Z",
+        "updatedAt": "2019-07-10T06:43:11.663Z",
+        "id": "539675"
+      },
+      "condition": "user.remindtime != null",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T06:42:37.375Z",
+            "updatedAt": "2019-07-10T06:42:42.359Z",
+            "id": "755693"
+          },
+          "property": "user.requesttime",
+          "value": "user.remindtime.datetime[0].timex[0]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T06:44:12.722Z",
+            "updatedAt": "2019-07-10T07:10:53.820Z",
+            "id": "263177"
+          },
+          "property": "user.endtime",
+          "value": "addDays(formatDateTime(user.requesttime), 1)"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T06:43:38.741Z",
+            "updatedAt": "2019-07-10T06:45:27.277Z",
+            "id": "999357"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}&StartDate={user.requesttime}&EndDate={user.endtime}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T06:43:19.809Z",
+            "updatedAt": "2019-07-10T06:43:30.400Z",
+            "id": "627140"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-09T09:37:31.142Z",
+        "updatedAt": "2019-07-09T11:28:36.215Z",
+        "id": "147709"
+      },
+      "property": "user.singlepagedata",
+      "value": "subArray(user.data, user.index * 5, min(user.index * 5+5, count(user.data)))"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:36:52.470Z",
+        "updatedAt": "2019-07-09T09:38:43.759Z",
+        "id": "707692"
+      },
+      "activity": "[ShowReminders(user.singlepagedata)]"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:40:37.129Z",
+        "updatedAt": "2019-07-10T06:13:00.368Z",
+        "id": "975169"
+      },
+      "condition": "(user.index + 1) * 5 < count(user.data)",
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-09T03:46:11.483Z",
+            "updatedAt": "2019-07-09T03:46:20.121Z",
+            "id": "635553"
+          },
+          "activity": "You have no more reminders."
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-10T03:03:56.783Z",
+            "updatedAt": "2019-07-10T03:03:58.767Z",
+            "id": "633090"
+          },
+          "dialog": "ClearUserData"
+        },
+        {
+          "$type": "Microsoft.EndDialog",
+          "$designer": {
+            "createdAt": "2019-07-12T04:08:27.343Z",
+            "updatedAt": "2019-07-12T04:08:27.347Z",
+            "id": "450749"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConfirmInput",
+      "$designer": {
+        "createdAt": "2019-07-10T02:21:53.846Z",
+        "updatedAt": "2019-07-10T03:48:45.738Z",
+        "id": "257539"
+      },
+      "property": "user.choice",
+      "prompt": "You have more reminders, do you want to show more reminders?",
+      "unrecognizedPrompt": "You have more reminders, do you want to show more reminders?",
+      "invalidPrompt": "You have more reminders, do you want to show more reminders?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      }
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:47:23.311Z",
+        "updatedAt": "2019-07-10T02:24:32.273Z",
+        "id": "709735"
+      },
+      "condition": "user.choice == true",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-09T03:47:50.217Z",
+            "updatedAt": "2019-07-09T12:03:09.951Z",
+            "id": "152409"
+          },
+          "property": "user.index",
+          "value": "user.index+1"
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T12:41:23.645Z",
+            "updatedAt": "2019-07-09T12:41:23.653Z",
+            "id": "251435"
+          }
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-10T03:59:54.836Z",
+            "updatedAt": "2019-07-10T04:00:16.987Z",
+            "id": "670207"
+          },
+          "activity": "OK."
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-10T03:03:42.121Z",
+            "updatedAt": "2019-07-10T03:03:43.693Z",
+            "id": "786720"
+          },
+          "dialog": "ClearUserData"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "createdAt": "2019-07-09T03:48:32.903Z",
+            "updatedAt": "2019-07-09T03:48:32.906Z",
+            "id": "060306"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:49:01.511Z",
+        "updatedAt": "2019-07-12T04:06:32.355Z",
+        "id": "077390"
+      },
+      "activity": "End."
+    }
+  ]
+}
