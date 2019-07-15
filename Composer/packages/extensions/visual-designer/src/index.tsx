@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import PropType from 'prop-types';
 import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
@@ -12,7 +11,16 @@ formatMessage.setup({
   missingTranslation: 'ignore',
 });
 
-const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }: { [key: string]: any }) => {
+const VisualDesigner: React.FC<VisualDesignerProps> = ({
+  navPath,
+  focusPath,
+  data: inputData,
+  isRoot,
+  onChange,
+  shellApi,
+}: {
+  [key: string]: any;
+}) => {
   const dataCache = useRef();
   const layoutVersion = useRef(0);
 
@@ -59,6 +67,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
         path={navPath}
         focusedId={normalizeFocusedId(focusPath, navPath)}
         data={data}
+        isRoot={isRoot}
         onSelect={x => focusTo(x ? '.' + x : '')}
         onExpand={x => navDown('.' + x)}
         onOpen={x => navTo(x + '#')}
@@ -70,13 +79,15 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
   );
 };
 
-VisualDesigner.propTypes = {
-  navPath: PropType.string.isRequired,
-  focusPath: PropType.string.isRequired,
-  data: PropType.object.isRequired,
-  onChange: PropType.func.isRequired,
-  shellApi: PropType.object.isRequired,
-};
+interface VisualDesignerProps {
+  data: object;
+  focusPath: string;
+  navPath: string;
+  onChange: (x: any) => void;
+  shellApi: object;
+
+  isRoot?: boolean;
+}
 
 VisualDesigner.defaultProps = {
   navPath: '.',
