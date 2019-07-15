@@ -26,40 +26,23 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   };
 
   const openNode = () => {
-    /**
-     * If it is currently selected, navigate to the Rule's steps. If there is only
-     * one Step and is a BeginDialog, navigate inside the BeginDialog.
-     *
-     * REF: https://github.com/microsoft/BotFramework-Composer/pull/326#pullrequestreview-245538064
-     */
-    // const directJumpDialog = getDirectJumpDialog(data);
-    // if (directJumpDialog) {
-    //   return onEvent(NodeEventTypes.OpenLink, directJumpDialog);
-    // } else {
     return onEvent(NodeEventTypes.Expand, id);
-    // }
   };
 
   const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
-    console.log('Child dialog click!', data);
     if (directJumpDialog) {
       return onEvent(NodeEventTypes.OpenLink, directJumpDialog);
     }
   };
 
   const onCardBodyClick = () => {
-    console.log('card body click');
     if (focusedId === id) {
       openNode();
     } else {
       focusNode();
     }
   };
-
-  // const onCardNavClick = () => {
-  //   openNode();
-  // };
 
   let text = '';
   let dialog = null;
@@ -68,16 +51,12 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
     text = 'No actions';
   } else if (data.steps.length == 1) {
     let step = normalizeObiStep(data.steps[0]);
-
     if (step.$type == ObiTypes.BeginDialog) {
       dialog = step.dialog;
       text = ConceptLabels[step.$type].title || step.$type;
     } else {
       text = '1 step: ' + ConceptLabels[step.$type].title || step.$type;
     }
-    // if (step.$type == ObiTypes.SendActivity) {
-    //   lines.push(step.text);
-    // }
   } else {
     text = data.steps.length + ' steps';
   }
@@ -88,16 +67,6 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
       iconColor={getElementColor(DialogGroup.RULE).iconColor}
       corner={
         <div style={{ display: 'flex' }}>
-          {/* <Icon
-            style={{ lineHeight: '16px', fontSize: '16px' }}
-            onClick={e => {
-              e.stopPropagation();
-              onCardNavClick();
-            }}
-            iconName="OpenSource"
-            data-testid="OpenIcon"
-          /> */}
-
           <NodeMenu id={id} onEvent={onEvent} />
         </div>
       }

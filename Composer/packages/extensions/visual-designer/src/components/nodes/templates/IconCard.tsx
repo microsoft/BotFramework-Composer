@@ -20,22 +20,6 @@ export const IconCard = ({
   onClick,
   onChildDialogClick,
 }) => {
-  // const containerStyle = {
-  //   width: boxWidth,
-  //   height: boxHeight,
-  //   fontSize: '14px',
-  //   lineHeight: '19px',
-  //   cursor: 'pointer',
-  //   overflow: 'hidden',
-  //   backgroundColor: themeColor,
-  //   color: '#000000',
-  //   borderRadius: '2px 2px 0 0',
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   paddingLeft: '9px',
-  //   boxSizing: 'border-box' as 'border-box',
-  // };
-
   const containerStyle = {
     width: boxWidth,
     height: boxHeight,
