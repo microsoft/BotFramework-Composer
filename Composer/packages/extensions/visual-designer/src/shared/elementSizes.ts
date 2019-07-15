@@ -16,8 +16,8 @@ export const LoopIconSize = {
 export const LoopEdgeMarginLeft = 20;
 
 export const EventNodeSize = {
-  width: 180,
-  height: 32,
+  width: 240,
+  height: 100,
 };
 
 export const CollapsedEventNodeSize = {
