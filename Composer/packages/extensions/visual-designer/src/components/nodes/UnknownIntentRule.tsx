@@ -6,6 +6,9 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 
 import { RuleCard } from './templates/RuleCard';
 
+// Generate the title displayed in the graph
+// If a custom title has been specified, use this
+// otherwise, displays a generic message about the unknown intent rule.
 function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
