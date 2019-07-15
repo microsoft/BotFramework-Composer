@@ -143,10 +143,10 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
   };
 
   const renderTitle = item => {
-    if (fieldOverrides[item.$type] && fieldOverrides[item.$type].title) {
-      return fieldOverrides[item.$type].title;
-    } else {
+    if (get(item, '$designer.name', item.$type)) {
       return get(item, '$designer.name', item.$type);
+    } else {
+      return fieldOverrides[item.$type].title;
     }
   };
 
