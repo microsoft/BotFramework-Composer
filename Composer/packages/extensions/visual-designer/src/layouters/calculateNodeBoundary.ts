@@ -26,8 +26,8 @@ export function calculateSequenceBoundary(
 }
 
 export function calculateForeachBoundary(
-  foreachBoundary: Boundary,
-  stepsBoundary: Boundary,
+  foreachBoundary: Boundary | null,
+  stepsBoundary: Boundary | null,
   loopBeginBoundary: Boundary,
   loopEndBoundary: Boundary
 ): Boundary {
@@ -36,8 +36,7 @@ export function calculateForeachBoundary(
   if (!foreachBoundary || !stepsBoundary) return box;
 
   box.axisX = Math.max(foreachBoundary.axisX, stepsBoundary.axisX) + LoopEdgeMarginLeft;
-  box.width =
-    box.axisX + Math.max(foreachBoundary.width - box.axisX, stepsBoundary.width - box.axisX) + LoopEdgeMarginLeft;
+  box.width = Math.max(foreachBoundary.width, stepsBoundary.width) + LoopEdgeMarginLeft;
   box.height =
     foreachBoundary.height +
     BranchIntervalY +
@@ -51,8 +50,8 @@ export function calculateForeachBoundary(
 }
 
 export function calculateIfElseBoundary(
-  conditionBoundary: Boundary,
-  choiceBoundary: Boundary,
+  conditionBoundary: Boundary | null,
+  choiceBoundary: Boundary | null,
   ifBoundary: Boundary,
   elseBoundary: Boundary
 ): Boundary {
@@ -64,8 +63,8 @@ export function calculateIfElseBoundary(
 }
 
 export function calculateSwitchCaseBoundary(
-  conditionBoundary: Boundary,
-  choiceBoundary: Boundary,
+  conditionBoundary: Boundary | null,
+  choiceBoundary: Boundary | null,
   branchBoundaries: Boundary[] = []
 ): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
@@ -74,8 +73,8 @@ export function calculateSwitchCaseBoundary(
 }
 
 function measureBranchingContainerBoundary(
-  conditionBoundary: Boundary,
-  choiceBoundary: Boundary,
+  conditionBoundary: Boundary | null,
+  choiceBoundary: Boundary | null,
   branchBoundaries: Boundary[] = []
 ): Boundary {
   if (!conditionBoundary || !choiceBoundary) return new Boundary();
