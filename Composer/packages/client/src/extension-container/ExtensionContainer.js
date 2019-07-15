@@ -107,7 +107,7 @@ function ExtensionContainer() {
 
   if (RealEditor) {
     window.parent.extensionData = window.parent.extensionData || {};
-    window.parent.extensionData[RealEditor.name] = shellData.data;
+    window.parent.extensionData[RealEditor.name] = shellData;
   }
 
   return (

@@ -142,6 +142,9 @@ export function ShellApi() {
   }
 
   function getState(sourceWindow) {
+    const [currentDialogId] = navPath.split('#');
+    const currentDialog = dialogs.find(d => d.id === currentDialogId);
+
     return {
       data: getData(sourceWindow),
       dialogs,
@@ -150,6 +153,7 @@ export function ShellApi() {
       schemas,
       lgFiles,
       luFiles,
+      isRoot: currentDialog && currentDialog.isRoot,
     };
   }
 
