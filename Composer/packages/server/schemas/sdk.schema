@@ -583,7 +583,18 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Composer."
-                }
+                },
+				"eventName": {
+					"title": "Event Name",
+					"description": "The name of event to emit",
+					"type": "string"
+				},
+				"eventValue": {
+					"type": "object",
+					"title": "Event Value",
+					"description": "Optional value to emit along with the event",
+					"additionalProperties": true
+				}
             },
             "additionalProperties": false,
             "patternProperties": {
@@ -1482,8 +1493,10 @@
                         {
                             "enum": [
                                 "beginDialog",
-                                "consultDialog",
+                                "resumeDialog",
+                                "repromptDialog",
                                 "cancelDialog",
+                                "endDialog",
                                 "activityReceived",
                                 "recognizedIntent",
                                 "unknownIntent",
@@ -1982,17 +1995,17 @@
                     "title": "Http headers",
                     "description": "Http headers to include with the HTTP request (supports data binding)"
                 },
-                "responseTypes": {
+                "responseType": {
                     "type": "string",
-                    "title": "Response Types",
+                    "title": "Response Type",
                     "description": "Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.",
                     "enum": [
-                        "none",
-                        "json",
-                        "activity",
-                        "activities"
+                        "None",
+                        "Json",
+                        "Activity",
+                        "Activities"
                     ],
-                    "default": "json"
+                    "default": "Json"
                 }
             },
             "additionalProperties": false,
@@ -2012,7 +2025,7 @@
                     "title": "Type",
                     "required": [
                         "url",
-                        "entity",
+                        "method",
                         "$type"
                     ]
                 }
