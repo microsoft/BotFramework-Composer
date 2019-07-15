@@ -104,10 +104,6 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
-  [ObiTypes.ChoiceInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
   [ObiTypes.EndDialog]: {
     details: 'property',
     text: 'End this dialog',
@@ -163,6 +159,9 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
+    const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : [];
+    let children: any = null;
+
     if (keyMap) {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;
@@ -180,6 +179,15 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
       header = truncateType(data.$type);
     }
 
+    if (choices) {
+      children = (
+        <div>
+          {choices.map((choice, index) => {
+            return <div key={index}>{choice.value}</div>;
+          })}
+        </div>
+      );
+    }
     return (
       <FormCard
         nodeColors={nodeColors}
@@ -190,7 +198,9 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);
         }}
-      />
+      >
+        {children}
+      </FormCard>
     );
   }
 }
