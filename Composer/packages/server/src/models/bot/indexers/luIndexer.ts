@@ -17,12 +17,11 @@ export class LUIndexer {
   public async index(files: FileInfo[]) {
     if (files.length === 0) return [];
     this.luFiles = [];
-    let luFileErr = {};
     for (const file of files) {
       const extName = Path.extname(file.name);
+      let luFileErr = { text: '', errCode: '' };
       if (extName === '.lu') {
         let parsedContent = {};
-
         try {
           parsedContent = await parseContent(file.content);
         } catch (err) {
@@ -30,11 +29,10 @@ export class LUIndexer {
           console.error('Error parsing lu file content.');
           console.error(err);
           /* eslint-enable no-console */
-          luFileErr = { err };
+          luFileErr = err;
         }
-
         this.luFiles.push({
-          ...luFileErr,
+          err: { text: luFileErr.text, errCode: luFileErr.errCode },
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,

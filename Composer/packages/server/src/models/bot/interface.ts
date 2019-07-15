@@ -36,6 +36,7 @@ export interface LGFile {
 }
 
 export interface LUFile {
+  err: { text: string; errCode: string };
   id: string;
   relativePath: string;
   content: string;
