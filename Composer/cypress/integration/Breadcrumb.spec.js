@@ -23,8 +23,8 @@ context('breadcrumb', () => {
     });
 
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('AddIntent').click();
-      cy.getByText('AddIntent').click();
+      cy.getByText('Handle AddIntent').click();
+      cy.getByText('Handle AddIntent').click();
     });
 
     cy.get('[data-testid="Breadcrumb"]').within(() => {
