@@ -31,6 +31,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
       x,
       y,
       length: StepInterval,
+      directed: true,
     });
   }
 
@@ -47,6 +48,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
       x: box.axisX,
       y: 0,
       length: ExtraEdgeLength,
+      directed: true,
     });
   }
 
