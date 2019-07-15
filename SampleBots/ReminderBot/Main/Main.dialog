@@ -1,0 +1,159 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T07:49:23.113Z",
+    "updatedAt": "2019-07-08T08:30:26.486Z",
+    "id": "899494",
+    "name": "ReminderBot",
+    "description": "ReminderBot"
+  },
+  "autoEndDialog": false,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-08T08:29:34.449Z",
+        "updatedAt": "2019-07-12T04:06:09.739Z",
+        "id": "134916"
+      },
+      "activity": "Welcome to reminder bot. Try say \"add reminder for today\"."
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:10.898Z",
+        "updatedAt": "2019-07-09T04:10:46.591Z",
+        "id": "899834"
+      },
+      "intent": "AddReminder",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "AddReminder"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteReminder",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:19.739Z",
+        "updatedAt": "2019-07-08T08:28:38.879Z",
+        "id": "295024"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-10T07:36:38.137Z",
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteAllReminders",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:40.553Z",
+        "updatedAt": "2019-07-08T08:28:44.105Z",
+        "id": "583948"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "ShowReminder"
+        }
+      ],
+      "intent": "ShowReminder",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:45.611Z",
+        "updatedAt": "2019-07-08T08:28:48.567Z",
+        "id": "622298"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "intent": "HelpIntent",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:57.477Z",
+        "updatedAt": "2019-07-08T08:28:57.505Z",
+        "id": "597721"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ],
+      "intent": "CancelIntent",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.020Z",
+        "updatedAt": "2019-07-08T08:28:58.025Z",
+        "id": "720611"
+      }
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.",
+          "$designer": {
+            "createdAt": "2019-07-08T08:31:12.564Z",
+            "updatedAt": "2019-07-08T08:31:12.567Z",
+            "id": "618611"
+          }
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.881Z",
+        "updatedAt": "2019-07-08T08:28:58.886Z",
+        "id": "146624"
+      }
+    }
+  ],
+  "$schema": "../../app.schema"
+}
