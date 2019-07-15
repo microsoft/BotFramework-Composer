@@ -351,6 +351,17 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           description: 'Extra information for the Bot Framework Composer.',
         },
+        eventName: {
+          title: 'Event Name',
+          description: 'The name of event to emit',
+          type: 'string',
+        },
+        eventValue: {
+          type: 'object',
+          title: 'Event Value',
+          description: 'Optional value to emit along with the event',
+          additionalProperties: true,
+        },
       },
       additionalProperties: false,
       patternProperties: {
@@ -1376,8 +1387,10 @@ export const appschema: JSONSchema6 = {
             type: 'string',
             enum: [
               'beginDialog',
-              'consultDialog',
+              'resumeDialog',
+              'repromptDialog',
               'cancelDialog',
+              'endDialog',
               'activityReceived',
               'recognizedIntent',
               'unknownIntent',
@@ -1601,12 +1614,12 @@ export const appschema: JSONSchema6 = {
           description:
             'Additional headers to include with the HTTP request. This may reference properties in memory as {property.name}.',
         },
-        responseTypes: {
+        responseType: {
           type: 'string',
           title: 'Expected Response Type',
           description:
             'This specifies the method used to parse the response from the HTTP request. If Activity or Activities, the results will be forwarded immediately to the customer as messages.',
-          enum: ['none', 'json', 'activity', 'activities'],
+          enum: ['None', 'Json', 'Activity', 'Activities'],
         },
       },
       additionalProperties: false,
