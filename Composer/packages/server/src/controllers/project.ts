@@ -123,8 +123,8 @@ async function saveProjectAs(req: Request, res: Response) {
 }
 
 async function getRecentProjects(req: Request, res: Response) {
-  const project = ProjectService.recentBotProjects;
-  return res.status(200).json(project);
+  const projects = ProjectService.getRecentBotProjects();
+  return res.status(200).json(projects);
 }
 
 async function updateDialog(req: Request, res: Response) {

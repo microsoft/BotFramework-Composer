@@ -1,0 +1,16 @@
+# Hello
+- Hi
+
+# help
+- I can add reminders for you, like 'add a reminder to finish the test for 8 am tomorrow'.
+
+# ShowReminders(singlepage)
+- IF: {count(singlepage) > 0}
+    - ```
+    Your have following reminders:
+    @{join(foreach(singlepage, x, lgTemplate('showSingleReminder', x)), '\n')}
+      ```
+
+
+# showSingleReminder(x)
+- * {x.content} at {x.reminderDateTime}
