@@ -105,6 +105,10 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
+  [ObiTypes.ChoiceInput]: {
+    label: 'prompt',
+    details: 'property',
+  },
   [ObiTypes.EndDialog]: {
     details: 'property',
     text: 'End this dialog',
