@@ -95,8 +95,20 @@ Bot Framework uses the [common expression language](https://github.com/microsoft
 *  [Operators](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#operators)
 * [Built-in functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md#pre-built-functions)
 
+When used in expressions, no special notation is necessary to refer to a property from memory.
 
-### Memory in Conditions
+### Memory in Branches and Loops
+
+A bot can evaluate values from memory when making decisions inside a branching action like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
+
+In the example below, the expression `user.profile.age > 13` will evaluate to either `TRUE` or `FALSE`, and the branch action will then execute the appropriate branch.
+
+![Branch condition](./Assets/branch-condition.png)
+
+In this second example, the value of `turn.choice` is used to match against multiple switch cases. Note that, while it looks like a raw reference to a property, this is actually an expression - since no operation is being taken on the property, the expression evaluates to the raw value.
+
+![Switch condition](./Assets/switch-condition.png)
+
 
 ### Memory in LG
 
