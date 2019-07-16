@@ -21,7 +21,7 @@ const getType = (data: FormData): string | undefined => {
 
 export interface FormEditorProps {
   data: FormData;
-  dialogName: string;
+  currentDialog: DialogInfo;
   dialogs: DialogInfo[];
   focusPath: string;
   isRoot: boolean;
@@ -77,7 +77,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     ...uiSchema[type],
   };
 
-  const dialogOptions = dialogs.map(f => f.id);
+  const dialogOptions = dialogs.map(f => ({ value: f.id, label: f.displayName }));
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
@@ -119,9 +119,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             rootId: props.focusPath,
             luFiles: props.luFiles,
             lgFiles: props.lgFiles,
-            dialogName: props.dialogName,
+            currentDialog: props.currentDialog,
             dialogId: get(data, '$designer.id'),
-            isRoot: props.isRoot,
+            isRoot: props.focusPath.endsWith('#'),
           }}
           idPrefix={props.focusPath}
         >

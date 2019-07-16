@@ -15,7 +15,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   navPath,
   focusPath,
   data: inputData,
-  isRoot,
+  currentDialog,
   onChange,
   shellApi,
 }: {
@@ -67,7 +67,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
         path={navPath}
         focusedId={normalizeFocusedId(focusPath, navPath)}
         data={data}
-        isRoot={isRoot}
+        isRoot={currentDialog.isRoot && navPath.endsWith('#')}
         onSelect={x => focusTo(x ? '.' + x : '')}
         onExpand={x => navDown('.' + x)}
         onOpen={x => navTo(x + '#')}
@@ -85,8 +85,7 @@ interface VisualDesignerProps {
   navPath: string;
   onChange: (x: any) => void;
   shellApi: object;
-
-  isRoot?: boolean;
+  currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 
 VisualDesigner.defaultProps = {
