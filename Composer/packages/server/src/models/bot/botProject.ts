@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import { get } from 'lodash';
+
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -190,10 +192,10 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const invalidLuFile = toPublish.filter(file => file.err.text !== '');
+    const invalidLuFile = toPublish.filter(file => file.diagostics !== null);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.map(file => {
-        return file.id + ': ' + file.err.text + `\n`;
+        return file.id + ': ' + get(file, 'diagostics.text', ' ') + `\n`;
       });
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
