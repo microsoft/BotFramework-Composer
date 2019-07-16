@@ -68,7 +68,7 @@ export class BotProject {
   public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
-    const diagostics: string[] = [];
+    const diagnostics: string[] = [];
 
     const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
@@ -79,7 +79,7 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse editor schema as JSON failed');
-        diagostics.push(`Error in editor.schema, ${error.message}`);
+        diagnostics.push(`Error in editor.schema, ${error.message}`);
       }
     }
 
@@ -89,14 +89,14 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse sdk schema as JSON failed');
-        diagostics.push(`Error in sdk.schema, ${error.message}`);
+        diagnostics.push(`Error in sdk.schema, ${error.message}`);
       }
     }
 
     return {
       editor: { content: editorSchema },
       sdk: { content: sdkSchema },
-      diagostics,
+      diagnostics,
     };
   };
 
@@ -206,10 +206,10 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const invalidLuFile = toPublish.filter(file => file.diagostics !== null);
+    const invalidLuFile = toPublish.filter(file => file.diagnostics !== null);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.map(file => {
-        return file.id + ': ' + get(file, 'diagostics.text', ' ') + `\n`;
+        return file.id + ': ' + get(file, 'diagnostics.text', ' ') + `\n`;
       });
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }

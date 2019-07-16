@@ -15,7 +15,7 @@ export interface Dialog {
   isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
-  diagostics: string[];
+  diagnostics: string[];
   lgFile: string;
   luFile: string;
   luIntents: string[];
@@ -32,11 +32,11 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
-  diagostics: any[]; // LGParser output, TODO:
+  diagnostics: any[]; // LGParser output, TODO:
 }
 
 export interface LUFile {
-  diagostics?: { text: string; errCode: string };
+  diagnostics: any[]; // ludown parser output
   id: string;
   relativePath: string;
   content: string;

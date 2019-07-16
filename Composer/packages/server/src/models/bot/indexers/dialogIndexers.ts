@@ -133,13 +133,13 @@ export class DialogIndexer {
             const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const id = Path.basename(file.name, extName);
             const isRoot = id === 'Main';
-            const diagostics = this.CheckFields(dialogJson);
+            const diagnostics = this.CheckFields(dialogJson);
             const dialog = {
               id,
               isRoot,
               displayName: isRoot ? botName : id,
               content: dialogJson,
-              diagostics,
+              diagnostics,
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),
