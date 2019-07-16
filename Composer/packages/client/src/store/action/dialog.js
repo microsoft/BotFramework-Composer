@@ -19,9 +19,10 @@ export async function createDialog(dispatch, { id, content }) {
     navTo(dispatch, `${id}#`);
   } catch (err) {
     dispatch({
-      type: ActionTypes.CREATE_DIALOG_FAILURE,
+      type: ActionTypes.SET_ERROR_MESSAGE,
       payload: {
-        error: err.response ? err.response.data : err,
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'CREATE DIALOG ERROR',
       },
     });
   }
@@ -41,9 +42,11 @@ export async function updateDialog(dispatch, { id, content }) {
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.UPDATE_DIALOG_FAILURE,
-      payload: null,
-      error: err,
+      type: ActionTypes.SET_ERROR_MESSAGE,
+      payload: {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'UPDATE DIALOG ERROR',
+      },
     });
   }
 }

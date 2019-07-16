@@ -7,32 +7,35 @@ import { ErrorPopup } from '../ErrorPopup';
 
 // only class component can be a error boundary
 export class ErrorBoundary extends Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-    this.addListener();
+    this.state = { setError: context.actions.setError };
+    this.unhandledrejectionHandler = this.unhandledrejectionHandler.bind(this);
+    this.eventHandler = this.eventHandler.bind(this);
   }
+
+  // will catch unhandle http error etc
   unhandledrejectionHandler(event) {
     event.preventDefault();
     console.log('Catch reject error:', event.reason.message);
-    this.context.actions.setErrorMsg({
-      message: event.reason.message,
+    this.context.actions.setError({
+      message: event.reason.message ? event.reason.message : event.reason.stack,
       summary: 'unhandled rejection',
     });
   }
 
   eventHandler(error) {
     console.log('Catch Error Event：', error);
-    this.context.actions.setErrorMsg({
+    this.context.actions.setError({
       message: error.message,
       summary: 'Event Error',
     });
   }
 
-  addListener() {
-    console.log(this.context);
+  componentDidMount() {
     window.onerror = function(message, source, lineno, colno, error) {
       console.log('Catch Error：', { message, source, lineno, colno, error });
-      this.context.actions.setErrorMsg({
+      this.context.actions.setError({
         message: message,
         summary: 'Something went wrong',
       });
@@ -42,16 +45,18 @@ export class ErrorBoundary extends Component {
     window.addEventListener('error', this.eventHandler, true);
   }
 
+  // catch all render errors for children components
   componentDidCatch(error) {
-    this.context.actions.setErrorMsg({
+    console.log(error);
+    this.state.setError({
       message: error.message,
-      summary: 'Something went wrong',
+      summary: 'Render Error',
     });
   }
 
   componentWillUnmount() {
-    // set errorMsg into null;
-    this.context.actions.setErrorMsg(null);
+    // set error into null;
+    this.context.actions.setError(null);
     window.onerror = null;
     window.removeEventListener('unhandledrejection', this.unhandledrejectionHandler);
     window.removeEventListener('error', this.eventHandler);
@@ -61,12 +66,12 @@ export class ErrorBoundary extends Component {
     return (
       <Store.Consumer>
         {({ state, actions }) => {
-          state.errorMsg ? (
+          return state.error ? (
             <ErrorPopup
-              error={state.errorMsg.message}
-              title={state.errorMsg.summary}
+              error={state.error.message}
+              title={state.error.summary}
               onDismiss={() => {
-                actions.setErrorMsg(null);
+                actions.setError(null);
               }}
             />
           ) : (

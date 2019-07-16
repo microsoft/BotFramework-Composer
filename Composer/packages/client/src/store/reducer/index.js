@@ -41,8 +41,7 @@ const updateLuTemplate = (state, { response }) => {
 };
 
 const setBotStatus = (state, { status }) => {
-  state.botStatus = status;
-  return state;
+  return (state.botStatus = status);
 };
 
 const getStoragesSuccess = (state, { response }) => {
@@ -114,7 +113,7 @@ const clearNavHistory = (state, { fromIndex }) => {
 };
 
 const setBotLoadErrorMsg = (state, { error }) => {
-  return (state.botLoadErrorMsg = error ? error.error : '');
+  return (state.botLoadErrorMsg = error);
 };
 
 const setCreationFlowStatus = (state, { creationFlowStatus }) => {
@@ -125,8 +124,8 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
-const setErrorMsg = (state, { errorMsg }) => {
-  return (state.errorMsg = errorMsg);
+const setError = (state, payload) => {
+  return (state.error = payload);
 };
 
 const updateOAuth = (state, { oAuth }) => {
@@ -159,5 +158,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
-  [ActionTypes.SET_ERROR_MESSAGE]: setErrorMsg,
+  [ActionTypes.SET_ERROR_MESSAGE]: setError,
 });

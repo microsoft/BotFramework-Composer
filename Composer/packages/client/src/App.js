@@ -95,6 +95,7 @@ export function App() {
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus } = actions;
+
   useEffect(() => {
     fetchProject();
   }, []);

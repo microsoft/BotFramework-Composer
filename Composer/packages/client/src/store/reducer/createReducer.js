@@ -11,7 +11,7 @@ const createReducer = handlers => {
     }
   });
   return (state, action) => {
-    const { type, payload, error } = action;
+    const { type, payload } = action;
 
     // ensure action dispatched is defined in constants/index.js#ActionTypes
     if (ActionTypes.hasOwnProperty(type) === false) {
@@ -20,7 +20,7 @@ const createReducer = handlers => {
 
     if (handlers.hasOwnProperty(type)) {
       return producer(state, nextState => {
-        handlers[type](nextState, payload, error ? error : null);
+        handlers[type](nextState, payload);
       });
     } else {
       return state;
