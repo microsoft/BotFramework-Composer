@@ -16,13 +16,13 @@
 - * {x.content} at {x.reminderDateTime}
 
 # bfdactivity-134916
--Welcome to reminder bot. Try say "add reminder for today".
+-Welcome to reminder bot. Try saying "add reminder for today".
 
 # bfdactivity-672824
--Add reminder successfully!
+-Added reminder successfully!
 
 # bfdactivity-984106
--Delete succeed!
+-Delete succeeded!
 
 # bfdactivity-707692
 -[ShowReminders(user.singlepagedata)]

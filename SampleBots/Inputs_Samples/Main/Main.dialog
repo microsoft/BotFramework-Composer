@@ -5,7 +5,7 @@
     "updatedAt": "2019-07-16T18:54:22.992Z",
     "id": "400830",
     "name": "Inputs_Samples",
-    "description": "This is a bot that demonstrates the different options to collect input from  user using Adaptive Dialogs."
+    "description": "This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs."
   },
   "autoEndDialog": false,
   "recognizer": {
