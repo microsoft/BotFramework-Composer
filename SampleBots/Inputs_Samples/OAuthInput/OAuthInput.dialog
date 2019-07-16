@@ -19,7 +19,7 @@
       "condition": "user.token == null",
       "steps": [
         {
-          "$type": "Microsoft.OAuthInput",
+          "$type": "Microsoft.OAuthPrompt",
           "$designer": {
             "createdAt": "2019-07-16T19:31:43.362Z",
             "updatedAt": "2019-07-16T19:31:51.650Z",
