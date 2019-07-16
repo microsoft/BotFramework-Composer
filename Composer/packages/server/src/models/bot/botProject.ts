@@ -170,6 +170,13 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+
+    try {
+      await this.luIndexer.parse(content);
+    } catch (error) {
+      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
+    }
+
     await this._updateFile(luFile.relativePath, content);
     this.luPublisher.update(luFile.relativePath);
     return this.luIndexer.getLuFiles();
@@ -177,6 +184,13 @@ export class BotProject {
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
+
+    try {
+      await this.luIndexer.parse(content);
+    } catch (error) {
+      throw new Error(`create ${id}.lu Failed, ${error.text}`);
+    }
+
     await this._createFile(relativePath, content);
     return this.luIndexer.getLuFiles();
   };

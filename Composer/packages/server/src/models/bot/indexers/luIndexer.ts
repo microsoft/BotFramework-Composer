@@ -45,4 +45,10 @@ export class LUIndexer {
   public getLuFiles() {
     return this.luFiles;
   }
+
+  public parse(content: string) {
+    // TODO update lg-parser, use new diagostic method
+
+    return parseContent(content);
+  }
 }
