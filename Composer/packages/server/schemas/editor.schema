@@ -1,9 +1,5 @@
 {
   "fieldTemplateOverrides": {
-    "BaseField": {
-      "title": false,
-      "description": false
-    },
     "RulesField": {
       "title": "Events",
       "description": "Define handlers for events that occur within the bot."

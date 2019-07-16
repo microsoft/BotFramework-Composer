@@ -10,6 +10,7 @@ import { FormContext } from '../types';
 import SectionSeparator from '../SectionSeparator';
 
 import { DesignerField } from './DesignerField';
+
 import './styles.scss';
 
 const descriptionMarkup = description => {
@@ -36,8 +37,9 @@ const overrideDefaults = {
 
 function RootDialog(props) {
   const { title, name, description, schema, formData, formContext } = props;
+  const { currentDialog, editorSchema, isRoot } = formContext as FormContext;
 
-  const templateOverrides = get(formContext.editorSchema, 'content.fieldTemplateOverrides.BaseField', overrideDefaults);
+  const overrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
@@ -45,21 +47,30 @@ function RootDialog(props) {
     props.onChange({ ...formData, $designer: newDesigner });
   };
 
+  const getTitle = () => {
+    const dialogName = isRoot && currentDialog.displayName;
+
+    if (overrides.title === false) {
+      return false;
+    }
+
+    return dialogName || overrides.title || title || schema.title || startCase(name);
+  };
+
+  const getDescription = () => {
+    return overrides.description || description || schema.description;
+  };
+
   return (
     <div id={props.id}>
-      {templateOverrides.title === false ? null : (
-        <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
-          {title || schema.title || startCase(name)}
-        </h3>
-      )}
-      {templateOverrides.description === false
-        ? null
-        : (description || schema.description) && (
-            <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
-              {description || schema.description}
-            </p>
-          )}
-      {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
+      <SectionSeparator styles={{ marginTop: 0 }} label={getTitle()}>
+        {overrides.description !== false && (description || schema.description) && (
+          <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
+            {getDescription()}
+          </p>
+        )}
+        {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
+      </SectionSeparator>
       {props.children}
     </div>
   );
@@ -67,7 +78,7 @@ function RootDialog(props) {
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const { children, title, name, description, schema, uiSchema, idSchema, formContext, className } = props;
-  const isRoot = idSchema.__id === formContext.rootId;
+  const isRootBaseField = idSchema.__id === formContext.rootId;
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
@@ -84,26 +95,23 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     key = `${key}-${formContext.dialogId}`;
   }
 
-  return isRoot ? (
-    <RootDialog {...props} key={key} id={key} formContext={formContext}>
+  return isRootBaseField ? (
+    <RootDialog {...props} key={key} id={key}>
       {children}
     </RootDialog>
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key}>
-      {titleOverride === false ? null : (
-        <SectionSeparator>
-          {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
-        </SectionSeparator>
-      )}
-      {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-        <p
-          className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
-          dangerouslySetInnerHTML={descriptionMarkup(
-            descriptionOverride || description || uiSchema['ui:description'] || schema.description
-          )}
-        />
-      )}
-      {children}
+      <SectionSeparator label={titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}>
+        {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
+          <p
+            className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
+            dangerouslySetInnerHTML={descriptionMarkup(
+              descriptionOverride || description || uiSchema['ui:description'] || schema.description
+            )}
+          />
+        )}
+        {children}
+      </SectionSeparator>
     </div>
   );
 }
