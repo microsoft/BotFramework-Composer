@@ -25,6 +25,17 @@ The **dialog scope** is associated with the current dialog and any child or pare
 The **turn scope** is associated with a single turn. Properties in the turn scope are discarded at the end of the turn.
 
 
+## Automatic Properties
+
+Some properties are automatically created and managed by the bot. These are available automatically.
+
+|Property |Description
+|-- |--
+| turn.activity | The full incoming [Activity](https://docs.microsoft.com/en-us/javascript/api/botframework-schema/activity?view=botbuilder-ts-latest) object
+| turn.intents | If a recognizer is run, the intents found
+| turn.entities | If a recognizer is run, the entities found
+| turn.dialogEvents.[event name].value | Payload of a custom event
+
 ## Memory Actions
 
 ## Memory in Conditions
