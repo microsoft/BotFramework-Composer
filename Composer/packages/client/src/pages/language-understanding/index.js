@@ -22,7 +22,6 @@ export const LUPage = props => {
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
-  const [isContentChanged, setIsContentChanged] = useState(false);
   const [luFile, setLuFile] = useState(null);
 
   const subPath = props['*'];
@@ -93,8 +92,16 @@ export const LUPage = props => {
     setNewContent(null);
   }, [activePath, dialogs, luFiles]);
 
+  const UIShowEditingToolBar = useMemo(() => {
+    return !!newContent;
+  }, [newContent]);
+
+  const UIShowEditingAlert = useMemo(() => {
+    return !!newContent;
+  }, [newContent]);
+
   function onSelect(id) {
-    if (isContentChanged) {
+    if (UIShowEditingAlert) {
       OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
       return;
     }
@@ -106,7 +113,6 @@ export const LUPage = props => {
   }
 
   function onChange(newContent) {
-    setIsContentChanged(true);
     setNewContent(newContent);
   }
 
@@ -115,7 +121,6 @@ export const LUPage = props => {
       ...luFiles.find(luFile => luFile.id === activeDialog.id),
     });
     setNewContent(null);
-    setIsContentChanged(false);
   }
 
   function onSave() {
@@ -124,7 +129,6 @@ export const LUPage = props => {
       content: newContent,
     };
     updateLuFile(payload);
-    setIsContentChanged(false);
   }
 
   // #TODO: get line number from lu parser, then deep link to code editor this
@@ -148,7 +152,7 @@ export const LUPage = props => {
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
-          {isContentChanged && (
+          {UIShowEditingToolBar && (
             <Fragment>
               <ActionButton
                 iconProps={{
