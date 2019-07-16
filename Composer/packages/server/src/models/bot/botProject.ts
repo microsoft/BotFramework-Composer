@@ -131,6 +131,20 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
+  public removeDialog = async (id: string): Promise<Dialog[]> => {
+    if (id === 'Main') {
+      throw new Error(`Main dialog can't be removed`);
+    }
+
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog === undefined) {
+      throw new Error(`no such dialog ${id}`);
+    }
+
+    await this._removeFile(dialog.relativePath);
+    return this.dialogIndexer.getDialogs();
+  };
+
   public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile === undefined) {

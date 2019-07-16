@@ -28,11 +28,34 @@ import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
+import { DialogStyle } from './../../components/Modal/styles';
+
+function onRenderContent() {
+  return (
+    <div style={{ fontSize: '16px', color: '#000' }}>
+      <p>{formatMessage('you are about to delete a dialog that is a parent or a child of these dialogs')}</p>
+      <p>{formatMessage('Do you really want to delete?')}</p>
+    </div>
+  );
+}
+
+function getAllRef(targetId, dialogs) {
+  let refs = [];
+  dialogs.forEach(dialog => {
+    if (dialog.id === targetId) {
+      refs = refs.concat(dialog.referredDialogs);
+    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
+      refs.push(dialog.id);
+    }
+  });
+  return refs;
+}
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
+  const { clearNavHistory, navTo, setCreationFlowStatus, removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(id) {
@@ -147,6 +170,28 @@ function DesignPage(props) {
     setModalOpen(false);
   }
 
+  async function handleDeleteDialog(id) {
+    const refs = getAllRef(id, dialogs);
+    let setting = { confirmBtnText: formatMessage('Okay'), cancelBtnText: formatMessage('Cancel') };
+    if (refs.length > 0) {
+      setting = {
+        title: formatMessage('Deleting a linked dialog'),
+        subTitle: `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`,
+        onRenderContent: onRenderContent,
+        style: DialogStyle.Console,
+      };
+    } else {
+      setting = {
+        title: formatMessage('Do you really want to delete?'),
+      };
+    }
+    const result = await OpenConfirmModal('test', id, setting);
+
+    if (result) {
+      await removeDialog(id);
+    }
+  }
+
   return (
     <Fragment>
       {props.match && <ToolBar toolbarItems={toolbarItems} />}
@@ -163,6 +208,7 @@ function DesignPage(props) {
                   activeNode={activeDialog}
                   onSelect={handleFileClick}
                   onAdd={() => setModalOpen(true)}
+                  onDelete={handleDeleteDialog}
                 />
               </div>
             </Tree>

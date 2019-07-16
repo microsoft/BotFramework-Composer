@@ -24,6 +24,12 @@ const updateDialog = (state, { response }) => {
   return state;
 };
 
+const removeDialog = (state, { response }) => {
+  state.dialogs = response.data.dialogs;
+  state.luFiles = response.data.luFiles;
+  return state;
+};
+
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
@@ -137,6 +143,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
+  [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
