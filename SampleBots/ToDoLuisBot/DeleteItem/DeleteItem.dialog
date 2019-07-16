@@ -1,65 +1,154 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T20:14:51.731Z",
+    "updatedAt": "2019-07-16T20:15:19.525Z",
+    "id": "735299",
+    "name": "DeleteItem"
+  },
+  "autoEndDialog": true,
   "generator": "common.lg",
   "steps": [
     {
       "$type": "Microsoft.SetProperty",
-      "value": "@promptContentML",
-      "property": "dialog.item"
+      "$designer": {
+        "createdAt": "2019-07-16T20:16:23.605Z",
+        "updatedAt": "2019-07-16T20:16:28.523Z",
+        "id": "741234",
+        "name": "Set a Property"
+      },
+      "property": "dialog.item",
+      "value": "@promptContentML"
     },
     {
       "$type": "Microsoft.SetProperty",
-      "value": "@ListType",
-      "property": "dialog.listName"
+      "$designer": {
+        "createdAt": "2019-07-16T20:16:30.172Z",
+        "updatedAt": "2019-07-16T20:16:33.564Z",
+        "id": "440899",
+        "name": "Set a Property"
+      },
+      "property": "dialog.listName",
+      "value": "@ListType"
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T20:16:34.963Z",
+        "updatedAt": "2019-07-16T20:16:37.975Z",
+        "id": "693036",
+        "name": "Branch"
+      },
       "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "The list name must be shopping, grocery or todo."
+          "$designer": {
+            "createdAt": "2019-07-16T20:16:39.907Z",
+            "updatedAt": "2019-07-16T20:16:44.840Z",
+            "id": "697543",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-697543]"
         },
         {
-          "$type": "Microsoft.EndDialog"
+          "$type": "Microsoft.EndDialog",
+          "$designer": {
+            "createdAt": "2019-07-16T20:16:46.405Z",
+            "updatedAt": "2019-07-16T20:16:49.342Z",
+            "id": "358588",
+            "name": "End Dialog"
+          }
         }
       ]
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T20:16:51.644Z",
+        "updatedAt": "2019-07-16T20:16:54.024Z",
+        "id": "082258",
+        "name": "Branch"
+      },
       "condition": "dialog.listName == null",
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "createdAt": "2019-07-16T20:16:56.307Z",
+            "updatedAt": "2019-07-16T20:17:01.339Z",
+            "id": "626333",
+            "name": "Prompt with multi-choice"
+          },
           "property": "dialog.listName",
+          "prompt": "Which list do you want to remove?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "outputFormat": "value",
           "choices": [
             {
               "value": "shopping",
-              "synonyms": ["1", "first", "shopping", "first one"]
+              "synonyms": [
+                "1",
+                "first",
+                "shopping",
+                "first one"
+              ]
             },
             {
               "value": "grocery",
-              "synonyms": ["2", "second", "grocery", "second one"]
+              "synonyms": [
+                "2",
+                "second",
+                "grocery",
+                "second one"
+              ]
             },
             {
               "value": "todo",
-              "synonyms": ["3", "third", "todo", "third one", "to do"]
+              "synonyms": [
+                "3",
+                "third",
+                "todo",
+                "third one",
+                "to do"
+              ]
             }
           ],
-          "prompt": "Which list do you want to remove?",
+          "appendChoices": true,
+          "defaultLocale": "en-us",
           "style": "SuggestedAction",
-          "alwaysPrompt": true,
-          "allowInterruptions": false
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          }
         }
       ]
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T20:17:03.891Z",
+        "updatedAt": "2019-07-16T20:17:06.170Z",
+        "id": "297609",
+        "name": "Branch"
+      },
       "condition": "user.lists == null",
       "steps": [
         {
           "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T20:17:08.740Z",
+            "updatedAt": "2019-07-16T20:17:13.472Z",
+            "id": "238900",
+            "name": "Initialize a Property"
+          },
           "property": "user.lists",
           "type": "object"
         }
@@ -67,21 +156,49 @@
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T20:17:16.562Z",
+        "updatedAt": "2019-07-16T20:17:18.655Z",
+        "id": "135758",
+        "name": "Branch"
+      },
       "condition": "dialog.item == null",
       "steps": [
         {
           "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-16T20:17:22.572Z",
+            "updatedAt": "2019-07-16T20:17:25.422Z",
+            "id": "251880",
+            "name": "Prompt for text"
+          },
+          "property": "dialog.item",
           "prompt": "Please enter the title of your item.",
-          "property": "dialog.item"
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
         }
       ]
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T20:17:28.522Z",
+        "updatedAt": "2019-07-16T20:17:31.337Z",
+        "id": "577484",
+        "name": "Branch"
+      },
       "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
       "steps": [
         {
           "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T20:17:34.605Z",
+            "updatedAt": "2019-07-16T20:17:39.938Z",
+            "id": "678664",
+            "name": "Initialize a Property"
+          },
           "property": "user.lists.{dialog.listName}",
           "type": "array"
         }
@@ -89,13 +206,26 @@
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T20:17:42.922Z",
+        "updatedAt": "2019-07-16T20:17:47.211Z",
+        "id": "451376",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Remove",
       "arrayProperty": "user.lists.{dialog.listName}",
       "value": "dialog.item"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Successfully removed {dialog.item} from {dialog.listName} list."
+      "$designer": {
+        "createdAt": "2019-07-16T20:17:49.949Z",
+        "updatedAt": "2019-07-16T20:17:54.485Z",
+        "id": "737534",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-737534]"
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

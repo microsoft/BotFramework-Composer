@@ -67,3 +67,20 @@
 # bfdactivity-636903
 -Hi! I'm a ToDoBot configured to use LUIS to understand you. Say "add a todo named first" to get started
 
+# bfdactivity-896478
+-Your have no items in your {dialog.listName} list.
+
+# bfdactivity-064151
+-[ShowItems(user, dialog.listName)]
+
+# bfdactivity-697543
+-The list name must be shopping, grocery or todo.
+
+# bfdactivity-737534
+-Successfully removed {dialog.item} from {dialog.listName} list.
+
+# bfdactivity-048651
+-The list name must be shopping, grocery or todo.
+
+# bfdactivity-569973
+-Successfully added {dialog.item} to {dialog.listName} list.
