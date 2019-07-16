@@ -1,6 +1,9 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { Component } from 'react';
 
 import { Store } from '../../store/index';
+import { ErrorPopup } from '../ErrorPopup';
 
 // only class component can be a error boundary
 export class ErrorBoundary extends Component {
@@ -55,7 +58,23 @@ export class ErrorBoundary extends Component {
   }
 
   render() {
-    return this.props.children;
+    return (
+      <Store.Consumer>
+        {({ state, actions }) => {
+          state.errorMsg ? (
+            <ErrorPopup
+              error={state.errorMsg.message}
+              title={state.errorMsg.summary}
+              onDismiss={() => {
+                actions.setErrorMsg(null);
+              }}
+            />
+          ) : (
+            this.props.children
+          );
+        }}
+      </Store.Consumer>
+    );
   }
 }
 ErrorBoundary.contextType = Store;

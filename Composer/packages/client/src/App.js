@@ -12,7 +12,6 @@ import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { CreationFlow } from './CreationFlow/index';
-import { ErrorPopup } from './components/ErrorPopup';
 
 initializeIcons(/* optional base url */);
 
@@ -94,23 +93,14 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botName, creationFlowStatus, errorMsg } = state;
-  const { fetchProject, setCreationFlowStatus, setErrorMsg } = actions;
+  const { botName, creationFlowStatus } = state;
+  const { fetchProject, setCreationFlowStatus } = actions;
   useEffect(() => {
     fetchProject();
   }, []);
 
   return (
     <Fragment>
-      {errorMsg ? (
-        <ErrorPopup
-          error={errorMsg.message}
-          title={errorMsg.summary}
-          onDismiss={() => {
-            setErrorMsg(null);
-          }}
-        />
-      ) : null}
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
