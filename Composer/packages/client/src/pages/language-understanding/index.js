@@ -93,11 +93,11 @@ export const LUPage = props => {
   }, [activePath, dialogs, luFiles]);
 
   const UIShowEditingToolBar = useMemo(() => {
-    return !!newContent;
+    return newContent !== null;
   }, [newContent]);
 
   const UIShowEditingAlert = useMemo(() => {
-    return !!newContent;
+    return newContent !== null;
   }, [newContent]);
 
   function onSelect(id) {
