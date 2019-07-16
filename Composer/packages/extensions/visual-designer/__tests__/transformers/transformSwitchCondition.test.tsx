@@ -1,10 +1,10 @@
 import { transformSwitchCondition } from '../../src/transformers/transformSwitchCondition';
 import { ObiTypes } from '../../src/shared/ObiTypes';
 
-test('should return {} when input is not SwitchCondition', () => {
-  expect(transformSwitchCondition(null, '')).toEqual({});
-  expect(transformSwitchCondition({}, '')).toEqual({});
-  expect(transformSwitchCondition({ $type: 'wrong' }, '')).toEqual({});
+test('should return NULL when input is not SwitchCondition', () => {
+  expect(transformSwitchCondition(null, '')).toBeNull();
+  expect(transformSwitchCondition({}, '')).toBeNull();
+  expect(transformSwitchCondition({ $type: 'wrong' }, '')).toBeNull();
 });
 
 test('should return correct schema when input empty cases', () => {

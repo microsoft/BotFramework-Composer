@@ -3,7 +3,6 @@ import { GraphNode } from '../../src/shared/GraphNode';
 import { switchCaseLayouter } from '../../src/layouters/switchCaseLayouter';
 
 describe('switchCaseLayouter', () => {
-  let boundary = new Boundary();
   let branchNodes, conditionNode, choiceNode;
 
   beforeEach(() => {
@@ -17,10 +16,10 @@ describe('switchCaseLayouter', () => {
   });
 
   it('should return an empty graphLayout when conditionNode is null', () => {
-    expect(switchCaseLayouter(null, new GraphNode(), branchNodes)).toEqual({ boundary });
+    expect(switchCaseLayouter(null, new GraphNode(), branchNodes).boundary).toEqual(new Boundary());
   });
 
   it('should reuturn a graphLayout whose edges count is 9 when branchNodes.length = 3', () => {
-    expect(switchCaseLayouter(conditionNode, choiceNode, branchNodes).edges!.length).toEqual(9);
+    expect(switchCaseLayouter(conditionNode, choiceNode, branchNodes).edges.length).toEqual(9);
   });
 });

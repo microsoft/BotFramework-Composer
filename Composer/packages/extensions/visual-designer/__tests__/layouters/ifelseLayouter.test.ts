@@ -3,7 +3,6 @@ import { Boundary } from '../../src/shared/Boundary';
 import { GraphNode } from '../../src/shared/GraphNode';
 
 describe('ifElseLayouter', () => {
-  let boundary = new Boundary();
   let ifNode, elseNode, conditionNode, choiceNode;
 
   beforeEach(() => {
@@ -14,11 +13,11 @@ describe('ifElseLayouter', () => {
   });
 
   it('should return an empty graphLayout when conditionNode or choiceNode is null', () => {
-    expect(ifElseLayouter(null, new GraphNode(), new GraphNode(), new GraphNode())).toEqual({ boundary });
-    expect(ifElseLayouter(new GraphNode(), null, new GraphNode(), new GraphNode())).toEqual({ boundary });
+    expect(ifElseLayouter(null, new GraphNode(), new GraphNode(), new GraphNode()).boundary).toEqual(new Boundary());
+    expect(ifElseLayouter(new GraphNode(), null, new GraphNode(), new GraphNode()).boundary).toEqual(new Boundary());
   });
 
   it('should reuturn a graphLayout whose edges count is 7', () => {
-    expect(ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode).edges!.length).toEqual(7);
+    expect(ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode).edges.length).toEqual(7);
   });
 });

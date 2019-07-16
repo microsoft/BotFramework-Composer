@@ -1,10 +1,10 @@
 import { transformForeach } from '../../src/transformers/transformForeach';
 import { ObiTypes } from '../../src/shared/ObiTypes';
 
-test('should return {} when input is invalid', () => {
-  expect(transformForeach(null, '')).toEqual({});
-  expect(transformForeach({}, '')).toEqual({});
-  expect(transformForeach({ $type: 'wrong' }, '')).toEqual({});
+test('should return NULL when input is invalid', () => {
+  expect(transformForeach(null, '')).toBeNull();
+  expect(transformForeach({}, '')).toBeNull();
+  expect(transformForeach({ $type: 'wrong' }, '')).toBeNull();
 });
 
 test('should return correct schema when input a Foreach schema', () => {
