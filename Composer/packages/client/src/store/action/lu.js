@@ -10,10 +10,11 @@ export async function updateLuFile(dispatch, { id, content }) {
       payload: { response },
     });
   } catch (err) {
+    // TODO, err here is html
+    // we need a json error from server
     dispatch({
       type: ActionTypes.UPDATE_LU_FAILURE,
-      payload: null,
-      error: err,
+      payload: { id, error: ['syntax error exist'] },
     });
   }
 }
@@ -29,6 +30,8 @@ export async function createLuFile(dispatch, { id, content }) {
     dispatch({
       type: ActionTypes.CREATE_LU_FAILURE,
       payload: null,
+      // TODO, createReducer do not take this error now
+      // we need to put it in payload
       error: err,
     });
   }

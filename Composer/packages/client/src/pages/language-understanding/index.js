@@ -8,8 +8,9 @@ import { navigate } from '@reach/router';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
+import { ActionTypes } from '../../constants/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
@@ -18,16 +19,30 @@ import { TestController } from './../../TestController';
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, diagnostics } = state;
   const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [luFile, setLuFile] = useState(null);
 
   const subPath = props['*'];
-
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.id === subPath);
+
+  useEffect(() => {
+    const luErrors = diagnostics.filter(d => d.type === ActionTypes.UPDATE_LU_FAILURE);
+    if (luErrors.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = luErrors.reduce((msg, luFile) => {
+        msg += `${luFile.diagnostics.join('\n')} \n`;
+        return msg;
+      }, '');
+
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
+  }, [diagnostics]);
 
   useEffect(() => {
     if (luFiles.length && activeDialog) {

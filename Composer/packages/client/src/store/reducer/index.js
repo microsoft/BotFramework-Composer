@@ -11,6 +11,38 @@ const getProjectSuccess = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.luStatus = response.data.luStatus;
+
+  // combine diagnostics
+  state.diagnostics = [
+    response.data.schemas.diagnostics,
+    ...response.data.dialogs
+      .filter(d => d.diagnostics.length)
+      .map(d => {
+        return {
+          id: d.id,
+          type: FileTypes.DIALOG,
+          diagnostics: d.diagnostics,
+        };
+      }),
+    ...response.data.luFiles
+      .filter(d => d.diagnostics.length)
+      .map(d => {
+        return {
+          id: d.id,
+          type: FileTypes.LU,
+          diagnostics: d.diagnostics,
+        };
+      }),
+    ...response.data.lgFiles
+      .filter(d => d.diagnostics.length)
+      .map(d => {
+        return {
+          id: d.id,
+          type: FileTypes.LG,
+          diagnostics: d.diagnostics,
+        };
+      }),
+  ];
   return state;
 };
 
@@ -116,6 +148,23 @@ const setBotLoadErrorMsg = (state, { error }) => {
   return (state.botLoadErrorMsg = error);
 };
 
+const updateLuError = (state, { id, error }) => {
+  const sameTypeErrorIdx = state.diagnostics.find(d => d.type === ActionTypes.UPDATE_LU_FAILURE);
+  const newError = {
+    id,
+    type: ActionTypes.UPDATE_LU_FAILURE,
+    diagnostics: error,
+  };
+
+  // override or replace
+  if (sameTypeErrorIdx !== -1) {
+    state.diagnostics.splice(sameTypeErrorIdx, 1, newError);
+  } else {
+    state.diagnostics.push(newError);
+  }
+  return state.diagnostics;
+};
+
 const setCreationFlowStatus = (state, { creationFlowStatus }) => {
   return (state.creationFlowStatus = creationFlowStatus);
 };
@@ -153,5 +202,6 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  [ActionTypes.UPDATE_LU_FAILURE]: updateLuError,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
 });

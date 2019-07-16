@@ -28,6 +28,7 @@ const initialState = {
   schemas: {},
   luFiles: [],
   luStatus: [],
+  diagnostics: [], // global errors/warnings
   oAuth: oauthStorage.get(),
 };
 

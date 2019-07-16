@@ -111,6 +111,10 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   UNKNOW: 'unknow',
+  DIALOG: 'dialog',
+  LU: 'lu',
+  LG: 'lg',
+  SCHEMA: 'schema',
 };
 
 export const CreationFlowStatus = {
