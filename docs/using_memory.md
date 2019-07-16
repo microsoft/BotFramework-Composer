@@ -69,6 +69,8 @@ Finally, the parent dialog is configured to capture the return value inside the 
 
 ![Return value stored in parent dialog](./Assets/dialog-property.png)
 
+When executed, the bot will perform the `profile` child dialog, collect the user's name and age in a _temporary_ scope, then return it to the parent dialog where it is captured into the `user.profile` property and stored permanently.
+
 ## Automatic Properties
 
 Some properties are automatically created and managed by the bot. These are available automatically.
