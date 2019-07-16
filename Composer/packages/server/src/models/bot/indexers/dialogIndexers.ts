@@ -165,7 +165,7 @@ export class DialogIndexer {
               displayName: isRoot ? botName : id,
               content: dialogJson,
               diagostics,
-              dialogs: this.ExtractReferredDialogs(dialogJson),
+              referredDialogs: this.ExtractReferredDialogs(dialogJson),
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),

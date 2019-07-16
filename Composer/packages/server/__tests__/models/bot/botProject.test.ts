@@ -38,8 +38,8 @@ describe('index', () => {
 
     // find out dialog used in,
     // here main.dialog refers a.dialog
-    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).dialogs.length).toBe(1);
-    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).dialogs.join(',')).toBe(['a'].join(','));
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.length).toBe(1);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.join(',')).toBe(['a'].join(','));
   });
 });
 
