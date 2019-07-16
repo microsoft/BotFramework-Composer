@@ -1,21 +1,34 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:20.992Z",
+    "updatedAt": "2019-07-16T19:38:00.695Z",
+    "id": "593555",
+    "name": "TextWithMemory"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SetProperty",
-      "value": "'This is a text saved in memory.'",
-      "property": "user.message"
+      "$designer": {
+        "createdAt": "2019-07-16T19:38:02.168Z",
+        "updatedAt": "2019-07-16T19:38:07.364Z",
+        "id": "765039",
+        "name": "Set a Property"
+      },
+      "property": "user.message",
+      "value": "'This is a text saved in memory.'"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "{user.message}"
+      "$designer": {
+        "createdAt": "2019-07-16T19:38:08.970Z",
+        "updatedAt": "2019-07-16T19:38:13.828Z",
+        "id": "822060",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-822060]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:50:20.992Z",
-    "updatedAt": "2019-07-03T06:50:21.022Z",
-    "id": "593555"
-  }
+  "$schema": "../../app.schema"
 }

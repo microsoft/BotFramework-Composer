@@ -137,7 +137,7 @@ export const DialogInfo = {
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
     subText: formatMessage(
-      `What can the user accomplish through this conversation? For example, book a table, order a coffee etc.`
+      `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
     ),
   },
   SELECT_LOCATION: {

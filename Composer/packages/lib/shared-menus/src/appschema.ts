@@ -113,11 +113,15 @@ export const createStepMenu = (
           name: ConceptLabels[$type] && ConceptLabels[$type].title ? formatMessage(ConceptLabels[$type].title) : $type,
           $type: $type,
           $designer: {
+            name:
+              ConceptLabels[$type] && ConceptLabels[$type].title ? formatMessage(ConceptLabels[$type].title) : $type,
             id: nanoid('1234567890', 6),
           },
           data: {
             $type: $type, // used by the steps field to create the item
             $designer: {
+              name:
+                ConceptLabels[$type] && ConceptLabels[$type].title ? formatMessage(ConceptLabels[$type].title) : $type,
               id: nanoid('1234567890', 6),
             },
           },
@@ -147,11 +151,13 @@ export const createStepMenu = (
         name: ConceptLabels[item].title,
         $type: item,
         $designer: {
+          name: ConceptLabels[item] && ConceptLabels[item].title ? formatMessage(ConceptLabels[item].title) : item,
           id: nanoid('1234567890', 6),
         },
         data: {
           $type: item,
           $designer: {
+            name: ConceptLabels[item] && ConceptLabels[item].title ? formatMessage(ConceptLabels[item].title) : item,
             id: nanoid('1234567890', 6),
           },
         },

@@ -1,13 +1,31 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:33:04.109Z",
+    "updatedAt": "2019-07-16T19:49:33.306Z",
+    "id": "395991",
+    "name": "EditArray"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T19:49:28.473Z",
+        "updatedAt": "2019-07-16T19:50:52.267Z",
+        "id": "356862",
+        "name": "Branch"
+      },
       "condition": "user.ids == null",
       "steps": [
         {
           "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T19:51:00.780Z",
+            "updatedAt": "2019-07-16T19:51:05.002Z",
+            "id": "384024",
+            "name": "Initialize a Property"
+          },
           "property": "user.ids",
           "type": "array"
         }
@@ -15,12 +33,24 @@
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T19:51:06.779Z",
+        "updatedAt": "2019-07-16T19:51:12.553Z",
+        "id": "076427",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Push",
       "arrayProperty": "user.ids",
       "value": "10000+1000+100+10+1"
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T19:51:14.662Z",
+        "updatedAt": "2019-07-16T19:51:19.568Z",
+        "id": "162360",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Push",
       "arrayProperty": "user.ids",
       "value": "200*200"
@@ -29,19 +59,34 @@
       "$type": "Microsoft.EditArray",
       "changeType": "Push",
       "arrayProperty": "user.ids",
-      "value": "888888/4"
+      "value": "888888/4",
+      "$designer": {
+        "createdAt": "2019-07-16T19:51:21.579Z",
+        "updatedAt": "2019-07-16T19:51:24.990Z",
+        "id": "393322",
+        "name": "Edit an Array Property"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:31:36.184Z",
-        "updatedAt": "2019-07-01T21:31:50.603Z",
-        "id": "666135"
+        "updatedAt": "2019-07-16T19:51:29.907Z",
+        "id": "666135",
+        "name": "Send an Activity"
       },
       "activity": "[bfdactivity-666135]"
     },
     {
       "$type": "Microsoft.Foreach",
+      "$designer": {
+        "createdAt": "2019-07-01T21:31:49.538Z",
+        "updatedAt": "2019-07-16T19:51:36.827Z",
+        "id": "995811",
+        "name": "Loop: For Each"
+      },
+      "indexProperty": "dialog.index",
+      "valueProperty": "dialog.value",
       "ListProperty": "user.ids",
       "Steps": [
         {
@@ -50,24 +95,28 @@
         }
       ],
       "IndexProperty": "dialog.index",
-      "ValueProperty": "dialog.value",
-      "$designer": {
-        "createdAt": "2019-07-01T21:31:49.538Z",
-        "updatedAt": "2019-07-01T21:31:49.574Z",
-        "id": "995811"
-      }
+      "ValueProperty": "dialog.value"
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:32:15.722Z",
-        "updatedAt": "2019-07-01T21:32:24.606Z",
-        "id": "763672"
+        "updatedAt": "2019-07-16T19:51:42.318Z",
+        "id": "763672",
+        "name": "Send an Activity"
       },
       "activity": "[bfdactivity-763672]"
     },
     {
       "$type": "Microsoft.ForeachPage",
+      "$designer": {
+        "createdAt": "2019-07-16T19:51:44.429Z",
+        "updatedAt": "2019-07-16T19:51:50.094Z",
+        "id": "087387",
+        "name": "Loop: For Each Page"
+      },
+      "pageSize": 10,
+      "valueProperty": "dialog.value",
       "ListProperty": "user.ids",
       "PageSize": "2",
       "ValueProperty": "dialog.page",
@@ -84,10 +133,5 @@
         }
       ]
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-07-03T06:33:04.109Z",
-    "updatedAt": "2019-07-03T06:33:04.169Z",
-    "id": "395991"
-  }
+  ]
 }

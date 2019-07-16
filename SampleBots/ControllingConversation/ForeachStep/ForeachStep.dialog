@@ -1,13 +1,31 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:49:36.238Z",
+    "updatedAt": "2019-07-16T18:48:46.242Z",
+    "id": "178401",
+    "name": "ForeachStep"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T18:51:01.648Z",
+        "updatedAt": "2019-07-16T18:51:04.036Z",
+        "id": "810905",
+        "name": "Branch"
+      },
       "condition": "dialog.ids == null",
       "steps": [
         {
           "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T18:51:05.568Z",
+            "updatedAt": "2019-07-16T18:51:13.542Z",
+            "id": "931303",
+            "name": "Initialize a Property"
+          },
           "property": "dialog.ids",
           "type": "array"
         }
@@ -15,18 +33,36 @@
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T18:51:16.417Z",
+        "updatedAt": "2019-07-16T18:51:20.796Z",
+        "id": "077820",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
       "value": "10000+1000+100+10+1"
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T18:51:23.599Z",
+        "updatedAt": "2019-07-16T18:51:27.859Z",
+        "id": "453517",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
       "value": "200*200"
     },
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T18:51:30.917Z",
+        "updatedAt": "2019-07-16T18:51:34.970Z",
+        "id": "889145",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
       "value": "888888/4"
@@ -35,12 +71,21 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "id": "638869",
-        "updatedAt": "2019-07-04T19:55:21.344Z"
+        "updatedAt": "2019-07-16T18:51:40.994Z",
+        "name": "Send an Activity"
       },
       "activity": "[bfdactivity-638869]"
     },
     {
       "$type": "Microsoft.Foreach",
+      "$designer": {
+        "createdAt": "2019-07-16T18:51:44.167Z",
+        "updatedAt": "2019-07-16T18:51:48.838Z",
+        "id": "299926",
+        "name": "Loop: For Each"
+      },
+      "indexProperty": "dialog.index",
+      "valueProperty": "dialog.value",
       "ListProperty": "dialog.ids",
       "Steps": [
         {
@@ -49,10 +94,5 @@
         }
       ]
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:36.238Z",
-    "updatedAt": "2019-07-03T06:49:36.310Z",
-    "id": "178401"
-  }
+  ]
 }

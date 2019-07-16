@@ -1,13 +1,20 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T07:49:25.845Z",
+    "updatedAt": "2019-07-16T19:39:35.169Z",
+    "id": "871426",
+    "name": "AddReminder"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-08T07:49:28.221Z",
-        "updatedAt": "2019-07-09T03:33:52.137Z",
-        "id": "633099"
+        "updatedAt": "2019-07-16T19:39:52.002Z",
+        "id": "633099",
+        "name": "Set a Property"
       },
       "property": "user.content",
       "value": "@Content"
@@ -16,8 +23,9 @@
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-09T03:33:19.562Z",
-        "updatedAt": "2019-07-09T08:48:59.683Z",
-        "id": "849308"
+        "updatedAt": "2019-07-16T19:39:56.624Z",
+        "id": "849308",
+        "name": "Set a Property"
       },
       "property": "user.remindtime",
       "value": "@RemindTime"
@@ -26,8 +34,9 @@
       "$type": "Microsoft.TextInput",
       "$designer": {
         "createdAt": "2019-07-09T08:34:23.221Z",
-        "updatedAt": "2019-07-10T03:48:57.506Z",
-        "id": "661955"
+        "updatedAt": "2019-07-16T19:40:00.854Z",
+        "id": "661955",
+        "name": "Prompt for text"
       },
       "property": "user.content",
       "prompt": "Please enter the content of your reminder.",
@@ -40,8 +49,9 @@
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-09T08:42:33.616Z",
-        "updatedAt": "2019-07-09T08:51:35.164Z",
-        "id": "530560"
+        "updatedAt": "2019-07-16T19:40:04.756Z",
+        "id": "530560",
+        "name": "Branch"
       },
       "condition": "user.remindtime != null",
       "steps": [
@@ -49,8 +59,9 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-09T08:46:05.316Z",
-            "updatedAt": "2019-07-09T08:46:21.501Z",
-            "id": "570104"
+            "updatedAt": "2019-07-16T19:40:09.474Z",
+            "id": "570104",
+            "name": "Set a Property"
           },
           "property": "user.requesttime",
           "value": "user.remindtime.datetime[0].timex[0]"
@@ -59,19 +70,27 @@
       "elseSteps": [
         {
           "$type": "Microsoft.DateTimeInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:40:11.984Z",
+            "updatedAt": "2019-07-16T19:40:16.187Z",
+            "id": "072656",
+            "name": "Type: Date"
+          },
           "property": "user.remindtime",
-          "alwaysPrompt": true,
-          "maxTurnCount": 10,
-          "allowInterruptions": false,
           "prompt": "Please enter a time for reminding.",
-          "invalidPrompt": "Sorry, the input is invalid. Please enter a valid time."
+          "invalidPrompt": "Sorry, the input is invalid. Please enter a valid time.",
+          "maxTurnCount": 10,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us"
         },
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-09T08:48:34.405Z",
-            "updatedAt": "2019-07-09T08:52:18.049Z",
-            "id": "353180"
+            "updatedAt": "2019-07-16T19:40:21.187Z",
+            "id": "353180",
+            "name": "Set a Property"
           },
           "property": "user.requesttime",
           "value": "user.remindtime[0].value"
@@ -82,10 +101,14 @@
       "$type": "Microsoft.ConfirmInput",
       "$designer": {
         "createdAt": "2019-07-09T08:54:11.872Z",
-        "updatedAt": "2019-07-09T08:55:11.364Z",
-        "id": "929045"
+        "updatedAt": "2019-07-16T19:40:32.754Z",
+        "id": "929045",
+        "name": "Prompt for confirmation"
       },
+      "property": "user.confirmresult",
       "prompt": "OK, the content is {user.content} and the time is {user.requesttime}, is this right?",
+      "unrecognizedPrompt": "Sorry, I don't understand, the content is {user.content} and the time is {user.requesttime}, is this right?",
+      "invalidPrompt": "Sorry, I don't understand, the content is {user.content} and the time is {user.requesttime}, is this right?",
       "maxTurnCount": 2147483647,
       "alwaysPrompt": true,
       "allowInterruptions": false,
@@ -96,17 +119,15 @@
         "inlineOr": " or ",
         "inlineOrMore": ", or ",
         "includeNumbers": true
-      },
-      "property": "user.confirmresult",
-      "unrecognizedPrompt": "Sorry, I don't understand, the content is {user.content} and the time is {user.requesttime}, is this right?",
-      "invalidPrompt": "Sorry, I don't understand, the content is {user.content} and the time is {user.requesttime}, is this right?"
+      }
     },
     {
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-09T08:55:52.498Z",
-        "updatedAt": "2019-07-09T08:56:00.440Z",
-        "id": "819123"
+        "updatedAt": "2019-07-16T19:40:35.600Z",
+        "id": "819123",
+        "name": "Branch"
       },
       "condition": "user.confirmresult",
       "steps": [
@@ -114,8 +135,9 @@
           "$type": "Microsoft.HttpRequest",
           "$designer": {
             "createdAt": "2019-07-09T08:57:23.002Z",
-            "updatedAt": "2019-07-10T06:12:41.461Z",
-            "id": "350238"
+            "updatedAt": "2019-07-16T19:40:41.413Z",
+            "id": "350238",
+            "name": "HTTP Request"
           },
           "method": "POST",
           "url": "http://bfdreminder.azurewebsites.net/api/AddReminder",
@@ -131,17 +153,19 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-09T10:46:15.059Z",
-            "updatedAt": "2019-07-10T02:29:59.280Z",
-            "id": "672824"
+            "updatedAt": "2019-07-16T19:40:48.733Z",
+            "id": "672824",
+            "name": "Send an Activity"
           },
-          "activity": "Add reminder successfully!"
+          "activity": "[bfdactivity-672824]"
         },
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "createdAt": "2019-07-10T03:06:07.410Z",
-            "updatedAt": "2019-07-10T03:06:13.593Z",
-            "id": "796324"
+            "updatedAt": "2019-07-16T19:40:54.901Z",
+            "id": "796324",
+            "name": "Begin a Dialog"
           },
           "dialog": "ClearUserData"
         }
@@ -151,8 +175,9 @@
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "createdAt": "2019-07-10T03:01:31.427Z",
-            "updatedAt": "2019-07-10T03:01:33.042Z",
-            "id": "528148"
+            "updatedAt": "2019-07-16T19:41:00.947Z",
+            "id": "528148",
+            "name": "Begin a Dialog"
           },
           "dialog": "ClearUserData"
         },
@@ -160,8 +185,9 @@
           "$type": "Microsoft.RepeatDialog",
           "$designer": {
             "createdAt": "2019-07-09T08:56:41.246Z",
-            "updatedAt": "2019-07-09T08:56:41.256Z",
-            "id": "046452"
+            "updatedAt": "2019-07-16T19:41:05.723Z",
+            "id": "046452",
+            "name": "Repeat this Dialog"
           }
         }
       ]
@@ -170,15 +196,11 @@
       "$type": "Microsoft.EndDialog",
       "$designer": {
         "createdAt": "2019-07-10T07:59:01.872Z",
-        "updatedAt": "2019-07-10T07:59:01.876Z",
-        "id": "951475"
+        "updatedAt": "2019-07-16T19:41:12.967Z",
+        "id": "951475",
+        "name": "End Dialog"
       }
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-08T07:49:25.845Z",
-    "updatedAt": "2019-07-08T07:49:25.881Z",
-    "id": "871426"
-  }
+  "$schema": "../../app.schema"
 }
