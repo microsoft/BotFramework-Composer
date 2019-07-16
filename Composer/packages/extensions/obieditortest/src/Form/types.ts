@@ -1,6 +1,6 @@
-import { WidgetProps, FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
 
-import { ShellApi, LuFile, LgFile } from '../types';
+import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
 
 export interface FormContext {
   editorSchema: any;
@@ -8,8 +8,8 @@ export interface FormContext {
   rootId: string;
   luFiles: LuFile[];
   lgFiles: LgFile[];
-  dialogOptions: string[];
-  dialogName: string;
+  dialogOptions: { value: string; label: string }[];
+  currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
 }
@@ -17,6 +17,11 @@ export interface FormContext {
 interface EnumOption {
   label: string;
   value: string;
+}
+
+export interface BFDObjectFieldTemplateProps extends ObjectFieldTemplateProps {
+  id: string;
+  onChange: (any) => void;
 }
 
 export interface BFDFieldProps extends FieldProps {
