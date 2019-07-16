@@ -20,6 +20,7 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
         {canAdd && (
           <SectionSeparator
             collapsable={false}
+            styles={{ marginTop: '20px' }}
             label={
               <PrimaryButton type="button" onClick={onAddClick} data-testid="ArrayContainerAdd">
                 {formatMessage('Add')}
