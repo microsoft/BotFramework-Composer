@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { Separator, createTheme, FontSizes, FontWeights, ISeparatorProps, IconButton } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { merge } from 'lodash';
@@ -31,7 +31,7 @@ export default function SectionSeparator(props: SectionSeparatorProps) {
 
   useLayoutEffect(() => {
     if (contentRef.current) {
-      const newHeight = contentRef.current.clientHeight;
+      const newHeight = contentRef.current.offsetHeight;
 
       if (newHeight !== contentHeight) {
         setContentHeight(newHeight);
@@ -62,12 +62,15 @@ export default function SectionSeparator(props: SectionSeparatorProps) {
         />
       </div>
       {props.children && (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div>
           <div
             style={{
-              flexBasis: collapsed ? '0px' : contentHeight ? `${contentHeight}px` : '100%',
+              // need to buffer the height to account for adding new elements
+              maxHeight: collapsed ? '0px' : contentHeight ? `${contentHeight + 100}px` : '100%',
               opacity: collapsed ? 0 : 1,
-              transition: contentHeight ? 'flex-basis 0.2s ease-in-out, opacity 0.2s linear' : undefined,
+              transition: contentHeight
+                ? 'max-height 0.25s ease-in, opacity 0.25s ease-in'
+                : 'max-height 0.25s ease-out, opacity 0.25s ease-out',
               overflowY: 'hidden',
             }}
           >
