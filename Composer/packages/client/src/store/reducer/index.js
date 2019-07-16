@@ -138,6 +138,10 @@ const updateOAuth = (state, { oAuth }) => {
   return (state.oAuth = oAuth);
 };
 
+const setToStartBot = (state, { toStartBot }) => {
+  return (state.toStartBot = toStartBot);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -165,5 +169,9 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
+<<<<<<< HEAD
   [ActionTypes.SET_ERROR]: setError,
+=======
+  [ActionTypes.TO_START_BOT]: setToStartBot,
+>>>>>>> auto reload bot
 });

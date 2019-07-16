@@ -3,6 +3,7 @@ import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
+import { startBot } from './bot';
 
 export function updateOAuth(dispatch, oAuth) {
   dispatch({
@@ -88,6 +89,7 @@ export async function openBotProject(dispatch, absolutePath) {
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
       navigate('/');
+      startBot(dispatch, true);
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
