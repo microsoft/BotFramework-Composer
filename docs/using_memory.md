@@ -33,9 +33,9 @@ Bot Framework provides a set of memory manipulation actions to create and modify
 
 ![Memory manipulation menu](./Assets/memory-manipulation-menu.png)
 
-Use **Set a Property** to set the value of a property. For example, set `user.onboarded` to `true`. The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](#expressions).
+Use **Set a Property** to set the value of a property. For example, set `user.onboarded` to `true`. The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](#expressions). When storing simple values, it is not necessary to initialize the property.
 
-Use **Initialize a Property** to create new properties that are objects or arrays. For example, initialize `user.profile` to `{}`. This allows your bot to use sub-properties, or store multiple values inside the property.  
+Use **Initialize a Property** to create new properties that are objects or arrays. For example, initialize `user.profile` to `{}` or intialze `dialog.toppings` to `[]`. This allows your bot to use sub-properties, or store multiple values inside the property.  
 
 It is important to note that before setting the value of a sub-property like `user.profile.age`, the `user.profile` must first be initialized. It is not necessary to further initialize `user.profile.age` unless `age` must also contain sub-values.
 
@@ -54,12 +54,23 @@ Some properties are automatically created and managed by the bot. These are avai
 | turn.entities | If a recognizer is run, the entities found
 | turn.dialogEvents.[event name].value | Payload of a custom event fired using the EmitEvent action.
 
-## Expressions
+## Refer to Properties in Memory
+
+Bots can retrieve and use values from memory for a variety of purposes. The bot may need to use a value in order to construct an outgoing message. The bot may need to make a decision based on a value and perform different actions based on that decision. The bot may need to use the value to calculate other values.
+
+Sometimes, you will refer directly to a property by its address in memory: `user.name`.  Other times, you will refer to one or more properties as part of an expression: `(dialog.orderTotal + dialog.orderTax) > 50`.  When refering to properties in memory, it is generally possibly to use either mechanism to access the necessary values.
+
+### Expressions
+
+Bot Framework uses the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to calculate computed values. This syntax allows developers to create composite values, define complex conditional tests, and transform the content and format of values.
+
+*  [Operators](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#operators)
+* [Built-in functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md#pre-built-functions)
 
 
-## Memory in Conditions
+### Memory in Conditions
 
-## Memory in LG
+### Memory in LG
 
 
 
