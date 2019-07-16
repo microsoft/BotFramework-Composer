@@ -30,7 +30,7 @@ app.use('/api', apiRouter);
 
 app.use(function(err: Error, req: Request, res: Response, next: NextFunction) {
   if (err) {
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 });
 

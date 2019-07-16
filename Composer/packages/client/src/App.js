@@ -94,26 +94,20 @@ const bottomLinks = [
 export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
-  const { botName, creationFlowStatus, errorMessages } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
-  const [currentError, setCurrentError] = useState(null);
+  const { botName, creationFlowStatus, errorMsg } = state;
+  const { fetchProject, setCreationFlowStatus, setErrorMsg } = actions;
   useEffect(() => {
     fetchProject();
   }, []);
 
-  useEffect(() => {
-    if (errorMessages.length > 0) {
-      setCurrentError(errorMessages[errorMessages.length - 1]);
-    }
-  }, [errorMessages]);
   return (
     <Fragment>
-      {currentError ? (
+      {errorMsg ? (
         <ErrorPopup
-          error={currentError.error}
-          title={currentError.title}
+          error={errorMsg.message}
+          title={errorMsg.summary}
           onDismiss={() => {
-            setCurrentError(null);
+            setErrorMsg(null);
           }}
         />
       ) : null}

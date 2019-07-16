@@ -1,29 +1,61 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import { Component } from 'react';
 
-import { ErrorPopup } from '../ErrorPopup/index';
+import { Store } from '../../store/index';
 
 // only class component can be a error boundary
 export class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, info: '', title: '' };
-    this.reset = this.reset.bind(this);
+    this.addListener();
+  }
+  unhandledrejectionHandler(event) {
+    event.preventDefault();
+    console.log('Catch reject error:', event.reason.message);
+    this.context.actions.setErrorMsg({
+      message: event.reason.message,
+      summary: 'unhandled rejection',
+    });
+  }
+
+  eventHandler(error) {
+    console.log('Catch Error Event：', error);
+    this.context.actions.setErrorMsg({
+      message: error.message,
+      summary: 'Event Error',
+    });
+  }
+
+  addListener() {
+    console.log(this.context);
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.log('Catch Error：', { message, source, lineno, colno, error });
+      this.context.actions.setErrorMsg({
+        message: message,
+        summary: 'Something went wrong',
+      });
+      return true;
+    };
+    window.addEventListener('unhandledrejection', this.unhandledrejectionHandler, true);
+    window.addEventListener('error', this.eventHandler, true);
   }
 
   componentDidCatch(error) {
-    this.setState({ hasError: true, info: error.message, title: error.name });
+    this.context.actions.setErrorMsg({
+      message: error.message,
+      summary: 'Something went wrong',
+    });
   }
 
-  reset() {
-    this.setState({ hasError: false, info: '', title: '' }, window.history.back());
+  componentWillUnmount() {
+    // set errorMsg into null;
+    this.context.actions.setErrorMsg(null);
+    window.onerror = null;
+    window.removeEventListener('unhandledrejection', this.unhandledrejectionHandler);
+    window.removeEventListener('error', this.eventHandler);
   }
 
   render() {
-    const { hasError, info, title } = this.state;
-    return (
-      <div>{hasError ? <ErrorPopup title={title} error={info} onDismiss={this.reset} /> : this.props.children}</div>
-    );
+    return this.props.children;
   }
 }
+ErrorBoundary.contextType = Store;

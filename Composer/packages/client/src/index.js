@@ -13,26 +13,6 @@ formatMessage.setup({
   missingTranslation: 'ignore',
 });
 
-window.onerror = function(message, source, lineno, colno, error) {
-  console.log('Catch Error：', { message, source, lineno, colno, error });
-  return true;
-};
-window.addEventListener(
-  'unhandledrejection',
-  event => {
-    event.preventDefault();
-    console.log('Catch reject error:', event.reason.message);
-  },
-  true
-);
-window.addEventListener(
-  'error',
-  error => {
-    console.log('Catch Error Event：', error);
-  },
-  true
-);
-
 ReactDOM.render(
   <StoreProvider>
     <ErrorBoundary>

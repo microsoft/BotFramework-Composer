@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { PropTypes } from 'prop-types';
 import { useState } from 'react';
-import { Dialog, DialogFooter, DefaultButton, DialogType } from 'office-ui-fabric-react';
+import { Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { consoleStyle, dialog } from './styles';
@@ -30,8 +31,14 @@ export const ErrorPopup = props => {
     >
       <div css={consoleStyle}>{formatMessage(props.error)}</div>
       <DialogFooter>
-        <DefaultButton onClick={_closeDialog} text="Cancel" />
+        <PrimaryButton onClick={_closeDialog} text="Ok" />
       </DialogFooter>
     </Dialog>
   );
+};
+
+ErrorPopup.propTypes = {
+  error: PropTypes.string,
+  title: PropTypes.string,
+  onDismiss: PropTypes.func,
 };

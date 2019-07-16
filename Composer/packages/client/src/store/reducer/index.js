@@ -40,11 +40,8 @@ const updateLuTemplate = (state, { response }) => {
   return state;
 };
 
-const setBotStatus = (state, { status, error }) => {
+const setBotStatus = (state, { status }) => {
   state.botStatus = status;
-  if (error) {
-    handleAllFailure(state, { error });
-  }
   return state;
 };
 
@@ -128,14 +125,8 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
-const handleAllFailure = (state, payload, error) => {
-  if (payload && payload.error) {
-    state.errorMessages.push(payload.error);
-  } else if ((!payload || !payload.error) && error) {
-    state.errorMessages.push(error);
-  } else if (error && payload.error && error !== payload.error) {
-    state.errorMessages.push(error);
-  }
+const setErrorMsg = (state, { errorMsg }) => {
+  return (state.errorMsg = errorMsg);
 };
 
 const updateOAuth = (state, { oAuth }) => {
@@ -146,7 +137,6 @@ export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
-  [ActionTypes.CREATE_DIALOG_FAILURE]: handleAllFailure,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
@@ -169,4 +159,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
+  [ActionTypes.SET_ERROR_MESSAGE]: setErrorMsg,
 });

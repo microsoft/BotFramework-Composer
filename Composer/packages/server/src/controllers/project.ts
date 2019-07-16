@@ -6,7 +6,6 @@ import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings/settings.json';
-import { ProjectError } from '../models/serverError/serverError';
 
 import DIALOG_TEMPLATE from './../store/dialogTemplate.json';
 import { Path } from './../utility/path';
@@ -35,13 +34,9 @@ async function createProject(req: Request, res: Response) {
       });
     }
   } catch (err) {
-    res.status(404).json(
-      new ProjectError({
-        message: err instanceof Error ? err.message : err,
-        title: 'Create Bot Project Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: err instanceof Error ? err.message : err,
+    });
   }
 }
 
@@ -53,25 +48,17 @@ async function getProject(req: Request, res: Response) {
       ...project,
     });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Get Bot Project Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
-    res.status(400).json(
-      new ProjectError({
-        message: 'parameters not provided, require stoarge id and path',
-        title: 'Open Bot Project Error',
-        statusCode: 400,
-      })
-    );
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
     return;
   }
 
@@ -88,34 +75,22 @@ async function openProject(req: Request, res: Response) {
         ...project,
       });
     } else {
-      res.status(404).json(
-        new ProjectError({
-          message: 'No such bot project opened',
-          title: 'Open Bot Project Error',
-          statusCode: 404,
-        })
-      );
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
     }
   } catch (e) {
-    res.status(400).json(
-      new ProjectError({
-        message: e.message,
-        title: 'Open Bot Project Error',
-        statusCode: 400,
-      })
-    );
+    res.status(400).json({
+      message: e.message,
+    });
   }
 }
 
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
-    res.status(400).json(
-      new ProjectError({
-        message: 'parameters not provided, require stoarge id and path',
-        title: 'Open Bot Project Error',
-        statusCode: 400,
-      })
-    );
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
     return;
   }
 
@@ -136,22 +111,14 @@ async function saveProjectAs(req: Request, res: Response) {
         ...project,
       });
     } else {
-      res.status(404).json(
-        new ProjectError({
-          message: 'No such bot project opened',
-          title: 'SaveAs Project Error',
-          statusCode: 404,
-        })
-      );
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
     }
   } catch (e) {
-    res.status(400).json(
-      new ProjectError({
-        message: e instanceof Error ? e.message : e,
-        title: 'SaveAs Project Error',
-        statusCode: 400,
-      })
-    );
+    res.status(400).json({
+      message: e instanceof Error ? e.message : e,
+    });
   }
 }
 
@@ -165,13 +132,9 @@ async function updateDialog(req: Request, res: Response) {
     const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.id, req.body.content);
     res.status(200).json({ dialogs });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Update Dialog Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -183,13 +146,9 @@ async function createDialog(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, '', req.body.id);
     res.status(200).json({ dialogs, luFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Create Dialog Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -198,13 +157,9 @@ async function updateLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Update Lg File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -213,13 +168,9 @@ async function createLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Update LG File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -228,13 +179,9 @@ async function removeLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.removeLgFile(req.params.lgFileId);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Remove LG File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -243,13 +190,9 @@ async function updateLuFile(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
     res.status(200).json({ luFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Update LU File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -258,13 +201,9 @@ async function createLuFile(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, req.body.content);
     res.status(200).json({ luFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Create LU File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -273,13 +212,9 @@ async function removeLuFile(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.removeLuFile(req.params.luFileId);
     res.status(200).json({ luFiles });
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Remove LU File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -289,22 +224,14 @@ async function publishLuis(req: Request, res: Response) {
       const status = await ProjectService.currentBotProject.publishLuis(req.body);
       res.status(200).json({ status });
     } catch (error) {
-      res.status(400).json(
-        new ProjectError({
-          message: error instanceof Error ? error.message : error,
-          title: 'Publish LU File Error',
-          statusCode: 400,
-        })
-      );
+      res.status(400).json({
+        message: error instanceof Error ? error.message : error,
+      });
     }
   } else {
-    res.status(404).json(
-      new ProjectError({
-        message: 'No such bot project opened',
-        title: 'Publish LU File Error',
-        statusCode: 404,
-      })
-    );
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -314,13 +241,9 @@ async function getAllProjects(req: Request, res: Response) {
   try {
     res.status(200).json(await StorageService.getBlob(storageId, folderPath));
   } catch (e) {
-    res.status(400).json(
-      new ProjectError({
-        message: e.message,
-        title: 'Get All Projects Error',
-        statusCode: 400,
-      })
-    );
+    res.status(400).json({
+      message: e.message,
+    });
   }
 }
 
