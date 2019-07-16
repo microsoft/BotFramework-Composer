@@ -19,7 +19,7 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-interface nodeProps {
+interface NodeProps {
   header: string;
   corner: any;
   label: any;
@@ -29,7 +29,7 @@ interface nodeProps {
   onClick: () => void;
   children?: any;
 }
-export const FormCard: FunctionComponent<nodeProps> = ({
+export const FormCard: FunctionComponent<NodeProps> = ({
   header,
   corner,
   label,

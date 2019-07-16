@@ -42,7 +42,7 @@ function measureSwitchConditionBoundary(json) {
 
 function measureChoiceBoundary(data) {
   const width = InitNodeSize.width;
-  let height =
+  const height =
     InitNodeSize.height +
     (data.choices
       ? (data.choices.length <= 4 ? data.choices.length : 4) * (ChoiceInputSize.height + ChoiceInputMarginTop)
