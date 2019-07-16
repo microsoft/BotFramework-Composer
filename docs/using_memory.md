@@ -27,6 +27,8 @@ The bot's memory also has 2 "ephemeral" scopes - a place to store temporary valu
 * **dialog** is associated with the active dialog and any child or parent dialogs. Properties in the dialog scope are retained until the last active dialog ends.
 * **turn** is associated with a single turn (handling of a single message from the user). Properties in the turn scope are discarded at the end of the turn.
 
+## Set Properties with Prompts
+
 ## Set Properties using Memory Actions
 
 Bot Framework provides a set of memory manipulation actions to create and modify properties in memory. Properties can be created on the fly in the Composer editor - the bot runtime will automatically manage the underlying data for you in the background.
@@ -42,6 +44,9 @@ It is important to note that before setting the value of a sub-property like `us
 Use **Edit an Array Property** to add and remove items from an array. Items can be added or removed from the top or bottom of an array using push, pop and take. Items can also be removed from an array.
 
 Use **Delete a Property** to remove a property from memory.
+
+## Set Properties with Dialogs
+
 
 ## Automatic Properties
 
