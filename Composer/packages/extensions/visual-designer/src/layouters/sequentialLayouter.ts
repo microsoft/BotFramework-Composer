@@ -2,6 +2,7 @@ import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
 
@@ -20,7 +21,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
     return offsetY + node.boundary.height + StepInterval;
   }, 0);
 
-  const edges: any[] = [];
+  const edges: EdgeData[] = [];
   for (let i = 0; i < nodes.length - 1; i++) {
     const { id, boundary, offset } = nodes[i];
     const x = box.axisX;

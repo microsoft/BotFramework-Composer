@@ -2,6 +2,7 @@ import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateForeachBoundary } from './calculateNodeBoundary';
 
@@ -42,7 +43,7 @@ export const foreachLayouter = (
     y: stepsNode.offset.y + stepsNode.boundary.height + ForeachIntervalY,
   };
 
-  const edges: any[] = [];
+  const edges: EdgeData[] = [];
 
   [foreachNode, loopBeginNode, stepsNode].forEach((node, index) => {
     edges.push({

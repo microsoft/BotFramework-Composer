@@ -2,6 +2,7 @@ import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
@@ -51,7 +52,7 @@ export function switchCaseLayouter(
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
-  const edges: any[] = [];
+  const edges: EdgeData[] = [];
   edges.push({
     id: `edge/${conditionNode.id}/switch/condition->switch`,
     direction: 'y',
