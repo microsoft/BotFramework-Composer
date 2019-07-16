@@ -41,12 +41,19 @@ Use **Initialize a Property** to create new properties that are objects or array
 
 It is important to note that before setting the value of a sub-property like `user.profile.age`, the `user.profile` must first be initialized. It is not necessary to further initialize `user.profile.age` unless `age` must also contain sub-values.
 
-Use **Edit an Array Property** to add and remove items from an array. Items can be added or removed from the top or bottom of an array using push, pop and take. Items can also be removed from an array.
+Use **Edit an Array Property** to add and remove items from an array. Items can be added or removed from the top or bottom of an array using push, pop and take. Items can also be removed from an array. 
+
+Note that it is possible to push the value of an existing property into another Array property - for example: push `turn.choice` onto `dialog.choices`.
 
 Use **Delete a Property** to remove a property from memory.
 
 ## Set Properties with Dialogs
 
+Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user, as well as a **property in memory** where the user's response will be stored.
+
+![Prompt definition](./Assets/prompt-property.png)
+
+In the above example, the result of the prompt "Do you like tacos?" will be automatically stored into the `user.taco_preference` property.
 
 ## Automatic Properties
 
