@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import ApiClient from '../messenger/ApiClient';
-import { getDialogName } from '../utils';
 
 import getEditor from './EditorMap';
 
@@ -110,16 +109,7 @@ function ExtensionContainer() {
     window.parent.extensionData[RealEditor.name] = shellData;
   }
 
-  return (
-    RealEditor && (
-      <RealEditor
-        {...shellData}
-        onChange={shellApi.saveData}
-        shellApi={shellApi}
-        dialogName={getDialogName(shellData.navPath)}
-      />
-    )
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;

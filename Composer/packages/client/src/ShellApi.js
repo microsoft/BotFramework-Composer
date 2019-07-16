@@ -153,7 +153,7 @@ export function ShellApi() {
       schemas,
       lgFiles,
       luFiles,
-      isRoot: currentDialog && currentDialog.isRoot,
+      currentDialog,
     };
   }
 
