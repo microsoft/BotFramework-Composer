@@ -1,7 +1,7 @@
 import React from 'react';
+import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { Icon } from '../icons/icon';
-import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 const boxWidth = 240;
 const boxHeight = 100;

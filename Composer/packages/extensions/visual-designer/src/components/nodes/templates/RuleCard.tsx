@@ -1,6 +1,7 @@
 import React from 'react';
 // import { Icon } from 'office-ui-fabric-react';
 import { ConceptLabels } from 'shared-menus';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../shared/NodeMenu';
@@ -48,17 +49,17 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   let dialog = null;
 
   if (!data.steps) {
-    text = 'No actions';
+    text = formatMessage('No actions');
   } else if (data.steps.length == 1) {
-    let step = normalizeObiStep(data.steps[0]);
+    const step = normalizeObiStep(data.steps[0]);
     if (step.$type == ObiTypes.BeginDialog) {
       dialog = step.dialog;
-      text = ConceptLabels[step.$type].title || step.$type;
+      text = formatMessage(ConceptLabels[step.$type].title || step.$type);
     } else {
-      text = '1 step: ' + ConceptLabels[step.$type].title || step.$type;
+      text = formatMessage('1 action: {step}', { step: ConceptLabels[step.$type].title || step.$type });
     }
   } else {
-    text = data.steps.length + ' steps';
+    text = formatMessage('{count} actions.', { count: data.steps.length });
   }
 
   return (
