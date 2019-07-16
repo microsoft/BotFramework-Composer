@@ -16,6 +16,7 @@ export interface Dialog {
   displayName: string;
   content: { [key: string]: any };
   diagnostics: string[];
+  referredDialogs: string[];
   lgFile: string;
   luFile: string;
   luIntents: string[];
