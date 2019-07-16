@@ -15,7 +15,7 @@ test('should return correct schema when input empty cases', () => {
     default: [],
   };
 
-  const result = transformSwitchCondition(json, 'steps[0]');
+  const result: any = transformSwitchCondition(json, 'steps[0]');
 
   expect(result).toBeTruthy();
 
@@ -43,7 +43,7 @@ test('should return correct schema when input empty cases', () => {
     default: [{ $type: ObiTypes.SendActivity }],
   };
 
-  const result = transformSwitchCondition(json, 'steps[0]');
+  const result: any = transformSwitchCondition(json, 'steps[0]');
 
   expect(result).toBeTruthy();
 

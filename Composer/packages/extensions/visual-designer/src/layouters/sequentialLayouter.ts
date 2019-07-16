@@ -1,4 +1,3 @@
-import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphLayout } from '../shared/GraphLayout';
@@ -11,7 +10,7 @@ const ExtraEdgeLength = ElementInterval.y / 2;
 
 export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, withTrailingEdge = true): GraphLayout {
   if (!Array.isArray(nodes) || nodes.length === 0) {
-    return { boundary: new Boundary(), nodes: [], edges: [] };
+    return new GraphLayout();
   }
 
   const box = calculateSequenceBoundary(nodes.map(x => x.boundary), withHeadEdge, withTrailingEdge);
@@ -63,5 +62,5 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
     });
   }
 
-  return { boundary: box, nodes, edges };
+  return { boundary: box, nodes, edges, nodeMap: {} };
 }

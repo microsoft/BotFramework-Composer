@@ -18,19 +18,28 @@ function measureStepGroupBoundary(stepGroup): Boundary {
 }
 
 function measureForeachBoundary(json): Boundary {
-  const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(json, '');
+  const result = transformForeach(json, '');
+  if (!result) return new Boundary();
+
+  const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
   const inputs: Boundary[] = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => measureJsonBoundary(x.json));
   return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
 function measureIfConditionBoundary(json): Boundary {
-  const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(json, '');
+  const result = transformIfCondtion(json, '');
+  if (!result) return new Boundary();
+
+  const { condition, choice, ifGroup, elseGroup } = result;
   const inputs: Boundary[] = [condition, choice, ifGroup, elseGroup].map(x => measureJsonBoundary(x.json));
   return calculateIfElseBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
 function measureSwitchConditionBoundary(json): Boundary {
-  const { condition, choice, branches } = transformSwitchCondition(json, '');
+  const result = transformSwitchCondition(json, '');
+  if (result === null) return new Boundary();
+
+  const { condition, choice, branches } = result;
   return calculateSwitchCaseBoundary(
     measureJsonBoundary(condition.json),
     measureJsonBoundary(choice.json),

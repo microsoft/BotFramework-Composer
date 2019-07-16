@@ -7,14 +7,17 @@ const CasesKey = 'cases';
 const CaseStepKey = 'steps';
 const DefaultBranchKey = 'default';
 
-export function transformSwitchCondition(input, jsonpath) {
-  if (!input || input.$type !== ObiTypes.SwitchCondition) return {};
+export function transformSwitchCondition(
+  input,
+  jsonpath: string
+): { condition: IndexedNode; choice: IndexedNode; branches: IndexedNode[] } | null {
+  if (!input || input.$type !== ObiTypes.SwitchCondition) return null;
 
   const condition = input[ConditionKey] || '';
   const defaultSteps = input[DefaultBranchKey] || [];
   const cases = input[CasesKey] || [];
 
-  const result: { [key: string]: any } = {
+  const result = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
       $type: ObiTypes.ConditionNode,
@@ -23,7 +26,7 @@ export function transformSwitchCondition(input, jsonpath) {
       $type: ObiTypes.ChoiceDiamond,
       text: condition,
     }),
-    branches: [],
+    branches: [] as IndexedNode[],
   };
 
   result.branches.push(

@@ -3,26 +3,27 @@ import { ObiTypes } from '../shared/ObiTypes';
 import { IndexedNode } from './models/IndexedNode';
 import { normalizeObiStep } from './helpers/elementBuilder';
 
-function transformSimpleDialog(input): any {
-  if (!input) return {};
+function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {
+  if (!input) return null;
 
   const rules = input.rules || [];
   const steps = input.steps || [];
 
-  const result: { [key: string]: any } = {};
-  result.ruleGroup = new IndexedNode('rules', {
+  const ruleGroup = new IndexedNode('rules', {
     $type: ObiTypes.RuleGroup,
     children: [...rules],
   });
 
-  result.stepGroup = new IndexedNode('steps', {
+  const stepGroup = new IndexedNode('steps', {
     $type: ObiTypes.StepGroup,
     children: steps.map(x => normalizeObiStep(x)),
   });
-  return result;
+  return {
+    ruleGroup,
+    stepGroup,
+  };
 }
 
-export function transformRootDialog(input): any {
-  if (!input) return {};
+export function transformRootDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {
   return transformSimpleDialog(input);
 }

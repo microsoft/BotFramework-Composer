@@ -12,7 +12,10 @@ import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
 
 const calculateNodeMap = (_, data) => {
-  const { ruleGroup, stepGroup } = transformRootDialog(data);
+  const result = transformRootDialog(data);
+  if (!result) return {};
+
+  const { ruleGroup, stepGroup } = result;
   return {
     ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),

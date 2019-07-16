@@ -5,10 +5,13 @@ import { IndexedNode } from './models/IndexedNode';
 const IfBranchKey = 'steps';
 const ElseBranchKey = 'elseSteps';
 
-export function transformIfCondtion(input, jsonpath?) {
-  if (!input || input.$type !== ObiTypes.IfCondition) return {};
+export function transformIfCondtion(
+  input,
+  jsonpath: string
+): { condition: IndexedNode; choice: IndexedNode; ifGroup: IndexedNode; elseGroup: IndexedNode } | null {
+  if (!input || input.$type !== ObiTypes.IfCondition) return null;
 
-  const result: { [key: string]: IndexedNode } = {
+  const result = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
       $type: ObiTypes.ConditionNode,
@@ -17,19 +20,15 @@ export function transformIfCondtion(input, jsonpath?) {
       $type: ObiTypes.ChoiceDiamond,
       text: input.condition,
     }),
+    ifGroup: new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
+      $type: ObiTypes.StepGroup,
+      children: input[IfBranchKey] || [],
+    }),
+    elseGroup: new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
+      $type: ObiTypes.StepGroup,
+      children: input[ElseBranchKey] || [],
+    }),
   };
-
-  const ifTrue = input[IfBranchKey] || [];
-  const ifFalse = input[ElseBranchKey] || [];
-
-  result.ifGroup = new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
-    $type: ObiTypes.StepGroup,
-    children: ifTrue,
-  });
-  result.elseGroup = new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
-    $type: ObiTypes.StepGroup,
-    children: ifFalse,
-  });
 
   return result;
 }

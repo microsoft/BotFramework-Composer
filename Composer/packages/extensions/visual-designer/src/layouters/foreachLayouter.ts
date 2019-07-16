@@ -1,4 +1,3 @@
-import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 import { GraphLayout } from '../shared/GraphLayout';
@@ -14,7 +13,7 @@ export const foreachLayouter = (
   loopBeginNode: GraphNode,
   loopEndNode: GraphNode
 ): GraphLayout => {
-  if (!foreachNode || !stepsNode) return { boundary: new Boundary() };
+  if (!foreachNode || !stepsNode) return new GraphLayout();
 
   const containerBoundary = calculateForeachBoundary(
     foreachNode.boundary,
@@ -85,5 +84,6 @@ export const foreachLayouter = (
       loopEndNode,
     },
     edges,
+    nodes: [],
   };
 };

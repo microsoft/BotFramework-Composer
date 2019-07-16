@@ -1,4 +1,3 @@
-import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 import { GraphLayout } from '../shared/GraphLayout';
@@ -21,7 +20,7 @@ export function switchCaseLayouter(
   branchNodes: GraphNode[] = []
 ): GraphLayout {
   if (!conditionNode) {
-    return { boundary: new Boundary() };
+    return new GraphLayout();
   }
 
   const containerBoundary = calculateSwitchCaseBoundary(
@@ -104,9 +103,11 @@ export function switchCaseLayouter(
     );
   }
 
+  // TODO: remove this 'any' type conversion after LogicFlow PR.
   return {
     boundary: containerBoundary,
-    nodeMap: { conditionNode, choiceNode, branchNodes },
+    nodeMap: { conditionNode, choiceNode, branchNodes: branchNodes as any },
     edges,
+    nodes: [],
   };
 }

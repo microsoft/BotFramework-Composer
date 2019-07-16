@@ -13,8 +13,11 @@ import { StepGroup } from '../groups';
 import { DefaultRenderer } from './DefaultRenderer';
 import { LoopIndicator } from './templates/LoopIndicator';
 
-const calculateNodeMap = (jsonpath, data) => {
-  const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(data, jsonpath);
+const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
+  const result = transformForeach(data, jsonpath);
+  if (!result) return {};
+
+  const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
   return {
     foreachNode: GraphNode.fromIndexedJson(foreachDetail),
     stepGroupNode: GraphNode.fromIndexedJson(stepGroup),
