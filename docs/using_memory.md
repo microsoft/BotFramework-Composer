@@ -97,7 +97,7 @@ Bot Framework uses the [common expression language](https://github.com/microsoft
 
 When used in expressions, no special notation is necessary to refer to a property from memory.
 
-### Memory in Branches and Loops
+### Memory in Branches
 
 A bot can evaluate values from memory when making decisions inside a branching action like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
 
@@ -109,6 +109,11 @@ In this second example, the value of `turn.choice` is used to match against mult
 
 ![Switch condition](./Assets/switch-condition.png)
 
+### Memory in Loops
+
+When using `Foreach` and `ForeachPage` actions, properties also come into play.
+
+![foreach properties](./Assets/foreach-properties.png)
 
 ### Memory in LG
 
