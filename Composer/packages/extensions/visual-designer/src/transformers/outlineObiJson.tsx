@@ -7,10 +7,10 @@ const childrenMap = {
   [ObiTypes.SwitchCondition]: ['cases'],
 };
 
-export function outlineObiJson(input: { [key: string]: any }) {
+export function outlineObiJson(input: any) {
   if (!input) return {};
 
-  const outline: { [key: string]: any } = {};
+  const outline: any = {};
   let childrenKeys = DEFAULT_CHILDREN_KEYS;
   if (input.$type && childrenMap[input.$type]) {
     childrenKeys = childrenMap[input.$type];

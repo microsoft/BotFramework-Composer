@@ -1,9 +1,10 @@
 import { Boundary } from './Boundary';
 import { GraphNode } from './GraphNode';
+import { EdgeData } from './EdgeData';
 
 export class GraphLayout {
   boundary: Boundary = new Boundary();
   nodes?: GraphNode[] = [];
-  nodeMap?: any = {};
-  edges?: any[] = [];
+  nodeMap?: { [id: string]: GraphNode } = {};
+  edges?: EdgeData[] = [];
 }

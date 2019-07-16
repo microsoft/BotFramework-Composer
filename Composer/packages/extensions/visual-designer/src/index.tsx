@@ -12,7 +12,7 @@ formatMessage.setup({
   missingTranslation: 'ignore',
 });
 
-const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }: { [key: string]: any }) => {
+const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }) => {
   const dataCache = useRef();
   const layoutVersion = useRef(0);
 

@@ -1,7 +1,7 @@
 import { cloneDeep, get, set } from 'lodash';
 import nanoid from 'nanoid/generate';
 
-function locateNode(dialog: { [key: string]: any }, path) {
+function locateNode(dialog, path) {
   if (!path) return null;
 
   const selectors = path.split('.');

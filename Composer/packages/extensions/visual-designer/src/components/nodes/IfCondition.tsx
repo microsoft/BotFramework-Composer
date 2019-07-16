@@ -26,9 +26,9 @@ const calculateNodeMap = (path, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  Object.values(nodeMap)
+  (Object.values(nodeMap) as GraphNode[])
     .filter(x => !!x)
-    .forEach((x: any) => (x.boundary = boundaryMap[x.id] || x.boundary));
+    .forEach((x: GraphNode) => (x.boundary = boundaryMap[x.id] || x.boundary));
 
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };

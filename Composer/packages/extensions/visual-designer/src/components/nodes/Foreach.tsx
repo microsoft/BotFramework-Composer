@@ -24,9 +24,11 @@ const calculateNodeMap = (jsonpath, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  Object.values(nodeMap)
+  (Object.values(nodeMap) as GraphNode[])
     .filter(x => !!x)
-    .forEach((x: any) => (x.boundary = boundaryMap[x.id] || x.boundary));
+    .forEach((x: GraphNode) => {
+      x.boundary = boundaryMap[x.id] || x.boundary;
+    });
 
   return foreachLayouter(nodeMap.foreachNode, nodeMap.stepGroupNode, nodeMap.loopBeginNode, nodeMap.loopEndNode);
 };
