@@ -10,6 +10,7 @@ import { NodeMenu } from '../shared/NodeMenu';
 
 import { FormCard } from './templates/FormCard';
 import { getFriendlyName } from './utils';
+import { ChoiceInputSize, ChoiceInputMarginTop, InitNodeSize } from '../../shared/elementSizes';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
@@ -159,8 +160,9 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
-    const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : [];
+    const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
     let children: any = null;
+    let styles: object = {};
 
     if (keyMap) {
       header = header || keyMap.header || '';
@@ -181,12 +183,53 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
 
     if (choices) {
       children = (
-        <div>
+        <div style={{ padding: '0 0 8px 45px' }}>
           {choices.map((choice, index) => {
-            return <div key={index}>{choice.value}</div>;
+            if (index < 3) {
+              return (
+                <div
+                  key={index}
+                  style={{
+                    height: ChoiceInputSize.height,
+                    width: ChoiceInputSize.width,
+                    marginTop: ChoiceInputMarginTop,
+                    paddingLeft: '7px',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    fontFamily: 'Segoe UI',
+                    fontSize: '12px',
+                    lineHeight: '19px',
+                    border: '1px solid #B3B0AD',
+                    boxSizing: 'border-box',
+                    borderRadius: '2px',
+                  }}
+                  title={typeof choice.value === 'string' ? choice.value : ''}
+                >
+                  {choice.value}
+                </div>
+              );
+            }
           })}
+          {choices.length > 3 ? (
+            <div
+              style={{
+                height: ChoiceInputSize.height,
+                width: ChoiceInputSize.width,
+                marginTop: ChoiceInputMarginTop,
+                textAlign: 'center',
+                fontFamily: 'Segoe UI',
+                fontSize: '12px',
+                lineHeight: '19px',
+                boxSizing: 'border-box',
+              }}
+            >
+              {`${choices.length - 3} more`}
+            </div>
+          ) : null}
         </div>
       );
+      styles = { height: InitNodeSize.height + (ChoiceInputSize.height + ChoiceInputMarginTop) * choices.length + 8 };
     }
     return (
       <FormCard
@@ -198,6 +241,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);
         }}
+        styles={styles}
       >
         {children}
       </FormCard>

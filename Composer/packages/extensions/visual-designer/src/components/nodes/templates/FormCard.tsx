@@ -24,6 +24,7 @@ interface nodeProps {
   corner: any;
   label: any;
   icon?: string;
+  styles?: object;
   nodeColors: { [key: string]: any };
   onClick: () => void;
   children?: any;
@@ -36,13 +37,15 @@ export const FormCard: FunctionComponent<nodeProps> = ({
   nodeColors,
   onClick,
   children = null,
+  styles = {},
 }) => {
   const { themeColor, iconColor } = nodeColors;
+  const style = { ...containerStyle, ...styles };
   return (
     <div
       className="card"
       data-testid="FormCard"
-      style={containerStyle}
+      style={style}
       onClick={e => {
         e.stopPropagation();
         onClick();
