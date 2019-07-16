@@ -34,7 +34,6 @@ const rendererByObiType = {
   [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
