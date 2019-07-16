@@ -14,6 +14,7 @@ const onRenderItem = item => {
 const onRenderOverflowButton = overflowItems => {
   return (
     <IconButton
+      data-testid="dialogMoreButton"
       styles={moreButton}
       menuIconProps={{ iconName: 'MoreVertical' }}
       menuProps={{ items: overflowItems, styles: { subComponentStyles: { callout: moreMenu } } }}
