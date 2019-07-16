@@ -21,7 +21,7 @@
         "createdAt": "2019-07-16T19:53:02.782Z",
         "updatedAt": "2019-07-16T19:53:05.404Z",
         "id": "964165",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.name == null",
       "steps": [
@@ -66,9 +66,7 @@
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "events": [
-        "cancelDialog"
-      ],
+      "events": ["cancelDialog"],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",

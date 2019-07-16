@@ -51,7 +51,7 @@
         "createdAt": "2019-07-09T08:42:33.616Z",
         "updatedAt": "2019-07-16T19:40:04.756Z",
         "id": "530560",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.remindtime != null",
       "steps": [
@@ -127,7 +127,7 @@
         "createdAt": "2019-07-09T08:55:52.498Z",
         "updatedAt": "2019-07-16T19:40:35.600Z",
         "id": "819123",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.confirmresult",
       "steps": [

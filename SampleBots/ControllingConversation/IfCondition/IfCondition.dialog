@@ -30,7 +30,7 @@
         "createdAt": "2019-07-16T18:48:13.156Z",
         "updatedAt": "2019-07-16T18:48:15.452Z",
         "id": "463418",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.age >= 18",
       "steps": [

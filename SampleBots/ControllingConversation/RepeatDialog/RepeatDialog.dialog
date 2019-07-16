@@ -37,7 +37,7 @@
         "createdAt": "2019-07-16T18:52:16.346Z",
         "updatedAt": "2019-07-16T18:52:18.539Z",
         "id": "365292",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.confirmed",
       "steps": [

@@ -53,7 +53,7 @@
         "createdAt": "2019-07-01T22:04:06.138Z",
         "updatedAt": "2019-07-16T20:02:10.088Z",
         "id": "462031",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "dialog.removed",
       "steps": [

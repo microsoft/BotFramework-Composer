@@ -14,7 +14,7 @@
         "createdAt": "2019-07-16T18:49:06.280Z",
         "updatedAt": "2019-07-16T18:49:08.545Z",
         "id": "400171",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "dialog.ids == null",
       "steps": [

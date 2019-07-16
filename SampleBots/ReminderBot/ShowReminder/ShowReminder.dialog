@@ -14,7 +14,7 @@
         "createdAt": "2019-07-09T03:39:41.698Z",
         "updatedAt": "2019-07-16T19:42:50.042Z",
         "id": "529601",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.index == null",
       "steps": [
@@ -48,7 +48,7 @@
         "createdAt": "2019-07-10T06:42:04.663Z",
         "updatedAt": "2019-07-16T19:43:05.264Z",
         "id": "539675",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.remindtime != null",
       "steps": [
@@ -131,7 +131,7 @@
         "createdAt": "2019-07-09T03:40:37.129Z",
         "updatedAt": "2019-07-16T19:43:44.362Z",
         "id": "975169",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "(user.index + 1) * 5 < count(user.data)",
       "elseSteps": [
@@ -196,7 +196,7 @@
         "createdAt": "2019-07-09T03:47:23.311Z",
         "updatedAt": "2019-07-16T19:44:14.358Z",
         "id": "709735",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.choice == true",
       "steps": [

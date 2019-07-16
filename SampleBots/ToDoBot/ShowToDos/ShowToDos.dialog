@@ -12,9 +12,9 @@
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-01T22:04:55.922Z",
-        "updatedAt": "2019-07-16T20:02:25.380Z",
+        "updatedAt": "2019-07-16T22:02:34.315Z",
         "id": "358464",
-        "name": "Branch"
+        "name": "Branch: If/Else: If/Else"
       },
       "condition": "user.todos == null",
       "steps": [

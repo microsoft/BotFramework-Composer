@@ -57,7 +57,7 @@
         "createdAt": "2019-07-01T22:00:35.159Z",
         "updatedAt": "2019-07-16T19:03:44.275Z",
         "id": "622462",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "(user.result - 4.4) < 0.0000001",
       "steps": [

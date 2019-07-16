@@ -14,7 +14,7 @@
         "createdAt": "2019-07-11T06:08:01.812Z",
         "updatedAt": "2019-07-16T19:30:09.770Z",
         "id": "245482",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.token == null",
       "steps": [

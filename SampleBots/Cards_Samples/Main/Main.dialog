@@ -70,7 +70,7 @@
         "createdAt": "2019-07-04T19:48:26.434Z",
         "updatedAt": "2019-07-16T18:43:23.765Z",
         "id": "403471",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.choice",
       "cases": [

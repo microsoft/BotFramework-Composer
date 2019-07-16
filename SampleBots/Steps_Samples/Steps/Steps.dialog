@@ -75,7 +75,7 @@
         "createdAt": "2019-07-01T21:47:07.036Z",
         "updatedAt": "2019-07-16T19:57:32.413Z",
         "id": "634904",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.age != null",
       "steps": [

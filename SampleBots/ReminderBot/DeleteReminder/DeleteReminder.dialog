@@ -36,7 +36,7 @@
         "createdAt": "2019-07-10T07:26:55.157Z",
         "updatedAt": "2019-07-16T19:41:55.761Z",
         "id": "767754",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.remindtime != null",
       "steps": [

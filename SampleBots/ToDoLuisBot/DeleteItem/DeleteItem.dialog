@@ -37,7 +37,7 @@
         "createdAt": "2019-07-16T20:16:34.963Z",
         "updatedAt": "2019-07-16T20:16:37.975Z",
         "id": "693036",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
       "steps": [
@@ -68,7 +68,7 @@
         "createdAt": "2019-07-16T20:16:51.644Z",
         "updatedAt": "2019-07-16T20:16:54.024Z",
         "id": "082258",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "dialog.listName == null",
       "steps": [
@@ -89,31 +89,15 @@
           "choices": [
             {
               "value": "shopping",
-              "synonyms": [
-                "1",
-                "first",
-                "shopping",
-                "first one"
-              ]
+              "synonyms": ["1", "first", "shopping", "first one"]
             },
             {
               "value": "grocery",
-              "synonyms": [
-                "2",
-                "second",
-                "grocery",
-                "second one"
-              ]
+              "synonyms": ["2", "second", "grocery", "second one"]
             },
             {
               "value": "todo",
-              "synonyms": [
-                "3",
-                "third",
-                "todo",
-                "third one",
-                "to do"
-              ]
+              "synonyms": ["3", "third", "todo", "third one", "to do"]
             }
           ],
           "appendChoices": true,
@@ -137,7 +121,7 @@
         "createdAt": "2019-07-16T20:17:03.891Z",
         "updatedAt": "2019-07-16T20:17:06.170Z",
         "id": "297609",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.lists == null",
       "steps": [
@@ -160,7 +144,7 @@
         "createdAt": "2019-07-16T20:17:16.562Z",
         "updatedAt": "2019-07-16T20:17:18.655Z",
         "id": "135758",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "dialog.item == null",
       "steps": [
@@ -187,7 +171,7 @@
         "createdAt": "2019-07-16T20:17:28.522Z",
         "updatedAt": "2019-07-16T20:17:31.337Z",
         "id": "577484",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
       "steps": [

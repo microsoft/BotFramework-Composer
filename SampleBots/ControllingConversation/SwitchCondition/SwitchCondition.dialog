@@ -61,7 +61,7 @@
         "createdAt": "2019-07-16T18:52:43.605Z",
         "updatedAt": "2019-07-16T18:52:45.887Z",
         "id": "088447",
-        "name": "Branch"
+        "name": "Branch: If/Else"
       },
       "condition": "user.name",
       "cases": [
