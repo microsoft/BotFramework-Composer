@@ -4,11 +4,11 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
+import { LgTemplate } from '../components/shared/sharedProps';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
-import { LgTemplate } from '../components/shared/sharedProps';
 
 export const ObiEditor: React.FC<ObiEditorProps> = ({
   path,
