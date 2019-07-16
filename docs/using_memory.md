@@ -29,6 +29,12 @@ The bot's memory also has 2 "ephemeral" scopes - a place to store temporary valu
 
 ## Set Properties with Prompts
 
+Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user, as well as a **property in memory** where the user's response will be stored.
+
+![Prompt definition](./Assets/prompt-property.png)
+
+In the above example, the result of the prompt "Do you like tacos?" will be automatically stored into the `user.taco_preference` property.
+
 ## Set Properties using Memory Actions
 
 Bot Framework provides a set of memory manipulation actions to create and modify properties in memory. Properties can be created on the fly in the Composer editor - the bot runtime will automatically manage the underlying data for you in the background.
@@ -49,11 +55,19 @@ Use **Delete a Property** to remove a property from memory.
 
 ## Set Properties with Dialogs
 
-Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user, as well as a **property in memory** where the user's response will be stored.
+Dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to the parent.
 
-![Prompt definition](./Assets/prompt-property.png)
+For example, a child dialog might first **initialize an object propert** called `dialog.profile`.  Then, using prompts, build a compound property representing a user profile.  Finally, the dialog returns the compound value to the parent dialog:
 
-In the above example, the result of the prompt "Do you like tacos?" will be automatically stored into the `user.taco_preference` property.
+![Sampple dialog](./Assets/dialog-with-return.png)
+
+The return value is specified as part of the **End Dialog** action:
+
+![Dialog return value property](./Assets/dialog-return-value.png)
+
+Finally, the parent dialog is configured to capture the return value inside the **begin a dialog** action:
+
+![Return value stored in parent dialog](./Assets/dialog-property.png)
 
 ## Automatic Properties
 
