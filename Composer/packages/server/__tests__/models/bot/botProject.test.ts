@@ -35,6 +35,11 @@ describe('index', () => {
     expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
       ['hello', 'bye', 'ShowImage'].join(',')
     );
+
+    // find out dialog used in,
+    // here main.dialog refers a.dialog
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).dialogs.length).toBe(1);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).dialogs.join(',')).toBe(['a'].join(','));
   });
 });
 
