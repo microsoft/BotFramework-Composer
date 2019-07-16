@@ -85,3 +85,7 @@ export default function SectionSeparator(props: SectionSeparatorProps) {
     </>
   );
 }
+
+SectionSeparator.defaultProps = {
+  collapsable: true,
+};
