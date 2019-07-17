@@ -76,7 +76,8 @@ describe('<RuleCard />', () => {
         const card = await findByTestId('IconCard');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        console.log(clickResults.onEvent);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, 'a']]); // data.steps[0]['dialog']]]);
       });
     });
   });
