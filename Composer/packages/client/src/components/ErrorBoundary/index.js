@@ -63,23 +63,6 @@ export class ErrorBoundary extends Component {
   }
 
   render() {
-    // return (
-    //   <Store.Consumer>
-    //     {({ state, actions }) => {
-    //       return state.error ? (
-    //         <ErrorPopup
-    //           error={state.error.message}
-    //           title={state.error.summary}
-    //           onDismiss={() => {
-    //             actions.setError(null);
-    //           }}
-    //         />
-    //       ) : (
-    //         this.props.children
-    //       );
-    //     }}
-    //   </Store.Consumer>
-    // );
     const { state, actions } = this.context;
     return state.error ? (
       <ErrorPopup
