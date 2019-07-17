@@ -17,6 +17,15 @@
   "generator": "common.lg",
   "rules": [
     {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[Welcome]"
+        }
+      ]
+    },
+    {
       "$type": "Microsoft.IntentRule",
       "intent": "TextInput",
       "steps": [
