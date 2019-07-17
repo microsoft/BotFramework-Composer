@@ -158,5 +158,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
-  [ActionTypes.SET_ERROR_MESSAGE]: setError,
+  [ActionTypes.SET_ERROR]: setError,
 });
