@@ -15,6 +15,13 @@ export const LoopIconSize = {
 
 export const LoopEdgeMarginLeft = 20;
 
+export const ChoiceInputSize = {
+  width: 145,
+  height: 22,
+};
+
+export const ChoiceInputMarginTop = 5;
+
 export const EventNodeSize = {
   width: 180,
   height: 32,
