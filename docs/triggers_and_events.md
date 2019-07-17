@@ -94,9 +94,9 @@ Regular expressions are great if you need to match a narrow set of highly struct
 ## Further Reading
 
 * [LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-* [LUIS.ai docs]()
+* [LUIS.ai docs](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/home)
 * [Adaptive Dialog Events](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
-* Messaging processing pipeline in adaptive dialogs
+* [Messaging processing pipeline in adaptive dialogs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/anatomy-and-runtime-behavior.md#runtime-behavior-adaptive-dialog)
 
 ## Next
 
