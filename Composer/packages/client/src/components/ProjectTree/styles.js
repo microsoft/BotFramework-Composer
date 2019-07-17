@@ -15,6 +15,7 @@ export const moreButton = {
     padding: '0 4px',
     alignSelf: 'stretch',
     height: 'auto',
+    visibility: 'hidden',
   },
   menuIcon: {
     fontSize: '14px',
@@ -25,15 +26,19 @@ export const moreButton = {
 export const moreMenu = {
   root: {
     marginTop: '-7px',
+    width: '100px',
   },
 };
 
-export const overflowSet = {
-  root: {
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-};
+export const overflowSet = css`
+  width: 100%;
+  justify-content: space-between;
+  & : hover {
+    .dialog-more-btn {
+      visibility: visible;
+    }
+  }
+`;
 
 export const addButton = css`
   margin-left: 10px;

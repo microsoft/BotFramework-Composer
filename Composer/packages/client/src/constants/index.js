@@ -150,6 +150,15 @@ export const DialogInfo = {
   },
 };
 
+export const DialogDeleting = {
+  NO_LINKED_TITLE: formatMessage('This action cannot be undone. Do you wish to continue?'),
+  TITLE: formatMessage('Warning!'),
+  CONTENT: formatMessage(
+    `The dialog you have tried to delete is currently used in the above dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
+  ),
+  CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',

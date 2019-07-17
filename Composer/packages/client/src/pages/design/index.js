@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -23,6 +23,7 @@ import {
   visualEditor,
   formEditor,
   editorWrapper,
+  deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
@@ -33,9 +34,9 @@ import { DialogStyle } from './../../components/Modal/styles';
 
 function onRenderContent() {
   return (
-    <div style={{ fontSize: '16px', color: '#000' }}>
-      <p>{formatMessage('you are about to delete a dialog that is a parent or a child of these dialogs')}</p>
-      <p>{formatMessage('Do you really want to delete?')}</p>
+    <div css={deleteDialogContent}>
+      <p>{DialogDeleting.CONTENT}</p>
+      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
     </div>
   );
 }
@@ -173,19 +174,19 @@ function DesignPage(props) {
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
     let setting = { confirmBtnText: formatMessage('Okay'), cancelBtnText: formatMessage('Cancel') };
+    let title = '';
+    let subTitle = '';
     if (refs.length > 0) {
+      title = DialogDeleting.TITLE;
+      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
       setting = {
-        title: formatMessage('Deleting a linked dialog'),
-        subTitle: `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`,
         onRenderContent: onRenderContent,
         style: DialogStyle.Console,
       };
     } else {
-      setting = {
-        title: formatMessage('Do you really want to delete?'),
-      };
+      title = DialogDeleting.NO_LINKED_TITLE;
     }
-    const result = await OpenConfirmModal('test', id, setting);
+    const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
       await removeDialog(id);

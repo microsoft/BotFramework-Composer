@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
 import { OverflowSet, CommandBarButton, IconButton } from 'office-ui-fabric-react';
 
 import { moreButton, overflowSet, moreMenu } from './styles';
@@ -14,6 +13,7 @@ const onRenderItem = item => {
 const onRenderOverflowButton = overflowItems => {
   return (
     <IconButton
+      className="dialog-more-btn"
       data-testid="dialogMoreButton"
       styles={moreButton}
       menuIconProps={{ iconName: 'MoreVertical' }}
@@ -23,7 +23,6 @@ const onRenderOverflowButton = overflowItems => {
 };
 
 export const TreeItem = props => {
-  const [showMore, setShowMore] = useState(false);
   const { link, render } = props;
   return (
     <OverflowSet
@@ -42,11 +41,9 @@ export const TreeItem = props => {
           onClick: () => link.onDelete(link.id),
         },
       ]}
-      styles={overflowSet}
+      css={overflowSet}
       onRenderItem={onRenderItem}
-      onRenderOverflowButton={link.hiddenMore || !showMore ? () => {} : onRenderOverflowButton}
-      onMouseOver={() => setShowMore(true)}
-      onMouseLeave={() => setShowMore(false)}
+      onRenderOverflowButton={link.hiddenMore ? () => {} : onRenderOverflowButton}
     />
   );
 };

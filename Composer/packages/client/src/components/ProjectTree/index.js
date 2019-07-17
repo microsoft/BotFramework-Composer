@@ -20,7 +20,7 @@ export const ProjectTree = props => {
       if (result.length === 0) {
         result = [{ links: [] }];
       }
-      const item = { key: file.id, ...file, onDelete: onDelete };
+      const item = { key: file.id, ...file, forceAnchor: true, onDelete: onDelete };
 
       item.name = file.displayName;
 
