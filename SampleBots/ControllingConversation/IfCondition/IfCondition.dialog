@@ -1,21 +1,45 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:49:39.154Z",
+    "updatedAt": "2019-07-16T18:48:49.706Z",
+    "id": "501534",
+    "name": "IfCondition"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.NumberInput",
+      "$designer": {
+        "createdAt": "2019-07-16T18:48:06.336Z",
+        "updatedAt": "2019-07-16T18:48:11.476Z",
+        "id": "260985",
+        "name": "Prompt for a number"
+      },
+      "property": "user.age",
       "prompt": "Hello, What's your age?",
-      "property": "user.age"
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "float",
+      "defaultLocale": "en-us"
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T18:48:13.156Z",
+        "updatedAt": "2019-07-16T18:48:15.452Z",
+        "id": "463418",
+        "name": "Branch: If/Else"
+      },
       "condition": "user.age >= 18",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "164444",
-            "updatedAt": "2019-07-04T19:55:38.267Z"
+            "updatedAt": "2019-07-16T18:48:20.188Z",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-164444]"
         }
@@ -25,17 +49,13 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "619321",
-            "updatedAt": "2019-07-04T19:56:28.408Z"
+            "updatedAt": "2019-07-16T18:48:25.248Z",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-619321]"
         }
       ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:39.154Z",
-    "updatedAt": "2019-07-03T06:49:39.178Z",
-    "id": "501534"
-  }
+  "$schema": "../../app.schema"
 }
