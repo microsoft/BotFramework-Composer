@@ -206,7 +206,7 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const invalidLuFile = toPublish.filter(file => file.diagnostics !== null);
+    const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.map(file => {
         return file.id + ': ' + get(file, 'diagnostics.text', ' ') + `\n`;
