@@ -86,6 +86,13 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
   },
+  'Microsoft.ConversationUpdateActivityRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+    ...globalFields,
+    'ui:order': ['events', 'constraint', '*', 'steps'],
+  },
   'Microsoft.EventRule': {
     steps: {
       'ui:field': StepsField,

@@ -119,7 +119,7 @@
     },
     "Activity": {
       "title": "Language Generation",
-      "description": "What your Bot says to the User. Visit <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> the documentation</a> a reference of capabilities."
+      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi"
     },
     "Microsoft.SetProperty": {
       "title": "Set a Property"

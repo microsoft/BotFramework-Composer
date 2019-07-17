@@ -67,6 +67,9 @@ You sent:
 # bfdactivity-991558
 -[ShowEmailSummary(user)]
 
+# Welcome
+-Welcome to input samples.
+
 # bfdactivity-365176
 -[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
 

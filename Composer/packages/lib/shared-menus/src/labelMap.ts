@@ -141,6 +141,9 @@ export const ConceptLabels = {
   'Microsoft.UnknownIntentRule': {
     title: formatMessage('Handle Unknown Intent'),
   },
+  'Microsoft.ConversationUpdateActivityRule': {
+    title: formatMessage('Handle ConversationUpdate'),
+  },
   'Microsoft.Foreach': {
     title: formatMessage('Loop: For Each'),
   },

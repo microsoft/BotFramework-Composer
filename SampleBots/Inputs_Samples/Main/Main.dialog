@@ -24,6 +24,20 @@
   "generator": "common.lg",
   "rules": [
     {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[Welcome]"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-07-17T19:25:09.963Z",
+        "updatedAt": "2019-07-17T19:25:09.971Z",
+        "id": "690456"
+      }
+    },
+    {
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-16T18:54:25.506Z",
