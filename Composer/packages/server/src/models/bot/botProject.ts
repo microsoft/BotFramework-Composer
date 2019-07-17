@@ -184,13 +184,6 @@ export class BotProject {
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
-
-    try {
-      await this.luIndexer.parse(content);
-    } catch (error) {
-      throw new Error(`create ${id}.lu Failed, ${error.text}`);
-    }
-
     await this._createFile(relativePath, content);
     return this.luIndexer.getLuFiles();
   };
