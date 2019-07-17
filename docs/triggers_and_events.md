@@ -12,6 +12,14 @@ TODO:
 TRIGGER + ACTIONS
 
 
+## Events at Root Dialog
+
+TODO: talk a bit about using events to trigger features
+
+## Events in Child Dialogs
+
+TODO: Talk a bit about using local interrupts
+
 ## Types of Event Handlers
 
 There are several types of event handlers available within Composer. They all work in a similar manner, and in some cases, can be interchanged.
@@ -97,6 +105,8 @@ In the example below, a similar `book-flight` intent is defined.  However, this 
 TODO: Is this where we want to discuss event bubbling?
 
 - What events bubble? Not all of them, right?
+- When no event is matched, it potentially consults parent dialog
+- if intent isn't matched locally, potentially consults parent
 
 ## Common Event Handler Recipes
 
