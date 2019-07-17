@@ -5,8 +5,11 @@ import throttle from 'lodash.throttle';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
-  wordWrap: 'on',
+  wordWrap: 'off',
+  fontFamily: 'Segoe UI',
+  fontSize: 14,
   lineNumbers: 'off',
+  quickSuggestions: false,
   minimap: {
     enabled: false,
   },

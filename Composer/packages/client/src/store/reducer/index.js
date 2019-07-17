@@ -24,6 +24,12 @@ const updateDialog = (state, { response }) => {
   return state;
 };
 
+const removeDialog = (state, { response }) => {
+  state.dialogs = response.data.dialogs;
+  state.luFiles = response.data.luFiles;
+  return state;
+};
+
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
@@ -124,6 +130,10 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
+const setError = (state, payload) => {
+  return (state.error = payload);
+};
+
 const updateOAuth = (state, { oAuth }) => {
   return (state.oAuth = oAuth);
 };
@@ -133,6 +143,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
+  [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
@@ -154,4 +165,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
+  [ActionTypes.SET_ERROR]: setError,
 });

@@ -35,6 +35,11 @@ describe('index', () => {
     expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
       ['hello', 'bye', 'ShowImage'].join(',')
     );
+
+    // find out dialog used in,
+    // here main.dialog refers a.dialog
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.length).toBe(1);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.join(',')).toBe(['a'].join(','));
   });
 });
 
@@ -225,6 +230,13 @@ describe('lu operation', () => {
       expect(result.relativePath).toEqual('root/root.lu');
       expect(result.content).toEqual(content);
     }
+  });
+
+  it('should throw error when lu content is invalid', async () => {
+    const id = 'root';
+    const content = 'hello \n hello3';
+
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
   });
 
   it('should delete lu file and update index', async () => {

@@ -9,7 +9,6 @@ import {
   NullField,
   LgEditorField,
 } from '../Form/fields';
-import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
 const globalFields = {
   property: {
@@ -25,13 +24,13 @@ const globalFields = {
 
 const activityFields = {
   prompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   unrecognizedPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   invalidPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   value: {
     'ui:widget': NullField,
@@ -66,7 +65,7 @@ export const uiSchema = {
   },
   'Microsoft.BeginDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -254,7 +253,7 @@ export const uiSchema = {
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -282,6 +281,12 @@ export const uiSchema = {
   'Microsoft.SendActivity': {
     activity: {
       'ui:field': LgEditorField,
+    },
+  },
+  'Microsoft.DateTimeInput': {
+    ...activityFields,
+    defaultValue: {
+      'ui:widget': 'DateTimeWidget',
     },
   },
 };
