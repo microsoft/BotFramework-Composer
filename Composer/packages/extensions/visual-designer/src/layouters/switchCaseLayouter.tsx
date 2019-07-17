@@ -1,5 +1,5 @@
 import { Boundary } from '../shared/Boundary';
-import { ElementInterval, DiamondSize, InitNodeSize } from '../shared/elementSizes';
+import { ElementInterval, DiamondSize, InitNodeSize, BranchIntervalMinX } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
@@ -41,7 +41,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: { [ke
       x: accOffsetX,
       y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
     };
-    return accOffsetX + BranchIntervalX + x.boundary.width;
+    return accOffsetX + Math.max(BranchIntervalX + x.boundary.width, BranchIntervalMinX);
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
