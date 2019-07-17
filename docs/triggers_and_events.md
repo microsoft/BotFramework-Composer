@@ -94,7 +94,13 @@ In the example below, a similar `book-flight` intent is defined.  However, this 
 
 ## Event Bubbling
 
+TODO: Is this where we want to discuss event bubbling?
+
+- What events bubble? Not all of them, right?
+
 ## Common Event Handler Recipes
+
+TODO: clean this up
 
 * Take action immediately when a dialog begins: in leaf dialogs: `beginDialog`
 * Send a welcome message as soon as the user begins chat: in Root dialog only: `activityReceived` with condition `(turn.activity.type=='conversationUpdate' && turn.activity.membersAdded[0].name != 'Bot')`
@@ -108,3 +114,4 @@ In the example below, a similar `book-flight` intent is defined.  However, this 
 
 ## Next
 
+TODO: add link
