@@ -187,8 +187,12 @@ async function removeLgFile(req: Request, res: Response) {
 
 async function updateLuFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
-    res.status(200).json({ luFiles });
+    try {
+      const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
+      res.status(200).json({ luFiles });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   } else {
     res.status(404).json({
       message: 'No such bot project opened',

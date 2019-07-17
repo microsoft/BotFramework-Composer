@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
-import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'react';
+import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
@@ -19,13 +18,12 @@ import { TestController } from './../../TestController';
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
   const { dialogs, luFiles } = state;
-  const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
+  const updateLuFile = actions.updateLuFile;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [luFile, setLuFile] = useState(null);
 
   const subPath = props['*'];
-
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.id === subPath);
 
@@ -92,8 +90,16 @@ export const LUPage = props => {
     setNewContent(null);
   }, [activePath, dialogs, luFiles]);
 
+  const UIShowEditingToolBar = useMemo(() => {
+    return newContent !== null;
+  }, [newContent]);
+
+  const UIShowEditingAlert = useMemo(() => {
+    return newContent !== null;
+  }, [newContent]);
+
   function onSelect(id) {
-    if (newContent) {
+    if (UIShowEditingAlert) {
       OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
       return;
     }
@@ -115,12 +121,20 @@ export const LUPage = props => {
     setNewContent(null);
   }
 
-  function onSave() {
+  async function onSave() {
     const payload = {
       id: activeDialog.id, // current opened lu file
       content: newContent,
     };
-    updateLuFile(payload);
+    try {
+      await updateLuFile(payload);
+    } catch (error) {
+      const title = `StaticValidationError`;
+      const subTitle = error.message;
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
   }
 
   // #TODO: get line number from lu parser, then deep link to code editor this
@@ -144,7 +158,7 @@ export const LUPage = props => {
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
-          {newContent && (
+          {UIShowEditingToolBar && (
             <Fragment>
               <ActionButton
                 iconProps={{

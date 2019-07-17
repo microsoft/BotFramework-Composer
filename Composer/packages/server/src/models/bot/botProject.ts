@@ -66,7 +66,7 @@ export class BotProject {
   public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
-    const diagostics: string[] = [];
+    const diagnostics: string[] = [];
 
     const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
@@ -77,7 +77,7 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse editor schema as JSON failed');
-        diagostics.push(`Error in editor.schema, ${error.message}`);
+        diagnostics.push(`Error in editor.schema, ${error.message}`);
       }
     }
 
@@ -87,14 +87,14 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse sdk schema as JSON failed');
-        diagostics.push(`Error in sdk.schema, ${error.message}`);
+        diagnostics.push(`Error in sdk.schema, ${error.message}`);
       }
     }
 
     return {
       editor: { content: editorSchema },
       sdk: { content: sdkSchema },
-      diagostics,
+      diagnostics,
     };
   };
 
@@ -168,6 +168,13 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+
+    try {
+      await this.luIndexer.parse(content);
+    } catch (error) {
+      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
+    }
+
     await this._updateFile(luFile.relativePath, content);
     this.luPublisher.update(luFile.relativePath);
     return this.luIndexer.getLuFiles();
@@ -189,11 +196,24 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
+    if (invalidLuFile.length !== 0) {
+      const msg = invalidLuFile.reduce((msg, file) => {
+        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+          text += `\n ${diagnostic.text}`;
+          return text;
+        }, `In ${file.id}.lu: `);
+        msg += `\n ${fileErrorText} \n`;
+        return msg;
+      }, '');
+      throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
+    }
     const emptyLuFiles = toPublish.filter(this.isEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
-      throw new Error('You have the following empty LuFile(s): ' + msg);
+      throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
     return await this.luPublisher.publish(config, toPublish);
   };
