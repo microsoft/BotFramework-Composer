@@ -7,6 +7,7 @@ export const COMPOUND_TYPES = [
   'Microsoft.EventRule',
   'Microsoft.IntentRule',
   'Microsoft.UnknownIntentRule',
+  'Microsoft.ConversationUpdateActivityRule',
 ];
 
 export const appschema: JSONSchema6 = {
@@ -1860,6 +1861,11 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType',
       oneOf: [
         {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+        },
+        {
           title: 'Microsoft.EventRule',
           description: 'This defines a rule for an event that is triggered by some source',
           $ref: '#/definitions/Microsoft.EventRule',
@@ -2070,6 +2076,62 @@ export const appschema: JSONSchema6 = {
           description: 'A list of any entities that must be found by the recognizer in order for this event to fire.',
           items: {
             type: 'string',
+          },
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
+    'Microsoft.ConversationUpdateActivityRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'ConversationUpdateActivity Rule',
+      description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+      type: 'object',
+      properties: {
+        $type: {
+          title: '$type',
+          description:
+            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.ConversationUpdateActivityRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Copy the definition by id from a .dialog file.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Inline id for reuse of an inline definition',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        $designer: {
+          title: '$designer',
+          type: 'object',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        constraint: {
+          $role: 'expression',
+          title: 'Constraint',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        steps: {
+          type: 'array',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
           },
         },
       },
