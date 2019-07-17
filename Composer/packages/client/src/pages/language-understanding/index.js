@@ -30,7 +30,7 @@ export const LUPage = props => {
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   useEffect(() => {
-    const luErrors = diagnostics.filter(d => d.type === ActionTypes.UPDATE_LU_FAILURE);
+    const luErrors = diagnostics.filter(d => d.name === ActionTypes.UPDATE_LU_FAILURE);
     if (luErrors.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = luErrors.reduce((msg, luFile) => {
@@ -40,6 +40,11 @@ export const LUPage = props => {
 
       OpenAlertModal(title, subTitle, {
         style: DialogStyle.Console,
+      });
+
+      // clean this error in store
+      actions.cleanError({
+        name: ActionTypes.UPDATE_LU_FAILURE,
       });
     }
   }, [diagnostics]);

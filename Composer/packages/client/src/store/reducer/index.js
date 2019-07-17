@@ -148,11 +148,21 @@ const setBotLoadErrorMsg = (state, { error }) => {
   return (state.botLoadErrorMsg = error);
 };
 
+const addError = (state, error) => {
+  state.diagnostics.push(error);
+  return state.diagnostics;
+};
+
+const cleanError = (state, { name }) => {
+  state.diagnostics = state.diagnostics.filter(d => d.name !== name);
+  return state.diagnostics;
+};
+
 const updateLuError = (state, { id, error }) => {
-  const sameTypeErrorIdx = state.diagnostics.find(d => d.type === ActionTypes.UPDATE_LU_FAILURE);
+  const sameTypeErrorIdx = state.diagnostics.find(d => d.name === ActionTypes.UPDATE_LU_FAILURE);
   const newError = {
     id,
-    type: ActionTypes.UPDATE_LU_FAILURE,
+    name: ActionTypes.UPDATE_LU_FAILURE,
     diagnostics: error,
   };
 
@@ -160,7 +170,7 @@ const updateLuError = (state, { id, error }) => {
   if (sameTypeErrorIdx !== -1) {
     state.diagnostics.splice(sameTypeErrorIdx, 1, newError);
   } else {
-    state.diagnostics.push(newError);
+    addError(newError);
   }
   return state.diagnostics;
 };
@@ -203,5 +213,7 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_LU_FAILURE]: updateLuError,
+  [ActionTypes.ADD_ERROR]: addError,
+  [ActionTypes.CLEAN_ERROR]: cleanError,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
 });
