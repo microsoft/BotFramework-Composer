@@ -4,13 +4,11 @@ All bots built with Bot Framework Composer have a "memory" - a representation of
 Developers can store and retrieve values in the bot memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot.
 Properties from memory can be used inside templates, and can also be used as part of a calculation.
 
-TODO:
-Things you can do with memory:
+The memory system makes it possible for bots built in Composer to do things like:
 
-* store info about a user
-* remember the topic you are discussing 
-* refer back to previous topics
-
+* Store a user profile and user preferences
+* Remember things between sessions - like the last search query or a list of recently mentioned locations
+* Pass information between dialogs
 
 ## Anatomy of a Property in Memory
 
@@ -143,7 +141,7 @@ Properties from memory can also be used within an lg template to provide conditi
 
 ### Memory Shorthands
 
-Bot Framework provides a variety of shortcuts for referring to properties in memory.  [See the full list here](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/docs-4.6-preview/experimental/adaptive-dialog/docs/memory-model-overview.md#memory-short-hands)
+Bot Framework provides a variety of shortcuts for referring to properties in memory.  [See the full list here.](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/docs-4.6-preview/experimental/adaptive-dialog/docs/memory-model-overview.md#memory-short-hands)
 
 
 ## Further Reading
