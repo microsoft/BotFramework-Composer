@@ -1,6 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { ArrayFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
+import formatMessage from 'format-message';
 
 import { BaseField } from '../fields/BaseField';
 import SectionSeparator from '../SectionSeparator';
@@ -17,11 +18,15 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
           <ArrayItem {...element} key={idx} />
         ))}
         {canAdd && (
-          <SectionSeparator>
-            <PrimaryButton type="button" onClick={onAddClick} data-testid="ArrayContainerAdd">
-              Add
-            </PrimaryButton>
-          </SectionSeparator>
+          <SectionSeparator
+            collapsable={false}
+            styles={{ marginTop: '20px' }}
+            label={
+              <PrimaryButton type="button" onClick={onAddClick} data-testid="ArrayContainerAdd">
+                {formatMessage('Add')}
+              </PrimaryButton>
+            }
+          />
         )}
       </div>
     </BaseField>
