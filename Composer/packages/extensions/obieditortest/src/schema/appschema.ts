@@ -1674,6 +1674,11 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.ConfirmInput',
         },
         {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+        },
+        {
           title: 'Microsoft.DateTimeInput',
           description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
           $ref: '#/definitions/Microsoft.DateTimeInput',

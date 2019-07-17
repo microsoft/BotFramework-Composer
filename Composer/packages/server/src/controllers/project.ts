@@ -152,6 +152,16 @@ async function createDialog(req: Request, res: Response) {
   }
 }
 
+async function removeDialog(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const dialogs = await ProjectService.currentBotProject.removeDialog(req.params.dialogId);
+    const luFiles = await ProjectService.currentBotProject.removeLuFile(req.params.dialogId);
+    res.status(200).json({ dialogs, luFiles });
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 async function updateLgFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.content);
@@ -187,8 +197,12 @@ async function removeLgFile(req: Request, res: Response) {
 
 async function updateLuFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
-    res.status(200).json({ luFiles });
+    try {
+      const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
+      res.status(200).json({ luFiles });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -252,6 +266,7 @@ export const ProjectController = {
   openProject,
   updateDialog,
   createDialog,
+  removeDialog,
   updateLgFile,
   createLgFile,
   removeLgFile,

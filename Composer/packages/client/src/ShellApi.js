@@ -120,7 +120,7 @@ export function ShellApi() {
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
-    const schemaError = get(schemas, 'diagostics', []);
+    const schemaError = get(schemas, 'diagnostics', []);
     if (schemaError.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = schemaError.join('\n');

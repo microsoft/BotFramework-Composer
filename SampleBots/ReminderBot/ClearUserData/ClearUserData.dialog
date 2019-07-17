@@ -2,18 +2,19 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-10T02:59:47.692Z",
-    "updatedAt": "2019-07-10T03:56:40.344Z",
-    "id": "323094"
+    "updatedAt": "2019-07-16T19:39:38.615Z",
+    "id": "323094",
+    "name": "ClearUserData"
   },
   "autoEndDialog": true,
-  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
   "steps": [
     {
       "$type": "Microsoft.DeleteProperty",
       "$designer": {
         "createdAt": "2019-07-10T03:56:44.738Z",
-        "updatedAt": "2019-07-10T03:56:49.036Z",
-        "id": "609169"
+        "updatedAt": "2019-07-16T19:41:20.771Z",
+        "id": "609169",
+        "name": "Delete a Property"
       },
       "property": "user.index"
     },
@@ -21,8 +22,9 @@
       "$type": "Microsoft.DeleteProperty",
       "$designer": {
         "createdAt": "2019-07-10T03:56:54.015Z",
-        "updatedAt": "2019-07-10T03:56:56.129Z",
-        "id": "971431"
+        "updatedAt": "2019-07-16T19:41:25.345Z",
+        "id": "971431",
+        "name": "Delete a Property"
       },
       "property": "user.data"
     },
@@ -30,8 +32,9 @@
       "$type": "Microsoft.DeleteProperty",
       "$designer": {
         "createdAt": "2019-07-10T03:57:01.610Z",
-        "updatedAt": "2019-07-10T03:57:39.831Z",
-        "id": "463745"
+        "updatedAt": "2019-07-16T19:41:30.021Z",
+        "id": "463745",
+        "name": "Delete a Property"
       },
       "property": "user.content"
     },
@@ -39,8 +42,9 @@
       "$type": "Microsoft.DeleteProperty",
       "$designer": {
         "createdAt": "2019-07-10T03:58:01.700Z",
-        "updatedAt": "2019-07-10T03:58:07.670Z",
-        "id": "210405"
+        "updatedAt": "2019-07-16T19:41:34.420Z",
+        "id": "210405",
+        "name": "Delete a Property"
       },
       "property": "user.remindtime"
     },
@@ -48,10 +52,12 @@
       "$type": "Microsoft.DeleteProperty",
       "$designer": {
         "createdAt": "2019-07-10T03:58:13.929Z",
-        "updatedAt": "2019-07-10T03:58:18.154Z",
-        "id": "716688"
+        "updatedAt": "2019-07-16T19:41:39.884Z",
+        "id": "716688",
+        "name": "Delete a Property"
       },
       "property": "user.requesttime"
     }
-  ]
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
 }
