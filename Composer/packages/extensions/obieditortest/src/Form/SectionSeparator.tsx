@@ -43,28 +43,30 @@ export default function SectionSeparator(props: SectionSeparatorProps) {
 
   return (
     <>
-      <div style={assign({}, defaultStyles, styleOverrides)}>
-        <Separator
-          theme={fieldHeaderTheme}
-          alignContent="start"
-          styles={{ root: { flex: 1 }, content: { paddingLeft: '0', paddingRight: '16px' } }}
-          {...rest}
-        >
-          {label}
-        </Separator>
-        {collapsable && (
-          <IconButton
-            onClick={() => setCollapsed(!collapsed)}
-            iconProps={{ iconName: 'PageRight' }}
-            checked={collapsed}
-            styles={{
-              rootChecked: { backgroundColor: 'transparent' },
-              iconChecked: { transform: 'rotate(270deg)' },
-              icon: { color: 'black', transform: 'rotate(90deg)', transition: 'transform 0.2s linear' },
-            }}
-          />
-        )}
-      </div>
+      {label && (
+        <div style={assign({}, defaultStyles, styleOverrides)}>
+          <Separator
+            theme={fieldHeaderTheme}
+            alignContent="start"
+            styles={{ root: { flex: 1 }, content: { paddingLeft: '0', paddingRight: '16px' } }}
+            {...rest}
+          >
+            {label}
+          </Separator>
+          {collapsable && (
+            <IconButton
+              onClick={() => setCollapsed(!collapsed)}
+              iconProps={{ iconName: 'PageRight' }}
+              checked={collapsed}
+              styles={{
+                rootChecked: { backgroundColor: 'transparent' },
+                iconChecked: { transform: 'rotate(270deg)' },
+                icon: { color: 'black', transform: 'rotate(90deg)', transition: 'transform 0.2s linear' },
+              }}
+            />
+          )}
+        </div>
+      )}
       {props.children && (
         <div>
           <div
