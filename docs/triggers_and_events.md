@@ -84,6 +84,14 @@ Regular expressions are rigid patterns that can be used to match simple or sophi
 
 Regular expressions are great if you need to match a narrow set of highly structured commands or keywords, however do not have the flexibility of a more fully featured language understanding technology like LUIS.
 
+In the example below, a similar `book-flight` intent is defined.  However, this will ONLY match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able match a much wider variety of messages.
+
+![RegEx recognizer](./Assets/regex-recognizer.png)
+
+[Learn more about the RegEx recognizer &rarr;](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
+
+[Learn more about Regular Expressions &rarr;](https://regexr.com/)
+
 ## Event Bubbling
 
 ## Common Event Handler Recipes
