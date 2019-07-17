@@ -8,6 +8,10 @@ import { FormContext } from '../types';
 
 import { DesignerField } from './DesignerField';
 
+const descriptionMarkup = description => {
+  return { __html: description };
+};
+
 const overrideDefaults = {
   collapsable: true,
   defaultCollapsed: false,
@@ -51,9 +55,10 @@ export function RootField(props) {
         defaultCollapsed={fieldOverrides.defaultCollapsed}
       >
         {sdkOverrides.description !== false && (description || schema.description) && (
-          <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
-            {getDescription()}
-          </p>
+          <p
+            className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}
+            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
+          />
         )}
         {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
       </SectionSeparator>
