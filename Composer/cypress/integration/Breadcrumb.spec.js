@@ -6,7 +6,7 @@ context('breadcrumb', () => {
     cy.openBot('ToDoBot');
   });
 
-  it('can show dialog name in breadcrumb', () => {
+  it.skip('can show dialog name in breadcrumb', () => {
     cy.get('[data-testid="Breadcrumb"]').within(() => {
       cy.getByText('ToDoBot').should('exist');
     });
