@@ -39,6 +39,8 @@ export const ActionTypes = {
   UPDATE_DIALOG_FAILURE: 'UPDATE_DIALOG_FAILURE',
   CREATE_DIALOG_SUCCESS: 'CREATE_DIALOG_SUCCESS',
   CREATE_DIALOG_FAILURE: 'CREATE_DIALOG_FAILURE',
+  REMOVE_DIALOG_SUCCESS: 'REMOVE_DIALOG_SUCCESS',
+  REMOVE_DIALOG_FAILURE: 'REMOVE_DIALOG_FAILURE',
   UPDATE_LG_SUCCESS: 'UPDATE_LG_SUCCESS',
   UPDATE_LG_FAILURE: 'UPDATE_LG_FAILURE',
   CREATE_LG_SUCCCESS: 'CREATE_LG_SUCCCESS',
@@ -146,6 +148,15 @@ export const DialogInfo = {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
   },
+};
+
+export const DialogDeleting = {
+  NO_LINKED_TITLE: formatMessage('This action cannot be undone. Do you wish to continue?'),
+  TITLE: formatMessage('Warning!'),
+  CONTENT: formatMessage(
+    `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
+  ),
+  CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
 };
 
 export const SupportedFileTypes = [
