@@ -4,6 +4,14 @@ All bots built with Bot Framework Composer have a "memory" - a representation of
 Developers can store and retrieve values in the bot memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot.
 Properties from memory can be used inside templates, and can also be used as part of a calculation.
 
+TODO:
+Things you can do with memory:
+
+* store info about a user
+* remember the topic you are discussing 
+* refer back to previous topics
+
+
 ## Anatomy of a Property in Memory
 
 A piece of data in memory is referred to as a **property** - this is a distinct value identified by a specific address.  The address is made up of two parts - the first part is the **scope** of the property, and the second is the **name** of the property.
@@ -111,12 +119,31 @@ In this second example, the value of `turn.choice` is used to match against mult
 
 ### Memory in Loops
 
-When using `Foreach` and `ForeachPage` actions, properties also come into play.
+When using `Foreach` and `ForeachPage` actions, properties also come into play. The definition of a for loop requires three properties: one that holds the list of items to loop over, one that will be used to hold the currently selected item inside the loop, and one to hold the array index of the selected item. The bot manages the value and index properties automatically.
 
 ![foreach properties](./Assets/foreach-properties.png)
 
 ### Memory in LG
 
+One of the most powerful features of the Bot Framework system is language generation - particularly when used alongside properties pulled from memory.
+You can refer to properties in the text of any message - including prompts.
+Properties can also be referred to in lg templates and functions - [learn more about the full scope of language generation system in this section.](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+
+To use the value of a property from memory inside a message, wrap the property reference in curly brackets: `{user.profile.name}`
+
+The screenshot below demonstrates how a bot can prompt a user for a value, then immediately use that value in a confirmation message.
+
+![use a property in the message text](./Assets/lg-properties.png)
+
+In addition to raw properties values, it is also possible to embed [expressions](#expressions) into the message template.  For example, it is possible to use the built-in `join()` and `foreach()` operators to format a list. 
+
+Given an array property held in `dialog.list`,  the expression `{ join(foreach(dialog.list, item, item), ',', ', and')) }` would result in a  grammatically correct list in the format, "item 1, item 2, and item 3"
+
+Properties from memory can also be used within an lg template to provide conditional variants of a messag and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
+
+### Memory Shorthands
+
+Bot Framework provides a variety of shortcuts for referring to properties in memory.  [See the full list here](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/docs-4.6-preview/experimental/adaptive-dialog/docs/memory-model-overview.md#memory-short-hands)
 
 
 ## Further Reading
