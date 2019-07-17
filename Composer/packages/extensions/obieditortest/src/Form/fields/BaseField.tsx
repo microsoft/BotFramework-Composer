@@ -49,19 +49,33 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     key = `${key}-${formContext.dialogId}`;
   }
 
+  const getTitle = () => {
+    if (titleOverride === false) {
+      return null;
+    }
+
+    return titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name);
+  };
+
+  const getDescription = () => {
+    if (descriptionOverride === false) {
+      return null;
+    }
+
+    return descriptionOverride || description || uiSchema['ui:description'] || schema.description;
+  };
+
   return isRootBaseField ? (
     <RootField {...props} key={key} id={key}>
       {children}
     </RootField>
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key}>
-      <SectionSeparator label={titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}>
+      <SectionSeparator label={getTitle()}>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
           <p
             className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
-            dangerouslySetInnerHTML={descriptionMarkup(
-              descriptionOverride || description || uiSchema['ui:description'] || schema.description
-            )}
+            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
           />
         )}
         {children}
