@@ -23,7 +23,7 @@ Here are a couple of examples:
 
 The scope of the property determines when the property is available, and how long the value will be retained.
 
-The bot's memory has 2 "permanent" scopes - a place to store information about individual users, and a place to store information about ongoing conversations:
+The bot's memory has two "permanent" scopes - a place to store information about individual users, and a place to store information about ongoing conversations:
 
 * **user** is associated with a specific user. Properties in the user scope are retained forever.
 * **conversation** is associated with the conversation id. Properties in the user scope are retained forever - and may be accessed by multiple users within the same conversation (for example multiple users together in an MS Teams channel).
@@ -103,7 +103,7 @@ Bot Framework uses the [common expression language](https://github.com/microsoft
 
 When used in expressions, no special notation is necessary to refer to a property from memory.
 
-### Memory in Branches
+### Memory in Branching Actions
 
 A bot can evaluate values from memory when making decisions inside a branching action like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
 
@@ -149,7 +149,6 @@ Bot Framework provides a variety of shortcuts for referring to properties in mem
 * [Bot Framework Adaptive Dialogs Memory Model](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md)
 
 * [Bot Framework on Github](https://github.com/microsoft/botframework)
-
 
 
 ## Next
