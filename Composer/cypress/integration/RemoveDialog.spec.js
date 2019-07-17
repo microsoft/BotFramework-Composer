@@ -15,7 +15,7 @@ context('RemoveDialog', () => {
         .click();
     });
     cy.getByText('Delete').click();
-    cy.getByText('Okay').click();
+    cy.getByText('Yes').click();
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="AddItem"]').should('not.exist');
     });
