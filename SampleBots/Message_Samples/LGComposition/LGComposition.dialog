@@ -1,22 +1,38 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:14.618Z",
+    "updatedAt": "2019-07-16T19:36:33.131Z",
+    "id": "662682",
+    "name": "LGComposition"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:36:36.053Z",
+        "updatedAt": "2019-07-16T19:36:39.049Z",
+        "id": "823530",
+        "name": "Prompt for text"
+      },
       "property": "user.name",
+      "prompt": "Hello, I'm Zoidberg. What is your name?",
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
       "allowInterruptions": false,
-      "prompt": "Hello, I'm Zoidberg. What is your name?"
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "[LGComposition(user)]"
+      "$designer": {
+        "createdAt": "2019-07-16T19:36:40.579Z",
+        "updatedAt": "2019-07-16T19:36:46.957Z",
+        "id": "823322",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-823322]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:50:14.618Z",
-    "updatedAt": "2019-07-03T06:50:14.741Z",
-    "id": "662682"
-  }
+  "$schema": "../../app.schema"
 }

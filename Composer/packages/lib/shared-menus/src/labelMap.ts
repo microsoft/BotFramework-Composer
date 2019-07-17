@@ -1,148 +1,153 @@
+import formatMessage from 'format-message';
+
 /**
  * These labels will be used when rendering the EdgeMenu
  * TODO: this is currently a copy of the SDKOverrides content from editor.schema. This should be drilled in from the shell.
  */
 export const ConceptLabels = {
   'Microsoft.AdaptiveDialog': {
-    title: 'AdaptiveDialog',
+    title: formatMessage('AdaptiveDialog'),
   },
   'Microsoft.BeginDialog': {
-    title: 'Begin a Dialog',
+    title: formatMessage('Begin a Dialog'),
   },
   'Microsoft.CancelAllDialogs': {
-    title: 'Cancel All Dialogs',
+    title: formatMessage('Cancel All Dialogs'),
   },
   'Microsoft.ChoiceInput': {
-    title: 'Prompt with multi-choice',
+    title: formatMessage('Prompt with multi-choice'),
   },
   'Microsoft.ConditionalSelector': {
-    title: 'ConditionalSelector',
+    title: formatMessage('ConditionalSelector'),
   },
   'Microsoft.ConfirmInput': {
-    title: 'Prompt for confirmation',
+    title: formatMessage('Prompt for confirmation'),
   },
   'Microsoft.DateTimeInput': {
-    title: 'Type: Date',
+    title: formatMessage('Type: Date'),
   },
   'Microsoft.DebugBreak': {
-    title: 'Debug Break',
+    title: formatMessage('Debug Break'),
   },
   'Microsoft.DeleteProperty': {
-    title: 'Delete a Property',
+    title: formatMessage('Delete a Property'),
   },
   'Microsoft.EditArray': {
-    title: 'Edit an Array Property',
+    title: formatMessage('Edit an Array Property'),
   },
   'Microsoft.EmitEvent': {
-    title: 'Emit a custom event',
+    title: formatMessage('Emit a custom event'),
   },
   'Microsoft.EndDialog': {
-    title: 'End Dialog',
+    title: formatMessage('End Dialog'),
   },
   'Microsoft.EndTurn': {
-    title: 'End Turn',
+    title: formatMessage('End Turn'),
   },
   'Microsoft.EventRule': {
-    title: 'Handle an Event',
+    title: formatMessage('Handle an Event'),
   },
   'Microsoft.FirstSelector': {
-    title: 'FirstSelector',
+    title: formatMessage('FirstSelector'),
   },
   'Microsoft.HttpRequest': {
-    title: 'HTTP Request',
+    title: formatMessage('HTTP Request'),
   },
   'Microsoft.IfCondition': {
-    title: 'Branch: If/Else',
+    title: formatMessage('Branch: If/Else'),
   },
   'Microsoft.InitProperty': {
-    title: 'Initialize a Property',
+    title: formatMessage('Initialize a Property'),
   },
   'Microsoft.IntentRule': {
-    title: 'Handle an Intent',
+    title: formatMessage('Handle an Intent'),
   },
   'Microsoft.LanguagePolicy': {
-    title: 'LanguagePolicy',
+    title: formatMessage('LanguagePolicy'),
   },
   'Microsoft.LogStep': {
-    title: 'Log to console',
+    title: formatMessage('Log to console'),
   },
   'Microsoft.LuisRecognizer': {
-    title: 'Language Understanding',
-    description:
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
+    title: formatMessage('Language Understanding'),
+    description: formatMessage(
+      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+    ),
   },
   'Microsoft.MostSpecificSelector': {
-    title: 'MostSpecificSelector',
+    title: formatMessage('MostSpecificSelector'),
   },
   'Microsoft.MultiLanguageRecognizer': {
-    title: 'Language Understanding',
-    description:
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
+    title: formatMessage('Language Understanding'),
+    description: formatMessage(
+      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+    ),
   },
   'Microsoft.NumberInput': {
-    title: 'Prompt for a number',
+    title: formatMessage('Prompt for a number'),
   },
   'Microsoft.QnAMakerDialog': {
-    title: 'QnAMakerDialog',
+    title: formatMessage('QnAMakerDialog'),
   },
   'Microsoft.RandomSelector': {
-    title: 'RandomSelector',
+    title: formatMessage('RandomSelector'),
   },
   'Microsoft.RegexRecognizer': {
     title: false,
     description: false,
   },
   'Microsoft.RepeatDialog': {
-    title: 'Repeat this Dialog',
+    title: formatMessage('Repeat this Dialog'),
   },
   'Microsoft.ReplaceDialog': {
-    title: 'Replace this Dialog',
+    title: formatMessage('Replace this Dialog'),
   },
   'Microsoft.Rule': {
-    title: 'Rule',
+    title: formatMessage('Rule'),
   },
   'Microsoft.SaveEntity': {
-    title: 'Save an Entity',
+    title: formatMessage('Save an Entity'),
   },
   'Microsoft.SendActivity': {
-    title: 'Send an Activity',
+    title: formatMessage('Send an Activity'),
   },
   'Microsoft.OAuthInput': {
-    title: 'OAuth Login',
+    title: formatMessage('OAuth Login'),
   },
   'Microsoft.AttachmentInput': {
-    title: 'Prompt for Attachment',
+    title: formatMessage('Prompt for Attachment'),
   },
   Activity: {
-    title: 'Language Generation',
-    description:
-      'What your Bot says to the User. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.',
+    title: formatMessage('Language Generation'),
+    description: formatMessage(
+      'What your Bot says to the User. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
+    ),
   },
   'Microsoft.SetProperty': {
-    title: 'Set a Property',
+    title: formatMessage('Set a Property'),
   },
   'Microsoft.SwitchCondition': {
-    title: 'Branch: Switch',
+    title: formatMessage('Branch: Switch'),
   },
   'Microsoft.TextInput': {
-    title: 'Prompt for text',
+    title: formatMessage('Prompt for text'),
   },
   'Microsoft.TraceActivity': {
-    title: 'Emit a trace event',
+    title: formatMessage('Emit a trace event'),
   },
   'Microsoft.TrueSelector': {
-    title: 'TrueSelector',
+    title: formatMessage('TrueSelector'),
   },
   'Microsoft.UnknownIntentRule': {
-    title: 'Handle Unknown Intent',
+    title: formatMessage('Handle Unknown Intent'),
   },
   'Microsoft.Foreach': {
-    title: 'Loop: For Each',
+    title: formatMessage('Loop: For Each'),
   },
   'Microsoft.ForeachPage': {
-    title: 'Loop: For Each Page',
+    title: formatMessage('Loop: For Each Page'),
   },
   'Microsoft.EditSteps': {
-    title: 'Modify active dialog',
+    title: formatMessage('Modify active dialog'),
   },
 };

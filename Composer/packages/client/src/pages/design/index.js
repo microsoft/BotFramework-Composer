@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -23,16 +23,41 @@ import {
   visualEditor,
   formEditor,
   editorWrapper,
+  deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
+import { DialogStyle } from './../../components/Modal/styles';
+
+function onRenderContent(subTitle, style) {
+  return (
+    <div css={deleteDialogContent}>
+      <p>{DialogDeleting.CONTENT}</p>
+      {subTitle && <div style={style}>{subTitle}</div>}
+      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
+    </div>
+  );
+}
+
+function getAllRef(targetId, dialogs) {
+  let refs = [];
+  dialogs.forEach(dialog => {
+    if (dialog.id === targetId) {
+      refs = refs.concat(dialog.referredDialogs);
+    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
+      refs.push(dialog.displayName || dialog.id);
+    }
+  });
+  return refs;
+}
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
+  const { clearNavHistory, navTo, setCreationFlowStatus, removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(id) {
@@ -147,6 +172,28 @@ function DesignPage(props) {
     setModalOpen(false);
   }
 
+  async function handleDeleteDialog(id) {
+    const refs = getAllRef(id, dialogs);
+    let setting = { confirmBtnText: formatMessage('Yes'), cancelBtnText: formatMessage('Cancel') };
+    let title = '';
+    let subTitle = '';
+    if (refs.length > 0) {
+      title = DialogDeleting.TITLE;
+      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
+      setting = {
+        onRenderContent: onRenderContent,
+        style: DialogStyle.Console,
+      };
+    } else {
+      title = DialogDeleting.NO_LINKED_TITLE;
+    }
+    const result = await OpenConfirmModal(title, subTitle, setting);
+
+    if (result) {
+      await removeDialog(id);
+    }
+  }
+
   return (
     <Fragment>
       {props.match && <ToolBar toolbarItems={toolbarItems} />}
@@ -163,6 +210,7 @@ function DesignPage(props) {
                   activeNode={activeDialog}
                   onSelect={handleFileClick}
                   onAdd={() => setModalOpen(true)}
+                  onDelete={handleDeleteDialog}
                 />
               </div>
             </Tree>
