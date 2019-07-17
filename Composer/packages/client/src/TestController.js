@@ -52,7 +52,7 @@ export const TestController = () => {
 
   async function handleClick() {
     const dialogErrors = dialogs.reduce((result, dialog) => {
-      if (dialog.diagostics.length !== 0) {
+      if (dialog.diagnostics.length !== 0) {
         return result.concat([dialog]);
       }
       return result;
@@ -60,7 +60,7 @@ export const TestController = () => {
     if (dialogErrors.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = dialogErrors.reduce((msg, dialog) => {
-        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagostics.join('\n')} \n`;
+        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagnostics.join('\n')} \n`;
         return msg;
       }, '');
 

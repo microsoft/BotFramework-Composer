@@ -1,9 +1,21 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-01T21:32:33.179Z",
+    "updatedAt": "2019-07-16T19:49:37.642Z",
+    "id": "519891",
+    "name": "EditSteps"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.EditSteps",
+      "$designer": {
+        "createdAt": "2019-07-16T19:52:15.850Z",
+        "updatedAt": "2019-07-16T19:52:21.863Z",
+        "id": "250234",
+        "name": "Modify active dialog"
+      },
       "changeType": "InsertSteps",
       "steps": [
         {
@@ -15,33 +27,30 @@
     },
     {
       "$type": "Microsoft.EditSteps",
+      "$designer": {
+        "createdAt": "2019-07-01T21:33:10.633Z",
+        "updatedAt": "2019-07-16T19:52:26.709Z",
+        "id": "443878",
+        "name": "Modify active dialog"
+      },
       "changeType": "AppendSteps",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Goodbye!"
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T21:33:10.633Z",
-        "updatedAt": "2019-07-01T21:33:10.638Z",
-        "id": "443878"
-      }
+      ]
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:33:09.385Z",
-        "updatedAt": "2019-07-01T21:33:11.411Z",
-        "id": "644042"
+        "updatedAt": "2019-07-16T19:52:30.861Z",
+        "id": "644042",
+        "name": "Send an Activity"
       },
       "activity": "[bfdactivity-644042]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T21:32:33.179Z",
-    "updatedAt": "2019-07-01T21:32:33.208Z",
-    "id": "519891"
-  }
+  "$schema": "../../app.schema"
 }
