@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Visual Designer', () => {
+context.skip('Visual Designer', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.copyBot('ToDoLuisBot', 'VisualDesignerTest');
