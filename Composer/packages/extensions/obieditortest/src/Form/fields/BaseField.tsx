@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { FormContext } from '../types';
 import SectionSeparator from '../SectionSeparator';
 
-import { DesignerField } from './DesignerField';
+import { RootField } from './RootField';
 
 import './styles.scss';
 
@@ -28,52 +28,6 @@ interface BaseFieldProps<T> {
   schema: JSONSchema6;
   title?: string;
   uiSchema: UiSchema;
-}
-
-const overrideDefaults = {
-  title: undefined,
-  description: undefined,
-};
-
-function RootDialog(props) {
-  const { title, name, description, schema, formData, formContext } = props;
-  const { currentDialog, editorSchema, isRoot } = formContext as FormContext;
-
-  const overrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
-
-  const hasDesigner = !!get(schema, 'properties.$designer');
-
-  const handleDesignerChange = newDesigner => {
-    props.onChange({ ...formData, $designer: newDesigner });
-  };
-
-  const getTitle = () => {
-    const dialogName = isRoot && currentDialog.displayName;
-
-    if (overrides.title === false) {
-      return false;
-    }
-
-    return dialogName || overrides.title || title || schema.title || startCase(name);
-  };
-
-  const getDescription = () => {
-    return overrides.description || description || schema.description;
-  };
-
-  return (
-    <div id={props.id}>
-      <SectionSeparator styles={{ marginTop: 0 }} label={getTitle()}>
-        {overrides.description !== false && (description || schema.description) && (
-          <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
-            {getDescription()}
-          </p>
-        )}
-        {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
-      </SectionSeparator>
-      {props.children}
-    </div>
-  );
 }
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
@@ -96,9 +50,9 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   }
 
   return isRootBaseField ? (
-    <RootDialog {...props} key={key} id={key}>
+    <RootField {...props} key={key} id={key}>
       {children}
-    </RootDialog>
+    </RootField>
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key}>
       <SectionSeparator label={titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}>

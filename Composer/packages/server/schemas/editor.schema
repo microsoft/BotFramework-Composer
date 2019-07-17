@@ -1,5 +1,8 @@
 {
   "fieldTemplateOverrides": {
+    "RootField": {
+      "defaultCollapsed": true
+    },
     "RulesField": {
       "title": "Events",
       "description": "Define handlers for events that occur within the bot."

@@ -19,14 +19,16 @@ const defaultStyles: React.CSSProperties = { display: 'flex', justifyContent: 's
 
 interface SectionSeparatorProps extends ISeparatorProps {
   collapsable?: boolean;
+  defaultCollapsed?: boolean;
+
   label: React.ReactNode | false;
   styles?: React.CSSProperties;
 }
 
 export default function SectionSeparator(props: SectionSeparatorProps) {
-  const { styles: styleOverrides, collapsable, label, ...rest } = props;
+  const { styles: styleOverrides, collapsable, defaultCollapsed, label, ...rest } = props;
   const contentRef = useRef<HTMLDivElement>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [contentHeight, setContentHeight] = useState<number | null>(null);
 
   useLayoutEffect(() => {
@@ -88,4 +90,5 @@ export default function SectionSeparator(props: SectionSeparatorProps) {
 
 SectionSeparator.defaultProps = {
   collapsable: true,
+  defaultCollapsed: false,
 };
