@@ -20,18 +20,15 @@ export class LUIndexer {
     for (const file of files) {
       const extName = Path.extname(file.name);
       if (extName === '.lu') {
+        const diagnostics = [];
         let parsedContent = {};
-
         try {
           parsedContent = await parseContent(file.content);
         } catch (err) {
-          /* eslint-disable no-console */
-          console.error('Error parsing lu file content.');
-          console.error(err);
-          /* eslint-enable no-console */
+          diagnostics.push(err);
         }
-
         this.luFiles.push({
+          diagnostics,
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
@@ -43,5 +40,11 @@ export class LUIndexer {
 
   public getLuFiles() {
     return this.luFiles;
+  }
+
+  public parse(content: string) {
+    // TODO update lg-parser, use new diagostic method
+
+    return parseContent(content);
   }
 }
