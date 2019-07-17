@@ -8,8 +8,11 @@ context('RemoveDialog', () => {
 
   it('can remove dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[title="AddItem"]').trigger('mouseover');
-      cy.get('[data-testid="dialogMoreButton"]').click();
+      cy.get('[data-testid="DialogTreeItemAddItem"]').trigger('mousedown');
+      cy.get('[data-testid="dialogMoreButton"]')
+        .first()
+        .invoke('attr', 'style', 'visibility: visible')
+        .click();
     });
     cy.getByText('Delete').click();
     cy.getByText('Okay').click();

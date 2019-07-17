@@ -42,6 +42,7 @@ export const TreeItem = props => {
         },
       ]}
       css={overflowSet}
+      data-testid={`DialogTreeItem${link.id}`}
       onRenderItem={onRenderItem}
       onRenderOverflowButton={link.hiddenMore ? () => {} : onRenderOverflowButton}
     />
