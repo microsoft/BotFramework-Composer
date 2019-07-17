@@ -232,6 +232,13 @@ describe('lu operation', () => {
     }
   });
 
+  it('should throw error when lu content is invalid', async () => {
+    const id = 'root';
+    const content = 'hello \n hello3';
+
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+  });
+
   it('should delete lu file and update index', async () => {
     const id = 'root';
     const luFiles = await proj.removeLuFile(id);

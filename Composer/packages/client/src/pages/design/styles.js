@@ -78,3 +78,7 @@ export const breadcrumbClass = mergeStyleSets({
     fontWeight: FontWeights.bold,
   },
 });
+
+export const deleteDialogContent = css`
+  color: #000;
+`;

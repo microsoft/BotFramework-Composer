@@ -1,6 +1,8 @@
 import { cloneDeep, get, set } from 'lodash';
 import nanoid from 'nanoid/generate';
 
+import { getFriendlyName } from '../components/nodes/utils';
+
 function locateNode(dialog: { [key: string]: any }, path) {
   if (!path) return null;
 
@@ -70,6 +72,7 @@ export function insert(inputDialog, path, position, $type) {
   const newStep = {
     $type,
     $designer: {
+      name: getFriendlyName({ $type }),
       id: nanoid('1234567890', 6),
     },
   };

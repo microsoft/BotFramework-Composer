@@ -51,7 +51,7 @@ context.skip('ToDo Bot', () => {
     });
   });
 
-  it('can open the ShowToDos dialog', () => {
+  it.skip('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="ShowToDos"]').click();
     });

@@ -96,7 +96,7 @@ export const ObiEditor: React.FC<ObiEditorProps> = ({
           isRoot={isRoot}
           getLgTemplates={getLgTemplates}
           onEvent={(...args) => {
-            divRef.focus();
+            divRef.focus({ preventScroll: true });
             dispatchEvent(...args);
           }}
         />
