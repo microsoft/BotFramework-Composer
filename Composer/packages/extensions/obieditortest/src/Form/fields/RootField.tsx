@@ -47,7 +47,7 @@ export function RootField(props) {
   };
 
   return (
-    <div id={props.id}>
+    <div id={props.id} className="RootField">
       <SectionSeparator
         styles={{ marginTop: 0 }}
         label={getTitle()}
