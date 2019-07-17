@@ -1,7 +1,5 @@
 import fs from 'fs';
 
-import { get } from 'lodash';
-
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -198,12 +196,18 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
-      const msg = invalidLuFile.map(file => {
-        return file.id + ': ' + get(file, 'diagnostics.text', ' ') + `\n`;
-      });
+      const msg = invalidLuFile.reduce((msg, file) => {
+        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+          text += `\n ${diagnostic.text}`;
+          return text;
+        }, `In ${file.id}.lu: `);
+        msg += `\n ${fileErrorText} \n`;
+        return msg;
+      }, '');
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
     const emptyLuFiles = toPublish.filter(this.isEmpty);
