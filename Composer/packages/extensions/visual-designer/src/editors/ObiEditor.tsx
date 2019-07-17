@@ -94,7 +94,7 @@ export const ObiEditor = ({
           focusedId={focusedId}
           getLgTemplates={getLgTemplates}
           onEvent={(...args) => {
-            divRef.focus();
+            divRef.focus({ preventScroll: true });
             dispatchEvent(...args);
           }}
         />
