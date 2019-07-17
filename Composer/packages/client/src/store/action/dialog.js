@@ -18,8 +18,13 @@ export async function createDialog(dispatch, { id, content }) {
     clearNavHistory(dispatch);
     navTo(dispatch, `${id}#`);
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(err);
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'CREATE DIALOG ERROR',
+      },
+    });
   }
 }
 
@@ -37,9 +42,11 @@ export async function updateDialog(dispatch, { id, content }) {
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.UPDATE_DIALOG_FAILURE,
-      payload: null,
-      error: err,
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'UPDATE DIALOG ERROR',
+      },
     });
   }
 }

@@ -6,7 +6,7 @@ async function connect(req: any, res: any) {
     res.send('OK');
   } catch (error) {
     res.status(400).json({
-      error: 'cannot connect to a bot runtime, make sure you start the bot runtime',
+      message: 'cannot connect to a bot runtime, make sure you start the bot runtime',
     });
   }
 }
@@ -16,7 +16,9 @@ async function sync(req: any, res: any) {
     await BotConnectorService.sync(req.body);
     res.send('OK');
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      message: error instanceof Error ? error.message : error,
+    });
   }
 }
 

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 
 import StorageService from '../services/storage';
 import { Path } from '../utility/path.js';
-
 function getStorageConnections(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
@@ -21,7 +20,9 @@ async function getBlob(req: Request, res: Response) {
     }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath));
   } catch (e) {
-    res.status(400).json(e);
+    res.status(400).json({
+      message: e instanceof Error ? e.message : e,
+    });
   }
 }
 
