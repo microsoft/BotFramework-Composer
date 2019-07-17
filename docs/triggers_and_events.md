@@ -2,23 +2,7 @@
 
 As discussed earlier, [each dialog includes a set of event handlers](introduction_to_bfd.md#building-blocks) that contain instructions for how the bot will respond to messages (and other inputs) received while the dialog is active.
 
-The basic form of an event handler is "When (EVENT) happens, then do (ACTIONS)".  The triggering event can be one of several types of event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request.
-
 Any time a bot receives a message, an event of type `activityReceived` is fired. Then, as the message is processed by the recognizer and passed through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken.
-
-## Anatomy of an Event Handler
-
-TODO:
-TRIGGER + ACTIONS
-
-
-## Events at Root Dialog
-
-TODO: talk a bit about using events to trigger features
-
-## Events in Child Dialogs
-
-TODO: Talk a bit about using local interrupts
 
 ## Types of Event Handlers
 
@@ -46,6 +30,23 @@ Use intent handlers when you want to do things like:
 * Extract and use entity values as parameters to your dialog or a child dialog
 
 Finally, if an intent is _not_ detected by the recognizer, any configured "Unknown Intent" handlers will fire. This will only fire if no matching intent handler or event handler is found.
+
+## Anatomy of an Event Handler
+
+The basic form of an event handler is "When (EVENT) happens, then do (ACTIONS)".  The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request.
+
+The screenshot below shows the definition of an intent handler that is configured to fire whenever the "cancel" intent is detected. It is possible to add a secondary constraint to the event - this expression, if specified, must evaluate to true for the event to fire.
+
+![Event definition in the property editor](./Assets/event-properties.png)
+
+This event will appear in the dialog as a node at the top of the editor, like the one shown below. Inside the node is a summary of the actions that will occur when the handler is activated. 
+
+![Event node in the editor](./Assets/event-node.png)
+
+Double-clicking on the node in the editor reveals the related actions, seen below. Actions within any event handler occur inside the context of the active dialog. These steps control the main functionality of a bot.
+
+![Event actions](./Assets/event-actions.png)
+
 
 ## Defining Triggers with Recognizers
 
