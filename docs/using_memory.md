@@ -125,7 +125,7 @@ When using `Foreach` and `ForeachPage` actions, properties also come into play. 
 
 One of the most powerful features of the Bot Framework system is language generation - particularly when used alongside properties pulled from memory.
 You can refer to properties in the text of any message - including prompts.
-Properties can also be referred to in lg templates and functions - [learn more about the full scope of language generation system in this section.](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+Properties can also be referred to in LG templates and functions - [learn more about the full scope of language generation system in this section.](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
 
 To use the value of a property from memory inside a message, wrap the property reference in curly brackets: `{user.profile.name}`
 
@@ -137,7 +137,7 @@ In addition to raw properties values, it is also possible to embed [expressions]
 
 Given an array property held in `dialog.list`,  the expression `{ join(foreach(dialog.list, item, item), ',', ', and')) }` would result in a  grammatically correct list in the format, "item 1, item 2, and item 3"
 
-Properties from memory can also be used within an lg template to provide conditional variants of a messag and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
+Properties from memory can also be used within an LG template to provide conditional variants of a messag and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
 
 ### Memory Shorthands
 
