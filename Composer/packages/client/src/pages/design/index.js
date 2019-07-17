@@ -32,10 +32,11 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
 
-function onRenderContent() {
+function onRenderContent(subTitle, style) {
   return (
     <div css={deleteDialogContent}>
       <p>{DialogDeleting.CONTENT}</p>
+      {subTitle && <div style={style}>{subTitle}</div>}
       <p>{DialogDeleting.CONFIRM_CONTENT}</p>
     </div>
   );
@@ -47,7 +48,7 @@ function getAllRef(targetId, dialogs) {
     if (dialog.id === targetId) {
       refs = refs.concat(dialog.referredDialogs);
     } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
-      refs.push(dialog.id);
+      refs.push(dialog.displayName || dialog.id);
     }
   });
   return refs;
@@ -173,7 +174,7 @@ function DesignPage(props) {
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
-    let setting = { confirmBtnText: formatMessage('Okay'), cancelBtnText: formatMessage('Cancel') };
+    let setting = { confirmBtnText: formatMessage('Yes'), cancelBtnText: formatMessage('Cancel') };
     let title = '';
     let subTitle = '';
     if (refs.length > 0) {

@@ -12,7 +12,7 @@ const ConfirmDialog = props => {
     title,
     subTitle = '',
     onRenderContent = () => null,
-    confirmBtnText = 'Okay',
+    confirmBtnText = 'Yes',
     cancelBtnText = 'Cancel',
     style = DialogStyle.normalStyle,
   } = setting;
@@ -34,8 +34,7 @@ const ConfirmDialog = props => {
         styles: dialogModal,
       }}
     >
-      {subTitle && <div style={BuiltInStyles[style]}>{subTitle}</div>}
-      {onRenderContent && onRenderContent()}
+      {onRenderContent && onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
         <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
         <DefaultButton onClick={onCancel} text={cancelBtnText} />
