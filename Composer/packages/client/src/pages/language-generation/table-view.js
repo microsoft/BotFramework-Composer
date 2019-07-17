@@ -21,6 +21,23 @@ import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
+function parse(content, name = '') {
+  try {
+    const resource = LGParser.parse(content, name);
+    return {
+      isValid: true,
+      resource,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      isValid: false,
+      resource: null,
+      error,
+    };
+  }
+}
+
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
   const { clearNavHistory, navTo } = actions;
@@ -34,10 +51,10 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
-      const parseResult = LGParser.TryParse(lgFile.content);
+      const parseResult = parse(lgFile.content);
 
       if (parseResult.isValid) {
-        const allTemplates = parseResult.templates.map((template, templateIndex) => {
+        const allTemplates = lodash.get(parseResult, 'recource.Templates', []).map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,

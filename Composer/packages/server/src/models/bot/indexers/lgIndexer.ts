@@ -1,4 +1,4 @@
-import { LGParser } from 'botbuilder-lg';
+import { LGParser, StaticChecker } from 'botbuilder-lg';
 
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
@@ -12,7 +12,7 @@ export class LGIndexer {
     for (const file of files) {
       const extName = Path.extname(file.name);
       if (extName === '.lg') {
-        const error = this.parse(file.content).error;
+        const error = this.staticCheck(file.content, file.name);
 
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
@@ -28,9 +28,26 @@ export class LGIndexer {
     return this.lgFiles;
   }
 
-  public parse(content: string) {
+  public staticCheck(content: string, name: string = '') {
+    return StaticChecker.checkText(content, name);
+  }
+
+  public parse(content: string, name: string = '') {
     // TODO update lg-parser, use new diagostic method
 
-    return LGParser.TryParse(content);
+    try {
+      const resource = LGParser.parse(content, name);
+      return {
+        isValid: true,
+        resource,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        isValid: false,
+        resource: null,
+        error,
+      };
+    }
   }
 }
