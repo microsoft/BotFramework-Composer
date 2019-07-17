@@ -54,9 +54,6 @@ export const ActionTypes = {
   PUBLISH_LU_FAILURE: 'PUBLISH_LU_FAILURE',
   SET_BOT_STATUS_SUCCESS: 'SET_BOT_STATUS_SUCCESS',
   SET_BOT_STATUS_FAILURE: 'SET_BOT_STATUS_FAILURE',
-  CLEAN_ERROR: 'CLEAN_ERROR', // clean a error in store
-  CLEAN_ALL_ERROR: 'CLEAN_ALL_ERROR', // clean all error in store
-  ADD_ERROR: 'ADD_ERROR', // add a error to store
   ADD_EDITOR: 'ADD_EDITOR',
   SET_EDITOR: 'SET_EDITOR',
   SET_STORAGE: 'SET_STORAGE',
@@ -114,10 +111,6 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   UNKNOW: 'unknow',
-  DIALOG: 'dialog',
-  LU: 'lu',
-  LG: 'lg',
-  SCHEMA: 'schema',
 };
 
 export const CreationFlowStatus = {

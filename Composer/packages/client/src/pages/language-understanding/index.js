@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
-import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'react';
+import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
@@ -10,7 +9,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
-import { ActionTypes } from '../../constants/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
@@ -19,8 +17,8 @@ import { TestController } from './../../TestController';
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
-  const { dialogs, luFiles, diagnostics } = state;
-  const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
+  const { dialogs, luFiles } = state;
+  const updateLuFile = actions.updateLuFile;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [luFile, setLuFile] = useState(null);
@@ -28,26 +26,6 @@ export const LUPage = props => {
   const subPath = props['*'];
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.id === subPath);
-
-  useEffect(() => {
-    const luErrors = diagnostics.filter(d => d.name === ActionTypes.UPDATE_LU_FAILURE);
-    if (luErrors.length !== 0) {
-      const title = `StaticValidationError`;
-      const subTitle = luErrors.reduce((msg, luFile) => {
-        msg += `${luFile.diagnostics.join('\n')} \n`;
-        return msg;
-      }, '');
-
-      OpenAlertModal(title, subTitle, {
-        style: DialogStyle.Console,
-      });
-
-      // clean this error in store
-      actions.cleanError({
-        name: ActionTypes.UPDATE_LU_FAILURE,
-      });
-    }
-  }, [diagnostics]);
 
   useEffect(() => {
     if (luFiles.length && activeDialog) {
@@ -143,12 +121,20 @@ export const LUPage = props => {
     setNewContent(null);
   }
 
-  function onSave() {
+  async function onSave() {
     const payload = {
       id: activeDialog.id, // current opened lu file
       content: newContent,
     };
-    updateLuFile(payload);
+    try {
+      await updateLuFile(payload);
+    } catch (error) {
+      const title = `StaticValidationError`;
+      const subTitle = error.message;
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
   }
 
   // #TODO: get line number from lu parser, then deep link to code editor this

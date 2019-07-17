@@ -10,12 +10,7 @@ export async function updateLuFile(dispatch, { id, content }) {
       payload: { response },
     });
   } catch (err) {
-    // TODO, err here is html
-    // we need a json error from server
-    dispatch({
-      type: ActionTypes.UPDATE_LU_FAILURE,
-      payload: { id, error: ['syntax error exist'] },
-    });
+    throw new Error(err.response.data.error);
   }
 }
 
