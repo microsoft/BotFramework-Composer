@@ -125,23 +125,31 @@ export const IconCard = ({
           >
             {summary && <div>{summary}</div>}
             {childDialog && (
-              <div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <FabricIcon
+                  style={{ lineHeight: '16px', fontSize: '16px' }}
+                  iconName="OpenSource"
+                  data-testid="OpenIcon"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onChildDialogClick();
+                  }}
+                />
                 <span
                   style={{
                     cursor: 'pointer',
                     color: 'blue',
-                    display: 'inline-block',
                   }}
                   onClick={e => {
                     e.stopPropagation();
                     onChildDialogClick();
                   }}
                 >
-                  <FabricIcon
-                    style={{ lineHeight: '16px', fontSize: '16px' }}
-                    iconName="OpenSource"
-                    data-testid="OpenIcon"
-                  />
                   {childDialog}
                 </span>
               </div>
