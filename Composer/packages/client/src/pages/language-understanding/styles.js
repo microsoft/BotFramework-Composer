@@ -21,6 +21,7 @@ export const ContentHeaderStyle = css`
   padding-right: 20px;
   height: 60px;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
 `;
@@ -121,8 +122,4 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
-`;
-
-export const dialogNavTree = css`
-  overflow: auto;
 `;
