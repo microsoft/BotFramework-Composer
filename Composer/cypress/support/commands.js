@@ -31,6 +31,7 @@ Cypress.Commands.add('openBot', botName => {
   });
   cy.get('[data-testid="SelectLocationOpen"]').click();
   cy.wait(500);
+  cy.get('[data-testid="publish-LUIS-models-cancel"]').click();
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {
