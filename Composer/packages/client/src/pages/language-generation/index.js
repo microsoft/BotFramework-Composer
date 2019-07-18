@@ -10,7 +10,9 @@ import { navigate } from '@reach/router';
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
+import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import { Tree } from './../../components/Tree';
 import '../language-understanding/style.css';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -181,17 +183,21 @@ export const LGPage = props => {
         </div>
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
-        <div>
-          <Nav
-            onLinkClick={(ev, item) => {
-              onSelect(item.id);
-              ev.preventDefault();
-            }}
-            selectedKey={activePath}
-            groups={navLinks}
-            className={'dialogNavTree'}
-            data-testid={'dialogNavTree'}
-          />
+        <div css={projectContainer}>
+          <Tree variant="large" extraCss={projectTree}>
+            <div css={projectWrapper}>
+              <Nav
+                onLinkClick={(ev, item) => {
+                  onSelect(item.id);
+                  ev.preventDefault();
+                }}
+                selectedKey={activePath}
+                groups={navLinks}
+                className={'dialogNavTree'}
+                data-testid={'dialogNavTree'}
+              />
+            </div>
+          </Tree>
         </div>
         <Content
           file={lgFile}

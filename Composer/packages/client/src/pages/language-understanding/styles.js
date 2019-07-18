@@ -32,7 +32,6 @@ export const ContentStyle = css`
   flex: 1;
   position: relative;
   nav {
-    width: 255px;
     ul {
       margin-top: 0px;
     }
@@ -122,4 +121,8 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
+`;
+
+export const dialogNavTree = css`
+  overflow: auto;
 `;
