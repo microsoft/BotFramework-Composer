@@ -122,7 +122,7 @@ function DesignPage(props) {
             path: item,
             text: formatMessage(upperCaseName(displayText)),
             onClick: (_event, { path, key }) => {
-              const navHistory = dialogHistory.spliceNavHistory(key);
+              const navHistory = dialogHistory.clearNavHistory(key);
               dialogHistory.navTo(path, navHistory);
             },
           };

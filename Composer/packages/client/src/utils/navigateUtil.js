@@ -41,9 +41,9 @@ class DialogHistory {
     navigate(pathname + searchParams, { state: { navHistory } });
   }
 
-  spliceNavHistory(index, howmany, ...items) {
+  clearNavHistory(fromIndex) {
     const navHistory = this.getNavHistory();
-    navHistory.splice(index, howmany, ...items);
+    navHistory.splice(fromIndex, navHistory.length);
     return navHistory;
   }
 
