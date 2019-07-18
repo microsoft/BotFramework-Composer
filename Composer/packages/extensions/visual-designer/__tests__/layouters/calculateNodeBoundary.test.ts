@@ -7,7 +7,7 @@ import {
 import { Boundary } from '../../src/shared/Boundary';
 import { ElementInterval, LoopEdgeMarginLeft } from '../../src/shared/elementSizes';
 
-let boundary = new Boundary();
+const boundary = new Boundary();
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 describe('calculateSequenceBoundary', () => {
@@ -36,40 +36,26 @@ describe('calculateIfElseBoundary', () => {
     conditionBoundary = new Boundary(280, 80);
     choiceBoundary = new Boundary(50, 20);
     ifBoundary = new Boundary(280, 80);
-    elseBoundary = new Boundary(300, 80);
+    elseBoundary = new Boundary(280, 80);
   });
   it('should return an new boundary when input conditionBoundary or choiceBoundary is empty', () => {
     expect(calculateIfElseBoundary(null, boundary, boundary, boundary)).toEqual(boundary);
     expect(calculateIfElseBoundary(boundary, null, boundary, boundary)).toEqual(boundary);
   });
-  it('should return a box whose property be calcalated by conditionBoundary, choiceBoundary, ifBoundary and elseBoundary', () => {
-    const returnBoundaryWithinIfAndElseBoundary = {
-      width: 580 + BranchIntervalX * 2,
-      height: 180 + BranchIntervalY * 3,
-      axisX: 140,
-      axisY: 0,
-    };
-    const returnBoundaryWithinIfBoundary = {
-      width: 280 + BranchIntervalX * 2,
-      height: 180 + BranchIntervalY * 3,
-      axisX: 140,
-      axisY: 0,
-    };
-    const returnBoundaryWithinElseBoundary = {
-      width: 440 + BranchIntervalX * 2,
-      height: 180 + BranchIntervalY * 3,
-      axisX: 140,
-      axisY: 0,
-    };
-    expect(calculateIfElseBoundary(conditionBoundary, choiceBoundary, ifBoundary, elseBoundary)).toEqual(
-      returnBoundaryWithinIfAndElseBoundary
+  it('should return a box whose size be calcalated by conditionBoundary, choiceBoundary, ifBoundary and elseBoundary', () => {
+    const bdWithBothBranch = calculateIfElseBoundary(conditionBoundary, choiceBoundary, ifBoundary, elseBoundary);
+    const bdWithIfBranch = calculateIfElseBoundary(conditionBoundary, choiceBoundary, ifBoundary, new Boundary());
+    const bdWithElseBranch = calculateIfElseBoundary(conditionBoundary, choiceBoundary, new Boundary(), elseBoundary);
+    const bdWithNoBranch = calculateForeachBoundary(conditionBoundary, choiceBoundary, new Boundary(), new Boundary());
+
+    expect(bdWithBothBranch.height).toEqual(bdWithIfBranch.height);
+    expect(bdWithIfBranch.height).toEqual(bdWithElseBranch.height);
+
+    expect(bdWithBothBranch.height - bdWithNoBranch.height).toEqual(ifBoundary.height);
+    expect(bdWithBothBranch.height).toBeGreaterThan(
+      conditionBoundary.height + choiceBoundary.height + Math.max(ifBoundary.height, elseBoundary.height)
     );
-    expect(calculateIfElseBoundary(conditionBoundary, choiceBoundary, ifBoundary, new Boundary())).toEqual(
-      returnBoundaryWithinIfBoundary
-    );
-    expect(calculateIfElseBoundary(conditionBoundary, choiceBoundary, new Boundary(), elseBoundary)).toEqual(
-      returnBoundaryWithinElseBoundary
-    );
+    expect(bdWithBothBranch.width).toBeGreaterThan(ifBoundary.width + elseBoundary.width);
   });
 });
 
