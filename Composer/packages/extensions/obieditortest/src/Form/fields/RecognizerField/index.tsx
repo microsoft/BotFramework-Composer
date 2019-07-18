@@ -17,12 +17,13 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const [loading, setLoading] = useState(false);
 
   const {
-    formContext: { luFiles, shellApi, dialogName },
+    formContext: { luFiles, shellApi, currentDialog },
     onChange,
   } = props;
 
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
-  const selectedFile: LuFile | void = luFiles.find(f => f.id === dialogName);
+  const currentDialogId = currentDialog.id;
+  const selectedFile: LuFile | void = luFiles.find(f => f.id === currentDialogId);
   const isLuFileSelected = Boolean(
     selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
   );
@@ -36,7 +37,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
         }
         case 'luis': {
           if (selectedFile) {
-            onChange(`${dialogName}.lu`);
+            onChange(`${currentDialogId}.lu`);
           } else {
             const { createLuFile } = shellApi;
 
@@ -49,9 +50,9 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
              * lu and lg files so this code path shouldn't be executed.
              */
             setLoading(true);
-            createLuFile(dialogName).then(() => {
+            createLuFile(currentDialogId).then(() => {
               setTimeout(() => {
-                onChange(`${dialogName}.lu`);
+                onChange(`${currentDialogId}.lu`);
                 setTimeout(() => {
                   setLoading(false);
                 }, 750);

@@ -1,9 +1,5 @@
 {
   "fieldTemplateOverrides": {
-    "BaseField": {
-      "title": false,
-      "description": false
-    },
     "RulesField": {
       "title": "Events",
       "description": "Define handlers for events that occur within the bot."
@@ -12,7 +8,8 @@
   },
   "SDKOverrides": {
     "Microsoft.AdaptiveDialog": {
-      "title": "AdaptiveDialog"
+      "title": "AdaptiveDialog",
+      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.BeginDialog": {
       "title": "Begin a Dialog"
@@ -71,16 +68,20 @@
     "Microsoft.LogStep": {
       "title": "Log to console"
     },
+    "Recognizer": {
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
+    },
     "Microsoft.LuisRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.NumberInput": {
       "title": "Prompt for a number"

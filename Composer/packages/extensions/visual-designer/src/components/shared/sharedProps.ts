@@ -1,4 +1,4 @@
-interface LgTemplate {
+export interface LgTemplate {
   Name: string;
   Body: string;
 }
@@ -10,6 +10,8 @@ export interface NodeProps {
   getLgTemplates: (id: string, templateName: string) => Promise<LgTemplate[]>;
   onEvent: (action, id) => object | void;
   onResize: (action?, id?) => object | void;
+
+  isRoot?: boolean;
 }
 
 export const defaultNodeProps = {

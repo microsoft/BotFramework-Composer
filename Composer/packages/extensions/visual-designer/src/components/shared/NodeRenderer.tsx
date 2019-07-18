@@ -15,6 +15,7 @@ import {
   SwitchCondition,
   ActivityRenderer,
   Foreach,
+  ChoiceInput,
 } from '../nodes/index';
 
 // eslint-disable-next-line no-unused-vars
@@ -36,6 +37,7 @@ const rendererByObiType = {
   [ObiTypes.ConversationUpdateActivityRule]: ConversationUpdateActivityRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
+  [ObiTypes.ChoiceInput]: ChoiceInput,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

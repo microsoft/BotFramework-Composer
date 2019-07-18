@@ -67,7 +67,11 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         </div>
         <IconButton
           iconProps={{ iconName: 'PageRight' }}
-          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginRight: '-15px' }}
+          style={{
+            transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
+            marginRight: '-15px',
+            transition: 'transform 0.2s linear',
+          }}
           onClick={collapseFuc}
         />
       </div>
