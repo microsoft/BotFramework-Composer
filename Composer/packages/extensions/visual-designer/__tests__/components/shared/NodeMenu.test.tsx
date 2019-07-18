@@ -26,11 +26,8 @@ describe('<NodeMenu />', () => {
 
     fireEvent.click(menuButton);
 
-    if (itemName) {
-      return findAllByText(document.body, itemName);
-    }
-
-    return findAllByText(document.body, /(Delete)/);
+    const matcher = itemName || /(Delete)/;
+    return findAllByText(document.body, matcher) as Promise<HTMLElement[]>;
   }
 
   it('can be delete', async () => {
