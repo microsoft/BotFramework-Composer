@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
+import dialogHistory from './../../utils/navigateUtil';
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { navTo, clearNavHistory } from './navigation';
 import { startBot } from './bot';
 
 export function updateOAuth(dispatch, oAuth) {
@@ -42,9 +42,8 @@ export async function fetchProject(dispatch) {
         response,
       },
     });
-    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, 'Main#');
+      dialogHistory.navTo(`Main#`);
     }
   } catch (err) {
     navigate('/home');
@@ -57,14 +56,12 @@ export async function fetchRecentProjects(dispatch) {
     const response = await axios.get(`${BASEURL}/projects/recent`);
     dispatch({
       type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_RECENT_PROJECTS_FAILURE, payload: null, error: err });
   }
 }
 
@@ -84,10 +81,8 @@ export async function openBotProject(dispatch, absolutePath) {
         response,
       },
     });
-    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, 'Main#');
-      navigate('/');
+      dialogHistory.navTo(`Main#`);
       startBot(dispatch, true);
     }
   } catch (err) {
@@ -118,10 +113,8 @@ export async function saveProjectAs(dispatch, name, description) {
         response,
       },
     });
-    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, 'Main#');
-      navigate('/');
+      dialogHistory.navTo(`Main#`);
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -146,9 +139,8 @@ export async function createProject(dispatch, templateId, name, description) {
         response,
       },
     });
-    clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, 'Main#');
+      dialogHistory.navTo(`Main#`);
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

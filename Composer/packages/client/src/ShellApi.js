@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
@@ -8,6 +8,7 @@ import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import dialogHistory from './utils/navigateUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
 // this is the api interface provided by shell to extensions
@@ -48,9 +49,9 @@ const shellNavigator = (shellPage, opts = {}) => {
   }
 };
 
-export function ShellApi() {
+function BaseShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
+  const { dialogs, schemas, lgFiles, luFiles } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
@@ -59,6 +60,7 @@ export function ShellApi() {
   const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
+  const { navPath, focusPath } = dialogHistory.getPath();
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE, REMOVE } = FileChangeTypes;
@@ -286,22 +288,22 @@ export function ShellApi() {
 
   function navTo({ path }) {
     cleanData();
-    actions.navTo(path);
+    dialogHistory.navTo(path, dialogHistory.getNavHistory());
   }
 
   function navDown({ subPath }) {
     cleanData();
-    actions.navDown(subPath);
+    dialogHistory.navigateDown(subPath);
   }
 
   function focusTo({ subPath }, event) {
     cleanData();
-    let path = navPath;
-    if (event.source.name === FORM_EDITOR) {
-      path = focusPath;
-    }
-    actions.focusTo(path + subPath);
+    dialogHistory.focusTo(subPath, event.source.name === FORM_EDITOR);
   }
 
   return null;
+}
+
+export function ShellApi() {
+  return <Location>{({ location, navigate }) => <BaseShellApi location={location} navigate={navigate} />}</Location>;
 }

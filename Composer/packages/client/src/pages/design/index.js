@@ -3,12 +3,12 @@ import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo, useEffect } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { globalHistory } from '@reach/router/lib/history';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
 import { DialogDeleting } from '../../constants';
 
+import dialogHistory from './../../utils/navigateUtil';
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -57,18 +57,19 @@ function getAllRef(targetId, dialogs) {
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPathHistory } = state;
-  const { clearNavHistory, navTo, removeDialog } = actions;
+  const { dialogs } = state;
+  const { removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
   const { match, location } = props;
 
+  const { navHistory } = location.state ? location.state : {};
+
   useEffect(() => {
-    globalHistory._onTransitionComplete();
+    dialogHistory.history._onTransitionComplete();
   }, [location]);
 
   function handleFileClick(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
+    dialogHistory.navTo(`${id}#`);
   }
 
   const getErrorMessage = name => {
@@ -110,24 +111,26 @@ function DesignPage(props) {
 
   const breadcrumbItems = useMemo(() => {
     const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
-    return navPathHistory.map((item, index) => {
-      const pathList = item.split('#');
-      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
-      const displayText = isRoot ? botName : text;
-      return {
-        key: index,
-        path: item,
-        text: formatMessage(upperCaseName(displayText)),
-        onClick: (_event, { path, key }) => {
-          clearNavHistory(key);
-          navTo(path);
-        },
-      };
-    });
-  }, [clearNavHistory, dialogs, navPathHistory, navTo]);
+    return navHistory
+      ? navHistory.map((item, index) => {
+          const pathList = item.split('#');
+          const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
+          const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
+          const displayText = isRoot ? botName : text;
+          return {
+            key: index,
+            path: item,
+            text: formatMessage(upperCaseName(displayText)),
+            onClick: (_event, { path, key }) => {
+              const navHistory = dialogHistory.spliceNavHistory(key);
+              dialogHistory.navTo(path, navHistory);
+            },
+          };
+        })
+      : [];
+  }, [dialogs, navHistory]);
 
-  const activeDialog = match ? match.dialogId : '';
+  const activeDialog = match ? match['*'].split('/')[0] : '';
 
   async function onSubmit(data) {
     const content = {
