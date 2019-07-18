@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   extends: [
-    '../../../.eslintrc.js',
+    '../../../.eslintrc.react.js',
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'prettier/@typescript-eslint',
