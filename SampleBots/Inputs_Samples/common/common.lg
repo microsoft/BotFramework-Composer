@@ -1,5 +1,6 @@
 # help
 -```
+    Welcome to Input Sample Bot.
     I can show you examples on how to use Steps, You can enter number 01-04
     [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput|OAuthInput]
 	01 - TextInput
@@ -75,3 +76,6 @@ You sent:
 
 # bfdactivity-581197
 -[help]
+
+# bfdactivity-172545
+- Welcome to Input Sample Bot.
