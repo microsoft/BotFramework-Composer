@@ -1,7 +1,6 @@
 import { ObiTypes } from '../shared/ObiTypes';
-
-import { IndexedNode } from './models/IndexedNode';
-import { normalizeObiStep } from './helpers/elementBuilder';
+import { IndexedNode } from '../shared/IndexedNode';
+import { normalizeObiStep } from '../shared/elementBuilder';
 
 export function transformObiRules(input, parentPath = ''): { stepGroup: IndexedNode } | null {
   if (!input) return null;

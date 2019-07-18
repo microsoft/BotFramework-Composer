@@ -1,6 +1,6 @@
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
-import { IndexedNode } from '../transformers/models/IndexedNode';
 
+import { IndexedNode } from './IndexedNode';
 import { Boundary } from './Boundary';
 
 class CoordPoint {

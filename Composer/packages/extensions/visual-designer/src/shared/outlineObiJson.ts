@@ -1,4 +1,4 @@
-import { ObiTypes } from '../shared/ObiTypes';
+import { ObiTypes } from './ObiTypes';
 
 const DEFAULT_CHILDREN_KEYS = ['steps'];
 const childrenMap = {
