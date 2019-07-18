@@ -47,7 +47,7 @@ const StopSVG = fill => {
 const PlaySVG = stroke => {
   return (
     <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1 1.16987L8.5 5.5L1 9.83013L1 1.16987Z" stroke="white" stroke-width="0.5" />
+      <path d="M1 1.16987L8.5 5.5L1 9.83013L1 1.16987Z" stroke="white" strokeWidth="0.5" />
     </svg>
   );
 };
