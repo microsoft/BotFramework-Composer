@@ -80,19 +80,19 @@
       "$type": "Microsoft.Foreach",
       "$designer": {
         "createdAt": "2019-07-16T18:51:44.167Z",
-        "updatedAt": "2019-07-16T18:51:48.838Z",
+        "updatedAt": "2019-07-18T10:17:55.365Z",
         "id": "299926",
         "name": "Loop: For Each"
       },
       "indexProperty": "dialog.index",
       "valueProperty": "dialog.value",
-      "ListProperty": "dialog.ids",
-      "Steps": [
+      "listProperty": "dialog.ids",
+      "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
-      ]
+      ],
     }
   ]
 }

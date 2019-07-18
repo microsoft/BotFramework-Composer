@@ -168,7 +168,27 @@
             "id": "953339",
             "updatedAt": "2019-07-04T19:53:52.311Z"
           },
-          "activity": "[bfdactivity-953339]"
+          "activity": "[help]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "791275",
+        "updatedAt": "2019-07-18T10:16:47.781Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "859266",
+            "updatedAt": "2019-07-18T10:17:03.223Z"
+          },
+          "activity": "[help]"
         }
       ]
     }

@@ -16,8 +16,9 @@
         "id": "699003",
         "name": "Prompt with multi-choice"
       },
+      "prompt": "Who are your?",
       "property": "user.name",
-      "maxTurnCount": 0,
+      "maxTurnCount": 3,
       "alwaysPrompt": false,
       "allowInterruptions": true,
       "outputFormat": "value",

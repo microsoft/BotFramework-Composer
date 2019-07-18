@@ -84,16 +84,14 @@
         "id": "993283",
         "name": "Loop: For Each Page"
       },
-      "pageSize": 10,
-      "valueProperty": "dialog.value",
-      "ListProperty": "dialog.ids",
-      "PageSize": "2",
-      "ValueProperty": "dialog.page",
-      "Steps": [
+      "listProperty": "dialog.ids",
+      "pageSize": "2",
+      "valueProperty": "dialog.page",
+      "steps": [
         {
           "$type": "Microsoft.Foreach",
-          "ListProperty": "dialog.page",
-          "Steps": [
+          "listProperty": "dialog.page",
+          "steps": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "{dialog.index}: {dialog.value}"
