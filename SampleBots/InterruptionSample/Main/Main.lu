@@ -1,0 +1,30 @@
+>To learn more about the LU file format, read the documentation at
+> https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format
+
+# Greeting
+- hi
+- hello
+- good morning
+- how are you?
+
+# Help
+- I need help
+- What can you do? 
+- Can you please help
+- I'm not sure what I can say
+- I'm stuck
+
+# ResetProfile
+- reset profile
+- forget me
+- delete my profile
+- please erase everything you know about me
+
+# Cancel
+- Please stop that
+- Cancel
+- I do not wish to do that anymore
+- I changed my mind
+- Abort
+- Don't do it
+- please cancel that

@@ -1,0 +1,118 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-18T20:37:42.890Z",
+    "updatedAt": "2019-07-18T20:38:02.601Z",
+    "id": "242070",
+    "name": "InterruptionSampleV2"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "665145",
+        "updatedAt": "2019-07-18T20:38:15.854Z"
+      },
+      "intent": "Greeting",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "960258",
+            "updatedAt": "2019-07-18T20:38:40.003Z"
+          },
+          "activity": "[bfdactivity-960258]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "269342",
+        "updatedAt": "2019-07-18T20:38:53.733Z"
+      },
+      "intent": "Help",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "129388",
+            "updatedAt": "2019-07-18T20:39:25.770Z"
+          },
+          "activity": "[bfdactivity-129388]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "884711",
+        "updatedAt": "2019-07-18T20:39:35.787Z"
+      },
+      "intent": "ResetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "name": "Delete a Property",
+            "id": "889612",
+            "updatedAt": "2019-07-18T20:39:43.868Z"
+          },
+          "property": "user.profile"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "636488",
+            "updatedAt": "2019-07-18T20:39:53.958Z"
+          },
+          "activity": "[bfdactivity-636488]"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "name": "Cancel All Dialogs",
+            "id": "186401"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "017903",
+        "updatedAt": "2019-07-18T20:40:16.992Z"
+      },
+      "intent": "Cancel",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "650587",
+            "updatedAt": "2019-07-18T20:40:27.858Z"
+          },
+          "activity": "[bfdactivity-650587]"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "name": "Cancel All Dialogs",
+            "id": "696483"
+          }
+        }
+      ]
+    }
+  ]
+}

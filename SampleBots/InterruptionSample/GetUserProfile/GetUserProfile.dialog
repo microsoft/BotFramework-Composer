@@ -1,0 +1,210 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-18T19:12:25.707Z",
+    "updatedAt": "2019-07-18T19:41:03.467Z",
+    "id": "430931",
+    "name": "GetUserProfile"
+  },
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "name": "Prompt for text",
+        "id": "849486",
+        "updatedAt": "2019-07-18T19:58:49.941Z"
+      },
+      "property": "user.profile.name",
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "trim",
+      "prompt": "[GetUserProfile.Name.Prompt]"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "name": "Send an Activity",
+        "id": "581482",
+        "updatedAt": "2019-07-18T19:37:13.964Z"
+      },
+      "activity": "[bfdactivity-581482]"
+    },
+    {
+      "$type": "Microsoft.NumberInput",
+      "$designer": {
+        "name": "Prompt for a number",
+        "id": "382698",
+        "updatedAt": "2019-07-18T20:00:12.544Z"
+      },
+      "property": "user.profile.age",
+      "prompt": "[GetUserProfile.Age.Prompt]",
+      "maxTurnCount": 0,
+      "validations": [
+        "int(turn.value) >= 1",
+        "int(turn.value) <= 150"
+      ],
+      "alwaysPrompt": false,
+      "allowInterruptions": true,
+      "outputFormat": "integer",
+      "defaultLocale": "en-us",
+      "invalidPrompt": "[GetUserProfile.Age.Invalid]"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "name": "Send an Activity",
+        "id": "295136",
+        "updatedAt": "2019-07-18T19:39:39.457Z"
+      },
+      "activity": "[bfdactivity-295136]"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "988610",
+        "updatedAt": "2019-07-18T19:40:20.594Z"
+      },
+      "intent": "Why",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "256349",
+            "updatedAt": "2019-07-18T19:44:09.771Z"
+          },
+          "activity": "[bfdactivity-256349]"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "248106",
+            "updatedAt": "2019-07-18T19:43:21.339Z"
+          },
+          "condition": "exists(user.profile.age)",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "901606",
+                "updatedAt": "2019-07-18T19:43:28.057Z"
+              },
+              "activity": "[bfdactivity-901606]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "011195",
+                "updatedAt": "2019-07-18T19:43:57.344Z"
+              },
+              "activity": "[bfdactivity-011195]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "813740",
+        "updatedAt": "2019-07-18T19:40:34.765Z"
+      },
+      "intent": "NoName",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "211795",
+            "updatedAt": "2019-07-18T20:05:04.728Z"
+          },
+          "activity": "[bfdactivity-211795]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "298719",
+            "updatedAt": "2019-07-18T20:05:20.366Z"
+          },
+          "property": "user.profile.name",
+          "value": "Human"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "045683",
+        "updatedAt": "2019-07-18T19:40:40.184Z"
+      },
+      "intent": "NoAge",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "212572",
+            "updatedAt": "2019-07-18T20:04:38.094Z"
+          },
+          "activity": "[bfdactivity-212572]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "166870",
+            "updatedAt": "2019-07-18T20:04:50.096Z"
+          },
+          "property": "user.profile.age",
+          "value": "30"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "722647",
+        "updatedAt": "2019-07-18T19:45:15.628Z"
+      },
+      "intent": "GetUserProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "521263",
+            "updatedAt": "2019-07-18T19:45:35.453Z"
+          },
+          "property": "user.profile.name",
+          "value": "@userName"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "160647",
+            "updatedAt": "2019-07-18T19:50:58.925Z"
+          },
+          "property": "user.profile.age",
+          "value": "coalesce(@number, @age)"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "recognizer": "GetUserProfile.lu"
+}

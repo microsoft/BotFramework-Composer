@@ -1,0 +1,169 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-18T19:05:28.969Z",
+    "updatedAt": "2019-07-18T19:06:51.281Z",
+    "id": "242621",
+    "name": "InterruptionSample"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "895059",
+        "updatedAt": "2019-07-18T19:08:43.461Z"
+      },
+      "intent": "Greeting",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "629323",
+            "updatedAt": "2019-07-18T19:08:50.825Z"
+          },
+          "activity": "[bfdactivity-629323]"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "583743",
+            "updatedAt": "2019-07-18T19:12:36.953Z"
+          },
+          "dialog": "GetUserProfile"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "939698",
+        "updatedAt": "2019-07-18T20:33:51.492Z"
+      },
+      "intent": "ResetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "name": "Delete a Property",
+            "id": "472168",
+            "updatedAt": "2019-07-18T20:34:00.710Z"
+          },
+          "property": "user.profile"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "540652",
+            "updatedAt": "2019-07-18T20:34:07.549Z"
+          },
+          "activity": "[bfdactivity-540652]"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "name": "Cancel All Dialogs",
+            "id": "579419"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "041237",
+        "updatedAt": "2019-07-18T19:06:19.290Z"
+      },
+      "intent": "Help",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "128608",
+            "updatedAt": "2019-07-18T19:16:19.428Z"
+          },
+          "activity": "[bfdactivity-128608]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "601750",
+        "updatedAt": "2019-07-18T19:11:01.054Z"
+      },
+      "intent": "Cancel",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "296852",
+            "updatedAt": "2019-07-18T19:11:18.759Z"
+          },
+          "activity": "[bfdactivity-296852]"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "name": "Cancel All Dialogs",
+            "id": "008780"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "416350"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "name": "Loop: For Each",
+            "id": "956615",
+            "updatedAt": "2019-07-18T19:13:09.638Z"
+          },
+          "indexProperty": "dialog.index",
+          "valueProperty": "turn.memberAdded",
+          "listProperty": "turn.activity.membersAdded",
+          "steps": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "name": "Branch: If/Else",
+                "id": "455205",
+                "updatedAt": "2019-07-18T19:13:53.775Z"
+              },
+              "condition": "turn.memberAdded.name != turn.activity.recipient.name",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "476792",
+                    "updatedAt": "2019-07-18T19:14:03.514Z"
+                  },
+                  "activity": "[bfdactivity-476792]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu"
+}

@@ -1,0 +1,48 @@
+
+# bfdactivity-629323
+- Hi there! I'm a demo bot! Nice to meet you.
+
+# bfdactivity-296852
+- Sure. I've cancelled that.
+
+# bfdactivity-476792
+- Hello! I'm a demo bot. \n \[Suggestions = Hello\]
+
+# bfdactivity-915421
+- I've reset your profile! \n \[Suggestions = Hello\]
+
+# bfdactivity-128608
+- Sure thing. Happy to help. This is global help and just saying - 'I'm just a demo bot'
+
+# bfdactivity-581482
+- Thanks. I have your name as {user.profile.name}
+
+# bfdactivity-295136
+- Hello {user.profile.name}, nice to meet you! I have your age as {user.profile.age}. \n \[Suggestions = Reset profile]
+
+# bfdactivity-901606
+- I need your name to be able to address you correctly!
+
+# bfdactivity-011195
+- I need your age to provide relevant product recommendations.
+
+# bfdactivity-256349
+- Worry not! Information I gather about you is kept private and never shared with anyone. \n\n You can see [here](https://contoso.com/privacypolicy) to read about our privacy policy.
+
+# GetUserProfile.Name.Prompt
+- What is your name? \n \[Suggestions = Why do you ask? | Sorry no name | Cancel | Reset profile\]
+
+# GetUserProfile.Age.Prompt
+- How old are you {user.profile.name}? \n \[Suggestions=Why do you ask? | No age | Cancel | reset profile\]
+
+# GetUserProfile.Age.Invalid
+- Sorry, {turn.value} does not work. I’m looking for an age between 1-150. \n \[Suggestions=why do you ask | No age | Cancel | reset profile\]
+
+# bfdactivity-212572
+- Sure. No worries. For now, I'll set your age to 30.
+
+# bfdactivity-211795
+- No worries. For now, I'll set your name to 'Human'
+
+# bfdactivity-540652
+- Sure, I've reset your profile!

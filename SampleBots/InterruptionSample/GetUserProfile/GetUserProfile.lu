@@ -1,0 +1,61 @@
+>To learn more about the LU file format, read the documentation at
+> https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format
+
+# Why
+- why do you ask?
+- why do you need my name?
+- why do you need my age? 
+- why do you ask for my age? 
+
+# NoName
+- Sorry no name
+- Sorry, I will not give you my name
+- I'm not going to give you my name
+- I will not give you my name
+
+# NoAge
+- No age
+- I will not give you my age
+- I do not feel comfortable giving you my age
+- No age for you
+- Sorry. I'm not giving you my age.
+
+> These are two additional intents to add for interruption to work effectively. 
+> Add utterances from parent's sibling intents (everything but the intent that triggered this dialog)
+# Interruption
+> - [Main-Greeting](../Main/Main.lu#Greeting)
+- hi
+- hello
+- good morning
+- how are you?
+> - [Main-Cancel](../Main/Main.lu#Cancel)
+- Please stop that
+- Cancel
+- I do not wish to do that anymore
+- I changed my mind
+- Abort
+- Don't do it
+- please cancel that
+> - [Main-Help](../Main/Main.lu#Help)
+- I need help
+- What can you do? 
+- Can you please help
+- I'm not sure what I can say
+- I'm stuck
+> - [Main-Reset](../Main/Main.lu#ResetProfile)
+- reset profile
+- forget me
+- delete my profile
+- please erase everything you know about me
+
+> Add utterances that correspond to users responding to inputs being prompted for in this dialog
+# GetUserProfile
+- my name is {userName}
+- {userName} is my name
+- you can call me {userName}
+- people call me {userName}
+- {userName}
+
+> Add LUIS built in age, number prebuilt entity types to extract user's age
+$ prebuilt : age
+$ prebuilt : number
