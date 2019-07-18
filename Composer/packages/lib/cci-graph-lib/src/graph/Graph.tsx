@@ -374,7 +374,7 @@ export class Graph<TData> extends React.Component<GraphProps<TData>, GraphState>
     }
   }
 
-  private onMouseMove = (event: React.MouseEvent<Element>): void => {
+  private onMouseMove = (_event: React.MouseEvent<Element>): void => {
     // NOTE(lin): Occasionally the edge tracer might get stuck in a visible state even after dropping it,
     // e.g. if the drop happens outside of the graph. Here we ensure it's hidden.
     if (this.state.edgeDragData) {
@@ -400,7 +400,7 @@ export class Graph<TData> extends React.Component<GraphProps<TData>, GraphState>
     }
   };
 
-  private onDrop = (event: React.DragEvent<Element>): void => {
+  private onDrop = (_event: React.DragEvent<Element>): void => {
     const { edgeDragData } = this.state;
 
     if (edgeDragData && !this.dropReceiverId) {

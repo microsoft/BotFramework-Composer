@@ -470,7 +470,7 @@ export class Edge<TData> extends React.Component<EdgeProps<TData>, EdgeState> {
     };
   }
 
-  private onAnimationEnd = (event: React.AnimationEvent<Element>): void => {
+  private onAnimationEnd = (_event: React.AnimationEvent<Element>): void => {
     this.setState({
       isFadingIn: false,
     });
@@ -495,7 +495,7 @@ export class Edge<TData> extends React.Component<EdgeProps<TData>, EdgeState> {
     });
   };
 
-  private onAnchorReceive = (event: React.DragEvent<Element>): void => {
+  private onAnchorReceive = (_event: React.DragEvent<Element>): void => {
     this.props.onAnchorReceive({
       edgeId: this.props.id,
       receivingLocalEdgeId: this.props.localEdgeId,
@@ -504,7 +504,7 @@ export class Edge<TData> extends React.Component<EdgeProps<TData>, EdgeState> {
     });
   };
 
-  private onReceptorReceive = (event: React.DragEvent<Element>): void => {
+  private onReceptorReceive = (_event: React.DragEvent<Element>): void => {
     this.props.onReceptorReceive({
       edgeId: this.props.id,
       receivingLocalEdgeId: undefined,
