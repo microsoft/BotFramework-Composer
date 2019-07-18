@@ -32,7 +32,7 @@ export async function createDialog(dispatch, { id, content }) {
         response,
       },
     });
-    navigate(id);
+    dialogHistory.navTo(`${id}#`);
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
