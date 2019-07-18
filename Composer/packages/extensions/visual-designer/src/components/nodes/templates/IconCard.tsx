@@ -4,7 +4,7 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import { Icon } from '../icons/icon';
 
 const boxWidth = 240;
-const boxHeight = 100;
+const boxHeight = 120;
 
 const headerHeight = 40;
 const contentHeight = boxHeight - headerHeight;
@@ -12,7 +12,8 @@ const contentHeight = boxHeight - headerHeight;
 export const IconCard = ({
   corner,
   label,
-  text,
+  trigger,
+  summary,
   childDialog,
   icon,
   themeColor,
@@ -69,16 +70,15 @@ export const IconCard = ({
         <div
           style={{
             fontWeight: 400,
-            paddingLeft: '10px',
-            margin: '5px',
+            padding: '5px 10px',
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'top',
           }}
         >
-          <div style={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon} color={iconColor} size={30} />
+          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+            <Icon icon={icon} color={iconColor} size={20} />
           </div>
           <div
             style={{
@@ -93,13 +93,39 @@ export const IconCard = ({
             }}
             title={typeof label === 'string' ? label : ''}
           >
-            {text}
+            {trigger}
+          </div>
+        </div>
+        <div
+          style={{
+            fontWeight: 400,
+            padding: '5px 10px',
+            borderTop: '1px solid #EBEBEB',
+            fontSize: '14px',
+            lineHeight: '19px',
+            display: 'flex',
+            alignItems: 'top',
+          }}
+        >
+          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+            <Icon icon="MessageBot" color="#656565" size={20} />
+          </div>
+          <div
+            style={{
+              height: '100%',
+              width: 'calc(100% - 20px)',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              fontSize: '14px',
+              lineHeight: '19px',
+              fontFamily: 'Segoe UI',
+            }}
+            title={typeof label === 'string' ? label : ''}
+          >
+            {summary && <div>{summary}</div>}
             {childDialog && (
-              <div
-                style={{
-                  paddingTop: '0.5rem',
-                }}
-              >
+              <div>
                 <span
                   style={{
                     cursor: 'pointer',

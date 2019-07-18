@@ -15,7 +15,14 @@ function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.events && data.events.length) {
-    return formatMessage('Handle events: {events}', { events: data.events.join(', ') });
+    if (data.events.length > 1) {
+      return formatMessage('Handle events: {events} +{count}', {
+        events: data.events[0],
+        count: data.events.length - 1,
+      });
+    } else {
+      return formatMessage('Handle event: {event}', { event: data.events[0] });
+    }
   } else {
     return formatMessage('Handle Event...');
   }

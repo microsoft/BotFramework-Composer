@@ -45,21 +45,44 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
     }
   };
 
-  let text = '';
+  let summary = '';
+  let trigger = '';
   let dialog = null;
 
+  if (data.$type == ObiTypes.IntentRule) {
+    if (data.intent) {
+      trigger = formatMessage('{intent}', { intent: data.intent });
+    } else {
+      trigger = formatMessage('? intent');
+    }
+  } else if (data.$type == ObiTypes.EventRule) {
+    if (data.events && data.events.length) {
+      if (data.events.length > 1) {
+        trigger = formatMessage('{event} +{count}', { event: data.events[0], count: data.events.length - 1 });
+      } else {
+        trigger = formatMessage('{event}', { event: data.events[0] });
+      }
+    } else {
+      trigger = formatMessage('? event');
+    }
+  } else if (data.$type == ObiTypes.UnknownIntentRule) {
+    trigger = 'Unknown Intent';
+  } else if (data.$type == ObiTypes.ConversationUpdateActivityRule) {
+    trigger = 'Conversation Update';
+  }
+
   if (!data.steps) {
-    text = formatMessage('No actions');
+    summary = formatMessage('No actions');
   } else if (data.steps.length == 1) {
     const step = normalizeObiStep(data.steps[0]);
     if (step.$type == ObiTypes.BeginDialog) {
       dialog = step.dialog;
-      text = formatMessage(ConceptLabels[step.$type].title || step.$type);
+      summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
     } else {
-      text = formatMessage('1 action: {step}', { step: ConceptLabels[step.$type].title || step.$type });
+      summary = formatMessage('1 action: {step}', { step: ConceptLabels[step.$type].title || step.$type });
     }
   } else {
-    text = formatMessage('{count} actions.', { count: data.steps.length });
+    summary = formatMessage('{count} actions', { count: data.steps.length });
   }
 
   return (
@@ -72,9 +95,10 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
         </div>
       }
       label={label}
-      text={text}
+      trigger={trigger}
+      summary={summary}
       childDialog={dialog}
-      icon="MessageBot"
+      icon="Play"
       onClick={onCardBodyClick}
       onChildDialogClick={openChildDialog}
     />
