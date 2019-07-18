@@ -44,7 +44,6 @@ namespace Tests
         public async Task Steps_01Steps()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-                .SendConversationUpdate()
                 .Send("01")
                 .AssertReply("Step 1")
                 .AssertReply("Step 2")
@@ -69,7 +68,6 @@ namespace Tests
         public async Task Steps_03IfCondition()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("03")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("Carlos")
@@ -81,7 +79,6 @@ namespace Tests
         public async Task Steps_04EditArray()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("04")
                 .AssertReply("Here are the index and values in the array.")
                 .AssertReply("0: 11111")
@@ -98,7 +95,6 @@ namespace Tests
         public async Task Steps_05EndDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("05")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -115,7 +111,6 @@ namespace Tests
         public async Task Steps_06HttpRequest()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .Send(new Activity(ActivityTypes.ConversationUpdate, membersAdded: new List<ChannelAccount>() { new ChannelAccount("bot", "Bot") }))
             .Send("06")
             .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
             .Send("TestPetName")
@@ -133,7 +128,6 @@ namespace Tests
         public async Task Steps_07SwitchCondition()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("07")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
@@ -146,7 +140,6 @@ namespace Tests
         public async Task Steps_08RepeatDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("08")
                 .AssertReply("Hello, what is your name?")
             .Send("luhan")
@@ -162,7 +155,6 @@ namespace Tests
         public async Task Steps_09TraceAndLog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"), sendTrace: true)
-            .SendConversationUpdate()
             .Send("09")
                 .AssertReply("Hello, what is your name?")
             .Send("luhan")
@@ -179,7 +171,6 @@ namespace Tests
         public async Task Steps_10EditSteps()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("10")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -192,7 +183,6 @@ namespace Tests
         public async Task Steps_11ReplaceDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("11")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -212,7 +202,6 @@ namespace Tests
         public async Task Steps_12EmitEvent()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-            .SendConversationUpdate()
             .Send("12")
                 .AssertReply("Say moo to get a response, say emit to emit a event.")
             .Send("moo")
