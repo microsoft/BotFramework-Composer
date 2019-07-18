@@ -5,12 +5,12 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 // eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
-import { OffsetContainer } from '../../shared/OffsetContainer';
-import { StepGroup } from '../groups';
-import { areBoundariesEqual } from '../../shared/Boundary';
-import { Edge } from '../shared/EdgeComponents';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
+import { areBoundariesEqual } from '../../shared/Boundary';
+import { OffsetContainer } from '../shared/OffsetContainer';
+import { Edge } from '../shared/EdgeComponents';
+import { StepGroup } from '../groups';
 
 import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';

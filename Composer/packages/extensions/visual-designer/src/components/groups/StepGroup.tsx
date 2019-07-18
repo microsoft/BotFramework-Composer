@@ -1,18 +1,16 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
-// eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../shared/NodeRenderer';
 import { GraphNode } from '../../shared/GraphNode';
-import { OffsetContainer } from '../../shared/OffsetContainer';
-import { Edge } from '../shared/EdgeComponents';
 import { areBoundariesEqual } from '../../shared/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { OffsetContainer } from '../shared/OffsetContainer';
+import { NodeRenderer } from '../shared/NodeRenderer';
+import { Edge } from '../shared/EdgeComponents';
 
 const StepInterval = ElementInterval.y;
 
