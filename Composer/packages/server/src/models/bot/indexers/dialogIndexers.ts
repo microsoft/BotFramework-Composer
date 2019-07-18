@@ -86,6 +86,31 @@ export class DialogIndexer {
     return uniq(intents);
   }
 
+  // find out all referred dialog
+  private ExtractReferredDialogs(dialog: Dialog): string[] {
+    const dialogs: string[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+        const dialogName = value.dialog;
+        dialogs.push(dialogName);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(dialogs);
+  }
+
   // check all fields
   private CheckFields(dialog: Dialog): string[] {
     const errors: string[] = [];
@@ -133,13 +158,14 @@ export class DialogIndexer {
             const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const id = Path.basename(file.name, extName);
             const isRoot = id === 'Main';
-            const diagostics = this.CheckFields(dialogJson);
+            const diagnostics = this.CheckFields(dialogJson);
             const dialog = {
               id,
               isRoot,
               displayName: isRoot ? botName : id,
               content: dialogJson,
-              diagostics,
+              diagnostics,
+              referredDialogs: this.ExtractReferredDialogs(dialogJson),
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),

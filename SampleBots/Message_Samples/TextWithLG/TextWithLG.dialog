@@ -1,17 +1,24 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:19.315Z",
+    "updatedAt": "2019-07-16T19:37:44.474Z",
+    "id": "620760",
+    "name": "TextWithLG"
+  },
   "autoEndDialog": true,
   "generator": "common.lg",
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "[TextWithLG]"
+      "$designer": {
+        "createdAt": "2019-07-16T19:37:46.188Z",
+        "updatedAt": "2019-07-16T19:37:51.260Z",
+        "id": "105188",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-105188]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:50:19.315Z",
-    "updatedAt": "2019-07-03T06:50:19.334Z",
-    "id": "620760"
-  }
+  "$schema": "../../app.schema"
 }

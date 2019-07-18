@@ -48,28 +48,36 @@ const defaultMemory = {
 
 const dialogFiles = [
   {
-    id: 'MyCustomDialog1',
-    name: 'MyCustomDialog1.dialog',
-    relativePath: 'MyCustomDialog1.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog1.dialog',
+    id: 'Main',
+    displayName: 'MyCustomDialog1',
+    name: 'Main.dialog',
+    relativePath: 'Main/Main.dialog',
+    path: '/Some/Cool/Path/Main/Main.dialog',
+    isRoot: true,
   },
   {
     id: 'MyCustomDialog2',
+    displayName: 'MyCustomDialog2',
     name: 'MyCustomDialog2.dialog',
     relativePath: 'MyCustomDialog2.dialog',
     path: '/Some/Cool/Path/MyCustomDialog2.dialog',
+    isRoot: false,
   },
   {
     id: 'MyCustomDialog3',
+    displayName: 'MyCustomDialog3',
     name: 'MyCustomDialog3.dialog',
     relativePath: 'MyCustomDialog3.dialog',
     path: '/Some/Cool/Path/MyCustomDialog3.dialog',
+    isRoot: false,
   },
   {
     id: 'MyCustomDialog4',
+    displayName: 'MyCustomDialog4',
     name: 'MyCustomDialog4.dialog',
     relativePath: 'MyCustomDialog4.dialog',
     path: '/Some/Cool/Path/MyCustomDialog4.dialog',
+    isRoot: false,
   },
 ];
 
@@ -336,7 +344,8 @@ const Demo: React.FC = () => {
           shellApi={mockShellApi as ShellApi}
           luFiles={luFiles}
           lgFiles={lgFiles}
-          dialogName="MyCustomDialog1"
+          currentDialog={dialogFiles[0]}
+          isRoot={true}
         />
       </div>
     </div>

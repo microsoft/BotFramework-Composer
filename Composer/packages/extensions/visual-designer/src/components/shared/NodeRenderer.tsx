@@ -9,6 +9,7 @@ import {
   BeginDialog,
   ReplaceDialog,
   UnknownIntentRule,
+  ConversationUpdateActivityRule,
   EventRule,
   IfCondition,
   SwitchCondition,
@@ -32,9 +33,9 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
+  [ObiTypes.ConversationUpdateActivityRule]: ConversationUpdateActivityRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

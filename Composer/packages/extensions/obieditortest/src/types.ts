@@ -17,6 +17,8 @@ export interface FormMemory {
 
 export interface DialogInfo {
   id: string;
+  displayName: string;
+  isRoot: boolean;
 }
 
 export interface Intent {

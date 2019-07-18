@@ -1,23 +1,42 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:51:38.784Z",
+    "updatedAt": "2019-07-16T20:00:42.988Z",
+    "id": "316336",
+    "name": "ClearToDos"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T20:01:31.422Z",
+        "updatedAt": "2019-07-16T20:01:36.455Z",
+        "id": "527945",
+        "name": "Edit an Array Property"
+      },
       "changeType": "Clear",
       "arrayProperty": "user.todos",
       "resultProperty": "dialog.cleared"
     },
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-01T22:03:19.772Z",
+        "updatedAt": "2019-07-16T20:01:39.092Z",
+        "id": "815442",
+        "name": "Branch: If/Else"
+      },
       "condition": "dialog.cleared",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-01T22:03:18.901Z",
-            "updatedAt": "2019-07-01T22:03:20.300Z",
-            "id": "832307"
+            "updatedAt": "2019-07-16T20:01:43.249Z",
+            "id": "832307",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-832307]"
         }
@@ -27,23 +46,14 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-01T22:03:36.091Z",
-            "updatedAt": "2019-07-01T22:03:39.000Z",
-            "id": "983761"
+            "updatedAt": "2019-07-16T20:01:47.803Z",
+            "id": "983761",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-983761]"
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:03:19.772Z",
-        "updatedAt": "2019-07-01T22:03:19.777Z",
-        "id": "815442"
-      }
+      ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:38.784Z",
-    "updatedAt": "2019-07-03T06:51:38.790Z",
-    "id": "316336"
-  }
+  "$schema": "../../app.schema"
 }

@@ -18,7 +18,7 @@ export class LGIndexer {
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagostics: error === undefined ? [] : [error],
+          diagnostics: error === undefined ? [] : [error],
         });
       }
     }

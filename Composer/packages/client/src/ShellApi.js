@@ -120,7 +120,7 @@ export function ShellApi() {
   }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
 
   useEffect(() => {
-    const schemaError = get(schemas, 'diagostics', []);
+    const schemaError = get(schemas, 'diagnostics', []);
     if (schemaError.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = schemaError.join('\n');
@@ -142,6 +142,9 @@ export function ShellApi() {
   }
 
   function getState(sourceWindow) {
+    const [currentDialogId] = navPath.split('#');
+    const currentDialog = dialogs.find(d => d.id === currentDialogId);
+
     return {
       data: getData(sourceWindow),
       dialogs,
@@ -150,6 +153,7 @@ export function ShellApi() {
       schemas,
       lgFiles,
       luFiles,
+      currentDialog,
     };
   }
 

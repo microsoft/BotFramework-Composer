@@ -1,4 +1,4 @@
-import { ElementInterval } from '../shared/elementSizes';
+import { ElementInterval, BranchIntervalMinX } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
 import { GraphLayout } from '../shared/GraphLayout';
 import { EdgeData } from '../shared/EdgeData';
@@ -47,7 +47,7 @@ export function switchCaseLayouter(
       x: accOffsetX,
       y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
     };
-    return accOffsetX + BranchIntervalX + x.boundary.width;
+    return accOffsetX + Math.max(BranchIntervalX + x.boundary.width, BranchIntervalMinX);
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
