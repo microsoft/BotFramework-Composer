@@ -28,6 +28,7 @@ const initialState = {
   schemas: {},
   luFiles: [],
   luStatus: [],
+  error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
 };
 

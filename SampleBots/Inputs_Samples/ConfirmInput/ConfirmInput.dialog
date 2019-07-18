@@ -1,9 +1,21 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:16.053Z",
+    "updatedAt": "2019-07-16T19:27:27.043Z",
+    "id": "556076",
+    "name": "ConfirmInput"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.ConfirmInput",
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:15.892Z",
+        "updatedAt": "2019-07-16T19:27:39.503Z",
+        "id": "647929",
+        "name": "Prompt for confirmation"
+      },
       "property": "user.confirmed",
       "prompt": "yes or no",
       "unrecognizedPrompt": "I need a yes or no.",
@@ -17,30 +29,27 @@
         "inlineOr": " or ",
         "inlineOrMore": ", or ",
         "includeNumbers": true
-      },
-      "$designer": {
-        "createdAt": "2019-07-01T21:59:15.892Z",
-        "updatedAt": "2019-07-01T21:59:15.898Z",
-        "id": "647929"
       }
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:59:14.563Z",
-        "updatedAt": "2019-07-01T21:59:16.680Z",
-        "id": "458458"
+        "updatedAt": "2019-07-16T19:27:43.477Z",
+        "id": "458458",
+        "name": "Send an Activity"
       },
       "activity": "[bfdactivity-458458]"
     },
     {
-      "$type": "Microsoft.RepeatDialog"
+      "$type": "Microsoft.RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:27:44.856Z",
+        "updatedAt": "2019-07-16T19:27:49.117Z",
+        "id": "131382",
+        "name": "Repeat this Dialog"
+      }
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:16.053Z",
-    "updatedAt": "2019-07-03T06:48:16.080Z",
-    "id": "556076"
-  }
+  "$schema": "../../app.schema"
 }

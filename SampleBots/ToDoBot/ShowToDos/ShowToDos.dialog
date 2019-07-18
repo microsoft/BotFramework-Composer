@@ -1,17 +1,30 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:51:43.763Z",
+    "updatedAt": "2019-07-16T20:00:49.889Z",
+    "id": "709692",
+    "name": "ShowToDos"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-01T22:04:55.922Z",
+        "updatedAt": "2019-07-16T22:02:34.315Z",
+        "id": "358464",
+        "name": "Branch: If/Else: If/Else"
+      },
       "condition": "user.todos == null",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-01T22:04:54.741Z",
-            "updatedAt": "2019-07-01T22:04:56.521Z",
-            "id": "339580"
+            "updatedAt": "2019-07-16T20:02:29.357Z",
+            "id": "339580",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-339580]"
         }
@@ -21,23 +34,14 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-01T22:05:03.290Z",
-            "updatedAt": "2019-07-01T22:05:05.016Z",
-            "id": "662084"
+            "updatedAt": "2019-07-16T20:02:34.141Z",
+            "id": "662084",
+            "name": "Send an Activity"
           },
           "activity": "[bfdactivity-662084]"
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:04:55.922Z",
-        "updatedAt": "2019-07-01T22:04:55.949Z",
-        "id": "358464"
-      }
+      ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:43.763Z",
-    "updatedAt": "2019-07-03T06:51:43.791Z",
-    "id": "709692"
-  }
+  "$schema": "../../app.schema"
 }

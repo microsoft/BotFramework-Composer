@@ -1,22 +1,38 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:00.744Z",
+    "updatedAt": "2019-07-16T19:28:23.545Z",
+    "id": "042284",
+    "name": "AttachmentInput"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.AttachmentInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:28:24.521Z",
+        "updatedAt": "2019-07-16T19:28:29.924Z",
+        "id": "452587",
+        "name": "Prompt for Attachment"
+      },
       "property": "dialog.attachments",
       "prompt": "Please send an image or music.",
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
       "outputFormat": "All"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
+      "$designer": {
+        "createdAt": "2019-07-16T19:28:31.311Z",
+        "updatedAt": "2019-07-16T19:28:35.928Z",
+        "id": "365176",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-365176]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:00.744Z",
-    "updatedAt": "2019-07-03T06:48:00.782Z",
-    "id": "042284"
-  }
+  "$schema": "../../app.schema"
 }

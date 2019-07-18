@@ -1,7 +1,7 @@
 import { ObiTypes } from '../shared/ObiTypes';
 import { Boundary } from '../shared/Boundary';
 import { GraphNode } from '../shared/GraphNode';
-import { DiamondSize, InitNodeSize, LoopIconSize } from '../shared/elementSizes';
+import { DiamondSize, InitNodeSize, LoopIconSize, ChoiceInputSize, ChoiceInputMarginTop } from '../shared/elementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
@@ -40,6 +40,16 @@ function measureSwitchConditionBoundary(json) {
   );
 }
 
+function measureChoiceInputBoundary(data) {
+  const width = InitNodeSize.width;
+  const height =
+    InitNodeSize.height +
+    (data.choices
+      ? (data.choices.length <= 4 ? data.choices.length : 4) * (ChoiceInputSize.height + ChoiceInputMarginTop)
+      : 0);
+  return new Boundary(width, height);
+}
+
 export function measureJsonBoundary(json) {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
@@ -65,6 +75,9 @@ export function measureJsonBoundary(json) {
       break;
     case ObiTypes.Foreach:
       boundary = measureForeachBoundary(json);
+      break;
+    case ObiTypes.ChoiceInput:
+      boundary = measureChoiceInputBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);

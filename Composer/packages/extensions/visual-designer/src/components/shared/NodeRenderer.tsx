@@ -9,11 +9,13 @@ import {
   BeginDialog,
   ReplaceDialog,
   UnknownIntentRule,
+  ConversationUpdateActivityRule,
   EventRule,
   IfCondition,
   SwitchCondition,
   ActivityRenderer,
   Foreach,
+  ChoiceInput,
 } from '../nodes/index';
 
 // eslint-disable-next-line no-unused-vars
@@ -32,9 +34,10 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
+  [ObiTypes.ConversationUpdateActivityRule]: ConversationUpdateActivityRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
+  [ObiTypes.ChoiceInput]: ChoiceInput,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
