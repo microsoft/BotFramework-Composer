@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LuEditor } from 'code-editor';
-import { ActionButton } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -32,19 +32,22 @@ export default function InlineLuEditor(props: InlineLuEditorProps) {
     focusEditor(editorRef);
   };
 
+  const hasChanges = value !== file.content;
+
   return (
     <div>
-      <div style={{ height: '40px' }}>
-        {value !== file.content && (
-          <>
-            <ActionButton iconProps={{ iconName: 'Save' }} split={true} onClick={commitChanges}>
-              {formatMessage('Save file')}
-            </ActionButton>
-            <ActionButton iconProps={{ iconName: 'Undo' }} onClick={discardChanges}>
-              {formatMessage('Discard changes')}
-            </ActionButton>
-          </>
-        )}
+      <div style={{ height: '40px', display: 'flex', justifyContent: 'flex-end' }}>
+        <PrimaryButton
+          iconProps={{ iconName: 'Save' }}
+          onClick={commitChanges}
+          disabled={!hasChanges}
+          styles={{ root: { marginRight: '10px' } }}
+        >
+          {formatMessage('Save')}
+        </PrimaryButton>
+        <DefaultButton iconProps={{ iconName: 'Undo' }} onClick={discardChanges} disabled={!hasChanges}>
+          {formatMessage('Discard changes')}
+        </DefaultButton>
       </div>
       <div style={{ height: '500px' }}>
         <LuEditor
