@@ -28,13 +28,13 @@ app.get('/test', function(req: Request, res: Response) {
 
 app.use('/api', apiRouter);
 
-app.use(function(err: Error, req: Request, res: Response) {
+app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   if (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-app.get('*', function(req, res) {
+app.get('*', function(req, res, _next) {
   res.sendFile(path.resolve(__dirname, './public/index.html'));
 });
 
