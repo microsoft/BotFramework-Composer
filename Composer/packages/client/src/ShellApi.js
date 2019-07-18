@@ -203,7 +203,20 @@ export function ShellApi() {
       throw new Error(res.error.Message);
     }
 
-    return res.templates.map(t => ({ Name: t.Name, Body: t.Body }));
+    const lines = file.content.split('\n');
+
+    return res.templates.map(t => {
+      const [start, end] = getTemplateBodyRange(t);
+      const body = lines.slice(start - 1, end).join('\n');
+
+      return { Name: t.Name, Parameters: t.Parameters, Body: body };
+    });
+  }
+
+  function getTemplateBodyRange(template) {
+    const startLineNumber = template.ParseTree._start.line + 1;
+    const endLineNumber = template.ParseTree._stop.line;
+    return [startLineNumber, endLineNumber];
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
