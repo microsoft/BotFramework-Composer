@@ -47,7 +47,7 @@ function measureSwitchConditionBoundary(json): Boundary {
   );
 }
 
-function measureChoiceBoundary(data): Boundary {
+function measureChoiceInputBoundary(data): Boundary {
   const width = InitNodeSize.width;
   const height =
     InitNodeSize.height +
@@ -84,7 +84,7 @@ export function measureJsonBoundary(json): Boundary {
       boundary = measureForeachBoundary(json);
       break;
     case ObiTypes.ChoiceInput:
-      boundary = measureChoiceBoundary(json);
+      boundary = measureChoiceInputBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
