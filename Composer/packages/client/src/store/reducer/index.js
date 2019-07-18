@@ -169,9 +169,6 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
-<<<<<<< HEAD
   [ActionTypes.SET_ERROR]: setError,
-=======
   [ActionTypes.TO_START_BOT]: setToStartBot,
->>>>>>> auto reload bot
 });
