@@ -42,7 +42,7 @@
 -Help, we don't need no stinkin' help!
 
 # bfdactivity-376720
--Hi! I'm a ToDo bot. Say " add a todo named first" to get started.
+-Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 
 # bfdactivity-116673
 -Successfully added a todo named {dialog.todo}

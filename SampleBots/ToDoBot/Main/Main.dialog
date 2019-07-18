@@ -32,10 +32,7 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "name": "Send an Activity",
-            "id": "[help]"
-          }
+          "activity": "[bfdactivity-376720]"
         }
       ]
     },
