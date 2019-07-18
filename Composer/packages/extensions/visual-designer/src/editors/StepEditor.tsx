@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
 import { StepGroup } from '../components/groups';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
-import { Boundary } from '../shared/Boundary';
-import { ElementInterval } from '../shared/elementSizes';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { OffsetContainer } from '../components/shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { Boundary } from '../shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };

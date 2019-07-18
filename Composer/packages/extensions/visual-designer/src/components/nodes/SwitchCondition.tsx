@@ -5,18 +5,21 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 // eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
-import { OffsetContainer } from '../../shared/OffsetContainer';
-import { StepGroup } from '../groups';
-import { areBoundariesEqual } from '../../shared/Boundary';
-import { Edge } from '../shared/EdgeComponents';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
+import { areBoundariesEqual } from '../../shared/Boundary';
+import { OffsetContainer } from '../shared/OffsetContainer';
+import { Edge } from '../shared/EdgeComponents';
+import { StepGroup } from '../groups';
 
 import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
 
 const calculateNodeMap = (path, data) => {
-  const { condition, choice, branches } = transformSwitchCondition(data, path);
+  const result = transformSwitchCondition(data, path);
+  if (!result) return {};
+
+  const { condition, choice, branches } = result;
   return {
     conditionNode: GraphNode.fromIndexedJson(condition),
     choiceNode: GraphNode.fromIndexedJson(choice),
@@ -60,19 +63,23 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({
   }, [layout]);
 
   const { boundary, nodeMap, edges } = layout;
+  const conditionNode = nodeMap.conditionNode;
+  const choiceNode = nodeMap.choiceNode;
+  const branchNodes = nodeMap.branchNodes || [];
+
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <DefaultRenderer
-          key={nodeMap && nodeMap.conditionNode.id}
-          id={nodeMap && nodeMap.conditionNode.id}
-          data={nodeMap && nodeMap.conditionNode.data}
+          key={conditionNode.id}
+          id={conditionNode.id}
+          data={conditionNode.data}
           focusedId={focusedId}
           getLgTemplates={getLgTemplates}
           onEvent={onEvent}
         />
       </OffsetContainer>
-      <OffsetContainer offset={nodeMap && nodeMap.choiceNode.offset} styles={{ zIndex: 100 }}>
+      <OffsetContainer offset={choiceNode.offset} styles={{ zIndex: 100 }}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
@@ -80,7 +87,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({
           }}
         />
       </OffsetContainer>
-      {((nodeMap && nodeMap.branchNodes) || []).map(x => (
+      {(branchNodes as any).map(x => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <StepGroup
             key={x.id}

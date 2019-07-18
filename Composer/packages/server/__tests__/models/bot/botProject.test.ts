@@ -87,11 +87,11 @@ describe('copyTo', () => {
 
   afterEach(() => {
     try {
-      const deleteFolder = (path: string) => {
+      const deleteFolder = (path: string): void => {
         let files = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
-          files.forEach(function(file, index) {
+          files.forEach(function(file) {
             const curPath = path + '/' + file;
             if (fs.statSync(curPath).isDirectory()) {
               // recurse
