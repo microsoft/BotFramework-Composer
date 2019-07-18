@@ -20,19 +20,25 @@
     }
   },
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:02:14.960Z",
-        "updatedAt": "2019-07-16T20:00:24.788Z",
-        "id": "376720",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-376720]"
-    }
-  ],
   "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "[help]"
+          }
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {

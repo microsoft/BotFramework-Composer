@@ -10,19 +10,25 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-08T08:29:34.449Z",
-        "updatedAt": "2019-07-16T19:38:54.655Z",
-        "id": "134916",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-134916]"
-    }
-  ],
   "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "[help]"
+          }
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
