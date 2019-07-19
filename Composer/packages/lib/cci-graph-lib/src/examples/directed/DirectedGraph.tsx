@@ -34,7 +34,7 @@ export class DirectedGraph extends React.Component<DirectedGraphPropsType, Direc
   };
 
   public render(): React.ReactNode {
-    const { width, height, items } = this.props;
+    const { items } = this.props;
     const { nodes, edges } = this.computeGraphElements(items);
 
     return (
