@@ -4,7 +4,6 @@
     "createdAt": "2019-06-28T06:31:58.726Z",
     "updatedAt": "2019-07-16T18:42:36.107Z",
     "id": "937757",
-
     "description": "This is a bot that demonstrates the ability to send different Cards to users."
   },
   "autoEndDialog": false,
