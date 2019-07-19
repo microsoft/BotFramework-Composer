@@ -4,7 +4,7 @@
     "createdAt": "2019-07-03T06:51:23.522Z",
     "updatedAt": "2019-07-16T19:50:46.367Z",
     "id": "714773",
-    "name": "TraceAndLog",
+
     "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
   },
   "autoEndDialog": true,
@@ -14,8 +14,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:58:15.911Z",
         "updatedAt": "2019-07-16T19:58:19.512Z",
-        "id": "107670",
-        "name": "Prompt for text"
+        "id": "107670"
       },
       "outputBinding": "user.name",
       "prompt": "Hello, what is your name?",
@@ -29,8 +28,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:58:20.503Z",
         "updatedAt": "2019-07-16T19:58:24.020Z",
-        "id": "774586",
-        "name": "Emit a trace event"
+        "id": "774586"
       },
       "valueType": "memory",
       "value": "{user}"
@@ -40,8 +38,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:58:24.944Z",
         "updatedAt": "2019-07-16T19:58:29.674Z",
-        "id": "219510",
-        "name": "Log to console"
+        "id": "219510"
       },
       "text": "{user.name}",
       "traceActivity": false
