@@ -18,6 +18,7 @@ interface DesignerData {
 }
 
 interface DesignerFieldProps {
+  placeholder: string;
   data: DesignerData;
   onChange: (data: DesignerData) => void;
 }
@@ -51,7 +52,12 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
   return (
     <div className="DesignerField">
       <div className="DesignerFieldSection">
-        <TextField value={get(data, 'name')} label={formatMessage('Name')} onChange={(_, val) => update('name', val)} />
+        <TextField
+          value={get(data, 'name')}
+          placeholder={props.placeholder}
+          label={formatMessage('Name')}
+          onChange={(_, val) => update('name', val)}
+        />
         <TextField
           multiline
           autoAdjustHeight
