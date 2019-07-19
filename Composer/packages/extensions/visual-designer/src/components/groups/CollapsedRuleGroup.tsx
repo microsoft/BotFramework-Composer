@@ -9,8 +9,8 @@ const ElementHeight = CollapsedEventNodeSize.height;
 const ElementMarginX = EventNodeLayout.marginX;
 const ElementMarginY = EventNodeLayout.marginX;
 const maxBlockHeight = (ElementHeight + ElementMarginY) * 2;
-export const CollapsedRuleGroup = ({ count }) => {
-  const items: any[] = [];
+export const CollapsedRuleGroup = ({ count }): JSX.Element => {
+  const items: JSX.Element[] = [];
   for (let i = 0; i < count; i++) {
     items.push(
       <div
