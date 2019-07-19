@@ -48,26 +48,40 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   let trigger = '';
   let dialog = null;
 
-  if (data.$type == ObiTypes.IntentRule) {
-    if (data.intent) {
-      trigger = formatMessage('{intent}', { intent: data.intent });
-    } else {
-      trigger = formatMessage('? intent');
-    }
-  } else if (data.$type == ObiTypes.EventRule) {
-    if (data.events && data.events.length) {
-      if (data.events.length > 1) {
-        trigger = formatMessage('{event} +{count}', { event: data.events[0], count: data.events.length - 1 });
+  switch (data.$type) {
+    case ObiTypes.IntentRule:
+      if (data.intent) {
+        trigger = data.intent;
       } else {
-        trigger = formatMessage('{event}', { event: data.events[0] });
+        trigger = formatMessage('? intent');
       }
-    } else {
-      trigger = formatMessage('? event');
-    }
-  } else if (data.$type == ObiTypes.UnknownIntentRule) {
-    trigger = formatMessage('Unknown Intent');
-  } else if (data.$type == ObiTypes.ConversationUpdateActivityRule) {
-    trigger = formatMessage('Conversation Update');
+      break;
+
+    case ObiTypes.EventRule:
+      if (data.events && data.events.length) {
+        trigger = formatMessage(
+          `{event} {
+          count, plural,
+             =0 {}
+          other {+#}
+        }`,
+          {
+            event: data.events[0],
+            count: data.events.length - 1,
+          }
+        );
+      } else {
+        trigger = formatMessage('? event');
+      }
+      break;
+
+    case ObiTypes.UnknownIntentRule:
+      trigger = formatMessage('Unknown Intent');
+      break;
+
+    case ObiTypes.ConversationUpdateActivityRule:
+      trigger = formatMessage('Conversation Update');
+      break;
   }
 
   if (!data.steps) {
