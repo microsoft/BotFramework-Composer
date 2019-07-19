@@ -37,18 +37,18 @@ It's a good practice to create a handler for each intent. In this guide, we’ve
 
 ## Step 4: Adding logic to the events
 There are two ways to do this:
-1. Adding actions without dialogs
-2. Adding actions using dialogs
+1. Adding logic without dialogs
+2. Adding logic using dialogs
 
 **Why use dialogs?**
 
-Dialogs allow you to create a multi-turn conversation. Each dialog is designed to perform a specific task. Using dialogs in your logic can make your bot program extensible and easily manageable. Follow this link to learn more about dialogs.
+Dialogs allow you to create a multi-turn conversation. Each dialog is designed to perform a specific task. Using dialogs in your logic can make your bot program extensible and manageable. Follow this link to learn more about dialogs.
 
 In this guide, we will demonstrate both approaches. To start, click the event icon to go to the logic page.
 
 <img src = "Assets/EventIcon.png" alt = "Event icon" width = 500></img>
 
-### 4.1: Adding actions without dialogs
+### 4.1: Adding logic without dialogs
 Let's add logic to *GreetingIntentHandler*. By design, we want the bot to send a message to the user in response to the *Greeting* intent. To do this, click the **add icon**, select **Send Messages**, then select **Send Activity**. On the **Language Generation** pane, type in the bot response. For example, *Hello from the bot!*.
 
 ![screenshot: LG](Assets/AddActions.png)
