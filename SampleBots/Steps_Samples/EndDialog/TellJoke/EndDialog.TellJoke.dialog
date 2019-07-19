@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-01T21:35:16.406Z",
     "updatedAt": "2019-07-16T19:49:53.339Z",
-    "id": "323744",
-    "name": "EndDialog.TellJoke"
+    "id": "323744"
   },
   "autoEndDialog": true,
   "recognizer": {
@@ -19,8 +18,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:35:45.065Z",
         "updatedAt": "2019-07-16T19:53:35.317Z",
-        "id": "150220",
-        "name": "Send an Activity"
+        "id": "150220"
       },
       "activity": "[bfdactivity-150220]"
     },
@@ -29,8 +27,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:35:47.297Z",
         "updatedAt": "2019-07-16T19:53:38.249Z",
-        "id": "889445",
-        "name": "End Turn"
+        "id": "889445"
       }
     },
     {
@@ -38,8 +35,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:35:55.897Z",
         "updatedAt": "2019-07-16T19:53:42.505Z",
-        "id": "451180",
-        "name": "Send an Activity"
+        "id": "451180"
       },
       "activity": "[bfdactivity-451180]"
     }
@@ -50,8 +46,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:53:25.585Z",
         "updatedAt": "2019-07-16T19:53:31.381Z",
-        "id": "241317",
-        "name": "Handle an Intent"
+        "id": "241317"
       },
       "steps": [
         {

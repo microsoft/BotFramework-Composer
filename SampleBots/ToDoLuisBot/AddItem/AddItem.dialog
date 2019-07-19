@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-16T20:14:36.220Z",
     "updatedAt": "2019-07-16T20:15:16.280Z",
-    "id": "479285",
-    "name": "AddItem"
+    "id": "479285"
   },
   "autoEndDialog": true,
   "generator": "common.lg",
@@ -14,8 +13,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:14:37.157Z",
         "updatedAt": "2019-07-16T20:18:02.912Z",
-        "id": "002799",
-        "name": "Set a Property"
+        "id": "002799"
       },
       "property": "dialog.item",
       "value": "@promptContentML"
@@ -25,8 +23,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:14:40.006Z",
         "updatedAt": "2019-07-16T20:18:08.591Z",
-        "id": "557725",
-        "name": "Set a Property"
+        "id": "557725"
       },
       "property": "dialog.listName",
       "value": "@ListType"
@@ -36,8 +33,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:14:41.004Z",
         "updatedAt": "2019-07-16T20:18:12.141Z",
-        "id": "965232",
-        "name": "Branch: If/Else"
+        "id": "965232"
       },
       "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
       "steps": [
@@ -46,8 +42,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:18:14.187Z",
             "updatedAt": "2019-07-16T20:18:20.208Z",
-            "id": "048651",
-            "name": "Send an Activity"
+            "id": "048651"
           },
           "activity": "[bfdactivity-048651]"
         },
@@ -56,8 +51,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:18:23.989Z",
             "updatedAt": "2019-07-16T20:18:26.523Z",
-            "id": "272186",
-            "name": "End Dialog"
+            "id": "272186"
           }
         }
       ]
@@ -67,8 +61,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:18:28.464Z",
         "updatedAt": "2019-07-16T20:18:30.464Z",
-        "id": "716714",
-        "name": "Branch: If/Else"
+        "id": "716714"
       },
       "condition": "user.lists == null",
       "steps": [
@@ -77,8 +70,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:18:33.356Z",
             "updatedAt": "2019-07-16T20:18:38.557Z",
-            "id": "312002",
-            "name": "Initialize a Property"
+            "id": "312002"
           },
           "property": "user.lists",
           "type": "object"
@@ -90,8 +82,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:18:40.958Z",
         "updatedAt": "2019-07-16T20:18:42.960Z",
-        "id": "431309",
-        "name": "Branch: If/Else"
+        "id": "431309"
       },
       "condition": "dialog.listName == null",
       "steps": [
@@ -100,8 +91,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:18:45.689Z",
             "updatedAt": "2019-07-16T20:18:49.862Z",
-            "id": "739777",
-            "name": "Prompt with multi-choice"
+            "id": "739777"
           },
           "property": "dialog.listName",
           "prompt": "Which list do you want to expand?",
@@ -143,8 +133,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:18:52.326Z",
         "updatedAt": "2019-07-16T20:18:54.401Z",
-        "id": "982253",
-        "name": "Branch: If/Else"
+        "id": "982253"
       },
       "condition": "dialog.item == null",
       "steps": [
@@ -153,8 +142,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:18:57.039Z",
             "updatedAt": "2019-07-16T20:19:13.919Z",
-            "id": "957758",
-            "name": "Prompt for text"
+            "id": "957758"
           },
           "property": "dialog.item",
           "prompt": "Please enter the title of your item.",
@@ -170,8 +158,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:19:14.934Z",
         "updatedAt": "2019-07-16T20:19:17.768Z",
-        "id": "075604",
-        "name": "Branch: If/Else"
+        "id": "075604"
       },
       "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
       "steps": [
@@ -180,8 +167,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:19:19.990Z",
             "updatedAt": "2019-07-16T20:19:25.307Z",
-            "id": "907210",
-            "name": "Initialize a Property"
+            "id": "907210"
           },
           "property": "user.lists.{dialog.listName}",
           "type": "array"
@@ -193,8 +179,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:19:27.421Z",
         "updatedAt": "2019-07-16T20:19:33.540Z",
-        "id": "644924",
-        "name": "Edit an Array Property"
+        "id": "644924"
       },
       "changeType": "Push",
       "arrayProperty": "user.lists.{dialog.listName}",
@@ -205,8 +190,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:19:36.168Z",
         "updatedAt": "2019-07-16T20:19:41.597Z",
-        "id": "569973",
-        "name": "Send an Activity"
+        "id": "569973"
       },
       "activity": "[bfdactivity-569973]"
     }
