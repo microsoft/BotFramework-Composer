@@ -4,7 +4,7 @@
     "createdAt": "2019-07-03T08:57:58.939Z",
     "updatedAt": "2019-07-16T18:54:22.992Z",
     "id": "400830",
-    "name": "Inputs_Samples",
+
     "description": "This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs."
   },
   "autoEndDialog": false,
@@ -42,8 +42,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:25.506Z",
         "updatedAt": "2019-07-16T18:54:29.045Z",
-        "id": "872701",
-        "name": "Handle an Intent"
+        "id": "872701"
       },
       "steps": [
         {
@@ -58,8 +57,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:30.230Z",
         "updatedAt": "2019-07-16T18:54:34.404Z",
-        "id": "454567",
-        "name": "Handle an Intent"
+        "id": "454567"
       },
       "steps": [
         {
@@ -74,8 +72,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:35.719Z",
         "updatedAt": "2019-07-16T18:54:39.007Z",
-        "id": "543817",
-        "name": "Handle an Intent"
+        "id": "543817"
       },
       "steps": [
         {
@@ -90,8 +87,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:40.362Z",
         "updatedAt": "2019-07-16T18:54:43.491Z",
-        "id": "034901",
-        "name": "Handle an Intent"
+        "id": "034901"
       },
       "steps": [
         {
@@ -106,8 +102,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:44.886Z",
         "updatedAt": "2019-07-16T18:54:50.293Z",
-        "id": "374825",
-        "name": "Handel an Intent"
+        "id": "374825"
       },
       "steps": [
         {
@@ -122,8 +117,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:54:51.534Z",
         "updatedAt": "2019-07-16T18:54:54.454Z",
-        "id": "832993",
-        "name": "Handle an Intent"
+        "id": "832993"
       },
       "steps": [
         {
@@ -138,8 +132,7 @@
       "$designer": {
         "createdAt": "2019-07-11T06:07:25.376Z",
         "updatedAt": "2019-07-16T18:54:58.779Z",
-        "id": "268314",
-        "name": "Handel an Intent"
+        "id": "268314"
       },
       "steps": [
         {
@@ -154,8 +147,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:58:18.063Z",
         "updatedAt": "2019-07-16T18:55:04.129Z",
-        "id": "566255",
-        "name": "Handle an Intent"
+        "id": "566255"
       },
       "steps": [
         {
@@ -163,8 +155,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:58:19.578Z",
             "updatedAt": "2019-07-16T19:32:19.931Z",
-            "id": "068558",
-            "name": "Send an Activity"
+            "id": "068558"
           },
           "activity": "[bfdactivity-068558]"
         }
@@ -176,8 +167,7 @@
       "$designer": {
         "createdAt": "2019-07-11T06:53:07.521Z",
         "updatedAt": "2019-07-16T18:55:15.093Z",
-        "id": "487768",
-        "name": "Handle an Unknown Intent"
+        "id": "487768"
       },
       "steps": [
         {
@@ -185,8 +175,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:32:30.912Z",
             "updatedAt": "2019-07-16T19:32:36.100Z",
-            "id": "581197",
-            "name": "Send an Activity"
+            "id": "581197"
           },
           "activity": "[bfdactivity-581197]"
         }

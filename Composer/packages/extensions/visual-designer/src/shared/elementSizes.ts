@@ -23,8 +23,8 @@ export const ChoiceInputSize = {
 export const ChoiceInputMarginTop = 5;
 
 export const EventNodeSize = {
-  width: 180,
-  height: 32,
+  width: 240,
+  height: 120,
 };
 
 export const CollapsedEventNodeSize = {
@@ -51,7 +51,7 @@ export const EventNodeLayout = {
 
 export const PanelSize = {
   minWidth: (EventNodeSize.width + EventNodeLayout.marginX) * 2 + 24 * 2,
-  maxWidth: (EventNodeSize.width + EventNodeLayout.marginX) * 5 + 24 * 2,
+  maxWidth: (EventNodeSize.width + EventNodeLayout.marginX) * 4 + 24 * 2,
   defaultWidth: (EventNodeSize.width + EventNodeLayout.marginX) * 3 + 24 * 2,
   maxHeight: (EventNodeSize.height + EventNodeLayout.marginY) * 3 + 44 + 24 + 12 + 2, // title: 44, padding: 24 + 12, border: 2
 };
