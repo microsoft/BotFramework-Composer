@@ -56,13 +56,15 @@
       "body": {
         "id": "{user.petid}",
         "category": {
-          "id": 0
+          "id": 0,
+          "name": "string"
         },
-
+        "name": "{user.petname}",
         "photoUrls": ["string"],
         "tags": [
           {
-            "id": 0
+            "id": 0,
+            "name": "string"
           }
         ],
         "status": "available"
