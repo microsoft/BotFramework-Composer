@@ -12,6 +12,7 @@ router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
 router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
+router.delete('/projects/opened/dialogs/:dialogId', ProjectController.removeDialog);
 router.post('/projects/opened/dialogs', ProjectController.createDialog);
 router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
 router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFile);
@@ -20,8 +21,8 @@ router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile)
 router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
-router.put('/projects/opened/botFile', ProjectController.updateBotFile);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
+router.get('/projects/recent', ProjectController.getRecentProjects);
 
 // storages
 router.get('/storages', StorageController.getStorageConnections);

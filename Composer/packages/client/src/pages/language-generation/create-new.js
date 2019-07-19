@@ -10,7 +10,7 @@ const validateForm = data => {
   const { name } = data;
 
   if (!name || !nameRegex.test(name)) {
-    errors.name = 'must only use letters, numbers, -, and _';
+    errors.name = 'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _';
   }
 
   return errors;
@@ -37,7 +37,7 @@ export default function NewLgFileModal(props) {
       return;
     }
 
-    onSubmit({ ...formData });
+    onSubmit({ ...formData, id: formData.name });
   };
 
   return (

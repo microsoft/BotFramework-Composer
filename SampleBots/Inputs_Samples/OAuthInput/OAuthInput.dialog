@@ -1,14 +1,32 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:21.955Z",
+    "updatedAt": "2019-07-16T19:30:07.176Z",
+    "id": "295682",
+    "name": "OAuthInput"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
-      "condition": "dialog.token == null",
+      "$designer": {
+        "createdAt": "2019-07-11T06:08:01.812Z",
+        "updatedAt": "2019-07-16T19:30:09.770Z",
+        "id": "245482",
+        "name": "Branch: If/Else"
+      },
+      "condition": "user.token == null",
       "steps": [
         {
           "$type": "Microsoft.OAuthPrompt",
-          "ConnectionName": "msgraph",
+          "$designer": {
+            "createdAt": "2019-07-16T19:31:43.362Z",
+            "updatedAt": "2019-07-16T19:31:51.650Z",
+            "id": "199270",
+            "name": "OAuth Login"
+          },
+          "ConnectionName": "Outlook",
           "Title": "Log in",
           "Text": "Please log in to your email account",
           "Property": "user.token"
@@ -17,8 +35,14 @@
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+      "$designer": {
+        "createdAt": "2019-07-11T06:07:53.618Z",
+        "updatedAt": "2019-07-16T19:32:00.212Z",
+        "id": "518974",
+        "name": "HTTP Request"
+      },
       "method": "GET",
+      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
       "header": {
         "Authorization": "Bearer {user.token.token}"
       },
@@ -26,13 +50,14 @@
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "[ShowEmailSummary(user)]"
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:32.777Z",
+        "updatedAt": "2019-07-16T19:32:04.947Z",
+        "id": "991558",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-991558]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:21.955Z",
-    "updatedAt": "2019-07-03T06:48:21.981Z",
-    "id": "295682"
-  }
+  "$schema": "../../app.schema"
 }

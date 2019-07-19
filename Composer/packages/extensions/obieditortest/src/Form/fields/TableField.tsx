@@ -93,6 +93,12 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       onClick: () => {
+        const item = formData[index];
+        // @ts-ignore
+        if (item.$type === 'Microsoft.SendActivity' && item.activity && item.activity.indexOf('bfdactivity-') !== -1) {
+          // @ts-ignore
+          formContext.shellApi.removeLgTemplate('common', item.activity.slice(1, item.activity.length - 1));
+        }
         const newItems = remove(formData, index);
         onChange(newItems);
       },
@@ -122,7 +128,9 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
 }
 
 export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderTitle, renderDescription, children } = props;
+  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderDescription, children } = props;
+
+  const fieldOverrides = get(props.formContext.editorSchema, `content.SDKOverrides`);
 
   const items = props.formData;
 
@@ -131,6 +139,16 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
       props.onChange(newItem);
     } else {
       props.onChange([...items, newItem]);
+    }
+  };
+
+  const renderTitle = item => {
+    if (get(item, '$designer.name')) {
+      return get(item, '$designer.name');
+    } else if (fieldOverrides[item.$type] && fieldOverrides[item.$type].title) {
+      return fieldOverrides[item.$type].title;
+    } else {
+      return item.$type;
     }
   };
 
@@ -198,6 +216,8 @@ TableField.defaultProps = {
   formData: [],
   navPrefix: '',
   onChange: () => {},
-  renderTitle: item => get(item, '$designer.name', item.$type),
+  renderTitle: item => {
+    return get(item, '$designer.name', item.$type);
+  },
   renderDescription: item => get(item, '$designer.description'),
 };

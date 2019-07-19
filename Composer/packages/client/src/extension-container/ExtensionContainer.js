@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import ApiClient from '../messenger/ApiClient';
-import { getDialogName } from '../utils';
 
 import getEditor from './EditorMap';
 
@@ -90,8 +89,16 @@ function ExtensionContainer() {
       return apiClient.apiCall('createLgTemplate', { id, template, position });
     },
 
+    removeLgTemplate: (id, templateName) => {
+      return apiClient.apiCall('removeLgTemplate', { id, templateName });
+    },
+
     updateLgTemplate: (id, templateName, template) => {
-      return apiClient.apiCall('updateLgTemplate', { id, templateName, template });
+      return apiClient.apiCall('updateLgTemplate', {
+        id,
+        templateName,
+        template: { Name: templateName, Body: template },
+      });
     },
   };
 
@@ -99,19 +106,10 @@ function ExtensionContainer() {
 
   if (RealEditor) {
     window.parent.extensionData = window.parent.extensionData || {};
-    window.parent.extensionData[RealEditor.name] = shellData.data;
+    window.parent.extensionData[RealEditor.name] = shellData;
   }
 
-  return (
-    RealEditor && (
-      <RealEditor
-        {...shellData}
-        onChange={shellApi.saveData}
-        shellApi={shellApi}
-        dialogName={getDialogName(shellData.navPath)}
-      />
-    )
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;

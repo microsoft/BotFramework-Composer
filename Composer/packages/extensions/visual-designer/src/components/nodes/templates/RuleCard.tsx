@@ -4,7 +4,7 @@ import { Icon } from 'office-ui-fabric-react';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../shared/NodeMenu';
 import { ObiTypes } from '../../../shared/ObiTypes';
-import { normalizeObiStep } from '../../../transformers/helpers/elementBuilder';
+import { normalizeObiStep } from '../../../shared/elementBuilder';
 import { getElementColor } from '../../../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';
 
@@ -63,6 +63,7 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
               onCardNavClick();
             }}
             iconName="OpenSource"
+            data-testid="OpenIcon"
           />
 
           <NodeMenu id={id} onEvent={onEvent} />

@@ -7,6 +7,6 @@ describe('<Header />', () => {
   it('should render the header', () => {
     const { container } = render(<Header />);
 
-    expect(container).toHaveTextContent('Bot Framework Designer');
+    expect(container).toHaveTextContent('Bot Framework Composer');
   });
 });

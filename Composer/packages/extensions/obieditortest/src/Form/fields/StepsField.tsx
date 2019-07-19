@@ -1,16 +1,20 @@
 import React from 'react';
 import { DialogGroup, createStepMenu } from 'shared-menus';
 import formatMessage from 'format-message';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
 
 import { setOverridesOnField } from '../utils';
+import { BFDFieldProps } from '../types';
 
 import { TableField } from './TableField';
 
-export const StepsField: React.FC<FieldProps> = props => {
+export const StepsField: React.FC<BFDFieldProps> = props => {
   const { formContext } = props;
   const overrides = setOverridesOnField(formContext, 'StepsField');
+
+  if (formContext.isRoot) {
+    return null;
+  }
 
   return (
     <TableField<MicrosoftIDialog>
@@ -28,6 +32,7 @@ export const StepsField: React.FC<FieldProps> = props => {
               [
                 DialogGroup.RESPONSE,
                 DialogGroup.INPUT,
+                DialogGroup.BRANCHING,
                 DialogGroup.STEP,
                 DialogGroup.MEMORY,
                 DialogGroup.CODE,

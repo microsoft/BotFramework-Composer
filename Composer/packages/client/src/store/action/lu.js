@@ -10,11 +10,7 @@ export async function updateLuFile(dispatch, { id, content }) {
       payload: { response },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
+    throw new Error(err.response.data.error);
   }
 }
 
@@ -29,6 +25,8 @@ export async function createLuFile(dispatch, { id, content }) {
     dispatch({
       type: ActionTypes.CREATE_LU_FAILURE,
       payload: null,
+      // TODO, createReducer do not take this error now
+      // we need to put it in payload
       error: err,
     });
   }
@@ -57,13 +55,7 @@ export async function publishLuis(dispatch, config) {
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },
     });
-    return { status: response.data.status, error: '' };
   } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-    return { error: err.response.data.error };
+    throw new Error(err.response.data.error);
   }
 }

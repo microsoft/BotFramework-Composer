@@ -1,0 +1,167 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T07:49:23.113Z",
+    "updatedAt": "2019-07-08T08:30:26.486Z",
+    "id": "899494",
+    "name": "ReminderBot",
+    "description": "ReminderBot"
+  },
+  "autoEndDialog": false,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-08T08:29:34.449Z",
+        "updatedAt": "2019-07-16T19:38:54.655Z",
+        "id": "134916",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-134916]"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:10.898Z",
+        "updatedAt": "2019-07-16T19:39:00.986Z",
+        "id": "899834",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "AddReminder"
+        }
+      ],
+      "intent": "AddReminder"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:19.739Z",
+        "updatedAt": "2019-07-16T19:39:04.451Z",
+        "id": "295024",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteReminder"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:40.553Z",
+        "updatedAt": "2019-07-16T19:39:07.824Z",
+        "id": "583948",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-10T07:36:38.137Z",
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteAllReminders"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:45.611Z",
+        "updatedAt": "2019-07-16T19:39:11.639Z",
+        "id": "622298",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T04:10:54.622Z",
+            "updatedAt": "2019-07-09T04:10:57.646Z",
+            "id": "306443"
+          },
+          "dialog": "ShowReminder"
+        }
+      ],
+      "intent": "ShowReminder"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:57.477Z",
+        "updatedAt": "2019-07-16T19:39:15.047Z",
+        "id": "597721",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "intent": "HelpIntent"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.020Z",
+        "updatedAt": "2019-07-16T19:39:18.070Z",
+        "id": "720611",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.881Z",
+        "updatedAt": "2019-07-16T19:39:23.811Z",
+        "id": "146624",
+        "name": "Handle an Unknown Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.",
+          "$designer": {
+            "createdAt": "2019-07-08T08:31:12.564Z",
+            "updatedAt": "2019-07-08T08:31:12.567Z",
+            "id": "618611"
+          }
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

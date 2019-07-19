@@ -11,6 +11,10 @@
     },
     {
       "$type": "Microsoft.SendActivity",
+      "activity": "[bye] bye bye again"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
       "activity": "[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]"
     },
     {
@@ -20,6 +24,16 @@
     {
       "$type": "Microsoft.TextInput",
       "activity": "[bye3] See you again"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "a"
+        }
+      ]
     }
   ]
 }

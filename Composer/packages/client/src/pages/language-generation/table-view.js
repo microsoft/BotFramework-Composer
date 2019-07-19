@@ -17,6 +17,7 @@ import { LGParser } from 'botbuilder-lg';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
+import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
 
@@ -57,13 +58,25 @@ export default function TableView(props) {
           }, []);
           setTemplates(dialogsReferenceThisTemplate);
         }
+      } else {
+        const { Start, End } = parseResult.error.Range;
+        const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+        OpenConfirmModal('Templates parse failed', `${errorDetail},\n ${parseResult.error.Message}`, {
+          style: DialogStyle.Console,
+          confirmBtnText: 'Edit',
+        }).then(res => {
+          if (res) {
+            props.onEdit();
+          }
+        });
       }
     }
   }, [lgFile, activeDialog]);
 
-  function navigateToDialog(name) {
+  function navigateToDialog(id) {
     clearNavHistory();
-    navTo(`${name}#`);
+    navTo(`${id}#`);
     navigate('/');
   }
 
@@ -157,7 +170,7 @@ export default function TableView(props) {
       templates.forEach(template => {
         templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
           if (dialog.lgTemplates.indexOf(template.Name) !== -1) {
-            result.push(dialog.name);
+            result.push(dialog.id);
           }
           return result;
         }, []);
@@ -171,10 +184,10 @@ export default function TableView(props) {
         maxWidth: 200,
         data: 'string',
         onRender: item => {
-          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(name => {
+          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={name} onClick={() => navigateToDialog(name)}>
-                <Link>{name}</Link>
+              <div key={id} onClick={() => navigateToDialog(id)}>
+                <Link>{id}</Link>
               </div>
             );
           });

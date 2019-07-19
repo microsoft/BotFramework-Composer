@@ -36,6 +36,11 @@
             "$ref": "#/definitions/Microsoft.ConfirmInput"
         },
         {
+            "title": "Microsoft.ConversationUpdateActivityRule",
+            "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+            "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+        },
+        {
             "title": "Microsoft.DebugBreak",
             "description": "If debugger is attached, do a debugger break at this point",
             "$ref": "#/definitions/Microsoft.DebugBreak"
@@ -215,7 +220,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -338,7 +343,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -443,7 +448,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -508,7 +513,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "dialog": {
                     "$type": "Microsoft.IDialog",
@@ -582,7 +587,18 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
+                },
+                "eventName": {
+                    "title": "Event Name",
+                    "description": "The name of event to emit",
+                    "type": "string"
+                },
+                "eventValue": {
+                    "type": "object",
+                    "title": "Event Value",
+                    "description": "Optional value to emit along with the event",
+                    "additionalProperties": true
                 }
             },
             "additionalProperties": false,
@@ -662,7 +678,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -767,7 +783,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -960,7 +976,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -1065,7 +1081,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -1197,7 +1213,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -1249,7 +1265,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -1309,7 +1325,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "changeType": {
                     "type": "string",
@@ -1398,7 +1414,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "ChangeType": {
                     "type": "string",
@@ -1473,7 +1489,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "eventName": {
                     "title": "Event Name",
@@ -1482,8 +1498,10 @@
                         {
                             "enum": [
                                 "beginDialog",
-                                "consultDialog",
+                                "resumeDialog",
+                                "repromptDialog",
                                 "cancelDialog",
+                                "endDialog",
                                 "activityReceived",
                                 "recognizedIntent",
                                 "unknownIntent",
@@ -1560,7 +1578,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -1621,7 +1639,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -1673,7 +1691,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -1763,7 +1781,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "ListProperty": {
                     "$role": "expression",
@@ -1851,7 +1869,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "ListProperty": {
                     "$role": "expression",
@@ -1937,7 +1955,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "method": {
                     "type": "string",
@@ -1982,17 +2000,17 @@
                     "title": "Http headers",
                     "description": "Http headers to include with the HTTP request (supports data binding)"
                 },
-                "responseTypes": {
+                "responseType": {
                     "type": "string",
-                    "title": "Response Types",
+                    "title": "Response Type",
                     "description": "Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.",
                     "enum": [
-                        "none",
-                        "json",
-                        "activity",
-                        "activities"
+                        "None",
+                        "Json",
+                        "Activity",
+                        "Activities"
                     ],
-                    "default": "json"
+                    "default": "Json"
                 }
             },
             "additionalProperties": false,
@@ -2012,7 +2030,7 @@
                     "title": "Type",
                     "required": [
                         "url",
-                        "entity",
+                        "method",
                         "$type"
                     ]
                 }
@@ -2241,6 +2259,11 @@
             "$role": "unionType",
             "oneOf": [
                 {
+                    "title": "Microsoft.ConversationUpdateActivityRule",
+                    "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+                    "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+                },
+                {
                     "title": "Microsoft.EventRule",
                     "description": "Defines a rule for an event which is triggered by some source",
                     "$ref": "#/definitions/Microsoft.EventRule"
@@ -2306,7 +2329,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "condition": {
                     "$role": "expression",
@@ -2387,7 +2410,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -2460,7 +2483,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -2516,6 +2539,76 @@
                 }
             ]
         },
+        "Microsoft.ConversationUpdateActivityRule": {
+            "$role": "unionType(Microsoft.IRule)",
+            "title": "ConversationUpdateActivity Rule",
+            "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+            "type": "object",
+            "properties": {
+                "$type": {
+                    "title": "$type",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+                    "const": "Microsoft.ConversationUpdateActivityRule"
+                },
+                "$copy": {
+                    "title": "$copy",
+                    "description": "Copy the definition by id from a .dialog file.",
+                    "type": "string",
+                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
+                },
+                "$id": {
+                    "title": "$id",
+                    "description": "Inline id for reuse of an inline definition",
+                    "type": "string",
+                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
+                },
+                "$designer": {
+                    "title": "$designer",
+                    "type": "object",
+                    "description": "Extra information for the Bot Framework Composer."
+                },
+                "constraint": {
+                    "$role": "expression",
+                    "title": "Constraint",
+                    "description": "Optional constraint to which must be met for this rule to fire",
+                    "examples": [
+                        "user.vip == true"
+                    ],
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "description": "Sequence of steps or dialogs to execute",
+                    "items": {
+                        "$type": "Microsoft.IDialog",
+                        "$ref": "#/definitions/Microsoft.IDialog"
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\$": {
+                    "type": "string"
+                }
+            },
+            "anyOf": [
+                {
+                    "title": "Reference",
+                    "required": [
+                        "$copy"
+                    ]
+                },
+                {
+                    "title": "Type",
+                    "required": [
+                        "steps",
+                        "$type"
+                    ]
+                }
+            ]
+        },
         "Microsoft.LanguagePolicy": {
             "$role": "unionType(Microsoft.ILanguagePolicy)",
             "title": "Language Policy",
@@ -2545,7 +2638,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "patternProperties": {
@@ -2596,7 +2689,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "text": {
                     "type": "string",
@@ -2661,7 +2754,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "applicationId": {
                     "type": "string"
@@ -2724,7 +2817,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "languagePolicy": {
                     "$type": "Microsoft.ILanguagePolicy",
@@ -2793,7 +2886,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -2898,7 +2991,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -2969,7 +3062,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -3060,7 +3153,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "intents": {
                     "type": "object",
@@ -3121,7 +3214,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -3173,7 +3266,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "dialog": {
                     "$type": "Microsoft.IDialog",
@@ -3246,7 +3339,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -3316,7 +3409,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "activity": {
                     "$type": "Microsoft.IActivityTemplate",
@@ -3374,7 +3467,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -3447,7 +3540,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "condition": {
                     "$role": "expression",
@@ -3547,7 +3640,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -3652,7 +3745,7 @@
                     "type": "boolean",
                     "title": "Allow Interruptions",
                     "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": true,
+                    "default": false,
                     "examples": [
                         true
                     ]
@@ -3719,7 +3812,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "name": {
                     "type": "string",
@@ -3788,7 +3881,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",

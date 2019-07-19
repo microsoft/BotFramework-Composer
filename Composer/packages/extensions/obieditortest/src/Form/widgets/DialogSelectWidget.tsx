@@ -1,15 +1,13 @@
 import React from 'react';
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+
+import { BFDWidgetProps } from '../types';
 
 import { SelectWidget } from './SelectWidget';
 
-export const DialogSelectWidget: React.FC<WidgetProps> = props => {
+export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
   const { formContext } = props;
 
-  return (
-    <SelectWidget
-      {...props}
-      options={{ enumOptions: (formContext.dialogOptions || []).map(d => ({ value: d, label: d })) }}
-    />
-  );
+  const options = (formContext.dialogOptions || []).filter(d => d.value !== formContext.currentDialog.id);
+
+  return <SelectWidget {...props} options={{ enumOptions: options }} />;
 };

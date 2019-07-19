@@ -7,6 +7,7 @@ export const COMPOUND_TYPES = [
   'Microsoft.EventRule',
   'Microsoft.IntentRule',
   'Microsoft.UnknownIntentRule',
+  'Microsoft.ConversationUpdateActivityRule',
 ];
 
 export const appschema: JSONSchema6 = {
@@ -15,18 +16,18 @@ export const appschema: JSONSchema6 = {
   $id: 'app.schema',
   type: 'object',
   title: 'Component types',
-  description: 'These are all of the types that can be created by the loader.',
+  description: 'These are all the types of components that the loader can create.',
   definitions: {
     'Microsoft.AdaptiveDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Adaptive Dialog',
-      description: 'Configures a data driven dialog via a collection of steps/dialogs.',
+      description: 'This configures a data driven dialog via a collection of steps/dialogs.',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.AdaptiveDialog',
@@ -46,13 +47,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -60,7 +61,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -69,7 +70,7 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -77,7 +78,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Auto End Dialog',
           description:
-            'IF this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
+            'If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
           default: true,
         },
         recognizer: {
@@ -101,7 +102,8 @@ export const appschema: JSONSchema6 = {
         // },
         steps: {
           type: 'array',
-          description: 'Initial Sequence of steps or dialogs to execute when dialog is started',
+          title: 'Actions',
+          description: 'This is the initial sequence of steps to execute when this dialog is started.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -109,7 +111,7 @@ export const appschema: JSONSchema6 = {
         },
         rules: {
           type: 'array',
-          description: 'Array of rules to use to evaluate conversation',
+          description: 'This is the array of rules to use to evaluate conversation',
           items: {
             $type: 'Microsoft.IRule',
             $ref: '#/definitions/Microsoft.IRule',
@@ -126,13 +128,13 @@ export const appschema: JSONSchema6 = {
     'Microsoft.AttachmentInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ConfirmInput Dialog',
-      description: 'This represents a dialog which gathers a yes/no style responses',
+      description: 'This represents a dialog which gathers yes/no style responses',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.AttachmentInput',
@@ -152,13 +154,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday', 'user.name'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -166,7 +168,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -175,46 +177,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The message to send to as prompt for this input.',
+          description: 'The first message to send as a prompt for this value.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: 'The message to send if the last input is not recognized.',
+          description: "The message to send if no attachment is found in the customer's response.",
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: "The message to send if the customer's response fails the validation rules.",
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
           examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'String must contain an expression.',
+            description: 'An expression used to validate customer input.',
           },
         },
         value: {
@@ -232,23 +235,22 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          description: 'If set, this prompt will allow interruptions.',
+          default: false,
           examples: [true],
         },
         outputFormat: {
           type: 'string',
           enum: ['all', 'first'],
           title: 'Output Format',
-          description: 'The attachment output format.',
+          description: 'The format of the final value.',
           default: 'first',
         },
       },
@@ -262,13 +264,13 @@ export const appschema: JSONSchema6 = {
     'Microsoft.BeginDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Begin Dialog',
-      description: 'Step which begins another dialog (and when that dialog is done, it will return the caller).',
+      description: 'Begin a child dialog, then resume from this point.',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.BeginDialog',
@@ -288,24 +290,25 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         dialog: {
           $type: 'Microsoft.IDialog',
           title: 'Dialog',
-          description: 'This is the dialog to call.',
+          description: 'Select a dialog to call at this point.',
           type: 'string',
         },
         options: {
           type: 'object',
           title: 'Options',
-          description: 'Options to pass to the dialog.',
+          description:
+            'Define options to pass to this dialog. These will be available in the child dialog as dialog.options.<name>.',
           additionalProperties: true,
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to bind to the dialog and store the result in',
+          description: 'The property in memory used to store the results of this dialog.',
           examples: ['user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -321,8 +324,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.CancelAllDialogs': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Cancel All Dialogs',
-      description:
-        'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
+      description: 'The command used to cancel all current dialogs running.',
       type: 'object',
       properties: {
         $type: {
@@ -348,7 +350,18 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        eventName: {
+          title: 'Event Name',
+          description: 'The name of event to emit',
+          type: 'string',
+        },
+        eventValue: {
+          type: 'object',
+          title: 'Event Value',
+          description: 'Optional value to emit along with the event',
+          additionalProperties: true,
         },
       },
       additionalProperties: false,
@@ -361,7 +374,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ChoiceInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ChoiceInput Dialog',
-      description: 'This represents a dialog which gathers a choice response',
+      description:
+        'This represents a dialog that confirms multiple choices; for instance it might ask customers to select one from a list offered.',
       type: 'object',
       definitions: {
         choice: {
@@ -370,7 +384,7 @@ export const appschema: JSONSchema6 = {
             value: {
               type: 'string',
               title: 'Value',
-              description: 'the value to return when selected.',
+              description: 'The choice label and value that will be returned when selected.',
             },
             action: {
               title: 'Action',
@@ -381,7 +395,7 @@ export const appschema: JSONSchema6 = {
             synonyms: {
               type: 'array',
               title: 'Synonyms',
-              description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+              description: 'An optional list of synonyms that can be used to select this choice.',
               items: {
                 type: 'string',
               },
@@ -416,13 +430,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -430,7 +444,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -439,46 +453,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The message to send to as prompt for this input.',
+          description: 'The first message to send as a prompt for this value.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: 'The message to send if the last input is not recognized.',
+          description: "The message to send if no valid choice is found in the customer's response.",
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: "The message to send if the customer's response fails the validation rules.",
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
-          type: 'number',
+          type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
-          default: '2147483647',
-          examples: ['3'],
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
+          examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'String must contain an expression.',
+            description: 'An expression used to validate customer input.',
           },
         },
         value: {
@@ -496,35 +511,35 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
-          examples: ['false'],
+          examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not',
+          description: 'If set, this prompt will allow interruptions.',
           default: true,
-          examples: ['true'],
+          examples: [true],
         },
         outputFormat: {
           type: 'string',
           enum: ['value', 'index'],
           title: 'Output Format',
-          description: 'The output format.',
+          description: 'The format of the final value.',
           default: 'value',
         },
         choices: {
           title: 'Choices',
           type: 'array',
           items: {
+            title: 'Value',
             type: 'object',
             properties: {
               value: {
                 type: 'string',
                 title: 'Value',
-                description: 'the value to return when selected.',
+                description: 'The choice label and value that will be returned when selected.',
               },
               // TODO: Re-enable card actions when we are better equipped to provide a UI that is foolproof
               // action: {
@@ -536,7 +551,7 @@ export const appschema: JSONSchema6 = {
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
-                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                description: 'An optional list of synonyms that can be used to select this choice.',
                 items: {
                   type: 'string',
                 },
@@ -547,48 +562,48 @@ export const appschema: JSONSchema6 = {
         appendChoices: {
           type: 'boolean',
           title: 'Append Choices',
-          description: 'Compose an output activity containing a set of choices',
-          default: 'true',
+          description: 'If set, the activity will automatically include choices in the specified format.',
+          default: true,
         },
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          description: 'The language setting that will be used to interpret input and generate choices.',
           default: 'en-us',
         },
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
           title: 'List Style',
-          description: 'The kind of choice list style to generate',
+          description: 'Specify how the choices will appear in the message.',
           default: 'Auto',
         },
         choiceOptions: {
           type: 'object',
-          title: 'Choice Options',
+          title: 'Formatting Options',
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Seperator',
-              description: 'Character used to separate individual choices when there are more than 2 choices',
+              title: 'Inline Separator',
+              description: 'The character to use to separate individual choices when there are more than two choices.',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
               title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
+              description: 'Separator inserted between the choices when there are only two choices.',
               default: ' or ',
             },
             inlineOrMore: {
               type: 'string',
               title: 'Inline OrMore',
-              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
+              description: 'Separator inserted between the last 2 choices when there are more than 2 choices.',
               default: ', or ',
             },
             includeNumbers: {
               type: 'boolean',
               title: 'Include Numbers',
-              description: 'if true, inline and list style choices will be prefixed with the index of the choice.',
+              description: 'If set, choices will be prefixed with a number.',
               default: true,
             },
           },
@@ -599,16 +614,17 @@ export const appschema: JSONSchema6 = {
           properties: {
             noValue: {
               type: 'boolean',
-              title: 'No Value',
-              description: 'If true, the choices value field will NOT be search over',
+              title: 'No value',
+              description: 'If set, the bot will not use the "value" setting as a valid choice.',
               default: false,
             },
-            noAction: {
-              type: 'boolean',
-              title: 'No Action',
-              description: 'If true, the the choices action.title field will NOT be searched over',
-              default: false,
-            },
+            // TODO: re-enable this when we re-enable the action field in choices
+            // noAction: {
+            //   type: 'boolean',
+            //   title: 'No Action',
+            //   description: 'If set, the the choices action.title field will NOT be searched over',
+            //   default: false,
+            // },
           },
         },
       },
@@ -622,7 +638,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ConfirmInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ConfirmInput Dialog',
-      description: 'This represents a dialog which gathers a yes/no style responses',
+      description: 'This is a prompt that gathers yes/no responses from the customer.',
       type: 'object',
       properties: {
         $type: {
@@ -648,13 +664,212 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        property: {
+          $role: 'memoryPath',
+          title: 'Property',
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday', 'user.name'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
+        inputBindings: {
+          type: 'object',
+          title: 'Input Bindings',
+          description: 'This defines properties which be passed as arguments to this dialog',
+          examples: ['turn.birthday'],
+          additionalProperties: {
+            type: 'string',
+          },
+        },
+        outputBinding: {
+          $role: 'memoryPath',
+          title: 'Output Property binding',
+          description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
+          examples: ['turn.birthday'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
+        prompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Initial Prompt',
+          description: 'The first message to send as a prompt for this value.',
+          examples: ['What is your birth date?'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        unrecognizedPrompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Unrecognized Prompt',
+          description: "The message to send if no valid choice is found in the customer's response.",
+          examples: ["Let's try again. What is your birth date?"],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        invalidPrompt: {
+          $type: 'Microsoft.IActivityTemplate',
+          title: 'Invalid Prompt',
+          description: "The message to send if the customer's response fails the validation rules.",
+          examples: ['No date was recognized'],
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+        maxTurnCount: {
+          type: 'integer',
+          title: 'Max Turn Count',
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
+          examples: [3],
+        },
+        validations: {
+          type: 'array',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
+          items: {
+            $role: 'expression',
+            type: 'string',
+            description: 'An expression used to validate customer input.',
+          },
+        },
+        value: {
+          $role: 'expression',
+          title: 'Value',
+          description: 'The expression that you evaluated for input.',
+          type: 'string',
+        },
+        defaultValue: {
+          $role: 'expression',
+          title: 'Default Value',
+          description: 'Value to return if max turn count is reached.',
+          type: 'string',
+        },
+        alwaysPrompt: {
+          type: 'boolean',
+          title: 'Always Prompt',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
+          default: false,
+          examples: [false],
+        },
+        allowInterruptions: {
+          type: 'boolean',
+          title: 'Allow Interruptions',
+          description: 'If set, this prompt will allow interruptions.',
+          default: false,
+          examples: [true],
+        },
+        defaultLocale: {
+          type: 'string',
+          title: 'Default Locale',
+          description: 'The language setting that will be used to interpret input and generate choices.',
+          default: 'en-us',
+        },
+        style: {
+          type: 'string',
+          enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
+          title: 'List Style',
+          description: 'The kind of choice list style to generate',
+          default: 'Auto',
+        },
+        choiceOptions: {
+          type: 'object',
+          title: 'Formatting Options',
+          properties: {
+            inlineSeparator: {
+              type: 'string',
+              title: 'Inline Separator',
+              description: 'The character to use to separate individual choices when there are more than two choices.',
+              default: ', ',
+            },
+            inlineOr: {
+              type: 'string',
+              title: 'Inline Or',
+              description: 'Separator inserted between the choices when there are only two choices.',
+              default: ' or ',
+            },
+            inlineOrMore: {
+              type: 'string',
+              title: 'Inline OrMore',
+              description: 'Separator inserted between the last 2 choices when there are more than 2 choices.',
+              default: ', or ',
+            },
+            includeNumbers: {
+              type: 'boolean',
+              title: 'Include Numbers',
+              description: 'If set, choices will be prefixed with a number.',
+              default: true,
+            },
+          },
+        },
+        confirmChoices: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'The choice label and value that will be returned when selected.',
+              },
+              action: {
+                title: 'Action',
+                description: 'Card action for the choice',
+                type: 'object',
+                additionalProperties: true,
+              },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'An optional list of synonyms that can be used to select this choice.',
+                items: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
+    'Microsoft.DateTimeInput': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'DateTimeInput Dialog',
+      description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+      type: 'object',
+      properties: {
+        $type: {
+          title: '$type',
+          description:
+            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.DateTimeInput',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Copy the definition by id from a .dialog file.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Inline id for reuse of an inline definition',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        $designer: {
+          title: '$designer',
+          type: 'object',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
           description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday', 'user.name'],
+          examples: ['value.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -719,10 +934,18 @@ export const appschema: JSONSchema6 = {
           description: 'The expression that you evaluated for input.',
           type: 'string',
         },
+        valueProperty: {
+          $role: 'memoryPath',
+          title: 'Value Property',
+          description: 'It is where you want to the putput of the input written to',
+          examples: ['user.name'],
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+        },
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: 'Value to return if max turn count is reached.',
+          description: "Value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
@@ -737,7 +960,7 @@ export const appschema: JSONSchema6 = {
           type: 'boolean',
           title: 'Allow Interruptions',
           description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          default: false,
           examples: [true],
         },
         defaultLocale: {
@@ -746,69 +969,6 @@ export const appschema: JSONSchema6 = {
           description: 'The prompts default locale that should be recognized.',
           default: 'en-us',
         },
-        style: {
-          type: 'string',
-          enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
-          title: 'List Style',
-          description: 'The kind of choice list style to generate',
-          default: 'Auto',
-        },
-        choiceOptions: {
-          type: 'object',
-          properties: {
-            inlineSeparator: {
-              type: 'string',
-              title: 'Inline Seperator',
-              description: 'Character used to separate individual choices when there are more than 2 choices',
-              default: ', ',
-            },
-            inlineOr: {
-              type: 'string',
-              title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
-              default: ' or ',
-            },
-            inlineOrMore: {
-              type: 'string',
-              title: 'Inline OrMore',
-              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
-              default: ', or ',
-            },
-            includeNumbers: {
-              type: 'boolean',
-              title: 'Include Numbers',
-              description: 'if true, inline and list style choices will be prefixed with the index of the choice.',
-              default: true,
-            },
-          },
-        },
-        confirmChoices: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              value: {
-                type: 'string',
-                title: 'Value',
-                description: 'the value to return when selected.',
-              },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-                additionalProperties: true,
-              },
-              synonyms: {
-                type: 'array',
-                title: 'Synonyms',
-                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-                items: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
       },
       additionalProperties: false,
       patternProperties: {
@@ -816,17 +976,27 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['$type'],
+        },
+      ],
     },
     'Microsoft.DebugBreak': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Debugger Break Step',
-      description: 'If debugger is attached, do a debugger break at this point',
+      description: 'If the debugger is attached, do a debugger break at this point',
       type: 'object',
       properties: {
         $type: {
           title: '$type',
           description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+            'This defines the valid properties for the component being configured (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
           const: 'Microsoft.DebugBreak',
@@ -846,7 +1016,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -859,7 +1029,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.DeleteProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Delete PropertyS',
-      description: 'This is a step which allows you to remove a property from memory',
+      description: 'Remove a property from memory.',
       type: 'object',
       properties: {
         $type: {
@@ -885,12 +1055,12 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The Memory property path to delete.',
+          description: 'The property in memory to delete.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -905,7 +1075,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EditArray': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Edit Array Step',
-      description: 'This is a step which allows you to modify an array in memory',
+      description: 'This lets you add or remove items from an array in the memory of the bot.',
       type: 'object',
       properties: {
         $type: {
@@ -931,31 +1101,31 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         changeType: {
           type: 'string',
           title: 'Change Type',
-          description: 'The array operation to perform.',
+          description: 'This specifies which operation to perform in the array, like adding or removing an item.',
           enum: ['Push', 'Pop', 'Take', 'Remove', 'Clear'],
         },
         arrayProperty: {
           $role: 'memoryPath',
           type: 'string',
           title: 'Array Property',
-          description: 'Memory expression of the array to manipulate.',
+          description: 'Property in memory containing the array to manipulate.',
         },
         resultProperty: {
           $role: 'memoryPath',
           type: 'string',
           title: 'Result Property',
-          description: 'Memory expression of the result of this action.',
+          description: 'Property in memory where the result of this action will be stored.',
         },
         value: {
           $role: 'expression',
           type: 'string',
           title: 'Value of the Item',
-          description: 'Expression to evaluate.',
+          description: 'Expression or property in memory that contains the item to add or remove.',
           examples: ['dialog.todo'],
         },
       },
@@ -968,8 +1138,8 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EditSteps': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'EditSteps Step',
-      description: 'Edit current dialog with changeType and Steps.',
+      title: 'EditSteps',
+      description: 'This provides a mechanism to edit the content of the current dialog at run time.',
       type: 'object',
       properties: {
         $type: {
@@ -995,18 +1165,18 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         changeType: {
           type: 'string',
           title: 'Change Type',
-          description: 'The change type to apply to current dialog',
+          description: 'Specify the type of change to apply to this dialog.',
           enum: ['InsertSteps', 'InsertStepsBeforeTags', 'AppendSteps', 'EndSequence', 'ReplaceSequence'],
         },
         steps: {
           type: 'array',
-          title: 'Steps',
-          description: 'Steps to execute.',
+          title: 'Actions',
+          description: 'These new actions will be applied bas.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1023,7 +1193,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EmitEvent': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Emit Event Step',
-      description: 'This is a step which allows you to emit an event',
+      description: 'Emit a custom event.',
       type: 'object',
       properties: {
         $type: {
@@ -1049,24 +1219,24 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         eventName: {
           title: 'Event Name',
-          description: 'The name of event to emit.',
+          description: 'The name of the event to emit.',
           type: 'string',
           pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
         },
         eventValue: {
           type: 'object',
           title: 'Event Value',
-          description: 'Optional value to emit along with the event.',
+          description: 'An optional value to include in the custom event.',
           additionalProperties: true,
         },
         bubbleEvent: {
           type: 'boolean',
           title: 'Bubble Event',
-          description: 'If true this event should propagate to parent dialogs.',
+          description: 'If set, this event will propagate to parent dialogs.',
         },
       },
       additionalProperties: false,
@@ -1105,11 +1275,12 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
-          description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
+          title: 'Return Value',
+          description: 'The property in memory that is returned to the parent dialog.',
           examples: ['dialog.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1125,7 +1296,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.EndTurn': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'End Turn',
-      description: 'End the current turn without ending the dialog.',
+      description: 'End the current turn without ending the dialog, causing the bot to pause for additional input.',
       type: 'object',
       properties: {
         $type: {
@@ -1151,7 +1322,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -1163,7 +1334,7 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EventRule': {
       title: 'Event Rule',
-      description: 'Defines a rule for an event which is triggered by some source',
+      description: 'Defines actions the bot will take in response to an event.',
       type: 'object',
       $role: 'unionType(Microsoft.IRule)',
       properties: {
@@ -1190,18 +1361,20 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1210,13 +1383,15 @@ export const appschema: JSONSchema6 = {
         events: {
           title: 'Events',
           type: 'array',
-          description: 'Events to trigger this rule for',
+          description: 'Select the types of event that will trigger this handler.',
           items: {
             type: 'string',
             enum: [
               'beginDialog',
-              'consultDialog',
+              'resumeDialog',
+              'repromptDialog',
               'cancelDialog',
+              'endDialog',
               'activityReceived',
               'recognizedIntent',
               'unknownIntent',
@@ -1264,19 +1439,19 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         listProperty: {
           $role: 'expression',
-          title: 'ListProperty',
-          description: 'Expression to evaluate.',
+          title: 'List Property',
+          description: 'An expression or property in memory that evaluates to a list of items.',
           examples: ['user.todoList'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          title: 'Steps',
-          description: 'Steps to execute',
+          title: 'Actions',
+          description: 'These steps will be executed for each item in the list.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1285,7 +1460,7 @@ export const appschema: JSONSchema6 = {
         indexProperty: {
           $role: 'memoryPath',
           title: 'Index Property',
-          description: 'The memory path which refers to the index of the item',
+          description: 'The property in memory that contains the index of the current item.',
           default: 'dialog.index',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1293,7 +1468,7 @@ export const appschema: JSONSchema6 = {
         valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
-          description: 'The memory path which refers to the value of the item',
+          description: 'The property in memory that will contain the value of the current item.',
           default: 'dialog.value',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1309,7 +1484,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ForeachPage': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Foreach Page Step',
-      description: 'Step which execute steps per item page in a collection.',
+      description: 'Step which execute steps per item page in a list.',
       type: 'object',
       properties: {
         $type: {
@@ -1335,19 +1510,19 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         listProperty: {
           $role: 'expression',
-          title: 'ListProperty',
-          description: 'Expression to evaluate.',
+          title: 'List Property',
+          description: 'An expression or property in memory that evaluates to a list of items.',
           examples: ['user.todoList'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          title: 'Steps',
-          description: 'Steps to execute',
+          title: 'Actions',
+          description: 'These steps will be executed for each page of data in the list.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1356,13 +1531,13 @@ export const appschema: JSONSchema6 = {
         pageSize: {
           type: 'integer',
           title: 'Page Size',
-          description: 'The page size',
+          description: 'The number of items to include in each page.',
           default: 10,
         },
         valueProperty: {
           $role: 'memoryPath',
           title: 'Value Property',
-          description: 'The memory path which refers to the value of the item',
+          description: 'The property in memory containing the current set of items.',
           default: 'dialog.value',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1378,8 +1553,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.HttpRequest': {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
-      title: 'Http Request',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      title: 'HTTP Request',
+      description: 'This is a step which makes a call to an external HTTP resource.',
       properties: {
         $type: {
           title: '$type',
@@ -1404,31 +1579,31 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         method: {
           type: 'string',
           title: 'Method',
-          description: 'The HTTP method to use',
+          description: 'The HTTP method to use.',
           enum: ['GET', 'POST'],
           examples: ['GET', 'POST'],
         },
         url: {
           type: 'string',
-          title: 'Url',
-          description: 'The url to call (supports data binding)',
+          title: 'URL',
+          description: 'The url to call. This may reference properties in memory as {property.name}.',
           examples: ['https://contoso.com'],
         },
         body: {
           type: 'object',
           title: 'Body',
-          description: 'The body to send in the HTTP call  (supports data binding)',
+          description: 'The body of the HTTP request. This may reference properties in memory as {property.name}.',
           additionalProperties: true,
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to store the result of the HTTP call in (as object or string)',
+          description: 'The property in memory used to store the result of the HTTP call.',
           examples: ['dialog.contosodata'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1436,15 +1611,16 @@ export const appschema: JSONSchema6 = {
         headers: {
           type: 'object',
           additionalProperties: true,
-          title: 'Http headers',
-          description: 'Http headers to include with the HTTP request (supports data binding)',
-        },
-        responseTypes: {
-          type: 'string',
-          title: 'Response Types',
+          title: 'HTTP Headers',
           description:
-            'Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.',
-          enum: ['none', 'json', 'activity', 'activities'],
+            'Additional headers to include with the HTTP request. This may reference properties in memory as {property.name}.',
+        },
+        responseType: {
+          type: 'string',
+          title: 'Expected Response Type',
+          description:
+            'This specifies the method used to parse the response from the HTTP request. If Activity or Activities, the results will be forwarded immediately to the customer as messages.',
+          enum: ['None', 'Json', 'Activity', 'Activities'],
         },
       },
       additionalProperties: false,
@@ -1498,6 +1674,16 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.ConfirmInput',
         },
         {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+        },
+        {
+          title: 'Microsoft.DateTimeInput',
+          description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+          $ref: '#/definitions/Microsoft.DateTimeInput',
+        },
+        {
           title: 'Microsoft.DebugBreak',
           description: 'If debugger is attached, do a debugger break at this point',
           $ref: '#/definitions/Microsoft.DebugBreak',
@@ -1519,18 +1705,18 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.EmitEvent',
-          description: 'This is a step which allows you to emit an event',
+          description: 'This is the action that allows you to emit an event.',
           $ref: '#/definitions/Microsoft.EmitEvent',
         },
         {
           title: 'Microsoft.EndDialog',
           description:
-            'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+            'This is the command that ends the current dialog running, and returns the resultProperty as a result of that dialog.',
           $ref: '#/definitions/Microsoft.EndDialog',
         },
         {
           title: 'Microsoft.EndTurn',
-          description: 'End the current turn without ending the dialog.',
+          description: 'This will end the current turn without ending the dialog.',
           $ref: '#/definitions/Microsoft.EndTurn',
         },
         {
@@ -1545,28 +1731,29 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.HttpRequest',
-          description: 'This is a step which replaces the current dialog with the target dialog',
+          description: 'This action replaces the current dialog with a target dialog, which is a request for a URL.',
           $ref: '#/definitions/Microsoft.HttpRequest',
         },
         {
           title: 'Microsoft.IfCondition',
-          description: 'Step which conditionally decides which step to execute next.',
+          description:
+            'The action that conditionally decides which step to execute next in the line up of actions needed.',
           $ref: '#/definitions/Microsoft.IfCondition',
         },
         {
           title: 'Microsoft.InitProperty',
-          description: 'This step allows you to innitial a property to either an object or array',
+          description: 'This action lets you initialize a property to either an object or array.',
           $ref: '#/definitions/Microsoft.InitProperty',
         },
         {
           title: 'Microsoft.LogStep',
           description:
-            'This is a step which writes to console.log and optional creates a TraceActivity around a text binding',
+            'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
           $ref: '#/definitions/Microsoft.LogStep',
         },
         {
           title: 'Microsoft.NumberInput',
-          description: 'This represents a dialog which gathers a decimal number in a specified range',
+          description: 'This prompts the customer to provide a number.',
           $ref: '#/definitions/Microsoft.NumberInput',
         },
         {
@@ -1576,37 +1763,37 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.RepeatDialog',
-          description: 'This is a step which repeats the current dialog with the same dialog.',
+          description: 'An action that repeats the current dialog running.',
           $ref: '#/definitions/Microsoft.RepeatDialog',
         },
         {
           title: 'Microsoft.ReplaceDialog',
-          description: 'This is a step which replaces the current dialog with the target dialog',
+          description: 'An action that replaces the current dialog running with a target dialog',
           $ref: '#/definitions/Microsoft.ReplaceDialog',
         },
         {
           title: 'Microsoft.SendActivity',
-          description: 'This is a step which sends an activity to the user',
+          description: 'This will send a message to the user and may include language generation rules.',
           $ref: '#/definitions/Microsoft.SendActivity',
         },
         {
           title: 'Microsoft.SetProperty',
-          description: 'This step allows you to set memory to the value of an expression',
+          description: 'This will set or update a property to the value of an expression.',
           $ref: '#/definitions/Microsoft.SetProperty',
         },
         {
           title: 'Microsoft.SwitchCondition',
-          description: 'Step which conditionally decides which step to execute next.',
+          description: 'This is an action that decides which action to execute next, depending on certain conditions.',
           $ref: '#/definitions/Microsoft.SwitchCondition',
         },
         {
           title: 'Microsoft.TextInput',
-          description: 'This represents a dialog which gathers a text from the user',
+          description: 'A prompt to the customer to provide a response in text format.',
           $ref: '#/definitions/Microsoft.TextInput',
         },
         {
           title: 'Microsoft.TraceActivity',
-          description: 'This is a step which sends an TraceActivity to the transcript',
+          description: 'This is a debugging message that is used to track progress through the code.',
           $ref: '#/definitions/Microsoft.TraceActivity',
         },
         {
@@ -1664,7 +1851,7 @@ export const appschema: JSONSchema6 = {
         // },
         {
           title: 'Microsoft.RegexRecognizer',
-          description: 'Recognizer which uses regex expressions to generate intents and entities.',
+          description: 'A Recognizer that uses regex expressions to generate intents and entities.',
           $ref: '#/definitions/Microsoft.RegexRecognizer',
         },
         {
@@ -1679,13 +1866,18 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType',
       oneOf: [
         {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+        },
+        {
           title: 'Microsoft.EventRule',
-          description: 'Defines a rule for an event which is triggered by some source',
+          description: 'This defines a rule for an event that is triggered by some source',
           $ref: '#/definitions/Microsoft.EventRule',
         },
         {
           title: 'Microsoft.IntentRule',
-          description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+          description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
           $ref: '#/definitions/Microsoft.IntentRule',
         },
         {
@@ -1695,7 +1887,7 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.UnknownIntentRule',
-          description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
+          description: 'Defines a sequence of actions to take if there is no other trigger or plan operating',
           $ref: '#/definitions/Microsoft.UnknownIntentRule',
         },
       ],
@@ -1714,7 +1906,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.IfCondition': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'If Condition Step',
-      description: 'Step which conditionally decides which step to execute next',
+      description:
+        'This is an action that tests a boolean expression and executes one of two alternate branches of the dialog.',
       type: 'object',
       properties: {
         $type: {
@@ -1740,19 +1933,19 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         condition: {
           $role: 'expression',
           title: 'Condition',
-          description: 'Expression to evaluate',
+          description: 'A boolean expression used to choose a branch.',
           examples: ['user.age > 3'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          title: 'Steps',
-          description: 'Steps to execute if condition is true',
+          title: 'Actions: True Branch',
+          description: 'Steps to execute if the condition evalutes to true.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1760,8 +1953,8 @@ export const appschema: JSONSchema6 = {
         },
         elseSteps: {
           type: 'array',
-          title: 'Else Steps',
-          description: 'Steps to execute if condition is false',
+          title: 'Actions: False Branch',
+          description: 'Steps to execute if the condition evalutes to false.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1778,7 +1971,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.InitProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Init Property Step',
-      description: 'This step allows you to initialize a property to either an object or array',
+      description: 'Create a new property to hold an object or array.',
       type: 'object',
       properties: {
         $type: {
@@ -1804,12 +1997,12 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'A property in memory.',
           examples: ['user.age'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -1817,7 +2010,7 @@ export const appschema: JSONSchema6 = {
         type: {
           type: 'string',
           title: 'Type',
-          description: 'Type of value to set the property to, object or array',
+          description: 'The type of value this property will contain: an object or an array.',
           enum: ['object', 'array'],
         },
       },
@@ -1831,7 +2024,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.IntentRule': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'Intent Rule',
-      description: 'This defines the steps to take when an Intent is recognized (and optionally entities)',
+      description:
+        'Defines the actions to take when an intent is identified by a recognizer service such as RegEx, or LUIS.',
       type: 'object',
       properties: {
         $type: {
@@ -1857,18 +2051,20 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1877,14 +2073,70 @@ export const appschema: JSONSchema6 = {
         intent: {
           type: 'string',
           title: 'Intent',
-          description: 'Intent name to trigger on',
+          description: 'The name of the intent that, when identified by a recognizer, causes this event to fire.',
         },
         entities: {
           type: 'array',
           title: 'Entities',
-          description: 'The entities required to trigger this rule',
+          description: 'A list of any entities that must be found by the recognizer in order for this event to fire.',
           items: {
             type: 'string',
+          },
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
+    'Microsoft.ConversationUpdateActivityRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'ConversationUpdateActivity Rule',
+      description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+      type: 'object',
+      properties: {
+        $type: {
+          title: '$type',
+          description:
+            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.ConversationUpdateActivityRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Copy the definition by id from a .dialog file.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Inline id for reuse of an inline definition',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        $designer: {
+          title: '$designer',
+          type: 'object',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        constraint: {
+          $role: 'expression',
+          title: 'Constraint',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        steps: {
+          type: 'array',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
           },
         },
       },
@@ -1925,7 +2177,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       patternProperties: {
@@ -1938,7 +2190,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Log Step',
       description:
-        'This is a step which writes to console.log and optionally creates a TraceActivity around a text binding',
+        "This is a debugging message that's used to track progress through the code by writing messages to the log.",
       type: 'object',
       properties: {
         $type: {
@@ -1964,17 +2216,17 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         text: {
           type: 'string',
           title: 'Text',
-          description: 'LG Expression to write to the log',
+          description: 'This is the text to write to the log.  It may include language generation rules.',
         },
         traceActivity: {
           type: 'boolean',
-          title: 'Send Trace Activity',
-          description: 'Set to true to also create a TraceActivity with the log text',
+          title: 'Send TraceActivity',
+          description: 'If set, also create a TraceActivity with then same log text.',
           default: false,
         },
       },
@@ -2015,7 +2267,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         applicationId: {
           type: 'string',
@@ -2063,7 +2315,7 @@ export const appschema: JSONSchema6 = {
     //     $designer: {
     //       title: '$designer',
     //       type: 'object',
-    //       description: 'Extra information for the Bot Framework Designer.',
+    //       description: 'Extra information for the Bot Framework Composer.',
     //     },
     //     languagePolicy: {
     //       $type: 'Microsoft.ILanguagePolicy',
@@ -2092,7 +2344,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.NumberInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Number prompt',
-      description: 'This represents a dialog which gathers a decimal number in a specified range',
+      description: 'This prompts the customer to provide a number.',
       type: 'object',
       properties: {
         $type: {
@@ -2118,13 +2370,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday', 'user.name'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2132,7 +2384,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -2141,46 +2393,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The message to send to as prompt for this input.',
+          description: 'The first message to send as a prompt for this value.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: 'The message to send if the last input is not recognized.',
+          description: "The message to send if no number is found in the customer's response.",
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: "The message to send if the customer's response fails the validation rules.",
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
           examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'String must contain an expression.',
+            description: 'An expression used to validate customer input.',
           },
         },
         value: {
@@ -2198,29 +2451,28 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          description: 'If set, this prompt will allow interruptions.',
+          default: false,
           examples: [true],
         },
         outputFormat: {
           type: 'string',
           enum: ['float', 'integer'],
           title: 'Output Format',
-          description: 'The NumberInput output format.',
+          description: 'The format of the final value.',
           default: 'float',
         },
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          description: 'The language setting that will be used to interpret input.',
           default: 'en-us',
         },
       },
@@ -2260,13 +2512,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2274,7 +2526,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -2283,14 +2535,14 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         connectionName: {
           type: 'string',
           title: 'Connection Name',
-          description: 'The connection name set in Azure',
+          description: 'The connection name set in Azure.',
           examples: ['msgraphconnection'],
         },
       },
@@ -2330,7 +2582,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         intents: {
           type: 'object',
@@ -2355,7 +2607,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
       title: 'Repeat Dialog',
-      description: 'This is a step which repeats the current dialog with the same dialog.',
+      description: 'Repeat the current dialog.',
       properties: {
         $type: {
           title: '$type',
@@ -2380,7 +2632,7 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
       },
       additionalProperties: false,
@@ -2394,7 +2646,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
       title: 'Replace Dialog',
-      description: 'This is a step which replaces the current dialog with the target dialog',
+      description: 'Ends the current dialog and replaces it with a different one.',
       properties: {
         $type: {
           title: '$type',
@@ -2419,23 +2671,24 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         dialog: {
           $type: 'Microsoft.IDialog',
           title: 'Dialog',
-          description: 'This is the dialog to switch to.',
+          description: 'Select a dialog to call at this point.',
           type: 'string',
         },
         options: {
           type: 'object',
           title: 'Options',
-          description: 'Options to pass to the dialog.',
+          description:
+            'Define options to pass to this dialog. These will be available in the child dialog as dialog.options.<name>.',
           additionalProperties: true,
         },
         property: {
           $role: 'memoryPath',
-          description: 'The property to bind to the dialog and store the result in',
+          description: 'The property in memory used to store the result of the child dialog.',
           examples: ['user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2477,18 +2730,20 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2505,7 +2760,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.SendActivity': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Send Activity Step',
-      description: 'This is a step which sends an activity to the user',
+      description: 'This will send a message to the user.',
       type: 'object',
       properties: {
         $type: {
@@ -2531,12 +2786,12 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         activity: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Activity',
-          description: 'Activity to send to the user',
+          description: 'This is the message to sent to the customer. It may include language generation rules.',
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
       },
@@ -2550,7 +2805,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.SetProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Set Property Step',
-      description: 'This step allows you to set memory to the value of an expression',
+      description: 'Set a property in memory to the value of an expression.',
       type: 'object',
       properties: {
         $type: {
@@ -2576,12 +2831,12 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'The property in memory to set.',
           examples: ['user.age'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
@@ -2589,7 +2844,7 @@ export const appschema: JSONSchema6 = {
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Expression against memory to use to get the value.',
+          description: 'This is the expression that will be evaluated to set the property.',
           examples: ['dialog.result'],
           type: 'string',
         },
@@ -2604,7 +2859,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.SwitchCondition': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Switch Step',
-      description: 'Step which conditionally decides which step to execute next.',
+      description:
+        'This is an action that evaluates an expression and executes one of multiple alternate branches of the dialog.',
       type: 'object',
       properties: {
         $type: {
@@ -2630,32 +2886,32 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         condition: {
           $role: 'expression',
           title: 'Condition',
-          description: 'Expression to evaluate to switch on.',
+          description: 'The expression used to choose a branch.',
           examples: ['user.age > 3'],
           type: 'string',
         },
         cases: {
           type: 'array',
           title: 'Cases',
-          description: 'Cases to evaluate against condition',
+          description: 'If the conditional expression matches this case, the following actions will be executed.',
           items: {
             type: 'object',
             properties: {
               value: {
                 $role: 'expression',
                 title: 'Value',
-                description: 'Value which must match the condition property',
+                description: 'Value to match against condition.',
                 type: 'string',
               },
               steps: {
                 type: 'array',
-                title: 'Steps',
-                description: 'Steps to execute if case is equal to condition',
+                title: 'Actions',
+                description: 'Steps to execute if this case matches the condition.',
                 items: {
                   $type: 'Microsoft.IDialog',
                   $ref: '#/defintions/Microsoft.IDialog',
@@ -2667,8 +2923,8 @@ export const appschema: JSONSchema6 = {
         },
         default: {
           type: 'array',
-          title: 'Default',
-          description: 'Step to execute if no case is equal to condition',
+          title: 'Default Branch',
+          description: 'Steps to execute if no case matches the condition.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2685,7 +2941,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.TextInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Text prompt',
-      description: 'This represents a dialog which gathers a text from the user',
+      description: 'A prompt to the customer to provide a response in text format.',
       type: 'object',
       properties: {
         $type: {
@@ -2711,13 +2967,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday', 'user.name'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2725,7 +2981,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -2734,46 +2990,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The message to send to as prompt for this input.',
+          description: 'The first message to send as a prompt for this value.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: 'The message to send if the last input is not recognized.',
+          description: "The message to send if the customer's response is blank.",
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: "The message to send if the customer's response fails the validation rules.",
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
           examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'String must contain an expression.',
+            description: 'An expression used to validate customer input.',
           },
         },
         value: {
@@ -2791,23 +3048,22 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
           type: 'boolean',
           title: 'Allow Interruptions',
-          description: 'If set to true this will always consult the parent dialog whether it will be interupt or not.',
-          default: true,
+          description: 'If set, this prompt will allow interruptions.',
+          default: false,
           examples: [true],
         },
         outputFormat: {
           type: 'string',
           enum: ['none', 'trim', 'lowercase', 'uppercase'],
           title: 'Output Format',
-          description: 'The TextInput output format.',
+          description: 'The format of the final value.',
           default: 'none',
         },
       },
@@ -2821,7 +3077,8 @@ export const appschema: JSONSchema6 = {
     'Microsoft.TraceActivity': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Trace Activity Step',
-      description: 'This is a step which sends an TraceActivity to the transcript',
+      description:
+        "This is a debugging message that's used to track progress through the code by emitting events visible in the emulator.",
       type: 'object',
       properties: {
         $type: {
@@ -2847,22 +3104,22 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         name: {
           type: 'string',
           title: 'Name',
-          description: 'Name of the trace activity',
+          description: 'Name of the trace activity.',
         },
         valueType: {
           type: 'string',
           title: 'Value Type',
-          description: 'Value type of the trace activity',
+          description: 'Value type of the trace activity.',
         },
         value: {
           $role: 'memoryPath',
           title: 'Value',
-          description: 'Property path to memory object to send as the value of the trace activity',
+          description: 'This is the property in memory that contains the value of the trace activity.',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -2904,18 +3161,20 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         constraint: {
           $role: 'expression',
           title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
           examples: ['user.vip == true'],
           type: 'string',
         },
         steps: {
           type: 'array',
-          description: 'Sequence of steps or dialogs to execute',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',

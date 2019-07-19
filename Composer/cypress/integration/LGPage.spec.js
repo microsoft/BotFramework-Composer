@@ -7,8 +7,7 @@ context('check language generation page', () => {
   });
 
   it('can open language generation page', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-generation');
-
+    cy.get('[data-testid="LeftNav-CommandBarButtonBot Says"]').click();
     // left nav tree
     cy.contains('ToDoBot');
     cy.contains('All');

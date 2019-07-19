@@ -30,14 +30,17 @@ export const BASEURL = 'http://localhost:5000/api';
 
 export const ActionTypes = {
   INIT_PROJECT_STATE: 'INIT_PROJECT_STATE',
-  UPDATE_PROJFILE__SUCCESS: 'UPDATE_PROJFILE__SUCCESS',
-  UPDATE_PROJFILE__FAILURE: 'UPDATE_PROJFILE__FAILURE',
   GET_PROJECT: 'GET_PROJECT',
   GET_PROJECT_SUCCESS: 'GET_PROJECT_SUCCESS',
   GET_PROJECT_FAILURE: 'GET_PROJECT_FAILURE',
+  GET_RECENT_PROJECTS_SUCCESS: 'GET_RECENT_PROJECTS_SUCCESS',
+  GET_RECENT_PROJECTS_FAILURE: 'GET_RECENT_PROJECTS_FAILURE',
   UPDATE_DIALOG: 'UPDATE_DIALOG',
   UPDATE_DIALOG_FAILURE: 'UPDATE_DIALOG_FAILURE',
   CREATE_DIALOG_SUCCESS: 'CREATE_DIALOG_SUCCESS',
+  CREATE_DIALOG_FAILURE: 'CREATE_DIALOG_FAILURE',
+  REMOVE_DIALOG_SUCCESS: 'REMOVE_DIALOG_SUCCESS',
+  REMOVE_DIALOG_FAILURE: 'REMOVE_DIALOG_FAILURE',
   UPDATE_LG_SUCCESS: 'UPDATE_LG_SUCCESS',
   UPDATE_LG_FAILURE: 'UPDATE_LG_FAILURE',
   CREATE_LG_SUCCCESS: 'CREATE_LG_SUCCCESS',
@@ -72,6 +75,8 @@ export const ActionTypes = {
   CONNECT_BOT_FAILURE: 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS: 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE: 'RELOAD_BOT_FAILURE',
+  UPDATE_OAUTH: 'UPDATE_OAUTH',
+  SET_ERROR: 'SET_ERROR',
 };
 
 export const Tips = {
@@ -96,6 +101,7 @@ export const Text = {
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
+  CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
 };
 
 export const LuisConfig = {
@@ -135,13 +141,22 @@ export const DialogInfo = {
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
     subText: formatMessage(
-      `What can the user accomplish through this conversation? For example, book a table, order a coffee etc.`
+      `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
     ),
   },
   SELECT_LOCATION: {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
   },
+};
+
+export const DialogDeleting = {
+  NO_LINKED_TITLE: formatMessage('This action cannot be undone. Do you wish to continue?'),
+  TITLE: formatMessage('Warning!'),
+  CONTENT: formatMessage(
+    `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
+  ),
+  CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
 };
 
 export const SupportedFileTypes = [

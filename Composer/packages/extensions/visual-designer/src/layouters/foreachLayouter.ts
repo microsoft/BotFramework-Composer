@@ -1,18 +1,19 @@
-import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
+import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateForeachBoundary } from './calculateNodeBoundary';
 
 const ForeachIntervalY = ElementInterval.y / 2;
 
 export const foreachLayouter = (
-  foreachNode: GraphNode,
-  stepsNode: GraphNode,
+  foreachNode: GraphNode | null,
+  stepsNode: GraphNode | null,
   loopBeginNode: GraphNode,
   loopEndNode: GraphNode
-): any => {
-  if (!foreachNode || !stepsNode) return { boundary: new Boundary() };
+): GraphLayout => {
+  if (!foreachNode || !stepsNode) return new GraphLayout();
 
   const containerBoundary = calculateForeachBoundary(
     foreachNode.boundary,
@@ -41,7 +42,7 @@ export const foreachLayouter = (
     y: stepsNode.offset.y + stepsNode.boundary.height + ForeachIntervalY,
   };
 
-  const edges: any[] = [];
+  const edges: EdgeData[] = [];
 
   [foreachNode, loopBeginNode, stepsNode].forEach((node, index) => {
     edges.push({
@@ -61,6 +62,7 @@ export const foreachLayouter = (
       y: node.offset.y + node.boundary.axisY,
       length: containerBoundary.axisX - node.boundary.axisX,
       dashed: true,
+      directed: index === 0 ? true : false,
     });
   });
 
@@ -82,5 +84,6 @@ export const foreachLayouter = (
       loopEndNode,
     },
     edges,
+    nodes: [],
   };
 };

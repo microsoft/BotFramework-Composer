@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 
 import { Icon } from '../icons/icon';
 import { InitNodeSize } from '../../../shared/elementSizes';
@@ -19,12 +19,33 @@ const containerStyle = {
   boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
 };
 
-export const FormCard = ({ header, corner, label, icon = 'MessageBot', nodeColors, onClick }) => {
+interface NodeProps {
+  header: string;
+  corner: any;
+  label: any;
+  icon?: string;
+  styles?: object;
+  nodeColors: { [key: string]: any };
+  onClick: () => void;
+  children?: any;
+}
+export const FormCard: FunctionComponent<NodeProps> = ({
+  header,
+  corner,
+  label,
+  icon = 'MessageBot',
+  nodeColors,
+  onClick,
+  children = null,
+  styles = {},
+}) => {
   const { themeColor, iconColor } = nodeColors;
+  const style = { ...containerStyle, ...styles };
   return (
     <div
       className="card"
-      style={containerStyle}
+      data-testid="FormCard"
+      style={style}
       onClick={e => {
         e.stopPropagation();
         onClick();
@@ -85,6 +106,7 @@ export const FormCard = ({ header, corner, label, icon = 'MessageBot', nodeColor
             {label}
           </div>
         </div>
+        {children}
       </div>
     </div>
   );

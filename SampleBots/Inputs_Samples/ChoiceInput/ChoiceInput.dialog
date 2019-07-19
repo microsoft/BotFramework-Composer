@@ -1,10 +1,27 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:13.382Z",
+    "updatedAt": "2019-07-16T19:27:59.654Z",
+    "id": "952602",
+    "name": "ChoiceInput"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
+      "$designer": {
+        "createdAt": "2019-07-11T06:04:01.752Z",
+        "updatedAt": "2019-07-16T19:28:05.726Z",
+        "id": "673028",
+        "name": "Prompt with multi-choice"
+      },
       "property": "user.style",
+      "prompt": "Please select a value from below:",
+      "maxTurnCount": "2147483647",
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "outputFormat": "value",
       "choices": [
         {
           "value": "Test1"
@@ -16,19 +33,30 @@
           "value": "Test3"
         }
       ],
-      "prompt": "Please select a value from below:",
+      "appendChoices": "true",
+      "defaultLocale": "en-us",
       "style": "List",
-      "alwaysPrompt": true
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false,
+        "noAction": false
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "You select: {user.style}"
+      "$designer": {
+        "createdAt": "2019-07-01T21:59:01.216Z",
+        "updatedAt": "2019-07-16T19:28:09.770Z",
+        "id": "004212",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-004212]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:13.382Z",
-    "updatedAt": "2019-07-03T06:48:13.408Z",
-    "id": "952602"
-  }
+  "$schema": "../../app.schema"
 }

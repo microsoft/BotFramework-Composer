@@ -1,23 +1,42 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:51:19.533Z",
+    "updatedAt": "2019-07-16T19:50:36.775Z",
+    "id": "873848",
+    "name": "TellJokeDialog"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Why did the chicken cross the road?"
+      "$designer": {
+        "createdAt": "2019-07-01T21:42:09.721Z",
+        "updatedAt": "2019-07-16T19:56:52.484Z",
+        "id": "577618",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-577618]"
     },
     {
-      "$type": "Microsoft.EndTurn"
+      "$type": "Microsoft.EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-01T21:42:10.542Z",
+        "updatedAt": "2019-07-16T19:56:55.169Z",
+        "id": "735689",
+        "name": "End Turn"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "To get to the other side"
+      "$designer": {
+        "createdAt": "2019-07-01T21:42:17.402Z",
+        "updatedAt": "2019-07-16T19:56:59.155Z",
+        "id": "286023",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-286023]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:51:19.533Z",
-    "updatedAt": "2019-07-03T06:51:19.561Z",
-    "id": "873848"
-  }
+  "$schema": "../../app.schema"
 }

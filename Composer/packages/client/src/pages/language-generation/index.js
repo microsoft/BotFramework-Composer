@@ -1,17 +1,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { debounce } from 'lodash';
-import { useContext, Fragment, useEffect, useRef, useState, useMemo } from 'react';
+import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
+import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import { Tree } from './../../components/Tree';
 import '../language-understanding/style.css';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -19,7 +20,6 @@ import { TestController } from './../../TestController';
 
 export const LGPage = props => {
   const { state, actions } = useContext(Store);
-  const updateLgFile = useRef(debounce(actions.updateLgFile, 500)).current;
   const { lgFiles, dialogs } = state;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
@@ -28,7 +28,7 @@ export const LGPage = props => {
   const subPath = props['*'];
 
   const activePath = subPath === '' ? '_all' : subPath;
-  const activeDialog = dialogs.find(item => item.name === subPath);
+  const activeDialog = dialogs.find(item => item.id === subPath);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
@@ -50,12 +50,12 @@ export const LGPage = props => {
         ];
       }
       const item = {
-        id: file.name,
-        key: file.name,
+        id: file.id,
+        key: file.id,
         name: file.displayName,
       };
 
-      if (file.id === 0) {
+      if (file.isRoot) {
         result[0] = {
           ...result[0],
           ...item,
@@ -115,12 +115,18 @@ export const LGPage = props => {
     setNewContent(null);
   }
 
-  function onSave() {
+  async function onSave() {
     const payload = {
       id: lgFile.id,
       content: newContent,
     };
-    updateLgFile(payload);
+    try {
+      await actions.updateLgFile(payload);
+    } catch (error) {
+      OpenAlertModal('Save Failed', error.message, {
+        style: DialogStyle.Console,
+      });
+    }
   }
 
   // #TODO: get line number from lg parser, then deep link to code editor this
@@ -144,25 +150,27 @@ export const LGPage = props => {
       <div css={ContentHeaderStyle}>
         <div>Bot says..</div>
         <div css={flexContent}>
-          {newContent && (
+          {textMode && (
             <Fragment>
-              <ActionButton
+              <PrimaryButton
                 iconProps={{
                   iconName: 'Save',
                 }}
-                split={true}
                 onClick={() => onSave()}
+                disabled={!newContent}
+                styles={{ root: { marginRight: '10px' } }}
               >
-                Save file
-              </ActionButton>
-              <ActionButton
+                {formatMessage('Save')}
+              </PrimaryButton>
+              <DefaultButton
                 iconProps={{
                   iconName: 'Undo',
                 }}
                 onClick={() => discardChanges()}
+                disabled={!newContent}
               >
-                Discard changes
-              </ActionButton>
+                {formatMessage('Discard changes')}
+              </DefaultButton>
             </Fragment>
           )}
           <Toggle
@@ -177,17 +185,21 @@ export const LGPage = props => {
         </div>
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
-        <div>
-          <Nav
-            onLinkClick={(ev, item) => {
-              onSelect(item.id);
-              ev.preventDefault();
-            }}
-            selectedKey={activePath}
-            groups={navLinks}
-            className={'dialogNavTree'}
-            data-testid={'dialogNavTree'}
-          />
+        <div css={projectContainer}>
+          <Tree variant="large" extraCss={projectTree}>
+            <div css={projectWrapper}>
+              <Nav
+                onLinkClick={(ev, item) => {
+                  onSelect(item.id);
+                  ev.preventDefault();
+                }}
+                selectedKey={activePath}
+                groups={navLinks}
+                className={'dialogNavTree'}
+                data-testid={'dialogNavTree'}
+              />
+            </div>
+          </Tree>
         </div>
         <Content
           file={lgFile}

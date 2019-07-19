@@ -12,14 +12,24 @@ import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
 
 const calculateNodeMap = (_, data) => {
-  const { ruleGroup, stepGroup } = transformRootDialog(data);
+  const result = transformRootDialog(data);
+  if (!result) return {};
+
+  const { ruleGroup, stepGroup } = result;
   return {
     ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
 };
 
-export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent }): JSX.Element => {
+export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
+  id,
+  data,
+  focusedId,
+  getLgTemplates,
+  onEvent,
+  isRoot,
+}): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -36,27 +46,29 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({ id, data, f
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {ruleGroup ? (
+      {ruleGroup && (
         <EventsEditor
           key={ruleGroup.id}
           id={ruleGroup.id}
           data={ruleGroup.data}
           focusedId={focusedId}
+          getLgTemplates={getLgTemplates}
           onEvent={onEvent}
         />
-      ) : null}
+      )}
       <div style={{ height: 50 }} />
-      {stepGroup ? (
-        <Collapse text="Steps">
+      {!isRoot && stepGroup && (
+        <Collapse text="Actions">
           <StepEditor
             key={stepGroup.id}
             id={stepGroup.id}
             data={stepGroup.data}
             focusedId={focusedId}
+            getLgTemplates={getLgTemplates}
             onEvent={onEvent}
           />
         </Collapse>
-      ) : null}
+      )}
     </div>
   );
 };

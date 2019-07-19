@@ -3,6 +3,7 @@ import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 
 import StorageService from './storage';
+import { Path } from './../utility/path';
 
 class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
@@ -14,6 +15,17 @@ class BotProjectService {
       this.currentBotProject = new BotProject(this.recentBotProjects[0]);
     }
   }
+
+  public getRecentBotProjects = () => {
+    return this.recentBotProjects.reduce((result: any[], item) => {
+      const name = Path.basename(item.path);
+      //remove .botproj. Someone may open project before new folder structure.
+      if (name.indexOf('.botproj') === -1) {
+        result.push({ name, ...item });
+      }
+      return result;
+    }, []);
+  };
 
   public openProject = async (locationRef: LocationRef) => {
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
@@ -29,14 +41,14 @@ class BotProjectService {
       return;
     }
 
-    const currRef = this.currentBotProject.ref;
-    const idx = this.recentBotProjects.findIndex(ref => currRef.path === ref.path);
-
+    const currDir = this.currentBotProject.dir;
+    const idx = this.recentBotProjects.findIndex(ref => currDir === ref.path);
     if (idx > -1) {
       this.recentBotProjects.splice(idx, 1);
     }
 
-    this.recentBotProjects.unshift(this.currentBotProject.ref);
+    const toSaveRecentProject = { storageId: 'default', path: currDir };
+    this.recentBotProjects.unshift(toSaveRecentProject);
     Store.set('recentBotProjects', this.recentBotProjects);
   }
 

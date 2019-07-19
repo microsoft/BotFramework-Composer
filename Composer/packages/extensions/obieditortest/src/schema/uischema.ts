@@ -7,8 +7,8 @@ import {
   SelectorField,
   StepsField,
   NullField,
+  LgEditorField,
 } from '../Form/fields';
-import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
 const globalFields = {
   property: {
@@ -24,13 +24,13 @@ const globalFields = {
 
 const activityFields = {
   prompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   unrecognizedPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   invalidPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   value: {
     'ui:widget': NullField,
@@ -41,9 +41,6 @@ export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     recognizer: {
       'ui:field': RecognizerField,
-      'ui:title': 'Language Understanding',
-      'ui:description':
-        'To understand what the user says, your dialog needs a ‘Recognizer’ that includes example words and sentences that users may use.',
     },
     rules: {
       'ui:field': RulesField,
@@ -57,12 +54,15 @@ export const uiSchema = {
     autoEndDialog: {
       'ui:field': NullField,
     },
+    generator: {
+      'ui:field': NullField,
+    },
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
   },
   'Microsoft.BeginDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -82,35 +82,42 @@ export const uiSchema = {
     ...globalFields,
   },
   'Microsoft.EditSteps': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
+  },
+  'Microsoft.ConversationUpdateActivityRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+    ...globalFields,
+    'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.EventRule': {
     steps: {
       'ui:field': StepsField,
     },
     ...globalFields,
-    'ui:order': ['*', 'steps'],
+    'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.Foreach': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'IndexProperty', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'steps', '*'],
   },
   'Microsoft.ForeachPage': {
-    Steps: {
+    steps: {
       'ui:field': StepsField,
     },
-    'ui:order': ['*', 'ListProperty', 'PageSize', 'ValueProperty', 'Steps'],
+    'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'steps', '*'],
   },
   'Microsoft.HttpRequest': {
     body: {
       'ui:field': JsonField,
     },
     // ...globalFields,  // we do not want to exclude the property field here
-    'ui:order': ['*', 'body'],
+    'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   'Microsoft.IfCondition': {
     elseSteps: {
@@ -203,6 +210,15 @@ export const uiSchema = {
     outputBinding: {
       'ui:field': NullField,
     },
+    choices: {
+      items: {
+        value: {
+          'ui:options': {
+            label: false,
+          },
+        },
+      },
+    },
     ...activityFields,
     'ui:order': [
       'prompt',
@@ -241,7 +257,7 @@ export const uiSchema = {
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -265,5 +281,16 @@ export const uiSchema = {
       'ui:field': StepsField,
     },
     ...globalFields,
+  },
+  'Microsoft.SendActivity': {
+    activity: {
+      'ui:field': LgEditorField,
+    },
+  },
+  'Microsoft.DateTimeInput': {
+    ...activityFields,
+    defaultValue: {
+      'ui:widget': 'DateTimeWidget',
+    },
   },
 };

@@ -12,6 +12,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { get } from 'lodash';
 
 import { Store } from '../../store/index';
 
@@ -29,8 +30,8 @@ export default function TableView(props) {
     // make up intents data
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
-      const luDialog = dialogs.find(dialog => luFile.id === dialog.name);
-      luFile.parsedContent.LUISJsonStructure.utterances.forEach(utterance => {
+      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
+      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
         if (updateIntent) {
@@ -53,16 +54,16 @@ export default function TableView(props) {
       // dialog view, show dialog intents
     } else {
       const dialogIntents = allIntents.filter(item => {
-        return item.fileId === activeDialog.name;
+        return item.fileId === activeDialog.id;
       });
 
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog, dialogs]);
 
-  function navigateToDialog(name) {
+  function navigateToDialog(id) {
     clearNavHistory();
-    navTo(`${name}#`);
+    navTo(`${id}#`);
     navigate('/');
   }
 
@@ -117,10 +118,10 @@ export default function TableView(props) {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          const name = item.fileId;
+          const id = item.fileId;
           return (
-            <div key={name} onClick={() => navigateToDialog(name)}>
-              <Link>{name}</Link>
+            <div key={id} onClick={() => navigateToDialog(id)}>
+              <Link>{id}</Link>
             </div>
           );
         },

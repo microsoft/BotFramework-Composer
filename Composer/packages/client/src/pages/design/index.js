@@ -1,13 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo } from 'react';
-import { Breadcrumb, IconButton } from 'office-ui-fabric-react';
-import findindex from 'lodash.findindex';
+import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -24,26 +23,62 @@ import {
   visualEditor,
   formEditor,
   editorWrapper,
+  deleteDialogContent,
 } from './styles';
-import NewDialogModal from './NewDialogModal';
+import NewDialogModal from './new-dialog-modal';
 import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
+import { DialogStyle } from './../../components/Modal/styles';
+
+function onRenderContent(subTitle, style) {
+  return (
+    <div css={deleteDialogContent}>
+      <p>{DialogDeleting.CONTENT}</p>
+      {subTitle && <div style={style}>{subTitle}</div>}
+      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
+    </div>
+  );
+}
+
+function getAllRef(targetId, dialogs) {
+  let refs = [];
+  dialogs.forEach(dialog => {
+    if (dialog.id === targetId) {
+      refs = refs.concat(dialog.referredDialogs);
+    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
+      refs.push(dialog.displayName || dialog.id);
+    }
+  });
+  return refs;
+}
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, setCreationFlowStatus } = actions;
+  const { clearNavHistory, navTo, setCreationFlowStatus, removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
-  function handleFileClick(index) {
+  function handleFileClick(id) {
     clearNavHistory();
-    navTo(`${dialogs[index].name}#`);
+    navTo(`${id}#`);
   }
+
+  const getErrorMessage = name => {
+    if (
+      dialogs.findIndex(dialog => {
+        return dialog.name === name;
+      }) >= 0
+    ) {
+      return 'duplication of name';
+    }
+    return '';
+  };
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
-      result[dialog.name] = dialog.content;
+      result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
@@ -52,22 +87,47 @@ function DesignPage(props) {
     {
       type: 'action',
       text: formatMessage('New'),
-      iconName: 'CirclePlus',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Add',
+        },
+        menuProps: {
+          items: [
+            {
+              key: 'newBot',
+              text: formatMessage('New Bot'),
+              onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+            },
+            {
+              key: 'newDialog',
+              text: formatMessage('New Dialog'),
+              onClick: () => setModalOpen(true),
+            },
+          ],
+        },
+      },
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Open'),
-      iconName: 'OpenFolderHorizontal',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenFolderHorizontal',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+      },
       align: 'left',
     },
     {
       type: 'action',
       text: formatMessage('Save as'),
-      iconName: 'Save',
-      onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Save',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      },
       align: 'left',
     },
     {
@@ -78,11 +138,12 @@ function DesignPage(props) {
   ];
 
   const breadcrumbItems = useMemo(() => {
+    const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
     return navPathHistory.map((item, index) => {
       const pathList = item.split('#');
       const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const botName = dialogs[0].displayName;
-      const displayText = text === 'Main' ? botName : text;
+      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
+      const displayText = isRoot ? botName : text;
       return {
         key: index,
         path: item,
@@ -96,14 +157,41 @@ function DesignPage(props) {
   }, [clearNavHistory, dialogs, navPathHistory, navTo]);
 
   const activeDialog = useMemo(() => {
-    if (!navPath) return -1;
-    const dialogName = navPath.split('#')[0];
-    return findindex(dialogs, { name: dialogName });
+    if (!navPath) return '';
+    return navPath.split('#')[0];
   }, [navPath]);
 
   async function onSubmit(data) {
-    await actions.createDialog(data);
+    const content = {
+      $designer: {
+        name: data.name,
+        description: data.description,
+      },
+    };
+    await actions.createDialog({ id: data.name, content });
     setModalOpen(false);
+  }
+
+  async function handleDeleteDialog(id) {
+    const refs = getAllRef(id, dialogs);
+    let setting = { confirmBtnText: formatMessage('Yes'), cancelBtnText: formatMessage('Cancel') };
+    let title = '';
+    let subTitle = '';
+    if (refs.length > 0) {
+      title = DialogDeleting.TITLE;
+      subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
+      setting = {
+        onRenderContent: onRenderContent,
+        style: DialogStyle.Console,
+      };
+    } else {
+      title = DialogDeleting.NO_LINKED_TITLE;
+    }
+    const result = await OpenConfirmModal(title, subTitle, setting);
+
+    if (result) {
+      await removeDialog(id);
+    }
   }
 
   return (
@@ -116,24 +204,16 @@ function DesignPage(props) {
               <div css={projectWrapper}>
                 <div css={projectHeader}>
                   <div>{formatMessage('Dialogs')}</div>
-                  {dialogs.length > 0 ? (
-                    <IconButton
-                      iconProps={{
-                        iconName: 'Add',
-                      }}
-                      title={formatMessage('New Dialog')}
-                      ariaLabel={formatMessage('New Dialog')}
-                      onClick={() => setModalOpen(true)}
-                    />
-                  ) : (
-                    <div />
-                  )}
                 </div>
-                <ProjectTree files={dialogs} activeNode={activeDialog} onSelect={handleFileClick} />
+                <ProjectTree
+                  files={dialogs}
+                  activeNode={activeDialog}
+                  onSelect={handleFileClick}
+                  onAdd={() => setModalOpen(true)}
+                  onDelete={handleDeleteDialog}
+                />
               </div>
             </Tree>
-            {/* <div style={{ height: '20px' }} />
-          <Tree extraCss={assetTree} /> */}
           </div>
           <Conversation extraCss={editorContainer}>
             <Fragment>
@@ -141,6 +221,7 @@ function DesignPage(props) {
                 items={breadcrumbItems}
                 ariaLabel={formatMessage('Navigation Path')}
                 styles={breadcrumbClass}
+                data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
                 <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
@@ -150,7 +231,12 @@ function DesignPage(props) {
           </Conversation>
         </Fragment>
       </MainContent>
-      <NewDialogModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} onSubmit={onSubmit} />
+      <NewDialogModal
+        isOpen={modalOpen}
+        onDismiss={() => setModalOpen(false)}
+        onSubmit={onSubmit}
+        onGetErrorMessage={getErrorMessage}
+      />
     </Fragment>
   );
 }

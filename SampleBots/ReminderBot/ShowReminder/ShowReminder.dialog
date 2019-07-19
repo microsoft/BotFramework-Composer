@@ -1,0 +1,268 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-08T08:29:21.579Z",
+    "updatedAt": "2019-07-16T19:39:46.691Z",
+    "id": "215192",
+    "name": "ShowReminder"
+  },
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:39:41.698Z",
+        "updatedAt": "2019-07-16T19:42:50.042Z",
+        "id": "529601",
+        "name": "Branch: If/Else"
+      },
+      "condition": "user.index == null",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-09T03:40:00.515Z",
+            "updatedAt": "2019-07-16T19:42:56.048Z",
+            "id": "494041",
+            "name": "Set a Property"
+          },
+          "property": "user.index",
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-10T06:41:27.397Z",
+        "updatedAt": "2019-07-16T19:43:01.446Z",
+        "id": "384323",
+        "name": "Set a Property"
+      },
+      "property": "user.remindtime",
+      "value": "@RemindTime"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-10T06:42:04.663Z",
+        "updatedAt": "2019-07-16T19:43:05.264Z",
+        "id": "539675",
+        "name": "Branch: If/Else"
+      },
+      "condition": "user.remindtime != null",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T06:42:37.375Z",
+            "updatedAt": "2019-07-16T19:43:09.863Z",
+            "id": "755693",
+            "name": "Set a Property"
+          },
+          "property": "user.requesttime",
+          "value": "user.remindtime.datetime[0].timex[0]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T06:44:12.722Z",
+            "updatedAt": "2019-07-16T19:43:24.113Z",
+            "id": "263177",
+            "name": "Set a Property"
+          },
+          "property": "user.endtime",
+          "value": "addDays(formatDateTime(user.requesttime), 1)"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T06:43:38.741Z",
+            "updatedAt": "2019-07-16T19:43:28.672Z",
+            "id": "999357",
+            "name": "HTTP Request"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}&StartDate={user.requesttime}&EndDate={user.endtime}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-10T06:43:19.809Z",
+            "updatedAt": "2019-07-16T19:43:19.553Z",
+            "id": "627140",
+            "name": "HTTP Request"
+          },
+          "method": "GET",
+          "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}",
+          "property": "user.data",
+          "responseTypes": "json"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "$designer": {
+        "createdAt": "2019-07-09T09:37:31.142Z",
+        "updatedAt": "2019-07-16T19:43:34.559Z",
+        "id": "147709",
+        "name": "Set a Property"
+      },
+      "property": "user.singlepagedata",
+      "value": "subArray(user.data, user.index * 5, min(user.index * 5+5, count(user.data)))"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:36:52.470Z",
+        "updatedAt": "2019-07-16T19:43:39.982Z",
+        "id": "707692",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-707692]"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:40:37.129Z",
+        "updatedAt": "2019-07-16T19:43:44.362Z",
+        "id": "975169",
+        "name": "Branch: If/Else"
+      },
+      "condition": "(user.index + 1) * 5 < count(user.data)",
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-09T03:46:11.483Z",
+            "updatedAt": "2019-07-16T19:43:50.967Z",
+            "id": "635553",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-635553]"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-10T03:03:56.783Z",
+            "updatedAt": "2019-07-16T19:43:57.800Z",
+            "id": "633090",
+            "name": "Begin a Dialog"
+          },
+          "dialog": "ClearUserData"
+        },
+        {
+          "$type": "Microsoft.EndDialog",
+          "$designer": {
+            "createdAt": "2019-07-12T04:08:27.343Z",
+            "updatedAt": "2019-07-16T19:44:01.811Z",
+            "id": "450749",
+            "name": "End Dialog"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConfirmInput",
+      "$designer": {
+        "createdAt": "2019-07-10T02:21:53.846Z",
+        "updatedAt": "2019-07-16T19:44:09.830Z",
+        "id": "257539",
+        "name": "Prompt for confirmation"
+      },
+      "property": "user.choice",
+      "prompt": "You have more reminders, do you want to show more reminders?",
+      "unrecognizedPrompt": "You have more reminders, do you want to show more reminders?",
+      "invalidPrompt": "You have more reminders, do you want to show more reminders?",
+      "maxTurnCount": 2147483647,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "defaultLocale": "en-us",
+      "style": "Auto",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      }
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-09T03:47:23.311Z",
+        "updatedAt": "2019-07-16T19:44:14.358Z",
+        "id": "709735",
+        "name": "Branch: If/Else"
+      },
+      "condition": "user.choice == true",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-09T03:47:50.217Z",
+            "updatedAt": "2019-07-16T19:44:20.391Z",
+            "id": "152409",
+            "name": "Set a Property"
+          },
+          "property": "user.index",
+          "value": "user.index+1"
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-07-09T12:41:23.645Z",
+            "updatedAt": "2019-07-16T19:44:26.806Z",
+            "id": "251435",
+            "name": "Repeat this Dialog"
+          }
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-10T03:59:54.836Z",
+            "updatedAt": "2019-07-16T19:44:46.548Z",
+            "id": "670207",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-670207]"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-10T03:03:42.121Z",
+            "updatedAt": "2019-07-16T19:44:50.388Z",
+            "id": "786720",
+            "name": "Begin a Dialog"
+          },
+          "dialog": "ClearUserData"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "createdAt": "2019-07-09T03:48:32.903Z",
+            "updatedAt": "2019-07-16T19:44:55.179Z",
+            "id": "060306",
+            "name": "Cancel all Dialogs"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "createdAt": "2019-07-09T03:49:01.511Z",
+        "updatedAt": "2019-07-16T19:44:33.764Z",
+        "id": "077390",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-077390]"
+    }
+  ],
+  "$schema": "../../app.schema"
+}

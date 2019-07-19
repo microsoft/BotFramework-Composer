@@ -1,27 +1,56 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
-  "$id": "root",
   "$designer": {
-    "name": "14 - RepeatDialog",
-    "description": "This is a bot that demonstrates use of the RepeatDialog concept in Adaptive Dialogs."
+    "createdAt": "2019-07-01T21:40:32.900Z",
+    "updatedAt": "2019-07-16T19:50:15.379Z",
+    "id": "869987",
+    "name": "RepeatDialog"
   },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-01T21:40:57.559Z",
+        "updatedAt": "2019-07-16T19:55:20.735Z",
+        "id": "905646",
+        "name": "Prompt for text"
+      },
+      "property": "user.name",
       "prompt": "Hello, what is your name?",
+      "maxTurnCount": 2147483647,
       "alwaysPrompt": true,
-      "property": "user.name"
+      "allowInterruptions": true,
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hello {user.name}, nice to meet you!"
+      "$designer": {
+        "createdAt": "2019-07-01T21:40:59.389Z",
+        "updatedAt": "2019-07-16T19:55:24.641Z",
+        "id": "839941",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-839941]"
     },
     {
-      "$type": "Microsoft.EndTurn"
+      "$type": "Microsoft.EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-16T19:55:26.352Z",
+        "updatedAt": "2019-07-16T19:55:30.171Z",
+        "id": "575528",
+        "name": "End Turn"
+      }
     },
     {
-      "$type": "Microsoft.RepeatDialog"
+      "$type": "Microsoft.RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:55:31.844Z",
+        "updatedAt": "2019-07-16T19:55:35.651Z",
+        "id": "317559",
+        "name": "Repeat this Dialog"
+      }
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

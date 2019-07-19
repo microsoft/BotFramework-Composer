@@ -1,5 +1,12 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-04T08:14:01.139Z",
+    "updatedAt": "2019-07-16T19:59:30.647Z",
+    "id": "288769",
+    "name": "ToDoBot",
+    "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+  },
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
@@ -16,63 +23,104 @@
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:14.960Z",
+        "updatedAt": "2019-07-16T20:00:24.788Z",
+        "id": "376720",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-376720]"
     }
   ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "AddIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:32.772Z",
+        "updatedAt": "2019-07-16T19:59:36.277Z",
+        "id": "064505",
+        "name": "Handle an Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddToDo"
         }
-      ]
+      ],
+      "intent": "AddIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "DeleteIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:37.184Z",
+        "updatedAt": "2019-07-16T19:59:40.406Z",
+        "id": "114961",
+        "name": "Handle an Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteToDo"
         }
-      ]
+      ],
+      "intent": "DeleteIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ClearIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:41.352Z",
+        "updatedAt": "2019-07-16T19:59:44.427Z",
+        "id": "088050",
+        "name": "Handle an Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ClearToDos"
         }
-      ]
+      ],
+      "intent": "ClearIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ShowIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "ShowToDos"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "HelpIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:50.315Z",
+        "updatedAt": "2019-07-16T19:59:54.774Z",
+        "id": "633942",
+        "name": "Handle an Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
-      ]
+      ],
+      "intent": "HelpIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:00.082Z",
+        "updatedAt": "2019-07-16T20:00:03.344Z",
+        "id": "794124",
+        "name": "Handle an Intent"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowToDos"
+        }
+      ],
+      "intent": "ShowIntent"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:08.499Z",
+        "updatedAt": "2019-07-16T20:00:12.504Z",
+        "id": "179728",
+        "name": "Handle an Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -81,10 +129,17 @@
         {
           "$type": "Microsoft.EndDialog"
         }
-      ]
+      ],
+      "intent": "CancelIntent"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:13.577Z",
+        "updatedAt": "2019-07-16T20:00:19.435Z",
+        "id": "677447",
+        "name": "Handle an Unknown Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -93,10 +148,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-07-04T08:14:01.193Z",
-    "id": "288769"
-  }
+  "$schema": "../../app.schema"
 }

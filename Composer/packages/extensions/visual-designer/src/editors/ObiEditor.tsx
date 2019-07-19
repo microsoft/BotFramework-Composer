@@ -1,16 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
+import { LgTemplate } from '../components/shared/sharedProps';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
-export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, onChange }) => {
+export const ObiEditor: React.FC<ObiEditorProps> = ({
+  path,
+  focusedId,
+  data,
+  onSelect,
+  onExpand,
+  onOpen,
+  onChange,
+  getLgTemplates,
+  removeLgTemplate,
+  isRoot,
+}) => {
+  let divRef;
+
   const dispatchEvent = (eventName?, eventData?) => {
     let handler;
     switch (eventName) {
@@ -25,7 +38,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id));
+          onChange(deleteNode(data, e.id, removeLgTemplate));
           onSelect('');
         };
         break;
@@ -63,6 +76,7 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       className="obi-editor-container"
       data-testid="obi-editor-container"
       style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
+      ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;
         if (keyString === 'Delete' && focusedId) {
@@ -75,7 +89,17 @@ export const ObiEditor = ({ path, focusedId, data, onSelect, onExpand, onOpen, o
       }}
     >
       <DragScroll>
-        <ChosenEditor id={path} data={data} focusedId={focusedId} onEvent={(...args) => dispatchEvent(...args)} />
+        <ChosenEditor
+          id={path}
+          data={data}
+          focusedId={focusedId}
+          isRoot={isRoot}
+          getLgTemplates={getLgTemplates}
+          onEvent={(...args) => {
+            divRef.focus({ preventScroll: true });
+            dispatchEvent(...args);
+          }}
+        />
       </DragScroll>
     </div>
   );
@@ -91,13 +115,16 @@ ObiEditor.defaultProps = {
   onChange: () => {},
 };
 
-ObiEditor.propTypes = {
-  path: PropTypes.string,
-  focusedId: PropTypes.string,
+interface ObiEditorProps {
+  path: string;
+  focusedId: string;
   // Obi raw json
-  data: PropTypes.object,
-  onSelect: PropTypes.func,
-  onExpand: PropTypes.func,
-  onOpen: PropTypes.func,
-  onChange: PropTypes.func,
-};
+  data: any;
+  isRoot: boolean;
+  onSelect: Function;
+  onExpand: Function;
+  onOpen: Function;
+  onChange: Function;
+  getLgTemplates: (id: string, templateName: string) => Promise<LgTemplate[]>;
+  removeLgTemplate: Function;
+}

@@ -2,7 +2,7 @@ import { Path } from '../../src/utility/path';
 import StorageService from '../../src/services/storage';
 jest.mock('azure-storage', () => {
   return {
-    createBlobService: (account: string, key: string) => {
+    createBlobService: (_account: string, _key: string) => {
       return {
         listContainersSegmented: () => {
           return { containers: [] };
@@ -25,7 +25,7 @@ jest.mock('../../src/store/store', () => {
   ];
   return {
     Store: {
-      get: (key: string) => data,
+      get: (_key: string) => data,
       set: (key: string, value: any) => {
         console.log(`set ${value} in store`);
       },

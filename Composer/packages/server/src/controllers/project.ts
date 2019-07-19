@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { merge } from 'lodash';
 
 import ProjectService from '../services/project';
 import AssectService from '../services/asset';
@@ -6,6 +7,7 @@ import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings/settings.json';
 
+import DIALOG_TEMPLATE from './../store/dialogTemplate.json';
 import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
@@ -32,7 +34,9 @@ async function createProject(req: Request, res: Response) {
       });
     }
   } catch (err) {
-    res.status(404).json({ error: 'Create bot project error' });
+    res.status(404).json({
+      message: err instanceof Error ? err.message : err,
+    });
   }
 }
 
@@ -44,48 +48,49 @@ async function getProject(req: Request, res: Response) {
       ...project,
     });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
-    res.status(400).json('parameters not provided, require stoarge id and path');
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
     return;
   }
 
-  //find *.botproj
-  const storage = StorageService.getStorageClient(req.body.storageId);
-  const botprojPaths = await storage.glob('**/*.botproj', req.body.path);
-
-  if (botprojPaths.length !== 1) {
-    res.status(400).json('unsupported project file type, expect .botproj');
-    return;
-  }
-
-  const locationRef: LocationRef = {
+  const location: LocationRef = {
     storageId: req.body.storageId,
-    path: Path.join(req.body.path, botprojPaths[0]),
+    path: req.body.path,
   };
 
   try {
-    await ProjectService.openProject(locationRef);
+    await ProjectService.openProject(location);
     if (ProjectService.currentBotProject !== undefined) {
       const project = await ProjectService.currentBotProject.getIndexes();
       res.status(200).json({
         ...project,
       });
     } else {
-      res.status(404).json({ error: 'No bot project opened' });
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
     }
   } catch (e) {
-    res.status(400).json(e.message);
+    res.status(400).json({
+      message: e.message,
+    });
   }
 }
 
 async function saveProjectAs(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.name) {
-    res.status(400).json('parameters not provided, require stoarge id and path');
+    res.status(400).json({
+      message: 'parameters not provided, require stoarge id and path',
+    });
     return;
   }
 
@@ -106,35 +111,51 @@ async function saveProjectAs(req: Request, res: Response) {
         ...project,
       });
     } else {
-      res.status(404).json({ error: 'No bot project opened' });
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
     }
   } catch (e) {
-    res.status(400).json(e);
+    res.status(400).json({
+      message: e instanceof Error ? e.message : e,
+    });
   }
+}
+
+async function getRecentProjects(req: Request, res: Response) {
+  const projects = ProjectService.getRecentBotProjects();
+  return res.status(200).json(projects);
 }
 
 async function updateDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.name, req.body.content);
+    const dialogs = await ProjectService.currentBotProject.updateDialog(req.body.id, req.body.content);
     res.status(200).json({ dialogs });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
-  }
-}
-
-async function updateBotFile(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
-    const botFile = await ProjectService.currentBotProject.updateBotFile(req.body.name, req.body.content);
-    res.status(200).json({ botFile });
-  } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
 async function createDialog(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.name);
-    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.name, '');
+    const content = JSON.stringify(merge(req.body.content, DIALOG_TEMPLATE), null, 2) + '\n';
+    //dir = id
+    const dialogs = await ProjectService.currentBotProject.createDialog(req.body.id, content, req.body.id);
+    const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, '', req.body.id);
+    res.status(200).json({ dialogs, luFiles });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
+async function removeDialog(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    const dialogs = await ProjectService.currentBotProject.removeDialog(req.params.dialogId);
+    const luFiles = await ProjectService.currentBotProject.removeLuFile(req.params.dialogId);
     res.status(200).json({ dialogs, luFiles });
   } else {
     res.status(404).json({ error: 'No bot project opened' });
@@ -146,7 +167,9 @@ async function updateLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.updateLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -155,7 +178,9 @@ async function createLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.createLgFile(req.body.id, req.body.content);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -164,16 +189,24 @@ async function removeLgFile(req: Request, res: Response) {
     const lgFiles = await ProjectService.currentBotProject.removeLgFile(req.params.lgFileId);
     res.status(200).json({ lgFiles });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
 async function updateLuFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
-    res.status(200).json({ luFiles });
+    try {
+      const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
+      res.status(200).json({ luFiles });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -182,7 +215,9 @@ async function createLuFile(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.createLuFile(req.body.id, req.body.content);
     res.status(200).json({ luFiles });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -191,7 +226,9 @@ async function removeLuFile(req: Request, res: Response) {
     const luFiles = await ProjectService.currentBotProject.removeLuFile(req.params.luFileId);
     res.status(200).json({ luFiles });
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -201,10 +238,14 @@ async function publishLuis(req: Request, res: Response) {
       const status = await ProjectService.currentBotProject.publishLuis(req.body);
       res.status(200).json({ status });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({
+        message: error instanceof Error ? error.message : error,
+      });
     }
   } else {
-    res.status(404).json({ error: 'No bot project opened' });
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
   }
 }
 
@@ -214,7 +255,9 @@ async function getAllProjects(req: Request, res: Response) {
   try {
     res.status(200).json(await StorageService.getBlob(storageId, folderPath));
   } catch (e) {
-    res.status(400).json(e);
+    res.status(400).json({
+      message: e.message,
+    });
   }
 }
 
@@ -223,6 +266,7 @@ export const ProjectController = {
   openProject,
   updateDialog,
   createDialog,
+  removeDialog,
   updateLgFile,
   createLgFile,
   removeLgFile,
@@ -230,8 +274,8 @@ export const ProjectController = {
   createLuFile,
   removeLuFile,
   publishLuis,
-  updateBotFile,
   saveProjectAs,
   createProject,
   getAllProjects,
+  getRecentProjects,
 };

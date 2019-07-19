@@ -11,9 +11,9 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot');
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
     cy.get('[data-testid="LUEditor"]').within(() => {
-      cy.getByText('ToDoLuisBot').should('exist');
+      cy.getAllByText('ToDoLuisBot').should('exist');
     });
 
     cy.route('POST', '/api/projects/opened/luFiles/publish', 'fixture:luPublish/success').as('publish');

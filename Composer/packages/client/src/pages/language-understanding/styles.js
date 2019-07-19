@@ -3,6 +3,7 @@ import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
 export const actionButton = css`
   font-size: 16px;
+  margin: 0;
   margin-left: 15px;
 `;
 
@@ -17,10 +18,10 @@ export const flexContent = css`
 `;
 
 export const ContentHeaderStyle = css`
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 5px 20px;
   height: 60px;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
 `;
@@ -32,7 +33,6 @@ export const ContentStyle = css`
   flex: 1;
   position: relative;
   nav {
-    width: 255px;
     ul {
       margin-top: 0px;
     }

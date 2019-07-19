@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
 import { StepGroup } from '../components/groups';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
-import { Boundary } from '../shared/Boundary';
-import { ElementInterval } from '../shared/elementSizes';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { OffsetContainer } from '../components/shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { Boundary } from '../shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };
@@ -34,7 +34,7 @@ const TailSize = {
   height: CircleSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, focusedId, onEvent }) => {
+export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
@@ -49,6 +49,7 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
       onResize={boundary => {
         setStepGroupBoundary(boundary);
       }}
+      getLgTemplates={getLgTemplates}
     />
   );
   const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;
@@ -76,7 +77,7 @@ export const StepEditor = ({ id, data, focusedId, onEvent }) => {
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
         <div className="step-editor__tail" style={{ ...TailSize, position: 'relative' }}>
-          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} />
+          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} directed={true} />
           <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
             <Circle />
           </OffsetContainer>

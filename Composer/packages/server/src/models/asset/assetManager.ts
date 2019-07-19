@@ -8,10 +8,29 @@ import StorageService from '../../services/storage';
 
 import { IProjectTemplate } from './interface';
 
-const templateDescriptions: { [key: string]: string } = {
-  EchoBot: 'This is bot that can echo back what you say to it.',
-  EmptyBot: 'This is a bot that can do nothing.',
-  ToDoBot: 'This is a bot that demonstrates management of a ToDo list.',
+interface TemplateData {
+  [key: string]: {
+    name: string;
+    description: string;
+  };
+}
+const templates: TemplateData = {
+  EchoBot: {
+    name: 'Echo Bot',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  EmptyBot: {
+    name: 'Empty Bot',
+    description: 'The very basic bot template that is ready for your creativity',
+  },
+  ToDoBot: {
+    name: 'ToDo Bot',
+    description: 'A bot that allows you add, list, remove to do items',
+  },
+  SampleBot: {
+    name: 'SampleBot',
+    description: 'A sample bot used for testing',
+  },
 };
 
 export class AssetManager {
@@ -32,7 +51,7 @@ export class AssetManager {
     for (const name of folders) {
       const absPath = Path.join(path, name);
       if ((await this.templateStorage.stat(absPath)).isDir) {
-        const base = { id: name, name: name, description: templateDescriptions[name] };
+        const base = { id: name, name: templates[name].name, description: templates[name].description };
         this.projectTemplates.push({ ...base, path: absPath });
         output.push(base);
       }
@@ -43,32 +62,17 @@ export class AssetManager {
 
   public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
     const template = find(this.projectTemplates, { id: templateId });
-    if (template !== undefined && template.path !== undefined) {
-      // user storage maybe diff from template storage
-      const dstStorage = StorageService.getStorageClient(ref.storageId);
-      const dstDir = Path.resolve(ref.path);
-      if (await dstStorage.exists(dstDir)) {
-        throw new Error('already have this folder, please give another name');
-      }
-
-      await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
-
-      const oldBotprojPaths = await dstStorage.glob('**/*.botproj', ref.path);
-
-      if (oldBotprojPaths && oldBotprojPaths.length === 1) {
-        const oldBotprojPath = Path.join(ref.path, oldBotprojPaths[0]);
-        const botPath = Path.dirname(oldBotprojPath);
-        const botName = Path.basename(ref.path);
-        const newBotprojPath = Path.join(botPath, `${botName}.botproj`);
-        await dstStorage.rename(oldBotprojPath, newBotprojPath);
-        return {
-          storageId: ref.storageId,
-          path: newBotprojPath,
-        };
-      } else {
-        throw new Error('more than one botproj');
-      }
+    if (template === undefined || template.path === undefined) {
+      throw new Error(`no such template with id ${templateId}`);
     }
-    throw new Error('no template botproject');
+    // user storage maybe diff from template storage
+    const dstStorage = StorageService.getStorageClient(ref.storageId);
+    const dstDir = Path.resolve(ref.path);
+    if (await dstStorage.exists(dstDir)) {
+      throw new Error('already have this folder, please give another name');
+    }
+
+    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+    return ref;
   }
 }

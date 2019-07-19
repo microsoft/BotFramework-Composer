@@ -1,4 +1,5 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
+import nanoid from 'nanoid/generate';
 
 import { ConceptLabels } from './labelMap';
 
@@ -36,39 +37,36 @@ export const dialogGroups: DialogGroupsMap = {
       // 'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
-      'Microsoft.OAuthInput',
       'Microsoft.AttachmentInput',
+      'Microsoft.DateTimeInput',
     ],
   },
   [DialogGroup.BRANCHING]: {
-    label: 'Decisions',
-    types: ['Microsoft.IfCondition', 'Microsoft.SwitchCondition'],
+    label: 'Flow',
+    types: ['Microsoft.IfCondition', 'Microsoft.SwitchCondition', 'Microsoft.Foreach', 'Microsoft.ForeachPage'],
   },
   [DialogGroup.MEMORY]: {
     label: 'Memory manipulation',
     types: ['Microsoft.SetProperty', 'Microsoft.InitProperty', 'Microsoft.DeleteProperty', 'Microsoft.EditArray'],
   },
   [DialogGroup.STEP]: {
-    label: 'Flow',
+    label: 'Dialogs',
     types: [
-      'Microsoft.IfCondition',
-      'Microsoft.SwitchCondition',
-      'Microsoft.Foreach',
-      'Microsoft.ForeachPage',
       'Microsoft.BeginDialog',
-      'Microsoft.EditSteps',
       'Microsoft.EndDialog',
       'Microsoft.CancelAllDialogs',
       'Microsoft.EndTurn',
       'Microsoft.RepeatDialog',
       'Microsoft.ReplaceDialog',
-      'Microsoft.EmitEvent',
+      'Microsoft.EditSteps',
     ],
   },
   [DialogGroup.CODE]: {
-    label: 'Roll your own code',
+    label: 'Integrations',
     types: [
       'Microsoft.HttpRequest',
+      'Microsoft.EmitEvent',
+      'Microsoft.OAuthInput',
       //  'Microsoft.CodeStep'
     ],
   },
@@ -78,7 +76,12 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
-    types: ['Microsoft.EventRule', 'Microsoft.IntentRule', 'Microsoft.UnknownIntentRule'],
+    types: [
+      'Microsoft.EventRule',
+      'Microsoft.IntentRule',
+      'Microsoft.UnknownIntentRule',
+      'Microsoft.ConversationUpdateActivityRule',
+    ],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',
@@ -111,10 +114,18 @@ export const createStepMenu = (
       const subMenu: IContextualMenuProps = {
         items: item.types.map($type => ({
           key: $type,
-          name: ConceptLabels[$type] ? ConceptLabels[$type] : $type,
+          name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
           $type: $type,
+          $designer: {
+            name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
+            id: nanoid('1234567890', 6),
+          },
           data: {
             $type: $type, // used by the steps field to create the item
+            $designer: {
+              name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
+              id: nanoid('1234567890', 6),
+            },
           },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
@@ -138,11 +149,19 @@ export const createStepMenu = (
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
       const menuItem: IContextualMenuItem = {
         key: item,
-        text: ConceptLabels[item],
-        name: ConceptLabels[item],
+        text: ConceptLabels[item].title,
+        name: ConceptLabels[item].title,
         $type: item,
+        $designer: {
+          name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
+          id: nanoid('1234567890', 6),
+        },
         data: {
           $type: item,
+          $designer: {
+            name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
+            id: nanoid('1234567890', 6),
+          },
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {

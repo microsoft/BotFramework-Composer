@@ -3,15 +3,6 @@ export interface LocationRef {
   path: string;
 }
 
-export interface BotProjectFileContent {
-  services: string[];
-  entry: string;
-  schemas?: {
-    editor?: string;
-    sdk?: string;
-  };
-}
-
 export interface FileInfo {
   name: string;
   content: any;
@@ -20,10 +11,12 @@ export interface FileInfo {
 }
 
 export interface Dialog {
-  id: number;
-  name: string;
+  id: string;
+  isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
+  diagnostics: string[];
+  referredDialogs: string[];
   lgFile: string;
   luFile: string;
   luIntents: string[];
@@ -40,9 +33,11 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
+  diagnostics: any[]; // LGParser output, TODO:
 }
 
 export interface LUFile {
+  diagnostics: any[]; // ludown parser output
   id: string;
   relativePath: string;
   content: string;

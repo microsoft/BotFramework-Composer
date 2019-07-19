@@ -48,31 +48,43 @@ const defaultMemory = {
 
 const dialogFiles = [
   {
-    name: 'MyCustomDialog1.dialog',
-    relativePath: 'MyCustomDialog1.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog1.dialog',
+    id: 'Main',
+    displayName: 'MyCustomDialog1',
+    name: 'Main.dialog',
+    relativePath: 'Main/Main.dialog',
+    path: '/Some/Cool/Path/Main/Main.dialog',
+    isRoot: true,
   },
   {
+    id: 'MyCustomDialog2',
+    displayName: 'MyCustomDialog2',
     name: 'MyCustomDialog2.dialog',
     relativePath: 'MyCustomDialog2.dialog',
     path: '/Some/Cool/Path/MyCustomDialog2.dialog',
+    isRoot: false,
   },
   {
+    id: 'MyCustomDialog3',
+    displayName: 'MyCustomDialog3',
     name: 'MyCustomDialog3.dialog',
     relativePath: 'MyCustomDialog3.dialog',
     path: '/Some/Cool/Path/MyCustomDialog3.dialog',
+    isRoot: false,
   },
   {
+    id: 'MyCustomDialog4',
+    displayName: 'MyCustomDialog4',
     name: 'MyCustomDialog4.dialog',
     relativePath: 'MyCustomDialog4.dialog',
     path: '/Some/Cool/Path/MyCustomDialog4.dialog',
+    isRoot: false,
   },
 ];
 
 const luFiles: LuFile[] = [
   {
-    id: 'FirstLuFile',
-    relativePath: 'SomePath/FirstLuFile',
+    id: 'MyCustomDialog1',
+    relativePath: 'SomePath/MyCustomDialog1',
     content: '## FirstHello\n-Hi',
     parsedContent: {
       LUISJsonStructure: {
@@ -82,8 +94,8 @@ const luFiles: LuFile[] = [
     },
   },
   {
-    id: 'SecondLuFile',
-    relativePath: 'SomePath/SecondLuFile',
+    id: 'MyCustomDialog2',
+    relativePath: 'SomePath/MyCustomDialog2',
     content: '## SecondHello\n-Good morning',
     parsedContent: {
       LUISJsonStructure: {
@@ -93,8 +105,8 @@ const luFiles: LuFile[] = [
     },
   },
   {
-    id: 'ThirdLuFile',
-    relativePath: 'SomePath/ThirdLuFile',
+    id: 'MyCustomDialog3',
+    relativePath: 'SomePath/MyCustomDialog3',
     content: '## ThirdHello\n-Hello',
     parsedContent: {
       LUISJsonStructure: {
@@ -332,7 +344,8 @@ const Demo: React.FC = () => {
           shellApi={mockShellApi as ShellApi}
           luFiles={luFiles}
           lgFiles={lgFiles}
-          dialogName="FirstLuFile"
+          currentDialog={dialogFiles[0]}
+          isRoot={true}
         />
       </div>
     </div>

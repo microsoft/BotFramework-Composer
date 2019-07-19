@@ -23,13 +23,18 @@ const DefaultKeyMap = {
 function makeLabel(data) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
-      return `${data.property || '?'} = ${data.value || '?'}`;
+      return `{${data.property || '?'}} = ${data.value || '?'}`;
     case ObiTypes.SaveEntity:
-      return `${data.property || '?'} = ${data.entity || '?'}`;
+      return `{${data.property || '?'}} = ${data.entity || '?'}`;
     case ObiTypes.InitProperty:
-      return `${data.property || '?'} = new ${data.type || '?'}`;
+      return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
-      return `${data.changeType} ${data.arrayProperty || '?'}`;
+      return `${data.changeType} {${data.arrayProperty || '?'}}`;
+    case ObiTypes.ForeachDetail:
+      return `Each {${data.valueProperty || '?'}} in {${data.listProperty || '?'}}`;
+    case ObiTypes.ForeachPageDetail:
+      return `Each page of ${data.pageSize || '?'} in {${data.listProperty || '?'}}`;
+
     default:
       return '';
   }
@@ -40,9 +45,6 @@ const ContentKeyByTypes: {
     [key: string]: string;
   };
 } = {
-  [ObiTypes.SendActivity]: {
-    label: 'activity',
-  },
   [ObiTypes.EditArray]: {
     label: 'changeType',
     details: 'arrayProperty',
@@ -71,11 +73,11 @@ const ContentKeyByTypes: {
     label: 'condition',
   },
   [ObiTypes.ForeachDetail]: {
-    header: 'For Each',
+    header: 'Loop: For Each',
     label: 'listProperty',
   },
   [ObiTypes.ForeachPageDetail]: {
-    header: 'For Each Page',
+    header: 'Loop: For Each Page',
     label: 'listProperty',
   },
   [ObiTypes.TextInput]: {
@@ -98,7 +100,7 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
-  [ObiTypes.ChoiceInput]: {
+  [ObiTypes.AttachmentInput]: {
     label: 'prompt',
     details: 'property',
   },
@@ -111,10 +113,13 @@ const ContentKeyByTypes: {
     text: 'Cancel all active dialogs',
   },
   [ObiTypes.EndTurn]: {
-    text: 'End turn, then wait for another message',
+    text: 'Wait for another message',
   },
   [ObiTypes.RepeatDialog]: {
-    text: 'Restart this dialog',
+    text: 'Repeat this dialog',
+  },
+  [ObiTypes.ReplaceDialog]: {
+    text: 'Replace this dialog',
   },
   [ObiTypes.EmitEvent]: {
     label: 'eventName',
@@ -130,6 +135,9 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.LogStep]: {
     label: 'text',
+  },
+  [ObiTypes.EditSteps]: {
+    label: 'changeType',
   },
 };
 
@@ -151,6 +159,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
+
     if (keyMap) {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;

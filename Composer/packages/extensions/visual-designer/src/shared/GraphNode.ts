@@ -1,5 +1,6 @@
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
+import { IndexedNode } from './IndexedNode';
 import { Boundary } from './Boundary';
 
 class CoordPoint {
@@ -23,8 +24,8 @@ export class GraphNode {
     this.boundary = boundary;
   }
 
-  static fromIndexedJson(indexedJson): GraphNode | null {
-    if (!indexedJson) return null;
+  static fromIndexedJson(indexedJson: IndexedNode): GraphNode {
+    if (!indexedJson) throw new Error('Invalid input json');
     const node = new GraphNode(indexedJson.id, indexedJson.json);
     node.boundary = measureJsonBoundary(indexedJson.json);
     return node;

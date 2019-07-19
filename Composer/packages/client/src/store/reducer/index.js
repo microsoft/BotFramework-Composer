@@ -7,7 +7,6 @@ const projectFiles = ['bot', 'botproj'];
 const getProjectSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botName = response.data.botName;
-  state.botProjFile = response.data.botFile;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
@@ -15,8 +14,19 @@ const getProjectSuccess = (state, { response }) => {
   return state;
 };
 
+const getRecentProjectsSuccess = (state, { response }) => {
+  state.recentProjects = response.data;
+  return state;
+};
+
 const updateDialog = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  return state;
+};
+
+const removeDialog = (state, { response }) => {
+  state.dialogs = response.data.dialogs;
+  state.luFiles = response.data.luFiles;
   return state;
 };
 
@@ -33,11 +43,6 @@ const updateLgTemplate = (state, { response }) => {
 
 const updateLuTemplate = (state, { response }) => {
   state.luFiles = response.data.luFiles;
-  return state;
-};
-
-const updateProjFile = (state, { response }) => {
-  state.botProjFile = response.data.botFile;
   return state;
 };
 
@@ -125,16 +130,25 @@ const saveTemplateId = (state, { templateId }) => {
   return (state.templateId = templateId);
 };
 
+const setError = (state, payload) => {
+  return (state.error = payload);
+};
+
+const updateOAuth = (state, { oAuth }) => {
+  return (state.oAuth = oAuth);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
+  [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
-  [ActionTypes.UPDATE_PROJFILE__SUCCESS]: updateProjFile,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.NAVIGATE_TO]: navigateTo,
   [ActionTypes.NAVIGATE_DOWN]: navigateDown,
@@ -150,4 +164,6 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  [ActionTypes.UPDATE_OAUTH]: updateOAuth,
+  [ActionTypes.SET_ERROR]: setError,
 });

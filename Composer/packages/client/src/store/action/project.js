@@ -1,7 +1,17 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
+
+export function updateOAuth(dispatch, oAuth) {
+  dispatch({
+    type: ActionTypes.UPDATE_OAUTH,
+    payload: {
+      oAuth,
+    },
+  });
+}
 
 export function setCreationFlowStatus(dispatch, creationFlowStatus) {
   dispatch({
@@ -33,10 +43,28 @@ export async function fetchProject(dispatch) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
+      navigate('/');
     }
   } catch (err) {
+    navigate('/home');
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+  }
+}
+
+export async function fetchRecentProjects(dispatch) {
+  try {
+    const response = await axios.get(`${BASEURL}/projects/recent`);
+    dispatch({
+      type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
+      payload: { response },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
+      payload: null,
+      error: err,
+    });
   }
 }
 
@@ -58,7 +86,8 @@ export async function openBotProject(dispatch, absolutePath) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
+      navigate('/');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -84,7 +113,7 @@ export async function saveProjectAs(dispatch, name, description) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -111,24 +140,10 @@ export async function createProject(dispatch, templateId, name, description) {
     });
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
-      navTo(dispatch, `${dialogs[0].name}#`);
+      navTo(dispatch, 'Main#');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
-  }
-}
-
-export async function updateProjFile(dispatch, { name, content }) {
-  try {
-    const response = await axios.put(`${BASEURL}/projects/opened/botFile`, { name, content });
-    dispatch({
-      type: ActionTypes.UPDATE_PROJFILE__SUCCESS,
-      payload: {
-        response,
-      },
-    });
-  } catch (err) {
-    dispatch({ type: ActionTypes.UPDATE_PROJFILE__FAILURE, payload: null, error: err });
   }
 }
 

@@ -1,24 +1,42 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-05-18T23:11:05.833Z",
+    "updatedAt": "2019-07-16T19:49:58.659Z",
+    "id": "570040",
+    "name": "EndTurn"
+  },
+  "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "What's up?"
+      "$designer": {
+        "createdAt": "2019-07-01T21:37:32.573Z",
+        "updatedAt": "2019-07-16T19:53:49.651Z",
+        "id": "423305",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-423305]"
     },
     {
-      "$type": "Microsoft.EndTurn"
+      "$type": "Microsoft.EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-01T21:37:33.405Z",
+        "updatedAt": "2019-07-16T19:53:53.413Z",
+        "id": "280288",
+        "name": "End Turn"
+      }
     },
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Oh I see!"
+      "$designer": {
+        "createdAt": "2019-07-01T21:37:38.941Z",
+        "updatedAt": "2019-07-16T19:53:58.401Z",
+        "id": "448895",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-448895]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-05-18T23:11:05.833Z",
-    "updatedAt": "2019-05-18T23:11:05.841Z",
-    "id": "570040",
-    "name": "02 - EndTurn",
-    "description": "This is a bot that demonstrates the EndTurn concept in Adaptive Dialogs."
-  }
+  "$schema": "../../app.schema"
 }

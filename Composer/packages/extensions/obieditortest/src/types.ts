@@ -16,7 +16,9 @@ export interface FormMemory {
 }
 
 export interface DialogInfo {
-  name: string;
+  id: string;
+  displayName: string;
+  isRoot: boolean;
 }
 
 export interface Intent {
@@ -45,6 +47,10 @@ export interface LgFile {
   relativePath: string;
   content: string;
 }
+export interface LgTemplate {
+  Name: string;
+  Body: string;
+}
 
 export interface FormData {
   $type?: string;
@@ -60,9 +66,10 @@ export interface ShellApi {
   focusTo: (path: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;
-  getLgTemplates: (id: string) => Promise<{ Name: string }>;
-  createLgTemplate: (id: string, template: string, position: number) => Promise<void>;
-  updateLgTemplate: (id: string, templateName: string, template: string) => Promise<void>;
+  getLgTemplates: (id: string) => Promise<LgTemplate[]>;
+  createLgTemplate: (id: string, template: LgTemplate, position: number) => Promise<void>;
+  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
+  removeLgTemplate: (id: string, templateName: string) => Promise<void>;
 }
 export interface EditorSchema {
   editor: {

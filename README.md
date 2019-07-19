@@ -1,38 +1,64 @@
 
-# Microsoft Bot Framework Designer
+# Microsoft Bot Framework Composer
 
 [![Build Status](https://fuselabs.visualstudio.com/Composer/_apis/build/status/ComposerCI/Composer-CI?branchName=master)](https://fuselabs.visualstudio.com/Composer/_build/latest?definitionId=516&branchName=master)
 
 ## Overview 
 
-Bot Framework Designer provides a tool for 1st and 3rd party professional conversation creators with an extensible framework to build compelling Conversational AI solutions for Microsoft customers. 
+Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack. Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience:
+* A visual dialog Composer
+* Tools to train and manage a language understanding (NLU) component
+* A powerful language generation and templating system
+* A ready-to-use bot runtime executable
 
-It provides 
-* a professional tool to enables multi-disciplinary team of professional conversation creators to create, edit and refine dialogs 
-* a dialog authoring user experience for OBI standard file formats (Dialogs, dialog steps, etc) to allow users to create and edit dialogs to create 
-  * Reusable dialog components 
-  * Standalone bots for Enterprise scenarios (ISV/SIs), or 
-  * Bot-building solutions for customers (MCS)
-  * An extensible solution to enhance bot creation experience and support custom dialog types and editors 
+Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK without writing code. The Composer app reads and writes from the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a [declarative](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog/declarative) JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates. 
 
 ## Get Started
+To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
 
-### Prerequisites
+To get started [install the Bot Framework Composer](#Installing-Bot-Framework-Composer) on your local machine, create your first bot and review the various samples.
 
+### Installing Bot Framework Composer
+The Bot Framework Composer is designed to be a hosted web app. Currently, you need to run the Composer locally as a web app. 
+
+To start, clone the Composer GitHub repository. 
+```
+git clone https://github.com/microsoft/BotFramework-Composer.git
+```
+
+Next,you have two options for running Composer locally:
+* [Using a docker image](#Using-docker-image) (Recommended) 
+* [Build and run Composer](#Build-and-run-Composer)
+
+
+### Using docker image 
+
+Using a docker provides a more controled and isolated environment for you to run the composer.  There are two docker images, one for the Composer web app and one for the bot project runtime. 
+
+#### Prerequisites
 * [docker-compose](https://docs.docker.com/compose/install/)
 * [docker](https://www.docker.com/)
+* [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
 
-  NOTE: If you follow the instructions of installing docker-compose, and install docker-desktop for your platform, you should already have docker-compose and docker. 
+  NOTE: If you follow the instructions of installing docker for Windows or MacOs, the Docker Desktop  and Docker Toolbox already include Compose along with other Docker apps, so most  users do not need to install Compose separately.  
 
-### Instructions
+#### Instructions
 
-* Run
+* Run the docker images
 
-    Just run
+    Form a terminal windows
     ```
-    $ docker-compose up
+    docker-compose up
     ```
-    this will build two images for composer-app and bot-runtime if not exits, then start two containers based on these images
+    This will build two images for composer-app and bot-runtime if not exits, then start two containers based on these images.
+    
+    To use Composer, open a browser and navigate to http://localhost:3000
+    
+ 
+ * Restart the Composer app
+ Should you find yourself needing to restart the composer app. From the terminal window you are using to run the docker image:
+ If the docker image is currently running, use ctrl+c in the terminal window to stop the docker app, then use *docker-compose up*
+ 
 
 * Build
 
@@ -45,14 +71,61 @@ It provides
 * Test Bot With Emulator
 
     When using Emulator to test your bot, make sure you use ngrok and *uncheck* 'bypass ngrok for local addresses', because container is considered as remote, even the address looks like local. 
+    
+    The bot is running on http://localhost:3979/api/messages. 
    
 
-* Development
+* Advance use: Development
 
     If you are developing some components and you want fast iteraction without re-building container images on every change, please refer to the document to each component for setup instuctions
     
     * [Designer App](https://github.com/microsoft/BotFramework-Designer/tree/master/Composer)
     * [Bot Runtime](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp)
+
+
+### Build and run Composer
+With this option you need to use [Yarn](https://yarnpkg.com) to build the Composer app and run it locally.
+
+#### Prerequisites
+* [Node.js](https://nodejs.org/en/)
+* [Yarn](https://yarnpkg.com/en/docs/install)
+* [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+
+
+#### Instructions
+
+* Build and run Composer
+
+Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **Composer** folder. Run the following commands:
+```
+yarn install
+```
+This command gets all dependent packages.
+
+```
+yarn build
+```
+This command build the Composer app. The build process can take few minutes.
+
+```
+yarn start
+```
+This command runs the Composer app. 
+
+ To use Composer, open a browser and navigate to http://localhost:3000
+ 
+* Run the Bot Project 
+
+To test the bot you are creating with the Composer you need to run the Bot Project that comes with the Composer. 
+
+Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **BotProject\CSharp** folder. Run the following command:
+```
+dotnet run
+```
+This will build and run a Bot Framework bot that the Composer connects to.
+
+The bot is running on http://localhost:3979/api/messages.
+
 
 
 ## Related projects

@@ -107,7 +107,7 @@ namespace Tests
             .Send("joke")
                 .AssertReply("Why did the chicken cross the road?")
             .Send("I don't know")
-                .AssertReply("To get to the other side")
+                .AssertReply("To get to the other side!")
             .StartTestAsync();
         }
 
@@ -200,10 +200,10 @@ namespace Tests
             .Send("joke")
                 .AssertReply("Why did the chicken cross the road?")
             .Send("Why?")
-                .AssertReply("To get to the other side")
+                .AssertReply("To get to the other side!")
             .Send("future")
-                .AssertReply("Seeing into the future...")
-                .AssertReply("I see great things in your future...")
+                .AssertReply("Seeing into your future...")
+                .AssertReply("I see great things in your future!")
                 .AssertReply("Potentially a successful demo")
             .StartTestAsync();
         }
@@ -219,77 +219,6 @@ namespace Tests
                 .AssertReply("Yippee ki-yay!")
             .Send("emit")
                 .AssertReply("CustomEvent Fired.")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_01TextInput()
-        {
-            await BuildTestFlow(getFolderPath("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("01")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
-            .Send("02")
-                .AssertReply("Hello 02, nice to talk to you!")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
-            .Send("02")
-                .AssertReply("What is your age?")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_02NumberInput()
-        {
-            await BuildTestFlow(getFolderPath("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("02")
-                .AssertReply("What is your age?")
-            .Send("18")
-                .AssertReply("Hello, your age is 18!")
-                .AssertReply("2 * 2.2 equals?")
-            .Send("4.4")
-                .AssertReply("2 * 2.2 equals 4.4, that's right!")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_03ConfirmInput()
-        {
-            await BuildTestFlow(getFolderPath("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("03")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("asdasd")
-                .AssertReply("I need a yes or no. (1) Yes or (2) No")
-            .Send("yes")
-                .AssertReply("confirmation: True")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("nope")
-                .AssertReply("confirmation: False")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_04ChoiceInput()
-        {
-            await BuildTestFlow(getFolderPath("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("04")
-                .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
-            .Send("Test1")
-                .AssertReply("You select: Test1")
-            .StartTestAsync();
-        }
-
-        [TestMethod]
-        public async Task Inputs_06DateTimeInput()
-        {
-            await BuildTestFlow(getFolderPath("Inputs_Samples"))
-            .SendConversationUpdate()
-            .Send("06")
-                .AssertReply("Please enter a date.")
-            .Send("June 1st 2019")
-                .AssertReply("You entered: 2019-06-01")
             .StartTestAsync();
         }
 
