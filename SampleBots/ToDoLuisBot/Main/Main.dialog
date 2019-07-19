@@ -5,7 +5,7 @@
     "createdAt": "2019-07-01T10:00:39.032Z",
     "updatedAt": "2019-07-16T20:04:10.274Z",
     "id": "948970",
-    "name": "ToDoLuisBot",
+
     "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
   },
   "autoEndDialog": false,
@@ -17,8 +17,7 @@
       "$designer": {
         "createdAt": "2019-07-04T07:31:13.192Z",
         "updatedAt": "2019-07-16T20:03:51.301Z",
-        "id": "842277",
-        "name": "Handle an Intent"
+        "id": "842277"
       },
       "constraint": "#AddToDo.score>0.6",
       "steps": [
@@ -34,8 +33,7 @@
       "$designer": {
         "createdAt": "2019-07-04T07:31:14.654Z",
         "updatedAt": "2019-07-16T20:03:54.762Z",
-        "id": "905057",
-        "name": "Handle an Intent"
+        "id": "905057"
       },
       "steps": [
         {
@@ -51,8 +49,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:03:55.674Z",
         "updatedAt": "2019-07-16T20:03:58.931Z",
-        "id": "735961",
-        "name": "Handle an Intent"
+        "id": "735961"
       },
       "steps": [
         {
@@ -68,8 +65,7 @@
       "$designer": {
         "createdAt": "2019-07-04T19:37:38.354Z",
         "updatedAt": "2019-07-16T20:04:06.035Z",
-        "id": "265106",
-        "name": "Handle an Unknown Intent"
+        "id": "265106"
       },
       "steps": [
         {

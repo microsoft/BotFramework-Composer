@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:49:41.680Z",
     "updatedAt": "2019-07-16T18:48:54.243Z",
-    "id": "607738",
-    "name": "RepeatDialog"
+    "id": "607738"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:52:10.284Z",
         "updatedAt": "2019-07-16T18:52:14.640Z",
-        "id": "841600",
-        "name": "Prompt for confirmation"
+        "id": "841600"
       },
       "property": "user.confirmed",
       "prompt": "Do you want to repeat this dialog, yes to repeat, no to end this dialog",
@@ -36,8 +34,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:52:16.346Z",
         "updatedAt": "2019-07-16T18:52:18.539Z",
-        "id": "365292",
-        "name": "Branch: If/Else"
+        "id": "365292"
       },
       "condition": "user.confirmed",
       "steps": [
@@ -46,8 +43,7 @@
           "$designer": {
             "createdAt": "2019-07-16T18:52:20.435Z",
             "updatedAt": "2019-07-16T18:52:23.947Z",
-            "id": "221664",
-            "name": "Repeat this Dialog"
+            "id": "221664"
           }
         }
       ],
@@ -57,8 +53,7 @@
           "$designer": {
             "createdAt": "2019-07-16T18:52:25.645Z",
             "updatedAt": "2019-07-16T18:52:28.521Z",
-            "id": "573415",
-            "name": "End Dialog"
+            "id": "573415"
           }
         }
       ]

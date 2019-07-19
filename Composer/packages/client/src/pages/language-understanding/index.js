@@ -9,7 +9,9 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
+import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import { Tree } from './../../components/Tree';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -194,17 +196,22 @@ export const LUPage = props => {
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
-        <div>
-          <Nav
-            onLinkClick={(ev, item) => {
-              onSelect(item.id);
-              ev.preventDefault();
-            }}
-            selectedKey={activePath}
-            groups={navLinks}
-            className={'dialogNavTree'}
-            data-testid={'dialogNavTree'}
-          />
+        <div css={projectContainer}>
+          <Tree variant="large" extraCss={projectTree}>
+            <div css={projectWrapper}>
+              <Nav
+                onLinkClick={(ev, item) => {
+                  onSelect(item.id);
+                  ev.preventDefault();
+                }}
+                styles={projectWrapper}
+                selectedKey={activePath}
+                groups={navLinks}
+                className={'dialogNavTree'}
+                data-testid={'dialogNavTree'}
+              />
+            </div>
+          </Tree>
         </div>
         <Content
           file={luFile}
