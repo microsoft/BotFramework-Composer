@@ -10,7 +10,7 @@ export async function updateLuFile(dispatch, { id, content }) {
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
 }
 
@@ -56,6 +56,6 @@ export async function publishLuis(dispatch, config) {
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
 }
