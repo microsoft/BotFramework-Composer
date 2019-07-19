@@ -30,15 +30,15 @@ describe('<RuleCard />', () => {
         renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
       });
 
-      // it('renders openIcon & openIcon can be clicked', async () => {
-      //   const { findByTestId } = renderResult;
-      //   const openIcon = await findByTestId('OpenIcon');
+      it.skip('renders openIcon & openIcon can be clicked', async () => {
+        const { findByTestId } = renderResult;
+        const openIcon = await findByTestId('OpenIcon');
 
-      //   expect(openIcon).toBeTruthy();
+        expect(openIcon).toBeTruthy();
 
-      //   fireEvent.click(openIcon);
-      //   expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
-      // });
+        fireEvent.click(openIcon);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
+      });
 
       it('should trigger open node function when id = focusedId', async () => {
         const { findByTestId } = renderResult;
@@ -61,15 +61,15 @@ describe('<RuleCard />', () => {
         renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
       });
 
-      // it('renders openIcon & openIcon can be clicked', async () => {
-      //   const { findByTestId } = renderResult;
-      //   const openIcon = await findByTestId('OpenIcon');
+      it.skip('renders openIcon & openIcon can be clicked', async () => {
+        const { findByTestId } = renderResult;
+        const openIcon = await findByTestId('OpenIcon');
 
-      //   expect(openIcon).toBeTruthy();
+        expect(openIcon).toBeTruthy();
 
-      //   fireEvent.click(openIcon);
-      //   expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
-      // });
+        fireEvent.click(openIcon);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+      });
 
       it('should trigger open node function when id = focusedId', async () => {
         const { findByTestId } = renderResult;
@@ -93,15 +93,15 @@ describe('<RuleCard />', () => {
         renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
       });
 
-      // it('renders openIcon & openIcon can be clicked', async () => {
-      //   const { findByTestId } = renderResult;
-      //   const openIcon = await findByTestId('OpenIcon');
+      it.skip('renders openIcon & openIcon can be clicked', async () => {
+        const { findByTestId } = renderResult;
+        const openIcon = await findByTestId('OpenIcon');
 
-      //   expect(openIcon).toBeTruthy();
+        expect(openIcon).toBeTruthy();
 
-      //   fireEvent.click(openIcon);
-      //   expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
-      // });
+        fireEvent.click(openIcon);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
+      });
 
       it('should trigger focus node function when id != focusedId', async () => {
         const { findByTestId } = renderResult;
@@ -124,15 +124,15 @@ describe('<RuleCard />', () => {
         renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
       });
 
-      // it('renders openIcon & openIcon can be clicked', async () => {
-      //   const { findByTestId } = renderResult;
-      //   const openIcon = await findByTestId('OpenIcon');
+      it.skip('renders openIcon & openIcon can be clicked', async () => {
+        const { findByTestId } = renderResult;
+        const openIcon = await findByTestId('OpenIcon');
 
-      //   expect(openIcon).toBeTruthy();
+        expect(openIcon).toBeTruthy();
 
-      //   fireEvent.click(openIcon);
-      //   expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
-      // });
+        fireEvent.click(openIcon);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+      });
 
       it('should trigger open node function when id != focusedId', async () => {
         const { findByTestId } = renderResult;

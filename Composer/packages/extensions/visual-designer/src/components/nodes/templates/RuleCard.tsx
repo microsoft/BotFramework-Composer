@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Icon } from 'office-ui-fabric-react';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
@@ -66,9 +65,9 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
       trigger = formatMessage('? event');
     }
   } else if (data.$type == ObiTypes.UnknownIntentRule) {
-    trigger = 'Unknown Intent';
+    trigger = formatMessage('Unknown Intent');
   } else if (data.$type == ObiTypes.ConversationUpdateActivityRule) {
-    trigger = 'Conversation Update';
+    trigger = formatMessage('Conversation Update');
   }
 
   if (!data.steps) {
