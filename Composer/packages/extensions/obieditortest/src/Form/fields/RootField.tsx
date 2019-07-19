@@ -19,10 +19,10 @@ const overrideDefaults = {
 interface RootFieldProps {
   description?: string;
   formContext: FormContext;
-  formData: { $type: string };
+  formData: any;
   id: string;
   name?: string;
-  onChange: (data: object) => void;
+  onChange?: (data: any) => void;
   schema: JSONSchema6;
   title?: string;
 }
@@ -37,28 +37,26 @@ export const RootField: React.FC<RootFieldProps> = props => {
   const hasDesigner = !!get(schema, 'properties.$designer');
 
   const handleDesignerChange = (newDesigner): void => {
-    props.onChange({ ...formData, $designer: newDesigner });
+    if (props.onChange) {
+      props.onChange({ ...formData, $designer: newDesigner });
+    }
   };
 
-  const getTitle = (): false | string => {
+  const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
-
-    if (sdkOverrides.title === false) {
-      return false;
-    }
 
     return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
   const getDescription = (): string => {
-    return sdkOverrides.description || description || schema.description;
+    return sdkOverrides.description || description || schema.description || '';
   };
 
   return (
     <div id={props.id} className="RootField">
       <SectionSeparator
         styles={{ marginTop: 0 }}
-        label={getTitle()}
+        label={sdkOverrides.title === false ? null : getTitle()}
         collapsable={fieldOverrides.collapsable}
         defaultCollapsed={fieldOverrides.defaultCollapsed}
       >
@@ -69,11 +67,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           />
         )}
         {hasDesigner && (
-          <DesignerField
-            placeholder={currentDialog.displayName}
-            data={get(formData, '$designer')}
-            onChange={handleDesignerChange}
-          />
+          <DesignerField placeholder={getTitle()} data={get(formData, '$designer')} onChange={handleDesignerChange} />
         )}
       </SectionSeparator>
       {props.children}
