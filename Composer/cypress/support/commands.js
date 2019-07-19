@@ -25,6 +25,7 @@
 import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Open').click();
   cy.get('[data-testid="SelectLocation"]').within(() => {
     cy.get(`input[aria-label="${botName}"]`).click();
@@ -49,6 +50,7 @@ Cypress.Commands.add('openDialog', dialogName => {
 
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Save as').click();
 
   cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
