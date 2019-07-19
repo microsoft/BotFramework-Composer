@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:50:14.618Z",
     "updatedAt": "2019-07-16T19:36:33.131Z",
-    "id": "662682",
-    "name": "LGComposition"
+    "id": "662682"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:36:36.053Z",
         "updatedAt": "2019-07-16T19:36:39.049Z",
-        "id": "823530",
-        "name": "Prompt for text"
+        "id": "823530"
       },
       "property": "user.name",
       "prompt": "Hello, I'm Zoidberg. What is your name?",
@@ -28,8 +26,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:36:40.579Z",
         "updatedAt": "2019-07-16T19:36:46.957Z",
-        "id": "823322",
-        "name": "Send an Activity"
+        "id": "823322"
       },
       "activity": "[bfdactivity-823322]"
     }
