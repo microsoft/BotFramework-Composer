@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfdesigner/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 'office-ui-fabric-react';
@@ -28,7 +28,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
   );
 
-  const handleChange = (_, option?: IDropdownOption) => {
+  const handleChange = (_, option?: IDropdownOption): void => {
     if (option) {
       switch (option.key) {
         case 'none': {
@@ -85,7 +85,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     },
   ];
 
-  const getSelectedType = () => {
+  const getSelectedType = (): string => {
     if (typeof props.formData === 'string') {
       return 'luis';
     }
@@ -97,7 +97,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     return 'none';
   };
 
-  const onRenderTitle = (options?: IDropdownOption[]) => {
+  const onRenderTitle = (options?: IDropdownOption[]): ReactElement => {
     if (loading || !options) {
       return (
         <div style={{ height: '100%', display: 'flex' }}>
@@ -132,7 +132,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       >
         {() => {
           if (selectedFile && isLuFileSelected) {
-            const updateLuFile = (newValue?: string) => {
+            const updateLuFile = (newValue?: string): void => {
               shellApi.updateLuFile({ id: selectedFile.id, content: newValue });
             };
             return <InlineLuEditor file={selectedFile} onSave={updateLuFile} />;
