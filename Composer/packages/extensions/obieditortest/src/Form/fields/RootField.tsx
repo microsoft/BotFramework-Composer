@@ -2,15 +2,12 @@ import { startCase, get } from 'lodash';
 import React from 'react';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import classnames from 'classnames';
+import { JSONSchema6 } from 'json-schema';
 
 import SectionSeparator from '../SectionSeparator';
 import { FormContext } from '../types';
 
 import { DesignerField } from './DesignerField';
-
-const descriptionMarkup = description => {
-  return { __html: description };
-};
 
 const overrideDefaults = {
   collapsable: true,
@@ -19,20 +16,31 @@ const overrideDefaults = {
   description: undefined,
 };
 
-export function RootField(props) {
+interface RootFieldProps {
+  description?: string;
+  formContext: FormContext;
+  formData: { $type: string };
+  id: string;
+  name?: string;
+  onChange: (data: object) => void;
+  schema: JSONSchema6;
+  title?: string;
+}
+
+export const RootField: React.FC<RootFieldProps> = props => {
   const { title, name, description, schema, formData, formContext } = props;
-  const { currentDialog, editorSchema, isRoot } = formContext as FormContext;
+  const { currentDialog, editorSchema, isRoot } = formContext;
 
   const fieldOverrides = get(editorSchema, 'content.fieldTemplateOverrides.RootField', overrideDefaults);
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
-  const handleDesignerChange = newDesigner => {
+  const handleDesignerChange = (newDesigner): void => {
     props.onChange({ ...formData, $designer: newDesigner });
   };
 
-  const getTitle = () => {
+  const getTitle = (): false | string => {
     const dialogName = isRoot && currentDialog.displayName;
 
     if (sdkOverrides.title === false) {
@@ -42,7 +50,7 @@ export function RootField(props) {
     return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
-  const getDescription = () => {
+  const getDescription = (): string => {
     return sdkOverrides.description || description || schema.description;
   };
 
@@ -57,7 +65,7 @@ export function RootField(props) {
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p
             className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}
-            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
+            dangerouslySetInnerHTML={{ __html: getDescription() }}
           />
         )}
         {hasDesigner && (
@@ -71,4 +79,4 @@ export function RootField(props) {
       {props.children}
     </div>
   );
-}
+};
