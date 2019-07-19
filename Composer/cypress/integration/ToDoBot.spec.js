@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('ToDo Bot', () => {
+context.skip('ToDo Bot', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
@@ -51,7 +51,7 @@ context('ToDo Bot', () => {
     });
   });
 
-  it('can open the ShowToDos dialog', () => {
+  it.skip('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="ShowToDos"]').click();
     });

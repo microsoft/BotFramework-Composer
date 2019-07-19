@@ -2,43 +2,55 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-05-18T22:37:53.053Z",
-    "updatedAt": "2019-07-01T21:37:47.307Z",
-    "id": "351884",
-    "name": "11 - HttpRequest",
-    "description": "This is a bot that demonstrates the HttpRequest concept in Adaptive Dialogs."
+    "updatedAt": "2019-07-16T19:50:05.513Z",
+    "id": "351884"
   },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:04.412Z",
+        "updatedAt": "2019-07-16T19:54:04.749Z",
+        "id": "738240"
+      },
       "property": "user.petname",
       "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
       "maxTurnCount": 2147483647,
       "alwaysPrompt": false,
       "allowInterruptions": true,
-      "outputFormat": "none",
-      "$designer": {
-        "createdAt": "2019-07-01T21:38:04.412Z",
-        "updatedAt": "2019-07-01T21:38:04.419Z",
-        "id": "738240"
-      }
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:38:03.242Z",
-        "updatedAt": "2019-07-01T21:38:05.182Z",
+        "updatedAt": "2019-07-16T19:54:08.581Z",
         "id": "229784"
       },
       "activity": "[bfdactivity-229784]"
     },
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:54:10.345Z",
+        "updatedAt": "2019-07-16T19:54:13.518Z",
+        "id": "665408"
+      },
+      "property": "user.petid",
       "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
-      "property": "user.petid"
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.HttpRequest",
+      "$designer": {
+        "createdAt": "2019-07-01T21:38:30.329Z",
+        "updatedAt": "2019-07-16T19:54:17.896Z",
+        "id": "845107"
+      },
       "method": "POST",
       "url": "http://petstore.swagger.io/v2/pet",
       "body": {
@@ -61,43 +73,47 @@
       "header": {
         "test": "test",
         "test2": "test2"
-      },
-      "$designer": {
-        "createdAt": "2019-07-01T21:38:30.329Z",
-        "updatedAt": "2019-07-01T21:38:30.334Z",
-        "id": "845107"
       }
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:38:28.974Z",
-        "updatedAt": "2019-07-01T21:38:31.064Z",
+        "updatedAt": "2019-07-16T19:54:23.208Z",
         "id": "200761"
       },
       "activity": "[bfdactivity-200761]"
     },
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:54:25.494Z",
+        "updatedAt": "2019-07-16T19:54:28.792Z",
+        "id": "797897"
+      },
+      "property": "user.id",
       "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",
-      "property": "user.id"
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.HttpRequest",
-      "method": "GET",
-      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
-      "property": "user.getResponse",
       "$designer": {
         "createdAt": "2019-07-01T21:38:55.511Z",
-        "updatedAt": "2019-07-01T21:38:55.516Z",
+        "updatedAt": "2019-07-16T19:54:33.113Z",
         "id": "705959"
-      }
+      },
+      "method": "GET",
+      "url": "http://petstore.swagger.io/v2/pet/{user.id}",
+      "property": "user.getResponse"
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:38:56.964Z",
-        "updatedAt": "2019-07-01T21:38:58.832Z",
+        "updatedAt": "2019-07-16T19:54:38.539Z",
         "id": "212615"
       },
       "activity": "[bfdactivity-212615]"

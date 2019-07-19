@@ -104,10 +104,6 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
-  [ObiTypes.ChoiceInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
   [ObiTypes.EndDialog]: {
     details: 'property',
     text: 'End this dialog',
@@ -163,6 +159,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
+
     if (keyMap) {
       header = header || keyMap.header || '';
       label = data[keyMap.label] || label;

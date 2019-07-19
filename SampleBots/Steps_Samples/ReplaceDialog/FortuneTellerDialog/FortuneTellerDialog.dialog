@@ -1,12 +1,17 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-01T21:41:06.164Z",
+    "updatedAt": "2019-07-16T19:50:24.598Z",
+    "id": "682472"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:41:08.120Z",
-        "updatedAt": "2019-07-01T21:41:10.907Z",
+        "updatedAt": "2019-07-16T19:55:41.722Z",
         "id": "554030"
       },
       "activity": "[bfdactivity-554030]"
@@ -15,7 +20,7 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:41:09.715Z",
-        "updatedAt": "2019-07-01T21:41:16.976Z",
+        "updatedAt": "2019-07-16T19:55:45.578Z",
         "id": "302405"
       },
       "activity": "[bfdactivity-302405]"
@@ -24,16 +29,11 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:41:30.793Z",
-        "updatedAt": "2019-07-01T21:41:32.819Z",
+        "updatedAt": "2019-07-16T19:55:49.690Z",
         "id": "322106"
       },
       "activity": "[bfdactivity-322106]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T21:41:06.164Z",
-    "updatedAt": "2019-07-01T21:41:06.193Z",
-    "id": "682472"
-  }
+  "$schema": "../../app.schema"
 }

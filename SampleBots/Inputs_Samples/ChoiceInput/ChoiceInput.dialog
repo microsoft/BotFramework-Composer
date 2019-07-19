@@ -1,12 +1,17 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:13.382Z",
+    "updatedAt": "2019-07-16T19:27:59.654Z",
+    "id": "952602"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.ChoiceInput",
       "$designer": {
         "createdAt": "2019-07-11T06:04:01.752Z",
-        "updatedAt": "2019-07-11T06:04:06.880Z",
+        "updatedAt": "2019-07-16T19:28:05.726Z",
         "id": "673028"
       },
       "property": "user.style",
@@ -44,16 +49,11 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:59:01.216Z",
-        "updatedAt": "2019-07-01T21:59:03.940Z",
+        "updatedAt": "2019-07-16T19:28:09.770Z",
         "id": "004212"
       },
       "activity": "[bfdactivity-004212]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:13.382Z",
-    "updatedAt": "2019-07-03T06:48:13.408Z",
-    "id": "952602"
-  }
+  "$schema": "../../app.schema"
 }

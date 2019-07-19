@@ -4,8 +4,7 @@
     "createdAt": "2019-07-11T23:45:43.726Z",
     "updatedAt": "2019-07-11T23:45:43.734Z",
     "id": "433224",
-    "name": "EchoBot",
-    “description”: “This bot accepts input from the user and echoes it back.”
+    "description": "This bot accepts input from the user and echoes it back."
   },
   "autoEndDialog": true,
   "generator": "common.lg",

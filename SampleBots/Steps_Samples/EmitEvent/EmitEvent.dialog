@@ -1,18 +1,28 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-01T21:33:24.264Z",
+    "updatedAt": "2019-07-16T19:49:41.073Z",
+    "id": "701087"
+  },
   "autoEndDialog": false,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:33:40.722Z",
-        "updatedAt": "2019-07-01T21:33:43.763Z",
+        "updatedAt": "2019-07-16T19:52:37.148Z",
         "id": "879639"
       },
       "activity": "[bfdactivity-879639]"
     },
     {
       "$type": "Microsoft.BeginDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:52:44.693Z",
+        "updatedAt": "2019-07-16T19:52:48.031Z",
+        "id": "293316"
+      },
       "Dialog": {
         "$type": "Microsoft.AdaptiveDialog",
         "autoEndDialog": false,
@@ -52,19 +62,19 @@
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "Events": ["CustomEvent"],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "CustomEvent Fired."
         }
-      ]
+      ],
+      "Events": ["CustomEvent"],
+      "$designer": {
+        "createdAt": "2019-07-16T19:52:38.448Z",
+        "updatedAt": "2019-07-16T19:52:38.463Z",
+        "id": "767051"
+      }
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T21:33:24.264Z",
-    "updatedAt": "2019-07-01T21:33:24.299Z",
-    "id": "701087"
-  }
+  "$schema": "../../app.schema"
 }

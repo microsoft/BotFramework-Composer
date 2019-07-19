@@ -9,7 +9,6 @@ import {
   NullField,
   LgEditorField,
 } from '../Form/fields';
-import { DialogSelectWidget, TextareaWidget } from '../Form/widgets';
 
 const globalFields = {
   property: {
@@ -25,13 +24,13 @@ const globalFields = {
 
 const activityFields = {
   prompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   unrecognizedPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   invalidPrompt: {
-    'ui:widget': TextareaWidget,
+    'ui:widget': 'TextareaWidget',
   },
   value: {
     'ui:widget': NullField,
@@ -42,9 +41,6 @@ export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     recognizer: {
       'ui:field': RecognizerField,
-      'ui:title': 'Language Understanding',
-      'ui:description':
-        'To understand what the user says, your dialog needs a ‘Recognizer’ that includes example words and sentences that users may use.',
     },
     rules: {
       'ui:field': RulesField,
@@ -66,7 +62,7 @@ export const uiSchema = {
   },
   'Microsoft.BeginDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -89,6 +85,13 @@ export const uiSchema = {
     steps: {
       'ui:field': StepsField,
     },
+  },
+  'Microsoft.ConversationUpdateActivityRule': {
+    steps: {
+      'ui:field': StepsField,
+    },
+    ...globalFields,
+    'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.EventRule': {
     steps: {
@@ -254,7 +257,7 @@ export const uiSchema = {
   },
   'Microsoft.ReplaceDialog': {
     dialog: {
-      'ui:widget': DialogSelectWidget,
+      'ui:widget': 'DialogSelectWidget',
     },
     ...globalFields,
   },
@@ -282,6 +285,12 @@ export const uiSchema = {
   'Microsoft.SendActivity': {
     activity: {
       'ui:field': LgEditorField,
+    },
+  },
+  'Microsoft.DateTimeInput': {
+    ...activityFields,
+    defaultValue: {
+      'ui:widget': 'DateTimeWidget',
     },
   },
 };

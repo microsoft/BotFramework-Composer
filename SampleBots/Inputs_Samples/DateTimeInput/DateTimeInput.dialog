@@ -1,30 +1,36 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:48:17.871Z",
+    "updatedAt": "2019-07-16T19:04:22.213Z",
+    "id": "031360"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.DateTimeInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:04:23.366Z",
+        "updatedAt": "2019-07-16T19:04:28.792Z",
+        "id": "996821"
+      },
       "property": "user.date",
-      "alwaysPrompt": true,
-      "maxTurnCount": 2,
-      "allowInterruptions": false,
       "prompt": "Please enter a date.",
-      "invalidPrompt": "Please enter a date."
+      "invalidPrompt": "Please enter a date.",
+      "maxTurnCount": 2,
+      "alwaysPrompt": true,
+      "allowInterruptions": false,
+      "defaultLocale": "en-us"
     },
     {
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-01T21:59:41.571Z",
-        "updatedAt": "2019-07-01T21:59:42.925Z",
+        "updatedAt": "2019-07-16T19:04:32.657Z",
         "id": "828009"
       },
       "activity": "[bfdactivity-828009]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:48:17.871Z",
-    "updatedAt": "2019-07-03T06:48:17.895Z",
-    "id": "031360"
-  }
+  "$schema": "../../app.schema"
 }

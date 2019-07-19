@@ -2,26 +2,46 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:51:23.522Z",
-    "updatedAt": "2019-07-03T06:51:23.602Z",
+    "updatedAt": "2019-07-16T19:50:46.367Z",
     "id": "714773",
-    "name": "15 - TraceAndLog",
+
     "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
   },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.TextInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:58:15.911Z",
+        "updatedAt": "2019-07-16T19:58:19.512Z",
+        "id": "107670"
+      },
+      "outputBinding": "user.name",
       "prompt": "Hello, what is your name?",
-      "outputBinding": "user.name"
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "none"
     },
     {
       "$type": "Microsoft.TraceActivity",
+      "$designer": {
+        "createdAt": "2019-07-16T19:58:20.503Z",
+        "updatedAt": "2019-07-16T19:58:24.020Z",
+        "id": "774586"
+      },
       "valueType": "memory",
       "value": "{user}"
     },
     {
       "$type": "Microsoft.LogStep",
-      "text": "{user.name}"
+      "$designer": {
+        "createdAt": "2019-07-16T19:58:24.944Z",
+        "updatedAt": "2019-07-16T19:58:29.674Z",
+        "id": "219510"
+      },
+      "text": "{user.name}",
+      "traceActivity": false
     }
   ],
   "$schema": "../../app.schema"

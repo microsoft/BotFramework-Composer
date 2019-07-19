@@ -2,17 +2,16 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-09T03:35:01.900Z",
-    "updatedAt": "2019-07-09T03:35:06.945Z",
+    "updatedAt": "2019-07-16T19:39:43.596Z",
     "id": "295341"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
   "steps": [
     {
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-10T07:22:22.187Z",
-        "updatedAt": "2019-07-10T07:22:28.682Z",
+        "updatedAt": "2019-07-16T19:41:48.407Z",
         "id": "548776"
       },
       "property": "user.content",
@@ -22,7 +21,7 @@
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-10T07:22:00.425Z",
-        "updatedAt": "2019-07-10T07:22:11.066Z",
+        "updatedAt": "2019-07-16T19:41:52.065Z",
         "id": "944876"
       },
       "property": "user.remindtime",
@@ -32,7 +31,7 @@
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-10T07:26:55.157Z",
-        "updatedAt": "2019-07-10T07:27:00.692Z",
+        "updatedAt": "2019-07-16T19:41:55.761Z",
         "id": "767754"
       },
       "condition": "user.remindtime != null",
@@ -41,7 +40,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-10T07:27:37.427Z",
-            "updatedAt": "2019-07-10T07:27:41.848Z",
+            "updatedAt": "2019-07-16T19:41:59.584Z",
             "id": "173768"
           },
           "property": "user.requesttime",
@@ -51,7 +50,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-10T07:28:25.135Z",
-            "updatedAt": "2019-07-10T07:28:29.796Z",
+            "updatedAt": "2019-07-16T19:42:04.471Z",
             "id": "609489"
           },
           "property": "user.endtime",
@@ -61,7 +60,7 @@
           "$type": "Microsoft.HttpRequest",
           "$designer": {
             "createdAt": "2019-07-10T07:27:49.439Z",
-            "updatedAt": "2019-07-10T07:37:53.886Z",
+            "updatedAt": "2019-07-16T19:42:15.015Z",
             "id": "043822"
           },
           "method": "GET",
@@ -73,25 +72,25 @@
       "elseSteps": [
         {
           "$type": "Microsoft.TextInput",
-          "maxTurnCount": 2147483647,
-          "alwaysPrompt": false,
-          "allowInterruptions": false,
-          "outputFormat": "none",
           "$designer": {
             "createdAt": "2019-07-10T07:32:32.211Z",
-            "updatedAt": "2019-07-10T07:32:46.912Z",
+            "updatedAt": "2019-07-16T19:42:21.498Z",
             "id": "575714"
           },
+          "property": "user.content",
           "prompt": "What is the content of your reminder which you want to delete?",
           "unrecognizedPrompt": "Sorry I don't understand. What is the content of your reminder which you want to delete?",
           "invalidPrompt": "Sorry I don't understand. What is the content of your reminder which you want to delete?",
-          "property": "user.content"
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
         },
         {
           "$type": "Microsoft.HttpRequest",
           "$designer": {
             "createdAt": "2019-07-10T07:33:03.203Z",
-            "updatedAt": "2019-07-10T07:38:00.513Z",
+            "updatedAt": "2019-07-16T19:42:27.956Z",
             "id": "522076"
           },
           "method": "GET",
@@ -105,7 +104,7 @@
       "$type": "Microsoft.BeginDialog",
       "$designer": {
         "createdAt": "2019-07-10T07:29:40.698Z",
-        "updatedAt": "2019-07-10T07:29:42.006Z",
+        "updatedAt": "2019-07-16T19:42:34.328Z",
         "id": "912506"
       },
       "dialog": "ClearUserData"
@@ -114,10 +113,11 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-09T03:36:40.655Z",
-        "updatedAt": "2019-07-09T03:36:47.560Z",
+        "updatedAt": "2019-07-16T19:42:40.719Z",
         "id": "984106"
       },
-      "activity": "Delete succeed!"
+      "activity": "[bfdactivity-984106]"
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

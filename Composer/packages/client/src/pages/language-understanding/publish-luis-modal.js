@@ -50,7 +50,9 @@ const validateForm = data => {
   dataKeys.forEach(key => {
     const value = data[key];
     if (key !== 'errors' && (!value || !nameRegex.test(value))) {
-      errors[key] = formatMessage('must only use letters, numbers, -, and _');
+      errors[key] = formatMessage(
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+      );
     }
   });
 

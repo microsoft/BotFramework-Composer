@@ -1,20 +1,22 @@
 import { ObiTypes } from '../shared/ObiTypes';
-
-import { IndexedNode } from './models/IndexedNode';
+import { IndexedNode } from '../shared/IndexedNode';
 
 const ConditionKey = 'condition';
 const CasesKey = 'cases';
 const CaseStepKey = 'steps';
 const DefaultBranchKey = 'default';
 
-export function transformSwitchCondition(input, jsonpath) {
-  if (!input || input.$type !== ObiTypes.SwitchCondition) return {};
+export function transformSwitchCondition(
+  input,
+  jsonpath: string
+): { condition: IndexedNode; choice: IndexedNode; branches: IndexedNode[] } | null {
+  if (!input || input.$type !== ObiTypes.SwitchCondition) return null;
 
   const condition = input[ConditionKey] || '';
   const defaultSteps = input[DefaultBranchKey] || [];
   const cases = input[CasesKey] || [];
 
-  const result: { [key: string]: any } = {
+  const result = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
       $type: ObiTypes.ConditionNode,
@@ -23,14 +25,14 @@ export function transformSwitchCondition(input, jsonpath) {
       $type: ObiTypes.ChoiceDiamond,
       text: condition,
     }),
-    branches: [],
+    branches: [] as IndexedNode[],
   };
 
   result.branches.push(
     new IndexedNode(`${jsonpath}.${DefaultBranchKey}`, {
       $type: ObiTypes.StepGroup,
       label: DefaultBranchKey,
-      children: defaultSteps.map((x, index) => new IndexedNode(`${jsonpath}.${DefaultBranchKey}[${index}]`, x)),
+      children: defaultSteps,
     })
   );
 
@@ -42,7 +44,7 @@ export function transformSwitchCondition(input, jsonpath) {
       return new IndexedNode(`${prefix}.${CaseStepKey}`, {
         $type: ObiTypes.StepGroup,
         label: value,
-        children: (steps || []).map((x, index) => new IndexedNode(`${prefix}.${CaseStepKey}[${index}]`, x)),
+        children: steps || [],
       });
     })
   );

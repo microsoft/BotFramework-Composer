@@ -7,6 +7,7 @@ export const COMPOUND_TYPES = [
   'Microsoft.EventRule',
   'Microsoft.IntentRule',
   'Microsoft.UnknownIntentRule',
+  'Microsoft.ConversationUpdateActivityRule',
 ];
 
 export const appschema: JSONSchema6 = {
@@ -350,6 +351,17 @@ export const appschema: JSONSchema6 = {
           title: '$designer',
           type: 'object',
           description: 'Extra information for the Bot Framework Composer.',
+        },
+        eventName: {
+          title: 'Event Name',
+          description: 'The name of event to emit',
+          type: 'string',
+        },
+        eventValue: {
+          type: 'object',
+          title: 'Event Value',
+          description: 'Optional value to emit along with the event',
+          additionalProperties: true,
         },
       },
       additionalProperties: false,
@@ -1376,8 +1388,10 @@ export const appschema: JSONSchema6 = {
             type: 'string',
             enum: [
               'beginDialog',
-              'consultDialog',
+              'resumeDialog',
+              'repromptDialog',
               'cancelDialog',
+              'endDialog',
               'activityReceived',
               'recognizedIntent',
               'unknownIntent',
@@ -1601,12 +1615,12 @@ export const appschema: JSONSchema6 = {
           description:
             'Additional headers to include with the HTTP request. This may reference properties in memory as {property.name}.',
         },
-        responseTypes: {
+        responseType: {
           type: 'string',
           title: 'Expected Response Type',
           description:
             'This specifies the method used to parse the response from the HTTP request. If Activity or Activities, the results will be forwarded immediately to the customer as messages.',
-          enum: ['none', 'json', 'activity', 'activities'],
+          enum: ['None', 'Json', 'Activity', 'Activities'],
         },
       },
       additionalProperties: false,
@@ -1658,6 +1672,11 @@ export const appschema: JSONSchema6 = {
           title: 'Microsoft.ConfirmInput',
           description: 'This represents a dialog which gathers a yes/no style responses',
           $ref: '#/definitions/Microsoft.ConfirmInput',
+        },
+        {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
         },
         {
           title: 'Microsoft.DateTimeInput',
@@ -1846,6 +1865,11 @@ export const appschema: JSONSchema6 = {
       description: 'Union of components which implement the IRule interface',
       $role: 'unionType',
       oneOf: [
+        {
+          title: 'Microsoft.ConversationUpdateActivityRule',
+          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+        },
         {
           title: 'Microsoft.EventRule',
           description: 'This defines a rule for an event that is triggered by some source',
@@ -2057,6 +2081,62 @@ export const appschema: JSONSchema6 = {
           description: 'A list of any entities that must be found by the recognizer in order for this event to fire.',
           items: {
             type: 'string',
+          },
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
+    'Microsoft.ConversationUpdateActivityRule': {
+      $role: 'unionType(Microsoft.IRule)',
+      title: 'ConversationUpdateActivity Rule',
+      description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+      type: 'object',
+      properties: {
+        $type: {
+          title: '$type',
+          description:
+            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+          type: 'string',
+          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          const: 'Microsoft.ConversationUpdateActivityRule',
+        },
+        $copy: {
+          title: '$copy',
+          description: 'Copy the definition by id from a .dialog file.',
+          type: 'string',
+          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+        },
+        $id: {
+          title: '$id',
+          description: 'Inline id for reuse of an inline definition',
+          type: 'string',
+          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+        },
+        $designer: {
+          title: '$designer',
+          type: 'object',
+          description: 'Extra information for the Bot Framework Composer.',
+        },
+        constraint: {
+          $role: 'expression',
+          title: 'Constraint',
+          description:
+            'An optional expression containing additional requirements which must be met for this event to fire.',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        steps: {
+          type: 'array',
+          title: 'Actions',
+          description: 'These are the steps the bot will be execute when this event fires.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
           },
         },
       },

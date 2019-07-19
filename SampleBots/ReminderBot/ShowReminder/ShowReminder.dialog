@@ -2,17 +2,16 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-08T08:29:21.579Z",
-    "updatedAt": "2019-07-09T03:36:32.843Z",
+    "updatedAt": "2019-07-16T19:39:46.691Z",
     "id": "215192"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
   "steps": [
     {
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-09T03:39:41.698Z",
-        "updatedAt": "2019-07-09T03:39:50.312Z",
+        "updatedAt": "2019-07-16T19:42:50.042Z",
         "id": "529601"
       },
       "condition": "user.index == null",
@@ -21,7 +20,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-09T03:40:00.515Z",
-            "updatedAt": "2019-07-09T03:40:08.037Z",
+            "updatedAt": "2019-07-16T19:42:56.048Z",
             "id": "494041"
           },
           "property": "user.index",
@@ -33,7 +32,7 @@
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-10T06:41:27.397Z",
-        "updatedAt": "2019-07-10T06:41:40.205Z",
+        "updatedAt": "2019-07-16T19:43:01.446Z",
         "id": "384323"
       },
       "property": "user.remindtime",
@@ -43,7 +42,7 @@
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-10T06:42:04.663Z",
-        "updatedAt": "2019-07-10T06:43:11.663Z",
+        "updatedAt": "2019-07-16T19:43:05.264Z",
         "id": "539675"
       },
       "condition": "user.remindtime != null",
@@ -52,7 +51,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-10T06:42:37.375Z",
-            "updatedAt": "2019-07-10T06:42:42.359Z",
+            "updatedAt": "2019-07-16T19:43:09.863Z",
             "id": "755693"
           },
           "property": "user.requesttime",
@@ -62,7 +61,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-10T06:44:12.722Z",
-            "updatedAt": "2019-07-10T07:10:53.820Z",
+            "updatedAt": "2019-07-16T19:43:24.113Z",
             "id": "263177"
           },
           "property": "user.endtime",
@@ -72,7 +71,7 @@
           "$type": "Microsoft.HttpRequest",
           "$designer": {
             "createdAt": "2019-07-10T06:43:38.741Z",
-            "updatedAt": "2019-07-10T06:45:27.277Z",
+            "updatedAt": "2019-07-16T19:43:28.672Z",
             "id": "999357"
           },
           "method": "GET",
@@ -86,7 +85,7 @@
           "$type": "Microsoft.HttpRequest",
           "$designer": {
             "createdAt": "2019-07-10T06:43:19.809Z",
-            "updatedAt": "2019-07-10T06:43:30.400Z",
+            "updatedAt": "2019-07-16T19:43:19.553Z",
             "id": "627140"
           },
           "method": "GET",
@@ -100,7 +99,7 @@
       "$type": "Microsoft.SetProperty",
       "$designer": {
         "createdAt": "2019-07-09T09:37:31.142Z",
-        "updatedAt": "2019-07-09T11:28:36.215Z",
+        "updatedAt": "2019-07-16T19:43:34.559Z",
         "id": "147709"
       },
       "property": "user.singlepagedata",
@@ -110,16 +109,16 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-09T03:36:52.470Z",
-        "updatedAt": "2019-07-09T09:38:43.759Z",
+        "updatedAt": "2019-07-16T19:43:39.982Z",
         "id": "707692"
       },
-      "activity": "[ShowReminders(user.singlepagedata)]"
+      "activity": "[bfdactivity-707692]"
     },
     {
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-09T03:40:37.129Z",
-        "updatedAt": "2019-07-10T06:13:00.368Z",
+        "updatedAt": "2019-07-16T19:43:44.362Z",
         "id": "975169"
       },
       "condition": "(user.index + 1) * 5 < count(user.data)",
@@ -128,16 +127,16 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-09T03:46:11.483Z",
-            "updatedAt": "2019-07-09T03:46:20.121Z",
+            "updatedAt": "2019-07-16T19:43:50.967Z",
             "id": "635553"
           },
-          "activity": "You have no more reminders."
+          "activity": "[bfdactivity-635553]"
         },
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "createdAt": "2019-07-10T03:03:56.783Z",
-            "updatedAt": "2019-07-10T03:03:58.767Z",
+            "updatedAt": "2019-07-16T19:43:57.800Z",
             "id": "633090"
           },
           "dialog": "ClearUserData"
@@ -146,7 +145,7 @@
           "$type": "Microsoft.EndDialog",
           "$designer": {
             "createdAt": "2019-07-12T04:08:27.343Z",
-            "updatedAt": "2019-07-12T04:08:27.347Z",
+            "updatedAt": "2019-07-16T19:44:01.811Z",
             "id": "450749"
           }
         }
@@ -156,7 +155,7 @@
       "$type": "Microsoft.ConfirmInput",
       "$designer": {
         "createdAt": "2019-07-10T02:21:53.846Z",
-        "updatedAt": "2019-07-10T03:48:45.738Z",
+        "updatedAt": "2019-07-16T19:44:09.830Z",
         "id": "257539"
       },
       "property": "user.choice",
@@ -179,7 +178,7 @@
       "$type": "Microsoft.IfCondition",
       "$designer": {
         "createdAt": "2019-07-09T03:47:23.311Z",
-        "updatedAt": "2019-07-10T02:24:32.273Z",
+        "updatedAt": "2019-07-16T19:44:14.358Z",
         "id": "709735"
       },
       "condition": "user.choice == true",
@@ -188,7 +187,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-09T03:47:50.217Z",
-            "updatedAt": "2019-07-09T12:03:09.951Z",
+            "updatedAt": "2019-07-16T19:44:20.391Z",
             "id": "152409"
           },
           "property": "user.index",
@@ -198,7 +197,7 @@
           "$type": "Microsoft.RepeatDialog",
           "$designer": {
             "createdAt": "2019-07-09T12:41:23.645Z",
-            "updatedAt": "2019-07-09T12:41:23.653Z",
+            "updatedAt": "2019-07-16T19:44:26.806Z",
             "id": "251435"
           }
         }
@@ -208,16 +207,16 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "createdAt": "2019-07-10T03:59:54.836Z",
-            "updatedAt": "2019-07-10T04:00:16.987Z",
+            "updatedAt": "2019-07-16T19:44:46.548Z",
             "id": "670207"
           },
-          "activity": "OK."
+          "activity": "[bfdactivity-670207]"
         },
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "createdAt": "2019-07-10T03:03:42.121Z",
-            "updatedAt": "2019-07-10T03:03:43.693Z",
+            "updatedAt": "2019-07-16T19:44:50.388Z",
             "id": "786720"
           },
           "dialog": "ClearUserData"
@@ -226,7 +225,7 @@
           "$type": "Microsoft.CancelAllDialogs",
           "$designer": {
             "createdAt": "2019-07-09T03:48:32.903Z",
-            "updatedAt": "2019-07-09T03:48:32.906Z",
+            "updatedAt": "2019-07-16T19:44:55.179Z",
             "id": "060306"
           }
         }
@@ -236,10 +235,11 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "createdAt": "2019-07-09T03:49:01.511Z",
-        "updatedAt": "2019-07-12T04:06:32.355Z",
+        "updatedAt": "2019-07-16T19:44:33.764Z",
         "id": "077390"
       },
-      "activity": "End."
+      "activity": "[bfdactivity-077390]"
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
