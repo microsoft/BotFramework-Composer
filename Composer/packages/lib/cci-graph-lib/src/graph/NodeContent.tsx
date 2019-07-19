@@ -18,6 +18,7 @@ export interface NodeContentProps<TData> {
   scrollIntoView?: () => void;
 }
 
+// eslint-disable-next-line react/require-render-return
 export class NodeContent<TData, TAdditionalProps = {}> extends React.Component<
   NodeContentProps<TData> & TAdditionalProps
 > {
@@ -37,7 +38,7 @@ export class NodeContent<TData, TAdditionalProps = {}> extends React.Component<
     throw new Error(`Concrete node content component must implement the render method.`);
   }
 
-  public getEdgeAnchorPoint(edge: GraphEdge): AnchorPointResult {
+  public getEdgeAnchorPoint(_edge: GraphEdge): AnchorPointResult {
     return 'NodeDefault';
   }
 }

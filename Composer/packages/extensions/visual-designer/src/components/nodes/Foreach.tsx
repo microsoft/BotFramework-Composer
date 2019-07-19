@@ -4,8 +4,8 @@ import { transformForeach } from '../../transformers/transformForeach';
 import { foreachLayouter } from '../../layouters/foreachLayouter';
 import { areBoundariesEqual } from '../../shared/Boundary';
 import { GraphNode } from '../../shared/GraphNode';
-import { OffsetContainer } from '../../shared/OffsetContainer';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { OffsetContainer } from '../shared/OffsetContainer';
 import { Edge } from '../shared/EdgeComponents';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { StepGroup } from '../groups';
@@ -13,8 +13,11 @@ import { StepGroup } from '../groups';
 import { DefaultRenderer } from './DefaultRenderer';
 import { LoopIndicator } from './templates/LoopIndicator';
 
-const calculateNodeMap = (jsonpath, data) => {
-  const { foreachDetail, stepGroup, loopBegin, loopEnd } = transformForeach(data, jsonpath);
+const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
+  const result = transformForeach(data, jsonpath);
+  if (!result) return {};
+
+  const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
   return {
     foreachNode: GraphNode.fromIndexedJson(foreachDetail),
     stepGroupNode: GraphNode.fromIndexedJson(stepGroup),
@@ -24,9 +27,11 @@ const calculateNodeMap = (jsonpath, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  Object.values(nodeMap)
+  (Object.values(nodeMap) as GraphNode[])
     .filter(x => !!x)
-    .forEach((x: any) => (x.boundary = boundaryMap[x.id] || x.boundary));
+    .forEach((x: GraphNode) => {
+      x.boundary = boundaryMap[x.id] || x.boundary;
+    });
 
   return foreachLayouter(nodeMap.foreachNode, nodeMap.stepGroupNode, nodeMap.loopBeginNode, nodeMap.loopEndNode);
 };
