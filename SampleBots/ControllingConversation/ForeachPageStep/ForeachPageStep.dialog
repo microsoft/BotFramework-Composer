@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:49:33.882Z",
     "updatedAt": "2019-07-16T18:48:40.640Z",
-    "id": "847208",
-    "name": "ForeachPageStep"
+    "id": "847208"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:49:06.280Z",
         "updatedAt": "2019-07-16T18:49:08.545Z",
-        "id": "400171",
-        "name": "Branch: If/Else"
+        "id": "400171"
       },
       "condition": "dialog.ids == null",
       "steps": [
@@ -23,8 +21,7 @@
           "$designer": {
             "createdAt": "2019-07-16T18:49:10.551Z",
             "updatedAt": "2019-07-16T18:49:15.661Z",
-            "id": "879949",
-            "name": "Initialize a Property"
+            "id": "879949"
           },
           "property": "dialog.ids",
           "type": "array"
@@ -36,8 +33,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:50:18.301Z",
         "updatedAt": "2019-07-16T18:50:25.211Z",
-        "id": "834603",
-        "name": "Edit an Array Property"
+        "id": "834603"
       },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
@@ -48,8 +44,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:50:27.435Z",
         "updatedAt": "2019-07-16T18:50:32.414Z",
-        "id": "048190",
-        "name": "Edit an Array Property"
+        "id": "048190"
       },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
@@ -60,8 +55,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:50:35.101Z",
         "updatedAt": "2019-07-16T18:50:39.790Z",
-        "id": "434590",
-        "name": "Edit an Array Property"
+        "id": "434590"
       },
       "changeType": "Push",
       "arrayProperty": "dialog.ids",
@@ -71,8 +65,7 @@
       "$type": "Microsoft.SendActivity",
       "$designer": {
         "id": "623448",
-        "updatedAt": "2019-07-16T18:50:46.170Z",
-        "name": "Send an Activity"
+        "updatedAt": "2019-07-16T18:50:46.170Z"
       },
       "activity": "[bfdactivity-623448]"
     },
@@ -81,8 +74,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:50:48.833Z",
         "updatedAt": "2019-07-16T18:50:55.482Z",
-        "id": "993283",
-        "name": "Loop: For Each Page"
+        "id": "993283"
       },
       "pageSize": 10,
       "valueProperty": "dialog.value",

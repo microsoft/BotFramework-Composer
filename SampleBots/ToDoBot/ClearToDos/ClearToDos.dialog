@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:38.784Z",
     "updatedAt": "2019-07-16T20:00:42.988Z",
-    "id": "316336",
-    "name": "ClearToDos"
+    "id": "316336"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:01:31.422Z",
         "updatedAt": "2019-07-16T20:01:36.455Z",
-        "id": "527945",
-        "name": "Edit an Array Property"
+        "id": "527945"
       },
       "changeType": "Clear",
       "arrayProperty": "user.todos",
@@ -25,8 +23,7 @@
       "$designer": {
         "createdAt": "2019-07-01T22:03:19.772Z",
         "updatedAt": "2019-07-16T20:01:39.092Z",
-        "id": "815442",
-        "name": "Branch: If/Else"
+        "id": "815442"
       },
       "condition": "dialog.cleared",
       "steps": [
@@ -35,8 +32,7 @@
           "$designer": {
             "createdAt": "2019-07-01T22:03:18.901Z",
             "updatedAt": "2019-07-16T20:01:43.249Z",
-            "id": "832307",
-            "name": "Send an Activity"
+            "id": "832307"
           },
           "activity": "[bfdactivity-832307]"
         }
@@ -47,8 +43,7 @@
           "$designer": {
             "createdAt": "2019-07-01T22:03:36.091Z",
             "updatedAt": "2019-07-16T20:01:47.803Z",
-            "id": "983761",
-            "name": "Send an Activity"
+            "id": "983761"
           },
           "activity": "[bfdactivity-983761]"
         }

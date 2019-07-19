@@ -60,7 +60,13 @@ export function RootField(props) {
             dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
           />
         )}
-        {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
+        {hasDesigner && (
+          <DesignerField
+            placeholder={currentDialog.displayName}
+            data={get(formData, '$designer')}
+            onChange={handleDesignerChange}
+          />
+        )}
       </SectionSeparator>
       {props.children}
     </div>

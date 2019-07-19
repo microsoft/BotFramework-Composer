@@ -1,16 +1,27 @@
-import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
+import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateIfElseBoundary } from './calculateNodeBoundary';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
 
-export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
-  if (!conditionNode || !choiceNode) return { boundary: new Boundary() };
+export function ifElseLayouter(
+  conditionNode: GraphNode | null,
+  choiceNode: GraphNode | null,
+  ifNode: GraphNode,
+  elseNode: GraphNode
+): GraphLayout {
+  if (!conditionNode || !choiceNode) return new GraphLayout();
 
-  const containerBoundary = calculateIfElseBoundary(conditionNode, choiceNode, ifNode, elseNode);
+  const containerBoundary = calculateIfElseBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    ifNode.boundary,
+    elseNode.boundary
+  );
 
   const leftNode = ifNode || new GraphNode();
   const rightNode = elseNode || new GraphNode();
@@ -89,7 +100,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
       break;
   }
 
-  const edgeList: { [key: string]: any } = [];
+  const edgeList: EdgeData[] = [];
   edgeList.push({
     id: `edge/${conditionNode.id}/condition->choice`,
     direction: 'y',
@@ -177,6 +188,7 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
   } else {
     edgeList.push({
       id: `edge/${choiceNode.id}/left/choice->out`,
+      direction: 'y',
       x: containerBoundary.axisX,
       y: choiceNode.offset.y + choiceNode.boundary.height,
       length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
@@ -193,5 +205,6 @@ export function ifElseLayouter(conditionNode, choiceNode, ifNode, elseNode) {
       else: elseNode,
     },
     edges: edgeList,
+    nodes: [],
   };
 }
