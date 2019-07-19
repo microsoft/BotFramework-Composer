@@ -5,7 +5,7 @@
     "updatedAt": "2019-07-11T23:45:43.734Z",
     "id": "433224",
     "name": "EchoBot",
-    “description”: “This bot accepts input from the user and echoes it back.”
+    "description": "This bot accepts input from the user and echoes it back."
   },
   "autoEndDialog": true,
   "generator": "common.lg",
@@ -14,6 +14,7 @@
     {
       "$type": "Microsoft.UnknownIntentRule",
       "$designer": {
+        "name": "Handle Unknown Intent",
         "id": "821845"
       },
       "steps": [
@@ -21,6 +22,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "003038",
+            "name": "Send an Activity",
             "updatedAt": "2019-07-11T23:45:59.499Z"
           },
           "activity": "[bfdactivity-003038]"

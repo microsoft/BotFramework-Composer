@@ -37,6 +37,8 @@ export const ElementInterval = {
   y: 60,
 };
 
+export const BranchIntervalMinX = 150;
+
 export const EdgeAddButtonSize = {
   width: 16,
   height: 16,

@@ -17,7 +17,7 @@ export class LGIndexer {
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagostics: this.staticCheck(file.content, file.name),
+          diagnostics: this.staticCheck(file.content, file.name),
         });
       }
     }

@@ -1,27 +1,24 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
+  "$designer": {
+    "createdAt": "2019-07-01T10:00:39.032Z",
+    "updatedAt": "2019-07-16T20:04:10.274Z",
+    "id": "948970",
+    "name": "ToDoLuisBot",
+    "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
+  },
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Hi",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:10.665Z",
-        "updatedAt": "2019-07-04T07:31:10.670Z",
-        "id": "948777"
-      }
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-04T07:31:13.192Z",
-        "updatedAt": "2019-07-12T10:35:12.951Z",
-        "id": "842277"
+        "updatedAt": "2019-07-16T20:03:51.301Z",
+        "id": "842277",
+        "name": "Handle an Intent"
       },
       "constraint": "#AddToDo.score>0.6",
       "steps": [
@@ -36,8 +33,9 @@
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-04T07:31:14.654Z",
-        "updatedAt": "2019-07-12T10:35:25.481Z",
-        "id": "905057"
+        "updatedAt": "2019-07-16T20:03:54.762Z",
+        "id": "905057",
+        "name": "Handle an Intent"
       },
       "steps": [
         {
@@ -51,9 +49,10 @@
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
-        "createdAt": "2019-07-12T10:35:27.396Z",
-        "updatedAt": "2019-07-12T10:35:45.821Z",
-        "id": "624737"
+        "createdAt": "2019-07-16T20:03:55.674Z",
+        "updatedAt": "2019-07-16T20:03:58.931Z",
+        "id": "735961",
+        "name": "Handle an Intent"
       },
       "steps": [
         {
@@ -66,6 +65,12 @@
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T19:37:38.354Z",
+        "updatedAt": "2019-07-16T20:04:06.035Z",
+        "id": "265106",
+        "name": "Handle an Unknown Intent"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -76,18 +81,8 @@
           },
           "activity": "[bfdactivity-636903]"
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-04T19:37:38.354Z",
-        "updatedAt": "2019-07-04T19:37:38.376Z",
-        "id": "265106"
-      }
+      ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-07-01T10:00:39.054Z",
-    "id": "948970"
-  }
+  "$schema": "../../app.schema"
 }

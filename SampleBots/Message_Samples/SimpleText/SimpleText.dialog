@@ -1,16 +1,23 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:50:17.253Z",
+    "updatedAt": "2019-07-16T19:37:32.051Z",
+    "id": "897725",
+    "name": "SimpleText"
+  },
   "autoEndDialog": true,
   "steps": [
     {
       "$type": "Microsoft.SendActivity",
-      "activity": "Here is a simple text message."
+      "$designer": {
+        "createdAt": "2019-07-16T19:37:33.208Z",
+        "updatedAt": "2019-07-16T19:37:37.881Z",
+        "id": "219943",
+        "name": "Send an Activity"
+      },
+      "activity": "[bfdactivity-219943]"
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:50:17.253Z",
-    "updatedAt": "2019-07-03T06:50:17.273Z",
-    "id": "897725"
-  }
+  "$schema": "../../app.schema"
 }

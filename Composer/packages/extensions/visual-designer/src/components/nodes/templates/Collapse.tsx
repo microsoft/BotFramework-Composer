@@ -48,7 +48,11 @@ export const Collapse = ({ text, children }) => {
         <IconButton
           onClick={collapseFuc}
           iconProps={{ iconName: 'PageRight' }}
-          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginLeft: '12px' }}
+          style={{
+            transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
+            marginLeft: '12px',
+            transition: 'transform 0.2s linear',
+          }}
         />
       </div>
       <div style={{ display: collapsed ? 'none' : 'block' }}>{children}</div>

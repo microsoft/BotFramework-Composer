@@ -13,6 +13,7 @@ export const ObiTypes = {
   UnknownIntentRule: 'Microsoft.UnknownIntentRule',
   IntentRule: 'Microsoft.IntentRule',
   EventRule: 'Microsoft.EventRule',
+  ConversationUpdateActivityRule: 'Microsoft.ConversationUpdateActivityRule',
 
   // steps
   BeginDialog: 'Microsoft.BeginDialog',
