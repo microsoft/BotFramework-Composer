@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
 import { Boundary } from '../shared/Boundary';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { OffsetContainer } from '../components/shared/OffsetContainer';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { Edge } from '../components/shared/EdgeComponents';
