@@ -17,7 +17,7 @@ const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null) => {
   }
 };
 
-export default function InlineLuEditor(props: InlineLuEditorProps) {
+const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   const { file, onSave } = props;
   const [value, setValue] = useState(file.content || '');
   const [editorRef, setEditorRef] = useState<Monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -61,4 +61,6 @@ export default function InlineLuEditor(props: InlineLuEditorProps) {
       </div>
     </div>
   );
-}
+};
+
+export default InlineLuEditor;
