@@ -75,13 +75,10 @@ export const TestController = () => {
       return;
     }
     const config = LuisStorage.get(botName);
-    const files = luFiles.filter(f => !!f.content);
+    const files = luFiles.filter(f => dialogs.findIndex(dialog => dialog.luFile === f.id) !== -1);
     const updated =
-      luStatus.length !== luFiles.length ||
-      !luStatus.every(item => {
-        if (item.status === 1) return true;
-        return false;
-      }) ||
+      luStatus.length !== files.length ||
+      !luStatus.every(item => item.status === 1) ||
       config[LuisConfig.AUTHORING_KEY] === '';
     if (files.length !== 0 && updated) {
       if (!luisPublishSucceed) {

@@ -12,6 +12,7 @@ export class ErrorBoundary extends Component {
     this.state = { setError: context.actions.setError };
     this.unhandledrejectionHandler = this.unhandledrejectionHandler.bind(this);
     this.eventHandler = this.eventHandler.bind(this);
+    this.onErrorHandler = this.onErrorHandler.bind(this);
   }
 
   // will catch unhandle http error etc
@@ -32,15 +33,17 @@ export class ErrorBoundary extends Component {
     });
   }
 
+  onErrorHandler(message, source, lineno, colno, error) {
+    console.log('Catch Error：', { message, source, lineno, colno, error });
+    this.context.actions.setError({
+      message: message,
+      summary: 'Something went wrong',
+    });
+    return true;
+  }
+
   componentDidMount() {
-    window.onerror = function(message, source, lineno, colno, error) {
-      console.log('Catch Error：', { message, source, lineno, colno, error });
-      this.context.actions.setError({
-        message: message,
-        summary: 'Something went wrong',
-      });
-      return true;
-    };
+    window.onerror = this.onErrorHandler;
     window.addEventListener('unhandledrejection', this.unhandledrejectionHandler, true);
     window.addEventListener('error', this.eventHandler, true);
   }
@@ -64,16 +67,19 @@ export class ErrorBoundary extends Component {
 
   render() {
     const { state, actions } = this.context;
-    return state.error ? (
-      <ErrorPopup
-        error={state.error.message}
-        title={state.error.summary}
-        onDismiss={() => {
-          actions.setError(null);
-        }}
-      />
-    ) : (
-      this.props.children
+    return (
+      <div>
+        {state.error ? (
+          <ErrorPopup
+            error={state.error.message}
+            title={state.error.summary}
+            onDismiss={() => {
+              actions.setError(null);
+            }}
+          />
+        ) : null}
+        {this.props.children}
+      </div>
     );
   }
 }

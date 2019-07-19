@@ -1,49 +1,162 @@
 import React from 'react';
+import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { Icon } from '../icons/icon';
 
-const boxWidth = 180;
-const boxHeight = 32;
+const boxWidth = 240;
+const boxHeight = 120;
 
-export const IconCard = ({ corner, label, icon, themeColor, onClick }) => {
+const headerHeight = 40;
+const contentHeight = boxHeight - headerHeight;
+
+export const IconCard = ({
+  corner,
+  label,
+  trigger,
+  summary,
+  childDialog,
+  icon,
+  themeColor,
+  iconColor,
+  onClick,
+  onChildDialogClick,
+}) => {
   const containerStyle = {
     width: boxWidth,
     height: boxHeight,
-    fontSize: '14px',
-    lineHeight: '19px',
+    fontSize: '20px',
     cursor: 'pointer',
     overflow: 'hidden',
-    backgroundColor: themeColor,
-    color: '#000000',
-    borderRadius: '2px 2px 0 0',
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: '9px',
-    boxSizing: 'border-box' as 'border-box',
+    backgroundColor: 'white',
+    borderRadius: '2px',
+    boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
   };
+
   return (
     <div
-      style={containerStyle}
+      className="card"
       data-testid="IconCard"
+      style={containerStyle}
       onClick={e => {
         e.stopPropagation();
         onClick();
       }}
     >
-      <Icon icon={icon || 'MessageBot'} color={themeColor} fill="black" />
       <div
+        className="card__header"
         style={{
-          lineHeight: '29px',
-          width: 'calc(100% - 68px)',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
+          width: '100%',
+          height: `${headerHeight}px`,
+          backgroundColor: themeColor,
+          fontFamily: 'Segoe UI',
+          fontSize: '14px',
+          lineHeight: '19px',
+          color: 'black',
+          position: 'relative',
         }}
-        title={typeof label === 'string' ? label : ''}
       >
-        {label}
+        <div style={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>
+          {label}
+        </div>
+        <div style={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
       </div>
-      <div style={{ position: 'absolute', top: 9, right: 0 }}>{corner}</div>
+      <div
+        className="card__content"
+        style={{
+          width: '100%',
+          height: contentHeight,
+        }}
+      >
+        <div
+          style={{
+            fontWeight: 400,
+            padding: '5px 10px',
+            fontSize: '14px',
+            lineHeight: '19px',
+            display: 'flex',
+            alignItems: 'top',
+          }}
+        >
+          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+            <Icon icon={icon} color={iconColor} size={20} />
+          </div>
+          <div
+            style={{
+              height: '100%',
+              width: 'calc(100% - 20px)',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              fontSize: '14px',
+              lineHeight: '19px',
+              fontFamily: 'Segoe UI',
+            }}
+            title={typeof label === 'string' ? label : ''}
+          >
+            {trigger}
+          </div>
+        </div>
+        <div
+          style={{
+            fontWeight: 400,
+            padding: '5px 10px',
+            borderTop: '1px solid #EBEBEB',
+            fontSize: '14px',
+            lineHeight: '19px',
+            display: 'flex',
+            alignItems: 'top',
+          }}
+        >
+          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+            <Icon icon="MessageBot" color="#656565" size={20} />
+          </div>
+          <div
+            style={{
+              height: '100%',
+              width: 'calc(100% - 20px)',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              fontSize: '14px',
+              lineHeight: '19px',
+              fontFamily: 'Segoe UI',
+            }}
+            title={typeof label === 'string' ? label : ''}
+          >
+            {summary && <div>{summary}</div>}
+            {childDialog && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <FabricIcon
+                  style={{ lineHeight: '16px', fontSize: '16px' }}
+                  iconName="OpenSource"
+                  data-testid="OpenIcon"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onChildDialogClick();
+                  }}
+                />
+                <span
+                  style={{
+                    cursor: 'pointer',
+                    color: 'blue',
+                  }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    onChildDialogClick();
+                  }}
+                >
+                  {childDialog}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

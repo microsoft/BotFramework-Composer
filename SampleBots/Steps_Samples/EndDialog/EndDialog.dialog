@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:13.961Z",
     "updatedAt": "2019-07-16T19:49:47.566Z",
-    "id": "727878",
-    "name": "EndDialog"
+    "id": "727878"
   },
   "autoEndDialog": false,
   "recognizer": {
@@ -20,8 +19,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:53:02.782Z",
         "updatedAt": "2019-07-16T19:53:05.404Z",
-        "id": "964165",
-        "name": "Branch: If/Else"
+        "id": "964165"
       },
       "condition": "user.name == null",
       "steps": [
@@ -30,8 +28,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:34:31.248Z",
             "updatedAt": "2019-07-16T19:53:08.688Z",
-            "id": "543141",
-            "name": "Prompt for text"
+            "id": "543141"
           },
           "property": "user.name",
           "prompt": "Hello, I'm Zoidberg. What is your name?",
@@ -47,8 +44,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:34:15.607Z",
         "updatedAt": "2019-07-16T19:53:14.153Z",
-        "id": "604381",
-        "name": "Send an Activity"
+        "id": "604381"
       },
       "activity": "[bfdactivity-604381]"
     },
@@ -57,8 +53,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:34:52.937Z",
         "updatedAt": "2019-07-16T19:53:20.249Z",
-        "id": "338063",
-        "name": "Send an Activity"
+        "id": "338063"
       },
       "activity": "[bfdactivity-338063]"
     }
