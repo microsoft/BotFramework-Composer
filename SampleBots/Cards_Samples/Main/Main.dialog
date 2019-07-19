@@ -4,7 +4,7 @@
     "createdAt": "2019-06-28T06:31:58.726Z",
     "updatedAt": "2019-07-16T18:42:36.107Z",
     "id": "937757",
-    "name": "Cards_Samples",
+
     "description": "This is a bot that demonstrates the ability to send different Cards to users."
   },
   "autoEndDialog": false,
@@ -15,8 +15,7 @@
       "$designer": {
         "createdAt": "2019-07-04T19:48:36.378Z",
         "updatedAt": "2019-07-16T18:40:40.814Z",
-        "id": "378731",
-        "name": "Prompt with multi-choice"
+        "id": "378731"
       },
       "property": "user.choice",
       "prompt": "Which card would you like to display?",
@@ -69,8 +68,7 @@
       "$designer": {
         "createdAt": "2019-07-04T19:48:26.434Z",
         "updatedAt": "2019-07-16T18:43:23.765Z",
-        "id": "403471",
-        "name": "Branch: If/Else"
+        "id": "403471"
       },
       "condition": "user.choice",
       "cases": [
@@ -82,8 +80,7 @@
               "$designer": {
                 "createdAt": "2019-07-04T19:52:01.341Z",
                 "updatedAt": "2019-07-16T18:43:27.985Z",
-                "id": "068293",
-                "name": "Send an Activity"
+                "id": "068293"
               },
               "activity": "[bfdactivity-068293]"
             }
@@ -96,8 +93,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "625345",
-                "updatedAt": "2019-07-16T18:43:33.555Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:43:33.555Z"
               },
               "activity": "[bfdactivity-625345]"
             }
@@ -110,8 +106,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "733841",
-                "updatedAt": "2019-07-16T18:43:38.518Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:43:38.518Z"
               },
               "activity": "[bfdactivity-733841]"
             }
@@ -124,8 +119,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "545252",
-                "updatedAt": "2019-07-16T18:43:43.808Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:43:43.808Z"
               },
               "activity": "[bfdactivity-545252]"
             }
@@ -138,8 +132,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "808579",
-                "updatedAt": "2019-07-16T18:43:49.250Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:43:49.250Z"
               },
               "activity": "[bfdactivity-808579]"
             }
@@ -152,8 +145,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "117065",
-                "updatedAt": "2019-07-16T18:43:54.884Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:43:54.884Z"
               },
               "activity": "[bfdactivity-117065]"
             }
@@ -166,8 +158,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "581350",
-                "updatedAt": "2019-07-16T18:44:10.248Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:44:10.248Z"
               },
               "activity": "[bfdactivity-581350]"
             }
@@ -180,8 +171,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "654665",
-                "updatedAt": "2019-07-16T18:44:15.852Z",
-                "name": "Send an Activity"
+                "updatedAt": "2019-07-16T18:44:15.852Z"
               },
               "activity": "[bfdactivity-654665]"
             }
@@ -194,8 +184,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:44:19.355Z",
         "updatedAt": "2019-07-16T18:44:24.065Z",
-        "id": "247255",
-        "name": "Repeat this Dialog"
+        "id": "247255"
       }
     }
   ],
