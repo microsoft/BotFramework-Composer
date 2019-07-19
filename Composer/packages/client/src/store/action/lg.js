@@ -7,12 +7,12 @@ import { BASEURL, ActionTypes } from './../../constants/index';
 
 const templateValidate = ({ Name, Body }) => {
   const text = ['#', Name, '\n', Body].join('');
-  return parse(text);
+  return validateLgContent(text);
 };
 
 const templatesFromText = content => {
-  const res = parse(content);
-  return res.isValid && get(res, 'resource.Templates', []);
+  const res = validateLgContent(content);
+  return get(res, 'templates', []);
 };
 
 const textFromTemplates = templates => {
@@ -38,13 +38,10 @@ const textFromTemplates = templates => {
  */
 export function validateLgTemplate(template) {
   // validate template
-  const validateResult = templateValidate(template);
-  if (validateResult.isValid === false) {
-    throw new Error(validateResult.errorMsg);
-  }
+  const res = templateValidate(template);
 
   // should be a single template.
-  if (get(validateResult, 'resource.Templates', []).length !== 1) {
+  if (get(res, 'templates', []).length !== 1) {
     throw new Error('invalid single template');
   }
 }
@@ -54,10 +51,18 @@ export function validateLgTemplate(template) {
  * @param string, content
  */
 export function validateLgContent(content) {
-  // validate template
-  const validateResult = parse(content);
-  if (validateResult.isValid === false) {
-    throw new Error(validateResult.errorMsg);
+  // validate template, make up error message
+  try {
+    return parse(content);
+  } catch (error) {
+    const errorMsg = get(error, 'Diagnostics', []).reduce((msg, error) => {
+      const { Start, End } = error.Range;
+      const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+      msg += `${errorDetail} \n ${error.Message}\n`;
+      return msg;
+    }, '');
+    throw new Error(errorMsg);
   }
 }
 

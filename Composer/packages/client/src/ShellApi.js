@@ -198,14 +198,9 @@ export function ShellApi() {
     if (!file) throw new Error(`lg file ${id} not found`);
 
     const res = lgParse(file.content);
-
-    if (res.isValid === false) {
-      throw new Error(res.errorMsg);
-    }
-
     const lines = file.content.split('\n');
 
-    return get(res, 'resource.Templates', []).map(t => {
+    return get(res, 'templates', []).map(t => {
       const [start, end] = getTemplateBodyRange(t);
       const body = lines.slice(start - 1, end).join('\n');
 

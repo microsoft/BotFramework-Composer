@@ -34,9 +34,9 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
-      const parseResult = parse(lgFile.content);
-      if (parseResult.isValid) {
-        const allTemplates = lodash.get(parseResult, 'resource.Templates', []).map((template, templateIndex) => {
+      try {
+        const parseResult = parse(lgFile.content);
+        const allTemplates = lodash.get(parseResult, 'templates', []).map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,
@@ -57,8 +57,8 @@ export default function TableView(props) {
           }, []);
           setTemplates(dialogsReferenceThisTemplate);
         }
-      } else {
-        OpenConfirmModal('Templates parse failed', `${parseResult.errorMsg}`, {
+      } catch (error) {
+        OpenConfirmModal('Templates parse failed', error.message, {
           style: DialogStyle.Console,
           confirmBtnText: 'Edit',
         }).then(res => {

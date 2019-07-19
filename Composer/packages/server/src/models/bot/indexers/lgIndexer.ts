@@ -1,4 +1,4 @@
-import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
+import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import { get } from 'lodash';
 
 import { Path } from '../../../utility/path';
@@ -7,7 +7,7 @@ import { FileInfo, LGFile } from '../interface';
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
 
-  public index(files: FileInfo[]) {
+  public index(files: FileInfo[]): LGFile[] {
     if (files.length === 0) return [];
     this.lgFiles = [];
     for (const file of files) {
@@ -17,47 +17,33 @@ export class LGIndexer {
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagnostics: this.staticCheck(file.content, file.name),
+          diagnostics: StaticChecker.checkText(file.content, file.name),
         });
       }
     }
-  }
-
-  public getLgFiles() {
     return this.lgFiles;
   }
 
-  public staticCheck(content: string, name: string = '') {
-    return StaticChecker.checkText(content, name);
+  public getLgFiles(): LGFile[] {
+    return this.lgFiles;
   }
 
-  public isValid(content: string) {
+  public isValid(content: string): boolean {
     return StaticChecker.checkText(content, name).filter(d => d.Severity === DiagnosticSeverity.Error).length === 0;
   }
 
-  public parse(content: string, name: string = '') {
-    try {
-      const resource = LGParser.parse(content, name);
-      return {
-        isValid: true,
-        resource,
-        error: null,
-        errorMsg: '',
-      };
-    } catch (error) {
-      const errorMsg = get(error, 'Diagnostics', []).reduce((msg: string, err: Diagnostic) => {
-        const { Start, End } = err.Range;
-        const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-        msg += `${errorDetail} \n ${err.Message}\n`;
-        return msg;
-      }, '');
-      return {
-        isValid: false,
-        resource: null,
-        error,
-        errorMsg,
-      };
-    }
+  public parse(
+    content: string,
+    name: string = ''
+  ): {
+    templates: LGTemplate[];
+    diagnostics: Diagnostic[];
+  } {
+    const resource = LGParser.parse(content, name);
+    const diagnostics = StaticChecker.checkText(content, name);
+    return {
+      templates: get(resource, 'Templates', []),
+      diagnostics,
+    };
   }
 }
