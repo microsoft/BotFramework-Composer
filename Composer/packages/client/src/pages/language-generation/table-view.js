@@ -19,7 +19,7 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
-import { parse } from '../../utils/lgUtil';
+import * as lgUtil from '../../utils/lgUtil';
 
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
@@ -34,9 +34,9 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
-      try {
-        const parseResult = parse(lgFile.content);
-        const allTemplates = lodash.get(parseResult, 'templates', []).map((template, templateIndex) => {
+      const diagnostics = lodash.get(lgFile, 'diagnostics', []);
+      if (lgUtil.isValid(diagnostics) === true) {
+        const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,
@@ -57,8 +57,9 @@ export default function TableView(props) {
           }, []);
           setTemplates(dialogsReferenceThisTemplate);
         }
-      } catch (error) {
-        OpenConfirmModal('Templates parse failed', error.message, {
+      } else {
+        const errorMsg = lgUtil.combineMessage(diagnostics);
+        OpenConfirmModal('Templates parse failed', errorMsg, {
           style: DialogStyle.Console,
           confirmBtnText: 'Edit',
         }).then(res => {

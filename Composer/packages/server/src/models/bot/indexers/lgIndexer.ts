@@ -28,22 +28,26 @@ export class LGIndexer {
     return this.lgFiles;
   }
 
-  public isValid(content: string): boolean {
-    return StaticChecker.checkText(content, name).filter(d => d.Severity === DiagnosticSeverity.Error).length === 0;
+  public isValid(diagnostics: Diagnostic[]): boolean {
+    return diagnostics.filter(d => d.Severity === DiagnosticSeverity.Error).length === 0;
   }
 
-  public parse(
-    content: string,
-    name: string = ''
-  ): {
-    templates: LGTemplate[];
-    diagnostics: Diagnostic[];
-  } {
+  public check(content: string, name: string = ''): Diagnostic[] {
+    return StaticChecker.checkText(content, name);
+  }
+
+  public parse(content: string, name: string = ''): LGTemplate[] {
     const resource = LGParser.parse(content, name);
-    const diagnostics = StaticChecker.checkText(content, name);
-    return {
-      templates: get(resource, 'Templates', []),
-      diagnostics,
-    };
+    return get(resource, 'Templates', []);
+  }
+
+  public combineMessage(diagnostics: Diagnostic[]): string {
+    return diagnostics.reduce((msg, d) => {
+      const { Start, End } = d.Range;
+      const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+      msg += `${position} \n ${d.Message}\n`;
+      return msg;
+    }, '');
   }
 }
