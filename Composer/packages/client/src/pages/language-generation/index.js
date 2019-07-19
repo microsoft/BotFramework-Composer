@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
@@ -150,25 +150,27 @@ export const LGPage = props => {
       <div css={ContentHeaderStyle}>
         <div>Bot says..</div>
         <div css={flexContent}>
-          {newContent && (
+          {textMode && (
             <Fragment>
-              <ActionButton
+              <PrimaryButton
                 iconProps={{
                   iconName: 'Save',
                 }}
-                split={true}
                 onClick={() => onSave()}
+                disabled={!newContent}
+                styles={{ root: { marginRight: '10px' } }}
               >
-                Save file
-              </ActionButton>
-              <ActionButton
+                {formatMessage('Save')}
+              </PrimaryButton>
+              <DefaultButton
                 iconProps={{
                   iconName: 'Undo',
                 }}
                 onClick={() => discardChanges()}
+                disabled={!newContent}
               >
-                Discard changes
-              </ActionButton>
+                {formatMessage('Discard changes')}
+              </DefaultButton>
             </Fragment>
           )}
           <Toggle

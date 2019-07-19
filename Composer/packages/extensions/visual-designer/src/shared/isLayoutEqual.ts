@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 
-import { outlineObiJson } from '../transformers/outlineObiJson';
+import { outlineObiJson } from './outlineObiJson';
 
 export function isLayoutEqual(value, other) {
   const valueOutline = outlineObiJson(value);

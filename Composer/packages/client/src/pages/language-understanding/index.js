@@ -4,7 +4,7 @@ import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
@@ -160,25 +160,28 @@ export const LUPage = props => {
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
-          {UIShowEditingToolBar && (
+          {textMode && (
             <Fragment>
-              <ActionButton
+              <PrimaryButton
                 iconProps={{
                   iconName: 'Save',
                 }}
                 split={true}
                 onClick={() => onSave()}
+                disabled={!UIShowEditingToolBar}
+                styles={{ root: { marginRight: '10px' } }}
               >
-                Save file
-              </ActionButton>
-              <ActionButton
+                {formatMessage('Save')}
+              </PrimaryButton>
+              <DefaultButton
                 iconProps={{
                   iconName: 'Undo',
                 }}
                 onClick={() => discardChanges()}
+                disabled={!UIShowEditingToolBar}
               >
-                Discard changes
-              </ActionButton>
+                {formatMessage('Discard changes')}
+              </DefaultButton>
             </Fragment>
           )}
           <Toggle
