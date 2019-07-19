@@ -114,6 +114,7 @@ export async function saveProjectAs(dispatch, name, description) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
+      navigate('/');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
