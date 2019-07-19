@@ -13,30 +13,13 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
-import { LGParser } from 'botbuilder-lg';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { Store } from '../../store/index';
 import { actionButton, formCell } from '../language-understanding/styles';
-
-function parse(content, name = '') {
-  try {
-    const resource = LGParser.parse(content, name);
-    return {
-      isValid: true,
-      resource,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      isValid: false,
-      resource: null,
-      error,
-    };
-  }
-}
+import { parse } from '../../utils/lgUtil';
 
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
@@ -52,9 +35,8 @@ export default function TableView(props) {
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
       const parseResult = parse(lgFile.content);
-
       if (parseResult.isValid) {
-        const allTemplates = lodash.get(parseResult, 'recource.Templates', []).map((template, templateIndex) => {
+        const allTemplates = lodash.get(parseResult, 'resource.Templates', []).map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,
@@ -76,10 +58,7 @@ export default function TableView(props) {
           setTemplates(dialogsReferenceThisTemplate);
         }
       } else {
-        const { Start, End } = parseResult.error.Range;
-        const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-        OpenConfirmModal('Templates parse failed', `${errorDetail},\n ${parseResult.error.Message}`, {
+        OpenConfirmModal('Templates parse failed', `${parseResult.errorMsg}`, {
           style: DialogStyle.Console,
           confirmBtnText: 'Edit',
         }).then(res => {

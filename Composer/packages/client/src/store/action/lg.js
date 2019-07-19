@@ -1,16 +1,18 @@
 import axios from 'axios';
-import { LGParser } from 'botbuilder-lg';
+import { get } from 'lodash';
+
+import { parse } from '../../utils/lgUtil';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
 const templateValidate = ({ Name, Body }) => {
   const text = ['#', Name, '\n', Body].join('');
-  return LGParser.TryParse(text);
+  return parse(text);
 };
 
 const templatesFromText = content => {
-  const res = LGParser.TryParse(content);
-  return res.isValid && res.templates;
+  const res = parse(content);
+  return res.isValid && get(res, 'resource.Templates', []);
 };
 
 const textFromTemplates = templates => {
@@ -30,10 +32,6 @@ const textFromTemplates = templates => {
   return text;
 };
 
-const contentValidate = text => {
-  return LGParser.TryParse(text);
-};
-
 /**
  *
  * @param {Name, Body} template
@@ -42,11 +40,11 @@ export function validateLgTemplate(template) {
   // validate template
   const validateResult = templateValidate(template);
   if (validateResult.isValid === false) {
-    throw new Error(validateResult.error.Message);
+    throw new Error(validateResult.errorMsg);
   }
 
   // should be a single template.
-  if (validateResult.templates.length !== 1) {
+  if (get(validateResult, 'resource.Templates', []).length !== 1) {
     throw new Error('invalid single template');
   }
 }
@@ -57,11 +55,9 @@ export function validateLgTemplate(template) {
  */
 export function validateLgContent(content) {
   // validate template
-  const validateResult = contentValidate(content);
+  const validateResult = parse(content);
   if (validateResult.isValid === false) {
-    const { Start, End } = validateResult.error.Range;
-    const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-    throw new Error(`${errorDetail},\n ${validateResult.error.Message}`);
+    throw new Error(validateResult.errorMsg);
   }
 }
 

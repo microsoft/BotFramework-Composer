@@ -1,10 +1,10 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
-import { LGParser } from 'botbuilder-lg';
 
 import { validateLgTemplate } from '../src/store/action/lg';
 
+import { parse as lgParse } from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -193,13 +193,13 @@ export function ShellApi() {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
 
-    const res = LGParser.TryParse(file.content);
+    const res = lgParse(file.content);
 
     if (res.isValid === false) {
-      throw new Error(res.error.Message);
+      throw new Error(res.errorMsg);
     }
 
-    return res.templates.map(t => ({ Name: t.Name, Body: t.Body }));
+    return get(res, 'resource.Templates', []).map(t => ({ Name: t.Name, Body: t.Body }));
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {

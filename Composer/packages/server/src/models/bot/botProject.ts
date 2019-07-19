@@ -138,7 +138,7 @@ export class BotProject {
     }
     const parseResult = this.lgIndexer.parse(content);
     if (parseResult.isValid === false) {
-      throw new Error(`update lg ${id} content is invalid, ${parseResult.error.Message}`);
+      throw new Error(`update lg ${id} content is invalid, ${parseResult.errorMsg}`);
     }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
@@ -148,7 +148,7 @@ export class BotProject {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     const parseResult = this.lgIndexer.parse(content);
     if (parseResult.isValid === false) {
-      throw new Error(`create lg ${id} content is invalid, ${parseResult.error.Message}`);
+      throw new Error(`create lg ${id} content is invalid, ${parseResult.errorMsg}`);
     }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
