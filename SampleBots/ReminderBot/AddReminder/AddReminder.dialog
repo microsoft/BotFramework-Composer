@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-08T07:49:25.845Z",
     "updatedAt": "2019-07-16T19:39:35.169Z",
-    "id": "871426",
-    "name": "AddReminder"
+    "id": "871426"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-08T07:49:28.221Z",
         "updatedAt": "2019-07-16T19:39:52.002Z",
-        "id": "633099",
-        "name": "Set a Property"
+        "id": "633099"
       },
       "property": "user.content",
       "value": "@Content"
@@ -24,8 +22,7 @@
       "$designer": {
         "createdAt": "2019-07-09T03:33:19.562Z",
         "updatedAt": "2019-07-16T19:39:56.624Z",
-        "id": "849308",
-        "name": "Set a Property"
+        "id": "849308"
       },
       "property": "user.remindtime",
       "value": "@RemindTime"
@@ -35,8 +32,7 @@
       "$designer": {
         "createdAt": "2019-07-09T08:34:23.221Z",
         "updatedAt": "2019-07-16T19:40:00.854Z",
-        "id": "661955",
-        "name": "Prompt for text"
+        "id": "661955"
       },
       "property": "user.content",
       "prompt": "Please enter the content of your reminder.",
@@ -50,8 +46,7 @@
       "$designer": {
         "createdAt": "2019-07-09T08:42:33.616Z",
         "updatedAt": "2019-07-16T19:40:04.756Z",
-        "id": "530560",
-        "name": "Branch: If/Else"
+        "id": "530560"
       },
       "condition": "user.remindtime != null",
       "steps": [
@@ -60,8 +55,7 @@
           "$designer": {
             "createdAt": "2019-07-09T08:46:05.316Z",
             "updatedAt": "2019-07-16T19:40:09.474Z",
-            "id": "570104",
-            "name": "Set a Property"
+            "id": "570104"
           },
           "property": "user.requesttime",
           "value": "user.remindtime.datetime[0].timex[0]"
@@ -73,8 +67,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:40:11.984Z",
             "updatedAt": "2019-07-16T19:40:16.187Z",
-            "id": "072656",
-            "name": "Type: Date"
+            "id": "072656"
           },
           "property": "user.remindtime",
           "prompt": "Please enter a time for reminding.",
@@ -89,8 +82,7 @@
           "$designer": {
             "createdAt": "2019-07-09T08:48:34.405Z",
             "updatedAt": "2019-07-16T19:40:21.187Z",
-            "id": "353180",
-            "name": "Set a Property"
+            "id": "353180"
           },
           "property": "user.requesttime",
           "value": "user.remindtime[0].value"
@@ -102,8 +94,7 @@
       "$designer": {
         "createdAt": "2019-07-09T08:54:11.872Z",
         "updatedAt": "2019-07-16T19:40:32.754Z",
-        "id": "929045",
-        "name": "Prompt for confirmation"
+        "id": "929045"
       },
       "property": "user.confirmresult",
       "prompt": "OK, the content is {user.content} and the time is {user.requesttime}, is this right?",
@@ -126,8 +117,7 @@
       "$designer": {
         "createdAt": "2019-07-09T08:55:52.498Z",
         "updatedAt": "2019-07-16T19:40:35.600Z",
-        "id": "819123",
-        "name": "Branch: If/Else"
+        "id": "819123"
       },
       "condition": "user.confirmresult",
       "steps": [
@@ -136,8 +126,7 @@
           "$designer": {
             "createdAt": "2019-07-09T08:57:23.002Z",
             "updatedAt": "2019-07-16T19:40:41.413Z",
-            "id": "350238",
-            "name": "HTTP Request"
+            "id": "350238"
           },
           "method": "POST",
           "url": "http://bfdreminder.azurewebsites.net/api/AddReminder",
@@ -154,8 +143,7 @@
           "$designer": {
             "createdAt": "2019-07-09T10:46:15.059Z",
             "updatedAt": "2019-07-16T19:40:48.733Z",
-            "id": "672824",
-            "name": "Send an Activity"
+            "id": "672824"
           },
           "activity": "[bfdactivity-672824]"
         },
@@ -164,8 +152,7 @@
           "$designer": {
             "createdAt": "2019-07-10T03:06:07.410Z",
             "updatedAt": "2019-07-16T19:40:54.901Z",
-            "id": "796324",
-            "name": "Begin a Dialog"
+            "id": "796324"
           },
           "dialog": "ClearUserData"
         }
@@ -176,8 +163,7 @@
           "$designer": {
             "createdAt": "2019-07-10T03:01:31.427Z",
             "updatedAt": "2019-07-16T19:41:00.947Z",
-            "id": "528148",
-            "name": "Begin a Dialog"
+            "id": "528148"
           },
           "dialog": "ClearUserData"
         },
@@ -186,8 +172,7 @@
           "$designer": {
             "createdAt": "2019-07-09T08:56:41.246Z",
             "updatedAt": "2019-07-16T19:41:05.723Z",
-            "id": "046452",
-            "name": "Repeat this Dialog"
+            "id": "046452"
           }
         }
       ]
@@ -197,8 +182,7 @@
       "$designer": {
         "createdAt": "2019-07-10T07:59:01.872Z",
         "updatedAt": "2019-07-16T19:41:12.967Z",
-        "id": "951475",
-        "name": "End Dialog"
+        "id": "951475"
       }
     }
   ],

@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:48:21.955Z",
     "updatedAt": "2019-07-16T19:30:07.176Z",
-    "id": "295682",
-    "name": "OAuthInput"
+    "id": "295682"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-11T06:08:01.812Z",
         "updatedAt": "2019-07-16T19:30:09.770Z",
-        "id": "245482",
-        "name": "Branch: If/Else"
+        "id": "245482"
       },
       "condition": "user.token == null",
       "steps": [
@@ -23,8 +21,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:31:43.362Z",
             "updatedAt": "2019-07-16T19:31:51.650Z",
-            "id": "199270",
-            "name": "OAuth Login"
+            "id": "199270"
           },
           "ConnectionName": "Outlook",
           "Title": "Log in",
@@ -38,8 +35,7 @@
       "$designer": {
         "createdAt": "2019-07-11T06:07:53.618Z",
         "updatedAt": "2019-07-16T19:32:00.212Z",
-        "id": "518974",
-        "name": "HTTP Request"
+        "id": "518974"
       },
       "method": "GET",
       "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
@@ -53,8 +49,7 @@
       "$designer": {
         "createdAt": "2019-07-11T06:04:32.777Z",
         "updatedAt": "2019-07-16T19:32:04.947Z",
-        "id": "991558",
-        "name": "Send an Activity"
+        "id": "991558"
       },
       "activity": "[bfdactivity-991558]"
     }

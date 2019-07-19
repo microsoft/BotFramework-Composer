@@ -3,21 +3,20 @@ import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 import { useState } from 'react';
 import { Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
 
 import { consoleStyle, dialog } from './styles';
 
 export const ErrorPopup = props => {
-  const [isShow, setIsShow] = useState(true);
+  const [hidden, setHidden] = useState(props.error ? false : true);
 
   const _closeDialog = () => {
-    setIsShow(false);
+    setHidden(true);
     props.onDismiss();
   };
 
   return (
     <Dialog
-      hidden={!isShow}
+      hidden={hidden}
       onDismiss={_closeDialog}
       dialogContentProps={{
         type: DialogType.normal,
@@ -29,7 +28,7 @@ export const ErrorPopup = props => {
         styles: { main: { maxWidth: 450 } },
       }}
     >
-      <div css={consoleStyle}>{formatMessage(props.error)}</div>
+      <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
         <PrimaryButton onClick={_closeDialog} text="Ok" />
       </DialogFooter>

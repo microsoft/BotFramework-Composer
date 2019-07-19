@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-10T02:59:47.692Z",
     "updatedAt": "2019-07-16T19:39:38.615Z",
-    "id": "323094",
-    "name": "ClearUserData"
+    "id": "323094"
   },
   "autoEndDialog": true,
   "steps": [
@@ -13,8 +12,7 @@
       "$designer": {
         "createdAt": "2019-07-10T03:56:44.738Z",
         "updatedAt": "2019-07-16T19:41:20.771Z",
-        "id": "609169",
-        "name": "Delete a Property"
+        "id": "609169"
       },
       "property": "user.index"
     },
@@ -23,8 +21,7 @@
       "$designer": {
         "createdAt": "2019-07-10T03:56:54.015Z",
         "updatedAt": "2019-07-16T19:41:25.345Z",
-        "id": "971431",
-        "name": "Delete a Property"
+        "id": "971431"
       },
       "property": "user.data"
     },
@@ -33,8 +30,7 @@
       "$designer": {
         "createdAt": "2019-07-10T03:57:01.610Z",
         "updatedAt": "2019-07-16T19:41:30.021Z",
-        "id": "463745",
-        "name": "Delete a Property"
+        "id": "463745"
       },
       "property": "user.content"
     },
@@ -43,8 +39,7 @@
       "$designer": {
         "createdAt": "2019-07-10T03:58:01.700Z",
         "updatedAt": "2019-07-16T19:41:34.420Z",
-        "id": "210405",
-        "name": "Delete a Property"
+        "id": "210405"
       },
       "property": "user.remindtime"
     },
@@ -53,8 +48,7 @@
       "$designer": {
         "createdAt": "2019-07-10T03:58:13.929Z",
         "updatedAt": "2019-07-16T19:41:39.884Z",
-        "id": "716688",
-        "name": "Delete a Property"
+        "id": "716688"
       },
       "property": "user.requesttime"
     }
