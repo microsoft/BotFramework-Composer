@@ -8,7 +8,7 @@ Follow these six steps to create a weather bot from scratch using Bot Framework 
 ## Step 1: Creating a new bot
 On the Composer homepage, click **New**. Select **Create from scratch**. Click **Next**. Give your bot a name, for example *WeatherBot*. Once created, you should be able to see the following screen.
 
-![screenshot: creating a new bot](Assets/s1DesignFlow.png)
+![screenshot: creating a new bot](Assets/DesignFlow.png)
 
 
 ## Step 2: Setting up the intent recognizer
@@ -20,7 +20,7 @@ In the text editor, type in the intents and utterances, then click **Save**.
 
 **Note**: You should use the correct file format to edit the recognizer (see example below). Follow this [link](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format) to learn more about the LU format.
 
-![screenshot: editing the LU](Assets/s3LU.png)
+![screenshot: editing the LU](Assets/LU.png)
 
 
 ## Step 3: Creating events as intent handlers
@@ -32,7 +32,7 @@ On the right-hand side of the page, give the intent a name, for example, *Greeti
 
 It's a good practice to create a handler for each intent. In this guide, we’ve created two handlers named *GreetingIntentHandler* and *CheckWeatherIntentHandler*.
 
-<img src = "Assets/IntentName.png" alt = "edit intent" width = 500></img>
+<img src = "Assets/IntentName.png" alt = "Intent name" width = 500></img>
 
 
 ## Step 4: Adding logic to the events
@@ -46,7 +46,7 @@ Dialogs allow you to create a multi-turn conversation. Each dialog is designed t
 
 In this guide, we will demonstrate both approaches. To start, click the event icon to go to the logic page.
 
-<img src = "Assets/EventIcon.png" alt = "edit intent" width = 500></img>
+<img src = "Assets/EventIcon.png" alt = "Event icon" width = 500></img>
 
 ### 4.1: Adding actions without dialogs
 Let's add logic to *GreetingIntentHandler*. By design, we want the bot to send a message to the user in response to the *Greeting* intent. To do this, click the **add icon**, select **Send Messages**, then select **Send Activity**. On the **Language Generation** pane, type in the bot response. For example, *Hello from the bot!*.
@@ -69,7 +69,7 @@ To add the newly created dialog to the event, first, go back to the root dialog,
 ## Step 5: (Optional) Creating handlers for other types of events
 Besides recognized intents, you may want to handle other types of events, for example, when there are unrecognized intents or when a user joins the conversation. Creating handlers for these types of events is no different from creating intent handlers. You just need to select a different event type as shown below. For example, select **Handle ConversationUpdate** if you want to send a welcome message to the user when they first join the conversation (when a conversationUpdate event is trigged).
 
-<img src = "Assets/OtherEventHandler.png" alt = "edit intent" width = 450></img>
+<img src = "Assets/OtherEventHandler.png" alt = "Other event handler" width = 450></img>
 
 
 ## Step 6: Testing your bot
