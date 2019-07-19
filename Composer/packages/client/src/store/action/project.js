@@ -93,7 +93,7 @@ export async function openBotProject(dispatch, absolutePath) {
     dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
-        summary: 'Get Project Fail',
+        summary: 'Failed to open bot',
         message: err.response.data.message,
       },
     });
