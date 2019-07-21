@@ -38,7 +38,14 @@ export const ObiEditor: React.FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id, lgApiContext.removeLgTemplate));
+          const cleanLgTemplate = (removedData: any): void => {
+            if (removedData.$type === 'Microsoft.SendActivity') {
+              if (removedData.activity && removedData.activity.indexOf('[bfdactivity-') !== -1) {
+                lgApiContext.removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
+              }
+            }
+          };
+          onChange(deleteNode(data, e.id, cleanLgTemplate));
           onSelect('');
         };
         break;
