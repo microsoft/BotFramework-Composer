@@ -51,7 +51,7 @@ export class NodeRenderer extends React.Component<NodeProps, {}> {
   containerRef = React.createRef();
 
   render() {
-    const { id, data, focusedId, onEvent, onResize, getLgTemplates } = this.props;
+    const { id, data, focusedId, onEvent, onResize } = this.props;
     const ChosenRenderer = chooseRendererByType(data.$type);
     return (
       <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}>
@@ -63,7 +63,6 @@ export class NodeRenderer extends React.Component<NodeProps, {}> {
           onResize={size => {
             onResize(size, 'node');
           }}
-          getLgTemplates={getLgTemplates}
         />
       </div>
     );

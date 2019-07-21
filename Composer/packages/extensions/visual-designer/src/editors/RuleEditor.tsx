@@ -19,7 +19,7 @@ const calculateNodeMap = (_, data) => {
   };
 };
 
-export const RuleEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const RuleEditor = ({ id, data, focusedId, onEvent }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup } = nodeMap;
 
@@ -43,7 +43,6 @@ export const RuleEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => 
             data={stepGroup.data}
             focusedId={focusedId}
             onEvent={onEvent}
-            getLgTemplates={getLgTemplates}
           />
         </div>
       ) : null}

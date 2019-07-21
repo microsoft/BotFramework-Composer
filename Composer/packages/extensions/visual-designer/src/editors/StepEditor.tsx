@@ -34,7 +34,7 @@ const TailSize = {
   height: CircleSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const StepEditor = ({ id, data, focusedId, onEvent }) => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
@@ -49,7 +49,6 @@ export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => 
       onResize={boundary => {
         setStepGroupBoundary(boundary);
       }}
-      getLgTemplates={getLgTemplates}
     />
   );
   const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;

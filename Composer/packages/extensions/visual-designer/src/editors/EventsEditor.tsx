@@ -5,7 +5,7 @@ import { Panel } from '../components/nodes/templates/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 
-export const EventsEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const EventsEditor = ({ id, data, focusedId, onEvent }) => {
   const ruleCount = data.children.length;
   const title = `Events (${ruleCount})`;
 
@@ -19,7 +19,7 @@ export const EventsEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) =
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
       addMenu={<EventMenu onClick={onClick} />}
     >
-      <RuleGroup key={id} id={id} data={data} focusedId={focusedId} getLgTemplates={getLgTemplates} onEvent={onEvent} />
+      <RuleGroup key={id} id={id} data={data} focusedId={focusedId} onEvent={onEvent} />
     </Panel>
   );
 };

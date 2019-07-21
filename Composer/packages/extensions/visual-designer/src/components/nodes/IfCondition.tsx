@@ -34,14 +34,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export const IfCondition: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  getLgTemplates,
-  onEvent,
-  onResize,
-}) => {
+export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -73,7 +66,6 @@ export const IfCondition: FunctionComponent<NodeProps> = ({
           id={condition.id}
           data={condition.data}
           focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
           onEvent={onEvent}
         />
       </OffsetContainer>
@@ -94,7 +86,6 @@ export const IfCondition: FunctionComponent<NodeProps> = ({
                   id={x.id}
                   data={x.data}
                   focusedId={focusedId}
-                  getLgTemplates={getLgTemplates}
                   onEvent={onEvent}
                   onResize={size => {
                     patchBoundary(x.id, size);

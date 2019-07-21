@@ -26,7 +26,6 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
   id,
   data,
   focusedId,
-  getLgTemplates,
   onEvent,
   isRoot,
 }): JSX.Element => {
@@ -52,7 +51,6 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
           id={ruleGroup.id}
           data={ruleGroup.data}
           focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
           onEvent={onEvent}
         />
       )}
@@ -64,7 +62,6 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
             id={stepGroup.id}
             data={stepGroup.data}
             focusedId={focusedId}
-            getLgTemplates={getLgTemplates}
             onEvent={onEvent}
           />
         </Collapse>
