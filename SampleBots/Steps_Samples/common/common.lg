@@ -1,6 +1,6 @@
 # help
 - ```
-    I can show you examples on how to use Steps, You can enter a number  between 1-12.
+    I can show you examples on how to use Steps. Enter the number next to the entity that you with to see in action.
     [Suggestions=Steps|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|EditSteps|ReplaceDialog|EmitEvent]
 	01 - Steps
 	02 - EndTurn
