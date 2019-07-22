@@ -92,7 +92,7 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
       dialog = step.dialog;
       summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
     } else {
-      summary = formatMessage('1 action: {step}', { step: ConceptLabels[step.$type].title || step.$type });
+      summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
     }
   } else {
     summary = formatMessage('{count} actions', { count: data.steps.length });
