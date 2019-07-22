@@ -1,0 +1,91 @@
+{
+    "$schema": "../../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "recognizer": {
+      "$type": "Microsoft.RegexRecognizer",
+      "intents": {
+        "ShowEmailIntent": "(?i)show email",
+        "SendEmailIntent": "(?i)send email",
+        "HelpIntent": "(?i)help",
+        "FindContactIntent": "(?i)find email contact",
+        "ForwardEmailIntent": "(?i)forward email",
+        "ReplyEmailIntent": "(?i)reply email",
+        "CancelIntent": "(?i)cancel|never mind"
+      }
+    },
+    "rules": [
+      {
+        "$type": "Microsoft.UnknownIntentRule",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hi! I'm a Email bot. Say \"show email\" to get started."
+          }
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "CancelIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "ok, see you next time."
+          },
+          {
+            "$type": "Microsoft.EndDialog"
+          }
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "ShowEmailIntent",
+        "steps": [
+          "Initialization",
+          "ShowMyEmail"
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "SendEmailIntent",
+        "steps": [
+          "Initialization",
+          //"SendEmail"
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "FindContactIntent",
+        "steps": [
+          "Initialization",
+          //"FindContact"
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "ForwardEmailIntent",
+        "steps": [
+          "Initialization",
+          //"ForwardEmail"
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "ReplyEmailIntent",
+        "steps": [
+          "Initialization",
+          //"ReplyEmail"
+        ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "HelpIntent",
+        "steps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "I am an email bot, Please try show email to get started."
+          }
+        ]
+      }
+    ]
+  }

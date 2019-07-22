@@ -1,0 +1,52 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        "ShowMyCurrentEmail",
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.ShowEmailChoice",
+            "choices": [
+                {
+                    "value": "show next page"
+                },
+                {
+                    "value": "show last page"
+                },
+                {
+                    "value": "go back"
+                }
+            ],
+            "prompt": "What do you want to do now? ",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.ShowEmailChoice",
+            "cases": [
+                {
+                    "value": "show next page",
+                    "steps": [
+                        "ShowMyNextPage"
+                    ]
+                },
+                {
+                    "value": "show last page",
+                    "steps": [
+                        "ShowMyLastPage"
+                    ]
+                },
+                {
+                    "value": "go back",
+                    "steps": [
+                        //need to be completed
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.RepeatDialog"
+        }
+    ]
+}

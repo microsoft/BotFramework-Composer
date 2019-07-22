@@ -1,0 +1,77 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        "GetMyEmail",
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "This is the preview of your email."
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}].subject}"
+            "activity": "{user.emails[0].subject}"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}+1].subject}"
+            "activity": "{user.emails[1].subject}"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}+2].subject}"
+            "activity": "{user.emails[2].subject}"
+        },
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.EmailChoice",
+            "choices": [
+                {
+                    "value": "Email1"
+                },
+                {
+                    "value": "Email2"
+                },
+                {
+                    "value": "Email3"
+                }
+            ],
+            "prompt": "Please select a value from below:",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.EmailChoice",
+            "cases": [
+                {
+                    "value": "Email1",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "{user.emails[0].body}"
+                        }
+                    ]
+                },
+                {
+                    "value": "Email2",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "{user.emails[2].body}"
+                        }
+                    ]
+                },
+                {
+                    "value": "Email3",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SendActivity",
+                            "activity": "{user.emails[2].body}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
