@@ -53,7 +53,7 @@ namespace Tests
             .Send("01")
                 .AssertReply("Hello, What's your age?")
             .Send("18")
-                .AssertReply("Your age is 18 which satisified the condition we evaluated")
+                .AssertReply("Your age is 18 which satisified the condition that was evaluated")
             .Send("02")
                 .AssertReply("Who are your?\n\n   1. Susan\n   2. Nick\n   3. Tom")
             .Send("2")
