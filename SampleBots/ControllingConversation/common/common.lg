@@ -21,10 +21,10 @@
 -Pushed dialog.id into a list
 
 # bfdactivity-164444
--You age is {user.age} which satisified the condition we evaluated
+-Your age is {user.age} which satisified the condition that was evaluated
 
 # bfdactivity-619321
--You age is {user.age} which did not satisfy the condition
+-Your age is {user.age} which did not satisfy the condition that we evaluated
 
 # bfdactivity-097130
 -You selected {user.name}

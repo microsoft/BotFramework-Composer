@@ -1,6 +1,6 @@
 # help
 - ```
-    I can show you examples on how to use Steps, You can enter number 01-12
+    I can show you examples on how to use Steps, You can enter a number  between 1-12.
     [Suggestions=Steps|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|EditSteps|ReplaceDialog|EmitEvent]
 	01 - Steps
 	02 - EndTurn
@@ -122,4 +122,7 @@
 -You select: 3
 
 # bfdactivity-347762 
+-[help]
+
+# bfdactivity-640616
 -[help]

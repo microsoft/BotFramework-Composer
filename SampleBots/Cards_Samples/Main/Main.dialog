@@ -74,12 +74,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-068293]",
                   "$designer": {
-                    "createdAt": "2019-07-22T08:34:17.910Z",
-                    "updatedAt": "2019-07-22T08:34:17.948Z",
-                    "id": "268757"
-                  }
+                    "name": "Send an Activity",
+                    "id": "159442",
+                    "updatedAt": "2019-07-22T15:24:36.922Z"
+                  },
+                  "activity": "[bfdactivity-159442]"
                 }
               ]
             },
@@ -88,12 +88,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-625345]",
                   "$designer": {
-                    "createdAt": "2019-07-22T08:34:19.849Z",
-                    "updatedAt": "2019-07-22T08:34:19.873Z",
-                    "id": "819930"
-                  }
+                    "name": "Send an Activity",
+                    "id": "762914",
+                    "updatedAt": "2019-07-22T15:24:47.764Z"
+                  },
+                  "activity": "[bfdactivity-762914]"
                 }
               ]
             },
@@ -102,7 +102,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-733841]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "241579",
+                    "updatedAt": "2019-07-22T15:24:58.696Z"
+                  },
+                  "activity": "[bfdactivity-241579]"
                 }
               ]
             },
@@ -111,7 +116,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-545252]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "901582",
+                    "updatedAt": "2019-07-22T15:25:08.676Z"
+                  },
+                  "activity": "[bfdactivity-901582]"
                 }
               ]
             },
@@ -120,7 +130,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-808579]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "553859",
+                    "updatedAt": "2019-07-22T15:25:18.697Z"
+                  },
+                  "activity": "[bfdactivity-553859]"
                 }
               ]
             },
@@ -129,7 +144,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-117065]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "190928",
+                    "updatedAt": "2019-07-22T15:25:26.007Z"
+                  },
+                  "activity": "[bfdactivity-190928]"
                 }
               ]
             },
@@ -138,7 +158,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-581350]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "806895",
+                    "updatedAt": "2019-07-22T15:25:36.088Z"
+                  },
+                  "activity": "[bfdactivity-806895]"
                 }
               ]
             },
@@ -147,7 +172,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[bfdactivity-654665]"
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "997450",
+                    "updatedAt": "2019-07-22T15:25:48.926Z"
+                  },
+                  "activity": "[bfdactivity-997450]"
                 }
               ]
             }
@@ -174,12 +204,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[bfdactivity-355490]",
           "$designer": {
             "createdAt": "2019-07-22T08:34:29.617Z",
-            "updatedAt": "2019-07-22T08:34:29.637Z",
+            "updatedAt": "2019-07-22T15:22:23.069Z",
             "id": "729500"
-          }
+          },
+          "activity": "[bfdactivity-729500]"
         }
       ],
       "$designer": {

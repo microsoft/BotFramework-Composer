@@ -113,37 +113,13 @@
     08 - AllCards
   ```
 
-#bfdactivity-068293
 
--[HeroCard]
 
-#bfdactivity-625345
 
--[ThumbnailCard]
 
-#bfdactivity-733841
 
--[SigninCard]
 
-#bfdactivity-545252
 
--[AnimationCard]
-
-#bfdactivity-808579
-
--[VideoCard]
-
-#bfdactivity-117065
-
--[AudioCard]
-
-#bfdactivity-581350
-
--[AdaptiveCard]
-
-#bfdactivity-654665
-
--[AllCards]
 
 # Welcome
 - Welcome to Card Samples Bot.
@@ -151,3 +127,29 @@
 # bfdactivity-355490
 - Welcome to Card Samples Bot.
 
+# bfdactivity-729500
+-Welcome to Card Samples Bot.
+
+# bfdactivity-159442
+-[HeroCard]
+
+# bfdactivity-762914
+-[ThumbnailCard]
+
+# bfdactivity-241579
+-[SigninCard]
+
+# bfdactivity-901582
+-[AnimationCard]
+
+# bfdactivity-553859
+-[VideoCard]
+
+# bfdactivity-190928
+-[AudioCard]
+
+# bfdactivity-806895
+-[AdaptiveCard]
+
+# bfdactivity-997450
+-[AllCards]

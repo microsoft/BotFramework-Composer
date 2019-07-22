@@ -2,22 +2,22 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:28:10.677Z",
-    "updatedAt": "2019-07-16T19:47:49.350Z",
+    "updatedAt": "2019-07-22T16:20:08.258Z",
     "id": "892616"
   },
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
-      "Steps": "Steps|01",
-      "EndTurn": "EndTurn|02",
-      "IfCondition": "IfCondition|03",
-      "EditArray": "EditArray|04",
-      "EndDialog": "EndDialog|05",
-      "HttpRequest": "HttpRequest|06",
-      "SwitchCondition": "SwitchCondition|07",
-      "RepeatDialog": "RepeatDialog|08",
-      "TraceAndLog": "TraceAndLog|trace|log|09",
+      "Steps": "Steps|(0?1)$",
+      "EndTurn": "EndTurn|(0?2)",
+      "IfCondition": "IfCondition|(0?3)",
+      "EditArray": "EditArray|(0?4)",
+      "EndDialog": "EndDialog|(0?5)",
+      "HttpRequest": "HttpRequest|(0?6)",
+      "SwitchCondition": "SwitchCondition|(0?7)",
+      "RepeatDialog": "RepeatDialog|(0?8)",
+      "TraceAndLog": "TraceAndLog|trace|log|(0?9)",
       "EditSteps": "EditSteps|10",
       "ReplaceDialog": "ReplaceDialog|11",
       "EmitEvent": "EmitEvent|12",
@@ -255,12 +255,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]",
           "$designer": {
             "createdAt": "2019-07-22T07:31:04.680Z",
-            "updatedAt": "2019-07-22T07:31:04.721Z",
+            "updatedAt": "2019-07-22T16:14:47.793Z",
             "id": "640616"
-          }
+          },
+          "activity": "[bfdactivity-640616]"
         }
       ]
     }
