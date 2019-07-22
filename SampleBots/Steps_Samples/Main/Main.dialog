@@ -38,7 +38,12 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "Steps"
+          "dialog": "Steps",
+          "$designer": {
+            "createdAt": "2019-07-22T07:32:51.372Z",
+            "updatedAt": "2019-07-22T07:32:51.385Z",
+            "id": "124654"
+          }
         }
       ],
       "intent": "Steps"

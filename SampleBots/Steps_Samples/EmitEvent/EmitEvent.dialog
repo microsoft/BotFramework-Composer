@@ -7,61 +7,6 @@
     "name": "EmitEvent"
   },
   "autoEndDialog": false,
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:33:40.722Z",
-        "updatedAt": "2019-07-16T19:52:37.148Z",
-        "id": "879639",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-879639]"
-    },
-    {
-      "$type": "Microsoft.BeginDialog",
-      "$designer": {
-        "createdAt": "2019-07-16T19:52:44.693Z",
-        "updatedAt": "2019-07-16T19:52:48.031Z",
-        "id": "293316",
-        "name": "Begin a Dialog"
-      },
-      "Dialog": {
-        "$type": "Microsoft.AdaptiveDialog",
-        "autoEndDialog": false,
-        "recognizer": {
-          "$type": "Microsoft.RegexRecognizer",
-          "intents": {
-            "EmitEvent": "emit",
-            "CowboyIntent": "moo"
-          }
-        },
-        "rules": [
-          {
-            "$type": "Microsoft.IntentRule",
-            "intent": "EmitEvent",
-            "steps": [
-              {
-                "$type": "Microsoft.EmitEvent",
-                "EventName": "CustomEvent",
-                "BubbleEvent": true
-              }
-            ]
-          },
-          {
-            "$type": "Microsoft.IntentRule",
-            "intent": "CowboyIntent",
-            "steps": [
-              {
-                "$type": "Microsoft.SendActivity",
-                "activity": "Yippee ki-yay!"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.EventRule",
@@ -79,6 +24,72 @@
         "updatedAt": "2019-07-16T19:52:38.463Z",
         "id": "767051"
       }
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "360314",
+        "updatedAt": "2019-07-22T08:03:52.948Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:33:40.722Z",
+            "updatedAt": "2019-07-16T19:52:37.148Z",
+            "id": "879639",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-879639]"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "createdAt": "2019-07-16T19:52:44.693Z",
+            "updatedAt": "2019-07-16T19:52:48.031Z",
+            "id": "293316",
+            "name": "Begin a Dialog"
+          },
+          "Dialog": {
+            "$type": "Microsoft.AdaptiveDialog",
+            "autoEndDialog": false,
+            "recognizer": {
+              "$type": "Microsoft.RegexRecognizer",
+              "intents": {
+                "EmitEvent": "emit",
+                "CowboyIntent": "moo"
+              }
+            },
+            "rules": [
+              {
+                "$type": "Microsoft.IntentRule",
+                "intent": "EmitEvent",
+                "steps": [
+                  {
+                    "$type": "Microsoft.EmitEvent",
+                    "EventName": "CustomEvent",
+                    "BubbleEvent": true
+                  }
+                ]
+              },
+              {
+                "$type": "Microsoft.IntentRule",
+                "intent": "CowboyIntent",
+                "steps": [
+                  {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Yippee ki-yay!"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     }
   ],
   "$schema": "../../app.schema"

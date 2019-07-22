@@ -7,32 +7,45 @@
     "name": "AttachmentInput"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.AttachmentInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:28:24.521Z",
-        "updatedAt": "2019-07-16T19:28:29.924Z",
-        "id": "452587",
-        "name": "Prompt for Attachment"
+        "name": "Handle an Event",
+        "id": "883342",
+        "updatedAt": "2019-07-22T07:50:42.820Z"
       },
-      "property": "dialog.attachments",
-      "prompt": "Please send an image or music.",
-      "maxTurnCount": 0,
-      "alwaysPrompt": false,
-      "allowInterruptions": false,
-      "outputFormat": "All"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T19:28:31.311Z",
-        "updatedAt": "2019-07-16T19:28:35.928Z",
-        "id": "365176",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-365176]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.AttachmentInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:28:24.521Z",
+            "updatedAt": "2019-07-16T19:28:29.924Z",
+            "id": "452587",
+            "name": "Prompt for Attachment"
+          },
+          "property": "dialog.attachments",
+          "prompt": "Please send an image or music.",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "All"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:28:31.311Z",
+            "updatedAt": "2019-07-16T19:28:35.928Z",
+            "id": "365176",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-365176]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

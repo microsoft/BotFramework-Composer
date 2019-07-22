@@ -7,57 +7,70 @@
     "name": "TextInput"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-11T06:04:39.354Z",
-        "updatedAt": "2019-07-16T18:55:28.843Z",
-        "id": "077848",
-        "name": "Prompt for text"
+        "name": "Handle an Event",
+        "id": "235447",
+        "updatedAt": "2019-07-22T07:51:38.546Z"
       },
-      "property": "user.name",
-      "prompt": "Hello, I'm Zoidberg. What is your name?",
-      "maxTurnCount": 2147483647,
-      "alwaysPrompt": true,
-      "allowInterruptions": false,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:01:12.688Z",
-        "updatedAt": "2019-07-16T18:55:33.401Z",
-        "id": "538962",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-538962]"
-    },
-    {
-      "$type": "Microsoft.TextInput",
-      "$designer": {
-        "createdAt": "2019-07-01T22:01:13.642Z",
-        "updatedAt": "2019-07-16T18:55:38.060Z",
-        "id": "025273",
-        "name": "Prompt for text"
-      },
-      "property": "user.name",
-      "prompt": "Hello, I'm Zoidberg. What is your name?",
-      "maxTurnCount": 2147483647,
-      "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:01:16.223Z",
-        "updatedAt": "2019-07-16T18:55:43.007Z",
-        "id": "118486",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-118486]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-11T06:04:39.354Z",
+            "updatedAt": "2019-07-16T18:55:28.843Z",
+            "id": "077848",
+            "name": "Prompt for text"
+          },
+          "property": "user.name",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T22:01:12.688Z",
+            "updatedAt": "2019-07-16T18:55:33.401Z",
+            "id": "538962",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-538962]"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-01T22:01:13.642Z",
+            "updatedAt": "2019-07-16T18:55:38.060Z",
+            "id": "025273",
+            "name": "Prompt for text"
+          },
+          "property": "user.name",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T22:01:16.223Z",
+            "updatedAt": "2019-07-16T18:55:43.007Z",
+            "id": "118486",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-118486]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

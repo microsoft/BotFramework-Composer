@@ -8,44 +8,57 @@
     "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:58:15.911Z",
-        "updatedAt": "2019-07-16T19:58:19.512Z",
-        "id": "107670",
-        "name": "Prompt for text"
+        "name": "Handle an Event",
+        "id": "044028",
+        "updatedAt": "2019-07-22T08:05:18.175Z"
       },
-      "outputBinding": "user.name",
-      "prompt": "Hello, what is your name?",
-      "maxTurnCount": 0,
-      "alwaysPrompt": false,
-      "allowInterruptions": false,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.TraceActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T19:58:20.503Z",
-        "updatedAt": "2019-07-16T19:58:24.020Z",
-        "id": "774586",
-        "name": "Emit a trace event"
-      },
-      "valueType": "memory",
-      "value": "{user}"
-    },
-    {
-      "$type": "Microsoft.LogStep",
-      "$designer": {
-        "createdAt": "2019-07-16T19:58:24.944Z",
-        "updatedAt": "2019-07-16T19:58:29.674Z",
-        "id": "219510",
-        "name": "Log to console"
-      },
-      "text": "{user.name}",
-      "traceActivity": false
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:58:15.911Z",
+            "updatedAt": "2019-07-16T19:58:19.512Z",
+            "id": "107670",
+            "name": "Prompt for text"
+          },
+          "outputBinding": "user.name",
+          "prompt": "Hello, what is your name?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TraceActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:58:20.503Z",
+            "updatedAt": "2019-07-16T19:58:24.020Z",
+            "id": "774586",
+            "name": "Emit a trace event"
+          },
+          "valueType": "memory",
+          "value": "{user}"
+        },
+        {
+          "$type": "Microsoft.LogStep",
+          "$designer": {
+            "createdAt": "2019-07-16T19:58:24.944Z",
+            "updatedAt": "2019-07-16T19:58:29.674Z",
+            "id": "219510",
+            "name": "Log to console"
+          },
+          "text": "{user.name}",
+          "traceActivity": false
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

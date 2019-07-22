@@ -8,208 +8,237 @@
   },
   "autoEndDialog": true,
   "generator": "common.lg",
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SetProperty",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T20:14:37.157Z",
-        "updatedAt": "2019-07-16T20:18:02.912Z",
-        "id": "002799",
-        "name": "Set a Property"
+        "name": "Handle an Event",
+        "id": "735800",
+        "updatedAt": "2019-07-22T08:12:19.686Z"
       },
-      "property": "dialog.item",
-      "value": "@promptContentML"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "$designer": {
-        "createdAt": "2019-07-16T20:14:40.006Z",
-        "updatedAt": "2019-07-16T20:18:08.591Z",
-        "id": "557725",
-        "name": "Set a Property"
-      },
-      "property": "dialog.listName",
-      "value": "@ListType"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:14:41.004Z",
-        "updatedAt": "2019-07-16T20:18:12.141Z",
-        "id": "965232",
-        "name": "Branch: If/Else"
-      },
-      "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T20:14:37.157Z",
+            "updatedAt": "2019-07-16T20:18:02.912Z",
+            "id": "002799",
+            "name": "Set a Property"
+          },
+          "property": "dialog.item",
+          "value": "@promptContentML"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T20:14:40.006Z",
+            "updatedAt": "2019-07-16T20:18:08.591Z",
+            "id": "557725",
+            "name": "Set a Property"
+          },
+          "property": "dialog.listName",
+          "value": "@ListType"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:14:41.004Z",
+            "updatedAt": "2019-07-16T20:18:12.141Z",
+            "id": "965232",
+            "name": "Branch: If/Else"
+          },
+          "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-16T20:18:14.187Z",
+                "updatedAt": "2019-07-16T20:18:20.208Z",
+                "id": "048651",
+                "name": "Send an Activity"
+              },
+              "activity": "[bfdactivity-048651]"
+            },
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T20:18:23.989Z",
+                "updatedAt": "2019-07-16T20:18:26.523Z",
+                "id": "272186",
+                "name": "End Dialog"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:18:28.464Z",
+            "updatedAt": "2019-07-16T20:18:30.464Z",
+            "id": "716714",
+            "name": "Branch: If/Else"
+          },
+          "condition": "user.lists == null",
+          "steps": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "createdAt": "2019-07-16T20:18:33.356Z",
+                "updatedAt": "2019-07-16T20:18:38.557Z",
+                "id": "312002",
+                "name": "Initialize a Property"
+              },
+              "property": "user.lists",
+              "type": "object"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:18:40.958Z",
+            "updatedAt": "2019-07-16T20:18:42.960Z",
+            "id": "431309",
+            "name": "Branch: If/Else"
+          },
+          "condition": "dialog.listName == null",
+          "steps": [
+            {
+              "$type": "Microsoft.ChoiceInput",
+              "$designer": {
+                "createdAt": "2019-07-16T20:18:45.689Z",
+                "updatedAt": "2019-07-16T20:18:49.862Z",
+                "id": "739777",
+                "name": "Prompt with multi-choice"
+              },
+              "property": "dialog.listName",
+              "prompt": "Which list do you want to expand?",
+              "maxTurnCount": 0,
+              "alwaysPrompt": true,
+              "allowInterruptions": true,
+              "outputFormat": "value",
+              "choices": [
+                {
+                  "value": "shopping",
+                  "synonyms": [
+                    "1",
+                    "first",
+                    "shopping",
+                    "first one"
+                  ]
+                },
+                {
+                  "value": "grocery",
+                  "synonyms": [
+                    "2",
+                    "second",
+                    "grocery",
+                    "second one"
+                  ]
+                },
+                {
+                  "value": "todo",
+                  "synonyms": [
+                    "3",
+                    "third",
+                    "todo",
+                    "third one",
+                    "to do"
+                  ]
+                }
+              ],
+              "appendChoices": true,
+              "defaultLocale": "en-us",
+              "style": "SuggestedAction",
+              "choiceOptions": {
+                "inlineSeparator": ", ",
+                "inlineOr": " or ",
+                "inlineOrMore": ", or ",
+                "includeNumbers": true
+              },
+              "recognizerOptions": {
+                "noValue": false
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:18:52.326Z",
+            "updatedAt": "2019-07-16T20:18:54.401Z",
+            "id": "982253",
+            "name": "Branch: If/Else"
+          },
+          "condition": "dialog.item == null",
+          "steps": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "createdAt": "2019-07-16T20:18:57.039Z",
+                "updatedAt": "2019-07-16T20:19:13.919Z",
+                "id": "957758",
+                "name": "Prompt for text"
+              },
+              "property": "dialog.item",
+              "prompt": "Please enter the title of your item.",
+              "maxTurnCount": 0,
+              "alwaysPrompt": false,
+              "allowInterruptions": false,
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:19:14.934Z",
+            "updatedAt": "2019-07-16T20:19:17.768Z",
+            "id": "075604",
+            "name": "Branch: If/Else"
+          },
+          "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+          "steps": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "createdAt": "2019-07-16T20:19:19.990Z",
+                "updatedAt": "2019-07-16T20:19:25.307Z",
+                "id": "907210",
+                "name": "Initialize a Property"
+              },
+              "property": "user.lists.{dialog.listName}",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-16T20:19:27.421Z",
+            "updatedAt": "2019-07-16T20:19:33.540Z",
+            "id": "644924",
+            "name": "Edit an Array Property"
+          },
+          "changeType": "Push",
+          "arrayProperty": "user.lists.{dialog.listName}",
+          "value": "dialog.item"
+        },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-16T20:18:14.187Z",
-            "updatedAt": "2019-07-16T20:18:20.208Z",
-            "id": "048651",
+            "createdAt": "2019-07-16T20:19:36.168Z",
+            "updatedAt": "2019-07-16T20:19:41.597Z",
+            "id": "569973",
             "name": "Send an Activity"
           },
-          "activity": "[bfdactivity-048651]"
-        },
-        {
-          "$type": "Microsoft.EndDialog",
-          "$designer": {
-            "createdAt": "2019-07-16T20:18:23.989Z",
-            "updatedAt": "2019-07-16T20:18:26.523Z",
-            "id": "272186",
-            "name": "End Dialog"
-          }
+          "activity": "[bfdactivity-569973]"
         }
       ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:18:28.464Z",
-        "updatedAt": "2019-07-16T20:18:30.464Z",
-        "id": "716714",
-        "name": "Branch: If/Else"
-      },
-      "condition": "user.lists == null",
-      "steps": [
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "createdAt": "2019-07-16T20:18:33.356Z",
-            "updatedAt": "2019-07-16T20:18:38.557Z",
-            "id": "312002",
-            "name": "Initialize a Property"
-          },
-          "property": "user.lists",
-          "type": "object"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:18:40.958Z",
-        "updatedAt": "2019-07-16T20:18:42.960Z",
-        "id": "431309",
-        "name": "Branch: If/Else"
-      },
-      "condition": "dialog.listName == null",
-      "steps": [
-        {
-          "$type": "Microsoft.ChoiceInput",
-          "$designer": {
-            "createdAt": "2019-07-16T20:18:45.689Z",
-            "updatedAt": "2019-07-16T20:18:49.862Z",
-            "id": "739777",
-            "name": "Prompt with multi-choice"
-          },
-          "property": "dialog.listName",
-          "prompt": "Which list do you want to expand?",
-          "maxTurnCount": 0,
-          "alwaysPrompt": true,
-          "allowInterruptions": true,
-          "outputFormat": "value",
-          "choices": [
-            {
-              "value": "shopping",
-              "synonyms": ["1", "first", "shopping", "first one"]
-            },
-            {
-              "value": "grocery",
-              "synonyms": ["2", "second", "grocery", "second one"]
-            },
-            {
-              "value": "todo",
-              "synonyms": ["3", "third", "todo", "third one", "to do"]
-            }
-          ],
-          "appendChoices": true,
-          "defaultLocale": "en-us",
-          "style": "SuggestedAction",
-          "choiceOptions": {
-            "inlineSeparator": ", ",
-            "inlineOr": " or ",
-            "inlineOrMore": ", or ",
-            "includeNumbers": true
-          },
-          "recognizerOptions": {
-            "noValue": false
-          }
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:18:52.326Z",
-        "updatedAt": "2019-07-16T20:18:54.401Z",
-        "id": "982253",
-        "name": "Branch: If/Else"
-      },
-      "condition": "dialog.item == null",
-      "steps": [
-        {
-          "$type": "Microsoft.TextInput",
-          "$designer": {
-            "createdAt": "2019-07-16T20:18:57.039Z",
-            "updatedAt": "2019-07-16T20:19:13.919Z",
-            "id": "957758",
-            "name": "Prompt for text"
-          },
-          "property": "dialog.item",
-          "prompt": "Please enter the title of your item.",
-          "maxTurnCount": 0,
-          "alwaysPrompt": false,
-          "allowInterruptions": false,
-          "outputFormat": "none"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:19:14.934Z",
-        "updatedAt": "2019-07-16T20:19:17.768Z",
-        "id": "075604",
-        "name": "Branch: If/Else"
-      },
-      "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
-      "steps": [
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "createdAt": "2019-07-16T20:19:19.990Z",
-            "updatedAt": "2019-07-16T20:19:25.307Z",
-            "id": "907210",
-            "name": "Initialize a Property"
-          },
-          "property": "user.lists.{dialog.listName}",
-          "type": "array"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "$designer": {
-        "createdAt": "2019-07-16T20:19:27.421Z",
-        "updatedAt": "2019-07-16T20:19:33.540Z",
-        "id": "644924",
-        "name": "Edit an Array Property"
-      },
-      "changeType": "Push",
-      "arrayProperty": "user.lists.{dialog.listName}",
-      "value": "dialog.item"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T20:19:36.168Z",
-        "updatedAt": "2019-07-16T20:19:41.597Z",
-        "id": "569973",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-569973]"
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

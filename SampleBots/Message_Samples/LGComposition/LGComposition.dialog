@@ -7,32 +7,45 @@
     "name": "LGComposition"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:36:36.053Z",
-        "updatedAt": "2019-07-16T19:36:39.049Z",
-        "id": "823530",
-        "name": "Prompt for text"
+        "name": "Handle an Event",
+        "id": "432892",
+        "updatedAt": "2019-07-22T07:54:16.386Z"
       },
-      "property": "user.name",
-      "prompt": "Hello, I'm Zoidberg. What is your name?",
-      "maxTurnCount": 0,
-      "alwaysPrompt": false,
-      "allowInterruptions": false,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T19:36:40.579Z",
-        "updatedAt": "2019-07-16T19:36:46.957Z",
-        "id": "823322",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-823322]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:36:36.053Z",
+            "updatedAt": "2019-07-16T19:36:39.049Z",
+            "id": "823530",
+            "name": "Prompt for text"
+          },
+          "property": "user.name",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:36:40.579Z",
+            "updatedAt": "2019-07-16T19:36:46.957Z",
+            "id": "823322",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-823322]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

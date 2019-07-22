@@ -14,45 +14,6 @@
       "FortuneTellerIntent": "(?i)fortune|future"
     }
   },
-  "steps": [
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T19:55:53.273Z",
-        "updatedAt": "2019-07-16T19:56:25.943Z",
-        "id": "646692",
-        "name": "Branch: If/Else"
-      },
-      "condition": "user.name == null",
-      "steps": [
-        {
-          "$type": "Microsoft.TextInput",
-          "$designer": {
-            "createdAt": "2019-07-01T21:42:01.159Z",
-            "updatedAt": "2019-07-16T19:56:29.324Z",
-            "id": "823146",
-            "name": "Prompt for text"
-          },
-          "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "maxTurnCount": 2147483647,
-          "alwaysPrompt": false,
-          "allowInterruptions": true,
-          "outputFormat": "none"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:41:59.475Z",
-        "updatedAt": "2019-07-16T19:56:33.688Z",
-        "id": "120128",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-120128]"
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
@@ -85,6 +46,56 @@
         }
       ],
       "intent": "FortuneTellerIntent"
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "644475",
+        "updatedAt": "2019-07-22T08:04:53.812Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T19:55:53.273Z",
+            "updatedAt": "2019-07-16T19:56:25.943Z",
+            "id": "646692",
+            "name": "Branch: If/Else"
+          },
+          "condition": "user.name == null",
+          "steps": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "createdAt": "2019-07-01T21:42:01.159Z",
+                "updatedAt": "2019-07-16T19:56:29.324Z",
+                "id": "823146",
+                "name": "Prompt for text"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": true,
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:41:59.475Z",
+            "updatedAt": "2019-07-16T19:56:33.688Z",
+            "id": "120128",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-120128]"
+        }
+      ]
     }
   ],
   "$schema": "../../app.schema"

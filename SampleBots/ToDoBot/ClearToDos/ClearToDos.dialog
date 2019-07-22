@@ -7,53 +7,66 @@
     "name": "ClearToDos"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.EditArray",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T20:01:31.422Z",
-        "updatedAt": "2019-07-16T20:01:36.455Z",
-        "id": "527945",
-        "name": "Edit an Array Property"
+        "name": "Handle an Event",
+        "id": "480162",
+        "updatedAt": "2019-07-22T08:10:50.068Z"
       },
-      "changeType": "Clear",
-      "arrayProperty": "user.todos",
-      "resultProperty": "dialog.cleared"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-01T22:03:19.772Z",
-        "updatedAt": "2019-07-16T20:01:39.092Z",
-        "id": "815442",
-        "name": "Branch: If/Else"
-      },
-      "condition": "dialog.cleared",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.EditArray",
           "$designer": {
-            "createdAt": "2019-07-01T22:03:18.901Z",
-            "updatedAt": "2019-07-16T20:01:43.249Z",
-            "id": "832307",
-            "name": "Send an Activity"
+            "createdAt": "2019-07-16T20:01:31.422Z",
+            "updatedAt": "2019-07-16T20:01:36.455Z",
+            "id": "527945",
+            "name": "Edit an Array Property"
           },
-          "activity": "[bfdactivity-832307]"
-        }
-      ],
-      "elseSteps": [
+          "changeType": "Clear",
+          "arrayProperty": "user.todos",
+          "resultProperty": "dialog.cleared"
+        },
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-01T22:03:36.091Z",
-            "updatedAt": "2019-07-16T20:01:47.803Z",
-            "id": "983761",
-            "name": "Send an Activity"
+            "createdAt": "2019-07-01T22:03:19.772Z",
+            "updatedAt": "2019-07-16T20:01:39.092Z",
+            "id": "815442",
+            "name": "Branch: If/Else"
           },
-          "activity": "[bfdactivity-983761]"
+          "condition": "dialog.cleared",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:18.901Z",
+                "updatedAt": "2019-07-16T20:01:43.249Z",
+                "id": "832307",
+                "name": "Send an Activity"
+              },
+              "activity": "[bfdactivity-832307]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:36.091Z",
+                "updatedAt": "2019-07-16T20:01:47.803Z",
+                "id": "983761",
+                "name": "Send an Activity"
+              },
+              "activity": "[bfdactivity-983761]"
+            }
+          ]
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }
