@@ -21,6 +21,7 @@ export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   align-items: center;
 `;
@@ -32,7 +33,6 @@ export const ContentStyle = css`
   flex: 1;
   position: relative;
   nav {
-    width: 255px;
     ul {
       margin-top: 0px;
     }

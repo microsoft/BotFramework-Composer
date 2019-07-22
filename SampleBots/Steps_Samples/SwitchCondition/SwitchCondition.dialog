@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-06-07T16:18:34.824Z",
     "updatedAt": "2019-07-16T19:50:43.791Z",
-    "id": "039096",
-    "name": "SwitchCondition"
+    "id": "039096"
   },
   "autoEndDialog": true,
   "steps": [
@@ -42,8 +41,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:57:48.037Z",
         "updatedAt": "2019-07-16T19:57:51.482Z",
-        "id": "084631",
-        "name": "Prompt with multi-choice"
+        "id": "084631"
       }
     },
     {
@@ -51,8 +49,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:55:12.076Z",
         "updatedAt": "2019-07-16T19:57:55.398Z",
-        "id": "160914",
-        "name": "Send an Activity"
+        "id": "160914"
       },
       "activity": "[bfdactivity-160914]"
     },
@@ -61,8 +58,7 @@
       "$designer": {
         "createdAt": "2019-07-01T21:55:13.229Z",
         "updatedAt": "2019-07-16T19:57:58.231Z",
-        "id": "448444",
-        "name": "Branch: If/Else"
+        "id": "448444"
       },
       "condition": "user.style",
       "cases": [
@@ -74,8 +70,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:55:23.134Z",
                 "updatedAt": "2019-07-16T19:58:02.619Z",
-                "id": "576002",
-                "name": "Send an Activity"
+                "id": "576002"
               },
               "activity": "[bfdactivity-576002]"
             }
@@ -89,8 +84,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:57:26.930Z",
                 "updatedAt": "2019-07-16T19:58:07.532Z",
-                "id": "677412",
-                "name": "Send an Activity"
+                "id": "677412"
               },
               "activity": "[bfdactivity-677412]"
             }
@@ -104,8 +98,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:57:33.404Z",
                 "updatedAt": "2019-07-16T19:58:11.985Z",
-                "id": "700082",
-                "name": "Send an Activity"
+                "id": "700082"
               },
               "activity": "[bfdactivity-700082]"
             }

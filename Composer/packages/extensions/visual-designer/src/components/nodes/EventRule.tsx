@@ -15,7 +15,17 @@ function renderTitle(data) {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.events && data.events.length) {
-    return formatMessage('Handle events: {events}', { events: data.events.join(', ') });
+    return formatMessage(
+      `Handle events: {event} {
+        count, plural,
+           =0 {}
+        other {+#}
+      }`,
+      {
+        event: data.events[0],
+        count: data.events.length - 1,
+      }
+    );
   } else {
     return formatMessage('Handle Event...');
   }

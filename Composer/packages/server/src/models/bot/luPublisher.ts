@@ -38,7 +38,7 @@ export class LuPublisher {
         return true;
       }
 
-      const newChecksum = await this._checksum(path);
+      const newChecksum = await this._checksum(this.luPath + '/' + path);
       if (newChecksum !== status.checksum) {
         status.checksum = newChecksum;
         status.status = FileState.UPDATED;
