@@ -265,9 +265,11 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
+          "activity": "[help]",
           "$designer": {
-            "name": "Send an Activity",
-            "id": "[help]"
+            "createdAt": "2019-07-22T07:31:04.680Z",
+            "updatedAt": "2019-07-22T07:31:04.721Z",
+            "id": "640616"
           }
         }
       ]

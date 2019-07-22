@@ -87,7 +87,7 @@
       },
       "indexProperty": "dialog.index",
       "valueProperty": "dialog.value",
-      "ListProperty": "user.ids",
+      "listProperty": "user.ids",
       "Steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -117,13 +117,13 @@
       },
       "pageSize": 10,
       "valueProperty": "dialog.value",
-      "ListProperty": "user.ids",
+      "listProperty": "user.ids",
       "PageSize": "2",
       "ValueProperty": "dialog.page",
       "Steps": [
         {
           "$type": "Microsoft.Foreach",
-          "ListProperty": "dialog.page",
+          "listProperty": "dialog.page",
           "Steps": [
             {
               "$type": "Microsoft.SendActivity",

@@ -48,6 +48,8 @@ namespace Tests
         public async Task Inputs_01TextInput()
         {
             await BuildTestFlow()
+            .SendConversationUpdate()
+                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("01")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("02")
@@ -62,6 +64,8 @@ namespace Tests
         public async Task Inputs_02NumberInput()
         {
             await BuildTestFlow()
+            .SendConversationUpdate()
+                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("02")
                 .AssertReply("What is your age?")
             .Send("18")
@@ -76,6 +80,8 @@ namespace Tests
         public async Task Inputs_03ConfirmInput()
         {
             await BuildTestFlow()
+            .SendConversationUpdate()
+                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("03")
                 .AssertReply("yes or no (1) Yes or (2) No")
             .Send("asdasd")
@@ -92,6 +98,8 @@ namespace Tests
         public async Task Inputs_04ChoiceInput()
         {
             await BuildTestFlow()
+            .SendConversationUpdate()
+                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("04")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
@@ -103,6 +111,8 @@ namespace Tests
         public async Task Inputs_06DateTimeInput()
         {
             await BuildTestFlow()
+            .SendConversationUpdate()
+                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("06")
                 .AssertReply("Please enter a date.")
             .Send("June 1st 2019")

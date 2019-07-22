@@ -44,7 +44,9 @@ namespace Tests
         public async Task Steps_01Steps()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
-                .Send("01")
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
+            .Send("01")
                 .AssertReply("Step 1")
                 .AssertReply("Step 2")
                 .AssertReply("Step 3")
@@ -57,6 +59,8 @@ namespace Tests
         public async Task Steps_02EndTurn()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("02")
                 .AssertReply("What's up?")
             .Send("Nothing")
@@ -68,6 +72,8 @@ namespace Tests
         public async Task Steps_03IfCondition()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("03")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("Carlos")
@@ -79,6 +85,8 @@ namespace Tests
         public async Task Steps_04EditArray()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("04")
                 .AssertReply("Here are the index and values in the array.")
                 .AssertReply("0: 11111")
@@ -95,6 +103,8 @@ namespace Tests
         public async Task Steps_05EndDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("05")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -111,16 +121,18 @@ namespace Tests
         public async Task Steps_06HttpRequest()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("06")
-            .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
+                .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
             .Send("TestPetName")
-            .AssertReply("Great! Your pet's name is TestPetName")
-            .AssertReply("Now please enter the id of your pet, this could help you find your pet later.")
+                .AssertReply("Great! Your pet's name is TestPetName")
+                .AssertReply("Now please enter the id of your pet, this could help you find your pet later.")
             .Send("88888")
-            .AssertReply("Done! You have added a pet named \"TestPetName\" with id \"88888\"")
-            .AssertReply("Now try to specify the id of your pet, and I will help your find it out from the store.")
+                .AssertReply("Done! You have added a pet named \"TestPetName\" with id \"88888\"")
+                .AssertReply("Now try to specify the id of your pet, and I will help your find it out from the store.")
             .Send("88888")
-            .AssertReply("Great! I found your pet named \"TestPetName\"")
+                .AssertReply("Great! I found your pet named \"TestPetName\"")
             .StartTestAsync();
         }
 
@@ -128,6 +140,8 @@ namespace Tests
         public async Task Steps_07SwitchCondition()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("07")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
@@ -140,6 +154,8 @@ namespace Tests
         public async Task Steps_08RepeatDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("08")
                 .AssertReply("Hello, what is your name?")
             .Send("luhan")
@@ -155,6 +171,8 @@ namespace Tests
         public async Task Steps_09TraceAndLog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"), sendTrace: true)
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("09")
                 .AssertReply("Hello, what is your name?")
             .Send("luhan")
@@ -171,6 +189,8 @@ namespace Tests
         public async Task Steps_10EditSteps()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("10")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -183,6 +203,8 @@ namespace Tests
         public async Task Steps_11ReplaceDialog()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("11")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
@@ -202,6 +224,8 @@ namespace Tests
         public async Task Steps_12EmitEvent()
         {
             await BuildTestFlow(getFolderPath("Steps_Samples"))
+            .SendConversationUpdate()
+                .AssertReply("I can show you examples on how to use Steps, You can enter number 01-12\n01 - Steps\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditSteps\n11 - ReplaceDialog\n12 - EmitEvent\n")
             .Send("12")
                 .AssertReply("Say moo to get a response, say emit to emit a event.")
             .Send("moo")
