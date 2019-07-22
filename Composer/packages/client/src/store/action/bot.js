@@ -34,3 +34,12 @@ export async function reloadBot(dispatch, botName) {
     throw new Error(err.response.data.message);
   }
 }
+
+export async function startBot(dispatch, toStartBot) {
+  dispatch({
+    type: ActionTypes.TO_START_BOT,
+    payload: {
+      toStartBot,
+    },
+  });
+}
