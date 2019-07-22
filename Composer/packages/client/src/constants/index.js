@@ -74,6 +74,7 @@ export const ActionTypes = {
   UPDATE_OAUTH: 'UPDATE_OAUTH',
   SET_ERROR: 'SET_ERROR',
   TO_START_BOT: 'TO_START_BOT',
+  SET_DESIGN_PATH: 'SET_DESIGN_PATH',
 };
 
 export const Tips = {

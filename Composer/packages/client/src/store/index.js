@@ -25,6 +25,13 @@ const initialState = {
   schemas: {},
   luFiles: [],
   luStatus: [],
+  designPath: {
+    dialogId: '',
+    navPath: '',
+    focused: '',
+    uri: '',
+    navPathHistory: [],
+  },
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
 };

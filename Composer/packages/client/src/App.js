@@ -27,7 +27,7 @@ const topLinks = [
     exact: true,
   },
   {
-    to: 'dialogs/',
+    to: '/dialogs/Main',
     iconName: 'SplitObject',
     labelName: 'Design Flow',
     activeIfUrlContains: 'dialogs',

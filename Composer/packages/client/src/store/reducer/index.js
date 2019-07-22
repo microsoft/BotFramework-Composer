@@ -103,6 +103,10 @@ const setToStartBot = (state, { toStartBot }) => {
   return (state.toStartBot = toStartBot);
 };
 
+const setDesignPath = (state, { dialogId, navPath, focused, uri, navPathHistory }) => {
+  return (state.designPath = { dialogId, navPath, focused, uri, navPathHistory });
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -128,4 +132,5 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.TO_START_BOT]: setToStartBot,
+  [ActionTypes.SET_DESIGN_PATH]: setDesignPath,
 });

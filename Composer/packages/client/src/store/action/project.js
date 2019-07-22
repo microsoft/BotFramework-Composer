@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
-import dialogHistory from './../../utils/navigateUtil';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { startBot } from './bot';
 
@@ -43,7 +42,7 @@ export async function fetchProject(dispatch) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      dialogHistory.navTo(`Main#`);
+      navigate('/dialogs/Main');
     }
   } catch (err) {
     navigate('/home');
@@ -82,7 +81,7 @@ export async function openBotProject(dispatch, absolutePath) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      dialogHistory.navTo(`Main#`);
+      navigate('/dialogs/Main');
       startBot(dispatch, true);
     }
   } catch (err) {
@@ -114,7 +113,7 @@ export async function saveProjectAs(dispatch, name, description) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      dialogHistory.navTo(`Main#`);
+      navigate('dialogs/Main');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -140,7 +139,7 @@ export async function createProject(dispatch, templateId, name, description) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      dialogHistory.navTo(`Main#`);
+      navigate('/dialogs/Main');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

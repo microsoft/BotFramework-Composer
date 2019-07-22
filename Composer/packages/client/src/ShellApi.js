@@ -1,5 +1,5 @@
-import React, { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual, get } from 'lodash';
+import { useEffect, useContext, useRef, useMemo } from 'react';
+import { debounce, isEqual, get, cloneDeep } from 'lodash';
 import { navigate } from '@reach/router';
 
 import { validateLgTemplate } from '../src/store/action/lg';
@@ -8,12 +8,12 @@ import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
-import dialogHistory from './utils/navigateUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
-// this is the api interface provided by shell to extensions
-// this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
-// this is where all side effects (like directly calling api of extensions) happened
+// this is the api interface provided by shell to extensions this is the single
+// place handles all incoming request from extensions, VisualDesigner or
+// FormEditor this is where all side effects (like directly calling api of
+// extensions) happened
 
 const apiClient = new ApiClient();
 
@@ -49,9 +49,9 @@ const shellNavigator = (shellPage, opts = {}) => {
   }
 };
 
-function BaseShellApi() {
+export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, schemas, lgFiles, luFiles } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPath } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
@@ -60,8 +60,14 @@ function BaseShellApi() {
   const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
-  const { navPath, focusPath } = dialogHistory.getPath();
 
+  const { dialogId, focused, navPathHistory } = designPath;
+  const navPath = dialogId + '#' + designPath.navPath;
+  let focusPath = navPath;
+  if (focused) {
+    focusPath = focusPath + focused;
+  }
+  const navPathHistoryCopy = cloneDeep(navPathHistory);
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE, REMOVE } = FileChangeTypes;
 
@@ -126,9 +132,7 @@ function BaseShellApi() {
     if (schemaError.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, {
-        style: DialogStyle.Console,
-      });
+      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
     }
   }, [schemas]);
 
@@ -178,7 +182,10 @@ function BaseShellApi() {
     if (path !== '') {
       const updatedDialog = setDialogData(dialogsMap, path, newData);
       const dialogId = path.split('#')[0];
-      const payload = { id: dialogId, content: updatedDialog };
+      const payload = {
+        id: dialogId,
+        content: updatedDialog,
+      };
       dialogsMap[dialogId] = updatedDialog;
       updateDialog(payload);
     }
@@ -224,11 +231,7 @@ function BaseShellApi() {
 
     switch (fileChangeType) {
       case UPDATE:
-        return await updateLgTemplate({
-          file,
-          templateName,
-          template,
-        });
+        return await updateLgTemplate({ file, templateName, template });
       case CREATE:
         return await createLgTemplate({
           file,
@@ -236,10 +239,7 @@ function BaseShellApi() {
           position: position === 0 ? 0 : -1,
         });
       case REMOVE:
-        return await removeLgTemplate({
-          file,
-          templateName,
-        });
+        return await removeLgTemplate({ file, templateName });
       default:
         throw new Error(`unsupported method ${fileChangeType}`);
     }
@@ -277,33 +277,46 @@ function BaseShellApi() {
   }
 
   function cleanData() {
-    const dialogId = navPath.split('#')[0];
     const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
     if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = { id: dialogId, content: cleanedData };
+      const payload = {
+        id: dialogId,
+        content: cleanedData,
+      };
       updateDialog(payload);
     }
     flushUpdates();
   }
 
+  function updateNavPathHistory(dialogId, navPath) {
+    if (navPathHistoryCopy.length === 0) {
+      navPathHistoryCopy.push({ dialogId: designPath.dialogId, navPath: designPath.navPath });
+    }
+    navPathHistoryCopy.push({ dialogId, navPath });
+    return { state: { navPathHistory: navPathHistoryCopy } };
+  }
+
   function navTo({ path }) {
     cleanData();
-    dialogHistory.navTo(path, dialogHistory.getNavHistory());
+    const item = path.split('#');
+    navigate(`/dialogs/${item[0]}`, updateNavPathHistory(item[0], ''));
   }
 
   function navDown({ subPath }) {
     cleanData();
-    dialogHistory.navigateDown(subPath);
+    const navPath = designPath.navPath + subPath;
+    navigate(`/dialogs/${dialogId}/${navPath}`, updateNavPathHistory(dialogId, navPath));
   }
 
   function focusTo({ subPath }, event) {
     cleanData();
-    dialogHistory.focusTo(subPath, event.source.name === FORM_EDITOR);
+    if (event.source.name === FORM_EDITOR) {
+      subPath = designPath.focused + subPath;
+    }
+    navigate(`/dialogs/${dialogId}/${designPath.navPath}?focused=${subPath}`, {
+      state: { navPathHistory: navPathHistoryCopy },
+    });
   }
 
   return null;
-}
-
-export function ShellApi() {
-  return <Location>{({ location, navigate }) => <BaseShellApi location={location} navigate={navigate} />}</Location>;
 }

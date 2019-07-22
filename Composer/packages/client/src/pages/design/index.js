@@ -3,12 +3,12 @@ import { jsx } from '@emotion/core';
 import { Fragment, useContext, useState, useMemo, useEffect } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { globalHistory } from '@reach/router';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
 import { DialogDeleting } from '../../constants';
 
-import dialogHistory from './../../utils/navigateUtil';
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -58,18 +58,30 @@ function getAllRef(targetId, dialogs) {
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs } = state;
-  const { removeDialog } = actions;
+  const { removeDialog, setDesignPath } = actions;
   const [modalOpen, setModalOpen] = useState(false);
-  const { match, location } = props;
-
-  const { navHistory } = location.state ? location.state : {};
+  const { navigate, location, match } = props;
+  const { dialogId, uri } = match ? match : {};
+  const navPathHistory = location.state ? location.state.navPathHistory || [] : [];
 
   useEffect(() => {
-    dialogHistory.history._onTransitionComplete();
+    globalHistory._onTransitionComplete();
+  }, [location]);
+
+  useEffect(() => {
+    if (match) {
+      setDesignPath({
+        dialogId: dialogId,
+        navPath: match['*'] || '',
+        uri: uri,
+        focused: new URLSearchParams(location.search).get('focused'),
+        navPathHistory: navPathHistory,
+      });
+    }
   }, [location]);
 
   function handleFileClick(id) {
-    dialogHistory.navTo(`${id}#`);
+    navigate(`/dialogs/${id}`);
   }
 
   const getErrorMessage = name => {
@@ -109,28 +121,41 @@ function DesignPage(props) {
     },
   ];
 
-  const breadcrumbItems = useMemo(() => {
-    const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
-    return navHistory
-      ? navHistory.map((item, index) => {
-          const pathList = item.split('#');
-          const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-          const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
-          const displayText = isRoot ? botName : text;
-          return {
-            key: index,
-            path: item,
-            text: formatMessage(upperCaseName(displayText)),
-            onClick: (_event, { path, key }) => {
-              const navHistory = dialogHistory.clearNavHistory(key);
-              dialogHistory.navTo(path, navHistory);
-            },
-          };
-        })
-      : [];
-  }, [dialogs, navHistory]);
+  function handleBreadcrumbItemClick(_event, { item, index }) {
+    const { dialogId, navPath } = item;
+    navPathHistory.splice(index + 1, navPathHistory.length);
+    navigate(`/dialogs/${dialogId}/${navPath}`, { state: { navPathHistory: navPathHistory } });
+  }
 
-  const activeDialog = match ? match['*'].split('/')[0] : '';
+  const breadcrumbItems = useMemo(() => {
+    if (!dialogId || dialogs.length === 0) {
+      return [];
+    }
+    if (navPathHistory.length === 0) {
+      return [
+        {
+          key: dialogId,
+          text: formatMessage(upperCaseName(dialogs.find(d => d.id === dialogId).displayName)),
+          onClick: () => {},
+        },
+      ];
+    } else {
+      return navPathHistory.map((item, index) => {
+        const { dialogId, navPath } = item;
+        let text = dialogs.find(d => d.id === dialogId).displayName;
+        if (navPath !== '') {
+          text = getDialogData(dialogsMap, `${dialogId}#${navPath}.$type`);
+        }
+        return {
+          key: dialogId + navPath,
+          index: index,
+          item: item,
+          text: formatMessage(upperCaseName(text)),
+          onClick: handleBreadcrumbItemClick,
+        };
+      });
+    }
+  }, [dialogs, dialogId, navPathHistory]);
 
   async function onSubmit(data) {
     const content = {
@@ -170,7 +195,7 @@ function DesignPage(props) {
 
   return (
     <Fragment>
-      {props.match && <ToolBar toolbarItems={toolbarItems} />}
+      {match && <ToolBar toolbarItems={toolbarItems} />}
       <MainContent>
         <Fragment>
           <div css={projectContainer}>
@@ -181,7 +206,7 @@ function DesignPage(props) {
                 </div>
                 <ProjectTree
                   files={dialogs}
-                  activeNode={activeDialog}
+                  activeNode={dialogId || ''}
                   onSelect={handleFileClick}
                   onAdd={() => setModalOpen(true)}
                   onDelete={handleDeleteDialog}

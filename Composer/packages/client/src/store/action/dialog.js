@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
 
-import dialogHistory from './../../utils/navigateUtil';
 import { BASEURL, ActionTypes } from './../../constants/index';
 
 export async function removeDialog(dispatch, id) {
@@ -8,31 +8,26 @@ export async function removeDialog(dispatch, id) {
     const response = await await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
     dispatch({
       type: ActionTypes.REMOVE_DIALOG_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
-    dialogHistory.navTo(`Main#`);
+    navigate(`/dialogs/Main`);
   } catch (err) {
-    dispatch({
-      type: ActionTypes.REMOVE_DIALOG_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.REMOVE_DIALOG_FAILURE, payload: null, error: err });
   }
 }
 
 export async function createDialog(dispatch, { id, content }) {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, {
-      id,
-      content,
-    });
+    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, { id, content });
     dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: {
         response,
       },
     });
-    dialogHistory.navTo(`${id}#`);
+    navigate(`/dialogs/${id}`);
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
