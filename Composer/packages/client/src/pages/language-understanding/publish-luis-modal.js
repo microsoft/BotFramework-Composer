@@ -175,7 +175,7 @@ export const PublishLuis = props => {
         >
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} data-testid={'publish-LUIS-models-cancel'} />
       </DialogFooter>
     </Fragment>
   );
