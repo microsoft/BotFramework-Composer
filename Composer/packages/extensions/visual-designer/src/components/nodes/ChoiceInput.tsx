@@ -38,12 +38,13 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
 
     if (choices) {
       children = (
-        <div style={{ padding: '0 0 8px 45px' }}>
+        <div data-testid="ChoiceInput" style={{ padding: '0 0 8px 45px' }}>
           {choices.map((choice, index) => {
             if (index < 3) {
               return (
                 <div
                   key={index}
+                  role="choice"
                   style={{
                     height: ChoiceInputSize.height,
                     width: ChoiceInputSize.width,
@@ -68,6 +69,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           })}
           {choices.length > 3 ? (
             <div
+              data-testid="hasMore"
               style={{
                 height: ChoiceInputSize.height,
                 width: ChoiceInputSize.width,
