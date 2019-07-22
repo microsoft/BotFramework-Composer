@@ -13027,7 +13027,7 @@ ludown@^1.3.1:
     read-text-file "^1.1.0"
     semver "^5.5.1"
 
-luis-apis@^2.5.0, luis-apis@^2.5.1:
+luis-apis@^2.5.0, luis-apis@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/luis-apis/-/luis-apis-2.5.1.tgz#92134e5944636c1c0205eb5e84acf38f28b147ca"
   integrity sha512-R6NgnKHIBLv+Vouy71VvrUY6TIpR02cK4tFGKvkPka8f6n39tAMjADzAeLoGorGkfTS+NZx/epS86Of6ytpMSw==
