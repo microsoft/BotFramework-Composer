@@ -12,34 +12,6 @@
       "CancelIntent": "(?i)cancel|never mind"
     }
   },
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:35:45.065Z",
-        "updatedAt": "2019-07-16T19:53:35.317Z",
-        "id": "150220"
-      },
-      "activity": "[bfdactivity-150220]"
-    },
-    {
-      "$type": "Microsoft.EndTurn",
-      "$designer": {
-        "createdAt": "2019-07-01T21:35:47.297Z",
-        "updatedAt": "2019-07-16T19:53:38.249Z",
-        "id": "889445"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:35:55.897Z",
-        "updatedAt": "2019-07-16T19:53:42.505Z",
-        "id": "451180"
-      },
-      "activity": "[bfdactivity-451180]"
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
@@ -54,6 +26,44 @@
         }
       ],
       "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "120822",
+        "updatedAt": "2019-07-22T08:04:13.891Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:35:45.065Z",
+            "updatedAt": "2019-07-16T19:53:35.317Z",
+            "id": "150220"
+          },
+          "activity": "[bfdactivity-150220]"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "createdAt": "2019-07-01T21:35:47.297Z",
+            "updatedAt": "2019-07-16T19:53:38.249Z",
+            "id": "889445"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:35:55.897Z",
+            "updatedAt": "2019-07-16T19:53:42.505Z",
+            "id": "451180"
+          },
+          "activity": "[bfdactivity-451180]"
+        }
+      ]
     }
   ],
   "$schema": "../../app.schema"
