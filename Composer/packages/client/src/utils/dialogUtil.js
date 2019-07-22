@@ -1,5 +1,5 @@
 import { get, set, cloneDeep, replace } from 'lodash';
-
+import { ConceptLabels } from 'shared-menus';
 export function getDialogName(path) {
   const realPath = replace(path, '#.', '#');
   const [dialogName] = realPath.split('#');
@@ -17,7 +17,9 @@ export function getDialogData(dialogsMap, path) {
     return dialog;
   }
 
-  return get(dialog, pathList[1]);
+  return ConceptLabels[get(dialog, pathList[1])]
+    ? ConceptLabels[get(dialog, pathList[1])].title
+    : get(dialog, pathList[1]);
 }
 
 export function setDialogData(dialogsMap, path, data) {
