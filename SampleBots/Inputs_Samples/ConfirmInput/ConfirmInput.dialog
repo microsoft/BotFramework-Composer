@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:48:16.053Z",
     "updatedAt": "2019-07-16T19:27:27.043Z",
-    "id": "556076",
-    "name": "ConfirmInput"
+    "id": "556076"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "030235",
         "updatedAt": "2019-07-22T07:51:03.850Z"
       },
@@ -25,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:59:15.892Z",
             "updatedAt": "2019-07-16T19:27:39.503Z",
-            "id": "647929",
-            "name": "Prompt for confirmation"
+            "id": "647929"
           },
           "property": "user.confirmed",
           "prompt": "yes or no",
@@ -48,8 +45,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:59:14.563Z",
             "updatedAt": "2019-07-16T19:27:43.477Z",
-            "id": "458458",
-            "name": "Send an Activity"
+            "id": "458458"
           },
           "activity": "[bfdactivity-458458]"
         },
@@ -58,8 +54,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:27:44.856Z",
             "updatedAt": "2019-07-16T19:27:49.117Z",
-            "id": "131382",
-            "name": "Repeat this Dialog"
+            "id": "131382"
           }
         }
       ]

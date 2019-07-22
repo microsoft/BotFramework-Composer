@@ -1,6 +1,7 @@
-import { Boundary } from '../shared/Boundary';
-import { ElementInterval, DiamondSize, InitNodeSize, BranchIntervalMinX } from '../shared/elementSizes';
+import { ElementInterval, BranchIntervalMinX } from '../shared/elementSizes';
 import { GraphNode } from '../shared/GraphNode';
+import { GraphLayout } from '../shared/GraphLayout';
+import { EdgeData } from '../shared/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
@@ -13,15 +14,20 @@ const BranchIntervalY = ElementInterval.y / 2;
  *           ------------
  *           |   |  |   |
  */
-export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: { [key: string]: any } = []) {
+export function switchCaseLayouter(
+  conditionNode: GraphNode | null,
+  choiceNode: GraphNode,
+  branchNodes: GraphNode[] = []
+): GraphLayout {
   if (!conditionNode) {
-    return { boundary: new Boundary() };
+    return new GraphLayout();
   }
 
-  choiceNode.boundary = new Boundary(DiamondSize.width, DiamondSize.height);
-  conditionNode.boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
-
-  const containerBoundary = calculateSwitchCaseBoundary(conditionNode, choiceNode, branchNodes);
+  const containerBoundary = calculateSwitchCaseBoundary(
+    conditionNode.boundary,
+    choiceNode.boundary,
+    branchNodes.map(x => x.boundary)
+  );
 
   /** Calulate nodes position */
   conditionNode.offset = {
@@ -45,7 +51,7 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: { [ke
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
-  const edges: { [key: string]: any } = [];
+  const edges: EdgeData[] = [];
   edges.push({
     id: `edge/${conditionNode.id}/switch/condition->switch`,
     direction: 'y',
@@ -97,9 +103,11 @@ export function switchCaseLayouter(conditionNode, choiceNode, branchNodes: { [ke
     );
   }
 
+  // TODO: remove this 'any' type conversion after LogicFlow PR.
   return {
     boundary: containerBoundary,
-    nodeMap: { conditionNode, choiceNode, branchNodes },
+    nodeMap: { conditionNode, choiceNode, branchNodes: branchNodes as any },
     edges,
+    nodes: [],
   };
 }

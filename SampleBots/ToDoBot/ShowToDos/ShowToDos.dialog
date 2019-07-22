@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:43.763Z",
     "updatedAt": "2019-07-16T20:00:49.889Z",
-    "id": "709692",
-    "name": "ShowToDos"
+    "id": "709692"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "783343",
         "updatedAt": "2019-07-22T08:11:00.380Z"
       },
@@ -23,10 +21,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-01T22:04:55.922Z",
-            "updatedAt": "2019-07-16T22:02:34.315Z",
-            "id": "358464",
-            "name": "Branch: If/Else: If/Else"
+            "createdAt": "2019-07-01T22:05:03.290Z",
+            "updatedAt": "2019-07-16T20:02:34.141Z",
+            "id": "662084"
           },
           "condition": "user.todos == null",
           "steps": [

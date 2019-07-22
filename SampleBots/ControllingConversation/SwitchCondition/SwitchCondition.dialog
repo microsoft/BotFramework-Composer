@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:49:45.210Z",
     "updatedAt": "2019-07-16T18:48:58.963Z",
-    "id": "122121",
-    "name": "SwitchCondition"
+    "id": "122121"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "050101",
         "updatedAt": "2019-07-22T07:46:06.571Z"
       },
@@ -25,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-04T19:56:49.850Z",
             "updatedAt": "2019-07-16T18:52:37.253Z",
-            "id": "699003",
-            "name": "Prompt with multi-choice"
+            "id": "699003"
           },
           "prompt": "Who are your?",
           "property": "user.name",
@@ -63,8 +60,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "097130",
-            "updatedAt": "2019-07-16T18:52:41.766Z",
-            "name": "Send an Activity"
+            "updatedAt": "2019-07-16T18:52:41.766Z"
           },
           "activity": "[bfdactivity-097130]"
         },
@@ -73,8 +69,7 @@
           "$designer": {
             "createdAt": "2019-07-16T18:52:43.605Z",
             "updatedAt": "2019-07-16T18:52:45.887Z",
-            "id": "088447",
-            "name": "Branch: If/Else"
+            "id": "088447"
           },
           "condition": "user.name",
           "cases": [
@@ -85,8 +80,7 @@
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "040464",
-                    "updatedAt": "2019-07-16T18:52:50.794Z",
-                    "name": "Send an Activity"
+                    "updatedAt": "2019-07-16T18:52:50.794Z"
                   },
                   "activity": "[bfdactivity-040464]"
                 }
@@ -99,8 +93,7 @@
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "230206",
-                    "updatedAt": "2019-07-16T18:52:55.816Z",
-                    "name": "Send an Activity"
+                    "updatedAt": "2019-07-16T18:52:55.816Z"
                   },
                   "activity": "[bfdactivity-230206]"
                 }
@@ -113,8 +106,7 @@
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "604251",
-                    "updatedAt": "2019-07-16T18:53:01.222Z",
-                    "name": "Send an Activity"
+                    "updatedAt": "2019-07-16T18:53:01.222Z"
                   },
                   "activity": "[bfdactivity-604251]"
                 }

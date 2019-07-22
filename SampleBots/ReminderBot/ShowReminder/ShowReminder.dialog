@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-08T08:29:21.579Z",
     "updatedAt": "2019-07-16T19:39:46.691Z",
-    "id": "215192",
-    "name": "ShowReminder"
+    "id": "215192"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "560402",
         "updatedAt": "2019-07-22T08:01:54.930Z"
       },
@@ -23,10 +21,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-09T03:39:41.698Z",
-            "updatedAt": "2019-07-16T19:42:50.042Z",
-            "id": "529601",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-10T06:42:37.375Z",
+            "updatedAt": "2019-07-16T19:43:09.863Z",
+            "id": "755693"
           },
           "condition": "user.index == null",
           "steps": [
@@ -46,10 +43,9 @@
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-10T06:41:27.397Z",
-            "updatedAt": "2019-07-16T19:43:01.446Z",
-            "id": "384323",
-            "name": "Set a Property"
+            "createdAt": "2019-07-10T06:44:12.722Z",
+            "updatedAt": "2019-07-16T19:43:24.113Z",
+            "id": "263177"
           },
           "property": "user.remindtime",
           "value": "@RemindTime"
@@ -57,10 +53,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-10T06:42:04.663Z",
-            "updatedAt": "2019-07-16T19:43:05.264Z",
-            "id": "539675",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-10T06:43:38.741Z",
+            "updatedAt": "2019-07-16T19:43:28.672Z",
+            "id": "999357"
           },
           "condition": "user.remindtime != null",
           "steps": [
@@ -69,8 +64,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T06:42:37.375Z",
                 "updatedAt": "2019-07-16T19:43:09.863Z",
-                "id": "755693",
-                "name": "Set a Property"
+                "id": "755693"
               },
               "property": "user.requesttime",
               "value": "user.remindtime.datetime[0].timex[0]"
@@ -80,8 +74,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T06:44:12.722Z",
                 "updatedAt": "2019-07-16T19:43:24.113Z",
-                "id": "263177",
-                "name": "Set a Property"
+                "id": "263177"
               },
               "property": "user.endtime",
               "value": "addDays(formatDateTime(user.requesttime), 1)"
@@ -91,8 +84,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T06:43:38.741Z",
                 "updatedAt": "2019-07-16T19:43:28.672Z",
-                "id": "999357",
-                "name": "HTTP Request"
+                "id": "999357"
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}&StartDate={user.requesttime}&EndDate={user.endtime}",
@@ -106,8 +98,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T06:43:19.809Z",
                 "updatedAt": "2019-07-16T19:43:19.553Z",
-                "id": "627140",
-                "name": "HTTP Request"
+                "id": "627140"
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}",
@@ -121,8 +112,7 @@
           "$designer": {
             "createdAt": "2019-07-09T09:37:31.142Z",
             "updatedAt": "2019-07-16T19:43:34.559Z",
-            "id": "147709",
-            "name": "Set a Property"
+            "id": "147709"
           },
           "property": "user.singlepagedata",
           "value": "subArray(user.data, user.index * 5, min(user.index * 5+5, count(user.data)))"
@@ -132,18 +122,16 @@
           "$designer": {
             "createdAt": "2019-07-09T03:36:52.470Z",
             "updatedAt": "2019-07-16T19:43:39.982Z",
-            "id": "707692",
-            "name": "Send an Activity"
+            "id": "707692"
           },
           "activity": "[bfdactivity-707692]"
         },
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-09T03:40:37.129Z",
-            "updatedAt": "2019-07-16T19:43:44.362Z",
-            "id": "975169",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-10T03:03:56.783Z",
+            "updatedAt": "2019-07-16T19:43:57.800Z",
+            "id": "633090"
           },
           "condition": "(user.index + 1) * 5 < count(user.data)",
           "elseSteps": [
@@ -183,8 +171,7 @@
           "$designer": {
             "createdAt": "2019-07-10T02:21:53.846Z",
             "updatedAt": "2019-07-16T19:44:09.830Z",
-            "id": "257539",
-            "name": "Prompt for confirmation"
+            "id": "257539"
           },
           "property": "user.choice",
           "prompt": "You have more reminders, do you want to show more reminders?",
@@ -205,10 +192,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-09T03:47:23.311Z",
-            "updatedAt": "2019-07-16T19:44:14.358Z",
-            "id": "709735",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-09T03:47:50.217Z",
+            "updatedAt": "2019-07-16T19:44:20.391Z",
+            "id": "152409"
           },
           "condition": "user.choice == true",
           "steps": [
@@ -217,8 +203,7 @@
               "$designer": {
                 "createdAt": "2019-07-09T03:47:50.217Z",
                 "updatedAt": "2019-07-16T19:44:20.391Z",
-                "id": "152409",
-                "name": "Set a Property"
+                "id": "152409"
               },
               "property": "user.index",
               "value": "user.index+1"
@@ -228,8 +213,7 @@
               "$designer": {
                 "createdAt": "2019-07-09T12:41:23.645Z",
                 "updatedAt": "2019-07-16T19:44:26.806Z",
-                "id": "251435",
-                "name": "Repeat this Dialog"
+                "id": "251435"
               }
             }
           ],
@@ -239,8 +223,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T03:59:54.836Z",
                 "updatedAt": "2019-07-16T19:44:46.548Z",
-                "id": "670207",
-                "name": "Send an Activity"
+                "id": "670207"
               },
               "activity": "[bfdactivity-670207]"
             },
@@ -249,8 +232,7 @@
               "$designer": {
                 "createdAt": "2019-07-10T03:03:42.121Z",
                 "updatedAt": "2019-07-16T19:44:50.388Z",
-                "id": "786720",
-                "name": "Begin a Dialog"
+                "id": "786720"
               },
               "dialog": "ClearUserData"
             },
@@ -259,8 +241,7 @@
               "$designer": {
                 "createdAt": "2019-07-09T03:48:32.903Z",
                 "updatedAt": "2019-07-16T19:44:55.179Z",
-                "id": "060306",
-                "name": "Cancel all Dialogs"
+                "id": "060306"
               }
             }
           ]
@@ -270,8 +251,7 @@
           "$designer": {
             "createdAt": "2019-07-09T03:49:01.511Z",
             "updatedAt": "2019-07-16T19:44:33.764Z",
-            "id": "077390",
-            "name": "Send an Activity"
+            "id": "077390"
           },
           "activity": "[bfdactivity-077390]"
         }

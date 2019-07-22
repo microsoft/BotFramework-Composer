@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-05-18T23:11:05.833Z",
     "updatedAt": "2019-07-16T19:49:58.659Z",
-    "id": "570040",
-    "name": "EndTurn"
+    "id": "570040"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "064818",
         "updatedAt": "2019-07-22T08:04:20.667Z"
       },
@@ -25,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:37:32.573Z",
             "updatedAt": "2019-07-16T19:53:49.651Z",
-            "id": "423305",
-            "name": "Send an Activity"
+            "id": "423305"
           },
           "activity": "[bfdactivity-423305]"
         },
@@ -35,8 +32,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:37:33.405Z",
             "updatedAt": "2019-07-16T19:53:53.413Z",
-            "id": "280288",
-            "name": "End Turn"
+            "id": "280288"
           }
         },
         {
@@ -44,8 +40,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:37:38.941Z",
             "updatedAt": "2019-07-16T19:53:58.401Z",
-            "id": "448895",
-            "name": "Send an Activity"
+            "id": "448895"
           },
           "activity": "[bfdactivity-448895]"
         }

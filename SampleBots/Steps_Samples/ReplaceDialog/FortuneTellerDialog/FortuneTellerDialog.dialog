@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-01T21:41:06.164Z",
     "updatedAt": "2019-07-16T19:50:24.598Z",
-    "id": "682472",
-    "name": "FortuneTellerDialog"
+    "id": "682472"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "777661",
         "updatedAt": "2019-07-22T08:04:46.738Z"
       },
@@ -25,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:41:08.120Z",
             "updatedAt": "2019-07-16T19:55:41.722Z",
-            "id": "554030",
-            "name": "Send an Activity"
+            "id": "554030"
           },
           "activity": "[bfdactivity-554030]"
         },
@@ -35,8 +32,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:41:09.715Z",
             "updatedAt": "2019-07-16T19:55:45.578Z",
-            "id": "302405",
-            "name": "Send an Activity"
+            "id": "302405"
           },
           "activity": "[bfdactivity-302405]"
         },
@@ -45,8 +41,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:41:30.793Z",
             "updatedAt": "2019-07-16T19:55:49.690Z",
-            "id": "322106",
-            "name": "Send an Activity"
+            "id": "322106"
           },
           "activity": "[bfdactivity-322106]"
         }

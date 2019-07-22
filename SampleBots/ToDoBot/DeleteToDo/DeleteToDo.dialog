@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:41.186Z",
     "updatedAt": "2019-07-16T20:00:46.804Z",
-    "id": "114909",
-    "name": "DeleteToDo"
+    "id": "114909"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "768658",
         "updatedAt": "2019-07-22T08:10:54.685Z"
       },
@@ -23,10 +21,9 @@
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-16T20:01:51.456Z",
-            "updatedAt": "2019-07-16T20:01:54.684Z",
-            "id": "310367",
-            "name": "Set a Property"
+            "createdAt": "2019-07-01T22:04:05.322Z",
+            "updatedAt": "2019-07-16T20:02:14.365Z",
+            "id": "725469"
           },
           "property": "dialog.todo",
           "value": "@title"
@@ -36,8 +33,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:01:55.761Z",
             "updatedAt": "2019-07-16T20:01:59.761Z",
-            "id": "870620",
-            "name": "Prompt for text"
+            "id": "870620"
           },
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of the todo you want to remove.",
@@ -51,8 +47,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:02:01.004Z",
             "updatedAt": "2019-07-16T20:02:06.091Z",
-            "id": "492096",
-            "name": "Edit an Array Property"
+            "id": "492096"
           },
           "changeType": "Remove",
           "arrayProperty": "user.todos",
@@ -62,10 +57,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-01T22:04:06.138Z",
-            "updatedAt": "2019-07-16T20:02:10.088Z",
-            "id": "462031",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-01T22:04:45.788Z",
+            "updatedAt": "2019-07-16T20:02:19.199Z",
+            "id": "549615"
           },
           "condition": "dialog.removed",
           "steps": [
@@ -74,8 +68,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T22:04:05.322Z",
                 "updatedAt": "2019-07-16T20:02:14.365Z",
-                "id": "725469",
-                "name": "Send an Activity"
+                "id": "725469"
               },
               "activity": "[bfdactivity-725469]"
             }
@@ -86,8 +79,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T22:04:45.788Z",
                 "updatedAt": "2019-07-16T20:02:19.199Z",
-                "id": "549615",
-                "name": "Send an Activity"
+                "id": "549615"
               },
               "activity": "[bfdactivity-549615]"
             }

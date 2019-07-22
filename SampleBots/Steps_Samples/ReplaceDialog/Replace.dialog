@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-01T21:41:42.141Z",
     "updatedAt": "2019-07-16T19:50:31.760Z",
-    "id": "714288",
-    "name": "Replace"
+    "id": "714288"
   },
   "autoEndDialog": false,
   "recognizer": {
@@ -20,8 +19,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:55:56.379Z",
         "updatedAt": "2019-07-16T19:56:03.854Z",
-        "id": "563828",
-        "name": "Handle an Intent"
+        "id": "563828"
       },
       "steps": [
         {
@@ -36,8 +34,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:56:04.841Z",
         "updatedAt": "2019-07-16T19:56:11.047Z",
-        "id": "473201",
-        "name": "Handle an Intent"
+        "id": "473201"
       },
       "steps": [
         {
@@ -50,7 +47,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "644475",
         "updatedAt": "2019-07-22T08:04:53.812Z"
       },
@@ -63,8 +59,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:55:53.273Z",
             "updatedAt": "2019-07-16T19:56:25.943Z",
-            "id": "646692",
-            "name": "Branch: If/Else"
+            "id": "646692"
           },
           "condition": "user.name == null",
           "steps": [
@@ -73,8 +68,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:42:01.159Z",
                 "updatedAt": "2019-07-16T19:56:29.324Z",
-                "id": "823146",
-                "name": "Prompt for text"
+                "id": "823146"
               },
               "property": "user.name",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
@@ -90,8 +84,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:41:59.475Z",
             "updatedAt": "2019-07-16T19:56:33.688Z",
-            "id": "120128",
-            "name": "Send an Activity"
+            "id": "120128"
           },
           "activity": "[bfdactivity-120128]"
         }

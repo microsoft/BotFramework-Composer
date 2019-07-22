@@ -4,7 +4,6 @@
     "createdAt": "2019-06-28T06:31:58.726Z",
     "updatedAt": "2019-07-16T18:42:36.107Z",
     "id": "937757",
-    "name": "Cards_Samples",
     "description": "This is a bot that demonstrates the ability to send different Cards to users."
   },
   "autoEndDialog": false,
@@ -15,12 +14,6 @@
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
-          "$designer": {
-            "createdAt": "2019-07-04T19:48:36.378Z",
-            "updatedAt": "2019-07-16T18:40:40.814Z",
-            "id": "378731",
-            "name": "Prompt with multi-choice"
-          },
           "property": "user.choice",
           "prompt": "Which card would you like to display?",
           "maxTurnCount": "2147483647",
@@ -65,16 +58,15 @@
           "recognizerOptions": {
             "noValue": false,
             "noAction": false
+          },
+          "$designer": {
+            "createdAt": "2019-07-22T08:34:14.657Z",
+            "updatedAt": "2019-07-22T08:34:14.700Z",
+            "id": "359223"
           }
         },
         {
           "$type": "Microsoft.SwitchCondition",
-          "$designer": {
-            "createdAt": "2019-07-04T19:48:26.434Z",
-            "updatedAt": "2019-07-16T18:43:23.765Z",
-            "id": "403471",
-            "name": "Branch: If/Else"
-          },
           "condition": "user.choice",
           "cases": [
             {
@@ -82,13 +74,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
+                  "activity": "[bfdactivity-068293]",
                   "$designer": {
-                    "createdAt": "2019-07-04T19:52:01.341Z",
-                    "updatedAt": "2019-07-16T18:43:27.985Z",
-                    "id": "068293",
-                    "name": "Send an Activity"
-                  },
-                  "activity": "[bfdactivity-068293]"
+                    "createdAt": "2019-07-22T08:34:17.910Z",
+                    "updatedAt": "2019-07-22T08:34:17.948Z",
+                    "id": "268757"
+                  }
                 }
               ]
             },
@@ -97,12 +88,12 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
+                  "activity": "[bfdactivity-625345]",
                   "$designer": {
-                    "id": "625345",
-                    "updatedAt": "2019-07-16T18:43:33.555Z",
-                    "name": "Send an Activity"
-                  },
-                  "activity": "[bfdactivity-625345]"
+                    "createdAt": "2019-07-22T08:34:19.849Z",
+                    "updatedAt": "2019-07-22T08:34:19.873Z",
+                    "id": "819930"
+                  }
                 }
               ]
             },
@@ -111,11 +102,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "733841",
-                    "updatedAt": "2019-07-16T18:43:38.518Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-733841]"
                 }
               ]
@@ -125,11 +111,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "545252",
-                    "updatedAt": "2019-07-16T18:43:43.808Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-545252]"
                 }
               ]
@@ -139,11 +120,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "808579",
-                    "updatedAt": "2019-07-16T18:43:49.250Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-808579]"
                 }
               ]
@@ -153,11 +129,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "117065",
-                    "updatedAt": "2019-07-16T18:43:54.884Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-117065]"
                 }
               ]
@@ -167,11 +138,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "581350",
-                    "updatedAt": "2019-07-16T18:44:10.248Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-581350]"
                 }
               ]
@@ -181,11 +147,6 @@
               "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "$designer": {
-                    "id": "654665",
-                    "updatedAt": "2019-07-16T18:44:15.852Z",
-                    "name": "Send an Activity"
-                  },
                   "activity": "[bfdactivity-654665]"
                 }
               ]
@@ -195,38 +156,37 @@
         {
           "$type": "Microsoft.RepeatDialog",
           "$designer": {
-            "createdAt": "2019-07-16T18:44:19.355Z",
-            "updatedAt": "2019-07-16T18:44:24.065Z",
-            "id": "247255",
-            "name": "Repeat this Dialog"
+            "createdAt": "2019-07-22T08:34:21.376Z",
+            "updatedAt": "2019-07-22T08:34:21.387Z",
+            "id": "831626"
           }
         }
       ],
       "$designer": {
-        "createdAt": "2019-07-18T06:50:16.974Z",
-        "updatedAt": "2019-07-18T06:50:17.024Z",
-        "id": "482310"
+        "createdAt": "2019-07-22T08:34:10.390Z",
+        "updatedAt": "2019-07-22T08:34:10.448Z",
+        "id": "392502"
       }
     },
     {
       "$type": "Microsoft.ConversationUpdateActivityRule",
-      "$designer": {
-        "name": "Handle ConversationUpdate",
-        "id": "244253",
-        "updatedAt": "2019-07-18T10:06:00.547Z"
-      },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
+          "activity": "[bfdactivity-355490]",
           "$designer": {
-            "name": "Send an Activity",
-            "id": "355490",
-            "updatedAt": "2019-07-18T10:06:06.273Z"
-          },
-          "activity": "[bfdactivity-355490]"
+            "createdAt": "2019-07-22T08:34:29.617Z",
+            "updatedAt": "2019-07-22T08:34:29.637Z",
+            "id": "729500"
+          }
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-07-22T08:34:11.222Z",
+        "updatedAt": "2019-07-22T08:34:11.229Z",
+        "id": "109137"
+      }
     }
   ],
   "$schema": "../../app.schema"

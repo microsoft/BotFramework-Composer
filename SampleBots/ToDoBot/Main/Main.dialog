@@ -4,7 +4,6 @@
     "createdAt": "2019-07-04T08:14:01.139Z",
     "updatedAt": "2019-07-16T19:59:30.647Z",
     "id": "288769",
-    "name": "ToDoBot",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
   "autoEndDialog": false,
@@ -24,9 +23,9 @@
     {
       "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
-        "name": "Handle ConversationUpdate",
-        "id": "954390",
-        "updatedAt": "2019-07-18T11:25:59.878Z"
+        "createdAt": "2019-07-01T22:02:14.960Z",
+        "updatedAt": "2019-07-16T20:00:24.788Z",
+        "id": "376720"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "steps": [
@@ -41,8 +40,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:59:32.772Z",
         "updatedAt": "2019-07-16T19:59:36.277Z",
-        "id": "064505",
-        "name": "Handle an Intent"
+        "id": "064505"
       },
       "steps": [
         {
@@ -57,8 +55,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:59:37.184Z",
         "updatedAt": "2019-07-16T19:59:40.406Z",
-        "id": "114961",
-        "name": "Handle an Intent"
+        "id": "114961"
       },
       "steps": [
         {
@@ -73,8 +70,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:59:41.352Z",
         "updatedAt": "2019-07-16T19:59:44.427Z",
-        "id": "088050",
-        "name": "Handle an Intent"
+        "id": "088050"
       },
       "steps": [
         {
@@ -89,8 +85,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:59:50.315Z",
         "updatedAt": "2019-07-16T19:59:54.774Z",
-        "id": "633942",
-        "name": "Handle an Intent"
+        "id": "633942"
       },
       "steps": [
         {
@@ -105,8 +100,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:00:00.082Z",
         "updatedAt": "2019-07-16T20:00:03.344Z",
-        "id": "794124",
-        "name": "Handle an Intent"
+        "id": "794124"
       },
       "steps": [
         {
@@ -121,8 +115,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:00:08.499Z",
         "updatedAt": "2019-07-16T20:00:12.504Z",
-        "id": "179728",
-        "name": "Handle an Intent"
+        "id": "179728"
       },
       "steps": [
         {
@@ -140,8 +133,7 @@
       "$designer": {
         "createdAt": "2019-07-16T20:00:13.577Z",
         "updatedAt": "2019-07-16T20:00:19.435Z",
-        "id": "677447",
-        "name": "Handle an Unknown Intent"
+        "id": "677447"
       },
       "steps": [
         {

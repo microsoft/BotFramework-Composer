@@ -10,7 +10,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "455902",
         "updatedAt": "2019-07-22T07:40:35.808Z"
       },

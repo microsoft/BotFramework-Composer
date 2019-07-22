@@ -3,6 +3,7 @@ import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
+import { startBot } from './bot';
 
 export function updateOAuth(dispatch, oAuth) {
   dispatch({
@@ -88,9 +89,16 @@ export async function openBotProject(dispatch, absolutePath) {
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
       navigate('/');
+      startBot(dispatch, true);
     }
   } catch (err) {
-    dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        summary: 'Failed to open bot',
+        message: err.response.data.message,
+      },
+    });
   }
 }
 
@@ -114,6 +122,7 @@ export async function saveProjectAs(dispatch, name, description) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
+      navigate('/');
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-16T20:15:20.633Z",
     "updatedAt": "2019-07-16T20:15:24.313Z",
-    "id": "327317",
-    "name": "ShowItems"
+    "id": "327317"
   },
   "autoEndDialog": true,
   "generator": "common.lg",
@@ -13,7 +12,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "515654",
         "updatedAt": "2019-07-22T08:12:34.596Z"
       },
@@ -26,8 +24,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:15:25.706Z",
             "updatedAt": "2019-07-16T20:15:30.439Z",
-            "id": "179183",
-            "name": "Set a Property"
+            "id": "179183"
           },
           "property": "dialog.listName",
           "value": "@ListType"
@@ -37,8 +34,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:15:31.391Z",
             "updatedAt": "2019-07-16T20:15:33.750Z",
-            "id": "049005",
-            "name": "Branch: If/Else"
+            "id": "049005"
           },
           "condition": "user.lists == null",
           "steps": [
@@ -47,8 +43,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T20:15:35.123Z",
                 "updatedAt": "2019-07-16T20:15:41.056Z",
-                "id": "198534",
-                "name": "Initialize a Property"
+                "id": "198534"
               },
               "property": "user.lists",
               "type": "object"
@@ -60,8 +55,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:15:42.479Z",
             "updatedAt": "2019-07-16T20:15:45.442Z",
-            "id": "488882",
-            "name": "Branch: If/Else"
+            "id": "488882"
           },
           "condition": "dialog.listName == null",
           "steps": [
@@ -70,8 +64,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T20:15:49.373Z",
                 "updatedAt": "2019-07-16T20:15:56.419Z",
-                "id": "288302",
-                "name": "Prompt with multi-choice"
+                "id": "288302"
               },
               "property": "dialog.listName",
               "prompt": "Which list do you want to show?",
@@ -127,10 +120,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:15:58.598Z",
-            "updatedAt": "2019-07-16T20:16:01.746Z",
-            "id": "333909",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-16T20:16:10.787Z",
+            "updatedAt": "2019-07-16T20:16:15.697Z",
+            "id": "064151"
           },
           "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
           "steps": [
@@ -139,8 +131,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T20:16:03.881Z",
                 "updatedAt": "2019-07-16T20:16:09.035Z",
-                "id": "896478",
-                "name": "Send an Activity"
+                "id": "896478"
               },
               "activity": "[bfdactivity-896478]"
             }
@@ -151,8 +142,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T20:16:10.787Z",
                 "updatedAt": "2019-07-16T20:16:15.697Z",
-                "id": "064151",
-                "name": "Send an Activity"
+                "id": "064151"
               },
               "activity": "[bfdactivity-064151]"
             }

@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-06-28T06:31:58.726Z",
     "updatedAt": "2019-07-16T19:33:30.401Z",
-    "id": "937757",
-    "name": "Message_Samples"
+    "id": "937757"
   },
   "autoEndDialog": false,
   "generator": "common.lg",
@@ -14,8 +13,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:33:40.769Z",
         "updatedAt": "2019-07-16T19:33:46.468Z",
-        "id": "289770",
-        "name": "Prompt with multi-choice"
+        "id": "289770"
       },
       "property": "user.choice",
       "prompt": "What type of message would you like to send?",
@@ -58,8 +56,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:33:48.266Z",
         "updatedAt": "2019-07-16T19:33:52.059Z",
-        "id": "981997",
-        "name": "Branch: If/Else"
+        "id": "981997"
       },
       "condition": "user.choice",
       "cases": [
@@ -71,8 +68,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:33:53.985Z",
                 "updatedAt": "2019-07-16T19:33:58.958Z",
-                "id": "256544",
-                "name": "Begin a Dialog"
+                "id": "256544"
               },
               "dialog": "SimpleText"
             }
@@ -86,8 +82,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:34:01.452Z",
                 "updatedAt": "2019-07-16T19:34:04.489Z",
-                "id": "598449",
-                "name": "Begin a Dialog"
+                "id": "598449"
               },
               "dialog": "TextWithMemory"
             }
@@ -101,8 +96,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:34:07.118Z",
                 "updatedAt": "2019-07-16T19:34:11.776Z",
-                "id": "791050",
-                "name": "Begin a Dialog"
+                "id": "791050"
               },
               "dialog": "TextWithLG"
             }
@@ -116,8 +110,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:34:14.518Z",
                 "updatedAt": "2019-07-16T19:34:20.351Z",
-                "id": "078497",
-                "name": "Begin a Dialog"
+                "id": "078497"
               },
               "dialog": "LGWithParam"
             }
@@ -131,8 +124,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:34:22.754Z",
                 "updatedAt": "2019-07-16T19:34:27.469Z",
-                "id": "349641",
-                "name": "Begin a Dialog"
+                "id": "349641"
               },
               "dialog": "LGComposition"
             }
@@ -145,8 +137,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:34:30.447Z",
         "updatedAt": "2019-07-16T19:34:34.636Z",
-        "id": "938048",
-        "name": "Repeat this Dialog"
+        "id": "938048"
       }
     }
   ],
@@ -156,8 +147,7 @@
       "$designer": {
         "createdAt": "2019-07-16T19:35:20.436Z",
         "updatedAt": "2019-07-16T19:35:25.861Z",
-        "id": "807187",
-        "name": "Handle an Unknown Intent"
+        "id": "807187"
       },
       "steps": [
         {

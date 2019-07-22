@@ -25,6 +25,7 @@ interface BaseFieldProps<T> {
   formData: T;
   idSchema: IdSchema;
   name?: string;
+  onChange?: (data: T) => void;
   schema: JSONSchema6;
   title?: string;
   uiSchema: UiSchema;

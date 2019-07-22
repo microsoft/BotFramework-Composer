@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-06-07T15:50:40.307Z",
     "updatedAt": "2019-07-16T19:50:11.129Z",
-    "id": "708197",
-    "name": "IfCondition"
+    "id": "708197"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,9 +11,9 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
-        "id": "083098",
-        "updatedAt": "2019-07-22T08:04:32.573Z"
+        "createdAt": "2019-07-16T19:55:03.213Z",
+        "updatedAt": "2019-07-16T19:55:06.022Z",
+        "id": "475044"
       },
       "events": [
         "beginDialog"
@@ -23,10 +22,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T19:55:03.213Z",
-            "updatedAt": "2019-07-16T19:55:06.022Z",
-            "id": "475044",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-01T21:40:16.578Z",
+            "updatedAt": "2019-07-16T19:55:09.909Z",
+            "id": "719594"
           },
           "condition": "user.name == null",
           "steps": [
@@ -35,8 +33,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:40:16.578Z",
                 "updatedAt": "2019-07-16T19:55:09.909Z",
-                "id": "719594",
-                "name": "Prompt for text"
+                "id": "719594"
               },
               "property": "user.name",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
@@ -52,8 +49,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:40:15.216Z",
             "updatedAt": "2019-07-16T19:55:14.687Z",
-            "id": "485963",
-            "name": "Send an Activity"
+            "id": "485963"
           },
           "activity": "[bfdactivity-485963]"
         }

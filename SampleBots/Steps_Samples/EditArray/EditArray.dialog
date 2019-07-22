@@ -3,17 +3,16 @@
   "$designer": {
     "createdAt": "2019-07-03T06:33:04.109Z",
     "updatedAt": "2019-07-16T19:49:33.306Z",
-    "id": "395991",
-    "name": "EditArray"
+    "id": "395991"
   },
   "autoEndDialog": true,
   "rules": [
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
-        "id": "722373",
-        "updatedAt": "2019-07-22T08:03:35.873Z"
+        "createdAt": "2019-07-16T19:49:28.473Z",
+        "updatedAt": "2019-07-16T19:50:52.267Z",
+        "id": "356862"
       },
       "events": [
         "beginDialog"
@@ -24,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:49:28.473Z",
             "updatedAt": "2019-07-16T19:50:52.267Z",
-            "id": "356862",
-            "name": "Branch: If/Else"
+            "id": "356862"
           },
           "condition": "user.ids == null",
           "steps": [
@@ -34,8 +32,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T19:51:00.780Z",
                 "updatedAt": "2019-07-16T19:51:05.002Z",
-                "id": "384024",
-                "name": "Initialize a Property"
+                "id": "384024"
               },
               "property": "user.ids",
               "type": "array"
@@ -47,8 +44,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:51:06.779Z",
             "updatedAt": "2019-07-16T19:51:12.553Z",
-            "id": "076427",
-            "name": "Edit an Array Property"
+            "id": "076427"
           },
           "changeType": "Push",
           "arrayProperty": "user.ids",
@@ -59,8 +55,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:51:14.662Z",
             "updatedAt": "2019-07-16T19:51:19.568Z",
-            "id": "162360",
-            "name": "Edit an Array Property"
+            "id": "162360"
           },
           "changeType": "Push",
           "arrayProperty": "user.ids",
@@ -74,8 +69,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:51:21.579Z",
             "updatedAt": "2019-07-16T19:51:24.990Z",
-            "id": "393322",
-            "name": "Edit an Array Property"
+            "id": "393322"
           }
         },
         {
@@ -83,8 +77,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:31:36.184Z",
             "updatedAt": "2019-07-16T19:51:29.907Z",
-            "id": "666135",
-            "name": "Send an Activity"
+            "id": "666135"
           },
           "activity": "[bfdactivity-666135]"
         },
@@ -93,8 +86,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:31:49.538Z",
             "updatedAt": "2019-07-16T19:51:36.827Z",
-            "id": "995811",
-            "name": "Loop: For Each"
+            "id": "995811"
           },
           "indexProperty": "dialog.index",
           "valueProperty": "dialog.value",
@@ -113,8 +105,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:32:15.722Z",
             "updatedAt": "2019-07-16T19:51:42.318Z",
-            "id": "763672",
-            "name": "Send an Activity"
+            "id": "763672"
           },
           "activity": "[bfdactivity-763672]"
         },
@@ -123,8 +114,7 @@
           "$designer": {
             "createdAt": "2019-07-16T19:51:44.429Z",
             "updatedAt": "2019-07-16T19:51:50.094Z",
-            "id": "087387",
-            "name": "Loop: For Each Page"
+            "id": "087387"
           },
           "pageSize": 10,
           "valueProperty": "dialog.value",

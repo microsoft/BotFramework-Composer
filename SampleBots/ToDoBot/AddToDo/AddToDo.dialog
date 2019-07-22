@@ -3,8 +3,7 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:37.526Z",
     "updatedAt": "2019-07-16T20:00:39.131Z",
-    "id": "808722",
-    "name": "AddToDo"
+    "id": "808722"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -12,7 +11,6 @@
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "335456",
         "updatedAt": "2019-07-22T08:10:44.402Z"
       },
@@ -25,8 +23,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:00:51.769Z",
             "updatedAt": "2019-07-16T20:00:54.804Z",
-            "id": "201694",
-            "name": "Set a Property"
+            "id": "201694"
           },
           "property": "dialog.todo",
           "value": "@title"
@@ -36,8 +33,7 @@
           "$designer": {
             "createdAt": "2019-07-16T20:00:55.825Z",
             "updatedAt": "2019-07-16T20:00:59.346Z",
-            "id": "298897",
-            "name": "Prompt for text"
+            "id": "298897"
           },
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of your todo.",
@@ -49,10 +45,9 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:01:00.952Z",
-            "updatedAt": "2019-07-16T20:01:03.778Z",
-            "id": "046367",
-            "name": "Branch: If/Else"
+            "createdAt": "2019-07-16T20:01:05.970Z",
+            "updatedAt": "2019-07-16T20:01:13.866Z",
+            "id": "015420"
           },
           "condition": "user.todos == null",
           "steps": [
@@ -61,8 +56,7 @@
               "$designer": {
                 "createdAt": "2019-07-16T20:01:05.970Z",
                 "updatedAt": "2019-07-16T20:01:13.866Z",
-                "id": "015420",
-                "name": "Initialize a Property"
+                "id": "015420"
               },
               "property": "user.todos",
               "type": "array"
@@ -74,8 +68,7 @@
           "$designer": {
             "createdAt": "2019-07-01T22:02:54.672Z",
             "updatedAt": "2019-07-16T20:01:19.783Z",
-            "id": "567087",
-            "name": "Edit an Array Property"
+            "id": "567087"
           },
           "changeType": "Push",
           "arrayProperty": "user.todos",
@@ -86,8 +79,7 @@
           "$designer": {
             "createdAt": "2019-07-01T22:02:53.545Z",
             "updatedAt": "2019-07-16T20:01:26.980Z",
-            "id": "116673",
-            "name": "Send an Activity"
+            "id": "116673"
           },
           "activity": "[bfdactivity-116673]"
         }

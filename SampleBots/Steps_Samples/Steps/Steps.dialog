@@ -3,15 +3,13 @@
   "$designer": {
     "createdAt": "2019-07-03T06:51:20.899Z",
     "updatedAt": "2019-07-16T19:50:39.583Z",
-    "id": "126960",
-    "name": "Steps"
+    "id": "126960"
   },
   "autoEndDialog": true,
   "rules": [
     {
       "$type": "Microsoft.EventRule",
       "$designer": {
-        "name": "Handle an Event",
         "id": "218388",
         "updatedAt": "2019-07-22T08:05:04.387Z"
       },
@@ -22,10 +20,9 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-01T21:55:00.865Z",
-            "updatedAt": "2019-07-16T19:57:04.928Z",
-            "id": "522200",
-            "name": "Send an Activity"
+            "createdAt": "2019-07-01T21:47:08.296Z",
+            "updatedAt": "2019-07-16T19:57:37.389Z",
+            "id": "166131"
           },
           "activity": "[bfdactivity-522200]"
         },
@@ -34,8 +31,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:54:55.777Z",
             "updatedAt": "2019-07-16T19:57:08.511Z",
-            "id": "350559",
-            "name": "Send an Activity"
+            "id": "350559"
           },
           "activity": "[bfdactivity-350559]"
         },
@@ -44,8 +40,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:54:47.248Z",
             "updatedAt": "2019-07-16T19:57:12.012Z",
-            "id": "309397",
-            "name": "Send an Activity"
+            "id": "309397"
           },
           "activity": "[bfdactivity-309397]"
         },
@@ -54,8 +49,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:54:48.182Z",
             "updatedAt": "2019-07-16T19:57:18.322Z",
-            "id": "026341",
-            "name": "Set a Property"
+            "id": "026341"
           },
           "property": "user.age",
           "value": "9+9"
@@ -63,10 +57,9 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-01T21:54:34.003Z",
-            "updatedAt": "2019-07-16T19:57:23.251Z",
-            "id": "797905",
-            "name": "Send an Activity"
+            "createdAt": "2019-07-01T21:54:15.926Z",
+            "updatedAt": "2019-07-16T19:57:41.832Z",
+            "id": "643043"
           },
           "activity": "[bfdactivity-797905]"
         },
@@ -75,8 +68,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:54:35.399Z",
             "updatedAt": "2019-07-16T19:57:28.877Z",
-            "id": "948500",
-            "name": "Delete a Property"
+            "id": "948500"
           },
           "property": "user.age"
         },
@@ -85,8 +77,7 @@
           "$designer": {
             "createdAt": "2019-07-01T21:47:07.036Z",
             "updatedAt": "2019-07-16T19:57:32.413Z",
-            "id": "634904",
-            "name": "Branch: If/Else"
+            "id": "634904"
           },
           "condition": "user.age != null",
           "steps": [
@@ -95,8 +86,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:47:08.296Z",
                 "updatedAt": "2019-07-16T19:57:37.389Z",
-                "id": "166131",
-                "name": "Send an Activity"
+                "id": "166131"
               },
               "activity": "[bfdactivity-166131]"
             }
@@ -107,8 +97,7 @@
               "$designer": {
                 "createdAt": "2019-07-01T21:54:15.926Z",
                 "updatedAt": "2019-07-16T19:57:41.832Z",
-                "id": "643043",
-                "name": "Send an Activity"
+                "id": "643043"
               },
               "activity": "[bfdactivity-643043]"
             }

@@ -4,7 +4,7 @@
     "createdAt": "2019-07-04T19:47:59.519Z",
     "updatedAt": "2019-07-16T18:46:52.103Z",
     "id": "864790",
-    "name": "ControllingConversation",
+
     "description": "This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs."
   },
   "autoEndDialog": false,
@@ -27,8 +27,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:02.069Z",
         "updatedAt": "2019-07-16T18:47:06.232Z",
-        "id": "139291",
-        "name": "Handle an Intent"
+        "id": "139291"
       },
       "steps": [
         {
@@ -43,8 +42,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:07.473Z",
         "updatedAt": "2019-07-16T18:47:10.789Z",
-        "id": "606805",
-        "name": "Handle an Intent"
+        "id": "606805"
       },
       "steps": [
         {
@@ -59,8 +57,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:12.071Z",
         "updatedAt": "2019-07-16T18:47:15.570Z",
-        "id": "175644",
-        "name": "Handle an Intent"
+        "id": "175644"
       },
       "steps": [
         {
@@ -75,8 +72,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:16.917Z",
         "updatedAt": "2019-07-16T18:47:20.109Z",
-        "id": "973338",
-        "name": "Handle an Intent"
+        "id": "973338"
       },
       "steps": [
         {
@@ -91,8 +87,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:21.301Z",
         "updatedAt": "2019-07-16T18:47:24.658Z",
-        "id": "329460",
-        "name": "Handle an Intent"
+        "id": "329460"
       },
       "steps": [
         {
@@ -106,8 +101,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:25.995Z",
         "updatedAt": "2019-07-16T18:47:29.138Z",
-        "id": "132038",
-        "name": "Handle an Intent"
+        "id": "132038"
       },
       "steps": [
         {
@@ -118,17 +112,14 @@
           "$type": "Microsoft.EndDialog"
         }
       ],
-      "events": [
-        "cancelDialog"
-      ]
+      "events": ["cancelDialog"]
     },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-16T18:47:30.457Z",
         "updatedAt": "2019-07-16T18:47:34.267Z",
-        "id": "043417",
-        "name": "Handle an Intent"
+        "id": "043417"
       },
       "steps": [
         {
@@ -142,8 +133,7 @@
       "$designer": {
         "createdAt": "2019-07-16T18:47:35.642Z",
         "updatedAt": "2019-07-16T18:47:38.774Z",
-        "id": "294228",
-        "name": "Handle an Intent"
+        "id": "294228"
       },
       "steps": [
         {
@@ -158,8 +148,7 @@
       "$designer": {
         "createdAt": "2019-07-04T19:53:46.534Z",
         "updatedAt": "2019-07-16T18:47:46.616Z",
-        "id": "094908",
-        "name": "Handle an Unknown Intent"
+        "id": "094908"
       },
       "steps": [
         {
