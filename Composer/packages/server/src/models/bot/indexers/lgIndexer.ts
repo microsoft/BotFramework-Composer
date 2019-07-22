@@ -29,7 +29,7 @@ export class LGIndexer {
   }
 
   public isValid(diagnostics: Diagnostic[]): boolean {
-    return diagnostics.filter(d => d.Severity === DiagnosticSeverity.Error).length === 0;
+    return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
   }
 
   public check(content: string, name: string = ''): Diagnostic[] {

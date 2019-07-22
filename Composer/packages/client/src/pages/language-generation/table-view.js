@@ -59,9 +59,10 @@ export default function TableView(props) {
         }
       } else {
         const errorMsg = lgUtil.combineMessage(diagnostics);
-        OpenConfirmModal('Templates parse failed', errorMsg, {
+        const errorTitle = formatMessage('There was a problem parsing an LG template.');
+        OpenConfirmModal(errorTitle, errorMsg, {
           style: DialogStyle.Console,
-          confirmBtnText: 'Edit',
+          confirmBtnText: formatMessage('Edit'),
         }).then(res => {
           if (res) {
             props.onEdit();
@@ -81,21 +82,21 @@ export default function TableView(props) {
     const buttons = [
       {
         key: 'edit',
-        name: 'Edit',
+        name: formatMessage('Edit'),
         onClick: () => {
           props.onEdit(templates[index]);
         },
       },
       {
         key: 'delete',
-        name: 'Delete',
+        name: formatMessage('Delete'),
         onClick: () => {
           onRemoveTemplate(index);
         },
       },
       {
         key: 'copy',
-        name: 'Make a copy',
+        name: formatMessage('Make a copy'),
         onClick: () => {
           onCopyTemplate(index);
         },

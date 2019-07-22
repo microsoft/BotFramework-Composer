@@ -2,7 +2,7 @@ import { LGParser, StaticChecker, DiagnosticSeverity } from 'botbuilder-lg';
 import { get } from 'lodash';
 
 export function isValid(diagnostics) {
-  return diagnostics.filter(d => d.Severity === DiagnosticSeverity.Error).length === 0;
+  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
 }
 
 export function check(content, name = '') {
