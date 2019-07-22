@@ -102,6 +102,7 @@ describe('delete node flow', () => {
       const result = deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual(dialog);
+      expect(removedDataFn).not.toBeCalled();
     });
   });
 
@@ -111,12 +112,14 @@ describe('delete node flow', () => {
       const result = deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual({ foo: { bar: [{ $type: 'secondOne' }] } });
+      expect(removedDataFn).toBeCalledWith(dialog.foo.bar[0]);
     });
     it("should delete node successfully when targetNode's currentKey type is string", () => {
       path = 'foo.bar';
       const result = deleteNode(dialog, path, removedDataFn);
 
       expect(result).toEqual({ foo: {} });
+      expect(removedDataFn).toBeCalledWith(dialog.foo.bar);
     });
     it("removeLgTemplate function should be called when targetNode's $type is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
       dialog.foo.activityNode = { $type: 'Microsoft.SendActivity', activity: '[bfdactivity-a]' };
