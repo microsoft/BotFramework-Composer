@@ -3,6 +3,7 @@ import { jsx } from '@emotion/core';
 import { useState, useContext, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
+import { navigate } from '@reach/router';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
 import { Store } from './../../store/index';
@@ -21,6 +22,7 @@ export function SelectLocation(props) {
         }) >= 0
       ) {
         startBot(true);
+        navigate('/');
         onDismiss();
       } else {
         setErrorMessage(formatMessage('Please select one of these options.'));
