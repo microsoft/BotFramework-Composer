@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context.skip('ToDo Bot', () => {
+context('ToDo Bot', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
@@ -8,10 +8,10 @@ context.skip('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/Hi! I'm a ToDo bot./).should('exist');
+      cy.getByText('Events (7)').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Actions').should('exist');
+      cy.getByText('ToDoBot').should('exist');
     });
   });
 
@@ -23,7 +23,7 @@ context.skip('ToDo Bot', () => {
       cy.getByText(/Successfully added a todo named/).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Actions').should('exist');
+      cy.getByText('AddToDo').should('exist');
     });
   });
 
@@ -32,10 +32,10 @@ context.skip('ToDo Bot', () => {
       cy.get('[title="ClearToDos"]').click();
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Successfully cleared items in the Todo List.').should('exist');
+      cy.getByText(/Successfully cleared items/).should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Edit an Array Property').should('exist');
+      cy.getByText('ClearToDos').should('exist');
     });
   });
 
@@ -47,11 +47,11 @@ context.skip('ToDo Bot', () => {
       cy.getByText('Edit an Array Property').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Set a Property').should('exist');
+      cy.getByText('DeleteToDo').should('exist');
     });
   });
 
-  it.skip('can open the ShowToDos dialog', () => {
+  it('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="ShowToDos"]').click();
     });
@@ -59,7 +59,7 @@ context.skip('ToDo Bot', () => {
       cy.getByText('You have no todos.').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Branch: If/Else').should('exist');
+      cy.getByText('ShowToDos').should('exist');
     });
   });
 });
