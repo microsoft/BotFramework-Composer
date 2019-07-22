@@ -92,7 +92,7 @@
           "$type": "Microsoft.SendActivity",
           "activity": "{dialog.index}: {dialog.value}"
         }
-      ],
+      ]
     }
   ]
 }
