@@ -2,15 +2,12 @@ import { startCase, get } from 'lodash';
 import React from 'react';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import classnames from 'classnames';
+import { JSONSchema6 } from 'json-schema';
 
 import SectionSeparator from '../SectionSeparator';
 import { FormContext } from '../types';
 
 import { DesignerField } from './DesignerField';
-
-const descriptionMarkup = description => {
-  return { __html: description };
-};
 
 const overrideDefaults = {
   collapsable: true,
@@ -19,56 +16,61 @@ const overrideDefaults = {
   description: undefined,
 };
 
-export function RootField(props) {
+interface RootFieldProps {
+  description?: string;
+  formContext: FormContext;
+  formData: any;
+  id: string;
+  name?: string;
+  onChange?: (data: any) => void;
+  schema: JSONSchema6;
+  title?: string;
+}
+
+export const RootField: React.FC<RootFieldProps> = props => {
   const { title, name, description, schema, formData, formContext } = props;
-  const { currentDialog, editorSchema, isRoot } = formContext as FormContext;
+  const { currentDialog, editorSchema, isRoot } = formContext;
 
   const fieldOverrides = get(editorSchema, 'content.fieldTemplateOverrides.RootField', overrideDefaults);
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
   const hasDesigner = !!get(schema, 'properties.$designer');
 
-  const handleDesignerChange = newDesigner => {
-    props.onChange({ ...formData, $designer: newDesigner });
+  const handleDesignerChange = (newDesigner): void => {
+    if (props.onChange) {
+      props.onChange({ ...formData, $designer: newDesigner });
+    }
   };
 
-  const getTitle = () => {
+  const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
-
-    if (sdkOverrides.title === false) {
-      return false;
-    }
 
     return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
-  const getDescription = () => {
-    return sdkOverrides.description || description || schema.description;
+  const getDescription = (): string => {
+    return sdkOverrides.description || description || schema.description || '';
   };
 
   return (
     <div id={props.id} className="RootField">
       <SectionSeparator
         styles={{ marginTop: 0 }}
-        label={getTitle()}
+        label={sdkOverrides.title === false ? null : getTitle()}
         collapsable={fieldOverrides.collapsable}
         defaultCollapsed={fieldOverrides.defaultCollapsed}
       >
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p
             className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}
-            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
+            dangerouslySetInnerHTML={{ __html: getDescription() }}
           />
         )}
         {hasDesigner && (
-          <DesignerField
-            placeholder={currentDialog.displayName}
-            data={get(formData, '$designer')}
-            onChange={handleDesignerChange}
-          />
+          <DesignerField placeholder={getTitle()} data={get(formData, '$designer')} onChange={handleDesignerChange} />
         )}
       </SectionSeparator>
       {props.children}
     </div>
   );
-}
+};

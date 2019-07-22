@@ -7,6 +7,7 @@ context('Saving As', () => {
 
   it('can create a new bot from an existing bot', () => {
     cy.openBot('ToDoLuisBot');
+    cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
     cy.getByText('Save as').click();
 
     cy.get('input[data-testid="NewDialogName"]').type('__TestSaveAs');

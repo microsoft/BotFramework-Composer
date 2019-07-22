@@ -63,7 +63,7 @@ export const Home = () => {
       text: formatMessage('New'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add',
+          iconName: 'CirclePlus',
         },
         onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
       },
@@ -81,6 +81,17 @@ export const Home = () => {
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Save as'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Save',
+        },
+        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+      },
+      align: 'left',
     },
   ];
 
