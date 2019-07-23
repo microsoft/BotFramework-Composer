@@ -7,6 +7,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { getDialogGroupByType } from '../../shared/appschema';
 import { getElementColor } from '../../shared/elementColors';
 import { ObiTypes } from '../../shared/ObiTypes';
+import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
 
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
@@ -25,7 +26,8 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
     const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
     let children: any = null;
-    let styles: object = {};
+    const { height } = measureJsonBoundary(data);
+    const styles = { height };
 
     if (keyMap) {
       header = header || keyMap.header || '';
@@ -38,12 +40,13 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
 
     if (choices) {
       children = (
-        <div style={{ padding: '0 0 8px 45px' }}>
+        <div data-testid="ChoiceInput" style={{ padding: '0 0 8px 45px' }}>
           {choices.map((choice, index) => {
             if (index < 3) {
               return (
                 <div
                   key={index}
+                  role="choice"
                   style={{
                     height: ChoiceInputSize.height,
                     width: ChoiceInputSize.width,
@@ -68,6 +71,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           })}
           {choices.length > 3 ? (
             <div
+              data-testid="hasMore"
               style={{
                 height: ChoiceInputSize.height,
                 width: ChoiceInputSize.width,
@@ -84,7 +88,6 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           ) : null}
         </div>
       );
-      styles = { height: InitNodeSize.height + (ChoiceInputSize.height + ChoiceInputMarginTop) * choices.length + 8 };
     }
     return (
       <FormCard
