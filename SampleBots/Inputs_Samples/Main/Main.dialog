@@ -25,10 +25,11 @@
   "rules": [
     {
       "$type": "Microsoft.ConversationUpdateActivityRule",
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[Welcome]"
+          "activity": "[help]"
         }
       ],
       "$designer": {

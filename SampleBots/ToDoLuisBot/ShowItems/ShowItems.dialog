@@ -7,120 +7,148 @@
   },
   "autoEndDialog": true,
   "generator": "common.lg",
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SetProperty",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T20:15:25.706Z",
-        "updatedAt": "2019-07-16T20:15:30.439Z",
-        "id": "179183"
+        "id": "515654",
+        "updatedAt": "2019-07-22T08:12:34.596Z"
       },
-      "property": "dialog.listName",
-      "value": "@ListType"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:15:31.391Z",
-        "updatedAt": "2019-07-16T20:15:33.750Z",
-        "id": "049005"
-      },
-      "condition": "user.lists == null",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.InitProperty",
+          "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-16T20:15:35.123Z",
-            "updatedAt": "2019-07-16T20:15:41.056Z",
-            "id": "198534"
-          },
-          "property": "user.lists",
-          "type": "object"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:15:42.479Z",
-        "updatedAt": "2019-07-16T20:15:45.442Z",
-        "id": "488882"
-      },
-      "condition": "dialog.listName == null",
-      "steps": [
-        {
-          "$type": "Microsoft.ChoiceInput",
-          "$designer": {
-            "createdAt": "2019-07-16T20:15:49.373Z",
-            "updatedAt": "2019-07-16T20:15:56.419Z",
-            "id": "288302"
+            "createdAt": "2019-07-16T20:15:25.706Z",
+            "updatedAt": "2019-07-16T20:15:30.439Z",
+            "id": "179183"
           },
           "property": "dialog.listName",
-          "prompt": "Which list do you want to show?",
-          "maxTurnCount": 0,
-          "alwaysPrompt": true,
-          "allowInterruptions": false,
-          "outputFormat": "value",
-          "choices": [
-            {
-              "value": "shopping",
-              "synonyms": ["1", "first", "shopping", "first one"]
-            },
-            {
-              "value": "grocery",
-              "synonyms": ["2", "second", "grocery", "second one"]
-            },
-            {
-              "value": "todo",
-              "synonyms": ["3", "third", "todo", "third one", "to do"]
-            }
-          ],
-          "appendChoices": true,
-          "defaultLocale": "en-us",
-          "style": "SuggestedAction",
-          "choiceOptions": {
-            "inlineSeparator": ", ",
-            "inlineOr": " or ",
-            "inlineOrMore": ", or ",
-            "includeNumbers": true
-          },
-          "recognizerOptions": {
-            "noValue": false
-          }
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T20:15:58.598Z",
-        "updatedAt": "2019-07-16T20:16:01.746Z",
-        "id": "333909"
-      },
-      "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
-      "steps": [
+          "value": "@ListType"
+        },
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:16:03.881Z",
-            "updatedAt": "2019-07-16T20:16:09.035Z",
-            "id": "896478"
+            "createdAt": "2019-07-16T20:15:31.391Z",
+            "updatedAt": "2019-07-16T20:15:33.750Z",
+            "id": "049005"
           },
-          "activity": "[bfdactivity-896478]"
-        }
-      ],
-      "elseSteps": [
+          "condition": "user.lists == null",
+          "steps": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "createdAt": "2019-07-16T20:15:35.123Z",
+                "updatedAt": "2019-07-16T20:15:41.056Z",
+                "id": "198534"
+              },
+              "property": "user.lists",
+              "type": "object"
+            }
+          ]
+        },
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T20:15:42.479Z",
+            "updatedAt": "2019-07-16T20:15:45.442Z",
+            "id": "488882"
+          },
+          "condition": "dialog.listName == null",
+          "steps": [
+            {
+              "$type": "Microsoft.ChoiceInput",
+              "$designer": {
+                "createdAt": "2019-07-16T20:15:49.373Z",
+                "updatedAt": "2019-07-16T20:15:56.419Z",
+                "id": "288302"
+              },
+              "property": "dialog.listName",
+              "prompt": "Which list do you want to show?",
+              "maxTurnCount": 0,
+              "alwaysPrompt": true,
+              "allowInterruptions": false,
+              "outputFormat": "value",
+              "choices": [
+                {
+                  "value": "shopping",
+                  "synonyms": [
+                    "1",
+                    "first",
+                    "shopping",
+                    "first one"
+                  ]
+                },
+                {
+                  "value": "grocery",
+                  "synonyms": [
+                    "2",
+                    "second",
+                    "grocery",
+                    "second one"
+                  ]
+                },
+                {
+                  "value": "todo",
+                  "synonyms": [
+                    "3",
+                    "third",
+                    "todo",
+                    "third one",
+                    "to do"
+                  ]
+                }
+              ],
+              "appendChoices": true,
+              "defaultLocale": "en-us",
+              "style": "SuggestedAction",
+              "choiceOptions": {
+                "inlineSeparator": ", ",
+                "inlineOr": " or ",
+                "inlineOrMore": ", or ",
+                "includeNumbers": true
+              },
+              "recognizerOptions": {
+                "noValue": false
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
           "$designer": {
             "createdAt": "2019-07-16T20:16:10.787Z",
             "updatedAt": "2019-07-16T20:16:15.697Z",
             "id": "064151"
           },
-          "activity": "[bfdactivity-064151]"
+          "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-16T20:16:03.881Z",
+                "updatedAt": "2019-07-16T20:16:09.035Z",
+                "id": "896478"
+              },
+              "activity": "[bfdactivity-896478]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-16T20:16:10.787Z",
+                "updatedAt": "2019-07-16T20:16:15.697Z",
+                "id": "064151"
+              },
+              "activity": "[bfdactivity-064151]"
+            }
+          ]
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }
