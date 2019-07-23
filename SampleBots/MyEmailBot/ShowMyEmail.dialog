@@ -8,13 +8,10 @@
             "property": "user.ShowEmailChoice",
             "choices": [
                 {
-                    "value": "show next page"
+                    "value": "reply this email"
                 },
                 {
-                    "value": "show last page"
-                },
-                {
-                    "value": "go back"
+                    "value": "forward this email"
                 }
             ],
             "prompt": "What do you want to do now? ",
@@ -26,21 +23,15 @@
             "condition": "user.ShowEmailChoice",
             "cases": [
                 {
-                    "value": "show next page",
+                    "value": "reply this email",
                     "steps": [
-                        "ShowMyNextPage"
+                        "ReplyMyEmail"
                     ]
                 },
                 {
-                    "value": "show last page",
+                    "value": "forward this email",
                     "steps": [
-                        "ShowMyLastPage"
-                    ]
-                },
-                {
-                    "value": "go back",
-                    "steps": [
-                        //need to be completed
+                        "ForwardMyEmail"
                     ]
                 }
             ]

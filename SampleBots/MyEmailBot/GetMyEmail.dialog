@@ -29,7 +29,7 @@
             "changeType": "Push",
             "arrayProperty": "user.emails",
             "value": "user.getGraphEmails.value[{user.pages}*{user.ItemsPerPage}+2]"
-        },
+        }
     ]
 
 }

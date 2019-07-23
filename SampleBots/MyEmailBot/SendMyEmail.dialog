@@ -1,0 +1,50 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+    {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Start to write an email. "
+    },
+      {
+        "$type": "Microsoft.TextInput",
+        "prompt": "Please enter the subject of your email.",
+        "property": "user.subject"
+      },
+      {
+        "$type": "Microsoft.TextInput",
+        "prompt": "Get! please enter the body of your email.",
+        "property": "user.MailBody"
+      },
+      {
+        "$type": "Microsoft.TextInput",
+        "prompt": "Get! please enter email address of your recipient.",
+        "property": "user.EmailAddr"
+      },
+      {
+        "$type": "Microsoft.ConfirmInput",
+        "property": "dialog.confirmed",
+        "prompt": "Are you sure to send this email?",
+        "unrecognizedPrompt": "Please try again.",
+        "invalidPrompt": "Please input yes/no.",
+        "alwaysPrompt": true
+      },
+      {
+        "$type": "Microsoft.IfCondition",
+        "condition": "dialog.confirmed",
+        "steps": [
+          "SendMyEmailToGraph",
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Your email has been sent succsessfully. "
+          }
+        ],
+        "elseSteps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "OK, let's do it next time."
+          }
+        ]
+      }
+    ]
+}

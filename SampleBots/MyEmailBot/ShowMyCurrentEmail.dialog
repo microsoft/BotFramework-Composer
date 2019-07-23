@@ -1,11 +1,12 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
     "steps": [
         "GetMyEmail",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the preview of your email."
+            "activity": "This is the preview of your page {user.pages} emails."
         },
         {
             "$type": "Microsoft.SendActivity",
@@ -27,13 +28,22 @@
             "property": "user.EmailChoice",
             "choices": [
                 {
-                    "value": "Email1"
+                    "value": "Show me the 1st Email. "
                 },
                 {
-                    "value": "Email2"
+                    "value": "Show me the 2nd Email. "
                 },
                 {
-                    "value": "Email3"
+                    "value": "Show me the 3rd Email. "
+                },
+                {
+                    "value": "Next Page. "
+                },
+                {
+                    "value": "Last Page. "
+                },
+                {
+                    "value": "Go back. "
                 }
             ],
             "prompt": "Please select a value from below:",
@@ -45,33 +55,85 @@
             "condition": "user.EmailChoice",
             "cases": [
                 {
-                    "value": "Email1",
+                    "value": "Show me the 1st Email. ",
                     "steps": [
                         {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.SelectedEmail",
+                            "value": "user.emails[0]"
+                        },
+                        {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.emails[0].body}"
+                            "activity": "{user.SelectedEmail.body}"
+                        },
+                        {
+                            "$type": "Microsoft.EndDialog"
                         }
                     ]
                 },
                 {
-                    "value": "Email2",
+                    "value": "Show me the 2nd Email. ",
                     "steps": [
                         {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.SelectedEmail",
+                            "value": "user.emails[1]"
+                        },
+                        {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.emails[2].body}"
+                            "activity": "{user.SelectedEmail.body}"
+                        },
+                        {
+                            "$type": "Microsoft.EndDialog"
                         }
                     ]
                 },
                 {
-                    "value": "Email3",
+                    "value": "Show me the 3rd Email. ",
                     "steps": [
                         {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.SelectedEmail",
+                            "value": "user.emails[2]"
+                        },
+                        {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.emails[2].body}"
+                            "activity": "{user.SelectedEmail.body}"
+                        },
+                        {
+                            "$type": "Microsoft.EndDialog"
                         }
                     ]
                 }
             ]
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.EmailChoice",
+            "cases": [
+                {
+                    "value": "Next Page. ",
+                    "steps": [
+                        "ShowMyNextPage"
+                    ]
+                },
+                {
+                    "value": "Last Page. ",
+                    "steps": [
+                        "ShowMyLastPage"
+                    ]
+                },
+                {
+                    "value": "Go back. ",
+                    "steps": [
+                        //need to be completed.
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.RepeatDialog"
         }
+        
     ]
 }
