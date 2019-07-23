@@ -65,3 +65,10 @@ Cypress.Commands.add('copyBot', (bot, name) => {
   cy.get('input[data-testid="NewDialogName"]').type('{enter}');
   cy.wait(1000);
 });
+
+Cypress.Commands.add('addEventHandler', handler => {
+  cy.withinEditor('VisualEditor', () => {
+    cy.getByTestId('EventsEditorAdd').click();
+    cy.getByText(handler).click();
+  });
+});

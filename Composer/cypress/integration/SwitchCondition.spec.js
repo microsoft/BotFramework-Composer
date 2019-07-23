@@ -1,22 +1,22 @@
 /// <reference types="Cypress" />
 
-context.skip('SwitchCondition', () => {
+context('SwitchCondition', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('ToDoLuisBot', 'SwitchConditionSpec');
+    cy.startFromTemplate('EmptyBot', 'SwitchConditionSpec');
   });
 
   it('can manage cases', () => {
-    // Add switch condition
-    cy.withinEditor('FormEditor', () => {
-      cy.get('[data-testid="StepsFieldAdd"]').click();
+    cy.addEventHandler('Handle Unknown Intent');
+
+    cy.withinEditor('VisualEditor', () => {
+      cy.getByText('Unknown Intent').click();
+      cy.getByTestId('StepGroupAdd').click();
       cy.getByText('Flow').click();
       cy.getByText('Branch: Switch').click();
+      cy.getByTestId('SwitchConditionDiamond').click();
     });
-    // Focus switch condition in form editor
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByTestId('SwitchConditionDiamond').click({ force: true });
-    });
+
     // Add case and add/delete/edit steps
     cy.withinEditor('FormEditor', () => {
       // Edit condition
@@ -111,8 +111,8 @@ context.skip('SwitchCondition', () => {
       });
 
       cy.get('[role="separator"]')
-        .should('have.length', 3)
-        .eq(1)
+        .should('have.length', 4)
+        .eq(2)
         .should('have.text', 'Branch: Case1');
 
       cy.wait(100);
@@ -130,8 +130,8 @@ context.skip('SwitchCondition', () => {
       });
 
       cy.get('[role="separator"]')
-        .should('have.length', 2)
-        .eq(1)
+        .should('have.length', 3)
+        .eq(2)
         .should('have.text', 'Default Branch');
     });
   });
