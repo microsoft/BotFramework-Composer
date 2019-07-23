@@ -8,10 +8,11 @@ context('SwitchCondition', () => {
 
   it('can manage cases', () => {
     cy.addEventHandler('Handle Unknown Intent');
+    cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('Unknown Intent').click({ force: true });
-      cy.wait(200);
+      cy.wait(100);
       cy.getByTestId('StepGroupAdd').click({ force: true });
       cy.getByText('Flow').click({ force: true });
       cy.getByText('Branch: Switch').click({ force: true });
