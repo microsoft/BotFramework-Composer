@@ -84,7 +84,12 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           ) : null}
         </div>
       );
-      styles = { height: InitNodeSize.height + (ChoiceInputSize.height + ChoiceInputMarginTop) * choices.length + 8 };
+      styles = {
+        height:
+          InitNodeSize.height +
+          (ChoiceInputSize.height + ChoiceInputMarginTop) * (choices.length > 4 ? 4 : choices.length) +
+          8,
+      };
     }
     return (
       <FormCard
