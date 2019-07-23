@@ -11,13 +11,13 @@ Samples are designed to illustrate scenarios you'll need to implement to build g
 | Sample Name             | Description                                                                    |
 |-------------------------|--------------------------------------------------------------------------------|
 |Message_Samples          |explains how to use LG to send messages.|
-|Inputs_Samples           |show how to use different input to user.|
-|Cards_Sample             |show how to send different cards to user. This sample uses a menu pattern and LG to send cards.|
-|Steps_Samples            |explains the different steps in Composer. A step is a building block with in a dialog.|
-|ControllingConversation  |explain the different steps avaible to control the flow of a conversation|
+|Inputs_Samples           |shows how to use different input to user.|
+|Cards_Sample             |shows how to send different cards to user. This sample uses a menu pattern and LG to send cards.|
+|Steps_Samples            |explains the different steps in Composer. A step is a building block within a dialog.|
+|ControllingConversation  |explains the different steps available to control the flow of a conversation|
 |ToDoBot                  |is a simple To Do bot that uses RegEx for LU|
 |ToDoLuisBot              |is a simple To Do bot that uses LUIS for its LU|
-|ReminderBot              |is a advanced To Do bot that contains LUIS for its LU, uses HTTP backend service calls to deal with data store and support paging by using expression for listing out reminders|
+|ReminderBot              |is an advanced To Do bot that contains LUIS for its LU, uses HTTP backend service calls to deal with data store and supports paging by using expression for listing out reminders|
 
 
 
