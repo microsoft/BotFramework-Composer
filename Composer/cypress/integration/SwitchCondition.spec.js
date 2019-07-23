@@ -11,6 +11,7 @@ context('SwitchCondition', () => {
 
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('Unknown Intent').click();
+      cy.wait(100);
       cy.getByTestId('StepGroupAdd').click();
       cy.getByText('Flow').click();
       cy.getByText('Branch: Switch').click();
