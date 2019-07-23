@@ -28,7 +28,17 @@ export default function Content(props) {
 
   // performance optimization, component update should only trigger by lgFile change.
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(lgFile) === false ? <LgEditor value={lgFile.content} onChange={onChange} /> : <div />;
+    return lodash.isEmpty(lgFile) === false ? (
+      <LgEditor
+        options={{
+          lineNumbers: 'on',
+        }}
+        value={lgFile.content}
+        onChange={onChange}
+      />
+    ) : (
+      <div />
+    );
   }, [lgFile]);
 
   return (

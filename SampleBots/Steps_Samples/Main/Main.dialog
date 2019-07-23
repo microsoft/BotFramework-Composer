@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:28:10.677Z",
-    "updatedAt": "2019-07-16T19:47:49.350Z",
+    "updatedAt": "2019-07-22T20:43:22.981Z",
     "id": "892616"
   },
   "autoEndDialog": false,
@@ -36,7 +36,12 @@
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "Steps"
+          "dialog": "Steps",
+          "$designer": {
+            "createdAt": "2019-07-22T07:32:51.372Z",
+            "updatedAt": "2019-07-22T07:32:51.385Z",
+            "id": "124654"
+          }
         }
       ],
       "intent": "Steps"
@@ -236,6 +241,26 @@
             "id": "347762"
           },
           "activity": "[bfdactivity-347762]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-22T07:31:04.680Z",
+            "updatedAt": "2019-07-22T16:14:47.793Z",
+            "id": "640616"
+          },
+          "activity": "[bfdactivity-640616]"
         }
       ]
     }

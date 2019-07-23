@@ -44,23 +44,25 @@ function locateNode(dialog: { [key: string]: any }, path) {
   return { parentData, currentData, currentKey };
 }
 
-export function deleteNode(inputDialog, path, removeLgTemplate) {
+export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {
   const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
   if (!target) return dialog;
 
   const { parentData, currentData, currentKey } = target;
-  if (currentData.$type === 'Microsoft.SendActivity') {
-    if (currentData.activity && currentData.activity.indexOf('[bfdactivity-') !== -1) {
-      removeLgTemplate('common', currentData.activity.slice(1, currentData.activity.length - 1));
-    }
-  }
+
+  const deletedData = cloneDeep(currentData);
 
   // Remove targetKey
   if (Array.isArray(parentData) && typeof currentKey === 'number') {
     parentData.splice(currentKey, 1);
   } else {
     delete parentData[currentKey];
+  }
+
+  // invoke callback handler
+  if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
+    callbackOnRemovedData(deletedData);
   }
 
   return dialog;

@@ -6,31 +6,43 @@
     "id": "031360"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.DateTimeInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:04:23.366Z",
-        "updatedAt": "2019-07-16T19:04:28.792Z",
-        "id": "996821"
+        "id": "309212",
+        "updatedAt": "2019-07-22T07:51:11.884Z"
       },
-      "property": "user.date",
-      "prompt": "Please enter a date.",
-      "invalidPrompt": "Please enter a date.",
-      "maxTurnCount": 2,
-      "alwaysPrompt": true,
-      "allowInterruptions": false,
-      "defaultLocale": "en-us"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:59:41.571Z",
-        "updatedAt": "2019-07-16T19:04:32.657Z",
-        "id": "828009"
-      },
-      "activity": "[bfdactivity-828009]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.DateTimeInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:04:23.366Z",
+            "updatedAt": "2019-07-16T19:04:28.792Z",
+            "id": "996821"
+          },
+          "property": "user.date",
+          "prompt": "Please enter a date.",
+          "invalidPrompt": "Please enter a date.",
+          "maxTurnCount": 2,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:59:41.571Z",
+            "updatedAt": "2019-07-16T19:04:32.657Z",
+            "id": "828009"
+          },
+          "activity": "[bfdactivity-828009]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

@@ -6,33 +6,45 @@
     "id": "570040"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-01T21:37:32.573Z",
-        "updatedAt": "2019-07-16T19:53:49.651Z",
-        "id": "423305"
+        "id": "064818",
+        "updatedAt": "2019-07-22T08:04:20.667Z"
       },
-      "activity": "[bfdactivity-423305]"
-    },
-    {
-      "$type": "Microsoft.EndTurn",
-      "$designer": {
-        "createdAt": "2019-07-01T21:37:33.405Z",
-        "updatedAt": "2019-07-16T19:53:53.413Z",
-        "id": "280288"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:37:38.941Z",
-        "updatedAt": "2019-07-16T19:53:58.401Z",
-        "id": "448895"
-      },
-      "activity": "[bfdactivity-448895]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:37:32.573Z",
+            "updatedAt": "2019-07-16T19:53:49.651Z",
+            "id": "423305"
+          },
+          "activity": "[bfdactivity-423305]"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "createdAt": "2019-07-01T21:37:33.405Z",
+            "updatedAt": "2019-07-16T19:53:53.413Z",
+            "id": "280288"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:37:38.941Z",
+            "updatedAt": "2019-07-16T19:53:58.401Z",
+            "id": "448895"
+          },
+          "activity": "[bfdactivity-448895]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }
