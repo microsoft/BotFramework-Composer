@@ -6,16 +6,28 @@
     "id": "897725"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:37:33.208Z",
-        "updatedAt": "2019-07-16T19:37:37.881Z",
-        "id": "219943"
+        "id": "265236",
+        "updatedAt": "2019-07-22T07:54:30.409Z"
       },
-      "activity": "[bfdactivity-219943]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:37:33.208Z",
+            "updatedAt": "2019-07-16T19:37:37.881Z",
+            "id": "219943"
+          },
+          "activity": "[bfdactivity-219943]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

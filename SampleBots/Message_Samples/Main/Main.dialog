@@ -152,7 +152,32 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-07-18T10:35:38.221Z",
+            "updatedAt": "2019-07-18T10:35:38.579Z",
+            "id": "551445"
+          },
+          "activity": "[bfdactivity-551445]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "452701",
+        "updatedAt": "2019-07-18T10:34:46.562Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "576166",
+            "updatedAt": "2019-07-18T10:34:54.027Z"
+          },
+          "activity": "[bfdactivity-576166]"
         }
       ]
     }

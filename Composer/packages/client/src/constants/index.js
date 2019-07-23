@@ -77,6 +77,7 @@ export const ActionTypes = {
   RELOAD_BOT_FAILURE: 'RELOAD_BOT_FAILURE',
   UPDATE_OAUTH: 'UPDATE_OAUTH',
   SET_ERROR: 'SET_ERROR',
+  TO_START_BOT: 'TO_START_BOT',
 };
 
 export const Tips = {
