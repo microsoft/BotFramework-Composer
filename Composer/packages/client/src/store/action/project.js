@@ -45,7 +45,6 @@ export async function fetchProject(dispatch) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
-      navigate('/');
     }
   } catch (err) {
     navigate('/home');
