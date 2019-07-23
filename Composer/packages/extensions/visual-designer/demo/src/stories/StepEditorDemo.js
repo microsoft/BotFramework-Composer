@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { transformRootDialog } from '../../../src/transformers/transformRootDialog';
 import { NodeEventTypes } from '../../../src/shared/NodeEventTypes';
 import { StepEditor } from '../../../src/editors/StepEditor';
+import { NodeRendererContext } from '../../../src/store/NodeRendererContext';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
 
@@ -21,7 +22,7 @@ export class StepEditorDemo extends Component {
     selectedFile: defaultFile,
     stepData: getStepData(ObiExamples[defaultFile]),
     focusPath: '',
-    focusedStep: '',
+    focusedId: '',
   };
 
   constructor(props) {
@@ -33,7 +34,7 @@ export class StepEditorDemo extends Component {
       selectedFile: file,
       stepData: getStepData(copyJson(ObiExamples[file])),
       focusPath: file,
-      focusedStep: '',
+      focusedId: '',
     });
   }
 
@@ -86,27 +87,28 @@ export class StepEditorDemo extends Component {
             />
           </div>
           <div className="block block--right">
-            <StepEditor
-              key={this.state.focusPath}
-              id={stepData.id}
-              focusedId={this.state.focusedStep}
-              data={stepData.json}
-              focusPath={focusPath}
-              onEvent={(eventName, data) => {
-                switch (eventName) {
-                  case NodeEventTypes.Focus:
-                  case NodeEventTypes.Expand:
-                    this.setState({
-                      focusedStep: data,
-                    });
-                    break;
-                  default:
-                    console.log('StepEditor fires event', eventName, data);
-                    break;
-                }
-                console.log('event', eventName, data);
-              }}
-            />
+            <NodeRendererContext.Provider value={this.state}>
+              <StepEditor
+                key={this.state.focusPath}
+                id={stepData.id}
+                data={stepData.json}
+                focusPath={focusPath}
+                onEvent={(eventName, data) => {
+                  switch (eventName) {
+                    case NodeEventTypes.Focus:
+                    case NodeEventTypes.Expand:
+                      this.setState({
+                        focusedId: data,
+                      });
+                      break;
+                    default:
+                      console.log('StepEditor fires event', eventName, data);
+                      break;
+                  }
+                  console.log('event', eventName, data);
+                }}
+              />
+            </NodeRendererContext.Provider>
           </div>
         </div>
       </div>

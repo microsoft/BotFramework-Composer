@@ -1,9 +1,5 @@
 {
   "fieldTemplateOverrides": {
-    "BaseField": {
-      "title": false,
-      "description": false
-    },
     "RulesField": {
       "title": "Events",
       "description": "Define handlers for events that occur within the bot."
@@ -12,7 +8,8 @@
   },
   "SDKOverrides": {
     "Microsoft.AdaptiveDialog": {
-      "title": "AdaptiveDialog"
+      "title": "AdaptiveDialog",
+      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.BeginDialog": {
       "title": "Begin a Dialog"
@@ -28,6 +25,10 @@
     },
     "Microsoft.ConfirmInput": {
       "title": "Prompt for confirmation"
+    },
+    "Microsoft.ConversationUpdateActivityRule": {
+      "title": "Conversation Update Activity",
+      "description": "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.DebugBreak": {
       "title": "Debug Break"
@@ -71,16 +72,20 @@
     "Microsoft.LogStep": {
       "title": "Log to console"
     },
+    "Recognizer": {
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
+    },
     "Microsoft.LuisRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.NumberInput": {
       "title": "Prompt for a number"
@@ -118,7 +123,7 @@
     },
     "Activity": {
       "title": "Language Generation",
-      "description": "What your Bot says to the User. Visit <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> the documentation</a> a reference of capabilities."
+      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi"
     },
     "Microsoft.SetProperty": {
       "title": "Set a Property"

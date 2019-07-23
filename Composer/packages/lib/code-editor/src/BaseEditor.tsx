@@ -56,7 +56,12 @@ export default function BaseEditor(props: BaseEditorProps) {
     <div
       className="CodeEditor"
       ref={containerRef}
-      style={{ height: '100%', border: `1px solid ${NeutralColors.gray30}`, overflow: 'hidden' }}
+      style={{
+        height: '100%',
+        border: `1px solid ${NeutralColors.gray30}`,
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
     >
       <MonacoEditor {...props} {...rect} value={value || placeholder} onChange={onChange} options={options} />
     </div>

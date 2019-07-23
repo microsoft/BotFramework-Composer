@@ -14,7 +14,18 @@ describe('<IconCard />', () => {
     onClick = jest.fn();
 
     renderResult = render(
-      <IconCard icon={icon} label={label} corner={corner} themeColor={themeColor} onClick={onClick} />
+      <IconCard
+        icon={icon}
+        label={label}
+        corner={corner}
+        summary={''}
+        trigger={''}
+        childDialog={''}
+        themeColor={themeColor}
+        iconColor={'red'}
+        onClick={onClick}
+        onChildDialogClick={() => {}}
+      />
     );
   });
 

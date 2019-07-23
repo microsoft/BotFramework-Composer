@@ -1,10 +1,10 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
-import { LGParser } from 'botbuilder-lg';
 
 import { validateLgTemplate } from '../src/store/action/lg';
 
+import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -142,6 +142,9 @@ export function ShellApi() {
   }
 
   function getState(sourceWindow) {
+    const [currentDialogId] = navPath.split('#');
+    const currentDialog = dialogs.find(d => d.id === currentDialogId);
+
     return {
       data: getData(sourceWindow),
       dialogs,
@@ -150,6 +153,7 @@ export function ShellApi() {
       schemas,
       lgFiles,
       luFiles,
+      currentDialog,
     };
   }
 
@@ -193,13 +197,21 @@ export function ShellApi() {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
 
-    const res = LGParser.TryParse(file.content);
+    const templates = lgUtil.parse(file.content);
+    const lines = file.content.split('\n');
 
-    if (res.isValid === false) {
-      throw new Error(res.error.Message);
-    }
+    return templates.map(t => {
+      const [start, end] = getTemplateBodyRange(t);
+      const body = lines.slice(start - 1, end).join('\n');
 
-    return res.templates.map(t => ({ Name: t.Name, Body: t.Body }));
+      return { Name: t.Name, Parameters: t.Parameters, Body: body };
+    });
+  }
+
+  function getTemplateBodyRange(template) {
+    const startLineNumber = template.ParseTree._start.line + 1;
+    const endLineNumber = template.ParseTree._stop.line;
+    return [startLineNumber, endLineNumber];
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {

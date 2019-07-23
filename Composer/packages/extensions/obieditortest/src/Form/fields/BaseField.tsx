@@ -9,10 +9,11 @@ import classnames from 'classnames';
 import { FormContext } from '../types';
 import SectionSeparator from '../SectionSeparator';
 
-import { DesignerField } from './DesignerField';
+import { RootField } from './RootField';
+
 import './styles.scss';
 
-const descriptionMarkup = description => {
+const descriptionMarkup = (description: string): { __html: string } => {
   return { __html: description };
 };
 
@@ -24,50 +25,15 @@ interface BaseFieldProps<T> {
   formData: T;
   idSchema: IdSchema;
   name?: string;
+  onChange?: (data: T) => void;
   schema: JSONSchema6;
   title?: string;
   uiSchema: UiSchema;
 }
 
-const overrideDefaults = {
-  title: undefined,
-  description: undefined,
-};
-
-function RootDialog(props) {
-  const { title, name, description, schema, formData, formContext } = props;
-
-  const templateOverrides = get(formContext.editorSchema, 'content.fieldTemplateOverrides.BaseField', overrideDefaults);
-
-  const hasDesigner = !!get(schema, 'properties.$designer');
-
-  const handleDesignerChange = newDesigner => {
-    props.onChange({ ...formData, $designer: newDesigner });
-  };
-
-  return (
-    <div id={props.id}>
-      {templateOverrides.title === false ? null : (
-        <h3 className={classnames('RootFieldTitle', FontClassNames.xxLarge)}>
-          {title || schema.title || startCase(name)}
-        </h3>
-      )}
-      {templateOverrides.description === false
-        ? null
-        : (description || schema.description) && (
-            <p className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}>
-              {description || schema.description}
-            </p>
-          )}
-      {hasDesigner && <DesignerField data={get(formData, '$designer')} onChange={handleDesignerChange} />}
-      {props.children}
-    </div>
-  );
-}
-
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const { children, title, name, description, schema, uiSchema, idSchema, formContext, className } = props;
-  const isRoot = idSchema.__id === formContext.rootId;
+  const isRootBaseField = idSchema.__id === formContext.rootId;
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
@@ -84,26 +50,37 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     key = `${key}-${formContext.dialogId}`;
   }
 
-  return isRoot ? (
-    <RootDialog {...props} key={key} id={key} formContext={formContext}>
+  const getTitle = () => {
+    if (titleOverride === false) {
+      return null;
+    }
+
+    return titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name);
+  };
+
+  const getDescription = () => {
+    if (descriptionOverride === false) {
+      return null;
+    }
+
+    return descriptionOverride || description || uiSchema['ui:description'] || schema.description;
+  };
+
+  return isRootBaseField ? (
+    <RootField {...props} key={key} id={key}>
       {children}
-    </RootDialog>
+    </RootField>
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key}>
-      {titleOverride === false ? null : (
-        <SectionSeparator>
-          {titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name)}
-        </SectionSeparator>
-      )}
-      {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-        <p
-          className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
-          dangerouslySetInnerHTML={descriptionMarkup(
-            descriptionOverride || description || uiSchema['ui:description'] || schema.description
-          )}
-        />
-      )}
-      {children}
+      <SectionSeparator label={getTitle()}>
+        {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
+          <p
+            className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
+            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
+          />
+        )}
+        {children}
+      </SectionSeparator>
     </div>
   );
 }

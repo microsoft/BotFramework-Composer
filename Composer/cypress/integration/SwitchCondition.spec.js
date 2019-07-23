@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('SwitchCondition', () => {
+context.skip('SwitchCondition', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.copyBot('ToDoLuisBot', 'SwitchConditionSpec');

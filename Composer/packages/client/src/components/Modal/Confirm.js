@@ -11,13 +11,17 @@ const ConfirmDialog = props => {
   const {
     title,
     subTitle = '',
-    onRenderContent = () => null,
+    onRenderContent = defaultContentRender,
     confirmBtnText = 'Yes',
     cancelBtnText = 'Cancel',
     style = DialogStyle.normalStyle,
   } = setting;
   if (!title) {
     throw new Error('confirm modal must give a title');
+  }
+
+  function defaultContentRender() {
+    return <div style={BuiltInStyles[style]}> {subTitle} </div>;
   }
 
   return (
@@ -34,7 +38,7 @@ const ConfirmDialog = props => {
         styles: dialogModal,
       }}
     >
-      {onRenderContent && onRenderContent(subTitle, BuiltInStyles[style])}
+      {onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
         <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
         <DefaultButton onClick={onCancel} text={cancelBtnText} />

@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { CreationFlowStatus, DialogDeleting } from '../../constants';
+import { DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -57,7 +57,7 @@ function getAllRef(targetId, dialogs) {
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, setCreationFlowStatus, removeDialog } = actions;
+  const { clearNavHistory, navTo, removeDialog } = actions;
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(id) {
@@ -86,47 +86,12 @@ function DesignPage(props) {
   const toolbarItems = [
     {
       type: 'action',
-      text: formatMessage('New'),
+      text: formatMessage('Add'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add',
+          iconName: 'CirclePlus',
         },
-        menuProps: {
-          items: [
-            {
-              key: 'newBot',
-              text: formatMessage('New Bot'),
-              onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
-            },
-            {
-              key: 'newDialog',
-              text: formatMessage('New Dialog'),
-              onClick: () => setModalOpen(true),
-            },
-          ],
-        },
-      },
-      align: 'left',
-    },
-    {
-      type: 'action',
-      text: formatMessage('Open'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'OpenFolderHorizontal',
-        },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
-      },
-      align: 'left',
-    },
-    {
-      type: 'action',
-      text: formatMessage('Save as'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Save',
-        },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+        onClick: () => setModalOpen(true),
       },
       align: 'left',
     },

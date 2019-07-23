@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useRef, Fragment, useContext } from 'react';
+import { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,
   PrimaryButton,
@@ -46,9 +46,14 @@ export const TestController = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth } = state;
-  const { connectBot, reloadBot, publishLuis } = actions;
+  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth, toStartBot } = state;
+  const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === 'connected';
+
+  useEffect(() => {
+    toStartBot && handleClick();
+    startBot(false);
+  }, [toStartBot]);
 
   async function handleClick() {
     const dialogErrors = dialogs.reduce((result, dialog) => {
@@ -70,13 +75,10 @@ export const TestController = () => {
       return;
     }
     const config = LuisStorage.get(botName);
-    const files = luFiles.filter(f => !!f.content);
+    const files = luFiles.filter(f => dialogs.findIndex(dialog => dialog.luFile === f.id) !== -1);
     const updated =
-      luStatus.length !== luFiles.length ||
-      !luStatus.every(item => {
-        if (item.status === 1) return true;
-        return false;
-      }) ||
+      luStatus.length !== files.length ||
+      !luStatus.every(item => item.status === 1) ||
       config[LuisConfig.AUTHORING_KEY] === '';
     if (files.length !== 0 && updated) {
       if (!luisPublishSucceed) {
@@ -148,8 +150,9 @@ export const TestController = () => {
         )}
         <PrimaryButton
           css={botButton}
-          text={connected ? formatMessage('Reload') : formatMessage('Connect')}
+          text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
           onClick={handleClick}
+          id={'publishAndConnect'}
         />
         <Callout
           role="alertdialog"

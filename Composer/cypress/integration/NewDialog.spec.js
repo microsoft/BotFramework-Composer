@@ -4,11 +4,11 @@ context('Creating a new Dialog', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.copyBot('ToDoBot', 'ToDoBotCopy');
+    cy.get('[data-testid="LeftNav-CommandBarButtonDesign Flow"]').click();
   });
 
   it('can create a new dialog from toolbar', () => {
-    cy.getByText('New').click();
-    cy.getByText('New Dialog').click();
+    cy.getByText('Add').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewDialog1');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {

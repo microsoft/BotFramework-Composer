@@ -25,7 +25,7 @@ const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
   </div>
 );
 
-const App: React.FC<FormEditorProps> = props => {
+const ObiFormEditor: React.FC<FormEditorProps> = props => {
   return (
     <ErrorBoundary key={props.focusPath} FallbackComponent={ErrorInfo}>
       <FormEditor {...props} />
@@ -33,4 +33,4 @@ const App: React.FC<FormEditorProps> = props => {
   );
 };
 
-export default App;
+export default ObiFormEditor;

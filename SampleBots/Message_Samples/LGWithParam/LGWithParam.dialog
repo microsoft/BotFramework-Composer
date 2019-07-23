@@ -3,37 +3,46 @@
   "$designer": {
     "createdAt": "2019-07-03T06:50:15.750Z",
     "updatedAt": "2019-07-16T19:37:11.397Z",
-    "id": "519863",
-    "name": "LGWithParam"
+    "id": "519863"
   },
   "autoEndDialog": true,
   "generator": "common.lg",
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:37:12.535Z",
-        "updatedAt": "2019-07-16T19:37:17.975Z",
-        "id": "085232",
-        "name": "Prompt for text"
+        "id": "514780",
+        "updatedAt": "2019-07-22T07:54:25.331Z"
       },
-      "property": "user.name",
-      "prompt": "Hello, I'm Zoidberg. What is your name?",
-      "maxTurnCount": 0,
-      "alwaysPrompt": false,
-      "allowInterruptions": false,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T19:37:19.484Z",
-        "updatedAt": "2019-07-16T19:37:25.039Z",
-        "id": "176070",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-176070]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-16T19:37:12.535Z",
+            "updatedAt": "2019-07-16T19:37:17.975Z",
+            "id": "085232"
+          },
+          "property": "user.name",
+          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:37:19.484Z",
+            "updatedAt": "2019-07-16T19:37:25.039Z",
+            "id": "176070"
+          },
+          "activity": "[bfdactivity-176070]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }
