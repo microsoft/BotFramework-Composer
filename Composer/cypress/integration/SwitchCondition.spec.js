@@ -10,12 +10,12 @@ context('SwitchCondition', () => {
     cy.addEventHandler('Handle Unknown Intent');
 
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Unknown Intent').click();
-      cy.wait(100);
-      cy.getByTestId('StepGroupAdd').click();
-      cy.getByText('Flow').click();
-      cy.getByText('Branch: Switch').click();
-      cy.getByTestId('SwitchConditionDiamond').click();
+      cy.getByText('Unknown Intent').click({ force: true });
+      cy.wait(200);
+      cy.getByTestId('StepGroupAdd').click({ force: true });
+      cy.getByText('Flow').click({ force: true });
+      cy.getByText('Branch: Switch').click({ force: true });
+      cy.getByTestId('SwitchConditionDiamond').click({ force: true });
     });
 
     // Add case and add/delete/edit steps
@@ -24,7 +24,7 @@ context('SwitchCondition', () => {
       cy.getByLabelText('Condition').type('user.age >= 21');
 
       // Add new case
-      cy.getByText('Add New Case').click();
+      cy.getByText('Add New Case').click({ force: true });
       cy.getByLabelText('Value')
         .type('Case1')
         .type('{enter}');
@@ -57,24 +57,22 @@ context('SwitchCondition', () => {
         .get('@steps')
         .eq(0)
         .find('button')
-        .click();
-      // btn0.click();
+        .click({ force: true });
       btn0.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
-          .click();
+          .click({ force: true });
       });
 
       const btn2 = cy
         .get('@steps')
         .eq(2)
         .find('button')
-        .click();
-      // btn2.click();
+        .click({ force: true });
       btn2.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
-          .click();
+          .click({ force: true });
       });
 
       // assert that the steps are in correct order
@@ -92,7 +90,7 @@ context('SwitchCondition', () => {
         .should('contain.text', 'Send an Activity');
 
       // Add another new case
-      cy.getByText('Add New Case').click();
+      cy.getByText('Add New Case').click({ force: true });
       cy.getByLabelText('Value')
         .type('Case2')
         .type('{enter}');
@@ -104,11 +102,11 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click();
+      btn.click({ force: true });
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
-          .click();
+          .click({ force: true });
       });
 
       cy.get('[role="separator"]')
@@ -123,7 +121,7 @@ context('SwitchCondition', () => {
         .get('.CasesFieldConditionsMenu')
         .first()
         .find('button');
-      btn.click();
+      btn.click({ force: true });
       btn.invoke('attr', 'aria-owns').then(menuId => {
         cy.get(`#${menuId}`)
           .getByText('Remove')

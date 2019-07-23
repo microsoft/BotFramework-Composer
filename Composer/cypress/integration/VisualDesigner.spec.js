@@ -14,21 +14,25 @@ context('Visual Designer', () => {
   it('can add a rule from the visual designer', () => {
     cy.withinEditor('VisualEditor', () => {
       clickAddEvent('Handle an Event');
+      cy.wait(100);
       cy.get('.node-renderer-container--focused').within(() => {
         cy.contains('Handle an Event').should('exist');
       });
 
       clickAddEvent('Handle an Intent');
+      cy.wait(100);
       cy.get('.node-renderer-container--focused').within(() => {
         cy.contains('Handle an Intent').should('exist');
       });
 
       clickAddEvent('Handle Unknown Intent');
+      cy.wait(100);
       cy.get('.node-renderer-container--focused').within(() => {
         cy.contains('Handle Unknown Intent').should('exist');
       });
 
       clickAddEvent('Handle ConversationUpdate');
+      cy.wait(100);
       cy.get('.node-renderer-container--focused').within(() => {
         cy.contains('Handle ConversationUpdate').should('exist');
       });
