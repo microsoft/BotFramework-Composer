@@ -5,7 +5,7 @@ The Bot Framework Composer includes few samples to help you get started.
 ## Samples list
 Samples are designed to illustrate scenarios you'll need to implement to build great bots! Samples could be opened by Bot Framework Composer by clicking on the Open button. You should see a list of samples to choose from. Pick one and give it a try.
 <p align="center">
-    <img alt="Open samples" src="./Assets/samples_open.jpg" style="max-width:700px;" />
+    <img alt="Open samples" src="./Assets/samples_open.JPG" style="max-width:700px;" />
 </p>
 
 | Sample Name             | Description                                                                    |
