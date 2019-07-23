@@ -6,41 +6,54 @@
     "id": "708197"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.IfCondition",
+      "$type": "Microsoft.EventRule",
       "$designer": {
         "createdAt": "2019-07-16T19:55:03.213Z",
         "updatedAt": "2019-07-16T19:55:06.022Z",
         "id": "475044"
       },
-      "condition": "user.name == null",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.TextInput",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
             "createdAt": "2019-07-01T21:40:16.578Z",
             "updatedAt": "2019-07-16T19:55:09.909Z",
             "id": "719594"
           },
-          "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "maxTurnCount": 2147483647,
-          "alwaysPrompt": false,
-          "allowInterruptions": true,
-          "outputFormat": "none"
+          "condition": "user.name == null",
+          "steps": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "createdAt": "2019-07-01T21:40:16.578Z",
+                "updatedAt": "2019-07-16T19:55:09.909Z",
+                "id": "719594"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": true,
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:40:15.216Z",
+            "updatedAt": "2019-07-16T19:55:14.687Z",
+            "id": "485963"
+          },
+          "activity": "[bfdactivity-485963]"
         }
       ]
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:40:15.216Z",
-        "updatedAt": "2019-07-16T19:55:14.687Z",
-        "id": "485963"
-      },
-      "activity": "[bfdactivity-485963]"
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
@@ -20,7 +20,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
+export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
     return onEvent(NodeEventTypes.Focus, id);
   };
@@ -37,7 +37,7 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   };
 
   const onCardBodyClick = () => {
-    if (focusedId === id) {
+    if (focused) {
       openNode();
     } else {
       focusNode();

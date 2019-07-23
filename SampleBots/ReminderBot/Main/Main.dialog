@@ -4,24 +4,27 @@
     "createdAt": "2019-07-08T07:49:23.113Z",
     "updatedAt": "2019-07-08T08:30:26.486Z",
     "id": "899494",
-
     "description": "ReminderBot"
   },
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
         "createdAt": "2019-07-08T08:29:34.449Z",
         "updatedAt": "2019-07-16T19:38:54.655Z",
         "id": "134916"
       },
-      "activity": "[bfdactivity-134916]"
-    }
-  ],
-  "rules": [
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {

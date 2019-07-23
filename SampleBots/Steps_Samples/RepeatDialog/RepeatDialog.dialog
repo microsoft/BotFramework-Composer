@@ -6,46 +6,58 @@
     "id": "869987"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-01T21:40:57.559Z",
-        "updatedAt": "2019-07-16T19:55:20.735Z",
-        "id": "905646"
+        "id": "099628",
+        "updatedAt": "2019-07-22T08:04:38.805Z"
       },
-      "property": "user.name",
-      "prompt": "Hello, what is your name?",
-      "maxTurnCount": 2147483647,
-      "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "outputFormat": "none"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:40:59.389Z",
-        "updatedAt": "2019-07-16T19:55:24.641Z",
-        "id": "839941"
-      },
-      "activity": "[bfdactivity-839941]"
-    },
-    {
-      "$type": "Microsoft.EndTurn",
-      "$designer": {
-        "createdAt": "2019-07-16T19:55:26.352Z",
-        "updatedAt": "2019-07-16T19:55:30.171Z",
-        "id": "575528"
-      }
-    },
-    {
-      "$type": "Microsoft.RepeatDialog",
-      "$designer": {
-        "createdAt": "2019-07-16T19:55:31.844Z",
-        "updatedAt": "2019-07-16T19:55:35.651Z",
-        "id": "317559"
-      }
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-01T21:40:57.559Z",
+            "updatedAt": "2019-07-16T19:55:20.735Z",
+            "id": "905646"
+          },
+          "property": "user.name",
+          "prompt": "Hello, what is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": true,
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:40:59.389Z",
+            "updatedAt": "2019-07-16T19:55:24.641Z",
+            "id": "839941"
+          },
+          "activity": "[bfdactivity-839941]"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "createdAt": "2019-07-16T19:55:26.352Z",
+            "updatedAt": "2019-07-16T19:55:30.171Z",
+            "id": "575528"
+          }
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-07-16T19:55:31.844Z",
+            "updatedAt": "2019-07-16T19:55:35.651Z",
+            "id": "317559"
+          }
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

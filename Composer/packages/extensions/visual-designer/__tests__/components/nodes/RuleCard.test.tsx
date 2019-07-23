@@ -27,7 +27,9 @@ describe('<RuleCard />', () => {
     describe('data has no steps', () => {
       beforeEach(() => {
         data = {};
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it.skip('renders openIcon & openIcon can be clicked', async () => {
@@ -58,7 +60,9 @@ describe('<RuleCard />', () => {
             },
           ],
         };
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it.skip('renders openIcon & openIcon can be clicked', async () => {
@@ -68,7 +72,7 @@ describe('<RuleCard />', () => {
         expect(openIcon).toBeTruthy();
 
         fireEvent.click(openIcon);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0].dialg]]);
       });
 
       it('should trigger open node function when id = focusedId', async () => {
@@ -90,7 +94,9 @@ describe('<RuleCard />', () => {
     describe('data has no steps', () => {
       beforeEach(() => {
         data = {};
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it.skip('renders openIcon & openIcon can be clicked', async () => {
@@ -121,7 +127,9 @@ describe('<RuleCard />', () => {
             },
           ],
         };
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it.skip('renders openIcon & openIcon can be clicked', async () => {
@@ -131,7 +139,7 @@ describe('<RuleCard />', () => {
         expect(openIcon).toBeTruthy();
 
         fireEvent.click(openIcon);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0].dialog]]);
       });
 
       it('should trigger open node function when id != focusedId', async () => {

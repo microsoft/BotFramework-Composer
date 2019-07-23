@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
-// eslint-disable-next-line
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeColors } from '../../shared/elementColors';
 import { DialogGroup } from '../../shared/appschema';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
@@ -15,7 +15,9 @@ const isAnonymousTemplateReference = activity => {
 };
 
 export const ActivityRenderer: React.FC<NodeProps> = props => {
-  const { id, data, onEvent, getLgTemplates } = props;
+  const { getLgTemplates } = useContext(NodeRendererContext);
+
+  const { id, data, onEvent } = props;
   const [templateText, setTemplateText] = useState('');
 
   const updateTemplateText = async () => {
