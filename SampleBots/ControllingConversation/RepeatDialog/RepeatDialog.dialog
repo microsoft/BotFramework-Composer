@@ -6,58 +6,70 @@
     "id": "607738"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.ConfirmInput",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T18:52:10.284Z",
-        "updatedAt": "2019-07-16T18:52:14.640Z",
-        "id": "841600"
+        "id": "695225",
+        "updatedAt": "2019-07-22T07:45:52.118Z"
       },
-      "property": "user.confirmed",
-      "prompt": "Do you want to repeat this dialog, yes to repeat, no to end this dialog",
-      "unrecognizedPrompt": "I need a yes or no.",
-      "maxTurnCount": 0,
-      "alwaysPrompt": true,
-      "allowInterruptions": false,
-      "defaultLocale": "en-us",
-      "style": "Auto",
-      "choiceOptions": {
-        "inlineSeparator": ", ",
-        "inlineOr": " or ",
-        "inlineOrMore": ", or ",
-        "includeNumbers": true
-      }
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-16T18:52:16.346Z",
-        "updatedAt": "2019-07-16T18:52:18.539Z",
-        "id": "365292"
-      },
-      "condition": "user.confirmed",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.RepeatDialog",
+          "$type": "Microsoft.ConfirmInput",
           "$designer": {
-            "createdAt": "2019-07-16T18:52:20.435Z",
-            "updatedAt": "2019-07-16T18:52:23.947Z",
-            "id": "221664"
+            "createdAt": "2019-07-16T18:52:10.284Z",
+            "updatedAt": "2019-07-16T18:52:14.640Z",
+            "id": "841600"
+          },
+          "property": "user.confirmed",
+          "prompt": "Do you want to repeat this dialog, yes to repeat, no to end this dialog",
+          "unrecognizedPrompt": "I need a yes or no.",
+          "maxTurnCount": 0,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
           }
-        }
-      ],
-      "elseSteps": [
+        },
         {
-          "$type": "Microsoft.EndDialog",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T18:52:25.645Z",
-            "updatedAt": "2019-07-16T18:52:28.521Z",
-            "id": "573415"
-          }
+            "createdAt": "2019-07-16T18:52:16.346Z",
+            "updatedAt": "2019-07-16T18:52:18.539Z",
+            "id": "365292"
+          },
+          "condition": "user.confirmed",
+          "steps": [
+            {
+              "$type": "Microsoft.RepeatDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T18:52:20.435Z",
+                "updatedAt": "2019-07-16T18:52:23.947Z",
+                "id": "221664"
+              }
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T18:52:25.645Z",
+                "updatedAt": "2019-07-16T18:52:28.521Z",
+                "id": "573415"
+              }
+            }
+          ]
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

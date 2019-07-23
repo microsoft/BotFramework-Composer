@@ -6,70 +6,16 @@
     "id": "126960"
   },
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-01T21:55:00.865Z",
-        "updatedAt": "2019-07-16T19:57:04.928Z",
-        "id": "522200"
+        "id": "218388",
+        "updatedAt": "2019-07-22T08:05:04.387Z"
       },
-      "activity": "[bfdactivity-522200]"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:54:55.777Z",
-        "updatedAt": "2019-07-16T19:57:08.511Z",
-        "id": "350559"
-      },
-      "activity": "[bfdactivity-350559]"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:54:47.248Z",
-        "updatedAt": "2019-07-16T19:57:12.012Z",
-        "id": "309397"
-      },
-      "activity": "[bfdactivity-309397]"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "$designer": {
-        "createdAt": "2019-07-01T21:54:48.182Z",
-        "updatedAt": "2019-07-16T19:57:18.322Z",
-        "id": "026341"
-      },
-      "property": "user.age",
-      "value": "9+9"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:54:34.003Z",
-        "updatedAt": "2019-07-16T19:57:23.251Z",
-        "id": "797905"
-      },
-      "activity": "[bfdactivity-797905]"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "$designer": {
-        "createdAt": "2019-07-01T21:54:35.399Z",
-        "updatedAt": "2019-07-16T19:57:28.877Z",
-        "id": "948500"
-      },
-      "property": "user.age"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "$designer": {
-        "createdAt": "2019-07-01T21:47:07.036Z",
-        "updatedAt": "2019-07-16T19:57:32.413Z",
-        "id": "634904"
-      },
-      "condition": "user.age != null",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -78,10 +24,36 @@
             "updatedAt": "2019-07-16T19:57:37.389Z",
             "id": "166131"
           },
-          "activity": "[bfdactivity-166131]"
-        }
-      ],
-      "elseSteps": [
+          "activity": "[bfdactivity-522200]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:54:55.777Z",
+            "updatedAt": "2019-07-16T19:57:08.511Z",
+            "id": "350559"
+          },
+          "activity": "[bfdactivity-350559]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:54:47.248Z",
+            "updatedAt": "2019-07-16T19:57:12.012Z",
+            "id": "309397"
+          },
+          "activity": "[bfdactivity-309397]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-01T21:54:48.182Z",
+            "updatedAt": "2019-07-16T19:57:18.322Z",
+            "id": "026341"
+          },
+          "property": "user.age",
+          "value": "9+9"
+        },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -89,7 +61,47 @@
             "updatedAt": "2019-07-16T19:57:41.832Z",
             "id": "643043"
           },
-          "activity": "[bfdactivity-643043]"
+          "activity": "[bfdactivity-797905]"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-01T21:54:35.399Z",
+            "updatedAt": "2019-07-16T19:57:28.877Z",
+            "id": "948500"
+          },
+          "property": "user.age"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T21:47:07.036Z",
+            "updatedAt": "2019-07-16T19:57:32.413Z",
+            "id": "634904"
+          },
+          "condition": "user.age != null",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T21:47:08.296Z",
+                "updatedAt": "2019-07-16T19:57:37.389Z",
+                "id": "166131"
+              },
+              "activity": "[bfdactivity-166131]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T21:54:15.926Z",
+                "updatedAt": "2019-07-16T19:57:41.832Z",
+                "id": "643043"
+              },
+              "activity": "[bfdactivity-643043]"
+            }
+          ]
         }
       ]
     }
