@@ -5,7 +5,7 @@ The Bot Framework Composer includes few samples to help you get started.
 ## Samples list
 Samples are designed to illustrate scenarios you'll need to implement to build great bots! Samples could be opened by Bot Framework Composer by clicking on the Open button. You should see a list of samples to choose from. Pick one and give it a try.
 <p align="center">
-    <img alt="Open samples" src="./Assets/open-samples.jpg" style="max-width:700px;" />
+    <img alt="Open samples" src="./Assets/samples_open.jpg" style="max-width:700px;" />
 </p>
 
 | Sample Name             | Description                                                                    |
@@ -17,7 +17,7 @@ Samples are designed to illustrate scenarios you'll need to implement to build g
 |ControllingConversation  |explain the different steps avaible to control the flow of a conversation|
 |ToDoBot                  |is a simple To Do bot that uses RegEx for LU|
 |ToDoLuisBot              |is a simple To Do bot that uses LUIS for its LU|
-|ReminderBot              ||
-|Sandwich                 ||
+|ReminderBot              |is a advanced To Do bot that contains LUIS for its LU, uses HTTP backend service calls to deal with data store and support paging by using expression for listing out reminders|
+
 
 
