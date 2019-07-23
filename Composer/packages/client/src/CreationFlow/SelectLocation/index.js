@@ -22,7 +22,7 @@ export function SelectLocation(props) {
         }) >= 0
       ) {
         startBot(true);
-        navigate('/');
+        navigate('/dialogs/Main');
         onDismiss();
       } else {
         setErrorMessage(formatMessage('Please select one of these options.'));
