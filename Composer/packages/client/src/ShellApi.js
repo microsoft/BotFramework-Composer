@@ -1,10 +1,10 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
-import { LGParser } from 'botbuilder-lg';
 
 import { validateLgTemplate } from '../src/store/action/lg';
 
+import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -197,15 +197,10 @@ export function ShellApi() {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
 
-    const res = LGParser.TryParse(file.content);
-
-    if (res.isValid === false) {
-      throw new Error(res.error.Message);
-    }
-
+    const templates = lgUtil.parse(file.content);
     const lines = file.content.split('\n');
 
-    return res.templates.map(t => {
+    return templates.map(t => {
       const [start, end] = getTemplateBodyRange(t);
       const body = lines.slice(start - 1, end).join('\n');
 

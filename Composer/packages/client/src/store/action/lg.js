@@ -1,17 +1,8 @@
 import axios from 'axios';
-import { LGParser } from 'botbuilder-lg';
+
+import * as lgUtil from '../../utils/lgUtil';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-
-const templateValidate = ({ Name, Body }) => {
-  const text = ['#', Name, '\n', Body].join('');
-  return LGParser.TryParse(text);
-};
-
-const templatesFromText = content => {
-  const res = LGParser.TryParse(content);
-  return res.isValid && res.templates;
-};
 
 const textFromTemplates = templates => {
   let text = '';
@@ -30,23 +21,17 @@ const textFromTemplates = templates => {
   return text;
 };
 
-const contentValidate = text => {
-  return LGParser.TryParse(text);
-};
-
 /**
  *
  * @param {Name, Body} template
  */
-export function validateLgTemplate(template) {
-  // validate template
-  const validateResult = templateValidate(template);
-  if (validateResult.isValid === false) {
-    throw new Error(validateResult.error.Message);
-  }
+export function validateLgTemplate({ Name, Body }) {
+  // should be a valid lg content
+  const text = ['#', Name, '\n', Body].join('');
+  validateLgContent(text);
 
   // should be a single template.
-  if (validateResult.templates.length !== 1) {
+  if (lgUtil.parse(text).length !== 1) {
     throw new Error('invalid single template');
   }
 }
@@ -56,12 +41,12 @@ export function validateLgTemplate(template) {
  * @param string, content
  */
 export function validateLgContent(content) {
-  // validate template
-  const validateResult = contentValidate(content);
-  if (validateResult.isValid === false) {
-    const { Start, End } = validateResult.error.Range;
-    const errorDetail = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-    throw new Error(`${errorDetail},\n ${validateResult.error.Message}`);
+  // validate template, make up error message
+
+  const diagnostics = lgUtil.check(content);
+  if (lgUtil.isValid(diagnostics) === false) {
+    const errorMsg = lgUtil.combineMessage(diagnostics);
+    throw new Error(errorMsg);
   }
 }
 
@@ -125,7 +110,7 @@ export async function removeLgFile(dispatch, { id }) {
 export async function updateLgTemplate(dispatch, { file, templateName, template }) {
   validateLgTemplate(template);
 
-  const oldTemplates = templatesFromText(file.content);
+  const oldTemplates = lgUtil.parse(file.content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
   const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
@@ -178,7 +163,7 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
  * @param {*} templateName name of template to delete
  */
 export async function removeLgTemplate(dispatch, { file, templateName }) {
-  const oldTemplates = templatesFromText(file.content);
+  const oldTemplates = lgUtil.parse(file.content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
   const orignialTemplate = oldTemplates.find(x => x.Name === templateName);

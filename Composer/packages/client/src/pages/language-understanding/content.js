@@ -26,7 +26,15 @@ export default function Content(props) {
   // performance optimization, component update should only trigger by luFile change.
   const memoizedEditor = useMemo(() => {
     const textContent = lodash.isEmpty(luFile) === false ? luFile.content : '';
-    return <LuEditor value={textContent} onChange={onChange} />;
+    return (
+      <LuEditor
+        options={{
+          lineNumbers: 'on',
+        }}
+        value={textContent}
+        onChange={onChange}
+      />
+    );
   }, [luFile]);
 
   return (
