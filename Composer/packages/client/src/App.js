@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
+import { BASEPATH } from './constants';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
@@ -95,6 +96,7 @@ export function App() {
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus } = actions;
+  const mapNavItemTo = x => (BASEPATH === '/' ? x : `${BASEPATH}${x}`);
 
   useEffect(() => {
     fetchProject();
@@ -122,7 +124,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}
@@ -140,7 +142,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}

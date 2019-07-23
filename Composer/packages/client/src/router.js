@@ -16,7 +16,7 @@ const Routes = props => {
   const Content = props.component;
   const parentProps = props;
   return (
-    <Match path="/" {...props}>
+    <Match path={BASEPATH} {...props}>
       {props => (
         <div css={data}>
           <Content css={showDesign(props.match)}>
