@@ -1,7 +1,13 @@
 import { Boundary } from '../../src/shared/Boundary';
 import { measureJsonBoundary } from '../../src/layouters/measureJsonBoundary';
 import { ObiTypes } from '../../src/shared/ObiTypes';
-import { DiamondSize, InitNodeSize, LoopIconSize } from '../../src/shared/elementSizes';
+import {
+  DiamondSize,
+  InitNodeSize,
+  LoopIconSize,
+  ChoiceInputSize,
+  ChoiceInputMarginTop,
+} from '../../src/shared/elementSizes';
 
 describe('measureJsonBoundary', () => {
   let boundary = new Boundary();
@@ -10,7 +16,7 @@ describe('measureJsonBoundary', () => {
     expect(measureJsonBoundary(null)).toEqual(boundary);
     expect(measureJsonBoundary({ a: 1 })).toEqual(boundary);
   });
-  it('should return boundary whose size according to the json.$type', () => {
+  it('should return boundary whose size is determined by the json.$type', () => {
     expect(measureJsonBoundary({ $type: ObiTypes.ChoiceDiamond })).toEqual(
       new Boundary(DiamondSize.width, DiamondSize.height)
     );
@@ -22,6 +28,16 @@ describe('measureJsonBoundary', () => {
     );
     expect(measureJsonBoundary({ $type: ObiTypes.LogStep })).toEqual(
       new Boundary(InitNodeSize.width, InitNodeSize.height)
+    );
+  });
+  it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
+    let data: { [key: string]: any } = {
+      $type: ObiTypes.ChoiceInput,
+      choices: [{ value: '1' }],
+    };
+
+    expect(measureJsonBoundary(data)).toEqual(
+      new Boundary(InitNodeSize.width, InitNodeSize.height + ChoiceInputSize.height + ChoiceInputMarginTop)
     );
   });
 });
