@@ -10,6 +10,7 @@ import { ObiTypes } from '../../shared/ObiTypes';
 
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
+import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 export class ChoiceInput extends React.Component<NodeProps, {}> {
@@ -25,7 +26,8 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
     const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
     const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
     let children: any = null;
-    let styles: object = {};
+    const { height } = measureJsonBoundary(data);
+    const styles = { height };
 
     if (keyMap) {
       header = header || keyMap.header || '';
@@ -86,12 +88,6 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           ) : null}
         </div>
       );
-      styles = {
-        height:
-          InitNodeSize.height +
-          (ChoiceInputSize.height + ChoiceInputMarginTop) * (choices.length > 4 ? 4 : choices.length) +
-          8,
-      };
     }
     return (
       <FormCard
