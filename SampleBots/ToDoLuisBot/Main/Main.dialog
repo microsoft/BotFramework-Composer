@@ -78,6 +78,24 @@
           "activity": "[bfdactivity-636903]"
         }
       ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "[LuisToDoHelp]"
+          }
+        }
+      ]
     }
   ],
   "$schema": "../../app.schema"

@@ -19,18 +19,22 @@
     }
   },
   "generator": "common.lg",
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
         "createdAt": "2019-07-01T22:02:14.960Z",
         "updatedAt": "2019-07-16T20:00:24.788Z",
         "id": "376720"
       },
-      "activity": "[bfdactivity-376720]"
-    }
-  ],
-  "rules": [
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[bfdactivity-376720]"
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {

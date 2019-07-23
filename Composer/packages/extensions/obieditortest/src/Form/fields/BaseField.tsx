@@ -13,7 +13,7 @@ import { RootField } from './RootField';
 
 import './styles.scss';
 
-const descriptionMarkup = description => {
+const descriptionMarkup = (description: string): { __html: string } => {
   return { __html: description };
 };
 
