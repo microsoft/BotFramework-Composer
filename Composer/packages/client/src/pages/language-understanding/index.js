@@ -9,6 +9,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal } from '../../components/Modal/Alert';
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
 
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
@@ -86,7 +87,7 @@ export const LUPage = props => {
     }
 
     if (!activeDialog && subPath && dialogs.length) {
-      navigate('/language-understanding');
+      navigate(`${BASEPATH}/language-understanding`);
     }
 
     setNewContent(null);
@@ -98,9 +99,9 @@ export const LUPage = props => {
       return;
     }
     if (id === '_all') {
-      navigate(`/language-understanding`);
+      navigate(`${BASEPATH}/language-understanding`);
     } else {
-      navigate(`/language-understanding/${id}`);
+      navigate(`${BASEPATH}/language-understanding/${id}`);
     }
   }
 
@@ -126,7 +127,7 @@ export const LUPage = props => {
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
   function onTableViewWantEdit(template) {
-    navigate(`/language-understanding/${template.fileId}`);
+    navigate(`${BASEPATH}/language-understanding/${template.fileId}`);
     setTextMode(true);
   }
 

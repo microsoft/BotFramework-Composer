@@ -8,6 +8,7 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 
@@ -83,7 +84,7 @@ export const LGPage = props => {
   // if dialog not find, navigate to all.
   useEffect(() => {
     if (!activeDialog && subPath && dialogs.length) {
-      navigate('/language-generation');
+      navigate(`${BASEPATH}/language-generation`);
     }
 
     setNewContent(null);
@@ -95,9 +96,9 @@ export const LGPage = props => {
       return;
     }
     if (id === '_all') {
-      navigate(`/language-generation`);
+      navigate(`${BASEPATH}/language-generation`);
     } else {
-      navigate(`/language-generation/${id}`);
+      navigate(`${BASEPATH}/language-generation/${id}`);
     }
     setTextMode(false); // back to table view
   }

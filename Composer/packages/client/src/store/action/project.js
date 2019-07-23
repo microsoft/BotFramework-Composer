@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
 export function updateOAuth(dispatch, oAuth) {
@@ -44,10 +44,10 @@ export async function fetchProject(dispatch) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
-      navigate('/');
+      navigate(BASEPATH);
     }
   } catch (err) {
-    navigate('/home');
+    navigate(`${BASEPATH}/home`);
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
@@ -87,7 +87,7 @@ export async function openBotProject(dispatch, absolutePath) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
-      navigate('/');
+      navigate(BASEPATH);
     }
   } catch (err) {
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
