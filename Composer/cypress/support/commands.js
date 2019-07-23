@@ -31,6 +31,7 @@ Cypress.Commands.add('openBot', botName => {
     cy.get(`input[aria-label="${botName}"]`).click();
   });
   cy.get('[data-testid="SelectLocationOpen"]').click();
+  if (botName === 'ToDoLuisBot') cy.get('[data-testid="publish-LUIS-models-cancel"]').click();
   cy.wait(500);
 });
 
