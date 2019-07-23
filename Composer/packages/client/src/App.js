@@ -65,7 +65,7 @@ const topLinks = [
     underTest: true, // will delete
   },
   {
-    to: 'setting',
+    to: '/setting/',
     iconName: 'Settings',
     labelName: 'Settings',
     activeIfUrlContains: 'setting',
@@ -96,7 +96,10 @@ export function App() {
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => (BASEPATH === '/' ? x : `${BASEPATH}${x}`);
+  const mapNavItemTo = x => {
+    const leaf = x.startsWith('/') ? x : `/${x}`;
+    return BASEPATH === '/' ? leaf : `${BASEPATH}${leaf}`;
+  };
 
   useEffect(() => {
     fetchProject();
