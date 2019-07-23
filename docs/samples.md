@@ -11,7 +11,7 @@ Samples are designed to illustrate scenarios you'll need to implement to build g
 | Sample Name             | Description                                                                    |
 |-------------------------|--------------------------------------------------------------------------------|
 |Message_Samples          |explains how to use LG to send messages.|
-|Inputs_Samples           |shows how to use different input to user.|
+|Inputs_Samples           |shows how to use different inputs to user.|
 |Cards_Sample             |shows how to send different cards to user. This sample uses a menu pattern and LG to send cards.|
 |Steps_Samples            |explains the different steps in Composer. A step is a building block within a dialog.|
 |ControllingConversation  |explains the different steps available to control the flow of a conversation|
