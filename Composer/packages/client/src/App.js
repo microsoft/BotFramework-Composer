@@ -12,6 +12,7 @@ import { BASEPATH } from './constants';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
+import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow/index';
 
 initializeIcons(/* optional base url */);
@@ -96,10 +97,7 @@ export function App() {
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => {
-    const leaf = x.startsWith('/') ? x : `/${x}`;
-    return BASEPATH === '/' ? leaf : `${BASEPATH}${leaf}`;
-  };
+  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   useEffect(() => {
     fetchProject();
