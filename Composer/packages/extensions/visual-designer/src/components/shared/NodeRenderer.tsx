@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
@@ -17,8 +17,8 @@ import {
   Foreach,
   ChoiceInput,
 } from '../nodes/index';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
 
@@ -41,30 +41,30 @@ const rendererByObiType = {
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
-function chooseRendererByType($type) {
+function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
   const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
   return renderer;
 }
 
-export class NodeRenderer extends React.Component<NodeProps, {}> {
-  static defaultProps = defaultNodeProps;
-  containerRef = React.createRef();
+export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+  const ChosenRenderer = chooseRendererByType(data.$type);
 
-  render() {
-    const { id, data, focusedId, onEvent, onResize } = this.props;
-    const ChosenRenderer = chooseRendererByType(data.$type);
-    return (
-      <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}>
-        <ChosenRenderer
-          id={id}
-          data={data}
-          focusedId={focusedId}
-          onEvent={onEvent}
-          onResize={size => {
-            onResize(size, 'node');
-          }}
-        />
-      </div>
-    );
-  }
-}
+  const { focusedId } = useContext(NodeRendererContext);
+  const nodeFocused = focusedId === id;
+
+  return (
+    <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}>
+      <ChosenRenderer
+        id={id}
+        data={data}
+        focused={nodeFocused}
+        onEvent={onEvent}
+        onResize={size => {
+          onResize(size, 'node');
+        }}
+      />
+    </div>
+  );
+};
+
+NodeRenderer.defaultProps = defaultNodeProps;

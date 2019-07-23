@@ -4,25 +4,16 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
-import { LgAPIContext } from '../store/LgAPIContext';
+import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
-export const ObiEditor: React.FC<ObiEditorProps> = ({
-  path,
-  focusedId,
-  data,
-  onSelect,
-  onExpand,
-  onOpen,
-  onChange,
-  isRoot,
-}) => {
+export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, onOpen, onChange, isRoot }) => {
   let divRef;
 
-  const lgApiContext = useContext(LgAPIContext);
+  const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
 
   const dispatchEvent = (eventName?, eventData?): any => {
     let handler;
@@ -41,7 +32,7 @@ export const ObiEditor: React.FC<ObiEditorProps> = ({
           const cleanLgTemplate = (removedData: any): void => {
             if (removedData && removedData.$type === 'Microsoft.SendActivity') {
               if (removedData.activity && removedData.activity.indexOf('[bfdactivity-') !== -1) {
-                lgApiContext.removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
+                removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
               }
             }
           };
@@ -99,8 +90,7 @@ export const ObiEditor: React.FC<ObiEditorProps> = ({
         <ChosenEditor
           id={path}
           data={data}
-          focusedId={focusedId}
-          isRoot={isRoot}
+          hideSteps={isRoot}
           onEvent={(...args) => {
             divRef.focus({ preventScroll: true });
             dispatchEvent(...args);
@@ -113,7 +103,6 @@ export const ObiEditor: React.FC<ObiEditorProps> = ({
 
 ObiEditor.defaultProps = {
   path: '.',
-  focusedId: '',
   data: {},
   onSelect: () => {},
   onExpand: () => {},
@@ -123,7 +112,6 @@ ObiEditor.defaultProps = {
 
 interface ObiEditorProps {
   path: string;
-  focusedId: string;
   // Obi raw json
   data: any;
   isRoot: boolean;

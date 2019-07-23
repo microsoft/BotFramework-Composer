@@ -34,7 +34,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent, onResize }) => {
+export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -61,13 +61,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId,
   return (
     <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
-        <DefaultRenderer
-          key={condition.id}
-          id={condition.id}
-          data={condition.data}
-          focusedId={focusedId}
-          onEvent={onEvent}
-        />
+        <DefaultRenderer key={condition.id} id={condition.id} data={condition.data} onEvent={onEvent} />
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
         <Diamond
@@ -85,7 +79,6 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, focusedId,
                   key={x.id}
                   id={x.id}
                   data={x.data}
-                  focusedId={focusedId}
                   onEvent={onEvent}
                   onResize={size => {
                     patchBoundary(x.id, size);

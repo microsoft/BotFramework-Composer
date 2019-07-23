@@ -3,10 +3,17 @@ export interface LgTemplate {
   Body: string;
 }
 
+export interface EditorProps {
+  id: string;
+  data: any;
+  onEvent: (action, id) => object | void;
+
+  hideSteps?: boolean;
+}
 export interface NodeProps {
   id: string;
   data: any;
-  focusedId: string;
+  focused?: boolean;
   onEvent: (action, id) => object | void;
   onResize: (action?, id?) => object | void;
 
@@ -16,7 +23,6 @@ export interface NodeProps {
 export const defaultNodeProps = {
   id: '',
   data: {},
-  focusedId: '',
   onEvent: () => {},
   onResize: () => {},
 };
