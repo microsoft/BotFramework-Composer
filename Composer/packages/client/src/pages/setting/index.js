@@ -6,8 +6,6 @@ import { Nav } from 'office-ui-fabric-react';
 import { Link, navigate } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';
-import { BASEPATH } from '../../constants';
-import { resolveToBasePath } from '../../utils/fileUtil';
 
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
@@ -66,7 +64,7 @@ export const SettingPage = () => {
                   onRenderLink={onRenderLink}
                   selectedKey={active}
                   onLinkClick={(e, item) => {
-                    navigate(resolveToBasePath(BASEPATH, item.key));
+                    navigate(item.key);
                   }}
                 />
               </div>
