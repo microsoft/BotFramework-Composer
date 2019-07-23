@@ -7,10 +7,10 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { getDialogGroupByType } from '../../shared/appschema';
 import { getElementColor } from '../../shared/elementColors';
 import { ObiTypes } from '../../shared/ObiTypes';
+import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
 
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
-import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 export class ChoiceInput extends React.Component<NodeProps, {}> {
