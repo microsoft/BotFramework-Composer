@@ -11,7 +11,7 @@ import { RuleCard } from './templates/RuleCard';
 // If a custom title has been specified, use this
 // otherwise, display the name of the intent handled
 // if no intent have yet been configured, display a generic title
-function renderTitle(data) {
+function renderTitle(data): string {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else if (data.intent) {
@@ -21,8 +21,8 @@ function renderTitle(data) {
   }
 }
 
-export const IntentRule: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent }) => {
-  return <RuleCard id={id} data={data} label={renderTitle(data)} focusedId={focusedId} onEvent={onEvent} />;
+export const IntentRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
+  return <RuleCard id={id} data={data} label={renderTitle(data)} focused={focused} onEvent={onEvent} />;
 };
 
 IntentRule.defaultProps = defaultNodeProps;
