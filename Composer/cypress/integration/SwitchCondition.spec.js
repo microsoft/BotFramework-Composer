@@ -111,6 +111,7 @@ context('SwitchCondition', () => {
           .click({ force: true });
       });
 
+      cy.wait(100);
       cy.get('[role="separator"]')
         .should('have.length', 4)
         .eq(2)
@@ -130,6 +131,7 @@ context('SwitchCondition', () => {
           .click({ force: true });
       });
 
+      cy.wait(100);
       cy.get('[role="separator"]')
         .should('have.length', 3)
         .eq(2)
