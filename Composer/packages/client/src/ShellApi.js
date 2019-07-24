@@ -10,6 +10,7 @@ import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { BASEPATH } from './constants';
+import { resolveToBasePath } from './utils/fileUtil';
 
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
@@ -42,7 +43,7 @@ const FileTargetTypes = {
 const shellNavigator = (shellPage, opts = {}) => {
   switch (shellPage) {
     case 'lu':
-      navigate(`${BASEPATH}/language-understanding/${opts.id}`);
+      navigate(resolveToBasePath(BASEPATH, `/language-understanding/${opts.id}`));
       return;
     default:
       return;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
+import { resolveToBasePath } from './../../utils/fileUtil';
 import { navTo, clearNavHistory } from './navigation';
 import { startBot } from './bot';
 
@@ -47,7 +48,7 @@ export async function fetchProject(dispatch) {
       navTo(dispatch, 'Main#');
     }
   } catch (err) {
-    navigate(`${BASEPATH}/home`);
+    navigate(resolveToBasePath(BASEPATH, '/home'));
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
