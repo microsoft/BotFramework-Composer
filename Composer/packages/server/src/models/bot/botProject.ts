@@ -59,7 +59,6 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
-      luStatus: this.luPublisher.status,
     };
   };
 
@@ -214,7 +213,8 @@ export class BotProject {
   public publishLuis = async (config: ILuisConfig) => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
+    const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.reduce((msg, file) => {
         const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
@@ -234,11 +234,12 @@ export class BotProject {
     return await this.luPublisher.publish(config, toPublish);
   };
 
-  public checkNeedLuisDeploy = async () => {
-    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
-      return false;
+  public checkLuisPublished = async () => {
+    const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
+    if (referredLuFiles.length <= 0) {
+      return true;
     } else {
-      return !(await this.luPublisher.checkLuisDeployed());
+      return await this.luPublisher.checkLuisPublised(referredLuFiles);
     }
   };
 

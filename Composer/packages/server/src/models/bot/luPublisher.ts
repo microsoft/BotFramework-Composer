@@ -64,16 +64,28 @@ export class LuPublisher {
     return await this._updateStatus(config.authoringKey, config);
   };
 
-  public checkLuisDeployed = async () => {
+  public getUnpublisedFiles = async (files: LUFile[]) => {
     const setting: ILuisSettings = await this._getSettings();
-    if (setting === null) return false;
-    const appNames = keys(setting.luis);
-    return appNames.every(async name => {
-      if (ENDPOINT_KEYS.indexOf(name) < 0) {
-        return await this.storage.exists(`${name.split('_').join('.')}.dialog`);
+    if (setting === null) return files;
+    const result = files.filter((file: LUFile) => {
+      const appName = this._getAppName(file.id);
+      // //if no generated files
+      // if (!(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`))) {
+      //   return true;
+      // }
+      //if no status
+      if (!setting.status[appName]) {
+        return true;
       }
-      return true;
+      //check file's checksum
+      return setting.status[appName].status === FileState.UPDATED;
     });
+    return result;
+  };
+
+  public checkLuisPublised = async (files: LUFile[]) => {
+    const unpublished = await this.getUnpublisedFiles(files);
+    return unpublished.length === 0;
   };
 
   public getLuisStatus = async () => {
@@ -150,7 +162,7 @@ export class LuPublisher {
     return '';
   };
 
-  private _getAppName = async (path: string) => {
+  private _getAppName = (path: string) => {
     if (this.config === null) return '';
     const culture = this._getCultureFromPath(path) || this.config.defaultLanguage;
     let name = `${Path.basename(path, '.lu')}.${culture}.lu`;

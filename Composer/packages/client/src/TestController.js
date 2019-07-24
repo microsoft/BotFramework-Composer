@@ -16,7 +16,7 @@ import formatMessage from 'format-message';
 import LuisStorage from './utils/luisStorage';
 import { Store } from './store/index';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { LuisConfig, Text } from './constants';
+import { Text, LuisConfig } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
@@ -44,10 +44,10 @@ export const TestController = () => {
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
-  const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
+  const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth, toStartBot } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { botName, botStatus, dialogs, oAuth, toStartBot } = state;
+  const { connectBot, reloadBot, publishLuis, startBot, getPublishedStatus } = actions;
   const connected = botStatus === 'connected';
 
   useEffect(() => {
@@ -75,15 +75,10 @@ export const TestController = () => {
       return;
     }
     const config = LuisStorage.get(botName);
-    const files = luFiles.filter(f => dialogs.findIndex(dialog => dialog.luFile === f.id) !== -1);
-    const updated =
-      luStatus.length !== files.length ||
-      !luStatus.every(item => item.status === 1) ||
-      config[LuisConfig.AUTHORING_KEY] === '';
-    if (files.length !== 0 && updated) {
-      if (!luisPublishSucceed) {
+
+    if ((await getPublishedStatus()) === 'unpublished') {
+      if (!luisPublishSucceed || config[LuisConfig.AUTHORING_KEY] === '') {
         setModalOpen(true);
-        return;
       } else {
         await publishAndReload(config);
       }
@@ -208,6 +203,4 @@ TestController.propTypes = {
   reloadBot: PropTypes.func,
   openStorageExplorer: PropTypes.func,
   openPublish: PropTypes.func,
-  luFiles: PropTypes.array,
-  luStatus: PropTypes.array,
 };

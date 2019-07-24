@@ -12,6 +12,7 @@ import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { CreationFlow } from './CreationFlow/index';
+import LuisStorage from './utils/luisStorage';
 
 initializeIcons(/* optional base url */);
 
@@ -94,11 +95,17 @@ export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
+  const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
 
   useEffect(() => {
     fetchProject();
   }, []);
+
+  useEffect(() => {
+    if (botName !== '') {
+      setLuisConfig(LuisStorage.get(botName));
+    }
+  }, [botName]);
 
   return (
     <Fragment>
