@@ -62,7 +62,7 @@ export function ShellApi() {
   const createLgFile = actions.createLgFile;
 
   const { dialogId, focused, navPathHistory, uri } = designPath;
-  const navPath = dialogId + '#.' + designPath.navPath;
+  const navPath = dialogId + '#' + (designPath.navPath ? `.${designPath.navPath}` : '');
   let focusPath = navPath;
   if (focused) {
     focusPath = focusPath + '.' + focused;
