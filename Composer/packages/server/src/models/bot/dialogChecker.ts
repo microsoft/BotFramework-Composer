@@ -53,7 +53,7 @@ function EditArrayChecker(node: { path: string; value: any }): string {
 /**
  * Dialog Validation Rules
  */
-export const DialogRules: { [key: string]: CheckerFunc[] } = {
+export const DialogChecker: { [key: string]: CheckerFunc[] } = {
   'Microsoft.IfCondition': [IsExpression('condition')],
   'Microsoft.SwitchCondition': [IsExpression('condition')],
   'Microsoft.SetProperty': [IsExpression('property'), IsExpression('value')],
