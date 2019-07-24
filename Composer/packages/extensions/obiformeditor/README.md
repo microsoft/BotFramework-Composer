@@ -1,10 +1,10 @@
-# obieditortest
+# obiformeditor
 
 [![Travis][build-badge]][build]
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-Describe obieditortest here.
+Describe obiformeditor here.
 
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo
@@ -22,7 +22,7 @@ Describe obieditortest here.
 There is a playground to see and experiment with all of the different OBI types. This is usually helpful to view
 outside of Composer because it gives you a finer grain of control and allows you to drill down into any level of detail easily.
 
-In the Composer directory or in the obieditortest directory:
+In the Composer directory or in the obiformeditor directory:
 ```bash
 yarn start
 ```
@@ -62,4 +62,4 @@ Once you are done making changes, commit them and push.
 Then merge those changes into the [composer branch](https://github.com/a-b-r-o-w-n/react-jsonschema-form/tree/composer).
 Once merged, update the package version by incrementing the number after the actual package version (ex. `1.4.0-1` -> `1.4.0-2`).
 Create a tag with the new version number (`git tag v1.4.0-2`) and push to git.
-Finally, update the tag in obieditortest package.json to reference the newly created tag.
+Finally, update the tag in obiformeditor package.json to reference the newly created tag.
