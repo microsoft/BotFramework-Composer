@@ -1,0 +1,35 @@
+{
+    "$schema": "../../../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.EditArray",
+            "changeType": "Clear",
+            "arrayProperty": "user.SentItems"
+        },
+        {
+            "$type": "Microsoft.SetProperty",
+            "property": "user.SentItemsCount",
+            "value": "count(user.getGraphSentItems.value)"
+        },
+        {
+            "$type": "Microsoft.EditArray",
+            "changeType": "Push",
+            "arrayProperty": "user.SentItems",
+            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}]"
+        },
+        {
+            "$type": "Microsoft.EditArray",
+            "changeType": "Push",
+            "arrayProperty": "user.SentItems",
+            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}+1]"
+        },
+        {
+            "$type": "Microsoft.EditArray",
+            "changeType": "Push",
+            "arrayProperty": "user.SentItems",
+            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}+2]"
+        }
+    ]
+
+}

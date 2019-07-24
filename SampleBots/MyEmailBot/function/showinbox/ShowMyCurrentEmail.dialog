@@ -1,8 +1,12 @@
 {
-    "$schema": "../../app.schema",
+    "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
+    "generator": "EmailDialog.lg",
     "steps": [
-        "ShowMyCurrentEmail",
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[ShowEmailCard(user.SelectedEmail)]"
+        },
         {
             "$type": "Microsoft.ChoiceInput",
             "property": "user.ShowEmailChoice",
@@ -12,6 +16,9 @@
                 },
                 {
                     "value": "forward this email"
+                },
+                {
+                    "value": "go back"
                 }
             ],
             "prompt": "What do you want to do now? ",
@@ -33,11 +40,13 @@
                     "steps": [
                         "ForwardMyEmail"
                     ]
+                },
+                {
+                    "value": "go back",
+                    "steps": [
+                    ]
                 }
             ]
-        },
-        {
-            "$type": "Microsoft.RepeatDialog"
         }
     ]
 }

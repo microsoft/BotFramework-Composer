@@ -1,0 +1,24 @@
+{
+    "$schema": "../../../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+      {
+        "$type": "Microsoft.IfCondition",
+        "condition": "user.Sentpages == 0",
+        "steps": [
+          {
+            "$type" : "Microsoft.SendActivity",
+            "activity" : "This is the first page !"
+          },
+          {
+            "$type": "Microsoft.EndDialog"
+          }
+        ]
+      },
+      {
+        "$type": "Microsoft.SetProperty",
+        "value": "user.Sentpages - 1",
+        "property": "user.Sentpages"
+      }
+    ]
+  }

@@ -1,0 +1,54 @@
+# WelcomeCard
+- ```
+[Herocard
+    title= Welcome to EmailBot! 
+    subtitle= Do you want to manage your emails effectively?
+    text= I can help do things like checking, replying, forwarding and sending emails.
+    images= https://picsum.photos/300/200
+    buttons = show inbox email | show sent items | send email | help 
+```
+
+# help
+- I am an email bot, do you need any help? If you want to check your inbox, say "show inbox email" 
+
+# ShowEmailCard(x)
+- ```
+[adaptivecard
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "size": "Medium",
+                    "weight": "Bolder",
+                    "text": "@{x.subject}"
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "@{x.bodypreview}",
+                    "wrap": true,
+                    "maxLines": 10
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "View",
+            "url": "@{x.webLink}"
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}
+]
+```

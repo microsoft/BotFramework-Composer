@@ -1,5 +1,5 @@
 {
-    "$schema": "../../app.schema",
+    "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
         {
@@ -10,7 +10,7 @@
         {
             "$type": "Microsoft.SetProperty",
             "property": "user.EmailCount",
-            "value": "count(user.EmailFromGraph.value)"
+            "value": "count(user.getGraphEmails.value)"
         },
         {
             "$type": "Microsoft.EditArray",

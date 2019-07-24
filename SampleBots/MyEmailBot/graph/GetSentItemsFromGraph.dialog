@@ -1,5 +1,5 @@
 {
-    "$schema": "../../../app.schema",
+    "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
         {
@@ -17,12 +17,12 @@
         },
         {
             "$type": "Microsoft.HttpRequest",
-            "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+            "url": "https://graph.microsoft.com/beta/me/mailFolders/sentitems/messages",
             "method": "GET",
             "header": {
               "Authorization": "Bearer {dialog.token.Token}"
             },
-            "Property": "user.getGraphEmails"
+            "Property": "user.getGraphSentItems"
         }
     ]
 }

@@ -1,15 +1,15 @@
 {
-    "$schema": "../../../app.schema",
+    "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
+    "generator": "EmailDialog.lg", 
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
       "intents": {
-        "ShowEmailIntent": "(?i)show email",
+        "ShowEmailIntent": "(?i)show inbox email",
         "SendEmailIntent": "(?i)send email",
         "HelpIntent": "(?i)help",
-        "ForwardEmailIntent": "(?i)forward email",
-        "ReplyEmailIntent": "(?i)reply email",
+        "SentItemsIntent": "(?i)show sent items",
         "CancelIntent": "(?i)cancel|never mind"
       }
     },
@@ -19,7 +19,7 @@
         "steps": [
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "Hi! I'm a Email bot. Say \"show email\" to get started."
+            "activity": "[help]"
           }
         ]
       },
@@ -54,29 +54,32 @@
       },
       {
         "$type": "Microsoft.IntentRule",
-        "intent": "ForwardEmailIntent",
-        "steps": [
-          "Initialization",
-          "ForwardMyEmail"
-        ]
-      },
-      {
-        "$type": "Microsoft.IntentRule",
-        "intent": "ReplyEmailIntent",
-        "steps": [
-          "Initialization",
-          "ReplyMyEmail"
-        ]
-      },
-      {
-        "$type": "Microsoft.IntentRule",
         "intent": "HelpIntent",
         "steps": [
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "I am an email bot, Please try show email to get started."
+            "activity": "[help]"
           }
         ]
+      },
+      {
+        "$type": "Microsoft.IntentRule",
+        "intent": "SentItemsIntent",
+        "steps": [
+          "Initialization",
+          "ShowSentItems"
+        ]
       }
-    ]
+    ],
+    "steps": [
+      {
+        "$type":"Microsoft.TextInput",
+        "prompt": "[WelcomeCard]",
+        "property": "user.ans"
+      },
+      {
+        "$type": "Microsoft.RepeatDialog"
+      }
+
+  ]
   }

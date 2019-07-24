@@ -1,10 +1,10 @@
 {
-    "$schema": "../../app.schema",
+    "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
       {
         "$type": "Microsoft.SetProperty",
-        "value": "user.pages - 1",
+        "value": "user.pages + 1",
         "property": "user.pages"
       }
     ]

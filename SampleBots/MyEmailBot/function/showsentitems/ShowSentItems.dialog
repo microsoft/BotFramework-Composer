@@ -1,31 +1,29 @@
 {
-    "$schema": "../../app.schema",
+    "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "autoEndDialog": false,
+    "generator": "EmailDialog.lg",
     "steps": [
-        "GetMyEmail",
+        "GetMySentItems",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the preview of your page {user.pages} emails."
+            "activity": "This is the preview of your page {user.Sentpages} sent items."
         },
         {
             "$type": "Microsoft.SendActivity",
-            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}].subject}"
-            "activity": "{user.emails[0].subject}"
+            "activity": "{user.SentItems[0].subject}"
         },
         {
             "$type": "Microsoft.SendActivity",
-            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}+1].subject}"
-            "activity": "{user.emails[1].subject}"
+            "activity": "{user.SentItems[1].subject}"
         },
         {
             "$type": "Microsoft.SendActivity",
-            //"activity": "{user.emails[{user.pages}*{user.ItemsPerPage}+2].subject}"
-            "activity": "{user.emails[2].subject}"
+            "activity": "{user.SentItems[2].subject}"
         },
         {
             "$type": "Microsoft.ChoiceInput",
-            "property": "user.EmailChoice",
+            "property": "user.SentItemsChoice",
             "choices": [
                 {
                     "value": "Show me the 1st Email. "
@@ -52,22 +50,19 @@
         },
         {
             "$type": "Microsoft.SwitchCondition",
-            "condition": "user.EmailChoice",
+            "condition": "user.SentItemsChoice",
             "cases": [
                 {
                     "value": "Show me the 1st Email. ",
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
-                            "value": "user.emails[0]"
+                            "property": "user.SelectedSentItems",
+                            "value": "user.SentItems[0]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.SelectedEmail.body}"
-                        },
-                        {
-                            "$type": "Microsoft.EndDialog"
+                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
                         }
                     ]
                 },
@@ -76,15 +71,12 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
-                            "value": "user.emails[1]"
+                            "property": "user.SelectedSentItems",
+                            "value": "user.SentItems[1]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.SelectedEmail.body}"
-                        },
-                        {
-                            "$type": "Microsoft.EndDialog"
+                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
                         }
                     ]
                 },
@@ -93,13 +85,30 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
-                            "value": "user.emails[2]"
+                            "property": "user.SelectedSentItems",
+                            "value": "user.SentItems[2]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "{user.SelectedEmail.body}"
-                        },
+                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
+                        }
+                    ]
+                },
+                {
+                    "value": "Next Page. ",
+                    "steps": [
+                        "ShowSentNextPage"
+                    ]
+                },
+                {
+                    "value": "Last Page. ",
+                    "steps": [
+                        "ShowSentLastPage"
+                    ]
+                },
+                {
+                    "value": "Go back. ",
+                    "steps": [
                         {
                             "$type": "Microsoft.EndDialog"
                         }
@@ -108,32 +117,7 @@
             ]
         },
         {
-            "$type": "Microsoft.SwitchCondition",
-            "condition": "user.EmailChoice",
-            "cases": [
-                {
-                    "value": "Next Page. ",
-                    "steps": [
-                        "ShowMyNextPage"
-                    ]
-                },
-                {
-                    "value": "Last Page. ",
-                    "steps": [
-                        "ShowMyLastPage"
-                    ]
-                },
-                {
-                    "value": "Go back. ",
-                    "steps": [
-                        //need to be completed.
-                    ]
-                }
-            ]
-        },
-        {
             "$type": "Microsoft.RepeatDialog"
         }
-        
     ]
 }
