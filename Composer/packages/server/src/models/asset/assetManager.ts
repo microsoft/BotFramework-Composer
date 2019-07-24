@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import { find } from 'lodash';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -45,15 +46,17 @@ export class AssetManager {
 
   public async getProjectTemplate() {
     const path = this.assetsLibrayPath + '/projects';
-    const folders = await this.templateStorage.readDir(path);
-    this.projectTemplates = [];
     const output = [];
-    for (const name of folders) {
-      const absPath = Path.join(path, name);
-      if ((await this.templateStorage.stat(absPath)).isDir) {
-        const base = { id: name, name: templates[name].name, description: templates[name].description };
-        this.projectTemplates.push({ ...base, path: absPath });
-        output.push(base);
+    if (existsSync(path)) {
+      const folders = await this.templateStorage.readDir(path);
+      this.projectTemplates = [];
+      for (const name of folders) {
+        const absPath = Path.join(path, name);
+        if ((await this.templateStorage.stat(absPath)).isDir) {
+          const base = { id: name, name: templates[name].name, description: templates[name].description };
+          this.projectTemplates.push({ ...base, path: absPath });
+          output.push(base);
+        }
       }
     }
 
