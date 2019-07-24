@@ -67,19 +67,18 @@ export class LuPublisher {
   public getUnpublisedFiles = async (files: LUFile[]) => {
     const setting: ILuisSettings = await this._getSettings();
     if (setting === null) return files;
-    const result = files.filter((file: LUFile) => {
+    const result: LUFile[] = [];
+    for (const file of files) {
       const appName = this._getAppName(file.id);
-      // //if no generated files
-      // if (!(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`))) {
-      //   return true;
-      // }
-      //if no status
-      if (!setting.status[appName]) {
-        return true;
+      // //if no generated files, no status, check file's checksum
+      if (
+        !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
+        !setting.status[appName] ||
+        setting.status[appName].status === FileState.UPDATED
+      ) {
+        result.push(file);
       }
-      //check file's checksum
-      return setting.status[appName].status === FileState.UPDATED;
-    });
+    }
     return result;
   };
 
