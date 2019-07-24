@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 export function CheckboxWidget(props: WidgetProps) {

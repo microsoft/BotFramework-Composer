@@ -1,6 +1,6 @@
 import React from 'react';
 import { DatePicker } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
 export function DateTimeWidget(props: WidgetProps) {
   const { onChange, onBlur, onFocus, required, value, schema, ...rest } = props;

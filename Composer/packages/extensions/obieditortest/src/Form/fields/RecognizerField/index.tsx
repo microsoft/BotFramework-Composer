@@ -1,6 +1,6 @@
 import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 
 import { BaseField } from '../BaseField';

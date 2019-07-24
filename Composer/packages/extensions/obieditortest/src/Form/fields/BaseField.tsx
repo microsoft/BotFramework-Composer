@@ -2,7 +2,7 @@ import React from 'react';
 import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
-import { IdSchema, UiSchema } from '@bfdesigner/react-jsonschema-form';
+import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
 

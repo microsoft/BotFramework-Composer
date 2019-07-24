@@ -1,7 +1,7 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 

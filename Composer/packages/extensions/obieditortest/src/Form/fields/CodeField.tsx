@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, IDropdownOption, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 

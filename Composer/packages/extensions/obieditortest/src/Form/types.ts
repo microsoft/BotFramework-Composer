@@ -1,4 +1,4 @@
-import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 
 import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
 

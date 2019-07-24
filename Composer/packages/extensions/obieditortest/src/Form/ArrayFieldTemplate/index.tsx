@@ -1,6 +1,6 @@
 import React from 'react';
-import { findSchemaDefinition } from '@bfdesigner/react-jsonschema-form/lib/utils';
-import { ArrayFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
+import { findSchemaDefinition } from '@bfcomposer/react-jsonschema-form/lib/utils';
+import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 
 import StringArray from './StringArray';
 import ObjectArray from './ObjectArray';

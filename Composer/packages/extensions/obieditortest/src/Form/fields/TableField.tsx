@@ -12,7 +12,7 @@ import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';

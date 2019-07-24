@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toggle } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfdesigner/react-jsonschema-form';
+import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
 export function ToggleWidget(props: WidgetProps) {
   const { label, onChange, value } = props;

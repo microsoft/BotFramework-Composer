@@ -1418,10 +1418,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@bfdesigner/react-jsonschema-form@1.4.3-0":
-  version "1.4.3-0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfdesigner/react-jsonschema-form/-/@bfdesigner/react-jsonschema-form-1.4.3-0.tgz#cc80844a6cc633d477569464a24b9dd47fbb3b39"
-  integrity sha1-zICESmzGM9R3VpRkokud1H+7Ozk=
+"@bfcomposer/react-jsonschema-form@1.6.0":
+  version "1.6.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-jsonschema-form/-/@bfcomposer/react-jsonschema-form-1.6.0.tgz#19362224d67763cca2882d7f70057b0651e81fd6"
+  integrity sha1-GTYiJNZ3Y8yiiC1/cAV7BlHoH9Y=
   dependencies:
     ajv "^6.7.0"
     babel-runtime "^6.26.0"

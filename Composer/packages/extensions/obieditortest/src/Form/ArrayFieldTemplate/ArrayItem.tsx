@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton } from 'office-ui-fabric-react';
 import { IContextualMenuItem } from 'office-ui-fabric-react';
-import { ArrayFieldItem } from '@bfdesigner/react-jsonschema-form';
+import { ArrayFieldItem } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 

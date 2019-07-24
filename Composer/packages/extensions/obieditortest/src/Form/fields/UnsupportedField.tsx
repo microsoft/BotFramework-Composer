@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 
 export const UnsupportedField: React.FC<FieldProps> = props => {
   return (

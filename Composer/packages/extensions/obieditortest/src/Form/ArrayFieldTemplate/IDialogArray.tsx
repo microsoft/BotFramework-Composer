@@ -1,6 +1,6 @@
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
-import { ArrayFieldTemplateProps } from '@bfdesigner/react-jsonschema-form';
+import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 

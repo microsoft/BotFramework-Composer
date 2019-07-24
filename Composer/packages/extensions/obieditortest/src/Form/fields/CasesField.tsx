@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from '@bfdesigner/react-jsonschema-form';
+import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { PrimaryButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
