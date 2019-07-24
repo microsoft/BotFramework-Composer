@@ -61,11 +61,11 @@ export function ShellApi() {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, focused, navPathHistory } = designPath;
-  const navPath = dialogId + '#' + designPath.navPath;
+  const { dialogId, focused, navPathHistory, uri } = designPath;
+  const navPath = dialogId + '#.' + designPath.navPath;
   let focusPath = navPath;
   if (focused) {
-    focusPath = focusPath + focused;
+    focusPath = focusPath + '.' + focused;
   }
   const navPathHistoryCopy = cloneDeep(navPathHistory);
   const { LG, LU } = FileTargetTypes;
@@ -298,22 +298,35 @@ export function ShellApi() {
 
   function navTo({ path }) {
     cleanData();
-    const item = path.split('#');
-    navigate(`/dialogs/${item[0]}`, updateNavPathHistory(item[0], ''));
+    const items = path.split('#');
+    navigate(`/dialogs/${items[0]}`, updateNavPathHistory(items[0], ''));
   }
 
   function navDown({ subPath }) {
+    if (!subPath) {
+      return;
+    }
     cleanData();
-    const navPath = designPath.navPath + subPath;
-    navigate(`/dialogs/${dialogId}/${navPath}`, updateNavPathHistory(dialogId, navPath));
+    const items = subPath.split('.');
+    navigate(
+      `${uri}/${items[1]}`,
+      updateNavPathHistory(dialogId, designPath.navPath ? designPath.navPath + subPath : items[1])
+    );
   }
 
   function focusTo({ subPath }, event) {
     cleanData();
+    if (!subPath) {
+      navigate(uri, { state: { navPathHistory: navPathHistoryCopy } });
+      return;
+    }
+
     if (event.source.name === FORM_EDITOR) {
       subPath = designPath.focused + subPath;
+    } else {
+      subPath = subPath.split('.')[1];
     }
-    navigate(`/dialogs/${dialogId}/${designPath.navPath}?focused=${subPath}`, {
+    navigate(`${uri}?focused=${subPath}`, {
       state: { navPathHistory: navPathHistoryCopy },
     });
   }

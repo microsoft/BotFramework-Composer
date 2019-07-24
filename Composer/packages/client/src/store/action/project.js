@@ -34,16 +34,12 @@ export function saveTemplateId(dispatch, templateId) {
 export async function fetchProject(dispatch) {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);
-    const dialogs = response.data.dialogs;
     dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
-      navigate('/dialogs/Main');
-    }
   } catch (err) {
     navigate('/home');
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

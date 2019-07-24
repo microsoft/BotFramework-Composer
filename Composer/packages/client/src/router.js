@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Router, Match } from '@reach/router';
+import { Router, Match, Redirect } from '@reach/router';
 
 import DesignPage from './pages/design';
 import { SettingPage } from './pages/setting';
@@ -23,6 +23,7 @@ const Routes = props => {
           </Content>
           {!match && (
             <Router {...parentProps}>
+              <Redirect from="/" to="dialogs/Main" noThrow />
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
