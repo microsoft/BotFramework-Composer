@@ -284,9 +284,9 @@ export function ShellApi() {
     flushUpdates();
   }
 
-  function navTo({ path }) {
+  function navTo({ path, rest }) {
     cleanData();
-    actions.navTo(path);
+    actions.navTo(path, rest);
   }
 
   function navDown({ subPath }) {

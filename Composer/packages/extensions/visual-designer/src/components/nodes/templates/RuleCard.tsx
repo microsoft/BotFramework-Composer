@@ -32,7 +32,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
   const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
     if (directJumpDialog) {
-      return onEvent(NodeEventTypes.OpenLink, directJumpDialog);
+      return onEvent(NodeEventTypes.OpenLink, directJumpDialog, id);
     }
   };
 
