@@ -2,18 +2,53 @@ import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
-import { LuFile } from '../../types';
-import { BFDWidgetProps } from '../types';
+import { LuFile, DialogInfo } from '../../types';
+import { BFDWidgetProps, FormContext } from '../types';
 
 import './styles.scss';
 
-export const IntentWidget: React.FC<BFDWidgetProps> = props => {
-  const { label, onChange, onFocus, onBlur, value, formContext, schema, ...rest } = props;
-  const { description } = schema;
+const EMPTY_OPTION = { key: '', text: '' };
 
+enum RecognizerType {
+  'regex',
+  'luis',
+}
+
+function recognizerType(currentDialog: DialogInfo): RecognizerType | null {
+  const recognizer = currentDialog.content.recognizer;
+  if (!recognizer) {
+    return null;
+  }
+
+  if (typeof recognizer === 'object' && recognizer.$type === 'Microsoft.RegexRecognizer') {
+    return RecognizerType.regex;
+  } else if (typeof recognizer === 'string') {
+    return RecognizerType.luis;
+  }
+
+  return null;
+}
+
+function regexIntentOptions(currentDialog: DialogInfo): IDropdownOption[] {
+  const recognizer = currentDialog.content.recognizer as RegexRecognizer;
+  let options: IDropdownOption[] = [EMPTY_OPTION];
+
+  if (!recognizer) {
+    return options;
+  }
+
+  if (recognizer.intents) {
+    options = options.concat(Object.keys(recognizer.intents).map(i => ({ key: i, text: i })));
+  }
+
+  return options;
+}
+
+function luIntentOptions(formContext: FormContext): IDropdownOption[] {
   const luFile: LuFile | void = formContext.luFiles.find(f => f.id === formContext.currentDialog.id);
-  let options: IDropdownOption[] = [{ key: '', text: '' }];
+  let options: IDropdownOption[] = [EMPTY_OPTION];
 
   if (luFile) {
     const intents: { name: string }[] = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
@@ -26,6 +61,26 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
     );
   }
 
+  return options;
+}
+
+export const IntentWidget: React.FC<BFDWidgetProps> = props => {
+  const { label, disabled, onChange, id, onFocus, onBlur, value, formContext, schema, placeholder, ...rest } = props;
+  const { description } = schema;
+  let options: IDropdownOption[] = [];
+
+  switch (recognizerType(formContext.currentDialog)) {
+    case RecognizerType.regex:
+      options = regexIntentOptions(formContext.currentDialog);
+      break;
+    case RecognizerType.luis:
+      options = luIntentOptions(formContext);
+      break;
+    default:
+      options = [EMPTY_OPTION];
+      break;
+  }
+
   const handleChange = (_e, option): void => {
     if (option) {
       onChange(option.key);
@@ -36,13 +91,16 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
     <>
       <Dropdown
         {...rest}
+        id={CSS.escape(id)}
         label={label}
-        onBlur={() => onBlur(rest.id, value)}
+        onBlur={() => onBlur(id, value)}
         onChange={handleChange}
-        onFocus={() => onFocus(rest.id, value)}
+        onFocus={() => onFocus(id, value)}
         options={options}
-        selectedKey={value}
+        selectedKey={value || null}
         responsiveMode={ResponsiveMode.large}
+        disabled={disabled || options.length === 1}
+        placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
       />
       {description && (
         <span style={{ fontSize: '14px' }}>

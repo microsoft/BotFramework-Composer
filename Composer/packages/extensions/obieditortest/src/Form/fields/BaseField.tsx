@@ -67,11 +67,11 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   };
 
   return isRootBaseField ? (
-    <RootField {...props} key={key} id={key}>
+    <RootField {...props} key={key} id={CSS.escape(key)}>
       {children}
     </RootField>
   ) : (
-    <div className={classnames('BaseField', className)} key={key} id={key}>
+    <div className={classnames('BaseField', className)} key={key} id={CSS.escape(key)}>
       <SectionSeparator label={getTitle()}>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
           <p

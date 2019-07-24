@@ -177,6 +177,20 @@ interface SwitchCondition extends BaseSchema {
   default?: MicrosoftIDialog[];
 }
 
+/** This configures a data driven dialog via a collection of steps/dialogs. */
+interface MicrosoftAdaptiveDialog extends BaseSchema {
+  /** If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time. */
+  autoEndDialog?: boolean;
+  /** Configured recognizer to generate intent and entites from user utterance. */
+  recognizer?: MicrosoftIRecognizer;
+  /** Language generator to use for this dialog. (aka: LG file) */
+  generator?: string;
+  /** This is the initial sequence of steps to execute when this dialog is started. */
+  steps: MicrosoftIDialog[];
+  /** This is the array of rules to use to evaluate conversation */
+  rules: MicrosoftIRule[];
+}
+
 /* Union of components which implement the IDialog interface */
 type MicrosoftIDialog =
   | ChoiceInput

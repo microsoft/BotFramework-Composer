@@ -54,6 +54,10 @@ const dialogFiles = [
     relativePath: 'Main/Main.dialog',
     path: '/Some/Cool/Path/Main/Main.dialog',
     isRoot: true,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+      recognizer: 'Main',
+    },
   },
   {
     id: 'MyCustomDialog2',
@@ -62,6 +66,9 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog2.dialog',
     path: '/Some/Cool/Path/MyCustomDialog2.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
   {
     id: 'MyCustomDialog3',
@@ -70,6 +77,9 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog3.dialog',
     path: '/Some/Cool/Path/MyCustomDialog3.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
   {
     id: 'MyCustomDialog4',
@@ -78,6 +88,9 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog4.dialog',
     path: '/Some/Cool/Path/MyCustomDialog4.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
 ];
 
