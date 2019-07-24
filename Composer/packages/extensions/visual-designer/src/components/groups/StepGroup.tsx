@@ -67,7 +67,10 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
-        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
+        <EdgeMenu
+          onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
+          data-testid="StepGroupAdd"
+        />
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
@@ -79,7 +82,10 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
               }}
               styles={{ zIndex: 100 }}
             >
-              <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })} />
+              <EdgeMenu
+                onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}
+                data-testid="StepGroupAdd"
+              />
             </OffsetContainer>
           ))
         : null}
