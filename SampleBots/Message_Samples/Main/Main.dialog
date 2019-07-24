@@ -1,102 +1,186 @@
 {
-    "$type": "Microsoft.AdaptiveDialog",
-    "autoEndDialog": false,
-    "generator": "common.lg",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-06-28T06:31:58.726Z",
+    "updatedAt": "2019-07-16T19:33:30.401Z",
+    "id": "937757"
+  },
+  "autoEndDialog": false,
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.ChoiceInput",
+      "$designer": {
+        "createdAt": "2019-07-16T19:33:40.769Z",
+        "updatedAt": "2019-07-16T19:33:46.468Z",
+        "id": "289770"
+      },
+      "property": "user.choice",
+      "prompt": "What type of message would you like to send?",
+      "maxTurnCount": 0,
+      "alwaysPrompt": true,
+      "allowInterruptions": true,
+      "outputFormat": "value",
+      "choices": [
         {
-            "$type": "Microsoft.ChoiceInput",
-            "property": "user.choice",
-            "choices": [
-                {
-                    "value": "Simple Text"
-                },
-                {
-                    "value": "Text With Memory"
-                },
-                {
-                    "value": "Text With LG"
-                },
-                {
-                    "value": "LGWithParam"
-                },
-                {
-                    "value": "LGComposition"
-                }
-            ],
-            "prompt": "What type of message would you like to send?",
-            "style": "List",
-            "alwaysPrompt": true
+          "value": "Simple Text"
         },
         {
-            "$type": "Microsoft.SwitchCondition",
-            "condition": "user.choice",
-            "cases": [
-                {
-                    "value": "Simple Text",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.BeginDialog",
-                            "dialog": "SimpleText"
-                        }
-                    ]
-                },
-                {
-                    "value": "Text With Memory",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.BeginDialog",
-                            "dialog": "TextWithMemory"
-                        }
-                    ]
-                },
-                {
-                    "value": "Text With LG",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.BeginDialog",
-                            "dialog": "TextWithLG"
-                        }
-                    ]
-                },
-                {
-                    "value": "LGWithParam",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.BeginDialog",
-                            "dialog": "LGWithParam"
-                        }
-                    ]
-                },
-                {
-                    "value": "LGComposition",
-                    "steps": [
-                        {
-                            "$type": "Microsoft.BeginDialog",
-                            "dialog": "LGComposition"
-                        }
-                    ]
-                }
-            ]
+          "value": "Text With Memory"
         },
         {
-            "$type": "Microsoft.RepeatDialog"
+          "value": "Text With LG"
+        },
+        {
+          "value": "LGWithParam"
+        },
+        {
+          "value": "LGComposition"
         }
-    ],
-    "rules": [
-      {
-        "$type": "Microsoft.UnknownIntentRule",
-        "steps": [
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[help]"
-          }
-        ]
+      ],
+      "appendChoices": true,
+      "defaultLocale": "en-us",
+      "style": "List",
+      "choiceOptions": {
+        "inlineSeparator": ", ",
+        "inlineOr": " or ",
+        "inlineOrMore": ", or ",
+        "includeNumbers": true
+      },
+      "recognizerOptions": {
+        "noValue": false
       }
-    ],
-    "$schema": "../../app.schema",
-    "$designer": {
-        "createdAt": "2019-06-28T06:31:58.726Z",
-        "updatedAt": "2019-06-28T06:31:58.818Z",
-        "id": "937757"
+    },
+    {
+      "$type": "Microsoft.SwitchCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T19:33:48.266Z",
+        "updatedAt": "2019-07-16T19:33:52.059Z",
+        "id": "981997"
+      },
+      "condition": "user.choice",
+      "cases": [
+        {
+          "value": "Simple Text",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T19:33:53.985Z",
+                "updatedAt": "2019-07-16T19:33:58.958Z",
+                "id": "256544"
+              },
+              "dialog": "SimpleText"
+            }
+          ]
+        },
+        {
+          "value": "Text With Memory",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T19:34:01.452Z",
+                "updatedAt": "2019-07-16T19:34:04.489Z",
+                "id": "598449"
+              },
+              "dialog": "TextWithMemory"
+            }
+          ]
+        },
+        {
+          "value": "Text With LG",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T19:34:07.118Z",
+                "updatedAt": "2019-07-16T19:34:11.776Z",
+                "id": "791050"
+              },
+              "dialog": "TextWithLG"
+            }
+          ]
+        },
+        {
+          "value": "LGWithParam",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T19:34:14.518Z",
+                "updatedAt": "2019-07-16T19:34:20.351Z",
+                "id": "078497"
+              },
+              "dialog": "LGWithParam"
+            }
+          ]
+        },
+        {
+          "value": "LGComposition",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "createdAt": "2019-07-16T19:34:22.754Z",
+                "updatedAt": "2019-07-16T19:34:27.469Z",
+                "id": "349641"
+              },
+              "dialog": "LGComposition"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:34:30.447Z",
+        "updatedAt": "2019-07-16T19:34:34.636Z",
+        "id": "938048"
+      }
     }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-16T19:35:20.436Z",
+        "updatedAt": "2019-07-16T19:35:25.861Z",
+        "id": "807187"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-18T10:35:38.221Z",
+            "updatedAt": "2019-07-18T10:35:38.579Z",
+            "id": "551445"
+          },
+          "activity": "[bfdactivity-551445]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "452701",
+        "updatedAt": "2019-07-18T10:34:46.562Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "576166",
+            "updatedAt": "2019-07-18T10:34:54.027Z"
+          },
+          "activity": "[bfdactivity-576166]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
 }

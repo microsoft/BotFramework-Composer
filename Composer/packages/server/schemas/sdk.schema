@@ -36,6 +36,11 @@
             "$ref": "#/definitions/Microsoft.ConfirmInput"
         },
         {
+            "title": "Microsoft.ConversationUpdateActivityRule",
+            "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+            "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+        },
+        {
             "title": "Microsoft.DebugBreak",
             "description": "If debugger is attached, do a debugger break at this point",
             "$ref": "#/definitions/Microsoft.DebugBreak"
@@ -583,6 +588,17 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Composer."
+                },
+                "eventName": {
+                    "title": "Event Name",
+                    "description": "The name of event to emit",
+                    "type": "string"
+                },
+                "eventValue": {
+                    "type": "object",
+                    "title": "Event Value",
+                    "description": "Optional value to emit along with the event",
+                    "additionalProperties": true
                 }
             },
             "additionalProperties": false,
@@ -1482,8 +1498,10 @@
                         {
                             "enum": [
                                 "beginDialog",
-                                "consultDialog",
+                                "resumeDialog",
+                                "repromptDialog",
                                 "cancelDialog",
+                                "endDialog",
                                 "activityReceived",
                                 "recognizedIntent",
                                 "unknownIntent",
@@ -1982,17 +2000,17 @@
                     "title": "Http headers",
                     "description": "Http headers to include with the HTTP request (supports data binding)"
                 },
-                "responseTypes": {
+                "responseType": {
                     "type": "string",
-                    "title": "Response Types",
+                    "title": "Response Type",
                     "description": "Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.",
                     "enum": [
-                        "none",
-                        "json",
-                        "activity",
-                        "activities"
+                        "None",
+                        "Json",
+                        "Activity",
+                        "Activities"
                     ],
-                    "default": "json"
+                    "default": "Json"
                 }
             },
             "additionalProperties": false,
@@ -2012,7 +2030,7 @@
                     "title": "Type",
                     "required": [
                         "url",
-                        "entity",
+                        "method",
                         "$type"
                     ]
                 }
@@ -2240,6 +2258,11 @@
             "description": "Union of components which implement the IRule interface",
             "$role": "unionType",
             "oneOf": [
+                {
+                    "title": "Microsoft.ConversationUpdateActivityRule",
+                    "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+                    "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+                },
                 {
                     "title": "Microsoft.EventRule",
                     "description": "Defines a rule for an event which is triggered by some source",
@@ -2510,6 +2533,76 @@
                     "title": "Type",
                     "required": [
                         "intent",
+                        "steps",
+                        "$type"
+                    ]
+                }
+            ]
+        },
+        "Microsoft.ConversationUpdateActivityRule": {
+            "$role": "unionType(Microsoft.IRule)",
+            "title": "ConversationUpdateActivity Rule",
+            "description": "This defines the steps to take when a ConversationUpdate Activity is recieved",
+            "type": "object",
+            "properties": {
+                "$type": {
+                    "title": "$type",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+                    "const": "Microsoft.ConversationUpdateActivityRule"
+                },
+                "$copy": {
+                    "title": "$copy",
+                    "description": "Copy the definition by id from a .dialog file.",
+                    "type": "string",
+                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
+                },
+                "$id": {
+                    "title": "$id",
+                    "description": "Inline id for reuse of an inline definition",
+                    "type": "string",
+                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
+                },
+                "$designer": {
+                    "title": "$designer",
+                    "type": "object",
+                    "description": "Extra information for the Bot Framework Composer."
+                },
+                "constraint": {
+                    "$role": "expression",
+                    "title": "Constraint",
+                    "description": "Optional constraint to which must be met for this rule to fire",
+                    "examples": [
+                        "user.vip == true"
+                    ],
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "description": "Sequence of steps or dialogs to execute",
+                    "items": {
+                        "$type": "Microsoft.IDialog",
+                        "$ref": "#/definitions/Microsoft.IDialog"
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\$": {
+                    "type": "string"
+                }
+            },
+            "anyOf": [
+                {
+                    "title": "Reference",
+                    "required": [
+                        "$copy"
+                    ]
+                },
+                {
+                    "title": "Type",
+                    "required": [
                         "steps",
                         "$type"
                     ]

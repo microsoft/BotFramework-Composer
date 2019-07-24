@@ -1,5 +1,11 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-04T08:14:01.139Z",
+    "updatedAt": "2019-07-16T19:59:30.647Z",
+    "id": "288769",
+    "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+  },
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
@@ -13,20 +19,29 @@
     }
   },
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:02:14.960Z",
-        "updatedAt": "2019-07-01T22:02:16.191Z",
-        "id": "376720"
-      },
-      "activity": "[bfdactivity-376720]"
-    }
-  ],
   "rules": [
     {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "createdAt": "2019-07-01T22:02:14.960Z",
+        "updatedAt": "2019-07-16T20:00:24.788Z",
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[bfdactivity-376720]"
+        }
+      ]
+    },
+    {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:32.772Z",
+        "updatedAt": "2019-07-16T19:59:36.277Z",
+        "id": "064505"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -37,77 +52,71 @@
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "DeleteIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:37.184Z",
+        "updatedAt": "2019-07-16T19:59:40.406Z",
+        "id": "114961"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteToDo"
         }
-      ]
+      ],
+      "intent": "DeleteIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ClearIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:41.352Z",
+        "updatedAt": "2019-07-16T19:59:44.427Z",
+        "id": "088050"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ClearToDos"
         }
-      ]
+      ],
+      "intent": "ClearIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ShowIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "ShowToDos"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "HelpIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:59:50.315Z",
+        "updatedAt": "2019-07-16T19:59:54.774Z",
+        "id": "633942"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
-      ]
+      ],
+      "intent": "HelpIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ClearIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.BeginDialog",
-          "dialog": "ClearToDos"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "ShowIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:00.082Z",
+        "updatedAt": "2019-07-16T20:00:03.344Z",
+        "id": "794124"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowToDos"
         }
-      ]
+      ],
+      "intent": "ShowIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "HelpIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:08.499Z",
+        "updatedAt": "2019-07-16T20:00:12.504Z",
+        "id": "179728"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -116,10 +125,16 @@
         {
           "$type": "Microsoft.EndDialog"
         }
-      ]
+      ],
+      "intent": "CancelIntent"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-16T20:00:13.577Z",
+        "updatedAt": "2019-07-16T20:00:19.435Z",
+        "id": "677447"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -128,10 +143,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-07-04T08:14:01.193Z",
-    "id": "288769"
-  }
+  "$schema": "../../app.schema"
 }

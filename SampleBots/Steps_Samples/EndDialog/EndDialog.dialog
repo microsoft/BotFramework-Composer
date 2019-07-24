@@ -2,10 +2,8 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:51:13.961Z",
-    "updatedAt": "2019-07-03T06:51:14.013Z",
-    "id": "727878",
-    "name": "09 - EndDialog",
-    "description": "This is a bot that demonstrates the EndDialog concept in Adaptive Dialogs."
+    "updatedAt": "2019-07-16T19:49:47.566Z",
+    "id": "727878"
   },
   "autoEndDialog": false,
   "recognizer": {
@@ -15,50 +13,12 @@
       "CancelIntent": "(?i)cancel|never mind"
     }
   },
-  "steps": [
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.name == null",
-      "steps": [
-        {
-          "$type": "Microsoft.TextInput",
-          "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "maxTurnCount": 2147483647,
-          "alwaysPrompt": false,
-          "allowInterruptions": true,
-          "outputFormat": "none",
-          "$designer": {
-            "createdAt": "2019-07-01T21:34:31.248Z",
-            "updatedAt": "2019-07-01T21:34:31.254Z",
-            "id": "543141"
-          }
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:34:15.607Z",
-        "updatedAt": "2019-07-01T21:34:32.366Z",
-        "id": "604381"
-      },
-      "activity": "[bfdactivity-604381]"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:34:52.937Z",
-        "updatedAt": "2019-07-01T21:34:59.787Z",
-        "id": "338063"
-      },
-      "activity": "[bfdactivity-338063]"
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.EventRule",
-      "events": ["cancelDialog"],
+      "events": [
+        "cancelDialog"
+      ],
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -76,6 +36,61 @@
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndDialog.TellJoke"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "917307",
+        "updatedAt": "2019-07-22T08:04:02.873Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T19:53:02.782Z",
+            "updatedAt": "2019-07-16T19:53:05.404Z",
+            "id": "964165"
+          },
+          "condition": "user.name == null",
+          "steps": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "createdAt": "2019-07-01T21:34:31.248Z",
+                "updatedAt": "2019-07-16T19:53:08.688Z",
+                "id": "543141"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": true,
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:34:15.607Z",
+            "updatedAt": "2019-07-16T19:53:14.153Z",
+            "id": "604381"
+          },
+          "activity": "[bfdactivity-604381]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:34:52.937Z",
+            "updatedAt": "2019-07-16T19:53:20.249Z",
+            "id": "338063"
+          },
+          "activity": "[bfdactivity-338063]"
         }
       ]
     }

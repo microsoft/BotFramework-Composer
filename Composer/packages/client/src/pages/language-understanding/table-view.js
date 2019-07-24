@@ -12,6 +12,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { get } from 'lodash';
 
 import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
@@ -31,7 +32,7 @@ export default function TableView(props) {
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      luFile.parsedContent.LUISJsonStructure.utterances.forEach(utterance => {
+      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
         if (updateIntent) {

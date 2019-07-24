@@ -1,38 +1,40 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
+  "$designer": {
+    "createdAt": "2019-07-01T10:00:39.032Z",
+    "updatedAt": "2019-07-16T20:04:10.274Z",
+    "id": "948970",
+
+    "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
+  },
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Hi",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:10.665Z",
-        "updatedAt": "2019-07-04T07:31:10.670Z",
-        "id": "948777"
-      }
-    }
-  ],
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:13.192Z",
+        "updatedAt": "2019-07-16T20:03:51.301Z",
+        "id": "842277"
+      },
+      "constraint": "#AddToDo.score>0.6",
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddItem"
         }
       ],
-      "intent": "AddToDo",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:13.192Z",
-        "updatedAt": "2019-07-04T07:31:13.209Z",
-        "id": "842277"
-      }
+      "intent": "AddToDo"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T07:31:14.654Z",
+        "updatedAt": "2019-07-16T20:03:54.762Z",
+        "id": "905057"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -40,24 +42,31 @@
         }
       ],
       "intent": "DeleteToDo",
-      "$designer": {
-        "createdAt": "2019-07-04T07:31:14.654Z",
-        "updatedAt": "2019-07-04T07:31:14.669Z",
-        "id": "905057"
-      }
+      "constraint": "#DeleteToDo.score>0.6"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ShowToDo",
+      "$designer": {
+        "createdAt": "2019-07-16T20:03:55.674Z",
+        "updatedAt": "2019-07-16T20:03:58.931Z",
+        "id": "735961"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowItems"
         }
-      ]
+      ],
+      "intent": "ShowToDo",
+      "constraint": "#ShowToDo.score>0.6"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-04T19:37:38.354Z",
+        "updatedAt": "2019-07-16T20:04:06.035Z",
+        "id": "265106"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -68,18 +77,26 @@
           },
           "activity": "[bfdactivity-636903]"
         }
-      ],
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
-        "createdAt": "2019-07-04T19:37:38.354Z",
-        "updatedAt": "2019-07-04T19:37:38.376Z",
-        "id": "265106"
-      }
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "[LuisToDoHelp]"
+          }
+        }
+      ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-07-01T10:00:39.054Z",
-    "id": "948970"
-  }
+  "$schema": "../../app.schema"
 }

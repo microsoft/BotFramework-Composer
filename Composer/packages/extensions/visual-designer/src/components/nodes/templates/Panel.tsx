@@ -67,7 +67,11 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         </div>
         <IconButton
           iconProps={{ iconName: 'PageRight' }}
-          style={{ transform: collapsed ? 'none' : 'rotate(90deg)', marginRight: '-15px' }}
+          style={{
+            transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
+            marginRight: '-15px',
+            transition: 'transform 0.2s linear',
+          }}
           onClick={collapseFuc}
         />
       </div>
@@ -76,10 +80,8 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
           border: '1px solid #656565',
           boxSizing: 'border-box',
           padding: '24px 0px 12px 24px',
-          maxHeight: PanelSize.maxHeight,
           width: width,
           minWidth: PanelSize.minWidth,
-          maxWidth: PanelSize.maxWidth,
           overflow: 'auto',
           margin: '0 auto',
           position: 'relative',

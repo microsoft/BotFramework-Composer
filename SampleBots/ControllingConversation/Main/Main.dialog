@@ -2,8 +2,10 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-04T19:47:59.519Z",
-    "updatedAt": "2019-07-04T19:53:44.044Z",
-    "id": "864790"
+    "updatedAt": "2019-07-16T18:46:52.103Z",
+    "id": "864790",
+
+    "description": "This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs."
   },
   "autoEndDialog": false,
   "recognizer": {
@@ -22,56 +24,85 @@
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:02.069Z",
+        "updatedAt": "2019-07-16T18:47:06.232Z",
+        "id": "139291"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "IfCondition"
         }
-      ]
+      ],
+      "intent": "IfCondition"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SwitchCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:07.473Z",
+        "updatedAt": "2019-07-16T18:47:10.789Z",
+        "id": "606805"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SwitchCondition"
         }
-      ]
+      ],
+      "intent": "SwitchCondition"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ForeachStep",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:12.071Z",
+        "updatedAt": "2019-07-16T18:47:15.570Z",
+        "id": "175644"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ForeachStep"
         }
-      ]
+      ],
+      "intent": "ForeachStep"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ForeachPageStep",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:16.917Z",
+        "updatedAt": "2019-07-16T18:47:20.109Z",
+        "id": "973338"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ForeachPageStep"
         }
-      ]
+      ],
+      "intent": "ForeachPageStep"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "Cancel",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:21.301Z",
+        "updatedAt": "2019-07-16T18:47:24.658Z",
+        "id": "329460"
+      },
       "steps": [
         {
           "$type": "Microsoft.CancelAllDialogs"
         }
-      ]
+      ],
+      "intent": "Cancel"
     },
     {
       "$type": "Microsoft.EventRule",
-      "events": ["cancelDialog"],
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:25.995Z",
+        "updatedAt": "2019-07-16T18:47:29.138Z",
+        "id": "132038"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -80,32 +111,43 @@
         {
           "$type": "Microsoft.EndDialog"
         }
-      ]
+      ],
+      "events": ["cancelDialog"]
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:30.457Z",
+        "updatedAt": "2019-07-16T18:47:34.267Z",
+        "id": "043417"
+      },
       "steps": [
         {
           "$type": "Microsoft.EndTurn"
         }
-      ]
+      ],
+      "intent": "EndTurn"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T18:47:35.642Z",
+        "updatedAt": "2019-07-16T18:47:38.774Z",
+        "id": "294228"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "RepeatDialog"
         }
-      ]
+      ],
+      "intent": "RepeatDialog"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
       "$designer": {
         "createdAt": "2019-07-04T19:53:46.534Z",
-        "updatedAt": "2019-07-04T19:53:49.708Z",
+        "updatedAt": "2019-07-16T18:47:46.616Z",
         "id": "094908"
       },
       "steps": [
@@ -115,7 +157,27 @@
             "id": "953339",
             "updatedAt": "2019-07-04T19:53:52.311Z"
           },
-          "activity": "[bfdactivity-953339]"
+          "activity": "[help]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "791275",
+        "updatedAt": "2019-07-18T10:16:47.781Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "859266",
+            "updatedAt": "2019-07-18T10:17:03.223Z"
+          },
+          "activity": "[help]"
         }
       ]
     }

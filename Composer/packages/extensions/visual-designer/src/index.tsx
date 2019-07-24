@@ -1,18 +1,27 @@
-import React, { useRef } from 'react';
-import PropType from 'prop-types';
+import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { isLayoutEqual } from './shared/isLayoutEqual';
+import { NodeRendererContext } from './store/NodeRendererContext';
 
 initializeIcons(/* optional base url */);
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
 
-const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellApi }: { [key: string]: any }) => {
+const VisualDesigner: React.FC<VisualDesignerProps> = ({
+  navPath,
+  focusPath,
+  data: inputData,
+  currentDialog,
+  onChange,
+  shellApi,
+}: {
+  [key: string]: any;
+}) => {
   const dataCache = useRef();
   const layoutVersion = useRef(0);
 
@@ -38,7 +47,7 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
    *  - input:  focusPath = 'AddToDo#, navPath='AddToDo#'
    *  - output: ''
    */
-  const normalizeFocusedId = (focusPath, navPath) => {
+  const normalizeFocusedId = (focusPath, navPath): string => {
     let id = focusPath;
     if (id.indexOf(navPath) === 0) {
       id = id.replace(navPath + '.', '');
@@ -52,31 +61,47 @@ const VisualDesigner = ({ navPath, focusPath, data: inputData, onChange, shellAp
 
   const data = dataCache.current;
   const { navDown, focusTo, navTo, getLgTemplates, removeLgTemplate } = shellApi;
+
+  // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
+  const [context, setContext] = useState({
+    focusedId: normalizeFocusedId(focusPath, navPath),
+    getLgTemplates: getLgTemplates,
+    removeLgTemplate: removeLgTemplate,
+  });
+
+  useEffect(() => {
+    setContext({
+      ...context,
+      focusedId: normalizeFocusedId(focusPath, navPath),
+    });
+  }, [focusPath, navPath]);
+
   return (
-    <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
-      <ObiEditor
-        key={navPath + '?version=' + layoutVersion.current}
-        path={navPath}
-        focusedId={normalizeFocusedId(focusPath, navPath)}
-        data={data}
-        onSelect={x => focusTo(x ? '.' + x : '')}
-        onExpand={x => navDown('.' + x)}
-        onOpen={x => navTo(x + '#')}
-        onChange={x => onChange(x)}
-        getLgTemplates={getLgTemplates}
-        removeLgTemplate={removeLgTemplate}
-      />
-    </div>
+    <NodeRendererContext.Provider value={context}>
+      <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
+        <ObiEditor
+          key={navPath + '?version=' + layoutVersion.current}
+          path={navPath}
+          data={data}
+          isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
+          onSelect={x => focusTo(x ? '.' + x : '')}
+          onExpand={x => navDown('.' + x)}
+          onOpen={x => navTo(x + '#')}
+          onChange={x => onChange(x)}
+        />
+      </div>
+    </NodeRendererContext.Provider>
   );
 };
 
-VisualDesigner.propTypes = {
-  navPath: PropType.string.isRequired,
-  focusPath: PropType.string.isRequired,
-  data: PropType.object.isRequired,
-  onChange: PropType.func.isRequired,
-  shellApi: PropType.object.isRequired,
-};
+interface VisualDesignerProps {
+  data: object;
+  focusPath: string;
+  navPath: string;
+  onChange: (x: any) => void;
+  shellApi: object;
+  currentDialog: { id: string; displayName: string; isRoot: boolean };
+}
 
 VisualDesigner.defaultProps = {
   navPath: '.',

@@ -1,29 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
+import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
-export const ObiEditor = ({
-  path,
-  focusedId,
-  data,
-  onSelect,
-  onExpand,
-  onOpen,
-  onChange,
-  getLgTemplates,
-  removeLgTemplate,
-}) => {
+export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, onOpen, onChange, isRoot }) => {
   let divRef;
 
-  const dispatchEvent = (eventName?, eventData?) => {
+  const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
+
+  const dispatchEvent = (eventName?, eventData?): any => {
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
@@ -37,7 +29,14 @@ export const ObiEditor = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id, removeLgTemplate));
+          const cleanLgTemplate = (removedData: any): void => {
+            if (removedData && removedData.$type === 'Microsoft.SendActivity') {
+              if (removedData.activity && removedData.activity.indexOf('[bfdactivity-') !== -1) {
+                removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
+              }
+            }
+          };
+          onChange(deleteNode(data, e.id, cleanLgTemplate));
           onSelect('');
         };
         break;
@@ -55,7 +54,7 @@ export const ObiEditor = ({
     return handler(eventData);
   };
 
-  const chooseEditor = $type => {
+  const chooseEditor = ($type: string): FC<any> => {
     if ($type === ObiTypes.AdaptiveDialog) {
       return AdaptiveDialogEditor;
     }
@@ -91,10 +90,9 @@ export const ObiEditor = ({
         <ChosenEditor
           id={path}
           data={data}
-          focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
+          hideSteps={isRoot}
           onEvent={(...args) => {
-            divRef.focus();
+            divRef.focus({ preventScroll: true });
             dispatchEvent(...args);
           }}
         />
@@ -105,7 +103,6 @@ export const ObiEditor = ({
 
 ObiEditor.defaultProps = {
   path: '.',
-  focusedId: '',
   data: {},
   onSelect: () => {},
   onExpand: () => {},
@@ -113,13 +110,13 @@ ObiEditor.defaultProps = {
   onChange: () => {},
 };
 
-ObiEditor.propTypes = {
-  path: PropTypes.string,
-  focusedId: PropTypes.string,
+interface ObiEditorProps {
+  path: string;
   // Obi raw json
-  data: PropTypes.object,
-  onSelect: PropTypes.func,
-  onExpand: PropTypes.func,
-  onOpen: PropTypes.func,
-  onChange: PropTypes.func,
-};
+  data: any;
+  isRoot: boolean;
+  onSelect: Function;
+  onExpand: Function;
+  onOpen: Function;
+  onChange: Function;
+}

@@ -66,7 +66,7 @@ export class BotProject {
   public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
-    const diagostics: string[] = [];
+    const diagnostics: string[] = [];
 
     const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
@@ -77,7 +77,7 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse editor schema as JSON failed');
-        diagostics.push(`Error in editor.schema, ${error.message}`);
+        diagnostics.push(`Error in editor.schema, ${error.message}`);
       }
     }
 
@@ -87,14 +87,14 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse sdk schema as JSON failed');
-        diagostics.push(`Error in sdk.schema, ${error.message}`);
+        diagnostics.push(`Error in sdk.schema, ${error.message}`);
       }
     }
 
     return {
       editor: { content: editorSchema },
       sdk: { content: sdkSchema },
-      diagostics,
+      diagnostics,
     };
   };
 
@@ -131,14 +131,29 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
+  public removeDialog = async (id: string): Promise<Dialog[]> => {
+    if (id === 'Main') {
+      throw new Error(`Main dialog can't be removed`);
+    }
+
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog === undefined) {
+      throw new Error(`no such dialog ${id}`);
+    }
+
+    await this._removeFile(dialog.relativePath);
+    return this.dialogIndexer.getDialogs();
+  };
+
   public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    const parseResult = this.lgIndexer.parse(content);
-    if (parseResult.isValid === false) {
-      throw new Error(`update lg ${id} content is invalid, ${parseResult.error.Message}`);
+    const diagnostics = this.lgIndexer.check(content);
+    if (this.lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+      throw new Error(errorMsg);
     }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
@@ -146,9 +161,10 @@ export class BotProject {
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    const parseResult = this.lgIndexer.parse(content);
-    if (parseResult.isValid === false) {
-      throw new Error(`create lg ${id} content is invalid, ${parseResult.error.Message}`);
+    const diagnostics = this.lgIndexer.check(content);
+    if (this.lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+      throw new Error(errorMsg);
     }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
@@ -168,6 +184,13 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+
+    try {
+      await this.luIndexer.parse(content);
+    } catch (error) {
+      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
+    }
+
     await this._updateFile(luFile.relativePath, content);
     this.luPublisher.update(luFile.relativePath);
     return this.luIndexer.getLuFiles();
@@ -189,11 +212,24 @@ export class BotProject {
   };
 
   public publishLuis = async (config: ILuisConfig) => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
+    if (invalidLuFile.length !== 0) {
+      const msg = invalidLuFile.reduce((msg, file) => {
+        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+          text += `\n ${diagnostic.text}`;
+          return text;
+        }, `In ${file.id}.lu: `);
+        msg += `\n ${fileErrorText} \n`;
+        return msg;
+      }, '');
+      throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
+    }
     const emptyLuFiles = toPublish.filter(this.isEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
-      throw new Error('You have the following empty LuFile(s): ' + msg);
+      throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
     return await this.luPublisher.publish(config, toPublish);
   };

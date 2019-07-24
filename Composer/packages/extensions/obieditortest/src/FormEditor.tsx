@@ -13,25 +13,26 @@ import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 
-import './App.css';
+import './FormEditor.css';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
 };
 
 export interface FormEditorProps {
-  navPath: string;
-  focusPath: string;
   data: FormData;
+  currentDialog: DialogInfo;
   dialogs: DialogInfo[];
-  dialogName: string;
-  luFiles: LuFile[];
+  focusPath: string;
+  isRoot: boolean;
   lgFiles: LgFile[];
-  schemas: EditorSchema;
+  luFiles: LuFile[];
   memory: FormMemory;
-  shellApi: ShellApi;
-  onChange: (newData: object) => void;
+  navPath: string;
   onBlur?: () => void;
+  onChange: (newData: object) => void;
+  schemas: EditorSchema;
+  shellApi: ShellApi;
 }
 
 function updateDesigner(data) {
@@ -76,7 +77,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     ...uiSchema[type],
   };
 
-  const dialogOptions = dialogs.map(f => f.id);
+  const dialogOptions = dialogs.map(f => ({ value: f.id, label: f.displayName }));
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
@@ -118,8 +119,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
             rootId: props.focusPath,
             luFiles: props.luFiles,
             lgFiles: props.lgFiles,
-            dialogName: props.dialogName,
+            currentDialog: props.currentDialog,
             dialogId: get(data, '$designer.id'),
+            isRoot: props.focusPath.endsWith('#'),
           }}
           idPrefix={props.focusPath}
         >

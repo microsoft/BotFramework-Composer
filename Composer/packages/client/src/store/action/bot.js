@@ -16,7 +16,7 @@ export async function connectBot(dispatch, botName) {
     });
     await reloadBot(dispatch, botName);
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
 }
 
@@ -31,6 +31,15 @@ export async function reloadBot(dispatch, botName) {
       },
     });
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
+}
+
+export async function startBot(dispatch, toStartBot) {
+  dispatch({
+    type: ActionTypes.TO_START_BOT,
+    payload: {
+      toStartBot,
+    },
+  });
 }

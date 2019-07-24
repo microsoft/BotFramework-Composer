@@ -2,93 +2,122 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-06-07T16:18:34.824Z",
-    "updatedAt": "2019-07-03T06:51:22.177Z",
-    "id": "039096",
-    "name": "13 - SwitchCondition",
-    "description": "This is a bot that demonstrates use of the SwitchCondition in Adaptive Dialogs."
+    "updatedAt": "2019-07-16T19:50:43.791Z",
+    "id": "039096"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.ChoiceInput",
-      "property": "user.style",
-      "choices": [
-        {
-          "value": "Test1"
-        },
-        {
-          "value": "Test2"
-        },
-        {
-          "value": "Test3"
-        }
-      ],
-      "prompt": "Please select a value from below:",
-      "style": "List",
-      "alwaysPrompt": true
-    },
-    {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-01T21:55:12.076Z",
-        "updatedAt": "2019-07-01T21:55:13.912Z",
-        "id": "160914"
+        "id": "851391",
+        "updatedAt": "2019-07-22T08:05:10.334Z"
       },
-      "activity": "[bfdactivity-160914]"
-    },
-    {
-      "$type": "Microsoft.SwitchCondition",
-      "condition": "user.style",
-      "cases": [
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
         {
-          "value": "Test1",
-          "steps": [
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.style",
+          "prompt": "Please select a value from below:",
+          "maxTurnCount": 0,
+          "alwaysPrompt": true,
+          "allowInterruptions": true,
+          "outputFormat": "value",
+          "choices": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:55:23.134Z",
-                "updatedAt": "2019-07-01T21:55:25.537Z",
-                "id": "576002"
-              },
-              "activity": "[bfdactivity-576002]"
+              "value": "Test1"
+            },
+            {
+              "value": "Test2"
+            },
+            {
+              "value": "Test3"
             }
-          ]
+          ],
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          },
+          "$designer": {
+            "createdAt": "2019-07-16T19:57:48.037Z",
+            "updatedAt": "2019-07-16T19:57:51.482Z",
+            "id": "084631"
+          }
         },
         {
-          "value": "Test2",
-          "steps": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:57:26.930Z",
-                "updatedAt": "2019-07-01T21:57:28.948Z",
-                "id": "677412"
-              },
-              "activity": "[bfdactivity-677412]"
-            }
-          ]
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:55:12.076Z",
+            "updatedAt": "2019-07-16T19:57:55.398Z",
+            "id": "160914"
+          },
+          "activity": "[bfdactivity-160914]"
         },
         {
-          "value": "Test3",
-          "steps": [
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T21:55:13.229Z",
+            "updatedAt": "2019-07-16T19:57:58.231Z",
+            "id": "448444"
+          },
+          "condition": "user.style",
+          "cases": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:57:33.404Z",
-                "updatedAt": "2019-07-01T21:57:35.153Z",
-                "id": "700082"
-              },
-              "activity": "[bfdactivity-700082]"
+              "value": "Test1",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:55:23.134Z",
+                    "updatedAt": "2019-07-16T19:58:02.619Z",
+                    "id": "576002"
+                  },
+                  "activity": "[bfdactivity-576002]"
+                }
+              ]
+            },
+            {
+              "value": "Test2",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:57:26.930Z",
+                    "updatedAt": "2019-07-16T19:58:07.532Z",
+                    "id": "677412"
+                  },
+                  "activity": "[bfdactivity-677412]"
+                }
+              ]
+            },
+            {
+              "value": "Test3",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:57:33.404Z",
+                    "updatedAt": "2019-07-16T19:58:11.985Z",
+                    "id": "700082"
+                  },
+                  "activity": "[bfdactivity-700082]"
+                }
+              ]
             }
           ]
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T21:55:13.229Z",
-        "updatedAt": "2019-07-01T21:55:13.263Z",
-        "id": "448444"
-      }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

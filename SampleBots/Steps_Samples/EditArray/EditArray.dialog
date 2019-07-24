@@ -1,93 +1,140 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:33:04.109Z",
+    "updatedAt": "2019-07-16T19:49:33.306Z",
+    "id": "395991"
+  },
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.ids == null",
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "createdAt": "2019-07-16T19:49:28.473Z",
+        "updatedAt": "2019-07-16T19:50:52.267Z",
+        "id": "356862"
+      },
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.InitProperty",
-          "property": "user.ids",
-          "type": "array"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.ids",
-      "value": "10000+1000+100+10+1"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.ids",
-      "value": "200*200"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.ids",
-      "value": "888888/4"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:31:36.184Z",
-        "updatedAt": "2019-07-01T21:31:50.603Z",
-        "id": "666135"
-      },
-      "activity": "[bfdactivity-666135]"
-    },
-    {
-      "$type": "Microsoft.Foreach",
-      "ListProperty": "user.ids",
-      "Steps": [
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T19:49:28.473Z",
+            "updatedAt": "2019-07-16T19:50:52.267Z",
+            "id": "356862"
+          },
+          "condition": "user.ids == null",
+          "steps": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "createdAt": "2019-07-16T19:51:00.780Z",
+                "updatedAt": "2019-07-16T19:51:05.002Z",
+                "id": "384024"
+              },
+              "property": "user.ids",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-16T19:51:06.779Z",
+            "updatedAt": "2019-07-16T19:51:12.553Z",
+            "id": "076427"
+          },
+          "changeType": "Push",
+          "arrayProperty": "user.ids",
+          "value": "10000+1000+100+10+1"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-16T19:51:14.662Z",
+            "updatedAt": "2019-07-16T19:51:19.568Z",
+            "id": "162360"
+          },
+          "changeType": "Push",
+          "arrayProperty": "user.ids",
+          "value": "200*200"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.ids",
+          "value": "888888/4",
+          "$designer": {
+            "createdAt": "2019-07-16T19:51:21.579Z",
+            "updatedAt": "2019-07-16T19:51:24.990Z",
+            "id": "393322"
+          }
+        },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{dialog.index}: {dialog.value}"
-        }
-      ],
-      "IndexProperty": "dialog.index",
-      "ValueProperty": "dialog.value",
-      "$designer": {
-        "createdAt": "2019-07-01T21:31:49.538Z",
-        "updatedAt": "2019-07-01T21:31:49.574Z",
-        "id": "995811"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:32:15.722Z",
-        "updatedAt": "2019-07-01T21:32:24.606Z",
-        "id": "763672"
-      },
-      "activity": "[bfdactivity-763672]"
-    },
-    {
-      "$type": "Microsoft.ForeachPage",
-      "ListProperty": "user.ids",
-      "PageSize": "2",
-      "ValueProperty": "dialog.page",
-      "Steps": [
+          "$designer": {
+            "createdAt": "2019-07-01T21:31:36.184Z",
+            "updatedAt": "2019-07-16T19:51:29.907Z",
+            "id": "666135"
+          },
+          "activity": "[bfdactivity-666135]"
+        },
         {
           "$type": "Microsoft.Foreach",
-          "ListProperty": "dialog.page",
+          "$designer": {
+            "createdAt": "2019-07-01T21:31:49.538Z",
+            "updatedAt": "2019-07-16T19:51:36.827Z",
+            "id": "995811"
+          },
+          "indexProperty": "dialog.index",
+          "valueProperty": "dialog.value",
+          "listProperty": "user.ids",
           "Steps": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "{dialog.index}: {dialog.value}"
             }
+          ],
+          "IndexProperty": "dialog.index",
+          "ValueProperty": "dialog.value"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:32:15.722Z",
+            "updatedAt": "2019-07-16T19:51:42.318Z",
+            "id": "763672"
+          },
+          "activity": "[bfdactivity-763672]"
+        },
+        {
+          "$type": "Microsoft.ForeachPage",
+          "$designer": {
+            "createdAt": "2019-07-16T19:51:44.429Z",
+            "updatedAt": "2019-07-16T19:51:50.094Z",
+            "id": "087387"
+          },
+          "pageSize": 10,
+          "valueProperty": "dialog.value",
+          "listProperty": "user.ids",
+          "PageSize": "2",
+          "ValueProperty": "dialog.page",
+          "Steps": [
+            {
+              "$type": "Microsoft.Foreach",
+              "listProperty": "dialog.page",
+              "Steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "{dialog.index}: {dialog.value}"
+                }
+              ]
+            }
           ]
         }
       ]
     }
-  ],
-  "$designer": {
-    "createdAt": "2019-07-03T06:33:04.109Z",
-    "updatedAt": "2019-07-03T06:33:04.169Z",
-    "id": "395991"
-  }
+  ]
 }

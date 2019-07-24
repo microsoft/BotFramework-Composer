@@ -1,4 +1,5 @@
-import { LGParser } from 'botbuilder-lg';
+import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
+import { get } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile } from '../interface';
@@ -6,31 +7,47 @@ import { FileInfo, LGFile } from '../interface';
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
 
-  public index(files: FileInfo[]) {
+  public index(files: FileInfo[]): LGFile[] {
     if (files.length === 0) return [];
     this.lgFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
       if (extName === '.lg') {
-        const error = this.parse(file.content).error;
-
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagostics: error === undefined ? [] : [error],
+          diagnostics: StaticChecker.checkText(file.content, file.name),
         });
       }
     }
-  }
-
-  public getLgFiles() {
     return this.lgFiles;
   }
 
-  public parse(content: string) {
-    // TODO update lg-parser, use new diagostic method
+  public getLgFiles(): LGFile[] {
+    return this.lgFiles;
+  }
 
-    return LGParser.TryParse(content);
+  public isValid(diagnostics: Diagnostic[]): boolean {
+    return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
+  }
+
+  public check(content: string, name: string = ''): Diagnostic[] {
+    return StaticChecker.checkText(content, name);
+  }
+
+  public parse(content: string, name: string = ''): LGTemplate[] {
+    const resource = LGParser.parse(content, name);
+    return get(resource, 'Templates', []);
+  }
+
+  public combineMessage(diagnostics: Diagnostic[]): string {
+    return diagnostics.reduce((msg, d) => {
+      const { Start, End } = d.Range;
+      const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+      msg += `${position} \n ${d.Message}\n`;
+      return msg;
+    }, '');
   }
 }

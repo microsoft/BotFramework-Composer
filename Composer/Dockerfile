@@ -6,6 +6,7 @@ COPY yarn.lock .
 COPY .npmrc .
 COPY package.json .
 COPY packages/client/package.json ./packages/client/
+COPY yarn.lock ./packages/server/
 COPY packages/server/package.json ./packages/server/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/lib/cci-graph-lib/package.json ./packages/lib/cci-graph-lib/

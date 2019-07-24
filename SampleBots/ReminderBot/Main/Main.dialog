@@ -4,32 +4,34 @@
     "createdAt": "2019-07-08T07:49:23.113Z",
     "updatedAt": "2019-07-08T08:30:26.486Z",
     "id": "899494",
-    "name": "ReminderBot",
     "description": "ReminderBot"
   },
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
         "createdAt": "2019-07-08T08:29:34.449Z",
-        "updatedAt": "2019-07-12T04:06:09.739Z",
+        "updatedAt": "2019-07-16T19:38:54.655Z",
         "id": "134916"
       },
-      "activity": "Welcome to reminder bot. Try say \"add reminder for today\"."
-    }
-  ],
-  "rules": [
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-08T08:28:10.898Z",
-        "updatedAt": "2019-07-09T04:10:46.591Z",
+        "updatedAt": "2019-07-16T19:39:00.986Z",
         "id": "899834"
       },
-      "intent": "AddReminder",
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -40,10 +42,16 @@
           },
           "dialog": "AddReminder"
         }
-      ]
+      ],
+      "intent": "AddReminder"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:19.739Z",
+        "updatedAt": "2019-07-16T19:39:04.451Z",
+        "id": "295024"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -55,15 +63,15 @@
           "dialog": "DeleteReminder"
         }
       ],
-      "intent": "DeleteReminder",
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:19.739Z",
-        "updatedAt": "2019-07-08T08:28:38.879Z",
-        "id": "295024"
-      }
+      "intent": "DeleteReminder"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:40.553Z",
+        "updatedAt": "2019-07-16T19:39:07.824Z",
+        "id": "583948"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -75,15 +83,15 @@
           "dialog": "DeleteReminder"
         }
       ],
-      "intent": "DeleteAllReminders",
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:40.553Z",
-        "updatedAt": "2019-07-08T08:28:44.105Z",
-        "id": "583948"
-      }
+      "intent": "DeleteAllReminders"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:45.611Z",
+        "updatedAt": "2019-07-16T19:39:11.639Z",
+        "id": "622298"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -95,30 +103,30 @@
           "dialog": "ShowReminder"
         }
       ],
-      "intent": "ShowReminder",
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:45.611Z",
-        "updatedAt": "2019-07-08T08:28:48.567Z",
-        "id": "622298"
-      }
+      "intent": "ShowReminder"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:57.477Z",
+        "updatedAt": "2019-07-16T19:39:15.047Z",
+        "id": "597721"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
       ],
-      "intent": "HelpIntent",
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:57.477Z",
-        "updatedAt": "2019-07-08T08:28:57.505Z",
-        "id": "597721"
-      }
+      "intent": "HelpIntent"
     },
     {
       "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.020Z",
+        "updatedAt": "2019-07-16T19:39:18.070Z",
+        "id": "720611"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -128,15 +136,15 @@
           "$type": "Microsoft.EndDialog"
         }
       ],
-      "intent": "CancelIntent",
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:58.020Z",
-        "updatedAt": "2019-07-08T08:28:58.025Z",
-        "id": "720611"
-      }
+      "intent": "CancelIntent"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-08T08:28:58.881Z",
+        "updatedAt": "2019-07-16T19:39:23.811Z",
+        "id": "146624"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -147,12 +155,7 @@
             "id": "618611"
           }
         }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-08T08:28:58.881Z",
-        "updatedAt": "2019-07-08T08:28:58.886Z",
-        "id": "146624"
-      }
+      ]
     }
   ],
   "$schema": "../../app.schema"

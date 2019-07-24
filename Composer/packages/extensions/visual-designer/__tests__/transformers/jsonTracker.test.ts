@@ -1,4 +1,4 @@
-import { insert } from '../../src/shared/jsonTracker';
+import { insert, deleteNode } from '../../src/shared/jsonTracker';
 
 describe('insert', () => {
   const path = 'foo.bar';
@@ -85,6 +85,49 @@ describe('insert', () => {
       const updated = insert(dialog, path, 0, 'newOne');
 
       expect(updated.foo.bar).toEqual([{ $type: 'newOne', $designer: { id: expect.any(String) } }]);
+    });
+  });
+});
+
+describe('delete node flow', () => {
+  let dialog, path, removedDataFn;
+  beforeEach(() => {
+    dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    removedDataFn = jest.fn();
+  });
+
+  describe('when target node does not exist', () => {
+    it('should not change the data', () => {
+      path = null;
+      const result = deleteNode(dialog, path, removedDataFn);
+
+      expect(result).toEqual(dialog);
+      expect(removedDataFn).not.toBeCalled();
+    });
+  });
+
+  describe('when target node exists', () => {
+    it("should delete node successfully when targetNode's currentKey type is number", () => {
+      path = 'foo.bar[0]';
+      const result = deleteNode(dialog, path, removedDataFn);
+
+      expect(result).toEqual({ foo: { bar: [{ $type: 'secondOne' }] } });
+      expect(removedDataFn).toBeCalledWith(dialog.foo.bar[0]);
+    });
+    it("should delete node successfully when targetNode's currentKey type is string", () => {
+      path = 'foo.bar';
+      const result = deleteNode(dialog, path, removedDataFn);
+
+      expect(result).toEqual({ foo: {} });
+      expect(removedDataFn).toBeCalledWith(dialog.foo.bar);
+    });
+    it("removeLgTemplate function should be called when targetNode's $type is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
+      dialog.foo.activityNode = { $type: 'Microsoft.SendActivity', activity: '[bfdactivity-a]' };
+      path = 'foo.activityNode';
+      const result = deleteNode(dialog, path, removedDataFn);
+
+      expect(removedDataFn).toBeCalledWith(dialog.foo.activityNode);
+      expect(result).toEqual({ foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } });
     });
   });
 });

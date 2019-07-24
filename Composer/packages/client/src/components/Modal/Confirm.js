@@ -4,19 +4,24 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
 
-import { DialogStyle, BuiltInStyles } from './styles';
+import { DialogStyle, BuiltInStyles, dialog, dialogModal } from './styles';
 
 const ConfirmDialog = props => {
   const { setting, onCancel, onConfirm } = props;
   const {
     title,
     subTitle = '',
-    confirmBtnText = 'Ok',
+    onRenderContent = defaultContentRender,
+    confirmBtnText = 'Yes',
     cancelBtnText = 'Cancel',
     style = DialogStyle.normalStyle,
   } = setting;
   if (!title) {
     throw new Error('confirm modal must give a title');
+  }
+
+  function defaultContentRender() {
+    return <div style={BuiltInStyles[style]}> {subTitle} </div>;
   }
 
   return (
@@ -26,13 +31,14 @@ const ConfirmDialog = props => {
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
+        styles: dialog,
       }}
       modalProps={{
         isBlocking: true,
-        styles: { main: { maxWidth: 450 } },
+        styles: dialogModal,
       }}
     >
-      {subTitle && <div style={BuiltInStyles[style]}>{subTitle}</div>}
+      {onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
         <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
         <DefaultButton onClick={onCancel} text={cancelBtnText} />

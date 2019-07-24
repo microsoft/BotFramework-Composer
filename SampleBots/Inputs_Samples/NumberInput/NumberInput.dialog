@@ -1,83 +1,95 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.NumberInput",
-      "property": "user.age",
-      "prompt": "What is your age?",
-      "invalidPrompt": "Please input a number.",
-      "maxTurnCount": 2,
-      "alwaysPrompt": true,
-      "allowInterruptions": false,
-      "outputFormat": "float",
-      "defaultLocale": "en-us",
-      "$designer": {
-        "createdAt": "2019-07-11T06:04:25.809Z",
-        "updatedAt": "2019-07-11T06:04:25.849Z",
-        "id": "416094"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T22:00:02.461Z",
-        "updatedAt": "2019-07-01T22:00:05.463Z",
-        "id": "303304"
-      },
-      "activity": "[bfdactivity-303304]"
-    },
-    {
-      "$type": "Microsoft.NumberInput",
-      "property": "user.result",
-      "prompt": "2 * 2.2 equals?",
-      "maxTurnCount": 2147483647,
-      "alwaysPrompt": true,
-      "allowInterruptions": false,
-      "outputFormat": "float",
-      "defaultLocale": "en-us",
-      "$designer": {
-        "createdAt": "2019-07-11T06:04:28.145Z",
-        "updatedAt": "2019-07-11T06:04:28.176Z",
-        "id": "890316"
-      }
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "(user.result - 4.4) < 0.0000001",
-      "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:00:33.141Z",
-            "updatedAt": "2019-07-01T22:00:35.972Z",
-            "id": "284482"
-          },
-          "activity": "[bfdactivity-284482]"
-        }
-      ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:00:47.197Z",
-            "updatedAt": "2019-07-01T22:00:49.773Z",
-            "id": "172233"
-          },
-          "activity": "[bfdactivity-172233]"
-        }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:00:35.159Z",
-        "updatedAt": "2019-07-01T22:00:35.189Z",
-        "id": "622462"
-      }
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:48:20.139Z",
-    "updatedAt": "2019-07-03T06:48:20.173Z",
+    "updatedAt": "2019-07-16T19:04:01.421Z",
     "id": "183119"
-  }
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "272503",
+        "updatedAt": "2019-07-22T07:51:20.256Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "createdAt": "2019-07-11T06:04:25.809Z",
+            "updatedAt": "2019-07-16T19:03:20.053Z",
+            "id": "416094"
+          },
+          "property": "user.age",
+          "prompt": "What is your age?",
+          "invalidPrompt": "Please input a number.",
+          "maxTurnCount": 2,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:02.461Z",
+            "updatedAt": "2019-07-16T19:03:24.117Z",
+            "id": "303304"
+          },
+          "activity": "[bfdactivity-303304]"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "createdAt": "2019-07-11T06:04:28.145Z",
+            "updatedAt": "2019-07-16T19:03:38.609Z",
+            "id": "890316"
+          },
+          "property": "user.result",
+          "prompt": "2 * 2.2 equals?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T22:00:35.159Z",
+            "updatedAt": "2019-07-16T19:03:44.275Z",
+            "id": "622462"
+          },
+          "condition": "(user.result - 4.4) < 0.0000001",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:00:33.141Z",
+                "updatedAt": "2019-07-16T19:03:49.121Z",
+                "id": "284482"
+              },
+              "activity": "[bfdactivity-284482]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:00:47.197Z",
+                "updatedAt": "2019-07-16T19:03:54.464Z",
+                "id": "172233"
+              },
+              "activity": "[bfdactivity-172233]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

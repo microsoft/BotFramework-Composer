@@ -1,16 +1,19 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
+import { navigate } from '@reach/router';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
-
+import { Store } from './../../store/index';
 export function SelectLocation(props) {
+  const { actions } = useContext(Store);
   const [selected, setSelected] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const { onDismiss, folders, onOpen, defaultKey } = props;
 
+  const { onDismiss, folders, onOpen, defaultKey } = props;
+  const { startBot } = actions;
   function handleOpen() {
     if (selected === null) {
       if (
@@ -18,6 +21,8 @@ export function SelectLocation(props) {
           return item.name === defaultKey;
         }) >= 0
       ) {
+        startBot(true);
+        navigate('/');
         onDismiss();
       } else {
         setErrorMessage(formatMessage('Please select one of these options.'));

@@ -1,5 +1,5 @@
 export class IndexedNode {
-  id: any;
+  id: string;
   json: any;
   constructor(id, payload) {
     this.id = id;

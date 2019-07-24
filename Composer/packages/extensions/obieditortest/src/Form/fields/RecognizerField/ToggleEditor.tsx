@@ -9,7 +9,7 @@ interface ToggleEditorProps {
 }
 
 export default function ToggleEditor(props: ToggleEditorProps) {
-  const [showEditor, setShowEditor] = useState(false);
+  const [showEditor, setShowEditor] = useState(true);
 
   if (!props.loaded) {
     return null;
