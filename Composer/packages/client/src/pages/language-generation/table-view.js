@@ -17,10 +17,9 @@ import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
-import { Store } from '../../store/index';
 import { BASEPATH } from '../../constants';
+import { Store } from '../../store/index';
 import * as lgUtil from '../../utils/lgUtil';
-
 import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
