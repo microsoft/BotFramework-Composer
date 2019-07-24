@@ -1,0 +1,73 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T21:34:56.832Z",
+    "updatedAt": "2019-07-16T21:34:56.839Z",
+    "id": "988289",
+    "name": "profile"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "steps": [
+    {
+      "$type": "Microsoft.InitProperty",
+      "$designer": {
+        "id": "053390",
+        "updatedAt": "2019-07-16T21:44:06.602Z"
+      },
+      "property": "dialog.profile",
+      "type": "object"
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "$designer": {
+        "id": "736685",
+        "updatedAt": "2019-07-17T16:08:52.488Z"
+      },
+      "property": "dialog.profile.name",
+      "prompt": "what is your name?",
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "none"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "828677",
+        "updatedAt": "2019-07-17T16:08:36.568Z"
+      },
+      "activity": "[bfdactivity-828677]"
+    },
+    {
+      "$type": "Microsoft.NumberInput",
+      "$designer": {
+        "id": "741870",
+        "updatedAt": "2019-07-16T21:44:29.929Z"
+      },
+      "maxTurnCount": 0,
+      "alwaysPrompt": false,
+      "allowInterruptions": false,
+      "outputFormat": "float",
+      "defaultLocale": "en-us",
+      "prompt": "what is your favorite number?",
+      "property": "dialog.profile.number"
+    },
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "id": "910289",
+        "updatedAt": "2019-07-16T21:45:04.689Z"
+      },
+      "activity": "[bfdactivity-910289]"
+    },
+    {
+      "$type": "Microsoft.EndDialog",
+      "$designer": {
+        "id": "293010",
+        "updatedAt": "2019-07-16T21:44:38.009Z"
+      },
+      "property": "dialog.profile"
+    }
+  ]
+}

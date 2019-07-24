@@ -1,0 +1,44 @@
+# bfdactivity-187558
+-I'm not sure what you meant by that.
+
+# bfdactivity-315122
+-Cancelling! \n \[Suggestions=Menu | Help | Hi\]
+
+# bfdactivity-930795
+-You have accessed my help system... which is currently empty.
+
+# bfdactivity-887900
+-Hello! I am a friendly helper bot.  Add new DIALOGS in BOT FRAMEWORK COMPOSER to give me new features.
+
+# bfdactivity-287247
+- No, thank you!
+- Aw, shucks.
+- :)
+- You are welcome.
+
+# bfdactivity-091284
+-You choice {turn.choice}.
+
+# bfdactivity-601624
+-This is the main menu. Choose from my commands by picking from the list.
+
+# bfdactivity-255855
+-This is the foo dialog
+
+# bfdactivity-384727
+-THIS IS THE MENU BRO
+
+# bfdactivity-222386
+-GOT A PROFILE: {string(user.profile)}
+
+# bfdactivity-910289
+-OK!: {string(dialog.profile)}
+
+# bfdactivity-066486
+-Let's continue...
+
+# bfdactivity-208681
+-Sorry, you have to be over 13 to access this.
+
+# bfdactivity-828677
+- Hi, {dialog.profile.name}!

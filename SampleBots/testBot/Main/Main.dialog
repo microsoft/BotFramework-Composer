@@ -1,0 +1,42 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-24T00:36:14.503Z",
+    "updatedAt": "2019-07-24T00:36:14.511Z",
+    "id": "026024",
+    "name": "testBot"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "name": "Handle Unknown Intent",
+        "id": "673685"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "348651",
+            "updatedAt": "2019-07-24T00:37:30.565Z"
+          },
+          "property": "user.age",
+          "value": "test"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "207194",
+            "updatedAt": "2019-07-24T00:36:35.716Z"
+          },
+          "activity": "[bfdactivity-207194]"
+        }
+      ]
+    }
+  ]
+}

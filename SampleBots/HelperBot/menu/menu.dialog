@@ -1,0 +1,88 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T15:58:17.096Z",
+    "updatedAt": "2019-07-16T16:28:10.485Z",
+    "id": "846673",
+    "name": "menu",
+    "description": "a menu of common options\n"
+  },
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "891192",
+        "updatedAt": "2019-07-16T16:00:57.697Z",
+        "name": "BEGIN DIALOG"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "384727",
+            "updatedAt": "2019-07-16T19:28:53.284Z"
+          },
+          "activity": "[bfdactivity-384727]"
+        },
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "375345",
+            "updatedAt": "2019-07-18T18:08:16.779Z"
+          },
+          "property": "turn.choice",
+          "prompt": "What can I help with?",
+          "unrecognizedPrompt": "Sorry, I don't know that one. Please choose from the list.",
+          "invalidPrompt": "Which one did you want?",
+          "maxTurnCount": 5,
+          "alwaysPrompt": true,
+          "allowInterruptions": true,
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "Command 1"
+            },
+            {
+              "value": "Command 2"
+            }
+          ],
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "SuggestedAction",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "091284",
+            "updatedAt": "2019-07-16T16:00:43.618Z"
+          },
+          "activity": "[bfdactivity-091284]"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "765569",
+        "updatedAt": "2019-07-23T18:11:05.888Z"
+      },
+      "intent": "MenuInput"
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "recognizer": "menu.lu"
+}

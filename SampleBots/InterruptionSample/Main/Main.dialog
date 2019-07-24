@@ -28,13 +28,65 @@
           "activity": "[bfdactivity-629323]"
         },
         {
-          "$type": "Microsoft.BeginDialog",
+          "$type": "Microsoft.ConfirmInput",
           "$designer": {
-            "name": "Begin a Dialog",
-            "id": "583743",
-            "updatedAt": "2019-07-18T19:12:36.953Z"
+            "name": "Prompt for confirmation",
+            "id": "734701",
+            "updatedAt": "2019-07-24T00:19:56.924Z"
           },
-          "dialog": "GetUserProfile"
+          "property": "turn.userProfileConfirmation",
+          "prompt": "I’d like to get to learn more about you. Would you like to get started?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "111054",
+            "updatedAt": "2019-07-24T00:20:20.162Z"
+          },
+          "condition": "turn.userProfileConfirmation == true",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "752733",
+                "updatedAt": "2019-07-24T00:20:40.728Z"
+              },
+              "activity": "[bfdactivity-752733]"
+            },
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "name": "Begin a Dialog",
+                "id": "901067",
+                "updatedAt": "2019-07-24T00:20:28.458Z"
+              },
+              "dialog": "GetUserProfile"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "513877",
+                "updatedAt": "2019-07-24T00:20:54.286Z"
+              },
+              "activity": "[bfdactivity-513877]"
+            }
+          ]
         }
       ]
     },
@@ -160,6 +212,26 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "455597",
+        "updatedAt": "2019-07-24T00:19:11.106Z"
+      },
+      "intent": "SetupProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "884136",
+            "updatedAt": "2019-07-24T00:19:17.364Z"
+          },
+          "dialog": "GetUserProfile"
         }
       ]
     }

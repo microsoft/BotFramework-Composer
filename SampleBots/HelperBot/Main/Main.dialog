@@ -1,0 +1,160 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T15:38:57.681Z",
+    "updatedAt": "2019-07-18T18:07:03.171Z",
+    "id": "125276",
+    "name": "HelperBot",
+    "description": "This is a base template for creating a simple \"helper\" bot that will do simple repetitive tasks in chat."
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "id": "575264"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "187558",
+            "updatedAt": "2019-07-16T15:40:38.089Z"
+          },
+          "activity": "[bfdactivity-187558]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "id": "613239",
+        "updatedAt": "2019-07-16T15:42:13.165Z"
+      },
+      "intent": "cancel",
+      "steps": [
+        {
+          "$type": "Microsoft.LogStep",
+          "$designer": {
+            "id": "431945",
+            "updatedAt": "2019-07-16T15:57:49.125Z"
+          },
+          "text": "Is there a way to check if any dialogs are currently active?",
+          "traceActivity": false
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "315122",
+            "updatedAt": "2019-07-16T15:42:40.737Z"
+          },
+          "activity": "[bfdactivity-315122]"
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "id": "911478"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "id": "317764",
+        "updatedAt": "2019-07-16T15:42:54.839Z"
+      },
+      "intent": "help",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "197275",
+            "updatedAt": "2019-07-16T15:43:50.993Z"
+          },
+          "dialog": "help"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "id": "907592",
+        "updatedAt": "2019-07-16T15:55:17.882Z"
+      },
+      "intent": "thanks",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "571419",
+            "updatedAt": "2019-07-16T15:55:22.240Z"
+          },
+          "dialog": "thanks"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "id": "629030",
+        "updatedAt": "2019-07-16T15:55:55.773Z"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "230933",
+            "updatedAt": "2019-07-16T15:55:45.999Z"
+          },
+          "dialog": "welcome"
+        }
+      ],
+      "intent": "welcome"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "id": "966444",
+        "updatedAt": "2019-07-16T16:02:33.825Z",
+        "name": "Show menu"
+      },
+      "intent": "menu",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "276822",
+            "updatedAt": "2019-07-16T16:02:40.164Z"
+          },
+          "dialog": "menu"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "924253",
+        "updatedAt": "2019-07-16T18:46:27.114Z",
+        "name": "Welcome a user"
+      },
+      "constraint": "(turn.activity.type=='conversationUpdate' && turn.activity.membersAdded[0].name!='Bot')",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "195210",
+            "updatedAt": "2019-07-16T16:24:06.916Z"
+          },
+          "dialog": "welcome"
+        }
+      ],
+      "events": [
+        "activityReceived"
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

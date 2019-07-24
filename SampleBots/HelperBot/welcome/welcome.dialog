@@ -1,0 +1,35 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T15:39:47.780Z",
+    "updatedAt": "2019-07-16T15:39:47.786Z",
+    "id": "127713",
+    "name": "welcome",
+    "description": "welcome the user when they first start chatting.\n"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "122632",
+        "updatedAt": "2019-07-16T15:40:03.556Z",
+        "name": "BEGIN DIALOG"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "887900",
+            "updatedAt": "2019-07-16T15:45:51.039Z"
+          },
+          "activity": "[bfdactivity-887900]"
+        }
+      ]
+    }
+  ]
+}

@@ -13,33 +13,25 @@
       "$designer": {
         "name": "Prompt for text",
         "id": "849486",
-        "updatedAt": "2019-07-18T19:58:49.941Z"
+        "updatedAt": "2019-07-24T00:35:10.551Z"
       },
-      "property": "user.profile.name",
+      "property": "user.name",
+      "prompt": "[GetUserProfile.Name.Prompt]",
       "maxTurnCount": 0,
       "alwaysPrompt": false,
       "allowInterruptions": true,
-      "outputFormat": "trim",
-      "prompt": "[GetUserProfile.Name.Prompt]"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "name": "Send an Activity",
-        "id": "581482",
-        "updatedAt": "2019-07-18T19:37:13.964Z"
-      },
-      "activity": "[bfdactivity-581482]"
+      "outputFormat": "trim"
     },
     {
       "$type": "Microsoft.NumberInput",
       "$designer": {
         "name": "Prompt for a number",
         "id": "382698",
-        "updatedAt": "2019-07-18T20:00:12.544Z"
+        "updatedAt": "2019-07-24T00:35:13.880Z"
       },
-      "property": "user.profile.age",
+      "property": "user.age",
       "prompt": "[GetUserProfile.Age.Prompt]",
+      "invalidPrompt": "[GetUserProfile.Age.Invalid]",
       "maxTurnCount": 0,
       "validations": [
         "int(turn.value) >= 1",
@@ -48,8 +40,7 @@
       "alwaysPrompt": false,
       "allowInterruptions": true,
       "outputFormat": "integer",
-      "defaultLocale": "en-us",
-      "invalidPrompt": "[GetUserProfile.Age.Invalid]"
+      "defaultLocale": "en-us"
     },
     {
       "$type": "Microsoft.SendActivity",
@@ -71,15 +62,6 @@
       },
       "intent": "Why",
       "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "name": "Send an Activity",
-            "id": "256349",
-            "updatedAt": "2019-07-18T19:44:09.771Z"
-          },
-          "activity": "[bfdactivity-256349]"
-        },
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -110,6 +92,15 @@
               "activity": "[bfdactivity-011195]"
             }
           ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "183652",
+            "updatedAt": "2019-07-24T00:23:50.677Z"
+          },
+          "activity": "[bfdactivity-183652]"
         }
       ]
     },
@@ -123,23 +114,23 @@
       "intent": "NoName",
       "steps": [
         {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "name": "Send an Activity",
-            "id": "211795",
-            "updatedAt": "2019-07-18T20:05:04.728Z"
-          },
-          "activity": "[bfdactivity-211795]"
-        },
-        {
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "name": "Set a Property",
             "id": "298719",
-            "updatedAt": "2019-07-18T20:05:20.366Z"
+            "updatedAt": "2019-07-24T00:34:57.694Z"
           },
-          "property": "user.profile.name",
+          "property": "user.name",
           "value": "Human"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "600420",
+            "updatedAt": "2019-07-24T00:33:51.168Z"
+          },
+          "activity": "[bfdactivity-600420]"
         }
       ]
     },
@@ -180,29 +171,7 @@
         "id": "722647",
         "updatedAt": "2019-07-18T19:45:15.628Z"
       },
-      "intent": "GetUserProfile",
-      "steps": [
-        {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "name": "Set a Property",
-            "id": "521263",
-            "updatedAt": "2019-07-18T19:45:35.453Z"
-          },
-          "property": "user.profile.name",
-          "value": "@userName"
-        },
-        {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "name": "Set a Property",
-            "id": "160647",
-            "updatedAt": "2019-07-18T19:50:58.925Z"
-          },
-          "property": "user.profile.age",
-          "value": "coalesce(@number, @age)"
-        }
-      ]
+      "intent": "GetUserProfile"
     }
   ],
   "$schema": "../../BotProject/CSharp/Schemas/app.schema",

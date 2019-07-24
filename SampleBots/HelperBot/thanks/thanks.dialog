@@ -1,0 +1,35 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-16T15:54:24.017Z",
+    "updatedAt": "2019-07-16T15:54:24.023Z",
+    "id": "906909",
+    "name": "thanks",
+    "description": "respond when someone says thanks\n"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "282101",
+        "updatedAt": "2019-07-16T16:01:04.181Z",
+        "name": "BEGIN DIALOG"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "287247",
+            "updatedAt": "2019-07-16T15:54:42.657Z"
+          },
+          "activity": "[bfdactivity-287247]"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ]
+    }
+  ]
+}
