@@ -57,8 +57,8 @@ function ExtensionContainer() {
       return apiClient.apiCall('saveData', newData);
     },
 
-    navTo: path => {
-      return apiClient.apiCall('navTo', { path: path });
+    navTo: (path, rest) => {
+      return apiClient.apiCall('navTo', { path, rest });
     },
 
     navDown: subPath => {
