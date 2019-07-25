@@ -19,6 +19,7 @@
     "codemirror": "^5.45.0",
     "composer-extensions": "*",
     "css-loader": "1.0.0",
+    "cssesc": "^3.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
     "eslint": "5.12.0",

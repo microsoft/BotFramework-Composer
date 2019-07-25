@@ -3,6 +3,7 @@ import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-reac
 import get from 'lodash.get';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import * as cssesc from 'cssesc';
 
 import { LuFile, DialogInfo } from '../../types';
 import { BFDWidgetProps, FormContext } from '../types';
@@ -89,7 +90,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
     <>
       <Dropdown
         {...rest}
-        id={CSS.escape(id)}
+        id={cssesc(id)}
         label={label}
         onBlur={() => onBlur(id, value)}
         onChange={handleChange}

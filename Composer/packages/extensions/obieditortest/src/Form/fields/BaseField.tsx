@@ -5,6 +5,7 @@ import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfdesigner/react-jsonschema-form';
 import get from 'lodash.get';
 import classnames from 'classnames';
+import * as cssesc from 'cssesc';
 
 import { FormContext } from '../types';
 import SectionSeparator from '../SectionSeparator';
@@ -67,11 +68,11 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   };
 
   return isRootBaseField ? (
-    <RootField {...props} key={key} id={CSS.escape(key)}>
+    <RootField {...props} key={key} id={cssesc(key)}>
       {children}
     </RootField>
   ) : (
-    <div className={classnames('BaseField', className)} key={key} id={CSS.escape(key)}>
+    <div className={classnames('BaseField', className)} key={key} id={cssesc(key)}>
       <SectionSeparator label={getTitle()}>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
           <p
