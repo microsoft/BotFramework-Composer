@@ -1,7 +1,10 @@
-import { initializeIcons } from '@uifabric/icons';
+import { setIconOptions } from 'office-ui-fabric-react/lib/Styling';
 import 'jest-dom/extend-expect';
 import { cleanup } from 'react-testing-library';
 
-initializeIcons();
+// Suppress icon warnings.
+setIconOptions({
+  disableWarnings: true,
+});
 
 afterEach(cleanup);
