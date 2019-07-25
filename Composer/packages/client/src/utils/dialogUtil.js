@@ -1,5 +1,9 @@
 import { get, set, cloneDeep, replace } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
+import { ExpressionEngine } from 'botbuilder-expression-parser';
+
+const ExpressionParser = new ExpressionEngine();
+
 export function getDialogName(path) {
   const realPath = replace(path, '#.', '#');
   const [dialogName] = realPath.split('#');
@@ -80,4 +84,14 @@ export function sanitizeDialogData(dialogData) {
   }
 
   return dialogData;
+}
+
+export function isExpression(str) {
+  try {
+    ExpressionParser.parse(str);
+  } catch (error) {
+    return false;
+  }
+
+  return true;
 }

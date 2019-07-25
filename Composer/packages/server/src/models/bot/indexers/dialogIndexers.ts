@@ -2,7 +2,7 @@ import { has, uniq } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
-import { DialogRules } from '../dialogRules';
+import { DialogChecker } from '../dialogChecker';
 
 import { FileInfo, Dialog } from './../interface';
 
@@ -123,8 +123,8 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (has(value, '$type') && has(DialogRules, value.$type)) {
-        const matchedCheckers = DialogRules[value.$type];
+      if (has(value, '$type') && has(DialogChecker, value.$type)) {
+        const matchedCheckers = DialogChecker[value.$type];
         matchedCheckers.forEach(checker => {
           const checkRes = checker.apply(null, [
             {
