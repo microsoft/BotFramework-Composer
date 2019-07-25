@@ -91,14 +91,12 @@
           "indexProperty": "dialog.index",
           "valueProperty": "dialog.value",
           "listProperty": "user.ids",
-          "Steps": [
+          "steps": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "{dialog.index}: {dialog.value}"
             }
-          ],
-          "IndexProperty": "dialog.index",
-          "ValueProperty": "dialog.value"
+          ]
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -116,12 +114,10 @@
             "updatedAt": "2019-07-16T19:51:50.094Z",
             "id": "087387"
           },
-          "pageSize": 10,
-          "valueProperty": "dialog.value",
+          "pageSize": "2",
+          "valueProperty": "dialog.page",
           "listProperty": "user.ids",
-          "PageSize": "2",
-          "ValueProperty": "dialog.page",
-          "Steps": [
+          "steps": [
             {
               "$type": "Microsoft.Foreach",
               "listProperty": "dialog.page",
