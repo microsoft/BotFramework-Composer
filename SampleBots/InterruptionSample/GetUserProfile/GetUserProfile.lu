@@ -50,12 +50,16 @@
 
 > Add utterances that correspond to users responding to inputs being prompted for in this dialog
 # GetUserProfile
-- my name is {userName}
-- {userName} is my name
-- you can call me {userName}
-- people call me {userName}
-- {userName}
+- my name is {age:userAge}
+- {number:userAgeAsNum}
+- {oersonName:userName} is my name
+- you can call me {personName:userName}
+- people call me {personName:userName}
+- {personName:userName}
 
 > Add LUIS built in age, number prebuilt entity types to extract user's age
 $ prebuilt : age
 $ prebuilt : number
+
+> Add LUIS person name prebuilt entity type to extract user name
+$ prebuilt : personName

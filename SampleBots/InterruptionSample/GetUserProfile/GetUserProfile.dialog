@@ -13,11 +13,12 @@
       "$designer": {
         "name": "Prompt for text",
         "id": "849486",
-        "updatedAt": "2019-07-24T00:35:10.551Z"
+        "updatedAt": "2019-07-25T04:19:20.609Z"
       },
       "property": "user.name",
       "prompt": "[GetUserProfile.Name.Prompt]",
       "maxTurnCount": 0,
+      "defaultValue": "@userName",
       "alwaysPrompt": false,
       "allowInterruptions": true,
       "outputFormat": "trim"
@@ -27,7 +28,7 @@
       "$designer": {
         "name": "Prompt for a number",
         "id": "382698",
-        "updatedAt": "2019-07-24T00:35:13.880Z"
+        "updatedAt": "2019-07-25T04:19:37.557Z"
       },
       "property": "user.age",
       "prompt": "[GetUserProfile.Age.Prompt]",
@@ -40,7 +41,8 @@
       "alwaysPrompt": false,
       "allowInterruptions": true,
       "outputFormat": "integer",
-      "defaultLocale": "en-us"
+      "defaultLocale": "en-us",
+      "defaultValue": "coalesce(@userAge, @userAgeAsNum)"
     },
     {
       "$type": "Microsoft.SendActivity",
