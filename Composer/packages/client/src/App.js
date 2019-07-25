@@ -8,9 +8,11 @@ import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
+import { BASEPATH } from './constants';
 import Routes from './router';
 import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
+import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow/index';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -64,7 +66,7 @@ const topLinks = [
     underTest: true, // will delete
   },
   {
-    to: 'setting',
+    to: '/setting/',
     iconName: 'Settings',
     labelName: 'Settings',
     activeIfUrlContains: 'setting',
@@ -95,6 +97,7 @@ export function App() {
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus } = actions;
+  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   useEffect(() => {
     fetchProject();
@@ -122,7 +125,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}
@@ -140,7 +143,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}

@@ -1,6 +1,7 @@
 import formatMessage from 'format-message';
 
-export const BASEURL = 'http://localhost:5000/api';
+export const BASEPATH = process.env.PUBLIC_URL || '/';
+export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
 
 /**
  * Global ActionTypes Defination Instruction.
@@ -81,9 +82,9 @@ export const ActionTypes = {
 };
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application: 
+  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
     (projectname-environment-LUfilename)`),
-  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with 
+  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),

@@ -10,19 +10,20 @@ import { Home } from './pages/home';
 import { About } from './pages/about';
 import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
+import { BASEPATH } from './constants';
 
 const Routes = props => {
   const Content = props.component;
   const parentProps = props;
   return (
-    <Match path="/" {...props}>
+    <Match path={BASEPATH} {...props}>
       {props => (
         <div css={data}>
           <Content css={showDesign(props.match)}>
             <DesignPage {...props} />
           </Content>
           {!props.match && (
-            <Router {...parentProps}>
+            <Router basepath={BASEPATH} {...parentProps}>
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
