@@ -86,7 +86,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
           onSelect={x => focusTo(x ? '.' + x : '')}
           onExpand={x => navDown('.' + x)}
-          onOpen={x => navTo(x + '#')}
+          onOpen={(x, rest) => navTo(x + '#', rest)}
           onChange={x => onChange(x)}
         />
       </div>
