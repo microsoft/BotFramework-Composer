@@ -47,13 +47,21 @@ export const TestController = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botName, botStatus, dialogs, oAuth, toStartBot } = state;
-  const { connectBot, reloadBot, publishLuis, startBot, getPublishedStatus } = actions;
+  const { connectBot, reloadBot, publishLuis, startBot, getPublishedStatus, setLuisConfig } = actions;
   const connected = botStatus === 'connected';
 
   useEffect(() => {
+    handleAutoStart();
+  }, [toStartBot]);
+
+  async function handleAutoStart() {
+    // check luis config when open a new bot
+    if (botName !== '') {
+      await setLuisConfig(LuisStorage.get(botName));
+    }
     toStartBot && handleClick();
     startBot(false);
-  }, [toStartBot]);
+  }
 
   async function handleClick() {
     const dialogErrors = dialogs.reduce((result, dialog) => {
