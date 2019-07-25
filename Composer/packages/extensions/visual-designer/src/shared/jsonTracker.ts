@@ -1,5 +1,6 @@
 import { cloneDeep, get, set } from 'lodash';
 import nanoid from 'nanoid/generate';
+import { seedNewDialog } from 'shared-menus';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -77,6 +78,7 @@ export function insert(inputDialog, path, position, $type) {
       name: getFriendlyName({ $type }),
       id: nanoid('1234567890', 6),
     },
+    ...seedNewDialog($type),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
