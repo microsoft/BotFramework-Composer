@@ -121,12 +121,19 @@
             {
               "$type": "Microsoft.Foreach",
               "listProperty": "dialog.page",
-              "Steps": [
+              "indexProperty": "dialog.index",
+              "valueProperty": "dialog.value",
+              "steps": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "activity": "{dialog.index}: {dialog.value}"
                 }
-              ]
+              ],
+              "$designer": {
+                "createdAt": "2019-07-25T08:49:45.095Z",
+                "updatedAt": "2019-07-25T08:49:45.114Z",
+                "id": "494428"
+              }
             }
           ]
         }
