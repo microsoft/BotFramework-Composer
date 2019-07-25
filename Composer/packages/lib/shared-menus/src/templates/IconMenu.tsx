@@ -1,9 +1,33 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
+import {
+  OverflowSet,
+  IconButton,
+  Link,
+  IRenderFunction,
+  IContextualMenuItem,
+  IButtonStyles,
+} from 'office-ui-fabric-react';
 
-export const IconMenu = ({ iconName, iconSize, iconStyles, label, menuItems, menuWidth }) => {
-  const _onRenderItem = item => {
+interface IconMenuProps {
+  dataTestId?: string;
+  iconName: string;
+  iconSize?: number;
+  iconStyles: object;
+  label?: string;
+  menuItems: IContextualMenuItem[];
+  menuWidth?: number;
+}
+
+export const IconMenu: React.FC<IconMenuProps> = ({
+  iconName,
+  iconSize,
+  iconStyles,
+  label,
+  menuItems,
+  menuWidth,
+  ...rest
+}) => {
+  const _onRenderItem = (item): React.ReactNode => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
         {item.name}
@@ -11,8 +35,12 @@ export const IconMenu = ({ iconName, iconSize, iconStyles, label, menuItems, men
     );
   };
 
-  const _onRenderOverflowButton = overflowItems => {
-    const buttonStyles = {
+  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = overflowItems => {
+    if (!overflowItems) {
+      return null;
+    }
+
+    const buttonStyles: IButtonStyles = {
       root: {
         minWidth: 0,
         padding: '0 4px',
@@ -22,12 +50,14 @@ export const IconMenu = ({ iconName, iconSize, iconStyles, label, menuItems, men
         ...iconStyles,
       },
     };
+
     return (
       <IconButton
         styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
         ariaLabel={label}
+        {...rest}
       />
     );
   };
@@ -51,16 +81,3 @@ IconMenu.defaultProps = {
   menuItems: [],
   menuWidth: 0,
 };
-
-// IconMenu.propTypes = {
-//   iconName: PropTypes.string.isRequired,
-//   label: PropTypes.string,
-//   menuItems: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       key: PropTypes.string.isRequired,
-//       name: PropTypes.string.isRequired,
-//       onClick: PropTypes.func,
-//     })
-//   ).isRequired,
-//   menuWidth: PropTypes.number,
-// };

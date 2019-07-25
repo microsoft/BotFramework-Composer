@@ -78,8 +78,15 @@ const setStorageFileFetchingStatus = (state, { status }) => {
   return state;
 };
 
-const navigateTo = (state, { path }) => {
+const navigateTo = (state, { path, rest }) => {
   if (state.navPath !== path) {
+    if (rest && Array.isArray(rest)) {
+      rest.forEach(nav => {
+        if (nav !== state.navPath) {
+          state.navPathHistory.push(state.navPath + nav);
+        }
+      });
+    }
     state.navPath = path;
     state.focusPath = state.navPath; // fire up form editor on non-leaf node
 

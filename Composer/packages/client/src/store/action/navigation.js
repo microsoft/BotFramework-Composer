@@ -1,9 +1,9 @@
 import { ActionTypes } from './../../constants/index';
 
-export function navTo(dispatch, path) {
+export function navTo(dispatch, path, rest) {
   dispatch({
     type: ActionTypes.NAVIGATE_TO,
-    payload: { path },
+    payload: { path, rest },
   });
 }
 
