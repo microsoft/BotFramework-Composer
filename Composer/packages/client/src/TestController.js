@@ -19,6 +19,7 @@ import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } fr
 import { Text, LuisConfig } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { getReferredFiles } from './utils/luUtil';
 
 const openInEmulator = (url, authSettings) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -46,22 +47,14 @@ export const TestController = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, dialogs, oAuth, toStartBot } = state;
-  const { connectBot, reloadBot, publishLuis, startBot, getPublishedStatus, setLuisConfig } = actions;
+  const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
+  const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === 'connected';
 
   useEffect(() => {
-    handleAutoStart();
-  }, [toStartBot]);
-
-  async function handleAutoStart() {
-    // check luis config when open a new bot
-    if (botName !== '') {
-      await setLuisConfig(LuisStorage.get(botName));
-    }
     toStartBot && handleClick();
     startBot(false);
-  }
+  }, [toStartBot]);
 
   async function handleClick() {
     const dialogErrors = dialogs.reduce((result, dialog) => {
@@ -84,7 +77,7 @@ export const TestController = () => {
     }
     const config = LuisStorage.get(botName);
 
-    if ((await getPublishedStatus()) === 'unpublished') {
+    if (getReferredFiles(luFiles, dialogs).length > 0) {
       if (!luisPublishSucceed || config[LuisConfig.AUTHORING_KEY] === '') {
         setModalOpen(true);
       } else {

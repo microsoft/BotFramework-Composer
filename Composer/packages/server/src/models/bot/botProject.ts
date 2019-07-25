@@ -212,8 +212,12 @@ export class BotProject {
 
   public publishLuis = async (config: ILuisConfig) => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
+    this.luPublisher.setLuisConfig(config);
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
+    if (unpublished.length === 0) {
+      return await this.luPublisher.getLuisStatus();
+    }
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.reduce((msg, file) => {
@@ -226,12 +230,12 @@ export class BotProject {
       }, '');
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = toPublish.filter(this.isEmpty);
+    const emptyLuFiles = unpublished.filter(this.isEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
-    return await this.luPublisher.publish(config, toPublish);
+    return await this.luPublisher.publish(config, unpublished);
   };
 
   public checkLuisPublished = async () => {

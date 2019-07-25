@@ -59,20 +59,3 @@ export async function publishLuis(dispatch, config) {
     throw new Error(err.response.data.message);
   }
 }
-
-export async function getPublishedStatus() {
-  try {
-    const response = await axios.get(`${BASEURL}/projects/opened/luFiles/status`);
-    return response.data.status;
-  } catch (err) {
-    throw new Error(err.response.data.message);
-  }
-}
-
-export async function setLuisConfig(dispatch, config) {
-  try {
-    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, config);
-  } catch (err) {
-    throw new Error(err.response.data.message);
-  }
-}

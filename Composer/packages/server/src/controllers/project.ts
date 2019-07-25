@@ -249,40 +249,6 @@ async function publishLuis(req: Request, res: Response) {
   }
 }
 
-async function getPublishStatus(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
-    try {
-      const published = await ProjectService.currentBotProject.checkLuisPublished();
-      res.status(200).json({ status: published ? 'published' : 'unpublished' });
-    } catch (error) {
-      res.status(400).json({
-        message: error instanceof Error ? error.message : error,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function setLuisConfig(req: Request, res: Response) {
-  if (ProjectService.currentBotProject !== undefined) {
-    try {
-      await ProjectService.currentBotProject.luPublisher.setLuisConfig(req.body);
-      res.send('OK');
-    } catch (error) {
-      res.status(400).json({
-        message: error instanceof Error ? error.message : error,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function getAllProjects(req: Request, res: Response) {
   const storageId = 'default';
   const folderPath = Path.resolve(settings.development.defaultFolder);
@@ -312,6 +278,4 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
-  getPublishStatus,
-  setLuisConfig,
 };
