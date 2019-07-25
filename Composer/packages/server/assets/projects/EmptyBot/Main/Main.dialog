@@ -4,5 +4,14 @@
   "$designer": {
     "description": "<Fill in the description of your bot here>"
   },
-  "generator": "common.lg"
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+  }
+  ]
 }
