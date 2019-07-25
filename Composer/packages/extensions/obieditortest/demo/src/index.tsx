@@ -54,6 +54,10 @@ const dialogFiles = [
     relativePath: 'Main/Main.dialog',
     path: '/Some/Cool/Path/Main/Main.dialog',
     isRoot: true,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+      recognizer: 'Main',
+    },
   },
   {
     id: 'MyCustomDialog2',
@@ -62,6 +66,9 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog2.dialog',
     path: '/Some/Cool/Path/MyCustomDialog2.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
   {
     id: 'MyCustomDialog3',
@@ -70,6 +77,9 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog3.dialog',
     path: '/Some/Cool/Path/MyCustomDialog3.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
   {
     id: 'MyCustomDialog4',
@@ -78,40 +88,43 @@ const dialogFiles = [
     relativePath: 'MyCustomDialog4.dialog',
     path: '/Some/Cool/Path/MyCustomDialog4.dialog',
     isRoot: false,
+    content: {
+      $type: 'Microsoft.AdaptiveDialog',
+    },
   },
 ];
 
 const luFiles: LuFile[] = [
   {
-    id: 'MyCustomDialog1',
-    relativePath: 'SomePath/MyCustomDialog1',
-    content: '## FirstHello\n-Hi',
+    id: 'Main',
+    relativePath: 'SomePath/Main',
+    content: '## FirstHello\n-Hi\n\n## FirstGoodBye\n-Goodbye',
     parsedContent: {
       LUISJsonStructure: {
-        intents: [{ name: 'FirstHello' }],
-        utterances: [{ intent: 'FirstHello', text: 'Hi' }],
+        intents: [{ name: 'FirstHello' }, { name: 'FirstGoodBye' }],
+        utterances: [{ intent: 'FirstHello', text: 'Hi' }, { intent: 'FirstGoodBye', text: 'Goodbye' }],
       },
     },
   },
   {
     id: 'MyCustomDialog2',
     relativePath: 'SomePath/MyCustomDialog2',
-    content: '## SecondHello\n-Good morning',
+    content: '## SecondHello\n-Good morning\n\n## SecondGoodBye\n-See ya!',
     parsedContent: {
       LUISJsonStructure: {
-        intents: [{ name: 'SecondHello' }],
-        utterances: [{ intent: 'SecondHello', text: 'Good morning' }],
+        intents: [{ name: 'SecondHello' }, { name: 'SecondGoodBye' }],
+        utterances: [{ intent: 'SecondHello', text: 'Good morning' }, { intent: 'SecondGoodBye', text: 'See ya!' }],
       },
     },
   },
   {
     id: 'MyCustomDialog3',
     relativePath: 'SomePath/MyCustomDialog3',
-    content: '## ThirdHello\n-Hello',
+    content: '## ThirdHello\n-Hello\n\n## ThirdGoodBye\n-Later',
     parsedContent: {
       LUISJsonStructure: {
-        intents: [{ name: 'ThirdHello' }],
-        utterances: [{ intent: 'ThirdHello', text: 'Hello' }],
+        intents: [{ name: 'ThirdHello' }, { name: 'ThirdGoodbye' }],
+        utterances: [{ intent: 'ThirdHello', text: 'Hello' }, { intent: 'ThirdGoodbye', text: 'Later' }],
       },
     },
   },
