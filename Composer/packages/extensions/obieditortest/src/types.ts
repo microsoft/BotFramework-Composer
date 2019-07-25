@@ -19,6 +19,7 @@ export interface DialogInfo {
   id: string;
   displayName: string;
   isRoot: boolean;
+  content: MicrosoftAdaptiveDialog;
 }
 
 export interface Intent {

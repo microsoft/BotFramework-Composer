@@ -2,12 +2,12 @@ import {
   CasesField,
   CodeField,
   JsonField,
+  LgEditorField,
+  NullField,
   RecognizerField,
   RulesField,
   SelectorField,
   StepsField,
-  NullField,
-  LgEditorField,
 } from '../Form/fields';
 
 const globalFields = {
@@ -139,6 +139,9 @@ export const uiSchema = {
     ...globalFields,
   },
   'Microsoft.IntentRule': {
+    intent: {
+      'ui:widget': 'IntentWidget',
+    },
     steps: {
       'ui:field': StepsField,
     },
