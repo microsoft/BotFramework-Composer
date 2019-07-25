@@ -7,8 +7,6 @@ import formatMessage from 'format-message';
 import { LuFile, DialogInfo } from '../../types';
 import { BFDWidgetProps, FormContext } from '../types';
 
-import './styles.scss';
-
 const EMPTY_OPTION = { key: '', text: '' };
 
 enum RecognizerType {
