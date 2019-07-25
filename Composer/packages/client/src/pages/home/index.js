@@ -176,6 +176,7 @@ export const Home = () => {
                   onClick={() => {
                     onClickTemplate(template.id);
                   }}
+                  data-testid={`TemplateCopy-${template.id}`}
                 >
                   <div css={home.templateText}>{template.name}</div>
                   <div css={home.templateDescription}>{template.description}</div>
