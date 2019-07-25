@@ -4,7 +4,7 @@ import { navigate } from '@reach/router';
 
 import { validateLgTemplate } from '../src/store/action/lg';
 
-import { parseExpression } from './utils';
+import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
@@ -93,7 +93,7 @@ export function ShellApi() {
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
-    apiClient.registerApi('parseExpression', str => parseExpression(str));
+    apiClient.registerApi('isExpression', str => isExpression(str));
 
     return () => {
       apiClient.disconnect();

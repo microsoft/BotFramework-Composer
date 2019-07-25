@@ -86,6 +86,12 @@ export function sanitizeDialogData(dialogData) {
   return dialogData;
 }
 
-export function parseExpression(str) {
-  return ExpressionParser.parse(str);
+export function isExpression(str) {
+  try {
+    ExpressionParser.parse(str);
+  } catch (error) {
+    return false;
+  }
+
+  return true;
 }

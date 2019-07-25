@@ -32,7 +32,7 @@ enum EditArrayChangeTypes {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function EditArrayChecker(node: { path: string; value: any }): string {
+function EditArrayValueChecker(node: { path: string; value: any }): string {
   let message = '';
 
   const changeType = get(node.value, 'changeType');
@@ -59,5 +59,5 @@ export const DialogChecker: { [key: string]: CheckerFunc[] } = {
   'Microsoft.SetProperty': [IsExpression('property'), IsExpression('value')],
   'Microsoft.ForeachPage': [IsExpression('listProperty')],
   'Microsoft.Foreach': [IsExpression('listProperty')],
-  'Microsoft.EditArray': [IsExpression('arrayProperty'), EditArrayChecker],
+  'Microsoft.EditArray': [IsExpression('arrayProperty'), EditArrayValueChecker],
 };
