@@ -16,7 +16,7 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
     <Panel
       title={title}
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
-      addMenu={<EventMenu onClick={onClick} />}
+      addMenu={<EventMenu onClick={onClick} data-testid="EventsEditorAdd" />}
     >
       <RuleGroup key={id} id={id} data={data} onEvent={onEvent} />
     </Panel>
