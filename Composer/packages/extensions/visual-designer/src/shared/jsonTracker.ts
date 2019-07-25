@@ -1,7 +1,7 @@
 import { cloneDeep, get, set } from 'lodash';
 import nanoid from 'nanoid/generate';
-
 import { seedNewDialog } from 'shared-menus';
+
 import { getFriendlyName } from '../components/nodes/utils';
 
 function locateNode(dialog: { [key: string]: any }, path) {
