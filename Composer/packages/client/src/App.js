@@ -13,7 +13,7 @@ import { Store } from './store/index';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { CreationFlow } from './CreationFlow/index';
 
-initializeIcons(/* optional base url */);
+initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef((props, ref) => <div css={content} {...props} ref={ref} />);
