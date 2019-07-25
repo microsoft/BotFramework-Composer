@@ -59,9 +59,7 @@
     "webpack-dev-server": "^3.7.0"
   },
   "dependencies": {
-    "@uifabric/fluent-theme": "^0.16.10",
     "lodash.throttle": "^4.1.1",
-    "office-ui-fabric-react": "^6.189.1",
     "react-monaco-editor": "^0.26.2"
   }
 }
