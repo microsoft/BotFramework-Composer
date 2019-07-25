@@ -118,6 +118,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   return (
     <BaseField {...props}>
       <Dropdown
+        styles={{ root: { paddingRight: '47px' } }}
         label={formatMessage('Recognizer Type')}
         onChange={handleChange}
         options={options}

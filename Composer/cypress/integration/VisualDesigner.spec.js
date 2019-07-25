@@ -1,30 +1,41 @@
 /// <reference types="Cypress" />
 
-context.skip('Visual Designer', () => {
+context('Visual Designer', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('ToDoLuisBot', 'VisualDesignerTest');
+    cy.startFromTemplate('EmptyBot', 'VisualDesignerTest');
   });
 
-  it('can add a step from the visual designer', () => {
+  function clickAddEvent(event) {
+    cy.getByTestId('EventsEditorAdd').click();
+    cy.getByText(event).click();
+  }
+
+  it('can add a rule from the visual designer', () => {
     cy.withinEditor('VisualEditor', () => {
-      let btns = cy.get('button[aria-label="Add"]');
-      btns.first().click();
-
-      cy.getByText('Ask a Question').click();
-      cy.getByText('Prompt for text').click();
-
+      clickAddEvent('Handle an Event');
+      cy.wait(100);
       cy.get('.node-renderer-container--focused').within(() => {
-        cy.getByText('Prompt for text').should('exist');
+        cy.contains('Handle an Event').should('exist');
       });
 
-      btns = cy.get('button[aria-label="Add"]');
-      btns.last().click();
+      clickAddEvent('Handle an Intent');
+      cy.wait(100);
+      cy.get('.node-renderer-container--focused').within(() => {
+        cy.contains('Handle an Intent').should('exist');
+      });
 
-      cy.getByText('Dialogs').click();
-      cy.getByText('End Turn').click();
+      clickAddEvent('Handle Unknown Intent');
+      cy.wait(100);
+      cy.get('.node-renderer-container--focused').within(() => {
+        cy.contains('Handle Unknown Intent').should('exist');
+      });
 
-      cy.getByText('End Turn').should('exist');
+      clickAddEvent('Handle ConversationUpdate');
+      cy.wait(100);
+      cy.get('.node-renderer-container--focused').within(() => {
+        cy.contains('Handle ConversationUpdate').should('exist');
+      });
     });
   });
 });
