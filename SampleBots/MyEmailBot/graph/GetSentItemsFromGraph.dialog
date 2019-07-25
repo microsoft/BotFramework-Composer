@@ -10,7 +10,7 @@
                 "$type": "Microsoft.OAuthPrompt",
                 "ConnectionName": "connection_t-hahan",
                 "Title": "Log in",
-                "Text": "Please log in to your email account",
+                "Text": "Please Log in to Your Email Account",
                 "Property": "dialog.token"
               }
             ]

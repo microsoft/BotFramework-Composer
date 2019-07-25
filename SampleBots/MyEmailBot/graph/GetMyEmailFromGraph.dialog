@@ -10,7 +10,7 @@
                 "$type": "Microsoft.OAuthPrompt",
                 "ConnectionName": "connection_t-hahan",
                 "Title": "Log in",
-                "Text": "Please log in to your email account",
+                "Text": "Please Log in to Your Email Account",
                 "Property": "dialog.token"
               }
             ]
@@ -23,6 +23,46 @@
               "Authorization": "Bearer {dialog.token.Token}"
             },
             "Property": "user.getGraphEmails"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriScheme('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriHost('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriPort('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriPath('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.gethttpaddr",
+          "value": "uriPathAndQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
         }
+        // {
+        //   "$type": "Microsoft.SendActivity",
+        //   "activity": "{user.gethttpaddr}. "
+        // }
     ]
 }

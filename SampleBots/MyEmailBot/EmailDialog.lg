@@ -2,10 +2,10 @@
 - ```
 [Herocard
     title= Welcome to EmailBot! 
-    subtitle= Do you want to manage your emails effectively?
-    text= I can help do things like checking, replying, forwarding and sending emails.
+    subtitle= Do you Want to Manage Your Emails Effectively?
+    text= I can Help Do Things like Checking, Replying, Forwarding and Sending Emails.
     images= https://picsum.photos/300/200
-    buttons = show inbox email | show sent items | send email | help 
+    buttons = Show Inbox Emails | Show Sent Items | Send Emails | Help | Cancel]
 ```
 
 # help
@@ -52,3 +52,11 @@
 }
 ]
 ```
+# EmailStatistics
+- {toUpper('hi, i have checked your email.')} Total Number: {user.EmailCount} Emails in {add(div(user.EmailCount, user.ItemsPerPage), 1)} Pages. 
+
+# PageOrdinalNumber
+- This is the Preview of Your {addOrdinal(int(user.pages)+1)} Page Emails.
+
+# SentPageOrdinalNumber
+- This is the Preview of Your {addOrdinal(int(user.Sentpages)+1)} Page Emails.

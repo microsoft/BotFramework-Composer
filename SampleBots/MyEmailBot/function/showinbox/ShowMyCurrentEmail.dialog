@@ -12,13 +12,13 @@
             "property": "user.ShowEmailChoice",
             "choices": [
                 {
-                    "value": "reply this email"
+                    "value": "Reply This Email"
                 },
                 {
-                    "value": "forward this email"
+                    "value": "Forward This Email"
                 },
                 {
-                    "value": "go back"
+                    "value": "Go Back"
                 }
             ],
             "prompt": "What do you want to do now? ",
@@ -30,19 +30,19 @@
             "condition": "user.ShowEmailChoice",
             "cases": [
                 {
-                    "value": "reply this email",
+                    "value": "Reply This Email",
                     "steps": [
                         "ReplyMyEmail"
                     ]
                 },
                 {
-                    "value": "forward this email",
+                    "value": "Forward This Email",
                     "steps": [
                         "ForwardMyEmail"
                     ]
                 },
                 {
-                    "value": "go back",
+                    "value": "Go Back",
                     "steps": [
                     ]
                 }

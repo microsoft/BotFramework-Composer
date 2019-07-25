@@ -9,8 +9,7 @@
         "ShowEmailIntent": "(?i)show inbox email",
         "SendEmailIntent": "(?i)send email",
         "HelpIntent": "(?i)help",
-        "SentItemsIntent": "(?i)show sent items",
-        "CancelIntent": "(?i)cancel|never mind"
+        "SentItemsIntent": "(?i)show sent items"
       }
     },
     "rules": [
@@ -20,19 +19,6 @@
           {
             "$type": "Microsoft.SendActivity",
             "activity": "[help]"
-          }
-        ]
-      },
-      {
-        "$type": "Microsoft.IntentRule",
-        "intent": "CancelIntent",
-        "steps": [
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "ok, see you next time."
-          },
-          {
-            "$type": "Microsoft.EndDialog"
           }
         ]
       },
@@ -76,6 +62,19 @@
         "$type":"Microsoft.TextInput",
         "prompt": "[WelcomeCard]",
         "property": "user.ans"
+      },
+      {
+        "$type": "Microsoft.IfCondition",
+        "condition": "isMatch(user.ans, '(?i)cancel')",
+        "steps": [
+              {
+                "$type": "Microsoft.SendActivity",
+                "activity": "OK, See You Next Time."
+              },
+              {
+                "$type": "Microsoft.EndDialog"
+              }
+        ]
       },
       {
         "$type": "Microsoft.RepeatDialog"

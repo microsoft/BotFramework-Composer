@@ -3,24 +3,28 @@
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
       {
+        "$type": "Microsoft.SendActivity",
+        "activity": "OK! Let's Start To Forward this Email. "
+      },
+      {
         "$type": "Microsoft.SetProperty",
         "value": "concat('Fw:',user.focusedEmail.subject)",
         "property": "user.fwSubject"
       },
       {
         "$type": "Microsoft.TextInput",
-        "prompt": "OK, please enter the content of your email to forward.",
+        "prompt": "OK, Please Enter the Content of Your Email to Forward.",
         "property": "user.fwContent"
       },
       {
         "$type": "Microsoft.TextInput",
-        "prompt": "OK, please enter the email address of your forward recipient.",
+        "prompt": "OK, Please Enter the Email Address of Your Forward Recipient.",
         "property": "user.EmailAddr"
       },
       {
         "$type": "Microsoft.ConfirmInput",
         "property": "dialog.confirmed",
-        "prompt": "Are you sure to send this email?",
+        "prompt": "Are you Sure to Send this Email?",
         "unrecognizedPrompt": "Please try again.",
         "invalidPrompt": "Please input yes/no.",
         "alwaysPrompt": true
@@ -32,13 +36,13 @@
           "ForwardMyEmailThroughGraph",
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "Your email has been sent succsessfully. "
+            "activity": "Your Email has been Sent Succsessfully. "
           }
         ],
         "elseSteps": [
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "OK, let's do it next time."
+            "activity": "OK, Let's Do it Next Time."
           }
         ]
       }

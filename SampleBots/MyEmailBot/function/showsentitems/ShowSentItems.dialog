@@ -7,7 +7,7 @@
         "GetMySentItems",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the preview of your page {user.Sentpages} sent items."
+            "activity": "[SentPageOrdinalNumber]"
         },
         {
             "$type": "Microsoft.SendActivity",
@@ -41,10 +41,10 @@
                     "value": "Last Page. "
                 },
                 {
-                    "value": "Go back. "
+                    "value": "Go Back. "
                 }
             ],
-            "prompt": "Please select a value from below:",
+            "prompt": "What do you want to do? ",
             "style": "List",
             "alwaysPrompt": true
         },
@@ -107,7 +107,7 @@
                     ]
                 },
                 {
-                    "value": "Go back. ",
+                    "value": "Go Back. ",
                     "steps": [
                         {
                             "$type": "Microsoft.EndDialog"

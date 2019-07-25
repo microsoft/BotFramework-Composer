@@ -2,29 +2,29 @@
     "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
-    {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Start to write an email. "
-    },
+      {
+        "$type": "Microsoft.SendActivity",
+        "activity": "OK! Let's Start To Write an Email. "
+      },
       {
         "$type": "Microsoft.TextInput",
-        "prompt": "Please enter the subject of your email.",
+        "prompt": "Please Enter the Subject of Your Email.",
         "property": "user.subject"
       },
       {
         "$type": "Microsoft.TextInput",
-        "prompt": "Get! please enter the body of your email.",
+        "prompt": "Get! Please Enter the Body of Your Email.",
         "property": "user.MailBody"
       },
       {
         "$type": "Microsoft.TextInput",
-        "prompt": "Get! please enter email address of your recipient.",
+        "prompt": "Get! Please Enter Email Address of Your Recipient.",
         "property": "user.EmailAddr"
       },
       {
         "$type": "Microsoft.ConfirmInput",
         "property": "dialog.confirmed",
-        "prompt": "Are you sure to send this email?",
+        "prompt": "Are you Sure to Send this Email?",
         "unrecognizedPrompt": "Please try again.",
         "invalidPrompt": "Please input yes/no.",
         "alwaysPrompt": true
@@ -36,13 +36,13 @@
           "SendMyEmailToGraph",
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "Your email has been sent succsessfully. "
+            "activity": "Your Email has been Sent Succsessfully. "
           }
         ],
         "elseSteps": [
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "OK, let's do it next time."
+            "activity": "OK, Let's Do it Next Time."
           }
         ]
       }

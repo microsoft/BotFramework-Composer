@@ -7,19 +7,23 @@
         "GetMyEmail",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the preview of your page {user.pages} emails."
+            "activity": "[EmailStatistics]"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[0].subject}"
+            "activity": "[PageOrdinalNumber]"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[1].subject}"
+            "activity": "{user.emails[0].subject} . {length(user.emails[0].bodypreview)} words"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[2].subject}"
+            "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.emails[2].subject} . {length(user.emails[2].bodypreview)} words"
         },
         {
             "$type": "Microsoft.ChoiceInput",
@@ -44,7 +48,7 @@
                     "value": "Go back. "
                 }
             ],
-            "prompt": "Please select a value from below:",
+            "prompt": "What do you want to do? ",
             "style": "List",
             "alwaysPrompt": true
         },
