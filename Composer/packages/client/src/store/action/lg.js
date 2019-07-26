@@ -4,7 +4,7 @@ import * as lgUtil from '../../utils/lgUtil';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-const textFromTemplates = templates => {
+export function textFromTemplates(templates) {
   let text = '';
 
   templates.forEach(template => {
@@ -19,54 +19,43 @@ const textFromTemplates = templates => {
   });
 
   return text;
-};
+}
 
-const insertTemplateIntoContent = ({ file, templateName, template }) => {
-  const oldTemplates = lgUtil.parse(file.content);
+// update & remove template
+export function replaceTemplateInContent({ content, templateName, template }) {
+  const oldTemplates = lgUtil.parse(content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
-  const orignialTemplate = templateName ? oldTemplates.find(x => x.Name === templateName) : undefined;
-  let content = file.content.trimEnd();
+  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
 
-  // create lg template
   if (orignialTemplate === undefined) {
-    content = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
-
-    // update lg template
-  } else {
-    const startLineNumber = orignialTemplate.ParseTree._start.line;
-    const endLineNumber = orignialTemplate.ParseTree._stop.line;
-
-    const lines = content.split('\n');
-    const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-    const contentAfter = lines.slice(endLineNumber).join('\n');
-    const newTemplateContent = textFromTemplates([template]);
-
-    content = [contentBefore, newTemplateContent, contentAfter].join('\n');
+    throw new Error(`template ${templateName} not exist.`);
   }
 
-  return content;
-};
+  let newContent = content.trimEnd();
+
+  const startLineNumber = orignialTemplate.ParseTree._start.line;
+  const endLineNumber = orignialTemplate.ParseTree._stop.line;
+
+  const lines = content.split('\n');
+  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+  const contentAfter = lines.slice(endLineNumber).join('\n');
+  const newTemplateContent = textFromTemplates([template]);
+
+  newContent = [contentBefore, newTemplateContent, contentAfter].join('\n');
+
+  return newContent;
+}
 
 /**
  *
  * @param {Name, Body} template
  */
-export function validateLgTemplate({ file, templateName, template }) {
-  const content = insertTemplateIntoContent({ file, templateName, template });
-  validateLgContent(content);
+export function parseLgTemplate({ Name, Body }) {
+  const content = textFromTemplates([{ Name, Body }]);
 
-  // create lg template, should add a single template.
-  if (templateName === undefined) {
-    if (lgUtil.parse(content).length - lgUtil.parse(file.content).length !== 1) {
-      throw new Error('Not a single template');
-    }
-
-    // update lg template, should no add template.
-  } else {
-    if (lgUtil.parse(content).length - lgUtil.parse(file.content).length !== 0) {
-      throw new Error('Not a single template');
-    }
+  if (lgUtil.parse(content).length !== 1) {
+    throw new Error('Not a single template');
   }
 }
 
@@ -74,8 +63,8 @@ export function validateLgTemplate({ file, templateName, template }) {
  *
  * @param string, content
  */
-export function validateLgContent(content) {
-  // validate template, make up error message
+export function checkLgContent(content) {
+  // check lg content, make up error message
 
   const diagnostics = lgUtil.check(content);
   if (lgUtil.isValid(diagnostics) === false) {
@@ -85,7 +74,7 @@ export function validateLgContent(content) {
 }
 
 export async function updateLgFile(dispatch, { id, content }) {
-  validateLgContent(content);
+  checkLgContent(content);
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
@@ -102,7 +91,7 @@ export async function updateLgFile(dispatch, { id, content }) {
 }
 
 export async function createLgFile(dispatch, { id, content }) {
-  validateLgContent(content);
+  checkLgContent(content);
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
     dispatch({
@@ -142,10 +131,11 @@ export async function removeLgFile(dispatch, { id }) {
  * @param {*} template updated template, expected {Name, Body}
  */
 export async function updateLgTemplate(dispatch, { file, templateName, template }) {
-  validateLgTemplate({ file, templateName, template });
-  const content = insertTemplateIntoContent({ file, templateName, template });
+  parseLgTemplate(template);
+  const newContent = replaceTemplateInContent({ content: file.content, templateName, template });
+  checkLgContent(newContent);
 
-  return await updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(dispatch, { id: file.id, content: newContent });
 }
 
 /**
@@ -159,7 +149,7 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
  */
 
 export async function createLgTemplate(dispatch, { file, template, position }) {
-  validateLgTemplate({ file, template });
+  parseLgTemplate(template);
 
   let content = file.content;
   if (position === 0) {
@@ -168,6 +158,7 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
     content = content.trimEnd() + '\n\n' + textFromTemplates([template]) + '\n';
   }
 
+  checkLgContent(content);
   return await updateLgFile(dispatch, { id: file.id, content });
 }
 
@@ -178,21 +169,8 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
  * @param {*} templateName name of template to delete
  */
 export async function removeLgTemplate(dispatch, { file, templateName }) {
-  const oldTemplates = lgUtil.parse(file.content);
-  if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
+  const newContent = replaceTemplateInContent({ content: file.content, templateName, template: {} });
+  checkLgContent(newContent);
 
-  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
-  if (orignialTemplate === undefined) {
-    throw new Error(`no such template ${templateName} to delete`);
-  }
-  const startLineNumber = orignialTemplate.ParseTree._start.line;
-  const endLineNumber = orignialTemplate.ParseTree._stop.line;
-
-  const lines = file.content.split('\n');
-  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-  const contentAfter = lines.slice(endLineNumber).join('\n');
-
-  const content = [contentBefore, contentAfter].join('\n');
-
-  return await updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(dispatch, { id: file.id, content: newContent });
 }
