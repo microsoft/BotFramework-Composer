@@ -8,7 +8,9 @@ import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
+import { resolveToBasePath } from '../../utils/fileUtil';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
@@ -17,6 +19,8 @@ import '../language-understanding/style.css';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
+
+const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LGPage = props => {
   const { state, actions } = useContext(Store);
@@ -85,7 +89,7 @@ export const LGPage = props => {
   // if dialog not find, navigate to all.
   useEffect(() => {
     if (!activeDialog && subPath && dialogs.length) {
-      navigate('/language-generation');
+      navigate(mapNavPath('language-generation'));
     }
 
     setNewContent(null);
@@ -97,9 +101,9 @@ export const LGPage = props => {
       return;
     }
     if (id === '_all') {
-      navigate(`/language-generation`);
+      navigate(mapNavPath('/language-generation'));
     } else {
-      navigate(`/language-generation/${id}`);
+      navigate(mapNavPath(`language-generation/${id}`));
     }
     setTextMode(false); // back to table view
   }

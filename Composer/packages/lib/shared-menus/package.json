@@ -19,8 +19,8 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "react": "^16.8.4",
     "format-message": "^6.2.1",
+    "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
   "devDependencies": {
