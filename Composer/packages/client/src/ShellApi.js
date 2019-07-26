@@ -77,16 +77,16 @@ export function ShellApi() {
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) => {
       // this validation error can pass to extensions in api callback
-      validateLgTemplate(template);
+      lgTemplateValidator({ id, template, position });
       // this update operation error cannot pass to extensions, due to debounce
       // then shell can push an error to extension
       lgTemplateHandler(CREATE, { id, template, position }, event);
     });
     apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) => {
-      validateLgTemplate(template);
+      lgTemplateValidator({ id, templateName, template });
       lgTemplateHandler(UPDATE, { id, templateName, template }, event);
     });
-    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => validateLgTemplate({ Name, Body }));
+    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => lgTemplateHandler({ template: { Name, Body } }));
     apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
       lgTemplateHandler(REMOVE, { id, templateName }, event)
     );
@@ -216,6 +216,15 @@ export function ShellApi() {
     const startLineNumber = template.ParseTree._start.line + 1;
     const endLineNumber = template.ParseTree._stop.line;
     return [startLineNumber, endLineNumber];
+  }
+
+  function lgTemplateValidator({ id, templateName, template }) {
+    const file = lgFiles.find(file => file.id === id);
+    return validateLgTemplate({
+      file,
+      templateName,
+      template,
+    });
   }
 
   async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
