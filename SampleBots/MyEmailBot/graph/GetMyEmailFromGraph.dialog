@@ -7,62 +7,26 @@
             "condition": "dialog.token == null",
             "steps": [
               {
-                "$type": "Microsoft.OAuthPrompt",
+                "$type": "Microsoft.OAuthInput",
                 "ConnectionName": "connection_t-hahan",
-                "Title": "Log in",
-                "Text": "Please Log in to Your Email Account",
-                "Property": "dialog.token"
+                "title": "Log in",
+                "text": "Please Log in to Your Email Account",
+                "property": "dialog.token"
               }
             ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "{dialog.token}"
         },
         {
             "$type": "Microsoft.HttpRequest",
             "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
             "method": "GET",
             "header": {
-              "Authorization": "Bearer {dialog.token.Token}"
+              "Authorization": "Bearer {dialog.token.token}"
             },
-            "Property": "user.getGraphEmails"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriScheme('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriHost('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriPort('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriPath('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.gethttpaddr",
-          "value": "uriPathAndQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+            "property": "user.getGraphEmails"
         }
-        // {
-        //   "$type": "Microsoft.SendActivity",
-        //   "activity": "{user.gethttpaddr}. "
-        // }
     ]
 }

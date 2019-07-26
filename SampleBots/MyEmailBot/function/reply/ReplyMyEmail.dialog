@@ -18,25 +18,6 @@
       },
       {
         "$type": "Microsoft.ConfirmInput",
-        "property": "dialog.addtime",
-        "prompt": "Do you Want to Add a Timestamp?",
-        "unrecognizedPrompt": "Please try again.",
-        "invalidPrompt": "Please input yes/no.",
-        "alwaysPrompt": true
-      },
-      {
-        "$type": "Microsoft.IfCondition",
-        "condition": "dialog.addtime",
-        "steps": [
-          {
-            "$type": "Microsoft.SetProperty",
-            "property": "user.toContent",
-            "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))"
-          }
-        ]
-      },
-      {
-        "$type": "Microsoft.ConfirmInput",
         "property": "dialog.confirmed",
         "prompt": "Are you Sure to Send this Email?",
         "unrecognizedPrompt": "Please try again.",

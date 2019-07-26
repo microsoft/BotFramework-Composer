@@ -7,7 +7,7 @@
             "condition": "dialog.token == null",
             "steps": [
               {
-                "$type": "Microsoft.OAuthPrompt",
+                "$type": "Microsoft.OAuthInput",
                 "ConnectionName": "connection_t-hahan",
                 "Title": "Log in",
                 "Text": "Please Log in to Your Email Account",
@@ -20,7 +20,7 @@
             "url": "https://graph.microsoft.com/v1.0/me/sendMail",
             "method": "POST",
             "header": {
-              "Authorization": "Bearer {dialog.token.Token}"
+              "Authorization": "Bearer {dialog.token.token}"
             },
             "body": {
                 "message": {
@@ -38,7 +38,7 @@
                     ]
                 }
             },
-            "Property": "user.response"
+            "Property": "user.responese"
         }
     ]
 }
