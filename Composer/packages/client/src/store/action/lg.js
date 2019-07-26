@@ -114,7 +114,7 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
   const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
-  let content = file.content.trimEnd();
+  let content = file.content.replace(/\s+$/, '');
 
   if (orignialTemplate === undefined) {
     content = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
@@ -150,7 +150,7 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
   if (position === 0) {
     content = textFromTemplates([template]) + '\n\n' + content;
   } else {
-    content = content.trimEnd() + '\n\n' + textFromTemplates([template]) + '\n';
+    content = content.replace(/\s+$/, '') + '\n\n' + textFromTemplates([template]) + '\n';
   }
 
   return await updateLgFile(dispatch, { id: file.id, content });
