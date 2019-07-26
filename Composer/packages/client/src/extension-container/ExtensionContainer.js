@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
 
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
+
+initializeIcons(undefined, { disableWarnings: true });
 /**
  * ExtensionContainer is a IFrame container to host any extension as React component
  * ExtensionContainer provides a React absraction to it's inner extention, on top of the
@@ -57,8 +60,8 @@ function ExtensionContainer() {
       return apiClient.apiCall('saveData', newData);
     },
 
-    navTo: path => {
-      return apiClient.apiCall('navTo', { path: path });
+    navTo: (path, rest) => {
+      return apiClient.apiCall('navTo', { path, rest });
     },
 
     navDown: subPath => {

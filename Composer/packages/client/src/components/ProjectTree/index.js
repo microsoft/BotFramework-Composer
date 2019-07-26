@@ -38,11 +38,11 @@ export const ProjectTree = props => {
     <div>
       <Nav
         onLinkClick={(ev, item) => {
-          onSelect(item.id);
+          onSelect(item.id || files[0].id);
           ev.preventDefault();
         }}
         onLinkExpandClick={(ev, item) => {
-          onSelect(item.id);
+          onSelect(item.id || files[0].id);
         }}
         groups={[{ links: links }]}
         selectedKey={activeNode}

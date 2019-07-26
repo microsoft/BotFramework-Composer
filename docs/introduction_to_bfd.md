@@ -8,7 +8,7 @@ Bot Framework Composer is an integrated development environment (IDE) for buildi
 * A powerful language generation and templating system
 * A ready-to-use bot runtime executable
 
-Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK **without writing code**. The Composer app reads and writes from the Adaptive Dialog format, a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates.
+Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK **in a visual manner**. The Composer app reads and writes from the Adaptive Dialog format, a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates.
 
 ## Building Blocks
 
@@ -18,7 +18,7 @@ With Bot Framework Composer, all of these pieces are integrated with one another
 
 Each dialog represents a piece of the bot's functionality. They contain instructions for how the bot will react to input. Simple bots will have a few dialogs. Complex bots may have dozens or hundreds of individual dialogs.
 
-As a dialog is called into action, its **recognizer** will process the message, attempting to extract the primary **intent** represented by the message, along with any **entity values** the message includes. After processing the message, this information is passed onto the dialog's event handlers. Composer currently supports 2 types of recognizer: one powered by the [LUIS.ai service](https://www.luis.ai), and one powered by regular expressions. 
+As a dialog is called into action, its **recognizer** will process the message, attempting to extract the primary **intent** represented by the message, along with any **entity values** the message includes. After processing the message, this information is passed onto the dialog's event handlers. Composer currently supports 2 types of recognizer: one powered by the [LUIS.ai service](https://www.luis.ai), and one powered by regular expressions. A dilaog can have no recognizer. 
 
 The functionality of a dialog is contained within **event handlers** - rules that tell the bot how to process incoming messages.  They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interuptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself.
 
@@ -30,7 +30,7 @@ With a single click from within Composer, developers can launch the **bot runtim
 
 ## The Natural Place for Natural Language
 
-Creating a natural language understanding system can be tricky business, especially when developers are required to manage the NLU in a completely different environment than the rest of their bot.  Bot Framework Composer brings language understanding right into the bot development experience and interface, allowing developers to train language understanding directly in the context of editing a dialog. 
+language understanding is a core component of Bot Framework Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
 As dialogs are edited in the flow designer, developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances. Bot Framework Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
 

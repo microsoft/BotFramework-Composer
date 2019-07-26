@@ -4,11 +4,14 @@ import { navigate } from '@reach/router';
 
 import { validateLgTemplate } from '../src/store/action/lg';
 
+import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
 import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { BASEPATH } from './constants';
+import { resolveToBasePath } from './utils/fileUtil';
 
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
@@ -41,7 +44,7 @@ const FileTargetTypes = {
 const shellNavigator = (shellPage, opts = {}) => {
   switch (shellPage) {
     case 'lu':
-      navigate(`/language-understanding/${opts.id}`);
+      navigate(resolveToBasePath(BASEPATH, `/language-understanding/${opts.id}`));
       return;
     default:
       return;
@@ -92,6 +95,7 @@ export function ShellApi() {
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
+    apiClient.registerApi('isExpression', str => isExpression(str));
 
     return () => {
       apiClient.disconnect();
@@ -284,9 +288,9 @@ export function ShellApi() {
     flushUpdates();
   }
 
-  function navTo({ path }) {
+  function navTo({ path, rest }) {
     cleanData();
-    actions.navTo(path);
+    actions.navTo(path, rest);
   }
 
   function navDown({ subPath }) {

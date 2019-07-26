@@ -17,9 +17,10 @@ import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
-import { actionButton, formCell } from '../language-understanding/styles';
 import * as lgUtil from '../../utils/lgUtil';
+import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(Store);
@@ -75,7 +76,7 @@ export default function TableView(props) {
   function navigateToDialog(id) {
     clearNavHistory();
     navTo(`${id}#`);
-    navigate('/');
+    navigate(BASEPATH);
   }
 
   const getTemplatesMoreButtons = (item, index) => {

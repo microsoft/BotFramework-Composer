@@ -1,13 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { isLayoutEqual } from './shared/isLayoutEqual';
 import { NodeRendererContext } from './store/NodeRendererContext';
 
-initializeIcons(/* optional base url */);
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
@@ -86,7 +84,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
           onSelect={x => focusTo(x ? '.' + x : '')}
           onExpand={x => navDown('.' + x)}
-          onOpen={x => navTo(x + '#')}
+          onOpen={(x, rest) => navTo(x + '#', rest)}
           onChange={x => onChange(x)}
         />
       </div>

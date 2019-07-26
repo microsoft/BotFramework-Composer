@@ -14,6 +14,7 @@ import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { get } from 'lodash';
 
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
 
 import { formCell, luPhraseCell } from './styles';
@@ -64,7 +65,7 @@ export default function TableView(props) {
   function navigateToDialog(id) {
     clearNavHistory();
     navTo(`${id}#`);
-    navigate('/');
+    navigate(BASEPATH);
   }
 
   const getTemplatesMoreButtons = (item, index) => {
