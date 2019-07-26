@@ -1,13 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { isLayoutEqual } from './shared/isLayoutEqual';
 import { NodeRendererContext } from './store/NodeRendererContext';
 
-initializeIcons(/* optional base url */);
 formatMessage.setup({
   missingTranslation: 'ignore',
 });

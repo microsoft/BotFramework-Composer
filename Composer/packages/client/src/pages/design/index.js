@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { DialogDeleting } from '../../constants';
+import { BASEPATH, DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -53,6 +53,8 @@ function getAllRef(targetId, dialogs) {
   });
   return refs;
 }
+
+const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
@@ -189,8 +191,18 @@ function DesignPage(props) {
                 data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
-                <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
-                <iframe key="FormEditor" name="FormEditor" css={formEditor} src="/extensionContainer.html" />
+                <iframe
+                  key="VisualEditor"
+                  name="VisualEditor"
+                  css={visualEditor}
+                  src={`${rootPath}/extensionContainer.html`}
+                />
+                <iframe
+                  key="FormEditor"
+                  name="FormEditor"
+                  css={formEditor}
+                  src={`${rootPath}/extensionContainer.html`}
+                />
               </div>
             </Fragment>
           </Conversation>
