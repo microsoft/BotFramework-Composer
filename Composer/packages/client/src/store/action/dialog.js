@@ -68,3 +68,15 @@ export async function updateDialog(dispatch, { id, content }) {
     });
   }
 }
+
+export function createDialogBegin(dispatch) {
+  dispatch({
+    type: ActionTypes.CREATE_DIALOG_BEGIN,
+  });
+}
+
+export function createDialogCancel(dispatch) {
+  dispatch({
+    type: ActionTypes.CREATE_DIALOG_CANCEL,
+  });
+}
