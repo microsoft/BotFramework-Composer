@@ -86,7 +86,7 @@ export function ShellApi() {
       lgTemplateValidator({ id, templateName, template });
       lgTemplateHandler(UPDATE, { id, templateName, template }, event);
     });
-    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => lgTemplateHandler({ template: { Name, Body } }));
+    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => lgTemplateValidator({ template: { Name, Body } }));
     apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
       lgTemplateHandler(REMOVE, { id, templateName }, event)
     );
