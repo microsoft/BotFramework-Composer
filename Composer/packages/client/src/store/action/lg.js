@@ -58,13 +58,13 @@ export function validateLgTemplate({ file, templateName, template }) {
 
   // create lg template, should add a single template.
   if (templateName === undefined) {
-    if (lgUtil.parse(content).length === lgUtil.parse(file.content).length) {
+    if (lgUtil.parse(content).length - lgUtil.parse(file.content).length !== 1) {
       throw new Error('Not a single template');
     }
 
     // update lg template, should no add template.
   } else {
-    if (lgUtil.parse(content).length - lgUtil.parse(file.content).length === 1) {
+    if (lgUtil.parse(content).length - lgUtil.parse(file.content).length !== 0) {
       throw new Error('Not a single template');
     }
   }
