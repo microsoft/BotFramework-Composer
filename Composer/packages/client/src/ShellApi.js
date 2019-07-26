@@ -2,7 +2,7 @@ import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
-import { parseLgTemplate, checkLgContent, replaceTemplateInContent } from '../src/store/action/lg';
+import { parseLgTemplate, checkLgContent, replaceTemplateInContent, textFromTemplates } from '../src/store/action/lg';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -230,8 +230,17 @@ export function ShellApi() {
     parseLgTemplate(template);
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
-    const content = replaceTemplateInContent({ content: file.content, templateName, template });
-    checkLgContent(content);
+
+    // TODO: form editor should call createLgTemplate
+    // remove try catch
+
+    try {
+      const content = replaceTemplateInContent({ content: file.content, templateName, template });
+      checkLgContent(content);
+    } catch (error) {
+      await createLgTemplateHandler({ id, template }, event);
+      return;
+    }
 
     await updateLgTemplate({
       file,
