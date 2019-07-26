@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
+import { resolveToBasePath } from './../../utils/fileUtil';
 import { navTo, clearNavHistory } from './navigation';
 import { startBot } from './bot';
 
@@ -47,7 +48,7 @@ export async function fetchProject(dispatch) {
       navTo(dispatch, 'Main#');
     }
   } catch (err) {
-    navigate('/home');
+    navigate(resolveToBasePath(BASEPATH, '/home'));
     dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 }
@@ -87,7 +88,7 @@ export async function openBotProject(dispatch, absolutePath) {
     clearNavHistory(dispatch);
     if (dialogs && dialogs.length > 0) {
       navTo(dispatch, 'Main#');
-      navigate('/');
+      navigate(BASEPATH);
       startBot(dispatch, true);
     }
   } catch (err) {
