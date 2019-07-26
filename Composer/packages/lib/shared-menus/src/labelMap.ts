@@ -1,5 +1,9 @@
 import formatMessage from 'format-message';
 
+formatMessage.setup({
+  missingTranslation: 'ignore',
+});
+
 /**
  * These labels will be used when rendering the EdgeMenu
  * TODO: this is currently a copy of the SDKOverrides content from editor.schema. This should be drilled in from the shell.
