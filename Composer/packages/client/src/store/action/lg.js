@@ -113,14 +113,14 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
   const oldTemplates = lgUtil.parse(file.content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
-  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
+  const originalTemplate = oldTemplates.find(x => x.Name === templateName);
   let content = file.content.replace(/\s+$/, '');
 
-  if (orignialTemplate === undefined) {
+  if (originalTemplate === undefined) {
     content = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
   } else {
-    const startLineNumber = orignialTemplate.ParseTree._start.line;
-    const endLineNumber = orignialTemplate.ParseTree._stop.line;
+    const startLineNumber = originalTemplate.ParseTree._start.line;
+    const endLineNumber = originalTemplate.ParseTree._stop.line;
 
     const lines = content.split('\n');
     const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
