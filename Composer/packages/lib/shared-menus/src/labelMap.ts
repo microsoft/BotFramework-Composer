@@ -124,7 +124,7 @@ export const ConceptLabels = {
   Activity: {
     title: formatMessage('Language Generation'),
     description: formatMessage(
-      'What your Bot says to the User. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
+      'What your Bot says to the user. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
     ),
   },
   'Microsoft.SetProperty': {
