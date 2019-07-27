@@ -21,28 +21,27 @@ export function textFromTemplates(templates) {
   return text;
 }
 
-// update & remove template
-export function replaceTemplateInContent({ content, templateName, template }) {
+// update & remove template & create if not exist
+export function updateTemplateInContent({ content, templateName, template }) {
   const oldTemplates = lgUtil.parse(content);
   if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
 
   const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
-
-  if (orignialTemplate === undefined) {
-    throw new Error(`template ${templateName} not exist.`);
-  }
-
   let newContent = content.trimEnd();
 
-  const startLineNumber = orignialTemplate.ParseTree._start.line;
-  const endLineNumber = orignialTemplate.ParseTree._stop.line;
+  if (orignialTemplate === undefined) {
+    newContent = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
+  } else {
+    const startLineNumber = orignialTemplate.ParseTree._start.line;
+    const endLineNumber = orignialTemplate.ParseTree._stop.line;
 
-  const lines = content.split('\n');
-  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-  const contentAfter = lines.slice(endLineNumber).join('\n');
-  const newTemplateContent = textFromTemplates([template]);
+    const lines = content.split('\n');
+    const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+    const contentAfter = lines.slice(endLineNumber).join('\n');
+    const newTemplateContent = textFromTemplates([template]);
 
-  newContent = [contentBefore, newTemplateContent, contentAfter].join('\n');
+    newContent = [contentBefore, newTemplateContent, contentAfter].join('\n');
+  }
 
   return newContent;
 }
@@ -132,7 +131,7 @@ export async function removeLgFile(dispatch, { id }) {
  */
 export async function updateLgTemplate(dispatch, { file, templateName, template }) {
   parseLgTemplate(template);
-  const newContent = replaceTemplateInContent({ content: file.content, templateName, template });
+  const newContent = updateTemplateInContent({ content: file.content, templateName, template });
   checkLgContent(newContent);
 
   return await updateLgFile(dispatch, { id: file.id, content: newContent });
@@ -169,7 +168,7 @@ export async function createLgTemplate(dispatch, { file, template, position }) {
  * @param {*} templateName name of template to delete
  */
 export async function removeLgTemplate(dispatch, { file, templateName }) {
-  const newContent = replaceTemplateInContent({ content: file.content, templateName, template: {} });
+  const newContent = updateTemplateInContent({ content: file.content, templateName, template: {} });
   checkLgContent(newContent);
 
   return await updateLgFile(dispatch, { id: file.id, content: newContent });

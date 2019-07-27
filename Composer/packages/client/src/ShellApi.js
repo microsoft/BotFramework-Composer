@@ -2,7 +2,7 @@ import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
-import { parseLgTemplate, checkLgContent, replaceTemplateInContent, textFromTemplates } from '../src/store/action/lg';
+import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -57,9 +57,7 @@ export function ShellApi() {
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
-  const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
-  const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
@@ -75,9 +73,7 @@ export function ShellApi() {
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgTemplate', createLgTemplateHandler);
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
-    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => parseLgTemplate({ Name, Body }));
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
@@ -207,56 +203,27 @@ export function ShellApi() {
     return [startLineNumber, endLineNumber];
   }
 
-  async function createLgTemplateHandler({ id, template, position }, event) {
-    if (isEventSourceValid(event) === false) return false;
-
-    parseLgTemplate(template);
-    const file = lgFiles.find(file => file.id === id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    const appendContent = textFromTemplates([template]);
-    const content = file.content + '\n' + appendContent;
-    checkLgContent(content);
-
-    await createLgTemplate({
-      file,
-      template,
-      position: position === 0 ? 0 : -1,
-    });
-  }
-
+  /**
+   *
+   * @param {*}  { id, templateName, template}
+   * if templateName exit, update
+   * if template is {}, remove
+   * if templateName not exist, create
+   * @param {*} event
+   */
   async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
 
     parseLgTemplate(template);
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
-
-    // TODO: form editor should call createLgTemplate
-    // remove try catch
-
-    try {
-      const content = replaceTemplateInContent({ content: file.content, templateName, template });
-      checkLgContent(content);
-    } catch (error) {
-      await createLgTemplateHandler({ id, template }, event);
-      return;
-    }
+    const content = updateTemplateInContent({ content: file.content, templateName, template });
+    checkLgContent(content);
 
     await updateLgTemplate({
       file,
       templateName,
       template,
-    });
-  }
-
-  async function removeLgTemplateHandler({ id, templateName }, event) {
-    if (isEventSourceValid(event) === false) return false;
-
-    const file = lgFiles.find(file => file.id === id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    await removeLgTemplate({
-      file,
-      templateName,
     });
   }
 
