@@ -27,7 +27,7 @@ export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
     label: 'Send Messages',
-    types: ['Microsoft.SendActivity', 'Microsoft.BeginDialog'],
+    types: ['Microsoft.SendActivity'],
   },
   [DialogGroup.INPUT]: {
     label: 'Ask a Question',
