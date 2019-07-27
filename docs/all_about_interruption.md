@@ -79,11 +79,47 @@ You can set `AllowInterruption` to either `Always` or `NotRecognized`. Here are 
 With this mode, you are explicitly consulting up your parent dialog chain on every turn of user response to the active input action. With this setting,  
 1. Consider adding an intent event with associated steps to catch locally relevant things that your bot should handle within the context of the active dialog that holds the input action. 
     - In the example listed [here](#local_interrupt), this would be things like user saying 'why do you need my name' as well as 'I will not give you my name' that needs to be handled locally within the active dialog. 
-2. Consider adding an intent event with associated steps to catch user responding to input actions in the active dialog. In this intent event action, use SetProperty (if required) to save any entities that were recognized by the recognizer. 
+2. Consider adding an intent event with associated steps to catch user responding to input actions in the active dialog. 
+    - In this intent event action, use SetProperty (if required) to save any entities that were recognized by the recognizer. 
+    - Consider adding LUIS entity types - e.g. prebuilt LUIS entity types like personName, age, number, dateTime etc or ClosedList entity type (if you are using choice input action) so the parent dialog's recognizer can appropriately detect entities that pull values your input action is looking for from the user utterance. 
     - In the example listed [here](#local_intent_handling), this would cover things like user saying 'I'm vishwac'. In this case, you can use the recognizer to pull 'vishwac' as the user name instead of verbatim taking the entirity of user's response as their name which would be incorrect.
 3. Consider adding an 'interruption' intent that includes examples of things users can say that would be better served by a different dialog within your bot handling that user input. **Do not** add an intent action in that specific dialog to handle this. By not doing this, your dialog is signalling that consultation should move up to the next level up the parent dialog chain. 
     - In the example listed [here](#global_interrupt), this would cover things like user saying 'How is the weather there next thursday' which would be better served by the `weather` dialog handling it rather than it being considered as a valid response to the bot asking for departure city.
 
 **Note:** AllowInteruption = NotRecognized mode does not help in cases where intents you would like to fulfill within the child dialog or up the parent dialog chain expects values of the specific type the active input action is prompting user for.
+
+## Interruption behavior
+With `AllowInterruption = Always` or `AllowInterruption = NotRecognized`, the active input action will initiate consultation up its parent dialog chain starting with the immediate parent dialog that contains this active input action. 
+
+Consultation **stops** when an intent event up the parent dialog chain (including the immediate) parent fires. 
+
+The active input will assume the user utterance to be consumed if there are any actions that are excuted in the consultaton bubble. 
+
+Here's an example: 
+
+```markdown
+user: hi
+bot: hello, what is your name?
+user: why do you need my name? 
+> bot comes back with a response here via a SendActivity action inside a 'whyName' intent event handler in the parent dialog that contains this active input step. 
+> this stops consultation bubbling. 
+bot: I need your name to be able to address you correctly. 
+> The user input `why do you need my name?` is considered consumed and the active input step issues a re-prompt
+bot: what is your name? 
+user: ...
+```
+
+In some cases, you might want to have more explicit control of when the user input is considered consumed. To achieve this, you can use the `SetProperty` action and set property `turn.processInput` to value `true` to signal the active input action should continue to process user uttearnces and not consider it consumed. 
+
+Here is an example: 
+```markdown
+user: hi
+bot: hello, what is your name? 
+user: vishwac
+> Assuming the input action that is asking the user for their name has AllowInterruption = Always or AllowInterruption = NotRecognized, the parent dialog's recognizer might come back with a 'None' intent. In the intent event action for 'None' intent, you might want to perform some other actions (e.g. send a trace, log something, make a HTTP call etc) and subsequently have the input re-evaluate user utterance. 
+> To do this, you would add a intent event for 'None', add the actions you would like to have your bot perform and use SetProperty action to set turn.processInput = true. 
+> This will cause the active input action to continue to use the user utterance 'vishwac' and process it using its own recognizer. 
+bot: Hello vishwac, nice to meet you. 
+```
 
 You can checkout the `InterruptionSample` to see these concepts in action. 
