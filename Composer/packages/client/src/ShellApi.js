@@ -2,7 +2,7 @@ import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
-import { validateLgTemplate } from '../src/store/action/lg';
+import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -10,6 +10,8 @@ import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { BASEPATH } from './constants';
+import { resolveToBasePath } from './utils/fileUtil';
 
 // this is the api interface provided by shell to extensions
 // this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
@@ -42,7 +44,7 @@ const FileTargetTypes = {
 const shellNavigator = (shellPage, opts = {}) => {
   switch (shellPage) {
     case 'lu':
-      navigate(`/language-understanding/${opts.id}`);
+      navigate(resolveToBasePath(BASEPATH, `/language-understanding/${opts.id}`));
       return;
     default:
       return;
@@ -55,14 +57,12 @@ export function ShellApi() {
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
-  const createLgTemplate = useDebouncedFunc(actions.createLgTemplate);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
-  const removeLgTemplate = useDebouncedFunc(actions.removeLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
   const { LG, LU } = FileTargetTypes;
-  const { CREATE, UPDATE, REMOVE } = FileChangeTypes;
+  const { CREATE, UPDATE } = FileChangeTypes;
 
   useEffect(() => {
     apiClient.connect();
@@ -73,21 +73,7 @@ export function ShellApi() {
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgTemplate', ({ id, template, position }, event) => {
-      // this validation error can pass to extensions in api callback
-      validateLgTemplate(template);
-      // this update operation error cannot pass to extensions, due to debounce
-      // then shell can push an error to extension
-      lgTemplateHandler(CREATE, { id, template, position }, event);
-    });
-    apiClient.registerApi('updateLgTemplate', ({ id, templateName, template }, event) => {
-      validateLgTemplate(template);
-      lgTemplateHandler(UPDATE, { id, templateName, template }, event);
-    });
-    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => validateLgTemplate({ Name, Body }));
-    apiClient.registerApi('removeLgTemplate', ({ id, templateName }, event) =>
-      lgTemplateHandler(REMOVE, { id, templateName }, event)
-    );
+    apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -216,33 +202,35 @@ export function ShellApi() {
     return [startLineNumber, endLineNumber];
   }
 
-  async function lgTemplateHandler(fileChangeType, { id, templateName, template, position }, event) {
+  /**
+   *
+   * @param {
+   * id: string,
+   * templateName: string,
+   * template: { Name: string, ?Parameters: string[], Body: string }
+   * }
+   * when templateName exit in current file, will do update
+   * when templateName do not exit in current file, will do create
+   * when template is {}, will do remove
+   *
+   * @param {*} event
+   */
+  async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
-
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
+    if (!templateName) throw new Error(`templateName is missing or empty`);
 
-    switch (fileChangeType) {
-      case UPDATE:
-        return await updateLgTemplate({
-          file,
-          templateName,
-          template,
-        });
-      case CREATE:
-        return await createLgTemplate({
-          file,
-          template,
-          position: position === 0 ? 0 : -1,
-        });
-      case REMOVE:
-        return await removeLgTemplate({
-          file,
-          templateName,
-        });
-      default:
-        throw new Error(`unsupported method ${fileChangeType}`);
-    }
+    parseLgTemplate(template);
+
+    const content = updateTemplateInContent({ content: file.content, templateName, template });
+    checkLgContent(content);
+
+    await updateLgTemplate({
+      file,
+      templateName,
+      template,
+    });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
