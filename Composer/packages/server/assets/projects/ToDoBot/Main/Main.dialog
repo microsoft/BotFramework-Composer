@@ -14,12 +14,6 @@
             "CancelIntent": "(?i)cancel|never mind"
         }
     },
-    "steps": [
-        {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
-        }
-    ],
     "rules": [
         {
             "$type": "Microsoft.IntentRule",
@@ -92,6 +86,13 @@
                     "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
                 }
             ]
+        },
+        {
+            "$type": "Microsoft.ConversationUpdateActivityRule",
+            "$designer": {
+              "id": "376720"
+            },
+            "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
         }
     ]
 }

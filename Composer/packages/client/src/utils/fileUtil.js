@@ -12,3 +12,8 @@ export function upperCaseName(filename) {
   if (typeof filename !== 'string') return filename;
   return filename.charAt(0).toUpperCase() + filename.slice(1);
 }
+
+export function resolveToBasePath(base, relPath) {
+  const leaf = relPath.startsWith('/') ? relPath : `/${relPath}`;
+  return base === '/' ? leaf : `${base}${leaf}`;
+}

@@ -2,11 +2,13 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 
+import { BASEPATH } from '../../constants';
+
 import { notfoundbody, notfoundcontainer, description, notfoundicon } from './style';
 
 export const NotFound = props => {
   const { uri } = props;
-  if (uri === '/') {
+  if (uri === BASEPATH) {
     return null;
   }
 
