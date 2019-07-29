@@ -6,7 +6,7 @@ import oauthStorage from '../utils/oauthStorage';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus } from './../constants';
+import { CreationFlowStatus, CreateDialogFlowStatus } from './../constants';
 
 export const Store = React.createContext();
 
@@ -22,6 +22,7 @@ const initialState = {
   botStatus: 'unConnected',
   botLoadErrorMsg: '',
   creationFlowStatus: CreationFlowStatus.CLOSE,
+  createDialogFlowStatus: CreateDialogFlowStatus.CLOSE,
   templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],

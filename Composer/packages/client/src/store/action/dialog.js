@@ -68,3 +68,12 @@ export async function updateDialog(dispatch, { id, content }) {
     });
   }
 }
+
+export function setCreateDialogFlowStatus(dispatch, createDialogFlowStatus) {
+  dispatch({
+    type: ActionTypes.SET_CREATE_DIALOG_FLOW_STATUS,
+    payload: {
+      createDialogFlowStatus,
+    },
+  });
+}

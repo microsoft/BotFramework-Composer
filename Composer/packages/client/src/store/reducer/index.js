@@ -19,6 +19,10 @@ const getRecentProjectsSuccess = (state, { response }) => {
   return state;
 };
 
+const setCreateDialogFlowStatus = (state, { createDialogFlowStatus }) => {
+  return (state.createDialogFlowStatus = createDialogFlowStatus);
+};
+
 const updateDialog = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   return state;
@@ -152,6 +156,7 @@ const setToStartBot = (state, { toStartBot }) => {
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.SET_CREATE_DIALOG_FLOW_STATUS]: setCreateDialogFlowStatus,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,

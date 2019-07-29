@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useState, useMemo } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { BASEPATH, DialogDeleting } from '../../constants';
+import { BASEPATH, DialogDeleting, CreateDialogFlowStatus } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -58,9 +58,8 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
-  const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, removeDialog } = actions;
-  const [modalOpen, setModalOpen] = useState(false);
+  const { dialogs, navPath, navPathHistory, createDialogFlowStatus } = state;
+  const { clearNavHistory, navTo, removeDialog, setCreateDialogFlowStatus } = actions;
 
   function handleFileClick(id) {
     clearNavHistory();
@@ -93,7 +92,7 @@ function DesignPage(props) {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setModalOpen(true),
+        onClick: () => setCreateDialogFlowStatus(CreateDialogFlowStatus.OPEN),
       },
       align: 'left',
     },
@@ -136,7 +135,7 @@ function DesignPage(props) {
       },
     };
     await actions.createDialog({ id: data.name, content });
-    setModalOpen(false);
+    setCreateDialogFlowStatus(CreateDialogFlowStatus.CLOSE);
   }
 
   async function handleDeleteDialog(id) {
@@ -176,7 +175,7 @@ function DesignPage(props) {
                   files={dialogs}
                   activeNode={activeDialog}
                   onSelect={handleFileClick}
-                  onAdd={() => setModalOpen(true)}
+                  onAdd={() => setCreateDialogFlowStatus(CreateDialogFlowStatus.OPEN)}
                   onDelete={handleDeleteDialog}
                 />
               </div>
@@ -209,8 +208,8 @@ function DesignPage(props) {
         </Fragment>
       </MainContent>
       <NewDialogModal
-        isOpen={modalOpen}
-        onDismiss={() => setModalOpen(false)}
+        isOpen={createDialogFlowStatus === CreateDialogFlowStatus.OPEN}
+        onDismiss={() => setCreateDialogFlowStatus(CreateDialogFlowStatus.CLOSE)}
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
