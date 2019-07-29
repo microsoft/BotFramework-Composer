@@ -1,4 +1,6 @@
-import React, { FunctionComponent } from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import { FunctionComponent } from 'react';
 
 import { Icon } from '../icons/icon';
 import { InitNodeSize } from '../../../shared/elementSizes';
@@ -40,12 +42,11 @@ export const FormCard: FunctionComponent<NodeProps> = ({
   styles = {},
 }) => {
   const { themeColor, iconColor } = nodeColors;
-  const style = { ...containerStyle, ...styles };
   return (
     <div
       className="card"
       data-testid="FormCard"
-      style={style}
+      css={[containerStyle, { ...styles }]}
       onClick={e => {
         e.stopPropagation();
         onClick();
@@ -53,7 +54,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
     >
       <div
         className="card__header"
-        style={{
+        css={css({
           width: '100%',
           height: `${headerHeight}px`,
           backgroundColor: themeColor,
@@ -62,22 +63,22 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           lineHeight: '19px',
           color: 'black',
           position: 'relative',
-        }}
+        })}
       >
-        <div style={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>
+        <div css={css({ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' })}>
           {header}
         </div>
-        <div style={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
+        <div css={css({ position: 'absolute', top: 10, right: 0 })}>{corner}</div>
       </div>
       <div
         className="card__content"
-        style={{
+        css={css({
           width: '100%',
           height: contentHeight,
-        }}
+        })}
       >
         <div
-          style={{
+          css={{
             fontWeight: 400,
             paddingLeft: '10px',
             margin: '5px',
@@ -87,11 +88,11 @@ export const FormCard: FunctionComponent<NodeProps> = ({
             alignItems: 'center',
           }}
         >
-          <div style={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
+          <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
             <Icon icon={icon} color={iconColor} size={30} />
           </div>
           <div
-            style={{
+            css={{
               height: '100%',
               width: 'calc(100% - 20px)',
               whiteSpace: 'nowrap',

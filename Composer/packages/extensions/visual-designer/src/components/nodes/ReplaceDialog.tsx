@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
@@ -19,7 +21,7 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
       <span
-        style={{
+        css={{
           cursor: 'pointer',
           color: 'blue',
         }}
