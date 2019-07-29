@@ -205,18 +205,21 @@ export function ShellApi() {
 
   /**
    *
-   * @param {*}  { id, templateName, template}
-   * if templateName exit, update
-   * if template is {}, remove
-   * if templateName not exist, create
+   * @param {*}  { id, templateName: string, template: { Name, Body }}
+   * when templateName exit in current file, will do update
+   * when templateName do not exit in current file, will do create
+   * when template is {}, will do remove
+   *
    * @param {*} event
    */
   async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
-
-    parseLgTemplate(template);
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
+    if (!templateName) throw new Error(`templateName is missing or empty`);
+
+    parseLgTemplate(template);
+
     const content = updateTemplateInContent({ content: file.content, templateName, template });
     checkLgContent(content);
 
