@@ -1,4 +1,5 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { Icon } from '../icons/icon';
@@ -36,7 +37,7 @@ export const IconCard = ({
     <div
       className="card"
       data-testid="IconCard"
-      style={containerStyle}
+      css={containerStyle}
       onClick={e => {
         e.stopPropagation();
         onClick();
@@ -44,7 +45,7 @@ export const IconCard = ({
     >
       <div
         className="card__header"
-        style={{
+        css={{
           width: '100%',
           height: `${headerHeight}px`,
           backgroundColor: themeColor,
@@ -55,20 +56,18 @@ export const IconCard = ({
           position: 'relative',
         }}
       >
-        <div style={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>
-          {label}
-        </div>
-        <div style={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
+        <div css={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{label}</div>
+        <div css={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
       </div>
       <div
         className="card__content"
-        style={{
+        css={{
           width: '100%',
           height: contentHeight,
         }}
       >
         <div
-          style={{
+          css={{
             fontWeight: 400,
             padding: '5px 10px',
             fontSize: '14px',
@@ -77,11 +76,11 @@ export const IconCard = ({
             alignItems: 'top',
           }}
         >
-          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+          <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
             <Icon icon={icon} color={iconColor} size={20} />
           </div>
           <div
-            style={{
+            css={{
               height: '100%',
               width: 'calc(100% - 20px)',
               whiteSpace: 'nowrap',
@@ -97,7 +96,7 @@ export const IconCard = ({
           </div>
         </div>
         <div
-          style={{
+          css={{
             fontWeight: 400,
             padding: '5px 10px',
             borderTop: '1px solid #EBEBEB',
@@ -107,11 +106,11 @@ export const IconCard = ({
             alignItems: 'top',
           }}
         >
-          <div style={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+          <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
             <Icon icon="MessageBot" color="#656565" size={20} />
           </div>
           <div
-            style={{
+            css={{
               height: '100%',
               width: 'calc(100% - 20px)',
               whiteSpace: 'nowrap',
@@ -126,13 +125,13 @@ export const IconCard = ({
             {summary && <div>{summary}</div>}
             {childDialog && (
               <div
-                style={{
+                css={{
                   display: 'flex',
                   alignItems: 'center',
                 }}
               >
                 <FabricIcon
-                  style={{ lineHeight: '16px', fontSize: '16px' }}
+                  css={{ lineHeight: '16px', fontSize: '16px' }}
                   iconName="OpenSource"
                   data-testid="OpenIcon"
                   onClick={e => {
@@ -141,7 +140,7 @@ export const IconCard = ({
                   }}
                 />
                 <span
-                  style={{
+                  css={{
                     cursor: 'pointer',
                     color: 'blue',
                   }}

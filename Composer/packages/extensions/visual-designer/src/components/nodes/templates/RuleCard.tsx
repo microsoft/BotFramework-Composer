@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
@@ -103,7 +104,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       themeColor={getElementColor(DialogGroup.RULE).expanded}
       iconColor={getElementColor(DialogGroup.RULE).iconColor}
       corner={
-        <div style={{ display: 'flex' }}>
+        <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />
         </div>
       }

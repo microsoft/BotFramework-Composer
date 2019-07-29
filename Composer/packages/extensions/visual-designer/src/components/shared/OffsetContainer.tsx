@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 // eslint-disable-next-line no-unused-vars
 import React, { ReactNode } from 'react';
 
@@ -17,14 +19,16 @@ export class OffsetContainer extends React.Component<OffsetContainerProps, objec
 
     return (
       <div
-        style={{
-          position: 'absolute',
-          left: offset.x,
-          top: offset.y,
-          transitionDuration: '50ms',
-          transitionProperty: 'left, right, top, bottom',
-          ...styles,
-        }}
+        css={[
+          {
+            position: 'absolute',
+            left: offset.x,
+            top: offset.y,
+            transitionDuration: '50ms',
+            transitionProperty: 'left, right, top, bottom',
+          },
+          { ...styles },
+        ]}
       >
         {children}
       </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 
 import { getElementColor } from '../../../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';
@@ -6,11 +7,11 @@ import { DialogGroup } from '../../../shared/appschema';
 export const Diamond = ({ onClick, ...rest }) => (
   <div
     {...rest}
-    style={{
+    css={css({
       width: '50px',
       height: '20px',
       cursor: 'pointer',
-    }}
+    })}
     onClick={e => {
       e.stopPropagation();
       onClick();
