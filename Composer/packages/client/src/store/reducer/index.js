@@ -30,13 +30,15 @@ const removeDialog = (state, { response }) => {
   return state;
 };
 
-const createDialogBegin = state => {
+const createDialogBegin = (state, { onComplete }) => {
   state.showCreateDialogModal = true;
+  state.onCreateDialogComplete = onComplete;
   return state;
 };
 
 const createDialogCancel = state => {
   state.showCreateDialogModal = false;
+  state.onCreateDialogComplete = null;
   return state;
 };
 
@@ -44,6 +46,7 @@ const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   state.showCreateDialogModal = false;
+  state.onCreateDialogComplete = null;
   return state;
 };
 

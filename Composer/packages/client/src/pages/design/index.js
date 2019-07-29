@@ -84,6 +84,11 @@ function DesignPage(props) {
     }, {});
   }, [dialogs]);
 
+  const onCreateDialogComplete = newDialog => {
+    actions.clearNavHistory();
+    actions.navTo(`${newDialog}#`);
+  };
+
   const toolbarItems = [
     {
       type: 'action',
@@ -92,7 +97,7 @@ function DesignPage(props) {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => actions.createDialogBegin(),
+        onClick: () => actions.createDialogBegin(onCreateDialogComplete),
       },
       align: 'left',
     },
@@ -174,7 +179,7 @@ function DesignPage(props) {
                   files={dialogs}
                   activeNode={activeDialog}
                   onSelect={handleFileClick}
-                  onAdd={() => actions.createDialogBegin()}
+                  onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
                   onDelete={handleDeleteDialog}
                 />
               </div>

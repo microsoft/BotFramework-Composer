@@ -27,14 +27,15 @@ export async function createDialog(store, { id, content }) {
       id,
       content,
     });
+    if (typeof store.state.onCreateDialogComplete === 'function') {
+      store.state.onCreateDialogComplete(id);
+    }
     store.dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: {
         response,
       },
     });
-    clearNavHistory(store);
-    navTo(store, `${id}#`);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -69,9 +70,12 @@ export async function updateDialog({ dispatch }, { id, content }) {
   }
 }
 
-export function createDialogBegin({ dispatch }) {
+export function createDialogBegin({ dispatch }, onComplete) {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
+    payload: {
+      onComplete,
+    },
   });
 }
 
