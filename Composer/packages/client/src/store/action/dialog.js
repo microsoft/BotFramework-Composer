@@ -79,8 +79,11 @@ export function createDialogBegin({ dispatch }, onComplete) {
   });
 }
 
-export function createDialogCancel({ dispatch }) {
-  dispatch({
+export function createDialogCancel(store) {
+  if (typeof store.state.onCreateDialogComplete === 'function') {
+    store.state.onCreateDialogComplete(null);
+  }
+  store.dispatch({
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
 }
