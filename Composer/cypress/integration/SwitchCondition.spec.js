@@ -52,7 +52,7 @@ context('SwitchCondition', () => {
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
-        .should('have.length', 3);
+        .should('have.length', 4);
 
       // re-order steps
       const btn0 = cy
