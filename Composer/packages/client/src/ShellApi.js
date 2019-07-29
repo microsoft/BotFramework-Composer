@@ -74,7 +74,7 @@ export function ShellApi() {
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
-    apiClient.registerApi('validateLgTemplate', ({ Name, Body }) => parseLgTemplate({ Name, Body }));
+    apiClient.registerApi('parseLgTemplate', parseLgTemplate);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
@@ -205,7 +205,11 @@ export function ShellApi() {
 
   /**
    *
-   * @param {*}  { id, templateName: string, template: { Name, Body }}
+   * @param {
+   * id: string,
+   * templateName: string,
+   * template: { Name: string, ?Parameters: string[], Body: string }
+   * }
    * when templateName exit in current file, will do update
    * when templateName do not exit in current file, will do create
    * when template is {}, will do remove

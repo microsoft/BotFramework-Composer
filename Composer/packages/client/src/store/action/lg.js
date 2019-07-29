@@ -48,10 +48,10 @@ export function updateTemplateInContent({ content, templateName, template }) {
 
 /**
  *
- * @param {Name, Body} template
+ * @param {Name: string, ?Parameters: string[], Body: string} template
  */
-export function parseLgTemplate({ Name, Body }) {
-  const content = textFromTemplates([{ Name, Body }]);
+export function parseLgTemplate(template) {
+  const content = textFromTemplates([template]);
 
   if (lgUtil.parse(content).length !== 1) {
     throw new Error('Not a single template');
