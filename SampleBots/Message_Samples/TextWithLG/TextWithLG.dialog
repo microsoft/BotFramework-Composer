@@ -7,16 +7,30 @@
   },
   "autoEndDialog": true,
   "generator": "common.lg",
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.EventRule",
       "$designer": {
         "createdAt": "2019-07-16T19:37:46.188Z",
         "updatedAt": "2019-07-16T19:37:51.260Z",
         "id": "105188"
       },
-      "activity": "[bfdactivity-105188]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:37:46.188Z",
+            "updatedAt": "2019-07-16T19:37:51.260Z",
+            "id": "105188",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-105188]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

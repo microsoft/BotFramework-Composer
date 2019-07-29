@@ -1,12 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { isLayoutEqual } from './shared/isLayoutEqual';
+import { NodeRendererContext } from './store/NodeRendererContext';
 
-initializeIcons(/* optional base url */);
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
@@ -46,7 +45,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
    *  - input:  focusPath = 'AddToDo#, navPath='AddToDo#'
    *  - output: ''
    */
-  const normalizeFocusedId = (focusPath, navPath) => {
+  const normalizeFocusedId = (focusPath, navPath): string => {
     let id = focusPath;
     if (id.indexOf(navPath) === 0) {
       id = id.replace(navPath + '.', '');
@@ -60,22 +59,36 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const data = dataCache.current;
   const { navDown, focusTo, navTo, getLgTemplates, removeLgTemplate } = shellApi;
+
+  // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
+  const [context, setContext] = useState({
+    focusedId: normalizeFocusedId(focusPath, navPath),
+    getLgTemplates: getLgTemplates,
+    removeLgTemplate: removeLgTemplate,
+  });
+
+  useEffect(() => {
+    setContext({
+      ...context,
+      focusedId: normalizeFocusedId(focusPath, navPath),
+    });
+  }, [focusPath, navPath]);
+
   return (
-    <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
-      <ObiEditor
-        key={navPath + '?version=' + layoutVersion.current}
-        path={navPath}
-        focusedId={normalizeFocusedId(focusPath, navPath)}
-        data={data}
-        isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
-        onSelect={x => focusTo(x ? '.' + x : '')}
-        onExpand={x => navDown('.' + x)}
-        onOpen={x => navTo(x + '#')}
-        onChange={x => onChange(x)}
-        getLgTemplates={getLgTemplates}
-        removeLgTemplate={removeLgTemplate}
-      />
-    </div>
+    <NodeRendererContext.Provider value={context}>
+      <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
+        <ObiEditor
+          key={navPath + '?version=' + layoutVersion.current}
+          path={navPath}
+          data={data}
+          isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
+          onSelect={x => focusTo(x ? '.' + x : '')}
+          onExpand={x => navDown('.' + x)}
+          onOpen={(x, rest) => navTo(x + '#', rest)}
+          onChange={x => onChange(x)}
+        />
+      </div>
+    </NodeRendererContext.Provider>
   );
 };
 

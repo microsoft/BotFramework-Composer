@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
@@ -20,7 +20,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
+export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
     return onEvent(NodeEventTypes.Focus, id);
   };
@@ -32,12 +32,12 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
   const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
     if (directJumpDialog) {
-      return onEvent(NodeEventTypes.OpenLink, directJumpDialog);
+      return onEvent(NodeEventTypes.OpenLink, directJumpDialog, id);
     }
   };
 
   const onCardBodyClick = () => {
-    if (focusedId === id) {
+    if (focused) {
       openNode();
     } else {
       focusNode();
@@ -92,7 +92,7 @@ export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
       dialog = step.dialog;
       summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
     } else {
-      summary = formatMessage('1 action: {step}', { step: ConceptLabels[step.$type].title || step.$type });
+      summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
     }
   } else {
     summary = formatMessage('{count} actions', { count: data.steps.length });

@@ -24,14 +24,7 @@ const calculateLayout = (nodes, boundaryMap) => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  onEvent,
-  onResize,
-  getLgTemplates,
-}: NodeProps) => {
+export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
@@ -62,8 +55,6 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
                 key={`stepGroup/${x.id}]`}
                 id={x.id}
                 data={x.data}
-                focusedId={focusedId}
-                getLgTemplates={getLgTemplates}
                 onEvent={onEvent}
                 onResize={size => {
                   patchBoundary(x.id, size);
@@ -76,7 +67,10 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
-        <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
+        <EdgeMenu
+          onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
+          data-testid="StepGroupAdd"
+        />
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
@@ -88,7 +82,10 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
               }}
               styles={{ zIndex: 100 }}
             >
-              <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })} />
+              <EdgeMenu
+                onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}
+                data-testid="StepGroupAdd"
+              />
             </OffsetContainer>
           ))
         : null}

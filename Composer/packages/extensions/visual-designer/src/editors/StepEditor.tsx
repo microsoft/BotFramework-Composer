@@ -13,8 +13,8 @@ import { ElementInterval } from '../shared/elementSizes';
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };
 
-const Circle = () => <div style={{ ...CircleSize, border: '2px solid #A4A4A4', borderRadius: '14px' }} />;
-const Trigger = () => (
+const Circle = (): JSX.Element => <div style={{ ...CircleSize, border: '2px solid #A4A4A4', borderRadius: '14px' }} />;
+const Trigger = (): JSX.Element => (
   <div
     style={{ ...TriggerSize, border: '1px solid #979797', background: 'white', display: 'flex', alignItems: 'center' }}
   >
@@ -34,22 +34,23 @@ const TailSize = {
   height: CircleSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
-    <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
+    <EdgeMenu
+      onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
+      data-testid="StepGroupAdd"
+    />
   ) : (
     <StepGroup
       id={id}
       data={data}
-      focusedId={focusedId}
       onEvent={onEvent}
       onResize={boundary => {
         setStepGroupBoundary(boundary);
       }}
-      getLgTemplates={getLgTemplates}
     />
   );
   const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;

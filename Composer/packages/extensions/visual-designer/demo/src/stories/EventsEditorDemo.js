@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { transformRootDialog } from '../../../src/transformers/transformRootDialog';
 import { NodeEventTypes } from '../../../src/shared/NodeEventTypes';
 import { EventsEditor } from '../../../src/editors/EventsEditor';
+import { NodeRendererContext } from '../../../src/store/NodeRendererContext';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
 
@@ -83,27 +84,28 @@ export class EventsEditorDemo extends Component {
             />
           </div>
           <div className="block block--right">
-            <EventsEditor
-              key={this.state.focusPath}
-              id={data.id}
-              focusedId={this.state.focusedId}
-              data={data.json}
-              focusPath={focusPath}
-              onEvent={(eventName, data) => {
-                switch (eventName) {
-                  case NodeEventTypes.Focus:
-                  case NodeEventTypes.Expand:
-                    this.setState({
-                      focusedId: data,
-                    });
-                    break;
-                  default:
-                    console.log('StepEditor fires event', eventName, data);
-                    break;
-                }
-                console.log('event', eventName, data);
-              }}
-            />
+            <NodeRendererContext.Provider value={this.state}>
+              <EventsEditor
+                key={this.state.focusPath}
+                id={data.id}
+                data={data.json}
+                focusPath={focusPath}
+                onEvent={(eventName, data) => {
+                  switch (eventName) {
+                    case NodeEventTypes.Focus:
+                    case NodeEventTypes.Expand:
+                      this.setState({
+                        focusedId: data,
+                      });
+                      break;
+                    default:
+                      console.log('StepEditor fires event', eventName, data);
+                      break;
+                  }
+                  console.log('event', eventName, data);
+                }}
+              />
+            </NodeRendererContext.Provider>
           </div>
         </div>
       </div>

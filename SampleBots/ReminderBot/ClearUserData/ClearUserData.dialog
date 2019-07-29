@@ -6,52 +6,64 @@
     "id": "323094"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.DeleteProperty",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-10T03:56:44.738Z",
-        "updatedAt": "2019-07-16T19:41:20.771Z",
-        "id": "609169"
+        "id": "258852",
+        "updatedAt": "2019-07-22T08:01:38.855Z"
       },
-      "property": "user.index"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "$designer": {
-        "createdAt": "2019-07-10T03:56:54.015Z",
-        "updatedAt": "2019-07-16T19:41:25.345Z",
-        "id": "971431"
-      },
-      "property": "user.data"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "$designer": {
-        "createdAt": "2019-07-10T03:57:01.610Z",
-        "updatedAt": "2019-07-16T19:41:30.021Z",
-        "id": "463745"
-      },
-      "property": "user.content"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "$designer": {
-        "createdAt": "2019-07-10T03:58:01.700Z",
-        "updatedAt": "2019-07-16T19:41:34.420Z",
-        "id": "210405"
-      },
-      "property": "user.remindtime"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "$designer": {
-        "createdAt": "2019-07-10T03:58:13.929Z",
-        "updatedAt": "2019-07-16T19:41:39.884Z",
-        "id": "716688"
-      },
-      "property": "user.requesttime"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T03:56:44.738Z",
+            "updatedAt": "2019-07-16T19:41:20.771Z",
+            "id": "609169"
+          },
+          "property": "user.index"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T03:56:54.015Z",
+            "updatedAt": "2019-07-16T19:41:25.345Z",
+            "id": "971431"
+          },
+          "property": "user.data"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T03:57:01.610Z",
+            "updatedAt": "2019-07-16T19:41:30.021Z",
+            "id": "463745"
+          },
+          "property": "user.content"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T03:58:01.700Z",
+            "updatedAt": "2019-07-16T19:41:34.420Z",
+            "id": "210405"
+          },
+          "property": "user.remindtime"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "createdAt": "2019-07-10T03:58:13.929Z",
+            "updatedAt": "2019-07-16T19:41:39.884Z",
+            "id": "716688"
+          },
+          "property": "user.requesttime"
+        }
+      ]
     }
-  ],
-  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+  ]
 }

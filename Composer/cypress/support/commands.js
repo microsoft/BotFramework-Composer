@@ -25,11 +25,13 @@
 import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Open').click();
   cy.get('[data-testid="SelectLocation"]').within(() => {
     cy.get(`input[aria-label="${botName}"]`).click();
   });
   cy.get('[data-testid="SelectLocationOpen"]').click();
+  if (botName === 'ToDoLuisBot') cy.get('[data-testid="publish-LUIS-models-cancel"]').click();
   cy.wait(500);
 });
 
@@ -46,11 +48,27 @@ Cypress.Commands.add('openDialog', dialogName => {
   });
 });
 
+Cypress.Commands.add('startFromTemplate', (template, name) => {
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+  cy.getByTestId(`TemplateCopy-${template}`).click();
+  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
+  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.wait(1000);
+});
+
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Save as').click();
 
   cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
   cy.get('input[data-testid="NewDialogName"]').type('{enter}');
   cy.wait(1000);
+});
+
+Cypress.Commands.add('addEventHandler', handler => {
+  cy.withinEditor('VisualEditor', () => {
+    cy.getByTestId('EventsEditorAdd').click();
+    cy.getByText(handler).click();
+  });
 });

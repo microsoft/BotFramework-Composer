@@ -79,8 +79,15 @@ const setStorageFileFetchingStatus = (state, { status }) => {
   return state;
 };
 
-const navigateTo = (state, { path }) => {
+const navigateTo = (state, { path, rest }) => {
   if (state.navPath !== path) {
+    if (rest && Array.isArray(rest)) {
+      rest.forEach(nav => {
+        if (nav !== state.navPath) {
+          state.navPathHistory.push(state.navPath + nav);
+        }
+      });
+    }
     state.navPath = path;
     state.focusPath = state.navPath; // fire up form editor on non-leaf node
 
@@ -138,6 +145,10 @@ const updateOAuth = (state, { oAuth }) => {
   return (state.oAuth = oAuth);
 };
 
+const setToStartBot = (state, { toStartBot }) => {
+  return (state.toStartBot = toStartBot);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -166,4 +177,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
+  [ActionTypes.TO_START_BOT]: setToStartBot,
 });
