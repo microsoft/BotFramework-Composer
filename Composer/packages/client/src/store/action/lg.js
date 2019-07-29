@@ -4,7 +4,7 @@ import * as lgUtil from '../../utils/lgUtil';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-const textFromTemplates = templates => {
+export function textFromTemplates(templates) {
   let text = '';
 
   templates.forEach(template => {
@@ -19,20 +19,42 @@ const textFromTemplates = templates => {
   });
 
   return text;
-};
+}
+
+// update & remove template & create if not exist
+export function updateTemplateInContent({ content, templateName, template }) {
+  const oldTemplates = lgUtil.parse(content);
+  if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
+
+  const originalTemplate = oldTemplates.find(x => x.Name === templateName);
+  let newContent = content.replace(/\s+$/, '');
+
+  if (originalTemplate === undefined) {
+    newContent = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
+  } else {
+    const startLineNumber = originalTemplate.ParseTree._start.line;
+    const endLineNumber = originalTemplate.ParseTree._stop.line;
+
+    const lines = content.split('\n');
+    const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
+    const contentAfter = lines.slice(endLineNumber).join('\n');
+    const newTemplateContent = textFromTemplates([template]);
+
+    newContent = [contentBefore, newTemplateContent, contentAfter].join('\n');
+  }
+
+  return newContent;
+}
 
 /**
  *
- * @param {Name, Body} template
+ * @param {Name: string, ?Parameters: string[], Body: string} template
  */
-export function validateLgTemplate({ Name, Body }) {
-  // should be a valid lg content
-  const text = ['#', Name, '\n', Body].join('');
-  validateLgContent(text);
+export function parseLgTemplate(template) {
+  const content = textFromTemplates([template]);
 
-  // should be a single template.
-  if (lgUtil.parse(text).length !== 1) {
-    throw new Error('invalid single template');
+  if (lgUtil.parse(content).length !== 1) {
+    throw new Error('Not a single template');
   }
 }
 
@@ -40,8 +62,8 @@ export function validateLgTemplate({ Name, Body }) {
  *
  * @param string, content
  */
-export function validateLgContent(content) {
-  // validate template, make up error message
+export function checkLgContent(content) {
+  // check lg content, make up error message
 
   const diagnostics = lgUtil.check(content);
   if (lgUtil.isValid(diagnostics) === false) {
@@ -50,8 +72,8 @@ export function validateLgContent(content) {
   }
 }
 
-export async function updateLgFile(dispatch, { id, content }) {
-  validateLgContent(content);
+export async function updateLgFile({ dispatch }, { id, content }) {
+  checkLgContent(content);
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
@@ -67,8 +89,8 @@ export async function updateLgFile(dispatch, { id, content }) {
   }
 }
 
-export async function createLgFile(dispatch, { id, content }) {
-  validateLgContent(content);
+export async function createLgFile({ dispatch }, { id, content }) {
+  checkLgContent(content);
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
     dispatch({
@@ -84,7 +106,7 @@ export async function createLgFile(dispatch, { id, content }) {
   }
 }
 
-export async function removeLgFile(dispatch, { id }) {
+export async function removeLgFile({ dispatch }, { id }) {
   try {
     const response = await axios.delete(`${BASEURL}/projects/opened/lgFiles/${id}`);
     dispatch({
@@ -102,40 +124,22 @@ export async function removeLgFile(dispatch, { id }) {
 
 /**
  *
- * @param {*} dispatch
+ * @param {*} store
  * @param {*} file lg file take this update
  * @param {*} templateName name of template to update
  * @param {*} template updated template, expected {Name, Body}
  */
-export async function updateLgTemplate(dispatch, { file, templateName, template }) {
-  validateLgTemplate(template);
+export async function updateLgTemplate(store, { file, templateName, template }) {
+  parseLgTemplate(template);
+  const newContent = updateTemplateInContent({ content: file.content, templateName, template });
+  checkLgContent(newContent);
 
-  const oldTemplates = lgUtil.parse(file.content);
-  if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
-
-  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
-  let content = file.content.trimEnd();
-
-  if (orignialTemplate === undefined) {
-    content = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
-  } else {
-    const startLineNumber = orignialTemplate.ParseTree._start.line;
-    const endLineNumber = orignialTemplate.ParseTree._stop.line;
-
-    const lines = content.split('\n');
-    const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-    const contentAfter = lines.slice(endLineNumber).join('\n');
-    const newTemplateContent = textFromTemplates([template]);
-
-    content = [contentBefore, newTemplateContent, contentAfter].join('\n');
-  }
-
-  return await updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(store, { id: file.id, content: newContent });
 }
 
 /**
  *
- * @param {*} dispatch
+ * @param {*} store
  * @param {*} File lg file take this update
  * @param {*} template new template to add, expected {Name, Body}
  * @param {*} position
@@ -143,41 +147,29 @@ export async function updateLgTemplate(dispatch, { file, templateName, template 
  *  -1 insert at file end, by default
  */
 
-export async function createLgTemplate(dispatch, { file, template, position }) {
-  validateLgTemplate(template);
+export async function createLgTemplate(store, { file, template, position }) {
+  parseLgTemplate(template);
 
   let content = file.content;
   if (position === 0) {
     content = textFromTemplates([template]) + '\n\n' + content;
   } else {
-    content = content.trimEnd() + '\n\n' + textFromTemplates([template]) + '\n';
+    content = content.replace(/\s+$/, '') + '\n\n' + textFromTemplates([template]) + '\n';
   }
 
-  return await updateLgFile(dispatch, { id: file.id, content });
+  checkLgContent(content);
+  return await updateLgFile(store, { id: file.id, content });
 }
 
 /**
  *
- * @param {*} dispatch
+ * @param {*} store
  * @param {*} file lg file take this update
  * @param {*} templateName name of template to delete
  */
-export async function removeLgTemplate(dispatch, { file, templateName }) {
-  const oldTemplates = lgUtil.parse(file.content);
-  if (Array.isArray(oldTemplates) === false) throw new Error('origin lg file is not valid');
+export async function removeLgTemplate(store, { file, templateName }) {
+  const newContent = updateTemplateInContent({ content: file.content, templateName, template: {} });
+  checkLgContent(newContent);
 
-  const orignialTemplate = oldTemplates.find(x => x.Name === templateName);
-  if (orignialTemplate === undefined) {
-    throw new Error(`no such template ${templateName} to delete`);
-  }
-  const startLineNumber = orignialTemplate.ParseTree._start.line;
-  const endLineNumber = orignialTemplate.ParseTree._stop.line;
-
-  const lines = file.content.split('\n');
-  const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-  const contentAfter = lines.slice(endLineNumber).join('\n');
-
-  const content = [contentBefore, contentAfter].join('\n');
-
-  return await updateLgFile(dispatch, { id: file.id, content });
+  return await updateLgFile(store, { id: file.id, content: newContent });
 }
