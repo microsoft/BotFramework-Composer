@@ -10,7 +10,7 @@ import { Store } from './store/index';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
-import { BASEPATH } from './constants';
+import { BASEPATH, CreateDialogFlowStatus } from './constants';
 import { resolveToBasePath } from './utils/fileUtil';
 
 // this is the api interface provided by shell to extensions
@@ -71,6 +71,7 @@ export function ShellApi() {
 
     apiClient.registerApi('getState', (_, event) => getState(event.source.name));
     apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('openCreateDialog', openCreateDialog);
     apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
@@ -192,6 +193,10 @@ export function ShellApi() {
     }
 
     return true;
+  }
+
+  function openCreateDialog() {
+    actions.setCreateDialogFlowStatus(CreateDialogFlowStatus.OPEN);
   }
 
   function getLgTemplates({ id }, event) {
