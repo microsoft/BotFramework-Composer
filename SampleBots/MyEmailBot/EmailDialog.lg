@@ -5,8 +5,21 @@
     subtitle= Do you Want to Manage Your Emails Effectively?
     text= I can Help Do Things like Checking, Replying, Forwarding and Sending Emails.
     images= https://picsum.photos/300/200
-    buttons = Show Inbox Emails | Show Sent Items | Send Emails | Help | Cancel]
+    buttons = Sign In | Help | Cancel]
 ```
+
+# EmailCard
+- ```
+[Herocard
+    title= Cool ! @{user.Info.displayName}, Nice to See You.  
+    text= Successfully Sign In! Now, Choose What You Want to Do.
+    images= https://picsum.photos/300/200
+    buttons = Show Inbox Emails | Show Sent Items | Send Emails]
+```
+# MissionCancel
+- OK, see you next time, @{user.Info.displayName}!
+- Let's do it when you are ready, @{user.Info.displayName}.
+- Emm, OK, see you, @{user.Info.displayName}.
 
 # help
 - I am an email bot, do you need any help? If you want to check your inbox, say "show inbox email" 
@@ -53,10 +66,10 @@
 ]
 ```
 # EmailStatistics
-- {toUpper('hi, i have checked your email.')} Total Number: {user.EmailCount} Emails in {add(div(user.EmailCount, user.ItemsPerPage), 1)} Pages. 
+- OK, @{user.Info.displayName}, {toUpper('hi, i have checked your email.')} Total Number: {user.EmailCount} Emails in {add(div(user.EmailCount, user.ItemsPerPage), 1)} Pages. 
 
 # PageOrdinalNumber
-- This is the Preview of Your {addOrdinal(user.pages+1)} Page Emails.
+- Let's See the Preview of Your {addOrdinal(user.pages+1)} Page Emails.
 
 # SentPageOrdinalNumber
 - This is the Preview of Your {addOrdinal(int(user.Sentpages)+1)} Page Emails.

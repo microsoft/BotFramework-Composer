@@ -42,7 +42,7 @@
         "elseSteps": [
           {
             "$type": "Microsoft.SendActivity",
-            "activity": "OK, Let's Do it Next Time."
+            "activity": "[MissionCancel]"
           }
         ]
       }

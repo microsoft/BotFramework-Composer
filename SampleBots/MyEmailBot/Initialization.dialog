@@ -42,6 +42,7 @@
         "changeType": "Clear",
         "arrayProperty": "user.SentItems"
       },
+      "SignInToGraph",
       "GetMyEmailFromGraph",
       "GetSentItemsFromGraph"
     ]

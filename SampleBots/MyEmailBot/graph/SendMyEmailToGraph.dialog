@@ -3,24 +3,11 @@
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
         {
-            "$type": "Microsoft.IfCondition",
-            "condition": "dialog.token == null",
-            "steps": [
-              {
-                "$type": "Microsoft.OAuthPrompt",
-                "ConnectionName": "connection_t-hahan",
-                "Title": "Log in",
-                "Text": "Please Log in to Your Email Account",
-                "Property": "dialog.token"
-              }
-            ]
-        },
-        {
             "$type": "Microsoft.HttpRequest",
             "url": "https://graph.microsoft.com/v1.0/me/sendMail",
             "method": "POST",
             "header": {
-              "Authorization": "Bearer {dialog.token.Token}"
+              "Authorization": "Bearer {user.token.token}"
             },
             "body": {
                 "message": {

@@ -6,10 +6,8 @@
     "recognizer": {
       "$type": "Microsoft.RegexRecognizer",
       "intents": {
-        "ShowEmailIntent": "(?i)show inbox email",
-        "SendEmailIntent": "(?i)send email",
-        "HelpIntent": "(?i)help",
-        "SentItemsIntent": "(?i)show sent items"
+        "SignInIntent": "(?i)sign in",
+        "HelpIntent": "(?i)help"
       }
     },
     "rules": [
@@ -24,18 +22,10 @@
       },
       {
         "$type": "Microsoft.IntentRule",
-        "intent": "ShowEmailIntent",
+        "intent": "SignInIntent",
         "steps": [
           "Initialization",
-          "ShowMyEmail"
-        ]
-      },
-      {
-        "$type": "Microsoft.IntentRule",
-        "intent": "SendEmailIntent",
-        "steps": [
-          "Initialization",
-          "SendMyEmail"
+          "EmailPage"
         ]
       },
       {
@@ -46,14 +36,6 @@
             "$type": "Microsoft.SendActivity",
             "activity": "[help]"
           }
-        ]
-      },
-      {
-        "$type": "Microsoft.IntentRule",
-        "intent": "SentItemsIntent",
-        "steps": [
-          "Initialization",
-          "ShowSentItems"
         ]
       }
     ],
@@ -69,7 +51,7 @@
         "steps": [
               {
                 "$type": "Microsoft.SendActivity",
-                "activity": "OK, See You Next Time."
+                "activity": "[MissionCancel]"
               },
               {
                 "$type": "Microsoft.EndDialog"

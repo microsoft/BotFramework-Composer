@@ -1,0 +1,33 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.IfCondition",
+            "condition": "dialog.token == null",
+            "steps": [
+              {
+                "$type": "Microsoft.OAuthPrompt",
+                "ConnectionName": "connection_t-hahan",
+                "Title": "Log in",
+                "Text": "Please Log in to Your Email Account",
+                "Property": "user.token"
+              }
+            ]
+        },
+        {
+            "$type": "Microsoft.HttpRequest",
+            "url": "https://graph.microsoft.com/v1.0/me/",
+            "method": "GET",
+            "header": {
+              "Authorization": "Bearer {user.token.token}"
+            },
+            "Property": "user.Info"
+        },
+        {
+            "$type": "Microsoft.SetProperty",
+            "property": "user.Name",
+            "value": "user.Info.displayName"
+        }
+    ]
+}
