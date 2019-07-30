@@ -53,7 +53,7 @@ export const VerticalEdge = ({ length, color, text, x, y, dashed, directed }): J
 
   return (
     <svg
-      style={{
+      css={{
         position: 'absolute',
         overflow: 'visible',
         left: x,

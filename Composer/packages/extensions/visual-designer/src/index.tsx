@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import formatMessage from 'format-message';
@@ -76,7 +78,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   return (
     <NodeRendererContext.Provider value={context}>
-      <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
+      <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%' }}>
         <ObiEditor
           key={navPath + '?version=' + layoutVersion.current}
           path={navPath}
