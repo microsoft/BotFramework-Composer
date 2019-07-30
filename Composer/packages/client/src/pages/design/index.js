@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useState, useMemo } from 'react';
+import { Fragment, useContext, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { getDialogData } from '../../utils';
 import { TestController } from '../../TestController';
-import { DialogDeleting } from '../../constants';
+import { BASEPATH, DialogDeleting } from '../../constants';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -54,11 +54,12 @@ function getAllRef(targetId, dialogs) {
   return refs;
 }
 
+const rootPath = BASEPATH.replace(/\/+$/g, '');
+
 function DesignPage(props) {
   const { state, actions } = useContext(Store);
   const { dialogs, navPath, navPathHistory } = state;
   const { clearNavHistory, navTo, removeDialog } = actions;
-  const [modalOpen, setModalOpen] = useState(false);
 
   function handleFileClick(id) {
     clearNavHistory();
@@ -83,6 +84,11 @@ function DesignPage(props) {
     }, {});
   }, [dialogs]);
 
+  const onCreateDialogComplete = newDialog => {
+    actions.clearNavHistory();
+    actions.navTo(`${newDialog}#`);
+  };
+
   const toolbarItems = [
     {
       type: 'action',
@@ -91,7 +97,7 @@ function DesignPage(props) {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setModalOpen(true),
+        onClick: () => actions.createDialogBegin(onCreateDialogComplete),
       },
       align: 'left',
     },
@@ -134,7 +140,6 @@ function DesignPage(props) {
       },
     };
     await actions.createDialog({ id: data.name, content });
-    setModalOpen(false);
   }
 
   async function handleDeleteDialog(id) {
@@ -174,7 +179,7 @@ function DesignPage(props) {
                   files={dialogs}
                   activeNode={activeDialog}
                   onSelect={handleFileClick}
-                  onAdd={() => setModalOpen(true)}
+                  onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
                   onDelete={handleDeleteDialog}
                 />
               </div>
@@ -189,16 +194,26 @@ function DesignPage(props) {
                 data-testid="Breadcrumb"
               />
               <div css={editorWrapper}>
-                <iframe key="VisualEditor" name="VisualEditor" css={visualEditor} src="/extensionContainer.html" />
-                <iframe key="FormEditor" name="FormEditor" css={formEditor} src="/extensionContainer.html" />
+                <iframe
+                  key="VisualEditor"
+                  name="VisualEditor"
+                  css={visualEditor}
+                  src={`${rootPath}/extensionContainer.html`}
+                />
+                <iframe
+                  key="FormEditor"
+                  name="FormEditor"
+                  css={formEditor}
+                  src={`${rootPath}/extensionContainer.html`}
+                />
               </div>
             </Fragment>
           </Conversation>
         </Fragment>
       </MainContent>
       <NewDialogModal
-        isOpen={modalOpen}
-        onDismiss={() => setModalOpen(false)}
+        isOpen={state.showCreateDialogModal}
+        onDismiss={() => actions.createDialogCancel()}
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />

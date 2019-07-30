@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
 
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
+
+initializeIcons(undefined, { disableWarnings: true });
 /**
  * ExtensionContainer is a IFrame container to host any extension as React component
  * ExtensionContainer provides a React absraction to it's inner extention, on top of the
@@ -99,6 +102,10 @@ function ExtensionContainer() {
         templateName,
         template: { Name: templateName, Body: template },
       });
+    },
+
+    createDialog: () => {
+      return apiClient.apiCall('createDialog');
     },
   };
 
