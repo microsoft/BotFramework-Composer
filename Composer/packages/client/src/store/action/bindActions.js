@@ -1,6 +1,6 @@
-export default function bindActions(dispatch, actions) {
+export default function bindActions(store, actions) {
   return Object.keys(actions).reduce((boundActions, actionName) => {
-    boundActions[actionName] = actions[actionName].bind(null, dispatch);
+    boundActions[actionName] = actions[actionName].bind(null, store);
     return boundActions;
   }, {});
 }
