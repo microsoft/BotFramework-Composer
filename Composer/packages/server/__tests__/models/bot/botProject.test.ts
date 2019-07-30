@@ -17,6 +17,14 @@ const mockLocationRef: LocationRef = {
   path: Path.join(__dirname, `${botDir}`),
 };
 
+const luisConfig = {
+  authoringKey: '111111111111',
+  authoringRegion: 'westus',
+  defaultLanguage: 'en-us',
+  environment: 'test',
+  name: 'test',
+};
+
 const proj = new BotProject(mockLocationRef);
 
 beforeEach(async () => {
@@ -125,7 +133,7 @@ describe('modify non exist files', () => {
     await expect(proj.removeLgFile(id)).rejects.toThrow();
     await expect(proj.removeLuFile(id)).rejects.toThrow();
     await expect(proj.updateLgFile(id, content)).rejects.toThrow();
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content, luisConfig)).rejects.toThrow();
   });
 });
 
@@ -219,7 +227,7 @@ describe('lu operation', () => {
   it('should update lu file and update index', async () => {
     const id = 'root';
     const content = '## hello \n - hello2';
-    const luFiles = await proj.updateLuFile(id, content);
+    const luFiles = await proj.updateLuFile(id, content, luisConfig);
     const result = luFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(8);
@@ -236,7 +244,7 @@ describe('lu operation', () => {
     const id = 'root';
     const content = 'hello \n hello3';
 
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content, luisConfig)).rejects.toThrow();
   });
 
   it('should delete lu file and update index', async () => {

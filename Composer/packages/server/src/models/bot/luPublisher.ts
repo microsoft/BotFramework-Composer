@@ -91,6 +91,7 @@ export class LuPublisher {
       result.push({ name, ...status[item] });
       return result;
     }, []);
+    return this.status;
   };
 
   public getLuisConfig = () => this.config;
