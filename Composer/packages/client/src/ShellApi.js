@@ -80,6 +80,13 @@ export function ShellApi() {
     apiClient.registerApi('focusTo', focusTo);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', str => isExpression(str));
+    apiClient.registerApi('createDialog', () => {
+      return new Promise(resolve => {
+        actions.createDialogBegin(newDialog => {
+          resolve(newDialog);
+        });
+      });
+    });
 
     return () => {
       apiClient.disconnect();
