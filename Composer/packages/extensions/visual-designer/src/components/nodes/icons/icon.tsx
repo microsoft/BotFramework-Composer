@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+
 import { iconCss } from './styles';
 
 const FriendSVG = fill => {
