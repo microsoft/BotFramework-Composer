@@ -1,8 +1,8 @@
-// eslint-disable-next-line no-unused-vars
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
 import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
@@ -61,7 +61,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
   const branchNodes = nodeMap.branchNodes || [];
 
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <DefaultRenderer key={conditionNode.id} id={conditionNode.id} data={conditionNode.data} onEvent={onEvent} />
       </OffsetContainer>

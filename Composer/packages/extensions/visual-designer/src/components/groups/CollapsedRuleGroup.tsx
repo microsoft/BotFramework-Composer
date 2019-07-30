@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { CollapsedEventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
@@ -15,7 +17,7 @@ export const CollapsedRuleGroup = ({ count }): JSX.Element => {
     items.push(
       <div
         key={i}
-        style={{
+        css={{
           width: ElementWidth,
           height: ElementHeight,
           background: getElementColor(DialogGroup.RULE).collapsed,
@@ -24,7 +26,5 @@ export const CollapsedRuleGroup = ({ count }): JSX.Element => {
       />
     );
   }
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', maxHeight: maxBlockHeight, overflow: 'hidden' }}>{items}</div>
-  );
+  return <div css={{ display: 'flex', flexWrap: 'wrap', maxHeight: maxBlockHeight, overflow: 'hidden' }}>{items}</div>;
 };

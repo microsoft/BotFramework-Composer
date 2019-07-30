@@ -1,4 +1,6 @@
-import React, { useContext, FC } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
@@ -60,7 +62,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       tabIndex={0}
       className="obi-editor-container"
       data-testid="obi-editor-container"
-      style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
+      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
       ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;
