@@ -89,7 +89,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
     <>
       <Dropdown
         {...rest}
-        id={CSS.escape(id)}
+        id={id.replace(/\.|#/g, '')}
         label={label}
         onBlur={() => onBlur(id, value)}
         onChange={handleChange}
