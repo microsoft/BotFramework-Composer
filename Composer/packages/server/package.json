@@ -81,7 +81,7 @@
     "http-errors": "^1.7.2",
     "immer": "^2.1.4",
     "lodash": "^4.17.11",
-    "lubuild": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.1-preview.tgz",
+    "lubuild": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz",
     "ludown": "^1.3.1",
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
