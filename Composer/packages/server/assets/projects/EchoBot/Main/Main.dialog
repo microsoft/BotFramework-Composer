@@ -32,7 +32,7 @@
       "$designer": {
         "id": "376720"
       },
-      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
     }
   ]
 }
