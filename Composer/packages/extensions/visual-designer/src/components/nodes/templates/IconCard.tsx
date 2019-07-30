@@ -4,7 +4,7 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import { Icon } from '../icons/icon';
 
 const boxWidth = 240;
-const boxHeight = 120;
+const boxHeight = 125;
 
 const headerHeight = 40;
 const contentHeight = boxHeight - headerHeight;
@@ -99,7 +99,7 @@ export const IconCard = ({
         <div
           style={{
             fontWeight: 400,
-            padding: '5px 10px',
+            padding: '5px 10px 3px',
             borderTop: '1px solid #EBEBEB',
             fontSize: '14px',
             lineHeight: '19px',
@@ -124,37 +124,53 @@ export const IconCard = ({
             title={typeof label === 'string' ? label : ''}
           >
             {summary && <div>{summary}</div>}
-            {childDialog && (
-              <div
+          </div>
+        </div>
+        <div
+          style={{
+            height: '100%',
+            width: 'calc(100% - 20px)',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            fontSize: '14px',
+            lineHeight: '19px',
+            fontFamily: 'Segoe UI',
+            padding: '0px 10px',
+            paddingLeft: '40px',
+          }}
+          title={typeof label === 'string' ? label : ''}
+        >
+          {childDialog && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <FabricIcon
+                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
+                iconName="OpenSource"
+                data-testid="OpenIcon"
+                onClick={e => {
+                  e.stopPropagation();
+                  onChildDialogClick();
+                }}
+              />
+              <span
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
+                  cursor: 'pointer',
+                  color: 'blue',
+                }}
+                onClick={e => {
+                  e.stopPropagation();
+                  onChildDialogClick();
                 }}
               >
-                <FabricIcon
-                  style={{ lineHeight: '16px', fontSize: '16px' }}
-                  iconName="OpenSource"
-                  data-testid="OpenIcon"
-                  onClick={e => {
-                    e.stopPropagation();
-                    onChildDialogClick();
-                  }}
-                />
-                <span
-                  style={{
-                    cursor: 'pointer',
-                    color: 'blue',
-                  }}
-                  onClick={e => {
-                    e.stopPropagation();
-                    onChildDialogClick();
-                  }}
-                >
-                  {childDialog}
-                </span>
-              </div>
-            )}
-          </div>
+                {childDialog}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
