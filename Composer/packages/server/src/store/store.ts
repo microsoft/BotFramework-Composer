@@ -10,7 +10,7 @@ const dataStorePath =
     ? path.resolve(process.env.HOME, './site/data.json')
     : path.resolve(__dirname, '../../data.json');
 
-const initData = process.env.HOME ? abhInitData : localInitData;
+const initData = isHostedInAzure ? abhInitData : localInitData;
 
 // create data.json if not exits
 if (!fs.existsSync(dataStorePath)) {
