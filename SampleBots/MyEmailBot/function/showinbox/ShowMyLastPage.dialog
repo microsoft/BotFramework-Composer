@@ -8,7 +8,7 @@
         "steps": [
           {
             "$type" : "Microsoft.SendActivity",
-            "activity" : "This is the first page !"
+            "activity" : "This Is the First Page !"
           },
           {
             "$type": "Microsoft.EndDialog"

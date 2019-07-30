@@ -7,19 +7,23 @@
         "GetMyEmail",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the Preview of Your addOrdinal({user.pages}+1) Page Emails."
+            "activity": "[EmailStatistics]"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[0].subject}"
+            "activity": "[PageOrdinalNumber]"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[1].subject}"
+            "activity": "{user.emails[0].subject} . {length(user.emails[0].bodypreview)} words"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.emails[2].subject}"
+            "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.emails[2].subject} . {length(user.emails[2].bodypreview)} words"
         },
         {
             "$type": "Microsoft.ChoiceInput",

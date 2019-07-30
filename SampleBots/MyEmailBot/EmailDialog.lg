@@ -5,7 +5,7 @@
     subtitle= Do you Want to Manage Your Emails Effectively?
     text= I can Help Do Things like Checking, Replying, Forwarding and Sending Emails.
     images= https://picsum.photos/300/200
-    buttons = Show Inbox Emails | Show Sent Items | Send Emails | Help 
+    buttons = Show Inbox Emails | Show Sent Items | Send Emails | Help | Cancel]
 ```
 
 # help
@@ -52,6 +52,11 @@
 }
 ]
 ```
+# EmailStatistics
+- {toUpper('hi, i have checked your email.')} Total Number: {user.EmailCount} Emails in {add(div(user.EmailCount, user.ItemsPerPage), 1)} Pages. 
 
-# pagenumber
-- addOrdinal({user.pages}+1)
+# PageOrdinalNumber
+- This is the Preview of Your {addOrdinal(user.pages+1)} Page Emails.
+
+# SentPageOrdinalNumber
+- This is the Preview of Your {addOrdinal(int(user.Sentpages)+1)} Page Emails.

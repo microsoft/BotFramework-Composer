@@ -7,7 +7,7 @@
         "condition": "dialog.token == null",
         "steps": [
           {
-            "$type": "Microsoft.OAuthInput",
+            "$type": "Microsoft.OAuthPrompt",
             "ConnectionName": "connection_t-hahan",
             "Title": "Log in",
             "Text": "Please Log in to Your Email Account",
@@ -20,7 +20,7 @@
         "url": "https://graph.microsoft.com/v1.0/me/messages/{user.SelectedEmail.id}/forward",
         "method": "POST",
         "header": {
-          "Authorization": "Bearer {dialog.token.token}"
+          "Authorization": "Bearer {dialog.token.Token}"
         },
         "body": {
           "comment": "{user.fwContent}",

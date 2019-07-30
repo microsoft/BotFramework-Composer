@@ -7,7 +7,7 @@
         "GetMySentItems",
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "This is the preview of your page {user.Sentpages} sent items."
+            "activity": "[SentPageOrdinalNumber]"
         },
         {
             "$type": "Microsoft.SendActivity",
