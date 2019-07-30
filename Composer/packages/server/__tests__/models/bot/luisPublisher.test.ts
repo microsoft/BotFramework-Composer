@@ -53,7 +53,7 @@ beforeEach(() => {
 
 afterEach(mock.restore);
 
-describe('getLuisStatus', () => {
+describe.skip('getLuisStatus', () => {
   it('will get luis status', async () => {
     const luPublisher = new LuPublisher(bot2Dir, storage);
     const settings = await luPublisher.getLuisStatus();
@@ -62,7 +62,7 @@ describe('getLuisStatus', () => {
   });
 });
 
-describe('getUnpublisedFiles', () => {
+describe.skip('getUnpublisedFiles', () => {
   it('will get unpublished files when no setting.json exist', async () => {
     const lufiles = [
       {
@@ -96,7 +96,7 @@ describe('getUnpublisedFiles', () => {
   });
 });
 
-describe('update', () => {
+describe.skip('update', () => {
   it('will not update the statuse if no setting.json', async () => {
     const luPublisher = new LuPublisher(bot1Dir, storage);
     await luPublisher.update(true, luFile1Path, luisConfig);

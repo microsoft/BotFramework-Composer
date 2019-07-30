@@ -68,6 +68,7 @@ export class LuPublisher {
       if (
         !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
         !setting.status[appName] ||
+        !setting.status[appName].state ||
         setting.status[appName].state === FileState.UNPUBLISHED
       ) {
         result.push(file);
