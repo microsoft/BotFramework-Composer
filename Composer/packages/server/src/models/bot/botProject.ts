@@ -1,5 +1,6 @@
 import fs from 'fs';
 
+import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -191,8 +192,10 @@ export class BotProject {
     }
 
     await this._updateFile(luFile.relativePath, content);
-    this.luPublisher.update(luFile.relativePath);
-    return this.luIndexer.getLuFiles();
+    const luFiles = this.luIndexer.getLuFiles();
+    const currentLufile = luFiles.find(lu => lu.id === id);
+    this.luPublisher.update(isEqual(currentLufile, luFile), luFile.relativePath);
+    return luFiles;
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {

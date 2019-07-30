@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 import { IConfig } from 'lubuild/typings/lib/IConfig';
 import { keys, replace } from 'lodash';
 import { runBuild } from 'lubuild';
@@ -27,28 +25,21 @@ export class LuPublisher {
     this.storage = storage;
   }
 
-  public update = async (path: string) => {
-    try {
-      const setting: ILuisSettings = await this._getSettings();
-      if (setting === null) return true;
+  public update = async (isUpdated: boolean, path: string) => {
+    if (!isUpdated) return;
 
-      const name = await this._getAppName(path);
-      const status = setting.status[name];
-      if (status && status.status === FileState.UPDATED) {
-        return true;
-      }
+    const setting: ILuisSettings = await this._getSettings();
+    if (setting === null) return;
 
-      const newChecksum = await this._checksum(this.luPath + '/' + path);
-      if (newChecksum !== status.checksum) {
-        status.checksum = newChecksum;
-        status.status = FileState.UPDATED;
-      }
-      setting.status[name] = status;
-      await this._setSettings(setting);
-      return true;
-    } catch (error) {
-      return error;
+    const name = await this._getAppName(path);
+    const status = setting.status[name];
+    if (status && status.state === FileState.UNPUBLISHED) {
+      return;
     }
+
+    status.state = FileState.UNPUBLISHED;
+    setting.status[name] = status;
+    await this._setSettings(setting);
   };
 
   public publish = async (luisConfig: ILuisConfig, luFiles: LUFile[]) => {
@@ -74,7 +65,7 @@ export class LuPublisher {
       if (
         !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
         !setting.status[appName] ||
-        setting.status[appName].status === FileState.UPDATED
+        setting.status[appName].state === FileState.UNPUBLISHED
       ) {
         result.push(file);
       }
@@ -137,7 +128,7 @@ export class LuPublisher {
           'com' as AzureClouds,
           setting.luis[name]
         );
-        setting.status[name] = { version: appInfo.activeVersion, checksum: '', status: FileState.LATEST };
+        setting.status[name] = { version: appInfo.activeVersion, state: FileState.PUBLISHED };
       }
     }
     await this._setSettings(setting);
@@ -176,14 +167,6 @@ export class LuPublisher {
     } else {
       return null;
     }
-  };
-
-  private _checksum = async (path: string) => {
-    const text = await this.storage.readFile(path);
-    return crypto
-      .createHash('md5')
-      .update(text)
-      .digest('hex');
   };
 
   private _getCultureFromPath = (file: string): string | null => {
