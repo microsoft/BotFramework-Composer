@@ -52,7 +52,7 @@ context('SwitchCondition', () => {
 
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
-        .should('have.length', 4);
+        .should('have.length', 3);
 
       // re-order steps
       const btn0 = cy
@@ -64,6 +64,7 @@ context('SwitchCondition', () => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
           .click({ force: true });
+        cy.wait(100);
       });
 
       const btn2 = cy
@@ -75,6 +76,7 @@ context('SwitchCondition', () => {
         cy.get(`#${menuId}`)
           .getByText('Move Up')
           .click({ force: true });
+        cy.wait(100);
       });
 
       // assert that the steps are in correct order
@@ -93,6 +95,7 @@ context('SwitchCondition', () => {
 
       // Add another new case
       cy.getByText('Add New Case').click({ force: true });
+      cy.wait(100);
       cy.getByLabelText('Value')
         .type('Case2')
         .type('{enter}');
@@ -109,12 +112,13 @@ context('SwitchCondition', () => {
         cy.get(`#${menuId}`)
           .getByText('Move Down')
           .click({ force: true });
+        cy.wait(100);
       });
 
-      cy.wait(100);
-      cy.get('[role="separator"]')
+      cy.get('[role="separator"]:contains(Branch)')
+        .filter(':not(:contains(Branch: Switch))')
         .should('have.length', 3)
-        .eq(2)
+        .eq(1)
         .should('have.text', 'Branch: Case1');
 
       cy.wait(100);
@@ -129,12 +133,13 @@ context('SwitchCondition', () => {
         cy.get(`#${menuId}`)
           .getByText('Remove')
           .click({ force: true });
+        cy.wait(100);
       });
 
-      cy.wait(100);
-      cy.get('[role="separator"]')
-        .should('have.length', 3)
-        .eq(2)
+      cy.get('[role="separator"]:contains(Branch)')
+        .filter(':not(:contains(Branch: Switch))')
+        .should('have.length', 2)
+        .eq(1)
         .should('have.text', 'Default Branch');
     });
   });
