@@ -194,8 +194,9 @@ export class BotProject {
 
     await this._updateFile(luFile.relativePath, content);
     const luFiles = this.luIndexer.getLuFiles();
-    const currentLufile = luFiles.find(lu => lu.id === id);
-    this.luPublisher.update(!isEqual(currentLufile, luFile), luFile.relativePath);
+    const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
+    const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
+    this.luPublisher.update(isUpdate, luFile.relativePath);
     return luFiles;
   };
 
