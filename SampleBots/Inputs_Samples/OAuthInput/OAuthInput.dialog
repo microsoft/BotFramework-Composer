@@ -34,7 +34,7 @@
                 "updatedAt": "2019-07-16T19:31:51.650Z",
                 "id": "199270"
               },
-              "connectionName": "Outlook",
+              "ConnectionName": "Outlook",
               "title": "Log in",
               "text": "Please log in to your email account",
               "property": "user.token"
