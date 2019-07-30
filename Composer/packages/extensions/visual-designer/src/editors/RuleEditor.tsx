@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { defaultNodeProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
+import { defaultNodeProps } from '../components/shared/sharedProps';
+import { Collapse } from '../components/nodes/templates/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
 
 import { StepEditor } from './StepEditor';
-
-const ColMargin = 10;
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformObiRules(data);
@@ -28,18 +27,19 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       style={{
         position: 'relative',
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {stepGroup ? (
-        <div style={{ margin: ColMargin }}>
+      {stepGroup && (
+        <Collapse text="Actions">
           <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
-        </div>
-      ) : null}
+        </Collapse>
+      )}
     </div>
   );
 };
