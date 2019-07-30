@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useMemo, FC } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
@@ -26,7 +28,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideS
 
   return (
     <div
-      style={{
+      css={{
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
@@ -38,7 +40,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideS
       }}
     >
       {ruleGroup && <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={onEvent} />}
-      <div style={{ height: 50 }} />
+      <div css={{ height: 50 }} />
       {!hideSteps && stepGroup && (
         <Collapse text="Actions">
           <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />

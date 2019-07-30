@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
@@ -25,7 +27,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
 
   return (
     <div
-      style={{
+      css={{
         position: 'relative',
         display: 'flex',
         flexDirection: 'row',
@@ -36,7 +38,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
     >
       {stepGroup ? (
-        <div style={{ margin: ColMargin }}>
+        <div css={{ margin: ColMargin }}>
           <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
         </div>
       ) : null}
