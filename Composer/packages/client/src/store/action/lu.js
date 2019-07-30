@@ -1,10 +1,15 @@
 import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
+import LuisStorage from './../../utils/luisStorage';
 
-export async function updateLuFile({ dispatch }, { id, content }) {
+export async function updateLuFile({ dispatch }, { id, content }, botName) {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
+    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, {
+      id,
+      content,
+      luisConfig: LuisStorage.get(botName),
+    });
     dispatch({
       type: ActionTypes.UPDATE_LU_SUCCESS,
       payload: { response },

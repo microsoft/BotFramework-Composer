@@ -180,7 +180,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
+  public updateLuFile = async (id: string, content: string, config: ILuisConfig): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -196,7 +196,7 @@ export class BotProject {
     const luFiles = this.luIndexer.getLuFiles();
     const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
     const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
-    this.luPublisher.update(isUpdate, luFile.relativePath);
+    this.luPublisher.update(isUpdate, luFile.relativePath, config);
     return luFiles;
   };
 

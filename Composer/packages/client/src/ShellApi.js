@@ -250,7 +250,7 @@ export function ShellApi() {
 
     switch ([fileTargetType, fileChangeType].join(',')) {
       case [LU, UPDATE].join(','):
-        return await updateLuFile(payload);
+        return await updateLuFile(payload, botName);
 
       case [LG, UPDATE].join(','):
         return await updateLgFile(payload);

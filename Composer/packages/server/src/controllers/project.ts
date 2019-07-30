@@ -198,7 +198,11 @@ async function removeLgFile(req: Request, res: Response) {
 async function updateLuFile(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
+      const luFiles = await ProjectService.currentBotProject.updateLuFile(
+        req.body.id,
+        req.body.content,
+        req.body.luisConfig
+      );
       res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({ error: error.message });

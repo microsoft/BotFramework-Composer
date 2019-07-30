@@ -25,13 +25,16 @@ export class LuPublisher {
     this.storage = storage;
   }
 
-  public update = async (isUpdated: boolean, path: string) => {
+  public update = async (isUpdated: boolean, path: string, config: ILuisConfig) => {
     if (!isUpdated) return;
 
+    this.setLuisConfig(config);
     const setting: ILuisSettings = await this._getSettings();
     if (setting === null) return;
 
     const name = await this._getAppName(path);
+    if (!name) return;
+
     const status = setting.status[name];
     if (status && status.state === FileState.UNPUBLISHED) {
       return;
