@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { FC, ComponentClass, useContext } from 'react';
+import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
 import {
@@ -58,7 +59,7 @@ export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
 
   return (
     <div
-      className="node-renderer-container"
+      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;
         position: relative;
