@@ -1,4 +1,5 @@
 import { css } from '@emotion/core';
+
 import { Collapse } from './Collapse';
 
 export const collapseContainer = css`
