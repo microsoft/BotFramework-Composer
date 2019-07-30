@@ -114,7 +114,7 @@ describe('<RuleCard />', () => {
         const card = await findByTestId('IconCard');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Focus, id]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
     });
     describe('data has steps', () => {
@@ -147,7 +147,7 @@ describe('<RuleCard />', () => {
         const card = await findByTestId('IconCard');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Focus, id]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
     });
   });
