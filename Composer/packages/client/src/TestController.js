@@ -165,7 +165,7 @@ export const TestController = () => {
               {error.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {formatMessage(error.message)}
+              {error.message}
             </p>
             <Stack
               horizontal
