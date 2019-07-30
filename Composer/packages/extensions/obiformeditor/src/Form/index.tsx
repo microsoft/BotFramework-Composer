@@ -82,6 +82,7 @@ const Form: React.FunctionComponent<FormProps> = props => {
         uiSchema={uiSchema}
         widgets={widgets as { [key: string]: Widget }}
         formatData={removeUndefinedOrEmpty}
+        safeRenderCompletion
         {...rest}
       />
     </div>
