@@ -49,7 +49,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
         break;
       case NodeEventTypes.Drop:
         handler = e => {
-          const dialog = drop(data, e.id, e.position, e.source.data.$type, e.copy);
+          const dialog = drop(data, e.id, e.position, e.source, e.copy);
           onChange(dialog);
           onSelect(`${e.id}[${e.position || 0}]`);
         };
