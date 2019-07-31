@@ -28,10 +28,9 @@ Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Open').click();
   cy.get('[data-testid="SelectLocation"]').within(() => {
-    cy.get(`input[aria-label="${botName}"]`).click();
+    cy.getByText(botName).click({ force: true });
   });
-  cy.get('[data-testid="SelectLocationOpen"]').click();
-  if (botName === 'ToDoLuisBot') cy.get('[data-testid="publish-LUIS-models-cancel"]').click();
+  cy.getByTestId('SelectLocationOpen').click({ force: true });
   cy.wait(500);
 });
 

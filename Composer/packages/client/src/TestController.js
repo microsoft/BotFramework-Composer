@@ -16,7 +16,7 @@ import formatMessage from 'format-message';
 import LuisStorage from './utils/luisStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { LuisConfig, Text } from './constants';
+import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 
@@ -48,7 +48,7 @@ export const TestController = () => {
   const botActionRef = useRef(null);
   const { botName, botStatus, luFiles, luStatus, dialogs, oAuth, toStartBot } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
-  const connected = botStatus === 'connected';
+  const connected = botStatus === BotStatus.connected;
 
   useEffect(() => {
     toStartBot && handleClick();
