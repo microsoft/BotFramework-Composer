@@ -56,6 +56,7 @@ afterEach(mock.restore);
 describe.skip('getLuisStatus', () => {
   it('will get luis status', async () => {
     const luPublisher = new LuPublisher(bot2Dir, storage);
+    luPublisher.setLuisConfig(luisConfig);
     const settings = await luPublisher.getLuisStatus();
     expect(settings[0].name).toEqual('a.lu');
     expect(settings[0].state).toBe('published');
@@ -99,17 +100,19 @@ describe.skip('getUnpublisedFiles', () => {
 describe.skip('update', () => {
   it('will not update the statuse if no setting.json', async () => {
     const luPublisher = new LuPublisher(bot1Dir, storage);
-    await luPublisher.update(true, luFile1Path, luisConfig);
+    luPublisher.setLuisConfig(luisConfig);
+    await luPublisher.update(true, luFile1Path);
     const settings = await luPublisher.getLuisStatus();
     expect(settings).toEqual([]);
   });
 
   it('update the statuse if setting.json exist', async () => {
     const luPublisher = new LuPublisher(bot2Dir, storage);
-    await luPublisher.update(false, luFile2Path, luisConfig);
+    luPublisher.setLuisConfig(luisConfig);
+    await luPublisher.update(false, luFile2Path);
     let settings = await luPublisher.getLuisStatus();
     expect(settings[0].state).toBe('published');
-    await luPublisher.update(true, luFile2Path, luisConfig);
+    await luPublisher.update(true, luFile2Path);
     settings = await luPublisher.getLuisStatus();
     expect(settings[0].state).toBe('unpublished');
   });

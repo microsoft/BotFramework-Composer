@@ -180,7 +180,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public updateLuFile = async (id: string, content: string, config: ILuisConfig): Promise<LUFile[]> => {
+  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -196,7 +196,7 @@ export class BotProject {
     const luFiles = this.luIndexer.getLuFiles();
     const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
     const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
-    this.luPublisher.update(isUpdate, luFile.relativePath, config);
+    this.luPublisher.update(isUpdate, luFile.relativePath);
     return luFiles;
   };
 
@@ -215,9 +215,12 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public publishLuis = async (config: ILuisConfig) => {
-    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
+  public setLuisConfig = async (config: ILuisConfig) => {
     this.luPublisher.setLuisConfig(config);
+  };
+
+  public publishLuis = async () => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
     if (unpublished.length === 0) {
@@ -240,7 +243,7 @@ export class BotProject {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
-    return await this.luPublisher.publish(config, unpublished);
+    return await this.luPublisher.publish(unpublished);
   };
 
   public checkLuisPublished = async () => {

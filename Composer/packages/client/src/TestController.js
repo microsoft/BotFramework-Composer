@@ -48,7 +48,7 @@ export const TestController = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { connectBot, reloadBot, publishLuis, startBot, setLuisConfig } = actions;
   const connected = botStatus === 'connected';
 
   useEffect(() => {
@@ -81,15 +81,15 @@ export const TestController = () => {
       if (!luisPublishSucceed || config[LuisConfig.AUTHORING_KEY] === '') {
         setModalOpen(true);
       } else {
-        await publishAndReload(config);
+        await publishAndReload();
       }
     } else {
       await handleLoadBot();
     }
   }
 
-  async function publishAndReload(config) {
-    if (await handlePublish(config)) {
+  async function publishAndReload() {
+    if (await handlePublish()) {
       setLuisPublishSucceed(true);
       await handleLoadBot();
     } else {
@@ -97,10 +97,11 @@ export const TestController = () => {
     }
   }
 
-  async function handlePublish(config) {
+  async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await publishLuis(config);
+      await setLuisConfig(botName);
+      await publishLuis();
       return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
