@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BaseEditor, { BaseEditorProps } from './BaseEditor';
+import { BaseEditor, BaseEditorProps } from './BaseEditor';
 
 const LU_HELP =
   'https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format';

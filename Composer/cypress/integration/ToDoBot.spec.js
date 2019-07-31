@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context.skip('ToDo Bot', () => {
+context('ToDo Bot', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
@@ -8,10 +8,10 @@ context.skip('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/Hi! I'm a ToDo bot./).should('exist');
+      cy.getByText('Events (8)').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Actions').should('exist');
+      cy.getByText('ToDoBot').should('exist');
     });
   });
 
@@ -19,11 +19,15 @@ context.skip('ToDo Bot', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="AddToDo"]').click();
     });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/Successfully added a todo named/).should('exist');
-    });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Actions').should('exist');
+      cy.getByText('AddToDo').should('exist');
+    });
+    cy.withinEditor('VisualEditor', () => {
+      cy.getByText('Handle events: beginDialog').click();
+      cy.wait(100);
+      cy.getByText('5 actions').click();
+      cy.wait(100);
+      cy.getByText(/Successfully added a todo named/).should('exist');
     });
   });
 
@@ -31,11 +35,15 @@ context.skip('ToDo Bot', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="ClearToDos"]').click();
     });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Successfully cleared items in the Todo List.').should('exist');
-    });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Edit an Array Property').should('exist');
+      cy.getByText('ClearToDos').should('exist');
+    });
+    cy.withinEditor('VisualEditor', () => {
+      cy.getByText('Handle events: beginDialog').click();
+      cy.wait(100);
+      cy.getByText('2 actions').click();
+      cy.wait(100);
+      cy.getByText(/Successfully cleared items/).should('exist');
     });
   });
 
@@ -43,23 +51,31 @@ context.skip('ToDo Bot', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="DeleteToDo"]').click();
     });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Edit an Array Property').should('exist');
-    });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Set a Property').should('exist');
+      cy.getByText('DeleteToDo').should('exist');
+    });
+    cy.withinEditor('VisualEditor', () => {
+      cy.getByText('Handle events: beginDialog').click();
+      cy.wait(100);
+      cy.getByText('4 actions').click();
+      cy.wait(100);
+      cy.getByText('Edit an Array Property').should('exist');
     });
   });
 
-  it.skip('can open the ShowToDos dialog', () => {
+  it('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.get('[title="ShowToDos"]').click();
     });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText('You have no todos.').should('exist');
-    });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('Branch: If/Else').should('exist');
+      cy.getByText('ShowToDos').should('exist');
+    });
+    cy.withinEditor('VisualEditor', () => {
+      cy.getByText('Handle events: beginDialog').click();
+      cy.wait(100);
+      cy.getByText('1 action: Branch: If/Else').click();
+      cy.wait(100);
+      cy.getByText('You have no todos.').should('exist');
     });
   });
 });

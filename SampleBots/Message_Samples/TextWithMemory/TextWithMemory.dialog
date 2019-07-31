@@ -3,32 +3,41 @@
   "$designer": {
     "createdAt": "2019-07-03T06:50:20.992Z",
     "updatedAt": "2019-07-16T19:38:00.695Z",
-    "id": "593555",
-    "name": "TextWithMemory"
+    "id": "593555"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.SetProperty",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-16T19:38:02.168Z",
-        "updatedAt": "2019-07-16T19:38:07.364Z",
-        "id": "765039",
-        "name": "Set a Property"
+        "id": "822789",
+        "updatedAt": "2019-07-22T07:54:44.419Z"
       },
-      "property": "user.message",
-      "value": "'This is a text saved in memory.'"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-16T19:38:08.970Z",
-        "updatedAt": "2019-07-16T19:38:13.828Z",
-        "id": "822060",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-822060]"
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-16T19:38:02.168Z",
+            "updatedAt": "2019-07-16T19:38:07.364Z",
+            "id": "765039"
+          },
+          "property": "user.message",
+          "value": "'This is a text saved in memory.'"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:38:08.970Z",
+            "updatedAt": "2019-07-16T19:38:13.828Z",
+            "id": "822060"
+          },
+          "activity": "[bfdactivity-822060]"
+        }
+      ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

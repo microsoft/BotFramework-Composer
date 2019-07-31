@@ -4,16 +4,22 @@ import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
 import { Store } from '../../store/index';
+import { resolveToBasePath } from '../../utils/fileUtil';
+import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import { Tree } from './../../components/Tree';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
+
+const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
@@ -84,7 +90,7 @@ export const LUPage = props => {
     }
 
     if (!activeDialog && subPath && dialogs.length) {
-      navigate('/language-understanding');
+      navigate(mapNavPath('/language-understanding'));
     }
 
     setNewContent(null);
@@ -104,9 +110,9 @@ export const LUPage = props => {
       return;
     }
     if (id === '_all') {
-      navigate(`/language-understanding`);
+      navigate(mapNavPath('/language-understanding'));
     } else {
-      navigate(`/language-understanding/${id}`);
+      navigate(mapNavPath(`/language-understanding/${id}`));
     }
   }
 
@@ -140,7 +146,7 @@ export const LUPage = props => {
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
   function onTableViewWantEdit(template) {
-    navigate(`/language-understanding/${template.fileId}`);
+    navigate(mapNavPath(`language-understanding/${template.fileId}`));
     setTextMode(true);
   }
 
@@ -158,25 +164,28 @@ export const LUPage = props => {
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
-          {UIShowEditingToolBar && (
+          {textMode && (
             <Fragment>
-              <ActionButton
+              <PrimaryButton
                 iconProps={{
                   iconName: 'Save',
                 }}
                 split={true}
                 onClick={() => onSave()}
+                disabled={!UIShowEditingToolBar}
+                styles={{ root: { marginRight: '10px' } }}
               >
-                Save file
-              </ActionButton>
-              <ActionButton
+                {formatMessage('Save')}
+              </PrimaryButton>
+              <DefaultButton
                 iconProps={{
                   iconName: 'Undo',
                 }}
                 onClick={() => discardChanges()}
+                disabled={!UIShowEditingToolBar}
               >
-                Discard changes
-              </ActionButton>
+                {formatMessage('Discard changes')}
+              </DefaultButton>
             </Fragment>
           )}
           <Toggle
@@ -191,17 +200,22 @@ export const LUPage = props => {
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
-        <div>
-          <Nav
-            onLinkClick={(ev, item) => {
-              onSelect(item.id);
-              ev.preventDefault();
-            }}
-            selectedKey={activePath}
-            groups={navLinks}
-            className={'dialogNavTree'}
-            data-testid={'dialogNavTree'}
-          />
+        <div css={projectContainer}>
+          <Tree variant="large" extraCss={projectTree}>
+            <div css={projectWrapper}>
+              <Nav
+                onLinkClick={(ev, item) => {
+                  onSelect(item.id);
+                  ev.preventDefault();
+                }}
+                styles={projectWrapper}
+                selectedKey={activePath}
+                groups={navLinks}
+                className={'dialogNavTree'}
+                data-testid={'dialogNavTree'}
+              />
+            </div>
+          </Tree>
         </div>
         <Content
           file={luFile}

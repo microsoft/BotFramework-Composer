@@ -3,116 +3,121 @@
   "$designer": {
     "createdAt": "2019-06-07T16:18:34.824Z",
     "updatedAt": "2019-07-16T19:50:43.791Z",
-    "id": "039096",
-    "name": "SwitchCondition"
+    "id": "039096"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.ChoiceInput",
-      "property": "user.style",
-      "prompt": "Please select a value from below:",
-      "maxTurnCount": 0,
-      "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "outputFormat": "value",
-      "choices": [
-        {
-          "value": "Test1"
-        },
-        {
-          "value": "Test2"
-        },
-        {
-          "value": "Test3"
-        }
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "851391",
+        "updatedAt": "2019-07-22T08:05:10.334Z"
+      },
+      "events": [
+        "beginDialog"
       ],
-      "appendChoices": true,
-      "defaultLocale": "en-us",
-      "style": "List",
-      "choiceOptions": {
-        "inlineSeparator": ", ",
-        "inlineOr": " or ",
-        "inlineOrMore": ", or ",
-        "includeNumbers": true
-      },
-      "recognizerOptions": {
-        "noValue": false
-      },
-      "$designer": {
-        "createdAt": "2019-07-16T19:57:48.037Z",
-        "updatedAt": "2019-07-16T19:57:51.482Z",
-        "id": "084631",
-        "name": "Prompt with multi-choice"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:55:12.076Z",
-        "updatedAt": "2019-07-16T19:57:55.398Z",
-        "id": "160914",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-160914]"
-    },
-    {
-      "$type": "Microsoft.SwitchCondition",
-      "$designer": {
-        "createdAt": "2019-07-01T21:55:13.229Z",
-        "updatedAt": "2019-07-16T19:57:58.231Z",
-        "id": "448444",
-        "name": "Branch: If/Else"
-      },
-      "condition": "user.style",
-      "cases": [
+      "steps": [
         {
-          "value": "Test1",
-          "steps": [
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.style",
+          "prompt": "Please select a value from below:",
+          "maxTurnCount": 0,
+          "alwaysPrompt": true,
+          "allowInterruptions": true,
+          "outputFormat": "value",
+          "choices": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:55:23.134Z",
-                "updatedAt": "2019-07-16T19:58:02.619Z",
-                "id": "576002",
-                "name": "Send an Activity"
-              },
-              "activity": "[bfdactivity-576002]"
+              "value": "Test1"
+            },
+            {
+              "value": "Test2"
+            },
+            {
+              "value": "Test3"
             }
-          ]
+          ],
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          },
+          "$designer": {
+            "createdAt": "2019-07-16T19:57:48.037Z",
+            "updatedAt": "2019-07-16T19:57:51.482Z",
+            "id": "084631"
+          }
         },
         {
-          "value": "Test2",
-          "steps": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:57:26.930Z",
-                "updatedAt": "2019-07-16T19:58:07.532Z",
-                "id": "677412",
-                "name": "Send an Activity"
-              },
-              "activity": "[bfdactivity-677412]"
-            }
-          ]
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:55:12.076Z",
+            "updatedAt": "2019-07-16T19:57:55.398Z",
+            "id": "160914"
+          },
+          "activity": "[bfdactivity-160914]"
         },
         {
-          "value": "Test3",
-          "steps": [
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T21:55:13.229Z",
+            "updatedAt": "2019-07-16T19:57:58.231Z",
+            "id": "448444"
+          },
+          "condition": "user.style",
+          "cases": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "createdAt": "2019-07-01T21:57:33.404Z",
-                "updatedAt": "2019-07-16T19:58:11.985Z",
-                "id": "700082",
-                "name": "Send an Activity"
-              },
-              "activity": "[bfdactivity-700082]"
+              "value": "Test1",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:55:23.134Z",
+                    "updatedAt": "2019-07-16T19:58:02.619Z",
+                    "id": "576002"
+                  },
+                  "activity": "[bfdactivity-576002]"
+                }
+              ]
+            },
+            {
+              "value": "Test2",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:57:26.930Z",
+                    "updatedAt": "2019-07-16T19:58:07.532Z",
+                    "id": "677412"
+                  },
+                  "activity": "[bfdactivity-677412]"
+                }
+              ]
+            },
+            {
+              "value": "Test3",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-07-01T21:57:33.404Z",
+                    "updatedAt": "2019-07-16T19:58:11.985Z",
+                    "id": "700082"
+                  },
+                  "activity": "[bfdactivity-700082]"
+                }
+              ]
             }
           ]
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

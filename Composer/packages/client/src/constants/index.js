@@ -1,6 +1,7 @@
 import formatMessage from 'format-message';
 
-export const BASEURL = 'http://localhost:5000/api';
+export const BASEPATH = process.env.PUBLIC_URL || '/';
+export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
 
 /**
  * Global ActionTypes Defination Instruction.
@@ -37,6 +38,8 @@ export const ActionTypes = {
   GET_RECENT_PROJECTS_FAILURE: 'GET_RECENT_PROJECTS_FAILURE',
   UPDATE_DIALOG: 'UPDATE_DIALOG',
   UPDATE_DIALOG_FAILURE: 'UPDATE_DIALOG_FAILURE',
+  CREATE_DIALOG_BEGIN: 'CREATE_DIALOG_BEGIN',
+  CREATE_DIALOG_CANCEL: 'CREATE_DIALOG_CANCEL',
   CREATE_DIALOG_SUCCESS: 'CREATE_DIALOG_SUCCESS',
   CREATE_DIALOG_FAILURE: 'CREATE_DIALOG_FAILURE',
   REMOVE_DIALOG_SUCCESS: 'REMOVE_DIALOG_SUCCESS',
@@ -77,12 +80,13 @@ export const ActionTypes = {
   RELOAD_BOT_FAILURE: 'RELOAD_BOT_FAILURE',
   UPDATE_OAUTH: 'UPDATE_OAUTH',
   SET_ERROR: 'SET_ERROR',
+  TO_START_BOT: 'TO_START_BOT',
 };
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application: 
+  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
     (projectname-environment-LUfilename)`),
-  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with 
+  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),

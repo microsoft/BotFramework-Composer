@@ -4,7 +4,7 @@ import * as TodoBotMain from './todoBot.main.json';
 
 test('should return safely when input null value', () => {
   const result = transformRootDialog(null);
-  expect(result).toEqual({});
+  expect(result).toBeNull();
 });
 
 test('should parse stepGroup when input TodoBotMain with steps', () => {
@@ -13,10 +13,11 @@ test('should parse stepGroup when input TodoBotMain with steps', () => {
     steps: [{ $type: 'any' }],
   };
   const result = transformRootDialog(jsonWithSteps);
+  if (!result) throw new Error('transformRootDialog got null result.');
+
   expect(result.stepGroup).toBeTruthy();
   expect(result.stepGroup.id).toEqual('steps');
   expect(result.stepGroup.json.children.length === jsonWithSteps.steps.length).toBeTruthy();
-  expect(result.stepGroup.json.children[0].id).toEqual('steps[0]');
 });
 
 test('should parse ruleGroup and stepGroup when input TodoBotMain without recognizer', () => {
@@ -25,9 +26,9 @@ test('should parse ruleGroup and stepGroup when input TodoBotMain without recogn
     recognizer: null,
   };
   const result = transformRootDialog(jsonWithoutRecognizer);
-  expect(result.recognizerGroup).toBeFalsy();
+  if (!result) throw new Error('transformRootDialog got null result.');
+
   expect(result.ruleGroup).toBeTruthy();
   expect(result.ruleGroup.id).toEqual('rules');
   expect(result.ruleGroup.json.children.length === jsonWithoutRecognizer.rules.length).toBeTruthy();
-  expect(result.ruleGroup.json.children[0].id).toEqual('rules[0]');
 });

@@ -10,7 +10,7 @@ import { RuleCard } from './templates/RuleCard';
 // Generate the title displayed in the graph
 // If a custom title has been specified, use this
 // otherwise, displays a generic message about the unknown intent rule.
-function renderTitle(data) {
+function renderTitle(data): string {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else {
@@ -19,7 +19,7 @@ function renderTitle(data) {
   }
 }
 
-export const UnknownIntentRule: FunctionComponent<NodeProps> = ({ id, data, focusedId, onEvent }) => {
-  return <RuleCard id={id} data={data} label={renderTitle(data)} focusedId={focusedId} onEvent={onEvent} />;
+export const UnknownIntentRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
+  return <RuleCard id={id} data={data} label={renderTitle(data)} focused={focused} onEvent={onEvent} />;
 };
 UnknownIntentRule.defaultProps = defaultNodeProps;

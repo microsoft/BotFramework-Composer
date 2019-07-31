@@ -21,7 +21,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   value?: string;
 }
 
-export default function BaseEditor(props: BaseEditorProps) {
+export function BaseEditor(props: BaseEditorProps) {
   const { onChange, placeholder, value } = props;
   const options = Object.assign({}, defaultOptions, props.options);
 
@@ -56,7 +56,12 @@ export default function BaseEditor(props: BaseEditorProps) {
     <div
       className="CodeEditor"
       ref={containerRef}
-      style={{ height: '100%', border: `1px solid ${NeutralColors.gray30}`, overflow: 'hidden' }}
+      style={{
+        height: '100%',
+        border: `1px solid ${NeutralColors.gray30}`,
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
     >
       <MonacoEditor {...props} {...rect} value={value || placeholder} onChange={onChange} options={options} />
     </div>

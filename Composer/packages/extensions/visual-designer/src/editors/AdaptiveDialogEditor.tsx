@@ -1,32 +1,26 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useMemo, FunctionComponent } from 'react';
+import React, { useMemo, FC } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
+import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
 
-const calculateNodeMap = (_, data) => {
-  const { ruleGroup, stepGroup } = transformRootDialog(data);
+const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
+  const result = transformRootDialog(data);
+  if (!result) return {};
+
+  const { ruleGroup, stepGroup } = result;
   return {
     ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
 };
 
-export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  getLgTemplates,
-  onEvent,
-  isRoot,
-}): JSX.Element => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideSteps }): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { stepGroup, ruleGroup } = nodeMap;
 
@@ -43,27 +37,11 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {ruleGroup && (
-        <EventsEditor
-          key={ruleGroup.id}
-          id={ruleGroup.id}
-          data={ruleGroup.data}
-          focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
-          onEvent={onEvent}
-        />
-      )}
+      {ruleGroup && <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={onEvent} />}
       <div style={{ height: 50 }} />
-      {!isRoot && stepGroup && (
+      {!hideSteps && stepGroup && (
         <Collapse text="Actions">
-          <StepEditor
-            key={stepGroup.id}
-            id={stepGroup.id}
-            data={stepGroup.data}
-            focusedId={focusedId}
-            getLgTemplates={getLgTemplates}
-            onEvent={onEvent}
-          />
+          <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
         </Collapse>
       )}
     </div>

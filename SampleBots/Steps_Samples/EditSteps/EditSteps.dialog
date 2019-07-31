@@ -3,54 +3,63 @@
   "$designer": {
     "createdAt": "2019-07-01T21:32:33.179Z",
     "updatedAt": "2019-07-16T19:49:37.642Z",
-    "id": "519891",
-    "name": "EditSteps"
+    "id": "519891"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.EditSteps",
+      "$type": "Microsoft.EventRule",
       "$designer": {
         "createdAt": "2019-07-16T19:52:15.850Z",
         "updatedAt": "2019-07-16T19:52:21.863Z",
-        "id": "250234",
-        "name": "Modify active dialog"
+        "id": "250234"
       },
-      "changeType": "InsertSteps",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.TextInput",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "property": "user.name"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.EditSteps",
-      "$designer": {
-        "createdAt": "2019-07-01T21:33:10.633Z",
-        "updatedAt": "2019-07-16T19:52:26.709Z",
-        "id": "443878",
-        "name": "Modify active dialog"
-      },
-      "changeType": "AppendSteps",
-      "steps": [
+          "$type": "Microsoft.EditSteps",
+          "$designer": {
+            "createdAt": "2019-07-16T19:52:15.850Z",
+            "updatedAt": "2019-07-16T19:52:21.863Z",
+            "id": "250234"
+          },
+          "changeType": "InsertSteps",
+          "steps": [
+            {
+              "$type": "Microsoft.TextInput",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "property": "user.name"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditSteps",
+          "$designer": {
+            "createdAt": "2019-07-01T21:33:10.633Z",
+            "updatedAt": "2019-07-16T19:52:26.709Z",
+            "id": "443878"
+          },
+          "changeType": "AppendSteps",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "Goodbye!"
+            }
+          ]
+        },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Goodbye!"
+          "$designer": {
+            "createdAt": "2019-07-01T21:33:09.385Z",
+            "updatedAt": "2019-07-16T19:52:30.861Z",
+            "id": "644042"
+          },
+          "activity": "[bfdactivity-644042]"
         }
       ]
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:33:09.385Z",
-        "updatedAt": "2019-07-16T19:52:30.861Z",
-        "id": "644042",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-644042]"
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

@@ -3,61 +3,68 @@
   "$designer": {
     "createdAt": "2019-07-03T06:48:21.955Z",
     "updatedAt": "2019-07-16T19:30:07.176Z",
-    "id": "295682",
-    "name": "OAuthInput"
+    "id": "295682"
   },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.IfCondition",
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-11T06:08:01.812Z",
-        "updatedAt": "2019-07-16T19:30:09.770Z",
-        "id": "245482",
-        "name": "Branch: If/Else"
+        "id": "823674",
+        "updatedAt": "2019-07-22T07:51:27.421Z"
       },
-      "condition": "user.token == null",
+      "events": [
+        "beginDialog"
+      ],
       "steps": [
         {
-          "$type": "Microsoft.OAuthPrompt",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T19:31:43.362Z",
-            "updatedAt": "2019-07-16T19:31:51.650Z",
-            "id": "199270",
-            "name": "OAuth Login"
+            "createdAt": "2019-07-11T06:08:01.812Z",
+            "updatedAt": "2019-07-16T19:30:09.770Z",
+            "id": "245482"
           },
-          "ConnectionName": "Outlook",
-          "Title": "Log in",
-          "Text": "Please log in to your email account",
-          "Property": "user.token"
+          "condition": "user.token == null",
+          "steps": [
+            {
+              "$type": "Microsoft.OAuthPrompt",
+              "$designer": {
+                "createdAt": "2019-07-16T19:31:43.362Z",
+                "updatedAt": "2019-07-16T19:31:51.650Z",
+                "id": "199270"
+              },
+              "ConnectionName": "Outlook",
+              "Title": "Log in",
+              "Text": "Please log in to your email account",
+              "Property": "user.token"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-11T06:07:53.618Z",
+            "updatedAt": "2019-07-16T19:32:00.212Z",
+            "id": "518974"
+          },
+          "method": "GET",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "Property": "user.getGraphEmails"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-11T06:04:32.777Z",
+            "updatedAt": "2019-07-16T19:32:04.947Z",
+            "id": "991558"
+          },
+          "activity": "[bfdactivity-991558]"
         }
       ]
-    },
-    {
-      "$type": "Microsoft.HttpRequest",
-      "$designer": {
-        "createdAt": "2019-07-11T06:07:53.618Z",
-        "updatedAt": "2019-07-16T19:32:00.212Z",
-        "id": "518974",
-        "name": "HTTP Request"
-      },
-      "method": "GET",
-      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
-      "header": {
-        "Authorization": "Bearer {user.token.token}"
-      },
-      "Property": "user.getGraphEmails"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-11T06:04:32.777Z",
-        "updatedAt": "2019-07-16T19:32:04.947Z",
-        "id": "991558",
-        "name": "Send an Activity"
-      },
-      "activity": "[bfdactivity-991558]"
     }
-  ],
-  "$schema": "../../app.schema"
+  ]
 }

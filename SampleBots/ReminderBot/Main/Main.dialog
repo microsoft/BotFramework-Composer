@@ -4,32 +4,33 @@
     "createdAt": "2019-07-08T07:49:23.113Z",
     "updatedAt": "2019-07-08T08:30:26.486Z",
     "id": "899494",
-    "name": "ReminderBot",
     "description": "ReminderBot"
   },
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
         "createdAt": "2019-07-08T08:29:34.449Z",
         "updatedAt": "2019-07-16T19:38:54.655Z",
-        "id": "134916",
-        "name": "Send an Activity"
+        "id": "134916"
       },
-      "activity": "[bfdactivity-134916]"
-    }
-  ],
-  "rules": [
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ]
+    },
     {
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-08T08:28:10.898Z",
         "updatedAt": "2019-07-16T19:39:00.986Z",
-        "id": "899834",
-        "name": "Handle an Intent"
+        "id": "899834"
       },
       "steps": [
         {
@@ -49,8 +50,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:19.739Z",
         "updatedAt": "2019-07-16T19:39:04.451Z",
-        "id": "295024",
-        "name": "Handle an Intent"
+        "id": "295024"
       },
       "steps": [
         {
@@ -70,8 +70,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:40.553Z",
         "updatedAt": "2019-07-16T19:39:07.824Z",
-        "id": "583948",
-        "name": "Handle an Intent"
+        "id": "583948"
       },
       "steps": [
         {
@@ -91,8 +90,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:45.611Z",
         "updatedAt": "2019-07-16T19:39:11.639Z",
-        "id": "622298",
-        "name": "Handle an Intent"
+        "id": "622298"
       },
       "steps": [
         {
@@ -112,8 +110,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:57.477Z",
         "updatedAt": "2019-07-16T19:39:15.047Z",
-        "id": "597721",
-        "name": "Handle an Intent"
+        "id": "597721"
       },
       "steps": [
         {
@@ -128,8 +125,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:58.020Z",
         "updatedAt": "2019-07-16T19:39:18.070Z",
-        "id": "720611",
-        "name": "Handle an Intent"
+        "id": "720611"
       },
       "steps": [
         {
@@ -147,8 +143,7 @@
       "$designer": {
         "createdAt": "2019-07-08T08:28:58.881Z",
         "updatedAt": "2019-07-16T19:39:23.811Z",
-        "id": "146624",
-        "name": "Handle an Unknown Intent"
+        "id": "146624"
       },
       "steps": [
         {

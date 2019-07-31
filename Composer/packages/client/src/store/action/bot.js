@@ -4,23 +4,23 @@ import oauthStorage from './../../utils/oauthStorage';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import LuisStorage from './../../utils/luisStorage';
 
-export async function connectBot(dispatch, botName) {
+export async function connectBot(store, botName) {
   const path = `${BASEURL}/launcher/connect`;
   try {
     await axios.get(path);
-    dispatch({
+    store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
         status: 'connected',
       },
     });
-    await reloadBot(dispatch, botName);
+    await reloadBot(store, botName);
   } catch (err) {
     throw new Error(err.response.data.message);
   }
 }
 
-export async function reloadBot(dispatch, botName) {
+export async function reloadBot({ dispatch }, botName) {
   const path = `${BASEURL}/launcher/sync`;
   try {
     await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
@@ -33,4 +33,13 @@ export async function reloadBot(dispatch, botName) {
   } catch (err) {
     throw new Error(err.response.data.message);
   }
+}
+
+export async function startBot({ dispatch }, toStartBot) {
+  dispatch({
+    type: ActionTypes.TO_START_BOT,
+    payload: {
+      toStartBot,
+    },
+  });
 }

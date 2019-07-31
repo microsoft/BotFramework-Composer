@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-export async function updateLuFile(dispatch, { id, content }) {
+export async function updateLuFile({ dispatch }, { id, content }) {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
     dispatch({
@@ -10,11 +10,11 @@ export async function updateLuFile(dispatch, { id, content }) {
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
 }
 
-export async function createLuFile(dispatch, { id, content }) {
+export async function createLuFile({ dispatch }, { id, content }) {
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id, content });
     dispatch({
@@ -32,7 +32,7 @@ export async function createLuFile(dispatch, { id, content }) {
   }
 }
 
-export async function removeLuFile(dispatch, { id }) {
+export async function removeLuFile({ dispatch }, { id }) {
   try {
     const response = await axios.delete(`${BASEURL}/projects/opened/luFiles/${id}`);
     dispatch({
@@ -48,7 +48,7 @@ export async function removeLuFile(dispatch, { id }) {
   }
 }
 
-export async function publishLuis(dispatch, config) {
+export async function publishLuis({ dispatch }, config) {
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, config);
     dispatch({
@@ -56,6 +56,6 @@ export async function publishLuis(dispatch, config) {
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data.message);
   }
 }
