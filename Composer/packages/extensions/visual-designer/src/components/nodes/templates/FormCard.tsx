@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
 import { Icon } from '../icons/icon';
@@ -54,7 +54,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
     >
       <div
         className="card__header"
-        css={css({
+        css={{
           width: '100%',
           height: `${headerHeight}px`,
           backgroundColor: themeColor,
@@ -63,19 +63,17 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           lineHeight: '19px',
           color: 'black',
           position: 'relative',
-        })}
+        }}
       >
-        <div css={css({ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' })}>
-          {header}
-        </div>
-        <div css={css({ position: 'absolute', top: 10, right: 0 })}>{corner}</div>
+        <div css={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{header}</div>
+        <div css={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
       </div>
       <div
         className="card__content"
-        css={css({
+        css={{
           width: '100%',
           height: contentHeight,
-        })}
+        }}
       >
         <div
           css={{
