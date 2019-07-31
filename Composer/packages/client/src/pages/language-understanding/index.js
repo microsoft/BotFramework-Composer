@@ -23,7 +23,7 @@ const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LUPage = props => {
   const { actions, state } = useContext(Store);
-  const { dialogs, luFiles, botName } = state;
+  const { dialogs, luFiles } = state;
   const updateLuFile = actions.updateLuFile;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
@@ -133,7 +133,7 @@ export const LUPage = props => {
       content: newContent,
     };
     try {
-      await updateLuFile(payload, botName);
+      await updateLuFile(payload);
     } catch (error) {
       const title = `StaticValidationError`;
       const subTitle = error.message;
