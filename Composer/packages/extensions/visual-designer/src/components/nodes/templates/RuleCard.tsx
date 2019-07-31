@@ -37,11 +37,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
   };
 
   const onCardBodyClick = () => {
-    if (focused) {
-      openNode();
-    } else {
-      focusNode();
-    }
+    openNode();
   };
 
   let summary = '';

@@ -4,9 +4,7 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
-import { Collapse } from '../components/nodes/templates/Collapse';
 
-import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
@@ -22,7 +20,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
 
 export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideSteps }): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { stepGroup, ruleGroup } = nodeMap;
+  const { ruleGroup } = nodeMap;
 
   return (
     <div
@@ -38,12 +36,6 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideS
       }}
     >
       {ruleGroup && <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={onEvent} />}
-      <div style={{ height: 50 }} />
-      {!hideSteps && stepGroup && (
-        <Collapse text="Actions">
-          <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
-        </Collapse>
-      )}
     </div>
   );
 };
