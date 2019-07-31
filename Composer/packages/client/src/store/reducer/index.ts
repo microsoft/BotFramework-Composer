@@ -1,10 +1,12 @@
+import { ReducerFunc } from '../types';
+import { getExtension } from '../../utils';
+import { ActionTypes, FileTypes } from '../../constants';
+
 import createReducer from './createReducer';
-import { getExtension } from './../../utils';
-import { ActionTypes, FileTypes } from './../../constants/index';
 
 const projectFiles = ['bot', 'botproj'];
 
-const getProjectSuccess = (state, { response }) => {
+const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botName = response.data.botName;
   state.lgFiles = response.data.lgFiles;
@@ -14,61 +16,61 @@ const getProjectSuccess = (state, { response }) => {
   return state;
 };
 
-const getRecentProjectsSuccess = (state, { response }) => {
+const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
   state.recentProjects = response.data;
   return state;
 };
 
-const updateDialog = (state, { response }) => {
+const updateDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   return state;
 };
 
-const removeDialog = (state, { response }) => {
+const removeDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   return state;
 };
 
-const createDialogBegin = (state, { onComplete }) => {
+const createDialogBegin: ReducerFunc = (state, { onComplete }) => {
   state.showCreateDialogModal = true;
   state.onCreateDialogComplete = onComplete;
   return state;
 };
 
-const createDialogCancel = state => {
+const createDialogCancel: ReducerFunc = state => {
   state.showCreateDialogModal = false;
-  state.onCreateDialogComplete = null;
+  delete state.onCreateDialogComplete;
   return state;
 };
 
-const createDialogSuccess = (state, { response }) => {
+const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   state.showCreateDialogModal = false;
-  state.onCreateDialogComplete = null;
+  delete state.onCreateDialogComplete;
   return state;
 };
 
-const updateLgTemplate = (state, { response }) => {
+const updateLgTemplate: ReducerFunc = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   return state;
 };
 
-const updateLuTemplate = (state, { response }) => {
+const updateLuTemplate: ReducerFunc = (state, { response }) => {
   state.luFiles = response.data.luFiles;
   return state;
 };
 
-const setBotStatus = (state, { status }) => {
+const setBotStatus: ReducerFunc = (state, { status }) => {
   return (state.botStatus = status);
 };
 
-const getStoragesSuccess = (state, { response }) => {
+const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   return (state.storages = response.data);
 };
 
-const getStorageFileSuccess = (state, { response }) => {
+const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
   const focusedStorageFolder = response.data;
   focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
     if (file.type === FileTypes.FOLDER) {
@@ -88,12 +90,12 @@ const getStorageFileSuccess = (state, { response }) => {
   return state;
 };
 
-const setStorageFileFetchingStatus = (state, { status }) => {
+const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   state.storageFileLoadingStatus = status;
   return state;
 };
 
-const navigateTo = (state, { path, rest }) => {
+const navigateTo: ReducerFunc = (state, { path, rest }) => {
   if (state.navPath !== path) {
     if (rest && Array.isArray(rest)) {
       rest.forEach(nav => {
@@ -114,19 +116,19 @@ const navigateTo = (state, { path, rest }) => {
   return state;
 };
 
-const navigateDown = (state, { subPath }) => {
+const navigateDown: ReducerFunc = (state, { subPath }) => {
   state.navPath = state.navPath + subPath;
   state.focusPath = state.navPath; // fire up form editor on non-leaf node
   state.navPathHistory.push(state.navPath);
   return state;
 };
 
-const focusTo = (state, { path }) => {
+const focusTo: ReducerFunc = (state, { path }) => {
   state.focusPath = path;
-  return state.focusPath;
+  return state;
 };
 
-const clearNavHistory = (state, { fromIndex }) => {
+const clearNavHistory: ReducerFunc = (state, { fromIndex }) => {
   const length = state.navPathHistory.length;
   if (typeof fromIndex === 'undefined') {
     state.navPath = '';
@@ -139,28 +141,29 @@ const clearNavHistory = (state, { fromIndex }) => {
   return state;
 };
 
-const setBotLoadErrorMsg = (state, { error }) => {
-  return (state.botLoadErrorMsg = error);
+const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
+  state.botLoadErrorMsg = error;
+  return state;
 };
 
-const setCreationFlowStatus = (state, { creationFlowStatus }) => {
-  return (state.creationFlowStatus = creationFlowStatus);
+const setCreationFlowStatus: ReducerFunc = (state, { creationFlowStatus }) => {
+  state.creationFlowStatus = creationFlowStatus;
+  return state;
 };
 
-const saveTemplateId = (state, { templateId }) => {
-  return (state.templateId = templateId);
+const saveTemplateId: ReducerFunc = (state, { templateId }) => {
+  state.templateId = templateId;
+  return state;
 };
 
-const setError = (state, payload) => {
-  return (state.error = payload);
+const setError: ReducerFunc = (state, payload) => {
+  state.error = payload;
+  return state;
 };
 
-const updateOAuth = (state, { oAuth }) => {
-  return (state.oAuth = oAuth);
-};
-
-const setToStartBot = (state, { toStartBot }) => {
-  return (state.toStartBot = toStartBot);
+const updateOAuth: ReducerFunc = (state, { oAuth }) => {
+  state.oAuth = oAuth;
+  return state;
 };
 
 export const reducer = createReducer({
@@ -193,5 +196,4 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
-  [ActionTypes.TO_START_BOT]: setToStartBot,
-});
+} as { [type in ActionTypes]: ReducerFunc });

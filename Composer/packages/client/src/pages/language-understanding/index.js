@@ -9,7 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
@@ -22,7 +22,7 @@ import { TestController } from './../../TestController';
 const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LUPage = props => {
-  const { actions, state } = useContext(Store);
+  const { actions, state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const updateLuFile = actions.updateLuFile;
   const [textMode, setTextMode] = useState(false);

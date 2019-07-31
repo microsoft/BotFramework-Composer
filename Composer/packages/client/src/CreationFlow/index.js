@@ -7,12 +7,12 @@ import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
 import { Steps } from './../constants/index';
 import { SelectLocation } from './SelectLocation';
-import { Store } from './../store/index';
+import { StoreContext } from './../store';
 import { DialogInfo } from './../constants/index';
 import { StepWizard } from './StepWizard/StepWizard';
 
 export function CreationFlow(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const [templates, setTemplates] = useState([]);
   const [bots, setBots] = useState([]);
   const [step, setStep] = useState();

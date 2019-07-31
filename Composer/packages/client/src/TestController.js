@@ -14,7 +14,7 @@ import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
 import LuisStorage from './utils/luisStorage';
-import { Store } from './store/index';
+import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
 import { LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
@@ -39,7 +39,7 @@ const STATE = {
 };
 
 export const TestController = () => {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);

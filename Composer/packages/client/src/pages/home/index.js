@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 import { CreationFlowStatus, BASEPATH } from '../../constants';
 
 import { ToolBar } from './../../components/ToolBar/index';
@@ -33,7 +33,7 @@ const linksRight = [
 ];
 
 export const Home = () => {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { recentProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
