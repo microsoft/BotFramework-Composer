@@ -72,7 +72,7 @@
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.8.tgz",
+    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.0.tgz",
     "cookie-parser": "^1.4.4",
     "debug": "^4.1.1",
     "express": "^4.16.4",

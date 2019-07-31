@@ -4907,16 +4907,16 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.4.tgz":
-  version "4.5.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.4.tgz#d51598fb8c4093f69e8808012abccfe9d3ff169d"
+"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz":
+  version "4.5.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz#2bbf7f9cbc6922fdb757c8319db2965d3638d63a"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.4.tgz"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
 
-"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.4.tgz":
-  version "4.5.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.4.tgz#9d126e51adbb3abe3990ce55b79a32ce5582d220"
+"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz":
+  version "4.5.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz#5a232132ff924d5c53c35ef19b9d30dd8c179e11"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     antlr4ts "0.5.0-alpha.1"
@@ -4927,13 +4927,14 @@ boom@2.x.x:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.8.tgz":
-  version "4.5.8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.5.8.tgz#a44787190bd3eece3f4d56e4db26232970e2079b"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.0.tgz":
+  version "4.6.0"
+  uid "5a78715ca0e871d48af11bdeead3aae0c15f3091"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.0.tgz#5a78715ca0e871d48af11bdeead3aae0c15f3091"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.4.tgz"
-    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.4.tgz"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
+    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz"
     lodash "^4.17.11"
 
 boxen@^1.2.1:
