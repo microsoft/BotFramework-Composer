@@ -2,7 +2,7 @@ import React, { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { ObiTypes } from '../shared/ObiTypes';
-import { deleteNode, insert } from '../shared/jsonTracker';
+import { deleteNode, insert, drop } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
@@ -43,6 +43,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       case NodeEventTypes.Insert:
         handler = e => {
           const dialog = insert(data, e.id, e.position, e.$type);
+          onChange(dialog);
+          onSelect(`${e.id}[${e.position || 0}]`);
+        };
+        break;
+      case NodeEventTypes.Drop:
+        handler = e => {
+          const dialog = drop(data, e.id, e.position, e.source.data.$type, e.copy);
           onChange(dialog);
           onSelect(`${e.id}[${e.position || 0}]`);
         };

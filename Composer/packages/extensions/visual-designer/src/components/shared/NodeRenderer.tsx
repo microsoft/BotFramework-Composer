@@ -21,6 +21,7 @@ import { NodeRendererContext } from '../../store/NodeRendererContext';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 import './NodeRenderer.css';
+import { setDndData, isDndElement } from './dndHelpers';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -53,7 +54,21 @@ export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   const nodeFocused = focusedId === id;
 
   return (
-    <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}>
+    <div
+      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
+      draggable={true}
+      onMouseDown={ev => {
+        // 1. DONOT stop the propagation of onMouseUp() event. <Dragscroll /> needs this event to stop dragging.
+        // 2. only start a dnd cycle when focus on a element node.
+        if (isDndElement(ev.target)) {
+          ev.stopPropagation();
+        }
+      }}
+      onDragStart={ev => {
+        setDndData(ev, { id, data });
+        ev.stopPropagation();
+      }}
+    >
       <ChosenRenderer
         id={id}
         data={data}

@@ -89,3 +89,7 @@ export function insert(inputDialog, path, position, $type) {
 
   return dialog;
 }
+
+export function drop(inputDialog, path, position, source, isCopyMode: boolean) {
+  return insert(inputDialog, path, position, source);
+}

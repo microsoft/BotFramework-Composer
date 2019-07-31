@@ -11,6 +11,7 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Edge } from '../shared/EdgeComponents';
+import { DropZone } from '../shared/DropZone';
 
 const StepInterval = ElementInterval.y;
 
@@ -67,6 +68,11 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         styles={{ zIndex: 100 }}
       >
+        <DropZone
+          onDrop={(sourceData, isCopyMode) =>
+            onEvent(NodeEventTypes.Drop, { id, position: 0, source: sourceData, copy: isCopyMode })
+          }
+        />
         <EdgeMenu
           onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
           data-testid="StepGroupAdd"
@@ -82,6 +88,11 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
               }}
               styles={{ zIndex: 100 }}
             >
+              <DropZone
+                onDrop={(sourceData, isCopyMode) =>
+                  onEvent(NodeEventTypes.Drop, { id, position: idx + 1, source: sourceData, copy: isCopyMode })
+                }
+              />
               <EdgeMenu
                 onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}
                 data-testid="StepGroupAdd"
