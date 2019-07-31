@@ -1,6 +1,6 @@
 // this is currently hard-coded here
 
-import FormEditor from 'composer-extensions/obieditortest';
+import FormEditor from 'composer-extensions/obiformeditor';
 import VisualDesigner from 'composer-extensions/visual-designer';
 
 const getEditor = () => {

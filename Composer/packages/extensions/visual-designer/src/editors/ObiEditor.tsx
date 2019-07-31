@@ -15,7 +15,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
 
   const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
 
-  const dispatchEvent = (eventName?, eventData?): any => {
+  const dispatchEvent = (eventName?, eventData?, ...rest): any => {
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
@@ -51,7 +51,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
         handler = onSelect;
         break;
     }
-    return handler(eventData);
+    return handler(eventData, rest);
   };
 
   const chooseEditor = ($type: string): FC<any> => {

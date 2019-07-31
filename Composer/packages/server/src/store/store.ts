@@ -1,9 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-import initData from './data.template.json';
+import localInitData from './data.template.json';
+import abhInitData from './abh-template.json';
 
-const dataStorePath = path.resolve(__dirname, '../../data.json');
+const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
+const dataStorePath =
+  isHostedInAzure && process.env.HOME
+    ? path.resolve(process.env.HOME, './site/data.json')
+    : path.resolve(__dirname, '../../data.json');
+
+const initData = isHostedInAzure ? abhInitData : localInitData;
 
 // create data.json if not exits
 if (!fs.existsSync(dataStorePath)) {

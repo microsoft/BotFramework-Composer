@@ -2,6 +2,7 @@ import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-reac
 import nanoid from 'nanoid/generate';
 
 import { ConceptLabels } from './labelMap';
+import { seedNewDialog } from './dialogFactory';
 
 export enum DialogGroup {
   RESPONSE = 'RESPONSE',
@@ -26,7 +27,7 @@ export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
     label: 'Send Messages',
-    types: ['Microsoft.SendActivity', 'Microsoft.BeginDialog'],
+    types: ['Microsoft.SendActivity'],
   },
   [DialogGroup.INPUT]: {
     label: 'Ask a Question',
@@ -120,12 +121,14 @@ export const createStepMenu = (
             name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
             id: nanoid('1234567890', 6),
           },
+          ...seedNewDialog($type),
           data: {
             $type: $type, // used by the steps field to create the item
             $designer: {
               name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
               id: nanoid('1234567890', 6),
             },
+            ...seedNewDialog($type),
           },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
@@ -156,12 +159,14 @@ export const createStepMenu = (
           name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
           id: nanoid('1234567890', 6),
         },
+        ...seedNewDialog(item),
         data: {
           $type: item,
           $designer: {
             name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
             id: nanoid('1234567890', 6),
           },
+          ...seedNewDialog(item),
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {

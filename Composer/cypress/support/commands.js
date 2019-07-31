@@ -48,6 +48,14 @@ Cypress.Commands.add('openDialog', dialogName => {
   });
 });
 
+Cypress.Commands.add('startFromTemplate', (template, name) => {
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+  cy.getByTestId(`TemplateCopy-${template}`).click();
+  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
+  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.wait(1000);
+});
+
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.openBot(bot);
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
@@ -56,4 +64,11 @@ Cypress.Commands.add('copyBot', (bot, name) => {
   cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
   cy.get('input[data-testid="NewDialogName"]').type('{enter}');
   cy.wait(1000);
+});
+
+Cypress.Commands.add('addEventHandler', handler => {
+  cy.withinEditor('VisualEditor', () => {
+    cy.getByTestId('EventsEditorAdd').click();
+    cy.getByText(handler).click();
+  });
 });

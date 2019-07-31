@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 
 import { Store } from '../../store/index';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, BASEPATH } from '../../constants';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import * as home from './styles';
@@ -41,7 +41,7 @@ export const Home = () => {
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
-    navigate('/');
+    navigate(BASEPATH);
   };
 
   const onClickNewBotProject = async () => {
@@ -176,6 +176,7 @@ export const Home = () => {
                   onClick={() => {
                     onClickTemplate(template.id);
                   }}
+                  data-testid={`TemplateCopy-${template.id}`}
                 >
                   <div css={home.templateText}>{template.name}</div>
                   <div css={home.templateDescription}>{template.description}</div>
