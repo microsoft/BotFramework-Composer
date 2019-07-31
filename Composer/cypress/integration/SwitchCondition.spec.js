@@ -3,12 +3,12 @@
 context('SwitchCondition', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.startFromTemplate('EmptyBot', 'SwitchConditionSpec');
+    cy.openBot('ToDoBot');
   });
 
   it('can manage cases', () => {
+    cy.startFromTemplate('EmptyBot', 'SwitchConditionSpec');
     cy.addEventHandler('Handle Unknown Intent');
-
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('Unknown Intent').click({ force: true });
       cy.wait(100);
