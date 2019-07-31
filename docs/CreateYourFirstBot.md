@@ -52,7 +52,7 @@ By design, we want the bot to send a message to the user in response to the *Gre
 ### 4.2 Adding actions to *CheckWeatherIntentHandler*
 Double-click on the *CheckWeatherIntentHandler* node to get started. By design, we want the bot to begin a dialog (and take actions as specified in that dialog) in response to the *CheckWeather* intent. To do this, we first need to create a dialog (e.g. *CheckWeatherDialog*), then add this dialog to the *CheckWeatherIntentHandler*.
 
-To create a dialog, click **Add** on the **Dialogs** pane, and follow the instructions to complete the process. Once a dialog is created, add actions to this handler following the same process as described in 4.1.
+To create a dialog, click **Add** on the **Dialogs** pane, and follow the instructions to complete the process. Once a dialog is created, add actions to this dialog following the same process as described in 4.1.
 
 <img src = "Assets/addDialog.png" alt = "Other event handler" width = 250></img>
 
