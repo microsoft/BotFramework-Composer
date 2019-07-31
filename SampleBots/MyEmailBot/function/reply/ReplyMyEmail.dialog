@@ -2,13 +2,14 @@
     "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
+      "DeleteReplyInfo",
       {
         "$type": "Microsoft.SendActivity",
         "activity": "OK! Let's Start To Reply this Email. "
       },
       {
         "$type": "Microsoft.SetProperty",
-        "value": "concat('Re:',user.SelectedEmail.subject)",
+        "value": "concat('Re:',user.selectedEmail.subject)",
         "property": "user.toSubject"
       },
       {
@@ -18,7 +19,7 @@
       },
       {
         "$type": "Microsoft.ConfirmInput",
-        "property": "dialog.addtime",
+        "property": "dialog.addTime",
         "prompt": "Do you Want to Add a Timestamp?",
         "unrecognizedPrompt": "Please try again.",
         "invalidPrompt": "Please input yes/no.",
@@ -26,7 +27,7 @@
       },
       {
         "$type": "Microsoft.IfCondition",
-        "condition": "dialog.addtime",
+        "condition": "dialog.addTime",
         "steps": [
           {
             "$type": "Microsoft.SetProperty",

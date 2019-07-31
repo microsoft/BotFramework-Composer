@@ -11,19 +11,19 @@
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.SentItems[0].subject}"
+            "activity": "{user.sentItems[0].subject}"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.SentItems[1].subject}"
+            "activity": "{user.sentItems[1].subject}"
         },
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "{user.SentItems[2].subject}"
+            "activity": "{user.sentItems[2].subject}"
         },
         {
             "$type": "Microsoft.ChoiceInput",
-            "property": "user.SentItemsChoice",
+            "property": "user.sentItemsChoice",
             "choices": [
                 {
                     "value": "Show me the 1st Email. "
@@ -50,19 +50,19 @@
         },
         {
             "$type": "Microsoft.SwitchCondition",
-            "condition": "user.SentItemsChoice",
+            "condition": "user.sentItemsChoice",
             "cases": [
                 {
                     "value": "Show me the 1st Email. ",
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedSentItems",
-                            "value": "user.SentItems[0]"
+                            "property": "user.selectedSentItems",
+                            "value": "user.sentItems[0]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
+                            "activity": "[ShowEmailCard(user.selectedSentItems)]"
                         }
                     ]
                 },
@@ -71,12 +71,12 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedSentItems",
-                            "value": "user.SentItems[1]"
+                            "property": "user.selectedSentItems",
+                            "value": "user.sentItems[1]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
+                            "activity": "[ShowEmailCard(user.selectedSentItems)]"
                         }
                     ]
                 },
@@ -85,12 +85,12 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedSentItems",
-                            "value": "user.SentItems[2]"
+                            "property": "user.selectedSentItems",
+                            "value": "user.sentItems[2]"
                         },
                         {
                             "$type": "Microsoft.SendActivity",
-                            "activity": "[ShowEmailCard(user.SelectedSentItems)]"
+                            "activity": "[ShowEmailCard(user.selectedSentItems)]"
                         }
                     ]
                 },

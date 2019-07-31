@@ -5,11 +5,11 @@
     "steps": [
         {
             "$type": "Microsoft.SendActivity",
-            "activity": "[ShowEmailCard(user.SelectedEmail)]"
+            "activity": "[ShowEmailCard(user.selectedEmail)]"
         },
         {
             "$type": "Microsoft.ChoiceInput",
-            "property": "user.ShowEmailChoice",
+            "property": "user.showEmailChoice",
             "choices": [
                 {
                     "value": "Reply This Email"
@@ -27,7 +27,7 @@
         },
         {
             "$type": "Microsoft.SwitchCondition",
-            "condition": "user.ShowEmailChoice",
+            "condition": "user.showEmailChoice",
             "cases": [
                 {
                     "value": "Reply This Email",

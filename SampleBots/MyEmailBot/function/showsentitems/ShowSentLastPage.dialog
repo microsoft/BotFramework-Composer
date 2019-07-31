@@ -4,7 +4,7 @@
     "steps": [
       {
         "$type": "Microsoft.IfCondition",
-        "condition": "user.Sentpages == 0",
+        "condition": "user.sentPages == 0",
         "steps": [
           {
             "$type" : "Microsoft.SendActivity",
@@ -17,8 +17,8 @@
       },
       {
         "$type": "Microsoft.SetProperty",
-        "value": "user.Sentpages - 1",
-        "property": "user.Sentpages"
+        "value": "user.sentPages - 1",
+        "property": "user.sentPages"
       }
     ]
   }

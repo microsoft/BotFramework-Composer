@@ -8,6 +8,24 @@
     buttons = Sign In | Help | Cancel]
 ```
 
+# ShowRecipient(user)
+- IF: {count(user.intentRecipient.value) == 1}
+  - Cool, I Find the Recipient You Want, it's {user.intentRecipient.value[0].displayName}.
+- ELSEIF: {count(user.intentRecipient.value) == 0}
+  - Emm, I didn't Find What you Need, Can You Try it Again ?
+- ELSEIF: {count(user.intentRecipient.value) > 1}
+  - I Find Several People Satisfy Your Demand. The First Two People are {user.intentRecipient.value[0].displayName} and {user.intentRecipient.value[1].displayName}. Can you Name it More Specificly?
+- ELSE:
+  - Something Strange Happened.
+  
+# Multi
+- ```
+    This is a multi-line list
+    - one
+    - two
+    - Greeting: 
+``` 
+
 # EmailCard
 - ```
 [Herocard
@@ -66,10 +84,10 @@
 ]
 ```
 # EmailStatistics
-- OK, @{user.Info.displayName}, {toUpper('hi, i have checked your email.')} Total Number: {user.EmailCount} Emails in {add(div(user.EmailCount, user.ItemsPerPage), 1)} Pages. 
+- OK, @{user.Info.displayName}, {toUpper('hi, i have checked your email.')} Total Number: {user.emailCount} Emails in {add(div(user.emailCount, user.itemsPerPage), 1)} Pages. 
 
 # PageOrdinalNumber
 - Let's See the Preview of Your {addOrdinal(user.pages+1)} Page Emails.
 
 # SentPageOrdinalNumber
-- This is the Preview of Your {addOrdinal(int(user.Sentpages)+1)} Page Emails.
+- This is the Preview of Your {addOrdinal(int(user.sentPages)+1)} Page Emails.

@@ -5,7 +5,7 @@
       {
         "$type": "Microsoft.SetProperty",
         "value": "3",
-        "property": "user.ItemsPerPage"
+        "property": "user.itemsPerPage"
       },
       {
         "$type": "Microsoft.SetProperty",
@@ -15,21 +15,16 @@
       {
         "$type": "Microsoft.SetProperty",
         "value": "0",
-        "property": "user.gobackbool"
+        "property": "user.sentPages"
       },
       {
         "$type": "Microsoft.SetProperty",
-        "value": "0",
-        "property": "user.Sentpages"
-      },
-      {
-        "$type": "Microsoft.SetProperty",
-        "property": "user.EmailCount",
+        "property": "user.emailCount",
         "value": "0"
       },
       {
         "$type": "Microsoft.SetProperty",
-        "property": "user.SentItemsCount",
+        "property": "user.sentItemsCount",
         "value": "0"
       },
       {
@@ -40,7 +35,7 @@
       {
         "$type": "Microsoft.EditArray",
         "changeType": "Clear",
-        "arrayProperty": "user.SentItems"
+        "arrayProperty": "user.sentItems"
       },
       "SignInToGraph",
       "GetMyEmailFromGraph",

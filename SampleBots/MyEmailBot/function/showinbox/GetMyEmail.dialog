@@ -9,26 +9,26 @@
         },
         {
             "$type": "Microsoft.SetProperty",
-            "property": "user.EmailCount",
+            "property": "user.emailCount",
             "value": "count(user.getGraphEmails.value)"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
             "arrayProperty": "user.emails",
-            "value": "user.getGraphEmails.value[{user.pages}*{user.ItemsPerPage}]"
+            "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}]"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
             "arrayProperty": "user.emails",
-            "value": "user.getGraphEmails.value[{user.pages}*{user.ItemsPerPage}+1]"
+            "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}+1]"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
             "arrayProperty": "user.emails",
-            "value": "user.getGraphEmails.value[{user.pages}*{user.ItemsPerPage}+2]"
+            "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}+2]"
         }
     ]
 

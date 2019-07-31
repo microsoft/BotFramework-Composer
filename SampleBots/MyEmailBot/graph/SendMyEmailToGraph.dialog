@@ -14,12 +14,12 @@
                     "subject": "{user.subject}",
                     "body": {
                         "contentType": "Text",
-                        "content": "{user.MailBody}"
+                        "content": "{user.sendContext}"
                     },
                     "toRecipients": [
                         {
                             "emailAddress" : {
-                                "address": "{user.EmailAddr}"
+                                "address": "{user.emailAddr}"
                             }
                         }                        
                     ]

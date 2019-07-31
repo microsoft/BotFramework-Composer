@@ -16,11 +16,7 @@
         "prompt": "OK, Please Enter the Content of Your Email to Forward.",
         "property": "user.fwContent"
       },
-      {
-        "$type": "Microsoft.TextInput",
-        "prompt": "OK, Please Enter the Email Address of Your Forward Recipient.",
-        "property": "user.EmailAddr"
-      },
+      "FindMyContact",
       {
         "$type": "Microsoft.ConfirmInput",
         "property": "dialog.confirmed",

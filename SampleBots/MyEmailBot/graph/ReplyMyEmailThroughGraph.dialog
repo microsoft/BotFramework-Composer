@@ -4,7 +4,7 @@
     "steps": [
       {
         "$type": "Microsoft.HttpRequest",
-        "url": "https://graph.microsoft.com/v1.0/me/messages/{user.SelectedEmail.id}/reply",
+        "url": "https://graph.microsoft.com/v1.0/me/messages/{user.selectedEmail.id}/reply",
         "method": "POST",
         "header": {
           "Authorization": "Bearer {user.token.token}"

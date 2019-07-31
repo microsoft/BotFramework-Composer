@@ -27,7 +27,7 @@
         },
         {
             "$type": "Microsoft.ChoiceInput",
-            "property": "user.EmailChoice",
+            "property": "user.emailChoice",
             "choices": [
                 {
                     "value": "Show me the 1st Email. "
@@ -54,14 +54,14 @@
         },
         {
             "$type": "Microsoft.SwitchCondition",
-            "condition": "user.EmailChoice",
+            "condition": "user.emailChoice",
             "cases": [
                 {
                     "value": "Show me the 1st Email. ",
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
+                            "property": "user.selectedEmail",
                             "value": "user.emails[0]"
                         },
                         "ShowMyCurrentEmail"
@@ -72,7 +72,7 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
+                            "property": "user.selectedEmail",
                             "value": "user.emails[1]"
                         },
                         "ShowMyCurrentEmail"
@@ -83,7 +83,7 @@
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "property": "user.SelectedEmail",
+                            "property": "user.selectedEmail",
                             "value": "user.emails[2]"
                         },
                         "ShowMyCurrentEmail"

@@ -4,8 +4,8 @@
     "steps": [
       {
         "$type": "Microsoft.SetProperty",
-        "value": "user.Sentpages + 1",
-        "property": "user.Sentpages"
+        "value": "user.sentPages + 1",
+        "property": "user.sentPages"
       }
     ]
   }

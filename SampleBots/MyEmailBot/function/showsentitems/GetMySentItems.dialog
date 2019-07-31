@@ -5,30 +5,30 @@
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Clear",
-            "arrayProperty": "user.SentItems"
+            "arrayProperty": "user.sentItems"
         },
         {
             "$type": "Microsoft.SetProperty",
-            "property": "user.SentItemsCount",
+            "property": "user.sentItemsCount",
             "value": "count(user.getGraphSentItems.value)"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
-            "arrayProperty": "user.SentItems",
-            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}]"
+            "arrayProperty": "user.sentItems",
+            "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}]"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
-            "arrayProperty": "user.SentItems",
-            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}+1]"
+            "arrayProperty": "user.sentItems",
+            "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+1]"
         },
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Push",
-            "arrayProperty": "user.SentItems",
-            "value": "user.getGraphSentItems.value[{user.Sentpages}*{user.ItemsPerPage}+2]"
+            "arrayProperty": "user.sentItems",
+            "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+2]"
         }
     ]
 

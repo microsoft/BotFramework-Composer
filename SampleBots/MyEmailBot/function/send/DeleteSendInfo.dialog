@@ -1,0 +1,14 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+      {
+        "$type": "Microsoft.DeleteProperty",
+        "property": "user.subject"
+      },
+      {
+        "$type": "Microsoft.DeleteProperty",
+        "property": "user.sendContext"
+      }
+    ]
+}

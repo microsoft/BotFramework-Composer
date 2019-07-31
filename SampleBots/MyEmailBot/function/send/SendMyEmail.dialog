@@ -2,6 +2,7 @@
     "$schema": "../../../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
     "steps": [
+      "DeleteSendInfo",
       {
         "$type": "Microsoft.SendActivity",
         "activity": "OK! Let's Start To Write an Email. "
@@ -14,13 +15,9 @@
       {
         "$type": "Microsoft.TextInput",
         "prompt": "Get! Please Enter the Body of Your Email.",
-        "property": "user.MailBody"
+        "property": "user.sendContext"
       },
-      {
-        "$type": "Microsoft.TextInput",
-        "prompt": "Get! Please Enter Email Address of Your Recipient.",
-        "property": "user.EmailAddr"
-      },
+      "FindMyContact",
       {
         "$type": "Microsoft.ConfirmInput",
         "property": "dialog.confirmed",

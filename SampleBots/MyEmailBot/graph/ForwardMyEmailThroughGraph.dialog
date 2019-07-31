@@ -4,7 +4,7 @@
     "steps": [
       {
         "$type": "Microsoft.HttpRequest",
-        "url": "https://graph.microsoft.com/v1.0/me/messages/{user.SelectedEmail.id}/forward",
+        "url": "https://graph.microsoft.com/v1.0/me/messages/{user.selectedEmail.id}/forward",
         "method": "POST",
         "header": {
           "Authorization": "Bearer {user.token.token}"
@@ -14,7 +14,7 @@
           "toRecipients": [
             {
               "emailAddress": {
-                "address": "{user.EmailAddr}"
+                "address": "{user.emailAddr}"
               }
             }
           ]
