@@ -93,11 +93,13 @@ export function insert(inputDialog, path, position, $type) {
 export function drop(inputDialog, targetId, targetPosition: number, source, isCopyMode: boolean) {
   if (!source || !targetId) return inputDialog;
 
-  const { id: sourceId, data: sourceData } = source;
-  if (sourceId === `${targetId}[${targetPosition}]` && !isCopyMode) return inputDialog;
+  const { id: sourcePath, data: sourceData } = source;
+  const targetPath = `${targetId}[${targetPosition}]`;
+  // Forbid the case that drop a node to itself or its child under non-copy mode.
+  if (targetPath.indexOf(sourcePath) === 0 && !isCopyMode) return inputDialog;
 
   const dialog = cloneDeep(inputDialog);
-  const sourceNode = locateNode(dialog, sourceId);
+  const sourceNode = locateNode(dialog, sourcePath);
   if (sourceNode === null) return dialog;
 
   const targetArrayNode = locateNode(dialog, targetId);
