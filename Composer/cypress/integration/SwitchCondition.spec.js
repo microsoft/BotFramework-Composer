@@ -15,8 +15,11 @@ context('SwitchCondition', () => {
       cy.getByText('Unknown Intent').click({ force: true });
       cy.wait(100);
       cy.getByTestId('StepGroupAdd').click({ force: true });
+      cy.wait(100);
       cy.getByText('Flow').click({ force: true });
+      cy.wait(100);
       cy.getByText('Branch: Switch').click({ force: true });
+      cy.wait(100);
       cy.getByTestId('SwitchConditionDiamond').click({ force: true });
     });
 
@@ -37,19 +40,25 @@ context('SwitchCondition', () => {
       // Use { force: true } can disable error checking like dom not visible or width and height '0 * 0' pixels.
       // So if a button is in a popup window, using { force: true } to button click can make the tests more stable.
       cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.wait(100);
       cy.getByText('Send Messages').click({ force: true });
+      cy.wait(100);
       cy.getByText('Send an Activity').click({ force: true });
-
+      cy.wait(100);
       // Edit array
       cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.wait(100);
       cy.getByText('Memory manipulation').click({ force: true });
+      cy.wait(100);
       cy.getByText('Edit an Array Property').click({ force: true });
-
+      cy.wait(100);
       // Log step
       cy.getByText('Add New Step for Case1').click({ force: true });
+      cy.wait(100);
       cy.getByText('Debugging').click({ force: true });
+      cy.wait(100);
       cy.getByText('Log to console').click({ force: true });
-
+      cy.wait(100);
       cy.get('[data-automationid="DetailsRow"]')
         .as('steps')
         .should('have.length', 3);
