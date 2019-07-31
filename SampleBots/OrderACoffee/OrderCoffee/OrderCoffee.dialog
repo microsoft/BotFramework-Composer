@@ -1,7 +1,0 @@
-{
-  "$designer": {
-    "name": "OrderCoffee"
-  },
-  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
-  "$type": "Microsoft.AdaptiveDialog"
-}
