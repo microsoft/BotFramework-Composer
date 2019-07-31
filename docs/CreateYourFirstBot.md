@@ -2,8 +2,9 @@
 Follow these six steps to create a weather bot from scratch using Bot Framework Composer. Alternatively, watch the [video](https://microsoft-my.sharepoint.com/:v:/p/t-yangxi/EVcxF6YjGKZOvJjPZstfS5EBLVlDldzoZ5yQiqJlNs_NKw?e=zkzymp).
 
 ## Prerequisites
-* You’ve already installed Bot Framework Composer and Emulator locally. If not, please follow this [guide](https://github.com/microsoft/BotFramework-Composer) to install the tools.
-* You’ve already thought about what the user will be able to accomplish with your bot. In other words, you’ve defined the intents, utterances, and entities. If you’re not sure, follow this [link](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format) to learn more.
+* [Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer)
+* Bot Framework Emulator ([download](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2))
+* LUIS authoring key ([where to find](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys#programmatic-key))
 
 ## Step 1: Creating a new bot
 On the Composer homepage, click **New**. Select **Create from scratch**. Click **Next**. Give your bot a name, for example *WeatherBot*. Once created, you should be able to see the following screen.
@@ -23,7 +24,7 @@ In the text editor, type in the intents and utterances, then click **Save**.
 ![screenshot: editing the LU](Assets/LU.png)
 
 
-## Step 3: Creating events as intent handlers
+## Step 3: Creating event handlers to handle the intents
 On the **Events** pane, click the **add icon**, then select **Handle an Intent**.
 
 <img src = "Assets/CreateIntentHandler.png" alt = "create intent handler" width = 250></img>
@@ -35,30 +36,25 @@ It's a good practice to create a handler for each intent. In this guide, we’ve
 <img src = "Assets/IntentName.png" alt = "Intent name" width = 500></img>
 
 
-## Step 4: Adding logic to the events
-There are two ways to do this:
-1. Adding logic without dialogs
-2. Adding logic using dialogs
+## Step 4: Adding actions to the handlers
 
-**Why use dialogs?**
+Here we define the actions that the bot will take when an intent is recognized. You can add actions such as sending messages or performing computational tasks. You can also call a dialog ([SDK docs: Bot Framework Dialogs](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)) as part of the actions.
 
-Dialogs allow you to create a multi-turn conversation. Each dialog is designed to perform a specific task. Using dialogs in your logic can make your bot program extensible and manageable. Follow this link to learn more about dialogs.
+### 4.1: Adding actions to *GreetingIntentHandler*
+Double-click on the *GreetingIntentHandler* node to get started.
 
-In this guide, we will demonstrate both approaches. To start, click the event icon to go to the logic page.
+<img src = "Assets/GreetingIntentHandler.png" alt = "Other event handler" width = 250></img>
 
-<img src = "Assets/EventIcon.png" alt = "Event icon" width = 500></img>
-
-### 4.1: Adding logic without dialogs
-Let's add logic to *GreetingIntentHandler*. By design, we want the bot to send a message to the user in response to the *Greeting* intent. To do this, click the **add icon**, select **Send Messages**, then select **Send Activity**. On the **Language Generation** pane, type in the bot response. For example, *Hello from the bot!*.
+By design, we want the bot to send a message to the user in response to the *Greeting* intent. To do this, click the **add icon**, select **Send Messages**, then select **Send Activity**. On the **Language Generation** pane, type in the bot response. For example, *Hello from the bot!*.
 
 ![screenshot: LG](Assets/AddActions.png)
 
-### 4.2 Adding logic using dialogs
-Let's add logic to *CheckWeatherIntentHandler* by using a dialog. By design, we want the bot to begin a dialog (and take actions as specified in that dialog) in response to the *CheckWeather* intent. To do this, we first need to create a dialog (e.g. *CheckWeatherDialog*), then add this dialog to the *CheckWeatherIntentHandler*.
+### 4.2 Adding actions to *CheckWeatherIntentHandler*
+Double-click on the *CheckWeatherIntentHandler* node to get started. By design, we want the bot to begin a dialog (and take actions as specified in that dialog) in response to the *CheckWeather* intent. To do this, we first need to create a dialog (e.g. *CheckWeatherDialog*), then add this dialog to the *CheckWeatherIntentHandler*.
 
-To create a dialog, click **Add** and follow the instructions to complete the process. Once a dialog is created, add actions to this dialog following the same process as described in 4.1.
+To create a dialog, click **Add** on the **Dialogs** pane, and follow the instructions to complete the process. Once a dialog is created, add actions to this handler following the same process as described in 4.1.
 
-![screenshot: LG](Assets/AddADialog.png)
+<img src = "Assets/addDialog.png" alt = "Other event handler" width = 250></img>
 
 
 To add the newly created dialog to the event, first, go back to the root dialog, then select the event to which you want to add the dialog. Click the **add icon**, select **Dialogs**, select **Begin a Dialog**, then choose a dialog from the list.   
@@ -69,7 +65,7 @@ To add the newly created dialog to the event, first, go back to the root dialog,
 ## Step 5: (Optional) Creating handlers for other types of events
 Besides recognized intents, you may want to handle other types of events, for example, when there are unrecognized intents or when a user joins the conversation. Creating handlers for these types of events is no different from creating intent handlers. You just need to select a different event type as shown below. For example, select **Handle ConversationUpdate** if you want to send a welcome message to the user when they first join the conversation (when a conversationUpdate event is trigged).
 
-<img src = "Assets/OtherEventHandler.png" alt = "Other event handler" width = 450></img>
+<img src = "Assets/OtherEventHandlers.png" alt = "Other event handler" width = 500></img>
 
 
 ## Step 6: Testing your bot

@@ -1,0 +1,35 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-23T21:31:57.630Z",
+    "updatedAt": "2019-07-23T21:32:06.376Z",
+    "id": "541509",
+    "name": "Demo"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "827303",
+        "updatedAt": "2019-07-23T21:32:31.299Z"
+      },
+      "intent": "Greeting",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "616334",
+            "updatedAt": "2019-07-23T21:32:50.782Z"
+          },
+          "activity": "[bfdactivity-616334]"
+        }
+      ]
+    }
+  ]
+}

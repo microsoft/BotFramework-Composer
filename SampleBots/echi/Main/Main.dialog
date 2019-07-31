@@ -1,0 +1,30 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-11T23:45:43.726Z",
+    "updatedAt": "2019-07-11T23:45:43.734Z",
+    "id": "433224",
+    "name": "echi"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "id": "821845"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "003038",
+            "updatedAt": "2019-07-11T23:45:59.499Z"
+          },
+          "activity": "[bfdactivity-003038]"
+        }
+      ]
+    }
+  ]
+}

@@ -86,6 +86,42 @@
           ]
         }
       ]
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "233443",
+        "updatedAt": "2019-07-28T19:54:51.870Z"
+      },
+      "events": [
+        "beginDialog"
+      ]
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "name": "Handle Unknown Intent",
+        "id": "578254"
+      }
+    },
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "538038",
+        "updatedAt": "2019-07-28T20:03:59.582Z"
+      },
+      "events": [
+        "beginDialog"
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "404686"
+      }
     }
   ]
 }

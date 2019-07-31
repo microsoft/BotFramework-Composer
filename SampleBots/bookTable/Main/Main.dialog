@@ -1,0 +1,35 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-29T21:14:51.843Z",
+    "updatedAt": "2019-07-29T21:15:01.964Z",
+    "id": "734991",
+    "name": "bookTable"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "681351",
+        "updatedAt": "2019-07-29T21:18:33.934Z"
+      },
+      "intent": "bookTable",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "322680",
+            "updatedAt": "2019-07-29T21:19:25.496Z"
+          },
+          "dialog": "getLocation"
+        }
+      ]
+    }
+  ]
+}

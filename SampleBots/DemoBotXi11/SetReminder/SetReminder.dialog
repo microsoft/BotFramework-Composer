@@ -1,0 +1,11 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-25T18:34:29.520Z",
+    "updatedAt": "2019-07-25T18:34:29.527Z",
+    "id": "849962",
+    "name": "SetReminder"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}

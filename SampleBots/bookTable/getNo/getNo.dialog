@@ -1,0 +1,34 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-29T21:19:11.544Z",
+    "updatedAt": "2019-07-29T21:21:37.014Z",
+    "id": "034632",
+    "name": "getNo"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "recognizer": "getNo.lu",
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "756013",
+        "updatedAt": "2019-07-29T21:22:05.755Z"
+      },
+      "intent": "getNo"
+    }
+  ],
+  "steps": [
+    {
+      "$type": "Microsoft.SendActivity",
+      "$designer": {
+        "name": "Send an Activity",
+        "id": "237745",
+        "updatedAt": "2019-07-29T21:22:17.049Z"
+      },
+      "activity": "[bfdactivity-237745]"
+    }
+  ]
+}

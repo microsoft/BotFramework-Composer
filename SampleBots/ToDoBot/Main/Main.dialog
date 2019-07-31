@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-07-16T19:59:30.647Z",
+    "updatedAt": "2019-07-27T22:45:58.079Z",
     "id": "288769",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
@@ -10,12 +10,7 @@
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": {
-      "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-      "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
-      "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-      "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
-      "HelpIntent": "(?i)help",
-      "CancelIntent": "(?i)cancel|never mind"
+      "EditToDo": "edit to do {title}"
     }
   },
   "generator": "common.lg",
@@ -31,7 +26,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[bfdactivity-376720]"
+          "activity": "[bfdactivity-376720]",
+          "$designer": {
+            "createdAt": "2019-07-28T00:52:16.589Z",
+            "updatedAt": "2019-07-28T00:52:16.607Z",
+            "id": "906880"
+          }
         }
       ]
     },
@@ -39,16 +39,25 @@
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-16T19:59:32.772Z",
-        "updatedAt": "2019-07-16T19:59:36.277Z",
-        "id": "064505"
+        "updatedAt": "2019-07-30T16:52:46.534Z",
+        "id": "064505",
+        "name": "Hande intent"
       },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "AddToDo"
+          "dialog": "AddToDo",
+          "$designer": {
+            "createdAt": "2019-07-29T11:19:10.472Z",
+            "updatedAt": "2019-07-29T11:19:10.479Z",
+            "id": "298689"
+          }
         }
       ],
-      "intent": "AddIntent"
+      "intent": "AddIntent",
+      "entities": [
+        "@title"
+      ]
     },
     {
       "$type": "Microsoft.IntentRule",
@@ -139,6 +148,95 @@
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "201750",
+        "updatedAt": "2019-07-28T19:18:14.511Z"
+      },
+      "intent": "AddToDo",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "013427",
+            "updatedAt": "2019-07-28T19:35:26.695Z"
+          },
+          "activity": "[bfdactivity-013427]"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "831468",
+            "updatedAt": "2019-07-28T19:35:46.888Z"
+          },
+          "property": "user.name",
+          "prompt": "What's your name?",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "none"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "236123",
+        "updatedAt": "2019-07-30T22:20:24.706Z"
+      },
+      "intent": "AddToDo",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "074003",
+            "updatedAt": "2019-07-30T22:20:29.837Z"
+          },
+          "dialog": "AddToDo"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "505812",
+        "updatedAt": "2019-07-30T22:35:12.653Z"
+      },
+      "intent": "GreetingIntentHandler"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "956446",
+        "updatedAt": "2019-07-30T23:12:26.772Z"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "020127",
+            "updatedAt": "2019-07-30T23:12:56.739Z"
+          },
+          "dialog": "AddToDo"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "134552"
+          }
         }
       ]
     }

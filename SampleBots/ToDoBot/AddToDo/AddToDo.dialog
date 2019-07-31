@@ -2,11 +2,10 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:51:37.526Z",
-    "updatedAt": "2019-07-16T20:00:39.131Z",
+    "updatedAt": "2019-07-25T16:55:03.386Z",
     "id": "808722"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
   "rules": [
     {
       "$type": "Microsoft.EventRule",
@@ -32,12 +31,16 @@
           "$type": "Microsoft.TextInput",
           "$designer": {
             "createdAt": "2019-07-16T20:00:55.825Z",
-            "updatedAt": "2019-07-16T20:00:59.346Z",
+            "updatedAt": "2019-07-27T19:17:14.760Z",
             "id": "298897"
           },
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of your todo.",
           "maxTurnCount": 0,
+          "validations": [
+            "count(turn.value) >= 1",
+            "count(turn.value) <= 250"
+          ],
           "alwaysPrompt": false,
           "allowInterruptions": false,
           "outputFormat": "none"
@@ -82,8 +85,34 @@
             "id": "116673"
           },
           "activity": "[bfdactivity-116673]"
+        },
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "name": "Prompt with multi-choice",
+            "id": "192576",
+            "updatedAt": "2019-07-28T18:32:04.230Z"
+          },
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "outputFormat": "value",
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          }
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema",
+  "recognizer": "AddToDo.lu"
 }

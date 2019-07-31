@@ -1,0 +1,11 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-29T15:18:57.940Z",
+    "updatedAt": "2019-07-29T15:18:57.950Z",
+    "id": "577669",
+    "name": "aDialog"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}

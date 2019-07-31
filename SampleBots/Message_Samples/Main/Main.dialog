@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-06-28T06:31:58.726Z",
-    "updatedAt": "2019-07-16T19:33:30.401Z",
+    "updatedAt": "2019-07-28T19:01:15.254Z",
     "id": "937757"
   },
   "autoEndDialog": false,
@@ -180,7 +180,15 @@
           "activity": "[bfdactivity-576166]"
         }
       ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "406012"
+      }
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu"
 }

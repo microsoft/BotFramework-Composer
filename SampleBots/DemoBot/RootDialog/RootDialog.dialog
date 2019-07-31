@@ -1,0 +1,7 @@
+{
+  "$designer": {
+    "name": "RootDialog"
+  },
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "$type": "Microsoft.AdaptiveDialog"
+}

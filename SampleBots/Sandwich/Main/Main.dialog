@@ -8,8 +8,8 @@
       "$type": "Microsoft.IntentRule",
       "steps": [
         {
-          "$comment": "**** Primary ordering dialog ****",
           "$type": "Microsoft.AdaptiveDialog",
+          "autoEndDialog": true,
           "recognizer": "Main.lu",
           "rules": [
             {
@@ -329,7 +329,13 @@
                 }
               ]
             }
-          ]
+          ],
+          "$comment": "**** Primary ordering dialog ****",
+          "$designer": {
+            "createdAt": "2019-07-25T19:04:36.091Z",
+            "updatedAt": "2019-07-25T19:04:36.140Z",
+            "id": "694480"
+          }
         }
       ],
       "intent": "OrderSandwich",
@@ -342,33 +348,53 @@
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SandwichOptions",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[SandwichOptions]"
+          "$designer": {
+            "createdAt": "2019-07-25T19:04:48.440Z",
+            "updatedAt": "2019-07-25T19:04:49.285Z",
+            "id": "973826"
+          },
+          "activity": "[bfdactivity-973826]"
         }
-      ]
+      ],
+      "intent": "SandwichOptions",
+      "$designer": {
+        "createdAt": "2019-07-25T19:04:41.948Z",
+        "updatedAt": "2019-07-25T19:04:41.960Z",
+        "id": "699009"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "BreadOptions",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[BreadOptions]"
         }
-      ]
+      ],
+      "intent": "BreadOptions",
+      "$designer": {
+        "createdAt": "2019-07-25T19:04:51.844Z",
+        "updatedAt": "2019-07-25T19:04:51.862Z",
+        "id": "820159"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ToppingOptions",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[ToppingOptions]"
         }
-      ]
+      ],
+      "intent": "ToppingOptions",
+      "$designer": {
+        "createdAt": "2019-07-25T19:05:16.497Z",
+        "updatedAt": "2019-07-25T19:05:16.512Z",
+        "id": "855302"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
