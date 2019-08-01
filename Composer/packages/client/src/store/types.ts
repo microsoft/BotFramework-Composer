@@ -43,7 +43,6 @@ export interface State {
   schemas: any;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  luStatus: any[];
   error: StateError | null;
   oAuth: any;
   showCreateDialogModal: boolean;
