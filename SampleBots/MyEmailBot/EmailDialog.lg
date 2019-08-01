@@ -8,23 +8,26 @@
     buttons = Sign In | Help | Cancel]
 ```
 
+# Showinboxchoice
+- ```
+    What do you want to do?
+    - Show me the 1st Email. 
+    - Show me the 2nd Email. 
+    - Show me the 3rd Email. 
+    - Next Page. 
+    - Last Page. 
+    - Go back. 
+```
+
 # ShowRecipient(user)
 - IF: {count(user.intentRecipient.value) == 1}
   - Cool, I Find the Recipient You Want, it's {user.intentRecipient.value[0].displayName}.
-- ELSEIF: {count(user.intentRecipient.value) == 0}
+- ELSEIF: {less(count(user.intentRecipient.value), 0)}
   - Emm, I didn't Find What you Need, Can You Try it Again ?
-- ELSEIF: {count(user.intentRecipient.value) > 1}
+- ELSEIF: {greater(count(user.intentRecipient.value), 1)}
   - I Find Several People Satisfy Your Demand. The First Two People are {user.intentRecipient.value[0].displayName} and {user.intentRecipient.value[1].displayName}. Can you Name it More Specificly?
 - ELSE:
   - Something Strange Happened.
-  
-# Multi
-- ```
-    This is a multi-line list
-    - one
-    - two
-    - Greeting: 
-``` 
 
 # EmailCard
 - ```
