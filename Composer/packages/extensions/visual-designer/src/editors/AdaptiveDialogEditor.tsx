@@ -24,17 +24,18 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
-  const [activeEvent, setActiveEvent] = useState();
+  const [activeEventId, setActiveEventId] = useState('');
 
   const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
     if (eventName === NodeEventTypes.Expand) {
       const selectedRulePath = eventData;
-      setActiveEvent(queryNode(data, selectedRulePath));
+      setActiveEventId(selectedRulePath);
       return onEvent(NodeEventTypes.Focus, selectedRulePath);
     }
     return onEvent(eventName, eventData);
   };
 
+  const activeEventData = queryNode(data, activeEventId);
   return (
     <div
       style={{
@@ -52,7 +53,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div style={{ height: 50 }} />
-      {activeEvent && <RuleEditor key={activeEvent.id} id={activeEvent.id} data={activeEvent} onEvent={onEvent} />}
+      {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };
