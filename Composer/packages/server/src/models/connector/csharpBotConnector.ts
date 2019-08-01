@@ -42,7 +42,7 @@ export class CSharpBotConnector implements IBotConnector {
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (luisConfig.authoringKey !== null && (await BotProjectService.currentBotProject.checkNeedLuisDeploy())) {
+    if (luisConfig.authoringKey !== null && !(await BotProjectService.currentBotProject.checkLuisPublished())) {
       throw new Error('Please publish your Luis models');
     }
 
