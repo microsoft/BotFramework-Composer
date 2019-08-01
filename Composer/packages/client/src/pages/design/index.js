@@ -85,8 +85,10 @@ function DesignPage(props) {
   }, [dialogs]);
 
   const onCreateDialogComplete = newDialog => {
-    actions.clearNavHistory();
-    actions.navTo(`${newDialog}#`);
+    if (newDialog) {
+      actions.clearNavHistory();
+      actions.navTo(`${newDialog}#`);
+    }
   };
 
   const toolbarItems = [
