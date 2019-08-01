@@ -16,7 +16,7 @@
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "start": "nwb serve-react-demo --port 3002",
-    "test": "jest",
+    "test": "jest --no-cache",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix"
   },
