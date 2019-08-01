@@ -55,7 +55,6 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
     >
       <Collapse text="Actions">
-        {outlineVersion.current}
         <StepEditor
           key={stepGroup.id + '?version=' + outlineVersion.current}
           id={stepGroup.id}
