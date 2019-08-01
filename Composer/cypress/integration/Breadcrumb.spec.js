@@ -26,9 +26,7 @@ context('breadcrumb', () => {
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('AddIntent').click();
       cy.wait(100);
-      cy.getByText('AddIntent').click();
-      cy.wait(100);
-      cy.getByText('AddToDo').click();
+      cy.getAllByText('AddToDo').click();
     });
 
     cy.getByTestId('Breadcrumb')
