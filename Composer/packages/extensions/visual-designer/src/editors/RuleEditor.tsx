@@ -42,6 +42,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
   return (
     <div
       className="rule-editor"
+      data-testid="RuleEditor"
       style={{
         position: 'relative',
         display: 'flex',
