@@ -47,6 +47,7 @@ export async function fetchProject(store) {
     if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main#');
     }
+    return response.data;
   } catch (err) {
     navigate(resolveToBasePath(BASEPATH, '/home'));
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -91,6 +92,7 @@ export async function openBotProject(store, absolutePath) {
       navigate(BASEPATH);
       startBot(store, true);
     }
+    return response.data;
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -124,6 +126,7 @@ export async function saveProjectAs(store, name, description) {
       navTo(store, 'Main#');
       navigate('/');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
@@ -151,6 +154,7 @@ export async function createProject(store, templateId, name, description) {
     if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main#');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }

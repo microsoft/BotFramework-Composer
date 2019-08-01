@@ -45,8 +45,8 @@ export interface LUFile {
 }
 
 export enum FileState {
-  UPDATED,
-  LATEST,
+  PUBLISHED = 'published',
+  UNPUBLISHED = 'unpublished',
 }
 
 export interface ILuisSettings {
@@ -58,8 +58,7 @@ export interface ILuisSettings {
   status: {
     [key: string]: {
       version: string | undefined;
-      checksum: string;
-      status: FileState;
+      state: FileState;
     };
   };
 }
