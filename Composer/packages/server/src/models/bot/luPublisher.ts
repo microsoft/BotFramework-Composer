@@ -6,7 +6,7 @@ import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, FileState, LUFile, ILuisConfig, ILuisStatus } from './interface';
+import { ILuisSettings, LUFile, ILuisConfig, ILuisStatus } from './interface';
 
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
@@ -34,11 +34,11 @@ export class LuPublisher {
     if (!name) return;
 
     const status = luisStatus[name];
-    if (status && status.state === FileState.UNPUBLISHED) {
-      return;
+    if (status && status.lastUpdateTime < status.lastPublishTime) {
+      return; //already published
     }
 
-    status.state = FileState.UNPUBLISHED;
+    status.lastUpdateTime = new Date().getTime();
     luisStatus[name] = status;
     await this._setLuStatus(luisStatus);
   };
@@ -65,8 +65,9 @@ export class LuPublisher {
       if (
         !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
         !luStatus[appName] ||
-        !luStatus[appName].state ||
-        luStatus[appName].state === FileState.UNPUBLISHED
+        !luStatus[appName].lastPublishTime ||
+        !luStatus[appName].lastUpdateTime ||
+        luStatus[appName].lastUpdateTime < luStatus[appName].lastPublishTime
       ) {
         result.push(file);
       }
@@ -151,7 +152,12 @@ export class LuPublisher {
           'com' as AzureClouds,
           setting.luis[name]
         );
-        luisStatus[name] = { version: appInfo.activeVersion, state: FileState.PUBLISHED };
+        const currentTime = new Date().getTime();
+        luisStatus[name] = {
+          version: appInfo.activeVersion,
+          lastUpdateTime: currentTime,
+          lastPublishTime: currentTime,
+        };
       }
     }
     await this._setLuStatus(luisStatus);
@@ -237,7 +243,7 @@ export class LuPublisher {
   };
 
   private _setLuStatus = async (luState: ILuisStatus) => {
-    const luStatePath = await this._getLuStatusPath();
-    return await this.storage.writeFile(luStatePath, JSON.stringify(luState, null, 4));
+    const luStatusPath = await this._getLuStatusPath();
+    return await this.storage.writeFile(luStatusPath, JSON.stringify(luState, null, 4));
   };
 }
