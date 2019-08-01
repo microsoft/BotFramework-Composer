@@ -28,7 +28,8 @@ Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Open').click();
   cy.get('[data-testid="SelectLocation"]').within(() => {
-    cy.getByText(botName).click({ force: true });
+    cy.get(`[aria-label="${botName}"]`).click({ force: true });
+    cy.wait(500);
   });
   cy.getByTestId('SelectLocationOpen').click({ force: true });
   cy.wait(500);
