@@ -19,9 +19,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       case NodeEventTypes.Focus:
         handler = onSelect;
         break;
-      case NodeEventTypes.Expand:
-        handler = onExpand;
-        break;
       case NodeEventTypes.OpenDialog:
         handler = ({ caller, callee }) => onOpen(callee, caller);
         break;

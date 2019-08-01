@@ -30,6 +30,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
     if (eventName === NodeEventTypes.Expand) {
       const selectedRulePath = eventData;
       setActiveEvent(queryNode(data, selectedRulePath));
+      return onEvent(NodeEventTypes.Focus, selectedRulePath);
     }
     return onEvent(eventName, eventData);
   };
