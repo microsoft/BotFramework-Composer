@@ -8,8 +8,8 @@ import { transformObiRules } from '../transformers/transformObiRules';
 
 import { StepEditor } from './StepEditor';
 
-const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
-  const result = transformObiRules(data);
+const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
+  const result = transformObiRules(data, ruleId);
   if (!result) return {};
 
   const { stepGroup } = result;
