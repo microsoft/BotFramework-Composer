@@ -10,6 +10,7 @@ export const Collapse = ({ text, children }) => {
   };
   return (
     <div
+      className="collapse"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -21,6 +22,7 @@ export const Collapse = ({ text, children }) => {
       }}
     >
       <div
+        className="collapse__topbar"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -28,6 +30,7 @@ export const Collapse = ({ text, children }) => {
         }}
       >
         <div
+          className="collapse__header"
           style={{
             color: '#605E5C',
             fontSize: '12px',
@@ -39,6 +42,7 @@ export const Collapse = ({ text, children }) => {
           {text}
         </div>
         <div
+          className="collapse__line"
           style={{
             flex: 1,
             border: '0.5px solid #000000',
@@ -55,7 +59,9 @@ export const Collapse = ({ text, children }) => {
           }}
         />
       </div>
-      <div style={{ display: collapsed ? 'none' : 'block' }}>{children}</div>
+      <div className="collapse__content" style={{ display: collapsed ? 'none' : 'block' }}>
+        {children}
+      </div>
     </div>
   );
 };
