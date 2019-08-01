@@ -33,6 +33,6 @@ context('breadcrumb', () => {
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /ToDoBot.+Handle an Intent.+AddToDo/);
+      .should('match', /ToDoBot.+AddToDo/);
   });
 });
