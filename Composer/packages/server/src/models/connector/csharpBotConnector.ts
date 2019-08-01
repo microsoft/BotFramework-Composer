@@ -6,7 +6,7 @@ import FormData from 'form-data';
 
 import BotProjectService from '../../services/project';
 
-import { IBotConnector, BotStatus } from './interface';
+import { BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
@@ -17,7 +17,7 @@ export class CSharpBotConnector implements IBotConnector {
 
   public status: BotStatus = BotStatus.NotConnected;
 
-  connect = async () => {
+  connect = async (_: BotEnvironments) => {
     // confirm bot runtime is listening here
     try {
       await axios.get(this.endpoint + '/api/admin');
@@ -26,6 +26,8 @@ export class CSharpBotConnector implements IBotConnector {
     }
 
     this.status = BotStatus.NotConnected;
+
+    return `${this.endpoint}/api/messages`;
   };
 
   sync = async (config: any) => {

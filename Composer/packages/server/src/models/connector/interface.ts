@@ -3,8 +3,10 @@ export enum BotStatus {
   Connected,
 }
 
+export type BotEnvironments = 'production' | 'integration' | 'editing';
+
 export interface IBotConnector {
   status: BotStatus;
-  connect(): Promise<void>; // connect to a bot
+  connect(environment: BotEnvironments): Promise<string>; // connect to a bot return the bot endpoint
   sync(config: any): Promise<void>; // sync content with bot
 }

@@ -5,13 +5,16 @@ import { BASEURL, ActionTypes } from './../../constants/index';
 import LuisStorage from './../../utils/luisStorage';
 
 export async function connectBot(store, botName) {
-  const path = `${BASEURL}/launcher/connect`;
+  const botEnvironment = store.state.botEnvironment;
+  const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
+
   try {
-    await axios.get(path);
+    const res = await axios.get(path);
     store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
         status: 'connected',
+        botEndpoint: res.data.botEndpoint,
       },
     });
     await reloadBot(store, botName);

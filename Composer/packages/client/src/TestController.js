@@ -47,7 +47,7 @@ export const TestController = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
+  const { botName, botStatus, botEndpoint, dialogs, oAuth, toStartBot, luFiles } = state;
   const { connectBot, reloadBot, publishLuis, startBot, setLuisConfig } = actions;
   const connected = botStatus === 'connected';
 
@@ -132,7 +132,7 @@ export const TestController = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages', oAuth)}
+            onClick={() => openInEmulator(botEndpoint || 'http://localhost:3979/api/messages', oAuth)}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>

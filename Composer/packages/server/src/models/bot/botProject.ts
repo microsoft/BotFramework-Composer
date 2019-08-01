@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { absHosted } from '../../settings/env';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
@@ -61,6 +62,7 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
+      botEnvironment: absHosted ? this.name : undefined,
     };
   };
 

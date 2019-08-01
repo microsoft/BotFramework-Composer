@@ -10,6 +10,7 @@ const getProjectSuccess = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.botEnvironment = response.data.botEnvironment || 'production';
   return state;
 };
 
@@ -59,7 +60,8 @@ const updateLuTemplate = (state, { response }) => {
   return state;
 };
 
-const setBotStatus = (state, { status }) => {
+const setBotStatus = (state, { status, botEndpoint }) => {
+  state.botEndpoint = botEndpoint || state.botEndpoint;
   return (state.botStatus = status);
 };
 
