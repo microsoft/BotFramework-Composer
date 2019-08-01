@@ -48,7 +48,7 @@ export const TestController = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { connectBot, reloadBot, publishLuis, startBot, setLuisConfig } = actions;
   const connected = botStatus === BotStatus.connected;
 
   useEffect(() => {
