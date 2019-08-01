@@ -71,6 +71,7 @@ export interface ShellApi {
   createLgTemplate: (id: string, template: LgTemplate, position: number) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
+  createDialog: () => Promise<string>;
 }
 export interface EditorSchema {
   editor: {

@@ -103,6 +103,10 @@ function ExtensionContainer() {
         template: { Name: templateName, Body: template },
       });
     },
+
+    createDialog: () => {
+      return apiClient.apiCall('createDialog');
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;

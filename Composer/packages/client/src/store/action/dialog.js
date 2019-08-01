@@ -3,17 +3,17 @@ import axios from 'axios';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
-export async function removeDialog(dispatch, id) {
+export async function removeDialog(store, id) {
   try {
     const response = await await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
-    dispatch({
+    store.dispatch({
       type: ActionTypes.REMOVE_DIALOG_SUCCESS,
       payload: { response },
     });
-    clearNavHistory(dispatch);
-    navTo(dispatch, 'Main#');
+    clearNavHistory(store);
+    navTo(store, 'Main#');
   } catch (err) {
-    dispatch({
+    store.dispatch({
       type: ActionTypes.REMOVE_DIALOG_FAILURE,
       payload: null,
       error: err,
@@ -21,22 +21,23 @@ export async function removeDialog(dispatch, id) {
   }
 }
 
-export async function createDialog(dispatch, { id, content }) {
+export async function createDialog(store, { id, content }) {
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, {
       id,
       content,
     });
-    dispatch({
+    if (typeof store.state.onCreateDialogComplete === 'function') {
+      store.state.onCreateDialogComplete(id);
+    }
+    store.dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
       payload: {
         response,
       },
     });
-    clearNavHistory(dispatch);
-    navTo(dispatch, `${id}#`);
   } catch (err) {
-    dispatch({
+    store.dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
         message: err.response && err.response.data.message ? err.response.data.message : err,
@@ -46,7 +47,7 @@ export async function createDialog(dispatch, { id, content }) {
   }
 }
 
-export async function updateDialog(dispatch, { id, content }) {
+export async function updateDialog({ dispatch }, { id, content }) {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, {
       id,
@@ -67,4 +68,22 @@ export async function updateDialog(dispatch, { id, content }) {
       },
     });
   }
+}
+
+export function createDialogBegin({ dispatch }, onComplete) {
+  dispatch({
+    type: ActionTypes.CREATE_DIALOG_BEGIN,
+    payload: {
+      onComplete,
+    },
+  });
+}
+
+export function createDialogCancel(store) {
+  if (typeof store.state.onCreateDialogComplete === 'function') {
+    store.state.onCreateDialogComplete(null);
+  }
+  store.dispatch({
+    type: ActionTypes.CREATE_DIALOG_CANCEL,
+  });
 }
