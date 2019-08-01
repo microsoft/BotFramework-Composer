@@ -96,12 +96,19 @@ export function App() {
   const { state, actions } = useContext(Store);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
+  const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   useEffect(() => {
-    fetchProject();
+    init();
   }, []);
+
+  async function init() {
+    const data = await fetchProject();
+    if (data && data.botName) {
+      setLuisConfig(botName);
+    }
+  }
 
   return (
     <Fragment>

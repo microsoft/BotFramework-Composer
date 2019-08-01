@@ -24,7 +24,6 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  luStatus: [],
   designPath: {
     dialogId: '',
     navPath: '',

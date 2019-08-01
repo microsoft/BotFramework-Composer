@@ -35,13 +35,13 @@ export function saveTemplateId({ dispatch }, templateId) {
 export async function fetchProject(store) {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);
-    const dialogs = response.data.dialogs;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
         response,
       },
     });
+    return response.data;
   } catch (err) {
     navigate(resolveToBasePath(BASEPATH, '/home'));
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -82,6 +82,7 @@ export async function openBotProject(store, absolutePath) {
       navigate('/dialogs/Main');
       startBot(dispatch, true);
     }
+    return response.data;
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -113,6 +114,7 @@ export async function saveProjectAs(store, name, description) {
     if (dialogs && dialogs.length > 0) {
       navigate('dialogs/Main');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
@@ -139,6 +141,7 @@ export async function createProject(store, templateId, name, description) {
     if (dialogs && dialogs.length > 0) {
       navigate('/dialogs/Main');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
