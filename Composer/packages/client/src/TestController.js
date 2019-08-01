@@ -19,6 +19,7 @@ import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } fr
 import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { getReferredFiles } from './utils/luUtil';
 
 const openInEmulator = (url, authSettings) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -44,9 +45,9 @@ export const TestController = () => {
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
-  const [luisPublishSucceed, setLuisPublishSucceed] = useState(false);
+  const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, luFiles, luStatus, dialogs, oAuth, toStartBot } = state;
+  const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
@@ -75,25 +76,20 @@ export const TestController = () => {
       return;
     }
     const config = LuisStorage.get(botName);
-    const files = luFiles.filter(f => dialogs.findIndex(dialog => dialog.luFile === f.id) !== -1);
-    const updated =
-      luStatus.length !== files.length ||
-      !luStatus.every(item => item.status === 1) ||
-      config[LuisConfig.AUTHORING_KEY] === '';
-    if (files.length !== 0 && updated) {
-      if (!luisPublishSucceed) {
+
+    if (getReferredFiles(luFiles, dialogs).length > 0) {
+      if (!luisPublishSucceed || config[LuisConfig.AUTHORING_KEY] === '') {
         setModalOpen(true);
-        return;
       } else {
-        await publishAndReload(config);
+        await publishAndReload();
       }
     } else {
       await handleLoadBot();
     }
   }
 
-  async function publishAndReload(config) {
-    if (await handlePublish(config)) {
+  async function publishAndReload() {
+    if (await handlePublish()) {
       setLuisPublishSucceed(true);
       await handleLoadBot();
     } else {
@@ -101,10 +97,11 @@ export const TestController = () => {
     }
   }
 
-  async function handlePublish(config) {
+  async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await publishLuis(config);
+      await setLuisConfig(botName);
+      await publishLuis();
       return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
@@ -169,7 +166,7 @@ export const TestController = () => {
               {error.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {formatMessage(error.message)}
+              {error.message}
             </p>
             <Stack
               horizontal
@@ -208,6 +205,4 @@ TestController.propTypes = {
   reloadBot: PropTypes.func,
   openStorageExplorer: PropTypes.func,
   openPublish: PropTypes.func,
-  luFiles: PropTypes.array,
-  luStatus: PropTypes.array,
 };

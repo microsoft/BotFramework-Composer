@@ -12,7 +12,6 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
-  state.luStatus = response.data.luStatus;
   return state;
 };
 
