@@ -62,7 +62,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       tabIndex={0}
       className="obi-editor-container"
       data-testid="obi-editor-container"
-      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
+      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box', '&:focus': { outline: 'none' } }}
       ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;

@@ -6,15 +6,11 @@ import React, { ReactNode } from 'react';
 interface OffsetContainerProps {
   offset: { x: number; y: number };
   children: ReactNode;
-  styles: object;
 }
 
 export class OffsetContainer extends React.Component<OffsetContainerProps, object> {
-  static defaultProps = {
-    styles: {},
-  };
   render(): ReactNode {
-    const { offset, children, styles } = this.props;
+    const { offset, children } = this.props;
     if (!offset) return children;
 
     return (
@@ -27,8 +23,8 @@ export class OffsetContainer extends React.Component<OffsetContainerProps, objec
             transitionDuration: '50ms',
             transitionProperty: 'left, right, top, bottom',
           },
-          { ...styles },
         ]}
+        {...this.props}
       >
         {children}
       </div>

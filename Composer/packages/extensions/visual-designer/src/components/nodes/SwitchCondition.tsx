@@ -65,7 +65,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <DefaultRenderer key={conditionNode.id} id={conditionNode.id} data={conditionNode.data} onEvent={onEvent} />
       </OffsetContainer>
-      <OffsetContainer offset={choiceNode.offset} styles={{ zIndex: 100 }}>
+      <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
