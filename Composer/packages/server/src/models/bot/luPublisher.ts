@@ -6,7 +6,7 @@ import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, FileState, LUFile, ILuisConfig } from './interface';
+import { ILuisSettings, FileState, LUFile, ILuisConfig, ILuisStatus } from './interface';
 
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
@@ -27,20 +27,20 @@ export class LuPublisher {
   public update = async (isUpdated: boolean, path: string) => {
     if (!isUpdated) return;
 
-    const setting: ILuisSettings = await this._getSettings();
-    if (setting === null) return;
+    const luisStatus: ILuisStatus = await this._getLuStatus();
+    if (luisStatus === null) return;
 
     const name = await this._getAppName(path);
     if (!name) return;
 
-    const status = setting.status[name];
+    const status = luisStatus[name];
     if (status && status.state === FileState.UNPUBLISHED) {
       return;
     }
 
     status.state = FileState.UNPUBLISHED;
-    setting.status[name] = status;
-    await this._setSettings(setting);
+    luisStatus[name] = status;
+    await this._setLuStatus(luisStatus);
   };
 
   public publish = async (luFiles: LUFile[]) => {
@@ -56,17 +56,17 @@ export class LuPublisher {
   };
 
   public getUnpublisedFiles = async (files: LUFile[]) => {
-    const setting: ILuisSettings = await this._getSettings();
-    if (setting === null) return files;
+    const luStatus: ILuisStatus = await this._getLuStatus();
+    if (luStatus === null) return files;
     const result: LUFile[] = [];
     for (const file of files) {
       const appName = this._getAppName(file.id);
       // //if no generated files, no status, check file's checksum
       if (
         !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
-        !setting.status[appName] ||
-        !setting.status[appName].state ||
-        setting.status[appName].state === FileState.UNPUBLISHED
+        !luStatus[appName] ||
+        !luStatus[appName].state ||
+        luStatus[appName].state === FileState.UNPUBLISHED
       ) {
         result.push(file);
       }
@@ -80,9 +80,9 @@ export class LuPublisher {
   };
 
   public getLuisStatus = async () => {
-    const settings = await this._getSettings();
-    if (settings === null) return [];
-    const status = settings.status;
+    const luisStatus = await this._getLuStatus();
+    if (luisStatus === null) return [];
+    const status = luisStatus;
     this.status = keys(status).reduce((result: { [key: string]: string }[], item) => {
       let name = item.split('_').join('.');
       name = replace(name, '.en-us', '');
@@ -142,7 +142,7 @@ export class LuPublisher {
     });
     const client = new LuisAuthoring(credentials as any, {});
     const setting: ILuisSettings = await this._getSettings();
-    setting.status = {};
+    const luisStatus: ILuisStatus = {};
     const names = keys(setting.luis);
     for (const name of names) {
       if (ENDPOINT_KEYS.indexOf(name) < 0) {
@@ -151,16 +151,20 @@ export class LuPublisher {
           'com' as AzureClouds,
           setting.luis[name]
         );
-        setting.status[name] = { version: appInfo.activeVersion, state: FileState.PUBLISHED };
+        luisStatus[name] = { version: appInfo.activeVersion, state: FileState.PUBLISHED };
       }
     }
-    await this._setSettings(setting);
-    return setting.status;
+    await this._setLuStatus(luisStatus);
+    return luisStatus;
   };
 
   private _getSettingPath = (config: ILuisConfig | null) => {
     if (config === null) return '';
     return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
+  };
+
+  private _getLuStatusPath = async () => {
+    return Path.join(this.generatedFolderPath, `luis.status.json`);
   };
 
   private _getAppName = (path: string) => {
@@ -223,8 +227,17 @@ export class LuPublisher {
     return await this._getJsonObject(settingPath);
   };
 
-  private _setSettings = async (settings: ILuisSettings) => {
-    const settingPath = this._getSettingPath(this.config);
-    return await this.storage.writeFile(settingPath, JSON.stringify(settings, null, 4));
+  private _getLuStatus = async () => {
+    const luStatePath = await this._getLuStatusPath();
+    if (!this.storage.exists(luStatePath)) {
+      return null;
+    } else {
+      return await this._getJsonObject(luStatePath);
+    }
+  };
+
+  private _setLuStatus = async (luState: ILuisStatus) => {
+    const luStatePath = await this._getLuStatusPath();
+    return await this.storage.writeFile(luStatePath, JSON.stringify(luState, null, 4));
   };
 }
