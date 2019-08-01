@@ -64,6 +64,14 @@ export interface ILuisSettings {
   };
 }
 
+export interface ILuisState {
+  [key: string]: {
+    version: string | undefined;
+    checksum: string;
+    status: FileState;
+  };
+}
+
 export interface ILuisConfig {
   name: string;
   authoringKey: string;

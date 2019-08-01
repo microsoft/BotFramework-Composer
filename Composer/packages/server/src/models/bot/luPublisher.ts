@@ -9,7 +9,7 @@ import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, FileState, LUFile, ILuisConfig } from './interface';
+import { ILuisSettings, FileState, LUFile, ILuisConfig, ILuisState } from './interface';
 
 const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
@@ -29,11 +29,11 @@ export class LuPublisher {
 
   public update = async (path: string) => {
     try {
-      const setting: ILuisSettings = await this._getSettings();
-      if (setting === null) return true;
+      const luisState: ILuisState = await this._getLuState();
+      if (luisState === null) return true;
 
       const name = await this._getAppName(path);
-      const status = setting.status[name];
+      const status = luisState[name];
       if (status && status.status === FileState.UPDATED) {
         return true;
       }
@@ -43,8 +43,8 @@ export class LuPublisher {
         status.checksum = newChecksum;
         status.status = FileState.UPDATED;
       }
-      setting.status[name] = status;
-      await this._setSettings(setting);
+      luisState[name] = status;
+      await this._setLuState(luisState);
       return true;
     } catch (error) {
       return error;
@@ -77,9 +77,9 @@ export class LuPublisher {
   };
 
   public getLuisStatus = async () => {
-    const settings = await this._getSettings();
-    if (settings === null) return [];
-    const status = settings.status;
+    const luisState = await this._getLuState();
+    if (luisState === null) return [];
+    const status = luisState;
     this.status = keys(status).reduce((result: { [key: string]: string }[], item) => {
       let name = item.split('_').join('.');
       name = replace(name, '.en-us', '');
@@ -117,7 +117,7 @@ export class LuPublisher {
     });
     const client = new LuisAuthoring(credentials as any, {});
     const setting: ILuisSettings = await this._getSettings();
-    setting.status = {};
+    const luisState: ILuisState = {};
     const names = keys(setting.luis);
     for (const name of names) {
       if (ENDPOINT_KEYS.indexOf(name) < 0) {
@@ -126,11 +126,11 @@ export class LuPublisher {
           'com' as AzureClouds,
           setting.luis[name]
         );
-        setting.status[name] = { version: appInfo.activeVersion, checksum: '', status: FileState.LATEST };
+        luisState[name] = { version: appInfo.activeVersion, checksum: '', status: FileState.LATEST };
       }
     }
-    await this._setSettings(setting);
-    return setting.status;
+    await this._setLuState(luisState);
+    return luisState;
   };
 
   private _getSettingPath = async () => {
@@ -148,6 +148,10 @@ export class LuPublisher {
     }
 
     return '';
+  };
+
+  private _getLuStatePath = async () => {
+    return Path.join(this.generatedFolderPath, `luis.status.json`);
   };
 
   private _getAppName = async (path: string) => {
@@ -218,8 +222,22 @@ export class LuPublisher {
     return await this._getJsonObject(settingPath);
   };
 
-  private _setSettings = async (settings: ILuisSettings) => {
-    const settingPath = await this._getSettingPath();
-    return await this.storage.writeFile(settingPath, JSON.stringify(settings, null, 4));
+  // private _setSettings = async (settings: ILuisSettings) => {
+  //   const settingPath = await this._getSettingPath();
+  //   return await this.storage.writeFile(settingPath, JSON.stringify(settings, null, 4));
+  // };
+
+  private _getLuState = async () => {
+    const luStatePath = await this._getLuStatePath();
+    if (!this.storage.exists(luStatePath)) {
+      return null;
+    } else {
+      return await this._getJsonObject(luStatePath);
+    }
+  };
+
+  private _setLuState = async (luState: ILuisState) => {
+    const luStatePath = await this._getLuStatePath();
+    return await this.storage.writeFile(luStatePath, JSON.stringify(luState, null, 4));
   };
 }
