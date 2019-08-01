@@ -49,7 +49,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       if (data.intent) {
         trigger = data.intent;
       } else {
-        trigger = formatMessage('? intent');
+        // Leave blank
       }
       break;
 
@@ -67,7 +67,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
           }
         );
       } else {
-        trigger = formatMessage('? event');
+        // Leave blank
       }
       break;
 
