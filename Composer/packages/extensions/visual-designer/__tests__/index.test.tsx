@@ -3,7 +3,7 @@ import { cleanup, render, waitForElement } from 'react-testing-library';
 
 import VisualDesigner from '../src';
 
-describe('<VisualDesigner />', () => {
+describe.skip('<VisualDesigner />', () => {
   afterEach(cleanup);
 
   it('should render the visual designer', async () => {
