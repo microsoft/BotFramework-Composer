@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
+import { isEqual } from 'lodash';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { GraphNode } from '../shared/GraphNode';
 import { defaultNodeProps } from '../components/shared/sharedProps';
 import { Collapse } from '../components/nodes/templates/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
+import { outlineObiJson } from '../shared/outlineObiJson';
 
 import { StepEditor } from './StepEditor';
 
@@ -18,8 +20,23 @@ const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
   };
 };
 
+/**
+ * `Rule` means a single element stored in the array `AdaptiveDialog.rules`.
+ * Usually, a Rule may contain a series of steps.
+ */
 export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
-  const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
+  const outlineCache = useRef();
+  const outlineVersion = useRef(0);
+
+  const nodeMap = useMemo(() => {
+    const newOutline = outlineObiJson(data);
+    if (!isEqual(newOutline, outlineCache.current)) {
+      outlineCache.current = newOutline;
+      outlineVersion.current += 1;
+    }
+    return calculateNodeMap(id, data);
+  }, [id, data]);
+
   const { stepGroup } = nodeMap;
 
   return (
@@ -38,7 +55,13 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
     >
       <Collapse text="Actions">
-        <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
+        {outlineVersion.current}
+        <StepEditor
+          key={stepGroup.id + '?version=' + outlineVersion.current}
+          id={stepGroup.id}
+          data={stepGroup.data}
+          onEvent={onEvent}
+        />
       </Collapse>
     </div>
   );
