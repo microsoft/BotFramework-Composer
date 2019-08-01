@@ -10,7 +10,6 @@ const getProjectSuccess = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
-  state.luStatus = response.data.luStatus;
   return state;
 };
 
@@ -30,9 +29,23 @@ const removeDialog = (state, { response }) => {
   return state;
 };
 
+const createDialogBegin = (state, { onComplete }) => {
+  state.showCreateDialogModal = true;
+  state.onCreateDialogComplete = onComplete;
+  return state;
+};
+
+const createDialogCancel = state => {
+  state.showCreateDialogModal = false;
+  state.onCreateDialogComplete = null;
+  return state;
+};
+
 const createDialogSuccess = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
+  state.showCreateDialogModal = false;
+  state.onCreateDialogComplete = null;
   return state;
 };
 
@@ -152,6 +165,8 @@ const setToStartBot = (state, { toStartBot }) => {
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
+  [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,

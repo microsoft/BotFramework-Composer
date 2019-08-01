@@ -27,14 +27,14 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  luStatus: [],
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
+  showCreateDialogModal: false,
 };
 
 export function StoreProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const boundActions = bindActions(dispatch, actions);
+  const boundActions = bindActions({ dispatch, state }, actions);
   const value = {
     state,
     actions: boundActions,

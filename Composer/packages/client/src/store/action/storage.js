@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-export async function fetchStorages(dispatch) {
+export async function fetchStorages({ dispatch }) {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
     dispatch({
@@ -26,7 +26,7 @@ export async function fetchTemplates() {
   }
 }
 
-export async function addNewStorage(dispatch, storageData) {
+export async function addNewStorage({ dispatch }, storageData) {
   try {
     const response = await axios.post(`${BASEURL}/storages`, storageData);
     dispatch({
@@ -41,7 +41,7 @@ export async function addNewStorage(dispatch, storageData) {
 }
 
 // todo: enable this if we have more storage, currently we only have one.
-export async function fetchStorageByName(dispatch, fileName) {
+export async function fetchStorageByName({ dispatch }, fileName) {
   try {
     const response = await axios.get(`${BASEURL}/storage/${fileName}`);
     dispatch({
@@ -55,7 +55,7 @@ export async function fetchStorageByName(dispatch, fileName) {
   }
 }
 
-export async function fetchFolderItemsByPath(dispatch, id, path) {
+export async function fetchFolderItemsByPath({ dispatch }, id, path) {
   try {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
