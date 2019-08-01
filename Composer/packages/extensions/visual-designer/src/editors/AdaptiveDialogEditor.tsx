@@ -26,7 +26,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
 
   const [activeEventId, setActiveEventId] = useState('');
 
-  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any): any => {
+  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
     if (eventName === NodeEventTypes.Expand) {
       const selectedRulePath = eventData;
       setActiveEventId(selectedRulePath);
@@ -44,14 +44,16 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         flexDirection: 'column',
         alignItems: 'center',
       }}
-      onClick={(e): void => {
+      onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {ruleGroup && <EventsEditor id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />}
+      {ruleGroup && (
+        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
+      )}
       <div style={{ height: 50 }} />
-      {activeEventId && <RuleEditor id={activeEventId} data={activeEventData} onEvent={onEvent} />}
+      {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };
