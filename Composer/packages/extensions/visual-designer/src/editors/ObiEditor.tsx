@@ -1,13 +1,11 @@
 import React, { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-import { RuleEditor } from './RuleEditor';
 import './ObiEditor.css';
 
 export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, onOpen, onChange, isRoot }) => {
@@ -54,20 +52,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
     return handler(eventData);
   };
 
-  const chooseEditor = ($type: string): FC<any> => {
-    if ($type === ObiTypes.AdaptiveDialog) {
-      return AdaptiveDialogEditor;
-    }
-    return RuleEditor;
-  };
-
   const renderFallbackContent = () => {
     return null;
   };
 
   if (!data) return renderFallbackContent();
 
-  const ChosenEditor = chooseEditor(data.$type);
   return (
     <div
       tabIndex={0}
@@ -87,10 +77,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       }}
     >
       <DragScroll>
-        <ChosenEditor
+        <AdaptiveDialogEditor
           id={path}
           data={data}
-          hideSteps={isRoot}
           onEvent={(eventName, eventData) => {
             divRef.focus({ preventScroll: true });
             dispatchEvent(eventName, eventData);

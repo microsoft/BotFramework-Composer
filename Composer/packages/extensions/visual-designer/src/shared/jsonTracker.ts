@@ -34,15 +34,24 @@ function locateNode(dialog: { [key: string]: any }, path) {
     parentData = currentData;
     currentData = parentData[objSelector];
     currentKey = objSelector;
+    if (currentData === undefined) return null;
 
     if (arrayIndex !== undefined) {
       parentData = currentData;
       currentData = parentData[arrayIndex];
       currentKey = arrayIndex;
+      if (currentData === undefined) return null;
     }
   }
 
   return { parentData, currentData, currentKey };
+}
+
+export function queryNode(inputDialog, path) {
+  const target = locateNode(inputDialog, path);
+  if (!target) return null;
+
+  return target.currentData;
 }
 
 export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {

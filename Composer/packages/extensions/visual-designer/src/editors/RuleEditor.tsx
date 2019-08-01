@@ -24,9 +24,11 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
 
   return (
     <div
+      className="rule-editor"
       style={{
         position: 'relative',
         display: 'flex',
+        width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
       }}
@@ -35,11 +37,9 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {stepGroup && (
-        <Collapse text="Actions">
-          <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
-        </Collapse>
-      )}
+      <Collapse text="Actions">
+        <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
+      </Collapse>
     </div>
   );
 };
