@@ -44,29 +44,19 @@ export interface LUFile {
   parsedContent: { [key: string]: any };
 }
 
-export enum FileState {
-  PUBLISHED = 'published',
-  UNPUBLISHED = 'unpublished',
-}
-
 export interface ILuisSettings {
   luis: {
     [key: string]: string;
     endpoint: string;
     endpointKey: string;
   };
-  status: {
-    [key: string]: {
-      version: string | undefined;
-      state: FileState;
-    };
-  };
 }
 
 export interface ILuisStatus {
   [key: string]: {
     version: string | undefined;
-    state: FileState;
+    lastUpdateTime: number;
+    lastPublishTime: number;
   };
 }
 
