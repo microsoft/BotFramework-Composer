@@ -27,7 +27,6 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  luStatus: [],
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
