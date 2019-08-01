@@ -11,6 +11,7 @@ const readDir = promisify(fs.readdir);
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
+const rmDir = promisify(fs.rmdir);
 const copyFile = promisify(fs.copyFile);
 const rename = promisify(fs.rename);
 
@@ -57,6 +58,10 @@ export class LocalDiskStorage implements IFileStorage {
 
   async mkDir(path: string, options?: MakeDirectoryOptions): Promise<void> {
     await mkDir(path, options);
+  }
+
+  async rmDir(path: string): Promise<void> {
+    await rmDir(path);
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
