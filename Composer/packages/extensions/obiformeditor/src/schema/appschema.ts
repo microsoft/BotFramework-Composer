@@ -386,24 +386,25 @@ export const appschema: JSONSchema6 = {
             value: {
               type: 'string',
               title: 'Value',
-              description: 'the value to return when selected.',
+              description: 'The choice label and value that will be returned when selected.',
             },
             action: {
               title: 'Action',
               description: 'Card action for the choice',
               type: 'object',
+              additionalProperties: true,
             },
             synonyms: {
               type: 'array',
               title: 'Synonyms',
-              description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+              description: 'An optional list of synonyms that can be used to select this choice.',
               items: {
                 type: 'string',
               },
             },
           },
         },
-        cardAction: {
+        CardAction: {
           type: 'object',
         },
       },
@@ -431,13 +432,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
+          description: 'Extra information for the Bot Framework Composer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
-          description: 'This is that will be passed in as InputProperty and also set as the OutputProperty',
-          examples: ['value.birthday', 'user.name'],
+          description: 'The property in memory used to store customer input.',
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -445,7 +446,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -454,46 +455,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
+          examples: ['turn.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The message to send to as prompt for this input.',
+          description: 'The first message to send as a prompt for this value.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: 'The message to send if the last input is not recognized.',
+          description: "The message to send if no valid choice is found in the customer's response.",
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: 'The message to send to when then input was not valid for the input type.',
+          description: "The message to send if the customer's response fails the validation rules.",
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          description: 'The maximum number of times this prompt will be presented.',
+          default: 0,
           examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          title: 'Validation Rules',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'String must contain an expression.',
+            description: 'An expression used to validate customer input.',
           },
         },
         value: {
@@ -505,124 +507,126 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: "Value to return if the value expression can't be evaluated.",
+          description: 'Value to return if max turn count is reached.',
           type: 'string',
         },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description:
-            'If set to true this will always prompt the user regardless if you already have the value or not.',
+          description: 'If set, this will always prompt the customer even if the value is already known.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
-          type: 'string',
-          enum: ['always', 'never', 'notRecognized'],
+          type: 'boolean',
           title: 'Allow Interruptions',
-          description:
-            "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-          default: 'never',
-          examples: ['notRecognized'],
+          description: 'If set, this prompt will allow interruptions.',
+          default: true,
+          examples: [true],
         },
         outputFormat: {
           type: 'string',
           enum: ['value', 'index'],
           title: 'Output Format',
-          description: 'The output format.',
+          description: 'The format of the final value.',
           default: 'value',
         },
         choices: {
+          title: 'Choices',
           type: 'array',
-          items: [
-            {
-              type: 'object',
-              properties: {
-                value: {
+          items: {
+            title: 'Value',
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'The choice label and value that will be returned when selected.',
+              },
+              // TODO: Re-enable card actions when we are better equipped to provide a UI that is foolproof
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              //   additionalProperties: true,
+              // },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'An optional list of synonyms that can be used to select this choice.',
+                items: {
                   type: 'string',
-                  title: 'Value',
-                  description: 'the value to return when selected.',
-                },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
-                synonyms: {
-                  type: 'array',
-                  title: 'Synonyms',
-                  description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-                  items: {
-                    type: 'string',
-                  },
                 },
               },
             },
-          ],
+          },
         },
         appendChoices: {
           type: 'boolean',
           title: 'Append Choices',
-          description: 'Compose an output activity containing a set of choices',
-          default: 'true',
+          description: 'If set, the activity will automatically include choices in the specified format.',
+          default: true,
         },
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          description: 'The language setting that will be used to interpret input and generate choices.',
           default: 'en-us',
         },
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
           title: 'List Style',
-          description: 'The kind of choice list style to generate',
+          description: 'Specify how the choices will appear in the message.',
           default: 'Auto',
         },
         choiceOptions: {
           type: 'object',
+          title: 'Formatting Options',
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Seperator',
-              description: 'Character used to separate individual choices when there are more than 2 choices',
+              title: 'Inline Separator',
+              description: 'The character to use to separate individual choices when there are more than two choices.',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
               title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
+              description: 'Separator inserted between the choices when there are only two choices.',
               default: ' or ',
             },
             inlineOrMore: {
               type: 'string',
               title: 'Inline OrMore',
-              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
+              description: 'Separator inserted between the last 2 choices when there are more than 2 choices.',
               default: ', or ',
             },
             includeNumbers: {
               type: 'boolean',
               title: 'Include Numbers',
-              description: 'If true, inline and list style choices will be prefixed with the index of the choice.',
+              description: 'If set, choices will be prefixed with a number.',
               default: true,
             },
           },
         },
         recognizerOptions: {
           type: 'object',
+          title: 'Recognizer Options',
           properties: {
             noValue: {
               type: 'boolean',
-              title: 'No Value',
-              description: 'If true, the choices value field will NOT be search over',
+              title: 'No value',
+              description: 'If set, the bot will not use the "value" setting as a valid choice.',
               default: false,
             },
-            noAction: {
-              type: 'boolean',
-              title: 'No Action',
-              description: 'If true, the the choices action.title field will NOT be searched over',
-              default: false,
-            },
+            // TODO: re-enable this when we re-enable the action field in choices
+            // noAction: {
+            //   type: 'boolean',
+            //   title: 'No Action',
+            //   description: 'If set, the the choices action.title field will NOT be searched over',
+            //   default: false,
+            // },
           },
         },
       },
