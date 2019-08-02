@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionCreator } from '../types';
 
-export async function fetchStorages({ dispatch }) {
+import { BASEURL, ActionTypes } from './../../constants';
+
+export const fetchStorages: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await axios.get(`${BASEURL}/storages`);
     dispatch({
@@ -15,7 +17,7 @@ export async function fetchStorages({ dispatch }) {
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
-}
+};
 
 export async function fetchTemplates() {
   try {
@@ -26,7 +28,7 @@ export async function fetchTemplates() {
   }
 }
 
-export async function addNewStorage({ dispatch }, storageData) {
+export const addNewStorage: ActionCreator = async ({ dispatch }, storageData) => {
   try {
     const response = await axios.post(`${BASEURL}/storages`, storageData);
     dispatch({
@@ -38,10 +40,10 @@ export async function addNewStorage({ dispatch }, storageData) {
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
-}
+};
 
 // todo: enable this if we have more storage, currently we only have one.
-export async function fetchStorageByName({ dispatch }, fileName) {
+export const fetchStorageByName: ActionCreator = async ({ dispatch }, fileName) => {
   try {
     const response = await axios.get(`${BASEURL}/storage/${fileName}`);
     dispatch({
@@ -53,9 +55,9 @@ export async function fetchStorageByName({ dispatch }, fileName) {
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
-}
+};
 
-export async function fetchFolderItemsByPath({ dispatch }, id, path) {
+export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, path) => {
   try {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
@@ -79,4 +81,4 @@ export async function fetchFolderItemsByPath({ dispatch }, id, path) {
       error: err,
     });
   }
-}
+};
