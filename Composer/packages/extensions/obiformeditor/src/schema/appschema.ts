@@ -2497,7 +2497,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    OAuthInput: {
+    'Microsoft.OAuthInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'OAuthInput Dialog',
       description: 'This represents a dialog which gathers an OAuth token from user',
@@ -3006,7 +3006,7 @@ export const appschema: JSONSchema6 = {
           default: 'none',
         },
         allowInterruptions: {
-          default: 'always',
+          default: 'never',
           type: 'string',
           enum: ['always', 'never', 'notRecognized'],
           title: 'Allow Interruptions',
