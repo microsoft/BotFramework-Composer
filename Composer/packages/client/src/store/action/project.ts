@@ -1,39 +1,41 @@
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
+import { ActionCreator } from '../types';
+
 import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { resolveToBasePath } from './../../utils/fileUtil';
 import { navTo, clearNavHistory } from './navigation';
 import { startBot } from './bot';
 
-export function updateOAuth({ dispatch }, oAuth) {
+export const updateOAuth: ActionCreator = ({ dispatch }, oAuth) => {
   dispatch({
     type: ActionTypes.UPDATE_OAUTH,
     payload: {
       oAuth,
     },
   });
-}
+};
 
-export function setCreationFlowStatus({ dispatch }, creationFlowStatus) {
+export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
     type: ActionTypes.SET_CREATION_FLOW_STATUS,
     payload: {
       creationFlowStatus,
     },
   });
-}
+};
 
-export function saveTemplateId({ dispatch }, templateId) {
+export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   dispatch({
     type: ActionTypes.SAVE_TEMPLATE_ID,
     payload: {
       templateId,
     },
   });
-}
+};
 
-export async function fetchProject(store) {
+export const fetchProject: ActionCreator = async store => {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);
     const dialogs = response.data.dialogs;
@@ -47,13 +49,14 @@ export async function fetchProject(store) {
     if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main#');
     }
+    return response.data;
   } catch (err) {
     navigate(resolveToBasePath(BASEPATH, '/home'));
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
-}
+};
 
-export async function fetchRecentProjects({ dispatch }) {
+export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await axios.get(`${BASEURL}/projects/recent`);
     dispatch({
@@ -67,9 +70,9 @@ export async function fetchRecentProjects({ dispatch }) {
       error: err,
     });
   }
-}
+};
 
-export async function openBotProject(store, absolutePath) {
+export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -91,6 +94,7 @@ export async function openBotProject(store, absolutePath) {
       navigate(BASEPATH);
       startBot(store, true);
     }
+    return response.data;
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -100,9 +104,9 @@ export async function openBotProject(store, absolutePath) {
       },
     });
   }
-}
+};
 
-export async function saveProjectAs(store, name, description) {
+export const saveProjectAs: ActionCreator = async (store, name, description) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -124,12 +128,13 @@ export async function saveProjectAs(store, name, description) {
       navTo(store, 'Main#');
       navigate('/');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
-}
+};
 
-export async function createProject(store, templateId, name, description) {
+export const createProject: ActionCreator = async (store, templateId, name, description) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -151,15 +156,16 @@ export async function createProject(store, templateId, name, description) {
     if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main#');
     }
+    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
-}
+};
 
-export async function getAllProjects() {
+export const getAllProjects = async () => {
   try {
     return (await axios.get(`${BASEURL}/projects`)).data.children;
   } catch (err) {
     return err;
   }
-}
+};

@@ -11,7 +11,7 @@ import { BASEPATH, DialogDeleting } from '../../constants';
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
-import { Store } from './../../store/index';
+import { StoreContext } from './../../store';
 import {
   breadcrumbClass,
   projectWrapper,
@@ -57,7 +57,7 @@ function getAllRef(targetId, dialogs) {
 const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { dialogs, navPath, navPathHistory } = state;
   const { clearNavHistory, navTo, removeDialog } = actions;
 
@@ -85,8 +85,10 @@ function DesignPage(props) {
   }, [dialogs]);
 
   const onCreateDialogComplete = newDialog => {
-    actions.clearNavHistory();
-    actions.navTo(`${newDialog}#`);
+    if (newDialog) {
+      actions.clearNavHistory();
+      actions.navTo(`${newDialog}#`);
+    }
   };
 
   const toolbarItems = [
