@@ -404,7 +404,7 @@ export const appschema: JSONSchema6 = {
             },
           },
         },
-        CardAction: {
+        cardAction: {
           type: 'object',
         },
       },
