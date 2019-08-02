@@ -31,7 +31,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[bfdactivity-376720]"
+          "$designer": {
+            "createdAt": "2019-08-02T22:18:56.943Z",
+            "updatedAt": "2019-08-02T22:36:20.947Z",
+            "id": "157674"
+          },
+          "activity": "[bfdactivity-157674]"
         }
       ]
     },

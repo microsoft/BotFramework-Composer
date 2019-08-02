@@ -94,11 +94,15 @@ _Connection errors to the bot_
 
 Make sure that if your bot is configured to use a `MicrosoftAppId` & `MicrosoftAppPassword` that you are providing values for these fields in the BF Composer _Settings_ page.
 
-#####During testing of your bot, you may see the following in the chat control:
+_BF Emulator's tunneling software (ngrok) has expired_
+
+The BF Emulator has a dependency on the [ngrok](https://ngrok.com/) tunneling software. This tunnel will expire and the BF Emulator will need to reconnect to the tunnel to be able to connect to your running bot. In this scenario you should see a red notification in the bottom-right corner of the BF Emulator that when clicked will open up the notifications panel. A message those be there with the option to reconnect to ngrok.
+
+###### During testing of your bot, you may see the following in the chat control:
 
 _Object reference not set to an instance of an object_
 
-This happens when there is an error in the Language Generation template being referenced in a dialog.
+This usually happens when there is an error in the Language Generation template being referenced in a dialog.
 
 _Value cannot be null. Parameter name: activity_
 
