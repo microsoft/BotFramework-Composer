@@ -1,0 +1,28 @@
+>To learn more about the LU file format, read the documentation at
+> https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format
+
+# Why
+- Why do you need my name?
+- why do you ask?
+- why?
+- Not sure why you need my age
+- may I know why you need it?
+
+# NoNameAge
+- I will not give you my name
+- no name
+- No way, not giving you my mame
+- I will not give you my age
+- no age
+- no way, not giving you my age
+
+# GetUserProfile
+- my name is {personName:userName}
+- I'm {age:userAge} years old
+- {personName:userName}
+- {age:userAge}
+
+> Add prebuilt entities for detecting user's name and age.
+$prebuilt:personName Roles=userName
+$prebuilt:age Roles=userAge
+

@@ -1,0 +1,191 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-01T21:51:18.963Z",
+    "updatedAt": "2019-08-01T22:10:39.438Z",
+    "id": "332341",
+    "name": "GetUserProfile"
+  },
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "717664",
+        "updatedAt": "2019-08-01T21:51:26.500Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "986082",
+            "updatedAt": "2019-08-01T22:08:19.350Z"
+          },
+          "property": "user.profile.name",
+          "prompt": "What is your name? [GetNameSuggestion]",
+          "invalidPrompt": "Sorry, ‘{turn.value}’ does not work. I’m looking for at least 3 characters and up to 150 characters in your name. What is your name? [GetNameSuggestion]",
+          "maxTurnCount": 3,
+          "validations": [
+            "length(turn.value) > 2",
+            "length(turn.value) <= 150"
+          ],
+          "defaultValue": "‘Human’",
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "trim"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "name": "Prompt for a number",
+            "id": "406613",
+            "updatedAt": "2019-08-01T22:08:05.140Z"
+          },
+          "property": "user.profile.age",
+          "prompt": "Hello {user.profile.name}, how old are you? [GetAgeSuggestions]",
+          "unrecognizedPrompt": "Sorry, I do not recognize ‘{turn.activity.text}’. I’m looking for a value between 1-150. What is your age? [GetAgeSuggestions]",
+          "invalidPrompt": "Sorry, ‘{urn.value}’ does not work. I’m looking for a value between 1-150. What is your age? [GetAgeSuggestions]",
+          "maxTurnCount": 3,
+          "validations": [
+            "int(turn.value) >= 1",
+            "int(turn.value) <= 150"
+          ],
+          "defaultValue": "30",
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "integer",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "186103",
+            "updatedAt": "2019-08-01T21:56:37.569Z"
+          },
+          "activity": "[bfdactivity-186103]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "938602",
+        "updatedAt": "2019-08-01T22:14:07.627Z"
+      },
+      "intent": "Why",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "838770",
+            "updatedAt": "2019-08-01T22:14:45.492Z"
+          },
+          "condition": "exists(user.profile.name)",
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "700225",
+                "updatedAt": "2019-08-01T22:15:55.088Z"
+              },
+              "activity": "[bfdactivity-700225]"
+            }
+          ],
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "623468",
+                "updatedAt": "2019-08-01T22:15:12.565Z"
+              },
+              "activity": "[bfdactivity-623468]"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "749016",
+            "updatedAt": "2019-08-01T22:16:05.578Z"
+          },
+          "activity": "[bfdactivity-749016]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "117541",
+        "updatedAt": "2019-08-01T22:14:12.626Z"
+      },
+      "intent": "NoNameAge",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "022739",
+            "updatedAt": "2019-08-01T22:17:35.624Z"
+          },
+          "condition": "exists(user.profile.name)",
+          "steps": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "name": "Set a Property",
+                "id": "902534",
+                "updatedAt": "2019-08-01T22:18:03.147Z"
+              },
+              "property": "user.profile.age",
+              "value": "30"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "915510",
+                "updatedAt": "2019-08-01T22:18:22.716Z"
+              },
+              "activity": "[bfdactivity-915510]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "name": "Set a Property",
+                "id": "700189",
+                "updatedAt": "2019-08-01T22:18:10.187Z"
+              },
+              "property": "user.profile.name",
+              "value": "‘Human’"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "708336",
+                "updatedAt": "2019-08-01T22:18:50.836Z"
+              },
+              "activity": "[bfdactivity-708336]"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "recognizer": "GetUserProfile.lu"
+}

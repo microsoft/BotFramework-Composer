@@ -28,6 +28,60 @@
             "updatedAt": "2019-07-18T20:38:40.003Z"
           },
           "activity": "[bfdactivity-960258]"
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "$designer": {
+            "name": "Prompt for confirmation",
+            "id": "318581",
+            "updatedAt": "2019-08-01T21:49:13.512Z"
+          },
+          "property": "turn.userProfileConfirm",
+          "prompt": "I’d love to know more about you. Shall we get started? ",
+          "unrecognizedPrompt": "Sorry, I did not understand. Shall we get started? ",
+          "maxTurnCount": 2,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "defaultValue": "false"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "198121",
+            "updatedAt": "2019-08-01T21:49:29.448Z"
+          },
+          "condition": "turn.userProfileConfirm == true",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "$designer": {
+                "name": "Begin a Dialog",
+                "id": "759455",
+                "updatedAt": "2019-08-01T21:49:38.345Z"
+              },
+              "dialog": "GetUserProfile"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "532270",
+                "updatedAt": "2019-08-01T21:50:59.884Z"
+              },
+              "activity": "[bfdactivity-532270]"
+            }
+          ]
         }
       ]
     },
@@ -111,6 +165,45 @@
             "name": "Cancel All Dialogs",
             "id": "696483"
           }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "273476"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "494115",
+            "updatedAt": "2019-08-01T21:45:01.387Z"
+          },
+          "activity": "[bfdactivity-494115]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "400068",
+        "updatedAt": "2019-08-01T21:47:14.617Z"
+      },
+      "intent": "GetStarted",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "898501",
+            "updatedAt": "2019-08-01T21:47:26.945Z"
+          },
+          "dialog": "GetUserProfile"
         }
       ]
     }

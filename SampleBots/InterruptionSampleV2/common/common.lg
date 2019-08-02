@@ -10,3 +10,44 @@
 
 # bfdactivity-650587
 - Sure. I've cancelled that!
+
+
+# bfdactivity-494115
+- Hello, I'm the interruption demo bot. \n \[Suggestions=Get started | Reset profile | Hi]
+
+
+# bfdactivity-532270
+- No worries. You can always say 'Get started'.
+
+
+# bfdactivity-186103
+- Hello {user.profile.name}, I have your age as {user.profile.age}. \n \[Suggestions=Reset profile]
+
+# GetNameSuggestion
+- ```
+[Suggestions=Why? | No name | Reset profile | Cancel]
+```
+
+# GetAgeSuggestions
+- ```
+[Suggestions=Why? | No age | Reset profile | Cancel]
+```
+
+# bfdactivity-623468
+- I need your age so I can provide relevant product recommendations
+
+
+# bfdactivity-700225
+- I need your name to address you correctly
+
+
+# bfdactivity-749016
+- Do not worry, any information you share will never be shared. See \[here\](http://contoso.com/privacy) to learn more.
+
+
+# bfdactivity-915510
+- No worries. I'll set 30 as your age.
+
+
+# bfdactivity-708336
+- No worries. I'll call you 'Human' for now.
