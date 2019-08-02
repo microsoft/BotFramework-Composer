@@ -459,7 +459,7 @@
                     ],
                     "title": "Allow Interruptions",
                     "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-                    "default": "notRecognized",
+                    "default": "never",
                     "examples": [
                         "notRecognized"
                     ]
@@ -799,7 +799,7 @@
                     ],
                     "title": "Allow Interruptions",
                     "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-                    "default": "notRecognized",
+                    "default": "never",
                     "examples": [
                         "notRecognized"
                     ]
@@ -1102,7 +1102,7 @@
                     ],
                     "title": "Allow Interruptions",
                     "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-                    "default": "notRecognized",
+                    "default": "never",
                     "examples": [
                         "notRecognized"
                     ]
@@ -1414,7 +1414,7 @@
                     ],
                     "title": "Allow Interruptions",
                     "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-                    "default": "notRecognized",
+                    "default": "never",
                     "examples": [
                         "notRecognized"
                     ]
@@ -3136,7 +3136,7 @@
                     ],
                     "title": "Allow Interruptions",
                     "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
-                    "default": "notRecognized",
+                    "default": "never",
                     "examples": [
                         "notRecognized"
                     ]
@@ -3813,7 +3813,7 @@
                     "default": "none"
                 },
                 "allowInterruptions": {
-                    "default": "always",
+                    "default": "never",
                     "type": "string",
                     "enum": [
                         "always",

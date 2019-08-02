@@ -64,7 +64,12 @@ export const uiSchema = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    ...globalFields,
+    inputBindings: {
+      'ui:field': NullField,
+    },
+    outputBinding: {
+      'ui:field': NullField,
+    },
   },
   'Microsoft.CodeStep': {
     codeHandler: {
