@@ -10,8 +10,8 @@ import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
-import { Store } from '../../store/index';
 import { checkLgContent } from '../../store/action/lg';
+import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
 import {
   ContentHeaderStyle,
@@ -31,7 +31,7 @@ import { TestController } from './../../TestController';
 const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LGPage = props => {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
 

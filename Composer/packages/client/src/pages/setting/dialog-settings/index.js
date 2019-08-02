@@ -10,7 +10,7 @@ import 'codemirror/addon/lint/json-lint';
 
 import './style.css';
 import oauthStorage from './../../../utils/oauthStorage';
-import { Store } from './../../../store/index';
+import { StoreContext } from './../../../store';
 
 window.jsonlint = jsonlint;
 
@@ -30,7 +30,7 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const [value, setValue] = useState('');
-  const { actions } = useContext(Store);
+  const { actions } = useContext(StoreContext);
 
   const { updateOAuth } = actions;
 
