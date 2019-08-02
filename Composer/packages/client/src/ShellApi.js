@@ -6,7 +6,7 @@ import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
-import { Store } from './store/index';
+import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
@@ -52,7 +52,7 @@ const shellNavigator = (shellPage, opts = {}) => {
 };
 
 export function ShellApi() {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
