@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 import * as lgUtil from '../../utils/lgUtil';
+import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { BASEURL, ActionTypes } from './../../constants';
 
 export function textFromTemplates(templates) {
   let text = '';
@@ -72,7 +73,7 @@ export function checkLgContent(content) {
   }
 }
 
-export async function updateLgFile({ dispatch }, { id, content }) {
+export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   checkLgContent(content);
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
@@ -87,9 +88,9 @@ export async function updateLgFile({ dispatch }, { id, content }) {
       error: err,
     });
   }
-}
+};
 
-export async function createLgFile({ dispatch }, { id, content }) {
+export const createLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   checkLgContent(content);
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
@@ -104,9 +105,9 @@ export async function createLgFile({ dispatch }, { id, content }) {
       error: err,
     });
   }
-}
+};
 
-export async function removeLgFile({ dispatch }, { id }) {
+export const removeLgFile: ActionCreator = async ({ dispatch }, { id }) => {
   try {
     const response = await axios.delete(`${BASEURL}/projects/opened/lgFiles/${id}`);
     dispatch({
@@ -120,34 +121,17 @@ export async function removeLgFile({ dispatch }, { id }) {
       error: err,
     });
   }
-}
+};
 
-/**
- *
- * @param {*} store
- * @param {*} file lg file take this update
- * @param {*} templateName name of template to update
- * @param {*} template updated template, expected {Name, Body}
- */
-export async function updateLgTemplate(store, { file, templateName, template }) {
+export const updateLgTemplate: ActionCreator = async (store, { file, templateName, template }) => {
   parseLgTemplate(template);
   const newContent = updateTemplateInContent({ content: file.content, templateName, template });
   checkLgContent(newContent);
 
   return await updateLgFile(store, { id: file.id, content: newContent });
-}
+};
 
-/**
- *
- * @param {*} store
- * @param {*} File lg file take this update
- * @param {*} template new template to add, expected {Name, Body}
- * @param {*} position
- *   0 insert at file start
- *  -1 insert at file end, by default
- */
-
-export async function createLgTemplate(store, { file, template, position }) {
+export const createLgTemplate: ActionCreator = async (store, { file, template, position }) => {
   parseLgTemplate(template);
 
   let content = file.content;
@@ -159,17 +143,11 @@ export async function createLgTemplate(store, { file, template, position }) {
 
   checkLgContent(content);
   return await updateLgFile(store, { id: file.id, content });
-}
+};
 
-/**
- *
- * @param {*} store
- * @param {*} file lg file take this update
- * @param {*} templateName name of template to delete
- */
-export async function removeLgTemplate(store, { file, templateName }) {
+export const removeLgTemplate: ActionCreator = async (store, { file, templateName }) => {
   const newContent = updateTemplateInContent({ content: file.content, templateName, template: {} });
   checkLgContent(newContent);
 
   return await updateLgFile(store, { id: file.id, content: newContent });
-}
+};
