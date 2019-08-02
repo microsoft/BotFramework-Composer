@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual, get, cloneDeep } from 'lodash';
+import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -54,7 +54,7 @@ const shellNavigator = (shellPage, opts = {}) => {
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, schemas, lgFiles, luFiles, designPath } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPath, navPath, focusPath } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
@@ -62,13 +62,8 @@ export function ShellApi() {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, focused, navPathHistory, uri } = designPath;
-  const navPath = dialogId + '#' + (designPath.navPath ? `.${designPath.navPath}` : '');
-  let focusPath = navPath;
-  if (focused) {
-    focusPath = focusPath + '.' + focused;
-  }
-  const navPathHistoryCopy = cloneDeep(navPathHistory);
+  const { dialogId } = designPath;
+
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
 
@@ -292,47 +287,19 @@ export function ShellApi() {
     flushUpdates();
   }
 
-  function updateNavPathHistory(dialogId, navPath) {
-    if (navPathHistoryCopy.length === 0) {
-      navPathHistoryCopy.push({ dialogId: designPath.dialogId, navPath: designPath.navPath });
-    }
-    navPathHistoryCopy.push({ dialogId, navPath });
-    return { state: { navPathHistory: navPathHistoryCopy } };
-  }
-
   function navTo({ path }) {
     cleanData();
-    const items = path.split('#');
-    navigate(`/dialogs/${items[0]}`, updateNavPathHistory(items[0], ''));
+    actions.navTo(path);
   }
 
   function navDown({ subPath }) {
-    if (!subPath) {
-      return;
-    }
     cleanData();
-    const items = subPath.split('.');
-    navigate(
-      `${uri}/${items[1]}`,
-      updateNavPathHistory(dialogId, designPath.navPath ? designPath.navPath + subPath : items[1])
-    );
+    actions.navDown(subPath);
   }
 
   function focusTo({ subPath }, event) {
     cleanData();
-    if (!subPath) {
-      navigate(uri, { state: { navPathHistory: navPathHistoryCopy } });
-      return;
-    }
-
-    if (event.source.name === FORM_EDITOR) {
-      subPath = designPath.focused + subPath;
-    } else {
-      subPath = subPath.split('.')[1];
-    }
-    navigate(`${uri}?focused=${subPath}`, {
-      state: { navPathHistory: navPathHistoryCopy },
-    });
+    actions.focusTo(subPath, event.source.name === FORM_EDITOR);
   }
 
   return null;
