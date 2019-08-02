@@ -106,7 +106,7 @@ export function App() {
   async function init() {
     const data = await fetchProject();
     if (data && data.botName) {
-      setLuisConfig(botName);
+      setLuisConfig(data.botName);
     }
   }
 
