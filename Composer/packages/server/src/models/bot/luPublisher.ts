@@ -31,12 +31,12 @@ export class LuPublisher {
     if (luisStatus === null) return;
 
     const name = await this._getAppName(path);
-    if (!name) return;
+    if (!name || !luisStatus[name]) return;
 
     const status = luisStatus[name];
-    if (status && status.lastUpdateTime < status.lastPublishTime) {
-      return; //already published
-    }
+    // if (status && status.lastUpdateTime < status.lastPublishTime) {
+    //   return; //already published
+    // }
 
     status.lastUpdateTime = new Date().getTime();
     luisStatus[name] = status;
@@ -48,11 +48,16 @@ export class LuPublisher {
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
-
+    const publishTime = new Date().getTime();
     //const settings: ILuisSettings = await this._getSettings();
-    await runBuild(config);
+    try {
+      await runBuild(config);
+    } catch (error) {
+      throw new Error('Something wrong happened during publishing ');
+    }
+
     await this._copyDialogsToTargetFolder(config);
-    return await this._updateStatus(config.authoringKey);
+    return await this._updateStatus(config.authoringKey, publishTime);
   };
 
   public getUnpublisedFiles = async (files: LUFile[]) => {
@@ -67,7 +72,7 @@ export class LuPublisher {
         !luStatus[appName] ||
         !luStatus[appName].lastPublishTime ||
         !luStatus[appName].lastUpdateTime ||
-        luStatus[appName].lastUpdateTime < luStatus[appName].lastPublishTime
+        luStatus[appName].lastUpdateTime > luStatus[appName].lastPublishTime
       ) {
         result.push(file);
       }
@@ -96,6 +101,8 @@ export class LuPublisher {
   public getLuisConfig = () => this.config;
 
   public setLuisConfig = async (config: ILuisConfig) => {
+    console.log(this.config);
+    console.log(config);
     if (!isEqual(config, this.config)) {
       this.config = config;
       if (!(await this.storage.exists(this._getSettingPath(config)))) {
@@ -113,6 +120,7 @@ export class LuPublisher {
         if ((await this.storage.stat(curPath)).isDir) {
           await this._deleteGenerated(curPath);
         } else {
+          console.log('删除', curPath);
           await this.storage.removeFile(curPath);
         }
       }
@@ -136,14 +144,14 @@ export class LuPublisher {
     });
   };
 
-  private _updateStatus = async (authoringKey: string) => {
+  private _updateStatus = async (authoringKey: string, publishTime: number) => {
     if (!this.config) return;
     const credentials = new msRest.ApiKeyCredentials({
       inHeader: { 'Ocp-Apim-Subscription-Key': authoringKey },
     });
     const client = new LuisAuthoring(credentials as any, {});
     const setting: ILuisSettings = await this._getSettings();
-    const luisStatus: ILuisStatus = {};
+    const luisStatus: ILuisStatus = (await this._getLuStatus()) || {};
     const names = keys(setting.luis);
     for (const name of names) {
       if (ENDPOINT_KEYS.indexOf(name) < 0) {
@@ -153,9 +161,15 @@ export class LuPublisher {
           setting.luis[name]
         );
         const currentTime = new Date().getTime();
+        //if the according lastupdate time does not exist, then initialize as 1.
+        const lastUpdateTime = luisStatus[name]
+          ? luisStatus[name].lastUpdateTime
+            ? luisStatus[name].lastUpdateTime
+            : 1
+          : 1;
         luisStatus[name] = {
           version: appInfo.activeVersion,
-          lastUpdateTime: currentTime,
+          lastUpdateTime: lastUpdateTime,
           lastPublishTime: currentTime,
         };
       }
