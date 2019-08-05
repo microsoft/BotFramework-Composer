@@ -22,7 +22,7 @@
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-16T20:00:51.769Z",
-            "updatedAt": "2019-07-16T20:00:54.804Z",
+            "updatedAt": "2019-08-02T22:30:32.704Z",
             "id": "201694"
           },
           "property": "dialog.todo",
@@ -67,7 +67,7 @@
           "$type": "Microsoft.EditArray",
           "$designer": {
             "createdAt": "2019-07-01T22:02:54.672Z",
-            "updatedAt": "2019-07-16T20:01:19.783Z",
+            "updatedAt": "2019-08-02T22:32:37.062Z",
             "id": "567087"
           },
           "changeType": "Push",
