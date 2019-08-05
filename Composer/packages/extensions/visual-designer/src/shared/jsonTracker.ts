@@ -40,10 +40,9 @@ function locateNode(dialog: { [key: string]: any }, path: string) {
   let currentData = dialog;
 
   for (const selector of normalizedSelectors) {
-    let objSelector = selector;
     parentData = currentData;
-    currentData = parentData[objSelector];
-    currentKey = objSelector;
+    currentData = parentData[selector];
+    currentKey = selector;
 
     if (currentData === undefined) return null;
   }
