@@ -35,9 +35,6 @@ export class LuPublisher {
     if (!appName || !name || !luisStatus[name]) return;
 
     const status = luisStatus[name];
-    // if (status && status.lastUpdateTime < status.lastPublishTime) {
-    //   return; //already published
-    // }
 
     status.lastUpdateTime = new Date().getTime();
     luisStatus[name] = status;

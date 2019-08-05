@@ -186,18 +186,18 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-
+    let currentLufileParsedContentLUISJsonStructure = null;
     try {
-      await this.luIndexer.parse(content);
+      currentLufileParsedContentLUISJsonStructure = await this.luIndexer.parse(content);
     } catch (error) {
       throw new Error(`Update ${id}.lu Failed, ${error.text}`);
     }
 
+    const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
+    const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
+    await this.luPublisher.update(isUpdate, luFile.relativePath);
     await this._updateFile(luFile.relativePath, content);
     const luFiles = this.luIndexer.getLuFiles();
-    const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
-    const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
-    this.luPublisher.update(isUpdate, luFile.relativePath);
     return luFiles;
   };
 
