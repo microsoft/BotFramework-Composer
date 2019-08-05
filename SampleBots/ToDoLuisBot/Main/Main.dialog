@@ -5,7 +5,6 @@
     "createdAt": "2019-07-01T10:00:39.032Z",
     "updatedAt": "2019-07-16T20:04:10.274Z",
     "id": "948970",
-
     "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
   },
   "autoEndDialog": false,
@@ -84,7 +83,7 @@
       "$designer": {
         "name": "Handle ConversationUpdate",
         "id": "954390",
-        "updatedAt": "2019-07-18T11:25:59.878Z"
+        "updatedAt": "2019-08-02T03:17:42.774Z"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "steps": [
@@ -92,8 +91,10 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "[LuisToDoHelp]"
-          }
+            "id": "452135",
+            "updatedAt": "2019-08-02T03:17:48.143Z"
+          },
+          "activity": "[bfdactivity-452135]"
         }
       ]
     }
