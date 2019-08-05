@@ -42,6 +42,8 @@ export interface LUFile {
   relativePath: string;
   content: string;
   parsedContent: { [key: string]: any };
+  lastUpdateTime: number;
+  lastPublishTime: number;
 }
 
 export interface ILuisSettings {

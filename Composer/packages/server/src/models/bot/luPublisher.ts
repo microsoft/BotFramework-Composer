@@ -30,8 +30,9 @@ export class LuPublisher {
     const luisStatus: ILuisStatus = await this._getLuStatus();
     if (luisStatus === null) return;
 
-    const name = await this._getAppName(path);
-    if (!name || !luisStatus[name]) return;
+    const appName = await this._getAppName(path);
+    const name = this._getName(appName);
+    if (!appName || !name || !luisStatus[name]) return;
 
     const status = luisStatus[name];
     // if (status && status.lastUpdateTime < status.lastPublishTime) {
@@ -66,13 +67,14 @@ export class LuPublisher {
     const result: LUFile[] = [];
     for (const file of files) {
       const appName = this._getAppName(file.id);
+      const name = this._getName(appName);
       // //if no generated files, no status, check file's checksum
       if (
         !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
-        !luStatus[appName] ||
-        !luStatus[appName].lastPublishTime ||
-        !luStatus[appName].lastUpdateTime ||
-        luStatus[appName].lastUpdateTime > luStatus[appName].lastPublishTime
+        !luStatus[name] ||
+        !luStatus[name].lastPublishTime ||
+        !luStatus[name].lastUpdateTime ||
+        luStatus[name].lastUpdateTime > luStatus[name].lastPublishTime
       ) {
         result.push(file);
       }
@@ -101,8 +103,6 @@ export class LuPublisher {
   public getLuisConfig = () => this.config;
 
   public setLuisConfig = async (config: ILuisConfig) => {
-    console.log(this.config);
-    console.log(config);
     if (!isEqual(config, this.config)) {
       this.config = config;
       if (!(await this.storage.exists(this._getSettingPath(config)))) {
@@ -120,7 +120,6 @@ export class LuPublisher {
         if ((await this.storage.stat(curPath)).isDir) {
           await this._deleteGenerated(curPath);
         } else {
-          console.log('删除', curPath);
           await this.storage.removeFile(curPath);
         }
       }
@@ -152,15 +151,16 @@ export class LuPublisher {
     const client = new LuisAuthoring(credentials as any, {});
     const setting: ILuisSettings = await this._getSettings();
     const luisStatus: ILuisStatus = (await this._getLuStatus()) || {};
-    const names = keys(setting.luis);
-    for (const name of names) {
-      if (ENDPOINT_KEYS.indexOf(name) < 0) {
+    const appNames = keys(setting.luis);
+    for (const appName of appNames) {
+      if (ENDPOINT_KEYS.indexOf(appName) < 0) {
         const appInfo = await client.apps.get(
           this.config.authoringRegion as AzureRegions,
           'com' as AzureClouds,
-          setting.luis[name]
+          setting.luis[appName]
         );
         const currentTime = new Date().getTime();
+        const name = this._getName(appName);
         //if the according lastupdate time does not exist, then initialize as 1.
         const lastUpdateTime = luisStatus[name]
           ? luisStatus[name].lastUpdateTime
@@ -259,5 +259,10 @@ export class LuPublisher {
   private _setLuStatus = async (luState: ILuisStatus) => {
     const luStatusPath = await this._getLuStatusPath();
     return await this.storage.writeFile(luStatusPath, JSON.stringify(luState, null, 4));
+  };
+
+  private _getName = (appName: string) => {
+    const tokens = appName.split('_');
+    return tokens[0];
   };
 }
