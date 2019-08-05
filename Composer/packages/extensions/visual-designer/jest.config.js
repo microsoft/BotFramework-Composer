@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const path = require('path');
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
   testPathIgnorePatterns: [
@@ -12,7 +14,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      tsConfig: './tsconfig.json',
+      tsConfig: path.resolve(__dirname, './tsconfig.json'),
       diagnostics: false,
     },
   },
