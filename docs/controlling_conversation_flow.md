@@ -66,8 +66,56 @@ Once the loop begins, it will repeat once for each item in the list of items. In
 
 Note: It is not currently possible to end the loop before all items have been processed. If the bot needs to process only a subset of the items, use `If/Else` and `Switch` actions within the loop to create further conditional paths.
 
-# Dialogs: start/end/repeat/cancel 
-
 # Child Dialogs
 
+In addition to conditional branching and looping, it is also possible to compose multiple dialogs into a larger more complex interaction.
+
+Child dialogs can be launched using the `Begin a Dialog` action. When the child dialog begins, the parent dialog _pauses_ until the child dialog completes, then _resumes_ where it left off.
+
+It is possible to pass parameters into the child dialog. Parameters can be added to the `begin a dialog` action as name/value pairs - the value of each parameter can be a property in memory or an expression.
+
+![Begin Dialog properties](./Assets/begin-dialogs-properties.png)
+
+In the example above, the child dialog `menu` will be started, and will be passed 2 options:
+
+* the first will contain the value of the property `dialog.option1` and be available inside the menu dialog as `dialog.options.option1`
+* the second will contain the value of the property `user.preference` and will available inside the menu dialog as `dialog.options.option2`
+
+Note that it is not necessary to map memory properties that would otherwise be available automatically - that is, the `user` and `conversation` scopes will automatically be available for all dialogs.  However, values stored in the `turn` and `dialog` scope do need to be explicitly passed.
+
+In addition to passing values into a child dialog, it is also possible to receive a return value from the child dialog.  This return value is specified as part of the `End Dialog` action, as [described below](#ending-dialogs).
+
+In addition to `Begin a Dialog`, there are a few other methods for launching a child dialog:
+
+`Replace this Dialog` works just like `begin a dialog`, with one major difference: the parent dialog *does not* resume when the child finishes. 
+
+`Repeat this dialog` causes the current dialog to repeat from the beginning. Note that this does not reset any properties that may have been set during the course of the dialog's first run.
+
+## Ending Dialogs
+
+Any dialog called will naturally end and return control to any parent dialog when it reaches the last action it the flow. It is not necessary to explicitly call `end dialog`.
+
+It is sometimes desirable to end a dialog before it reaches the end of the flow - for example, you may want to end a dialog if a certain condition is met.
+
+Another reason to call the `End Dialog` action is to pass a return value back to the parent dialog. The return value of a dialog can be a property in memory or an expression, allowing developers to return complex values if necessary.
+
+Imagine a child dialog used to collect a display name for a user profile. It asks the user a series of questions about their preferences, finally helping them enter a valid user name.  Rather than returning all of the information collected by the dialog, it can be configured to return only the user name value, as seen in the example below. The dialog's `end dialog` action is configured to return the value of `dialog.new_user_name` to the parent dialog.
+
+![End dialog properties](./Assets/end-dialog-properties.png)
+
+
 # Conditional versions of a message in LG
+
+
+## Further Reading
+
+* [Docs for the Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) used in conditionals
+
+* [Bot Framework Adaptive Dialogs Memory Model](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md)
+
+* [Bot Framework on Github](https://github.com/microsoft/botframework)
+
+
+## Next
+
+* [Overview of Bot Framework Composer](overview_of_bfd.md) 
