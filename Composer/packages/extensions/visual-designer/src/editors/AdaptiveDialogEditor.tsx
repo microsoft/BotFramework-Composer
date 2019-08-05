@@ -52,7 +52,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
       {ruleGroup && (
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
-      <div style={{ height: 50 }} />
+      <div className="editor-interval" style={{ height: 50 }} />
       {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
