@@ -4,7 +4,7 @@ import { seedNewDialog } from 'shared-menus';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
-function locateNode(dialog: { [key: string]: any }, path) {
+function locateNode(dialog: { [key: string]: any }, path: string) {
   if (!path) return null;
 
   const selectors = path.split('.');
@@ -16,32 +16,36 @@ function locateNode(dialog: { [key: string]: any }, path) {
     selectors.shift();
   }
 
+  const normalizedSelectors = selectors.reduce(
+    (result, selector) => {
+      // e.g. steps[0]
+      const parseResult = selector.match(/(\w+)\[(\d+)\]/);
+
+      if (parseResult) {
+        const [, objSelector, arraySelector] = parseResult;
+        const arrayIndex = parseInt(arraySelector);
+        result.push(objSelector, arrayIndex);
+      } else {
+        result.push(selector);
+      }
+
+      return result;
+    },
+    [] as any[]
+  );
+
   // Locate the manipulated json node
   let parentData: object = {};
   let currentKey: number | string = '';
   let currentData = dialog;
 
-  for (const selector of selectors) {
+  for (const selector of normalizedSelectors) {
     let objSelector = selector;
-    let arrayIndex;
-
-    const parseResult = selector.match(/(\w+)\[(\d+)\]/);
-    if (parseResult) {
-      [, objSelector, arrayIndex] = parseResult;
-      arrayIndex = parseInt(arrayIndex);
-    }
-
     parentData = currentData;
     currentData = parentData[objSelector];
     currentKey = objSelector;
-    if (currentData === undefined) return null;
 
-    if (arrayIndex !== undefined) {
-      parentData = currentData;
-      currentData = parentData[arrayIndex];
-      currentKey = arrayIndex;
-      if (currentData === undefined) return null;
-    }
+    if (currentData === undefined) return null;
   }
 
   return { parentData, currentData, currentKey };
