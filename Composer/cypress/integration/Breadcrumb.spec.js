@@ -26,13 +26,13 @@ context('breadcrumb', () => {
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('AddIntent').click();
       cy.wait(100);
-      cy.getByText('AddIntent').click();
-      cy.wait(100);
-      cy.getByText('AddToDo').click();
+      cy.getByTestId('RuleEditor').within(() => {
+        cy.getByText('AddToDo').click();
+      });
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /ToDoBot.+Handle an Intent.+AddToDo/);
+      .should('match', /ToDoBot.+AddToDo/);
   });
 });
