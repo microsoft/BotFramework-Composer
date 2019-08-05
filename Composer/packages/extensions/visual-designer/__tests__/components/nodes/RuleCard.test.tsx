@@ -21,7 +21,7 @@ describe('<RuleCard />', () => {
   afterEach(cleanup);
   describe('focusedId is equal to id', () => {
     beforeEach(() => {
-      focusedId = id = 'steps[0]]';
+      focusedId = id = 'steps[0]';
     });
 
     describe('data has no steps', () => {
