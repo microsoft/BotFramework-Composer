@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const path = require('path');
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
   testPathIgnorePatterns: ['"/node_modules/(?!office-ui-fabric-react).+\\.js$"', '/node_modules/', '/jestMocks/'],
@@ -9,7 +11,7 @@ module.exports = {
   },
   globals: {
     'ts-jest': {
-      tsConfig: './tsconfig.json',
+      tsConfig: path.resolve(__dirname, './tsconfig.json'),
       diagnostics: false,
     },
   },
