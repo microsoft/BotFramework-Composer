@@ -1,14 +1,29 @@
 import { insert, deleteNode, queryNode } from '../../src/shared/jsonTracker';
 
 describe('queryNode', () => {
-  it('query correct result when data exists', () => {
-    const dialog = {};
-    expect(queryNode(dialog, 'foo.bar[0]')).toEqual(null);
+  describe('can query correct result', () => {
+    const dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    it('when data not exists.', () => {
+      expect(queryNode({}, 'foo.bar[0]')).toEqual(null);
+    });
+
+    it('when data locates in an object.', () => {
+      expect(queryNode(dialog, 'foo.bar')).toEqual([{ $type: 'firstOne' }, { $type: 'secondOne' }]);
+    });
+
+    it('when data locates in an array.', () => {
+      expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
+    });
   });
 
-  it('query NULL result when data not exists', () => {
-    const dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
-    expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
+  it('should return a reference.', () => {
+    const dialog = { foo: { bar: 'bar' } };
+    const result = queryNode(dialog, 'foo');
+    expect(result).toEqual({ bar: 'bar' });
+
+    dialog.foo.bar = 'newValue';
+    expect(dialog.foo).toEqual({ bar: 'newValue' });
+    expect(result).toEqual({ bar: 'newValue' });
   });
 });
 
