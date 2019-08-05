@@ -38,7 +38,7 @@
 
 # help
 -I can add a todo, show todos, remove a todo, and clear all todos
--I can hep you yes I can
+-I can help you yes I can
 -Help, we don't need no stinkin' help!
 
 # bfdactivity-376720
@@ -64,3 +64,10 @@
 
 # bfdactivity-662084
 -[ShowTodo]
+
+# bfdactivity-696707
+-[help]
+
+
+# bfdactivity-157674
+- Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
