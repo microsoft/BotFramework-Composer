@@ -212,7 +212,8 @@ export const appschema: JSONSchema6 = {
         validations: {
           type: 'array',
           title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
@@ -386,7 +387,7 @@ export const appschema: JSONSchema6 = {
             value: {
               type: 'string',
               title: 'Value',
-              description: 'The choice label and value that will be returned when selected.',
+              description: 'the value to return when selected.',
             },
             action: {
               title: 'Action',
@@ -432,13 +433,13 @@ export const appschema: JSONSchema6 = {
         $designer: {
           title: '$designer',
           type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
+          description: 'Extra information for the Bot Framework Designer.',
         },
         property: {
           $role: 'memoryPath',
           title: 'Property',
           description: 'The property in memory used to store customer input.',
-          examples: ['turn.birthday'],
+          examples: ['value.birthday', 'user.name'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
@@ -446,7 +447,7 @@ export const appschema: JSONSchema6 = {
           type: 'object',
           title: 'Input Bindings',
           description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['turn.birthday'],
+          examples: ['value.birthday'],
           additionalProperties: {
             type: 'string',
           },
@@ -455,47 +456,47 @@ export const appschema: JSONSchema6 = {
           $role: 'memoryPath',
           title: 'Output Property binding',
           description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['turn.birthday'],
+          examples: ['value.birthday'],
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
         prompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Initial Prompt',
-          description: 'The first message to send as a prompt for this value.',
+          description: 'The message to send to as prompt for this input.',
           examples: ['What is your birth date?'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         unrecognizedPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Unrecognized Prompt',
-          description: "The message to send if no valid choice is found in the customer's response.",
+          description: 'The message to send if the last input is not recognized.',
           examples: ["Let's try again. What is your birth date?"],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         invalidPrompt: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Invalid Prompt',
-          description: "The message to send if the customer's response fails the validation rules.",
+          description: 'The message to send to when then input was not valid for the input type.',
           examples: ['No date was recognized'],
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
         maxTurnCount: {
           type: 'integer',
           title: 'Max Turn Count',
-          description: 'The maximum number of times this prompt will be presented.',
-          default: 0,
+          description: 'The max retry count for this prompt.',
+          default: 2147483647,
           examples: [3],
         },
         validations: {
           type: 'array',
-          title: 'Validation Rules',
+          title: 'Validation Expressions',
           description:
             'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
-            description: 'An expression used to validate customer input.',
+            description: 'String must contain an expression.',
           },
         },
         value: {
@@ -507,53 +508,52 @@ export const appschema: JSONSchema6 = {
         defaultValue: {
           $role: 'expression',
           title: 'Default Value',
-          description: 'Value to return if max turn count is reached.',
+          description: "Value to return if the value expression can't be evaluated.",
           type: 'string',
         },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always Prompt',
-          description: 'If set, this will always prompt the customer even if the value is already known.',
+          description:
+            'If set to true this will always prompt the user regardless if you already have the value or not.',
           default: false,
           examples: [false],
         },
         allowInterruptions: {
-          type: 'boolean',
+          type: 'string',
+          enum: ['always', 'never', 'notRecognized'],
           title: 'Allow Interruptions',
-          description: 'If set, this prompt will allow interruptions.',
-          default: true,
-          examples: [true],
+          description:
+            "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+          default: 'never',
+          examples: ['notRecognized'],
         },
         outputFormat: {
           type: 'string',
           enum: ['value', 'index'],
           title: 'Output Format',
-          description: 'The format of the final value.',
+          description: 'The output format.',
           default: 'value',
         },
         choices: {
-          title: 'Choices',
           type: 'array',
           items: {
-            title: 'Value',
             type: 'object',
             properties: {
               value: {
                 type: 'string',
                 title: 'Value',
-                description: 'The choice label and value that will be returned when selected.',
+                description: 'the value to return when selected.',
               },
-              // TODO: Re-enable card actions when we are better equipped to provide a UI that is foolproof
-              // action: {
-              //   title: 'Action',
-              //   description: 'Card action for the choice',
-              //   type: 'object',
-              //   additionalProperties: true,
-              // },
+              action: {
+                title: 'Action',
+                description: 'Card action for the choice',
+                type: 'object',
+              },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
-                description: 'An optional list of synonyms that can be used to select this choice.',
+                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
                 items: {
                   type: 'string',
                 },
@@ -564,48 +564,47 @@ export const appschema: JSONSchema6 = {
         appendChoices: {
           type: 'boolean',
           title: 'Append Choices',
-          description: 'If set, the activity will automatically include choices in the specified format.',
-          default: true,
+          description: 'Compose an output activity containing a set of choices',
+          default: 'true',
         },
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
-          description: 'The language setting that will be used to interpret input and generate choices.',
+          description: 'The prompts default locale that should be recognized.',
           default: 'en-us',
         },
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
           title: 'List Style',
-          description: 'Specify how the choices will appear in the message.',
+          description: 'The kind of choice list style to generate',
           default: 'Auto',
         },
         choiceOptions: {
           type: 'object',
-          title: 'Formatting Options',
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Separator',
-              description: 'The character to use to separate individual choices when there are more than two choices.',
+              title: 'Inline Seperator',
+              description: 'Character used to separate individual choices when there are more than 2 choices',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
               title: 'Inline Or',
-              description: 'Separator inserted between the choices when there are only two choices.',
+              description: 'Separator inserted between the choices when their are only 2 choices',
               default: ' or ',
             },
             inlineOrMore: {
               type: 'string',
               title: 'Inline OrMore',
-              description: 'Separator inserted between the last 2 choices when there are more than 2 choices.',
+              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
               default: ', or ',
             },
             includeNumbers: {
               type: 'boolean',
               title: 'Include Numbers',
-              description: 'If set, choices will be prefixed with a number.',
+              description: 'If true, inline and list style choices will be prefixed with the index of the choice.',
               default: true,
             },
           },
@@ -616,15 +615,14 @@ export const appschema: JSONSchema6 = {
           properties: {
             noValue: {
               type: 'boolean',
-              title: 'No value',
-              description: 'If set, the bot will not use the "value" setting as a valid choice.',
+              title: 'No Value',
+              description: 'If true, the choices value field will NOT be search over',
               default: false,
             },
-            // TODO: re-enable this when we re-enable the action field in choices
             // noAction: {
             //   type: 'boolean',
             //   title: 'No Action',
-            //   description: 'If set, the the choices action.title field will NOT be searched over',
+            //   description: 'If true, the the choices action.title field will NOT be searched over',
             //   default: false,
             // },
           },
@@ -752,7 +750,8 @@ export const appschema: JSONSchema6 = {
         validations: {
           type: 'array',
           title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
@@ -953,7 +952,8 @@ export const appschema: JSONSchema6 = {
         validations: {
           type: 'array',
           title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
@@ -2444,7 +2444,8 @@ export const appschema: JSONSchema6 = {
         validations: {
           type: 'array',
           title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',
@@ -3074,7 +3075,8 @@ export const appschema: JSONSchema6 = {
         validations: {
           type: 'array',
           title: 'Validation Expressions',
-          description: 'Expressions to validate an input.',
+          description:
+            'These are expressions used to validate the customer response. The response is considered invalid if any of these evaluate to false.',
           items: {
             $role: 'expression',
             type: 'string',

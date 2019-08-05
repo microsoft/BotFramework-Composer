@@ -15,9 +15,7 @@
         "id": "735800",
         "updatedAt": "2019-07-22T08:12:19.686Z"
       },
-      "events": [
-        "beginDialog"
-      ],
+      "events": ["beginDialog"],
       "steps": [
         {
           "$type": "Microsoft.SetProperty",
@@ -108,36 +106,20 @@
               "prompt": "Which list do you want to expand?",
               "maxTurnCount": 0,
               "alwaysPrompt": true,
-              "allowInterruptions": true,
+              "allowInterruptions": "never",
               "outputFormat": "value",
               "choices": [
                 {
                   "value": "shopping",
-                  "synonyms": [
-                    "1",
-                    "first",
-                    "shopping",
-                    "first one"
-                  ]
+                  "synonyms": ["1", "first", "shopping", "first one"]
                 },
                 {
                   "value": "grocery",
-                  "synonyms": [
-                    "2",
-                    "second",
-                    "grocery",
-                    "second one"
-                  ]
+                  "synonyms": ["2", "second", "grocery", "second one"]
                 },
                 {
                   "value": "todo",
-                  "synonyms": [
-                    "3",
-                    "third",
-                    "todo",
-                    "third one",
-                    "to do"
-                  ]
+                  "synonyms": ["3", "third", "todo", "third one", "to do"]
                 }
               ],
               "appendChoices": true,
