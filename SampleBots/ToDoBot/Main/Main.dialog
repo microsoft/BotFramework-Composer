@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-07-16T19:59:30.647Z",
+    "updatedAt": "2019-08-01T23:45:38.308Z",
     "id": "288769",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
@@ -31,7 +31,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[bfdactivity-376720]"
+          "$designer": {
+            "createdAt": "2019-08-02T22:18:56.943Z",
+            "updatedAt": "2019-08-02T22:36:20.947Z",
+            "id": "157674"
+          },
+          "activity": "[bfdactivity-157674]"
         }
       ]
     },
@@ -54,13 +59,18 @@
       "$type": "Microsoft.IntentRule",
       "$designer": {
         "createdAt": "2019-07-16T19:59:37.184Z",
-        "updatedAt": "2019-07-16T19:59:40.406Z",
+        "updatedAt": "2019-08-01T23:46:50.759Z",
         "id": "114961"
       },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "DeleteToDo"
+          "dialog": "DeleteToDo",
+          "$designer": {
+            "createdAt": "2019-08-01T23:47:15.255Z",
+            "updatedAt": "2019-08-01T23:47:15.258Z",
+            "id": "978613"
+          }
         }
       ],
       "intent": "DeleteIntent"
@@ -90,7 +100,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-08-01T23:44:56.704Z",
+            "updatedAt": "2019-08-01T23:44:57.629Z",
+            "id": "696707"
+          },
+          "activity": "[bfdactivity-696707]"
         }
       ],
       "intent": "HelpIntent"
