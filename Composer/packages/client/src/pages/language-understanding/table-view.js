@@ -15,12 +15,12 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { get } from 'lodash';
 
 import { BASEPATH } from '../../constants';
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs, luFiles } = state;
   const activeDialog = props.activeDialog;

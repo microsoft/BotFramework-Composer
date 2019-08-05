@@ -1,11 +1,13 @@
 import axios from 'axios';
 
+import { ActionCreator } from '../types';
+
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo, clearNavHistory } from './navigation';
 
-export async function removeDialog(store, id) {
+export const removeDialog: ActionCreator = async (store, id) => {
   try {
-    const response = await await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
+    const response = await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
     store.dispatch({
       type: ActionTypes.REMOVE_DIALOG_SUCCESS,
       payload: { response },
@@ -19,9 +21,9 @@ export async function removeDialog(store, id) {
       error: err,
     });
   }
-}
+};
 
-export async function createDialog(store, { id, content }) {
+export const createDialog: ActionCreator = async (store, { id, content }) => {
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, {
       id,
@@ -45,9 +47,9 @@ export async function createDialog(store, { id, content }) {
       },
     });
   }
-}
+};
 
-export async function updateDialog({ dispatch }, { id, content }) {
+export const updateDialog: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, {
       id,
@@ -68,22 +70,22 @@ export async function updateDialog({ dispatch }, { id, content }) {
       },
     });
   }
-}
+};
 
-export function createDialogBegin({ dispatch }, onComplete) {
+export const createDialogBegin: ActionCreator = ({ dispatch }, onComplete) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {
       onComplete,
     },
   });
-}
+};
 
-export function createDialogCancel(store) {
+export const createDialogCancel: ActionCreator = store => {
   if (typeof store.state.onCreateDialogComplete === 'function') {
     store.state.onCreateDialogComplete(null);
   }
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
-}
+};

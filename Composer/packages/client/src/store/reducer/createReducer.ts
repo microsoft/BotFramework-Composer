@@ -1,8 +1,14 @@
 import producer from 'immer';
 
-import { ActionTypes } from './../../constants/index';
+import { State, ActionType, ReducerFunc } from '../types';
 
-const createReducer = handlers => {
+import { ActionTypes } from './../../constants';
+
+type CreateReducerFunc = (
+  handlers: { [type in ActionTypes]: ReducerFunc }
+) => (state: State, action: ActionType) => State;
+
+const createReducer: CreateReducerFunc = handlers => {
   // ensure action created is defined in constants/index.js#ActionTypes
   // when we switch to typescript, this is not need anymore.
   Object.keys(handlers).forEach(type => {
@@ -10,6 +16,7 @@ const createReducer = handlers => {
       throw new Error(`action created is not defined in constants/index.js#ActionTypes`);
     }
   });
+
   return (state, action) => {
     const { type, payload } = action;
 
