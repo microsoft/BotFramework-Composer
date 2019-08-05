@@ -56,7 +56,7 @@ export interface ILuisSettings {
 
 export interface ILuisStatus {
   [key: string]: {
-    version: string | undefined;
+    version?: string | undefined;
     lastUpdateTime: number;
     lastPublishTime: number;
   };

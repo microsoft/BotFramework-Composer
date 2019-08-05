@@ -4,6 +4,7 @@ import { Path } from '../../../utility/path';
 
 import { FileInfo, LUFile } from './../interface';
 import { IFileStorage } from './../../storage/interface';
+import { ILuisStatus } from './../../bot/interface';
 const parseContent = (content: string): Promise<any> => {
   const log = false;
   const locale = 'en-us';
@@ -11,16 +12,21 @@ const parseContent = (content: string): Promise<any> => {
   return ludown.parser.parseFile(content, log, locale);
 };
 
+const GENERATEDFOLDER = 'generated';
+const luisStatusFileName = 'luis.status.json';
 export class LUIndexer {
   private luFiles: LUFile[] = [];
-  private luisStatusFileName = 'luis.status.json';
+
+  private dir: string;
   public storage: IFileStorage;
-  constructor(storage: IFileStorage) {
+  constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
+    this.dir = dir;
   }
 
   public async index(files: FileInfo[]) {
     if (files.length === 0) return [];
+    await this.flush(files);
     this.luFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
@@ -44,7 +50,7 @@ export class LUIndexer {
       }
     }
 
-    const luStatusFile = files.find(file => file.name === this.luisStatusFileName);
+    const luStatusFile = files.find(file => file.name === luisStatusFileName);
     if (luStatusFile) {
       const luStatuses = await this._getLuStatus(luStatusFile.path);
 
@@ -64,10 +70,40 @@ export class LUIndexer {
     return this.luFiles;
   }
 
+  public async flush(files: FileInfo[]) {
+    const luisStatus: ILuisStatus = {};
+    for (const file of this.luFiles) {
+      luisStatus[file.id] = {
+        lastUpdateTime: file.lastUpdateTime,
+        lastPublishTime: file.lastPublishTime,
+      };
+    }
+    await this.storage.writeFile(
+      Path.join(this.dir, GENERATEDFOLDER, luisStatusFileName),
+      JSON.stringify(luisStatus, null, 4)
+    );
+  }
+
   public parse(content: string) {
     // TODO update lg-parser, use new diagostic method
 
     return parseContent(content);
+  }
+
+  public updateLuStatusTimeInMemory(ids: string[], key: string) {
+    const curTime = new Date().getTime();
+    for (const id of ids) {
+      const luFile = this.luFiles.find(luFile => luFile.id === id);
+      if (!luFile) continue;
+      switch (key) {
+        case 'lastUpdateTime':
+          luFile.lastUpdateTime = curTime;
+          break;
+        case 'lastPublishTime':
+          luFile.lastPublishTime = curTime;
+          break;
+      }
+    }
   }
 
   private _getLuStatus = async (path: string) => {

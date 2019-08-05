@@ -113,14 +113,13 @@ export class LuPublisher {
     if (await this.storage.exists(path)) {
       const files = await this.storage.readDir(path);
       for (const file of files) {
-        const curPath = path + '/' + file;
+        const curPath = Path.join(path, file);
         if ((await this.storage.stat(curPath)).isDir) {
           await this._deleteGenerated(curPath);
         } else {
           await this.storage.removeFile(curPath);
         }
       }
-      await this.storage.rmDir(path);
     }
   }
 
@@ -130,9 +129,9 @@ export class LuPublisher {
       const baseName = Path.basename(filePath, '.lu');
       const rootPath = Path.dirname(filePath);
       const currentPath = `${filePath}.dialog`;
-      const targetPath = `${this.generatedFolderPath}/${baseName}.lu.dialog`;
-      const currentVariantPath = `${rootPath}/${baseName}.${defaultLanguage}.lu.dialog`;
-      const targetVariantPath = `${this.generatedFolderPath}/${baseName}.${defaultLanguage}.lu.dialog`;
+      const targetPath = Path.join(this.generatedFolderPath, `${baseName}.lu.dialog`);
+      const currentVariantPath = Path.join(rootPath, `${baseName}.${defaultLanguage}.lu.dialog`);
+      const targetVariantPath = Path.join(this.generatedFolderPath, `${baseName}.${defaultLanguage}.lu.dialog`);
       await this.storage.copyFile(currentPath, targetPath);
       await this.storage.copyFile(currentVariantPath, targetVariantPath);
       await this.storage.removeFile(currentPath);
@@ -171,7 +170,7 @@ export class LuPublisher {
         };
       }
     }
-    await this._setLuStatus(luisStatus);
+    //await this._setLuStatus(luisStatus);
     return luisStatus;
   };
 

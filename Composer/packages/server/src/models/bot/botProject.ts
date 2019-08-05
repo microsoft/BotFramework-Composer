@@ -41,7 +41,7 @@ export class BotProject {
 
     this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
-    this.luIndexer = new LUIndexer(this.fileStorage);
+    this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
@@ -195,7 +195,9 @@ export class BotProject {
 
     const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    await this.luPublisher.update(isUpdate, luFile.relativePath);
+    if (!isUpdate) this.luIndexer.getLuFiles();
+    const toUpdateLuFile = [id];
+    this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuFile, 'lastUpdateTime');
     await this._updateFile(luFile.relativePath, content);
     const luFiles = this.luIndexer.getLuFiles();
     return luFiles;
@@ -245,11 +247,12 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    const luisStatues = await this.luPublisher.publish(unpublished);
-    for (const unpublishedLuFile of unpublished) {
-      this.reindex(unpublishedLuFile.relativePath);
-    }
-    return luisStatues;
+    const toUpdateLuId = unpublished.map(file => file.id);
+
+    this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime');
+    await this.luPublisher.publish(unpublished);
+    await this.reindex('dummy.lu');
+    return this.luIndexer.getLuFiles();
   };
 
   public checkLuisPublished = async () => {
