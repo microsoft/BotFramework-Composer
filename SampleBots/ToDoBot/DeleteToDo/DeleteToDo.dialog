@@ -39,7 +39,7 @@
           "prompt": "OK, please enter the title of the todo you want to remove.",
           "maxTurnCount": 0,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "none"
         },
         {

@@ -13,9 +13,7 @@
         "id": "030235",
         "updatedAt": "2019-07-22T07:51:03.850Z"
       },
-      "events": [
-        "beginDialog"
-      ],
+      "events": ["beginDialog"],
       "steps": [
         {
           "$type": "Microsoft.ConfirmInput",
@@ -29,7 +27,7 @@
           "unrecognizedPrompt": "I need a yes or no.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": true,
+          "allowInterruptions": "never",
           "defaultLocale": "en-us",
           "style": "Auto",
           "choiceOptions": {
