@@ -1,5 +1,17 @@
 import { insert, deleteNode, queryNode } from '../../src/shared/jsonTracker';
 
+describe('queryNode', () => {
+  it('query correct result when data exists', () => {
+    const dialog = {};
+    expect(queryNode(dialog, 'foo.bar[0]')).toEqual(null);
+  });
+
+  it('query NULL result when data not exists', () => {
+    const dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
+  });
+});
+
 describe('insert', () => {
   const path = 'foo.bar';
   let dialog;
@@ -11,10 +23,6 @@ describe('insert', () => {
   describe('when data already exists', () => {
     beforeEach(() => {
       dialog.foo.bar = [{ $type: 'firstOne' }, { $type: 'secondOne' }];
-    });
-
-    it('query correct result', () => {
-      expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
     });
 
     it('inserts into the correct position', () => {
@@ -83,10 +91,6 @@ describe('insert', () => {
   });
 
   describe('when data does not exist', () => {
-    it('query correct result', () => {
-      expect(queryNode(dialog, 'foo.bar[0]')).toEqual(null);
-    });
-
     it('inserts a new array with one element', () => {
       const path = 'foo.bar';
 
