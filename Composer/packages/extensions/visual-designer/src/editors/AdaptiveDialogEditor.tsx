@@ -1,13 +1,13 @@
-import React, { useMemo, FC } from 'react';
+import React, { useMemo, FC, useState } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
-import { Collapse } from '../components/nodes/templates/Collapse';
+import { queryNode } from '../shared/jsonTracker';
 
-import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
+import { RuleEditor } from './RuleEditor';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformRootDialog(data);
@@ -20,10 +20,22 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideSteps }): JSX.Element => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { stepGroup, ruleGroup } = nodeMap;
+  const { ruleGroup } = nodeMap;
 
+  const [activeEventId, setActiveEventId] = useState('');
+
+  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
+    if (eventName === NodeEventTypes.Expand) {
+      const selectedRulePath = eventData;
+      setActiveEventId(selectedRulePath);
+      return onEvent(NodeEventTypes.Focus, selectedRulePath);
+    }
+    return onEvent(eventName, eventData);
+  };
+
+  const activeEventData = queryNode(data, activeEventId);
   return (
     <div
       style={{
@@ -37,13 +49,11 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, hideS
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {ruleGroup && <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={onEvent} />}
-      <div style={{ height: 50 }} />
-      {!hideSteps && stepGroup && (
-        <Collapse text="Actions">
-          <StepEditor key={stepGroup.id} id={stepGroup.id} data={stepGroup.data} onEvent={onEvent} />
-        </Collapse>
+      {ruleGroup && (
+        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
+      <div className="editor-interval" style={{ height: 50 }} />
+      {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };
