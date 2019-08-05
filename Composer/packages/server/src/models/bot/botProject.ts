@@ -41,7 +41,7 @@ export class BotProject {
 
     this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
-    this.luIndexer = new LUIndexer();
+    this.luIndexer = new LUIndexer(this.fileStorage);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
@@ -50,7 +50,6 @@ export class BotProject {
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
-    await this.luPublisher.getLuisStatus();
     await this._checkProjectStructure();
   };
 
@@ -245,7 +244,12 @@ export class BotProject {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
-    return await this.luPublisher.publish(unpublished);
+
+    const luisStatues = await this.luPublisher.publish(unpublished);
+    for (const unpublishedLuFile of unpublished) {
+      this.reindex(unpublishedLuFile.relativePath);
+    }
+    return luisStatues;
   };
 
   public checkLuisPublished = async () => {
@@ -382,6 +386,16 @@ export class BotProject {
           });
         }
       }
+    }
+
+    const luisStatusPath = Path.join(this.dir, 'generated/luis.status.json');
+    if (await this.fileStorage.exists(luisStatusPath)) {
+      fileList.push({
+        name: Path.basename(luisStatusPath),
+        content: await this.fileStorage.readFile(luisStatusPath),
+        path: luisStatusPath,
+        relativePath: Path.relative(this.dir, luisStatusPath),
+      });
     }
     return fileList;
   };
