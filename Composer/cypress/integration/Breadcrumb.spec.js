@@ -26,7 +26,7 @@ context('breadcrumb', () => {
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('AddIntent').click();
       cy.wait(100);
-      cy.get('[data-testid="RuleEditor"]').within(() => {
+      cy.getByTestId('RuleEditor').within(() => {
         cy.getByText('AddToDo').click();
       });
     });
