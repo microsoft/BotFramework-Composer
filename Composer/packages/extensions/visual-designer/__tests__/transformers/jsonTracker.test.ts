@@ -19,7 +19,7 @@ describe('queryNode', () => {
   it('should return a reference.', () => {
     const dialog = { foo: { bar: 'bar' } };
     const result = queryNode(dialog, 'foo');
-    expect(result).toEqual({ bar: 'bar' });
+    expect(result).toBe(dialog.foo);
 
     dialog.foo.bar = 'newValue';
     expect(dialog.foo).toEqual({ bar: 'newValue' });
