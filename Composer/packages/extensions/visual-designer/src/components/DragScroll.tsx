@@ -1,4 +1,6 @@
-import React, { useRef } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useRef } from 'react';
 
 function getScrollParent(node) {
   if (!node || node === document) return null;
@@ -55,7 +57,7 @@ export default function DragScroll(props) {
   return (
     <div
       className="dragscroll"
-      style={{ width: '100%', height: '100%' }}
+      css={{ width: '100%', height: '100%' }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}

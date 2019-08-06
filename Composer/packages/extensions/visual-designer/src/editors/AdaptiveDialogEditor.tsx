@@ -1,4 +1,6 @@
-import React, { useMemo, FC, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useMemo, FC, useState } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
@@ -38,7 +40,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   const activeEventData = queryNode(data, activeEventId);
   return (
     <div
-      style={{
+      css={{
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
