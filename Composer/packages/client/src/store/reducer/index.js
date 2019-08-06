@@ -92,39 +92,6 @@ const setStorageFileFetchingStatus = (state, { status }) => {
   return state;
 };
 
-const navigateTo = (state, { path, rest }) => {
-  if (state.navPath !== path) {
-    if (rest && Array.isArray(rest)) {
-      rest.forEach(nav => {
-        if (nav !== state.navPath) {
-          state.navPathHistory.push(state.navPath + nav);
-        }
-      });
-    }
-    state.navPath = path;
-    state.focusPath = state.navPath; // fire up form editor on non-leaf node
-
-    state.navPathHistory.push(path);
-  }
-
-  if (state.focusPath !== path) {
-    state.focusPath = path;
-  }
-  return state;
-};
-
-const navigateDown = (state, { subPath }) => {
-  state.navPath = state.navPath + subPath;
-  state.focusPath = state.navPath; // fire up form editor on non-leaf node
-  state.navPathHistory.push(state.navPath);
-  return state;
-};
-
-const focusTo = (state, { path }) => {
-  state.focusPath = path;
-  return state.focusPath;
-};
-
 const setBotLoadErrorMsg = (state, { error }) => {
   return (state.botLoadErrorMsg = error);
 };
@@ -149,8 +116,33 @@ const setToStartBot = (state, { toStartBot }) => {
   return (state.toStartBot = toStartBot);
 };
 
-const setDesignPath = (state, { dialogId, navPath, focused, uri, navPathHistory }) => {
-  return (state.designPath = { dialogId, navPath, focused, uri, navPathHistory });
+const setDesignPageLocation = (state, { dialogId, dataPath, focused, uri, breadcrumb }) => {
+  //generate navPath and focusedPath
+  state.navPath = dialogId + '#';
+  if (dataPath) {
+    state.navPath = dialogId + '#.' + dataPath;
+  }
+
+  state.focusPath = state.navPath;
+  if (focused) {
+    state.focusPath = state.focusPath + '.' + focused;
+  }
+  const lastIndex = breadcrumb.length - 1;
+
+  if (breadcrumb.length === 0) {
+    breadcrumb.push({ dialogId, dataPath, focused });
+  } else if (
+    breadcrumb[lastIndex].dialogId !== dialogId ||
+    breadcrumb[lastIndex].dataPath !== dataPath ||
+    breadcrumb[lastIndex].focused !== focused
+  ) {
+    if ((focused && breadcrumb[lastIndex].focused) || (!focused && breadcrumb[lastIndex].focused)) {
+      breadcrumb.splice(lastIndex, 1);
+    }
+    breadcrumb.push({ dialogId, dataPath, focused });
+  }
+
+  return (state.designPageLocation = { dialogId, dataPath, focused, uri, breadcrumb });
 };
 
 export const reducer = createReducer({
@@ -167,9 +159,6 @@ export const reducer = createReducer({
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
-  [ActionTypes.NAVIGATE_TO]: navigateTo,
-  [ActionTypes.NAVIGATE_DOWN]: navigateDown,
-  [ActionTypes.FOCUS_TO]: focusTo,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
@@ -183,5 +172,5 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.TO_START_BOT]: setToStartBot,
-  [ActionTypes.SET_DESIGN_PATH]: setDesignPath,
+  [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
 });

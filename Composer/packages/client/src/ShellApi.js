@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual, get } from 'lodash';
+import { debounce, isEqual, get, replace } from 'lodash';
 import { navigate } from '@reach/router';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -54,7 +54,7 @@ const shellNavigator = (shellPage, opts = {}) => {
 
 export function ShellApi() {
   const { state, actions } = useContext(Store);
-  const { dialogs, schemas, lgFiles, luFiles, designPath, navPath, focusPath } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, navPath, focusPath } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
@@ -62,7 +62,7 @@ export function ShellApi() {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId } = designPath;
+  const { dialogId } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -289,16 +289,19 @@ export function ShellApi() {
 
   function navTo({ path }) {
     cleanData();
+    if (path) path = replace(path, /#|#./, '/');
     actions.navTo(path);
   }
 
   function navDown({ subPath }) {
     cleanData();
+    if (subPath) subPath = subPath.split('.')[1];
     actions.navDown(subPath);
   }
 
   function focusTo({ subPath }, event) {
     cleanData();
+    if (subPath) subPath = subPath.split('.')[1];
     actions.focusTo(subPath, event.source.name === FORM_EDITOR);
   }
 

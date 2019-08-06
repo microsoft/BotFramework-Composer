@@ -26,12 +26,12 @@ const initialState = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  designPath: {
+  designPageLocation: {
     dialogId: '',
-    navPath: '',
+    dataPath: '',
     focused: '',
     uri: '',
-    navPathHistory: [],
+    breadcrumb: [],
   },
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),

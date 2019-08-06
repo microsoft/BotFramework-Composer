@@ -4,6 +4,7 @@ import { navigate } from '@reach/router';
 import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { resolveToBasePath } from './../../utils/fileUtil';
 import { startBot } from './bot';
+import { navTo } from './navigation';
 
 export function updateOAuth({ dispatch }, oAuth) {
   dispatch({
@@ -79,7 +80,7 @@ export async function openBotProject(store, absolutePath) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navigate('/dialogs/Main');
+      navTo(store, 'Main');
       startBot(dispatch, true);
     }
     return response.data;
@@ -112,7 +113,7 @@ export async function saveProjectAs(store, name, description) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navigate('dialogs/Main');
+      navTo(store, 'Main');
     }
     return response.data;
   } catch (err) {
@@ -139,7 +140,7 @@ export async function createProject(store, templateId, name, description) {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navigate('/dialogs/Main');
+      navTo(store, 'Main');
     }
     return response.data;
   } catch (err) {

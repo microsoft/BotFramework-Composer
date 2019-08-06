@@ -16,7 +16,7 @@ const Routes = props => {
   const Content = props.component;
   const parentProps = props;
   return (
-    <Match path={`${BASEPATH}/dialogs/:dialogId/*`} {...props}>
+    <Match path={`/dialogs/:dialogId/*`} {...props}>
       {({ match, navigate, location }) => (
         <div css={data}>
           <Content css={showDesign(match)}>

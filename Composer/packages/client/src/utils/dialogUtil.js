@@ -1,6 +1,9 @@
 import { get, set, cloneDeep, replace } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import formatMessage from 'format-message';
+
+import { upperCaseName } from './fileUtil';
 
 const ExpressionParser = new ExpressionEngine();
 
@@ -9,6 +12,34 @@ export function getDialogName(path) {
   const [dialogName] = realPath.split('#');
 
   return dialogName;
+}
+
+export function getDialogsMap(dialogs) {
+  return dialogs.reduce((result, dialog) => {
+    result[dialog.id] = dialog.content;
+    return result;
+  }, {});
+}
+
+export function getbreadcrumbLabel(dialogs, dialogId, dataPath, focused) {
+  let label = '';
+  if (!dataPath && !focused) {
+    label = dialogs.find(d => d.id === dialogId).displayName;
+  } else {
+    let current = `${dataPath || ''}.${focused || ''}.$type`;
+    if (!dataPath) {
+      current = replace(current, '.', '');
+    }
+    if (!focused) {
+      current = replace(current, '..', '.');
+    }
+    const dialogsMap = getDialogsMap(dialogs);
+    const dialog = dialogsMap[dialogId];
+    label = get(dialog, current);
+  }
+
+  label = formatMessage(upperCaseName(label));
+  return label;
 }
 
 export function getDialogData(dialogsMap, path) {

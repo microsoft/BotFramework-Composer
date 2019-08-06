@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { navigate } from '@reach/router';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
+import { navTo } from './navigation';
 
 export async function removeDialog(store, id) {
   try {
@@ -12,7 +12,7 @@ export async function removeDialog(store, id) {
         response,
       },
     });
-    navigate(`/dialogs/Main`);
+    navTo(store, 'Main');
   } catch (err) {
     store.dispatch({ type: ActionTypes.REMOVE_DIALOG_FAILURE, payload: null, error: err });
   }
@@ -33,7 +33,7 @@ export async function createDialog(store, { id, content }) {
         response,
       },
     });
-    navigate(`/dialogs/${id}`);
+    navTo(store, id);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,

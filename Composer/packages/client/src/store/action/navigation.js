@@ -1,76 +1,42 @@
 import { navigate } from '@reach/router';
-import { replace } from 'lodash';
 
 import { ActionTypes } from '../../constants/index';
 
-export function setDesignPath({ dispatch }, { dialogId, navPath, focused, uri, navPathHistory }) {
+export function setDesignPageLocation({ dispatch }, { dialogId, dataPath, focused, uri, breadcrumb }) {
   dispatch({
-    type: ActionTypes.SET_DESIGN_PATH,
-    payload: { dialogId, navPath, focused, uri, navPathHistory },
+    type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
+    payload: { dialogId, dataPath, focused, uri, breadcrumb },
   });
 }
 
-export function navTo({ dispatch }, path, rest) {
+export function navTo(store, path, breadcrumb = null) {
   if (!path) return;
 
-  const realPath = replace(path, '#.', '#');
-  const items = realPath.split('#');
-
-  let uri = `/dialogs/${items[0]}/`;
-  if (items[1]) {
-    uri = uri + items[1];
-  }
-
-  navigate(uri);
-  dispatch({
-    type: ActionTypes.NAVIGATE_TO,
-    payload: { path, rest },
-  });
+  navigate(`/dialogs/${path}/`, { state: { breadcrumb: breadcrumb || [] } });
 }
 
-export function navDown({ dispatch, state }, subPath) {
+export function navDown({ state }, subPath) {
   if (!subPath) return;
 
-  const { uri, dataPath } = state;
+  const { uri, dataPath, breadcrumb } = state.designPageLocation;
   let currentUri = uri;
 
-  if (!dataPath) {
-    currentUri += subPath;
+  if (dataPath) {
+    currentUri = currentUri + '.' + subPath;
   } else {
-    currentUri = currentUri + '/' + subPath.split('.')[1];
+    currentUri = currentUri + '/' + subPath;
   }
-  navigate(currentUri);
-
-  dispatch({
-    type: ActionTypes.NAVIGATE_DOWN,
-    payload: { subPath },
-  });
+  navigate(currentUri, { state: { breadcrumb } });
 }
 
-export function focusTo({ dispatch, state }, subPath, fromForm) {
-  const { navPath, focusPath, designPath } = state;
-  const { focused, uri } = designPath;
+export function focusTo({ state }, subPath, fromForm = false) {
+  const { focused, uri, breadcrumb } = state.designPageLocation;
   let currentUri = uri;
-  let path = navPath;
   if (fromForm && focused) {
-    currentUri = `${uri}?focused=${focused}${subPath}`;
-    path = focusPath;
+    currentUri = `${uri}?focused=${focused}.${subPath}`;
   } else if (subPath) {
-    currentUri = `${uri}?focused=${subPath.split('.')[1]}`;
+    currentUri = `${uri}?focused=${subPath}`;
   }
 
-  navigate(currentUri);
-
-  dispatch({
-    type: ActionTypes.FOCUS_TO,
-    payload: { path: path + subPath },
-  });
+  navigate(currentUri, { state: { breadcrumb } });
 }
-
-// function updateNavPathHistory(dialogId, navPath) {
-//   if (navPathHistoryCopy.length === 0) {
-//     navPathHistoryCopy.push({ dialogId: designPath.dialogId, navPath: designPath.navPath });
-//   }
-//   navPathHistoryCopy.push({ dialogId, navPath });
-//   return { state: { navPathHistory: navPathHistoryCopy } };
-// }
