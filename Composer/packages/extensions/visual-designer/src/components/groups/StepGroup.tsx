@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
@@ -47,7 +49,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   const { boundary, nodes, edges } = layout;
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
       {nodes
         ? nodes.map(x => (
@@ -66,7 +68,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         : null}
       <OffsetContainer
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
-        styles={{ zIndex: 100 }}
+        css={{ zIndex: 100 }}
       >
         <EdgeMenu
           onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
@@ -81,7 +83,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
                 y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
               }}
-              styles={{ zIndex: 100 }}
+              css={{ zIndex: 100 }}
             >
               <EdgeMenu
                 onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}
