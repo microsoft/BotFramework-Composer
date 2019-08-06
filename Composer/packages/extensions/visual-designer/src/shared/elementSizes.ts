@@ -24,7 +24,7 @@ export const ChoiceInputMarginTop = 5;
 
 export const EventNodeSize = {
   width: 240,
-  height: 120,
+  height: 125,
 };
 
 export const CollapsedEventNodeSize = {

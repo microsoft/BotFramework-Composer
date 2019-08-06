@@ -16,7 +16,7 @@ function renderTitle(data): string {
     return data.$designer.name;
   } else if (data.events && data.events.length) {
     return formatMessage(
-      `Handle events: {event} {
+      `Events: {event} {
         count, plural,
            =0 {}
         other {+#}
@@ -27,7 +27,7 @@ function renderTitle(data): string {
       }
     );
   } else {
-    return formatMessage('Handle Event...');
+    return formatMessage('Event...');
   }
 }
 
