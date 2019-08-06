@@ -134,13 +134,13 @@ export const IconCard = ({
                 <FabricIcon
                   style={{ lineHeight: '16px', fontSize: '16px' }}
                   iconName="OpenSource"
-                  data-testid="OpenIcon"
                   onClick={e => {
                     e.stopPropagation();
                     onChildDialogClick();
                   }}
                 />
                 <span
+                  data-testid="OpenIcon"
                   style={{
                     cursor: 'pointer',
                     color: 'blue',

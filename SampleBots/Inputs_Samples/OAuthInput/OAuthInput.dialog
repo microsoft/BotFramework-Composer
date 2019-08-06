@@ -28,16 +28,16 @@
           "condition": "user.token == null",
           "steps": [
             {
-              "$type": "Microsoft.OAuthPrompt",
+              "$type": "Microsoft.OAuthInput",
               "$designer": {
                 "createdAt": "2019-07-16T19:31:43.362Z",
                 "updatedAt": "2019-07-16T19:31:51.650Z",
                 "id": "199270"
               },
-              "ConnectionName": "Outlook",
-              "Title": "Log in",
-              "Text": "Please log in to your email account",
-              "Property": "user.token"
+              "connectionName": "Outlook",
+              "title": "Log in",
+              "text": "Please log in to your email account",
+              "property": "user.token"
             }
           ]
         },
@@ -53,7 +53,7 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.getGraphEmails"
+          "property": "user.getGraphEmails"
         },
         {
           "$type": "Microsoft.SendActivity",

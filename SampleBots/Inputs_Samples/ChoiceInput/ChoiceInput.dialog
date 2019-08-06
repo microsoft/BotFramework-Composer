@@ -14,9 +14,7 @@
         "id": "865027",
         "updatedAt": "2019-07-22T07:50:53.182Z"
       },
-      "events": [
-        "beginDialog"
-      ],
+      "events": ["beginDialog"],
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
@@ -30,7 +28,7 @@
           "prompt": "Please select a value from below:",
           "maxTurnCount": "2147483647",
           "alwaysPrompt": true,
-          "allowInterruptions": true,
+          "allowInterruptions": "never",
           "outputFormat": "value",
           "choices": [
             {

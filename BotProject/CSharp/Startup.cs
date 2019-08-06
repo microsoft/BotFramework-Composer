@@ -53,6 +53,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
+            services.AddSingleton<InspectionMiddleware>();
+
             TypeFactory.Configuration = this.Configuration;
             services.AddSingleton<IBotManager, BotManager>((sp) => new BotManager(this.Configuration));
         }

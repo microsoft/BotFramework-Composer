@@ -29,7 +29,7 @@
           "prompt": "Hello, what is your name?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": true,
+          "allowInterruptions": "always",
           "outputFormat": "none"
         },
         {
