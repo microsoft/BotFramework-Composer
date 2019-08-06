@@ -2,21 +2,28 @@
 import { jsx } from '@emotion/core';
 import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
+import { checkLgContent } from '../../store/action/lg';
 import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from '../language-understanding/styles';
+import {
+  ContentHeaderStyle,
+  ContentStyle,
+  flexContent,
+  actionButton,
+  contentEditor,
+} from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
 import '../language-understanding/style.css';
-import Content from './content';
+import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
@@ -25,9 +32,7 @@ const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 export const LGPage = props => {
   const { state, actions } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [textMode, setTextMode] = useState(false);
-  const [newContent, setNewContent] = useState(null);
-  const [lgFile, setLgFile] = useState(null);
+  const [editMode, setEditMode] = useState(false);
 
   const subPath = props['*'];
 
@@ -36,13 +41,7 @@ export const LGPage = props => {
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
-  useEffect(() => {
-    if (lgFiles.length) {
-      setLgFile({
-        ...lgFiles[0],
-      });
-    }
-  }, [lgFiles]);
+  const lgFile = lgFiles.length && lgFiles[0];
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
@@ -91,39 +90,31 @@ export const LGPage = props => {
     if (!activeDialog && subPath && dialogs.length) {
       navigate(mapNavPath('language-generation'));
     }
-
-    setNewContent(null);
-  }, [activePath, dialogs, lgFiles]);
+  }, [activePath, dialogs]);
 
   function onSelect(id) {
-    if (newContent) {
-      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
-      return;
-    }
     if (id === '_all') {
       navigate(mapNavPath('/language-generation'));
     } else {
       navigate(mapNavPath(`language-generation/${id}`));
     }
-    setTextMode(false); // back to table view
+    setEditMode(false); // back to table view
   }
 
-  function onChange(newContent) {
-    setNewContent(newContent);
-  }
+  async function onChange(newContent) {
+    try {
+      checkLgContent(newContent);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return;
+    }
 
-  function discardChanges() {
-    setLgFile({
-      ...lgFiles[0],
-    });
-    setNewContent(null);
-  }
-
-  async function onSave() {
     const payload = {
       id: lgFile.id,
       content: newContent,
     };
+
     try {
       await actions.updateLgFile(payload);
     } catch (error) {
@@ -135,9 +126,8 @@ export const LGPage = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit(template) {
-    console.log(template);
-    setTextMode(true);
+  function onTableViewWantEdit() {
+    setEditMode(true);
   }
 
   const toolbarItems = [
@@ -152,39 +142,16 @@ export const LGPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>Bot says..</div>
+        <div>{formatMessage('Bot says')}..</div>
         <div css={flexContent}>
-          {textMode && (
-            <Fragment>
-              <PrimaryButton
-                iconProps={{
-                  iconName: 'Save',
-                }}
-                onClick={() => onSave()}
-                disabled={!newContent}
-                styles={{ root: { marginRight: '10px' } }}
-              >
-                {formatMessage('Save')}
-              </PrimaryButton>
-              <DefaultButton
-                iconProps={{
-                  iconName: 'Undo',
-                }}
-                onClick={() => discardChanges()}
-                disabled={!newContent}
-              >
-                {formatMessage('Discard changes')}
-              </DefaultButton>
-            </Fragment>
-          )}
           <Toggle
             className={'toggleEditMode'}
             css={actionButton}
-            onText="Edit mode"
-            offText="Edit mode"
-            checked={textMode}
-            disabled={activePath !== '_all' && textMode === false}
-            onChange={() => setTextMode(!textMode)}
+            onText={formatMessage('Edit mode')}
+            offText={formatMessage('Edit mode')}
+            checked={editMode}
+            disabled={activePath !== '_all' && editMode === false}
+            onChange={() => setEditMode(!editMode)}
           />
         </div>
       </div>
@@ -205,13 +172,13 @@ export const LGPage = props => {
             </div>
           </Tree>
         </div>
-        <Content
-          file={lgFile}
-          activeDialog={activeDialog}
-          onEdit={onTableViewWantEdit}
-          textMode={textMode}
-          onChange={onChange}
-        />
+        <div css={contentEditor}>
+          {editMode ? (
+            <CodeEditor file={lgFile} onChange={onChange} />
+          ) : (
+            <TableView file={lgFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+          )}
+        </div>
       </div>
     </Fragment>
   );
