@@ -181,7 +181,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
+  public updateLuFile = async (id: string, content: string, updateTime: number): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -196,9 +196,12 @@ export class BotProject {
     const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
     if (!isUpdate) this.luIndexer.getLuFiles();
-    const toUpdateLuFile = [id];
-    this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuFile, 'lastUpdateTime');
-    await this._updateFile(luFile.relativePath, content);
+
+    if (this.luIndexer.lastUpdateTime <= updateTime) {
+      const toUpdateLuFile = [id];
+      this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuFile, 'lastUpdateTime', updateTime);
+      await this._updateFile(luFile.relativePath, content);
+    }
     const luFiles = this.luIndexer.getLuFiles();
     return luFiles;
   };
@@ -222,7 +225,7 @@ export class BotProject {
     this.luPublisher.setLuisConfig(config);
   };
 
-  public publishLuis = async () => {
+  public publishLuis = async (publishTime: number) => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
@@ -249,8 +252,12 @@ export class BotProject {
 
     const toUpdateLuId = unpublished.map(file => file.id);
 
-    this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime');
-    await this.luPublisher.publish(unpublished);
+    try {
+      await this.luPublisher.publish(unpublished);
+      this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime', publishTime);
+    } catch (error) {
+      throw new Error(error);
+    }
     await this.reindex('dummy.lu');
     return this.luIndexer.getLuFiles();
   };

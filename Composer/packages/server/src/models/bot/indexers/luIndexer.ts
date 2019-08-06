@@ -19,9 +19,13 @@ export class LUIndexer {
 
   private dir: string;
   public storage: IFileStorage;
+  public lastUpdateTime: number;
+  public lastPublishTime: number;
   constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
     this.dir = dir;
+    this.lastUpdateTime = 1;
+    this.lastPublishTime = 1;
   }
 
   public async index(files: FileInfo[]) {
@@ -90,17 +94,18 @@ export class LUIndexer {
     return parseContent(content);
   }
 
-  public updateLuStatusTimeInMemory(ids: string[], key: string) {
-    const curTime = new Date().getTime();
+  public updateLuStatusTimeInMemory(ids: string[], key: string, newTime: number) {
     for (const id of ids) {
       const luFile = this.luFiles.find(luFile => luFile.id === id);
       if (!luFile) continue;
       switch (key) {
         case 'lastUpdateTime':
-          luFile.lastUpdateTime = curTime;
+          this.lastUpdateTime = newTime;
+          luFile.lastUpdateTime = newTime;
           break;
         case 'lastPublishTime':
-          luFile.lastPublishTime = curTime;
+          this.lastPublishTime = newTime;
+          luFile.lastPublishTime = newTime;
           break;
       }
     }

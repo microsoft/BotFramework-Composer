@@ -131,6 +131,7 @@ export const LUPage = props => {
     const payload = {
       id: activeDialog.id, // current opened lu file
       content: newContent,
+      updateTime: new Date().getTime(),
     };
     try {
       await updateLuFile(payload);
