@@ -1,14 +1,14 @@
 import { keys, replace, isEqual } from 'lodash';
 import { runBuild } from 'lubuild';
-import { LuisAuthoring } from 'luis-apis';
-import * as msRest from '@azure/ms-rest-js';
-import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
+// import { LuisAuthoring } from 'luis-apis';
+// import * as msRest from '@azure/ms-rest-js';
+// import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisSettings, LUFile, ILuisConfig, ILuisStatus } from './interface';
+import { LUFile, ILuisConfig, ILuisStatus } from './interface';
 
-const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
+//const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
 
 export class LuPublisher {
@@ -46,7 +46,6 @@ export class LuPublisher {
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
-    const publishTime = new Date().getTime();
     //const settings: ILuisSettings = await this._getSettings();
     try {
       await runBuild(config);
@@ -55,7 +54,7 @@ export class LuPublisher {
     }
 
     await this._copyDialogsToTargetFolder(config);
-    return await this._updateStatus(config.authoringKey, publishTime);
+    //return await this._updateStatus(config.authoringKey, publishTime);
   };
 
   public getUnpublisedFiles = async (files: LUFile[]) => {
@@ -139,40 +138,40 @@ export class LuPublisher {
     });
   };
 
-  private _updateStatus = async (authoringKey: string, publishTime: number) => {
-    if (!this.config) return;
-    const credentials = new msRest.ApiKeyCredentials({
-      inHeader: { 'Ocp-Apim-Subscription-Key': authoringKey },
-    });
-    const client = new LuisAuthoring(credentials as any, {});
-    const setting: ILuisSettings = await this._getSettings();
-    const luisStatus: ILuisStatus = (await this._getLuStatus()) || {};
-    const appNames = keys(setting.luis);
-    for (const appName of appNames) {
-      if (ENDPOINT_KEYS.indexOf(appName) < 0) {
-        const appInfo = await client.apps.get(
-          this.config.authoringRegion as AzureRegions,
-          'com' as AzureClouds,
-          setting.luis[appName]
-        );
-        const currentTime = new Date().getTime();
-        const name = this._getName(appName);
-        //if the according lastupdate time does not exist, then initialize as 1.
-        const lastUpdateTime = luisStatus[name]
-          ? luisStatus[name].lastUpdateTime
-            ? luisStatus[name].lastUpdateTime
-            : 1
-          : 1;
-        luisStatus[name] = {
-          version: appInfo.activeVersion,
-          lastUpdateTime: lastUpdateTime,
-          lastPublishTime: currentTime,
-        };
-      }
-    }
-    //await this._setLuStatus(luisStatus);
-    return luisStatus;
-  };
+  // private _updateStatus = async (authoringKey: string, publishTime: number) => {
+  //   if (!this.config) return;
+  //   const credentials = new msRest.ApiKeyCredentials({
+  //     inHeader: { 'Ocp-Apim-Subscription-Key': authoringKey },
+  //   });
+  //   const client = new LuisAuthoring(credentials as any, {});
+  //   const setting: ILuisSettings = await this._getSettings();
+  //   const luisStatus: ILuisStatus = (await this._getLuStatus()) || {};
+  //   const appNames = keys(setting.luis);
+  //   for (const appName of appNames) {
+  //     if (ENDPOINT_KEYS.indexOf(appName) < 0) {
+  //       const appInfo = await client.apps.get(
+  //         this.config.authoringRegion as AzureRegions,
+  //         'com' as AzureClouds,
+  //         setting.luis[appName]
+  //       );
+  //       const currentTime = new Date().getTime();
+  //       const name = this._getName(appName);
+  //       //if the according lastupdate time does not exist, then initialize as 1.
+  //       const lastUpdateTime = luisStatus[name]
+  //         ? luisStatus[name].lastUpdateTime
+  //           ? luisStatus[name].lastUpdateTime
+  //           : 1
+  //         : 1;
+  //       luisStatus[name] = {
+  //         version: appInfo.activeVersion,
+  //         lastUpdateTime: lastUpdateTime,
+  //         lastPublishTime: currentTime,
+  //       };
+  //     }
+  //   }
+  //   //await this._setLuStatus(luisStatus);
+  //   return luisStatus;
+  // };
 
   private _getSettingPath = (config: ILuisConfig | null) => {
     if (config === null) return '';
@@ -237,11 +236,11 @@ export class LuPublisher {
     return luConfig;
   };
 
-  private _getSettings = async () => {
-    const settingPath = this._getSettingPath(this.config);
-    if (settingPath === '') return null;
-    return await this._getJsonObject(settingPath);
-  };
+  // private _getSettings = async () => {
+  //   const settingPath = this._getSettingPath(this.config);
+  //   if (settingPath === '') return null;
+  //   return await this._getJsonObject(settingPath);
+  // };
 
   private _getLuStatus = async () => {
     const luStatePath = await this._getLuStatusPath();
