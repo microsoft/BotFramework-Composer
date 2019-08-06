@@ -31,7 +31,6 @@ export interface State {
   navPath: string;
   /** the data path for FormEditor */
   focusPath: string;
-  navPathHistory: string[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: any;
@@ -43,6 +42,7 @@ export interface State {
   schemas: any;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  designPageLocation: any;
   error: StateError | null;
   oAuth: any;
   showCreateDialogModal: boolean;
