@@ -1,7 +1,5 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
-import { LgEditor } from 'code-editor';
 import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -22,6 +20,7 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
 import '../language-understanding/style.css';
 import TableView from './table-view';
@@ -43,7 +42,6 @@ export const LGPage = props => {
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
   const lgFile = lgFiles.length && lgFiles[0];
-  const fileId = lgFile && lgFile.id;
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
@@ -140,21 +138,6 @@ export const LGPage = props => {
     },
   ];
 
-  const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(lgFile) === false ? (
-      <LgEditor
-        options={{
-          lineNumbers: 'on',
-          minimap: 'on',
-        }}
-        value={lgFile.content}
-        onChange={onChange}
-      />
-    ) : (
-      <div />
-    );
-  }, [fileId, editMode]);
-
   return (
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
@@ -191,7 +174,7 @@ export const LGPage = props => {
         </div>
         <div css={contentEditor}>
           {editMode ? (
-            memoizedEditor
+            <CodeEditor file={lgFile} onChange={onChange} />
           ) : (
             <TableView file={lgFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
           )}
