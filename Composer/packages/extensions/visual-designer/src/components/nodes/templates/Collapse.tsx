@@ -1,5 +1,16 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import { useState } from 'react';
 import { IconButton } from 'office-ui-fabric-react';
+
+import {
+  collapseContainer,
+  collapseHeader,
+  headerText,
+  headerIcon,
+  headerButton,
+  collapseContent,
+} from './CollapseStyles';
 
 export const Collapse = ({ text, children }) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -9,53 +20,17 @@ export const Collapse = ({ text, children }) => {
     setCollapsed(!collapsed);
   };
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        maxWidth: '1008px',
-        minWidth: '432px',
-        margin: '0 auto',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            color: '#605E5C',
-            fontSize: '12px',
-            lineHeight: '19px',
-            height: '22px',
-            marginRight: '20px',
-          }}
-        >
+    <div className="collapse" css={collapseContainer}>
+      <div className="collapse__topbar" css={collapseHeader}>
+        <div className="collapse__header" css={headerText}>
           {text}
         </div>
-        <div
-          style={{
-            flex: 1,
-            border: '0.5px solid #000000',
-            transform: 'rotate(0.01deg)',
-          }}
-        />
-        <IconButton
-          onClick={collapseFuc}
-          iconProps={{ iconName: 'PageRight' }}
-          style={{
-            transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
-            marginLeft: '12px',
-            transition: 'transform 0.2s linear',
-          }}
-        />
+        <div className="collapse__line" css={headerIcon} />
+        <IconButton onClick={collapseFuc} iconProps={{ iconName: 'PageRight' }} css={headerButton(collapsed)} />
       </div>
-      <div style={{ display: collapsed ? 'none' : 'block' }}>{children}</div>
+      <div className="collapse__content" css={collapseContent(collapsed)}>
+        {children}
+      </div>
     </div>
   );
 };

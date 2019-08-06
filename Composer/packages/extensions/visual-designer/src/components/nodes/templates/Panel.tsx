@@ -1,4 +1,6 @@
-import React, { useState, useLayoutEffect } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useLayoutEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react';
 
 import { PanelSize } from '../../../shared/elementSizes';
@@ -42,9 +44,9 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
     };
   });
   return (
-    <div style={{ width: '100%' }}>
+    <div css={{ width: '100%' }}>
       <div
-        style={{
+        css={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -55,7 +57,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         }}
       >
         <div
-          style={{
+          css={{
             flex: 1,
             color: '#656565',
             fontSize: '12px',
@@ -67,7 +69,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         </div>
         <IconButton
           iconProps={{ iconName: 'PageRight' }}
-          style={{
+          css={{
             transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
             marginRight: '-15px',
             transition: 'transform 0.2s linear',
@@ -76,7 +78,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         />
       </div>
       <div
-        style={{
+        css={{
           border: '1px solid #656565',
           boxSizing: 'border-box',
           padding: '24px 0px 12px 24px',
