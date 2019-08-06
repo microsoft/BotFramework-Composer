@@ -30,7 +30,7 @@
           "prompt": "Hello, what is your name?",
           "maxTurnCount": 0,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "none"
         },
         {

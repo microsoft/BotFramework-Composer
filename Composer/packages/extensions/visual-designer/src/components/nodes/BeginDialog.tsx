@@ -13,7 +13,7 @@ import { getFriendlyName } from './utils';
 export class BeginDialog extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;
   renderCallDialogLink() {
-    const { data, onEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     if (!data || !data.dialog) return null;
 
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
@@ -25,7 +25,7 @@ export class BeginDialog extends React.Component<NodeProps, object> {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeEventTypes.OpenLink, calleeDialog);
+          onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
         }}
       >
         {calleeDialog}

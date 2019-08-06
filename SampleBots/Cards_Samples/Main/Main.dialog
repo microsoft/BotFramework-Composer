@@ -14,11 +14,16 @@
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "createdAt": "2019-07-22T08:34:14.657Z",
+            "updatedAt": "2019-08-05T17:50:04.295Z",
+            "id": "359223"
+          },
           "property": "user.choice",
           "prompt": "Which card would you like to display?",
           "maxTurnCount": "2147483647",
           "alwaysPrompt": true,
-          "allowInterruptions": true,
+          "allowInterruptions": "never",
           "outputFormat": "value",
           "choices": [
             {
@@ -58,11 +63,6 @@
           "recognizerOptions": {
             "noValue": false,
             "noAction": false
-          },
-          "$designer": {
-            "createdAt": "2019-07-22T08:34:14.657Z",
-            "updatedAt": "2019-07-22T08:34:14.700Z",
-            "id": "359223"
           }
         },
         {
@@ -181,7 +181,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "$designer": {
+            "createdAt": "2019-08-05T19:05:34.585Z",
+            "updatedAt": "2019-08-05T19:05:34.635Z",
+            "id": "304837"
+          }
         },
         {
           "$type": "Microsoft.RepeatDialog",

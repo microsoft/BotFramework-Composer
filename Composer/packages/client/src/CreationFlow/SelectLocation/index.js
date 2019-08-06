@@ -6,9 +6,9 @@ import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'o
 import { navigate } from '@reach/router';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
-import { Store } from './../../store/index';
+import { StoreContext } from './../../store';
 export function SelectLocation(props) {
-  const { actions } = useContext(Store);
+  const { actions } = useContext(StoreContext);
   const [selected, setSelected] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 

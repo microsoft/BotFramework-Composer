@@ -4,7 +4,7 @@ const DEFAULT_CHILDREN_KEYS = ['steps'];
 const childrenMap = {
   [ObiTypes.AdaptiveDialog]: ['steps'],
   [ObiTypes.IfCondition]: ['steps', 'elseSteps'],
-  [ObiTypes.SwitchCondition]: ['cases'],
+  [ObiTypes.SwitchCondition]: ['cases', 'default'],
 };
 
 export function outlineObiJson(input: any) {
@@ -22,6 +22,8 @@ export function outlineObiJson(input: any) {
     const children = input[childrenKey];
     if (Array.isArray(children)) {
       outline[childrenKey] = children.map(x => outlineObiJson(x));
+    } else {
+      outline[childrenKey] = [];
     }
   }
   return outline;
