@@ -401,7 +401,7 @@
             "templates": [
                 {
                     "name": "ShowTodo",
-                    "body": "- IF: {count(user.todos) > 0}\r\n    - ```\r\n    Your most recent @{count(user.todos)} tasks are \r\n    @{join(foreach(user.todos, x, lgTemplate('showSingleTodo', x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos test reload lalala."
+                    "body": "- IF: {count(user.todos) > 0}\r\n    - ```\r\n    Your most recent @{count(user.todos)} tasks are \r\n    @{join(foreach(user.todos, x, showSingleTodo(x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos test reload lalala."
                 },
                 {
                     "name": "showSingleTodo(x)",
@@ -409,7 +409,7 @@
                 },
                 {
                     "name": "ShowGrocery",
-                    "body": "- IF: {count(user.groceryList) > 0}\r\n    - ```\r\n    Your most recent @{count(user.groceryList)} tasks are \r\n    @{join(foreach(user.groceryList, x, lgTemplate('showSingleTodo', x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos in grocery."
+                    "body": "- IF: {count(user.groceryList) > 0}\r\n    - ```\r\n    Your most recent @{count(user.groceryList)} tasks are \r\n    @{join(foreach(user.groceryList, x, showSingleTodo(x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos in grocery."
                 }
             ]
         }
