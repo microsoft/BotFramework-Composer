@@ -94,7 +94,7 @@
               "invalidPrompt": "Sorry I don't understand. What is the content of your reminder which you want to delete?",
               "maxTurnCount": 2147483647,
               "alwaysPrompt": false,
-              "allowInterruptions": false,
+              "allowInterruptions": "never",
               "outputFormat": "none"
             },
             {

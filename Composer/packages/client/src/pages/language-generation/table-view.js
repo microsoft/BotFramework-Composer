@@ -18,12 +18,12 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
@@ -305,7 +305,6 @@ export default function TableView(props) {
 
 TableView.propTypes = {
   file: PropTypes.object,
-  onChange: PropTypes.func,
   activeDialog: PropTypes.object,
   onEdit: PropTypes.func,
 };

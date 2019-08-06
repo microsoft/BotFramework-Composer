@@ -29,7 +29,7 @@
           "prompt": "Hello, I'm Zoidberg. What is your name?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "none"
         },
         {
@@ -52,7 +52,7 @@
           "prompt": "Hello, I'm Zoidberg. What is your name?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": true,
+          "allowInterruptions": "always",
           "outputFormat": "none"
         },
         {

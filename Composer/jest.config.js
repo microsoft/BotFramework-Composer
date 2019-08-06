@@ -35,13 +35,15 @@ module.exports = {
     '\\.(s)?css$': '<rootDir>/jestMocks/styleMock.js',
   },
   testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s', '/cypress/'],
-  transform: {
-    '^.+\\.(j|t)sx?$': 'babel-jest',
-  },
-  // Some node modules are packaged and distributed in a non-transpiled form
-  // (ex. contain import & export statements); and Jest won't be able to
-  // understand them because node_modules aren't transformed by default. So
-  // we can specify that they need to be transformed here.
-  transformIgnorePatterns: ['"/node_modules/(?!office-ui-fabric-react).+\\.js$"'],
-  setupFilesAfterEnv: ['./setupTests.js', './packages/client/setupTests.js'],
+  projects: [
+    '<rootDir>/packages/client',
+    '<rootDir>/packages/server',
+    '<rootDir>/packages/extensions/obiformeditor',
+    '<rootDir>/packages/extensions/visual-designer',
+    '<rootDir>/packages/extensions/sample-json-editor',
+    '<rootDir>/packages/lib/cci-graph-lib',
+    '<rootDir>/packages/lib/code-editor',
+    '<rootDir>/packages/lib/component-scaffold',
+    '<rootDir>/packages/lib/shared-menus',
+  ],
 };

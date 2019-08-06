@@ -64,7 +64,12 @@ export const uiSchema = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    ...globalFields,
+    inputBindings: {
+      'ui:field': NullField,
+    },
+    outputBinding: {
+      'ui:field': NullField,
+    },
   },
   'Microsoft.CodeStep': {
     codeHandler: {
@@ -155,37 +160,61 @@ export const uiSchema = {
     ...globalFields,
   },
   'Microsoft.TextInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.NumberInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.ConfirmInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     // ConfirmInput defaults to YES/NO. using confirmchoices is complex
     // - must provide yes/no in special format along with alternatives that have to be handled
     // TODO: Implement confirmChoices-specific widget with appropriate business rules.
@@ -198,10 +227,10 @@ export const uiSchema = {
       'style',
       'defaultLocale',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
@@ -212,6 +241,15 @@ export const uiSchema = {
     },
     outputBinding: {
       'ui:field': NullField,
+    },
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
     },
     choices: {
       items: {
@@ -231,29 +269,45 @@ export const uiSchema = {
       'defaultLocale',
       'choices',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.OAuthInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': ['connectionName', '*'],
   },
   'Microsoft.AttachmentInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
@@ -291,7 +345,15 @@ export const uiSchema = {
     },
   },
   'Microsoft.DateTimeInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     defaultValue: {
       'ui:widget': 'DateTimeWidget',
     },

@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
@@ -59,7 +61,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
   const choice = nodeMap.choice || new GraphNode();
 
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
         <DefaultRenderer key={condition.id} id={condition.id} data={condition.data} onEvent={onEvent} />
       </OffsetContainer>

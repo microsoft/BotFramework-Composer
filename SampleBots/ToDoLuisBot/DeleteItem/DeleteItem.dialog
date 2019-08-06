@@ -175,7 +175,7 @@
               "prompt": "Please enter the title of your item.",
               "maxTurnCount": 0,
               "alwaysPrompt": false,
-              "allowInterruptions": false,
+              "allowInterruptions": "never",
               "outputFormat": "none"
             }
           ]

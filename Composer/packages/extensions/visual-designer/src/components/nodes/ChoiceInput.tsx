@@ -1,6 +1,8 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { InitNodeSize, ChoiceInputSize, ChoiceInputMarginTop } from '../../shared/elementSizes';
+import { ChoiceInputSize, ChoiceInputMarginTop } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
@@ -40,14 +42,14 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
 
     if (choices) {
       children = (
-        <div data-testid="ChoiceInput" style={{ padding: '0 0 8px 45px' }}>
+        <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
           {choices.map((choice, index) => {
             if (index < 3) {
               return (
                 <div
                   key={index}
                   role="choice"
-                  style={{
+                  css={{
                     height: ChoiceInputSize.height,
                     width: ChoiceInputSize.width,
                     marginTop: ChoiceInputMarginTop,
@@ -72,7 +74,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
           {choices.length > 3 ? (
             <div
               data-testid="hasMore"
-              style={{
+              css={{
                 height: ChoiceInputSize.height,
                 width: ChoiceInputSize.width,
                 marginTop: ChoiceInputMarginTop,
