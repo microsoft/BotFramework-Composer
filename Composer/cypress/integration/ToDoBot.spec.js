@@ -23,7 +23,7 @@ context('ToDo Bot', () => {
       cy.getByText('AddToDo').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Handle events: beginDialog').click();
+      cy.getByText('Events: beginDialog').click();
       cy.wait(100);
       cy.getByText('5 actions').click();
       cy.wait(100);
@@ -39,7 +39,7 @@ context('ToDo Bot', () => {
       cy.getByText('ClearToDos').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Handle events: beginDialog').click();
+      cy.getByText('Events: beginDialog').click();
       cy.wait(100);
       cy.getByText('2 actions').click();
       cy.wait(100);
@@ -55,7 +55,7 @@ context('ToDo Bot', () => {
       cy.getByText('DeleteToDo').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Handle events: beginDialog').click();
+      cy.getByText('Events: beginDialog').click();
       cy.wait(100);
       cy.getByText('4 actions').click();
       cy.wait(100);
@@ -71,7 +71,7 @@ context('ToDo Bot', () => {
       cy.getByText('ShowToDos').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Handle events: beginDialog').click();
+      cy.getByText('Events: beginDialog').click();
       cy.wait(100);
       cy.getByText('1 action: Branch: If/Else').click();
       cy.wait(100);
