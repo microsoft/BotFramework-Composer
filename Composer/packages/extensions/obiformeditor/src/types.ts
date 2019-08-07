@@ -72,6 +72,7 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   createDialog: () => Promise<string>;
+  validateExpression: (expression?: string) => Promise<boolean>;
 }
 export interface EditorSchema {
   editor: {
