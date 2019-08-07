@@ -138,41 +138,6 @@ export class LuPublisher {
     });
   };
 
-  // private _updateStatus = async (authoringKey: string, publishTime: number) => {
-  //   if (!this.config) return;
-  //   const credentials = new msRest.ApiKeyCredentials({
-  //     inHeader: { 'Ocp-Apim-Subscription-Key': authoringKey },
-  //   });
-  //   const client = new LuisAuthoring(credentials as any, {});
-  //   const setting: ILuisSettings = await this._getSettings();
-  //   const luisStatus: ILuisStatus = (await this._getLuStatus()) || {};
-  //   const appNames = keys(setting.luis);
-  //   for (const appName of appNames) {
-  //     if (ENDPOINT_KEYS.indexOf(appName) < 0) {
-  //       const appInfo = await client.apps.get(
-  //         this.config.authoringRegion as AzureRegions,
-  //         'com' as AzureClouds,
-  //         setting.luis[appName]
-  //       );
-  //       const currentTime = new Date().getTime();
-  //       const name = this._getName(appName);
-  //       //if the according lastupdate time does not exist, then initialize as 1.
-  //       const lastUpdateTime = luisStatus[name]
-  //         ? luisStatus[name].lastUpdateTime
-  //           ? luisStatus[name].lastUpdateTime
-  //           : 1
-  //         : 1;
-  //       luisStatus[name] = {
-  //         version: appInfo.activeVersion,
-  //         lastUpdateTime: lastUpdateTime,
-  //         lastPublishTime: currentTime,
-  //       };
-  //     }
-  //   }
-  //   //await this._setLuStatus(luisStatus);
-  //   return luisStatus;
-  // };
-
   private _getSettingPath = (config: ILuisConfig | null) => {
     if (config === null) return '';
     return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);

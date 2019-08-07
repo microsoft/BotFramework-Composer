@@ -230,7 +230,7 @@ export class BotProject {
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
     if (unpublished.length === 0) {
-      return await this.luPublisher.getLuisStatus();
+      return this.luIndexer.getLuFiles();
     }
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
@@ -357,7 +357,7 @@ export class BotProject {
         this.lgIndexer.index(this.files);
         break;
       case '.lu':
-        await this.luIndexer.index(this.files); // ludown parser is async
+        await this.luIndexer.reIndex(this.files); // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
