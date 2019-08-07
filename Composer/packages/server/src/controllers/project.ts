@@ -201,7 +201,7 @@ async function updateLuFile(req: Request, res: Response) {
       const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
       res.status(200).json({ luFiles });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ message: error.message });
     }
   } else {
     res.status(404).json({
