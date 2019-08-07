@@ -27,8 +27,6 @@ interface StateError {
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
-  /** the data path for VisualEditor, based on `dialogs` which computed from files */
-  navPath: string;
   /** the data path for FormEditor */
   focusPath: string;
   recentProjects: any[];
@@ -45,6 +43,7 @@ export interface State {
   designPageLocation: any;
   error: StateError | null;
   oAuth: any;
+  breadcrumb: any[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
 }

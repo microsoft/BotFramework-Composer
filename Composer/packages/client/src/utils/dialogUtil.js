@@ -1,18 +1,12 @@
-import { get, set, cloneDeep, replace } from 'lodash';
+import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import formatMessage from 'format-message';
 
 import { upperCaseName } from './fileUtil';
+import { getFocusPath } from './navigation';
 
 const ExpressionParser = new ExpressionEngine();
-
-export function getDialogName(path) {
-  const realPath = replace(path, '#.', '#');
-  const [dialogName] = realPath.split('#');
-
-  return dialogName;
-}
 
 export function getDialogsMap(dialogs) {
   return dialogs.reduce((result, dialog) => {
@@ -21,18 +15,13 @@ export function getDialogsMap(dialogs) {
   }, {});
 }
 
-export function getbreadcrumbLabel(dialogs, dialogId, dataPath, focused) {
+export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps) {
   let label = '';
-  if (!dataPath && !focused) {
+  const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
+  if (!dataPath) {
     label = dialogs.find(d => d.id === dialogId).displayName;
   } else {
-    let current = `${dataPath || ''}.${focused || ''}.$type`;
-    if (!dataPath) {
-      current = replace(current, '.', '');
-    }
-    if (!focused) {
-      current = replace(current, '..', '.');
-    }
+    const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
     label = get(dialog, current);
@@ -42,31 +31,25 @@ export function getbreadcrumbLabel(dialogs, dialogId, dataPath, focused) {
   return label;
 }
 
-export function getDialogData(dialogsMap, path) {
-  if (path === '') return '';
-  const realPath = replace(path, '#.', '#');
-  const pathList = realPath.split('#');
-  const dialog = dialogsMap[pathList[0]];
+export function getDialogData(dialogsMap, dialogId, dataPath = '') {
+  if (!dialogId) return '';
+  const dialog = dialogsMap[dialogId];
 
-  if (pathList[1] === '') {
+  if (!dataPath) {
     return dialog;
   }
 
-  return ConceptLabels[get(dialog, pathList[1])]
-    ? ConceptLabels[get(dialog, pathList[1])].title
-    : get(dialog, pathList[1]);
+  return ConceptLabels[get(dialog, dataPath)] ? ConceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
 }
 
-export function setDialogData(dialogsMap, path, data) {
+export function setDialogData(dialogsMap, dialogId, dataPath, data) {
   const dialogsMapClone = cloneDeep(dialogsMap);
-  const realPath = replace(path, '#.', '#');
-  const pathList = realPath.split('#');
-  const dialog = dialogsMapClone[pathList[0]];
+  const dialog = dialogsMapClone[dialogId];
 
-  if (pathList[1] === '') {
+  if (!dataPath) {
     return data;
   }
-  return set(dialog, pathList[1], data);
+  return set(dialog, dataPath, data);
 }
 
 export function sanitizeDialogData(dialogData) {

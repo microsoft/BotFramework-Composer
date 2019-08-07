@@ -33,6 +33,7 @@ import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
+import { clearBreadcrumb, getUrlSearch } from './../../utils/navigation';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -60,10 +61,10 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation } = state;
+  const { dialogs, designPageLocation, breadcrumb } = state;
   const { removeDialog, setDesignPageLocation, navTo } = actions;
   const { location, match } = props;
-  const { dialogId, breadcrumb } = designPageLocation;
+  const { dialogId } = designPageLocation;
 
   useEffect(() => {
     if (match) {
@@ -97,8 +98,7 @@ function DesignPage(props) {
 
   const onCreateDialogComplete = newDialog => {
     if (newDialog) {
-      actions.clearNavHistory();
-      actions.navTo(`${newDialog}#`);
+      navTo(newDialog);
     }
   };
 
@@ -121,18 +121,17 @@ function DesignPage(props) {
     },
   ];
 
-  function handleBreadcrumbItemClick(_event, { dialogId, dataPath, index }) {
-    breadcrumb.splice(index, breadcrumb.length - index);
-    navTo(`${dialogId}/${dataPath}`, breadcrumb);
+  function handleBreadcrumbItemClick(_event, { dialogId, focusedEvent, focusedSteps, index }) {
+    navTo(`${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`, clearBreadcrumb(breadcrumb, index));
   }
 
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
         ? breadcrumb.map((item, index) => {
-            const { dialogId, dataPath, focused } = item;
+            const { dialogId, focusedEvent, focusedSteps } = item;
             return {
-              text: getbreadcrumbLabel(dialogs, dialogId, dataPath, focused),
+              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps),
               ...item,
               index,
               onClick: handleBreadcrumbItemClick,

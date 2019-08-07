@@ -2,6 +2,7 @@ import { navigate } from '@reach/router';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
+import { clearBreadcrumbWhenFocusSteps, clearBreadcrumbWhenFocusEvent } from './../../utils/navigation';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
@@ -15,47 +16,42 @@ export const setDesignPageLocation: ActionCreator = (
 
 export const navTo: ActionCreator = (store, path, breadcrumb = null) => {
   if (!path) return;
-
-  navigate(`/dialogs/${path}/`, { state: { breadcrumb: breadcrumb || [] } });
+  navigate(`/dialogs/${path}`, { state: { breadcrumb: breadcrumb || [] } });
 };
 
-export const focusTo: ActionCreator = ({ state }, subPath, fromForm = false) => {
-  const { focused, uri, breadcrumb } = state.designPageLocation;
-  let currentUri = uri;
-  if (fromForm && focused) {
-    currentUri = `${uri}?focused=${focused}.${subPath}`;
-  } else if (subPath) {
-    currentUri = `${uri}?focused=${subPath}`;
-  }
-
-  navigate(currentUri, { state: { breadcrumb } });
-};
-
-export const focuseEvent: ActionCreator = ({ state }, subPath) => {
+export const focusEvent: ActionCreator = ({ state }, subPath) => {
   const { uri } = state.designPageLocation;
+  const { breadcrumb } = state;
   let currentUri = uri;
 
   if (subPath) {
     currentUri = `${uri}?focusedEvent=${subPath}`;
   }
 
-  navigate(currentUri);
+  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusEvent(breadcrumb, subPath) } });
 };
 
-export const focuseSteps: ActionCreator = ({ state }, subPaths) => {
+const checkFocusedSteps = (focusedEvent: string, focusedSteps: string[]) => {
+  if (focusedSteps.length === 0) return true;
+  const parent = focusedSteps[0].split('.')[0];
+  if (!focusedSteps.every(item => item.split('.')[0] === parent)) return false;
+  return focusedEvent === parent;
+};
+
+export const focusSteps: ActionCreator = ({ state }, subPaths) => {
   const { uri, focusedEvent } = state.designPageLocation;
+  const { breadcrumb } = state;
+
+  if (!checkFocusedSteps(focusedEvent, subPaths)) {
+    return;
+  }
 
   let currentUri = uri;
-  if (subPaths.length > 0) {
-    const items = subPaths[0].split('.');
-    if (items[0] === focusedEvent) {
-      currentUri = `${uri}?focusedEvent=${focusedEvent}&focusedSteps[]=${subPaths[0]}`;
-    } else {
-      currentUri = `${uri}?focusedEvent=${items[0]}&focusedSteps[]=${subPaths[0]}`;
-    }
+  if (subPaths.length) {
+    currentUri = `${uri}?focusedEvent=${focusedEvent}&focusedSteps[]=${subPaths[0]}`;
   } else if (focusedEvent) {
     currentUri = `${uri}?focusedEvent=${focusedEvent}`;
   }
 
-  navigate(currentUri);
+  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusSteps(breadcrumb) } });
 };

@@ -1,5 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual, get, replace } from 'lodash';
+import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -12,6 +12,7 @@ import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { BASEPATH } from './constants';
 import { resolveToBasePath } from './utils/fileUtil';
+import { getFocusPath } from './utils/navigation';
 
 // this is the api interface provided by shell to extensions this is the single
 // place handles all incoming request from extensions, VisualDesigner or
@@ -54,7 +55,7 @@ const shellNavigator = (shellPage, opts = {}) => {
 
 export function ShellApi() {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, navPath, focusPath } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
@@ -79,10 +80,8 @@ export function ShellApi() {
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
-    apiClient.registerApi('navDown', navDown);
-    apiClient.registerApi('focusTo', focusTo);
-    apiClient.registerApi('onFocuseEvent', focuseEvent);
-    apiClient.registerApi('onFocuseSteps', focuseSteps);
+    apiClient.registerApi('onFocusEvent', focusEvent);
+    apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', str => isExpression(str));
     apiClient.registerApi('createDialog', () => {
@@ -110,14 +109,14 @@ export function ShellApi() {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath, focusedEvent, focusedSteps]);
+  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath, focusedEvent, focusedSteps]);
+  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -130,23 +129,21 @@ export function ShellApi() {
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
-    if (sourceWindow === VISUAL_EDITOR && navPath !== '') {
-      return getDialogData(dialogsMap, navPath);
+    if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
+      return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, focusPath);
+      return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusSteps[0]));
     }
 
     return '';
   }
 
   function getState(sourceWindow) {
-    const [currentDialogId] = navPath.split('#');
-    const currentDialog = dialogs.find(d => d.id === currentDialogId);
+    const currentDialog = dialogs.find(d => d.id === dialogId);
 
     return {
       data: getData(sourceWindow),
       dialogs,
-      navPath,
       focusPath,
       schemas,
       lgFiles,
@@ -160,23 +157,13 @@ export function ShellApi() {
 
   // persist value change
   function handleValueChange(newData, event) {
-    const sourceWindowName = event.source.name;
-    let path = '';
-    switch (sourceWindowName) {
-      case VISUAL_EDITOR:
-        path = navPath;
-        break;
-      case FORM_EDITOR:
-        path = focusPath;
-        break;
-      default:
-        path = '';
-        break;
+    let dataPath = '';
+    if (event.source.name === FORM_EDITOR) {
+      dataPath = getFocusPath(focusedEvent, focusSteps[0]);
     }
 
     if (path !== '') {
-      const updatedDialog = setDialogData(dialogsMap, path, newData);
-      const dialogId = path.split('#')[0];
+      const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
       const payload = {
         id: dialogId,
         content: updatedDialog,
@@ -186,9 +173,9 @@ export function ShellApi() {
     }
 
     //make sure focusPath always valid
-    const data = getDialogData(dialogsMap, focusPath);
+    const data = getDialogData(dialogsMap, dialogId, dataPath);
     if (typeof data === 'undefined') {
-      actions.focusTo(navPath);
+      actions.navTo(dialogId);
     }
 
     return true;
@@ -294,36 +281,17 @@ export function ShellApi() {
 
   function navTo({ path }) {
     cleanData();
-    if (path) path = replace(path, /#|#./, '/');
-    actions.navTo(path);
+    actions.navTo(path, breadcrumb);
   }
 
-  function navDown({ subPath }) {
+  function focusEvent({ subPath }) {
     cleanData();
-    if (subPath) subPath = subPath.split('.')[1];
-    actions.navDown(subPath);
+    actions.focusEvent(subPath);
   }
 
-  function focusTo({ subPath }) {
+  function focusSteps({ subPaths = [] }) {
     cleanData();
-    if (subPath) subPath = subPath = replace(subPath, '.', '');
-    const items = subPath.split('.');
-    if (items.length === 1) {
-      focuseEvent({ subPath });
-    } else {
-      focuseSteps({ subPaths: [subPath] });
-    }
-    // actions.focusTo(subPath, event.source.name === FORM_EDITOR);
-  }
-
-  function focuseEvent({ subPath }) {
-    cleanData();
-    actions.focuseEvent(subPath);
-  }
-
-  function focuseSteps({ subPaths = [] }) {
-    cleanData();
-    actions.focuseSteps(subPaths);
+    actions.focusSteps(subPaths);
   }
 
   return null;

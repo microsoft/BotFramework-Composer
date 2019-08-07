@@ -61,7 +61,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           onFocusSteps={onFocusSteps}
           focusedEvent={focusedEvent}
           onFocusEvent={onFocusEvent}
-          onOpen={(x, rest) => navTo(x + '#', rest)}
+          onOpen={(x, rest) => navTo(x, rest)}
           onChange={x => saveData(x)}
         />
       </div>

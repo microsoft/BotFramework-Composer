@@ -24,7 +24,7 @@ import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
-  const { clearNavHistory, navTo } = actions;
+  const { clearBreadcrumb, navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
@@ -74,8 +74,8 @@ export default function TableView(props) {
   }, [lgFile, activeDialog]);
 
   function navigateToDialog(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
+    clearBreadcrumb();
+    navTo(id);
     navigate(BASEPATH);
   }
 

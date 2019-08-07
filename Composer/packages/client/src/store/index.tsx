@@ -11,7 +11,6 @@ import { State, ActionType, ActionHandlers } from './types';
 const initialState: State = {
   dialogs: [],
   botName: '',
-  navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
   storages: [],
@@ -29,8 +28,8 @@ const initialState: State = {
     uri: '',
     focusedEvent: '',
     focusedSteps: [],
-    breadcrumb: [],
   },
+  breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,

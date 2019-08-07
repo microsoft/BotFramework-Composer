@@ -21,7 +21,7 @@ import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
-  const { clearNavHistory, navTo } = actions;
+  const { clearBreadcrumb, navTo } = actions;
   const { dialogs, luFiles } = state;
   const activeDialog = props.activeDialog;
   const [intents, setIntents] = useState([]);
@@ -63,8 +63,8 @@ export default function TableView(props) {
   }, [luFiles, activeDialog, dialogs]);
 
   function navigateToDialog(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
+    clearBreadcrumb();
+    navTo(id);
     navigate(BASEPATH);
   }
 
