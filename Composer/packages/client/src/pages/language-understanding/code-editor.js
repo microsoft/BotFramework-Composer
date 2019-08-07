@@ -11,10 +11,14 @@ import lodash from 'lodash';
 import * as luUtil from '../../utils/luUtil';
 
 export default function CodeEditor(props) {
-  const luFile = props.file;
+  const file = props.file;
   const onChange = props.onChange;
   const updateErrorMsg = props.errorMsg;
-  const diagnostics = lodash.get(luFile, 'diagnostics', []);
+  const diagnostics = lodash.get(file, 'diagnostics', []);
+
+  const _onChange = value => {
+    onChange(value);
+  };
 
   // diagnostics is load file error,
   // updateErrorMsg is save file return error.
@@ -22,19 +26,15 @@ export default function CodeEditor(props) {
   const isInvalid = !luUtil.isValid(diagnostics) || updateErrorMsg !== '';
   const errorMsg = `${luUtil.combineMessage(diagnostics)}\n ${updateErrorMsg}`;
 
-  const _onChange = value => {
-    onChange(value);
-  };
-
-  const fileId = luFile && luFile.id;
+  const fileId = file && file.id;
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(luFile) === false ? (
+    return lodash.isEmpty(file) === false ? (
       <LuEditor
         options={{
           lineNumbers: 'on',
           minimap: 'on',
         }}
-        value={luFile.content}
+        value={file.content}
         onChange={_onChange}
       />
     ) : (

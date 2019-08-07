@@ -11,9 +11,9 @@ import lodash from 'lodash';
 import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
-  const lgFile = props.file;
+  const file = props.file;
   const onChange = props.onChange;
-  const [diagnostics, setDiagnostics] = useState(lodash.get(lgFile, 'diagnostics', []));
+  const [diagnostics, setDiagnostics] = useState(lodash.get(file, 'diagnostics', []));
 
   const _onChange = value => {
     const diagnostics = lgUtil.check(value);
@@ -26,15 +26,15 @@ export default function CodeEditor(props) {
   const isInvalid = !lgUtil.isValid(diagnostics);
   const errorMsg = lgUtil.combineMessage(diagnostics);
 
-  const fileId = lgFile && lgFile.id;
+  const fileId = file && file.id;
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(lgFile) === false ? (
+    return lodash.isEmpty(file) === false ? (
       <LgEditor
         options={{
           lineNumbers: 'on',
           minimap: 'on',
         }}
-        value={lgFile.content}
+        value={file.content}
         onChange={_onChange}
       />
     ) : (
