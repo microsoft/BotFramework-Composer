@@ -30,7 +30,6 @@ export class LUIndexer {
 
   public async index(files: FileInfo[]) {
     if (files.length === 0) return [];
-    await this.flush(files);
     this.luFiles = [];
     for (const file of files) {
       const extName = Path.extname(file.name);
@@ -70,17 +69,25 @@ export class LUIndexer {
     }
   }
 
+  public async reIndex(files: FileInfo[]) {
+    await this.flush();
+    await this.index(files);
+  }
+
   public getLuFiles() {
     return this.luFiles;
   }
 
-  public async flush(files: FileInfo[]) {
+  public async flush() {
     const luisStatus: ILuisStatus = {};
     for (const file of this.luFiles) {
       luisStatus[file.id] = {
         lastUpdateTime: file.lastUpdateTime,
         lastPublishTime: file.lastPublishTime,
       };
+    }
+    if (!(await this.storage.exists(Path.join(this.dir, GENERATEDFOLDER)))) {
+      await this.storage.mkDir(Path.join(this.dir, GENERATEDFOLDER));
     }
     await this.storage.writeFile(
       Path.join(this.dir, GENERATEDFOLDER, luisStatusFileName),
