@@ -62,7 +62,7 @@ export function ShellApi() {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId } = designPageLocation;
+  const { dialogId, focusedEvent, focusedSteps } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -81,6 +81,8 @@ export function ShellApi() {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('navDown', navDown);
     apiClient.registerApi('focusTo', focusTo);
+    apiClient.registerApi('onFocuseEvent', focuseEvent);
+    apiClient.registerApi('onFocuseSteps', focuseSteps);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', str => isExpression(str));
     apiClient.registerApi('createDialog', () => {
@@ -108,14 +110,14 @@ export function ShellApi() {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+  }, [dialogs, lgFiles, luFiles, navPath, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+  }, [dialogs, lgFiles, luFiles, navPath, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -150,6 +152,9 @@ export function ShellApi() {
       lgFiles,
       luFiles,
       currentDialog,
+      dialogId,
+      focusedEvent,
+      focusedSteps,
     };
   }
 
@@ -299,10 +304,26 @@ export function ShellApi() {
     actions.navDown(subPath);
   }
 
-  function focusTo({ subPath }, event) {
+  function focusTo({ subPath }) {
     cleanData();
-    if (subPath) subPath = subPath.split('.')[1];
-    actions.focusTo(subPath, event.source.name === FORM_EDITOR);
+    if (subPath) subPath = subPath = replace(subPath, '.', '');
+    const items = subPath.split('.');
+    if (items.length === 1) {
+      focuseEvent({ subPath });
+    } else {
+      focuseSteps({ subPaths: [subPath] });
+    }
+    // actions.focusTo(subPath, event.source.name === FORM_EDITOR);
+  }
+
+  function focuseEvent({ subPath }) {
+    cleanData();
+    actions.focuseEvent(subPath);
+  }
+
+  function focuseSteps({ subPaths = [] }) {
+    cleanData();
+    actions.focuseSteps(subPaths);
   }
 
   return null;

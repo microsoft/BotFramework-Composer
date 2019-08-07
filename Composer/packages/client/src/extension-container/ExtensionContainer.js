@@ -72,6 +72,14 @@ function ExtensionContainer() {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
 
+    onFocuseEvent: subPath => {
+      return apiClient.apiCall('onFocuseEvent', { subPath });
+    },
+
+    onFocuseSteps: subPaths => {
+      return apiClient.apiCall('onFocuseSteps', { subPaths });
+    },
+
     shellNavigate: (shellPage, opts = {}) => {
       return apiClient.apiCall('shellNavigate', { shellPage, opts });
     },

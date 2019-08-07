@@ -68,11 +68,12 @@ function DesignPage(props) {
   useEffect(() => {
     if (match) {
       const { dialogId, uri } = match;
+      const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
-        dataPath: match['*'] || '',
         uri: uri,
-        focused: new URLSearchParams(location.search).get('focused'),
+        focusedEvent: params.get('focusedEvent'),
+        focusedSteps: params.getAll('focusedSteps[]'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
       });
     }

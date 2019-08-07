@@ -3,31 +3,20 @@ import { navigate } from '@reach/router';
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 
-export function setDesignPageLocation({ dispatch }, { dialogId, dataPath, focused, uri, breadcrumb }) {
+export const setDesignPageLocation: ActionCreator = (
+  { dispatch },
+  { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }
+) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
-    payload: { dialogId, dataPath, focused, uri, breadcrumb },
+    payload: { dialogId, focusedEvent, focusedSteps, uri, breadcrumb },
   });
-}
+};
 
-export function navTo(store, path, breadcrumb = null) {
+export const navTo: ActionCreator = (store, path, breadcrumb = null) => {
   if (!path) return;
 
   navigate(`/dialogs/${path}/`, { state: { breadcrumb: breadcrumb || [] } });
-}
-
-export const navDown: ActionCreator = ({ state }, subPath) => {
-  if (!subPath) return;
-
-  const { uri, dataPath, breadcrumb } = state.designPageLocation;
-  let currentUri = uri;
-
-  if (dataPath) {
-    currentUri = currentUri + '.' + subPath;
-  } else {
-    currentUri = currentUri + '/' + subPath;
-  }
-  navigate(currentUri, { state: { breadcrumb } });
 };
 
 export const focusTo: ActionCreator = ({ state }, subPath, fromForm = false) => {
@@ -40,4 +29,33 @@ export const focusTo: ActionCreator = ({ state }, subPath, fromForm = false) => 
   }
 
   navigate(currentUri, { state: { breadcrumb } });
+};
+
+export const focuseEvent: ActionCreator = ({ state }, subPath) => {
+  const { uri } = state.designPageLocation;
+  let currentUri = uri;
+
+  if (subPath) {
+    currentUri = `${uri}?focusedEvent=${subPath}`;
+  }
+
+  navigate(currentUri);
+};
+
+export const focuseSteps: ActionCreator = ({ state }, subPaths) => {
+  const { uri, focusedEvent } = state.designPageLocation;
+
+  let currentUri = uri;
+  if (subPaths.length > 0) {
+    const items = subPaths[0].split('.');
+    if (items[0] === focusedEvent) {
+      currentUri = `${uri}?focusedEvent=${focusedEvent}&focusedSteps[]=${subPaths[0]}`;
+    } else {
+      currentUri = `${uri}?focusedEvent=${items[0]}&focusedSteps[]=${subPaths[0]}`;
+    }
+  } else if (focusedEvent) {
+    currentUri = `${uri}?focusedEvent=${focusedEvent}`;
+  }
+
+  navigate(currentUri);
 };

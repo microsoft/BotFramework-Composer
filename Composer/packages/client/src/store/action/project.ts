@@ -83,7 +83,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     });
     if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main');
-      startBot(dispatch, true);
+      startBot(store, true);
     }
     return response.data;
   } catch (err) {

@@ -26,9 +26,9 @@ const initialState: State = {
   luFiles: [],
   designPageLocation: {
     dialogId: '',
-    dataPath: '',
-    focused: '',
     uri: '',
+    focusedEvent: '',
+    focusedSteps: [],
     breadcrumb: [],
   },
   error: null, // a object with structure {summary: "", message: ""}

@@ -119,33 +119,33 @@ const updateOAuth: ReducerFunc = (state, { oAuth }) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, dataPath, focused, uri, breadcrumb }) => {
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
   //generate navPath and focusedPath
   state.navPath = dialogId + '#';
-  if (dataPath) {
-    state.navPath = dialogId + '#.' + dataPath;
+  if (focusedSteps.length > 0) {
+    state.focusPath = dialogId + '#.' + focusedSteps[0];
   }
 
-  state.focusPath = state.navPath;
-  if (focused) {
-    state.focusPath = state.focusPath + '.' + focused;
-  }
-  const lastIndex = breadcrumb.length - 1;
-
-  if (breadcrumb.length === 0) {
-    breadcrumb.push({ dialogId, dataPath, focused });
-  } else if (
-    breadcrumb[lastIndex].dialogId !== dialogId ||
-    breadcrumb[lastIndex].dataPath !== dataPath ||
-    breadcrumb[lastIndex].focused !== focused
-  ) {
-    if ((focused && breadcrumb[lastIndex].focused) || (!focused && breadcrumb[lastIndex].focused)) {
-      breadcrumb.splice(lastIndex, 1);
-    }
-    breadcrumb.push({ dialogId, dataPath, focused });
+  if (focusedSteps.length === 0 && focusedEvent) {
+    state.focusPath = dialogId + '#.' + focusedEvent;
   }
 
-  state.designPageLocation = { dialogId, dataPath, focused, uri, breadcrumb };
+  // const lastIndex = breadcrumb.length - 1;
+
+  // if (breadcrumb.length === 0) {
+  //   breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
+  // } else if (
+  //   breadcrumb[lastIndex].dialogId !== dialogId ||
+  //   breadcrumb[lastIndex].dataPath !== dataPath ||
+  //   breadcrumb[lastIndex].focused !== focused
+  // ) {
+  //   if ((focused && breadcrumb[lastIndex].focused) || (!focused && breadcrumb[lastIndex].focused)) {
+  //     breadcrumb.splice(lastIndex, 1);
+  //   }
+  //   breadcrumb.push({ dialogId, dataPath, focused });
+  // }
+
+  state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri, breadcrumb };
   return state;
 };
 
