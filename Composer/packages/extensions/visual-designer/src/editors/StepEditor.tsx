@@ -1,24 +1,26 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
 import { StepGroup } from '../components/groups';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Icon } from '../components/nodes/icons/icon';
-import { Boundary } from '../shared/Boundary';
-import { ElementInterval } from '../shared/elementSizes';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { OffsetContainer } from '../components/shared/OffsetContainer';
 import { Edge } from '../components/shared/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { Boundary } from '../shared/Boundary';
+import { ElementInterval } from '../shared/elementSizes';
 
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };
 
-const Circle = () => <div style={{ ...CircleSize, border: '2px solid #A4A4A4', borderRadius: '14px' }} />;
-const Trigger = () => (
+const Circle = (): JSX.Element => <div css={{ ...CircleSize, border: '2px solid #A4A4A4', borderRadius: '14px' }} />;
+const Trigger = (): JSX.Element => (
   <div
-    style={{ ...TriggerSize, border: '1px solid #979797', background: 'white', display: 'flex', alignItems: 'center' }}
+    css={{ ...TriggerSize, border: '1px solid #979797', background: 'white', display: 'flex', alignItems: 'center' }}
   >
-    <div style={{ width: 30, height: 30, padding: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div css={{ width: 30, height: 30, padding: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Icon icon="MessageBot" size={30} color="#5C2D91" />
     </div>
     Trigger
@@ -34,22 +36,23 @@ const TailSize = {
   height: CircleSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
-    <EdgeMenu onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })} />
+    <EdgeMenu
+      onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
+      data-testid="StepGroupAdd"
+    />
   ) : (
     <StepGroup
       id={id}
       data={data}
-      focusedId={focusedId}
       onEvent={onEvent}
       onResize={boundary => {
         setStepGroupBoundary(boundary);
       }}
-      getLgTemplates={getLgTemplates}
     />
   );
   const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;
@@ -63,9 +66,9 @@ export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => 
   const editorAxisX = editorWidth / 2;
 
   return (
-    <div className="step-editor" style={{ position: 'relative', width: editorWidth, height: editorHeight }}>
+    <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
-        <div className="step-editor__head" style={{ ...HeadSize, position: 'relative' }}>
+        <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>
             <Trigger />
           </OffsetContainer>
@@ -76,8 +79,8 @@ export const StepEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => 
         {content}
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
-        <div className="step-editor__tail" style={{ ...TailSize, position: 'relative' }}>
-          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} />
+        <div className="step-editor__tail" css={{ ...TailSize, position: 'relative' }}>
+          <Edge direction="y" x={CircleSize.width / 2} y={0} length={ElementInterval.y / 2} directed={true} />
           <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
             <Circle />
           </OffsetContainer>

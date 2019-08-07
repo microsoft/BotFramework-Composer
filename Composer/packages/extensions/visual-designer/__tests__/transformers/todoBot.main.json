@@ -1,63 +1,64 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
     "recognizer": {
         "$type": "Microsoft.RegexRecognizer",
         "intents": {
             "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
             "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-            "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)|(?i)(?:show|see|view)",
+            "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
             "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
             "HelpIntent": "(?i)help",
             "CancelIntent": "(?i)cancel|never mind"
         }
     },
+    "steps": [
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started. test reload"
+        }
+    ],
     "rules": [
-        {
-            "$type": "Microsoft.NoMatchRule",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.EventRule",
-            "events": [ "cancelDialog" ],
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "ok."
-                }
-            ]
-        },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "AddIntent",
             "steps": [
-                "AddToDo"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "AddToDo"
+                }
+
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "DeleteIntent",
             "steps": [
-                "DeleteToDo"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "DeleteToDo"
+                }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ClearIntent",
             "steps": [
-                "ClearToDos"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ClearToDos"
+                }
             ]
         },
         {
             "$type": "Microsoft.IntentRule",
             "intent": "ShowIntent",
             "steps": [
-                "ShowToDos"
+                {
+                    "$type": "Microsoft.BeginDialog",
+                    "dialog": "ShowToDos"
+                }
             ]
         },
         {
@@ -75,7 +76,20 @@
             "intent": "CancelIntent",
             "steps": [
                 {
-                    "$type": "Microsoft.CancelDialog"
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "ok."
+                },
+                {
+                    "$type": "Microsoft.EndDialog"
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.UnknownIntentRule",
+            "steps": [
+                {
+                    "$type": "Microsoft.SendActivity",
+                    "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
                 }
             ]
         }

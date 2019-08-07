@@ -12,13 +12,15 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { get } from 'lodash';
 
-import { Store } from '../../store/index';
+import { BASEPATH } from '../../constants';
+import { StoreContext } from '../../store';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs, luFiles } = state;
   const activeDialog = props.activeDialog;
@@ -30,7 +32,7 @@ export default function TableView(props) {
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      luFile.parsedContent.LUISJsonStructure.utterances.forEach(utterance => {
+      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
         if (updateIntent) {
@@ -63,7 +65,7 @@ export default function TableView(props) {
   function navigateToDialog(id) {
     clearNavHistory();
     navTo(`${id}#`);
-    navigate('/');
+    navigate(BASEPATH);
   }
 
   const getTemplatesMoreButtons = (item, index) => {

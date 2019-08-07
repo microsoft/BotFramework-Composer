@@ -1,49 +1,66 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.todos",
-      "resultProperty": "dialog.cleared"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.cleared",
-      "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:03:18.901Z",
-            "updatedAt": "2019-07-01T22:03:20.300Z",
-            "id": "832307"
-          },
-          "activity": "[bfdactivity-832307]"
-        }
-      ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:03:36.091Z",
-            "updatedAt": "2019-07-01T22:03:39.000Z",
-            "id": "983761"
-          },
-          "activity": "[bfdactivity-983761]"
-        }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:03:19.772Z",
-        "updatedAt": "2019-07-01T22:03:19.777Z",
-        "id": "815442"
-      }
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:51:38.784Z",
-    "updatedAt": "2019-07-03T06:51:38.790Z",
+    "updatedAt": "2019-07-16T20:00:42.988Z",
     "id": "316336"
-  }
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "480162",
+        "updatedAt": "2019-07-22T08:10:50.068Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:18.901Z",
+            "updatedAt": "2019-07-16T20:01:43.249Z",
+            "id": "832307"
+          },
+          "changeType": "Clear",
+          "arrayProperty": "user.todos",
+          "resultProperty": "dialog.cleared"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:36.091Z",
+            "updatedAt": "2019-07-16T20:01:47.803Z",
+            "id": "983761"
+          },
+          "condition": "dialog.cleared",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:18.901Z",
+                "updatedAt": "2019-07-16T20:01:43.249Z",
+                "id": "832307"
+              },
+              "activity": "[bfdactivity-832307]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:36.091Z",
+                "updatedAt": "2019-07-16T20:01:47.803Z",
+                "id": "983761"
+              },
+              "activity": "[bfdactivity-983761]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

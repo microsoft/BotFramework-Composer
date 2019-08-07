@@ -1,5 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:28:10.677Z",
+    "updatedAt": "2019-07-22T20:43:22.981Z",
+    "id": "892616"
+  },
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
@@ -23,130 +28,210 @@
   "rules": [
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "Steps",
-      "steps": ["Steps"]
+      "$designer": {
+        "createdAt": "2019-07-16T19:47:51.216Z",
+        "updatedAt": "2019-07-16T19:47:55.250Z",
+        "id": "764307"
+      },
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Steps",
+          "$designer": {
+            "createdAt": "2019-07-22T07:32:51.372Z",
+            "updatedAt": "2019-07-22T07:32:51.385Z",
+            "id": "124654"
+          }
+        }
+      ],
+      "intent": "Steps"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EndTurn",
+      "$designer": {
+        "createdAt": "2019-07-16T19:47:56.248Z",
+        "updatedAt": "2019-07-16T19:47:59.827Z",
+        "id": "691722"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndTurn"
         }
-      ]
+      ],
+      "intent": "EndTurn"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "IfCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:01.339Z",
+        "updatedAt": "2019-07-16T19:48:04.483Z",
+        "id": "343907"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "IfCondition"
         }
-      ]
+      ],
+      "intent": "IfCondition"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EndDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:06.249Z",
+        "updatedAt": "2019-07-16T19:48:12.601Z",
+        "id": "608729"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndDialog"
         }
-      ]
+      ],
+      "intent": "EndDialog"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EditArray",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:13.837Z",
+        "updatedAt": "2019-07-16T19:48:17.400Z",
+        "id": "818726"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EditArray"
         }
-      ]
+      ],
+      "intent": "EditArray"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "HttpRequest",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:18.386Z",
+        "updatedAt": "2019-07-16T19:48:21.918Z",
+        "id": "894760"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "HttpRequest"
         }
-      ]
+      ],
+      "intent": "HttpRequest"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SwitchCondition",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:23.804Z",
+        "updatedAt": "2019-07-16T19:48:30.199Z",
+        "id": "273555"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SwitchCondition"
         }
-      ]
+      ],
+      "intent": "SwitchCondition"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "RepeatDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:31.492Z",
+        "updatedAt": "2019-07-16T19:48:35.496Z",
+        "id": "277723"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "RepeatDialog"
         }
-      ]
+      ],
+      "intent": "RepeatDialog"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "TraceAndLog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:36.440Z",
+        "updatedAt": "2019-07-16T19:48:40.412Z",
+        "id": "226996"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "TraceAndLog"
         }
-      ]
+      ],
+      "intent": "TraceAndLog"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EditSteps",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:42.911Z",
+        "updatedAt": "2019-07-16T19:48:46.325Z",
+        "id": "602168"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EditSteps"
         }
-      ]
+      ],
+      "intent": "EditSteps"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "ReplaceDialog",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:48.073Z",
+        "updatedAt": "2019-07-16T19:48:58.391Z",
+        "id": "413376"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "Replace"
         }
-      ]
+      ],
+      "intent": "ReplaceDialog"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "EmitEvent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:48:55.889Z",
+        "updatedAt": "2019-07-16T19:49:02.918Z",
+        "id": "173056"
+      },
       "steps": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EmitEvent"
         }
-      ]
+      ],
+      "intent": "EmitEvent"
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
+      "$designer": {
+        "createdAt": "2019-07-16T19:49:03.945Z",
+        "updatedAt": "2019-07-16T19:49:07.358Z",
+        "id": "242117"
+      },
       "steps": [
         {
           "$type": "Microsoft.EndDialog"
         }
-      ]
+      ],
+      "intent": "CancelIntent"
     },
     {
       "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "createdAt": "2019-07-01T21:30:37.124Z",
+        "updatedAt": "2019-07-16T19:49:14.554Z",
+        "id": "560915"
+      },
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
@@ -157,18 +242,28 @@
           },
           "activity": "[bfdactivity-347762]"
         }
-      ],
+      ]
+    },
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
       "$designer": {
-        "createdAt": "2019-07-01T21:30:37.124Z",
-        "updatedAt": "2019-07-01T21:30:37.129Z",
-        "id": "560915"
-      }
+        "name": "Handle ConversationUpdate",
+        "id": "954390",
+        "updatedAt": "2019-07-18T11:25:59.878Z"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-22T07:31:04.680Z",
+            "updatedAt": "2019-07-22T16:14:47.793Z",
+            "id": "640616"
+          },
+          "activity": "[bfdactivity-640616]"
+        }
+      ]
     }
   ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:28:10.677Z",
-    "updatedAt": "2019-07-03T06:28:11.165Z",
-    "id": "892616"
-  }
+  "$schema": "../../app.schema"
 }

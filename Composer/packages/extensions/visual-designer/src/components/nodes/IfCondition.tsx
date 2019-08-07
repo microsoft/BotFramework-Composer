@@ -1,22 +1,25 @@
-// eslint-disable-next-line no-unused-vars
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../transformers/transformIfCondition';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { GraphNode } from '../../shared/GraphNode';
-import { OffsetContainer } from '../../shared/OffsetContainer';
-import { StepGroup } from '../groups';
 import { areBoundariesEqual } from '../../shared/Boundary';
-import { Edge } from '../shared/EdgeComponents';
 import { ifElseLayouter } from '../../layouters/ifelseLayouter';
+import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
+import { OffsetContainer } from '../shared/OffsetContainer';
+import { StepGroup } from '../groups';
+import { Edge } from '../shared/EdgeComponents';
 
 import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
 
-const calculateNodeMap = (path, data) => {
-  const { condition, choice, ifGroup, elseGroup } = transformIfCondtion(data, path);
+const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
+  const result = transformIfCondtion(data, path);
+  if (!result) return {};
+
+  const { condition, choice, ifGroup, elseGroup } = result;
   return {
     conditionNode: GraphNode.fromIndexedJson(condition),
     choiceNode: GraphNode.fromIndexedJson(choice),
@@ -26,21 +29,14 @@ const calculateNodeMap = (path, data) => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  Object.values(nodeMap)
+  (Object.values(nodeMap) as GraphNode[])
     .filter(x => !!x)
-    .forEach((x: any) => (x.boundary = boundaryMap[x.id] || x.boundary));
+    .forEach((x: GraphNode) => (x.boundary = boundaryMap[x.id] || x.boundary));
 
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export const IfCondition: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  getLgTemplates,
-  onEvent,
-  onResize,
-}) => {
+export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -61,21 +57,15 @@ export const IfCondition: FunctionComponent<NodeProps> = ({
   }, [layout]);
 
   const { boundary, nodeMap, edges } = layout;
-  const condition = nodeMap ? nodeMap.condition : { id: '', data: {}, offset: '' };
+  const condition = nodeMap.condition || new GraphNode();
+  const choice = nodeMap.choice || new GraphNode();
 
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
-        <DefaultRenderer
-          key={condition.id}
-          id={condition.id}
-          data={condition.data}
-          focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
-          onEvent={onEvent}
-        />
+        <DefaultRenderer key={condition.id} id={condition.id} data={condition.data} onEvent={onEvent} />
       </OffsetContainer>
-      <OffsetContainer offset={nodeMap && nodeMap.choice.offset}>
+      <OffsetContainer offset={choice.offset}>
         <Diamond
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
@@ -91,8 +81,6 @@ export const IfCondition: FunctionComponent<NodeProps> = ({
                   key={x.id}
                   id={x.id}
                   data={x.data}
-                  focusedId={focusedId}
-                  getLgTemplates={getLgTemplates}
                   onEvent={onEvent}
                   onResize={size => {
                     patchBoundary(x.id, size);

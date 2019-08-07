@@ -290,7 +290,7 @@ export function Node<TData>(ContentComponent: ContentComponentType<TData>): Reac
       }
     };
 
-    private onAttractorDropzoneReceive = (event: React.DragEvent<Element>): void => {
+    private onAttractorDropzoneReceive = (_event: React.DragEvent<Element>): void => {
       if (this.props.onAttractorDropZoneReceive) {
         this.props.onAttractorDropZoneReceive({
           edgeId: this.props.dragData.edgeId,

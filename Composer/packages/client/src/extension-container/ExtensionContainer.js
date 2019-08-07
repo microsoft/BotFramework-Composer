@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
-import { getDialogName } from '../utils';
 
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
+
+initializeIcons(undefined, { disableWarnings: true });
 /**
  * ExtensionContainer is a IFrame container to host any extension as React component
  * ExtensionContainer provides a React absraction to it's inner extention, on top of the
@@ -58,8 +60,8 @@ function ExtensionContainer() {
       return apiClient.apiCall('saveData', newData);
     },
 
-    navTo: path => {
-      return apiClient.apiCall('navTo', { path: path });
+    navTo: (path, rest) => {
+      return apiClient.apiCall('navTo', { path, rest });
     },
 
     navDown: subPath => {
@@ -101,25 +103,20 @@ function ExtensionContainer() {
         template: { Name: templateName, Body: template },
       });
     },
+
+    createDialog: () => {
+      return apiClient.apiCall('createDialog');
+    },
   };
 
   const RealEditor = shellData.data ? getEditor() : null;
 
   if (RealEditor) {
     window.parent.extensionData = window.parent.extensionData || {};
-    window.parent.extensionData[RealEditor.name] = shellData.data;
+    window.parent.extensionData[RealEditor.name] = shellData;
   }
 
-  return (
-    RealEditor && (
-      <RealEditor
-        {...shellData}
-        onChange={shellApi.saveData}
-        shellApi={shellApi}
-        dialogName={getDialogName(shellData.navPath)}
-      />
-    )
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;

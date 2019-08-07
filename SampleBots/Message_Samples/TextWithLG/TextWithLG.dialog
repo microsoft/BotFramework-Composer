@@ -1,17 +1,36 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "[TextWithLG]"
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:50:19.315Z",
-    "updatedAt": "2019-07-03T06:50:19.334Z",
+    "updatedAt": "2019-07-16T19:37:44.474Z",
     "id": "620760"
-  }
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "createdAt": "2019-07-16T19:37:46.188Z",
+        "updatedAt": "2019-07-16T19:37:51.260Z",
+        "id": "105188"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-16T19:37:46.188Z",
+            "updatedAt": "2019-07-16T19:37:51.260Z",
+            "id": "105188",
+            "name": "Send an Activity"
+          },
+          "activity": "[bfdactivity-105188]"
+        }
+      ]
+    }
+  ]
 }

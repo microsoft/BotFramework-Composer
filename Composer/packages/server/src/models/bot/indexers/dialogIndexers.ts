@@ -2,6 +2,7 @@ import { has, uniq } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
+import { DialogChecker } from '../dialogChecker';
 
 import { FileInfo, Dialog } from './../interface';
 
@@ -85,6 +86,64 @@ export class DialogIndexer {
     return uniq(intents);
   }
 
+  // find out all referred dialog
+  private ExtractReferredDialogs(dialog: Dialog): string[] {
+    const dialogs: string[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+        const dialogName = value.dialog;
+        dialogs.push(dialogName);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(dialogs);
+  }
+
+  // check all fields
+  private CheckFields(dialog: Dialog): string[] {
+    const errors: string[] = [];
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && has(DialogChecker, value.$type)) {
+        const matchedCheckers = DialogChecker[value.$type];
+        matchedCheckers.forEach(checker => {
+          const checkRes = checker.apply(null, [
+            {
+              path,
+              value,
+            },
+          ]);
+          if (checkRes) {
+            errors.push(checkRes);
+          }
+        });
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+    return errors;
+  }
+
   public index = (files: FileInfo[]): Dialog[] => {
     this.dialogs = [];
     if (files.length !== 0) {
@@ -99,11 +158,14 @@ export class DialogIndexer {
             const lgFile = typeof dialogJson.generator === 'string' ? dialogJson.generator : '';
             const id = Path.basename(file.name, extName);
             const isRoot = id === 'Main';
+            const diagnostics = this.CheckFields(dialogJson);
             const dialog = {
               id,
               isRoot,
               displayName: isRoot ? botName : id,
               content: dialogJson,
+              diagnostics,
+              referredDialogs: this.ExtractReferredDialogs(dialogJson),
               lgTemplates: this.ExtractLgTemplates(dialogJson),
               luIntents: this.ExtractLuIntents(dialogJson),
               luFile: Path.basename(luFile, '.lu'),

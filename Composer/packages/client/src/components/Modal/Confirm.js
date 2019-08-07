@@ -1,13 +1,27 @@
 import * as React from 'react';
+import { PropTypes } from 'prop-types';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
 
+import { DialogStyle, BuiltInStyles, dialog, dialogModal } from './styles';
+
 const ConfirmDialog = props => {
   const { setting, onCancel, onConfirm } = props;
-  const { title, subTitle, confirmBtnText, cancelBtnText } = setting;
+  const {
+    title,
+    subTitle = '',
+    onRenderContent = defaultContentRender,
+    confirmBtnText = 'Yes',
+    cancelBtnText = 'Cancel',
+    style = DialogStyle.normalStyle,
+  } = setting;
   if (!title) {
     throw new Error('confirm modal must give a title');
+  }
+
+  function defaultContentRender() {
+    return <div style={BuiltInStyles[style]}> {subTitle} </div>;
   }
 
   return (
@@ -17,22 +31,29 @@ const ConfirmDialog = props => {
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
-        subText: subTitle,
+        styles: dialog,
       }}
       modalProps={{
         isBlocking: true,
-        styles: { main: { maxWidth: 450 } },
+        styles: dialogModal,
       }}
     >
+      {onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
-        <PrimaryButton onClick={onConfirm} text={confirmBtnText || 'Ok'} />
-        <DefaultButton onClick={onCancel} text={cancelBtnText || 'Cancel'} />
+        <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
+        <DefaultButton onClick={onCancel} text={cancelBtnText} />
       </DialogFooter>
     </Dialog>
   );
 };
 
-export const OpenConfirmModal = (title, subTitle) => {
+ConfirmDialog.propTypes = {
+  setting: PropTypes.object,
+  onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
+};
+
+export const OpenConfirmModal = (title, subTitle, setting = {}) => {
   return new Promise(resolve => {
     const node = document.createElement('div');
     document.body.appendChild(node);
@@ -49,7 +70,7 @@ export const OpenConfirmModal = (title, subTitle) => {
       resolve(false);
     };
 
-    const modal = <ConfirmDialog setting={{ title, subTitle }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
     ReactDOM.render(modal, node);
   });
 };

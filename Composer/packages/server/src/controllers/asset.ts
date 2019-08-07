@@ -5,7 +5,9 @@ async function getProjTemplates(req: any, res: any) {
     const templates = await AssectService.manager.getProjectTemplate();
     res.status(200).json(templates);
   } catch (error) {
-    res.status(400).json({ error: 'Stop error' });
+    res.status(400).json({
+      message: error instanceof Error ? error.message : error,
+    });
   }
 }
 

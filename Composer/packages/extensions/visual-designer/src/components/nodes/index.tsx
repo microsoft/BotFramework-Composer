@@ -10,3 +10,5 @@ export * from './Recognizer';
 export * from './ReplaceDialog';
 export * from './SwitchCondition';
 export * from './UnknownIntentRule';
+export * from './ConversationUpdateActivityRule';
+export * from './ChoiceInput';

@@ -1,20 +1,38 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "name": "EchoBot",
-    "description": "<Fill in the description of your bot here>"
+    "createdAt": "2019-07-11T23:45:43.726Z",
+    "updatedAt": "2019-07-11T23:45:43.734Z",
+    "id": "433224",
+    "description": "This bot accepts input from the user and echoes it back."
   },
+  "autoEndDialog": true,
   "generator": "common.lg",
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
-      "prompt": "Hello, I'm the echo bot.",
-      "property": "user.input"
+      "$type": "Microsoft.UnknownIntentRule",
+      "$designer": {
+        "id": "821845"
+      },
+      
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "003038",
+            "updatedAt": "2019-07-11T23:45:59.499Z"
+          },
+          "activity": "[bfdactivity-003038]"
+        }
+      ]
     },
     {
-      "$type": "Microsoft.SendActivity",
-      "activity": "your input is : {user.input}"
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
     }
   ]
 }

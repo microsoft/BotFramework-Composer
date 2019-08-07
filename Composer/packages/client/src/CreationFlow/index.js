@@ -1,24 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from '@reach/router';
 
-import { CreationFlowStatus } from '../constants';
+import { BASEPATH, CreationFlowStatus } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
 import { Steps } from './../constants/index';
 import { SelectLocation } from './SelectLocation';
-import { Store } from './../store/index';
+import { StoreContext } from './../store';
 import { DialogInfo } from './../constants/index';
 import { StepWizard } from './StepWizard/StepWizard';
 
 export function CreationFlow(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const [templates, setTemplates] = useState([]);
   const [bots, setBots] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs, saveTemplateId } = actions;
+  const {
+    fetchTemplates,
+    getAllProjects,
+    openBotProject,
+    createProject,
+    saveProjectAs,
+    saveTemplateId,
+    setLuisConfig,
+  } = actions;
   const { botName, templateId } = state;
 
   useEffect(() => {
@@ -60,7 +68,8 @@ export function CreationFlow(props) {
   };
 
   const openBot = async botFolder => {
-    await openBotProject(botFolder);
+    const { botName } = await openBotProject(botFolder);
+    setLuisConfig(botName);
     handleDismiss();
   };
 
@@ -73,7 +82,8 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description);
+    const { botName } = await saveProjectAs(formData.name, formData.description);
+    setLuisConfig(botName);
   };
 
   const handleSubmit = formData => {
@@ -82,7 +92,7 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigate('/');
+        navigate(BASEPATH);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);

@@ -35,6 +35,11 @@ describe('index', () => {
     expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
       ['hello', 'bye', 'ShowImage'].join(',')
     );
+
+    // find out dialog used in,
+    // here main.dialog refers a.dialog
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.length).toBe(1);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredDialogs.join(',')).toBe(['a'].join(','));
   });
 });
 
@@ -82,11 +87,11 @@ describe('copyTo', () => {
 
   afterEach(() => {
     try {
-      const deleteFolder = (path: string) => {
+      const deleteFolder = (path: string): void => {
         let files = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
-          files.forEach(function(file, index) {
+          files.forEach(function(file) {
             const curPath = path + '/' + file;
             if (fs.statSync(curPath).isDirectory()) {
               // recurse
@@ -166,6 +171,13 @@ describe('lg operation', () => {
     }
   });
 
+  it('should throw error when lg content is invalid', async () => {
+    const id = 'root';
+    const content = '# hello \n hello3';
+
+    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
+  });
+
   it('should delete lg file and update index', async () => {
     const id = 'root';
     const lgFiles = await proj.removeLgFile(id);
@@ -218,6 +230,13 @@ describe('lu operation', () => {
       expect(result.relativePath).toEqual('root/root.lu');
       expect(result.content).toEqual(content);
     }
+  });
+
+  it('should throw error when lu content is invalid', async () => {
+    const id = 'root';
+    const content = 'hello \n hello3';
+
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
   });
 
   it('should delete lu file and update index', async () => {

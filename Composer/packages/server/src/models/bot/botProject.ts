@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import { isEqual } from 'lodash';
+
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -59,13 +61,13 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
-      luStatus: this.luPublisher.status,
     };
   };
 
   public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
+    const diagnostics: string[] = [];
 
     const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
@@ -73,22 +75,27 @@ export class BotProject {
     if (userEditorSchemaFile !== undefined) {
       try {
         editorSchema = JSON.parse(userEditorSchemaFile.content);
-      } catch {
-        throw new Error('Attempt to parse editor schema as JSON failed');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Attempt to parse editor schema as JSON failed');
+        diagnostics.push(`Error in editor.schema, ${error.message}`);
       }
     }
 
     if (userSDKSchemaFile !== undefined) {
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
-      } catch {
-        throw new Error('Attempt to parse sdk schema as JSON failed');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Attempt to parse sdk schema as JSON failed');
+        diagnostics.push(`Error in sdk.schema, ${error.message}`);
       }
     }
 
     return {
       editor: { content: editorSchema },
       sdk: { content: sdkSchema },
+      diagnostics,
     };
   };
 
@@ -125,10 +132,30 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
+  public removeDialog = async (id: string): Promise<Dialog[]> => {
+    if (id === 'Main') {
+      throw new Error(`Main dialog can't be removed`);
+    }
+
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog === undefined) {
+      throw new Error(`no such dialog ${id}`);
+    }
+
+    await this._removeFile(dialog.relativePath);
+    return this.dialogIndexer.getDialogs();
+  };
+
   public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
+    }
+    const absolutePath = `${this.dir}/${lgFile.relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
+    if (this.lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+      throw new Error(errorMsg);
     }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgIndexer.getLgFiles();
@@ -136,6 +163,12 @@ export class BotProject {
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    const absolutePath = `${this.dir}/${relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
+    if (this.lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+      throw new Error(errorMsg);
+    }
     await this._createFile(relativePath, content);
     return this.lgIndexer.getLgFiles();
   };
@@ -154,9 +187,19 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+
+    try {
+      await this.luIndexer.parse(content);
+    } catch (error) {
+      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
+    }
+
     await this._updateFile(luFile.relativePath, content);
-    this.luPublisher.update(luFile.relativePath);
-    return this.luIndexer.getLuFiles();
+    const luFiles = this.luIndexer.getLuFiles();
+    const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
+    const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
+    this.luPublisher.update(isUpdate, luFile.relativePath);
+    return luFiles;
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
@@ -174,21 +217,43 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public publishLuis = async (config: ILuisConfig) => {
-    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const emptyLuFiles = toPublish.filter(this.isEmpty);
-    if (emptyLuFiles.length !== 0) {
-      const msg = emptyLuFiles.map(file => file.id).join(' ');
-      throw new Error('You have the following empty LuFile(s): ' + msg);
-    }
-    return await this.luPublisher.publish(config, toPublish);
+  public setLuisConfig = async (config: ILuisConfig) => {
+    this.luPublisher.setLuisConfig(config);
   };
 
-  public checkNeedLuisDeploy = async () => {
-    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
-      return false;
+  public publishLuis = async () => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
+    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
+    if (unpublished.length === 0) {
+      return await this.luPublisher.getLuisStatus();
+    }
+    const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
+    if (invalidLuFile.length !== 0) {
+      const msg = invalidLuFile.reduce((msg, file) => {
+        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+          text += `\n ${diagnostic.text}`;
+          return text;
+        }, `In ${file.id}.lu: `);
+        msg += `\n ${fileErrorText} \n`;
+        return msg;
+      }, '');
+      throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
+    }
+    const emptyLuFiles = unpublished.filter(this.isEmpty);
+    if (emptyLuFiles.length !== 0) {
+      const msg = emptyLuFiles.map(file => file.id).join(' ');
+      throw new Error(`You have the following empty LuFile(s): ` + msg);
+    }
+    return await this.luPublisher.publish(unpublished);
+  };
+
+  public checkLuisPublished = async () => {
+    const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
+    if (referredLuFiles.length <= 0) {
+      return true;
     } else {
-      return !(await this.luPublisher.checkLuisDeployed());
+      return await this.luPublisher.checkLuisPublised(referredLuFiles);
     }
   };
 

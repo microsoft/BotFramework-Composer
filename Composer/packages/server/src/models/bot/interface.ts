@@ -15,6 +15,8 @@ export interface Dialog {
   isRoot: boolean;
   displayName: string;
   content: { [key: string]: any };
+  diagnostics: string[];
+  referredDialogs: string[];
   lgFile: string;
   luFile: string;
   luIntents: string[];
@@ -31,9 +33,11 @@ export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
+  diagnostics: any[]; // LGParser output, TODO:
 }
 
 export interface LUFile {
+  diagnostics: any[]; // ludown parser output
   id: string;
   relativePath: string;
   content: string;
@@ -41,8 +45,8 @@ export interface LUFile {
 }
 
 export enum FileState {
-  UPDATED,
-  LATEST,
+  PUBLISHED = 'published',
+  UNPUBLISHED = 'unpublished',
 }
 
 export interface ILuisSettings {
@@ -54,8 +58,7 @@ export interface ILuisSettings {
   status: {
     [key: string]: {
       version: string | undefined;
-      checksum: string;
-      status: FileState;
+      state: FileState;
     };
   };
 }

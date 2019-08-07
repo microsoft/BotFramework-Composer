@@ -1,37 +1,46 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useMemo, FunctionComponent } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useMemo, FC, useState } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../components/shared/sharedProps';
+import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
-import { Collapse } from '../components/nodes/templates/Collapse';
+import { queryNode } from '../shared/jsonTracker';
 
-import { StepEditor } from './StepEditor';
 import { EventsEditor } from './EventsEditor';
+import { RuleEditor } from './RuleEditor';
 
-const calculateNodeMap = (_, data) => {
-  const { ruleGroup, stepGroup } = transformRootDialog(data);
+const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
+  const result = transformRootDialog(data);
+  if (!result) return {};
+
+  const { ruleGroup, stepGroup } = result;
   return {
     ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
     stepGroup: GraphNode.fromIndexedJson(stepGroup),
   };
 };
 
-export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
-  id,
-  data,
-  focusedId,
-  getLgTemplates,
-  onEvent,
-}): JSX.Element => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { stepGroup, ruleGroup } = nodeMap;
+  const { ruleGroup } = nodeMap;
 
+  const [activeEventId, setActiveEventId] = useState('');
+
+  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
+    if (eventName === NodeEventTypes.Expand) {
+      const selectedRulePath = eventData;
+      setActiveEventId(selectedRulePath);
+      return onEvent(NodeEventTypes.Focus, selectedRulePath);
+    }
+    return onEvent(eventName, eventData);
+  };
+
+  const activeEventData = queryNode(data, activeEventId);
   return (
     <div
-      style={{
+      css={{
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
@@ -42,29 +51,11 @@ export const AdaptiveDialogEditor: FunctionComponent<NodeProps> = ({
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      {ruleGroup ? (
-        <EventsEditor
-          key={ruleGroup.id}
-          id={ruleGroup.id}
-          data={ruleGroup.data}
-          focusedId={focusedId}
-          getLgTemplates={getLgTemplates}
-          onEvent={onEvent}
-        />
-      ) : null}
-      <div style={{ height: 50 }} />
-      {stepGroup ? (
-        <Collapse text="Steps">
-          <StepEditor
-            key={stepGroup.id}
-            id={stepGroup.id}
-            data={stepGroup.data}
-            focusedId={focusedId}
-            getLgTemplates={getLgTemplates}
-            onEvent={onEvent}
-          />
-        </Collapse>
-      ) : null}
+      {ruleGroup && (
+        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
+      )}
+      <div className="editor-interval" style={{ height: 50 }} />
+      {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };

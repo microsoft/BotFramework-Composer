@@ -3,6 +3,7 @@ import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
 
 import StorageService from './storage';
+import { Path } from './../utility/path';
 
 class BotProjectService {
   public currentBotProject: BotProject | undefined = undefined;
@@ -14,6 +15,17 @@ class BotProjectService {
       this.currentBotProject = new BotProject(this.recentBotProjects[0]);
     }
   }
+
+  public getRecentBotProjects = () => {
+    return this.recentBotProjects.reduce((result: any[], item) => {
+      const name = Path.basename(item.path);
+      //remove .botproj. Someone may open project before new folder structure.
+      if (name.indexOf('.botproj') === -1) {
+        result.push({ name, ...item });
+      }
+      return result;
+    }, []);
+  };
 
   public openProject = async (locationRef: LocationRef) => {
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {

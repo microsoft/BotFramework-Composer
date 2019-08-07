@@ -1,31 +1,35 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import lodash from 'lodash';
-import { useContext, useMemo, Fragment, useEffect, useRef, useState } from 'react';
+import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
-import { OpenAlertModal } from '../../components/Modal/Alert';
-import { Store } from '../../store/index';
+import { OpenAlertModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
+import { StoreContext } from '../../store';
+import { resolveToBasePath } from '../../utils/fileUtil';
+import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import { Tree } from './../../components/Tree';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
 import Content from './content';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
+const mapNavPath = x => resolveToBasePath(BASEPATH, x);
+
 export const LUPage = props => {
-  const { actions, state } = useContext(Store);
+  const { actions, state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
-  const updateLuFile = useRef(lodash.debounce(actions.updateLuFile, 500)).current;
+  const updateLuFile = actions.updateLuFile;
   const [textMode, setTextMode] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [luFile, setLuFile] = useState(null);
 
   const subPath = props['*'];
-
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.id === subPath);
 
@@ -86,21 +90,29 @@ export const LUPage = props => {
     }
 
     if (!activeDialog && subPath && dialogs.length) {
-      navigate('/language-understanding');
+      navigate(mapNavPath('/language-understanding'));
     }
 
     setNewContent(null);
   }, [activePath, dialogs, luFiles]);
 
+  const UIShowEditingToolBar = useMemo(() => {
+    return newContent !== null;
+  }, [newContent]);
+
+  const UIShowEditingAlert = useMemo(() => {
+    return newContent !== null;
+  }, [newContent]);
+
   function onSelect(id) {
-    if (newContent) {
+    if (UIShowEditingAlert) {
       OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
       return;
     }
     if (id === '_all') {
-      navigate(`/language-understanding`);
+      navigate(mapNavPath('/language-understanding'));
     } else {
-      navigate(`/language-understanding/${id}`);
+      navigate(mapNavPath(`/language-understanding/${id}`));
     }
   }
 
@@ -115,18 +127,26 @@ export const LUPage = props => {
     setNewContent(null);
   }
 
-  function onSave() {
+  async function onSave() {
     const payload = {
       id: activeDialog.id, // current opened lu file
       content: newContent,
     };
-    updateLuFile(payload);
+    try {
+      await updateLuFile(payload);
+    } catch (error) {
+      const title = `StaticValidationError`;
+      const subTitle = error.message;
+      OpenAlertModal(title, subTitle, {
+        style: DialogStyle.Console,
+      });
+    }
   }
 
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
   function onTableViewWantEdit(template) {
-    navigate(`/language-understanding/${template.fileId}`);
+    navigate(mapNavPath(`language-understanding/${template.fileId}`));
     setTextMode(true);
   }
 
@@ -144,25 +164,28 @@ export const LUPage = props => {
       <div css={ContentHeaderStyle}>
         <div>User says..</div>
         <div css={flexContent}>
-          {newContent && (
+          {textMode && (
             <Fragment>
-              <ActionButton
+              <PrimaryButton
                 iconProps={{
                   iconName: 'Save',
                 }}
                 split={true}
                 onClick={() => onSave()}
+                disabled={!UIShowEditingToolBar}
+                styles={{ root: { marginRight: '10px' } }}
               >
-                Save file
-              </ActionButton>
-              <ActionButton
+                {formatMessage('Save')}
+              </PrimaryButton>
+              <DefaultButton
                 iconProps={{
                   iconName: 'Undo',
                 }}
                 onClick={() => discardChanges()}
+                disabled={!UIShowEditingToolBar}
               >
-                Discard changes
-              </ActionButton>
+                {formatMessage('Discard changes')}
+              </DefaultButton>
             </Fragment>
           )}
           <Toggle
@@ -177,17 +200,22 @@ export const LUPage = props => {
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
-        <div>
-          <Nav
-            onLinkClick={(ev, item) => {
-              onSelect(item.id);
-              ev.preventDefault();
-            }}
-            selectedKey={activePath}
-            groups={navLinks}
-            className={'dialogNavTree'}
-            data-testid={'dialogNavTree'}
-          />
+        <div css={projectContainer}>
+          <Tree variant="large" extraCss={projectTree}>
+            <div css={projectWrapper}>
+              <Nav
+                onLinkClick={(ev, item) => {
+                  onSelect(item.id);
+                  ev.preventDefault();
+                }}
+                styles={projectWrapper}
+                selectedKey={activePath}
+                groups={navLinks}
+                className={'dialogNavTree'}
+                data-testid={'dialogNavTree'}
+              />
+            </div>
+          </Tree>
         </div>
         <Content
           file={luFile}

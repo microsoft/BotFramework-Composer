@@ -1,38 +1,70 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.token == null",
-      "steps": [
-        {
-          "$type": "Microsoft.OAuthPrompt",
-          "ConnectionName": "msgraph",
-          "Title": "Log in",
-          "Text": "Please log in to your email account",
-          "Property": "user.token"
-        }
-      ]
-    },
-    {
-      "$type": "Microsoft.HttpRequest",
-      "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
-      "method": "GET",
-      "header": {
-        "Authorization": "Bearer {user.token.token}"
-      },
-      "Property": "user.getGraphEmails"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "[ShowEmailSummary(user)]"
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:48:21.955Z",
-    "updatedAt": "2019-07-03T06:48:21.981Z",
+    "updatedAt": "2019-07-16T19:30:07.176Z",
     "id": "295682"
-  }
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "823674",
+        "updatedAt": "2019-07-22T07:51:27.421Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-11T06:08:01.812Z",
+            "updatedAt": "2019-07-16T19:30:09.770Z",
+            "id": "245482"
+          },
+          "condition": "user.token == null",
+          "steps": [
+            {
+              "$type": "Microsoft.OAuthInput",
+              "$designer": {
+                "createdAt": "2019-07-16T19:31:43.362Z",
+                "updatedAt": "2019-07-16T19:31:51.650Z",
+                "id": "199270"
+              },
+              "connectionName": "Outlook",
+              "title": "Log in",
+              "text": "Please log in to your email account",
+              "property": "user.token"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "createdAt": "2019-07-11T06:07:53.618Z",
+            "updatedAt": "2019-07-16T19:32:00.212Z",
+            "id": "518974"
+          },
+          "method": "GET",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "property": "user.getGraphEmails"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-11T06:04:32.777Z",
+            "updatedAt": "2019-07-16T19:32:04.947Z",
+            "id": "991558"
+          },
+          "activity": "[bfdactivity-991558]"
+        }
+      ]
+    }
+  ]
 }

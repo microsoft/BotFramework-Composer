@@ -1,46 +1,61 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.ConfirmInput",
-      "property": "user.confirmed",
-      "prompt": "yes or no",
-      "unrecognizedPrompt": "I need a yes or no.",
-      "maxTurnCount": 2147483647,
-      "alwaysPrompt": true,
-      "allowInterruptions": true,
-      "defaultLocale": "en-us",
-      "style": "Auto",
-      "choiceOptions": {
-        "inlineSeparator": ", ",
-        "inlineOr": " or ",
-        "inlineOrMore": ", or ",
-        "includeNumbers": true
-      },
-      "$designer": {
-        "createdAt": "2019-07-01T21:59:15.892Z",
-        "updatedAt": "2019-07-01T21:59:15.898Z",
-        "id": "647929"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "createdAt": "2019-07-01T21:59:14.563Z",
-        "updatedAt": "2019-07-01T21:59:16.680Z",
-        "id": "458458"
-      },
-      "activity": "[bfdactivity-458458]"
-    },
-    {
-      "$type": "Microsoft.RepeatDialog"
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:48:16.053Z",
-    "updatedAt": "2019-07-03T06:48:16.080Z",
+    "updatedAt": "2019-07-22T16:04:54.875Z",
     "id": "556076"
-  }
+  },
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "030235",
+        "updatedAt": "2019-07-22T07:51:03.850Z"
+      },
+      "events": ["beginDialog"],
+      "steps": [
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "$designer": {
+            "createdAt": "2019-07-01T21:59:15.892Z",
+            "updatedAt": "2019-07-16T19:27:39.503Z",
+            "id": "647929"
+          },
+          "property": "user.confirmed",
+          "prompt": "yes or no",
+          "unrecognizedPrompt": "I need a yes or no.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "never",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-07-01T21:59:14.563Z",
+            "updatedAt": "2019-07-16T19:27:43.477Z",
+            "id": "458458"
+          },
+          "activity": "[bfdactivity-458458]"
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-07-16T19:27:44.856Z",
+            "updatedAt": "2019-07-16T19:27:49.117Z",
+            "id": "131382"
+          }
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
 }

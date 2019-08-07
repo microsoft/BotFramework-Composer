@@ -5,7 +5,11 @@ import { IconMenu } from './templates/IconMenu';
 import { EdgeAddButtonSize } from './elementSizes';
 import { createStepMenu, DialogGroup } from './appschema';
 
-export const EdgeMenu = ({ onClick }) => {
+interface EdgeMenuProps {
+  onClick: (item: string | null) => void;
+}
+
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ onClick, ...rest }) => {
   return (
     <div
       style={{
@@ -26,6 +30,7 @@ export const EdgeMenu = ({ onClick }) => {
           [
             DialogGroup.RESPONSE,
             DialogGroup.INPUT,
+            DialogGroup.BRANCHING,
             DialogGroup.STEP,
             DialogGroup.MEMORY,
             DialogGroup.CODE,
@@ -35,6 +40,7 @@ export const EdgeMenu = ({ onClick }) => {
           (e, item) => onClick(item ? item.$type : null)
         )}
         label={formatMessage('Add')}
+        {...rest}
       />
     </div>
   );

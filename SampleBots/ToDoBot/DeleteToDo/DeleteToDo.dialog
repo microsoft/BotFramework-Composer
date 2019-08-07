@@ -1,60 +1,91 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "autoEndDialog": true,
-  "steps": [
-    {
-      "$type": "Microsoft.SetProperty",
-      "value": "@title",
-      "property": "dialog.todo"
-    },
-    {
-      "$type": "Microsoft.TextInput",
-      "prompt": "OK, please enter the title of the todo you want to remove.",
-      "property": "dialog.todo"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Remove",
-      "arrayProperty": "user.todos",
-      "value": "dialog.todo",
-      "resultProperty": "dialog.removed"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.removed",
-      "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:04:05.322Z",
-            "updatedAt": "2019-07-01T22:04:06.711Z",
-            "id": "725469"
-          },
-          "activity": "[bfdactivity-725469]"
-        }
-      ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "createdAt": "2019-07-01T22:04:45.788Z",
-            "updatedAt": "2019-07-01T22:04:47.071Z",
-            "id": "549615"
-          },
-          "activity": "[bfdactivity-549615]"
-        }
-      ],
-      "$designer": {
-        "createdAt": "2019-07-01T22:04:06.138Z",
-        "updatedAt": "2019-07-01T22:04:06.144Z",
-        "id": "462031"
-      }
-    }
-  ],
-  "$schema": "../../app.schema",
   "$designer": {
     "createdAt": "2019-07-03T06:51:41.186Z",
-    "updatedAt": "2019-07-03T06:51:41.224Z",
+    "updatedAt": "2019-07-16T20:00:46.804Z",
     "id": "114909"
-  }
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "id": "768658",
+        "updatedAt": "2019-07-22T08:10:54.685Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "createdAt": "2019-07-01T22:04:05.322Z",
+            "updatedAt": "2019-07-16T20:02:14.365Z",
+            "id": "725469"
+          },
+          "property": "dialog.todo",
+          "value": "@title"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "createdAt": "2019-07-16T20:01:55.761Z",
+            "updatedAt": "2019-07-16T20:01:59.761Z",
+            "id": "870620"
+          },
+          "property": "dialog.todo",
+          "prompt": "OK, please enter the title of the todo you want to remove.",
+          "maxTurnCount": 0,
+          "alwaysPrompt": false,
+          "allowInterruptions": "never",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-16T20:02:01.004Z",
+            "updatedAt": "2019-07-16T20:02:06.091Z",
+            "id": "492096"
+          },
+          "changeType": "Remove",
+          "arrayProperty": "user.todos",
+          "resultProperty": "dialog.removed",
+          "value": "dialog.todo"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T22:04:45.788Z",
+            "updatedAt": "2019-07-16T20:02:19.199Z",
+            "id": "549615"
+          },
+          "condition": "dialog.removed",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:04:05.322Z",
+                "updatedAt": "2019-07-16T20:02:14.365Z",
+                "id": "725469"
+              },
+              "activity": "[bfdactivity-725469]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:04:45.788Z",
+                "updatedAt": "2019-07-16T20:02:19.199Z",
+                "id": "549615"
+              },
+              "activity": "[bfdactivity-549615]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

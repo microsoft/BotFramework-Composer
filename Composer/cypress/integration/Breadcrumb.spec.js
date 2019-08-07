@@ -7,16 +7,17 @@ context('breadcrumb', () => {
   });
 
   it('can show dialog name in breadcrumb', () => {
-    cy.get('[data-testid="Breadcrumb"]').within(() => {
-      cy.getByText('ToDoBot').should('exist');
-    });
+    cy.getByTestId('Breadcrumb')
+      .invoke('text')
+      .should('equal', 'ToDoBot');
+
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('AddToDo').click();
     });
 
-    cy.get('[data-testid="Breadcrumb"]').within(() => {
-      cy.getByText('AddToDo').should('exist');
-    });
+    cy.getByTestId('Breadcrumb')
+      .invoke('text')
+      .should('equal', 'AddToDo');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('ToDoBot').click();
@@ -24,12 +25,14 @@ context('breadcrumb', () => {
 
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('AddIntent').click();
-      cy.getByText('AddIntent').click();
+      cy.wait(100);
+      cy.getByTestId('RuleEditor').within(() => {
+        cy.getByText('AddToDo').click();
+      });
     });
 
-    cy.get('[data-testid="Breadcrumb"]').within(() => {
-      cy.getByText('ToDoBot').should('exist');
-      cy.getByText('AddToDo').should('exist');
-    });
+    cy.getByTestId('Breadcrumb')
+      .invoke('text')
+      .should('match', /ToDoBot.+AddToDo/);
   });
 });

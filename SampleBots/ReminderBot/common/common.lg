@@ -1,0 +1,37 @@
+# Hello
+- Hi
+
+# help
+- I can add reminders for you, like 'add a reminder to finish the test for 8 am tomorrow'.
+
+# ShowReminders(singlepage)
+- IF: {count(singlepage) > 0}
+    - ```
+    Your have following reminders:
+    @{join(foreach(singlepage, x, lgTemplate('showSingleReminder', x)), '\n')}
+      ```
+
+
+# showSingleReminder(x)
+- * {x.content} at {x.reminderDateTime}
+
+# bfdactivity-134916
+-Welcome to reminder bot. Try saying "add reminder for today".
+
+# bfdactivity-672824
+-Added reminder successfully!
+
+# bfdactivity-984106
+-Delete succeeded!
+
+# bfdactivity-707692
+-[ShowReminders(user.singlepagedata)]
+
+# bfdactivity-635553
+-You have no more reminders.
+
+# bfdactivity-077390
+-End.
+
+# bfdactivity-670207
+-OK.

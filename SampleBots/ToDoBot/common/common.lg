@@ -19,7 +19,7 @@
 -IF:{count(user.todos) > 0}
 -```
     Your most recent @{count(user.todos)} tasks are 
-    @{join(foreach(user.todos, x, lgTemplate('showSingleTodo', x)), '\n')}
+    @{join(foreach(user.todos, x, showSingleTodo(x)), '\n')}
       ```
 -ELSE:
 -You don't have any todos.
@@ -31,18 +31,18 @@
 -IF:{count(user.groceryList) > 0}
 -```
     Your most recent @{count(user.groceryList)} tasks are 
-    @{join(foreach(user.groceryList, x, lgTemplate('showSingleTodo', x)), '\n')}
+    @{join(foreach(user.groceryList, x, showSingleTodo(x)), '\n')}
       ```
 -ELSE:
 -You don't have any todos in grocery.
 
 # help
 -I can add a todo, show todos, remove a todo, and clear all todos
--I can hep you yes I can
+-I can help you yes I can
 -Help, we don't need no stinkin' help!
 
 # bfdactivity-376720
--Hi! I'm a ToDo bot. Say " add a todo named first" to get started.
+-Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 
 # bfdactivity-116673
 -Successfully added a todo named {dialog.todo}
@@ -65,3 +65,9 @@
 # bfdactivity-662084
 -[ShowTodo]
 
+# bfdactivity-696707
+-[help]
+
+
+# bfdactivity-157674
+- Hi! I'm a ToDo bot. Say "add a todo named first" to get started.

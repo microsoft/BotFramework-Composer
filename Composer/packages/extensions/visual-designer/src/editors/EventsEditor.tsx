@@ -1,25 +1,24 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { EventMenu } from 'shared-menus';
 
 import { Panel } from '../components/nodes/templates/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { EditorProps } from '../components/shared/sharedProps';
 
-export const EventsEditor = ({ id, data, focusedId, onEvent, getLgTemplates }) => {
+export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
   const ruleCount = data.children.length;
-  const title = `Skills (${ruleCount})`;
+  const title = `Events (${ruleCount})`;
 
-  const onClick = $type => {
-    onEvent(NodeEventTypes.Insert, { id, $type, position: ruleCount });
-  };
+  const onClick = $type => onEvent(NodeEventTypes.Insert, { id, $type, position: ruleCount });
 
   return (
     <Panel
       title={title}
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
-      addMenu={<EventMenu onClick={onClick} />}
+      addMenu={<EventMenu onClick={onClick} data-testid="EventsEditorAdd" />}
     >
-      <RuleGroup key={id} id={id} data={data} focusedId={focusedId} getLgTemplates={getLgTemplates} onEvent={onEvent} />
+      <RuleGroup key={id} id={id} data={data} onEvent={onEvent} />
     </Panel>
   );
 };

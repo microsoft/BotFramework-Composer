@@ -1,0 +1,80 @@
+> # Intent definitions
+
+## AddReminder
+- add a reminder
+- add a reminder for {RemindTime=8 am tomorrow}
+- add a reminder to {Content=finish the docs} for {RemindTime=8 am tomorrow}
+- add a reminder to {Content=finish this demo}
+- add reminders
+- my reminder is {Content=finish this demo}
+- add reminder
+
+## DeleteAllReminders
+- delete all my reminders
+- delete all reminders for {RemindTime=today}
+- remove all my reminders for {RemindTime=tomorrow}
+- remove all reminders
+- remove all my reminders
+- delete all 
+
+## DeleteReminder
+- delete reminder {Content=finish this demo}
+- delete reminder {Content=test content}
+- delete the reminder to {Content=buy some things}
+- delete reminders for {RemindTime=today}
+- delete reminders for {RemindTime=tomorrow}
+- remove my reminders for {RemindTime=tomorrow}
+- remove
+- delete
+
+## None
+- Yes
+- No
+- test
+- today
+- tomorrow
+- next week
+
+## ShowReminder
+- show my reminders
+- show my reminders for {RemindTime=next week}
+- show my reminders for {RemindTime=today}
+- show my reminders for {RemindTime=tomorrow}
+- show reminders
+- show reminder
+- display
+- display reminder
+- show reminders for {RemindTime=next week}
+- show reminders for {RemindTime=today}
+- show reminders for {RemindTime=tomorrow}
+- show reminder for {RemindTime=next week}
+- show reminder for {RemindTime=today}
+- show reminder for {RemindTime=tomorrow}
+- display reminder for {RemindTime=next week}
+- display reminder for {RemindTime=today}
+- display reminder for {RemindTime=tomorrow}
+- display reminder on {RemindTime=next week}
+- display reminder on {RemindTime=today}
+- display reminder on {RemindTime=tomorrow}
+
+> # Entity definitions
+
+$Content:simple
+
+
+> # PREBUILT Entity definitions
+
+$PREBUILT:datetimeV2
+
+
+> # Phrase list definitions
+
+
+> # List entities
+
+> # RegEx entities
+
+
+> # Composite entities
+
+$RemindTime:[datetimeV2]

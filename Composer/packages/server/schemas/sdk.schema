@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/master/packages/DialogSchema/src/dialogSchema.schema",
-    "$id": "app.schema",
+    "$id": "sdk.schema",
     "type": "object",
     "title": "Component types",
     "description": "These are all of the types that can be created by the loader.",
@@ -12,7 +12,7 @@
         },
         {
             "title": "Microsoft.AttachmentInput",
-            "description": "This represents a dialog which gathers a yes/no style responses",
+            "description": "This represents a dialog which gathers an attachment such as image or music",
             "$ref": "#/definitions/Microsoft.AttachmentInput"
         },
         {
@@ -36,9 +36,14 @@
             "$ref": "#/definitions/Microsoft.ConfirmInput"
         },
         {
-            "title": "Microsoft.DebugBreak",
-            "description": "If debugger is attached, do a debugger break at this point",
-            "$ref": "#/definitions/Microsoft.DebugBreak"
+            "title": "Microsoft.ConversationUpdateActivityRule",
+            "description": "This defines the steps to take when an ConversationUpdate activity is received",
+            "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+        },
+        {
+            "title": "Microsoft.DateTimeInput",
+            "description": "This represents a dialog which gathers Date or Time or DateTime from the user",
+            "$ref": "#/definitions/Microsoft.DateTimeInput"
         },
         {
             "title": "Microsoft.DeleteProperty",
@@ -132,7 +137,7 @@
         },
         {
             "title": "Microsoft.OAuthInput",
-            "description": "This represents a dialog which gathers a decimal number in a specified range",
+            "description": "This represents a dialog which gathers an OAuth token from user",
             "$ref": "#/definitions/Microsoft.OAuthInput"
         },
         {
@@ -251,8 +256,14 @@
                 "autoEndDialog": {
                     "type": "boolean",
                     "title": "Auto End Dialog",
-                    "description": "IF this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.",
+                    "description": "If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.",
                     "default": "true"
+                },
+                "defaultResultProperty": {
+                    "type": "string",
+                    "title": "Default Result Property",
+                    "description": "Property path to the memory to return as the result of this dialog ending because AutoEndDialog is true and there are no more steps to execute.",
+                    "default": "dialog.result"
                 },
                 "recognizer": {
                     "$type": "Microsoft.IRecognizer",
@@ -312,8 +323,8 @@
         },
         "Microsoft.AttachmentInput": {
             "$role": "unionType(Microsoft.IDialog)",
-            "title": "ConfirmInput Dialog",
-            "description": "This represents a dialog which gathers a yes/no style responses",
+            "title": "AttachmentInput Dialog",
+            "description": "This represents a dialog which gathers an attachment such as image or music",
             "type": "object",
             "properties": {
                 "$type": {
@@ -440,12 +451,17 @@
                     ]
                 },
                 "allowInterruptions": {
-                    "type": "boolean",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
                     "title": "Allow Interruptions",
-                    "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": false,
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "default": "never",
                     "examples": [
-                        true
+                        "notRecognized"
                     ]
                 },
                 "outputFormat": {
@@ -583,6 +599,17 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
+                },
+                "eventName": {
+                    "title": "Event Name",
+                    "description": "The name of event to emit",
+                    "type": "string"
+                },
+                "eventValue": {
+                    "type": "object",
+                    "title": "Event Value",
+                    "description": "Optional value to emit along with the event",
+                    "additionalProperties": true
                 }
             },
             "additionalProperties": false,
@@ -635,7 +662,7 @@
                         }
                     }
                 },
-                "CardAction": {
+                "cardAction": {
                     "type": "object"
                 }
             },
@@ -764,12 +791,17 @@
                     ]
                 },
                 "allowInterruptions": {
-                    "type": "boolean",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
                     "title": "Allow Interruptions",
-                    "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": false,
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "default": "never",
                     "examples": [
-                        true
+                        "notRecognized"
                     ]
                 },
                 "outputFormat": {
@@ -784,31 +816,30 @@
                 },
                 "choices": {
                     "type": "array",
-                    "items": [
-                        {
-                            "type": "object",
-                            "properties": {
-                                "value": {
-                                    "type": "string",
-                                    "title": "Value",
-                                    "description": "the value to return when selected."
-                                },
-                                "action": {
-                                    "title": "Action",
-                                    "description": "Card action for the choice",
-                                    "type": "object"
-                                },
-                                "synonyms": {
-                                    "type": "array",
-                                    "title": "Synonyms",
-                                    "description": "the list of synonyms to recognize in addition to the value. This is optional.",
-                                    "items": {
-                                        "type": "string"
-                                    }
+                    "items":
+                    {
+                        "type": "object",
+                        "properties": {
+                            "value": {
+                                "type": "string",
+                                "title": "Value",
+                                "description": "the value to return when selected."
+                            },
+                            "action": {
+                                "title": "Action",
+                                "description": "Card action for the choice",
+                                "type": "object"
+                            },
+                            "synonyms": {
+                                "type": "array",
+                                "title": "Synonyms",
+                                "description": "the list of synonyms to recognize in addition to the value. This is optional.",
+                                "items": {
+                                    "type": "string"
                                 }
                             }
                         }
-                    ]
+                        }
                 },
                 "appendChoices": {
                     "type": "boolean",
@@ -860,7 +891,7 @@
                         "includeNumbers": {
                             "type": "boolean",
                             "title": "Include Numbers",
-                            "description": "if true, inline and list style choices will be prefixed with the index of the choice.",
+                            "description": "If true, inline and list style choices will be prefixed with the index of the choice.",
                             "default": true
                         }
                     }
@@ -926,7 +957,7 @@
                         "synonyms": {
                             "type": "array",
                             "title": "Synonyms",
-                            "description": "the list of synonyms to recognize in addition to the value. This is optional.",
+                            "description": "The list of synonyms to recognize in addition to the value. This is optional.",
                             "items": {
                                 "type": "string"
                             }
@@ -1062,12 +1093,17 @@
                     ]
                 },
                 "allowInterruptions": {
-                    "type": "boolean",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
                     "title": "Allow Interruptions",
-                    "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": false,
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "default": "never",
                     "examples": [
-                        true
+                        "notRecognized"
                     ]
                 },
                 "defaultLocale": {
@@ -1114,7 +1150,7 @@
                         "includeNumbers": {
                             "type": "boolean",
                             "title": "Include Numbers",
-                            "description": "if true, inline and list style choices will be prefixed with the index of the choice.",
+                            "description": "If true, inline and list style choices will be prefixed with the index of the choice.",
                             "default": true
                         }
                     }
@@ -1138,7 +1174,7 @@
                                 "synonyms": {
                                     "type": "array",
                                     "title": "Synonyms",
-                                    "description": "the list of synonyms to recognize in addition to the value. This is optional.",
+                                    "description": "The list of synonyms to recognize in addition to the value. This is optional.",
                                     "items": {
                                         "type": "string"
                                     }
@@ -1169,10 +1205,10 @@
                 }
             ]
         },
-        "Microsoft.DebugBreak": {
-            "$role": "unionType(Microsoft.IDialog)",
-            "title": "Debugger Break Step",
-            "description": "If debugger is attached, do a debugger break at this point",
+        "Microsoft.ConversationUpdateActivityRule": {
+            "$role": "unionType(Microsoft.IRule)",
+            "title": "ConversationUpdateActivity Rule",
+            "description": "This defines the steps to take when an ConversationUpdate activity is received",
             "type": "object",
             "properties": {
                 "$type": {
@@ -1180,7 +1216,7 @@
                     "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.DebugBreak"
+                    "const": "Microsoft.ConversationUpdateActivityRule"
                 },
                 "$copy": {
                     "title": "$copy",
@@ -1198,6 +1234,195 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
+                },
+                "constraint": {
+                    "$role": "expression",
+                    "title": "Constraint",
+                    "description": "Optional constraint to which must be met for this rule to fire",
+                    "examples": [
+                        "user.vip == true"
+                    ],
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "description": "Sequence of steps or dialogs to execute",
+                    "items": {
+                        "$type": "Microsoft.IDialog",
+                        "$ref": "#/definitions/Microsoft.IDialog"
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\$": {
+                    "type": "string"
+                }
+            },
+            "anyOf": [
+                {
+                    "title": "Reference",
+                    "required": [
+                        "$copy"
+                    ]
+                },
+                {
+                    "title": "Type",
+                    "required": [
+                        "steps",
+                        "$type"
+                    ]
+                }
+            ]
+        },
+        "Microsoft.DateTimeInput": {
+            "$role": "unionType(Microsoft.IDialog)",
+            "title": "DateTimeInput Dialog",
+            "description": "This represents a dialog which gathers Date or Time or DateTime from the user",
+            "type": "object",
+            "properties": {
+                "$type": {
+                    "title": "$type",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+                    "const": "Microsoft.DateTimeInput"
+                },
+                "$copy": {
+                    "title": "$copy",
+                    "description": "Copy the definition by id from a .dialog file.",
+                    "type": "string",
+                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
+                },
+                "$id": {
+                    "title": "$id",
+                    "description": "Inline id for reuse of an inline definition",
+                    "type": "string",
+                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
+                },
+                "$designer": {
+                    "title": "$designer",
+                    "type": "object",
+                    "description": "Extra information for the Bot Framework Designer."
+                },
+                "property": {
+                    "$role": "memoryPath",
+                    "title": "Property",
+                    "description": "This is that will be passed in as InputProperty and also set as the OutputProperty",
+                    "examples": [
+                        "value.birthday",
+                        "user.name"
+                    ],
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
+                },
+                "inputBindings": {
+                    "type": "object",
+                    "title": "Input Bindings",
+                    "description": "This defines properties which be passed as arguments to this dialog",
+                    "examples": [
+                        "value.birthday"
+                    ],
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "outputBinding": {
+                    "$role": "memoryPath",
+                    "title": "Output Property binding",
+                    "description": "This is the property which the EndDialog(result) will be set to when EndDialog() is called",
+                    "examples": [
+                        "value.birthday"
+                    ],
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
+                },
+                "prompt": {
+                    "$type": "Microsoft.IActivityTemplate",
+                    "title": "Initial Prompt",
+                    "description": "The message to send to as prompt for this input.",
+                    "examples": [
+                        "What is your birth date?"
+                    ],
+                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
+                },
+                "unrecognizedPrompt": {
+                    "$type": "Microsoft.IActivityTemplate",
+                    "title": "Unrecognized Prompt",
+                    "description": "The message to send if the last input is not recognized.",
+                    "examples": [
+                        "Let's try again. What is your birth date?"
+                    ],
+                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
+                },
+                "invalidPrompt": {
+                    "$type": "Microsoft.IActivityTemplate",
+                    "title": "Invalid Prompt",
+                    "description": "The message to send to when then input was not valid for the input type.",
+                    "examples": [
+                        "No date was recognized"
+                    ],
+                    "$ref": "#/definitions/Microsoft.IActivityTemplate"
+                },
+                "maxTurnCount": {
+                    "type": "integer",
+                    "title": "Max Turn Count",
+                    "description": "The max retry count for this prompt.",
+                    "default": 2147483647,
+                    "examples": [
+                        3
+                    ]
+                },
+                "validations": {
+                    "type": "array",
+                    "title": "Validation Expressions",
+                    "description": "Expressions to validate an input.",
+                    "items": {
+                        "$role": "expression",
+                        "type": "string",
+                        "description": "String must contain an expression."
+                    }
+                },
+                "value": {
+                    "$role": "expression",
+                    "title": "Value",
+                    "description": "The expression that you evaluated for input.",
+                    "type": "string"
+                },
+                "defaultValue": {
+                    "$role": "expression",
+                    "title": "Default Value",
+                    "description": "Value to return if the value expression can't be evaluated.",
+                    "type": "string"
+                },
+                "alwaysPrompt": {
+                    "type": "boolean",
+                    "title": "Always Prompt",
+                    "description": "If set to true this will always prompt the user regardless if you already have the value or not.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "allowInterruptions": {
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
+                    "title": "Allow Interruptions",
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "default": "never",
+                    "examples": [
+                        "notRecognized"
+                    ]
+                },
+                "defaultLocale": {
+                    "type": "string",
+                    "title": "Default Locale",
+                    "description": "The prompts default locale that should be recognized.",
+                    "default": "en-us"
                 }
             },
             "additionalProperties": false,
@@ -1400,7 +1625,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ChangeType": {
+                "changeType": {
                     "type": "string",
                     "title": "Change Type",
                     "description": "The change type to apply to current dialog",
@@ -1412,7 +1637,7 @@
                         "ReplaceSequence"
                     ]
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -1438,8 +1663,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ChangeType",
-                        "Steps",
+                        "changeType",
+                        "steps",
                         "$type"
                     ]
                 }
@@ -1482,8 +1707,10 @@
                         {
                             "enum": [
                                 "beginDialog",
-                                "consultDialog",
+                                "resumeDialog",
+                                "repromptDialog",
                                 "cancelDialog",
+                                "endDialog",
                                 "activityReceived",
                                 "recognizedIntent",
                                 "unknownIntent",
@@ -1765,7 +1992,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ListProperty": {
+                "listProperty": {
                     "$role": "expression",
                     "title": "ListProperty",
                     "description": "Expression to evaluate.",
@@ -1774,7 +2001,7 @@
                     ],
                     "type": "string"
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -1783,7 +2010,7 @@
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
                 },
-                "IndexProperty": {
+                "indexProperty": {
                     "$role": "memoryPath",
                     "title": "Index Property",
                     "description": "The memory path which refers to the index of the item",
@@ -1791,7 +2018,7 @@
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$"
                 },
-                "ValueProperty": {
+                "valueProperty": {
                     "$role": "memoryPath",
                     "title": "Value Property",
                     "description": "The memory path which refers to the value of the item",
@@ -1816,8 +2043,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ListProperty",
-                        "Steps",
+                        "listProperty",
+                        "steps",
                         "$type"
                     ]
                 }
@@ -1853,7 +2080,7 @@
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
                 },
-                "ListProperty": {
+                "listProperty": {
                     "$role": "expression",
                     "title": "ListProperty",
                     "description": "Expression to evaluate.",
@@ -1862,7 +2089,7 @@
                     ],
                     "type": "string"
                 },
-                "Steps": {
+                "steps": {
                     "type": "array",
                     "title": "Steps",
                     "description": "Steps to execute",
@@ -1871,13 +2098,13 @@
                         "$ref": "#/definitions/Microsoft.IDialog"
                     }
                 },
-                "PageSize": {
+                "pageSize": {
                     "type": "integer",
                     "title": "Page Size",
                     "description": "The page size",
                     "default": 10
                 },
-                "ValueProperty": {
+                "valueProperty": {
                     "$role": "memoryPath",
                     "title": "Value Property",
                     "description": "The memory path which refers to the value of the item",
@@ -1902,8 +2129,8 @@
                 {
                     "title": "Type",
                     "required": [
-                        "ListProperty",
-                        "Steps",
+                        "listProperty",
+                        "steps",
                         "$type"
                     ]
                 }
@@ -1982,17 +2209,17 @@
                     "title": "Http headers",
                     "description": "Http headers to include with the HTTP request (supports data binding)"
                 },
-                "responseTypes": {
+                "responseType": {
                     "type": "string",
-                    "title": "Response Types",
+                    "title": "Response Type",
                     "description": "Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.",
                     "enum": [
-                        "none",
-                        "json",
-                        "activity",
-                        "activities"
+                        "None",
+                        "Json",
+                        "Activity",
+                        "Activities"
                     ],
-                    "default": "json"
+                    "default": "Json"
                 }
             },
             "additionalProperties": false,
@@ -2012,7 +2239,7 @@
                     "title": "Type",
                     "required": [
                         "url",
-                        "entity",
+                        "method",
                         "$type"
                     ]
                 }
@@ -2043,7 +2270,7 @@
                 },
                 {
                     "title": "Microsoft.AttachmentInput",
-                    "description": "This represents a dialog which gathers a yes/no style responses",
+                    "description": "This represents a dialog which gathers an attachment such as image or music",
                     "$ref": "#/definitions/Microsoft.AttachmentInput"
                 },
                 {
@@ -2067,9 +2294,9 @@
                     "$ref": "#/definitions/Microsoft.ConfirmInput"
                 },
                 {
-                    "title": "Microsoft.DebugBreak",
-                    "description": "If debugger is attached, do a debugger break at this point",
-                    "$ref": "#/definitions/Microsoft.DebugBreak"
+                    "title": "Microsoft.DateTimeInput",
+                    "description": "This represents a dialog which gathers Date or Time or DateTime from the user",
+                    "$ref": "#/definitions/Microsoft.DateTimeInput"
                 },
                 {
                     "title": "Microsoft.DeleteProperty",
@@ -2138,7 +2365,7 @@
                 },
                 {
                     "title": "Microsoft.OAuthInput",
-                    "description": "This represents a dialog which gathers a decimal number in a specified range",
+                    "description": "This represents a dialog which gathers an OAuth token from user",
                     "$ref": "#/definitions/Microsoft.OAuthInput"
                 },
                 {
@@ -2240,6 +2467,11 @@
             "description": "Union of components which implement the IRule interface",
             "$role": "unionType",
             "oneOf": [
+                {
+                    "title": "Microsoft.ConversationUpdateActivityRule",
+                    "description": "This defines the steps to take when an ConversationUpdate activity is received",
+                    "$ref": "#/definitions/Microsoft.ConversationUpdateActivityRule"
+                },
                 {
                     "title": "Microsoft.EventRule",
                     "description": "Defines a rule for an event which is triggered by some source",
@@ -2767,7 +2999,7 @@
         },
         "Microsoft.NumberInput": {
             "$role": "unionType(Microsoft.IDialog)",
-            "title": "Number prompt",
+            "title": "NumberInput Dialog",
             "description": "This represents a dialog which gathers a decimal number in a specified range",
             "type": "object",
             "properties": {
@@ -2895,12 +3127,17 @@
                     ]
                 },
                 "allowInterruptions": {
-                    "type": "boolean",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
                     "title": "Allow Interruptions",
-                    "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": false,
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "default": "never",
                     "examples": [
-                        true
+                        "notRecognized"
                     ]
                 },
                 "outputFormat": {
@@ -2943,8 +3180,8 @@
         },
         "Microsoft.OAuthInput": {
             "$role": "unionType(Microsoft.IDialog)",
-            "title": "Number prompt",
-            "description": "This represents a dialog which gathers a decimal number in a specified range",
+            "title": "OAuthInput Dialog",
+            "description": "This represents a dialog which gathers an OAuth token from user",
             "type": "object",
             "properties": {
                 "$type": {
@@ -3005,10 +3242,23 @@
                 "connectionName": {
                     "type": "string",
                     "title": "Connection Name",
-                    "description": "The connection name set in Azure",
-                    "examples": [
-                        "msgraphconnection"
-                    ]
+                    "description": "The connection name configured in Azure Web App Bot OAuth settings."
+                },
+                "text": {
+                    "type": "string",
+                    "title": "Text",
+                    "description": "Text shown in the OAuth signin card."
+                },
+                "title": {
+                    "type": "string",
+                    "title": "Title",
+                    "description": "Title shown in the OAuth signin card."
+                },
+                "timeout": {
+                    "type": "integer",
+                    "title": "Timeout",
+                    "description": "Time out setting for the OAuth signin card.",
+                    "default": "900000"
                 }
             },
             "additionalProperties": false,
@@ -3521,7 +3771,7 @@
         },
         "Microsoft.TextInput": {
             "$role": "unionType(Microsoft.IDialog)",
-            "title": "Text prompt",
+            "title": "TextInput Dialog",
             "description": "This represents a dialog which gathers a text from the user",
             "type": "object",
             "properties": {
@@ -3548,6 +3798,32 @@
                     "title": "$designer",
                     "type": "object",
                     "description": "Extra information for the Bot Framework Designer."
+                },
+                "outputFormat": {
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "trim",
+                        "lowercase",
+                        "uppercase"
+                    ],
+                    "title": "Output Format",
+                    "description": "The TextInput output format.",
+                    "default": "none"
+                },
+                "allowInterruptions": {
+                    "default": "never",
+                    "type": "string",
+                    "enum": [
+                        "always",
+                        "never",
+                        "notRecognized"
+                    ],
+                    "title": "Allow Interruptions",
+                    "description": "Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized",
+                    "examples": [
+                        "notRecognized"
+                    ]
                 },
                 "property": {
                     "$role": "memoryPath",
@@ -3647,27 +3923,6 @@
                     "examples": [
                         false
                     ]
-                },
-                "allowInterruptions": {
-                    "type": "boolean",
-                    "title": "Allow Interruptions",
-                    "description": "If set to true this will always consult the parent dialog whether it will be interupt or not.",
-                    "default": false,
-                    "examples": [
-                        true
-                    ]
-                },
-                "outputFormat": {
-                    "type": "string",
-                    "enum": [
-                        "none",
-                        "trim",
-                        "lowercase",
-                        "uppercase"
-                    ],
-                    "title": "Output Format",
-                    "description": "The TextInput output format.",
-                    "default": "none"
                 }
             },
             "additionalProperties": false,

@@ -1,30 +1,42 @@
 # help
+-```Welcome to BFD controlling conversation flow. You can choose one of the following branching options to try: 
+        01 - IfCondition 
+        02 - SwitchCondition 
+        03 - ForeachStep 
+        04 - ForeachPageStep 
+        05 - Cancel 
+        06 - Endturn 
+        07 - RepeatDialog
+    You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accept an input. 
+    [Suggestions=IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog] 
+ ```
 
--`Welcome to BFD controlling conversation flow. You can choose one of the following branching options to try: You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accept an input. [Suggestions=IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog] 01 - IfCondition 02 - SwitchCondition 03 - ForeachStep 04 - ForeachPageStep 05 - Cancel 06 - Endturn 07 - RepeatDialog`<EOF>
-
-bfdactivity-953339
+# bfdactivity-953339
 -Hi. This Bot demonstrates different mechanisms to control conversion flow.
 
-bfdactivity-623448
+# bfdactivity-623448
 -Pushed dialog.ids into a list
 
-bfdactivity-638869
+# bfdactivity-638869
 -Pushed dialog.id into a list
 
-bfdactivity-164444
--You age is {user.age} which satisified the condition we evaluated
+# bfdactivity-164444
+-Your age is {user.age} which satisified the condition that was evaluated
 
-bfdactivity-619321
--You age is {user.age} which did not satisfy the condition
+# bfdactivity-619321
+-Your age is {user.age} which did not satisfy the condition that we evaluated
 
-bfdactivity-097130
+# bfdactivity-097130
 -You selected {user.name}
 
-bfdactivity-040464
--This is the logic inside the \"Susan\" switch block.
+# bfdactivity-040464
+-This is the logic inside the "Susan" switch block.
 
-bfdactivity-230206
--This is the logic inside the \"Nick\" switch block.
+# bfdactivity-230206
+-This is the logic inside the "Nick" switch block.
 
-bfdactivity-604251
--This is the logic inside the \"Tom\" switch block.
+# bfdactivity-604251
+-This is the logic inside the "Tom" switch block.
+
+# bfdactivity-859266
+- Welcome to Controlling Conversation Sample Bot.

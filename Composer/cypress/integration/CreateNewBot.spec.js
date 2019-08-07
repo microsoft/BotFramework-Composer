@@ -6,8 +6,8 @@ context('Creating a new bot', () => {
   });
 
   it('can create a new bot', () => {
-    cy.getByText('New').click();
-    cy.getByText('New Bot').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+    cy.get('[data-testid="homePage-ToolBar-New"]').click();
     cy.get('input[data-testid="Create from scratch"]').click();
     cy.get('button[data-testid="NextStepButton"]').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
@@ -18,8 +18,7 @@ context('Creating a new bot', () => {
   });
 
   it('can create a bot from the ToDo template', () => {
-    cy.getByText('New').click();
-    cy.getByText('New Bot').click();
+    cy.get('[data-testid="homePage-ToolBar-New"]').click();
     cy.get('input[data-testid="Create from template"]').click({ force: true });
     cy.get('[data-testid="ToDoBot"]').click();
     cy.get('button[data-testid="NextStepButton"]').click();

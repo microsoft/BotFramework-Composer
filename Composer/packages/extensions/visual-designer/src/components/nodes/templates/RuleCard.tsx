@@ -1,10 +1,12 @@
-import React from 'react';
-import { Icon } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { ConceptLabels } from 'shared-menus';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../shared/NodeMenu';
 import { ObiTypes } from '../../../shared/ObiTypes';
-import { normalizeObiStep } from '../../../transformers/helpers/elementBuilder';
+import { normalizeObiStep } from '../../../shared/elementBuilder';
 import { getElementColor } from '../../../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';
 
@@ -19,59 +21,96 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, focusedId, onEvent }) => {
+export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
     return onEvent(NodeEventTypes.Focus, id);
   };
 
   const openNode = () => {
-    /**
-     * If it is currently selected, navigate to the Rule's steps. If there is only
-     * one Step and is a BeginDialog, navigate inside the BeginDialog.
-     *
-     * REF: https://github.com/microsoft/BotFramework-Composer/pull/326#pullrequestreview-245538064
-     */
+    return onEvent(NodeEventTypes.Expand, id);
+  };
+
+  const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
     if (directJumpDialog) {
-      return onEvent(NodeEventTypes.OpenLink, directJumpDialog);
-    } else {
-      return onEvent(NodeEventTypes.Expand, id);
+      return onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: directJumpDialog });
     }
   };
 
   const onCardBodyClick = () => {
-    if (focusedId === id) {
-      openNode();
-    } else {
-      focusNode();
-    }
-  };
-
-  const onCardNavClick = () => {
     openNode();
   };
+
+  let summary = '';
+  let trigger = '';
+  let dialog = null;
+
+  switch (data.$type) {
+    case ObiTypes.IntentRule:
+      if (data.intent) {
+        trigger = data.intent;
+      } else {
+        // Leave blank
+      }
+      break;
+
+    case ObiTypes.EventRule:
+      if (data.events && data.events.length) {
+        trigger = formatMessage(
+          `{event} {
+          count, plural,
+             =0 {}
+          other {+#}
+        }`,
+          {
+            event: data.events[0],
+            count: data.events.length - 1,
+          }
+        );
+      } else {
+        // Leave blank
+      }
+      break;
+
+    case ObiTypes.UnknownIntentRule:
+      trigger = formatMessage('Unknown Intent');
+      break;
+
+    case ObiTypes.ConversationUpdateActivityRule:
+      trigger = formatMessage('Conversation Update');
+      break;
+  }
+
+  if (!data.steps) {
+    summary = formatMessage('No actions');
+  } else if (data.steps.length == 1) {
+    const step = normalizeObiStep(data.steps[0]);
+    if (step.$type === ObiTypes.BeginDialog) {
+      dialog = step.dialog;
+      summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
+    } else {
+      summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
+    }
+  } else {
+    summary = formatMessage('{count} actions', { count: data.steps.length });
+  }
 
   return (
     <IconCard
       themeColor={getElementColor(DialogGroup.RULE).expanded}
+      iconColor={getElementColor(DialogGroup.RULE).iconColor}
       corner={
-        <div style={{ display: 'flex' }}>
-          <Icon
-            style={{ lineHeight: '16px', fontSize: '16px' }}
-            onClick={e => {
-              e.stopPropagation();
-              onCardNavClick();
-            }}
-            iconName="OpenSource"
-            data-testid="OpenIcon"
-          />
-
+        <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />
         </div>
       }
       label={label}
-      icon="MessageBot"
+      trigger={trigger}
+      summary={summary}
+      childDialog={dialog}
+      icon="Play"
       onClick={onCardBodyClick}
+      onChildDialogClick={openChildDialog}
     />
   );
 };

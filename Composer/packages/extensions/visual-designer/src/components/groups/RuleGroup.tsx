@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 // eslint-disable-next-line no-unused-vars
@@ -17,37 +19,44 @@ export class RuleGroup extends React.Component<NodeProps> {
   static defaultProps = defaultNodeProps;
   containerElement;
 
-  propagateBoundary() {
+  propagateBoundary(): void {
     if (!this.containerElement) return;
 
     const { scrollWidth, scrollHeight } = this.containerElement;
     this.props.onResize(new Boundary(scrollWidth, scrollHeight));
   }
 
-  renderRule(rule) {
-    const { focusedId, getLgTemplates, onEvent } = this.props;
-    const data = rule.json;
+  renderRule(rule, index: number): JSX.Element {
+    const { id, onEvent } = this.props;
+    const elementId = `${id}[${index}]`;
     return (
-      <NodeRenderer
-        id={rule.id}
-        data={data}
-        focusedId={focusedId}
-        getLgTemplates={getLgTemplates}
-        onEvent={onEvent}
-        onResize={() => {
-          this.propagateBoundary();
+      <div
+        key={elementId + 'block'}
+        css={{
+          width: RuleBlockWidth,
+          height: RuleBlockHeight,
+          boxSizing: 'border-box',
         }}
-      />
+      >
+        <NodeRenderer
+          id={elementId}
+          data={rule}
+          onEvent={onEvent}
+          onResize={() => {
+            this.propagateBoundary();
+          }}
+        />
+      </div>
     );
   }
 
-  render() {
+  render(): JSX.Element {
     const { data } = this.props;
     const rules = data.children || [];
 
     return (
       <div
-        style={{
+        css={{
           boxSizing: 'border-box',
           display: 'flex',
           flexWrap: 'wrap',
@@ -57,18 +66,7 @@ export class RuleGroup extends React.Component<NodeProps> {
           this.propagateBoundary();
         }}
       >
-        {rules.map(x => (
-          <div
-            key={x.id + 'block'}
-            style={{
-              width: RuleBlockWidth,
-              height: RuleBlockHeight,
-              boxSizing: 'border-box',
-            }}
-          >
-            {this.renderRule(x)}
-          </div>
-        ))}
+        {rules.map((x, i) => this.renderRule(x, i))}
       </div>
     );
   }

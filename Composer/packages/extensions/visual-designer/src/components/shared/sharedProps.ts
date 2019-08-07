@@ -1,21 +1,26 @@
-interface LgTemplate {
+export interface LgTemplate {
   Name: string;
   Body: string;
 }
 
+export interface EditorProps {
+  id: string;
+  data: any;
+  onEvent: (action, id) => object | void;
+}
 export interface NodeProps {
   id: string;
-  data: { [key: string]: any };
-  focusedId: string;
-  getLgTemplates: (id: string, templateName: string) => Promise<LgTemplate[]>;
-  onEvent: (action, id) => object | void;
+  data: any;
+  focused?: boolean;
+  onEvent: (action, id, ...rest) => object | void;
   onResize: (action?, id?) => object | void;
+
+  isRoot?: boolean;
 }
 
 export const defaultNodeProps = {
   id: '',
   data: {},
-  focusedId: '',
   onEvent: () => {},
   onResize: () => {},
 };

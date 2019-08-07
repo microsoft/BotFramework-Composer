@@ -21,23 +21,20 @@ describe('<RuleCard />', () => {
   afterEach(cleanup);
   describe('focusedId is equal to id', () => {
     beforeEach(() => {
-      focusedId = id = 'a';
+      focusedId = id = 'steps[0]';
     });
 
     describe('data has no steps', () => {
       beforeEach(() => {
         data = {};
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
-      it('renders openIcon & openIcon can be clicked', async () => {
+      it(`shouldn't render openIcon`, async () => {
         const { findByTestId } = renderResult;
-        const openIcon = await findByTestId('OpenIcon');
-
-        expect(openIcon).toBeTruthy();
-
-        fireEvent.click(openIcon);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
+        expect(findByTestId('OpenIcon')).rejects.toThrow();
       });
 
       it('should trigger open node function when id = focusedId', async () => {
@@ -54,11 +51,13 @@ describe('<RuleCard />', () => {
           steps: [
             {
               $type: 'Microsoft.BeginDialog',
-              dialog: 'Hi! I\'m a ToDo bot. Say "add a todo named first" to get started.',
+              dialog: 'CalleeDialog',
             },
           ],
         };
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it('renders openIcon & openIcon can be clicked', async () => {
@@ -68,18 +67,25 @@ describe('<RuleCard />', () => {
         expect(openIcon).toBeTruthy();
 
         fireEvent.click(openIcon);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenDialog, { caller: id, callee: 'CalleeDialog' }]]);
       });
 
       it('should trigger open node function when id = focusedId', async () => {
         const { findByTestId } = renderResult;
         const card = await findByTestId('IconCard');
+        const openIcon = await findByTestId('OpenIcon');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        fireEvent.click(openIcon);
+
+        expect(clickResults.onEvent).toEqual([
+          [NodeEventTypes.Expand, id],
+          [NodeEventTypes.OpenDialog, { caller: id, callee: 'CalleeDialog' }],
+        ]);
       });
     });
   });
+
   describe('focusedId is not equal to id', () => {
     beforeEach(() => {
       focusedId = 'b';
@@ -89,16 +95,19 @@ describe('<RuleCard />', () => {
     describe('data has no steps', () => {
       beforeEach(() => {
         data = {};
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
-      it('renders openIcon & openIcon can be clicked', async () => {
+      it(`shouldn't render openIcon & IconCard can be clicked`, async () => {
         const { findByTestId } = renderResult;
-        const openIcon = await findByTestId('OpenIcon');
+        expect(findByTestId('OpenIcon')).rejects.toThrow();
 
-        expect(openIcon).toBeTruthy();
+        const card = await findByTestId('IconCard');
+        expect(card).toBeTruthy();
 
-        fireEvent.click(openIcon);
+        fireEvent.click(card);
         expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
 
@@ -107,20 +116,23 @@ describe('<RuleCard />', () => {
         const card = await findByTestId('IconCard');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Focus, id]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
     });
+
     describe('data has steps', () => {
       beforeEach(() => {
         data = {
           steps: [
             {
               $type: 'Microsoft.BeginDialog',
-              dialog: 'Hi! I\'m a ToDo bot. Say "add a todo named first" to get started.',
+              dialog: 'CalleeDialog',
             },
           ],
         };
-        renderResult = render(<RuleCard data={data} id={id} focusedId={focusedId} label={label} onEvent={onEvent} />);
+        renderResult = render(
+          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+        );
       });
 
       it('renders openIcon & openIcon can be clicked', async () => {
@@ -130,7 +142,7 @@ describe('<RuleCard />', () => {
         expect(openIcon).toBeTruthy();
 
         fireEvent.click(openIcon);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenLink, data.steps[0]['dialog']]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.OpenDialog, { caller: id, callee: 'CalleeDialog' }]]);
       });
 
       it('should trigger open node function when id != focusedId', async () => {
@@ -138,7 +150,7 @@ describe('<RuleCard />', () => {
         const card = await findByTestId('IconCard');
 
         fireEvent.click(card);
-        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Focus, id]]);
+        expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
     });
   });

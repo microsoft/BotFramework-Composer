@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
@@ -9,16 +11,17 @@ import {
   BeginDialog,
   ReplaceDialog,
   UnknownIntentRule,
+  ConversationUpdateActivityRule,
   EventRule,
   IfCondition,
   SwitchCondition,
   ActivityRenderer,
   Foreach,
+  ChoiceInput,
 } from '../nodes/index';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from './sharedProps';
-import './NodeRenderer.css';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -32,37 +35,48 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
+  [ObiTypes.ConversationUpdateActivityRule]: ConversationUpdateActivityRule,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
+  [ObiTypes.ChoiceInput]: ChoiceInput,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
-function chooseRendererByType($type) {
+function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
   const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
   return renderer;
 }
 
-export class NodeRenderer extends React.Component<NodeProps, {}> {
-  static defaultProps = defaultNodeProps;
-  containerRef = React.createRef();
+const nodeBorderStyle = css`
+  outline: 2px solid grey;
+`;
 
-  render() {
-    const { id, data, focusedId, onEvent, onResize, getLgTemplates } = this.props;
-    const ChosenRenderer = chooseRendererByType(data.$type);
-    return (
-      <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': focusedId === id })}>
-        <ChosenRenderer
-          id={id}
-          data={data}
-          focusedId={focusedId}
-          onEvent={onEvent}
-          onResize={size => {
-            onResize(size, 'node');
-          }}
-          getLgTemplates={getLgTemplates}
-        />
-      </div>
-    );
-  }
-}
+export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+  const ChosenRenderer = chooseRendererByType(data.$type);
+
+  const { focusedId } = useContext(NodeRendererContext);
+  const nodeFocused = focusedId === id;
+
+  return (
+    <div
+      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
+      css={css`
+        display: inline-block;
+        position: relative;
+        ${nodeFocused && nodeBorderStyle}
+      `}
+    >
+      <ChosenRenderer
+        id={id}
+        data={data}
+        focused={nodeFocused}
+        onEvent={onEvent}
+        onResize={size => {
+          onResize(size, 'node');
+        }}
+      />
+    </div>
+  );
+};
+
+NodeRenderer.defaultProps = defaultNodeProps;

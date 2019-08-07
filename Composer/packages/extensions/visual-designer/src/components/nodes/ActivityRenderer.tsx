@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
-// eslint-disable-next-line
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeColors } from '../../shared/elementColors';
 import { DialogGroup } from '../../shared/appschema';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 
+import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
 
 const isAnonymousTemplateReference = activity => {
@@ -14,7 +15,9 @@ const isAnonymousTemplateReference = activity => {
 };
 
 export const ActivityRenderer: React.FC<NodeProps> = props => {
-  const { id, data, onEvent, getLgTemplates } = props;
+  const { getLgTemplates } = useContext(NodeRendererContext);
+
+  const { id, data, onEvent } = props;
   const [templateText, setTemplateText] = useState('');
 
   const updateTemplateText = async () => {
@@ -27,7 +30,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
       }
 
       const templateName = data.activity.slice(1, data.activity.length - 1);
-      const templates = await getLgTemplates('common', `${templateName}`);
+      const templates = getLgTemplates ? await getLgTemplates('common', `${templateName}`) : [];
       const [template] = templates.filter(template => {
         return template.Name === templateName;
       });
@@ -47,7 +50,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   return (
     <FormCard
       nodeColors={NodeColors[DialogGroup.RESPONSE]}
-      header={'Activity'}
+      header={getFriendlyName(data) || 'Activity'}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       icon="MessageBot"
       label={templateText}

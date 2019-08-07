@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { CollapsedEventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
@@ -9,13 +11,13 @@ const ElementHeight = CollapsedEventNodeSize.height;
 const ElementMarginX = EventNodeLayout.marginX;
 const ElementMarginY = EventNodeLayout.marginX;
 const maxBlockHeight = (ElementHeight + ElementMarginY) * 2;
-export const CollapsedRuleGroup = ({ count }) => {
-  const items: any[] = [];
+export const CollapsedRuleGroup = ({ count }): JSX.Element => {
+  const items: JSX.Element[] = [];
   for (let i = 0; i < count; i++) {
     items.push(
       <div
         key={i}
-        style={{
+        css={{
           width: ElementWidth,
           height: ElementHeight,
           background: getElementColor(DialogGroup.RULE).collapsed,
@@ -24,7 +26,5 @@ export const CollapsedRuleGroup = ({ count }) => {
       />
     );
   }
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', maxHeight: maxBlockHeight, overflow: 'hidden' }}>{items}</div>
-  );
+  return <div css={{ display: 'flex', flexWrap: 'wrap', maxHeight: maxBlockHeight, overflow: 'hidden' }}>{items}</div>;
 };

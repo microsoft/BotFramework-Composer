@@ -11,19 +11,19 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.visit(Cypress.env('COMPOSER_URL') + '/language-understanding/ToDoLuisBot');
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
     cy.get('[data-testid="LUEditor"]').within(() => {
       cy.getAllByText('ToDoLuisBot').should('exist');
     });
 
     cy.route('POST', '/api/projects/opened/luFiles/publish', 'fixture:luPublish/success').as('publish');
 
-    cy.getByText('Connect').click();
+    cy.getByText('Start Bot').click();
     cy.get('[data-testid="ProjectNameInput"]').type('MyProject');
     cy.get('[data-testid="EnvironmentInput"]').type('composer');
     cy.get('[data-testid="AuthoringKeyInput"]').type('0d4991873f334685a9686d1b48e0ff48');
     cy.getByText('Publish').click();
-    cy.getByText('Reload').should('exist');
+    cy.getByText('Restart Bot').should('exist');
     cy.getByText('Test in Emulator').should('exist');
 
     cy.route({
@@ -32,7 +32,7 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/error',
     });
-    cy.getByText('Reload').click();
+    cy.getByText('Restart Bot').click();
     cy.getByText('Try again').click();
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
     cy.getByText('Publish').click();

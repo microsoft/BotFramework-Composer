@@ -13,15 +13,17 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
-import { LGParser } from 'botbuilder-lg';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { Store } from '../../store/index';
+import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
+import { BASEPATH } from '../../constants';
+import { StoreContext } from '../../store';
+import * as lgUtil from '../../utils/lgUtil';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
@@ -33,10 +35,9 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (lodash.isEmpty(lgFile) === false) {
-      const parseResult = LGParser.TryParse(lgFile.content);
-
-      if (parseResult.isValid) {
-        const allTemplates = parseResult.templates.map((template, templateIndex) => {
+      const diagnostics = lodash.get(lgFile, 'diagnostics', []);
+      if (lgUtil.isValid(diagnostics) === true) {
+        const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
           return {
             ...template,
             index: templateIndex,
@@ -57,6 +58,17 @@ export default function TableView(props) {
           }, []);
           setTemplates(dialogsReferenceThisTemplate);
         }
+      } else {
+        const errorMsg = lgUtil.combineMessage(diagnostics);
+        const errorTitle = formatMessage('There was a problem parsing an LG template.');
+        OpenConfirmModal(errorTitle, errorMsg, {
+          style: DialogStyle.Console,
+          confirmBtnText: formatMessage('Edit'),
+        }).then(res => {
+          if (res) {
+            props.onEdit();
+          }
+        });
       }
     }
   }, [lgFile, activeDialog]);
@@ -64,28 +76,28 @@ export default function TableView(props) {
   function navigateToDialog(id) {
     clearNavHistory();
     navTo(`${id}#`);
-    navigate('/');
+    navigate(BASEPATH);
   }
 
   const getTemplatesMoreButtons = (item, index) => {
     const buttons = [
       {
         key: 'edit',
-        name: 'Edit',
+        name: formatMessage('Edit'),
         onClick: () => {
           props.onEdit(templates[index]);
         },
       },
       {
         key: 'delete',
-        name: 'Delete',
+        name: formatMessage('Delete'),
         onClick: () => {
           onRemoveTemplate(index);
         },
       },
       {
         key: 'copy',
-        name: 'Make a copy',
+        name: formatMessage('Make a copy'),
         onClick: () => {
           onCopyTemplate(index);
         },
@@ -293,7 +305,6 @@ export default function TableView(props) {
 
 TableView.propTypes = {
   file: PropTypes.object,
-  onChange: PropTypes.func,
   activeDialog: PropTypes.object,
   onEdit: PropTypes.func,
 };

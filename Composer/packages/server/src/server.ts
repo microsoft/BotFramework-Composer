@@ -8,6 +8,8 @@ import { apiRouter } from './router/api';
 
 const app: Express = express();
 
+const BASEURL = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
@@ -15,26 +17,25 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(express.static(path.join(__dirname, './public')));
-
+app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
 app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/test', function(req: Request, res: Response) {
+app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
   res.send('fortest');
 });
 
-app.use('/api', apiRouter);
+app.use(`${BASEURL}/api`, apiRouter);
 
-app.use(function(err: Error, req: Request, res: Response, next: NextFunction) {
+app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   if (err) {
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 });
 
-app.get('*', function(req, res, next) {
+app.get('*', function(req, res, _next) {
   res.sendFile(path.resolve(__dirname, './public/index.html'));
 });
 

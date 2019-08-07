@@ -1,98 +1,118 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-07-03T06:49:45.210Z",
+    "updatedAt": "2019-07-16T18:48:58.963Z",
+    "id": "122121"
+  },
   "autoEndDialog": true,
-  "steps": [
+  "$schema": "../../app.schema",
+  "rules": [
     {
-      "$type": "Microsoft.ChoiceInput",
-      "property": "user.name",
-      "choices": [
-        {
-          "value": "Susan"
-        },
-        {
-          "value": "Nick"
-        },
-        {
-          "value": "Tom"
-        }
-      ],
-      "appendChoices": "true",
-      "defaultLocale": "en-us",
-      "style": "List",
-      "choiceOptions": {
-        "inlineSeparator": ", ",
-        "inlineOr": " or ",
-        "inlineOrMore": ", or ",
-        "includeNumbers": true
-      },
-      "recognizerOptions": {
-        "noValue": false,
-        "noAction": false
-      },
+      "$type": "Microsoft.EventRule",
       "$designer": {
-        "createdAt": "2019-07-04T19:56:49.850Z",
-        "updatedAt": "2019-07-04T19:56:49.855Z",
-        "id": "699003"
-      }
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "$designer": {
-        "id": "097130",
-        "updatedAt": "2019-07-04T19:57:08.860Z"
+        "id": "050101",
+        "updatedAt": "2019-07-22T07:46:06.571Z"
       },
-      "activity": "[bfdactivity-097130]"
-    },
-    {
-      "$type": "Microsoft.SwitchCondition",
-      "condition": "user.name",
-      "cases": [
+      "events": ["beginDialog"],
+      "steps": [
         {
-          "value": "Susan",
-          "steps": [
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "createdAt": "2019-07-04T19:56:49.850Z",
+            "updatedAt": "2019-07-16T18:52:37.253Z",
+            "id": "699003"
+          },
+          "prompt": "Who are your?",
+          "property": "user.name",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "never",
+          "outputFormat": "value",
+          "choices": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "040464",
-                "updatedAt": "2019-07-04T19:57:28.583Z"
-              },
-              "activity": "[bfdactivity-040464]"
+              "value": "Susan"
+            },
+            {
+              "value": "Nick"
+            },
+            {
+              "value": "Tom"
             }
-          ]
+          ],
+          "appendChoices": "true",
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false,
+            "noAction": false
+          }
         },
         {
-          "value": "Nick",
-          "steps": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "230206",
-                "updatedAt": "2019-07-04T19:58:22.053Z"
-              },
-              "activity": "[bfdactivity-230206]"
-            }
-          ]
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "097130",
+            "updatedAt": "2019-07-16T18:52:41.766Z"
+          },
+          "activity": "[bfdactivity-097130]"
         },
         {
-          "value": "Tom",
-          "steps": [
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "createdAt": "2019-07-16T18:52:43.605Z",
+            "updatedAt": "2019-07-16T18:52:45.887Z",
+            "id": "088447"
+          },
+          "condition": "user.name",
+          "cases": [
             {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "604251",
-                "updatedAt": "2019-07-04T19:58:34.719Z"
-              },
-              "activity": "[bfdactivity-604251]"
+              "value": "Susan",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "040464",
+                    "updatedAt": "2019-07-16T18:52:50.794Z"
+                  },
+                  "activity": "[bfdactivity-040464]"
+                }
+              ]
+            },
+            {
+              "value": "Nick",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "230206",
+                    "updatedAt": "2019-07-16T18:52:55.816Z"
+                  },
+                  "activity": "[bfdactivity-230206]"
+                }
+              ]
+            },
+            {
+              "value": "Tom",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "604251",
+                    "updatedAt": "2019-07-16T18:53:01.222Z"
+                  },
+                  "activity": "[bfdactivity-604251]"
+                }
+              ]
             }
           ]
         }
       ]
     }
-  ],
-  "$schema": "../../app.schema",
-  "$designer": {
-    "createdAt": "2019-07-03T06:49:45.210Z",
-    "updatedAt": "2019-07-03T06:49:45.249Z",
-    "id": "122121"
-  }
+  ]
 }

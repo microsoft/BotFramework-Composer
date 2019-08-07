@@ -8,12 +8,14 @@ import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
+import { BASEPATH } from './constants';
 import Routes from './router';
-import { Store } from './store/index';
+import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
-import { CreationFlow } from './CreationFlow/index';
+import { resolveToBasePath } from './utils/fileUtil';
+import { CreationFlow } from './CreationFlow';
 
-initializeIcons(/* optional base url */);
+initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef((props, ref) => <div css={content} {...props} ref={ref} />);
@@ -64,7 +66,7 @@ const topLinks = [
     underTest: true, // will delete
   },
   {
-    to: 'setting',
+    to: '/setting/',
     iconName: 'Settings',
     labelName: 'Settings',
     activeIfUrlContains: 'setting',
@@ -87,19 +89,26 @@ const bottomLinks = [
     labelName: 'About',
     activeIfUrlContains: '/about',
     exact: false,
-    underTest: true, // will delete
   },
 ];
 
 export function App() {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
+  const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
+  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   useEffect(() => {
-    fetchProject();
+    init();
   }, []);
+
+  async function init() {
+    const data = await fetchProject();
+    if (data && data.botName) {
+      setLuisConfig(botName);
+    }
+  }
 
   return (
     <Fragment>
@@ -123,7 +132,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}
@@ -141,7 +150,7 @@ export function App() {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={link.to}
+                  to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}

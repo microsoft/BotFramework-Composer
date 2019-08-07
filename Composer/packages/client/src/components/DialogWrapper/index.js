@@ -21,7 +21,7 @@ export function DialogWrapper(props) {
         styles: styles.modal,
       }}
     >
-      {isOpen && children}
+      {children}
     </Dialog>
   );
 }

@@ -32,14 +32,19 @@ const Colors = {
   // Composer Bright black text
   Cyan10: '#00B7C3',
   CyanLight: '#BFEAE9',
+
+  AcidGreen: '#B8D997',
+  DarkGreen: '#7ABD37',
+
   YellewGreen10: '#8CBD18',
   YellewGreen40: 'rgba(140, 189, 24, 0.4)',
 };
 
 export const NodeColors = {
   [DialogGroup.RULE]: {
-    expanded: Colors.CyanLight,
-    collapsed: Colors.Cyan10,
+    expanded: Colors.AcidGreen,
+    iconColor: Colors.DarkGreen,
+    collapsed: Colors.DarkGreen,
   },
   [DialogGroup.INPUT]: {
     themeColor: Colors.LightBlue,

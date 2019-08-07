@@ -225,7 +225,7 @@ export class TransformableView extends React.Component<TransformableViewProps, T
     });
   };
 
-  private handleScroll = (e: React.UIEvent): void => {
+  private handleScroll = (_e: React.UIEvent): void => {
     this.reRenderMiniMap();
   };
 
