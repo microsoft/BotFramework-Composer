@@ -70,7 +70,7 @@ export class LuPublisher {
         !luStatus[name] ||
         !luStatus[name].lastPublishTime ||
         !luStatus[name].lastUpdateTime ||
-        luStatus[name].lastUpdateTime > luStatus[name].lastPublishTime
+        luStatus[name].lastUpdateTime >= luStatus[name].lastPublishTime
       ) {
         result.push(file);
       }

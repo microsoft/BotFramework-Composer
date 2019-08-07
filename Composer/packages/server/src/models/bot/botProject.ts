@@ -251,14 +251,15 @@ export class BotProject {
     }
 
     const toUpdateLuId = unpublished.map(file => file.id);
-
-    try {
-      await this.luPublisher.publish(unpublished);
-      this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime', publishTime);
-    } catch (error) {
-      throw new Error(error);
+    if (publishTime >= this.luIndexer.lastPublishTime) {
+      try {
+        await this.luPublisher.publish(unpublished);
+        this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime', publishTime);
+        await this.reindex('dummy.lu');
+      } catch (error) {
+        throw new Error(error);
+      }
     }
-    await this.reindex('dummy.lu');
     return this.luIndexer.getLuFiles();
   };
 
