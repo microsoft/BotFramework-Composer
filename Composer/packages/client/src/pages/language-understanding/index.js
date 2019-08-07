@@ -1,19 +1,26 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
+import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { BASEPATH } from '../../constants';
 import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
+import {
+  ContentHeaderStyle,
+  ContentStyle,
+  flexContent,
+  actionButton,
+  contentEditor,
+} from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
 import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor } from './styles';
+import '../language-understanding/style.css';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
@@ -21,14 +28,13 @@ import { TestController } from './../../TestController';
 const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LUPage = props => {
-  const { actions, state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
-  const updateLuFile = actions.updateLuFile;
+  const { state, actions } = useContext(StoreContext);
+  const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const subPath = props['*'];
-  const activePath = subPath === '' ? '_all' : subPath;
+  const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   const luFile = luFiles.length && activeDialog && luFiles.find(luFile => luFile.id === activeDialog.id);
@@ -75,16 +81,17 @@ export const LUPage = props => {
     ];
   }, [dialogs]);
 
-  // if dialog not find, navigate to all. if all dialog selected, disable editMode
   useEffect(() => {
-    if (activePath === '_all') {
+    // if is root, disable editMode
+    if (isRoot) {
       setEditMode(false);
     }
 
-    if (!activeDialog && subPath && dialogs.length) {
+    //  if dialog not find, navigate to all
+    if (!isRoot && !activeDialog && dialogs.length) {
       navigate(mapNavPath('/language-understanding'));
     }
-  }, [activePath, dialogs]);
+  }, [subPath, dialogs]);
 
   function onSelect(id) {
     if (id === '_all') {
@@ -100,7 +107,7 @@ export const LUPage = props => {
       content: newContent,
     };
     try {
-      await updateLuFile(payload);
+      await actions.updateLuFile(payload);
       setErrorMsg('');
     } catch (error) {
       setErrorMsg(error.message);
@@ -134,7 +141,7 @@ export const LUPage = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             checked={editMode}
-            disabled={activePath === '_all'}
+            disabled={isRoot && editMode === false}
             onChange={() => setEditMode(!editMode)}
           />
         </div>
@@ -148,8 +155,7 @@ export const LUPage = props => {
                   onSelect(item.id);
                   ev.preventDefault();
                 }}
-                styles={projectWrapper}
-                selectedKey={activePath}
+                selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}
                 className={'dialogNavTree'}
                 data-testid={'dialogNavTree'}
@@ -161,7 +167,7 @@ export const LUPage = props => {
           {editMode ? (
             <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
           ) : (
-            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} errorMsg={errorMsg} />
           )}
         </div>
       </div>

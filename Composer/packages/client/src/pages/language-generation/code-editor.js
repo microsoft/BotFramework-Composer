@@ -13,7 +13,7 @@ import * as lgUtil from '../../utils/lgUtil';
 export default function CodeEditor(props) {
   const lgFile = props.file;
   const onChange = props.onChange;
-  const [diagnostics, setDiagnostics] = useState([]);
+  const [diagnostics, setDiagnostics] = useState(lodash.get(lgFile, 'diagnostics', []));
 
   const _onChange = value => {
     const diagnostics = lgUtil.check(value);

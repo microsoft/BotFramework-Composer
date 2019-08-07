@@ -8,14 +8,21 @@ import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
 import lodash from 'lodash';
 
+import * as luUtil from '../../utils/luUtil';
+
 export default function CodeEditor(props) {
   const luFile = props.file;
   const onChange = props.onChange;
-  const errorMsg = props.errorMsg;
+  const updateErrorMsg = props.errorMsg;
+  const diagnostics = lodash.get(luFile, 'diagnostics', []);
 
-  const isInvalid = !!errorMsg;
+  // diagnostics is load file error,
+  // updateErrorMsg is save file return error.
+  // TODO: validate at client like lg, when luParser is ready
+  const isInvalid = !luUtil.isValid(diagnostics) || updateErrorMsg !== '';
+  const errorMsg = `${luUtil.combineMessage(diagnostics)}\n ${updateErrorMsg}`;
+
   const _onChange = value => {
-    // TODO: validate at client, when luParser is ready
     onChange(value);
   };
 

@@ -6,3 +6,14 @@ export function getReferredFiles(luFiles, dialogs) {
     return false;
   });
 }
+
+export function isValid(diagnostics) {
+  return diagnostics.length === 0;
+}
+
+export function combineMessage(diagnostics) {
+  return diagnostics.reduce((msg, d) => {
+    msg += `${d.text}\n`;
+    return msg;
+  }, '');
+}

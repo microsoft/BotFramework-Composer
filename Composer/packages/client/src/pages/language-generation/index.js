@@ -8,7 +8,6 @@ import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
-import { checkLgContent } from '../../store/action/lg';
 import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
 import {
@@ -35,8 +34,7 @@ export const LGPage = props => {
   const [editMode, setEditMode] = useState(false);
 
   const subPath = props['*'];
-
-  const activePath = subPath === '' ? '_all' : subPath;
+  const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
@@ -85,12 +83,17 @@ export const LGPage = props => {
     ];
   }, [dialogs]);
 
-  // if dialog not find, navigate to all.
   useEffect(() => {
-    if (!activeDialog && subPath && dialogs.length) {
-      navigate(mapNavPath('language-generation'));
+    // if is not root, disable editMode
+    if (!isRoot) {
+      setEditMode(false);
     }
-  }, [activePath, dialogs]);
+
+    //  if dialog not find, navigate to all
+    if (!isRoot && !activeDialog && dialogs.length) {
+      navigate(mapNavPath('/language-generation'));
+    }
+  }, [subPath, dialogs]);
 
   function onSelect(id) {
     if (id === '_all') {
@@ -98,18 +101,9 @@ export const LGPage = props => {
     } else {
       navigate(mapNavPath(`language-generation/${id}`));
     }
-    setEditMode(false); // back to table view
   }
 
   async function onChange(newContent) {
-    try {
-      checkLgContent(newContent);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return;
-    }
-
     const payload = {
       id: lgFile.id,
       content: newContent,
@@ -127,6 +121,7 @@ export const LGPage = props => {
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
   function onTableViewWantEdit() {
+    navigate(mapNavPath('/language-generation'));
     setEditMode(true);
   }
 
@@ -150,7 +145,7 @@ export const LGPage = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             checked={editMode}
-            disabled={activePath !== '_all' && editMode === false}
+            disabled={!isRoot && editMode === false}
             onChange={() => setEditMode(!editMode)}
           />
         </div>
@@ -164,7 +159,7 @@ export const LGPage = props => {
                   onSelect(item.id);
                   ev.preventDefault();
                 }}
-                selectedKey={activePath}
+                selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}
                 className={'dialogNavTree'}
                 data-testid={'dialogNavTree'}
