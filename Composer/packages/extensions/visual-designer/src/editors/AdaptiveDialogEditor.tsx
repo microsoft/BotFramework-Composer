@@ -55,7 +55,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      {focusedEvent && <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />}
+      {activeEventData && <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };

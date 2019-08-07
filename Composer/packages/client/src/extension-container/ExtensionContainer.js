@@ -72,11 +72,11 @@ function ExtensionContainer() {
       return apiClient.apiCall('focusTo', { subPath: subPath });
     },
 
-    onFocuseEvent: subPath => {
+    onFocusEvent: subPath => {
       return apiClient.apiCall('onFocuseEvent', { subPath });
     },
 
-    onFocuseSteps: subPaths => {
+    onFocusSteps: subPaths => {
       return apiClient.apiCall('onFocuseSteps', { subPaths });
     },
 
