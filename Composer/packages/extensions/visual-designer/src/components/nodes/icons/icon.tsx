@@ -1,4 +1,7 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+
+import { iconCss } from './styles';
 
 const FriendSVG = fill => {
   return (
@@ -62,20 +65,7 @@ const svgByIconName = {
 
 export const Icon = ({ icon, color, size = 18, fill = 'white' }) =>
   svgByIconName[icon] ? (
-    <span
-      role="icon"
-      style={{
-        transform: `scale(${size / 18})`,
-        width: 18,
-        height: 18,
-        borderRadius: '37.5px',
-        backgroundColor: color || 'black',
-        textAlign: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <span role="icon" css={iconCss(size, color)}>
       {svgByIconName[icon](fill)}
     </span>
   ) : null;

@@ -1,4 +1,6 @@
-import React, { Fragment } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment } from 'react';
 
 const BAR_SIZE = 3;
 const TEXT_PADDING = 8;
@@ -13,7 +15,7 @@ export const HorizontalEdge = ({ length, color, text, x, y, dashed, directed }):
 
   return (
     <svg
-      style={{
+      css={{
         position: 'absolute',
         overflow: 'visible',
         left: x,
@@ -51,7 +53,7 @@ export const VerticalEdge = ({ length, color, text, x, y, dashed, directed }): J
 
   return (
     <svg
-      style={{
+      css={{
         position: 'absolute',
         overflow: 'visible',
         left: x,

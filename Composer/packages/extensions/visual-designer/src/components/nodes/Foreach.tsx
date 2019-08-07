@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
 import { transformForeach } from '../../transformers/transformForeach';
@@ -63,7 +65,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
 
   const { foreachNode, stepsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
         <DefaultRenderer key={foreachNode.id} id={foreachNode.id} data={foreachNode.data} onEvent={onEvent} />
       </OffsetContainer>

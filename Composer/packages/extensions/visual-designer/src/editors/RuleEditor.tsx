@@ -1,4 +1,6 @@
-import React, { useMemo, useRef } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useMemo, useRef } from 'react';
 import { isEqual } from 'lodash';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
@@ -43,7 +45,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
     <div
       className="rule-editor"
       data-testid="RuleEditor"
-      style={{
+      css={{
         position: 'relative',
         display: 'flex',
         width: '100%',
