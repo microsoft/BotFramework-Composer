@@ -1,14 +1,10 @@
 import { keys, replace, isEqual } from 'lodash';
 import { runBuild } from 'lubuild';
-// import { LuisAuthoring } from 'luis-apis';
-// import * as msRest from '@azure/ms-rest-js';
-// import { AzureClouds, AzureRegions } from 'luis-apis/typings/lib/models';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { LUFile, ILuisConfig, ILuisStatus } from './interface';
 
-//const ENDPOINT_KEYS = ['endpoint', 'endpointKey'];
 const GENERATEDFOLDER = 'generated';
 
 export class LuPublisher {
@@ -54,7 +50,6 @@ export class LuPublisher {
     }
 
     await this._copyDialogsToTargetFolder(config);
-    //return await this._updateStatus(config.authoringKey, publishTime);
   };
 
   public getUnpublisedFiles = async (files: LUFile[]) => {
@@ -107,7 +102,7 @@ export class LuPublisher {
     }
   };
 
-  //delete generated folder
+  //delete files in generated folder
   private async _deleteGenerated(path: string) {
     if (await this.storage.exists(path)) {
       const files = await this.storage.readDir(path);
@@ -200,12 +195,6 @@ export class LuPublisher {
 
     return luConfig;
   };
-
-  // private _getSettings = async () => {
-  //   const settingPath = this._getSettingPath(this.config);
-  //   if (settingPath === '') return null;
-  //   return await this._getJsonObject(settingPath);
-  // };
 
   private _getLuStatus = async () => {
     const luStatePath = await this._getLuStatusPath();
