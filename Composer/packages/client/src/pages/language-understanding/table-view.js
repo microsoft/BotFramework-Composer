@@ -208,7 +208,6 @@ export default function TableView(props) {
 }
 
 TableView.propTypes = {
-  onChange: PropTypes.func,
   activeDialog: PropTypes.object,
   onEdit: PropTypes.func,
 };

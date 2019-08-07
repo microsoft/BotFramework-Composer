@@ -4,18 +4,17 @@ import { useContext, useMemo, Fragment, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { navigate } from '@reach/router';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
-import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
 import { StoreContext } from '../../store';
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 
+import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton } from './styles';
-import Content from './content';
+import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor } from './styles';
+import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
@@ -25,21 +24,14 @@ export const LUPage = props => {
   const { actions, state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const updateLuFile = actions.updateLuFile;
-  const [textMode, setTextMode] = useState(false);
-  const [newContent, setNewContent] = useState(null);
-  const [luFile, setLuFile] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const subPath = props['*'];
   const activePath = subPath === '' ? '_all' : subPath;
   const activeDialog = dialogs.find(item => item.id === subPath);
 
-  useEffect(() => {
-    if (luFiles.length && activeDialog) {
-      setLuFile({
-        ...luFiles.find(luFile => luFile.id === activeDialog.id),
-      });
-    }
-  }, [luFiles, activeDialog]);
+  const luFile = luFiles.length && activeDialog && luFiles.find(luFile => luFile.id === activeDialog.id);
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
@@ -83,32 +75,18 @@ export const LUPage = props => {
     ];
   }, [dialogs]);
 
-  // if dialog not find, navigate to all. if all dialog selected, disable textMode
+  // if dialog not find, navigate to all. if all dialog selected, disable editMode
   useEffect(() => {
     if (activePath === '_all') {
-      setTextMode(false);
+      setEditMode(false);
     }
 
     if (!activeDialog && subPath && dialogs.length) {
       navigate(mapNavPath('/language-understanding'));
     }
-
-    setNewContent(null);
-  }, [activePath, dialogs, luFiles]);
-
-  const UIShowEditingToolBar = useMemo(() => {
-    return newContent !== null;
-  }, [newContent]);
-
-  const UIShowEditingAlert = useMemo(() => {
-    return newContent !== null;
-  }, [newContent]);
+  }, [activePath, dialogs]);
 
   function onSelect(id) {
-    if (UIShowEditingAlert) {
-      OpenAlertModal(formatMessage('You have unsaved changes on this page!'));
-      return;
-    }
     if (id === '_all') {
       navigate(mapNavPath('/language-understanding'));
     } else {
@@ -116,30 +94,16 @@ export const LUPage = props => {
     }
   }
 
-  function onChange(newContent) {
-    setNewContent(newContent);
-  }
-
-  function discardChanges() {
-    setLuFile({
-      ...luFiles.find(luFile => luFile.id === activeDialog.id),
-    });
-    setNewContent(null);
-  }
-
-  async function onSave() {
+  async function onChange(newContent) {
     const payload = {
       id: activeDialog.id, // current opened lu file
       content: newContent,
     };
     try {
       await updateLuFile(payload);
+      setErrorMsg('');
     } catch (error) {
-      const title = `StaticValidationError`;
-      const subTitle = error.message;
-      OpenAlertModal(title, subTitle, {
-        style: DialogStyle.Console,
-      });
+      setErrorMsg(error.message);
     }
   }
 
@@ -147,7 +111,7 @@ export const LUPage = props => {
   // Line
   function onTableViewWantEdit(template) {
     navigate(mapNavPath(`language-understanding/${template.fileId}`));
-    setTextMode(true);
+    setEditMode(true);
   }
 
   const toolbarItems = [
@@ -162,40 +126,16 @@ export const LUPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>User says..</div>
+        <div>{formatMessage('User says')}..</div>
         <div css={flexContent}>
-          {textMode && (
-            <Fragment>
-              <PrimaryButton
-                iconProps={{
-                  iconName: 'Save',
-                }}
-                split={true}
-                onClick={() => onSave()}
-                disabled={!UIShowEditingToolBar}
-                styles={{ root: { marginRight: '10px' } }}
-              >
-                {formatMessage('Save')}
-              </PrimaryButton>
-              <DefaultButton
-                iconProps={{
-                  iconName: 'Undo',
-                }}
-                onClick={() => discardChanges()}
-                disabled={!UIShowEditingToolBar}
-              >
-                {formatMessage('Discard changes')}
-              </DefaultButton>
-            </Fragment>
-          )}
           <Toggle
             className={'toggleEditMode'}
             css={actionButton}
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
-            checked={textMode}
+            checked={editMode}
             disabled={activePath === '_all'}
-            onChange={() => setTextMode(!textMode)}
+            onChange={() => setEditMode(!editMode)}
           />
         </div>
       </div>
@@ -217,13 +157,13 @@ export const LUPage = props => {
             </div>
           </Tree>
         </div>
-        <Content
-          file={luFile}
-          activeDialog={activeDialog}
-          onEdit={onTableViewWantEdit}
-          textMode={textMode}
-          onChange={onChange}
-        />
+        <div css={contentEditor}>
+          {editMode ? (
+            <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
+          ) : (
+            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+          )}
+        </div>
       </div>
     </Fragment>
   );

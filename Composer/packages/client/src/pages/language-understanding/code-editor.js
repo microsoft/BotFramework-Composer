@@ -1,40 +1,33 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useState, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { PropTypes } from 'prop-types';
 import { LgEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
 import lodash from 'lodash';
 
-import * as lgUtil from '../../utils/lgUtil';
-
 export default function CodeEditor(props) {
-  const lgFile = props.file;
+  const luFile = props.file;
   const onChange = props.onChange;
-  const [diagnostics, setDiagnostics] = useState([]);
+  const errorMsg = props.errorMsg;
 
+  const isInvalid = !!errorMsg;
   const _onChange = value => {
-    const diagnostics = lgUtil.check(value);
-    setDiagnostics(diagnostics);
-    if (lgUtil.isValid(diagnostics) === true) {
-      onChange(value);
-    }
+    // TODO: validate at client, when luParser is ready
+    onChange(value);
   };
 
-  const isInvalid = !lgUtil.isValid(diagnostics);
-  const errorMsg = lgUtil.combineMessage(diagnostics);
-
-  const fileId = lgFile && lgFile.id;
+  const fileId = luFile && luFile.id;
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(lgFile) === false ? (
+    return lodash.isEmpty(luFile) === false ? (
       <LgEditor
         options={{
           lineNumbers: 'on',
           minimap: 'on',
         }}
-        value={lgFile.content}
+        value={luFile.content}
         onChange={_onChange}
       />
     ) : (
@@ -60,13 +53,13 @@ export default function CodeEditor(props) {
           <br />
           <span>
             {formatMessage.rich(
-              'This text cannot be saved because there are errors in the LG syntax. Refer to the syntax documentation <a>here</a>.',
+              'This text cannot be saved because there are errors in the LU syntax. Refer to the syntax documentation <a>here</a>.',
               {
                 // eslint-disable-next-line react/display-name
                 a: ({ children }) => (
                   <a
                     key="a"
-                    href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md"
+                    href="https://github.com/microsoft/botframework-obi/blob/master/fileformats/lu/lu-file-format.md" // TODO: The document is old, valid intent start with double #, `## Greeting`
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -87,4 +80,5 @@ export default function CodeEditor(props) {
 CodeEditor.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
+  errorMsg: PropTypes.string,
 };
