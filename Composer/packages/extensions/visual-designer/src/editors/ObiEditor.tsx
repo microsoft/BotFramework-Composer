@@ -18,7 +18,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        handler = id => onFocusSteps([id]);
+        handler = id => onFocusSteps(id ? [id] : []);
         break;
       case NodeEventTypes.FocusEvent:
         handler = onFocusEvent;
