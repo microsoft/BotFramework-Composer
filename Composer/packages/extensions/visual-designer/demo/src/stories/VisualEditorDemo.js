@@ -15,7 +15,8 @@ export class VisualEditorDemo extends Component {
   state = {
     selectedFile: defaultFile,
     obiJson: ObiExamples[defaultFile],
-    focusPath: '',
+    focusedEvent: '',
+    focusedSteps: [],
   };
 
   constructor(props) {
@@ -26,7 +27,8 @@ export class VisualEditorDemo extends Component {
     this.setState({
       selectedFile: file,
       obiJson: copyJson(ObiExamples[file]),
-      focusPath: file,
+      focusedEvent: '',
+      focusedSteps: [],
     });
   }
 
@@ -35,15 +37,8 @@ export class VisualEditorDemo extends Component {
     this.setState({ obiJson: json });
   }
 
-  onFocus(id) {
-    console.log('focus node', id);
-    this.setState({
-      focusPath: this.state.selectedFile + id,
-    });
-  }
-
   render() {
-    const { selectedFile, obiJson, focusPath } = this.state;
+    const { selectedFile, obiJson, focusedEvent, focusedSteps } = this.state;
 
     return (
       <div className="ve-container">
@@ -80,26 +75,31 @@ export class VisualEditorDemo extends Component {
           <div className="block block--right">
             <VisualDesigner
               data={obiJson}
-              navPath={selectedFile}
-              focusPath={focusPath}
+              dialogId={selectedFile}
+              focusedEvent={focusedEvent}
+              focusedSteps={focusedSteps}
               shellApi={{
-                navDown: e => {
-                  console.log('navDown', e);
-                  this.onFocus(e);
-                },
                 navTo: e => {
                   console.log('navTo', e);
-                  this.onFocus(e);
                 },
-                focusTo: e => {
-                  console.log('focusTo', e);
-                  this.onFocus(e);
+                onFocusEvent: id => {
+                  console.log('onFocusEvent', id);
+                  this.setState({
+                    focusedEvent: id,
+                    focusedSteps: [],
+                  });
                 },
-              }}
-              onChange={json => {
-                this.setState({
-                  obiJson: json,
-                });
+                onFocusSteps: stepIds => {
+                  console.log('onFocusSteps', stepIds);
+                  this.setState({
+                    focusedSteps: stepIds,
+                  });
+                },
+                saveData: json => {
+                  this.setState({
+                    obiJson: json,
+                  });
+                },
               }}
             />
           </div>
