@@ -1,0 +1,70 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "SignInIntent": "(?i)sign in",
+      "HelpIntent": "(?i)help"
+    }
+  },
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "[WelcomeCard]",
+      "property": "user.ans"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "isMatch(user.ans, '(?i)cancel')",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[MissionCancel]"
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.RepeatDialog"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "SignInIntent",
+      "steps": [
+        "Initialization",
+        "EmailPage"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "HelpIntent",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:13:14.901Z",
+    "updatedAt": "2019-08-07T09:13:14.937Z",
+    "id": "648082"
+  }
+}

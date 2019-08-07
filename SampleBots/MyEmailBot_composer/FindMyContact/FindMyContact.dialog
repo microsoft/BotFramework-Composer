@@ -1,0 +1,63 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "steps": [
+    "DeleteContactInfo",
+    {
+      "$type": "Microsoft.SendActivity",
+      "activity": "OK! Let's Find Your Recipient. "
+    },
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "Please Type any part of Name of Your Recipient, or, You Can Type the whole Email Address.",
+      "property": "user.recipient"
+    },
+    {
+      "$type": "Microsoft.IfCondition",
+      "condition": "{not(contains(user.recipient, '@'))}",
+      "steps": [
+        "GetRecipientFromGraph",
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[ShowRecipient(user)]"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "{count(user.intentRecipient.value)} != 1",
+          "steps": [
+            {
+              "$type": "Microsoft.RepeatDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.intentRecipient.value[0].emailAddresses[0].address",
+          "property": "user.emailAddr"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Successfully Set the Email Address to be {user.emailAddr}. "
+        }
+      ],
+      "elseSteps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.recipient",
+          "property": "user.emailAddr"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Successfully Set the Email Address to be {user.emailAddr}. "
+        }
+      ]
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:21:48.648Z",
+    "updatedAt": "2019-08-07T09:21:48.687Z",
+    "id": "469850"
+  }
+}

@@ -1,0 +1,96 @@
+# WelcomeCard
+- ```
+[Herocard
+    title= Welcome to EmailBot! 
+    subtitle= Do you Want to Manage Your Emails Effectively?
+    text= I can Help Do Things like Checking, Replying, Forwarding and Sending Emails.
+    images= https://picsum.photos/300/200
+    buttons = Sign In | Help | Cancel]
+```
+
+# Showinboxchoice
+- ```
+    What do you want to do?
+    - Show me the 1st Email. 
+    - Show me the 2nd Email. 
+    - Show me the 3rd Email. 
+    - Next Page. 
+    - Last Page. 
+    - Go back. 
+```
+
+# ShowRecipient(user)
+- IF: {count(user.intentRecipient.value) == 1}
+  - Cool, I Find the Recipient You Want, it's {user.intentRecipient.value[0].displayName}.
+- ELSEIF: {less(count(user.intentRecipient.value), 0)}
+  - Emm, I didn't Find What you Need, Can You Try it Again ?
+- ELSEIF: {greater(count(user.intentRecipient.value), 1)}
+  - I Find Several People Satisfy Your Demand. The First Two People are {user.intentRecipient.value[0].displayName} and {user.intentRecipient.value[1].displayName}. Can you Name it More Specificly?
+- ELSE:
+  - Something Strange Happened.
+
+# EmailCard
+- ```
+[Herocard
+    title= Cool ! @{user.Info.displayName}, Nice to See You.  
+    text= Successfully Sign In! Now, Choose What You Want to Do.
+    images= https://picsum.photos/300/200
+    buttons = Show Inbox Emails | Show Sent Items | Send Emails]
+```
+# MissionCancel
+- OK, see you next time, @{user.Info.displayName}!
+- Let's do it when you are ready, @{user.Info.displayName}.
+- Emm, OK, see you, @{user.Info.displayName}.
+
+# help
+- I am an email bot, do you need any help? If you want to check your inbox, say "show inbox email" 
+
+# ShowEmailCard(x)
+- ```
+[adaptivecard
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "size": "Medium",
+                    "weight": "Bolder",
+                    "text": "@{x.subject}"
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "@{x.bodypreview}",
+                    "wrap": true,
+                    "maxLines": 10
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "View",
+            "url": "@{x.webLink}"
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}
+]
+```
+# EmailStatistics
+- OK, @{user.Info.displayName}, {toUpper('hi, i have checked your email.')} Total Number: {user.emailCount} Emails in {add(div(user.emailCount, user.itemsPerPage), 1)} Pages. 
+
+# PageOrdinalNumber
+- Let's See the Preview of Your {addOrdinal(user.pages+1)} Page Emails.
+
+# SentPageOrdinalNumber
+- This is the Preview of Your {addOrdinal(int(user.sentPages)+1)} Page Emails.

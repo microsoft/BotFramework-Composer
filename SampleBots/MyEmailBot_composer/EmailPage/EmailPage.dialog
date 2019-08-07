@@ -1,0 +1,52 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "ShowEmailIntent": "(?i)show inbox email",
+      "SendEmailIntent": "(?i)send email",
+      "SentItemsIntent": "(?i)show sent items"
+    }
+  },
+  "generator": "common.lg",
+  "steps": [
+    {
+      "$type": "Microsoft.TextInput",
+      "prompt": "[EmailCard]",
+      "property": "user.ans"
+    },
+    {
+      "$type": "Microsoft.RepeatDialog"
+    }
+  ],
+  "rules": [
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "ShowEmailIntent",
+      "steps": [
+        "ShowMyEmail"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "SentItemsIntent",
+      "steps": [
+        "ShowSentItems"
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "intent": "SendEmailIntent",
+      "steps": [
+        "SendMyEmail"
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:15:26.737Z",
+    "updatedAt": "2019-08-07T09:15:26.778Z",
+    "id": "209219"
+  }
+}

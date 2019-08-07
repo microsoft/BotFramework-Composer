@@ -1,0 +1,20 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.DeleteProperty",
+      "property": "user.subject"
+    },
+    {
+      "$type": "Microsoft.DeleteProperty",
+      "property": "user.sendContext"
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:17:56.712Z",
+    "updatedAt": "2019-08-07T09:17:56.735Z",
+    "id": "123044"
+  }
+}

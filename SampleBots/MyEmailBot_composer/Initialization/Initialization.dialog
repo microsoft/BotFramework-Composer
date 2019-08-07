@@ -1,0 +1,50 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "steps": [
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "3",
+      "property": "user.itemsPerPage"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "0",
+      "property": "user.pages"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "value": "0",
+      "property": "user.sentPages"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "property": "user.emailCount",
+      "value": "0"
+    },
+    {
+      "$type": "Microsoft.SetProperty",
+      "property": "user.sentItemsCount",
+      "value": "0"
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Clear",
+      "arrayProperty": "user.emails"
+    },
+    {
+      "$type": "Microsoft.EditArray",
+      "changeType": "Clear",
+      "arrayProperty": "user.sentItems"
+    },
+    "SignInToGraph",
+    "GetMyEmailFromGraph",
+    "GetSentItemsFromGraph"
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:21:40.506Z",
+    "updatedAt": "2019-08-07T09:21:40.562Z",
+    "id": "811347"
+  }
+}

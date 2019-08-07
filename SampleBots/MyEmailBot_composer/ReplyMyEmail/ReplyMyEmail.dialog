@@ -1,0 +1,65 @@
+{
+    "$schema": "../../../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+      "DeleteReplyInfo",
+      {
+        "$type": "Microsoft.SendActivity",
+        "activity": "OK! Let's Start To Reply this Email. "
+      },
+      {
+        "$type": "Microsoft.SetProperty",
+        "value": "concat('Re:',user.selectedEmail.subject)",
+        "property": "user.toSubject"
+      },
+      {
+        "$type": "Microsoft.TextInput",
+        "prompt": "OK, Please Enter the Content of Your Email to Reply.",
+        "property": "user.toContent"
+      },
+      {
+        "$type": "Microsoft.ConfirmInput",
+        "property": "dialog.addTime",
+        "prompt": "Do you Want to Add a Timestamp?",
+        "unrecognizedPrompt": "Please try again.",
+        "invalidPrompt": "Please input yes/no.",
+        "alwaysPrompt": true
+      },
+      {
+        "$type": "Microsoft.IfCondition",
+        "condition": "dialog.addTime",
+        "steps": [
+          {
+            "$type": "Microsoft.SetProperty",
+            "property": "user.toContent",
+            "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))"
+          }
+        ]
+      },
+      {
+        "$type": "Microsoft.ConfirmInput",
+        "property": "dialog.confirmed",
+        "prompt": "Are you Sure to Send this Email?",
+        "unrecognizedPrompt": "Please try again.",
+        "invalidPrompt": "Please input yes/no.",
+        "alwaysPrompt": true
+      },
+      {
+        "$type": "Microsoft.IfCondition",
+        "condition": "dialog.confirmed",
+        "steps": [
+          "ReplyMyEmailThroughGraph",
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Your Email has been Sent Succsessfully. "
+          }
+        ],
+        "elseSteps": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[MissionCancel]"
+          }
+        ]
+      }
+    ]
+  }

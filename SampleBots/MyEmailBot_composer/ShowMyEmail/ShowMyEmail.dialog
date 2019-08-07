@@ -1,0 +1,119 @@
+{
+    "$schema": "../../../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "autoEndDialog": false,
+    "generator": "common.lg",
+    "steps": [
+        "GetMyEmail",
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[EmailStatistics]"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "[PageOrdinalNumber]"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.emails[0].subject} . {length(user.emails[0].bodypreview)} words"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "{user.emails[2].subject} . {length(user.emails[2].bodypreview)} words"
+        },
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "property": "user.emailChoice",
+            "choices": [
+                {
+                    "value": "Show me the 1st Email. "
+                },
+                {
+                    "value": "Show me the 2nd Email. "
+                },
+                {
+                    "value": "Show me the 3rd Email. "
+                },
+                {
+                    "value": "Next Page. "
+                },
+                {
+                    "value": "Last Page. "
+                },
+                {
+                    "value": "Go back. "
+                }
+            ],
+            "prompt": "What do you want to do? ",
+            "style": "List",
+            "alwaysPrompt": true
+        },
+        {
+            "$type": "Microsoft.SwitchCondition",
+            "condition": "user.emailChoice",
+            "cases": [
+                {
+                    "value": "Show me the 1st Email. ",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.selectedEmail",
+                            "value": "user.emails[0]"
+                        },
+                        "ShowMyCurrentEmail"
+                    ]
+                },
+                {
+                    "value": "Show me the 2nd Email. ",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.selectedEmail",
+                            "value": "user.emails[1]"
+                        },
+                        "ShowMyCurrentEmail"
+                    ]
+                },
+                {
+                    "value": "Show me the 3rd Email. ",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "user.selectedEmail",
+                            "value": "user.emails[2]"
+                        },
+                        "ShowMyCurrentEmail"
+                    ]
+                },
+                {
+                    "value": "Next Page. ",
+                    "steps": [
+                        "ShowMyNextPage"
+                    ]
+                },
+                {
+                    "value": "Last Page. ",
+                    "steps": [
+                        "ShowMyLastPage"
+                    ]
+                },
+                {
+                    "value": "Go back. ",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.EndDialog"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Microsoft.RepeatDialog"
+        }
+        
+    ]
+}
