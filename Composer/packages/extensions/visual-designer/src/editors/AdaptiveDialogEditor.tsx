@@ -32,7 +32,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
     if (eventName === NodeEventTypes.Expand) {
       const selectedRulePath = eventData;
       setActiveEventId(selectedRulePath);
-      return onEvent(NodeEventTypes.Focus, selectedRulePath);
+      return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
     }
     return onEvent(eventName, eventData);
   };
@@ -48,7 +48,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeEventTypes.Focus, '');
+        onEvent(NodeEventTypes.FocusEvent, '');
       }}
     >
       {ruleGroup && (

@@ -12,11 +12,10 @@ formatMessage.setup({
 });
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
-  navPath,
-  focusPath,
+  dialogId,
+  focusedEvent,
+  focusedSteps,
   data: inputData,
-  currentDialog,
-  onChange,
   shellApi,
 }): JSX.Element => {
   const dataCache = useRef({});
@@ -30,32 +29,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     dataCache.current = inputData;
   }
 
-  /**
-   * Calculate focused node id from focusPath and navPath.
-   *  - input:  focusPath='AddToDo#', navPath='AddToDo#steps[0]'
-   *  - output: 'steps[0]'
-   *
-   *  - input:  focusPath = 'AddToDo#, navPath='AddToDo#'
-   *  - output: ''
-   */
-  const normalizeFocusedId = (focusPath, navPath): string => {
-    let id = focusPath;
-    if (id.indexOf(navPath) === 0) {
-      id = id.replace(navPath + '.', '');
-    }
-
-    if (id) {
-      return id;
-    }
-    return '';
-  };
-
   const data = dataCache.current;
-  const { navDown, focusTo, navTo, getLgTemplates, removeLgTemplate } = shellApi;
+  const { navTo, onFocusEvent, onFocusSteps, saveData, getLgTemplates, removeLgTemplate } = shellApi;
+
+  const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
 
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const [context, setContext] = useState({
-    focusedId: normalizeFocusedId(focusPath, navPath),
+    focusedId,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
@@ -63,22 +44,26 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   useEffect(() => {
     setContext({
       ...context,
-      focusedId: normalizeFocusedId(focusPath, navPath),
+      focusedId,
     });
-  }, [focusPath, navPath]);
+  }, [focusedEvent, focusedSteps]);
 
   return (
     <NodeRendererContext.Provider value={context}>
+      <div>
+        {dialogId}->{focusedEvent}->{focusedSteps}
+      </div>
       <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%' }}>
         <ObiEditor
-          key={navPath}
-          path={navPath}
+          key={dialogId}
+          path={dialogId}
           data={data}
-          isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
-          onSelect={x => focusTo(x ? '.' + x : '')}
-          onExpand={x => navDown('.' + x)}
+          focusedSteps={focusedSteps}
+          onFocusSteps={onFocusSteps}
+          focusedEvent={focusedEvent}
+          onFocusEvent={onFocusEvent}
           onOpen={(x, rest) => navTo(x + '#', rest)}
-          onChange={x => onChange(x)}
+          onChange={x => saveData(x)}
         />
       </div>
     </NodeRendererContext.Provider>
@@ -87,22 +72,23 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
 interface VisualDesignerProps {
   data: object;
-  focusPath: string;
-  navPath: string;
-  onChange: (x: any) => void;
+  dialogId: string;
+  focusedEvent: string;
+  focusedSteps: string[];
   shellApi: any;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 
 VisualDesigner.defaultProps = {
-  navPath: '.',
-  focusPath: '',
+  dialogId: '',
+  focusedEvent: '',
+  focusedSteps: [],
   data: {},
-  onChange: () => {},
   shellApi: {
-    navDown: () => {},
-    focusTo: () => {},
     navTo: () => {},
+    onFocusEvent: (eventId: string) => {},
+    onFocusSteps: (stepIds: string[]) => {},
+    saveData: () => {},
   },
 };
 
