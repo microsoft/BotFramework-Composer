@@ -37,6 +37,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const [context, setContext] = useState({
     focusedId,
+    focusedEvent,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
@@ -45,14 +46,12 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     setContext({
       ...context,
       focusedId,
+      focusedEvent,
     });
   }, [focusedEvent, focusedSteps]);
 
   return (
     <NodeRendererContext.Provider value={context}>
-      <div>
-        {dialogId}->{focusedEvent}->{focusedSteps}
-      </div>
       <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%' }}>
         <ObiEditor
           key={dialogId}
