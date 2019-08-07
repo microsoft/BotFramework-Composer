@@ -28,7 +28,6 @@ export interface FormEditorProps {
   lgFiles: LgFile[];
   luFiles: LuFile[];
   memory: FormMemory;
-  navPath: string;
   onBlur?: () => void;
   onChange: (newData: object) => void;
   schemas: EditorSchema;
