@@ -3,7 +3,7 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useMemo } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgEditor } from 'code-editor';
+import { LuEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
 import lodash from 'lodash';
@@ -22,7 +22,7 @@ export default function CodeEditor(props) {
   const fileId = luFile && luFile.id;
   const memoizedEditor = useMemo(() => {
     return lodash.isEmpty(luFile) === false ? (
-      <LgEditor
+      <LuEditor
         options={{
           lineNumbers: 'on',
           minimap: 'on',
@@ -59,7 +59,7 @@ export default function CodeEditor(props) {
                 a: ({ children }) => (
                   <a
                     key="a"
-                    href="https://github.com/microsoft/botframework-obi/blob/master/fileformats/lu/lu-file-format.md" // TODO: The document is old, valid intent start with double #, `## Greeting`
+                    href="https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format" // TODO: The document is old, valid intent start with double #, `## Greeting`
                     target="_blank"
                     rel="noopener noreferrer"
                   >
