@@ -1,1 +1,20 @@
-{"status":{"MyProject_main_en-us_lu":{"version":"0000000001","checksum":"","status":1}}}
+{
+    "status": {
+        "MyProject_main_en-us_lu": {
+            "version": "0000000001",
+            "checksum": "",
+            "status": 1
+        }
+    },
+    "luFiles": [
+        {
+            "content": "#Dummy\r\n--I am Dummy",
+            "diagnostics": [],
+            "id": "Main",
+            "lastPublishTime": 2,
+            "lastUpdateTime": 1,
+            "parsedContent": {},
+            "relativePath": "Main/Main.lu"
+        }
+    ]
+}
