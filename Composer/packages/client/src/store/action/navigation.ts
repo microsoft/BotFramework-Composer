@@ -53,5 +53,5 @@ export const focusSteps: ActionCreator = ({ state }, subPaths) => {
     currentUri = `${uri}?focusedEvent=${focusedEvent}`;
   }
 
-  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusSteps(breadcrumb) } });
+  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusSteps(breadcrumb, subPaths) } });
 };

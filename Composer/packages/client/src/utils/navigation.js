@@ -15,14 +15,17 @@ export function clearBreadcrumb(breadcrumb, fromIndex) {
   } else {
     breadcrumbCopy = [];
   }
-  breadcrumbCopy;
+  return breadcrumbCopy;
 }
 
-export function clearBreadcrumbWhenFocusSteps(breadcrumb) {
+export function clearBreadcrumbWhenFocusSteps(breadcrumb, focuseSteps) {
   const breadcrumbCopy = cloneDeep(breadcrumb);
   if (breadcrumbCopy.length === 0) return breadcrumbCopy;
   const lastIndex = breadcrumbCopy.length - 1;
   if (breadcrumbCopy[lastIndex].focusedSteps.length > 0) {
+    breadcrumbCopy.pop();
+  }
+  if (focuseSteps.length === 0) {
     breadcrumbCopy.pop();
   }
   return breadcrumbCopy;
