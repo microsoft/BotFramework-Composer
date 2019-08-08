@@ -12,7 +12,7 @@ import * as luUtil from '../../utils/luUtil';
 
 export default function CodeEditor(props) {
   const file = props.file;
-  const onChange = props.onChange;
+  const onChange = lodash.debounce(props.onChange, 500);
   const updateErrorMsg = props.errorMsg;
   const diagnostics = lodash.get(file, 'diagnostics', []);
 

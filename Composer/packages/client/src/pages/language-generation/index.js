@@ -39,7 +39,7 @@ export const LGPage = props => {
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
-  const lgFile = lgFiles.length && lgFiles[0];
+  const lgFile = lgFiles.length ? lgFiles[0] : null;
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {

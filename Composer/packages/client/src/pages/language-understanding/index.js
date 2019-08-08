@@ -37,7 +37,7 @@ export const LUPage = props => {
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
 
-  const luFile = luFiles.length && activeDialog && luFiles.find(luFile => luFile.id === activeDialog.id);
+  const luFile = luFiles.length && activeDialog ? luFiles.find(luFile => luFile.id === activeDialog.id) : null;
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {

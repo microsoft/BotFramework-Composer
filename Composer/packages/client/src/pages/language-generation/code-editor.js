@@ -12,7 +12,7 @@ import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
   const file = props.file;
-  const onChange = props.onChange;
+  const onChange = lodash.debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(lodash.get(file, 'diagnostics', []));
 
   const _onChange = value => {
