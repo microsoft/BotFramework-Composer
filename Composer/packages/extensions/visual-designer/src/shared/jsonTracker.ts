@@ -101,3 +101,34 @@ export function insert(inputDialog, path, position, $type) {
 
   return dialog;
 }
+
+export function drop(inputDialog, targetId, targetPosition: number, source, isCopyMode: boolean) {
+  if (!source || !targetId) return inputDialog;
+
+  const { id: sourcePath, data: sourceData } = source;
+  const targetPath = `${targetId}[${targetPosition}]`;
+  // Forbid the case that drop a node to itself or its child under non-copy mode.
+  if (targetPath.indexOf(sourcePath) === 0 && !isCopyMode) return inputDialog;
+
+  const dialog = cloneDeep(inputDialog);
+  const sourceNode = locateNode(dialog, sourcePath);
+  if (sourceNode === null) return dialog;
+
+  const targetArrayNode = locateNode(dialog, targetId);
+  if (targetArrayNode === null) return dialog;
+
+  // Insert new data to target point.
+  targetArrayNode.currentData.splice(targetPosition, 0, sourceData);
+
+  // Remove source data when is not copy mode.
+  if (!isCopyMode) {
+    sourceNode.currentData._deleted = true;
+    if (Array.isArray(sourceNode.parentData)) {
+      const oldDataIndex = sourceNode.parentData.findIndex(x => x._deleted);
+      sourceNode.parentData.splice(oldDataIndex, 1);
+    } else {
+      delete sourceNode.parentData[sourceNode.currentKey];
+    }
+  }
+  return dialog;
+}
