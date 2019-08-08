@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
@@ -13,19 +15,19 @@ import { getFriendlyName } from './utils';
 export class BeginDialog extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;
   renderCallDialogLink() {
-    const { data, onEvent } = this.props;
+    const { id, data, onEvent } = this.props;
     if (!data || !data.dialog) return null;
 
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
       <span
-        style={{
+        css={{
           cursor: 'pointer',
           color: 'blue',
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeEventTypes.OpenLink, calleeDialog);
+          onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
         }}
       >
         {calleeDialog}

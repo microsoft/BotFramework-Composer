@@ -29,7 +29,7 @@
           "prompt": "Hello, I'm Zoidberg. What is your name?",
           "maxTurnCount": 0,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "none"
         },
         {

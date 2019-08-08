@@ -31,9 +31,11 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private Source.IRegistry registry;
         private string rootDialogFile { get; set; }
 
-        public TestBot(string rootDialogFile, ConversationState conversationState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
         {
-            dialogState = conversationState.CreateProperty<DialogState>("DialogState");
+            this.conversationState = conversationState;
+            this.userState = userState;
+            this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.registry = registry;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
@@ -56,9 +58,11 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             this.dialogManager = new DialogManager(rootDialog);
         }
 
-        public override Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
+            await this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
+            await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
+            await this.userState.SaveChangesAsync(turnContext, false, cancellationToken);
         }
     }
 }

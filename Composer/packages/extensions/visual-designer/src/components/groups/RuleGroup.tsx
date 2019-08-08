@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
 // eslint-disable-next-line no-unused-vars
@@ -30,7 +32,7 @@ export class RuleGroup extends React.Component<NodeProps> {
     return (
       <div
         key={elementId + 'block'}
-        style={{
+        css={{
           width: RuleBlockWidth,
           height: RuleBlockHeight,
           boxSizing: 'border-box',
@@ -54,7 +56,7 @@ export class RuleGroup extends React.Component<NodeProps> {
 
     return (
       <div
-        style={{
+        css={{
           boxSizing: 'border-box',
           display: 'flex',
           flexWrap: 'wrap',
