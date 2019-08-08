@@ -22,7 +22,6 @@ import {
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
-import './NodeRenderer.css';
 import { setDndData, isDndElement } from './dndHelpers';
 
 const rendererByObiType = {
