@@ -10,6 +10,11 @@ export const NodeMenu = ({ id, onEvent }) => {
       name: 'Delete',
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
+    {
+      key: 'copy',
+      name: 'Copy',
+      onClick: () => onEvent(NodeEventTypes.Copy, { id }),
+    },
   ];
   return <IconMenu iconName="MoreVertical" menuItems={menuItems} menuWidth={100} />;
 };

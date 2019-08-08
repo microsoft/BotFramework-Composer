@@ -82,8 +82,6 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
 }
 
 export function insert(inputDialog, path, position, $type) {
-  const dialog = cloneDeep(inputDialog);
-  const current = get(dialog, path, []);
   const newStep = {
     $type,
     $designer: {
@@ -92,6 +90,13 @@ export function insert(inputDialog, path, position, $type) {
     },
     ...seedNewDialog($type),
   };
+
+  return insertStep(inputDialog, path, position, newStep);
+}
+
+export function insertStep(inputDialog, path, position, newStep) {
+  const dialog = cloneDeep(inputDialog);
+  const current = get(dialog, path, []);
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 

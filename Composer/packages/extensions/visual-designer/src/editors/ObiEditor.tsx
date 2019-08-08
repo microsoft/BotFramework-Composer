@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { deleteNode, insert, drop } from '../shared/jsonTracker';
+import { deleteNode, insert, drop, queryNode, insertStep } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
@@ -37,17 +37,45 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
         };
         break;
       case NodeEventTypes.Insert:
-        handler = e => {
-          const dialog = insert(data, e.id, e.position, e.$type);
-          onChange(dialog);
-          onSelect(`${e.id}[${e.position || 0}]`);
-        };
+        if (eventData.$type === 'PASTE') {
+          handler = ({ id, position }) => {
+            const text = navigator.clipboard
+              .readText()
+              .then(text => {
+                return JSON.parse(text);
+              })
+              .then(json => {
+                if (!json.$type) throw new Error('Invalid OBI JSON');
+                return json;
+              })
+              .catch(e => console.error('Invalid paste text: ', e.message))
+              .then(obi => {
+                console.log('insert', id, position, obi);
+                const dialog = insertStep(data, id, position, obi);
+                onChange(dialog);
+                onSelect(`${id}[${position || 0}]`);
+              });
+          };
+        } else {
+          handler = e => {
+            const dialog = insert(data, e.id, e.position, e.$type);
+            onChange(dialog);
+            onSelect(`${e.id}[${e.position || 0}]`);
+          };
+        }
         break;
       case NodeEventTypes.Drop:
         handler = e => {
           const dialog = drop(data, e.id, e.position, e.source, e.copy);
           onChange(dialog);
           onSelect(`${e.id}[${e.position || 0}]`);
+        };
+        break;
+      case NodeEventTypes.Copy:
+        handler = e => {
+          const json = queryNode(data, e.id);
+          navigator.clipboard.writeText(JSON.stringify(json, null, '\t'));
+          return;
         };
         break;
       default:

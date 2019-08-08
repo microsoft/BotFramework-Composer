@@ -26,19 +26,27 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ onClick, ...rest }) => {
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
-        menuItems={createStepMenu(
-          [
-            DialogGroup.RESPONSE,
-            DialogGroup.INPUT,
-            DialogGroup.BRANCHING,
-            DialogGroup.STEP,
-            DialogGroup.MEMORY,
-            DialogGroup.CODE,
-            DialogGroup.LOG,
-          ],
-          true,
-          (e, item) => onClick(item ? item.$type : null)
-        )}
+        menuItems={[
+          {
+            key: 'Paste',
+            name: 'Paste',
+            style: { color: 'lightblue' },
+            onClick: () => onClick('PASTE'),
+          },
+          ...createStepMenu(
+            [
+              DialogGroup.RESPONSE,
+              DialogGroup.INPUT,
+              DialogGroup.BRANCHING,
+              DialogGroup.STEP,
+              DialogGroup.MEMORY,
+              DialogGroup.CODE,
+              DialogGroup.LOG,
+            ],
+            true,
+            (e, item) => onClick(item ? item.$type : null)
+          ),
+        ]}
         label={formatMessage('Add')}
         {...rest}
       />

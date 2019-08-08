@@ -5,4 +5,6 @@ export enum NodeEventTypes {
   Delete = 'event.data.delete',
   Insert = 'event.data.insert',
   Drop = 'event.data.drop',
+  Copy = 'event.data.copy',
+  Paste = 'event.data.paste',
 }
