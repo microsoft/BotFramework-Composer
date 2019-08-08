@@ -132,7 +132,6 @@ export function ShellApi() {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      console.log(getFocusPath(focusedEvent, focusedSteps[0]));
       return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
     }
 
@@ -159,18 +158,16 @@ export function ShellApi() {
   function handleValueChange(newData, event) {
     let dataPath = '';
     if (event.source.name === FORM_EDITOR) {
-      dataPath = getFocusPath(focusedEvent, focusSteps[0]);
+      dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
     }
 
-    if (path !== '') {
-      const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
-      const payload = {
-        id: dialogId,
-        content: updatedDialog,
-      };
-      dialogsMap[dialogId] = updatedDialog;
-      updateDialog(payload);
-    }
+    const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
+    const payload = {
+      id: dialogId,
+      content: updatedDialog,
+    };
+    dialogsMap[dialogId] = updatedDialog;
+    updateDialog(payload);
 
     //make sure focusPath always valid
     const data = getDialogData(dialogsMap, dialogId, dataPath);

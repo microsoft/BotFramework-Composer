@@ -27,7 +27,7 @@ export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps
     label = get(dialog, current);
   }
 
-  label = formatMessage(upperCaseName(label));
+  label = formatMessage(upperCaseName(label || ''));
   return label;
 }
 
