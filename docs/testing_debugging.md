@@ -5,7 +5,9 @@ This document will explain different techniques you can use to test & debug your
 **Pre-requisites:**
 
 [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2)
+
 [Bot Framework Composer](https://github.com/Microsoft/BotFramework-Composer#installing-bot-framework-composer)
+
 [ngrok](https://ngrok.com/)
 
 To get started, load up a bot from the list of bots via the open dialog in the homepage.
