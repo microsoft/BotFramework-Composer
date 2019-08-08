@@ -1,52 +1,69 @@
 {
-    "$schema": "../../../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "generator": "common.lg",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[ShowEmailCard(user.selectedEmail)]"
+          "$type": "Microsoft.SendActivity",
+          "activity": "[ShowEmailCard(user.selectedEmail)]"
         },
         {
-            "$type": "Microsoft.ChoiceInput",
-            "property": "user.showEmailChoice",
-            "choices": [
-                {
-                    "value": "Reply This Email"
-                },
-                {
-                    "value": "Forward This Email"
-                },
-                {
-                    "value": "Go Back"
-                }
-            ],
-            "prompt": "What do you want to do now? ",
-            "style": "List",
-            "alwaysPrompt": true
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.showEmailChoice",
+          "choices": [
+            {
+              "value": "Reply This Email"
+            },
+            {
+              "value": "Forward This Email"
+            },
+            {
+              "value": "Go Back"
+            }
+          ],
+          "prompt": "What do you want to do now? ",
+          "style": "List",
+          "alwaysPrompt": true
         },
         {
-            "$type": "Microsoft.SwitchCondition",
-            "condition": "user.showEmailChoice",
-            "cases": [
-                {
-                    "value": "Reply This Email",
-                    "steps": [
-                        "ReplyMyEmail"
-                    ]
-                },
-                {
-                    "value": "Forward This Email",
-                    "steps": [
-                        "ForwardMyEmail"
-                    ]
-                },
-                {
-                    "value": "Go Back",
-                    "steps": [
-                    ]
-                }
-            ]
+          "$type": "Microsoft.SwitchCondition",
+          "condition": "user.showEmailChoice",
+          "cases": [
+            {
+              "value": "Reply This Email",
+              "steps": [
+                "ReplyMyEmail"
+              ]
+            },
+            {
+              "value": "Forward This Email",
+              "steps": [
+                "ForwardMyEmail"
+              ]
+            },
+            {
+              "value": "Go Back"
+            }
+          ]
         }
-    ]
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:58.789Z",
+        "updatedAt": "2019-08-08T07:00:58.799Z",
+        "id": "264696"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T06:35:13.460Z",
+    "updatedAt": "2019-08-08T06:35:13.471Z",
+    "id": "171340"
+  }
 }

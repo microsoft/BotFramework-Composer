@@ -9,30 +9,41 @@
     }
   },
   "generator": "common.lg",
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.TextInput",
-      "prompt": "[WelcomeCard]",
-      "property": "user.ans"
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "isMatch(user.ans, '(?i)cancel')",
+      "$type": "Microsoft.EventRule",
       "steps": [
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "[MissionCancel]"
+          "$type": "Microsoft.TextInput",
+          "prompt": "[WelcomeCard]",
+          "property": "user.ans"
         },
         {
-          "$type": "Microsoft.EndDialog"
+          "$type": "Microsoft.IfCondition",
+          "condition": "isMatch(user.ans, '(?i)cancel')",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            },
+            {
+              "$type": "Microsoft.EndDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
         }
-      ]
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:26:47.918Z",
+        "updatedAt": "2019-08-08T07:26:47.936Z",
+        "id": "279503"
+      }
     },
-    {
-      "$type": "Microsoft.RepeatDialog"
-    }
-  ],
-  "rules": [
     {
       "$type": "Microsoft.UnknownIntentRule",
       "steps": [
@@ -40,25 +51,40 @@
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
-      ]
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:03.842Z",
+        "updatedAt": "2019-08-08T07:22:03.860Z",
+        "id": "418196"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SignInIntent",
       "steps": [
         "Initialization",
         "EmailPage"
-      ]
+      ],
+      "intent": "SignInIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:06.363Z",
+        "updatedAt": "2019-08-08T07:22:06.410Z",
+        "id": "788831"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "HelpIntent",
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
         }
-      ]
+      ],
+      "intent": "HelpIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:08.040Z",
+        "updatedAt": "2019-08-08T07:22:08.055Z",
+        "id": "340813"
+      }
     }
   ],
   "$schema": "../../app.schema",

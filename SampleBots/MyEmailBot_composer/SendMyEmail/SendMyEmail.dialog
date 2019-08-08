@@ -1,47 +1,60 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "steps": [
-    "DeleteSendInfo",
+  "rules": [
     {
-      "$type": "Microsoft.SendActivity",
-      "activity": "OK! Let's Start To Write an Email. "
-    },
-    {
-      "$type": "Microsoft.TextInput",
-      "prompt": "Please Enter the Subject of Your Email.",
-      "property": "user.subject"
-    },
-    {
-      "$type": "Microsoft.TextInput",
-      "prompt": "Get! Please Enter the Body of Your Email.",
-      "property": "user.sendContext"
-    },
-    "FindMyContact",
-    {
-      "$type": "Microsoft.ConfirmInput",
-      "property": "dialog.confirmed",
-      "prompt": "Are you Sure to Send this Email?",
-      "unrecognizedPrompt": "Please try again.",
-      "invalidPrompt": "Please input yes/no.",
-      "alwaysPrompt": true
-    },
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "dialog.confirmed",
+      "$type": "Microsoft.EventRule",
       "steps": [
-        "SendMyEmailToGraph",
+        "DeleteSendInfo",
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "Your Email has been Sent Succsessfully. "
+          "activity": "OK! Let's Start To Write an Email. "
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "Please Enter the Subject of Your Email.",
+          "property": "user.subject"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "Get! Please Enter the Body of Your Email.",
+          "property": "user.sendContext"
+        },
+        "FindMyContact",
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.confirmed",
+          "prompt": "Are you Sure to Send this Email?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.confirmed",
+          "steps": [
+            "SendMyEmailToGraph",
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "Your Email has been Sent Succsessfully. "
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            }
+          ]
         }
       ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "[MissionCancel]"
-        }
-      ]
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:06.051Z",
+        "updatedAt": "2019-08-08T07:01:06.063Z",
+        "id": "390168"
+      }
     }
   ],
   "$schema": "../../../../app.schema",

@@ -1,11 +1,30 @@
 {
-    "$schema": "../../../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-      {
-        "$type": "Microsoft.SetProperty",
-        "value": "user.sentPages + 1",
-        "property": "user.sentPages"
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.sentPages + 1",
+          "property": "user.sentPages"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:43.392Z",
+        "updatedAt": "2019-08-08T07:00:43.404Z",
+        "id": "659631"
       }
-    ]
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:42.003Z",
+    "updatedAt": "2019-08-08T07:00:42.016Z",
+    "id": "321781"
   }
+}

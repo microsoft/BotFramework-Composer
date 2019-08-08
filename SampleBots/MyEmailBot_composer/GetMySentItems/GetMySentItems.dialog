@@ -1,34 +1,47 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.sentItems"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "property": "user.sentItemsCount",
-      "value": "count(user.getGraphSentItems.value)"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.sentItems",
-      "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}]"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.sentItems",
-      "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+1]"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Push",
-      "arrayProperty": "user.sentItems",
-      "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+2]"
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "arrayProperty": "user.sentItems"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.sentItemsCount",
+          "value": "count(user.getGraphSentItems.value)"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+1]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "arrayProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+2]"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:21.073Z",
+        "updatedAt": "2019-08-08T07:01:21.087Z",
+        "id": "514550"
+      }
     }
   ],
   "$schema": "../../../../app.schema",

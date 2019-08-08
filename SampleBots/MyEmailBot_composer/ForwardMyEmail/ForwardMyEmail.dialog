@@ -1,46 +1,65 @@
 {
-    "$schema": "../../../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-      {
-        "$type": "Microsoft.SendActivity",
-        "activity": "OK! Let's Start To Forward this Email. "
-      },
-      {
-        "$type": "Microsoft.SetProperty",
-        "value": "concat('Fw:',user.focusedEmail.subject)",
-        "property": "user.fwSubject"
-      },
-      {
-        "$type": "Microsoft.TextInput",
-        "prompt": "OK, Please Enter the Content of Your Email to Forward.",
-        "property": "user.fwContent"
-      },
-      "FindMyContact",
-      {
-        "$type": "Microsoft.ConfirmInput",
-        "property": "dialog.confirmed",
-        "prompt": "Are you Sure to Send this Email?",
-        "unrecognizedPrompt": "Please try again.",
-        "invalidPrompt": "Please input yes/no.",
-        "alwaysPrompt": true
-      },
-      {
-        "$type": "Microsoft.IfCondition",
-        "condition": "dialog.confirmed",
-        "steps": [
-          "ForwardMyEmailThroughGraph",
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Your Email has been Sent Succsessfully. "
-          }
-        ],
-        "elseSteps": [
-          {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[MissionCancel]"
-          }
-        ]
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Start To Forward this Email. "
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "concat('Fw:',user.focusedEmail.subject)",
+          "property": "user.fwSubject"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "OK, Please Enter the Content of Your Email to Forward.",
+          "property": "user.fwContent"
+        },
+        "FindMyContact",
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.confirmed",
+          "prompt": "Are you Sure to Send this Email?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.confirmed",
+          "steps": [
+            "ForwardMyEmailThroughGraph",
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "Your Email has been Sent Succsessfully. "
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            }
+          ]
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T06:53:45.695Z",
+        "updatedAt": "2019-08-08T06:53:45.714Z",
+        "id": "983009"
       }
-    ]
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T06:35:06.765Z",
+    "updatedAt": "2019-08-08T06:35:06.775Z",
+    "id": "262793"
   }
+}

@@ -1,15 +1,28 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.HttpRequest",
-      "url": "https://graph.microsoft.com/beta/me/mailFolders/sentitems/messages",
-      "method": "GET",
-      "header": {
-        "Authorization": "Bearer {user.token.token}"
-      },
-      "Property": "user.getGraphSentItems"
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/sentitems/messages",
+          "method": "GET",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "Property": "user.getGraphSentItems"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:16.786Z",
+        "updatedAt": "2019-08-08T07:01:16.798Z",
+        "id": "946561"
+      }
     }
   ],
   "$schema": "../../app.schema",

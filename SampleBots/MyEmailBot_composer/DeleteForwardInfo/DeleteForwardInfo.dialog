@@ -1,14 +1,27 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.DeleteProperty",
-      "property": "user.fwSubject"
-    },
-    {
-      "$type": "Microsoft.DeleteProperty",
-      "property": "user.fwContent"
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.fwSubject"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.fwContent"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T06:58:34.761Z",
+        "updatedAt": "2019-08-08T06:58:34.781Z",
+        "id": "876647"
+      }
     }
   ],
   "$schema": "../../app.schema",

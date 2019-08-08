@@ -1,51 +1,34 @@
 {
-    "$schema": "../../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
         {
-            "$type": "Microsoft.HttpRequest",
-            "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
-            "method": "GET",
-            "header": {
-              "Authorization": "Bearer {user.token.token}"
-            },
-            "Property": "user.getGraphEmails"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriScheme('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriHost('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriPort('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriPath('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
-        },
-        {
-          "$type": "Microsoft.EditArray",
-          "changeType": "Push",
-          "arrayProperty": "user.getHttpAddr",
-          "value": "uriPathAndQuery('https://graph.microsoft.com/beta/me/mailFolders/inbox/messages')"
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+          "method": "GET",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "Property": "user.getGraphEmails"
         }
-    ]
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:23.594Z",
+        "updatedAt": "2019-08-08T07:01:23.607Z",
+        "id": "897738"
+      }
+    }
+  ],
+  "$schema": "../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T06:35:22.829Z",
+    "updatedAt": "2019-08-08T06:35:22.836Z",
+    "id": "932164"
+  }
 }

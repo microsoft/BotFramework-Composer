@@ -1,24 +1,43 @@
 {
-    "$schema": "../../../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
-      {
-        "$type": "Microsoft.IfCondition",
-        "condition": "user.sentPages == 0",
-        "steps": [
-          {
-            "$type" : "Microsoft.SendActivity",
-            "activity" : "This Is the First Page !"
-          },
-          {
-            "$type": "Microsoft.EndDialog"
-          }
-        ]
-      },
-      {
-        "$type": "Microsoft.SetProperty",
-        "value": "user.sentPages - 1",
-        "property": "user.sentPages"
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "user.sentPages == 0",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "This Is the First Page !"
+            },
+            {
+              "$type": "Microsoft.EndDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.sentPages - 1",
+          "property": "user.sentPages"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:45.925Z",
+        "updatedAt": "2019-08-08T07:00:45.932Z",
+        "id": "589772"
       }
-    ]
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:44.779Z",
+    "updatedAt": "2019-08-08T07:00:44.792Z",
+    "id": "501341"
   }
+}

@@ -1,45 +1,58 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "steps": [
+  "rules": [
     {
-      "$type": "Microsoft.SetProperty",
-      "value": "3",
-      "property": "user.itemsPerPage"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "value": "0",
-      "property": "user.pages"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "value": "0",
-      "property": "user.sentPages"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "property": "user.emailCount",
-      "value": "0"
-    },
-    {
-      "$type": "Microsoft.SetProperty",
-      "property": "user.sentItemsCount",
-      "value": "0"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.emails"
-    },
-    {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.sentItems"
-    },
-    "SignInToGraph",
-    "GetMyEmailFromGraph",
-    "GetSentItemsFromGraph"
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "3",
+          "property": "user.itemsPerPage"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "0",
+          "property": "user.pages"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "0",
+          "property": "user.sentPages"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.emailCount",
+          "value": "0"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.sentItemsCount",
+          "value": "0"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "arrayProperty": "user.emails"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "arrayProperty": "user.sentItems"
+        },
+        "SignInToGraph",
+        "GetMyEmailFromGraph",
+        "GetSentItemsFromGraph"
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:13.154Z",
+        "updatedAt": "2019-08-08T07:01:13.171Z",
+        "id": "779035"
+      }
+    }
   ],
   "$schema": "../../app.schema",
   "$designer": {

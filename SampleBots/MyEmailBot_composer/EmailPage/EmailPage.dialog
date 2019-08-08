@@ -10,37 +10,63 @@
     }
   },
   "generator": "common.lg",
-  "steps": [
-    {
-      "$type": "Microsoft.TextInput",
-      "prompt": "[EmailCard]",
-      "property": "user.ans"
-    },
-    {
-      "$type": "Microsoft.RepeatDialog"
-    }
-  ],
   "rules": [
     {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "[EmailCard]",
+          "property": "user.ans"
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:15.777Z",
+        "updatedAt": "2019-08-08T07:00:15.790Z",
+        "id": "366453"
+      }
+    },
+    {
       "$type": "Microsoft.IntentRule",
-      "intent": "ShowEmailIntent",
       "steps": [
         "ShowMyEmail"
-      ]
+      ],
+      "intent": "ShowEmailIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:16.898Z",
+        "updatedAt": "2019-08-08T07:00:16.910Z",
+        "id": "794297"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SentItemsIntent",
       "steps": [
         "ShowSentItems"
-      ]
+      ],
+      "intent": "SentItemsIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:28.367Z",
+        "updatedAt": "2019-08-08T07:00:28.380Z",
+        "id": "541439"
+      }
     },
     {
       "$type": "Microsoft.IntentRule",
-      "intent": "SendEmailIntent",
       "steps": [
         "SendMyEmail"
-      ]
+      ],
+      "intent": "SendEmailIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:27.142Z",
+        "updatedAt": "2019-08-08T07:00:27.156Z",
+        "id": "024782"
+      }
     }
   ],
   "$schema": "../../app.schema",
