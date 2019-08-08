@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { EdgeMenu } from 'shared-menus';
 
@@ -11,26 +13,27 @@ import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { OffsetContainer } from '../shared/OffsetContainer';
 import { NodeRenderer } from '../shared/NodeRenderer';
 import { Edge } from '../shared/EdgeComponents';
+import { GraphLayout } from '../../shared/GraphLayout';
 
 const StepInterval = ElementInterval.y;
 
 const calculateNodes = (groupId: string, data): GraphNode[] => {
   const steps = transformStepGroup(data, groupId);
-  return steps.map(x => GraphNode.fromIndexedJson(x));
+  return steps.map((x): GraphNode => GraphNode.fromIndexedJson(x));
 };
 
-const calculateLayout = (nodes, boundaryMap) => {
-  nodes.forEach(x => (x.boundary = boundaryMap[x.id] || x.boundary));
+const calculateLayout = (nodes, boundaryMap): GraphLayout => {
+  nodes.forEach((x): void => (x.boundary = boundaryMap[x.id] || x.boundary));
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps) => {
+export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
   const [boundaryMap, setBoundaryMap] = useState({});
-  const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
-  const layout = useMemo(() => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
+  const initialNodes = useMemo((): GraphNode[] => calculateNodes(id, data), [id, data]);
+  const layout = useMemo((): GraphLayout => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
   const accumulatedPatches = {};
 
-  const patchBoundary = (id, boundary) => {
+  const patchBoundary = (id, boundary): void => {
     if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
       accumulatedPatches[id] = boundary;
       setBoundaryMap({
@@ -40,13 +43,13 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
     }
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     onResize(layout.boundary);
   }, [layout]);
 
   const { boundary, nodes, edges } = layout;
   return (
-    <div style={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+    <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
       {nodes
         ? nodes.map(x => (
@@ -65,7 +68,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         : null}
       <OffsetContainer
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
-        styles={{ zIndex: 100 }}
+        css={{ zIndex: 100 }}
       >
         <EdgeMenu
           onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
@@ -80,7 +83,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
                 y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
               }}
-              styles={{ zIndex: 100 }}
+              css={{ zIndex: 100 }}
             >
               <EdgeMenu
                 onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}

@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
 
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 import { ErrorPopup } from '../ErrorPopup';
 
 // only class component can be a error boundary
@@ -83,4 +83,4 @@ export class ErrorBoundary extends Component {
     );
   }
 }
-ErrorBoundary.contextType = Store;
+ErrorBoundary.contextType = StoreContext;
