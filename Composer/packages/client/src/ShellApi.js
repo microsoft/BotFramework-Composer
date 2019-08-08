@@ -132,7 +132,8 @@ export function ShellApi() {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusSteps[0]));
+      console.log(getFocusPath(focusedEvent, focusedSteps[0]));
+      return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
     }
 
     return '';
@@ -140,7 +141,6 @@ export function ShellApi() {
 
   function getState(sourceWindow) {
     const currentDialog = dialogs.find(d => d.id === dialogId);
-
     return {
       data: getData(sourceWindow),
       dialogs,
