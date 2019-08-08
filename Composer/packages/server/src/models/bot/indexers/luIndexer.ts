@@ -62,8 +62,8 @@ export class LUIndexer {
         const lastPublishTime = luStatuses[luName].lastPublishTime;
         const luFile = this.luFiles.find(lufile => lufile.id === luName);
         if (luFile) {
-          luFile['lastUpdateTime'] = lastUpdateTime;
-          luFile['lastPublishTime'] = lastPublishTime;
+          luFile.lastUpdateTime = lastUpdateTime;
+          luFile.lastPublishTime = lastPublishTime;
         }
       }
     }
