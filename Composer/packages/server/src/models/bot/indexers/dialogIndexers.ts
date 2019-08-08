@@ -45,7 +45,7 @@ export class DialogIndexer {
         if (target && typeof target === 'string') {
           // match a template name
           // match a temlate func  e.g. `showDate()`
-          const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
+          const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
           let matchResult;
           while ((matchResult = reg.exec(target)) !== null) {
             const templateName = matchResult[1];
