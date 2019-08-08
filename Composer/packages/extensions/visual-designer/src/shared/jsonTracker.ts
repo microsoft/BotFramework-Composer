@@ -4,7 +4,7 @@ import { seedNewDialog } from 'shared-menus';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
-function locateNode(dialog: { [key: string]: any }, path: string) {
+function parseSelector(path: string): null | string[] {
   if (!path) return null;
 
   const selectors = path.split('.');
@@ -34,17 +34,49 @@ function locateNode(dialog: { [key: string]: any }, path: string) {
     [] as any[]
   );
 
+  return normalizedSelectors;
+}
+
+function locateNode(dialog: { [key: string]: any }, path: string) {
+  const selectors = parseSelector(path);
+  if (!Array.isArray(selectors)) return null;
+  if (selectors.length === 0) return dialog;
+
   // Locate the manipulated json node
   let parentData: object = {};
   let currentKey: number | string = '';
   let currentData = dialog;
 
-  for (const selector of normalizedSelectors) {
+  for (const selector of selectors) {
     parentData = currentData;
     currentData = parentData[selector];
     currentKey = selector;
 
     if (currentData === undefined) return null;
+  }
+
+  return { parentData, currentData, currentKey };
+}
+
+function prepareNode(dialog: { [key: string]: any }, path: string) {
+  const selectors = parseSelector(path);
+  if (!Array.isArray(selectors)) return null;
+  if (selectors.length === 0) return dialog;
+
+  // Locate the manipulated json node
+  let parentData: object = {};
+  let currentKey: number | string = '';
+  let currentData = dialog;
+
+  for (const selector of selectors) {
+    parentData = currentData;
+    currentData = parentData[selector];
+    currentKey = selector;
+
+    if (currentData === undefined) {
+      currentData = [];
+      parentData[currentKey] = currentData;
+    }
   }
 
   return { parentData, currentData, currentKey };
@@ -119,7 +151,7 @@ export function drop(inputDialog, targetId, targetPosition: number, source, isCo
   const sourceNode = locateNode(dialog, sourcePath);
   if (sourceNode === null) return dialog;
 
-  const targetArrayNode = locateNode(dialog, targetId);
+  const targetArrayNode = prepareNode(dialog, targetId);
   if (targetArrayNode === null) return dialog;
 
   // Insert new data to target point.
