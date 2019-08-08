@@ -12,10 +12,10 @@
             {
               "$type": "Microsoft.OAuthInput",
               "timeout": "900000",
-              "ConnectionName": "connection_t-hahan",
-              "Title": "Log in",
-              "Text": "Please Log in to Your Email Account",
-              "Property": "user.token",
+              "connectionName": "connection_t-hahan",
+              "title": "Log in",
+              "text": "Please Log in to Your Email Account",
+              "property": "user.token",
               "$designer": {
                 "createdAt": "2019-08-08T09:30:12.512Z",
                 "updatedAt": "2019-08-08T09:30:12.519Z",
