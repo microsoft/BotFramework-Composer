@@ -46,6 +46,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
           onFocusSteps([`${e.id}[${e.position || 0}]`]);
         };
         break;
+      case NodeEventTypes.InsertEvent:
+        handler = e => {
+          const dialog = insert(data, e.id, e.position, e.$type);
+          onChange(dialog);
+          onFocusEvent(`${e.id}[${e.position || 0}]`);
+        };
+        break;
       default:
         handler = onFocusSteps;
         break;

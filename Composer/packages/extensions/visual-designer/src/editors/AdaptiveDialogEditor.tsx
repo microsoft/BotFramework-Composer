@@ -34,6 +34,9 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
       const selectedRulePath = eventData;
       return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
     }
+    if (eventName === NodeEventTypes.Insert) {
+      return onEvent(NodeEventTypes.InsertEvent, eventData);
+    }
     return onEvent(eventName, eventData);
   };
 

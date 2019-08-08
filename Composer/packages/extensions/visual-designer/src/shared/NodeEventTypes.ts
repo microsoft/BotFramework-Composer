@@ -7,4 +7,5 @@ export enum NodeEventTypes {
   InsertBefore = 'event.data.insert-before',
   InsertAfter = 'event.data.insert-after',
   Insert = 'event.data.insert',
+  InsertEvent = 'event.data.insert-event',
 }
