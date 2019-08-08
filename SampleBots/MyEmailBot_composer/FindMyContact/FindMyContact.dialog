@@ -1,0 +1,146 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteContactInfo",
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:02.045Z",
+            "updatedAt": "2019-08-08T09:26:02.053Z",
+            "id": "400733"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Find Your Recipient. ",
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:04.601Z",
+            "updatedAt": "2019-08-08T09:26:04.607Z",
+            "id": "076321"
+          }
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "never",
+          "property": "user.recipient",
+          "prompt": "Please Type any part of Name of Your Recipient, or, You Can Type the whole Email Address.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:06.104Z",
+            "updatedAt": "2019-08-08T09:26:06.112Z",
+            "id": "789212"
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "not(contains(user.recipient, '@'))",
+          "steps": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "GetRecipientFromGraph",
+              "$designer": {
+                "createdAt": "2019-08-08T09:14:34.573Z",
+                "updatedAt": "2019-08-08T09:14:34.582Z",
+                "id": "488020"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-08-08T09:05:15.819Z",
+                "updatedAt": "2019-08-08T09:06:05.303Z",
+                "id": "806792"
+              },
+              "activity": "[bfdactivity-806792]"
+            },
+            {
+              "$type": "Microsoft.IfCondition",
+              "condition": "count(user.intentRecipient.value) != 1",
+              "steps": [
+                {
+                  "$type": "Microsoft.RepeatDialog",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:26:30.539Z",
+                    "updatedAt": "2019-08-08T09:26:30.545Z",
+                    "id": "468938"
+                  }
+                }
+              ],
+              "$designer": {
+                "createdAt": "2019-08-08T09:26:29.038Z",
+                "updatedAt": "2019-08-08T09:26:29.068Z",
+                "id": "644261"
+              }
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "property": "user.emailAddr",
+              "value": "user.intentRecipient.value[0].emailAddresses[0].address",
+              "$designer": {
+                "createdAt": "2019-08-08T09:26:31.703Z",
+                "updatedAt": "2019-08-08T09:26:31.707Z",
+                "id": "550113"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-08-08T09:26:34.557Z",
+                "updatedAt": "2019-08-08T09:26:35.650Z",
+                "id": "993453"
+              },
+              "activity": "[bfdactivity-993453]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "property": "user.emailAddr",
+              "value": "user.recipient",
+              "$designer": {
+                "createdAt": "2019-08-08T09:26:27.640Z",
+                "updatedAt": "2019-08-08T09:26:27.649Z",
+                "id": "913920"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-08-08T09:26:23.713Z",
+                "updatedAt": "2019-08-08T09:26:24.953Z",
+                "id": "315212"
+              },
+              "activity": "[bfdactivity-315212]"
+            }
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:07.432Z",
+            "updatedAt": "2019-08-08T09:26:07.452Z",
+            "id": "824184"
+          }
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:01:31.939Z",
+        "updatedAt": "2019-08-08T07:01:31.952Z",
+        "id": "620051"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:21:48.648Z",
+    "updatedAt": "2019-08-07T09:21:48.687Z",
+    "id": "469850"
+  }
+}
