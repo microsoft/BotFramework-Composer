@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
@@ -32,7 +33,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
   const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
     if (directJumpDialog) {
-      return onEvent(NodeEventTypes.OpenLink, directJumpDialog, id);
+      return onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: directJumpDialog });
     }
   };
 
@@ -84,7 +85,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
     summary = formatMessage('No actions');
   } else if (data.steps.length == 1) {
     const step = normalizeObiStep(data.steps[0]);
-    if (step.$type == ObiTypes.BeginDialog) {
+    if (step.$type === ObiTypes.BeginDialog) {
       dialog = step.dialog;
       summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
     } else {
@@ -99,7 +100,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       themeColor={getElementColor(DialogGroup.RULE).expanded}
       iconColor={getElementColor(DialogGroup.RULE).iconColor}
       corner={
-        <div style={{ display: 'flex' }}>
+        <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />
         </div>
       }

@@ -1,9 +1,10 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useRef, useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
-import { isLayoutEqual } from './shared/isLayoutEqual';
 import { NodeRendererContext } from './store/NodeRendererContext';
 
 formatMessage.setup({
@@ -17,24 +18,16 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   currentDialog,
   onChange,
   shellApi,
-}: {
-  [key: string]: any;
-}) => {
-  const dataCache = useRef();
-  const layoutVersion = useRef(0);
+}): JSX.Element => {
+  const dataCache = useRef({});
 
   /**
    * VisualDesigner is coupled with ShellApi where input json always mutates.
    * Deep checking input data here to make React change detection works.
-   * Deep checking layout to trigger a redraw.
    */
   const dataChanged = !isEqual(dataCache.current, inputData);
-  const layoutChanged = dataChanged && !isLayoutEqual(dataCache.current, inputData);
   if (dataChanged) {
     dataCache.current = inputData;
-  }
-  if (layoutChanged) {
-    layoutVersion.current += 1;
   }
 
   /**
@@ -76,9 +69,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   return (
     <NodeRendererContext.Provider value={context}>
-      <div data-testid="visualdesigner-container" style={{ width: '100%', height: '100%' }}>
+      <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%' }}>
         <ObiEditor
-          key={navPath + '?version=' + layoutVersion.current}
+          key={navPath}
           path={navPath}
           data={data}
           isRoot={currentDialog && currentDialog.isRoot && navPath.endsWith('#')}
@@ -97,7 +90,7 @@ interface VisualDesignerProps {
   focusPath: string;
   navPath: string;
   onChange: (x: any) => void;
-  shellApi: object;
+  shellApi: any;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 

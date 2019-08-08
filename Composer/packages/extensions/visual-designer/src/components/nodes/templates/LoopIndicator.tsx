@@ -1,10 +1,11 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 export const LoopIndicator = ({ onClick }) => {
   return (
     <div
-      style={{
+      css={{
         width: 24,
         height: 24,
         borderRadius: 12,
@@ -18,7 +19,7 @@ export const LoopIndicator = ({ onClick }) => {
         onClick();
       }}
     >
-      <Icon iconName="Sync" style={{ color: 'white' }} />
+      <Icon iconName="Sync" css={{ color: 'white' }} />
     </div>
   );
 };

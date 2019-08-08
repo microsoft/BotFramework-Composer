@@ -7,8 +7,6 @@ export interface EditorProps {
   id: string;
   data: any;
   onEvent: (action, id) => object | void;
-
-  hideSteps?: boolean;
 }
 export interface NodeProps {
   id: string;

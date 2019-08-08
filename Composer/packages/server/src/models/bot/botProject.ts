@@ -1,5 +1,7 @@
 import fs from 'fs';
 
+import { isEqual } from 'lodash';
+
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
@@ -59,7 +61,6 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
-      luStatus: this.luPublisher.status,
     };
   };
 
@@ -150,7 +151,8 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    const diagnostics = this.lgIndexer.check(content);
+    const absolutePath = `${this.dir}/${lgFile.relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
       const errorMsg = this.lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);
@@ -161,7 +163,8 @@ export class BotProject {
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    const diagnostics = this.lgIndexer.check(content);
+    const absolutePath = `${this.dir}/${relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
       const errorMsg = this.lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);
@@ -192,8 +195,11 @@ export class BotProject {
     }
 
     await this._updateFile(luFile.relativePath, content);
-    this.luPublisher.update(luFile.relativePath);
-    return this.luIndexer.getLuFiles();
+    const luFiles = this.luIndexer.getLuFiles();
+    const currentLufile = luFiles.find(lu => lu.id === id) as LUFile;
+    const isUpdate = !isEqual(currentLufile.parsedContent.LUISJsonStructure, luFile.parsedContent.LUISJsonStructure);
+    this.luPublisher.update(isUpdate, luFile.relativePath);
+    return luFiles;
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
@@ -211,10 +217,18 @@ export class BotProject {
     return this.luIndexer.getLuFiles();
   };
 
-  public publishLuis = async (config: ILuisConfig) => {
+  public setLuisConfig = async (config: ILuisConfig) => {
+    this.luPublisher.setLuisConfig(config);
+  };
+
+  public publishLuis = async () => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const invalidLuFile = toPublish.filter(file => file.diagnostics.length !== 0);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
+    if (unpublished.length === 0) {
+      return await this.luPublisher.getLuisStatus();
+    }
+    const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.reduce((msg, file) => {
         const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
@@ -226,19 +240,20 @@ export class BotProject {
       }, '');
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = toPublish.filter(this.isEmpty);
+    const emptyLuFiles = unpublished.filter(this.isEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
-    return await this.luPublisher.publish(config, toPublish);
+    return await this.luPublisher.publish(unpublished);
   };
 
-  public checkNeedLuisDeploy = async () => {
-    if (this.luIndexer.getLuFiles().filter(f => !!f.content).length <= 0) {
-      return false;
+  public checkLuisPublished = async () => {
+    const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
+    if (referredLuFiles.length <= 0) {
+      return true;
     } else {
-      return !(await this.luPublisher.checkLuisDeployed());
+      return await this.luPublisher.checkLuisPublised(referredLuFiles);
     }
   };
 

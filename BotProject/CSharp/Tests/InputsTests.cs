@@ -115,7 +115,7 @@ namespace Tests
                 .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use Steps, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
             .Send("06")
                 .AssertReply("Please enter a date.")
-            .Send("June 1st 2019")
+            .Send("June 1st")
                 .AssertReply("You entered: 2019-06-01")
             .StartTestAsync();
         }

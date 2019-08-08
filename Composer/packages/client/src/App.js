@@ -10,10 +10,10 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import { BASEPATH } from './constants';
 import Routes from './router';
-import { Store } from './store/index';
+import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { CreationFlow } from './CreationFlow/index';
+import { CreationFlow } from './CreationFlow';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -93,15 +93,22 @@ const bottomLinks = [
 ];
 
 export function App() {
-  const { state, actions } = useContext(Store);
+  const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState('');
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus } = actions;
+  const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   useEffect(() => {
-    fetchProject();
+    init();
   }, []);
+
+  async function init() {
+    const data = await fetchProject();
+    if (data && data.botName) {
+      setLuisConfig(botName);
+    }
+  }
 
   return (
     <Fragment>
