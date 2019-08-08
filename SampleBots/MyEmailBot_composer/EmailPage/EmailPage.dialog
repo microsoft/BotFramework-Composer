@@ -1,0 +1,106 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "ShowEmailIntent": "(?i)show inbox email",
+      "SendEmailIntent": "(?i)send email",
+      "SentItemsIntent": "(?i)show sent items"
+    }
+  },
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "never",
+          "property": "user.ans",
+          "prompt": "[EmailCard]",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:52.466Z",
+            "updatedAt": "2019-08-08T09:24:52.477Z",
+            "id": "227657"
+          }
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:55.499Z",
+            "updatedAt": "2019-08-08T09:24:55.504Z",
+            "id": "596431"
+          }
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:15.777Z",
+        "updatedAt": "2019-08-08T07:00:15.790Z",
+        "id": "366453"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowMyEmail",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:00.403Z",
+            "updatedAt": "2019-08-08T09:25:00.410Z",
+            "id": "641772"
+          }
+        }
+      ],
+      "intent": "ShowEmailIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:16.898Z",
+        "updatedAt": "2019-08-08T07:00:16.910Z",
+        "id": "794297"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowSentItems"
+        }
+      ],
+      "intent": "SentItemsIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:28.367Z",
+        "updatedAt": "2019-08-08T07:00:28.380Z",
+        "id": "541439"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SendMyEmail"
+        }
+      ],
+      "intent": "SendEmailIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:27.142Z",
+        "updatedAt": "2019-08-08T07:00:27.156Z",
+        "id": "024782"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:15:26.737Z",
+    "updatedAt": "2019-08-07T09:15:26.778Z",
+    "id": "209219"
+  }
+}

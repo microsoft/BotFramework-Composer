@@ -1,0 +1,30 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.pages + 1",
+          "property": "user.pages"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:50.884Z",
+        "updatedAt": "2019-08-08T07:00:50.890Z",
+        "id": "576693"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:49.859Z",
+    "updatedAt": "2019-08-08T07:00:49.873Z",
+    "id": "282607"
+  }
+}
