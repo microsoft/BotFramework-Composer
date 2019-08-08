@@ -1,0 +1,183 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-02T21:23:09.609Z",
+    "updatedAt": "2019-08-02T21:41:57.585Z",
+    "id": "622543",
+    "name": "GetProfile"
+  },
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "$designer": {
+        "name": "Handle an Event",
+        "id": "151697",
+        "updatedAt": "2019-08-02T21:23:15.465Z"
+      },
+      "events": [
+        "beginDialog"
+      ],
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "362298",
+            "updatedAt": "2019-08-06T00:27:14.414Z"
+          },
+          "outputFormat": "trim",
+          "allowInterruptions": "always",
+          "property": "user.profile.name",
+          "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
+          "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
+          "maxTurnCount": 3,
+          "validations": [
+            "length(turn.value) <= 150"
+          ],
+          "defaultValue": "'Human'",
+          "alwaysPrompt": false,
+          "value": "@userName"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "name": "Prompt for a number",
+            "id": "005947",
+            "updatedAt": "2019-08-06T13:53:49.482Z"
+          },
+          "property": "user.profile.age",
+          "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "maxTurnCount": 3,
+          "validations": [
+            "int(turn.value) >= 1",
+            "int(turn.value) <= 150"
+          ],
+          "value": "@userAge",
+          "defaultValue": "30",
+          "alwaysPrompt": false,
+          "allowInterruptions": "notRecognized",
+          "outputFormat": "float",
+          "defaultLocale": "en-us",
+          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "296924",
+            "updatedAt": "2019-08-02T21:39:11.175Z"
+          },
+          "activity": "[bfdactivity-296924]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "661298",
+        "updatedAt": "2019-08-02T21:43:30.949Z"
+      },
+      "intent": "Why",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "567494",
+            "updatedAt": "2019-08-02T21:43:47.008Z"
+          },
+          "condition": "exists(user.profile.name)",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "907674",
+                "updatedAt": "2019-08-02T21:43:59.052Z"
+              },
+              "activity": "[bfdactivity-907674]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "558329",
+                "updatedAt": "2019-08-02T21:44:37.748Z"
+              },
+              "activity": "[bfdactivity-558329]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "449648",
+        "updatedAt": "2019-08-02T21:43:34.915Z"
+      },
+      "intent": "NoValue",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "015423",
+            "updatedAt": "2019-08-02T21:45:15.030Z"
+          },
+          "condition": "exists(user.profile.name)",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "074631",
+                "updatedAt": "2019-08-02T21:47:18.206Z"
+              },
+              "activity": "[bfdactivity-074631]"
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "name": "Set a Property",
+                "id": "960926",
+                "updatedAt": "2019-08-02T21:46:57.049Z"
+              },
+              "property": "user.profile.age",
+              "value": "30"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "758791",
+                "updatedAt": "2019-08-02T21:47:25.615Z"
+              },
+              "activity": "[bfdactivity-758791]"
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "name": "Set a Property",
+                "id": "142109",
+                "updatedAt": "2019-08-02T21:47:07.649Z"
+              },
+              "property": "user.profile.name",
+              "value": "'Human'"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "recognizer": "GetProfile.lu"
+}
