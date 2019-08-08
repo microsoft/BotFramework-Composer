@@ -1,0 +1,73 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.token == null",
+          "steps": [
+            {
+              "$type": "Microsoft.OAuthInput",
+              "timeout": "900000",
+              "connectionName": "connection_t-hahan",
+              "title": "Log in",
+              "text": "Please Log in to Your Email Account",
+              "property": "user.token",
+              "$designer": {
+                "createdAt": "2019-08-08T09:30:12.512Z",
+                "updatedAt": "2019-08-08T09:30:12.519Z",
+                "id": "986551"
+              }
+            }
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:14.677Z",
+            "updatedAt": "2019-08-08T09:30:14.693Z",
+            "id": "673634"
+          }
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "method": "GET",
+          "url": "https://graph.microsoft.com/v1.0/me/",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "Property": "user.Info",
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:15.887Z",
+            "updatedAt": "2019-08-08T09:30:15.896Z",
+            "id": "125222"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.Name",
+          "value": "user.Info.displayName",
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:16.539Z",
+            "updatedAt": "2019-08-08T09:30:16.549Z",
+            "id": "430037"
+          }
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:40.216Z",
+        "updatedAt": "2019-08-08T07:00:40.230Z",
+        "id": "415911"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:21:47.040Z",
+    "updatedAt": "2019-08-07T09:21:47.065Z",
+    "id": "523542"
+  }
+}

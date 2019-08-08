@@ -1,0 +1,58 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "equals(user.pages, 0)",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-08-08T07:41:54.859Z",
+                "updatedAt": "2019-08-08T07:41:56.311Z",
+                "id": "113979"
+              },
+              "activity": "[bfdactivity-113979]"
+            },
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "createdAt": "2019-08-08T09:29:53.178Z",
+                "updatedAt": "2019-08-08T09:29:53.190Z",
+                "id": "617347"
+              }
+            }
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:49.927Z",
+            "updatedAt": "2019-08-08T09:29:49.953Z",
+            "id": "518803"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.pages - 1",
+          "property": "user.pages"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:52.754Z",
+        "updatedAt": "2019-08-08T07:00:52.763Z",
+        "id": "735478"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:51.955Z",
+    "updatedAt": "2019-08-08T07:00:51.965Z",
+    "id": "807751"
+  }
+}

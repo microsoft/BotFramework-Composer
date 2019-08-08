@@ -1,0 +1,186 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        "GetMyEmail",
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:20.226Z",
+            "updatedAt": "2019-08-08T09:29:21.626Z",
+            "id": "865374"
+          },
+          "activity": "[bfdactivity-865374]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[PageOrdinalNumber]",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:24.419Z",
+            "updatedAt": "2019-08-08T09:29:24.426Z",
+            "id": "356283"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:25.809Z",
+            "updatedAt": "2019-08-08T09:29:26.957Z",
+            "id": "324576"
+          },
+          "activity": "[bfdactivity-324576]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:27.966Z",
+            "updatedAt": "2019-08-08T09:29:27.970Z",
+            "id": "455711"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:29.544Z",
+            "updatedAt": "2019-08-08T09:29:30.226Z",
+            "id": "426921"
+          },
+          "activity": "[bfdactivity-426921]"
+        },
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.emailChoice",
+          "choices": [
+            {
+              "value": "Show me the 1st Email. "
+            },
+            {
+              "value": "Show me the 2nd Email. "
+            },
+            {
+              "value": "Show me the 3rd Email. "
+            },
+            {
+              "value": "Next Page. "
+            },
+            {
+              "value": "Last Page. "
+            },
+            {
+              "value": "Go back. "
+            }
+          ],
+          "prompt": "What do you want to do? ",
+          "style": "List",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "condition": "user.emailChoice",
+          "cases": [
+            {
+              "value": "Show me the 1st Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedEmail",
+                  "value": "user.emails[0]",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:32.052Z",
+                    "updatedAt": "2019-08-08T09:29:32.058Z",
+                    "id": "930686"
+                  }
+                },
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
+              ]
+            },
+            {
+              "value": "Show me the 2nd Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedEmail",
+                  "value": "user.emails[1]",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:33.126Z",
+                    "updatedAt": "2019-08-08T09:29:33.131Z",
+                    "id": "641725"
+                  }
+                },
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
+              ]
+            },
+            {
+              "value": "Show me the 3rd Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedEmail",
+                  "value": "user.emails[2]"
+                },
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
+              ]
+            },
+            {
+              "value": "Next Page. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyNextPage"
+                }
+              ]
+            },
+            {
+              "value": "Last Page. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyLastPage"
+                }
+              ]
+            },
+            {
+              "value": "Go back. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.EndDialog"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:56.276Z",
+        "updatedAt": "2019-08-08T07:00:56.283Z",
+        "id": "386982"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:54.861Z",
+    "updatedAt": "2019-08-08T07:00:54.873Z",
+    "id": "809546"
+  }
+}
