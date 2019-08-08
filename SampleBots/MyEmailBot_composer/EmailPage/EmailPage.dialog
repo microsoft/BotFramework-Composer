@@ -16,11 +16,25 @@
       "steps": [
         {
           "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "never",
+          "property": "user.ans",
           "prompt": "[EmailCard]",
-          "property": "user.ans"
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:52.466Z",
+            "updatedAt": "2019-08-08T09:24:52.477Z",
+            "id": "227657"
+          }
         },
         {
-          "$type": "Microsoft.RepeatDialog"
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:55.499Z",
+            "updatedAt": "2019-08-08T09:24:55.504Z",
+            "id": "596431"
+          }
         }
       ],
       "events": [
@@ -35,7 +49,15 @@
     {
       "$type": "Microsoft.IntentRule",
       "steps": [
-        "ShowMyEmail"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowMyEmail",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:00.403Z",
+            "updatedAt": "2019-08-08T09:25:00.410Z",
+            "id": "641772"
+          }
+        }
       ],
       "intent": "ShowEmailIntent",
       "$designer": {
@@ -47,7 +69,10 @@
     {
       "$type": "Microsoft.IntentRule",
       "steps": [
-        "ShowSentItems"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowSentItems"
+        }
       ],
       "intent": "SentItemsIntent",
       "$designer": {
@@ -59,7 +84,10 @@
     {
       "$type": "Microsoft.IntentRule",
       "steps": [
-        "SendMyEmail"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SendMyEmail"
+        }
       ],
       "intent": "SendEmailIntent",
       "$designer": {

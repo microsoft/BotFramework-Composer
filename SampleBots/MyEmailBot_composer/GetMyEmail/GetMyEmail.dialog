@@ -8,7 +8,12 @@
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.Emails"
+          "arrayProperty": "user.Emails",
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:57.785Z",
+            "updatedAt": "2019-08-08T09:26:57.791Z",
+            "id": "179912"
+          }
         },
         {
           "$type": "Microsoft.SetProperty",

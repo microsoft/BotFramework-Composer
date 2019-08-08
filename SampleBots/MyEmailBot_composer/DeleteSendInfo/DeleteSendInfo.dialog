@@ -7,11 +7,21 @@
       "steps": [
         {
           "$type": "Microsoft.DeleteProperty",
-          "property": "user.subject"
+          "property": "user.subject",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:48.564Z",
+            "updatedAt": "2019-08-08T09:24:48.569Z",
+            "id": "558642"
+          }
         },
         {
           "$type": "Microsoft.DeleteProperty",
-          "property": "user.sendContext"
+          "property": "user.sendContext",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:49.403Z",
+            "updatedAt": "2019-08-08T09:24:49.408Z",
+            "id": "929603"
+          }
         }
       ],
       "events": [

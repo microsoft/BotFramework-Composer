@@ -61,8 +61,24 @@
     {
       "$type": "Microsoft.IntentRule",
       "steps": [
-        "Initialization",
-        "EmailPage"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Initialization",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:31.788Z",
+            "updatedAt": "2019-08-08T09:25:31.797Z",
+            "id": "387348"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EmailPage",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:33.163Z",
+            "updatedAt": "2019-08-08T09:25:33.168Z",
+            "id": "216905"
+          }
+        }
       ],
       "intent": "SignInIntent",
       "$designer": {
@@ -76,7 +92,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:36.101Z",
+            "updatedAt": "2019-08-08T09:25:36.993Z",
+            "id": "036405"
+          },
+          "activity": "[bfdactivity-036405]"
         }
       ],
       "intent": "HelpIntent",

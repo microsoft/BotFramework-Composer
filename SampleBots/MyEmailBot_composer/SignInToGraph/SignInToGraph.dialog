@@ -11,26 +11,47 @@
           "steps": [
             {
               "$type": "Microsoft.OAuthInput",
+              "timeout": "900000",
               "ConnectionName": "connection_t-hahan",
               "Title": "Log in",
               "Text": "Please Log in to Your Email Account",
-              "Property": "user.token"
+              "Property": "user.token",
+              "$designer": {
+                "createdAt": "2019-08-08T09:30:12.512Z",
+                "updatedAt": "2019-08-08T09:30:12.519Z",
+                "id": "986551"
+              }
             }
-          ]
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:14.677Z",
+            "updatedAt": "2019-08-08T09:30:14.693Z",
+            "id": "673634"
+          }
         },
         {
           "$type": "Microsoft.HttpRequest",
-          "url": "https://graph.microsoft.com/v1.0/me/",
           "method": "GET",
+          "url": "https://graph.microsoft.com/v1.0/me/",
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.Info"
+          "Property": "user.Info",
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:15.887Z",
+            "updatedAt": "2019-08-08T09:30:15.896Z",
+            "id": "125222"
+          }
         },
         {
           "$type": "Microsoft.SetProperty",
           "property": "user.Name",
-          "value": "user.Info.displayName"
+          "value": "user.Info.displayName",
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:16.539Z",
+            "updatedAt": "2019-08-08T09:30:16.549Z",
+            "id": "430037"
+          }
         }
       ],
       "events": [

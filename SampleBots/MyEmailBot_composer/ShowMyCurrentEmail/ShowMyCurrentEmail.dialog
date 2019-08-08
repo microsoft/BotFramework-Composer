@@ -35,13 +35,29 @@
             {
               "value": "Reply This Email",
               "steps": [
-                "ReplyMyEmail"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ReplyMyEmail",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:11.733Z",
+                    "updatedAt": "2019-08-08T09:29:11.743Z",
+                    "id": "461179"
+                  }
+                }
               ]
             },
             {
               "value": "Forward This Email",
               "steps": [
-                "ForwardMyEmail"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ForwardMyEmail",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:13.612Z",
+                    "updatedAt": "2019-08-08T09:29:13.619Z",
+                    "id": "682501"
+                  }
+                }
               ]
             },
             {

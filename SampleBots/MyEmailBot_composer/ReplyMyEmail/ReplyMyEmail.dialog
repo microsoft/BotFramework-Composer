@@ -5,15 +5,28 @@
     {
       "$type": "Microsoft.EventRule",
       "steps": [
-        "DeleteReplyInfo",
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteReplyInfo"
+        },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "OK! Let's Start To Reply this Email. "
+          "activity": "OK! Let's Start To Reply this Email. ",
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:21.602Z",
+            "updatedAt": "2019-08-08T09:27:21.608Z",
+            "id": "512779"
+          }
         },
         {
           "$type": "Microsoft.SetProperty",
+          "property": "user.toSubject",
           "value": "concat('Re:',user.selectedEmail.subject)",
-          "property": "user.toSubject"
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:23.035Z",
+            "updatedAt": "2019-08-08T09:27:23.042Z",
+            "id": "095079"
+          }
         },
         {
           "$type": "Microsoft.TextInput",
@@ -35,9 +48,19 @@
             {
               "$type": "Microsoft.SetProperty",
               "property": "user.toContent",
-              "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))"
+              "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))",
+              "$designer": {
+                "createdAt": "2019-08-08T09:27:25.261Z",
+                "updatedAt": "2019-08-08T09:27:25.266Z",
+                "id": "093887"
+              }
             }
-          ]
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:26.878Z",
+            "updatedAt": "2019-08-08T09:27:26.893Z",
+            "id": "087959"
+          }
         },
         {
           "$type": "Microsoft.ConfirmInput",
@@ -45,24 +68,62 @@
           "prompt": "Are you Sure to Send this Email?",
           "unrecognizedPrompt": "Please try again.",
           "invalidPrompt": "Please input yes/no.",
-          "alwaysPrompt": true
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "never",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:29.943Z",
+            "updatedAt": "2019-08-08T09:27:29.952Z",
+            "id": "674795"
+          }
         },
         {
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.confirmed",
           "steps": [
-            "ReplyMyEmailThroughGraph",
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "ReplyMyEmailThroughGraph",
+              "$designer": {
+                "createdAt": "2019-08-08T09:28:23.500Z",
+                "updatedAt": "2019-08-08T09:28:23.513Z",
+                "id": "170908"
+              }
+            },
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "Your Email has been Sent Succsessfully. "
+              "$designer": {
+                "createdAt": "2019-08-08T09:28:24.961Z",
+                "updatedAt": "2019-08-08T09:28:26.422Z",
+                "id": "477196"
+              },
+              "activity": "[bfdactivity-477196]"
             }
           ],
           "elseSteps": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "[MissionCancel]"
+              "$designer": {
+                "createdAt": "2019-08-08T09:28:27.116Z",
+                "updatedAt": "2019-08-08T09:28:27.837Z",
+                "id": "841334"
+              },
+              "activity": "[bfdactivity-841334]"
             }
-          ]
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:31.135Z",
+            "updatedAt": "2019-08-08T09:27:31.142Z",
+            "id": "426465"
+          }
         }
       ],
       "events": [

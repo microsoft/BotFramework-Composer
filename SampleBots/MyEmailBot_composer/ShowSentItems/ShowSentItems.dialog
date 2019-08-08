@@ -6,7 +6,10 @@
     {
       "$type": "Microsoft.EventRule",
       "steps": [
-        "GetMySentItems",
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetMySentItems"
+        },
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[SentPageOrdinalNumber]"
@@ -17,11 +20,21 @@
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{user.sentItems[1].subject}"
+          "$designer": {
+            "createdAt": "2019-08-08T09:31:13.918Z",
+            "updatedAt": "2019-08-08T09:31:15.028Z",
+            "id": "275713"
+          },
+          "activity": "[bfdactivity-275713]"
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{user.sentItems[2].subject}"
+          "$designer": {
+            "createdAt": "2019-08-08T09:31:09.457Z",
+            "updatedAt": "2019-08-08T09:31:10.586Z",
+            "id": "974289"
+          },
+          "activity": "[bfdactivity-974289]"
         },
         {
           "$type": "Microsoft.ChoiceInput",
@@ -64,7 +77,12 @@
                 },
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "[ShowEmailCard(user.selectedSentItems)]"
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:31:16.901Z",
+                    "updatedAt": "2019-08-08T09:31:17.993Z",
+                    "id": "854426"
+                  },
+                  "activity": "[bfdactivity-854426]"
                 }
               ]
             },
@@ -99,13 +117,19 @@
             {
               "value": "Next Page. ",
               "steps": [
-                "ShowSentNextPage"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowSentNextPage"
+                }
               ]
             },
             {
               "value": "Last Page. ",
               "steps": [
-                "ShowSentLastPage"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowSentLastPage"
+                }
               ]
             },
             {

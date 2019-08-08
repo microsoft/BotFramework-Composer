@@ -7,8 +7,13 @@
       "steps": [
         {
           "$type": "Microsoft.SetProperty",
+          "property": "user.sentPages",
           "value": "user.sentPages + 1",
-          "property": "user.sentPages"
+          "$designer": {
+            "createdAt": "2019-08-08T09:30:08.454Z",
+            "updatedAt": "2019-08-08T09:30:08.461Z",
+            "id": "712822"
+          }
         }
       ],
       "events": [

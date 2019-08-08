@@ -40,9 +40,33 @@
           "changeType": "Clear",
           "arrayProperty": "user.sentItems"
         },
-        "SignInToGraph",
-        "GetMyEmailFromGraph",
-        "GetSentItemsFromGraph"
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SignInToGraph",
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:15.645Z",
+            "updatedAt": "2019-08-08T09:27:15.652Z",
+            "id": "256471"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetMyEmailFromGraph",
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:16.910Z",
+            "updatedAt": "2019-08-08T09:27:16.922Z",
+            "id": "742302"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetSentItemsFromGraph",
+          "$designer": {
+            "createdAt": "2019-08-08T09:27:18.030Z",
+            "updatedAt": "2019-08-08T09:27:18.038Z",
+            "id": "707323"
+          }
+        }
       ],
       "events": [
         "beginDialog"

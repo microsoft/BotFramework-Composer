@@ -9,23 +9,48 @@
         "GetMyEmail",
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[EmailStatistics]"
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:20.226Z",
+            "updatedAt": "2019-08-08T09:29:21.626Z",
+            "id": "865374"
+          },
+          "activity": "[bfdactivity-865374]"
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[PageOrdinalNumber]"
+          "activity": "[PageOrdinalNumber]",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:24.419Z",
+            "updatedAt": "2019-08-08T09:29:24.426Z",
+            "id": "356283"
+          }
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{user.emails[0].subject} . {length(user.emails[0].bodypreview)} words"
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:25.809Z",
+            "updatedAt": "2019-08-08T09:29:26.957Z",
+            "id": "324576"
+          },
+          "activity": "[bfdactivity-324576]"
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words"
+          "activity": "{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words",
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:27.966Z",
+            "updatedAt": "2019-08-08T09:29:27.970Z",
+            "id": "455711"
+          }
         },
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "{user.emails[2].subject} . {length(user.emails[2].bodypreview)} words"
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:29.544Z",
+            "updatedAt": "2019-08-08T09:29:30.226Z",
+            "id": "426921"
+          },
+          "activity": "[bfdactivity-426921]"
         },
         {
           "$type": "Microsoft.ChoiceInput",
@@ -64,9 +89,17 @@
                 {
                   "$type": "Microsoft.SetProperty",
                   "property": "user.selectedEmail",
-                  "value": "user.emails[0]"
+                  "value": "user.emails[0]",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:32.052Z",
+                    "updatedAt": "2019-08-08T09:29:32.058Z",
+                    "id": "930686"
+                  }
                 },
-                "ShowMyCurrentEmail"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
               ]
             },
             {
@@ -75,9 +108,17 @@
                 {
                   "$type": "Microsoft.SetProperty",
                   "property": "user.selectedEmail",
-                  "value": "user.emails[1]"
+                  "value": "user.emails[1]",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:29:33.126Z",
+                    "updatedAt": "2019-08-08T09:29:33.131Z",
+                    "id": "641725"
+                  }
                 },
-                "ShowMyCurrentEmail"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
               ]
             },
             {
@@ -88,19 +129,28 @@
                   "property": "user.selectedEmail",
                   "value": "user.emails[2]"
                 },
-                "ShowMyCurrentEmail"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyCurrentEmail"
+                }
               ]
             },
             {
               "value": "Next Page. ",
               "steps": [
-                "ShowMyNextPage"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyNextPage"
+                }
               ]
             },
             {
               "value": "Last Page. ",
               "steps": [
-                "ShowMyLastPage"
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowMyLastPage"
+                }
               ]
             },
             {

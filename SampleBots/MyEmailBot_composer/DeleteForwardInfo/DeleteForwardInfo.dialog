@@ -7,11 +7,21 @@
       "steps": [
         {
           "$type": "Microsoft.DeleteProperty",
-          "property": "user.fwSubject"
+          "property": "user.fwSubject",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:39.200Z",
+            "updatedAt": "2019-08-08T09:24:39.207Z",
+            "id": "333955"
+          }
         },
         {
           "$type": "Microsoft.DeleteProperty",
-          "property": "user.fwContent"
+          "property": "user.fwContent",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:41.239Z",
+            "updatedAt": "2019-08-08T09:24:41.249Z",
+            "id": "753867"
+          }
         }
       ],
       "events": [

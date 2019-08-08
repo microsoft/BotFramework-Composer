@@ -13,7 +13,12 @@
         {
           "$type": "Microsoft.SetProperty",
           "property": "user.sentItemsCount",
-          "value": "count(user.getGraphSentItems.value)"
+          "value": "count(user.getGraphSentItems.value)",
+          "$designer": {
+            "createdAt": "2019-08-08T09:31:01.309Z",
+            "updatedAt": "2019-08-08T09:31:01.315Z",
+            "id": "199137"
+          }
         },
         {
           "$type": "Microsoft.EditArray",

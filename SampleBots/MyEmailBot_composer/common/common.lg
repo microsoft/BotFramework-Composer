@@ -98,3 +98,67 @@
 
 # bfdactivity-113979
 -This Is the First Page !
+
+
+# bfdactivity-806792
+-[ShowRecipient(user)]
+
+
+# bfdactivity-036405
+-[help]
+
+
+# bfdactivity-076321
+-OK! Let's Find Your Recipient.
+
+
+# bfdactivity-315212
+-Successfully Set the Email Address to be {user.emailAddr}.
+
+
+# bfdactivity-993453
+-Successfully Set the Email Address to be {user.emailAddr}.
+
+
+# bfdactivity-628158
+-OK! Let's Start To Forward this Email.
+
+
+# bfdactivity-512779
+-OK! Let's Start To Reply this Email.
+
+
+# bfdactivity-477196
+-Your Email has been Sent Succsessfully.
+
+
+# bfdactivity-841334
+-[MissionCancel]
+
+
+# bfdactivity-865374
+-[EmailStatistics]
+
+
+# bfdactivity-324576
+-{user.emails[0].subject} . {length(user.emails[0].bodypreview)} words
+
+
+# bfdactivity-583664
+-{user.emails[1].subject} . {length(user.emails[1].bodypreview)} words
+
+
+# bfdactivity-426921
+-{user.emails[2].subject} . {length(user.emails[2].bodypreview)} words
+
+
+# bfdactivity-974289
+-{user.sentItems[2].subject}
+
+
+# bfdactivity-275713
+-{user.sentItems[1].subject}
+
+
+# bfdactivity-854426
+-[ShowEmailCard(user.selectedSentItems)]

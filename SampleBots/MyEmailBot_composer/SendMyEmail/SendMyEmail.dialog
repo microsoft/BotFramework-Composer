@@ -5,7 +5,10 @@
     {
       "$type": "Microsoft.EventRule",
       "steps": [
-        "DeleteSendInfo",
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteSendInfo"
+        },
         {
           "$type": "Microsoft.SendActivity",
           "activity": "OK! Let's Start To Write an Email. "
@@ -20,7 +23,10 @@
           "prompt": "Get! Please Enter the Body of Your Email.",
           "property": "user.sendContext"
         },
-        "FindMyContact",
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "FindMyContact"
+        },
         {
           "$type": "Microsoft.ConfirmInput",
           "property": "dialog.confirmed",
@@ -33,7 +39,10 @@
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.confirmed",
           "steps": [
-            "SendMyEmailToGraph",
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "SendMyEmailToGraph"
+            },
             {
               "$type": "Microsoft.SendActivity",
               "activity": "Your Email has been Sent Succsessfully. "

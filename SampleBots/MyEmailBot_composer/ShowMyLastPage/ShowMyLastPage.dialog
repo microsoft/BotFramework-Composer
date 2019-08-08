@@ -19,9 +19,19 @@
               "activity": "[bfdactivity-113979]"
             },
             {
-              "$type": "Microsoft.EndDialog"
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "createdAt": "2019-08-08T09:29:53.178Z",
+                "updatedAt": "2019-08-08T09:29:53.190Z",
+                "id": "617347"
+              }
             }
-          ]
+          ],
+          "$designer": {
+            "createdAt": "2019-08-08T09:29:49.927Z",
+            "updatedAt": "2019-08-08T09:29:49.953Z",
+            "id": "518803"
+          }
         },
         {
           "$type": "Microsoft.SetProperty",
