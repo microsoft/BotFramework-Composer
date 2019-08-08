@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
+import lodash from 'lodash';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -12,10 +13,11 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { get } from 'lodash';
 
+import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { BASEPATH } from '../../constants';
 import { StoreContext } from '../../store';
+import * as luUtil from '../../utils/luUtil';
 
 import { formCell, luPhraseCell } from './styles';
 
@@ -28,11 +30,12 @@ export default function TableView(props) {
   const listRef = useRef(null);
 
   useEffect(() => {
+    checkErorrs(luFiles);
     // make up intents data
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
+      lodash.get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
         if (updateIntent) {
@@ -61,6 +64,32 @@ export default function TableView(props) {
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog, dialogs]);
+
+  function checkErorrs(files) {
+    // check diagnostic error
+    const errorFiles = files.filter(file => {
+      return luUtil.isValid(file.diagnostics) === false;
+    });
+
+    const showError = files => {
+      const file = files.pop();
+      if (!file) return;
+      const errorMsg = luUtil.combineMessage(file.diagnostics);
+      const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lu file.`);
+      OpenConfirmModal(errorTitle, errorMsg, {
+        style: DialogStyle.Console,
+        confirmBtnText: formatMessage('Edit'),
+      }).then(ok => {
+        if (ok === true) {
+          props.onEdit({ fileId: file.id });
+        } else {
+          showError(files);
+        }
+      });
+    };
+
+    showError(errorFiles);
+  }
 
   function navigateToDialog(id) {
     clearNavHistory();

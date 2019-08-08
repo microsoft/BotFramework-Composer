@@ -93,6 +93,10 @@ export const LUPage = props => {
     }
   }, [subPath, dialogs]);
 
+  useEffect(() => {
+    setErrorMsg('');
+  }, [luFile]);
+
   function onSelect(id) {
     if (id === '_all') {
       navigate(mapNavPath('/language-understanding'));
@@ -108,7 +112,6 @@ export const LUPage = props => {
     };
     try {
       await actions.updateLuFile(payload);
-      setErrorMsg('');
     } catch (error) {
       setErrorMsg(error.message);
     }
@@ -116,8 +119,8 @@ export const LUPage = props => {
 
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit(template) {
-    navigate(mapNavPath(`language-understanding/${template.fileId}`));
+  function onTableViewWantEdit({ fileId = '' }) {
+    navigate(mapNavPath(`language-understanding/${fileId}`));
     setEditMode(true);
   }
 
@@ -167,7 +170,7 @@ export const LUPage = props => {
           {editMode ? (
             <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
           ) : (
-            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} errorMsg={errorMsg} />
+            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
           )}
         </div>
       </div>
