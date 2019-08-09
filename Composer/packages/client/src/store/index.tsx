@@ -6,14 +6,12 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionType, ActionHandlers } from './types';
+import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types';
 
 const initialState: State = {
   dialogs: [],
   botName: '',
-  navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
-  navPathHistory: [],
   recentProjects: [],
   storages: [],
   focusedStorageFolder: {},
@@ -25,7 +23,14 @@ const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  error: null,
+  designPageLocation: {
+    dialogId: '',
+    uri: '',
+    focusedEvent: '',
+    focusedSteps: [],
+  },
+  breadcrumb: [],
+  error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
 };
@@ -33,7 +38,7 @@ const initialState: State = {
 interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
-  actions: ActionHandlers;
+  actions: BoundActionHandlers;
 }
 
 export const StoreContext = React.createContext<StoreContextValue>({

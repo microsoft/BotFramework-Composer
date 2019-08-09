@@ -1,7 +1,4 @@
-import { Store, ActionHandlers } from '../types';
-
-type BoundAction = (...args: any[]) => void;
-type BoundActionHandlers = { [action: string]: BoundAction };
+import { Store, ActionHandlers, BoundActionHandlers } from '../types';
 
 export default function bindActions(store: Store, actions: ActionHandlers) {
   return Object.keys(actions).reduce(

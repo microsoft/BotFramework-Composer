@@ -5,6 +5,8 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { BFDWidgetProps } from '../types';
 
+import { ExpressionWidget } from './ExpressionWidget';
+
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
 };
@@ -14,8 +16,22 @@ const getFloat = (value: string, step: number) => {
 };
 
 export function TextWidget(props: BFDWidgetProps) {
-  const { label, onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled, options } = props;
-  const { description, examples = [], type } = schema;
+  const {
+    label,
+    onBlur,
+    onChange,
+    onFocus,
+    readonly,
+    value,
+    placeholder,
+    schema,
+    id,
+    disabled,
+    options,
+    formContext,
+    rawErrors,
+  } = props;
+  const { description, examples = [], type, $role } = schema;
 
   let placeholderText = placeholder;
 
@@ -66,20 +82,25 @@ export function TextWidget(props: BFDWidgetProps) {
     );
   }
 
-  return (
-    <TextField
-      description={description}
-      disabled={disabled}
-      id={id}
-      label={getLabel()}
-      onBlur={() => onBlur(id, value)}
-      onChange={(_, newValue?: string) => onChange(newValue)}
-      onFocus={() => onFocus(id, value)}
-      placeholder={placeholderText}
-      readOnly={Boolean(schema.const) || readonly}
-      value={value}
-    />
-  );
+  const sharedProps = {
+    description,
+    disabled,
+    id,
+    value,
+    label: getLabel(),
+    autoComplete: 'off',
+    onBlur: () => onBlur(id, value),
+    onChange: (_, newValue?: string) => onChange(newValue),
+    onFocus: () => onFocus(id, value),
+    placeholder: placeholderText,
+    readOnly: Boolean(schema.const) || readonly,
+  };
+
+  if ($role === 'expression') {
+    return <ExpressionWidget {...sharedProps} formContext={formContext} rawErrors={rawErrors} />;
+  }
+
+  return <TextField {...sharedProps} />;
 }
 
 TextWidget.defaultProps = {

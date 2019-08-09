@@ -1,41 +1,62 @@
-import { get, set, cloneDeep, replace } from 'lodash';
+import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import formatMessage from 'format-message';
+
+import { upperCaseName } from './fileUtil';
+import { getFocusPath } from './navigation';
 
 const ExpressionParser = new ExpressionEngine();
 
-export function getDialogName(path) {
-  const realPath = replace(path, '#.', '#');
-  const [dialogName] = realPath.split('#');
-
-  return dialogName;
+export function getDialogsMap(dialogs) {
+  return dialogs.reduce((result, dialog) => {
+    result[dialog.id] = dialog.content;
+    return result;
+  }, {});
 }
 
-export function getDialogData(dialogsMap, path) {
-  if (path === '') return '';
-  const realPath = replace(path, '#.', '#');
-  const pathList = realPath.split('#');
-  const dialog = dialogsMap[pathList[0]];
+const getTitle = (editorSchema, type) => {
+  const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
 
-  if (pathList[1] === '') {
+  return (sdkOverrides && sdkOverrides.title) || '';
+};
+
+export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas) {
+  let label = '';
+  const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
+  if (!dataPath) {
+    label = dialogs.find(d => d.id === dialogId).displayName;
+  } else {
+    const current = `${dataPath}.$type`;
+    const dialogsMap = getDialogsMap(dialogs);
+    const dialog = dialogsMap[dialogId];
+    const type = get(dialog, current);
+    label = getTitle(schemas.editor, type);
+  }
+
+  label = formatMessage(upperCaseName(label || ''));
+  return label;
+}
+
+export function getDialogData(dialogsMap, dialogId, dataPath = '') {
+  if (!dialogId) return '';
+  const dialog = dialogsMap[dialogId];
+
+  if (!dataPath) {
     return dialog;
   }
 
-  return ConceptLabels[get(dialog, pathList[1])]
-    ? ConceptLabels[get(dialog, pathList[1])].title
-    : get(dialog, pathList[1]);
+  return ConceptLabels[get(dialog, dataPath)] ? ConceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
 }
 
-export function setDialogData(dialogsMap, path, data) {
+export function setDialogData(dialogsMap, dialogId, dataPath, data) {
   const dialogsMapClone = cloneDeep(dialogsMap);
-  const realPath = replace(path, '#.', '#');
-  const pathList = realPath.split('#');
-  const dialog = dialogsMapClone[pathList[0]];
+  const dialog = dialogsMapClone[dialogId];
 
-  if (pathList[1] === '') {
+  if (!dataPath) {
     return data;
   }
-  return set(dialog, pathList[1], data);
+  return set(dialog, dataPath, data);
 }
 
 export function sanitizeDialogData(dialogData) {
