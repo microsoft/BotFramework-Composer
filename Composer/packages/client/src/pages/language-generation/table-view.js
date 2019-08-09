@@ -2,8 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
-import lodash from 'lodash';
-import debounce from 'lodash.debounce';
+import { debounce, isEmpty } from 'lodash';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -25,7 +24,7 @@ import { actionButton, formCell } from '../language-understanding/styles';
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
-  const { dialogs } = state;
+  const { dialogs, lgFiles } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
@@ -34,44 +33,59 @@ export default function TableView(props) {
   const listRef = useRef(null);
 
   useEffect(() => {
-    if (lodash.isEmpty(lgFile) === false) {
-      const diagnostics = lodash.get(lgFile, 'diagnostics', []);
-      if (lgUtil.isValid(diagnostics) === true) {
-        const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
-          return {
-            ...template,
-            index: templateIndex,
-          };
-        });
+    if (isEmpty(lgFile)) return;
 
-        if (!activeDialog) {
-          setTemplates(allTemplates);
+    const errorFiles = checkErrors(lgFiles);
+    if (errorFiles.length !== 0) {
+      showErrors(errorFiles);
+      return;
+    }
+
+    const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
+      return {
+        ...template,
+        index: templateIndex,
+      };
+    });
+
+    if (!activeDialog) {
+      setTemplates(allTemplates);
+    } else {
+      const dialogsTemplates = activeDialog.lgTemplates.reduce((result, item) => {
+        const template = allTemplates.find(t => t.Name === item);
+        if (!template) {
+          new Error(`lg template ${item} not found`);
         } else {
-          const dialogsReferenceThisTemplate = activeDialog.lgTemplates.reduce((result, item) => {
-            const template = allTemplates.find(t => t.Name === item);
-            if (!template) {
-              new Error(`lg template ${item} not found`);
-            } else {
-              result.push(template);
-            }
-            return result;
-          }, []);
-          setTemplates(dialogsReferenceThisTemplate);
+          result.push(template);
         }
-      } else {
-        const errorMsg = lgUtil.combineMessage(diagnostics);
-        const errorTitle = formatMessage('There was a problem parsing an LG template.');
-        OpenConfirmModal(errorTitle, errorMsg, {
-          style: DialogStyle.Console,
-          confirmBtnText: formatMessage('Edit'),
-        }).then(res => {
-          if (res) {
-            props.onEdit();
-          }
-        });
-      }
+        return result;
+      }, []);
+      setTemplates(dialogsTemplates);
     }
   }, [lgFile, activeDialog]);
+
+  function checkErrors(files) {
+    return files.filter(file => {
+      return lgUtil.isValid(file.diagnostics) === false;
+    });
+  }
+
+  async function showErrors(files) {
+    const file = files.pop();
+    if (!file) return;
+    const errorMsg = lgUtil.combineMessage(file.diagnostics);
+    const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lg file.`);
+    const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
+      style: DialogStyle.Console,
+      confirmBtnText: formatMessage('Edit'),
+    });
+
+    if (confirmed === true) {
+      props.onEdit({ fileId: file.id });
+    } else {
+      await showErrors(files);
+    }
+  }
 
   function navigateToDialog(id) {
     clearNavHistory();

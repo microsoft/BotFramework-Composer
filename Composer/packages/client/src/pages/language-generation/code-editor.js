@@ -6,14 +6,14 @@ import { PropTypes } from 'prop-types';
 import { LgEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
-import lodash from 'lodash';
+import { get, debounce, isEmpty } from 'lodash';
 
 import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
   const file = props.file;
-  const onChange = lodash.debounce(props.onChange, 500);
-  const [diagnostics, setDiagnostics] = useState(lodash.get(file, 'diagnostics', []));
+  const onChange = debounce(props.onChange, 500);
+  const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
 
   const _onChange = value => {
     const diagnostics = lgUtil.check(value);
@@ -28,7 +28,7 @@ export default function CodeEditor(props) {
 
   const fileId = file && file.id;
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(file) === false ? (
+    return isEmpty(file) === false ? (
       <LgEditor
         options={{
           lineNumbers: 'on',
@@ -38,7 +38,7 @@ export default function CodeEditor(props) {
         onChange={_onChange}
       />
     ) : (
-      <div />
+      <Fragment />
     );
   }, [fileId]);
 
@@ -78,7 +78,7 @@ export default function CodeEditor(props) {
           </span>
         </div>
       ) : (
-        <div style={{ height: '19px' }} />
+        <Fragment />
       )}
     </Fragment>
   );

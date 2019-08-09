@@ -82,12 +82,12 @@ export const LUPage = props => {
   }, [dialogs]);
 
   useEffect(() => {
-    // if is root, disable editMode
+    // root view merge all lu file into one list, we can't edit multi file.
     if (isRoot) {
       setEditMode(false);
     }
 
-    //  if dialog not find, navigate to all
+    // fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
       navigate(mapNavPath('/language-understanding'));
     }

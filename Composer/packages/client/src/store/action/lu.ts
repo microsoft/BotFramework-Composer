@@ -18,7 +18,6 @@ export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content })
       payload: null,
       error: err,
     });
-    // pass error to caller
     throw new Error(err.response.data.message);
   }
 };

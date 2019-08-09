@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
-import lodash from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -30,12 +30,18 @@ export default function TableView(props) {
   const listRef = useRef(null);
 
   useEffect(() => {
-    checkErorrs(luFiles);
-    // make up intents data
+    if (isEmpty(luFiles)) return;
+
+    const errorFiles = checkErrors(luFiles);
+    if (errorFiles.length !== 0) {
+      showErrors(errorFiles);
+      return;
+    }
+
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      lodash.get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
+      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name);
         if (updateIntent) {
@@ -52,10 +58,8 @@ export default function TableView(props) {
       return result.concat(items);
     }, []);
 
-    // all view, show all lu intents
     if (!activeDialog) {
       setIntents(allIntents);
-      // dialog view, show dialog intents
     } else {
       const dialogIntents = allIntents.filter(item => {
         return item.fileId === activeDialog.id;
@@ -63,32 +67,29 @@ export default function TableView(props) {
 
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, dialogs]);
+  }, [luFiles, activeDialog]);
 
-  function checkErorrs(files) {
-    // check diagnostic error
-    const errorFiles = files.filter(file => {
+  function checkErrors(files) {
+    return files.filter(file => {
       return luUtil.isValid(file.diagnostics) === false;
     });
+  }
 
-    const showError = files => {
-      const file = files.pop();
-      if (!file) return;
-      const errorMsg = luUtil.combineMessage(file.diagnostics);
-      const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lu file.`);
-      OpenConfirmModal(errorTitle, errorMsg, {
-        style: DialogStyle.Console,
-        confirmBtnText: formatMessage('Edit'),
-      }).then(ok => {
-        if (ok === true) {
-          props.onEdit({ fileId: file.id });
-        } else {
-          showError(files);
-        }
-      });
-    };
+  async function showErrors(files) {
+    const file = files.pop();
+    if (!file) return;
+    const errorMsg = luUtil.combineMessage(file.diagnostics);
+    const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lu`);
+    const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
+      style: DialogStyle.Console,
+      confirmBtnText: formatMessage('Edit'),
+    });
 
-    showError(errorFiles);
+    if (confirmed === true) {
+      props.onEdit({ fileId: file.id });
+    } else {
+      await showErrors(files);
+    }
   }
 
   function navigateToDialog(id) {

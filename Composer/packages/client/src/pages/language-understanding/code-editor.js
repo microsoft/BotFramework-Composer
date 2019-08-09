@@ -6,19 +6,15 @@ import { PropTypes } from 'prop-types';
 import { LuEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { SharedColors } from '@uifabric/fluent-theme';
-import lodash from 'lodash';
+import { get, debounce, isEmpty } from 'lodash';
 
 import * as luUtil from '../../utils/luUtil';
 
 export default function CodeEditor(props) {
   const file = props.file;
-  const onChange = lodash.debounce(props.onChange, 500);
+  const onChange = debounce(props.onChange, 500);
   const updateErrorMsg = props.errorMsg;
-  const diagnostics = lodash.get(file, 'diagnostics', []);
-
-  const _onChange = value => {
-    onChange(value);
-  };
+  const diagnostics = get(file, 'diagnostics', []);
 
   // diagnostics is load file error,
   // updateErrorMsg is save file return error.
@@ -28,17 +24,17 @@ export default function CodeEditor(props) {
 
   const fileId = file && file.id;
   const memoizedEditor = useMemo(() => {
-    return lodash.isEmpty(file) === false ? (
+    return isEmpty(file) === false ? (
       <LuEditor
         options={{
           lineNumbers: 'on',
           minimap: 'on',
         }}
         value={file.content}
-        onChange={_onChange}
+        onChange={onChange}
       />
     ) : (
-      <div />
+      <Fragment />
     );
   }, [fileId]);
 
@@ -66,7 +62,7 @@ export default function CodeEditor(props) {
                 a: ({ children }) => (
                   <a
                     key="a"
-                    href="https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format" // TODO: The document is old, valid intent start with double #, `## Greeting`
+                    href="https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -78,7 +74,7 @@ export default function CodeEditor(props) {
           </span>
         </div>
       ) : (
-        <div style={{ height: '19px' }} />
+        <Fragment />
       )}
     </Fragment>
   );

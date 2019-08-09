@@ -84,12 +84,12 @@ export const LGPage = props => {
   }, [dialogs]);
 
   useEffect(() => {
-    // if is not root, disable editMode
+    // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
     if (!isRoot) {
       setEditMode(false);
     }
 
-    //  if dialog not find, navigate to all
+    //  fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
       navigate(mapNavPath('/language-generation'));
     }
@@ -120,8 +120,8 @@ export const LGPage = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit({ fileId = '' }) {
-    navigate(mapNavPath(`/language-generation/${fileId}`));
+  function onTableViewWantEdit() {
+    navigate(mapNavPath(`/language-generation`));
     setEditMode(true);
   }
 
