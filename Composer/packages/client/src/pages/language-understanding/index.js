@@ -119,7 +119,7 @@ export const LUPage = props => {
 
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit({ fileId = '' }) {
+  function onTableViewClickEdit({ fileId = '' }) {
     navigate(mapNavPath(`language-understanding/${fileId}`));
     setEditMode(true);
   }
@@ -170,7 +170,7 @@ export const LUPage = props => {
           {editMode ? (
             <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
           ) : (
-            <TableView file={luFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+            <TableView file={luFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}
         </div>
       </div>

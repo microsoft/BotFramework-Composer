@@ -11,9 +11,8 @@ import { get, debounce, isEmpty } from 'lodash';
 import * as luUtil from '../../utils/luUtil';
 
 export default function CodeEditor(props) {
-  const file = props.file;
+  const { file, errorMsg: updateErrorMsg } = props;
   const onChange = debounce(props.onChange, 500);
-  const updateErrorMsg = props.errorMsg;
   const diagnostics = get(file, 'diagnostics', []);
 
   // diagnostics is load file error,

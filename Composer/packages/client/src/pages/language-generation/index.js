@@ -120,7 +120,7 @@ export const LGPage = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit() {
+  function onTableViewClickEdit() {
     navigate(mapNavPath(`/language-generation`));
     setEditMode(true);
   }
@@ -171,7 +171,7 @@ export const LGPage = props => {
           {editMode ? (
             <CodeEditor file={lgFile} onChange={onChange} />
           ) : (
-            <TableView file={lgFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+            <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}
         </div>
       </div>

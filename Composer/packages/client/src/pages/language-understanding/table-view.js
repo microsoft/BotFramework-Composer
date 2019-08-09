@@ -25,7 +25,7 @@ export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs, luFiles } = state;
-  const activeDialog = props.activeDialog;
+  const { activeDialog, onClickEdit } = props;
   const [intents, setIntents] = useState([]);
   const listRef = useRef(null);
 
@@ -86,7 +86,7 @@ export default function TableView(props) {
     });
 
     if (confirmed === true) {
-      props.onEdit({ fileId: file.id });
+      onClickEdit({ fileId: file.id });
     } else {
       await showErrors(files);
     }
@@ -104,7 +104,7 @@ export default function TableView(props) {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          props.onEdit(intents[index]);
+          onClickEdit(intents[index]);
         },
       },
     ];
@@ -239,5 +239,5 @@ export default function TableView(props) {
 
 TableView.propTypes = {
   activeDialog: PropTypes.object,
-  onEdit: PropTypes.func,
+  onClickEdit: PropTypes.func,
 };

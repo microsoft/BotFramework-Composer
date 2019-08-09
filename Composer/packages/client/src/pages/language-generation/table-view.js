@@ -25,8 +25,7 @@ export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { clearNavHistory, navTo } = actions;
   const { dialogs, lgFiles } = state;
-  const lgFile = props.file;
-  const activeDialog = props.activeDialog;
+  const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
@@ -81,7 +80,7 @@ export default function TableView(props) {
     });
 
     if (confirmed === true) {
-      props.onEdit({ fileId: file.id });
+      onClickEdit({ fileId: file.id });
     } else {
       await showErrors(files);
     }
@@ -99,7 +98,7 @@ export default function TableView(props) {
         key: 'edit',
         name: formatMessage('Edit'),
         onClick: () => {
-          props.onEdit(templates[index]);
+          onClickEdit(templates[index]);
         },
       },
       {
@@ -320,5 +319,5 @@ export default function TableView(props) {
 TableView.propTypes = {
   file: PropTypes.object,
   activeDialog: PropTypes.object,
-  onEdit: PropTypes.func,
+  onClickEdit: PropTypes.func,
 };
