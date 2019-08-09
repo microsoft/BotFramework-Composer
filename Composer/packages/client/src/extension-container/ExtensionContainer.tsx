@@ -47,6 +47,14 @@ const shellApi = {
     return apiClient.apiCall('focusTo', { subPath: subPath });
   },
 
+  onFocusEvent: subPath => {
+    return apiClient.apiCall('onFocusEvent', { subPath });
+  },
+
+  onFocusSteps: subPaths => {
+    return apiClient.apiCall('onFocusSteps', { subPaths });
+  },
+
   shellNavigate: (shellPage, opts = {}) => {
     return apiClient.apiCall('shellNavigate', { shellPage, opts });
   },

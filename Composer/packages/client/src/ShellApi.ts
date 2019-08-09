@@ -12,21 +12,25 @@ import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { BASEPATH } from './constants';
 import { resolveToBasePath } from './utils/fileUtil';
+import { getFocusPath } from './utils/navigation';
 import { DialogInfo, LgFile, LuFile } from './store/types';
 
-// this is the api interface provided by shell to extensions
-// this is the single place handles all incoming request from extensions, VisualDesigner or FormEditor
-// this is where all side effects (like directly calling api of extensions) happened
+// this is the api interface provided by shell to extensions this is the single
+// place handles all incoming request from extensions, VisualDesigner or
+// FormEditor this is where all side effects (like directly calling api of
+// extensions) happened
 
 export interface ShellData {
   data: any;
   dialogs: DialogInfo[];
-  navPath: string;
   focusPath: string;
   schemas: any;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   currentDialog?: DialogInfo;
+  dialogId: string;
+  focusedEvent: string;
+  focusedSteps: string[];
 }
 
 const apiClient = new ApiClient();
@@ -65,13 +69,15 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 
 export function ShellApi() {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, navPath, focusPath, schemas, lgFiles, luFiles } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
   const updateLuFile = useDebouncedFunc(actions.updateLuFile);
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
+
+  const { dialogId, focusedEvent, focusedSteps } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -88,8 +94,8 @@ export function ShellApi() {
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
-    apiClient.registerApi('navDown', navDown);
-    apiClient.registerApi('focusTo', focusTo);
+    apiClient.registerApi('onFocusEvent', focusEvent);
+    apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -117,81 +123,71 @@ export function ShellApi() {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, navPath, focusPath]);
+  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
     if (schemaError.length !== 0) {
       const title = `StaticValidationError`;
       const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, {
-        style: DialogStyle.Console,
-      });
+      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
     }
   }, [schemas]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow) {
-    if (sourceWindow === VISUAL_EDITOR && navPath !== '') {
-      return getDialogData(dialogsMap, navPath);
+    if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
+      return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, focusPath);
+      return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
     }
 
     return '';
   }
 
   function getState(sourceWindow): ShellData {
-    const [currentDialogId] = navPath.split('#');
-    const currentDialog = dialogs.find(d => d.id === currentDialogId);
+    const currentDialog = dialogs.find(d => d.id === dialogId);
 
     return {
       data: getData(sourceWindow),
       dialogs,
-      navPath,
       focusPath,
       schemas,
       lgFiles,
       luFiles,
       currentDialog,
+      dialogId,
+      focusedEvent,
+      focusedSteps,
     };
   }
 
   // persist value change
   function handleValueChange(newData, event) {
-    const sourceWindowName = event.source.name;
-    let path = '';
-    switch (sourceWindowName) {
-      case VISUAL_EDITOR:
-        path = navPath;
-        break;
-      case FORM_EDITOR:
-        path = focusPath;
-        break;
-      default:
-        path = '';
-        break;
+    let dataPath = '';
+    if (event.source.name === FORM_EDITOR) {
+      dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
     }
 
-    if (path !== '') {
-      const updatedDialog = setDialogData(dialogsMap, path, newData);
-      const dialogId = path.split('#')[0];
-      const payload = { id: dialogId, content: updatedDialog };
-      dialogsMap[dialogId] = updatedDialog;
-      updateDialog(payload);
-    }
+    const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
+    const payload = {
+      id: dialogId,
+      content: updatedDialog,
+    };
+    dialogsMap[dialogId] = updatedDialog;
+    updateDialog(payload);
 
     //make sure focusPath always valid
-    const data = getDialogData(dialogsMap, focusPath);
+    const data = getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
     if (typeof data === 'undefined') {
-      actions.focusTo(navPath);
+      actions.navTo(dialogId);
     }
 
     return true;
@@ -284,32 +280,30 @@ export function ShellApi() {
   }
 
   function cleanData() {
-    const dialogId = navPath.split('#')[0];
     const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
     if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = { id: dialogId, content: cleanedData };
+      const payload = {
+        id: dialogId,
+        content: cleanedData,
+      };
       updateDialog(payload);
     }
     flushUpdates();
   }
 
-  function navTo({ path, rest }) {
+  function navTo({ path }) {
     cleanData();
-    actions.navTo(path, rest);
+    actions.navTo(path, breadcrumb);
   }
 
-  function navDown({ subPath }) {
+  function focusEvent({ subPath }) {
     cleanData();
-    actions.navDown(subPath);
+    actions.focusEvent(subPath);
   }
 
-  function focusTo({ subPath }, event) {
+  function focusSteps({ subPaths = [] }) {
     cleanData();
-    let path = navPath;
-    if (event.source.name === FORM_EDITOR) {
-      path = focusPath;
-    }
-    actions.focusTo(path + subPath);
+    actions.focusSteps(subPaths);
   }
 
   return null;

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Router, Match } from '@reach/router';
+import { Router, Match, Redirect } from '@reach/router';
 
 import DesignPage from './pages/design';
 import { SettingPage } from './pages/setting';
@@ -16,14 +16,15 @@ const Routes = props => {
   const Content = props.component;
   const parentProps = props;
   return (
-    <Match path={BASEPATH} {...props}>
-      {props => (
+    <Match path={`/dialogs/:dialogId/*`} {...props}>
+      {({ match, navigate, location }) => (
         <div css={data}>
-          <Content css={showDesign(props.match)}>
-            <DesignPage {...props} />
+          <Content css={showDesign(match)}>
+            <DesignPage match={match} navigate={navigate} location={location} />
           </Content>
-          {!props.match && (
+          {!match && (
             <Router basepath={BASEPATH} {...parentProps}>
+              <Redirect from="/" to="dialogs/Main" noThrow />
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />

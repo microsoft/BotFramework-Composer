@@ -11,9 +11,7 @@ import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types'
 const initialState: State = {
   dialogs: [],
   botName: '',
-  navPath: '', // the data path for VisualEditor, based on `dialogs` which computed from files
   focusPath: '', // the data path for FormEditor
-  navPathHistory: [],
   recentProjects: [],
   storages: [],
   focusedStorageFolder: {},
@@ -25,7 +23,14 @@ const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
-  error: null,
+  designPageLocation: {
+    dialogId: '',
+    uri: '',
+    focusedEvent: '',
+    focusedSteps: [],
+  },
+  breadcrumb: [],
+  error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
 };
