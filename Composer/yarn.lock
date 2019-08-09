@@ -4986,9 +4986,10 @@ boom@2.x.x:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.0.tgz":
-  version "4.6.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.0.tgz#5a78715ca0e871d48af11bdeead3aae0c15f3091"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.1.tgz":
+  version "4.6.1"
+  uid "5908bcb995ef345c1305dd68687155e72ae05dd7"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.1.tgz#5908bcb995ef345c1305dd68687155e72ae05dd7"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
