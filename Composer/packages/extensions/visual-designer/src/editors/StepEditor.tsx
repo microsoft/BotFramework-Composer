@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
+
+import { SelectableGroup } from 'react-selectable-fast';
 
 import { StepGroup } from '../components/groups';
 import { Icon } from '../components/nodes/icons/icon';
@@ -38,22 +40,52 @@ const TailSize = {
 
 export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectingItems, setSelectingItems] = useState<string[]>([]);
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
+
+  const handleSelecting = items => {
+    const itemIds: string[] = [];
+
+    items.forEach(item => {
+      item.props && itemIds.push(item.props.id);
+    });
+    setSelectingItems(itemIds);
+
+    console.log('selecting items:' + selectingItems);
+  };
+  const handleSelectionFinish = items => {
+    const itemIds: string[] = [];
+
+    items.forEach(item => {
+      item.props && itemIds.push(item.props.id);
+    });
+
+    setSelectedItems(selectedItems);
+    console.log('selected items:' + selectingItems);
+  };
   const content = hasNoSteps ? (
     <EdgeMenu
       onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
       data-testid="StepGroupAdd"
     />
   ) : (
-    <StepGroup
-      id={id}
-      data={data}
-      onEvent={onEvent}
-      onResize={boundary => {
-        setStepGroupBoundary(boundary);
-      }}
-    />
+    <SelectableGroup
+      clickClassName="tick"
+      ignoreList={['.not-selectable']}
+      duringSelection={handleSelecting}
+      onSelectionFinish={handleSelectionFinish}
+    >
+      <StepGroup
+        id={id}
+        data={data}
+        onEvent={onEvent}
+        onResize={boundary => {
+          setStepGroupBoundary(boundary);
+        }}
+      />
+    </SelectableGroup>
   );
   const contentBoundary = hasNoSteps ? new Boundary(CircleSize.width, CircleSize.height) : stepGroupBoundary;
 

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { FC, ComponentClass, useContext } from 'react';
+import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
@@ -43,15 +43,16 @@ const nodeBorderStyle = css`
   outline: 2px solid grey;
 `;
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, selected, selectableRef }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
-  const nodeFocused = focusedId === id || focusedEvent === id;
+  const nodeFocused = focusedId === id || focusedEvent === id || selected;
 
   return (
     <div
-      className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
+      ref={selectableRef}
+      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;
         position: relative;

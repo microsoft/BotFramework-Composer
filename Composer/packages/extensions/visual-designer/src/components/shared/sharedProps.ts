@@ -15,6 +15,9 @@ export interface NodeProps {
   onEvent: (action, id, ...rest) => object | void;
   onResize: (action?, id?) => object | void;
 
+  selectableRef?: any;
+  selected?: boolean;
+  selecting?: boolean;
   isRoot?: boolean;
 }
 
