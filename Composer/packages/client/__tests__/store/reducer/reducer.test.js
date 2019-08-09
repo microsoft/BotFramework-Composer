@@ -57,30 +57,4 @@ describe('test all reducer handlers', () => {
     expect(result.focusedStorageFolder).toEqual(expect.objectContaining({ children: expect.any(Array) }));
     expect(result.focusedStorageFolder.children).toHaveLength(2);
   });
-  it('test navigateTo reducer', () => {
-    const result = reducer({ navPathHistory: [] }, { type: ActionTypes.NAVIGATE_TO, payload: { path: 'mock path' } });
-    expect(result.focusPath).toBe('mock path');
-    expect(result.navPath).toBe('mock path');
-    expect(result.navPathHistory).toHaveLength(1);
-  });
-  it('test navigateDown reducer', () => {
-    const result = reducer(
-      { navPath: '', navPathHistory: [] },
-      { type: ActionTypes.NAVIGATE_DOWN, payload: { subPath: 'mock path' } }
-    );
-    expect(result.focusPath).toBe('mock path');
-    expect(result.navPath).toBe('mock path');
-    expect(result.navPathHistory).toHaveLength(1);
-  });
-  it('test focusTo reducer', () => {
-    const result = reducer({ navPath: '' }, { type: ActionTypes.FOCUS_TO, payload: { path: 'mock path' } });
-    expect(result.focusPath).toBe('mock path');
-  });
-  it('test clearNavHistory reducer', () => {
-    const result = reducer(
-      { navPathHistory: ['mock path1', 'mock path2'] },
-      { type: ActionTypes.CLEAR_NAV_HISTORY, payload: { fromIndex: 0 } }
-    );
-    expect(result.navPathHistory.length).toBe(0);
-  });
 });

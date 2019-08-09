@@ -5,7 +5,7 @@ import { IconButton } from 'office-ui-fabric-react';
 
 import { PanelSize } from '../../../shared/elementSizes';
 
-export const Panel = ({ title, children, collapsedItems, addMenu }) => {
+export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [width, setWidth] = useState(PanelSize.defaultWidth);
 
@@ -78,6 +78,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu }) => {
         />
       </div>
       <div
+        onClick={onClickContent}
         css={{
           border: '1px solid #656565',
           boxSizing: 'border-box',

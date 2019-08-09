@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, FC, useState } from 'react';
+import { useMemo, FC, useContext } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { queryNode } from '../shared/jsonTracker';
+import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
@@ -26,18 +27,20 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
-  const [activeEventId, setActiveEventId] = useState('');
+  const { focusedEvent } = useContext(NodeRendererContext);
 
   const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
     if (eventName === NodeEventTypes.Expand) {
       const selectedRulePath = eventData;
-      setActiveEventId(selectedRulePath);
-      return onEvent(NodeEventTypes.Focus, selectedRulePath);
+      return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
+    }
+    if (eventName === NodeEventTypes.Insert) {
+      return onEvent(NodeEventTypes.InsertEvent, eventData);
     }
     return onEvent(eventName, eventData);
   };
 
-  const activeEventData = queryNode(data, activeEventId);
+  const activeEventData = queryNode(data, focusedEvent);
   return (
     <div
       css={{
@@ -55,7 +58,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      {activeEventId && <RuleEditor key={activeEventId} id={activeEventId} data={activeEventData} onEvent={onEvent} />}
+      {activeEventData && <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />}
     </div>
   );
 };

@@ -5,8 +5,8 @@ import { ActionCreator } from '../types';
 
 import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { resolveToBasePath } from './../../utils/fileUtil';
-import { navTo, clearNavHistory } from './navigation';
 import { startBot } from './bot';
+import { navTo } from './navigation';
 
 export const updateOAuth: ActionCreator = ({ dispatch }, oAuth) => {
   dispatch({
@@ -38,17 +38,12 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 export const fetchProject: ActionCreator = async store => {
   try {
     const response = await axios.get(`${BASEURL}/projects/opened`);
-    const dialogs = response.data.dialogs;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
         response,
       },
     });
-    clearNavHistory(store);
-    if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main#');
-    }
     return response.data;
   } catch (err) {
     navigate(resolveToBasePath(BASEPATH, '/home'));
@@ -61,14 +56,12 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
     const response = await axios.get(`${BASEURL}/projects/recent`);
     dispatch({
       type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
-      payload: null,
-      error: err,
-    });
+    dispatch({ type: ActionTypes.GET_RECENT_PROJECTS_FAILURE, payload: null, error: err });
   }
 };
 
@@ -88,10 +81,8 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
         response,
       },
     });
-    clearNavHistory(store);
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main#');
-      navigate(BASEPATH);
+      navTo(store, 'Main');
       startBot(store, true);
     }
     return response.data;
@@ -123,10 +114,8 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
         response,
       },
     });
-    clearNavHistory(store);
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main#');
-      navigate('/');
+      navTo(store, 'Main');
     }
     return response.data;
   } catch (err) {
@@ -152,9 +141,8 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
         response,
       },
     });
-    clearNavHistory(store);
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main#');
+      navTo(store, 'Main');
     }
     return response.data;
   } catch (err) {

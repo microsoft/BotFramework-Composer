@@ -1,0 +1,117 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "SignInIntent": "(?i)sign in",
+      "HelpIntent": "(?i)help"
+    }
+  },
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "[WelcomeCard]",
+          "property": "user.ans"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "isMatch(user.ans, '(?i)cancel')",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            },
+            {
+              "$type": "Microsoft.EndDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:26:47.918Z",
+        "updatedAt": "2019-08-08T07:26:47.936Z",
+        "id": "279503"
+      }
+    },
+    {
+      "$type": "Microsoft.UnknownIntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:03.842Z",
+        "updatedAt": "2019-08-08T07:22:03.860Z",
+        "id": "418196"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Initialization",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:31.788Z",
+            "updatedAt": "2019-08-08T09:25:31.797Z",
+            "id": "387348"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EmailPage",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:33.163Z",
+            "updatedAt": "2019-08-08T09:25:33.168Z",
+            "id": "216905"
+          }
+        }
+      ],
+      "intent": "SignInIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:06.363Z",
+        "updatedAt": "2019-08-08T07:22:06.410Z",
+        "id": "788831"
+      }
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "steps": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:25:36.101Z",
+            "updatedAt": "2019-08-08T09:25:36.993Z",
+            "id": "036405"
+          },
+          "activity": "[bfdactivity-036405]"
+        }
+      ],
+      "intent": "HelpIntent",
+      "$designer": {
+        "createdAt": "2019-08-08T07:22:08.040Z",
+        "updatedAt": "2019-08-08T07:22:08.055Z",
+        "id": "340813"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:13:14.901Z",
+    "updatedAt": "2019-08-07T09:13:14.937Z",
+    "id": "648082"
+  }
+}
