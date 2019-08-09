@@ -219,6 +219,12 @@ export default function TableView(props) {
           styles={{
             root: {
               overflowX: 'hidden',
+              // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
+              selectors: {
+                'div[role="row"]:hover': {
+                  background: 'none',
+                },
+              },
             },
           }}
           className="table-view-list"

@@ -21,7 +21,6 @@ import { projectContainer, projectTree, projectWrapper } from '../design/styles'
 
 import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
-import '../language-understanding/style.css';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
@@ -158,6 +157,16 @@ export const LGPage = props => {
                 onLinkClick={(ev, item) => {
                   onSelect(item.id);
                   ev.preventDefault();
+                }}
+                styles={{
+                  root: {
+                    /* override dulplicate selected mark bellow All*/
+                    selectors: {
+                      'ul>li>ul button.ms-Nav-chevronButton:after': {
+                        borderLeft: 'none',
+                      },
+                    },
+                  },
                 }}
                 selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}
