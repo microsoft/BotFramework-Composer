@@ -13,11 +13,25 @@ import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { BASEPATH } from './constants';
 import { resolveToBasePath } from './utils/fileUtil';
 import { getFocusPath } from './utils/navigation';
+import { DialogInfo, LgFile, LuFile } from './store/types';
 
 // this is the api interface provided by shell to extensions this is the single
 // place handles all incoming request from extensions, VisualDesigner or
 // FormEditor this is where all side effects (like directly calling api of
 // extensions) happened
+
+export interface ShellData {
+  data: any;
+  dialogs: DialogInfo[];
+  focusPath: string;
+  schemas: any;
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  currentDialog?: DialogInfo;
+  dialogId: string;
+  focusedEvent: string;
+  focusedSteps: string[];
+}
 
 const apiClient = new ApiClient();
 
@@ -43,7 +57,7 @@ const FileTargetTypes = {
   LG: 'lg',
 };
 
-const shellNavigator = (shellPage, opts = {}) => {
+const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
   switch (shellPage) {
     case 'lu':
       navigate(resolveToBasePath(BASEPATH, `/language-understanding/${opts.id}`));
@@ -83,10 +97,10 @@ export function ShellApi() {
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
-    apiClient.registerApi('isExpression', str => isExpression(str));
+    apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
       return new Promise(resolve => {
-        actions.createDialogBegin(newDialog => {
+        actions.createDialogBegin((newDialog: string | null) => {
           resolve(newDialog);
         });
       });
@@ -138,8 +152,9 @@ export function ShellApi() {
     return '';
   }
 
-  function getState(sourceWindow) {
+  function getState(sourceWindow): ShellData {
     const currentDialog = dialogs.find(d => d.id === dialogId);
+
     return {
       data: getData(sourceWindow),
       dialogs,

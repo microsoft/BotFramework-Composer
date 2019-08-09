@@ -6,7 +6,7 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionType, ActionHandlers } from './types';
+import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types';
 
 const initialState: State = {
   dialogs: [],
@@ -38,7 +38,7 @@ const initialState: State = {
 interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
-  actions: ActionHandlers;
+  actions: BoundActionHandlers;
 }
 
 export const StoreContext = React.createContext<StoreContextValue>({
