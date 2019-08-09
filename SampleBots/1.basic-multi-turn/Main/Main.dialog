@@ -1,0 +1,85 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-09T19:17:13.316Z",
+    "updatedAt": "2019-08-09T19:18:54.591Z",
+    "id": "064914",
+    "name": "1.basic-multi-turn"
+  },
+  "autoEndDialog": true,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": {
+      "GetProfile": "hi"
+    }
+  },
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "GetProfile",
+        "id": "174029",
+        "updatedAt": "2019-08-09T19:18:59.445Z"
+      },
+      "intent": "GetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "079799",
+            "updatedAt": "2019-08-09T19:19:53.375Z"
+          },
+          "outputFormat": "trim",
+          "allowInterruptions": "never",
+          "property": "user.name",
+          "prompt": "Hello, I'm the demo bot. What is your name?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "609860",
+            "updatedAt": "2019-08-09T19:20:10.401Z"
+          },
+          "activity": "[bfdactivity-609860]"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "name": "Prompt for a number",
+            "id": "601105",
+            "updatedAt": "2019-08-09T19:20:29.993Z"
+          },
+          "prompt": "What is your age?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": "never",
+          "outputFormat": "float",
+          "defaultLocale": "en-us",
+          "property": "user.age"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "126047",
+            "updatedAt": "2019-08-09T19:20:44.898Z"
+          },
+          "activity": "[bfdactivity-126047]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}
