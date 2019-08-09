@@ -2226,7 +2226,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.23":
+"@types/react@*", "@types/react@^16.8.13", "@types/react@^16.8.23":
   version "16.8.24"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.24.tgz#8d1ea1fcbfa214220da3d3c04e506f1077b0deac"
   integrity sha512-VpFHUoD37YNY2+lr/+c7qL/tZsIU/bKuskUF3tmGUArbxIcQdb5j3zvo4cuuzu2A6UaVmVn7sJ4PgWYNFEBGzg==
@@ -4965,6 +4965,14 @@ boom@2.x.x:
   integrity sha1-OciRjO/1eZ+D+UkqhI9iWt0Mdm8=
   dependencies:
     hoek "2.x.x"
+
+botbuilder-expression-parser@^4.5.6:
+  version "4.5.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.6.tgz#2bbf7f9cbc6922fdb757c8319db2965d3638d63a"
+  integrity sha1-K79/nLxpIv23V8gxnbKWXTY41jo=
+  dependencies:
+    antlr4ts "0.5.0-alpha.1"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
 
 "botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz":
   version "4.5.6"
