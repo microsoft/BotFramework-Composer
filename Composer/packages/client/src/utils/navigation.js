@@ -25,6 +25,7 @@ export function clearBreadcrumbWhenFocusSteps(breadcrumb, focuseSteps) {
   if (breadcrumbCopy[lastIndex].focusedSteps.length > 0) {
     breadcrumbCopy.pop();
   }
+  //deselect the step
   if (focuseSteps.length === 0) {
     breadcrumbCopy.pop();
   }
@@ -37,6 +38,7 @@ export function clearBreadcrumbWhenFocusEvent(breadcrumb, focusedEvent) {
   while (breadcrumbCopy.length > 0 && breadcrumbCopy[breadcrumbCopy.length - 1].focusedEvent) {
     breadcrumbCopy.pop();
   }
+  //deselect the event
   if (!focusedEvent) {
     breadcrumbCopy.pop();
   }

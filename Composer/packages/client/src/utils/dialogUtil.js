@@ -15,7 +15,13 @@ export function getDialogsMap(dialogs) {
   }, {});
 }
 
-export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps) {
+const getTitle = (editorSchema, type) => {
+  const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
+
+  return (sdkOverrides && sdkOverrides.title) || '';
+};
+
+export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas) {
   let label = '';
   const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
   if (!dataPath) {
@@ -24,7 +30,8 @@ export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps
     const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
-    label = get(dialog, current);
+    const type = get(dialog, current);
+    label = getTitle(schemas.editor, type);
   }
 
   label = formatMessage(upperCaseName(label || ''));

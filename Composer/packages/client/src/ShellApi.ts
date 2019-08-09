@@ -185,7 +185,7 @@ export function ShellApi() {
     updateDialog(payload);
 
     //make sure focusPath always valid
-    const data = getDialogData(dialogsMap, dialogId, dataPath);
+    const data = getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
     if (typeof data === 'undefined') {
       actions.navTo(dialogId);
     }

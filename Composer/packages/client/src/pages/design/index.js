@@ -61,7 +61,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb } = state;
+  const { dialogs, designPageLocation, breadcrumb, schemas } = state;
   const { removeDialog, setDesignPageLocation, navTo } = actions;
   const { location, match } = props;
   const { dialogId } = designPageLocation;
@@ -131,7 +131,7 @@ function DesignPage(props) {
         ? breadcrumb.map((item, index) => {
             const { dialogId, focusedEvent, focusedSteps } = item;
             return {
-              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps),
+              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas),
               ...item,
               index,
               onClick: handleBreadcrumbItemClick,
