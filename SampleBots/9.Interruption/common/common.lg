@@ -1,0 +1,56 @@
+
+# bfdactivity-609860
+-Hello, I have your name as '{user.name}'
+
+
+# bfdactivity-126047
+-Thank you. I have your age as {user.age}
+
+
+# bfdactivity-897936
+- You are all set.
+
+
+# bfdactivity-444496
+-Ok. let's start over.
+
+
+# bfdactivity-133106
+-ok
+
+
+# bfdactivity-027975
+- You said '{$confirm}'
+
+
+# bfdactivity-367178
+-{@confirm}
+
+
+# bfdactivity-397822
+- {turn.confirm}
+
+# WhyReadBack
+- IF: {user.name == null}
+    - I need your name to address you correctly.
+- ELSEIF: {user.age == null}
+    - I need your age to provide you appropriate product recommendations.
+
+# bfdactivity-263687
+- [WhyReadBack]. \n Worry not, I'll never share your personal information. \n\n See \[here\](http://contoso.com/privacy) to learn more about our privacy policy
+
+
+# bfdactivity-065275
+- No worries. I have set your name to '{user.name}' for now.
+
+
+# bfdactivity-069443
+- No problem. I've set your age to {user.age} for now.
+
+
+# bfdactivity-361487
+-Here's something funny ... ''' ...
+
+
+# bfdactivity-020662
+-Here's something funny ... ''' ...

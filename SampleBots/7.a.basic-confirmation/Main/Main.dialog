@@ -1,0 +1,172 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-09T19:17:13.316Z",
+    "updatedAt": "2019-08-09T20:53:03.248Z",
+    "id": "064914",
+    "name": "7.a.basic-confirmation"
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "GetProfile",
+        "id": "174029",
+        "updatedAt": "2019-08-09T19:18:59.445Z"
+      },
+      "intent": "GetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "079799",
+            "updatedAt": "2019-08-09T21:01:27.019Z"
+          },
+          "outputFormat": "trim",
+          "allowInterruptions": "always",
+          "property": "user.name",
+          "prompt": "Hello, I'm the demo bot. What is your name?",
+          "unrecognizedPrompt": "Sorry, I do not understand '{turn.value}' in this context. What is your name?",
+          "invalidPrompt": "Sorry, {turn.value} does not work. Give me something between 3-150 characters in length. ",
+          "maxTurnCount": 3,
+          "validations": [
+            "length(turn.value) > 2",
+            "length(turn.value) <= 150"
+          ],
+          "value": "@userName",
+          "alwaysPrompt": false
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "609860",
+            "updatedAt": "2019-08-09T19:20:10.401Z"
+          },
+          "activity": "[bfdactivity-609860]"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "name": "Prompt for a number",
+            "id": "601105",
+            "updatedAt": "2019-08-09T23:15:20.126Z"
+          },
+          "property": "user.age",
+          "prompt": "What is your age?",
+          "unrecognizedPrompt": "Sorry, I do not understand '{turn.value}' in this context. What is your age?",
+          "invalidPrompt": "Sorry, {turn.value} does not work. Give me something between 1-150.",
+          "maxTurnCount": 3,
+          "validations": [
+            "int(turn.value) >= 1",
+            "int(turn.value) <= 150"
+          ],
+          "value": "coalesce(@age, @number)",
+          "defaultValue": "30",
+          "alwaysPrompt": false,
+          "allowInterruptions": "always",
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "133106",
+            "updatedAt": "2019-08-09T23:13:48.974Z"
+          },
+          "activity": "[bfdactivity-133106]"
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "$designer": {
+            "name": "Prompt for confirmation",
+            "id": "047536",
+            "updatedAt": "2019-08-09T23:15:56.941Z"
+          },
+          "property": "turn.confirm",
+          "prompt": "I have your name as '{user.name}' and age as '{user.age}'. Is this correct?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": "never",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "328017",
+            "updatedAt": "2019-08-09T23:06:36.381Z"
+          },
+          "condition": "turn.confirm == true",
+          "steps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "897936",
+                "updatedAt": "2019-08-09T23:06:53.541Z"
+              },
+              "activity": "[bfdactivity-897936]"
+            }
+          ],
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "444496",
+                "updatedAt": "2019-08-09T23:09:18.174Z"
+              },
+              "activity": "[bfdactivity-444496]"
+            },
+            {
+              "$type": "Microsoft.DeleteProperty",
+              "$designer": {
+                "name": "Delete a Property",
+                "id": "361246",
+                "updatedAt": "2019-08-09T23:09:26.368Z"
+              },
+              "property": "user.name"
+            },
+            {
+              "$type": "Microsoft.DeleteProperty",
+              "$designer": {
+                "name": "Delete a Property",
+                "id": "348346",
+                "updatedAt": "2019-08-09T23:09:32.560Z"
+              },
+              "property": "user.age"
+            },
+            {
+              "$type": "Microsoft.RepeatDialog",
+              "$designer": {
+                "name": "Repeat this Dialog",
+                "id": "246091"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

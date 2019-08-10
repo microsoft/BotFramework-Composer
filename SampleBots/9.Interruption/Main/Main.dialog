@@ -1,0 +1,131 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-09T19:17:13.316Z",
+    "updatedAt": "2019-08-09T20:53:03.248Z",
+    "id": "064914",
+    "name": "9.Interruption"
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "GetProfile",
+        "id": "174029",
+        "updatedAt": "2019-08-09T19:18:59.445Z"
+      },
+      "intent": "GetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "346907",
+            "updatedAt": "2019-08-10T00:38:37.177Z"
+          },
+          "dialog": "GetUserProfile"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "955424",
+        "updatedAt": "2019-08-10T01:14:50.673Z"
+      },
+      "intent": "Joke",
+      "steps": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "name": "Branch: If/Else",
+            "id": "652909",
+            "updatedAt": "2019-08-10T01:17:23.108Z"
+          },
+          "condition": "$jokeDelivered != null",
+          "elseSteps": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "020662",
+                "updatedAt": "2019-08-10T01:17:32.987Z"
+              },
+              "activity": "[bfdactivity-020662]"
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "name": "Set a Property",
+                "id": "860167",
+                "updatedAt": "2019-08-10T01:17:52.603Z"
+              },
+              "property": "$jokeDelivered",
+              "value": "true"
+            }
+          ],
+          "steps": [
+            {
+              "$type": "Microsoft.EditSteps",
+              "$designer": {
+                "name": "Modify active dialog",
+                "id": "841697",
+                "updatedAt": "2019-08-10T01:19:41.169Z"
+              },
+              "changeType": "InsertSteps",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "097794"
+                  },
+                  "activity": "Sure, I can tell you a joke right after we are done with your profile."
+                }
+              ]
+            },
+            {
+              "$type": "Microsoft.EditSteps",
+              "$designer": {
+                "name": "Modify active dialog",
+                "id": "468535",
+                "updatedAt": "2019-08-10T01:18:09.721Z"
+              },
+              "changeType": "AppendSteps",
+              "steps": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "097794"
+                  },
+                  "activity": "Sure, I can tell you a joke right after we are done with your profile."
+                },
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "708144"
+                  },
+                  "activity": "[bfdactivity-020662]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

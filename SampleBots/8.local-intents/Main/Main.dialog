@@ -1,0 +1,42 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-09T19:17:13.316Z",
+    "updatedAt": "2019-08-09T20:53:03.248Z",
+    "id": "064914",
+    "name": "8.local-intents"
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "GetProfile",
+        "id": "174029",
+        "updatedAt": "2019-08-09T19:18:59.445Z"
+      },
+      "intent": "GetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "name": "Begin a Dialog",
+            "id": "346907",
+            "updatedAt": "2019-08-10T00:38:37.177Z"
+          },
+          "dialog": "GetUserProfile"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}
