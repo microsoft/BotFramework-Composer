@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useState, useMemo } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { LgEditor } from 'code-editor';
 import formatMessage from 'format-message';
@@ -14,8 +14,19 @@ export default function CodeEditor(props) {
   const { file } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
+  const [content, setContent] = useState(get(file, 'content', ''));
 
+  const fileId = file && file.id;
+  useEffect(() => {
+    // reset content with file.content's initial state
+    if (isEmpty(file)) return;
+    setContent(file.content);
+  }, [fileId]);
+
+  // local content maybe invalid and should always sync real-time
+  // file.content assume to be load from server
   const _onChange = value => {
+    setContent(value);
     const diagnostics = lgUtil.check(value);
     setDiagnostics(diagnostics);
     if (lgUtil.isValid(diagnostics) === true) {
@@ -25,22 +36,6 @@ export default function CodeEditor(props) {
 
   const isInvalid = !lgUtil.isValid(diagnostics);
   const errorMsg = lgUtil.combineMessage(diagnostics);
-
-  const fileId = file && file.id;
-  const memoizedEditor = useMemo(() => {
-    return isEmpty(file) === false ? (
-      <LgEditor
-        options={{
-          lineNumbers: 'on',
-          minimap: 'on',
-        }}
-        value={file.content}
-        onChange={_onChange}
-      />
-    ) : (
-      <Fragment />
-    );
-  }, [fileId]);
 
   return (
     <Fragment>
@@ -52,7 +47,14 @@ export default function CodeEditor(props) {
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
       >
-        {memoizedEditor}
+        <LgEditor
+          options={{
+            lineNumbers: 'on',
+            minimap: 'on',
+          }}
+          value={content}
+          onChange={_onChange}
+        />
       </div>
       {isInvalid ? (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>

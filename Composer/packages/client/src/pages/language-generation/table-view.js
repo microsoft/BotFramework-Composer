@@ -68,24 +68,18 @@ export default function TableView(props) {
   }
 
   async function showErrors(files) {
-    const file = files.pop();
-    if (!file) return;
-    const errorMsg = lgUtil.combineMessage(file.diagnostics);
-    const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lg file.`);
-    const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
-      style: DialogStyle.Console,
-      confirmBtnText: formatMessage('Edit'),
-    });
-
-    if (confirmed === true) {
-      onClickEdit({ fileId: file.id });
-    } else {
-      await showErrors(files);
+    for (const file of files) {
+      const errorMsg = lgUtil.combineMessage(file.diagnostics);
+      const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lg file.`);
+      const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
+        style: DialogStyle.Console,
+        confirmBtnText: formatMessage('Edit'),
+      });
+      if (confirmed === true) {
+        onClickEdit({ fileId: file.id });
+        break;
+      }
     }
-  }
-
-  function navigateToDialog(id) {
-    navTo(id);
   }
 
   const getTemplatesMoreButtons = (item, index) => {
@@ -194,7 +188,7 @@ export default function TableView(props) {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={id} onClick={() => navigateToDialog(id)}>
+              <div key={id} onClick={() => navTo(id)}>
                 <Link>{id}</Link>
               </div>
             );
