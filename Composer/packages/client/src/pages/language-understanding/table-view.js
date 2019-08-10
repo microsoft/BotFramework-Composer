@@ -13,7 +13,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
+import { OpenConfirmModal, DialogStyle, OpenAlertModal } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as luUtil from '../../utils/luUtil';
 
@@ -59,9 +59,23 @@ export default function TableView(props) {
     if (!activeDialog) {
       setIntents(allIntents);
     } else {
-      const dialogIntents = allIntents.filter(item => {
-        return item.fileId === activeDialog.id;
+      const undefinedIntents = [];
+      const dialogIntents = [];
+
+      activeDialog.luIntents.forEach(name => {
+        const intent = allIntents.find(t => t.name === name && t.fileId === activeDialog.id);
+        if (!intent) {
+          undefinedIntents.push(name);
+        } else {
+          dialogIntents.push(intent);
+        }
       });
+
+      if (undefinedIntents.length) {
+        OpenAlertModal(`Intends used in ${activeDialog.id}.dialog not found`, undefinedIntents.join('\n'), {
+          style: DialogStyle.Console,
+        });
+      }
 
       setIntents(dialogIntents);
     }

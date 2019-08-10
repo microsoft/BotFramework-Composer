@@ -14,7 +14,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
+import { OpenConfirmModal, DialogStyle, OpenAlertModal } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { actionButton, formCell } from '../language-understanding/styles';
@@ -48,15 +48,22 @@ export default function TableView(props) {
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
-      const dialogsTemplates = activeDialog.lgTemplates.reduce((result, item) => {
+      const undefinedTemplates = [];
+      const dialogsTemplates = [];
+
+      activeDialog.lgTemplates.forEach(item => {
         const template = allTemplates.find(t => t.Name === item);
         if (!template) {
-          new Error(`lg template ${item} not found`);
+          undefinedTemplates.push(item);
         } else {
-          result.push(template);
+          dialogsTemplates.push(template);
         }
-        return result;
-      }, []);
+      });
+      if (undefinedTemplates.length) {
+        OpenAlertModal(`Templates used in ${activeDialog.id}.dialog not found`, undefinedTemplates.join('\n'), {
+          style: DialogStyle.Console,
+        });
+      }
       setTemplates(dialogsTemplates);
     }
   }, [lgFile, activeDialog]);
