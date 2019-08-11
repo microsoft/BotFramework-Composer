@@ -2,7 +2,7 @@ import { navigate } from '@reach/router';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
-import { clearBreadcrumbWhenFocusSteps, clearBreadcrumbWhenFocusEvent } from './../../utils/navigation';
+import { clearBreadcrumbWhenFocusSteps, clearBreadcrumbWhenFocusEvent, getUrlSearch } from './../../utils/navigation';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
@@ -14,9 +14,18 @@ export const setDesignPageLocation: ActionCreator = (
   });
 };
 
-export const navTo: ActionCreator = (store, path, breadcrumb = null) => {
+const checkUrl = (currentUri, { dialogId, focusedEvent, focusedSteps }) => {
+  const lastUri = `/dialogs/${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`;
+  return lastUri == currentUri;
+};
+
+export const navTo: ActionCreator = ({ state }, path, breadcrumb = null) => {
   if (!path) return;
-  navigate(`/dialogs/${path}`, { state: { breadcrumb: breadcrumb || [] } });
+  const { uri } = state.designPageLocation;
+  const currentUri = `/dialogs/${path}`;
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigate(currentUri, { state: { breadcrumb: breadcrumb || [] } });
 };
 
 export const focusEvent: ActionCreator = ({ state }, subPath) => {
@@ -28,6 +37,7 @@ export const focusEvent: ActionCreator = ({ state }, subPath) => {
     currentUri = `${uri}?focusedEvent=${subPath}`;
   }
 
+  if (checkUrl(currentUri, state.designPageLocation)) return;
   navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusEvent(breadcrumb, subPath) } });
 };
 
@@ -53,5 +63,6 @@ export const focusSteps: ActionCreator = ({ state }, subPaths) => {
     currentUri = `${uri}?focusedEvent=${focusedEvent}`;
   }
 
+  if (checkUrl(currentUri, state.designPageLocation)) return;
   navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusSteps(breadcrumb, subPaths) } });
 };
