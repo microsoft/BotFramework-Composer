@@ -29,3 +29,11 @@
 
 # bfdactivity-397822
 - {turn.confirm}
+
+
+# bfdactivity-300817
+-I have your name as '{user.name}' and age as '{user.age}'.
+
+
+# bfdactivity-912987
+- {coalesce(null, null, '42')}

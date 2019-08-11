@@ -86,9 +86,9 @@
           "$designer": {
             "name": "Prompt for confirmation",
             "id": "047536",
-            "updatedAt": "2019-08-10T01:13:11.564Z"
+            "updatedAt": "2019-08-11T23:13:42.713Z"
           },
-          "property": "turn.confirm",
+          "property": "$confirm",
           "prompt": "I have your name as '{user.name}' and age as '{user.age}'. Is this correct?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
@@ -112,9 +112,9 @@
           "$designer": {
             "name": "Branch: If/Else",
             "id": "328017",
-            "updatedAt": "2019-08-09T23:57:27.529Z"
+            "updatedAt": "2019-08-11T23:11:23.459Z"
           },
-          "condition": "turn.confirm == 'true'",
+          "condition": "$confirm == true",
           "steps": [
             {
               "$type": "Microsoft.SendActivity",
@@ -124,6 +124,15 @@
                 "updatedAt": "2019-08-09T23:06:53.541Z"
               },
               "activity": "[bfdactivity-897936]"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "name": "Send an Activity",
+                "id": "141587",
+                "updatedAt": "2019-08-11T23:11:41.832Z"
+              },
+              "activity": "[bfdactivity-141587]"
             }
           ],
           "elseSteps": [

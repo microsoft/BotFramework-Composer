@@ -46,3 +46,7 @@
 
 # bfdactivity-069443
 - No problem. I've set your age to {user.age} for now.
+
+
+# bfdactivity-141587
+-I have your name as '{user.name}' and age as '{user.age}'.
