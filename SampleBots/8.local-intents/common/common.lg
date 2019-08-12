@@ -50,3 +50,19 @@
 
 # bfdactivity-141587
 -I have your name as '{user.name}' and age as '{user.age}'.
+
+
+# bfdactivity-952735
+- reprompting for confirmation
+
+
+# bfdactivity-266466
+- continue with confirmation
+
+
+# bfdactivity-856129
+- No worries. I have set your name to 'Human' for now.
+
+
+# bfdactivity-768361
+- No problem. I've set your age to 30 for now.

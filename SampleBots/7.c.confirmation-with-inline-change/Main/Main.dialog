@@ -93,7 +93,7 @@
           "$designer": {
             "name": "Prompt for confirmation",
             "id": "047536",
-            "updatedAt": "2019-08-11T23:07:25.117Z"
+            "updatedAt": "2019-08-12T05:45:40.328Z"
           },
           "property": "$confirm",
           "prompt": "I have your name as '{user.name}' and age as '{user.age}'. Is this correct?",
@@ -217,6 +217,15 @@
           "value": "true"
         }
       ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "326425",
+        "updatedAt": "2019-08-12T05:45:52.734Z"
+      },
+      "intent": "GetUserProfile"
     }
   ],
   "$schema": "../../app.schema"
