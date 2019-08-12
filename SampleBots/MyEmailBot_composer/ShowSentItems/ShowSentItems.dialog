@@ -1,0 +1,165 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetMySentItems"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[SentPageOrdinalNumber]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "{user.sentItems[0].subject}"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:31:13.918Z",
+            "updatedAt": "2019-08-08T09:31:15.028Z",
+            "id": "275713"
+          },
+          "activity": "[bfdactivity-275713]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "createdAt": "2019-08-08T09:31:09.457Z",
+            "updatedAt": "2019-08-08T09:31:10.586Z",
+            "id": "974289"
+          },
+          "activity": "[bfdactivity-974289]"
+        },
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.sentItemsChoice",
+          "choices": [
+            {
+              "value": "Show me the 1st Email. "
+            },
+            {
+              "value": "Show me the 2nd Email. "
+            },
+            {
+              "value": "Show me the 3rd Email. "
+            },
+            {
+              "value": "Next Page. "
+            },
+            {
+              "value": "Last Page. "
+            },
+            {
+              "value": "Go Back. "
+            }
+          ],
+          "prompt": "What do you want to do? ",
+          "style": "List",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "condition": "user.sentItemsChoice",
+          "cases": [
+            {
+              "value": "Show me the 1st Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedSentItems",
+                  "value": "user.sentItems[0]"
+                },
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "createdAt": "2019-08-08T09:31:16.901Z",
+                    "updatedAt": "2019-08-08T09:31:17.993Z",
+                    "id": "854426"
+                  },
+                  "activity": "[bfdactivity-854426]"
+                }
+              ]
+            },
+            {
+              "value": "Show me the 2nd Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedSentItems",
+                  "value": "user.sentItems[1]"
+                },
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "[ShowEmailCard(user.selectedSentItems)]"
+                }
+              ]
+            },
+            {
+              "value": "Show me the 3rd Email. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.SetProperty",
+                  "property": "user.selectedSentItems",
+                  "value": "user.sentItems[2]"
+                },
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "[ShowEmailCard(user.selectedSentItems)]"
+                }
+              ]
+            },
+            {
+              "value": "Next Page. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowSentNextPage"
+                }
+              ]
+            },
+            {
+              "value": "Last Page. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ShowSentLastPage"
+                }
+              ]
+            },
+            {
+              "value": "Go Back. ",
+              "steps": [
+                {
+                  "$type": "Microsoft.EndDialog"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T07:00:32.291Z",
+        "updatedAt": "2019-08-08T07:00:32.305Z",
+        "id": "207872"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-08T07:00:30.166Z",
+    "updatedAt": "2019-08-08T07:00:30.180Z",
+    "id": "909525"
+  }
+}

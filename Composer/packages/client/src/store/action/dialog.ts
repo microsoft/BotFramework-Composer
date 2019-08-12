@@ -3,23 +3,20 @@ import axios from 'axios';
 import { ActionCreator } from '../types';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { navTo, clearNavHistory } from './navigation';
+import { navTo } from './navigation';
 
 export const removeDialog: ActionCreator = async (store, id) => {
   try {
     const response = await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
     store.dispatch({
       type: ActionTypes.REMOVE_DIALOG_SUCCESS,
-      payload: { response },
+      payload: {
+        response,
+      },
     });
-    clearNavHistory(store);
-    navTo(store, 'Main#');
+    navTo(store, 'Main');
   } catch (err) {
-    store.dispatch({
-      type: ActionTypes.REMOVE_DIALOG_FAILURE,
-      payload: null,
-      error: err,
-    });
+    store.dispatch({ type: ActionTypes.REMOVE_DIALOG_FAILURE, payload: null, error: err });
   }
 };
 
@@ -38,6 +35,7 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
         response,
       },
     });
+    navTo(store, id);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -51,10 +49,7 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
 
 export const updateDialog: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, {
-      id,
-      content,
-    });
+    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_DIALOG,
       payload: {

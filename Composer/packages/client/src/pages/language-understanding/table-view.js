@@ -10,18 +10,16 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
-import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { get } from 'lodash';
 
-import { BASEPATH } from '../../constants';
 import { StoreContext } from '../../store';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
-  const { clearNavHistory, navTo } = actions;
+  const { navTo } = actions;
   const { dialogs, luFiles } = state;
   const activeDialog = props.activeDialog;
   const [intents, setIntents] = useState([]);
@@ -63,9 +61,7 @@ export default function TableView(props) {
   }, [luFiles, activeDialog, dialogs]);
 
   function navigateToDialog(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
-    navigate(BASEPATH);
+    navTo(id);
   }
 
   const getTemplatesMoreButtons = (item, index) => {

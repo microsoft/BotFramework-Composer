@@ -6,6 +6,20 @@ test('should return safely when input null value', () => {
   expect(result).toEqual([]);
 });
 
+test('should transform string as BeginDialog', () => {
+  const result = transformStepGroup(
+    {
+      $type: ObiTypes.StepGroup,
+      children: ['CalleeDialog'],
+    },
+    ''
+  );
+  expect(result[0].json).toEqual({
+    $type: ObiTypes.BeginDialog,
+    dialog: 'CalleeDialog',
+  });
+});
+
 test('should parse child step correctly with parentPath', () => {
   const json = {
     $type: ObiTypes.StepGroup,

@@ -5,6 +5,7 @@ import { PrimaryButton, DefaultButton, DirectionalHint } from 'office-ui-fabric-
 import debounce from 'lodash.debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
+import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import Example from '../../src';
 import { ShellApi, LuFile } from '../../src/types';
@@ -177,6 +178,7 @@ const mockShellApi = [
   'getLgTemplates',
   'createLgTemplate',
   'updateLgTemplate',
+  'validateExpression',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {
@@ -184,7 +186,21 @@ const mockShellApi = [
       resolve();
     });
   return mock;
-}, {});
+}, {}) as ShellApi;
+
+mockShellApi.validateExpression = exp => {
+  if (!exp) {
+    return Promise.resolve(true);
+  }
+
+  const ExpressionParser = new ExpressionEngine();
+  try {
+    ExpressionParser.parse(exp);
+    return Promise.resolve(true);
+  } catch (_err) {
+    return Promise.resolve(false);
+  }
+};
 
 const Demo: React.FC = () => {
   const [dirtyFormData, setDirtyFormData] = useState(null);

@@ -18,6 +18,8 @@ export interface Store {
 
 export type ActionCreator = (store: Store, ...args: any[]) => Promise<void> | void;
 export type ActionHandlers = { [action: string]: ActionCreator };
+export type BoundAction = (...args: any[]) => void;
+export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {
   summary: string;
@@ -27,11 +29,8 @@ interface StateError {
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
-  /** the data path for VisualEditor, based on `dialogs` which computed from files */
-  navPath: string;
   /** the data path for FormEditor */
   focusPath: string;
-  navPathHistory: string[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: any;
@@ -43,8 +42,10 @@ export interface State {
   schemas: any;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  designPageLocation: any;
   error: StateError | null;
   oAuth: any;
+  breadcrumb: any[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
 }

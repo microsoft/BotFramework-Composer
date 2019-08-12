@@ -29,11 +29,11 @@ const topLinks = [
     exact: true,
   },
   {
-    to: '/',
+    to: '/dialogs/Main',
     iconName: 'SplitObject',
     labelName: 'Design Flow',
-    activeIfUrlContains: '',
-    exact: true,
+    activeIfUrlContains: 'dialogs',
+    exact: false,
   },
   {
     to: '/test-conversation',
@@ -106,7 +106,7 @@ export function App() {
   async function init() {
     const data = await fetchProject();
     if (data && data.botName) {
-      setLuisConfig(botName);
+      setLuisConfig(data.botName);
     }
   }
 

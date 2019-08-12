@@ -54,8 +54,8 @@ const nodeBorderStyle = css`
 export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
-  const { focusedId } = useContext(NodeRendererContext);
-  const nodeFocused = focusedId === id;
+  const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (
     <div

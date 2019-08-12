@@ -1,0 +1,49 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "method": "POST",
+          "url": "https://graph.microsoft.com/v1.0/me/messages/{user.selectedEmail.id}/forward",
+          "body": {
+            "comment": "{user.fwContent}",
+            "toRecipients": [
+              {
+                "emailAddress": {
+                  "address": "{user.emailAddr}"
+                }
+              }
+            ]
+          },
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "Property": "dialog.postResponse",
+          "$designer": {
+            "createdAt": "2019-08-08T09:26:51.659Z",
+            "updatedAt": "2019-08-08T09:26:51.668Z",
+            "id": "071946"
+          }
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T06:53:50.746Z",
+        "updatedAt": "2019-08-08T06:53:50.759Z",
+        "id": "609512"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:24:06.822Z",
+    "updatedAt": "2019-08-07T09:24:06.884Z",
+    "id": "326674"
+  }
+}
