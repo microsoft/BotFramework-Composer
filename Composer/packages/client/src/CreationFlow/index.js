@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from '@reach/router';
 
-import { BASEPATH, CreationFlowStatus } from '../constants';
+import { CreationFlowStatus } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
@@ -92,11 +92,11 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigate(BASEPATH);
+        navigate('/dialogs/Main');
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
-        navigate(BASEPATH);
+        navigate('/dialogs/Main');
         break;
       default:
         setStep(Steps.NONE);
