@@ -72,7 +72,7 @@ export default function TableView(props) {
       });
 
       if (undefinedIntents.length) {
-        OpenAlertModal(`Intends used in ${activeDialog.id}.dialog not found`, undefinedIntents.join('\n'), {
+        OpenAlertModal(`Intents used in ${activeDialog.id}.dialog not found`, undefinedIntents.join('\n'), {
           style: DialogStyle.Console,
         });
       }
