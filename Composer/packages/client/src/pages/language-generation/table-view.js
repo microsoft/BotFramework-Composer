@@ -13,18 +13,16 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
-import { navigate } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
-import { BASEPATH } from '../../constants';
-import { Store } from '../../store/index';
+import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(Store);
-  const { clearNavHistory, navTo } = actions;
+  const { state, actions } = useContext(StoreContext);
+  const { navTo } = actions;
   const { dialogs } = state;
   const lgFile = props.file;
   const activeDialog = props.activeDialog;
@@ -74,9 +72,7 @@ export default function TableView(props) {
   }, [lgFile, activeDialog]);
 
   function navigateToDialog(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
-    navigate(BASEPATH);
+    navTo(id);
   }
 
   const getTemplatesMoreButtons = (item, index) => {
@@ -305,7 +301,6 @@ export default function TableView(props) {
 
 TableView.propTypes = {
   file: PropTypes.object,
-  onChange: PropTypes.func,
   activeDialog: PropTypes.object,
   onEdit: PropTypes.func,
 };

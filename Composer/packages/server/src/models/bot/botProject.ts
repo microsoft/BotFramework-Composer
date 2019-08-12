@@ -153,7 +153,8 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    const diagnostics = this.lgIndexer.check(content);
+    const absolutePath = `${this.dir}/${lgFile.relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
       const errorMsg = this.lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);
@@ -164,7 +165,8 @@ export class BotProject {
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    const diagnostics = this.lgIndexer.check(content);
+    const absolutePath = `${this.dir}/${relativePath}`;
+    const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
       const errorMsg = this.lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);

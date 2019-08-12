@@ -1,4 +1,5 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import PropTypes from 'prop-types';
 import { OverflowSet, IconButton, Link } from 'office-ui-fabric-react';
 

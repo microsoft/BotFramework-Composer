@@ -1,0 +1,43 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "rules": [
+    {
+      "$type": "Microsoft.EventRule",
+      "steps": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.toSubject",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:44.946Z",
+            "updatedAt": "2019-08-08T09:24:44.959Z",
+            "id": "894191"
+          }
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.toContent",
+          "$designer": {
+            "createdAt": "2019-08-08T09:24:45.789Z",
+            "updatedAt": "2019-08-08T09:24:45.795Z",
+            "id": "265695"
+          }
+        }
+      ],
+      "events": [
+        "beginDialog"
+      ],
+      "$designer": {
+        "createdAt": "2019-08-08T06:59:23.316Z",
+        "updatedAt": "2019-08-08T06:59:23.330Z",
+        "id": "603561"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:21:35.680Z",
+    "updatedAt": "2019-08-07T09:21:35.705Z",
+    "id": "641002"
+  }
+}

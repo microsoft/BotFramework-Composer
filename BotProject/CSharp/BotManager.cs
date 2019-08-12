@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Connector.Authentication;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -54,18 +55,23 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             IStorage storage = new MemoryStorage();
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
+            var inspectionState = new InspectionState(storage);
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
 
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(Config));
 
+            var credentials = new MicrosoftAppCredentials(Config["MicrosoftAppId"], Config["MicrosoftAppPassword"]);
+
             adapter
               .UseStorage(storage)
               .UseState(userState, conversationState)
               .UseLanguageGeneration(resourceExplorer)
               .UseDebugger(4712)
+              .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
               .UseResourceExplorer(resourceExplorer);
+              
             adapter.OnTurnError = async (turnContext, exception) =>
             {
                 await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
@@ -75,7 +81,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot("Main.dialog", conversationState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
         public void SetCurrent(Stream fileStream, LuConfigFile luConfig = null, string appId = null, string appPwd = null)

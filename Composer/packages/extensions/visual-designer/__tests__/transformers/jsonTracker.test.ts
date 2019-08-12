@@ -1,4 +1,31 @@
-import { insert, deleteNode } from '../../src/shared/jsonTracker';
+import { insert, deleteNode, queryNode } from '../../src/shared/jsonTracker';
+
+describe('queryNode', () => {
+  describe('can query correct result', () => {
+    const dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    it('when data not exists.', () => {
+      expect(queryNode({}, 'foo.bar[0]')).toEqual(null);
+    });
+
+    it('when data locates in an object.', () => {
+      expect(queryNode(dialog, 'foo.bar')).toEqual([{ $type: 'firstOne' }, { $type: 'secondOne' }]);
+    });
+
+    it('when data locates in an array.', () => {
+      expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
+    });
+  });
+
+  it('should return a reference.', () => {
+    const dialog = { foo: { bar: 'bar' } };
+    const result = queryNode(dialog, 'foo');
+    expect(result).toBe(dialog.foo);
+
+    dialog.foo.bar = 'newValue';
+    expect(dialog.foo).toEqual({ bar: 'newValue' });
+    expect(result).toEqual({ bar: 'newValue' });
+  });
+});
 
 describe('insert', () => {
   const path = 'foo.bar';

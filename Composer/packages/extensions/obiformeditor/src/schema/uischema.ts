@@ -1,24 +1,12 @@
-import {
-  CasesField,
-  CodeField,
-  JsonField,
-  LgEditorField,
-  NullField,
-  RecognizerField,
-  RulesField,
-  SelectorField,
-  StepsField,
-} from '../Form/fields';
-
 const globalFields = {
   property: {
-    'ui:field': NullField,
+    'ui:field': 'NullField',
   },
   inputBindings: {
-    'ui:field': NullField,
+    'ui:field': 'NullField',
   },
   outputBinding: {
-    'ui:field': NullField,
+    'ui:field': 'NullField',
   },
 };
 
@@ -33,29 +21,29 @@ const activityFields = {
     'ui:widget': 'TextareaWidget',
   },
   value: {
-    'ui:widget': NullField,
+    'ui:widget': 'NullField',
   },
 };
 
 export const uiSchema = {
   'Microsoft.AdaptiveDialog': {
     recognizer: {
-      'ui:field': RecognizerField,
+      'ui:field': 'RecognizerField',
     },
     rules: {
-      'ui:field': RulesField,
+      'ui:field': 'RulesField',
     },
     selector: {
-      'ui:field': SelectorField,
+      'ui:field': 'SelectorField',
     },
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     autoEndDialog: {
-      'ui:field': NullField,
+      'ui:field': 'NullField',
     },
     generator: {
-      'ui:field': NullField,
+      'ui:field': 'NullField',
     },
     ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'rules', 'steps', '*', 'selector'],
@@ -64,67 +52,72 @@ export const uiSchema = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    ...globalFields,
+    inputBindings: {
+      'ui:field': 'NullField',
+    },
+    outputBinding: {
+      'ui:field': 'NullField',
+    },
   },
   'Microsoft.CodeStep': {
     codeHandler: {
-      'ui:field': CodeField,
+      'ui:field': 'CodeField',
     },
     ...globalFields,
   },
   'Microsoft.ConditionalSelector': {
     ifFalse: {
-      'ui:field': SelectorField,
+      'ui:field': 'SelectorField',
     },
     ifTrue: {
-      'ui:field': SelectorField,
+      'ui:field': 'SelectorField',
     },
     ...globalFields,
   },
   'Microsoft.EditSteps': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
   },
   'Microsoft.ConversationUpdateActivityRule': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
     'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.EventRule': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
     'ui:order': ['events', 'constraint', '*', 'steps'],
   },
   'Microsoft.Foreach': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'steps', '*'],
   },
   'Microsoft.ForeachPage': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'steps', '*'],
   },
   'Microsoft.HttpRequest': {
     body: {
-      'ui:field': JsonField,
+      'ui:field': 'JsonField',
     },
     // ...globalFields,  // we do not want to exclude the property field here
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   'Microsoft.IfCondition': {
     elseSteps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
   },
@@ -132,7 +125,7 @@ export const uiSchema = {
     conditionals: {
       items: {
         rules: {
-          'ui:field': RulesField,
+          'ui:field': 'RulesField',
         },
       },
     },
@@ -143,54 +136,78 @@ export const uiSchema = {
       'ui:widget': 'IntentWidget',
     },
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
     'ui:order': ['intent', 'constraint', 'entities', '*'],
   },
   'Microsoft.MostSpecificSelector': {
     selector: {
-      'ui:field': SelectorField,
+      'ui:field': 'SelectorField',
     },
     ...globalFields,
   },
   'Microsoft.TextInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.NumberInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.ConfirmInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     // ConfirmInput defaults to YES/NO. using confirmchoices is complex
     // - must provide yes/no in special format along with alternatives that have to be handled
     // TODO: Implement confirmChoices-specific widget with appropriate business rules.
     confirmChoices: {
-      'ui:field': NullField,
+      'ui:field': 'NullField',
     },
     'ui:order': [
       'prompt',
@@ -198,20 +215,29 @@ export const uiSchema = {
       'style',
       'defaultLocale',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.ChoiceInput': {
     inputBindings: {
-      'ui:field': NullField,
+      'ui:field': 'NullField',
     },
     outputBinding: {
-      'ui:field': NullField,
+      'ui:field': 'NullField',
+    },
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
     },
     choices: {
       items: {
@@ -231,29 +257,45 @@ export const uiSchema = {
       'defaultLocale',
       'choices',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
   },
   'Microsoft.OAuthInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': ['connectionName', '*'],
   },
   'Microsoft.AttachmentInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     'ui:order': [
       'prompt',
       'property',
       'outputFormat',
       'validations',
-      'value',
       'unrecognizedPrompt',
       'invalidPrompt',
       'maxTurnCount',
+      'value',
       'defaultValue',
       '*',
     ],
@@ -266,32 +308,40 @@ export const uiSchema = {
   },
   'Microsoft.Rule': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
   },
   'Microsoft.SwitchCondition': {
     cases: {
-      'ui:field': CasesField,
+      'ui:field': 'CasesField',
     },
     default: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
   },
   'Microsoft.UnknownIntentRule': {
     steps: {
-      'ui:field': StepsField,
+      'ui:field': 'StepsField',
     },
     ...globalFields,
   },
   'Microsoft.SendActivity': {
     activity: {
-      'ui:field': LgEditorField,
+      'ui:field': 'LgEditorField',
     },
   },
   'Microsoft.DateTimeInput': {
-    ...activityFields,
+    prompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    unrecognizedPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
+    invalidPrompt: {
+      'ui:widget': 'TextareaWidget',
+    },
     defaultValue: {
       'ui:widget': 'DateTimeWidget',
     },

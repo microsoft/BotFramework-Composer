@@ -1,31 +1,30 @@
-import React, { useContext, FC } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { ObiTypes } from '../shared/ObiTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-import { RuleEditor } from './RuleEditor';
-import './ObiEditor.css';
 
-export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, onOpen, onChange, isRoot }) => {
+export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocusSteps, onOpen, onChange }) => {
   let divRef;
 
   const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
 
-  const dispatchEvent = (eventName?, eventData?, ...rest): any => {
+  const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        handler = onSelect;
+        handler = id => onFocusSteps(id ? [id] : []);
         break;
-      case NodeEventTypes.Expand:
-        handler = onExpand;
+      case NodeEventTypes.FocusEvent:
+        handler = onFocusEvent;
         break;
-      case NodeEventTypes.OpenLink:
-        handler = onOpen;
+      case NodeEventTypes.OpenDialog:
+        handler = ({ caller, callee }) => onOpen(callee, caller);
         break;
       case NodeEventTypes.Delete:
         handler = e => {
@@ -37,28 +36,28 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
             }
           };
           onChange(deleteNode(data, e.id, cleanLgTemplate));
-          onSelect('');
+          onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
         handler = e => {
           const dialog = insert(data, e.id, e.position, e.$type);
           onChange(dialog);
-          onSelect(`${e.id}[${e.position || 0}]`);
+          onFocusSteps([`${e.id}[${e.position || 0}]`]);
+        };
+        break;
+      case NodeEventTypes.InsertEvent:
+        handler = e => {
+          const dialog = insert(data, e.id, e.position, e.$type);
+          onChange(dialog);
+          onFocusEvent(`${e.id}[${e.position || 0}]`);
         };
         break;
       default:
-        handler = onSelect;
+        handler = onFocusSteps;
         break;
     }
-    return handler(eventData, rest);
-  };
-
-  const chooseEditor = ($type: string): FC<any> => {
-    if ($type === ObiTypes.AdaptiveDialog) {
-      return AdaptiveDialogEditor;
-    }
-    return RuleEditor;
+    return handler(eventData);
   };
 
   const renderFallbackContent = () => {
@@ -67,13 +66,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
 
   if (!data) return renderFallbackContent();
 
-  const ChosenEditor = chooseEditor(data.$type);
   return (
     <div
       tabIndex={0}
       className="obi-editor-container"
       data-testid="obi-editor-container"
-      style={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box' }}
+      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box', '&:focus': { outline: 'none' } }}
       ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;
@@ -87,13 +85,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
       }}
     >
       <DragScroll>
-        <ChosenEditor
+        <AdaptiveDialogEditor
           id={path}
           data={data}
-          hideSteps={isRoot}
-          onEvent={(...args) => {
+          onEvent={(eventName, eventData) => {
             divRef.focus({ preventScroll: true });
-            dispatchEvent(...args);
+            dispatchEvent(eventName, eventData);
           }}
         />
       </DragScroll>
@@ -104,8 +101,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onSelect, onExpand, 
 ObiEditor.defaultProps = {
   path: '.',
   data: {},
-  onSelect: () => {},
-  onExpand: () => {},
+  focusedSteps: [],
+  onFocusSteps: () => {},
+  focusedEvent: '',
+  onFocusEvent: () => {},
   onOpen: () => {},
   onChange: () => {},
 };
@@ -114,9 +113,10 @@ interface ObiEditorProps {
   path: string;
   // Obi raw json
   data: any;
-  isRoot: boolean;
-  onSelect: Function;
-  onExpand: Function;
-  onOpen: Function;
-  onChange: Function;
+  focusedSteps: string[];
+  onFocusSteps: (stepIds: string[]) => any;
+  focusedEvent: string;
+  onFocusEvent: (eventId: string) => any;
+  onOpen: (calleeDialog: string, callerId: string) => any;
+  onChange: (newDialog: any) => any;
 }

@@ -17,7 +17,7 @@ export class LGIndexer {
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagnostics: StaticChecker.checkText(file.content, file.name),
+          diagnostics: StaticChecker.checkText(file.content, file.path),
         });
       }
     }
@@ -32,12 +32,12 @@ export class LGIndexer {
     return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
   }
 
-  public check(content: string, name: string = ''): Diagnostic[] {
-    return StaticChecker.checkText(content, name);
+  public check(content: string, path: string): Diagnostic[] {
+    return StaticChecker.checkText(content, path);
   }
 
-  public parse(content: string, name: string = ''): LGTemplate[] {
-    const resource = LGParser.parse(content, name);
+  public parse(content: string, path: string): LGTemplate[] {
+    const resource = LGParser.parse(content, path);
     return get(resource, 'Templates', []);
   }
 

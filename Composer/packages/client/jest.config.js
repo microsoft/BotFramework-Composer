@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const path = require('path');
 module.exports = {
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/serviceWorker.js'],
   moduleNameMapper: {
@@ -15,5 +17,5 @@ module.exports = {
   // we can specify that they need to be transformed here.
   transformIgnorePatterns: ['"/node_modules/(?!office-ui-fabric-react).+\\.js$"'],
 
-  setupFilesAfterEnv: ['./setupTests.js'],
+  setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.js')],
 };

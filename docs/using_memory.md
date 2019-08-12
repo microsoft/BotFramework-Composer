@@ -117,7 +117,7 @@ In this second example, the value of `turn.choice` is used to match against mult
 
 ### Memory in Loops
 
-When using `Foreach` and `ForeachPage` actions, properties also come into play. The definition of a for loop requires three properties: one that holds the list of items to loop over, one that will be used to hold the currently selected item inside the loop, and one to hold the array index of the selected item. The bot manages the value and index properties automatically.
+When using `For each` and `For each Page` actions, properties also come into play. The definition of a for loop requires three properties: one that holds the list of items to loop over, one that will be used to hold the currently selected item inside the loop, and one to hold the array index of the selected item. The bot manages the value and index properties automatically.
 
 ![foreach properties](./Assets/foreach-properties.png)
 

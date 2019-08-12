@@ -14,9 +14,7 @@
         "id": "050101",
         "updatedAt": "2019-07-22T07:46:06.571Z"
       },
-      "events": [
-        "beginDialog"
-      ],
+      "events": ["beginDialog"],
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
@@ -29,7 +27,7 @@
           "property": "user.name",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": true,
+          "allowInterruptions": "never",
           "outputFormat": "value",
           "choices": [
             {

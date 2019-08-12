@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
@@ -20,7 +22,6 @@ import {
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
-import './NodeRenderer.css';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -46,14 +47,25 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
+const nodeBorderStyle = css`
+  outline: 2px solid grey;
+`;
+
 export const NodeRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
-  const { focusedId } = useContext(NodeRendererContext);
-  const nodeFocused = focusedId === id;
+  const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (
-    <div className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}>
+    <div
+      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
+      css={css`
+        display: inline-block;
+        position: relative;
+        ${nodeFocused && nodeBorderStyle}
+      `}
+    >
       <ChosenRenderer
         id={id}
         data={data}

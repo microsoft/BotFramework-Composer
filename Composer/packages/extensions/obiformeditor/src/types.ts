@@ -63,8 +63,8 @@ export interface ShellApi {
   getDialogs: <T = any>() => Promise<T>;
   saveData: <T = any>(newData: T) => Promise<void>;
   navTo: (path: string) => Promise<void>;
-  navDown: (path: string) => Promise<void>;
-  focusTo: (path: string) => Promise<void>;
+  onFocusSteps: (stepIds: string[]) => Promise<void>;
+  onFocusEvent: (eventId: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;
   getLgTemplates: (id: string) => Promise<LgTemplate[]>;
@@ -72,6 +72,7 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   createDialog: () => Promise<string>;
+  validateExpression: (expression?: string) => Promise<boolean>;
 }
 export interface EditorSchema {
   editor: {

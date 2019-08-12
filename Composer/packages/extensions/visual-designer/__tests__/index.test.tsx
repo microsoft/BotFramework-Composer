@@ -3,6 +3,17 @@ import { cleanup, render, waitForElement } from 'react-testing-library';
 
 import VisualDesigner from '../src';
 
+// READ: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
+window.matchMedia = jest.fn().mockImplementation(query => {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  };
+});
+
 describe('<VisualDesigner />', () => {
   afterEach(cleanup);
 
@@ -11,9 +22,9 @@ describe('<VisualDesigner />', () => {
       <VisualDesigner
         data={{ content: '{"json": "some data"}' }}
         currentDialog={{ id: 'Main', displayName: 'Main', isRoot: false }}
-        onChange={() => {}}
-        navPath="Some#path"
-        focusPath="Some#path.foo"
+        dialogId="SomeDialog"
+        focusedEvent="rules[0]"
+        focusedSteps={['rules[0].steps[0]']}
         shellApi={{}}
       />
     );

@@ -1,0 +1,106 @@
+
+# bfdactivity-753396
+- Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
+
+
+# bfdactivity-552245
+- Sure. Let's get started!
+
+
+# bfdactivity-521242
+- No worries! \n \[Suggestions=Get started | Reset profile\]
+
+
+# bfdactivity-306123
+- Sure, happy to help...
+
+
+# bfdactivity-720659
+- I've reset your profile. \n \[Suggestions=Get started]
+
+
+# bfdactivity-926413
+- Sorry, I did not find any information about you. \n \[Suggestions=Get started]
+
+
+# bfdactivity-912837
+- I do not know much about you. I'd love to know more .. \n \[Suggestions=Get started]
+
+
+# bfdactivity-309274
+- ```
+Here's what I know about you - 
+- @{NameReadBack()}
+- @{AgeReadBack()}
+```
+
+# NameReadBack
+- IF : {exists(user.profile.name)}
+    - Name : {user.profile.name}
+- ELSE : 
+    - Name : unknown
+
+# AgeReadBack
+- IF : {exists(user.profile.age)}
+    - Age : {user.profile.age}
+- ELSE:
+    - Age : unknown
+
+# bfdactivity-650736
+- Sure, I've cancelled that.
+
+
+# bfdactivity-677901
+- Hello
+
+
+# bfdactivity-431348
+- Sure, let's get started.
+
+
+# bfdactivity-296924
+- Hello {user.profile.name}, I have your age as {user.profile.age}. \n \[Suggestions=Reset profile]
+
+
+# bfdactivity-907674
+- I need your age to customize recommediations. \n \[Suggestions=No age | Reset profile | Cancel]
+
+
+# bfdactivity-558329
+- I need your name to address you correctly! \n \[Suggestions=No name | Reset profile | Cancel]
+
+
+# bfdactivity-074631
+- No worries. I'll set your age to 30 for now.
+
+
+# bfdactivity-758791
+- No worries. I'll set your name as 'Human' for now.
+
+
+# bfdactivity-031899
+- {user.profile.name}
+
+
+# bfdactivity-537701
+- I have {user.profile.name}
+
+
+# bfdactivity-815492
+- No worries. I'll set your age to 30 for now.
+
+
+# bfdactivity-924700
+- Hello, I'm the interruption sample bot! \n \[Suggestions=Get started | Reset profile | Cancel | Show profile]
+
+
+# bfdactivity-054890
+- Hello, let's get started.
+
+
+# bfdactivity-348341
+- I've reset your profile. \n \[Suggestions=Get started]
+
+
+# bfdactivity-032735
+- I've reset your profile. \n \[Suggestions=Get started]
