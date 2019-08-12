@@ -1,3 +1,5 @@
+import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+
 export interface LocationRef {
   storageId: string;
   path: string;
@@ -25,15 +27,17 @@ export interface Dialog {
 }
 
 export interface LGTemplate {
-  name: string;
-  body: string;
+  Name: string;
+  Body: string;
+  Parameters: string[];
 }
 
 export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
-  diagnostics: any[]; // LGParser output, TODO:
+  diagnostics: LGDiagnostic[];
+  templates: LGTemplate[];
 }
 
 export interface LUFile {
