@@ -101,7 +101,7 @@ export const TestController = () => {
     setFetchState(STATE.PUBLISHING);
     try {
       await setLuisConfig(botName);
-      await publishLuis({ publishTime: new Date().getTime() });
+      await publishLuis();
       return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });

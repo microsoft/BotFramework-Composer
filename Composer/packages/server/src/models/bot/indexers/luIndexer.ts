@@ -4,7 +4,7 @@ import { Path } from '../../../utility/path';
 
 import { FileInfo, LUFile } from './../interface';
 import { IFileStorage } from './../../storage/interface';
-import { ILuisStatus } from './../../bot/interface';
+import { ILuisStatus, ILuisStatusOperation } from './../../bot/interface';
 const parseContent = (content: string): Promise<any> => {
   const log = false;
   const locale = 'en-us';
@@ -19,13 +19,9 @@ export class LUIndexer {
 
   private dir: string;
   public storage: IFileStorage;
-  public lastUpdateTime: number;
-  public lastPublishTime: number;
   constructor(storage: IFileStorage, dir: string) {
     this.storage = storage;
     this.dir = dir;
-    this.lastUpdateTime = 1;
-    this.lastPublishTime = 1;
   }
 
   public async index(files: FileInfo[]) {
@@ -56,29 +52,31 @@ export class LUIndexer {
     const luStatusFile = files.find(file => file.name === luisStatusFileName);
     if (luStatusFile) {
       const luStatuses = await this._getLuStatus(luStatusFile.path);
+      this.luFiles.forEach(luFile => {
+        const lastUpdateTime = luStatuses[luFile.id].lastUpdateTime;
+        const lastPublishTime = luStatuses[luFile.id].lastPublishTime;
 
-      for (const luName in luStatuses) {
-        const lastUpdateTime = luStatuses[luName].lastUpdateTime;
-        const lastPublishTime = luStatuses[luName].lastPublishTime;
-        const luFile = this.luFiles.find(lufile => lufile.id === luName);
-        if (luFile) {
-          luFile.lastUpdateTime = lastUpdateTime;
-          luFile.lastPublishTime = lastPublishTime;
-        }
-      }
+        luFile.lastUpdateTime = lastUpdateTime;
+        luFile.lastPublishTime = lastPublishTime;
+      });
     }
-  }
-
-  public async reIndex(files: FileInfo[]) {
-    await this.flush(files);
-    await this.index(files);
   }
 
   public getLuFiles() {
     return this.luFiles;
   }
 
-  public async flush(files: FileInfo[]) {
+  public async flush(files: FileInfo[], relativePath?: string) {
+    //write into lu file
+    if (relativePath) {
+      const index = files.findIndex(f => f.relativePath === relativePath);
+      if (index === -1) {
+        throw new Error(`no such file at ${relativePath}`);
+      }
+      const absolutePath = `${this.dir}/${relativePath}`;
+      await this.storage.writeFile(absolutePath, files[index].content);
+    }
+    //write into lu status
     const luisStatus: ILuisStatus = {};
     for (const file of this.luFiles) {
       luisStatus[file.id] = {
@@ -93,6 +91,7 @@ export class LUIndexer {
       Path.join(this.dir, GENERATEDFOLDER, luisStatusFileName),
       JSON.stringify(luisStatus, null, 4)
     );
+    // if files does not contain the luis.status.json we need to add it
     if (!files.find(file => file.name === luisStatusFileName)) {
       files.push({
         name: luisStatusFileName,
@@ -109,20 +108,35 @@ export class LUIndexer {
     return parseContent(content);
   }
 
-  public updateLuStatusTimeInMemory(ids: string[], key: string, newTime: number) {
-    for (const id of ids) {
-      const luFile = this.luFiles.find(luFile => luFile.id === id);
-      if (!luFile) continue;
-      switch (key) {
-        case 'lastUpdateTime':
-          this.lastUpdateTime = newTime;
-          luFile.lastUpdateTime = newTime;
-          break;
-        case 'lastPublishTime':
-          this.lastPublishTime = newTime;
-          luFile.lastPublishTime = newTime;
-          break;
-      }
+  public updateLuInMemory(data: ILuisStatusOperation, operation: string, files: FileInfo[], content?: string) {
+    switch (operation) {
+      case 'update':
+        for (const id in data) {
+          const curLuFile = this.luFiles.find(luFile => luFile.id === id);
+          const file = files.find(f => f.name === `${id}.lu`);
+          if (!curLuFile || !file) break;
+          const newLuFile = data[id];
+          for (const key in newLuFile) {
+            curLuFile[key] = newLuFile[key];
+          }
+          file.content = content;
+        }
+        break;
+      case 'publish':
+        for (const id in data) {
+          const curLuFile = this.luFiles.find(luFile => luFile.id === id);
+          const file = files.find(f => f.name === `${id}.lu`);
+          if (!curLuFile || !file) break;
+          const newLuFile = data[id];
+          for (const key in newLuFile) {
+            curLuFile[key] = newLuFile[key];
+          }
+        }
+        break;
+      case 'remove':
+        break;
+      case 'create':
+        break;
     }
   }
 

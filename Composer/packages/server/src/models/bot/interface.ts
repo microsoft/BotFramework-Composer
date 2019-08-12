@@ -44,6 +44,7 @@ export interface LUFile {
   parsedContent: { [key: string]: any };
   lastUpdateTime: number;
   lastPublishTime: number;
+  [key: string]: any;
 }
 
 export interface ILuisSettings {
@@ -68,4 +69,18 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+
+export interface IOperationLUFile {
+  diagnostics?: any[]; // ludown parser output
+  relativePath?: string;
+  content?: string;
+  parsedContent?: { [key: string]: any };
+  lastUpdateTime?: number;
+  lastPublishTime?: number;
+  [key: string]: any;
+}
+
+export interface ILuisStatusOperation {
+  [key: string]: IOperationLUFile;
 }

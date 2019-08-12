@@ -7,7 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, ILuisStatusOperation } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -181,7 +181,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public updateLuFile = async (id: string, content: string, updateTime: number): Promise<LUFile[]> => {
+  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -195,13 +195,20 @@ export class BotProject {
 
     const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) this.luIndexer.getLuFiles();
+    if (!isUpdate) return this.luIndexer.getLuFiles();
 
-    if (this.luIndexer.lastUpdateTime <= updateTime) {
-      const toUpdateLuFile = [id];
-      this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuFile, 'lastUpdateTime', updateTime);
-      await this._updateFile(luFile.relativePath, content);
-    }
+    const updateTime = new Date().getTime();
+
+    const data: ILuisStatusOperation = {};
+    data[id] = {
+      content,
+      parsedContent: currentLufileParsedContentLUISJsonStructure,
+      lastUpdateTime: updateTime,
+    };
+
+    this.luIndexer.updateLuInMemory(data, 'update', this.files, content);
+    await this.luIndexer.flush(this.files, luFile.relativePath);
+
     const luFiles = this.luIndexer.getLuFiles();
     return luFiles;
   };
@@ -225,7 +232,7 @@ export class BotProject {
     this.luPublisher.setLuisConfig(config);
   };
 
-  public publishLuis = async (publishTime: number) => {
+  public publishLuis = async () => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
     const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
@@ -251,14 +258,21 @@ export class BotProject {
     }
 
     const toUpdateLuId = unpublished.map(file => file.id);
-    if (publishTime >= this.luIndexer.lastPublishTime) {
-      try {
-        await this.luPublisher.publish(unpublished);
-        this.luIndexer.updateLuStatusTimeInMemory(toUpdateLuId, 'lastPublishTime', publishTime);
-        await this.reindex('dummy.lu');
-      } catch (error) {
-        throw new Error(error);
-      }
+    const publishTime = new Date().getTime();
+    const data: ILuisStatusOperation = {};
+    toUpdateLuId.forEach(
+      id =>
+        (data[id] = {
+          lastPublishTime: publishTime,
+        })
+    );
+
+    try {
+      await this.luPublisher.publish(unpublished);
+      this.luIndexer.updateLuInMemory(data, 'publish', this.files);
+      await this.luIndexer.flush(this.files);
+    } catch (error) {
+      throw new Error(error);
     }
     return this.luIndexer.getLuFiles();
   };
@@ -357,7 +371,7 @@ export class BotProject {
         this.lgIndexer.index(this.files);
         break;
       case '.lu':
-        await this.luIndexer.reIndex(this.files); // ludown parser is async
+        await this.luIndexer.index(this.files); // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);

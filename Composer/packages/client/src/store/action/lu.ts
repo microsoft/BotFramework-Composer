@@ -5,9 +5,9 @@ import { ActionCreator } from '../types';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import luisStorage from './../../utils/luisStorage';
 
-export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content, updateTime }) => {
+export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content, updateTime });
+    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_LU_SUCCESS,
       payload: { response },
@@ -51,9 +51,9 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
   }
 };
 
-export const publishLuis: ActionCreator = async ({ dispatch }, { publishTime }) => {
+export const publishLuis: ActionCreator = async ({ dispatch }) => {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { publishTime });
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },

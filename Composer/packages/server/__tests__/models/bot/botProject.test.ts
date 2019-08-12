@@ -125,7 +125,7 @@ describe('modify non exist files', () => {
     await expect(proj.removeLgFile(id)).rejects.toThrow();
     await expect(proj.removeLuFile(id)).rejects.toThrow();
     await expect(proj.updateLgFile(id, content)).rejects.toThrow();
-    await expect(proj.updateLuFile(id, content, new Date().getTime())).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
   });
 });
 
@@ -221,7 +221,7 @@ describe('lu operation', () => {
   it('should update lu file and update index', async () => {
     const id = 'root';
     const content = '## hello \n - hello2';
-    const luFiles = await proj.updateLuFile(id, content, new Date().getTime());
+    const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(9);
@@ -238,7 +238,7 @@ describe('lu operation', () => {
     const id = 'root';
     const content = 'hello \n hello3';
 
-    await expect(proj.updateLuFile(id, content, new Date().getTime())).rejects.toThrow();
+    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
   });
 
   it('should delete lu file and update index', async () => {
