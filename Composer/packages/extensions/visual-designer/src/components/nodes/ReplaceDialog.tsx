@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 // eslint-disable-next-line no-unused-vars
@@ -22,7 +23,7 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
       <span>
-        Switch to
+        {formatMessage('Switch to')}
         <span
           css={{
             cursor: 'pointer',
