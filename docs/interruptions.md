@@ -17,6 +17,8 @@ Basic scenario of multi-input form flow. Here the user answers the questions dir
 ## 2. Multi-turn with validations
 Here's the next level of sophistication where the bot can set **validation constraints** on user input and re-prompt in a more elegant way
 
+> [Composer-gap] We need to provide guidance for users to use turn.value. When adding constraints, the placeholder text could include a simple expression with turn.value to guide users. 
+
 | Who?  | Message                                                                           |
 |------:|:----------------------------------------------------------------------------------|
 |User:  | Hi                                                                                |
