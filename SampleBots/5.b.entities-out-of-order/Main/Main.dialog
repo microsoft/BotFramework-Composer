@@ -1,0 +1,136 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-08-09T19:17:13.316Z",
+    "updatedAt": "2019-08-09T20:53:03.248Z",
+    "id": "064914",
+    "name": "5.b.entities-out-of-order"
+  },
+  "autoEndDialog": true,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "rules": [
+    {
+      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "GetProfile",
+        "id": "174029",
+        "updatedAt": "2019-08-09T19:18:59.445Z"
+      },
+      "intent": "GetProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "079799",
+            "updatedAt": "2019-08-12T16:54:31.595Z"
+          },
+          "outputFormat": "trim",
+          "allowInterruptions": "always",
+          "property": "user.name",
+          "prompt": "Hello, I'm the demo bot. What is your name?",
+          "unrecognizedPrompt": "Sorry, I do not understand '{turn.value}' in this context. What is your name?",
+          "invalidPrompt": "Sorry, {turn.value} does not work. Give me something between 3-150 characters in length. ",
+          "maxTurnCount": 3,
+          "validations": [
+            "length(turn.value) > 2",
+            "length(turn.value) <= 150"
+          ],
+          "value": "@userName",
+          "alwaysPrompt": false
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "609860",
+            "updatedAt": "2019-08-09T19:20:10.401Z"
+          },
+          "activity": "[bfdactivity-609860]"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "name": "Prompt for a number",
+            "id": "601105",
+            "updatedAt": "2019-08-09T21:03:52.756Z"
+          },
+          "property": "user.age",
+          "prompt": "What is your age?",
+          "unrecognizedPrompt": "Sorry, I do not understand '{turn.value}' in this context. What is your age?",
+          "invalidPrompt": "Sorry, {turn.value} does not work. Give me something between 1-150.",
+          "maxTurnCount": 3,
+          "validations": [
+            "int(turn.value) >= 1",
+            "int(turn.value) <= 150"
+          ],
+          "value": "@age",
+          "defaultValue": "30",
+          "alwaysPrompt": false,
+          "allowInterruptions": "always",
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "126047",
+            "updatedAt": "2019-08-09T19:20:44.898Z"
+          },
+          "activity": "[bfdactivity-126047]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "255877",
+        "updatedAt": "2019-08-12T16:45:49.049Z"
+      },
+      "intent": "GetUserProfile",
+      "steps": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "332732",
+            "updatedAt": "2019-08-12T16:46:21.750Z"
+          },
+          "property": "user.name",
+          "value": "coalesce(@userName, @personName)"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "837840",
+            "updatedAt": "2019-08-12T16:46:34.822Z"
+          },
+          "property": "user.age",
+          "value": "coalesce(@number, @age, @userAge)"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "name": "Set a Property",
+            "id": "085701",
+            "updatedAt": "2019-08-12T16:48:04.820Z"
+          },
+          "property": "turn.processInput",
+          "value": "false"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}
