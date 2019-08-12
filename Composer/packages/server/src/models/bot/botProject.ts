@@ -197,7 +197,7 @@ export class BotProject {
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
-    const updateTime = new Date().getTime();
+    const updateTime = Date.now();
 
     const data: ILuisStatusOperation = {};
     data[id] = {
@@ -258,7 +258,7 @@ export class BotProject {
     }
 
     const toUpdateLuId = unpublished.map(file => file.id);
-    const publishTime = new Date().getTime();
+    const publishTime = Date.now();
     const data: ILuisStatusOperation = {};
     toUpdateLuId.forEach(
       id =>
