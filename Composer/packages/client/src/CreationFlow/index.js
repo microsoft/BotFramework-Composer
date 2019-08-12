@@ -96,6 +96,7 @@ export function CreationFlow(props) {
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
+        navigate(BASEPATH);
         break;
       default:
         setStep(Steps.NONE);

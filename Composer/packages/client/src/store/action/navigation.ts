@@ -21,7 +21,6 @@ const checkUrl = (currentUri, { dialogId, focusedEvent, focusedSteps }) => {
 
 export const navTo: ActionCreator = ({ state }, path, breadcrumb = null) => {
   if (!path) return;
-  const { uri } = state.designPageLocation;
   const currentUri = `/dialogs/${path}`;
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
