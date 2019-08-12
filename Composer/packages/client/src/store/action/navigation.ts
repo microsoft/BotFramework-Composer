@@ -16,7 +16,7 @@ export const setDesignPageLocation: ActionCreator = (
 
 const checkUrl = (currentUri, { dialogId, focusedEvent, focusedSteps }) => {
   const lastUri = `/dialogs/${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`;
-  return lastUri == currentUri;
+  return lastUri === currentUri;
 };
 
 export const navTo: ActionCreator = ({ state }, path, breadcrumb = null) => {
