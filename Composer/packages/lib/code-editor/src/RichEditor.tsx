@@ -16,7 +16,7 @@ export function RichEditor(props: RichEditorProps) {
   const isInvalid = !!errorMsg;
 
   const errorHelp = formatMessage.rich(
-    'This text cannot be saved because there are errors in the LG syntax. Refer to the syntax documentation <a>here</a>.',
+    'This text cannot be saved because there are errors in the syntax. Refer to the syntax documentation <a>here</a>.',
     {
       // eslint-disable-next-line react/display-name
       a: ({ children }) => (
