@@ -7,12 +7,12 @@ export function isValid(diagnostics) {
   return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
 }
 
-export function check(content, name = '') {
-  return StaticChecker.checkText(content, name, lgImportResolver);
+export function check(content, id = '') {
+  return StaticChecker.checkText(content, id, lgImportResolver);
 }
 
-export function parse(content, name = '') {
-  const resource = LGParser.parse(content, name, lgImportResolver);
+export function parse(content, id = '') {
+  const resource = LGParser.parse(content, id);
   return get(resource, 'Templates', []);
 }
 
