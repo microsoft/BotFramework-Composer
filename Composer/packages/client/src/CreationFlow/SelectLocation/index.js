@@ -22,15 +22,14 @@ export function SelectLocation(props) {
         }) >= 0
       ) {
         startBot(true);
-        navigate('/dialogs/Main');
         onDismiss();
       } else {
         setErrorMessage(formatMessage('Please select one of these options.'));
       }
-      return;
     } else {
       onOpen(selected);
     }
+    navigate('/dialogs/Main');
   }
 
   function TemplateItem(props) {
