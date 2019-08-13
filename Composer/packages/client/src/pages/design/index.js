@@ -1,12 +1,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useMemo } from 'react';
+import { Fragment, useContext, useEffect, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { globalHistory } from '@reach/router';
 
-import { getDialogData } from '../../utils';
+// import { getDialogData } from '../../utils';
+
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
+import { getbreadcrumbLabel } from '../../utils';
 
 import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
@@ -26,11 +29,11 @@ import {
   deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
-import { upperCaseName } from './../../utils/fileUtil';
 import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
+import { clearBreadcrumb, getUrlSearch } from './../../utils/navigation';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -58,12 +61,28 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, navPath, navPathHistory } = state;
-  const { clearNavHistory, navTo, removeDialog } = actions;
+  const { dialogs, designPageLocation, breadcrumb, schemas } = state;
+  const { removeDialog, setDesignPageLocation, navTo } = actions;
+  const { location, match } = props;
+  const { dialogId } = designPageLocation;
+
+  useEffect(() => {
+    if (match) {
+      const { dialogId, uri } = match;
+      const params = new URLSearchParams(location.search);
+      setDesignPageLocation({
+        dialogId: dialogId,
+        uri: uri,
+        focusedEvent: params.get('focusedEvent'),
+        focusedSteps: params.getAll('focusedSteps[]'),
+        breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+      });
+    }
+    globalHistory._onTransitionComplete();
+  }, [location]);
 
   function handleFileClick(id) {
-    clearNavHistory();
-    navTo(`${id}#`);
+    navTo(id);
   }
 
   const getErrorMessage = name => {
@@ -77,17 +96,9 @@ function DesignPage(props) {
     return '';
   };
 
-  const dialogsMap = useMemo(() => {
-    return dialogs.reduce((result, dialog) => {
-      result[dialog.id] = dialog.content;
-      return result;
-    }, {});
-  }, [dialogs]);
-
   const onCreateDialogComplete = newDialog => {
     if (newDialog) {
-      actions.clearNavHistory();
-      actions.navTo(`${newDialog}#`);
+      navTo(newDialog);
     }
   };
 
@@ -110,29 +121,32 @@ function DesignPage(props) {
     },
   ];
 
-  const breadcrumbItems = useMemo(() => {
-    const botName = dialogs.length && dialogs.find(d => d.isRoot).displayName;
-    return navPathHistory.map((item, index) => {
-      const pathList = item.split('#');
-      const text = pathList[1] === '' ? pathList[0] : getDialogData(dialogsMap, `${item}.$type`);
-      const isRoot = dialogs.findIndex(d => d.isRoot && d.id === text) >= 0;
-      const displayText = isRoot ? botName : text;
-      return {
-        key: index,
-        path: item,
-        text: formatMessage(upperCaseName(displayText)),
-        onClick: (_event, { path, key }) => {
-          clearNavHistory(key);
-          navTo(path);
-        },
-      };
-    });
-  }, [clearNavHistory, dialogs, navPathHistory, navTo]);
+  function handleBreadcrumbItemClick(_event, { dialogId, focusedEvent, focusedSteps, index }) {
+    navTo(`${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`, clearBreadcrumb(breadcrumb, index));
+  }
 
-  const activeDialog = useMemo(() => {
-    if (!navPath) return '';
-    return navPath.split('#')[0];
-  }, [navPath]);
+  const breadcrumbItems = useMemo(() => {
+    const items =
+      dialogs.length > 0
+        ? breadcrumb.map((item, index) => {
+            const { dialogId, focusedEvent, focusedSteps } = item;
+            return {
+              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas),
+              ...item,
+              index,
+              onClick: handleBreadcrumbItemClick,
+            };
+          })
+        : [];
+    return (
+      <Breadcrumb
+        items={items}
+        ariaLabel={formatMessage('Navigation Path')}
+        styles={breadcrumbClass}
+        data-testid="Breadcrumb"
+      />
+    );
+  }, [dialogs, breadcrumb]);
 
   async function onSubmit(data) {
     const content = {
@@ -146,7 +160,10 @@ function DesignPage(props) {
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
-    let setting = { confirmBtnText: formatMessage('Yes'), cancelBtnText: formatMessage('Cancel') };
+    let setting = {
+      confirmBtnText: formatMessage('Yes'),
+      cancelBtnText: formatMessage('Cancel'),
+    };
     let title = '';
     let subTitle = '';
     if (refs.length > 0) {
@@ -168,7 +185,7 @@ function DesignPage(props) {
 
   return (
     <Fragment>
-      {props.match && <ToolBar toolbarItems={toolbarItems} />}
+      {match && <ToolBar toolbarItems={toolbarItems} />}
       <MainContent>
         <Fragment>
           <div css={projectContainer}>
@@ -179,7 +196,7 @@ function DesignPage(props) {
                 </div>
                 <ProjectTree
                   files={dialogs}
-                  activeNode={activeDialog}
+                  activeNode={dialogId || ''}
                   onSelect={handleFileClick}
                   onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
                   onDelete={handleDeleteDialog}
@@ -189,12 +206,7 @@ function DesignPage(props) {
           </div>
           <Conversation extraCss={editorContainer}>
             <Fragment>
-              <Breadcrumb
-                items={breadcrumbItems}
-                ariaLabel={formatMessage('Navigation Path')}
-                styles={breadcrumbClass}
-                data-testid="Breadcrumb"
-              />
+              {breadcrumbItems}
               <div css={editorWrapper}>
                 <iframe
                   key="VisualEditor"

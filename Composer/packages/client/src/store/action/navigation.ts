@@ -1,34 +1,67 @@
-import { ActionCreator } from '../types';
+import { navigate } from '@reach/router';
 
+import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
+import { clearBreadcrumbWhenFocusSteps, clearBreadcrumbWhenFocusEvent, getUrlSearch } from './../../utils/navigation';
 
-export const navTo: ActionCreator = ({ dispatch }, path, rest) => {
+export const setDesignPageLocation: ActionCreator = (
+  { dispatch },
+  { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }
+) => {
   dispatch({
-    type: ActionTypes.NAVIGATE_TO,
-    payload: { path, rest },
+    type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
+    payload: { dialogId, focusedEvent, focusedSteps, uri, breadcrumb },
   });
 };
 
-// this sub path is relative to the navPath
-export const navDown: ActionCreator = ({ dispatch }, subPath) => {
-  dispatch({
-    type: ActionTypes.NAVIGATE_DOWN,
-    payload: { subPath },
-  });
+const checkUrl = (currentUri, { dialogId, focusedEvent, focusedSteps }) => {
+  const lastUri = `/dialogs/${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`;
+  return lastUri === currentUri;
 };
 
-// this sub path is relative to the navPath, not focusPath
-// so new focusPath = navPath + subPath
-export const focusTo: ActionCreator = ({ dispatch }, path) => {
-  dispatch({
-    type: ActionTypes.FOCUS_TO,
-    payload: { path },
-  });
+export const navTo: ActionCreator = ({ state }, path, breadcrumb = null) => {
+  if (!path) return;
+  const currentUri = `/dialogs/${path}`;
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigate(currentUri, { state: { breadcrumb: breadcrumb || [] } });
 };
 
-export const clearNavHistory: ActionCreator = ({ dispatch }, fromIndex) => {
-  dispatch({
-    type: ActionTypes.CLEAR_NAV_HISTORY,
-    payload: { fromIndex },
-  });
+export const focusEvent: ActionCreator = ({ state }, subPath) => {
+  const { uri } = state.designPageLocation;
+  const { breadcrumb } = state;
+  let currentUri = uri;
+
+  if (subPath) {
+    currentUri = `${uri}?focusedEvent=${subPath}`;
+  }
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusEvent(breadcrumb, subPath) } });
+};
+
+const checkFocusedSteps = (focusedEvent: string, focusedSteps: string[]) => {
+  if (focusedSteps.length === 0) return true;
+  const parent = focusedSteps[0].split('.')[0];
+  if (!focusedSteps.every(item => item.split('.')[0] === parent)) return false;
+  return focusedEvent === parent;
+};
+
+export const focusSteps: ActionCreator = ({ state }, subPaths) => {
+  const { uri, focusedEvent } = state.designPageLocation;
+  const { breadcrumb } = state;
+
+  if (!checkFocusedSteps(focusedEvent, subPaths)) {
+    return;
+  }
+
+  let currentUri = uri;
+  if (subPaths.length) {
+    currentUri = `${uri}?focusedEvent=${focusedEvent}&focusedSteps[]=${subPaths[0]}`;
+  } else if (focusedEvent) {
+    currentUri = `${uri}?focusedEvent=${focusedEvent}`;
+  }
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigate(currentUri, { state: { breadcrumb: clearBreadcrumbWhenFocusSteps(breadcrumb, subPaths) } });
 };

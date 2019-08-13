@@ -22,9 +22,9 @@ describe('<VisualDesigner />', () => {
       <VisualDesigner
         data={{ content: '{"json": "some data"}' }}
         currentDialog={{ id: 'Main', displayName: 'Main', isRoot: false }}
-        onChange={() => {}}
-        navPath="Some#path"
-        focusPath="Some#path.foo"
+        dialogId="SomeDialog"
+        focusedEvent="rules[0]"
+        focusedSteps={['rules[0].steps[0]']}
         shellApi={{}}
       />
     );

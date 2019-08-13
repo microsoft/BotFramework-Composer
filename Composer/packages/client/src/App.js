@@ -29,11 +29,11 @@ const topLinks = [
     exact: true,
   },
   {
-    to: '/',
+    to: '/dialogs/Main',
     iconName: 'SplitObject',
     labelName: 'Design Flow',
-    activeIfUrlContains: '',
-    exact: true,
+    activeIfUrlContains: 'dialogs',
+    exact: false,
   },
   {
     to: '/test-conversation',

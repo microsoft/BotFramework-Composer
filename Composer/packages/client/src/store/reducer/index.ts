@@ -94,52 +94,6 @@ const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   return state;
 };
 
-const navigateTo: ReducerFunc = (state, { path, rest }) => {
-  if (state.navPath !== path) {
-    if (rest && Array.isArray(rest)) {
-      rest.forEach(nav => {
-        if (nav !== state.navPath) {
-          state.navPathHistory.push(state.navPath + nav);
-        }
-      });
-    }
-    state.navPath = path;
-    state.focusPath = state.navPath; // fire up form editor on non-leaf node
-
-    state.navPathHistory.push(path);
-  }
-
-  if (state.focusPath !== path) {
-    state.focusPath = path;
-  }
-  return state;
-};
-
-const navigateDown: ReducerFunc = (state, { subPath }) => {
-  state.navPath = state.navPath + subPath;
-  state.focusPath = state.navPath; // fire up form editor on non-leaf node
-  state.navPathHistory.push(state.navPath);
-  return state;
-};
-
-const focusTo: ReducerFunc = (state, { path }) => {
-  state.focusPath = path;
-  return state;
-};
-
-const clearNavHistory: ReducerFunc = (state, { fromIndex }) => {
-  const length = state.navPathHistory.length;
-  if (typeof fromIndex === 'undefined') {
-    state.navPath = '';
-    state.focusPath = '';
-    state.navPathHistory.splice(0, length);
-  } else if (fromIndex + 1 !== state.navPathHistory.length) {
-    state.navPathHistory.splice(fromIndex, length);
-  }
-
-  return state;
-};
-
 const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
   state.botLoadErrorMsg = error;
   return state;
@@ -165,6 +119,25 @@ const updateOAuth: ReducerFunc = (state, { oAuth }) => {
   return state;
 };
 
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
+  const focusedStep = focusedSteps[0] || '';
+  //generate focusedPath. This will remove when all focusPath related is removed
+  state.focusPath = dialogId + '#';
+  if (focusedStep) {
+    state.focusPath = dialogId + '#.' + focusedStep;
+  }
+
+  if (focusedSteps.length === 0 && focusedEvent) {
+    state.focusPath = dialogId + '#.' + focusedEvent;
+  }
+
+  //add current path to the breadcrumb
+  breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
+  state.breadcrumb = breadcrumb;
+  state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -179,10 +152,6 @@ export const reducer = createReducer({
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
-  [ActionTypes.NAVIGATE_TO]: navigateTo,
-  [ActionTypes.NAVIGATE_DOWN]: navigateDown,
-  [ActionTypes.FOCUS_TO]: focusTo,
-  [ActionTypes.CLEAR_NAV_HISTORY]: clearNavHistory,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
@@ -196,4 +165,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
+  [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
 } as { [type in ActionTypes]: ReducerFunc });

@@ -74,15 +74,15 @@ const Form: React.FunctionComponent<FormProps> = props => {
         ArrayFieldTemplate={ArrayFieldTemplate}
         fields={fields}
         FieldTemplate={FieldTemplate}
+        formatData={removeUndefinedOrEmpty}
         formContext={formContext}
         formData={formData}
         ObjectFieldTemplate={ObjectFieldTemplate}
         onChange={onChange}
+        safeRenderCompletion
         schema={schema}
         uiSchema={uiSchema}
         widgets={widgets as { [key: string]: Widget }}
-        formatData={removeUndefinedOrEmpty}
-        safeRenderCompletion
         {...rest}
       />
     </div>
