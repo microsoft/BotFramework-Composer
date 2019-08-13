@@ -64,7 +64,8 @@ const updateLuTemplate: ReducerFunc = (state, { response }) => {
 
 const setBotStatus = (state, { status, botEndpoint }) => {
   state.botEndpoint = botEndpoint || state.botEndpoint;
-  return (state.botStatus = status);
+  state.botStatus = status;
+  return state;
 };
 
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
