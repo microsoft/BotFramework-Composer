@@ -2,8 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { SharedColors } from '@uifabric/fluent-theme';
-import formatMessage from 'format-message';
 
 import { BFDFieldProps } from '../types';
 
@@ -29,10 +27,9 @@ const getInitialTemplate = (formData?: string): string => {
 
 export const LgEditorField: React.FC<BFDFieldProps> = props => {
   const { formContext } = props;
-
-  const [isInvalid, setIsInvalid] = useState(false);
   const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
   const lgId = `bfdactivity-${formContext.dialogId}`;
+  const [errorMsg, setErrorMsg] = useState('');
 
   const ensureTemplate = async (newBody?: string): Promise<void> => {
     const templates = await formContext.shellApi.getLgTemplates('common');
@@ -66,8 +63,8 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
         setTemplateToRender({ Name: templateToRender.Name, Body: data });
         formContext.shellApi
           .updateLgTemplate('common', lgId, dataToEmit)
-          .then(() => setIsInvalid(false))
-          .catch(() => setIsInvalid(true));
+          .then(() => setErrorMsg(''))
+          .catch(error => setErrorMsg(error));
         props.onChange(`[${lgId}]`);
       } else {
         setTemplateToRender({ Name: templateToRender.Name, Body: '' });
@@ -88,44 +85,18 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
         <div
           style={{
             height: '250px',
-            border: '1px solid transparent',
-            borderColor: isInvalid ? SharedColors.red20 : 'transparent',
-            transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
+            paddingBottom: '19px',
           }}
         >
           <LgEditor
-            hidePlaceholder
-            value={Body}
-            onChange={onChange}
             editorDidMount={editor => {
               focusEditor(editor);
             }}
+            errorMsg={errorMsg}
+            value={Body}
+            onChange={onChange}
           />
         </div>
-        {isInvalid ? (
-          <span style={{ fontSize: '14px' }}>
-            <span style={{ margin: 0, color: SharedColors.red20, fontSize: '11px' }}>
-              {formatMessage.rich(
-                'This text cannot be saved because there are errors in the LG syntax. Refer to the syntax documentation <a>here</a>.',
-                {
-                  // eslint-disable-next-line react/display-name
-                  a: ({ children }) => (
-                    <a
-                      key="a"
-                      href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {children}
-                    </a>
-                  ),
-                }
-              )}
-            </span>
-          </span>
-        ) : (
-          <div style={{ height: '19px' }} />
-        )}
       </BaseField>
     </div>
   );

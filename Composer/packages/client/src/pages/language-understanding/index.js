@@ -102,6 +102,7 @@ export const LUPage = props => {
     } else {
       navigate(mapNavPath(`/language-understanding/${id}`));
     }
+    setEditMode(false);
   }
 
   async function onChange(newContent) {
