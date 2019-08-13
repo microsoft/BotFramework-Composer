@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, FC } from 'react';
+import { useContext, FC, useState } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { SelectableGroup } from '../components/nodes/dragSelection/index';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -64,6 +65,21 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
     return null;
   };
 
+  const handleSelectionChange = items => {
+    const itemIds: string[] = [];
+    let shortestLength = 999;
+
+    items.forEach(item => {
+      if (item && item.dataset['selectionid'] && item.dataset['selectionid'].length < shortestLength) {
+        shortestLength = item.dataset['selectionid'].length;
+      }
+      item && itemIds.push(item.dataset['selectionid']);
+    });
+
+    const seletectItemIds = new Set<string>(itemIds.map(item => (item = item.substr(0, shortestLength))));
+    console.log('selected items:' + Array.from(seletectItemIds));
+  };
+
   if (!data) return renderFallbackContent();
 
   return (
@@ -85,14 +101,21 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
       }}
     >
       <DragScroll>
-        <AdaptiveDialogEditor
-          id={path}
-          data={data}
-          onEvent={(eventName, eventData) => {
+        <SelectableGroup
+          onSelectionChange={items => {
             divRef.focus({ preventScroll: true });
-            dispatchEvent(eventName, eventData);
+            handleSelectionChange(items);
           }}
-        />
+        >
+          <AdaptiveDialogEditor
+            id={path}
+            data={data}
+            onEvent={(eventName, eventData) => {
+              divRef.focus({ preventScroll: true });
+              dispatchEvent(eventName, eventData);
+            }}
+          />
+        </SelectableGroup>
       </DragScroll>
     </div>
   );

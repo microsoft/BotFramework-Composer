@@ -16,6 +16,7 @@ import {
   ChoiceInput,
 } from '../nodes/index';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { SelectableGroupContext } from '../nodes/dragSelection/index';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
@@ -43,15 +44,23 @@ const nodeBorderStyle = css`
   outline: 2px solid grey;
 `;
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, selected, selectableRef }): JSX.Element => {
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
-  const nodeFocused = focusedId === id || focusedEvent === id || selected;
+
+  const { selectedItems } = useContext(SelectableGroupContext);
+  const selected =
+    selectedItems &&
+    selectedItems.find(item => {
+      return item['dataset']['selectionid'] == id;
+    });
+  const nodeFocused = focusedId === id || focusedEvent === id || !!selected;
 
   return (
     <div
-      ref={selectableRef}
+      data-selectionid={id}
+      data-is-focusable={true}
       className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;

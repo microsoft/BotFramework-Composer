@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useMemo, useEffect, FunctionComponent } from 'react';
-import { createSelectable } from 'react-selectable-fast';
 
 import { GraphNode } from '../../shared/GraphNode';
 import { areBoundariesEqual } from '../../shared/Boundary';
@@ -50,15 +49,13 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   const { boundary, nodes, edges } = layout;
 
-  const SelectableNode = createSelectable(StepRenderer);
-
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
       {nodes
         ? nodes.map(x => (
             <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
-              <SelectableNode
+              <StepRenderer
                 key={`stepGroup/${x.id}]`}
                 id={x.id}
                 data={x.data}
