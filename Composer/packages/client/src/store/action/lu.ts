@@ -13,6 +13,11 @@ export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content })
       payload: { response },
     });
   } catch (err) {
+    dispatch({
+      type: ActionTypes.UPDATE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
     throw new Error(err.response.data.message);
   }
 };
