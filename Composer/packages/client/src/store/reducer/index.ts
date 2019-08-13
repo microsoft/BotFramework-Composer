@@ -157,6 +157,7 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,

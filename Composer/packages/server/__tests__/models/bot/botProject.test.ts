@@ -194,6 +194,8 @@ describe('lu operation', () => {
   afterAll(() => {
     try {
       fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/generated/luis.status.json`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/generated`));
     } catch (err) {
       throw new Error(err);
     }
@@ -206,7 +208,7 @@ describe('lu operation', () => {
     const luFiles = await proj.createLuFile(id, content, dir);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.files.length).toEqual(9);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -222,7 +224,7 @@ describe('lu operation', () => {
     const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.files.length).toEqual(9);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -244,7 +246,7 @@ describe('lu operation', () => {
     const luFiles = await proj.removeLuFile(id);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(7);
+    expect(proj.files.length).toEqual(8);
     expect(luFiles.length).toEqual(3);
 
     expect(result).toBeUndefined();

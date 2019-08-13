@@ -46,11 +46,9 @@ export interface LUFile {
   relativePath: string;
   content: string;
   parsedContent: { [key: string]: any };
-}
-
-export enum FileState {
-  PUBLISHED = 'published',
-  UNPUBLISHED = 'unpublished',
+  lastUpdateTime: number;
+  lastPublishTime: number;
+  [key: string]: any;
 }
 
 export interface ILuisSettings {
@@ -59,11 +57,13 @@ export interface ILuisSettings {
     endpoint: string;
     endpointKey: string;
   };
-  status: {
-    [key: string]: {
-      version: string | undefined;
-      state: FileState;
-    };
+}
+
+export interface ILuisStatus {
+  [key: string]: {
+    version?: string | undefined;
+    lastUpdateTime: number;
+    lastPublishTime: number;
   };
 }
 
@@ -73,4 +73,18 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+
+export interface IOperationLUFile {
+  diagnostics?: any[]; // ludown parser output
+  relativePath?: string;
+  content?: string;
+  parsedContent?: { [key: string]: any };
+  lastUpdateTime?: number;
+  lastPublishTime?: number;
+  [key: string]: any;
+}
+
+export interface ILuisStatusOperation {
+  [key: string]: IOperationLUFile;
 }
