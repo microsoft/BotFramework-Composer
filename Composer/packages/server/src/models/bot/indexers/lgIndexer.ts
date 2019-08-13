@@ -1,8 +1,7 @@
-import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import { get } from 'lodash';
+import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
 
 import { Path } from '../../../utility/path';
-import { FileInfo, LGFile } from '../interface';
+import { FileInfo, LGFile, LGTemplate } from '../interface';
 
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
@@ -13,11 +12,19 @@ export class LGIndexer {
     for (const file of files) {
       const extName = Path.extname(file.name);
       if (extName === '.lg') {
+        const diagnostics = StaticChecker.checkText(file.content, file.path);
+        let templates: LGTemplate[] = [];
+        try {
+          templates = this.parse(file.content, '');
+        } catch (err) {
+          console.error(err);
+        }
         this.lgFiles.push({
           id: Path.basename(file.name, extName),
           relativePath: file.relativePath,
           content: file.content,
-          diagnostics: StaticChecker.checkText(file.content, file.path),
+          templates,
+          diagnostics,
         });
       }
     }
@@ -36,9 +43,12 @@ export class LGIndexer {
     return StaticChecker.checkText(content, path);
   }
 
-  public parse(content: string, path: string): LGTemplate[] {
-    const resource = LGParser.parse(content, path);
-    return get(resource, 'Templates', []);
+  public parse(content: string, id: string): LGTemplate[] {
+    const resource = LGParser.parse(content, id);
+    const templates = resource.Templates.map(t => {
+      return { Name: t.Name, Body: t.Body, Parameters: t.Parameters };
+    });
+    return templates;
   }
 
   public combineMessage(diagnostics: Diagnostic[]): string {

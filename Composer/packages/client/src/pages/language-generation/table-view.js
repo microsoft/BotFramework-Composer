@@ -2,8 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
-import lodash from 'lodash';
-import debounce from 'lodash.debounce';
+import { debounce, isEmpty } from 'lodash';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -23,56 +22,62 @@ import { actionButton, formCell } from '../language-understanding/styles';
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { navTo } = actions;
-  const { dialogs } = state;
-  const lgFile = props.file;
-  const activeDialog = props.activeDialog;
+  const { dialogs, lgFiles } = state;
+  const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
 
   useEffect(() => {
-    if (lodash.isEmpty(lgFile) === false) {
-      const diagnostics = lodash.get(lgFile, 'diagnostics', []);
-      if (lgUtil.isValid(diagnostics) === true) {
-        const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
-          return {
-            ...template,
-            index: templateIndex,
-          };
-        });
+    if (isEmpty(lgFile)) return;
 
-        if (!activeDialog) {
-          setTemplates(allTemplates);
-        } else {
-          const dialogsReferenceThisTemplate = activeDialog.lgTemplates.reduce((result, item) => {
-            const template = allTemplates.find(t => t.Name === item);
-            if (!template) {
-              new Error(`lg template ${item} not found`);
-            } else {
-              result.push(template);
-            }
-            return result;
-          }, []);
-          setTemplates(dialogsReferenceThisTemplate);
+    const errorFiles = checkErrors(lgFiles);
+    if (errorFiles.length !== 0) {
+      showErrors(errorFiles);
+      return;
+    }
+
+    const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
+      return {
+        ...template,
+        index: templateIndex,
+      };
+    });
+
+    if (!activeDialog) {
+      setTemplates(allTemplates);
+    } else {
+      const dialogsTemplates = [];
+      activeDialog.lgTemplates.forEach(item => {
+        const template = allTemplates.find(t => t.Name === item);
+        if (template) {
+          dialogsTemplates.push(template);
         }
-      } else {
-        const errorMsg = lgUtil.combineMessage(diagnostics);
-        const errorTitle = formatMessage('There was a problem parsing an LG template.');
-        OpenConfirmModal(errorTitle, errorMsg, {
-          style: DialogStyle.Console,
-          confirmBtnText: formatMessage('Edit'),
-        }).then(res => {
-          if (res) {
-            props.onEdit();
-          }
-        });
-      }
+      });
+      setTemplates(dialogsTemplates);
     }
   }, [lgFile, activeDialog]);
 
-  function navigateToDialog(id) {
-    navTo(id);
+  function checkErrors(files) {
+    return files.filter(file => {
+      return lgUtil.isValid(file.diagnostics) === false;
+    });
+  }
+
+  async function showErrors(files) {
+    for (const file of files) {
+      const errorMsg = lgUtil.combineMessage(file.diagnostics);
+      const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lg file.`);
+      const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
+        style: DialogStyle.Console,
+        confirmBtnText: formatMessage('Edit'),
+      });
+      if (confirmed === true) {
+        onClickEdit({ fileId: file.id });
+        break;
+      }
+    }
   }
 
   const getTemplatesMoreButtons = (item, index) => {
@@ -81,7 +86,7 @@ export default function TableView(props) {
         key: 'edit',
         name: formatMessage('Edit'),
         onClick: () => {
-          props.onEdit(templates[index]);
+          onClickEdit(templates[index]);
         },
       },
       {
@@ -181,7 +186,7 @@ export default function TableView(props) {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={id} onClick={() => navigateToDialog(id)}>
+              <div key={id} onClick={() => navTo(id)}>
                 <Link>{id}</Link>
               </div>
             );
@@ -284,6 +289,12 @@ export default function TableView(props) {
           styles={{
             root: {
               overflowX: 'hidden',
+              // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
+              selectors: {
+                'div[role="row"]:hover': {
+                  background: 'none',
+                },
+              },
             },
           }}
           className="table-view-list"
@@ -302,5 +313,5 @@ export default function TableView(props) {
 TableView.propTypes = {
   file: PropTypes.object,
   activeDialog: PropTypes.object,
-  onEdit: PropTypes.func,
+  onClickEdit: PropTypes.func,
 };
