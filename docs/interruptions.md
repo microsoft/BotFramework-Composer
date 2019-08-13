@@ -90,7 +90,7 @@ In the above example, the bot took '36' as user's age assuming that was set as t
 |Bot:   | Sorry, I do not understand that. I'm looking for a number between 1-150   |
 |User:  | blah blah blah                                                            |
 |Bot:   | **Sorry, I'm not getting it. For now, I'll set your age to 30. You can say 'My age is \<your age>' to give me that information**   |
-|Bot:   | Thank you. I have your age as 36                                          |
+|Bot:   | Thank you. I have your age as 30                                          |
 
 
 ## 5. Using LUIS for entity extraction
@@ -141,6 +141,8 @@ User can specify multiple pieces of information in one go
 ## 5b. Out of order entity extraction
 
 > [SDK-feature-gap]: With this, user still needs to answer the current question being asked if using text input. Event with no actions is not working at the moment. Bug? A better solution would be to have a processInput action that can be set to `true` to indicate the active input should re-process user input or `false` to indicate that the active input should re-prompt. 
+
+> Note: With this, the user is still in control of out-of order entity correction. E.g. user could say `my name is vishwac and not 36` as an example. Being able to understand propositional phrases like `and, or, not` etc are not pre-baked constructs in LUIS or our dialog system. The user will need to manually design for, configure and handle these. 
 
 | Who?  | Message                                                                   |
 |------:|:--------------------------------------------------------------------------|
@@ -329,19 +331,56 @@ Bot could choose to carry context forward across interrupting conversations
 
 > [SDK-feature-gap] This is hard to achieve without data-model driven dialogs since there is no sense today for a dialog to describe what it can accept/ return.
 
-| Who?  | Message                                                                   |
-|------:|:--------------------------------------------------------------------------|
-|User:  | Book flight                                                               |
-|Bot:   | Sure. What is your destination city?                                      |
-|User:  | How's the weather in seattle next thursday?                               |
-|Bot:   | It is forecast to be 72' and sunny in seattle next thursday               |
-|Bot:   | Are you looking to fly to Seattle next thursday?                          |
-|User:  | Yes                                                                       |
+| Who?  | Message                                                                           |
+|------:|:----------------------------------------------------------------------------------|
+|User:  | Book flight                                                                       |
+|Bot:   | Sure. What is your destination city?                                              |
+|User:  | How's the weather in seattle next thursday?                                       |
+|Bot:   | It is forecast to be 72' and sunny in seattle next thursday                       |
+|Bot:   | Are you looking to fly to Seattle next thursday?                                  |
+|User:  | Yes                                                                               |
 |Bot:   | Got it. I have flights to seattle for next thursday. What is your departure city? |
-|...    | ...                                                                       |
+|...    | ...                                                                               |
 
+# 12. QnA 
 
+Bot could choose to look up a knowledge base to come back with an answer. 
 
+> [Composer] It is unclear if we want to teach users to think about intent .vs. QA as separate concepts. If so, how do we educate users to model `why do you need my name` as a QA pair or as intent + action? My 2c is for us to continue to blur this line for the user and have the system do the right thing while providing an affordance for the user to define simple QA pairs that are contextually relevant. 
+
+| Who?  | Message                                       |
+|------:|:----------------------------------------------|
+|User:  | hi                                            |
+|Bot:   | hello, I'm the demo bot. What is your name?   |
+|User:  | well, what is your name?                      |
+|Bot:   | Its 'demo bot'                                |
+|Bot:   | What is your name?                            |
+|...    | ...                                           |
+
+This bucket also includes open ended questions like these - 
+
+- factual: `who is the president of USA?`
+- statements: `You are awesome!`
+- chitchat: `can you sing a song?`
+
+# 12.a QnA + follow up
+
+User could ask clarifying questions as a multi-turn QA conversation
+
+| Who?  | Message                                       |
+|------:|:----------------------------------------------|
+|User:  | hi                                            |
+|Bot:   | hello, I'm the demo bot. What is your name?   |
+|User:  | well, what is your name?                      |
+|Bot:   | Its 'demo bot'                                |
+|Bot:   | What is your name?                            |
+|User:  | and who made you?                             |
+|Bot:   | I was built by engieers at contoso cafe       |
+|Bot:   | What is your name?                            |
+|User:  | how old are you?                              |
+|Bot:   | Concept of age does not apply to me.          |
+|Bot:   | What is your name?                            |
+|.....  | ......                                        |
 
 
 
