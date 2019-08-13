@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { EdgeMenu } from 'shared-menus';
 
 import { StepGroup } from '../components/groups';
 import { Icon } from '../components/nodes/icons/icon';
@@ -11,6 +10,7 @@ import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval } from '../shared/elementSizes';
+import { EdgeMenu } from '../components/menus/EdgeMenu';
 
 const TriggerSize = { width: 280, height: 40 };
 const CircleSize = { width: 14, height: 14 };

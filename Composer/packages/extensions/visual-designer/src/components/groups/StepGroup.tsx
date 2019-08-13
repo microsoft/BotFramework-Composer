@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
-import { EdgeMenu } from 'shared-menus';
 
 import { GraphNode } from '../../shared/GraphNode';
 import { areBoundariesEqual } from '../../shared/Boundary';
@@ -11,9 +10,10 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { OffsetContainer } from '../shared/OffsetContainer';
-import { NodeRenderer } from '../shared/NodeRenderer';
+import { StepRenderer } from '../shared/StepRenderer';
 import { Edge } from '../shared/EdgeComponents';
 import { GraphLayout } from '../../shared/GraphLayout';
+import { EdgeMenu } from '../menus/EdgeMenu';
 
 const StepInterval = ElementInterval.y;
 
@@ -54,7 +54,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
       {nodes
         ? nodes.map(x => (
             <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
-              <NodeRenderer
+              <StepRenderer
                 key={`stepGroup/${x.id}]`}
                 id={x.id}
                 data={x.data}

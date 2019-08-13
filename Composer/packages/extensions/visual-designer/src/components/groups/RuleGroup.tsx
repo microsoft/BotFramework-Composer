@@ -2,9 +2,8 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeRenderer } from '../shared/NodeRenderer';
+import { EventRenderer } from '../shared/EventRenderer';
 import { Boundary } from '../../shared/Boundary';
 import { EventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
 
@@ -38,7 +37,7 @@ export class RuleGroup extends React.Component<NodeProps> {
           boxSizing: 'border-box',
         }}
       >
-        <NodeRenderer
+        <EventRenderer
           id={elementId}
           data={rule}
           onEvent={onEvent}

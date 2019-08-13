@@ -58,7 +58,7 @@ export function getUrlSearch(focusedEvent, focusedSteps) {
     });
   }
 
-  let result = search.toString();
+  let result = decodeURI(search.toString());
   if (result) {
     result = '?' + result;
   }

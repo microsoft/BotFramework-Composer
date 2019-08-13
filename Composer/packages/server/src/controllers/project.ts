@@ -201,7 +201,7 @@ async function updateLuFile(req: Request, res: Response) {
       const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
       res.status(200).json({ luFiles });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ message: error.message });
     }
   } else {
     res.status(404).json({
@@ -246,8 +246,8 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const status = await ProjectService.currentBotProject.publishLuis();
-      res.status(200).json({ status });
+      const luFiles = await ProjectService.currentBotProject.publishLuis();
+      res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
         message: error instanceof Error ? error.message : error,
