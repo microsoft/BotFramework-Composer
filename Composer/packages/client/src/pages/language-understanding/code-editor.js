@@ -3,15 +3,15 @@
 import { jsx } from '@emotion/core';
 import { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgEditor } from 'code-editor';
+import { LuEditor } from 'code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
-import * as lgUtil from '../../utils/lgUtil';
+import * as luUtil from '../../utils/luUtil';
 
 export default function CodeEditor(props) {
-  const { file } = props;
+  const { file, errorMsg: updateErrorMsg } = props;
   const onChange = debounce(props.onChange, 500);
-  const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
+  const diagnostics = get(file, 'diagnostics', []);
   const [content, setContent] = useState(get(file, 'content', ''));
 
   const fileId = file && file.id;
@@ -25,18 +25,17 @@ export default function CodeEditor(props) {
   // file.content assume to be load from server
   const _onChange = value => {
     setContent(value);
-    const diagnostics = lgUtil.check(value);
-    setDiagnostics(diagnostics);
-    if (lgUtil.isValid(diagnostics) === true) {
-      onChange(value);
-    }
+    // TODO: validate before request update server like lg, when luParser is ready
+    onChange(value);
   };
 
-  const isInvalid = !lgUtil.isValid(diagnostics);
-  const errorMsg = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
+  // diagnostics is load file error,
+  // updateErrorMsg is save file return error.
+  const isInvalid = !luUtil.isValid(diagnostics) || updateErrorMsg !== '';
+  const errorMsg = isInvalid ? `${luUtil.combineMessage(diagnostics)}\n ${updateErrorMsg}` : '';
 
   return (
-    <LgEditor
+    <LuEditor
       options={{
         lineNumbers: 'on',
         minimap: 'on',
@@ -51,4 +50,5 @@ export default function CodeEditor(props) {
 CodeEditor.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
+  errorMsg: PropTypes.string,
 };

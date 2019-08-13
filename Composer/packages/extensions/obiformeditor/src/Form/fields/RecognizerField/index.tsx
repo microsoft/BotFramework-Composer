@@ -15,6 +15,7 @@ import './styles.scss';
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData } = props;
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const {
     formContext: { luFiles, shellApi, currentDialog },
@@ -134,9 +135,15 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
         {() => {
           if (selectedFile && isLuFileSelected) {
             const updateLuFile = (newValue?: string): void => {
-              shellApi.updateLuFile({ id: selectedFile.id, content: newValue });
+              shellApi
+                .updateLuFile({ id: selectedFile.id, content: newValue })
+                .then(() => setErrorMsg(''))
+                .catch(error => {
+                  setErrorMsg(error);
+                });
             };
-            return <InlineLuEditor file={selectedFile} onSave={updateLuFile} />;
+
+            return <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />;
           }
           if (isRegex) {
             return <RegexEditor {...props} />;

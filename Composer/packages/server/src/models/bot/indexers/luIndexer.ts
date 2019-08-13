@@ -5,15 +5,10 @@ import { Path } from '../../../utility/path';
 import { FileInfo, LUFile } from './../interface';
 import { IFileStorage } from './../../storage/interface';
 import { ILuisStatus, ILuisStatusOperation } from './../../bot/interface';
-const parseContent = (content: string): Promise<any> => {
-  const log = false;
-  const locale = 'en-us';
-
-  return ludown.parser.parseFile(content, log, locale);
-};
 
 const GENERATEDFOLDER = 'generated';
 const luisStatusFileName = 'luis.status.json';
+
 export class LUIndexer {
   private luFiles: LUFile[] = [];
 
@@ -33,7 +28,7 @@ export class LUIndexer {
         const diagnostics = [];
         let parsedContent = {};
         try {
-          parsedContent = await parseContent(file.content);
+          parsedContent = await this.parse(file.content);
         } catch (err) {
           diagnostics.push(err);
         }
@@ -119,10 +114,11 @@ export class LUIndexer {
     }
   }
 
-  public parse(content: string) {
-    // TODO update lg-parser, use new diagostic method
+  public parse(content: string): Promise<any> {
+    const log = false;
+    const locale = 'en-us';
 
-    return parseContent(content);
+    return ludown.parser.parseFile(content, log, locale);
   }
 
   public updateLuInMemoryIfUpdate(files: FileInfo[], data: ILuisStatusOperation, content: string) {
