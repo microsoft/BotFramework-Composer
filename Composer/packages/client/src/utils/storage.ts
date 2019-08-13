@@ -1,9 +1,11 @@
-class Storage {
+export class ClientStorage {
+  private storage: Storage;
+
   constructor() {
     this.storage = window.localStorage;
   }
 
-  set(key, val) {
+  set<T = any>(key: string, val: T): T | void {
     if (val === undefined) {
       return this.remove(key);
     }
@@ -11,24 +13,24 @@ class Storage {
     return val;
   }
 
-  get(key, def) {
+  get<T = any>(key: string, def?: T): T {
     const val = this._deserialize(this.storage.getItem(key));
     return val === undefined ? def : val;
   }
 
-  has(key) {
+  has(key: string): boolean {
     return this.get(key) !== undefined;
   }
 
-  remove(key) {
+  remove(key: string): void {
     this.storage.removeItem(key);
   }
 
-  clear() {
+  clear(): void {
     this.storage.clear();
   }
 
-  getAll() {
+  getAll(): { [key: string]: any } {
     const ret = {};
     this._forEach((key, val) => {
       ret[key] = val;
@@ -36,18 +38,20 @@ class Storage {
     return ret;
   }
 
-  _forEach(callback) {
+  _forEach(callback: (key: string, val: any) => void) {
     for (let i = 0; i < this.storage.length; i++) {
       const key = this.storage.key(i);
-      callback(key, this.get(key));
+      if (key) {
+        callback(key, this.get(key));
+      }
     }
   }
 
-  _serialize(val) {
+  _serialize(val: any): string {
     return JSON.stringify(val);
   }
 
-  _deserialize(val) {
+  _deserialize(val: any): any {
     if (typeof val !== 'string') {
       return undefined;
     }
@@ -60,6 +64,6 @@ class Storage {
   }
 }
 
-const storage = new Storage();
+const storage = new ClientStorage();
 
 export default storage;

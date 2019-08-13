@@ -26,6 +26,16 @@ interface StateError {
   message: string;
 }
 
+export interface BreadcrumbItem {
+  dialogId: string;
+  focusedEvent?: string;
+  focusedSteps: string;
+}
+
+export interface BotSchemas {
+  editor?: any;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
@@ -39,13 +49,13 @@ export interface State {
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
-  schemas: any;
+  schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   designPageLocation: any;
   error: StateError | null;
   oAuth: any;
-  breadcrumb: any[];
+  breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
 }

@@ -1,6 +1,8 @@
 import { cloneDeep } from 'lodash';
 
-export function getFocusPath(focusedEvent, focusedStep) {
+import { BreadcrumbItem } from '../store/types';
+
+export function getFocusPath(focusedEvent: string, focusedStep: string): string {
   if (focusedEvent && focusedStep) return focusedStep;
 
   if (!focusedStep) return focusedEvent;
@@ -8,7 +10,7 @@ export function getFocusPath(focusedEvent, focusedStep) {
   return '';
 }
 
-export function clearBreadcrumb(breadcrumb, fromIndex) {
+export function clearBreadcrumb(breadcrumb: BreadcrumbItem[], fromIndex?: number): BreadcrumbItem[] {
   let breadcrumbCopy = cloneDeep(breadcrumb);
   if (fromIndex) {
     breadcrumbCopy.splice(fromIndex, breadcrumbCopy.length - fromIndex);
@@ -18,23 +20,29 @@ export function clearBreadcrumb(breadcrumb, fromIndex) {
   return breadcrumbCopy;
 }
 
-export function clearBreadcrumbWhenFocusSteps(breadcrumb, focuseSteps) {
+export function clearBreadcrumbWhenFocusSteps(breadcrumb: BreadcrumbItem[], focusedSteps: string[]): BreadcrumbItem[] {
   const breadcrumbCopy = cloneDeep(breadcrumb);
-  if (breadcrumbCopy.length === 0) return breadcrumbCopy;
+  if (breadcrumbCopy.length === 0) {
+    return breadcrumbCopy;
+  }
+
   const lastIndex = breadcrumbCopy.length - 1;
-  if (breadcrumbCopy[lastIndex].focusedSteps.length > 0) {
+  if (breadcrumbCopy[lastIndex] && breadcrumbCopy[lastIndex].focusedSteps.length > 0) {
     breadcrumbCopy.pop();
   }
   //deselect the step
-  if (focuseSteps.length === 0) {
+  if (focusedSteps.length === 0) {
     breadcrumbCopy.pop();
   }
   return breadcrumbCopy;
 }
 
-export function clearBreadcrumbWhenFocusEvent(breadcrumb, focusedEvent) {
+export function clearBreadcrumbWhenFocusEvent(breadcrumb: BreadcrumbItem[], focusedEvent: string): BreadcrumbItem[] {
   const breadcrumbCopy = cloneDeep(breadcrumb);
-  if (breadcrumbCopy.length === 0) return breadcrumbCopy;
+  if (breadcrumbCopy.length === 0) {
+    return breadcrumbCopy;
+  }
+
   while (breadcrumbCopy.length > 0 && breadcrumbCopy[breadcrumbCopy.length - 1].focusedEvent) {
     breadcrumbCopy.pop();
   }
@@ -46,7 +54,7 @@ export function clearBreadcrumbWhenFocusEvent(breadcrumb, focusedEvent) {
   return breadcrumbCopy;
 }
 
-export function getUrlSearch(focusedEvent, focusedSteps) {
+export function getUrlSearch(focusedEvent: string, focusedSteps: string[]): string {
   const search = new URLSearchParams();
   if (focusedEvent) {
     search.append('focusedEvent', focusedEvent);
