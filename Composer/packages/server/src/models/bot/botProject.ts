@@ -416,8 +416,8 @@ export class BotProject {
     }
 
     const luisStatusPath = Path.join(this.dir, 'generated/luis.status.json');
-    const content = await this.fileStorage.readFile(luisStatusPath);
     if (await this.fileStorage.exists(luisStatusPath)) {
+      const content = await this.fileStorage.readFile(luisStatusPath);
       fileList.push({
         name: Path.basename(luisStatusPath),
         content,

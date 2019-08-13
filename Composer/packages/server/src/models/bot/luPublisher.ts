@@ -42,11 +42,11 @@ export class LuPublisher {
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
-    //const settings: ILuisSettings = await this._getSettings();
     try {
       await runBuild(config);
     } catch (error) {
-      throw new Error('Something wrong happened during publishing ');
+      console.error(error);
+      throw new Error('Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);
