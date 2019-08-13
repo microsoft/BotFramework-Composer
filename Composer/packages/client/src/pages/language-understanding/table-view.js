@@ -41,7 +41,7 @@ export default function TableView(props) {
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
       get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
-        const updateIntent = items.find(item => item.name === name);
+        const updateIntent = items.find(item => item.name === name && item.fileId === luFile.id);
         if (updateIntent) {
           updateIntent.phrases.push(utterance.text);
         } else {
@@ -59,14 +59,7 @@ export default function TableView(props) {
     if (!activeDialog) {
       setIntents(allIntents);
     } else {
-      const dialogIntents = [];
-      activeDialog.luIntents.forEach(name => {
-        const intent = allIntents.find(t => t.name === name && t.fileId === activeDialog.id);
-        if (intent) {
-          dialogIntents.push(intent);
-        }
-      });
-
+      const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog]);
