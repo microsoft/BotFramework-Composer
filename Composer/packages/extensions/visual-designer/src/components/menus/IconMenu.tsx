@@ -14,7 +14,7 @@ interface IconMenuProps {
   iconSize?: number;
   iconStyles: object;
   label?: string;
-  menuItems: IContextualMenuItem[];
+  menuItems: any[];
   menuWidth?: number;
 }
 
@@ -26,7 +26,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   menuItems,
   menuWidth,
   ...rest
-}) => {
+}): JSX.Element => {
   const _onRenderItem = (item): React.ReactNode => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
