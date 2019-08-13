@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { Icon as FabricIcon } from 'office-ui-fabric-react';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 // eslint-disable-next-line no-unused-vars
@@ -20,17 +22,25 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
 
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
-      <span
-        css={{
-          cursor: 'pointer',
-          color: 'blue',
-        }}
-        onClick={e => {
-          e.stopPropagation();
-          onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
-        }}
-      >
-        Switch to {calleeDialog}
+      <span>
+        {formatMessage('Switch to')}
+        <span
+          css={{
+            cursor: 'pointer',
+            color: 'blue',
+          }}
+          onClick={e => {
+            e.stopPropagation();
+            onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
+          }}
+        >
+          <FabricIcon
+            style={{ lineHeight: '12px', fontSize: '12px', paddingLeft: '5px', paddingRight: '5px' }}
+            iconName="OpenSource"
+            data-testid="OpenIcon"
+          />
+          {calleeDialog}
+        </span>
       </span>
     );
   }
