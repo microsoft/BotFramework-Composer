@@ -71,7 +71,7 @@ export function ShellApi() {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
-  const updateLuFile = useDebouncedFunc(actions.updateLuFile);
+  const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;

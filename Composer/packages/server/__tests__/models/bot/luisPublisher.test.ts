@@ -72,6 +72,8 @@ describe.skip('getUnpublisedFiles', () => {
         relativePath: '/path/to/fake/bot1/a.lu',
         content: '',
         parsedContent: {},
+        lastUpdateTime: 1,
+        lastPublishTime: 1,
       },
     ];
     const luPublisher = new LuPublisher(bot1Dir, storage);
@@ -88,6 +90,8 @@ describe.skip('getUnpublisedFiles', () => {
         relativePath: '/path/to/fake/bot2/a.lu',
         content: '',
         parsedContent: {},
+        lastUpdateTime: 1,
+        lastPublishTime: 1,
       },
     ];
     const luPublisher = new LuPublisher(bot2Dir, storage);
