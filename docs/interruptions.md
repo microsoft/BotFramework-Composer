@@ -300,6 +300,7 @@ Bot could chooce to confirm with the user before deciding an action plan for han
 > [SDK-feature-gap] This scenario is not possible today. Ideally, user should get a continue processing consultation action that they can add to the canvas when the user confirms interruption. 
 
 **User confirms interruption**
+
 | Who?  | Message                                                                   |
 |------:|:--------------------------------------------------------------------------|
 |User:  | Hi                                                                        |
@@ -310,6 +311,7 @@ Bot could chooce to confirm with the user before deciding an action plan for han
 |Bot:   | Sure, I have reset your profile.                                          |
 
 **User rejects interruption confirmation**
+
 | Who?  | Message                                                                   |
 |------:|:--------------------------------------------------------------------------|
 |User:  | Hi                                                                        |
