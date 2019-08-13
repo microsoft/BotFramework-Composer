@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
-import { EdgeMenu } from 'shared-menus';
 
 import { GraphNode } from '../../shared/GraphNode';
 import { areBoundariesEqual } from '../../shared/Boundary';
@@ -14,6 +13,7 @@ import { OffsetContainer } from '../shared/OffsetContainer';
 import { StepRenderer } from '../shared/StepRenderer';
 import { Edge } from '../shared/EdgeComponents';
 import { GraphLayout } from '../../shared/GraphLayout';
+import { EdgeMenu } from '../menus/EdgeMenu';
 
 const StepInterval = ElementInterval.y;
 
