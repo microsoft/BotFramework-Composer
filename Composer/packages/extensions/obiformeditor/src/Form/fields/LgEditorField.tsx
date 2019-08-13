@@ -92,6 +92,7 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
             editorDidMount={editor => {
               focusEditor(editor);
             }}
+            hidePlaceholder={true}
             errorMsg={errorMsg}
             value={Body}
             onChange={onChange}

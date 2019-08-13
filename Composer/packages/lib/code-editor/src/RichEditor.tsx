@@ -37,7 +37,7 @@ export function RichEditor(props: RichEditorProps) {
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
       >
-        <BaseEditor placeholder={hidePlaceholder ? undefined : placeholder} {...props} />
+        <BaseEditor {...props} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
       {isInvalid ? (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>
