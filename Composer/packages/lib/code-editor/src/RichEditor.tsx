@@ -41,8 +41,6 @@ export function RichEditor(props: RichEditorProps) {
       </div>
       {isInvalid ? (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>
-          <span>{errorMsg}</span>
-          <br />
           <span>{errorHelp}</span>
         </div>
       ) : (
