@@ -151,7 +151,7 @@ export class LUIndexer {
     const diagnostics = [];
     let parsedContent = {};
     try {
-      parsedContent = await parseContent(content);
+      parsedContent = await this.parse(content);
     } catch (err) {
       diagnostics.push(err);
     }
