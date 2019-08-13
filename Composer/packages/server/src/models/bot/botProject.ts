@@ -206,7 +206,7 @@ export class BotProject {
       lastUpdateTime: updateTime,
     };
 
-    this.luIndexer.updateLuInMemory(data, 'update', this.files, content);
+    this.luIndexer.updateLuInMemoryIfUpdate(this.files, data, content);
     await this.luIndexer.flush(this.files, luFile.relativePath);
 
     const luFiles = this.luIndexer.getLuFiles();
@@ -215,7 +215,8 @@ export class BotProject {
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
-    await this._createFile(relativePath, content);
+    await this.luIndexer.updateLuInMemoryIfCreate(this.files, content, relativePath, id);
+    await this.luIndexer.flush(this.files, relativePath);
     return this.luIndexer.getLuFiles();
   };
 
@@ -224,7 +225,8 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    await this._removeFile(luFile.relativePath);
+    this.luIndexer.updateLuInMemoryIfRemove(this.files, luFile.relativePath, id);
+    await this.luIndexer.flush(this.files, luFile.relativePath);
     return this.luIndexer.getLuFiles();
   };
 
@@ -269,7 +271,7 @@ export class BotProject {
 
     try {
       await this.luPublisher.publish(unpublished);
-      this.luIndexer.updateLuInMemory(data, 'publish', this.files);
+      this.luIndexer.updateLuInMemoryIfPublish(this.files, data);
       await this.luIndexer.flush(this.files);
     } catch (error) {
       throw new Error(error);
@@ -414,10 +416,11 @@ export class BotProject {
     }
 
     const luisStatusPath = Path.join(this.dir, 'generated/luis.status.json');
+    const content = await this.fileStorage.readFile(luisStatusPath);
     if (await this.fileStorage.exists(luisStatusPath)) {
       fileList.push({
         name: Path.basename(luisStatusPath),
-        content: await this.fileStorage.readFile(luisStatusPath),
+        content,
         path: luisStatusPath,
         relativePath: Path.relative(this.dir, luisStatusPath),
       });
