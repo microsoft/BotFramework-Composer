@@ -664,7 +664,7 @@ export const appschema: JSONSchema6 = {
             },
           },
         },
-        CardAction: {
+        cardAction: {
           type: 'object',
         },
       },
@@ -2483,7 +2483,7 @@ export const appschema: JSONSchema6 = {
         },
         outputFormat: {
           type: 'string',
-          enum: ['float', 'interger'],
+          enum: ['float', 'integer'],
           title: 'Output Format',
           description: 'The NumberInput output format.',
           default: 'float',
