@@ -58,14 +58,24 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
 
 export const publishLuis: ActionCreator = async ({ dispatch }) => {
   try {
-    const unpublishedLuFiles = await axios.get(`${BASEURL}/projects/opened/luFiles/unpublished`);
-    console.log(unpublishedLuFiles);
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { unpublishedLuFiles });
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_SUCCCESS,
-      payload: { response },
-    });
+    let response = await axios.get(`${BASEURL}/projects/opened/luFiles/unpublished`);
+    const unpublishedLuFiles = response.data.unpublishedLuFiles;
+    if (unpublishedLuFiles && unpublishedLuFiles.length > 0) {
+      dispatch({
+        type: ActionTypes.PUBLISHING_LU,
+        payload: { unpublishedLuFiles },
+      });
+      response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { unpublishedLuFiles });
+      dispatch({
+        type: ActionTypes.PUBLISH_LU_SUCCCESS,
+        payload: { response },
+      });
+    }
   } catch (err) {
+    dispatch({
+      type: ActionTypes.PUBLISHING_LU,
+      payload: {},
+    });
     throw new Error(err.response.data.message);
   }
 };

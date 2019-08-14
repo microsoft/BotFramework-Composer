@@ -271,8 +271,6 @@ export class BotProject {
 =======
   public publishLuis = async (unpublished: LUFile[]) => {
     //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
-    // const referredLuFile = this.luIndexer.getLuFiles().filter(this.isReferred);
-    //const unpublished = await this.getUnPublishedLuFiles();
     if (unpublished.length === 0) {
       return this.luIndexer.getLuFiles();
     }

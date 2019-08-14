@@ -14,13 +14,14 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as luUtil from '../../utils/luUtil';
+import { BotStatus } from '../../constants';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { navTo } = actions;
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, botStatus } = state;
   const { activeDialog, onClickEdit } = props;
   const [intents, setIntents] = useState([]);
   const listRef = useRef(null);
@@ -40,6 +41,7 @@ export default function TableView(props) {
       get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name && item.fileId === luFile.id);
+        const state = getIntentState(luFile);
         if (updateIntent) {
           updateIntent.phrases.push(utterance.text);
         } else {
@@ -48,6 +50,7 @@ export default function TableView(props) {
             phrases: [utterance.text],
             fileId: luFile.id,
             used: luDialog.luIntents.indexOf(name) !== -1, // used by it's dialog or not
+            state,
           });
         }
       });
@@ -66,6 +69,22 @@ export default function TableView(props) {
     return files.filter(file => {
       return luUtil.isValid(file.diagnostics) === false;
     });
+  }
+
+  function getIntentState(file) {
+    if (!file.diagnostics) {
+      return 'Error';
+    } else if (file.publishing) {
+      return 'Publishing';
+    } else if (file.lastUpdateTime >= file.lastPublishTime) {
+      return 'Updated';
+    } else if (file.lastPublishTime > file.lastUpdateTime && botStatus === BotStatus.connected) {
+      return 'Published & Connected';
+    } else if (file.lastPublishTime > file.lastUpdateTime && botStatus !== BotStatus.connected) {
+      return 'Published';
+    } else {
+      return 'Unknown State';
+    }
   }
 
   async function showErrors(files) {
@@ -174,6 +193,19 @@ export default function TableView(props) {
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
+        },
+      },
+      {
+        key: 'State',
+        name: formatMessage('State'),
+        fieldName: 'State',
+        minWidth: 100,
+        maxWidth: 100,
+        isResizable: true,
+        isCollapsable: true,
+        data: 'string',
+        onRender: item => {
+          return formatMessage(item.state);
         },
       },
     ];
