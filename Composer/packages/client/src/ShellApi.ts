@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 import { navigate } from '@reach/router';
 
@@ -67,7 +67,7 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
   }
 };
 
-export function ShellApi() {
+export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
@@ -308,4 +308,4 @@ export function ShellApi() {
   }
 
   return null;
-}
+};

@@ -10,11 +10,7 @@ import Messenger, { MessageType, SubscriberFn } from './Messenger';
 const messenger = new Messenger();
 
 class ApiClient {
-  private defaultEndpoint: Window;
-
-  public constructor(parent = window.parent) {
-    this.defaultEndpoint = parent;
-  }
+  private defaultEndpoint = window.parent;
 
   // helper function for any api call to shell
   public apiCall = <T = any>(apiName: string, args?: any, endpoint: Window = this.defaultEndpoint): Promise<T> => {
@@ -45,12 +41,12 @@ class ApiClient {
     messenger.subscribe(name, api);
   };
 
-  public connect = () => {
-    this.defaultEndpoint.addEventListener('message', messenger.receiveMessage, false);
+  public connect = (target: Window = window) => {
+    target.addEventListener('message', messenger.receiveMessage, false);
   };
 
-  public disconnect = () => {
-    this.defaultEndpoint.removeEventListener('message', messenger.receiveMessage, false);
+  public disconnect = (target: Window = window) => {
+    target.removeEventListener('message', messenger.receiveMessage, false);
   };
 }
 

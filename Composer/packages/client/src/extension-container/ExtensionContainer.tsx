@@ -125,7 +125,14 @@ function ExtensionContainer() {
 
   const RealEditor = shellData.data ? getEditor() : null;
 
-  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
+  return (
+    RealEditor && (
+      // has to be wrapped in a fragment due to https://github.com/babel/babel/pull/9798
+      <>
+        <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />
+      </>
+    )
+  );
 }
 
 export default ExtensionContainer;

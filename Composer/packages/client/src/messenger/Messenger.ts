@@ -58,23 +58,23 @@ class Messenger {
       const callMsg = message as CallMessage;
       const callback = this.subscribers[callMsg.name];
 
-      // postMessage has a different call signature for different sources
-      if (event.source && event.source instanceof Window) {
+      if (event.source) {
+        const win = event.source as Window;
         try {
           const result = await callback(callMsg.args, event); // we pass args and the original event
 
-          event.source.postMessage(
+          win.postMessage(
             {
-              type: 'api_result',
+              type: MessageType.RESULT,
               id: callMsg.id,
               result,
             },
             '*'
           );
         } catch (err) {
-          event.source.postMessage(
+          win.postMessage(
             {
-              type: 'api_result',
+              type: MessageType.RESULT,
               id: callMsg.id,
               error: err.message,
             },

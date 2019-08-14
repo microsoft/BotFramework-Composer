@@ -58,6 +58,7 @@ export interface State {
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
+  toStartBot: boolean;
 }
 
 export type ReducerFunc = (state: State, payload: any) => State;
@@ -67,6 +68,7 @@ export interface DialogInfo {
   displayName: string;
   isRoot: boolean;
   content: any;
+  diagnostics: string[];
 }
 
 export interface Intent {

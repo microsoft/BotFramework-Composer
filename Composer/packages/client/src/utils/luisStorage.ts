@@ -3,7 +3,7 @@ import { set } from 'lodash';
 import storage, { ClientStorage } from './storage';
 import { LuisConfig } from './../constants';
 
-interface LuisStorageConfig {
+export interface LuisStorageConfig {
   [LuisConfig.PROJECT_NAME]: string;
   [LuisConfig.ENVIRONMENT]: string;
   [LuisConfig.AUTHORING_KEY]: string;

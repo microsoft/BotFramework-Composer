@@ -1,13 +1,21 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Component } from 'react';
+import React from 'react';
 
 import { StoreContext } from '../../store';
 import { ErrorPopup } from '../ErrorPopup';
 
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  setError: (err: { message: string; summary: string }) => void;
+}
+
 // only class component can be a error boundary
-export class ErrorBoundary extends Component {
-  constructor(props, context) {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps, context) {
     super(props);
     this.state = { setError: context.actions.setError };
     this.unhandledrejectionHandler = this.unhandledrejectionHandler.bind(this);
