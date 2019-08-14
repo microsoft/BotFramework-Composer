@@ -48,11 +48,13 @@ export class LUIndexer {
     if (luStatusFile) {
       const luStatuses = await this._getLuStatus(luStatusFile.path);
       this.luFiles.forEach(luFile => {
-        const lastUpdateTime = luStatuses[luFile.id].lastUpdateTime;
-        const lastPublishTime = luStatuses[luFile.id].lastPublishTime;
+        if (luStatuses[luFile.id]) {
+          const lastUpdateTime = luStatuses[luFile.id].lastUpdateTime;
+          const lastPublishTime = luStatuses[luFile.id].lastPublishTime;
 
-        luFile.lastUpdateTime = lastUpdateTime;
-        luFile.lastPublishTime = lastPublishTime;
+          luFile.lastUpdateTime = lastUpdateTime;
+          luFile.lastPublishTime = lastPublishTime;
+        }
       });
     }
   }
