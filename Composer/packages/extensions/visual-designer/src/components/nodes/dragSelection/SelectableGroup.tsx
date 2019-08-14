@@ -1,4 +1,6 @@
-import React, { useReducer, useState, useEffect, useRef, FC } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useReducer, useState, useEffect, useRef, FC } from 'react';
 import { SelectBox } from './SelectBox';
 import { SelectableGroupContext } from './Context';
 
@@ -24,19 +26,21 @@ export const SelectableGroup: FC<NodeProps> = props => {
     const items = document.querySelectorAll('div[data-is-focusable]');
     const { initClientX, currClientX, initClientY, currClientY } = data;
     if (initClientX !== currClientX || initClientY !== currClientY) {
-      const minX = Math.min(initClientX, currClientX);
-      const minY = Math.min(initClientY, currClientY);
-      const maxX = Math.max(initClientX, currClientX);
-      const maxY = Math.max(initClientY, currClientY);
+      if (divRef.current) {
+        const containerBound = divRef.current.getBoundingClientRect();
+        const minX = Math.min(initClientX, currClientX) + containerBound.left;
+        const minY = Math.min(initClientY, currClientY) + containerBound.top;
+        const maxX = Math.max(initClientX, currClientX) + containerBound.left;
+        const maxY = Math.max(initClientY, currClientY) + containerBound.top;
 
-      if ((!minX && !minY) || (!maxX && !maxY)) return;
-
-      if (items.length > 0) {
-        for (const item of Array.from(items)) {
-          const bounds = item.getBoundingClientRect();
-          if (!(bounds.right < minX || bounds.bottom < minY || (bounds.left > maxX || bounds.top > maxY))) {
-            // in bounds
-            selected.push(item);
+        if ((!minX && !minY) || (!maxX && !maxY)) return;
+        if (items.length > 0) {
+          for (const item of Array.from(items)) {
+            const bounds = item.getBoundingClientRect();
+            if (!(bounds.right < minX || bounds.bottom < minY || (bounds.left > maxX || bounds.top > maxY))) {
+              // in bounds
+              selected.push(item);
+            }
           }
         }
       }
@@ -46,9 +50,18 @@ export const SelectableGroup: FC<NodeProps> = props => {
     setSelectedItems(selected);
     props.onSelectionChange(selected);
   };
+  const getRelativePosition = payload => {
+    let { clientX, clientY } = payload;
+    if (divRef.current) {
+      const containerBound = divRef.current.getBoundingClientRect();
+      clientX = clientX - containerBound.left;
+      clientY = clientY - containerBound.top;
+    }
+    return { clientX, clientY };
+  };
   const reducer = (state, action) => {
     const { type, payload } = action;
-    const { clientX, clientY } = payload || { clientX: 0, clientY: 0 };
+    const { clientX, clientY } = getRelativePosition(payload || { clientX: 0, clientY: 0 });
     switch (type) {
       case 'mountrendercomplete': {
         return {
@@ -95,6 +108,7 @@ export const SelectableGroup: FC<NodeProps> = props => {
 
   const mousedownHandler = e => {
     e.stopPropagation();
+    console.log('mousedown');
     const { clientX, clientY } = e;
     if (mousedownStarted) return;
     mousedownStarted = true;
@@ -112,9 +126,7 @@ export const SelectableGroup: FC<NodeProps> = props => {
     }
   };
 
-  const mouseupHandler = e => {
-    e.preventDefault();
-    e.stopPropagation();
+  const mouseupHandler = () => {
     mousedownStarted = false;
     dispatch({ type: 'mouseup' });
     if (divRef.current) {
@@ -123,16 +135,25 @@ export const SelectableGroup: FC<NodeProps> = props => {
     }
   };
 
+  const keyListener = e => {
+    if (e.keyCode === 27) {
+      setSelectedItems([]);
+      props.onSelectionChange([]);
+    }
+  };
   useEffect(() => {
     if (!mountRenderComplete) {
       divRef.current && divRef.current.addEventListener('mousedown', mousedownHandler, false);
       dispatch({ type: 'mountrendercomplete' });
     }
+    if (props.deselectOnEsc) {
+      document.addEventListener('keydown', keyListener);
+    }
   }, [initClientX, initClientY, currClientX, currClientY]);
 
   return (
     <SelectableGroupContext.Provider value={{ selectedItems }}>
-      <div ref={divRef}>
+      <div ref={divRef} css={{ position: 'relative' }}>
         <SelectBox xStart={initClientX} xEnd={currClientX} yStart={initClientY} yEnd={currClientY} />
         {props.children}
       </div>

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, FC, useState } from 'react';
+import { useContext, FC } from 'react';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
@@ -87,7 +87,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
       tabIndex={0}
       className="obi-editor-container"
       data-testid="obi-editor-container"
-      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box', '&:focus': { outline: 'none' } }}
+      css={{
+        width: '100%',
+        height: '100%',
+        padding: '20px',
+        boxSizing: 'border-box',
+        '&:focus': { outline: 'none' },
+      }}
       ref={el => (divRef = el)}
       onKeyUp={e => {
         const keyString = e.key;
@@ -101,12 +107,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
       }}
     >
       <DragScroll>
-        <SelectableGroup
-          onSelectionChange={items => {
-            divRef.focus({ preventScroll: true });
-            handleSelectionChange(items);
-          }}
-        >
+        <SelectableGroup onSelectionChange={handleSelectionChange}>
           <AdaptiveDialogEditor
             id={path}
             data={data}
