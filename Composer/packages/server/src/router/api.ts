@@ -22,6 +22,7 @@ router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFi
 router.post('/projects/opened/luFiles/config', ProjectController.setLuisConfig);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
+router.get('/projects/opened/luFiles/unpublished', ProjectController.getUnpublishedLuFiles);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 

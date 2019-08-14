@@ -258,6 +258,7 @@ export class BotProject {
     this.luPublisher.setLuisConfig(config);
   };
 
+<<<<<<< HEAD
   public publishLuis = async () => {
 <<<<<<< HEAD
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
@@ -267,6 +268,15 @@ export class BotProject {
     const unpublished = await this.luPublisher.getUnpublisedFiles(refered);
 >>>>>>> move the length checking at later stage and rename some variables
 
+=======
+  public publishLuis = async (unpublished: LUFile[]) => {
+    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
+    // const referredLuFile = this.luIndexer.getLuFiles().filter(this.isReferred);
+    //const unpublished = await this.getUnPublishedLuFiles();
+    if (unpublished.length === 0) {
+      return this.luIndexer.getLuFiles();
+    }
+>>>>>>> save tmp code in github
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);
@@ -295,6 +305,12 @@ export class BotProject {
     } else {
       return await this.luPublisher.checkLuisPublised(referredLuFiles);
     }
+  };
+
+  public getUnPublishedLuFiles = async () => {
+    const referredLuFile = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(referredLuFile);
+    return unpublished;
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

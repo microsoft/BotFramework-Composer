@@ -252,7 +252,7 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const luFiles = await ProjectService.currentBotProject.publishLuis();
+      const luFiles = await ProjectService.currentBotProject.publishLuis(req.body.unpublishedLuFiles);
       res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
@@ -278,6 +278,23 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function getUnpublishedLuFiles(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    try {
+      const unpublishedLuFiles = await ProjectService.currentBotProject.getUnPublishedLuFiles();
+      res.status(200).json({ unpublishedLuFiles });
+    } catch (error) {
+      res.status(400).json({
+        message: error instanceof Error ? error.message : error,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 export const ProjectController = {
   getProject,
   openProject,
@@ -292,6 +309,7 @@ export const ProjectController = {
   createLuFile,
   removeLuFile,
   publishLuis,
+  getUnpublishedLuFiles,
   saveProjectAs,
   createProject,
   getAllProjects,
