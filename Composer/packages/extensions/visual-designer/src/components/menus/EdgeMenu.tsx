@@ -1,9 +1,10 @@
 import React from 'react';
 import formatMessage from 'format-message';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
-import { IconMenu } from './templates/IconMenu';
-import { EdgeAddButtonSize } from './elementSizes';
-import { createStepMenu, DialogGroup } from './appschema';
+import { EdgeAddButtonSize } from '../../shared/elementSizes';
+
+import { IconMenu } from './IconMenu';
 
 interface EdgeMenuProps {
   onClick: (item: string | null) => void;

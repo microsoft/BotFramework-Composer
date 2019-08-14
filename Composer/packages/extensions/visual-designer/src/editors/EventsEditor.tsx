@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { EventMenu } from 'shared-menus';
 
 import { Panel } from '../components/nodes/templates/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { EditorProps } from '../components/shared/sharedProps';
+import { EventMenu } from '../components/menus/EventMenu';
 
 export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
   const ruleCount = data.children.length;
