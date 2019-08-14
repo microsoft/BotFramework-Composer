@@ -17,6 +17,8 @@ Basic scenario of multi-input form flow. Here the user answers the questions dir
 ## 2. Multi-turn with validations
 Here's the next level of sophistication where the bot can set **validation constraints** on user input and re-prompt in a more elegant way
 
+<a id="c-g-1"></a>
+
 > [Composer-gap] We need to provide guidance for users to use turn.value. When adding constraints, the placeholder text could include a simple expression with turn.value to guide users. 
 
 | Who?  | Message                                                                           |
@@ -71,7 +73,11 @@ In the above example, the bot took '36' as user's age assuming that was set as t
 
 **Better expereince**
 
-> [SDK-feature-gap] This experience needs an SDK change to introduce a `onMaxTurn` message to the user that communicates that the bot has set a default value. Solution would be to introduce a `MaxCountPrompt` that is issued when max count is hit.
+<a id="s-g-1"></a>
+
+> [SDK-feature-gap] This experience needs an SDK change to introduce a `onMaxTurn` message to the user that communicates that the bot has set a default value. Solution would be to introduce a `MaxCountResponse` that is issued when max count is hit.
+
+<a id="s-g-2"></a>
 
 > [SDK-feature-gap] Need a streamlined way to access an action's properties. E.g. I should be able to say something like `Sorry, I'm not getting it. For now, I'll set your age to {~defaultValue}`. Where `~defaultValue` maps to `dialog.instance.defaultValue`. 
 
@@ -140,6 +146,8 @@ User can specify multiple pieces of information in one go
 
 ## 5b. Out of order entity extraction
 
+<a id="s-g-3"></a>
+
 > [SDK-feature-gap]: With this, user still needs to answer the current question being asked if using text input. Event with no actions is not working at the moment. Bug? A better solution would be to have a processInput action that can be set to `true` to indicate the active input should re-process user input or `false` to indicate that the active input should re-prompt. 
 
 > Note: With this, the user is still in control of out-of order entity correction. E.g. user could say `my name is vishwac and not 36` as an example. Being able to understand propositional phrases like `and, or, not` etc are not pre-baked constructs in LUIS or our dialog system. The user will need to manually design for, configure and handle these. 
@@ -153,6 +161,8 @@ User can specify multiple pieces of information in one go
 
 ## 6. Disambiguation
 Bot might choose to disambiguate on user's response
+
+<a id="s-g-4"></a>
 
 > [SDK-feature-gap] No built-in constructs available for disambiguation. User is in control of detecting and managing this experience. FormInput action is the solution.
 
@@ -190,6 +200,8 @@ No path.
 |Bot:   | Ok. let's start over                                      |
 
 ### 7.b Confirmation flow with change handling
+
+<a id="s-g-5"></a>
 
 > [SDK-feature-gap]
 No built-in constructs available for change handling. User is in control of detecting and managing this experience. FormInput action is the solution.
@@ -258,6 +270,8 @@ At this point, it is better to get set up with one dialog per scenario.
 |User:  | I will not give you my age.                           |    
 |Bot:   | No worries. For now, I will set your age to 30.       |
 
+<a id="c-b-1"></a>
+
 > [bug] set property in consultation does not work to move the input forward (confirm input) -- needs investigation
 
 ## 9. Interruption
@@ -292,12 +306,23 @@ Here's an example conversation that shows the interruption being queued up after
 |Bot:   | Here's the joke you asked for                                             |
 |Bot:   | ... ''' ...                                                               |
 
+<a id="s-g-6"></a>
+
 > [SDK-feature-gap] Our current EditSteps action does not model well since it is unclear if all recognized intent actions need to be wrapped in EditSteps (due to consultation bubbling)
+
+<a id="s-g-7"></a>
 
 > [SDK-feature-gap] Our current solution also does not provide a way for the consultation bubble on who is being interrupted so the parent can decide how to handle the interruption itself. 
 
+<a id="c-g-2"></a>
+
+> [Composer-gap] Composer does not include a visual canvas to author EditSteps action.
+
+
 ## 10. Interruption with confirmation
 Bot could chooce to confirm with the user before deciding an action plan for handling interruption
+
+<a id="s-g-8"></a>
 
 > [SDK-feature-gap] This scenario is not possible today. Ideally, user should get a continue processing consultation action that they can add to the canvas when the user confirms interruption. 
 
@@ -329,6 +354,8 @@ Bot could chooce to confirm with the user before deciding an action plan for han
 
 Bot could choose to carry context forward across interrupting conversations
 
+<a id="s-g-9"></a>
+
 > [SDK-feature-gap] This is hard to achieve without data-model driven dialogs since there is no sense today for a dialog to describe what it can accept/ return.
 
 | Who?  | Message                                                                           |
@@ -342,7 +369,7 @@ Bot could choose to carry context forward across interrupting conversations
 |Bot:   | Got it. I have flights to seattle for next thursday. What is your departure city? |
 |...    | ...                                                                               |
 
-# 12. QnA 
+## 12. QnA 
 
 Bot could choose to look up a knowledge base to come back with an answer. 
 
@@ -363,7 +390,7 @@ This bucket also includes open ended questions like these -
 - statements: `You are awesome!`
 - chitchat: `can you sing a song?`
 
-# 12.a QnA + follow up
+## 12.a QnA + follow up
 
 User could ask clarifying questions as a multi-turn QA conversation
 
@@ -385,4 +412,33 @@ User could ask clarifying questions as a multi-turn QA conversation
 
 
 
+# Feature gaps
+## SDK
+1. [Add MaxCountResponse](#s-g-1) add a new property that carries the response the bot will send if max turn count is hit and a default value will be picked up by the input.
+2. [Ability to access instance properties](#s-g-2) `~maxTurnCount` should resolve to `dialog.instance.maxTurnCount`. There is no way to access an action's properties through LG/ memory path.
+3. [ProcessInput action](#s-g-3) Ability for users to indicate if user input is consumed or should be reprocessed
+4. [Disambiguation](#s-g-4) Provide built in support for disambiguation via data model definition & FormInput action
+5. [Change handling](#s-g-5) Provide built in support for change handling for entities via data model definition & FormInput action
+6. [EditSteps-guidance](#s-g-6) Its unclear how to use EditSteps effectively with consultation as well as for the default triggering
+7. [Consultation-active-dialog-info](#s-g-7) Consultation does not include any information about the active dialog/ active adaptive dialog to use in decision making (with EditSteps).
+8. [Consultation-confirmation](#s-g-8) It is not possible to manually control consultation bubbling today.
+9. [Data-model-definition](#s-g-9) Unable to achieve context carry over type conversations without clear data model that describes what each dialog accepts/ returns.
+10. [QnA-integration](#s-g-10) No QnA integartion.
 
+## Composer
+1. [turn.value guidance](#c-g-1) provide guidance for users to use turn.value
+2. [EditSteps](#c-g-2) Composer does not include a visual authoring experience for EditSteps action.
+
+# Bugs
+## SDK
+1. [bug][s-b-1] Max turn conunt does not work with consultation. 
+2. [bug][s-b-2] Multiple inputs with validation do not work well with consultation. 
+3. [bug][s-b-3] Inputs with validation do not work well with consultation. 
+
+## Composer
+1. [bug](#c-b-1) Confirm input does not work with consultation. Needs investigation.
+
+[s-b-1]:https://github.com/microsoft/botbuilder-dotnet/issues/2392
+[s-b-2]:https://github.com/microsoft/botbuilder-dotnet/issues/2390
+[s-b-3]:https://github.com/microsoft/botbuilder-dotnet/issues/2391
+[s-g-10]:https://github.com/microsoft/botbuilder-dotnet/issues/1919
