@@ -73,7 +73,7 @@ export default function TableView(props) {
   async function showErrors(files) {
     for (const file of files) {
       const errorMsg = luUtil.combineMessage(file.diagnostics);
-      const errorTitle = formatMessage(`There was a problem parsing ${file.id}.lu file.`);
+      const errorTitle = formatMessage('There was a problem parsing {fileId}.lu file.', { fileId: file.id });
       const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
         style: DialogStyle.Console,
         confirmBtnText: formatMessage('Edit'),

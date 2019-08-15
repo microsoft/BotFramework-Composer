@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['./.eslintrc.js', 'plugin:react/recommended'],
-  plugins: ['react-hooks'],
+  plugins: ['react-hooks', 'format-message'],
   settings: {
     react: {
       version: 'detect',
@@ -19,13 +19,17 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
 
     'react/prop-types': 'warn',
+
+    'format-message/literal-pattern': 'error',
+    'format-message/no-invalid-pattern': 'error',
+    'format-message/no-missing-params': ['error', { allowNonLiteral: false }],
   },
   overrides: [
     {
       files: ['**/*.+(ts|tsx)'],
       rules: {
-        'react/prop-types': 'off'
-      }
+        'react/prop-types': 'off',
+      },
     },
     {
       files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)'],

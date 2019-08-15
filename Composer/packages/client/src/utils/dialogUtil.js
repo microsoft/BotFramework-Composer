@@ -1,7 +1,6 @@
 import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import formatMessage from 'format-message';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
@@ -35,7 +34,7 @@ export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps
     label = getTitle(schemas.editor, type);
   }
 
-  label = formatMessage(upperCaseName(label || ''));
+  label = upperCaseName(label || '');
   return label;
 }
 

@@ -87,7 +87,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
     const step = normalizeObiStep(data.steps[0]);
     if (step.$type === ObiTypes.BeginDialog) {
       dialog = step.dialog;
-      summary = formatMessage(ConceptLabels[step.$type].title || step.$type);
+      summary = ConceptLabels[step.$type].title || step.$type;
     } else {
       summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
     }
