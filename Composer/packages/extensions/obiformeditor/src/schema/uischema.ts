@@ -21,7 +21,7 @@ const activityFields = {
     'ui:widget': 'TextareaWidget',
   },
   value: {
-    'ui:widget': 'NullField',
+    'ui:field': 'NullField',
   },
 };
 
