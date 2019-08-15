@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Component } from 'react';
+import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
 import { ErrorPopup } from '../ErrorPopup';
-
 // only class component can be a error boundary
 export class ErrorBoundary extends Component {
   constructor(props, context) {
@@ -18,26 +18,26 @@ export class ErrorBoundary extends Component {
   // will catch unhandle http error etc
   unhandledrejectionHandler(event) {
     event.preventDefault();
-    console.log('Catch reject error:', event.reason.message);
+    console.error('Catch reject error:', event.reason.message);
     this.context.actions.setError({
       message: event.reason.message ? event.reason.message : event.reason.stack,
-      summary: 'unhandled rejection',
+      summary: formatMessage('unhandled rejection'),
     });
   }
 
   eventHandler(error) {
-    console.log('Catch Error Event：', error);
+    console.error('Catch Error Event：', error);
     this.context.actions.setError({
       message: error.message,
-      summary: 'Event Error',
+      summary: formatMessage('Event Error'),
     });
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
-    console.log('Catch Error：', { message, source, lineno, colno, error });
+    console.error('Catch Error：', { message, source, lineno, colno, error });
     this.context.actions.setError({
       message: message,
-      summary: 'Something went wrong',
+      summary: formatMessage('Something went wrong'),
     });
     return true;
   }
@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component {
     console.log(error);
     this.state.setError({
       message: error.message,
-      summary: 'Render Error',
+      summary: formatMessage('Render Error'),
     });
   }
 

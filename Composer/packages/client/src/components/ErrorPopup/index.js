@@ -3,7 +3,6 @@ import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 import { useState } from 'react';
 import { Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
 
 import { consoleStyle, dialog } from './styles';
 
@@ -21,7 +20,7 @@ export const ErrorPopup = props => {
       onDismiss={_closeDialog}
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage(props.title),
+        title: props.title,
         styles: dialog,
       }}
       modalProps={{
@@ -29,7 +28,7 @@ export const ErrorPopup = props => {
         styles: { main: { maxWidth: 450 } },
       }}
     >
-      <div css={consoleStyle}>{formatMessage({ errorMessage }, { errorMessage: props.error })}</div>
+      <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
         <PrimaryButton onClick={_closeDialog} text="Ok" />
       </DialogFooter>
