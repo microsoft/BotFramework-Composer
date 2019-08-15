@@ -306,6 +306,18 @@ Here's an example conversation that shows the interruption being queued up after
 |Bot:   | Here's the joke you asked for                                             |
 |Bot:   | ... ''' ...                                                               |
 
+<a id="s-g-11"></a>
+
+> [SDK-feature-gap] Painful to have an intent event that shorts consultation - this is the intent(s) that detect entities for turn.n conversations. 
+
+<a id="s-g-12"></a>
+
+> [SDK-feature-gap] We should auto-save recognized entities but need to account for doing it only on known intents - e.g. we do not want to over-write entities detected with `interruption` intent since that might not be applicable/ relevant
+
+<a id="s-g-13"></a>
+
+> [SDK-feature-gap] Is it the right behavior to start an instance of a dialog everytime? E.g. with consultation, if the root dialog's recognizer fires the active child's intent, we will start another instance of the child instead of resuming the instance of that child that's already in the stack.
+
 <a id="s-g-6"></a>
 
 > [SDK-feature-gap] Our current EditSteps action does not model well since it is unclear if all recognized intent actions need to be wrapped in EditSteps (due to consultation bubbling)
@@ -409,9 +421,6 @@ User could ask clarifying questions as a multi-turn QA conversation
 |Bot:   | What is your name?                            |
 |.....  | ......                                        |
 
-
-
-
 # Feature gaps
 ## SDK
 1. [Add MaxCountResponse](#s-g-1) add a new property that carries the response the bot will send if max turn count is hit and a default value will be picked up by the input.
@@ -424,6 +433,9 @@ User could ask clarifying questions as a multi-turn QA conversation
 8. [Consultation-confirmation](#s-g-8) It is not possible to manually control consultation bubbling today.
 9. [Data-model-definition](#s-g-9) Unable to achieve context carry over type conversations without clear data model that describes what each dialog accepts/ returns.
 10. [QnA-integration](#s-g-10) No QnA integartion.
+11. [Revisit-intent-event-for-consultation](#s-g-11) Painful to have an intent that shorts consultation
+12. [Auto-save-recognized-entities](#s-g-12) We should auto-save recognized entities but need to account for doing it only on known intents - e.g. we do not want to over-write entities detected with `interruption` intent since that might not be applicable/ relevant
+13. [BeginDialog-single-active-instance](#s-g-13) Is it the right behavior to start an instance of a dialog everytime? May be we add a configuration at the dialog level that says if a new instance (necessary for re-usable child dialogs) should be fired or use active instance if found in the stack (default behavior)
 
 ## Composer
 1. [turn.value guidance](#c-g-1) provide guidance for users to use turn.value
