@@ -78,8 +78,6 @@ function DesignPage(props) {
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
       });
       globalHistory._onTransitionComplete();
-    } else {
-      setDesignPageLocation({});
     }
   }, [location]);
 
