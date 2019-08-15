@@ -205,7 +205,7 @@ export default function TableView(props) {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          return formatMessage(item.state);
+          return item.state;
         },
       },
     ];
