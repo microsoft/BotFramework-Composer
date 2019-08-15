@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ContextProps {
-  selectedItems: Element[];
+  selectedItems: any[];
 }
 
 export const SelectableGroupContext = React.createContext<Partial<ContextProps>>({ selectedItems: [] });

@@ -24,6 +24,7 @@ export const SelectBox: FC<NodeProps> = ({ xStart, xEnd, yStart, yEnd }) => {
         border: '1px dotted #001f52',
         opacity: 0.5,
         position: 'absolute',
+        pointerEvents: 'none',
         zIndex: 10,
       }}
     />

@@ -6,6 +6,8 @@ import { SelectableGroupContext } from './Context';
 
 interface NodeProps {
   deselectOnEsc?: boolean;
+  selectableTag: string;
+  selectableNodeDataTag: string;
   onSelectionChange: (selectedNodes) => object | void;
 }
 
@@ -14,16 +16,15 @@ const defaultState = {
   currClientY: 0,
   initClientX: 0,
   initClientY: 0,
-  mountRenderComplete: false,
 };
 
 export const SelectableGroup: FC<NodeProps> = props => {
   const divRef = useRef<HTMLDivElement>(null);
-  let mousedownStarted = false;
+  let mousedownStarted = useRef(false);
   const [selectedItems, setSelectedItems] = useState<Element[]>([]);
   const onSelectArea = data => {
     let selected: Element[] = [];
-    const items = document.querySelectorAll('div[data-is-focusable]');
+    const items = document.querySelectorAll(`div[${props.selectableTag}]`);
     const { initClientX, currClientX, initClientY, currClientY } = data;
     if (initClientX !== currClientX || initClientY !== currClientY) {
       if (divRef.current) {
@@ -39,7 +40,9 @@ export const SelectableGroup: FC<NodeProps> = props => {
             const bounds = item.getBoundingClientRect();
             if (!(bounds.right < minX || bounds.bottom < minY || (bounds.left > maxX || bounds.top > maxY))) {
               // in bounds
-              selected.push(item);
+              if (item && item['dataset'][props.selectableNodeDataTag]) {
+                selected.push(item['dataset'][props.selectableNodeDataTag]);
+              }
             }
           }
         }
@@ -63,12 +66,6 @@ export const SelectableGroup: FC<NodeProps> = props => {
     const { type, payload } = action;
     const { clientX, clientY } = getRelativePosition(payload || { clientX: 0, clientY: 0 });
     switch (type) {
-      case 'mountrendercomplete': {
-        return {
-          ...defaultState,
-          mountRenderComplete: true,
-        };
-      }
       case 'mouseup': {
         const { initClientX, initClientY, currClientX, currClientY } = state;
         if (initClientX && initClientY && currClientX && currClientY) {
@@ -77,6 +74,9 @@ export const SelectableGroup: FC<NodeProps> = props => {
         return {
           ...defaultState,
         };
+      }
+      case 'mouseleave': {
+        return { ...defaultState };
       }
       case 'mousemove': {
         return {
@@ -92,11 +92,6 @@ export const SelectableGroup: FC<NodeProps> = props => {
           initClientY: clientY,
         };
       }
-      case 'setviewoptions': {
-        return {
-          ...state,
-        };
-      }
       default:
         throw new Error('Unsupported action dispatched in SelectableGroup');
     }
@@ -108,31 +103,28 @@ export const SelectableGroup: FC<NodeProps> = props => {
 
   const mousedownHandler = e => {
     e.stopPropagation();
-    console.log('mousedown');
     const { clientX, clientY } = e;
-    if (mousedownStarted) return;
-    mousedownStarted = true;
+    if (mousedownStarted.current) return;
+    mousedownStarted.current = true;
     dispatch({ type: 'mousedown', payload: { clientX, clientY } });
-    if (divRef.current) {
-      divRef.current.addEventListener('mouseup', mouseupHandler);
-      divRef.current.addEventListener('mousemove', mousemoveHandler);
-    }
   };
 
   const mousemoveHandler = e => {
-    if (mousedownStarted) {
+    if (mousedownStarted.current) {
       const { clientX, clientY } = e;
       dispatch({ type: 'mousemove', payload: { clientX, clientY } });
     }
   };
 
   const mouseupHandler = () => {
-    mousedownStarted = false;
+    console.log('mouseup');
+    mousedownStarted.current = false;
     dispatch({ type: 'mouseup' });
-    if (divRef.current) {
-      divRef.current.removeEventListener('mouseup', mouseupHandler);
-      divRef.current.removeEventListener('mousemove', mousemoveHandler);
-    }
+  };
+
+  const mouseleaveHandler = () => {
+    mousedownStarted.current = false;
+    dispatch({ type: 'mouseleave' });
   };
 
   const keyListener = e => {
@@ -141,11 +133,8 @@ export const SelectableGroup: FC<NodeProps> = props => {
       props.onSelectionChange([]);
     }
   };
+
   useEffect(() => {
-    if (!mountRenderComplete) {
-      divRef.current && divRef.current.addEventListener('mousedown', mousedownHandler, false);
-      dispatch({ type: 'mountrendercomplete' });
-    }
     if (props.deselectOnEsc) {
       document.addEventListener('keydown', keyListener);
     }
@@ -153,7 +142,14 @@ export const SelectableGroup: FC<NodeProps> = props => {
 
   return (
     <SelectableGroupContext.Provider value={{ selectedItems }}>
-      <div ref={divRef} css={{ position: 'relative' }}>
+      <div
+        ref={divRef}
+        css={{ position: 'relative' }}
+        onMouseDown={mousedownHandler}
+        onMouseMove={mousemoveHandler}
+        onMouseLeave={mouseleaveHandler}
+        onMouseUp={mouseupHandler}
+      >
         <SelectBox xStart={initClientX} xEnd={currClientX} yStart={initClientY} yEnd={currClientY} />
         {props.children}
       </div>
