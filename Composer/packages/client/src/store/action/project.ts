@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
-import { resolveToBasePath } from './../../utils/fileUtil';
+import { BASEURL, ActionTypes } from './../../constants/index';
+import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
 
@@ -46,7 +45,7 @@ export const fetchProject: ActionCreator = async store => {
     });
     return response.data;
   } catch (err) {
-    navigate(resolveToBasePath(BASEPATH, '/home'));
+    navigateTo('/home');
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 };
