@@ -3,7 +3,6 @@ import { jsx } from '@emotion/core';
 import { useState, useContext, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
-import { navigate } from '@reach/router';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
 import { StoreContext } from './../../store';
@@ -29,7 +28,6 @@ export function SelectLocation(props) {
     } else {
       onOpen(selected);
     }
-    navigate('/dialogs/Main');
   }
 
   function TemplateItem(props) {

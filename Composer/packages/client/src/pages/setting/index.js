@@ -3,9 +3,10 @@ import { jsx } from '@emotion/core';
 import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react';
-import { Link, navigate } from '@reach/router';
+import { Link } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';
+import { navigateTo } from '../../utils';
 
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
@@ -64,7 +65,7 @@ export const SettingPage = () => {
                   onRenderLink={onRenderLink}
                   selectedKey={active}
                   onLinkClick={(e, item) => {
-                    navigate(item.key);
+                    navigateTo(item.key);
                   }}
                 />
               </div>

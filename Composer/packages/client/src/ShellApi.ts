@@ -1,6 +1,5 @@
 import { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
-import { navigate } from '@reach/router';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
@@ -10,9 +9,7 @@ import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
-import { BASEPATH } from './constants';
-import { resolveToBasePath } from './utils/fileUtil';
-import { getFocusPath } from './utils/navigation';
+import { getFocusPath, navigateTo } from './utils/navigation';
 import { DialogInfo, LgFile, LuFile } from './store/types';
 
 // this is the api interface provided by shell to extensions this is the single
@@ -60,7 +57,7 @@ const FileTargetTypes = {
 const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
   switch (shellPage) {
     case 'lu':
-      navigate(resolveToBasePath(BASEPATH, `/language-understanding/${opts.id}`));
+      navigateTo(`/language-understanding/${opts.id}`);
       return;
     default:
       return;
