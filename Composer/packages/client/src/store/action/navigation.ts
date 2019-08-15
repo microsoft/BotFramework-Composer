@@ -9,7 +9,7 @@ import {
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
-  { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }
+  { dialogId = '', uri = '', focusedEvent = '', focusedSteps = [], breadcrumb = [] }
 ) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,

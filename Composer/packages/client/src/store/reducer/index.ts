@@ -120,20 +120,22 @@ const updateOAuth: ReducerFunc = (state, { oAuth }) => {
 };
 
 const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
-  const focusedStep = focusedSteps[0] || '';
-  //generate focusedPath. This will remove when all focusPath related is removed
-  state.focusPath = dialogId + '#';
-  if (focusedStep) {
-    state.focusPath = dialogId + '#.' + focusedStep;
-  }
+  if (dialogId) {
+    const focusedStep = focusedSteps[0] || '';
+    //generate focusedPath. This will remove when all focusPath related is removed
+    state.focusPath = dialogId + '#';
+    if (focusedStep) {
+      state.focusPath = dialogId + '#.' + focusedStep;
+    }
 
-  if (focusedSteps.length === 0 && focusedEvent) {
-    state.focusPath = dialogId + '#.' + focusedEvent;
-  }
+    if (focusedSteps.length === 0 && focusedEvent) {
+      state.focusPath = dialogId + '#.' + focusedEvent;
+    }
 
-  //add current path to the breadcrumb
-  breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
-  state.breadcrumb = breadcrumb;
+    //add current path to the breadcrumb
+    breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
+    state.breadcrumb = breadcrumb;
+  }
   state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
   return state;
 };

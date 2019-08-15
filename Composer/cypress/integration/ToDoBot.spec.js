@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('ToDo Bot', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
   });
