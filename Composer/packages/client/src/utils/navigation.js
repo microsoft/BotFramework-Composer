@@ -74,7 +74,7 @@ export function checkUrl(currentUri, { dialogId, focusedEvent, focusedSteps }) {
   return lastUri === currentUri;
 }
 
-export function navigateTo(to, { state, replace = false } = {}) {
+export function navigateTo(to, navigateOpts = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
-  navigate(mapNavPath, { state, replace });
+  navigate(mapNavPath, navigateOpts);
 }
