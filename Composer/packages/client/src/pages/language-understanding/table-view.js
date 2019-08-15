@@ -63,7 +63,7 @@ export default function TableView(props) {
       const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog]);
+  }, [luFiles, activeDialog, botStatus]);
 
   function checkErrors(files) {
     return files.filter(file => {
@@ -77,7 +77,7 @@ export default function TableView(props) {
     } else if (file.publishing) {
       return 'Publishing';
     } else if (file.lastUpdateTime >= file.lastPublishTime) {
-      return 'Updated';
+      return 'Not yet published';
     } else if (file.lastPublishTime > file.lastUpdateTime && botStatus === BotStatus.connected) {
       return 'Published & Connected';
     } else if (file.lastPublishTime > file.lastUpdateTime && botStatus !== BotStatus.connected) {
