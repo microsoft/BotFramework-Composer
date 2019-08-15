@@ -31,8 +31,8 @@ const shellApi = {
     return apiClient.apiCall('getState', {});
   },
 
-  saveData: newData => {
-    return apiClient.apiCall('saveData', newData);
+  saveData: (newData, updatePath) => {
+    return apiClient.apiCall('saveData', { newData, updatePath });
   },
 
   navTo: (path, rest) => {
@@ -103,7 +103,6 @@ function ExtensionContainer() {
     apiClient.connect();
 
     apiClient.registerApi('reset', newShellData => {
-      console.log('FORM: apiReset');
       setShellData(newShellData);
     });
 
@@ -124,8 +123,6 @@ function ExtensionContainer() {
   }, []);
 
   const RealEditor = shellData.data ? getEditor() : null;
-
-  console.log('FORM: extension container');
 
   return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }

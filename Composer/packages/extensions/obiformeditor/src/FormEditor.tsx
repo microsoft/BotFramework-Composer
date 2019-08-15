@@ -25,12 +25,13 @@ export interface FormEditorProps {
   dialogs: DialogInfo[];
   focusPath: string;
   focusedEvent: string;
+  focusedSteps: string[];
   isRoot: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   memory: FormMemory;
   onBlur?: () => void;
-  onChange: (newData: object) => void;
+  onChange: (newData: object, updatePath?: string) => void;
   schemas: EditorSchema;
   shellApi: ShellApi;
 }

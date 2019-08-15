@@ -167,10 +167,10 @@ export function ShellApi() {
   }
 
   // persist value change
-  function handleValueChange(newData, event) {
+  function handleValueChange({ newData, updatePath }, event) {
     let dataPath = '';
     if (event.source.name === FORM_EDITOR) {
-      dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
+      dataPath = updatePath || getFocusPath(focusedEvent, focusedSteps[0]);
     }
 
     const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
