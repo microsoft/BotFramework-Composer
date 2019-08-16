@@ -11,7 +11,7 @@ const errorToShow = {
   message: formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>.', {
     // eslint-disable-next-line react/display-name
     a: ({ children }) => (
-      <a key="a" href={githubIssueUrl} target="_blank" rel="noopener noreferrer">
+      <a key="a" href={githubIssueUrl} target="_blank" rel="noopener noreferrer" style={{ color: `greenyellow` }}>
         {children}
       </a>
     ),
