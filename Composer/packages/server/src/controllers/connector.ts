@@ -3,8 +3,9 @@ import BotConnectorService from '../services/connector';
 
 async function connect(req: any, res: any) {
   try {
+    const hostName = req.hostname;
     const env: BotEnvironments = req.query && req.query.botEnvironment ? req.query.botEnvironment : 'production';
-    const botEndpoint = await BotConnectorService.connect(env);
+    const botEndpoint = await BotConnectorService.connect(env, hostName);
     res.send({ botEndpoint });
   } catch (error) {
     res.status(400).json({

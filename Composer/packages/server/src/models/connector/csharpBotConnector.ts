@@ -17,7 +17,7 @@ export class CSharpBotConnector implements IBotConnector {
 
   public status: BotStatus = BotStatus.NotConnected;
 
-  connect = async (_: BotEnvironments) => {
+  connect = async (_: BotEnvironments, __: string) => {
     // confirm bot runtime is listening here
     try {
       await axios.get(this.endpoint + '/api/admin');

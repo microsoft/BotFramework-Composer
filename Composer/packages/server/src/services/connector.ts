@@ -15,8 +15,8 @@ class BotConnectorService {
   }
 
   // start the current bot
-  public connect = async (env: BotEnvironments) => {
-    return await this.connector.connect(env || 'production');
+  public connect = async (env: BotEnvironments, hostName: string) => {
+    return await this.connector.connect(env || 'production', hostName);
   };
 
   public sync = async (config: any) => {
