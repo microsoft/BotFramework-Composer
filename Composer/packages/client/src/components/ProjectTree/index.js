@@ -49,7 +49,13 @@ export const ProjectTree = props => {
 
   return (
     <div>
-      <input type="search" placeholder="filter" onKeyUp={updateFilter} onChange={updateFilter} />
+      <input
+        css={{ width: 'calc(100% - 1rem)', margin: '0.5rem auto', display: 'block' }}
+        type="search"
+        placeholder="filter"
+        onKeyUp={updateFilter}
+        onChange={updateFilter}
+      />
       <Nav
         onLinkClick={(ev, item) => {
           onSelect(item.id || files[0].id);
