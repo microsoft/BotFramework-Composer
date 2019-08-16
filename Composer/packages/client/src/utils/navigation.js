@@ -1,4 +1,8 @@
 import { cloneDeep } from 'lodash';
+import { navigate } from '@reach/router';
+
+import { BASEPATH } from './../constants/index';
+import { resolveToBasePath } from './fileUtil';
 
 export function getFocusPath(focusedEvent, focusedStep) {
   if (focusedEvent && focusedStep) return focusedStep;
@@ -63,4 +67,14 @@ export function getUrlSearch(focusedEvent, focusedSteps) {
     result = '?' + result;
   }
   return result;
+}
+
+export function checkUrl(currentUri, { dialogId, focusedEvent, focusedSteps }) {
+  const lastUri = `/dialogs/${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`;
+  return lastUri === currentUri;
+}
+
+export function navigateTo(to, navigateOpts = {}) {
+  const mapNavPath = resolveToBasePath(BASEPATH, to);
+  navigate(mapNavPath, navigateOpts);
 }

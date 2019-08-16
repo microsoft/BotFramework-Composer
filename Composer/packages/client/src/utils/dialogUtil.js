@@ -24,7 +24,8 @@ export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps
   let label = '';
   const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
   if (!dataPath) {
-    label = dialogs.find(d => d.id === dialogId).displayName;
+    const dialog = dialogs.find(d => d.id === dialogId);
+    label = (dialog && dialog.displayName) || '';
   } else {
     const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
