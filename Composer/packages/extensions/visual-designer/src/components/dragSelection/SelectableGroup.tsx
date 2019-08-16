@@ -77,7 +77,6 @@ export const SelectableGroup: FC<NodeProps> = props => {
   };
 
   const mousedownHandler = e => {
-    e.preventDefault();
     e.stopPropagation();
     const { clientX, clientY } = e;
     if (mousedownStarted.current) return;
