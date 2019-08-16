@@ -35,6 +35,10 @@ export const ProjectTree = props => {
         const item = { key: file.id, ...file, forceAnchor: true, onDelete: onDelete };
 
         item.name = file.displayName;
+        if (filter !== '') {
+          const pattern = `^(${filter})`;
+          item.name = item.name.replace(new RegExp(pattern, 'i'), '[$1]');
+        }
         result.push({ ...item, isExpanded: false, hiddenMore: true });
 
         return result;
@@ -69,6 +73,9 @@ export const ProjectTree = props => {
         styles={nav}
         onRenderLink={onRenderLink}
       />
+      {links.length === 0 && (
+        <div css={{ display: 'block', margin: '0.5rem auto', textAlign: 'center' }}>No matches</div>
+      )}
       <Link css={addButton} onClick={onAdd}>
         {formatMessage('Add ..')}
       </Link>
