@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useReducer, useState, useEffect, useRef, FC } from 'react';
+
 import { SelectBox } from './SelectBox';
 import { SelectableGroupContext } from './Context';
 
@@ -11,26 +12,21 @@ interface NodeProps {
   onSelectionChange: (selectedNodes) => object | void;
 }
 
-const defaultState = {
-  currClientX: 0,
-  currClientY: 0,
-  initClientX: 0,
-  initClientY: 0,
-};
-
 const threshold = 5;
 
+interface MousePosition {
+  x: number;
+  y: number;
+}
 export const SelectableGroup: FC<NodeProps> = props => {
   const divRef = useRef<HTMLDivElement>(null);
-  let mousedownStarted = useRef(false);
-  let selectedItems: Element[] = [];
+  const mousedownStarted = useRef(false);
+  let selectedItems: string[] = [];
   const [isDrawBox, setIsDrawBox] = useState(false);
-  const [initClientX, setInitClientX] = useState(0);
-  const [initClientY, setInitClientY] = useState(0);
-  const [currClientX, setCurrClientX] = useState(0);
-  const [currClientY, setCurrClientY] = useState(0);
+  const [initPosition, setInitPosition] = useState({ x: 0, y: 0 });
+  const [currPosition, setCurrPosition] = useState({ x: 0, y: 0 });
   const onSelectArea = data => {
-    const items = document.querySelectorAll(`div[${props.selectableTag}]`);
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`div[${props.selectableTag}]`);
     const { initClientX, currClientX, initClientY, currClientY } = data;
     if (initClientX !== currClientX || initClientY !== currClientY) {
       if (divRef.current) {
@@ -46,8 +42,8 @@ export const SelectableGroup: FC<NodeProps> = props => {
             const bounds = item.getBoundingClientRect();
             if (!(bounds.right < minX || bounds.bottom < minY || (bounds.left > maxX || bounds.top > maxY))) {
               // in bounds
-              if (item && item['dataset'][props.selectableNodeDataTag]) {
-                selectedItems.push(item['dataset'][props.selectableNodeDataTag]);
+              if (item && item.dataset[props.selectableNodeDataTag]) {
+                selectedItems.push(item.dataset[props.selectableNodeDataTag] as string);
               }
             }
           }
@@ -68,23 +64,20 @@ export const SelectableGroup: FC<NodeProps> = props => {
 
     switch (action) {
       case 'mousedown':
-        setInitClientX(clientX);
-        setInitClientY(clientY);
+        setInitPosition({ x: clientX, y: clientY });
         break;
       case 'mousemove':
-        setCurrClientX(clientX);
-        setCurrClientY(clientY);
+        setCurrPosition({ x: clientX, y: clientY });
         break;
       default:
-        setInitClientX(0);
-        setInitClientY(0);
-        setCurrClientX(0);
-        setCurrClientY(0);
+        setInitPosition({ x: 0, y: 0 });
+        setCurrPosition({ x: 0, y: 0 });
         break;
     }
   };
 
   const mousedownHandler = e => {
+    e.preventDefault();
     e.stopPropagation();
     const { clientX, clientY } = e;
     if (mousedownStarted.current) return;
@@ -99,29 +92,37 @@ export const SelectableGroup: FC<NodeProps> = props => {
     }
   };
 
-  const mouseupHandler = () => {
-    console.log('mouseup');
+  const mouseupHandler = e => {
+    e.preventDefault();
+    e.stopPropagation();
     mousedownStarted.current = false;
-    if (initClientX && initClientY && currClientX && currClientY) {
-      onSelectArea({ initClientX, initClientY, currClientX, currClientY });
+    if (initPosition.x && initPosition.y && currPosition.x && currPosition.y) {
+      onSelectArea({
+        initClientX: initPosition.x,
+        initClientY: initPosition.y,
+        currClientX: currPosition.x,
+        currClientY: currPosition.y,
+      });
     }
     getRelativePosition('mouseup');
   };
 
-  const mouseleaveHandler = () => {
+  const mouseleaveHandler = e => {
+    e.preventDefault();
+    e.stopPropagation();
     mousedownStarted.current = false;
     getRelativePosition('mouseleave');
   };
 
   useEffect(() => {
-    const diffX = Math.abs(initClientX - currClientX);
-    const diffY = Math.abs(initClientY - currClientY);
+    const diffX = Math.abs(initPosition.x - currPosition.x);
+    const diffY = Math.abs(initPosition.y - currPosition.y);
     if (diffX > threshold && diffY > threshold) {
       setIsDrawBox(true);
     } else {
       setIsDrawBox(false);
     }
-  }, [initClientX, initClientY, currClientX, currClientY]);
+  });
 
   return (
     <SelectableGroupContext.Provider value={{ selectedItems }}>
@@ -135,10 +136,10 @@ export const SelectableGroup: FC<NodeProps> = props => {
       >
         {isDrawBox ? (
           <SelectBox
-            xStart={initClientX}
-            xEnd={currClientX}
-            yStart={initClientY}
-            yEnd={currClientY}
+            xStart={initPosition.x}
+            yStart={initPosition.y}
+            xEnd={currPosition.x}
+            yEnd={currPosition.y}
             styles={props.styles}
           />
         ) : null}

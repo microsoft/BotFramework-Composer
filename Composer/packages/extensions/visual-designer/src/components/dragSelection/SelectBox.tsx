@@ -4,12 +4,12 @@ import { FC } from 'react';
 
 interface NodeProps {
   xStart: number;
-  xEnd: number;
   yStart: number;
+  xEnd: number;
   yEnd: number;
   styles?: object;
 }
-export const SelectBox: FC<NodeProps> = ({ xStart, xEnd, yStart, yEnd, styles = {} }) => {
+export const SelectBox: FC<NodeProps> = ({ xStart, yStart, xEnd, yEnd, styles = {} }) => {
   if (xEnd === 0 || yEnd === 0) {
     return null;
   }
