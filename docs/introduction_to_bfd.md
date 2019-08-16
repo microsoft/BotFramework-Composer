@@ -18,7 +18,7 @@ With Bot Framework Composer, all of these pieces are integrated with one another
 
 Each dialog represents a piece of the bot's functionality. They contain instructions for how the bot will react to input. Simple bots will have a few dialogs. Complex bots may have dozens or hundreds of individual dialogs.
 
-As a dialog is called into action, its **recognizer** will process the message, attempting to extract the primary **intent** represented by the message, along with any **entity values** the message includes. After processing the message, this information is passed onto the dialog's event handlers. Composer currently supports 2 types of recognizer: one powered by the [LUIS.ai service](https://www.luis.ai), and one powered by regular expressions. A dilaog can have no recognizer. 
+As a dialog is called into action, its **recognizer** will process the message, attempting to extract the primary **intent** represented by the message, along with any **entity values** the message includes. After processing the message, this information is passed onto the dialog's event handlers. Composer currently supports 2 types of recognizers: one powered by the [LUIS.ai service](https://www.luis.ai), and one powered by regular expressions. A dilaog can have no recognizer. 
 
 The functionality of a dialog is contained within **event handlers** - rules that tell the bot how to process incoming messages.  They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interuptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself.
 
@@ -40,10 +40,10 @@ Creating grammatically correct, data driven responses that also use a consistent
 
 With Language Generation (LG), previously complex tasks can be quickly achieved:
 
-* include dynamic elements in messages
-* generate grammatically correct lists, pronouns, articles
-* provide context-sensitive variation in messages
-* create dynamic card attachments
+* Include dynamic elements in messages
+* Generate grammatically correct lists, pronouns, articles
+* Provide context-sensitive variation in messages
+* Create Adaptive Cards attachments
 
 ## Unified Toolset
 
