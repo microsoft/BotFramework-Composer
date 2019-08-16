@@ -77,8 +77,8 @@ function DesignPage(props) {
         focusedSteps: params.getAll('focusedSteps[]'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
       });
+      globalHistory._onTransitionComplete();
     }
-    globalHistory._onTransitionComplete();
   }, [location]);
 
   function handleFileClick(id) {
