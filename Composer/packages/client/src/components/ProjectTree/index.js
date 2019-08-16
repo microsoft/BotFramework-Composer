@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { Nav, Link } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
@@ -15,27 +15,41 @@ const onRenderLink = (link, render) => {
 export const ProjectTree = props => {
   const { files, onSelect, activeNode, onAdd, onDelete } = props;
 
+  const [filter, setFilter] = useState('');
+
   const links = useMemo(() => {
-    const links = files.reduce((result, file) => {
-      if (result.length === 0) {
-        result = [{ links: [] }];
-      }
-      const item = { key: file.id, ...file, forceAnchor: true, onDelete: onDelete };
+    const links = files
+      .filter(file => {
+        return file.displayName.toLowerCase().indexOf(filter) === 0;
+      })
+      .sort((a, b) => {
+        if (a.isRoot) {
+          return -1;
+        } else if (b.isRoot) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+      .reduce((result, file) => {
+        const item = { key: file.id, ...file, forceAnchor: true, onDelete: onDelete };
 
-      item.name = file.displayName;
+        item.name = file.displayName;
+        result.push({ ...item, isExpanded: false, hiddenMore: true });
 
-      if (file.isRoot) {
-        result[0] = { ...result[0], ...item, isExpanded: true, hiddenMore: true };
-      } else {
-        result[0].links.push(item);
-      }
-      return result;
-    }, []);
+        return result;
+      }, []);
     return links;
-  }, [files]);
+  }, [files, filter]);
+
+  const updateFilter = event => {
+    const filter = event.target.value.toLowerCase();
+    setFilter(filter);
+  };
 
   return (
     <div>
+      <input type="search" placeholder="filter" onKeyUp={updateFilter} onChange={updateFilter} />
       <Nav
         onLinkClick={(ev, item) => {
           onSelect(item.id || files[0].id);
