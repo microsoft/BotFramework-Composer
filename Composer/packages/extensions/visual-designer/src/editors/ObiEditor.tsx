@@ -15,6 +15,20 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
 
   const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
 
+  const handleSelectionChange = items => {
+    let shortestLength = 999;
+
+    items.forEach(item => {
+      if (item.length < shortestLength) {
+        shortestLength = item.length;
+      }
+    });
+
+    const seletectItemIds = new Set<string>(items.map(item => (item = item.substr(0, shortestLength))));
+    onFocusSteps(Array.from(seletectItemIds));
+    console.log('selected items:' + Array.from(seletectItemIds));
+  };
+
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -63,19 +77,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
 
   const renderFallbackContent = () => {
     return null;
-  };
-
-  const handleSelectionChange = items => {
-    let shortestLength = 999;
-
-    items.forEach(item => {
-      if (item.length < shortestLength) {
-        shortestLength = item.length;
-      }
-    });
-
-    const seletectItemIds = new Set<string>(items.map(item => (item = item.substr(0, shortestLength))));
-    console.log('selected items:' + Array.from(seletectItemIds));
   };
 
   if (!data) return renderFallbackContent();

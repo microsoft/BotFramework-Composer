@@ -33,7 +33,6 @@
     "lodash": "^4.17.11",
     "office-ui-fabric-react": "^6.180.0",
     "prop-types": "^15.7.2",
-    "react-selectable-fast": "^2.3.1",
     "source-map-loader": "^0.2.4"
   },
   "peerDependencies": {

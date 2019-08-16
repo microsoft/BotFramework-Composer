@@ -16,7 +16,6 @@ import {
   ChoiceInput,
 } from '../nodes/index';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectableGroupContext } from '../dragSelection/index';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
@@ -49,13 +48,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
 
-  const { selectedItems } = useContext(SelectableGroupContext);
-  const selected =
-    selectedItems &&
-    selectedItems.find(item => {
-      return item === id;
-    });
-  const nodeFocused = focusedId === id || focusedEvent === id || !!selected;
+  const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (
     <div

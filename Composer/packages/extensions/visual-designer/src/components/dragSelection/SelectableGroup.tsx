@@ -5,9 +5,9 @@ import { SelectBox } from './SelectBox';
 import { SelectableGroupContext } from './Context';
 
 interface NodeProps {
-  deselectOnEsc?: boolean;
   selectableTag: string;
   selectableNodeDataTag: string;
+  styles?: object;
   onSelectionChange: (selectedNodes) => object | void;
 }
 
@@ -18,12 +18,18 @@ const defaultState = {
   initClientY: 0,
 };
 
+const threshold = 5;
+
 export const SelectableGroup: FC<NodeProps> = props => {
   const divRef = useRef<HTMLDivElement>(null);
   let mousedownStarted = useRef(false);
-  const [selectedItems, setSelectedItems] = useState<Element[]>([]);
+  let selectedItems: Element[] = [];
+  const [isDrawBox, setIsDrawBox] = useState(false);
+  const [initClientX, setInitClientX] = useState(0);
+  const [initClientY, setInitClientY] = useState(0);
+  const [currClientX, setCurrClientX] = useState(0);
+  const [currClientY, setCurrClientY] = useState(0);
   const onSelectArea = data => {
-    let selected: Element[] = [];
     const items = document.querySelectorAll(`div[${props.selectableTag}]`);
     const { initClientX, currClientX, initClientY, currClientY } = data;
     if (initClientX !== currClientX || initClientY !== currClientY) {
@@ -41,102 +47,79 @@ export const SelectableGroup: FC<NodeProps> = props => {
             if (!(bounds.right < minX || bounds.bottom < minY || (bounds.left > maxX || bounds.top > maxY))) {
               // in bounds
               if (item && item['dataset'][props.selectableNodeDataTag]) {
-                selected.push(item['dataset'][props.selectableNodeDataTag]);
+                selectedItems.push(item['dataset'][props.selectableNodeDataTag]);
               }
             }
           }
         }
       }
     } else {
-      selected = [];
+      selectedItems = [];
     }
-    setSelectedItems(selected);
-    props.onSelectionChange(selected);
+    props.onSelectionChange(selectedItems);
   };
-  const getRelativePosition = payload => {
-    let { clientX, clientY } = payload;
+  const getRelativePosition = (action, payload?) => {
+    let { clientX, clientY } = payload || { clientX: 0, clientY: 0 };
     if (divRef.current) {
       const containerBound = divRef.current.getBoundingClientRect();
       clientX = clientX - containerBound.left;
       clientY = clientY - containerBound.top;
     }
-    return { clientX, clientY };
-  };
-  const reducer = (state, action) => {
-    const { type, payload } = action;
-    const { clientX, clientY } = getRelativePosition(payload || { clientX: 0, clientY: 0 });
-    switch (type) {
-      case 'mouseup': {
-        const { initClientX, initClientY, currClientX, currClientY } = state;
-        if (initClientX && initClientY && currClientX && currClientY) {
-          onSelectArea({ initClientX, initClientY, currClientX, currClientY });
-        }
-        return {
-          ...defaultState,
-        };
-      }
-      case 'mouseleave': {
-        return { ...defaultState };
-      }
-      case 'mousemove': {
-        return {
-          ...state,
-          currClientX: clientX,
-          currClientY: clientY,
-        };
-      }
-      case 'mousedown': {
-        return {
-          ...state,
-          initClientX: clientX,
-          initClientY: clientY,
-        };
-      }
+
+    switch (action) {
+      case 'mousedown':
+        setInitClientX(clientX);
+        setInitClientY(clientY);
+        break;
+      case 'mousemove':
+        setCurrClientX(clientX);
+        setCurrClientY(clientY);
+        break;
       default:
-        throw new Error('Unsupported action dispatched in SelectableGroup');
+        setInitClientX(0);
+        setInitClientY(0);
+        setCurrClientX(0);
+        setCurrClientY(0);
+        break;
     }
   };
-  const [{ initClientX, currClientX, initClientY, currClientY, mountRenderComplete }, dispatch] = useReducer(
-    reducer,
-    defaultState
-  );
 
   const mousedownHandler = e => {
     e.stopPropagation();
     const { clientX, clientY } = e;
     if (mousedownStarted.current) return;
     mousedownStarted.current = true;
-    dispatch({ type: 'mousedown', payload: { clientX, clientY } });
+    getRelativePosition('mousedown', { clientX, clientY });
   };
 
   const mousemoveHandler = e => {
     if (mousedownStarted.current) {
       const { clientX, clientY } = e;
-      dispatch({ type: 'mousemove', payload: { clientX, clientY } });
+      getRelativePosition('mousemove', { clientX, clientY });
     }
   };
 
   const mouseupHandler = () => {
     console.log('mouseup');
     mousedownStarted.current = false;
-    dispatch({ type: 'mouseup' });
+    if (initClientX && initClientY && currClientX && currClientY) {
+      onSelectArea({ initClientX, initClientY, currClientX, currClientY });
+    }
+    getRelativePosition('mouseup');
   };
 
   const mouseleaveHandler = () => {
     mousedownStarted.current = false;
-    dispatch({ type: 'mouseleave' });
-  };
-
-  const keyListener = e => {
-    if (e.keyCode === 27) {
-      setSelectedItems([]);
-      props.onSelectionChange([]);
-    }
+    getRelativePosition('mouseleave');
   };
 
   useEffect(() => {
-    if (props.deselectOnEsc) {
-      document.addEventListener('keydown', keyListener);
+    const diffX = Math.abs(initClientX - currClientX);
+    const diffY = Math.abs(initClientY - currClientY);
+    if (diffX > threshold && diffY > threshold) {
+      setIsDrawBox(true);
+    } else {
+      setIsDrawBox(false);
     }
   }, [initClientX, initClientY, currClientX, currClientY]);
 
@@ -150,13 +133,17 @@ export const SelectableGroup: FC<NodeProps> = props => {
         onMouseLeave={mouseleaveHandler}
         onMouseUp={mouseupHandler}
       >
-        <SelectBox xStart={initClientX} xEnd={currClientX} yStart={initClientY} yEnd={currClientY} />
+        {isDrawBox ? (
+          <SelectBox
+            xStart={initClientX}
+            xEnd={currClientX}
+            yStart={initClientY}
+            yEnd={currClientY}
+            styles={props.styles}
+          />
+        ) : null}
         {props.children}
       </div>
     </SelectableGroupContext.Provider>
   );
-};
-
-SelectableGroup.defaultProps = {
-  deselectOnEsc: true,
 };
