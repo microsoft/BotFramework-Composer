@@ -15,6 +15,11 @@ const initData = isHostedInAzure ? abhInitData : localInitData;
 // create data.json if not exits
 if (!fs.existsSync(dataStorePath)) {
   fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+  if (isHostedInAzure) {
+    // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
+    // always find the file, add one more io to kick the  virtual file system
+    fs.appendFileSync(dataStorePath, ' ');
+  }
 }
 
 interface KVStore {
