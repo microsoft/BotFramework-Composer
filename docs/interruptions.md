@@ -451,23 +451,23 @@ User could ask clarifying questions as a multi-turn QA conversation
 
 # Feature gaps
 ## SDK
-1. [ ] [Add MaxCountResponse](#s-g-1) add a new property that carries the response the bot will send if max turn count is hit and a default value will be picked up by the input.
-2. [ ] [Ability to access instance properties](#s-g-2) `~maxTurnCount` should resolve to `dialog.instance.maxTurnCount`. There is no way to access an action's properties through LG/ memory path.
-3. [ ] [ProcessInput action](#s-g-3) Ability for users to indicate if user input is consumed or should be reprocessed
+1. [ ] [Add MaxCountResponse](#s-g-1) add a new property that carries the response the bot will send if max turn count is hit and a default value will be picked up by the input. Tracked via this bug - https://github.com/microsoft/botbuilder-dotnet/issues/2422
+2. [ ] [Ability to access instance properties](#s-g-2) `~maxTurnCount` should resolve to `dialog.instance.maxTurnCount`. There is no way to access an action's properties through LG/ memory path. Tracked via - https://github.com/microsoft/botbuilder-dotnet/issues/2423
+3. [ ] [ProcessInput action](#s-g-3) Ability for users to indicate if user input is consumed or should be reprocessed. Tracked via this bug - https://github.com/microsoft/botbuilder-dotnet/issues/2425
 4. [X] [Disambiguation](#s-g-4) Provide built in support for disambiguation via data model definition & FormInput action
 5. [X] [Change handling](#s-g-5) Provide built in support for change handling for entities via data model definition & FormInput action
 6. [EditSteps-guidance](#s-g-6) Its unclear how to use EditSteps effectively with consultation as well as for the default triggering
 7. [X] [Consultation-active-dialog-info](#s-g-7) Consultation does not include any information about the active dialog/ active adaptive dialog to use in decision making (with EditSteps). Guide user to set a flag to provide this info.
 8. [Consultation-confirmation](#s-g-8) It is not possible to manually control consultation bubbling today.
 9. [X] [Data-model-definition](#s-g-9) Unable to achieve context carry over type conversations without clear data model that describes what each dialog accepts/ returns.
-10. [ ] [QnA-integration](#s-g-10) No QnA integartion.
-11. [ ] [Revisit-intent-event-for-consultation](#s-g-11) Painful to have an intent that shorts consultation
-12. [ ] [Auto-save-recognized-entities](#s-g-12) We should auto-save recognized entities but need to account for doing it only on known intents - e.g. we do not want to over-write entities detected with `interruption` intent since that might not be applicable/ relevant
-13. [ ] [BeginDialog-single-active-instance](#s-g-13) Is it the right behavior to start an instance of a dialog everytime? May be we add a configuration at the dialog level that says if a new instance (necessary for re-usable child dialogs) should be fired or use active instance if found in the stack (default behavior)
+10. [ ] [QnA-integration](#s-g-10) No QnA integartion. Tracked via this bug - https://github.com/microsoft/botbuilder-dotnet/issues/1919
+11. [ ] [Revisit-intent-event-for-consultation](#s-g-11) Painful to have an intent that shorts consultation. Tracked via this bug - https://github.com/microsoft/botbuilder-dotnet/issues/2426
+12. [ ] [Auto-save-recognized-entities](#s-g-12) We should auto-save recognized entities but need to account for doing it only on known intents - e.g. we do not want to over-write entities detected with `interruption` intent since that might not be applicable/ relevant. Tracked via https://github.com/microsoft/botbuilder-dotnet/issues/2427
+13. [X] [BeginDialog-single-active-instance](#s-g-13) Is it the right behavior to start an instance of a dialog everytime? May be we add a configuration at the dialog level that says if a new instance (necessary for re-usable child dialogs) should be fired or use active instance if found in the stack (default behavior)
 
 ## Composer
-1. [ ] [turn.value guidance](#c-g-1) provide guidance for users to use turn.value
-2. [ ] [EditSteps](#c-g-2) Composer does not include a visual authoring experience for EditSteps action.
+1. [ ] [turn.value guidance](#c-g-1) provide guidance for users to use turn.value. Tracked via https://github.com/microsoft/BotFramework-Composer/issues/708
+2. [ ] [EditSteps](#c-g-2) Composer does not include a visual authoring experience for EditSteps action. Tracked via https://github.com/microsoft/BotFramework-Composer/issues/654
 
 # Bugs
 ## SDK
