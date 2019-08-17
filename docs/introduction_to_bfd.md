@@ -12,7 +12,7 @@ Bot Framework Composer enables teams working to create bots to build all kinds o
 
 ## Building Blocks
 
-Modern conversational software is comprised of many components, including programming code, custom business logic, cloud APIs, training data for language processing systems and perhaps most importantly, the actual content and copy used in conversations with the bot's end users.  
+Modern conversational software is comprised of many components, including programming code, custom business logic, cloud APIs, training data for language processing systems and perhaps most importantly, the actual content used in conversations with the bot's end users.  
 
 With Bot Framework Composer, all of these pieces are integrated with one another into a single interface for constructing blocks of bot functionality called "**Dialogs**." [(SDK Docs: Bot Framework Dialogs)](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
 
