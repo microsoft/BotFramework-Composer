@@ -7,8 +7,6 @@ import { FileInfo, LUFile } from './../interface';
 export class LUIndexer {
   private luFiles: LUFile[] = [];
 
-  constructor() {}
-
   public async index(files: FileInfo[]) {
     if (files.length === 0) return [];
     this.luFiles = [];
