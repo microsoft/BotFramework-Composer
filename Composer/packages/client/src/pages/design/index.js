@@ -4,7 +4,7 @@ import { Fragment, useContext, useEffect, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-
+import { toLower } from 'lodash';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
@@ -85,10 +85,15 @@ function DesignPage(props) {
     navTo(id);
   }
 
-  const getErrorMessage = name => {
+  const getErrorMessage = text => {
+    const id = toLower(text);
+    if (id === 'main') {
+      return 'Main dialog is default';
+    }
+
     if (
       dialogs.findIndex(dialog => {
-        return dialog.name === name;
+        return toLower(dialog.id) === id;
       }) >= 0
     ) {
       return 'duplication of name';
