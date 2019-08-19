@@ -125,8 +125,11 @@ export class BotProject {
   };
 
   public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog) {
+      throw new Error(`${id} dialog already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
