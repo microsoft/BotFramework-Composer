@@ -9,11 +9,10 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 
 import './style.css';
-import oauthStorage from './../../../utils/oauthStorage';
-import { StoreContext } from './../../../store';
-
+import oauthStorage from '../../../utils/oauthStorage';
+import luisStorage from '../../../utils/luisStorage';
+import { StoreContext } from '../../../store';
 window.jsonlint = jsonlint;
-
 const cmOptions = {
   theme: 'neat',
   mode: {
@@ -30,22 +29,24 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const [value, setValue] = useState('');
-  const { actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
 
-  const { updateOAuth } = actions;
+  // const { updateOAuth } = actions;
+  const { botName } = state;
 
   useEffect(() => {
-    setValue(oauthStorage.get());
+    setValue({ ...oauthStorage.get(), ...{ LuisConfig: luisStorage.get(botName) } });
   }, []);
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
       try {
-        oauthStorage.set(result);
-        updateOAuth(result);
+        console.log(result);
+        oauthStorage.set({ OAuthInput: result.OAuthInput });
+        luisStorage.setAll(botName, result.LuisConfig);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
       }
     } catch (err) {
       //Do Nothing

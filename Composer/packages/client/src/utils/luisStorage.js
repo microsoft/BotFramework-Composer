@@ -28,6 +28,14 @@ class LuisStorage {
 
     this.storage.set(LuisConfig.STORAGE_KEY, this._all);
   }
+  setAll(botName, value) {
+    if (value !== null) {
+      this._all[botName] = value;
+    } else {
+      delete this._all[botName];
+    }
+    this.storage.set(LuisConfig.STORAGE_KEY, this._all);
+  }
 }
 
 export default new LuisStorage();

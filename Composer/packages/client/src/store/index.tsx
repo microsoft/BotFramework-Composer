@@ -1,7 +1,5 @@
 import React, { useReducer } from 'react';
 
-import oauthStorage from '../utils/oauthStorage';
-
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
@@ -31,7 +29,6 @@ const initialState: State = {
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
-  oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
 };
 

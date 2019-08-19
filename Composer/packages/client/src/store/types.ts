@@ -44,7 +44,6 @@ export interface State {
   luFiles: LuFile[];
   designPageLocation: any;
   error: StateError | null;
-  oAuth: any;
   breadcrumb: any[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
@@ -89,4 +88,15 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+export interface OAuthInput {
+  MicrosoftAppId: string;
+  MicrosoftAppPassword: string;
+}
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
 }

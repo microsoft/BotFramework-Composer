@@ -7,15 +7,6 @@ import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
 
-export const updateOAuth: ActionCreator = ({ dispatch }, oAuth) => {
-  dispatch({
-    type: ActionTypes.UPDATE_OAUTH,
-    payload: {
-      oAuth,
-    },
-  });
-};
-
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
     type: ActionTypes.SET_CREATION_FLOW_STATUS,

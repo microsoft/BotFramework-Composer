@@ -114,11 +114,6 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const updateOAuth: ReducerFunc = (state, { oAuth }) => {
-  state.oAuth = oAuth;
-  return state;
-};
-
 const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
   const focusedStep = focusedSteps[0] || '';
   //generate focusedPath. This will remove when all focusPath related is removed
@@ -163,7 +158,6 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
 } as { [type in ActionTypes]: ReducerFunc });

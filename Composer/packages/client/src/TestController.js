@@ -20,6 +20,7 @@ import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
+import oauthStorage from './utils/oauthStorage';
 
 const openInEmulator = (url, authSettings) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -47,7 +48,7 @@ export const TestController = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, dialogs, oAuth, toStartBot, luFiles } = state;
+  const { botName, botStatus, dialogs, toStartBot, luFiles } = state;
   const { connectBot, reloadBot, publishLuis, startBot, setLuisConfig } = actions;
   const connected = botStatus === BotStatus.connected;
 
@@ -132,7 +133,7 @@ export const TestController = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages', oAuth)}
+            onClick={() => openInEmulator('http://localhost:3979/api/messages', oauthStorage.get())}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>
