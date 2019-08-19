@@ -66,32 +66,10 @@ export interface LuisStatus {
 // we will probably also use this interface to consolidate the processing of lu\lg\dialog
 export type FileUpdateType = 'create' | 'update' | 'delete';
 
-export interface ILuisStatus {
-  [key: string]: {
-    version?: string | undefined;
-    lastUpdateTime: number;
-    lastPublishTime: number;
-  };
-}
-
 export interface ILuisConfig {
   name: string;
   authoringKey: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
-}
-
-export interface IOperationLUFile {
-  diagnostics?: any[]; // ludown parser output
-  relativePath?: string;
-  content?: string;
-  parsedContent?: { [key: string]: any };
-  lastUpdateTime?: number;
-  lastPublishTime?: number;
-  [key: string]: any;
-}
-
-export interface ILuisStatusOperation {
-  [key: string]: IOperationLUFile;
 }
