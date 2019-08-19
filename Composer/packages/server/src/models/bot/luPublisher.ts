@@ -8,15 +8,15 @@ import { LUFile, ILuisConfig, ILuisStatus } from './interface';
 const GENERATEDFOLDER = 'generated';
 
 export class LuPublisher {
-  public luPath: string;
+  public botDir: string;
   public generatedFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public status: { [key: string]: string }[] = [];
 
   constructor(path: string, storage: IFileStorage) {
-    this.luPath = path;
-    this.generatedFolderPath = Path.join(path, GENERATEDFOLDER);
+    this.botDir = path;
+    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
     this.storage = storage;
   }
 
@@ -190,7 +190,7 @@ export class LuPublisher {
     luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
     luFiles.forEach(file => {
-      luConfig.models.push(Path.resolve(this.luPath, file.relativePath));
+      luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
     });
 
     return luConfig;
