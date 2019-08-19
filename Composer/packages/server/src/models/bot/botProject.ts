@@ -258,7 +258,6 @@ export class BotProject {
     this.luPublisher.setLuisConfig(config);
   };
 
-<<<<<<< HEAD
   public publishLuis = async () => {
 <<<<<<< HEAD
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
@@ -266,6 +265,7 @@ export class BotProject {
 =======
     const refered = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(refered);
+<<<<<<< HEAD
 >>>>>>> move the length checking at later stage and rename some variables
 
 =======
@@ -275,6 +275,8 @@ export class BotProject {
       return this.luIndexer.getLuFiles();
     }
 >>>>>>> save tmp code in github
+=======
+>>>>>>> check unpublished lu file on server
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);

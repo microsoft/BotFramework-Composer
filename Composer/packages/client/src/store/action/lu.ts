@@ -65,7 +65,7 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
         type: ActionTypes.PUBLISHING_LU,
         payload: { unpublishedLuFiles },
       });
-      response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { unpublishedLuFiles });
+      response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`);
       dispatch({
         type: ActionTypes.PUBLISH_LU_SUCCCESS,
         payload: { response },
