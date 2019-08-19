@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useMemo, useEffect, FunctionComponent } from 'react';
+import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 
 import { GraphNode } from '../../shared/GraphNode';
 import { areBoundariesEqual } from '../../shared/Boundary';
@@ -48,7 +48,6 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
   }, [layout]);
 
   const { boundary, nodes, edges } = layout;
-
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}

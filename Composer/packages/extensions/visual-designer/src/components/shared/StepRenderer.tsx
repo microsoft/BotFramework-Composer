@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, ComponentClass, useContext } from 'react';
+import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../shared/ObiTypes';
@@ -47,12 +47,11 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
-
   const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (
     <div
-      className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
+      className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;
         position: relative;

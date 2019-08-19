@@ -14,6 +14,8 @@ export interface NodeProps {
   focused?: boolean;
   onEvent: (action, id, ...rest) => object | void;
   onResize: (action?, id?) => object | void;
+
+  isRoot?: boolean;
 }
 
 export const defaultNodeProps = {

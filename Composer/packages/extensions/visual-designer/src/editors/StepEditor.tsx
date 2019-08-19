@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { StepGroup } from '../components/groups';
 import { Icon } from '../components/nodes/icons/icon';
@@ -40,7 +40,6 @@ export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
-
   const content = hasNoSteps ? (
     <EdgeMenu
       onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
