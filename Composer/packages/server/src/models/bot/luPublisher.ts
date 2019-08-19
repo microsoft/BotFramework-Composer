@@ -1,40 +1,74 @@
-import { keys, replace, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import { runBuild } from 'lubuild';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { LUFile, ILuisConfig, ILuisStatus } from './interface';
+import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 
 const GENERATEDFOLDER = 'generated';
+const LU_STATUS_FILE = 'luis.status.json';
 
 export class LuPublisher {
   public botDir: string;
   public generatedFolderPath: string;
+  public statusFile: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
-  public status: { [key: string]: string }[] = [];
+
+  // key: filePath relative to bot dir
+  // value: lastUpdateTime && lastPublishTime
+  public status: { [key: string]: LuisStatus } = {};
 
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
+    this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
     this.storage = storage;
   }
 
-  public update = async (isUpdated: boolean, path: string) => {
-    if (!isUpdated) return;
+  // load luis status from luis.status.json
+  public loadStatus = async (luFiles: LUFile[]) => {
+    if (await this.storage.exists(this.statusFile)) {
+      const content = await this.storage.readFile(this.statusFile);
+      this.status = JSON.parse(content);
+    }
 
-    const luisStatus: ILuisStatus = await this._getLuStatus();
-    if (luisStatus === null) return;
+    // make sure all LUFile have an initial value
+    luFiles.forEach(f => {
+      if (!this.status[f.relativePath]) {
+        this.status[f.relativePath] = {
+          lastUpdateTime: 1,
+          lastPublishTime: 0, // means unpublished
+        };
+      }
+    });
 
-    const appName = await this._getAppName(path);
-    const name = this._getName(appName);
-    if (!appName || !name || !luisStatus[name]) return;
+    return this.status;
+  };
 
-    const status = luisStatus[name];
+  public saveStatus = async () => {
+    if (!(await this.storage.exists(this.generatedFolderPath))) {
+      await this.storage.mkDir(this.generatedFolderPath);
+    }
+    await this.storage.writeFile(this.statusFile, JSON.stringify(this.status, null, 2));
+  };
 
-    status.lastUpdateTime = new Date().getTime();
-    luisStatus[name] = status;
-    await this._setLuStatus(luisStatus);
+  public onFileChange = async (relativePath: string, type: FileUpdateType) => {
+    switch (type) {
+      case 'create':
+        this.status[relativePath] = {
+          lastUpdateTime: Date.now(),
+          lastPublishTime: 0, // unpublished
+        };
+        break;
+      case 'update':
+        this.status[relativePath].lastUpdateTime = Date.now();
+        break;
+      case 'delete':
+        delete this.status[relativePath];
+        break;
+    }
+    await this.saveStatus();
   };
 
   public publish = async (luFiles: LUFile[]) => {
@@ -53,42 +87,18 @@ export class LuPublisher {
   };
 
   public getUnpublisedFiles = async (files: LUFile[]) => {
-    const luStatus: ILuisStatus = await this._getLuStatus();
-    if (luStatus === null) return files;
-    const result: LUFile[] = [];
-    for (const file of files) {
-      const appName = this._getAppName(file.id);
-      const name = this._getName(appName);
-      // //if no generated files, no status, check file's checksum
-      if (
-        !(await this.storage.exists(`${this.generatedFolderPath}/${appName.split('_').join('.')}.dialog`)) ||
-        !luStatus[name] ||
-        !luStatus[name].lastPublishTime ||
-        !luStatus[name].lastUpdateTime ||
-        luStatus[name].lastUpdateTime >= luStatus[name].lastPublishTime
-      ) {
-        result.push(file);
-      }
-    }
-    return result;
+    // unpublished means either
+    // 1. there is no status tracking
+    // 2. the status shows that lastPublishTime < lastUpdateTime
+    return files.filter(f => {
+      !this.status[f.relativePath] ||
+        this.status[f.relativePath].lastPublishTime < this.status[f.relativePath].lastUpdateTime;
+    });
   };
 
   public checkLuisPublised = async (files: LUFile[]) => {
     const unpublished = await this.getUnpublisedFiles(files);
     return unpublished.length === 0;
-  };
-
-  public getLuisStatus = async () => {
-    const luisStatus = await this._getLuStatus();
-    if (luisStatus === null) return [];
-    const status = luisStatus;
-    this.status = keys(status).reduce((result: { [key: string]: string }[], item) => {
-      let name = item.split('_').join('.');
-      name = replace(name, '.en-us', '');
-      result.push({ name, ...status[item] });
-      return result;
-    }, []);
-    return this.status;
   };
 
   public getLuisConfig = () => this.config;
@@ -138,50 +148,6 @@ export class LuPublisher {
     return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
   };
 
-  private _getLuStatusPath = async () => {
-    return Path.join(this.generatedFolderPath, `luis.status.json`);
-  };
-
-  private _getAppName = (path: string) => {
-    if (this.config === null) return '';
-    const culture = this._getCultureFromPath(path) || this.config.defaultLanguage;
-    let name = `${Path.basename(path, '.lu')}.${culture}.lu`;
-    name = name.split('.').join('_');
-    return name;
-  };
-
-  private _getJsonObject = async (path: string) => {
-    if (await this.storage.exists(path)) {
-      const json = await this.storage.readFile(path);
-      return JSON.parse(json);
-    } else {
-      return null;
-    }
-  };
-
-  private _getCultureFromPath = (file: string): string | null => {
-    const fn = Path.basename(file, Path.extname(file));
-    const lang = Path.extname(fn).substring(1);
-    switch (lang.toLowerCase()) {
-      case 'en-us':
-      case 'zh-cn':
-      case 'nl-nl':
-      case 'fr-fr':
-      case 'fr-ca':
-      case 'de-de':
-      case 'it-it':
-      case 'ja-jp':
-      case 'ko-kr':
-      case 'pt-br':
-      case 'es-es':
-      case 'es-mx':
-      case 'tr-tr':
-        return lang;
-      default:
-        return null;
-    }
-  };
-
   private _getConfig = (luFiles: LUFile[]) => {
     const luConfig: any = this.config;
     luConfig.models = [];
@@ -194,24 +160,5 @@ export class LuPublisher {
     });
 
     return luConfig;
-  };
-
-  private _getLuStatus = async () => {
-    const luStatePath = await this._getLuStatusPath();
-    if (!this.storage.exists(luStatePath)) {
-      return null;
-    } else {
-      return await this._getJsonObject(luStatePath);
-    }
-  };
-
-  private _setLuStatus = async (luState: ILuisStatus) => {
-    const luStatusPath = await this._getLuStatusPath();
-    return await this.storage.writeFile(luStatusPath, JSON.stringify(luState, null, 4));
-  };
-
-  private _getName = (appName: string) => {
-    const tokens = appName.split('_');
-    return tokens[0];
   };
 }

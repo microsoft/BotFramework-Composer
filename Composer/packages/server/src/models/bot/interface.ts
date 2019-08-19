@@ -46,8 +46,7 @@ export interface LUFile {
   relativePath: string;
   content: string;
   parsedContent: { [key: string]: any };
-  lastUpdateTime: number;
-  lastPublishTime: number;
+  status?: LuisStatus;
   [key: string]: any;
 }
 
@@ -58,6 +57,14 @@ export interface ILuisSettings {
     endpointKey: string;
   };
 }
+
+export interface LuisStatus {
+  lastUpdateTime: number;
+  lastPublishTime: number;
+}
+
+// we will probably also use this interface to consolidate the processing of lu\lg\dialog
+export type FileUpdateType = 'create' | 'update' | 'delete';
 
 export interface ILuisStatus {
   [key: string]: {
