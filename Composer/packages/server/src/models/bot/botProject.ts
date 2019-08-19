@@ -232,9 +232,8 @@ export class BotProject {
 
     // TODO: valid before save
     await this._createFile(relativePath, content);
-    await this.luPublisher.onFileChange(relativePath, 'create'); // the only thing different with LU, we need to let publish know that some files is changed
-
-    return this.luIndexer.getLuFiles();
+    await this.luPublisher.onFileChange(relativePath, 'create'); // let publisher know that some files is changed
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
   };
 
   public removeLuFile = async (id: string): Promise<LUFile[]> => {
@@ -244,7 +243,7 @@ export class BotProject {
     }
     this._removeFile(luFile.relativePath);
     await this.luPublisher.onFileChange(luFile.relativePath, 'delete');
-    return this.luIndexer.getLuFiles();
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
   public setLuisConfig = async (config: ILuisConfig) => {
