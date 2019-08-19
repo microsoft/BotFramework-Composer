@@ -6,7 +6,6 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
-import { SelectableGroup } from '../components/dragSelection/index';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -14,20 +13,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
   let divRef;
 
   const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
-
-  const handleSelectionChange = items => {
-    let shortestLength = 999;
-
-    items.forEach(item => {
-      if (item.length < shortestLength) {
-        shortestLength = item.length;
-      }
-    });
-
-    const seletectItemIds = new Set<string>(items.map(item => (item = item.substr(0, shortestLength))));
-    onFocusSteps(Array.from(seletectItemIds));
-    console.log('selected items:' + Array.from(seletectItemIds));
-  };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
@@ -106,20 +91,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
       }}
     >
       <DragScroll>
-        <SelectableGroup
-          selectableTag="data-is-focusable"
-          selectableNodeDataTag="selectionid"
-          onSelectionChange={handleSelectionChange}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.focus({ preventScroll: true });
-              dispatchEvent(eventName, eventData);
-            }}
-          />
-        </SelectableGroup>
+        <AdaptiveDialogEditor
+          id={path}
+          data={data}
+          onEvent={(eventName, eventData) => {
+            divRef.focus({ preventScroll: true });
+            dispatchEvent(eventName, eventData);
+          }}
+        />
       </DragScroll>
     </div>
   );

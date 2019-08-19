@@ -52,8 +52,6 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
 
   return (
     <div
-      data-selectionid={id}
-      data-is-focusable={true}
       className={classnames('node-renderer-container', { 'node-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;
