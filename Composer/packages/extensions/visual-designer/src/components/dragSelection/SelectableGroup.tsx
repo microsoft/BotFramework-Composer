@@ -2,13 +2,13 @@
 import { jsx } from '@emotion/core';
 import { useReducer, useState, useEffect, useRef, FC } from 'react';
 
-import { SelectBox } from './SelectBox';
+import { SelectedBox } from './SelectedBox';
 import { SelectableGroupContext } from './Context';
 
 interface NodeProps {
   selectableTag: string;
   selectableNodeDataTag: string;
-  styles?: object;
+  selectedBoxStyles?: object;
   onSelectionChange: (selectedNodes) => object | void;
 }
 
@@ -23,8 +23,8 @@ export const SelectableGroup: FC<NodeProps> = props => {
   const mousedownStarted = useRef(false);
   let selectedItems: string[] = [];
   const [isDrawBox, setIsDrawBox] = useState(false);
-  const [initPosition, setInitPosition] = useState({ x: 0, y: 0 });
-  const [currPosition, setCurrPosition] = useState({ x: 0, y: 0 });
+  const [initPosition, setInitPosition] = useState<MousePosition>({ x: 0, y: 0 });
+  const [currPosition, setCurrPosition] = useState<MousePosition>({ x: 0, y: 0 });
   const onSelectArea = data => {
     const items: NodeListOf<HTMLElement> = document.querySelectorAll(`div[${props.selectableTag}]`);
     const { initClientX, currClientX, initClientY, currClientY } = data;
@@ -134,12 +134,12 @@ export const SelectableGroup: FC<NodeProps> = props => {
         onMouseUp={mouseupHandler}
       >
         {isDrawBox ? (
-          <SelectBox
+          <SelectedBox
             xStart={initPosition.x}
             yStart={initPosition.y}
             xEnd={currPosition.x}
             yEnd={currPosition.y}
-            styles={props.styles}
+            styles={props.selectedBoxStyles}
           />
         ) : null}
         {props.children}
