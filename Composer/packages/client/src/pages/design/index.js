@@ -86,17 +86,12 @@ function DesignPage(props) {
   }
 
   const getErrorMessage = text => {
-    const id = toLower(text);
-    if (id === 'main') {
-      return 'Main dialog is default';
-    }
-
     if (
       dialogs.findIndex(dialog => {
-        return toLower(dialog.id) === id;
+        return toLower(dialog.id) === toLower(text);
       }) >= 0
     ) {
-      return 'duplication of name';
+      return `${text} has been used, please choose another name`;
     }
     return '';
   };
