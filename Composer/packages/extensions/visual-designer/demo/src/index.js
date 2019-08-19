@@ -6,6 +6,7 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
 import { StepEditorDemo } from './stories/StepEditorDemo';
 import { EventsEditorDemo } from './stories/EventsEditorDemo';
+import { DragSelectionDemo } from './stories/DragSelectionDemo';
 import './index.css';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -22,6 +23,10 @@ const DemoMaps = {
   EventsEditorDemo: {
     key: 'EventsEditorDemo',
     component: EventsEditorDemo,
+  },
+  DragSelectionDemo: {
+    key: 'DragSelectionDemo',
+    component: DragSelectionDemo,
   },
 };
 
@@ -61,7 +66,12 @@ class Demo extends Component {
           },
           {
             name: 'Component Demos',
-            links: [],
+            links: [
+              {
+                key: DemoMaps.DragSelectionDemo.key,
+                name: 'Drag Selection',
+              },
+            ],
           },
         ]}
       />
