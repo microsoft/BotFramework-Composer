@@ -22,10 +22,7 @@ export class LuPublisher {
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
-<<<<<<< HEAD
     this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
-=======
->>>>>>> rename luPath to botDir
     this.storage = storage;
   }
 
