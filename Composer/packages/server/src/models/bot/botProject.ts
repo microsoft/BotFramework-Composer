@@ -219,7 +219,11 @@ export class BotProject {
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
     await this._updateFile(luFile.relativePath, content);
+<<<<<<< HEAD
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
+=======
+    await this.luPublisher.onFileChange(luFile.relativePath, 'update');
+>>>>>>> fix bugs and test cases and no longer add luis.status.json into this.files
 
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
@@ -488,7 +492,11 @@ export class BotProject {
   };
 
   private generateErrorMessage = (invalidLuFile: LUFile[]) => {
+<<<<<<< HEAD
     return invalidLuFile.reduce((msg, file) => {
+=======
+    invalidLuFile.reduce((msg, file) => {
+>>>>>>> fix bugs and test cases and no longer add luis.status.json into this.files
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
         text += `\n ${diagnostic.text}`;
         return text;
