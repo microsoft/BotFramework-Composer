@@ -12,17 +12,17 @@ class oauthStorage {
 
   constructor() {
     this.storage = storage;
-    this._all = this.storage.get(KEY, null);
+    this._all = this.storage.get(KEY, {});
   }
 
-  get() {
-    return this._all || oauthStorage.defaultConfig;
+  get(botName) {
+    return this._all[botName] || oauthStorage.defaultConfig;
   }
 
-  set(config) {
+  set(botName, config) {
     this.check(config);
-    this._all = config;
-    this.storage.set(KEY, config);
+    this._all[botName] = config;
+    this.storage.set(KEY, this._all);
   }
 
   check(config) {

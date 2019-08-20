@@ -35,15 +35,14 @@ export const DialogSettings = () => {
   const { botName } = state;
 
   useEffect(() => {
-    setValue({ ...oauthStorage.get(), ...{ LuisConfig: luisStorage.get(botName) } });
-  }, []);
+    setValue({ ...oauthStorage.get(botName), ...{ LuisConfig: luisStorage.get(botName) } });
+  }, [botName]);
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
       try {
-        console.log(result);
-        oauthStorage.set({ OAuthInput: result.OAuthInput });
+        oauthStorage.set(botName, { OAuthInput: result.OAuthInput });
         luisStorage.setAll(botName, result.LuisConfig);
       } catch (err) {
         console.error(err.message);
@@ -53,5 +52,9 @@ export const DialogSettings = () => {
     }
   };
 
-  return <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />;
+  return botName ? (
+    <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
+  ) : (
+    <div>Data loading ... </div>
+  );
 };
