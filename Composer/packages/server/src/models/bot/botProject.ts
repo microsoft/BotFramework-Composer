@@ -7,16 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import {
-  LocationRef,
-  FileInfo,
-  LGFile,
-  Dialog,
-  LUFile,
-  ILuisConfig,
-  ILuisStatusOperation,
-  LuisStatus,
-} from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
