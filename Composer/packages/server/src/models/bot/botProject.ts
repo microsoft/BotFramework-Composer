@@ -266,16 +266,6 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    const toUpdateLuId = unpublished.map(file => file.id);
-    const publishTime = Date.now();
-    const data: ILuisStatusOperation = {};
-    toUpdateLuId.forEach(
-      id =>
-        (data[id] = {
-          lastPublishTime: publishTime,
-        })
-    );
-
     try {
       await this.luPublisher.publish(unpublished);
     } catch (error) {

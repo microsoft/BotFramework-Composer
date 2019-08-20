@@ -78,6 +78,11 @@ export class LuPublisher {
     }
     try {
       await runBuild(config);
+
+      // update pubish status after sucessfully published
+      luFiles.forEach(f => {
+        this.status[f.relativePath].lastPublishTime = Date.now();
+      });
     } catch (error) {
       console.error(error);
       throw new Error('Error publishing to LUIS.');
