@@ -83,6 +83,7 @@ export class LuPublisher {
       luFiles.forEach(f => {
         this.status[f.relativePath].lastPublishTime = Date.now();
       });
+      await this.saveStatus();
     } catch (error) {
       console.error(error);
       throw new Error('Error publishing to LUIS.');
