@@ -1,23 +1,41 @@
 /** @jsx jsx */
+/* eslint-disable no-console */
 import { jsx } from '@emotion/core';
-import React from 'react';
+import { Component } from 'react';
+import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
 import { ErrorPopup } from '../ErrorPopup';
+
+const githubIssueUrl = `https://github.com/microsoft/BotFramework-Composer/issues`;
+const errorToShow = {
+  message: formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>.', {
+    // eslint-disable-next-line react/display-name
+    a: ({ children }) => (
+      <a key="a" href={githubIssueUrl} target="_blank" rel="noopener noreferrer" style={{ color: `greenyellow` }}>
+        {children}
+      </a>
+    ),
+  }),
+  summary: formatMessage('Something went wrong!'),
+};
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
 }
 
 interface ErrorBoundaryState {
-  setError: (err: { message: string; summary: string }) => void;
+  error: {
+    message?: React.ReactNode;
+    summary?: string;
+  };
 }
 
 // only class component can be a error boundary
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps, context) {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { setError: context.actions.setError };
+    this.state = { error: {} };
     this.unhandledrejectionHandler = this.unhandledrejectionHandler.bind(this);
     this.eventHandler = this.eventHandler.bind(this);
     this.onErrorHandler = this.onErrorHandler.bind(this);
@@ -26,27 +44,18 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   // will catch unhandle http error etc
   unhandledrejectionHandler(event) {
     event.preventDefault();
-    console.log('Catch reject error:', event.reason.message);
-    this.context.actions.setError({
-      message: event.reason.message ? event.reason.message : event.reason.stack,
-      summary: 'unhandled rejection',
-    });
+    console.error(event.reason);
+    this.context.actions.setError(errorToShow);
   }
 
   eventHandler(error) {
-    console.log('Catch Error Event：', error);
-    this.context.actions.setError({
-      message: error.message,
-      summary: 'Event Error',
-    });
+    console.error(error);
+    this.context.actions.setError(errorToShow);
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
-    console.log('Catch Error：', { message, source, lineno, colno, error });
-    this.context.actions.setError({
-      message: message,
-      summary: 'Something went wrong',
-    });
+    console.error({ message, source, lineno, colno, error });
+    this.context.actions.setError(errorToShow);
     return true;
   }
 
@@ -59,10 +68,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   // catch all render errors for children components
   componentDidCatch(error) {
     console.log(error);
-    this.state.setError({
-      message: error.message,
-      summary: 'Render Error',
-    });
+    this.context.actions.setError(errorToShow);
   }
 
   componentWillUnmount() {
