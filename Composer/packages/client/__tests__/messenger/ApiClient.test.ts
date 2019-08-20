@@ -6,24 +6,25 @@ jest.mock('nanoid');
 
 (nanoid as jest.Mock).mockReturnValue('uniqueId');
 
-// @ts-ignore
-const mockWindow = new Window({ parsingMode: 'html' });
-mockWindow.postMessage = jest.fn().mockImplementation((data, origin) => {
-  const evt = new MessageEvent('message', { data, origin, source: mockWindow });
-
-  mockWindow.dispatchEvent(evt);
-});
+const oldPostMessage = window.postMessage;
 
 describe('ApiClient', () => {
   let client;
 
   beforeEach(() => {
-    client = new ApiClient(mockWindow);
+    window.postMessage = (data, origin) => {
+      const evt = new MessageEvent('message', { data, origin, source: window });
+
+      window.dispatchEvent(evt);
+    };
+
+    client = new ApiClient();
     client.connect();
   });
 
   afterEach(() => {
     client.disconnect();
+    window.postMessage = oldPostMessage;
   });
 
   it('can register and invoke a sync api', async () => {
@@ -33,7 +34,7 @@ describe('ApiClient', () => {
 
     client.registerApi('add', add);
 
-    const res = await client.apiCall('add', { x: 3, y: 4 }, mockWindow);
+    const res = await client.apiCall('add', { x: 3, y: 4 });
     expect(res).toEqual(7);
   });
 
@@ -44,7 +45,7 @@ describe('ApiClient', () => {
 
     client.registerApi('add', add);
 
-    const res = await client.apiCall('add', { x: 3, y: 4 }, mockWindow);
+    const res = await client.apiCall('add', { x: 3, y: 4 });
     expect(res).toEqual(7);
   });
 
@@ -62,13 +63,13 @@ describe('ApiClient', () => {
     client.registerApi('asyncError', asyncError);
 
     try {
-      await client.apiCall('syncError', undefined, mockWindow);
+      await client.apiCall('syncError');
     } catch (sErr) {
       expect(sErr).toBe('SomeError');
     }
 
     try {
-      await client.apiCall('asyncError', undefined, mockWindow);
+      await client.apiCall('asyncError');
     } catch (asErr) {
       expect(asErr).toBe('SomeError');
     }
