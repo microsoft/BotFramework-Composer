@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { navigate } from '@reach/router';
+import { navigate, NavigateOptions } from '@reach/router';
 
 import { BreadcrumbItem } from '../store/types';
 
@@ -77,12 +77,19 @@ export function getUrlSearch(focusedEvent: string, focusedSteps: string[]): stri
   return result;
 }
 
-export function checkUrl(currentUri, { dialogId, focusedEvent, focusedSteps }) {
+export function checkUrl(
+  currentUri: string,
+  { dialogId, focusedEvent, focusedSteps }: { dialogId: string; focusedEvent: string; focusedSteps: string[] }
+) {
   const lastUri = `/dialogs/${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`;
   return lastUri === currentUri;
 }
 
-export function navigateTo(to, navigateOpts = {}) {
+interface NavigationState {
+  breadcrumb: BreadcrumbItem[];
+}
+
+export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
   navigate(mapNavPath, navigateOpts);
 }

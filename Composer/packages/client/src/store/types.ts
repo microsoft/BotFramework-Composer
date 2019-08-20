@@ -69,6 +69,7 @@ export interface DialogInfo {
   isRoot: boolean;
   content: any;
   diagnostics: string[];
+  luFile: string;
 }
 
 export interface Intent {
@@ -77,6 +78,10 @@ export interface Intent {
 
 export interface Utterance {
   intent: string;
+  text: string;
+}
+
+export interface LuDiagnostic {
   text: string;
 }
 
@@ -90,6 +95,7 @@ export interface LuFile {
       utterances: Utterance[];
     };
   };
+  diagnostics: LuDiagnostic[];
 }
 
 export interface LgFile {

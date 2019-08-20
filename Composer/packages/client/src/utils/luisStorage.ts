@@ -39,7 +39,7 @@ class LuisStorage {
     this.storage.set(LuisConfig.STORAGE_KEY, this._all);
   }
 
-  remove(botName) {
+  remove(botName: string) {
     delete this._all[botName];
     this.storage.set(LuisConfig.STORAGE_KEY, this._all);
   }
