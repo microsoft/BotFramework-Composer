@@ -212,7 +212,7 @@ export class BotProject {
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
-    this._updateFile(luFile.relativePath, content);
+    await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, 'update');
 
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
@@ -247,14 +247,7 @@ export class BotProject {
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
-      const msg = invalidLuFile.reduce((msg, file) => {
-        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
-          text += `\n ${diagnostic.text}`;
-          return text;
-        }, `In ${file.id}.lu: `);
-        msg += `\n ${fileErrorText} \n`;
-        return msg;
-      }, '');
+      const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
     const emptyLuFiles = unpublished.filter(this.isEmpty);
@@ -409,16 +402,6 @@ export class BotProject {
       }
     }
 
-    const luisStatusPath = Path.join(this.dir, 'generated/luis.status.json');
-    if (await this.fileStorage.exists(luisStatusPath)) {
-      const content = await this.fileStorage.readFile(luisStatusPath);
-      fileList.push({
-        name: Path.basename(luisStatusPath),
-        content,
-        path: luisStatusPath,
-        relativePath: Path.relative(this.dir, luisStatusPath),
-      });
-    }
     return fileList;
   };
 
@@ -484,5 +467,16 @@ export class BotProject {
       return true;
     }
     return false;
+  };
+
+  private generateErrorMessage = (invalidLuFile: LUFile[]) => {
+    invalidLuFile.reduce((msg, file) => {
+      const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+        text += `\n ${diagnostic.text}`;
+        return text;
+      }, `In ${file.id}.lu: `);
+      msg += `\n ${fileErrorText} \n`;
+      return msg;
+    }, '');
   };
 }
