@@ -6,6 +6,15 @@ import { BASEURL, ActionTypes } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
+import luisStorage from './../../utils/luisStorage';
+export const updateOAuth: ActionCreator = ({ dispatch }, oAuth) => {
+  dispatch({
+    type: ActionTypes.UPDATE_OAUTH,
+    payload: {
+      oAuth,
+    },
+  });
+};
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
@@ -125,6 +134,7 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
     };
     const response = await axios.post(`${BASEURL}/projects`, data);
     const dialogs = response.data.dialogs;
+    luisStorage.remove(name);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
