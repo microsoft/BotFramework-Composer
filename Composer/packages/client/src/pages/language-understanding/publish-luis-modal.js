@@ -34,7 +34,7 @@ const STATE = {
 // eslint-disable-next-line react/display-name
 const onRenderLabel = info => props => (
   <Stack horizontal verticalAlign="center">
-    <span css={textFieldLabel}>{formatMessage(props.label)}</span>
+    <span css={textFieldLabel}>{props.label}</span>
     <TooltipHost content={info} calloutProps={{ gapSpace: 0 }}>
       <IconButton iconProps={{ iconName: 'Info' }} styles={{ root: { marginBottom: -3 } }} />
     </TooltipHost>
@@ -66,7 +66,7 @@ const DeploySuccess = props => {
     <Fragment>
       <div css={consoleStyle}>
         {appNames.map(item => {
-          return <div key={item}>{formatMessage(`${item}:${status[item].version}`)}</div>;
+          return <div key={item}>{`${item}:${status[item].version}`}</div>;
         })}
       </div>
       <div css={dialogSubTitle}>
@@ -87,7 +87,7 @@ const DeploySuccess = props => {
 const DeployFailure = props => {
   return (
     <Fragment>
-      <div css={consoleStyle}>{formatMessage(props.error)}</div>
+      <div css={consoleStyle}>{props.error}</div>
       <div css={dialogSubTitle}>{Text.LUISDEPLOYFAILURE}</div>
       <DialogFooter>
         <PrimaryButton onClick={props.tryAgain} text={formatMessage('Try again')} />
@@ -122,7 +122,7 @@ export const PublishLuis = props => {
   return (
     <Fragment>
       <div css={dialogSubTitle}>
-        {formatMessage(Text.LUISDEPLOY)}{' '}
+        {Text.LUISDEPLOY}{' '}
         <Link href={Links.LUIS} target="_blank">
           {formatMessage('Where can I find this?')}
         </Link>

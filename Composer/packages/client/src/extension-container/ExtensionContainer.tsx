@@ -32,8 +32,8 @@ const shellApi = {
     return apiClient.apiCall('getState', {});
   },
 
-  saveData: newData => {
-    return apiClient.apiCall('saveData', newData);
+  saveData: (newData, updatePath) => {
+    return apiClient.apiCall('saveData', { newData, updatePath });
   },
 
   navTo: (path: string, rest) => {

@@ -50,8 +50,7 @@ export function CreateOptions(props) {
           required={true}
         />
         <div css={placeholder}>
-          {checked &&
-            formatMessage(template ? `${template.description}` : "Select a template to see it's description.")}
+          {checked && template ? template.description : formatMessage("Select a template to see it's description.")}
         </div>
       </Fragment>
     );

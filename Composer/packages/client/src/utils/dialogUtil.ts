@@ -1,7 +1,6 @@
 import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import formatMessage from 'format-message';
 import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 
 import { BotSchemas } from '../store/types';
@@ -39,7 +38,7 @@ export function getbreadcrumbLabel(
   const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
   if (!dataPath) {
     const dialog = dialogs.find(d => d.id === dialogId);
-    label = dialog ? dialog.displayName : '';
+    label = (dialog && dialog.displayName) || '';
   } else {
     const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
@@ -48,7 +47,7 @@ export function getbreadcrumbLabel(
     label = getTitle(schemas.editor, type);
   }
 
-  label = formatMessage(upperCaseName(label || ''));
+  label = upperCaseName(label || '');
   return label;
 }
 
