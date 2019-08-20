@@ -25,7 +25,7 @@ export const connectBot: ActionCreator = async (store, botName) => {
 export const reloadBot: ActionCreator = async ({ dispatch }, botName) => {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
+    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get(botName).OAuthInput });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

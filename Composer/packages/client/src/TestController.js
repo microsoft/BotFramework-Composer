@@ -133,7 +133,7 @@ export const TestController = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => openInEmulator('http://localhost:3979/api/messages', oauthStorage.get())}
+            onClick={() => openInEmulator('http://localhost:3979/api/messages', oauthStorage.get(botName))}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>
