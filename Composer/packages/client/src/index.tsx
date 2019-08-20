@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import formatMessage from 'format-message';
 import './index.css';
@@ -15,10 +17,10 @@ formatMessage.setup({
 ReactDOM.render(
   <StoreProvider>
     <ErrorBoundary>
-      <>
+      <Fragment>
         <App />
         <ShellApi />
-      </>
+      </Fragment>
     </ErrorBoundary>
   </StoreProvider>,
   document.getElementById('root')

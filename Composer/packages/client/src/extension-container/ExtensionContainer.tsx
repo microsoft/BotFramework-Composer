@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
@@ -125,14 +127,7 @@ function ExtensionContainer() {
 
   const RealEditor = shellData.data ? getEditor() : null;
 
-  return (
-    RealEditor && (
-      // has to be wrapped in a fragment due to https://github.com/babel/babel/pull/9798
-      <>
-        <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />
-      </>
-    )
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;
