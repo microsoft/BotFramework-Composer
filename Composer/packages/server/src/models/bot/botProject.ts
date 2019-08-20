@@ -51,7 +51,7 @@ export class BotProject {
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this._checkProjectStructure();
-    await this.luPublisher.loadStatus(this.luIndexer.getLuFiles());
+    await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
 
   public getIndexes = () => {

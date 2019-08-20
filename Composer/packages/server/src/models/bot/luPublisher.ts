@@ -27,16 +27,16 @@ export class LuPublisher {
   }
 
   // load luis status from luis.status.json
-  public loadStatus = async (luFiles: LUFile[]) => {
+  public loadStatus = async (files: string[] = []) => {
     if (await this.storage.exists(this.statusFile)) {
       const content = await this.storage.readFile(this.statusFile);
       this.status = JSON.parse(content);
     }
 
-    // make sure all LUFile have an initial value
-    luFiles.forEach(f => {
-      if (!this.status[f.relativePath]) {
-        this.status[f.relativePath] = {
+    // make sure all LU file have an initial value
+    files.forEach(f => {
+      if (!this.status[f]) {
+        this.status[f] = {
           lastUpdateTime: 1,
           lastPublishTime: 0, // means unpublished
         };
