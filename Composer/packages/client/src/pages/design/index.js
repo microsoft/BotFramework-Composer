@@ -28,6 +28,7 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
 import { clearBreadcrumb } from './../../utils/navigation';
+import undoHistory from './../../store/middlewares/undo/history';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -110,6 +111,30 @@ function DesignPage(props) {
   };
 
   const toolbarItems = [
+    {
+      type: 'action',
+      text: formatMessage('Undo'),
+      buttonProps: {
+        disabled: !undoHistory.canUndo(),
+        iconProps: {
+          iconName: 'Undo',
+        },
+        onClick: () => actions.undo(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Redo'),
+      buttonProps: {
+        disabled: !undoHistory.canRedo(),
+        iconProps: {
+          iconName: 'Redo',
+        },
+        onClick: () => actions.redo(),
+      },
+      align: 'left',
+    },
     {
       type: 'element',
       element: <TestController />,

@@ -67,6 +67,12 @@ export interface State {
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
+export interface MiddlewareApi {
+  getState: () => State;
+  dispatch: React.Dispatch<ActionType>;
+}
+
+export type MiddlewareFunc = (middlewareApi: MiddlewareApi) => (next: any) => React.Dispatch<ActionType>;
 
 export interface ITrigger {
   id: string;

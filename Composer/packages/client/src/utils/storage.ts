@@ -63,7 +63,3 @@ export class ClientStorage {
     }
   }
 }
-
-const storage = new ClientStorage();
-
-export default storage;

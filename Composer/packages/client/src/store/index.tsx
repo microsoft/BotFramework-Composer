@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
@@ -7,7 +7,9 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionHandlers, BoundActionHandlers } from './types';
+import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc } from './types';
+import { undoActionsMiddleware } from './middlewares/undo';
+import { undoConfig } from './middlewares/undo/undoConfig';
 import { ActionType } from './action/types';
 
 const initialState: State = {
@@ -60,15 +62,28 @@ interface StoreProviderProps {
 }
 
 const prepareAxiosWithStore = once(prepareAxios);
+export const applyMiddleware = (middlewareApi: MiddlewareApi, ...middlewares: MiddlewareFunc[]) => {
+  const chain = middlewares.map(middleware => middleware(middlewareApi));
+  const dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(middlewareApi.dispatch);
+  return dispatch;
+};
 
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
-  const boundActions = bindActions({ dispatch, state }, actions);
+  const stateRef = useRef<State>(initialState);
+
+  stateRef.current = state;
+  const getState = () => {
+    return stateRef.current;
+  };
+
+  const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware(undoConfig));
+  // @ts-ignore some actions are not action creations and cannot be cast as such (e.g. textFromTemplates in lg.ts)
+  const boundActions = bindActions({ dispatch: interceptDispatch, state }, actions);
   const value = {
     state,
     actions: boundActions,
-    dispatch,
+    dispatch: interceptDispatch,
   };
 
   prepareAxiosWithStore({ dispatch, state });
