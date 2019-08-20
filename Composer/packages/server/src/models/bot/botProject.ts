@@ -242,12 +242,9 @@ export class BotProject {
   };
 
   public publishLuis = async () => {
-    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
-    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
-    if (unpublished.length === 0) {
-      return this.luIndexer.getLuFiles();
-    }
+    const refered = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(refered);
+
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = invalidLuFile.reduce((msg, file) => {
@@ -267,7 +264,9 @@ export class BotProject {
     }
 
     try {
-      await this.luPublisher.publish(unpublished);
+      if (unpublished.length > 0) {
+        await this.luPublisher.publish(unpublished);
+      }
     } catch (error) {
       throw new Error(error);
     }

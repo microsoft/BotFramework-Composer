@@ -97,8 +97,10 @@ export class LuPublisher {
     // 1. there is no status tracking
     // 2. the status shows that lastPublishTime < lastUpdateTime
     return files.filter(f => {
-      !this.status[f.relativePath] ||
-        this.status[f.relativePath].lastPublishTime < this.status[f.relativePath].lastUpdateTime;
+      return (
+        !this.status[f.relativePath] ||
+        this.status[f.relativePath].lastPublishTime < this.status[f.relativePath].lastUpdateTime
+      );
     });
   };
 
