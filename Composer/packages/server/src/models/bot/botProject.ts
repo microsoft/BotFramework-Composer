@@ -140,8 +140,11 @@ export class BotProject {
   };
 
   public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog) {
+      throw new Error(`${id} dialog already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
@@ -176,6 +179,10 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
+    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+    if (lgFile) {
+      throw new Error(`${id} lg file already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     const absolutePath = `${this.dir}/${relativePath}`;
     const diagnostics = this.lgIndexer.check(content, absolutePath);
@@ -219,6 +226,10 @@ export class BotProject {
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
+    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+    if (luFile) {
+      throw new Error(`${id} lu file already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
 
     // TODO: valid before save
