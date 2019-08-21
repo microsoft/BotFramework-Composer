@@ -6,7 +6,7 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
-import { SelectionContext } from '../store/SelectionContext';
+import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { NodeIndexGenerator } from '../shared/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
@@ -74,8 +74,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   };
 
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
-  const [selectionContext, setSelectionContext] = useState({
+  const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
     getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
+    selectedIds: [],
   });
 
   useEffect((): void => {
@@ -87,7 +88,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
       const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
-      onFocusSteps(selectedIds);
+      const newContext = {
+        getNodeIndex: selectionContext.getNodeIndex,
+        selectedIds,
+      };
+
+      setSelectionContext(newContext);
     },
   });
   selection.setItems(nodeItems);
