@@ -19,8 +19,7 @@ export const About = () => {
             Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience.`)}
             </p>
             <p>
-              {formatMessage(`Inside this web-based tool, you'll find everything you need to build a modern, state-of-the-art conversational experience.
-            Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
+              {formatMessage(`Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
             latest features from the Bot Framework SDK without writing code. The Designer app reads and writes from the Adaptive Dialog format,
             a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated
                 like normal developer assets - files that can be committed to source control and deployed alongside code updates.`)}
