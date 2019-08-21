@@ -30,6 +30,7 @@ const initialState: State = {
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
+  isEnvSettingUpdated: false,
 };
 
 interface StoreContextValue {

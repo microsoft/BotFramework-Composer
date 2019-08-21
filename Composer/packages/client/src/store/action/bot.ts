@@ -2,9 +2,8 @@ import axios from 'axios';
 
 import { ActionCreator } from '../types';
 
-import oauthStorage from './../../utils/oauthStorage';
+import settingStorage from './../../utils/dialogSettingStorage';
 import { BASEURL, ActionTypes } from './../../constants';
-import LuisStorage from './../../utils/luisStorage';
 
 export const connectBot: ActionCreator = async (store, botName) => {
   const path = `${BASEURL}/launcher/connect`;
@@ -25,7 +24,7 @@ export const connectBot: ActionCreator = async (store, botName) => {
 export const reloadBot: ActionCreator = async ({ dispatch }, botName) => {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get(botName).OAuthInput });
+    await axios.post(path, { luis: settingStorage.get(botName).LuisConfig, ...settingStorage.get(botName).OAuthInput });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

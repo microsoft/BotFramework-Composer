@@ -46,6 +46,7 @@ export interface State {
   error: StateError | null;
   breadcrumb: any[];
   showCreateDialogModal: boolean;
+  isEnvSettingUpdated: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
 }
 

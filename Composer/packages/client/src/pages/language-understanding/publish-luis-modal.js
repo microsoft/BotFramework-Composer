@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment } from 'react';
+import { useState, useContext, Fragment } from 'react';
 import {
   Dialog,
   DialogType,
@@ -19,10 +19,12 @@ import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
 import { keys } from 'lodash';
 
+import DialogSettingStorage from '../../utils/dialogSettingStorage';
+import { StoreContext } from '../../store';
+
 import { Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 import { Text } from './../../constants/index';
-import LuisStorage from './../../utils/luisStorage';
 
 const STATE = {
   INPUT: 0,
@@ -98,13 +100,15 @@ const DeployFailure = props => {
 };
 
 export const PublishLuis = props => {
+  const { actions } = useContext(StoreContext);
+  const { updateDialogSetting } = actions;
   const { onPublish, onDismiss, workState, botName } = props;
-  const [formData, setFormData] = useState({ ...LuisStorage.get(botName), errors: {} });
+  const [formData, setFormData] = useState({ ...DialogSettingStorage.get(botName).LuisConfig, errors: {} });
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
-    // storage.set(field, newValue);
-    LuisStorage.set(botName, field, newValue);
+    DialogSettingStorage.setField(botName, `LuisConfig.${field}`, newValue);
+    updateDialogSetting();
   };
 
   const handlePublish = async e => {

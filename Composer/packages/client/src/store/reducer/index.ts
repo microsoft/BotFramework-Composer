@@ -132,7 +132,10 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, foc
   state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
   return state;
 };
-
+const updateEnvSetting: ReducerFunc = state => {
+  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
+  return state;
+};
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -160,4 +163,5 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
+  [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
 } as { [type in ActionTypes]: ReducerFunc });

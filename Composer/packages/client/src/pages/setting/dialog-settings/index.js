@@ -7,10 +7,10 @@ import 'codemirror/theme/neat.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
-
 import './style.css';
-import oauthStorage from '../../../utils/oauthStorage';
-import luisStorage from '../../../utils/luisStorage';
+import { debounce } from 'lodash';
+
+import settingStorage from '../../../utils/dialogSettingStorage';
 import { StoreContext } from '../../../store';
 window.jsonlint = jsonlint;
 const cmOptions = {
@@ -30,20 +30,17 @@ const cmOptions = {
 export const DialogSettings = () => {
   const [value, setValue] = useState('');
   const { state } = useContext(StoreContext);
-
-  // const { updateOAuth } = actions;
-  const { botName } = state;
+  const { botName, isEnvSettingUpdated } = state;
 
   useEffect(() => {
-    setValue({ ...oauthStorage.get(botName), ...{ LuisConfig: luisStorage.get(botName) } });
-  }, [botName]);
+    setValue(settingStorage.get(botName));
+  }, [botName, isEnvSettingUpdated]);
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
       try {
-        oauthStorage.set(botName, { OAuthInput: result.OAuthInput });
-        luisStorage.setAll(botName, result.LuisConfig);
+        settingStorage.set(botName, result);
       } catch (err) {
         console.error(err.message);
       }
@@ -53,7 +50,12 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
+    <CodeMirror
+      value={JSON.stringify(value, null, 2)}
+      options={cmOptions}
+      onChange={debounce(updateFormData, 500)}
+      autoCursor
+    />
   ) : (
     <div>Data loading ... </div>
   );
