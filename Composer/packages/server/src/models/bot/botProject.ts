@@ -64,7 +64,7 @@ export class BotProject {
     };
   };
 
-  // merge the status managed my luPublisher to the LuFile structure to keep a unified interface
+  // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
   private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
     return luFiles.map(x => {
       if (luStatus[x.relativePath]) {
@@ -232,9 +232,9 @@ export class BotProject {
     }
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
 
-    // TODO: valid before save
+    // TODO: validate before save
     await this._createFile(relativePath, content);
-    await this.luPublisher.onFileChange(relativePath, 'create'); // let publisher know that some files is changed
+    await this.luPublisher.onFileChange(relativePath, 'create'); // let publisher know that some files changed
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
   };
 

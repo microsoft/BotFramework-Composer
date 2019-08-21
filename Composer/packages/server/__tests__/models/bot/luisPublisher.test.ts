@@ -14,7 +14,7 @@ describe('luis status management', () => {
     expect(status['bot1/a.lu'].lastPublishTime).toBe(0);
   });
 
-  it('will can update luis status', async () => {
+  it('can update luis status', async () => {
     const luPublisher = new LuPublisher(botDir, storage);
 
     await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu', 'bot1/Main.lu']);
@@ -27,7 +27,7 @@ describe('luis status management', () => {
   });
 });
 
-describe('get unpublisedFiles', () => {
+describe('get unpublishedFiles', () => {
   it('will get unpublished files', async () => {
     const lufiles = [
       {
