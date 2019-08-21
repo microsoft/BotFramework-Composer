@@ -1,15 +1,24 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, FC } from 'react';
+import { useContext, FC, useEffect, useState, useRef } from 'react';
+import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
-import DragScroll from '../components/DragScroll';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { SelectionContext } from '../store/SelectionContext';
+import { NodeIndexGenerator } from '../shared/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
-export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocusSteps, onOpen, onChange }) => {
+export const ObiEditor: FC<ObiEditorProps> = ({
+  path,
+  data,
+  onFocusEvent,
+  onFocusSteps,
+  onOpen,
+  onChange,
+}): JSX.Element | null => {
   let divRef;
 
   const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
@@ -64,37 +73,63 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data, onFocusEvent, onFocu
     return null;
   };
 
-  if (!data) return renderFallbackContent();
+  const nodeIndexGenerator = useRef(new NodeIndexGenerator());
+  const [selectionContext, setSelectionContext] = useState({
+    getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
+  });
 
+  useEffect((): void => {
+    nodeIndexGenerator.current.reset();
+  }, [data]);
+
+  const nodeItems = nodeIndexGenerator.current.getItemList();
+  const selection = new Selection({
+    onSelectionChanged: (): void => {
+      const selectedIndices = selection.getSelectedIndices();
+      const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
+      onFocusSteps(selectedIds);
+    },
+  });
+  selection.setItems(nodeItems);
+
+  if (!data) return renderFallbackContent();
   return (
-    <div
-      tabIndex={0}
-      className="obi-editor-container"
-      data-testid="obi-editor-container"
-      css={{ width: '100%', height: '100%', padding: '20px', boxSizing: 'border-box', '&:focus': { outline: 'none' } }}
-      ref={el => (divRef = el)}
-      onKeyUp={e => {
-        const keyString = e.key;
-        if (keyString === 'Delete' && focusedId) {
-          dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-        }
-      }}
-      onClick={e => {
-        e.stopPropagation();
-        dispatchEvent(NodeEventTypes.Focus, '');
-      }}
-    >
-      <DragScroll>
-        <AdaptiveDialogEditor
-          id={path}
-          data={data}
-          onEvent={(eventName, eventData) => {
-            divRef.focus({ preventScroll: true });
-            dispatchEvent(eventName, eventData);
+    <SelectionContext.Provider value={selectionContext}>
+      <MarqueeSelection selection={selection}>
+        <div
+          tabIndex={0}
+          className="obi-editor-container"
+          data-testid="obi-editor-container"
+          css={{
+            width: '100%',
+            height: '100%',
+            padding: '20px',
+            boxSizing: 'border-box',
+            '&:focus': { outline: 'none' },
           }}
-        />
-      </DragScroll>
-    </div>
+          ref={el => (divRef = el)}
+          onKeyUp={e => {
+            const keyString = e.key;
+            if (keyString === 'Delete' && focusedId) {
+              dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+            }
+          }}
+          onClick={e => {
+            e.stopPropagation();
+            dispatchEvent(NodeEventTypes.Focus, '');
+          }}
+        >
+          <AdaptiveDialogEditor
+            id={path}
+            data={data}
+            onEvent={(eventName, eventData) => {
+              divRef.focus({ preventScroll: true });
+              dispatchEvent(eventName, eventData);
+            }}
+          />
+        </div>
+      </MarqueeSelection>
+    </SelectionContext.Provider>
   );
 };
 

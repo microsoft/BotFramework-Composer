@@ -16,6 +16,7 @@ import {
   ChoiceInput,
 } from '../nodes/index';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { SelectionContext } from '../../store/SelectionContext';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
@@ -47,6 +48,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const { getNodeIndex } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (
@@ -57,6 +59,8 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
         position: relative;
         ${nodeFocused && nodeBorderStyle}
       `}
+      data-is-focusable={true}
+      data-selection-index={getNodeIndex(id)}
     >
       <ChosenRenderer
         id={id}
