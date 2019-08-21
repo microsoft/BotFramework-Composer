@@ -107,9 +107,6 @@ export const App: React.FC = () => {
 
   async function init() {
     await fetchProject();
-    // if (data && data.botName) {
-    //   setLuisConfig(data.botName);
-    // }
   }
 
   return (

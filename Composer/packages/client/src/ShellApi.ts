@@ -82,8 +82,15 @@ export const ShellApi: React.FC = () => {
   useEffect(() => {
     apiClient.connect();
 
-    // @ts-ignore
-    apiClient.registerApi('getState', (_, event) => getState(event.source.name));
+    apiClient.registerApi('getState', (_, event) => {
+      if (!event.source) {
+        return {};
+      }
+
+      const source = event.source as Window;
+
+      return getState(source.name);
+    });
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
