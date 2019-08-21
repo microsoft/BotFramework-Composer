@@ -52,7 +52,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   return (
     <NodeRendererContext.Provider value={context}>
-      <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%' }}>
+      <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
         <ObiEditor
           key={dialogId}
           path={dialogId}

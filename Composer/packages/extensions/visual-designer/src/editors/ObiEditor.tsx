@@ -74,16 +74,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   };
 
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
+  const nodeItems = nodeIndexGenerator.current.getItemList();
   const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
     getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
     selectedIds: [],
   });
 
-  useEffect((): void => {
-    nodeIndexGenerator.current.reset();
-  }, [data]);
+  useEffect(
+    (): void => {
+      selection.setItems(nodeIndexGenerator.current.getItemList());
+    }
+  );
 
-  const nodeItems = nodeIndexGenerator.current.getItemList();
   const selection = new Selection({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
@@ -92,11 +94,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
-
       setSelectionContext(newContext);
     },
   });
-  selection.setItems(nodeItems);
 
   if (!data) return renderFallbackContent();
   return (
