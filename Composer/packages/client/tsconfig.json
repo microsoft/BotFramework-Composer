@@ -4,7 +4,7 @@
     "noImplicitAny": false,
     "module": "es6",
     "target": "es5",
-    "jsx": "react",
+    "jsx": "preserve",
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",

@@ -83,7 +83,7 @@ export const botButton = css`
 `;
 
 export const calloutLabel = css`
-  font-size: ${FontSizes.large};
+  font-size: ${FontSizes.size18};
   font-weight: ${FontWeights.bold};
 `;
 

@@ -1,7 +1,5 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Fragment } from 'react';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 

@@ -1,26 +1,39 @@
 import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
+
+import { BotSchemas } from '../store/types';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
 
 const ExpressionParser = new ExpressionEngine();
 
-export function getDialogsMap(dialogs) {
+interface DialogsMap {
+  [dialogId: string]: any;
+}
+
+export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   return dialogs.reduce((result, dialog) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
 }
 
-const getTitle = (editorSchema, type) => {
+const getTitle = (editorSchema: any, type: string) => {
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
 
   return (sdkOverrides && sdkOverrides.title) || '';
 };
 
-export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas) {
+export function getbreadcrumbLabel(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  focusedEvent: string,
+  focusedSteps: string[],
+  schemas: BotSchemas
+) {
   let label = '';
   const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
   if (!dataPath) {
@@ -38,7 +51,7 @@ export function getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps
   return label;
 }
 
-export function getDialogData(dialogsMap, dialogId, dataPath = '') {
+export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath = '') {
   if (!dialogId) return '';
   const dialog = dialogsMap[dialogId];
 
@@ -49,7 +62,7 @@ export function getDialogData(dialogsMap, dialogId, dataPath = '') {
   return ConceptLabels[get(dialog, dataPath)] ? ConceptLabels[get(dialog, dataPath)].title : get(dialog, dataPath);
 }
 
-export function setDialogData(dialogsMap, dialogId, dataPath, data) {
+export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
   const dialogsMapClone = cloneDeep(dialogsMap);
   const dialog = dialogsMapClone[dialogId];
 
@@ -59,7 +72,7 @@ export function setDialogData(dialogsMap, dialogId, dataPath, data) {
   return set(dialog, dataPath, data);
 }
 
-export function sanitizeDialogData(dialogData) {
+export function sanitizeDialogData(dialogData: any) {
   if (dialogData === null || dialogData === '') {
     return undefined;
   }
@@ -107,7 +120,7 @@ export function sanitizeDialogData(dialogData) {
   return dialogData;
 }
 
-export function isExpression(str) {
+export function isExpression(str: string): boolean {
   try {
     ExpressionParser.parse(str);
   } catch (error) {

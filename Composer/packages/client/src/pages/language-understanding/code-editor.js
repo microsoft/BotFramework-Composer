@@ -1,7 +1,5 @@
 /* eslint-disable react/display-name */
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { LuEditor } from 'code-editor';
 import { get, debounce, isEmpty } from 'lodash';

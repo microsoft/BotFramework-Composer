@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Component } from 'react';
+/* eslint-disable no-console */
+import React, { Component } from 'react';
 import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
@@ -18,11 +17,23 @@ const errorToShow = {
   }),
   summary: formatMessage('Something went wrong!'),
 };
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  error: {
+    message?: React.ReactNode;
+    summary?: string;
+  };
+}
+
 // only class component can be a error boundary
-export class ErrorBoundary extends Component {
-  constructor(props, context) {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { setError: context.actions.setError };
+    this.state = { error: {} };
     this.unhandledrejectionHandler = this.unhandledrejectionHandler.bind(this);
     this.eventHandler = this.eventHandler.bind(this);
     this.onErrorHandler = this.onErrorHandler.bind(this);
@@ -55,7 +66,7 @@ export class ErrorBoundary extends Component {
   // catch all render errors for children components
   componentDidCatch(error) {
     console.log(error);
-    this.state.setError(errorToShow);
+    this.context.actions.setError(errorToShow);
   }
 
   componentWillUnmount() {
