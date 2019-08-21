@@ -31,7 +31,7 @@
     "dagre-d3": "^0.6.3",
     "format-message": "^6.2.1",
     "lodash": "^4.17.11",
-    "office-ui-fabric-react": "^6.180.0",
+    "office-ui-fabric-react": "^6.192.0",
     "prop-types": "^15.7.2",
     "source-map-loader": "^0.2.4"
   },
