@@ -1,16 +1,13 @@
 import { set } from 'lodash';
 
-import { OAuthInput, ILuisConfig } from '../store/types';
-import { LuisConfig } from '../constants';
-
 import storage from './storage';
 
 const KEY = 'DialogSetting';
 const defaultLuisConfig = {
   LuisConfig: {
-    [LuisConfig.PROJECT_NAME]: '',
-    [LuisConfig.ENVIRONMENT]: '',
-    [LuisConfig.AUTHORING_KEY]: '',
+    name: '',
+    environment: '',
+    authoringKey: '',
     authoringRegion: 'westus',
     defaultLanguage: 'en-us',
   },
@@ -21,6 +18,7 @@ const defaultOAuthConfig = {
     MicrosoftAppPassword: '',
   },
 };
+
 class DialogSettingStorage {
   static defaultConfig = {
     ...defaultOAuthConfig,
@@ -46,20 +44,8 @@ class DialogSettingStorage {
     this.storage.set(KEY, this._all);
   }
   set(botName, value) {
-    this.check(value);
     this._all[botName] = value;
     this.storage.set(KEY, this._all);
-  }
-  check(value: any) {
-    Object.keys(value).forEach(property => {
-      if (DialogSettingStorage.defaultConfig.hasOwnProperty(property)) {
-        if (property === 'OAuthInput' && !(value[property] as OAuthInput)) {
-          value[property] = defaultOAuthConfig;
-        } else if (property === 'LuisConfig' && !(value[property] as ILuisConfig)) {
-          value[property] = defaultLuisConfig;
-        }
-      }
-    });
   }
 }
 

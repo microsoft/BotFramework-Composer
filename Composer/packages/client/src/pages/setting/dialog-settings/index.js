@@ -8,7 +8,6 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 import './style.css';
-import { debounce } from 'lodash';
 
 import settingStorage from '../../../utils/dialogSettingStorage';
 import { StoreContext } from '../../../store';
@@ -50,12 +49,7 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <CodeMirror
-      value={JSON.stringify(value, null, 2)}
-      options={cmOptions}
-      onChange={debounce(updateFormData, 500)}
-      autoCursor
-    />
+    <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
   ) : (
     <div>Data loading ... </div>
   );
