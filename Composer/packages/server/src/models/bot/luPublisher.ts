@@ -76,12 +76,13 @@ export class LuPublisher {
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
+    const curTime = Date.now();
     try {
       await runBuild(config);
 
       // update pubish status after sucessfully published
       luFiles.forEach(f => {
-        this.status[f.relativePath].lastPublishTime = Date.now();
+        this.status[f.relativePath].lastPublishTime = curTime;
       });
       await this.saveStatus();
     } catch (error) {
