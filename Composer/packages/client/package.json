@@ -73,37 +73,12 @@
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "env": {
-      "production": {
-        "plugins": [
-          "emotion"
-        ]
-      },
-      "development": {
-        "plugins": [
-          [
-            "emotion",
-            {
-              "sourceMap": true
-            }
-          ]
-        ]
-      }
-    }
-  },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -119,6 +94,7 @@
     "@babel/preset-env": "7.3.0",
     "@babel/preset-react": "7.0.0",
     "@babel/runtime": "7.3.4",
+    "@emotion/babel-preset-css-prop": "^10.0.14",
     "@types/jest": "^24.0.16",
     "@types/reach__router": "^1.2.4",
     "@types/react": "^16.8.23",

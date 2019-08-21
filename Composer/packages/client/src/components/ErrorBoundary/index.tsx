@@ -1,7 +1,5 @@
-/** @jsx jsx */
 /* eslint-disable no-console */
-import { jsx } from '@emotion/core';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';

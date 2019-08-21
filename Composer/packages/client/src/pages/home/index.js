@@ -1,8 +1,6 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { useContext, useEffect, useState } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';
 

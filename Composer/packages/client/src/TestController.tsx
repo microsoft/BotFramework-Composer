@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useRef, Fragment, useContext, useEffect } from 'react';
+import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,
   PrimaryButton,

@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
