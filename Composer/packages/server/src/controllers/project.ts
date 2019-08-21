@@ -281,8 +281,8 @@ async function getAllProjects(req: Request, res: Response) {
 async function getUnpublishedLuFiles(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const unpublishedLuFiles = await ProjectService.currentBotProject.getUnPublishedLuFiles();
-      res.status(200).json({ unpublishedLuFiles });
+      const unpublishedLuFileIds = await ProjectService.currentBotProject.getUnPublishedLuFiles();
+      res.status(200).json({ unpublishedLuFileIds });
     } catch (error) {
       res.status(400).json({
         message: error instanceof Error ? error.message : error,

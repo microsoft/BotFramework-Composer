@@ -310,7 +310,7 @@ export class BotProject {
   public getUnPublishedLuFiles = async () => {
     const referredLuFile = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(referredLuFile);
-    return unpublished;
+    return unpublished.map(u => u.id);
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

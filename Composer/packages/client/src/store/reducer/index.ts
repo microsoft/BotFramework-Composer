@@ -61,16 +61,19 @@ const updateLuTemplate: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const setPublishingLuFiles: ReducerFunc = (state, { unpublishedLuFiles }) => {
-  if (unpublishedLuFiles) {
-    unpublishedLuFiles.forEach(uf => {
-      const luFile = state.luFiles.find(f => f.id === uf.id);
-      if (luFile) luFile.publishing = true;
-    });
-  } else {
-    state.luFiles.forEach(f => delete f.publishing);
-  }
+const setPublishingLuFiles: ReducerFunc = (state, { unpublishedLuFileIds }) => {
+  unpublishedLuFileIds.forEach(id => {
+    const luFile = state.luFiles.find(f => f.id === id);
+    if (luFile) luFile.publishing = true;
+  });
+  return state;
+};
 
+const resetPublishingLuFiles: ReducerFunc = (state, { publishingLuFileIds }) => {
+  publishingLuFileIds.forEach(id => {
+    const luFile = state.luFiles.find(f => f.id === id);
+    if (luFile) delete luFile.publishing;
+  });
   return state;
 };
 
@@ -172,7 +175,8 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.PUBLISHING_LU]: setPublishingLuFiles,
+  [ActionTypes.SET_PUBLISHING_LU]: setPublishingLuFiles,
+  [ActionTypes.RESET_PUBLISHING_LU]: resetPublishingLuFiles,
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,

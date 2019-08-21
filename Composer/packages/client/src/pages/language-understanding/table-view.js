@@ -76,14 +76,22 @@ export default function TableView(props) {
       return 'Error';
     } else if (file.publishing) {
       return 'Publishing';
-    } else if (file.lastUpdateTime >= file.lastPublishTime) {
+    } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
       return 'Not yet published';
-    } else if (file.lastPublishTime > file.lastUpdateTime && botStatus === BotStatus.connected) {
+    } else if (
+      file.status &&
+      file.status.lastPublishTime > file.status.lastUpdateTime &&
+      botStatus === BotStatus.connected
+    ) {
       return 'Published & Connected';
-    } else if (file.lastPublishTime > file.lastUpdateTime && botStatus !== BotStatus.connected) {
+    } else if (
+      file.status &&
+      file.status.lastPublishTime > file.status.lastUpdateTime &&
+      botStatus !== BotStatus.connected
+    ) {
       return 'Published';
     } else {
-      return 'Unknown State';
+      return 'Unknown State'; // It's a bug in most cases.
     }
   }
 
