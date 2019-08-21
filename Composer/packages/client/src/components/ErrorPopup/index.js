@@ -1,7 +1,5 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { useState } from 'react';
 import { Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react';
 
 import { consoleStyle, dialog } from './styles';

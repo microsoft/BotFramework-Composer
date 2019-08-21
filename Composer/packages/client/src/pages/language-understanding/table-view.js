@@ -1,9 +1,7 @@
 /* eslint-disable react/display-name */
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { isEmpty, get } from 'lodash';
-import { useContext, useRef, useEffect, useState } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react';
