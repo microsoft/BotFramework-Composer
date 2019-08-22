@@ -69,7 +69,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
         ${nodeFocused && nodeBorderFocusedStyle};
         ${nodeSelected && nodeBorderSelectedStyle};
         &:hover {
-          border: 1px solid #323130;
+          ${nodeBorderFocusedStyle}
         }
       `}
       data-is-focusable={true}
