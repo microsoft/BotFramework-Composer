@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useRef, Fragment, useContext, useEffect } from 'react';
+import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,
   PrimaryButton,
@@ -10,7 +8,6 @@ import {
   DefaultButton,
   Stack,
 } from 'office-ui-fabric-react';
-import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 
 import LuisStorage from './utils/luisStorage';
@@ -20,13 +17,14 @@ import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
+import { DialogInfo } from './store/types';
 
 const openInEmulator = (url, authSettings) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
   // and start up the emulator
   const i = document.createElement('iframe');
   i.style.display = 'none';
-  i.onload = () => i.parentNode.removeChild(i);
+  i.onload = () => i.parentNode && i.parentNode.removeChild(i);
   i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&MicrosoftAppId=${
     authSettings.MicrosoftAppId
   }&MicrosoftAppPassword=${authSettings.MicrosoftAppPassword}`;
@@ -39,7 +37,7 @@ const STATE = {
   SUCCESS: 2,
 };
 
-export const TestController = () => {
+export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
@@ -57,7 +55,7 @@ export const TestController = () => {
   }, [toStartBot]);
 
   async function handleClick() {
-    const dialogErrors = dialogs.reduce((result, dialog) => {
+    const dialogErrors = dialogs.reduce<DialogInfo[]>((result, dialog) => {
       if (dialog.diagnostics.length !== 0) {
         return result.concat([dialog]);
       }
@@ -189,20 +187,12 @@ export const TestController = () => {
       <PublishLuisDialog
         isOpen={modalOpen}
         onDismiss={() => setModalOpen(false)}
-        onPublish={config => {
-          publishAndReload(config);
+        onPublish={() => {
+          publishAndReload();
           setModalOpen(false);
         }}
         botName={botName}
       />
     </Fragment>
   );
-};
-
-TestController.propTypes = {
-  botStatus: PropTypes.string,
-  connectBot: PropTypes.func,
-  reloadBot: PropTypes.func,
-  openStorageExplorer: PropTypes.func,
-  openPublish: PropTypes.func,
 };

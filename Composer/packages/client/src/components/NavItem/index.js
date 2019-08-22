@@ -1,9 +1,7 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { useState } from 'react';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
 import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
-import { useState } from 'react';
 
 import { link, outer, commandBarButton } from './styles';
 

@@ -34,11 +34,11 @@ export function updateTemplateInContent({ content, templateName, template }) {
     newContent = `${content}${content ? '\n\n' : ''}${textFromTemplates([template])}\n`;
   } else {
     const startLineNumber = originalTemplate.ParseTree._start.line;
-    const endLineNumber = originalTemplate.ParseTree._stop.line;
+    const endLineNumber = originalTemplate.ParseTree._stop && originalTemplate.ParseTree._stop.line;
 
     const lines = content.split('\n');
     const contentBefore = lines.slice(0, startLineNumber - 1).join('\n');
-    const contentAfter = lines.slice(endLineNumber).join('\n');
+    const contentAfter = lines.slice(endLineNumber || lines.length).join('\n');
     const newTemplateContent = textFromTemplates([template]);
 
     newContent = [contentBefore, newTemplateContent, contentAfter].join('\n');

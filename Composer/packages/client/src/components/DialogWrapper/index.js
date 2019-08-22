@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 
 import { styles } from './styles';

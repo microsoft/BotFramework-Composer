@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useEffect, useContext, useRef, useMemo } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -10,7 +10,7 @@ import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath, navigateTo } from './utils/navigation';
-import { DialogInfo, LgFile, LuFile } from './store/types';
+import { DialogInfo, LgFile, LuFile, BotSchemas } from './store/types';
 
 // this is the api interface provided by shell to extensions this is the single
 // place handles all incoming request from extensions, VisualDesigner or
@@ -21,7 +21,7 @@ export interface ShellData {
   data: any;
   dialogs: DialogInfo[];
   focusPath: string;
-  schemas: any;
+  schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   currentDialog?: DialogInfo;
@@ -64,7 +64,7 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
   }
 };
 
-export function ShellApi() {
+export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = useDebouncedFunc(actions.updateDialog);
@@ -82,7 +82,15 @@ export function ShellApi() {
   useEffect(() => {
     apiClient.connect();
 
-    apiClient.registerApi('getState', (_, event) => getState(event.source.name));
+    apiClient.registerApi('getState', (_, event) => {
+      if (!event.source) {
+        return {};
+      }
+
+      const source = event.source as Window;
+
+      return getState(source.name);
+    });
     apiClient.registerApi('saveData', handleValueChange);
     apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
@@ -118,14 +126,14 @@ export function ShellApi() {
   useEffect(() => {
     if (window.frames[VISUAL_EDITOR]) {
       const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCallAt('reset', getState(VISUAL_EDITOR), editorWindow);
+      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCallAt('reset', getState(FORM_EDITOR), editorWindow);
+      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
   }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
 
@@ -139,7 +147,7 @@ export function ShellApi() {
   }, [schemas]);
 
   // api to return the data should be showed in this window
-  function getData(sourceWindow) {
+  function getData(sourceWindow?: string) {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
@@ -149,7 +157,7 @@ export function ShellApi() {
     return '';
   }
 
-  function getState(sourceWindow): ShellData {
+  function getState(sourceWindow?: string): ShellData {
     const currentDialog = dialogs.find(d => d.id === dialogId);
 
     return {
@@ -304,4 +312,4 @@ export function ShellApi() {
   }
 
   return null;
-}
+};
