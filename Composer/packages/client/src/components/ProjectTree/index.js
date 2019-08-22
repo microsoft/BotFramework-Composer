@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PropTypes } from 'prop-types';
 import { Nav, Link } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
