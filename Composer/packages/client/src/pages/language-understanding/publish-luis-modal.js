@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   Dialog,
   DialogType,

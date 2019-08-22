@@ -26,6 +26,16 @@ interface StateError {
   message: string;
 }
 
+export interface BreadcrumbItem {
+  dialogId: string;
+  focusedEvent?: string;
+  focusedSteps: string;
+}
+
+export interface BotSchemas {
+  editor?: any;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
@@ -39,15 +49,16 @@ export interface State {
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
-  schemas: any;
+  schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   designPageLocation: any;
   error: StateError | null;
-  breadcrumb: any[];
+  breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   isEnvSettingUpdated: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
+  toStartBot: boolean;
 }
 
 export type ReducerFunc = (state: State, payload: any) => State;
@@ -57,6 +68,8 @@ export interface DialogInfo {
   displayName: string;
   isRoot: boolean;
   content: any;
+  diagnostics: string[];
+  luFile: string;
 }
 
 export interface Intent {
@@ -65,6 +78,10 @@ export interface Intent {
 
 export interface Utterance {
   intent: string;
+  text: string;
+}
+
+export interface LuDiagnostic {
   text: string;
 }
 
@@ -78,6 +95,7 @@ export interface LuFile {
       utterances: Utterance[];
     };
   };
+  diagnostics: LuDiagnostic[];
 }
 
 export interface LgFile {
@@ -100,4 +118,8 @@ export interface ILuisConfig {
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+export interface DialogSettingConfig {
+  OAuthInput: OAuthInput;
+  LuisConfig: ILuisConfig;
 }

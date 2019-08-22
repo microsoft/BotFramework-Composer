@@ -106,12 +106,12 @@ export const Text = {
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
 };
 
-export const LuisConfig = {
-  STORAGE_KEY: 'luisConfig',
-  AUTHORING_KEY: 'authoringKey',
-  ENVIRONMENT: 'environment',
-  PROJECT_NAME: 'name',
-};
+export enum LuisConfig {
+  STORAGE_KEY = 'luisConfig',
+  AUTHORING_KEY = 'authoringKey',
+  ENVIRONMENT = 'environment',
+  PROJECT_NAME = 'name',
+}
 
 export const FileTypes = {
   FOLDER: 'folder',

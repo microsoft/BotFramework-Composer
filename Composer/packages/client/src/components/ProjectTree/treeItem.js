@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React from 'react';
 import { OverflowSet, CommandBarButton, IconButton } from 'office-ui-fabric-react';
 
 import { moreButton, overflowSet, moreMenu } from './styles';

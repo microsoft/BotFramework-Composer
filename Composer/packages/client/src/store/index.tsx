@@ -31,6 +31,7 @@ const initialState: State = {
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
+  toStartBot: false,
 };
 
 interface StoreContextValue {
@@ -46,7 +47,7 @@ export const StoreContext = React.createContext<StoreContextValue>({
 });
 
 interface StoreProviderProps {
-  children: React.ReactChildren;
+  children: React.ReactNode;
 }
 
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
