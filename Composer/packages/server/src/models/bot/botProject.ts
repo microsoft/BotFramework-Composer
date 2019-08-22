@@ -7,7 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -219,7 +219,7 @@ export class BotProject {
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
     await this._updateFile(luFile.relativePath, content);
-    await this.luPublisher.onFileChange(luFile.relativePath, 'update');
+    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
 
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
@@ -233,7 +233,7 @@ export class BotProject {
 
     // TODO: validate before save
     await this._createFile(relativePath, content);
-    await this.luPublisher.onFileChange(relativePath, 'create'); // let publisher know that some files changed
+    await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
   };
 
@@ -242,8 +242,8 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    this._removeFile(luFile.relativePath);
-    await this.luPublisher.onFileChange(luFile.relativePath, 'delete');
+    await this._removeFile(luFile.relativePath);
+    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
@@ -252,8 +252,8 @@ export class BotProject {
   };
 
   public publishLuis = async () => {
-    const refered = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(refered);
+    const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
@@ -271,7 +271,7 @@ export class BotProject {
         await this.luPublisher.publish(unpublished);
       }
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
@@ -480,7 +480,7 @@ export class BotProject {
   };
 
   private generateErrorMessage = (invalidLuFile: LUFile[]) => {
-    invalidLuFile.reduce((msg, file) => {
+    return invalidLuFile.reduce((msg, file) => {
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
         text += `\n ${diagnostic.text}`;
         return text;

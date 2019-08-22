@@ -42,7 +42,6 @@ export class LuPublisher {
         };
       }
     });
-
     return this.status;
   };
 
@@ -55,16 +54,16 @@ export class LuPublisher {
 
   public onFileChange = async (relativePath: string, type: FileUpdateType) => {
     switch (type) {
-      case 'create':
+      case FileUpdateType.CREATE:
         this.status[relativePath] = {
           lastUpdateTime: Date.now(),
           lastPublishTime: 0, // unpublished
         };
         break;
-      case 'update':
+      case FileUpdateType.UPDATE:
         this.status[relativePath].lastUpdateTime = Date.now();
         break;
-      case 'delete':
+      case FileUpdateType.DELETE:
         delete this.status[relativePath];
         break;
     }
@@ -100,7 +99,7 @@ export class LuPublisher {
     return files.filter(f => {
       return (
         !this.status[f.relativePath] ||
-        this.status[f.relativePath].lastPublishTime < this.status[f.relativePath].lastUpdateTime
+        this.status[f.relativePath].lastPublishTime <= this.status[f.relativePath].lastUpdateTime
       );
     });
   };

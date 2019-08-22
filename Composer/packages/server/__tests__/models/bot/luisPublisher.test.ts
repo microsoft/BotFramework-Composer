@@ -1,3 +1,4 @@
+import { FileUpdateType } from '../../../src/models/bot/interface';
 import { Path } from '../../../src/utility/path';
 
 import { LuPublisher } from './../../../src/models/bot/luPublisher';
@@ -20,7 +21,7 @@ describe('luis status management', () => {
     await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu', 'bot1/Main.lu']);
     const oldUpdateTime = luPublisher.status['bot1/a.lu'].lastUpdateTime;
 
-    await luPublisher.onFileChange('bot1/a.lu', 'update');
+    await luPublisher.onFileChange('bot1/a.lu', FileUpdateType.UPDATE);
     const newUpdateTime = luPublisher.status['bot1/a.lu'].lastUpdateTime;
     // update should increase the update time
     expect(newUpdateTime).toBeGreaterThan(oldUpdateTime);
@@ -33,14 +34,32 @@ describe('get unpublishedFiles', () => {
       {
         diagnostics: [],
         id: 'a',
-        relativePath: '/bot1/a.lu',
+        relativePath: 'bot1/a.lu',
+        content: '',
+        parsedContent: {},
+      },
+      {
+        diagnostics: [],
+        id: 'b',
+        relativePath: 'bot1/b.lu',
         content: '',
         parsedContent: {},
       },
     ];
+
     const luPublisher = new LuPublisher(botDir, storage);
-    luPublisher.loadStatus(['/bot1/a.lu']); // relative path is key
-    const files = await luPublisher.getUnpublisedFiles(lufiles);
+    await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu']); // relative path is key
+
+    let files = await luPublisher.getUnpublisedFiles(lufiles);
+    expect(files.length).toBe(2);
+    const curTime = Date.now();
+    luPublisher.status['bot1/a.lu'].lastPublishTime = curTime; // assumming we publish a.lu
+    luPublisher.status['bot1/b.lu'].lastPublishTime = curTime; // and b.lu
+    files = await luPublisher.getUnpublisedFiles(lufiles);
+    expect(files.length).toBe(0);
+
+    await luPublisher.onFileChange('bot1/a.lu', FileUpdateType.UPDATE);
+    files = await luPublisher.getUnpublisedFiles(lufiles);
     expect(files.length).toBe(1);
   });
 });
