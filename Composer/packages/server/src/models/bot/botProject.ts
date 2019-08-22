@@ -67,14 +67,13 @@ export class BotProject {
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
   private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
     return luFiles.map(x => {
-      if (luStatus[x.relativePath]) {
-        x.status = luStatus[x.relativePath];
-      } else {
-        // because luPublisher will make luFile have an inital status, this should be an error that
-        // some file are missing status
+      if (!luStatus[x.relativePath]) {
         throw new Error(`No luis status for lu file ${x.relativePath}`);
       }
-      return x;
+      return {
+        ...x,
+        status: luStatus[x.relativePath],
+      };
     });
   };
 
