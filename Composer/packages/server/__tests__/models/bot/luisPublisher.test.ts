@@ -1,3 +1,4 @@
+import { FileUpdateType } from '../../../src/models/bot/interface';
 import { Path } from '../../../src/utility/path';
 
 import { LuPublisher } from './../../../src/models/bot/luPublisher';
@@ -20,7 +21,7 @@ describe('luis status management', () => {
     await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu', 'bot1/Main.lu']);
     const oldUpdateTime = luPublisher.status['bot1/a.lu'].lastUpdateTime;
 
-    await luPublisher.onFileChange('bot1/a.lu', 'update');
+    await luPublisher.onFileChange('bot1/a.lu', FileUpdateType.UPDATE);
     const newUpdateTime = luPublisher.status['bot1/a.lu'].lastUpdateTime;
     // update should increase the update time
     expect(newUpdateTime).toBeGreaterThan(oldUpdateTime);
