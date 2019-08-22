@@ -64,7 +64,11 @@ export interface LuisStatus {
 }
 
 // we will probably also use this interface to consolidate the processing of lu\lg\dialog
-export type FileUpdateType = 'create' | 'update' | 'delete';
+export enum FileUpdateType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
 
 export interface ILuisConfig {
   name: string;

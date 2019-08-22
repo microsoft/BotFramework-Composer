@@ -37,6 +37,18 @@ describe('get unpublishedFiles', () => {
         content: '',
         parsedContent: {},
       },
+      //suppose the following lu is published
+      {
+        diagnostics: [],
+        id: 'a',
+        relativePath: '/bot1/published.lu',
+        content: '',
+        parsedContent: {},
+        status: {
+          lastPublishTime: 2,
+          lastUpdateTime: 1,
+        },
+      },
     ];
     const luPublisher = new LuPublisher(botDir, storage);
     luPublisher.loadStatus(['/bot1/a.lu']); // relative path is key
