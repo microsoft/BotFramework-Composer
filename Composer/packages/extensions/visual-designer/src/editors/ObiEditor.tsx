@@ -27,6 +27,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
+        resetSelectionData();
         handler = id => onFocusSteps(id ? [id] : []);
         break;
       case NodeEventTypes.FocusEvent:
@@ -73,6 +74,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return null;
   };
 
+  const resetSelectionData = () => {
+    nodeIndexGenerator.current.reset();
+    setSelectionContext({
+      getNodeIndex: selectionContext.getNodeIndex,
+      selectedIds: [],
+    });
+  };
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
   const nodeItems = nodeIndexGenerator.current.getItemList();
   const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
@@ -86,6 +94,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     }
   );
 
+  useEffect((): void => {
+    resetSelectionData();
+  }, [data]);
+
   const selection = new Selection({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
@@ -94,6 +106,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
+      console.log(selectedIds);
       setSelectionContext(newContext);
     },
   });
