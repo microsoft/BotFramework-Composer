@@ -34,26 +34,32 @@ describe('get unpublishedFiles', () => {
       {
         diagnostics: [],
         id: 'a',
-        relativePath: '/bot1/a.lu',
+        relativePath: 'bot1/a.lu',
         content: '',
         parsedContent: {},
       },
-      //suppose the following lu is published
       {
         diagnostics: [],
-        id: 'a',
-        relativePath: '/bot1/published.lu',
+        id: 'b',
+        relativePath: 'bot1/b.lu',
         content: '',
         parsedContent: {},
-        status: {
-          lastPublishTime: 2,
-          lastUpdateTime: 1,
-        },
       },
     ];
+
     const luPublisher = new LuPublisher(botDir, storage);
-    luPublisher.loadStatus(['/bot1/a.lu']); // relative path is key
-    const files = await luPublisher.getUnpublisedFiles(lufiles);
+    await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu']); // relative path is key
+
+    let files = await luPublisher.getUnpublisedFiles(lufiles);
+    expect(files.length).toBe(2);
+    const curTime = Date.now();
+    luPublisher.status['bot1/a.lu'].lastPublishTime = curTime; // assumming we publish a.lu
+    luPublisher.status['bot1/b.lu'].lastPublishTime = curTime; // and b.lu
+    files = await luPublisher.getUnpublisedFiles(lufiles);
+    expect(files.length).toBe(0);
+
+    await luPublisher.onFileChange('bot1/a.lu', FileUpdateType.UPDATE);
+    files = await luPublisher.getUnpublisedFiles(lufiles);
     expect(files.length).toBe(1);
   });
 });

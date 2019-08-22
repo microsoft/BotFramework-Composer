@@ -42,7 +42,6 @@ export class LuPublisher {
         };
       }
     });
-
     return this.status;
   };
 
@@ -100,7 +99,7 @@ export class LuPublisher {
     return files.filter(f => {
       return (
         !this.status[f.relativePath] ||
-        this.status[f.relativePath].lastPublishTime < this.status[f.relativePath].lastUpdateTime
+        this.status[f.relativePath].lastPublishTime <= this.status[f.relativePath].lastUpdateTime
       );
     });
   };
