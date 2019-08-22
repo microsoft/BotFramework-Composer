@@ -44,35 +44,6 @@ if (-not $appPassword) {
     $appPassword = Read-Host "? Password for MSA app registration (must be at least 16 characters long, contain at least 1 special character, and contain at least 1 numeric character)"
 }
 
-# if (-not $luisAuthoringRegion) {
-#     $luisAuthoringRegion = Read-Host "? LUIS Authoring Region (westus, westeurope, or australiaeast)"
-# }
-
-# if (-not $luisAuthoringKey) {
-# 	Switch ($luisAuthoringRegion) {
-# 		"westus" { 
-# 			$luisAuthoringKey = Read-Host "? LUIS Authoring Key (found at https://luis.ai/user/settings)"
-# 			Break
-# 		}
-# 		"westeurope" {
-# 		    $luisAuthoringKey = Read-Host "? LUIS Authoring Key (found at https://eu.luis.ai/user/settings)"
-# 			Break
-# 		}
-# 		"australiaeast" {
-# 			$luisAuthoringKey = Read-Host "? LUIS Authoring Key (found at https://au.luis.ai/user/settings)"
-# 			Break
-# 		}
-# 		default {
-# 			Write-Host "! $($luisAuthoringRegion) is not a valid LUIS authoring region." -ForegroundColor DarkRed
-# 			Break
-# 		}
-# 	}
-
-# 	if (-not $luisAuthoringKey) {
-# 		Break
-# 	}
-# }
-
 if (-not $appId) {
 	# Create app registration
 	$app = (az ad app create `
