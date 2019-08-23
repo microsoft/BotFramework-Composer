@@ -5,12 +5,11 @@ import archiver from 'archiver';
 import FormData from 'form-data';
 
 import BotProjectService from '../../services/project';
+import { DialogSetting } from '../bot/interface';
 
 import { IBotConnector, BotStatus } from './interface';
-
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
-
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -28,15 +27,16 @@ export class CSharpBotConnector implements IBotConnector {
     this.status = BotStatus.NotConnected;
   };
 
-  sync = async (config: any) => {
+  sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
     if (BotProjectService.currentBotProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    BotProjectService.currentBotProject.luPublisher.setLuisConfig(config.luis);
-    const luisConfig = config.luis;
+    await BotProjectService.currentBotProject.luPublisher.setLuisConfig(config.LuisConfig);
+    await BotProjectService.currentBotProject.settingManager.set(config);
+    const luisConfig = config.LuisConfig;
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
@@ -47,9 +47,9 @@ export class CSharpBotConnector implements IBotConnector {
     }
 
     form.append('config', JSON.stringify(luisConfig));
-    if (config.MicrosoftAppId && config.MicrosoftAppPassword) {
-      form.append('microsoftAppId', config.MicrosoftAppId);
-      form.append('microsoftAppPassword', config.MicrosoftAppPassword);
+    if (config.OAuthInput && config.OAuthInput.MicrosoftAppId && config.OAuthInput.MicrosoftAppPassword) {
+      form.append('microsoftAppId', config.OAuthInput.MicrosoftAppId);
+      form.append('microsoftAppPassword', config.OAuthInput.MicrosoftAppPassword);
     }
     try {
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });

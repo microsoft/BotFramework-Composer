@@ -88,3 +88,8 @@ export interface IOperationLUFile {
 export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
 }
+
+export interface OAuthInput {
+  MicrosoftAppId: string;
+  MicrosoftAppPassword: string;
+}

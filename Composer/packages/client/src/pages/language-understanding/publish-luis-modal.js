@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 import {
   Dialog,
   DialogType,
