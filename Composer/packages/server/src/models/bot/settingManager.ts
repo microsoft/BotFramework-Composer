@@ -6,7 +6,7 @@ import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { DialogSetting } from './interface';
 
 const keyword: any = ['OAuthInput.MicrosoftAppPassword', 'LuisConfig.authoringKey'];
-const subPath = 'settings/csharp/appsettings.json';
+const subPath = 'settings/appsettings.json';
 
 export class SettingManager {
   private path: string;

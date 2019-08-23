@@ -93,3 +93,8 @@ export interface OAuthInput {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
 }
+
+export interface DialogSetting {
+  OAuthInput: OAuthInput;
+  LuisConfig: ILuisConfig;
+}

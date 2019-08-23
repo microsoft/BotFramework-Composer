@@ -12,6 +12,8 @@ import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
+import { SettingManager } from './settingManager';
+import { DialogSetting } from './interface';
 
 export class BotProject {
   public ref: LocationRef;
@@ -26,6 +28,7 @@ export class BotProject {
   public luPublisher: LuPublisher;
   public defaultSDKSchema: { [key: string]: string };
   public defaultEditorSchema: { [key: string]: string };
+  public settingManager: SettingManager;
 
   constructor(ref: LocationRef) {
     this.ref = ref;
@@ -36,7 +39,7 @@ export class BotProject {
     this.defaultEditorSchema = JSON.parse(
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
-
+    this.settingManager = new SettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
     this.dialogIndexer = new DialogIndexer(this.name);
@@ -61,6 +64,14 @@ export class BotProject {
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
     };
+  };
+
+  public getDialogSetting = async () => {
+    return await this.settingManager.get();
+  };
+
+  public setDialogSetting = async (config: DialogSetting) => {
+    await this.settingManager.set(config);
   };
 
   public getSchemas = () => {
