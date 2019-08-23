@@ -247,7 +247,10 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public setLuisConfig = async (config: ILuisConfig) => {
+  public setLuisConfig = async (config: ILuisConfig, botName: string) => {
+    if (botName !== this.name) {
+      throw new Error(`The opened bot does not match to the bot you are trying to config`);
+    }
     this.luPublisher.setLuisConfig(config);
   };
 
