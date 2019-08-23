@@ -249,7 +249,7 @@ export class BotProject {
 
   public setLuisConfig = async (config: ILuisConfig, botName: string) => {
     if (botName !== this.name) {
-      throw new Error(`The opened bot does not match to the bot you are trying to config`);
+      throw new Error(`The opened bot ${this.name} does not match to the bot ${botName} you are trying to config`);
     }
     this.luPublisher.setLuisConfig(config);
   };
