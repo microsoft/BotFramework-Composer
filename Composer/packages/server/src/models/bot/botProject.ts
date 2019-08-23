@@ -29,7 +29,7 @@ export class BotProject {
   public defaultSDKSchema: { [key: string]: string };
   public defaultEditorSchema: { [key: string]: string };
   public settingManager: SettingManager;
-
+  public settings: DialogSetting | null = null;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -50,6 +50,7 @@ export class BotProject {
 
   public index = async () => {
     this.files = await this._getFiles();
+    this.settings = await this.getDialogSetting();
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
@@ -64,13 +65,15 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
+      settings: this.settings,
     };
   };
 
-  public getDialogSetting = async () => {
+  private getDialogSetting = async () => {
     return await this.settingManager.get();
   };
 
+  // create or update dialog settings
   public setDialogSetting = async (config: DialogSetting) => {
     await this.settingManager.set(config);
   };
