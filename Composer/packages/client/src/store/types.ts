@@ -103,11 +103,8 @@ export interface LuFile {
       utterances: Utterance[];
     };
   };
-<<<<<<< HEAD
   diagnostics: LuDiagnostic[];
-=======
   publishing: boolean;
->>>>>>> add a temporary state to luFile during publishing, change publishluis to a two-step process
 }
 
 export interface LgFile {

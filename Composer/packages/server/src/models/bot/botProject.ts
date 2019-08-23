@@ -219,11 +219,7 @@ export class BotProject {
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
     await this._updateFile(luFile.relativePath, content);
-<<<<<<< HEAD
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
-=======
-    await this.luPublisher.onFileChange(luFile.relativePath, 'update');
->>>>>>> fix bugs and test cases and no longer add luis.status.json into this.files
 
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
@@ -259,24 +255,9 @@ export class BotProject {
   };
 
   public publishLuis = async () => {
-<<<<<<< HEAD
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
-=======
-    const refered = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(refered);
-<<<<<<< HEAD
->>>>>>> move the length checking at later stage and rename some variables
 
-=======
-  public publishLuis = async (unpublished: LUFile[]) => {
-    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
-    if (unpublished.length === 0) {
-      return this.luIndexer.getLuFiles();
-    }
->>>>>>> save tmp code in github
-=======
->>>>>>> check unpublished lu file on server
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);
@@ -305,12 +286,6 @@ export class BotProject {
     } else {
       return await this.luPublisher.checkLuisPublised(referredLuFiles);
     }
-  };
-
-  public getUnPublishedLuFiles = async () => {
-    const referredLuFile = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referredLuFile);
-    return unpublished.map(u => u.id);
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
@@ -508,11 +483,7 @@ export class BotProject {
   };
 
   private generateErrorMessage = (invalidLuFile: LUFile[]) => {
-<<<<<<< HEAD
     return invalidLuFile.reduce((msg, file) => {
-=======
-    invalidLuFile.reduce((msg, file) => {
->>>>>>> fix bugs and test cases and no longer add luis.status.json into this.files
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
         text += `\n ${diagnostic.text}`;
         return text;

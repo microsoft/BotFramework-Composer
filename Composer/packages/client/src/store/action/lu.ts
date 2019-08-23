@@ -73,7 +73,7 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
       });
     }
   } catch (err) {
-    throw new Error(err);
+    throw err;
   } finally {
     dispatch({
       type: ActionTypes.RESET_PUBLISHING_LU,
