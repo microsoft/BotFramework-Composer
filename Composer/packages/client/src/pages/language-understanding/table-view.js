@@ -73,25 +73,25 @@ export default function TableView(props) {
 
   function getIntentState(file) {
     if (!file.diagnostics) {
-      return 'Error';
+      return formatMessage('Error');
     } else if (file.publishing) {
-      return 'Publishing';
+      return formatMessage('Publishing');
     } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
-      return 'Not yet published';
+      return formatMessage('Not yet published');
     } else if (
       file.status &&
       file.status.lastPublishTime > file.status.lastUpdateTime &&
       botStatus === BotStatus.connected
     ) {
-      return 'Published & Connected';
+      return formatMessage('Published & Connected');
     } else if (
       file.status &&
       file.status.lastPublishTime > file.status.lastUpdateTime &&
       botStatus !== BotStatus.connected
     ) {
-      return 'Published';
+      return formatMessage('Published');
     } else {
-      return 'Unknown State'; // It's a bug in most cases.
+      return formatMessage('Unknown State'); // It's a bug in most cases.
     }
   }
 
