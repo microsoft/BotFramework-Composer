@@ -100,12 +100,7 @@
             "inlineOr": " or ",
             "inlineOrMore": ", or ",
             "includeNumbers": true
-          },
-          "confirmChoices": [
-            {
-              "action": {}
-            }
-          ]
+          }
         },
         {
           "$type": "Microsoft.IfCondition",
@@ -288,6 +283,15 @@
           ]
         }
       ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "430427",
+        "updatedAt": "2019-08-25T23:06:49.593Z"
+      },
+      "intent": "GetUserProfile"
     }
   ],
   "$schema": "../../BotProject/CSharp/Schemas/app.schema",
