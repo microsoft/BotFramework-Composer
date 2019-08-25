@@ -1,0 +1,7 @@
+{
+    "$type": "Microsoft.MultiLanguageRecognizer",
+    "recognizers": {
+        "en-us": "GetProfile.en-us.lu",
+        "": "GetProfile.en-us.lu"
+    }
+}

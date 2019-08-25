@@ -176,6 +176,15 @@
           ]
         }
       ]
+    },
+    {
+      "$type": "Microsoft.IntentRule",
+      "$designer": {
+        "name": "Handle an Intent",
+        "id": "798175",
+        "updatedAt": "2019-08-25T23:11:07.763Z"
+      },
+      "intent": "GetProfileInputs"
     }
   ],
   "$schema": "../../BotProject/CSharp/Schemas/app.schema",
