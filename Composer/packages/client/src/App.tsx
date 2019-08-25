@@ -102,7 +102,9 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setLuisConfig(botName);
+    if (botName) {
+      setLuisConfig(botName);
+    }
   }, [botName]);
 
   async function init() {
