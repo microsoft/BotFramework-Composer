@@ -97,7 +97,7 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await setLuisConfig(settings);
+      await setLuisConfig(settings, botName);
       await publishLuis();
       return true;
     } catch (err) {

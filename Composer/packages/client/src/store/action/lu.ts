@@ -67,10 +67,10 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export async function setLuisConfig(store, settings: DialogSetting) {
+export async function setLuisConfig(store, settings: DialogSetting, botName: string) {
   try {
     const config = settings.LuisConfig;
-    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config });
+    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config, botName });
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,

@@ -69,7 +69,7 @@ export function CreationFlow(props) {
 
   const openBot = async botFolder => {
     const { settings } = await openBotProject(botFolder);
-    await setLuisConfig(settings);
+    await setLuisConfig(settings, botName);
     navigateTo('/dialogs/Main');
     handleDismiss();
   };
@@ -84,7 +84,7 @@ export function CreationFlow(props) {
 
   const handleSaveAs = async formData => {
     const { settings } = await saveProjectAs(formData.name, formData.description);
-    setLuisConfig(settings);
+    setLuisConfig(settings, botName);
   };
 
   const handleSubmit = formData => {
