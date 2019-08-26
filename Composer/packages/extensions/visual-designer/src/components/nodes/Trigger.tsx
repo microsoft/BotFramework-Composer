@@ -14,7 +14,7 @@ export const Trigger = ({ data, focused, onClick }): JSX.Element => (
       }}
       icon={'Relationship'}
       header={'Trigger'}
-      label={'asdasd'}
+      label={data.intent || data.$type}
       onClick={onClick}
     />
   </div>
