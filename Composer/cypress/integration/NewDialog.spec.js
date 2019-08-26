@@ -17,7 +17,7 @@ context('Creating a new Dialog', () => {
   });
 
   it('can create a new dialog from project tree', () => {
-    cy.getByText('Add ..').click();
+    cy.getByText('New Dialog ..').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewDialog2');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
