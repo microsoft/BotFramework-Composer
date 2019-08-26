@@ -1,6 +1,10 @@
+import { get, set } from 'lodash';
+
 import { ReducerFunc } from '../types';
 import { getExtension } from '../../utils';
 import { ActionTypes, FileTypes } from '../../constants';
+import settingStorage from '../../utils/dialogSettingStorage';
+import { SensitiveProperties } from '../../constants/index';
 
 import createReducer from './createReducer';
 
@@ -12,6 +16,15 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.settings = response.data.settings;
+  // merge setting in localStorage
+  const localSetting = settingStorage.get(response.data.botName);
+  if (localSetting) {
+    for (const property of SensitiveProperties) {
+      const value = get(localSetting, property);
+      set(state.settings as object, property, value);
+    }
+  }
   return state;
 };
 
@@ -132,8 +145,8 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, foc
   state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
   return state;
 };
-const updateEnvSetting: ReducerFunc = state => {
-  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
+const updateEnvSetting: ReducerFunc = (state, { settings }) => {
+  state.settings = settings;
   return state;
 };
 export const reducer = createReducer({

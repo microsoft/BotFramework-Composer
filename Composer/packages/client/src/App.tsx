@@ -93,7 +93,7 @@ const bottomLinks = [
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, creationFlowStatus } = state;
+  const { botName, creationFlowStatus, settings } = state;
   const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
@@ -102,8 +102,8 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setLuisConfig(botName);
-  }, [botName]);
+    setLuisConfig(settings);
+  }, [settings]);
 
   async function init() {
     await fetchProject();

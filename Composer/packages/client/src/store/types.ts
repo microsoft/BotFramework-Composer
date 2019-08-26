@@ -57,6 +57,7 @@ export interface State {
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   isEnvSettingUpdated: boolean;
+  settings: DialogSetting | null;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
 }
@@ -119,7 +120,8 @@ export interface ILuisConfig {
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 }
-export interface DialogSettingConfig {
+export interface DialogSetting {
   OAuthInput: OAuthInput;
   LuisConfig: ILuisConfig;
+  [key: string]: any;
 }

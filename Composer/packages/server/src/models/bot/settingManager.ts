@@ -7,7 +7,19 @@ import { DialogSetting } from './interface';
 
 const keyword: any = ['OAuthInput.MicrosoftAppPassword', 'LuisConfig.authoringKey'];
 const subPath = 'settings/appsettings.json';
-
+const defaultSetting: DialogSetting = {
+  OAuthInput: {
+    MicrosoftAppPassword: '',
+    MicrosoftAppId: '',
+  },
+  LuisConfig: {
+    name: '',
+    authoringKey: '',
+    authoringRegion: 'westus',
+    defaultLanguage: 'en-us',
+    environment: 'composer',
+  },
+};
 export class SettingManager {
   private path: string;
   private storage: LocalDiskStorage;
@@ -20,7 +32,8 @@ export class SettingManager {
       const file = await this.storage.readFile(this.path);
       return JSON.parse(file);
     } else {
-      return null;
+      // does not have setting file, return default value
+      return defaultSetting;
     }
   };
   public set = async (config: DialogSetting) => {
@@ -37,7 +50,7 @@ export class SettingManager {
     }
     for (const key of keyword) {
       if (has(config, key)) {
-        set(config, key, '****');
+        set(config, key, '');
       }
     }
   };

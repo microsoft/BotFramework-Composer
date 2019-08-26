@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-import { ActionCreator } from '../types';
+import { ActionCreator, DialogSetting } from '../types';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import settingStorage from './../../utils/dialogSettingStorage';
 
 export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
@@ -68,9 +67,9 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export async function setLuisConfig(store, botName) {
+export async function setLuisConfig(store, settings: DialogSetting) {
   try {
-    const config = settingStorage.get(botName).LuisConfig;
+    const config = settings.LuisConfig;
     await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config });
   } catch (err) {
     store.dispatch({

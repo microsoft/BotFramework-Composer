@@ -31,6 +31,7 @@ const initialState: State = {
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
+  settings: null,
   toStartBot: false,
 };
 

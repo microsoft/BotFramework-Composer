@@ -15,14 +15,13 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys } from 'lodash';
+import { keys, set } from 'lodash';
 
 import DialogSettingStorage from '../../utils/dialogSettingStorage';
 import { StoreContext } from '../../store';
 
-import { Tips, Links } from './../../constants';
+import { Text, Tips, Links, SensitiveProperties } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
-import { Text } from './../../constants/index';
 
 const STATE = {
   INPUT: 0,
@@ -98,15 +97,19 @@ const DeployFailure = props => {
 };
 
 export const PublishLuis = props => {
-  const { actions } = useContext(StoreContext);
+  const { state, actions } = useContext(StoreContext);
   const { updateDialogSetting } = actions;
+  const { settings } = state;
   const { onPublish, onDismiss, workState, botName } = props;
-  const [formData, setFormData] = useState({ ...DialogSettingStorage.get(botName).LuisConfig, errors: {} });
+  const [formData, setFormData] = useState({ ...settings.LuisConfig, errors: {} });
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
-    DialogSettingStorage.setField(botName, `LuisConfig.${field}`, newValue);
-    updateDialogSetting();
+    if (SensitiveProperties.indexOf(`LuisConfig.${field}`) >= 0) {
+      DialogSettingStorage.setField(botName, `LuisConfig.${field}`, newValue);
+    }
+    set(settings, `LuisConfig.${field}`, value);
+    updateDialogSetting(settings);
   };
 
   const handlePublish = async e => {

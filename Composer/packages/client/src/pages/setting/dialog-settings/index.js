@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { get } from 'lodash';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -9,8 +10,10 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 import './style.css';
 
-import settingStorage from '../../../utils/dialogSettingStorage';
 import { StoreContext } from '../../../store';
+import { SensitiveProperties } from '../../../constants';
+import settingsStorage from '../../../utils/dialogSettingStorage';
+
 window.jsonlint = jsonlint;
 const cmOptions = {
   theme: 'neat',
@@ -27,19 +30,20 @@ const cmOptions = {
 };
 
 export const DialogSettings = () => {
-  const [value, setValue] = useState('');
-  const { state } = useContext(StoreContext);
-  const { botName, isEnvSettingUpdated } = state;
-
-  useEffect(() => {
-    setValue(settingStorage.get(botName));
-  }, [botName, isEnvSettingUpdated]);
+  const { state, actions } = useContext(StoreContext);
+  const { settings, botName } = state;
+  const { updateDialogSetting } = actions;
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
+      for (const item of SensitiveProperties) {
+        const localSettings = settingsStorage.get(botName);
+        const value = get(result, item);
+        settingsStorage.setField(localSettings, item, value);
+      }
       try {
-        settingStorage.set(botName, result);
+        updateDialogSetting(result);
       } catch (err) {
         console.error(err.message);
       }
@@ -49,7 +53,7 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
+    <CodeMirror value={JSON.stringify(settings, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
   ) : (
     <div>Data loading ... </div>
   );
