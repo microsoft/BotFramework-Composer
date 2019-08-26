@@ -15,6 +15,10 @@ export const LoopIconSize = {
 
 export const LoopEdgeMarginLeft = 20;
 
+export const TriggerSize = { width: 280, height: 40 };
+
+export const TerminatorSize = { width: 14, height: 14 };
+
 export const ChoiceInputSize = {
   width: 145,
   height: 22,
