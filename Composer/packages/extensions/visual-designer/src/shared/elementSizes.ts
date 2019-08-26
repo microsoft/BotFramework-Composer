@@ -15,7 +15,7 @@ export const LoopIconSize = {
 
 export const LoopEdgeMarginLeft = 20;
 
-export const TriggerSize = { width: 280, height: 40 };
+export const TriggerSize = InitNodeSize;
 
 export const TerminatorSize = { width: 14, height: 14 };
 

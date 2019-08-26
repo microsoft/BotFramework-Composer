@@ -3,15 +3,19 @@ import { jsx } from '@emotion/core';
 
 import { TriggerSize } from '../../shared/elementSizes';
 
-import { Icon } from './icons/icon';
+import { FormCard } from './templates/FormCard';
 
-export const Trigger = (): JSX.Element => (
-  <div
-    css={{ ...TriggerSize, border: '1px solid #979797', background: 'white', display: 'flex', alignItems: 'center' }}
-  >
-    <div css={{ width: 30, height: 30, padding: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Icon icon="MessageBot" size={30} color="#5C2D91" />
-    </div>
-    Trigger
+export const Trigger = ({ data, focused, onClick }): JSX.Element => (
+  <div css={{ ...TriggerSize, outline: focused ? '2px solid grey' : 'none' }}>
+    <FormCard
+      nodeColors={{
+        themeColor: '#BFEAE9',
+        iconColor: 'black',
+      }}
+      icon={'Relationship'}
+      header={'Trigger'}
+      label={'asdasd'}
+      onClick={onClick}
+    />
   </div>
 );

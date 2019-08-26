@@ -10,7 +10,6 @@ import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../shared/elementSizes';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
-import { Trigger } from '../components/nodes/Trigger';
 import { Terminator } from '../components/nodes/Terminator';
 
 const HeadSize = {
@@ -22,7 +21,7 @@ const TailSize = {
   height: TerminatorSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
+export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
@@ -55,9 +54,7 @@ export const StepEditor = ({ id, data, onEvent }): JSX.Element => {
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
-          <OffsetContainer offset={{ x: 0, y: 0 }}>
-            <Trigger />
-          </OffsetContainer>
+          <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
           <Edge direction="y" x={HeadSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
         </div>
       </OffsetContainer>
