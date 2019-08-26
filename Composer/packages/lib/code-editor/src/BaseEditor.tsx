@@ -70,6 +70,6 @@ export function BaseEditor(props: BaseEditorProps) {
 
 BaseEditor.defaultProps = {
   height: '100%',
-  language: 'markdown',
+  language: 'typescript',
   theme: 'vs',
 };
