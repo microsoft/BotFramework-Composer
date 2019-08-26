@@ -8,6 +8,7 @@ import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps'
 import { GraphNode } from '../shared/GraphNode';
 import { queryNode } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
@@ -58,7 +59,11 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      {activeEventData && <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />}
+      <Collapse text="Actions">
+        {activeEventData && (
+          <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+        )}
+      </Collapse>
     </div>
   );
 };

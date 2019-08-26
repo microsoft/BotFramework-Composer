@@ -6,7 +6,6 @@ import { isEqual } from 'lodash';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { GraphNode } from '../shared/GraphNode';
 import { defaultNodeProps } from '../components/shared/sharedProps';
-import { Collapse } from '../components/nodes/templates/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../shared/outlineObiJson';
 
@@ -57,14 +56,12 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      <Collapse text="Actions">
-        <StepEditor
-          key={stepGroup.id + '?version=' + outlineVersion.current}
-          id={stepGroup.id}
-          data={stepGroup.data}
-          onEvent={onEvent}
-        />
-      </Collapse>
+      <StepEditor
+        key={stepGroup.id + '?version=' + outlineVersion.current}
+        id={stepGroup.id}
+        data={stepGroup.data}
+        onEvent={onEvent}
+      />
     </div>
   );
 };
