@@ -6,7 +6,7 @@ import FormData from 'form-data';
 
 import BotProjectService from '../../services/project';
 
-import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
@@ -30,7 +30,7 @@ export class CSharpBotConnector implements IBotConnector {
     return `${this.endpoint}/api/messages`;
   };
 
-  sync = async (config: any) => {
+  sync = async (config: BotConfig) => {
     // archive the project
     // send to bot runtime service
     if (BotProjectService.currentBotProject === undefined) {

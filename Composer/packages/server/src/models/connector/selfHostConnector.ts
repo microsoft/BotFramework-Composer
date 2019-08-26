@@ -1,6 +1,10 @@
+///<reference path='../../../types/commands.d.ts'/>.
+import { handlerAsync as buildAsync } from 'commands/build';
+import { resolve } from 'path';
+
 import { absHostRoot } from '../../settings/env';
 
-import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class SelfHostBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
@@ -13,7 +17,17 @@ export class SelfHostBotConnector implements IBotConnector {
     return Promise.resolve(`${root}/api/${prefix}messages`);
   };
 
-  public sync = async (config: any) => {
-    // NYI
+  public sync = async (config: BotConfig) => {
+    const { targetEnvironment: env } = config;
+
+    if (env === undefined) {
+      throw new Error('env not defined in config');
+    }
+
+    await buildAsync({
+      user: config.user || 'unknown user',
+      dest: resolve(process.env['HOME']!, 'site/artifacts/bots'),
+      env: env !== 'editing' ? env! : 'integration',
+    });
   };
 }
