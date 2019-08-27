@@ -6,7 +6,7 @@ import { StoreProvider } from '../src/store';
 
 import { App } from './../src/App';
 
-function renderWithRouter(ui, { route = '/dialogs/Main', history = createHistory(createMemorySource(route)) } = {}) {
+function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
   return {
     ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
     history,
@@ -27,9 +27,9 @@ describe('<Router/> router test', () => {
     } = renderWithRouter(<AppTest />);
 
     const appContainer = container;
-    expect(appContainer.innerHTML).toMatch('Dialogs');
+    expect(appContainer.innerHTML).toMatch('Bot Framework Composer');
 
-    await navigate('/setting');
+    await navigate('/language-understanding');
     expect(appContainer.innerHTML).toMatch('Setting');
   });
 

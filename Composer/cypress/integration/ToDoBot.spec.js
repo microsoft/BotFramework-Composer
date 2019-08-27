@@ -11,13 +11,13 @@ context('ToDo Bot', () => {
       cy.getByText('Events (8)').should('exist');
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('ToDoBot').should('exist');
+      cy.getByText('ToDoBot.Main').should('exist');
     });
   });
 
   it('can open the AddToDo dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[title="AddToDo"]').click();
+      cy.getByText('AddToDo').click();
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('AddToDo').should('exist');
@@ -33,7 +33,7 @@ context('ToDo Bot', () => {
 
   it('can open the ClearToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[title="ClearToDos"]').click();
+      cy.getByText('ClearToDos').click();
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('ClearToDos').should('exist');
@@ -49,7 +49,7 @@ context('ToDo Bot', () => {
 
   it('can open the DeleteToDo dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[title="DeleteToDo"]').click();
+      cy.getByText('DeleteToDo').click();
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('DeleteToDo').should('exist');
@@ -65,7 +65,7 @@ context('ToDo Bot', () => {
 
   it('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[title="ShowToDos"]').click();
+      cy.getByText('ShowToDos').click();
     });
     cy.withinEditor('FormEditor', () => {
       cy.getByText('ShowToDos').should('exist');
