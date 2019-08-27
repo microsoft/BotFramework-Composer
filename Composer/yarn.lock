@@ -13825,9 +13825,9 @@ monaco-editor-webpack-plugin@^1.7.0:
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"monaco-editor@https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar":
+"monaco-editor@https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar.gz":
   version "1.17.1"
-  resolved "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar#b64a94e86c25f4540e0d365bcd60ebe7ba84c686"
+  resolved "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar.gz#68de83607e16854078996702d40644ffa7cff9e0"
 
 morgan@^1.9.1:
   version "1.9.1"
@@ -16524,12 +16524,12 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-"react-monaco-editor@https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.1/archive.tar":
+"react-monaco-editor@https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.1/archive.tar.gz":
   version "1.30.1"
-  resolved "https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.1/archive.tar#6fb4812b89dea0aa9e42f0eb79adbe35447297e9"
+  resolved "https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.1/archive.tar.gz#36430217e3eb4107c19e370beda884bb1b99bed6"
   dependencies:
     "@types/react" "^16.9.2"
-    monaco-editor "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar"
+    monaco-editor "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.1/archive.tar.gz"
     prop-types "^15.7.2"
 
 react-proxy@^1.1.7:
