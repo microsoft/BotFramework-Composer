@@ -41,11 +41,11 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
 }
 
 const nodeBorderFocusedStyle = css`
-  border: 1px solid #323130;
+  outline: 1px solid #323130;
 `;
 
 const nodeBorderSelectedStyle = css`
-  border: 1px solid #0078d4;
+  outline: 1px solid #0078d4;
 `;
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
