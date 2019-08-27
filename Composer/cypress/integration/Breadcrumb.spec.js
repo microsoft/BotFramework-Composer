@@ -9,7 +9,7 @@ context('breadcrumb', () => {
   it('can show dialog name in breadcrumb', () => {
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('equal', 'ToDoBot');
+      .should('equal', 'ToDoBot.Main');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('AddToDo').click();
@@ -20,7 +20,7 @@ context('breadcrumb', () => {
       .should('equal', 'AddToDo');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoBot').click();
+      cy.getByText('ToDoBot.Main').click();
     });
 
     cy.withinEditor('VisualEditor', () => {
