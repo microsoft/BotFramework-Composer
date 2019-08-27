@@ -25,10 +25,13 @@ export const connectBot: ActionCreator = async (store, botName) => {
   }
 };
 
-export const reloadBot: ActionCreator = async ({ dispatch }, botName) => {
+export const reloadBot: ActionCreator = async ({ state, dispatch }, botName) => {
+  const { botEnvironment } = state;
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
+    const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';
+
+    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput, targetEnvironment });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
