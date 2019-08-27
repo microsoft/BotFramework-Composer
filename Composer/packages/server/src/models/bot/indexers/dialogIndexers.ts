@@ -162,7 +162,7 @@ export class DialogIndexer {
             const dialog = {
               id,
               isRoot,
-              displayName: isRoot ? botName : id,
+              displayName: isRoot ? `${botName}.Main` : id,
               content: dialogJson,
               diagnostics,
               referredDialogs: this.ExtractReferredDialogs(dialogJson),
