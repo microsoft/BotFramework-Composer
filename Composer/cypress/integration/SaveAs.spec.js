@@ -14,7 +14,7 @@ context('Saving As', () => {
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
 
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestSaveAs').should('exist');
+      cy.getByText('__TestSaveAs.Main').should('exist');
       cy.getByText('ShowItems').should('exist');
     });
   });
