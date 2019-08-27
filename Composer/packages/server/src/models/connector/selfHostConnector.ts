@@ -20,14 +20,10 @@ export class SelfHostBotConnector implements IBotConnector {
   public sync = async (config: BotConfig) => {
     const { targetEnvironment: env } = config;
 
-    if (env === undefined) {
-      throw new Error('env not defined in config');
-    }
-
     await buildAsync({
-      user: config.user || 'unknown user',
-      dest: resolve(process.env['HOME']!, 'site/artifacts/bots'),
-      env: env !== 'editing' ? env! : 'integration',
+      user: (config.user || 'unknown_user').replace(/\s/g, '_'),
+      dest: resolve(process.env['HOME']!, 'site/artifacts/bot'),
+      env: env && env !== 'editing' ? env : 'integration',
     });
   };
 }
