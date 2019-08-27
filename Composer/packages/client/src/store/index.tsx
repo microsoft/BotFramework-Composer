@@ -54,7 +54,7 @@ interface StoreProviderProps {
 
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // @ts-ignore some actions are not action creations and cannot be cast as such (e.g. textFromTemplates in lg.ts)
+  // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
   const boundActions = bindActions({ dispatch, state }, actions);
   const value = {
     state,

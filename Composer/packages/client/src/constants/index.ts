@@ -183,3 +183,5 @@ export const SupportedFileTypes = [
   'xlsx',
   'xsn',
 ];
+
+export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
