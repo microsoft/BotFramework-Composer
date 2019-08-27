@@ -44,12 +44,12 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
 
   const activeEventData = queryNode(data, focusedEvent);
 
-  const stepEditor = activeEventData ? (
+  const eventActions = activeEventData ? (
     <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {
-    return stepEditor;
+    return eventActions;
   }
 
   return (
@@ -69,7 +69,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      <Collapse text="Actions">{stepEditor}</Collapse>
+      <Collapse text="Actions">{eventActions}</Collapse>
     </div>
   );
 };
