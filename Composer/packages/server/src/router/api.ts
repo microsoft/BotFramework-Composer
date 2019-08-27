@@ -19,7 +19,7 @@ router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFi
 router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
 router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
 router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
-router.post('/projects/opened/luFiles/config', ProjectController.setLuisConfig);
+router.post('/projects/opened/settings', ProjectController.updateEnvSettings);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);

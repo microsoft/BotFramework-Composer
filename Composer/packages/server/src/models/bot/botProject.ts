@@ -7,7 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -55,6 +55,9 @@ export class BotProject {
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this._checkProjectStructure();
+    if (this.settings) {
+      await this.luPublisher.setLuisConfig(this.settings.LuisConfig);
+    }
     await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
 
@@ -74,7 +77,7 @@ export class BotProject {
   };
 
   // create or update dialog settings
-  public setDialogSetting = async (config: DialogSetting) => {
+  public updateEnvSettings = async (config: DialogSetting) => {
     await this.settingManager.set(config);
   };
 
@@ -261,14 +264,8 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public setLuisConfig = async (config: ILuisConfig, botName: string) => {
-    if (botName !== this.name) {
-      throw new Error(`The opened bot ${this.name} does not match to the bot ${botName} you are trying to config`);
-    }
-    this.luPublisher.setLuisConfig(config);
-  };
-
-  public publishLuis = async () => {
+  public publishLuis = async (authoringKey: string) => {
+    await this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
 

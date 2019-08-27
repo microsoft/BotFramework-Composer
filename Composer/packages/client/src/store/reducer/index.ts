@@ -22,7 +22,9 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
-      set(state.settings as object, property, value);
+      if (value) {
+        set(state.settings as object, property, value);
+      }
     }
   }
   return state;
@@ -149,6 +151,11 @@ const updateEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
 };
+
+const updateLuisSettings: ReducerFunc = state => {
+  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
+  return state;
+};
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -177,4 +184,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
+  [ActionTypes.UPDATE_LUIS_SETTING]: updateLuisSettings,
 } as { [type in ActionTypes]: ReducerFunc });

@@ -100,4 +100,5 @@ export interface OAuthInput {
 export interface DialogSetting {
   OAuthInput: OAuthInput;
   LuisConfig: ILuisConfig;
+  [key: string]: any;
 }

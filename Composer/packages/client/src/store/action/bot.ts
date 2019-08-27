@@ -23,6 +23,7 @@ export const connectBot: ActionCreator = async (store, settings) => {
 export const reloadBot: ActionCreator = async ({ dispatch }, settings) => {
   const path = `${BASEURL}/launcher/sync`;
   try {
+    console.log(settings);
     await axios.post(path, settings);
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,

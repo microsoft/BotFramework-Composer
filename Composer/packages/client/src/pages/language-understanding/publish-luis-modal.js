@@ -98,18 +98,19 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
-  const { updateDialogSetting } = actions;
+  const { setEnvSettings, setEnvSettingUpdated } = actions;
   const { settings } = state;
   const { onPublish, onDismiss, workState, botName } = props;
   const [formData, setFormData] = useState({ ...settings.LuisConfig, errors: {} });
 
   const updateForm = field => (e, newValue) => {
-    setFormData({ ...formData, errors: {}, [field]: newValue });
-    if (SensitiveProperties.indexOf(`LuisConfig.${field}`) >= 0) {
+    if (botName && SensitiveProperties.indexOf(`LuisConfig.${field}`) >= 0) {
       DialogSettingStorage.setField(botName, `LuisConfig.${field}`, newValue);
     }
-    set(settings, `LuisConfig.${field}`, value);
-    updateDialogSetting(settings);
+    set(settings, `LuisConfig.${field}`, newValue);
+    setFormData({ ...settings.LuisConfig, errors: {}, [field]: newValue });
+    setEnvSettings(settings);
+    setEnvSettingUpdated();
   };
 
   const handlePublish = async e => {

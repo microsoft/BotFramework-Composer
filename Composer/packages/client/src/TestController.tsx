@@ -45,7 +45,7 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, publishLuis, startBot, setLuisConfig } = actions;
+  const { connectBot, reloadBot, publishLuis, startBot, setEnvSettings } = actions;
   const connected = botStatus === BotStatus.connected;
 
   useEffect(() => {
@@ -97,8 +97,8 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await setLuisConfig(settings, botName);
-      await publishLuis();
+      await setEnvSettings(settings);
+      await publishLuis(settings.LuisConfig.authoringKey);
       return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
@@ -112,7 +112,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      await (connected ? reloadBot(settings) : connectBot(connectBot));
+      await (connected ? reloadBot(settings) : connectBot(settings));
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);

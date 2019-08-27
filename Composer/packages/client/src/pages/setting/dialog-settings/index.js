@@ -1,20 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { get } from 'lodash';
 import jsonlint from 'jsonlint-webpack';
+import { get, debounce } from 'lodash';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/neat.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
+
 import './style.css';
-
-import { StoreContext } from '../../../store';
-import { SensitiveProperties } from '../../../constants';
-import settingsStorage from '../../../utils/dialogSettingStorage';
-
+import settingsStorage from './../../../utils/dialogSettingStorage';
+import { StoreContext } from './../../../store';
+import { SensitiveProperties } from './../../../constants';
 window.jsonlint = jsonlint;
+
 const cmOptions = {
   theme: 'neat',
   mode: {
@@ -30,22 +30,25 @@ const cmOptions = {
 };
 
 export const DialogSettings = () => {
+  const [value, setValue] = useState('');
   const { state, actions } = useContext(StoreContext);
-  const { settings, botName } = state;
-  const { updateDialogSetting } = actions;
+  const { settings, botName, isEnvSettingUpdated } = state;
+  const { setEnvSettings } = actions;
+  useEffect(() => {
+    setValue(settings);
+  }, [botName, isEnvSettingUpdated]);
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
-      for (const item of SensitiveProperties) {
-        const localSettings = settingsStorage.get(botName);
-        const value = get(result, item);
-        settingsStorage.setField(localSettings, item, value);
-      }
       try {
-        updateDialogSetting(result);
+        for (const property of SensitiveProperties) {
+          const propertyValue = get(result, property);
+          settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+        }
+        setEnvSettings(result);
       } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
       }
     } catch (err) {
       //Do Nothing
@@ -53,8 +56,13 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <CodeMirror value={JSON.stringify(settings, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />
+    <CodeMirror
+      value={JSON.stringify(value, null, 2)}
+      options={cmOptions}
+      onChange={debounce(updateFormData, 500)}
+      autoCursor
+    />
   ) : (
-    <div>Data loading ... </div>
+    <div>Data Loading...</div>
   );
 };

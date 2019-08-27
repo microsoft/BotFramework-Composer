@@ -57,7 +57,7 @@ export interface State {
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   isEnvSettingUpdated: boolean;
-  settings: DialogSetting | null;
+  settings: DialogSetting;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
 }

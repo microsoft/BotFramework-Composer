@@ -7,14 +7,6 @@ import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
-export const updateDialogSetting: ActionCreator = ({ dispatch }, settings) => {
-  dispatch({
-    type: ActionTypes.UPDATE_ENV_SETTING,
-    payload: {
-      settings,
-    },
-  });
-};
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({

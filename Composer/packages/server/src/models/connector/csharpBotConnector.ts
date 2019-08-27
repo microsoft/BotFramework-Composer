@@ -27,6 +27,7 @@ export class CSharpBotConnector implements IBotConnector {
     this.status = BotStatus.NotConnected;
   };
 
+  // only sensitive fields
   sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
@@ -34,19 +35,22 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    await BotProjectService.currentBotProject.luPublisher.setLuisConfig(config.LuisConfig);
-    await BotProjectService.currentBotProject.settingManager.set(config);
-    const luisConfig = config.LuisConfig;
+    await BotProjectService.currentBotProject.luPublisher.setAuthoringKey(config.LuisConfig.authoringKey);
+    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
+    if (!luisConfig) {
+      throw new Error('Please Enter Luis Config');
+    }
     if (luisConfig.authoringKey !== null && !(await BotProjectService.currentBotProject.checkLuisPublished())) {
       throw new Error('Please publish your Luis models');
     }
 
     form.append('config', JSON.stringify(luisConfig));
+    BotProjectService.currentBotProject.settingManager.get();
     if (config.OAuthInput && config.OAuthInput.MicrosoftAppId && config.OAuthInput.MicrosoftAppPassword) {
       form.append('microsoftAppId', config.OAuthInput.MicrosoftAppId);
       form.append('microsoftAppPassword', config.OAuthInput.MicrosoftAppPassword);
