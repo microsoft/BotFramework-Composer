@@ -16,6 +16,7 @@ import {
   ChoiceInput,
 } from '../nodes/index';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { SelectionContext } from '../../store/SelectionContext';
 
 import { NodeProps, defaultNodeProps } from './sharedProps';
 
@@ -39,24 +40,40 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
-const nodeBorderStyle = css`
-  outline: 2px solid grey;
+const nodeBorderFocusedStyle = css`
+  outline: 1px solid #323130;
+`;
+
+const nodeBorderSelectedStyle = css`
+  outline: 1px solid #0078d4;
 `;
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
+  const nodeSelected = selectedIds.includes(id);
 
   return (
     <div
-      className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
+      className={classnames(
+        'step-renderer-container',
+        { 'step-renderer-container--focused': nodeFocused },
+        { 'step-renderer-container--selected': nodeSelected }
+      )}
       css={css`
         display: inline-block;
         position: relative;
-        ${nodeFocused && nodeBorderStyle}
+        ${nodeFocused && nodeBorderFocusedStyle};
+        ${nodeSelected && nodeBorderSelectedStyle};
+        &:hover {
+          ${nodeBorderFocusedStyle}
+        }
       `}
+      data-is-focusable={true}
+      data-selection-index={getNodeIndex(id)}
     >
       <ChosenRenderer
         id={id}
