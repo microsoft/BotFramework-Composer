@@ -9,17 +9,13 @@ import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel } from '../../utils';
 
-import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { StoreContext } from './../../store';
 import {
+  pageRoot,
+  contentWrapper,
   breadcrumbClass,
-  projectWrapper,
-  projectContainer,
-  projectHeader,
-  projectTree,
-  // assetTree,
   editorContainer,
   visualEditor,
   formEditor,
@@ -27,7 +23,6 @@ import {
   deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
-import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
@@ -183,25 +178,16 @@ function DesignPage(props) {
 
   return (
     <Fragment>
-      {match && <ToolBar toolbarItems={toolbarItems} />}
-      <MainContent>
-        <Fragment>
-          <div css={projectContainer}>
-            <Tree variant="large" extraCss={projectTree}>
-              <div css={projectWrapper}>
-                <div css={projectHeader}>
-                  <div>{formatMessage('Dialogs')}</div>
-                </div>
-                <ProjectTree
-                  files={dialogs}
-                  activeNode={dialogId || ''}
-                  onSelect={handleFileClick}
-                  onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-                  onDelete={handleDeleteDialog}
-                />
-              </div>
-            </Tree>
-          </div>
+      <div css={pageRoot}>
+        <ProjectTree
+          dialogs={dialogs}
+          activeNode={dialogId || ''}
+          onSelect={handleFileClick}
+          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onDelete={handleDeleteDialog}
+        />
+        <div css={contentWrapper}>
+          {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation extraCss={editorContainer}>
             <Fragment>
               {breadcrumbItems}
@@ -221,8 +207,8 @@ function DesignPage(props) {
               </div>
             </Fragment>
           </Conversation>
-        </Fragment>
-      </MainContent>
+        </div>
+      </div>
       <NewDialogModal
         isOpen={state.showCreateDialogModal}
         onDismiss={() => actions.createDialogCancel()}

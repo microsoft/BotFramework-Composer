@@ -1,12 +1,9 @@
 import React from 'react';
-import { OverflowSet, CommandBarButton, IconButton } from 'office-ui-fabric-react';
+import { OverflowSet, IconButton, ActionButton } from 'office-ui-fabric-react';
 
-import { moreButton, overflowSet, moreMenu } from './styles';
+import { moreButton, overflowSet, moreMenu, navItem, itemText } from './styles';
 const onRenderItem = item => {
-  if (item.onRender) {
-    return item.onRender(item);
-  }
-  return <CommandBarButton iconProps={{ iconName: item.icon }} menuProps={item.subMenuProps} text={item.name} />;
+  return <div css={itemText}>{item.displayName}</div>;
 };
 
 const onRenderOverflowButton = overflowItems => {
@@ -22,28 +19,32 @@ const onRenderOverflowButton = overflowItems => {
 };
 
 export const TreeItem = props => {
-  const { link, render } = props;
+  const { link, activeNode, onDelete, onSelect } = props;
   return (
-    <OverflowSet
-      items={[
-        {
-          key: 'common',
-          onRender: () => {
-            return render(link);
+    <ActionButton
+      css={navItem(activeNode === link.id)}
+      onClick={() => {
+        onSelect(link.id);
+      }}
+    >
+      <OverflowSet
+        items={[
+          {
+            ...link,
           },
-        },
-      ]}
-      overflowItems={[
-        {
-          key: 'delete',
-          name: 'Delete',
-          onClick: () => link.onDelete(link.id),
-        },
-      ]}
-      css={overflowSet}
-      data-testid={`DialogTreeItem${link.id}`}
-      onRenderItem={onRenderItem}
-      onRenderOverflowButton={link.hiddenMore ? () => {} : onRenderOverflowButton}
-    />
+        ]}
+        overflowItems={[
+          {
+            key: 'delete',
+            name: 'Delete',
+            onClick: () => onDelete(link.id),
+          },
+        ]}
+        css={overflowSet}
+        data-testid={`DialogTreeItem${link.id}`}
+        onRenderItem={onRenderItem}
+        onRenderOverflowButton={link.isRoot ? () => {} : onRenderOverflowButton}
+      />
+    </ActionButton>
   );
 };

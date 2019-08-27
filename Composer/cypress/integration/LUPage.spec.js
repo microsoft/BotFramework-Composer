@@ -10,7 +10,7 @@ context('check language understanding page', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
 
     // left nav tree
-    cy.contains('ToDoLuisBot');
+    cy.contains('ToDoLuisBot.Main');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -22,7 +22,7 @@ context('check language understanding page', () => {
     cy.get('[data-testid="LUEditor"] [data-testid="table-view"]').should('exist');
 
     // nav to ToDoLuisBot.main dialog
-    cy.get('.dialogNavTree button[title="ToDoLuisBot"]').click({ multiple: true });
+    cy.get('.dialogNavTree button[title="ToDoLuisBot.Main"]').click({ multiple: true });
     cy.wait(300);
 
     // goto edit-mode
