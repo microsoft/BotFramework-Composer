@@ -12,6 +12,7 @@ import { Collapse } from '../components/nodes/templates/Collapse';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
+import { EditorConfig } from './editorConfig';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformRootDialog(data);
@@ -24,7 +25,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
@@ -42,6 +43,15 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   };
 
   const activeEventData = queryNode(data, focusedEvent);
+
+  const stepEditor = activeEventData ? (
+    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+  ) : null;
+
+  if (!EditorConfig.features.showEvents) {
+    return stepEditor;
+  }
+
   return (
     <div
       css={{
@@ -59,11 +69,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      <Collapse text="Actions">
-        {activeEventData && (
-          <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
-        )}
-      </Collapse>
+      <Collapse text="Actions">{stepEditor}</Collapse>
     </div>
   );
 };
