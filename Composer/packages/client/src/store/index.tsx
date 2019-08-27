@@ -26,8 +26,8 @@ const initialState: State = {
   designPageLocation: {
     dialogId: '',
     uri: '',
-    focusedEvent: '',
-    focusedSteps: [],
+    focused: '',
+    selected: '',
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}

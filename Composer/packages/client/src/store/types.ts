@@ -28,8 +28,8 @@ interface StateError {
 
 export interface BreadcrumbItem {
   dialogId: string;
-  focusedEvent?: string;
-  focusedSteps: string;
+  selected: string;
+  focused: string;
 }
 
 export interface BotSchemas {
@@ -52,7 +52,7 @@ export interface State {
   schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  designPageLocation: any;
+  designPageLocation: DesignPageLocation;
   error: StateError | null;
   oAuth: any;
   breadcrumb: BreadcrumbItem[];
@@ -107,4 +107,11 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+
+export interface DesignPageLocation {
+  dialogId: string;
+  uri: string;
+  selected: string;
+  focused: string;
 }

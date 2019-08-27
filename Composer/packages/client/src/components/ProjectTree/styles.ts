@@ -1,5 +1,6 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
+import { IButtonStyles, ICalloutContentStyles } from 'office-ui-fabric-react';
 
 export const root = css`
   width: 180px;
@@ -15,27 +16,29 @@ export const root = css`
   }
 `;
 
-export const navItem = selected => css`
+export const navItem = (isActive: boolean, depth: number) => css`
   width: 100%;
   font-size: 12px;
   color: #605e5c;
   padding-left: 12px;
-  background: ${selected ? '#f2f2f2' : 'transparent'};
-  font-weight: ${selected ? FontWeights.semibold : FontWeights.regular};
+  background: ${isActive && depth !== 0 ? '#f2f2f2' : 'transparent'};
+  font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
   &: hover {
     color: #605e5c;
     background: #f2f2f2;
   }
 `;
 
-export const itemText = css`
-  max-width: 130px;
+export const itemText = (depth: number) => css`
+  padding-left: ${depth * 16}px;
+  width: ${depth === 0 ? 130 : 120}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  text-align: left;
 `;
 
-export const moreButton = {
+export const moreButton: IButtonStyles = {
   root: {
     padding: '0 4px',
     alignSelf: 'stretch',
@@ -49,7 +52,7 @@ export const moreButton = {
   },
 };
 
-export const moreMenu = {
+export const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-7px',
     width: '100px',

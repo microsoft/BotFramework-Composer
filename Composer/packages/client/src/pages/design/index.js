@@ -57,7 +57,7 @@ function DesignPage(props) {
   const { dialogs, designPageLocation, breadcrumb, schemas } = state;
   const { removeDialog, setDesignPageLocation, navTo } = actions;
   const { location, match } = props;
-  const { dialogId } = designPageLocation;
+  const { dialogId, selected } = designPageLocation;
 
   useEffect(() => {
     if (match) {
@@ -66,17 +66,25 @@ function DesignPage(props) {
       setDesignPageLocation({
         dialogId: dialogId,
         uri: uri,
-        focusedEvent: params.get('focusedEvent'),
-        focusedSteps: params.getAll('focusedSteps[]'),
+        selected: params.get('selected'),
+        focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
       });
       globalHistory._onTransitionComplete();
     }
   }, [location]);
 
-  function handleFileClick(id) {
-    navTo(id);
+  function handleSelect(id, selected = '') {
+    if (selected) {
+      navTo(`${id}?selected=${selected}`);
+    } else {
+      navTo(id);
+    }
   }
+
+  // function handleFileClick(id) {
+  //   navTo(id);
+  // }
 
   const getErrorMessage = text => {
     if (
@@ -114,8 +122,8 @@ function DesignPage(props) {
     },
   ];
 
-  function handleBreadcrumbItemClick(_event, { dialogId, focusedEvent, focusedSteps, index }) {
-    navTo(`${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`, clearBreadcrumb(breadcrumb, index));
+  function handleBreadcrumbItemClick(_event, { dialogId, selected, focused, index }) {
+    navTo(`${dialogId}${getUrlSearch(selected, focused)}`, clearBreadcrumb(breadcrumb, index));
   }
 
   const breadcrumbItems = useMemo(() => {
@@ -181,8 +189,9 @@ function DesignPage(props) {
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
-          activeNode={dialogId || ''}
-          onSelect={handleFileClick}
+          dialogId={dialogId}
+          selected={selected}
+          onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
           onDelete={handleDeleteDialog}
         />

@@ -30,12 +30,12 @@ const getTitle = (editorSchema: any, type: string) => {
 export function getbreadcrumbLabel(
   dialogs: DialogInfo[],
   dialogId: string,
-  focusedEvent: string,
-  focusedSteps: string[],
+  focused: string,
+  selected: string,
   schemas: BotSchemas
 ) {
   let label = '';
-  const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
+  const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
     const dialog = dialogs.find(d => d.id === dialogId);
     label = (dialog && dialog.displayName) || '';
