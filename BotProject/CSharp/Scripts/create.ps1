@@ -166,6 +166,12 @@ if ($outputs)
 	# Invoke-Expression "& '$(Join-Path $PSScriptRoot 'publish.ps1')' -botPath $($botPath) -name $($name) -resourceGroup $($resourceGroup) -projFolder '$($projDir)'"
 
 	Write-Host "> Done."
+	Write-Host "- App Id: $appId"
+	Write-Host "- App Password: $appPassword"
+	Write-Host "- Resource Group: $resourceGroup"
+	Write-Host "- ServicePlan: $servicePlanName"
+	Write-Host "- Bot Name: $name"
+	Write-Host "- Web App Name : $name"
 }
 else
 {
