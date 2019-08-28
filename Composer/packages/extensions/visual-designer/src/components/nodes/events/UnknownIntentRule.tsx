@@ -1,11 +1,8 @@
-// eslint-disable-next-line no-unused-vars
 import React, { FunctionComponent } from 'react';
 import formatMessage from 'format-message';
 
-// eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-
-import { RuleCard } from './templates/RuleCard';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { RuleCard } from '../templates/RuleCard';
 
 // Generate the title displayed in the graph
 // If a custom title has been specified, use this
