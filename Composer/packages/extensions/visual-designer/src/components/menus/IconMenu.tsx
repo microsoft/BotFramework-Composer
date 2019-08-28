@@ -12,7 +12,7 @@ interface IconMenuProps {
   dataTestId?: string;
   iconName: string;
   iconSize?: number;
-  iconStyles: object;
+  iconStyles?: object;
   label?: string;
   menuItems: any[];
   menuWidth?: number;

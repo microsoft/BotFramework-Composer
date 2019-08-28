@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, findByText } from 'react-testing-library';
 
-import { IconMenu } from '../../../src/components/nodes/templates/IconMenu';
+import { IconMenu } from '../../../src/components/menus/IconMenu';
 
 describe('<IconMenu />', () => {
   let menuItems, iconName, onClick;
