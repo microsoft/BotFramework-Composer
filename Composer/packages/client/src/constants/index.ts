@@ -186,16 +186,3 @@ export const SupportedFileTypes = [
 ];
 
 export const SensitiveProperties = ['OAuthInput.MicrosoftAppPassword', 'LuisConfig.authoringKey'];
-export const DefaultSettings = {
-  OAuthInput: {
-    MicrosoftAppId: '',
-    MicrosoftAppPassword: '',
-  },
-  LuisConfig: {
-    name: '',
-    environment: '',
-    authoringKey: '',
-    authoringRegion: 'westus',
-    defaultLanguage: 'en-us',
-  },
-};

@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-import { DialogSetting } from '../types';
-import { ActionCreator } from '../types';
+import { ActionCreator, DialogSetting } from '../types';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 

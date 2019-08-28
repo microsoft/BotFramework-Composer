@@ -48,7 +48,7 @@ export const DialogSettings = () => {
         }
         setEnvSettings(result);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
       }
     } catch (err) {
       //Do Nothing

@@ -27,7 +27,6 @@ export class CSharpBotConnector implements IBotConnector {
     this.status = BotStatus.NotConnected;
   };
 
-  // only sensitive fields
   sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
@@ -42,10 +41,12 @@ export class CSharpBotConnector implements IBotConnector {
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (!luisConfig) {
-      throw new Error('Please Enter Luis Config');
-    }
-    if (luisConfig.authoringKey !== null && !(await BotProjectService.currentBotProject.checkLuisPublished())) {
+
+    if (
+      luisConfig &&
+      luisConfig.authoringKey !== null &&
+      !(await BotProjectService.currentBotProject.checkLuisPublished())
+    ) {
       throw new Error('Please publish your Luis models');
     }
 

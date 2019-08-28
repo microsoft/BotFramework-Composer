@@ -121,7 +121,7 @@ export interface ILuisConfig {
   environment: string | 'composer';
 }
 export interface DialogSetting {
-  OAuthInput: OAuthInput;
-  LuisConfig: ILuisConfig;
+  OAuthInput?: OAuthInput;
+  LuisConfig?: ILuisConfig;
   [key: string]: any;
 }

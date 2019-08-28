@@ -3,7 +3,7 @@ import React, { useReducer } from 'react';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus, DefaultSettings } from './../constants';
+import { CreationFlowStatus, BotStatus } from './../constants';
 import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types';
 
 const initialState: State = {
@@ -31,7 +31,7 @@ const initialState: State = {
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
-  settings: DefaultSettings,
+  settings: {},
   toStartBot: false,
 };
 

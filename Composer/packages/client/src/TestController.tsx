@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { LuisConfig, Text, BotStatus, DefaultSettings } from './constants';
+import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
@@ -72,7 +72,7 @@ export const TestController: React.FC = () => {
       });
       return;
     }
-    const config = settings ? settings.LuisConfig : null;
+    const config = settings.LuisConfig;
 
     if (getReferredFiles(luFiles, dialogs).length > 0) {
       if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
@@ -98,8 +98,12 @@ export const TestController: React.FC = () => {
     setFetchState(STATE.PUBLISHING);
     try {
       await setEnvSettings(settings);
-      await publishLuis(settings.LuisConfig.authoringKey);
-      return true;
+      if (settings.LuisConfig) {
+        await publishLuis(settings.LuisConfig.authoringKey);
+        return true;
+      } else {
+        throw new Error('Please Set Luis Config');
+      }
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
@@ -132,7 +136,7 @@ export const TestController: React.FC = () => {
             onClick={() =>
               openInEmulator(
                 'http://localhost:3979/api/messages',
-                settings ? settings.OAuthInput : DefaultSettings.OAuthInput
+                settings.OAuthInput ? settings.OAuthInput : { MicrosoftAppId: '', MicrosoftAppPassword: '' }
               )
             }
           >

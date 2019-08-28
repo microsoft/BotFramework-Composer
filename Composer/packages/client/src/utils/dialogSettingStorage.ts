@@ -29,10 +29,6 @@ class DialogSettingStorage {
     delete this._all[botName];
     this.storage.set(KEY, this._all);
   }
-  // set(botName: string, value: { OAuthInput: OAuthInput; LuisConfig: ILuisConfig }) {
-  //   this._all[botName] = value;
-  //   this.storage.set(KEY, this._all);
-  // }
 }
 
 export default new DialogSettingStorage();

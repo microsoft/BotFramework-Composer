@@ -79,6 +79,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (config: DialogSetting) => {
     await this.settingManager.set(config);
+    await this.luPublisher.setLuisConfig(config.LuisConfig);
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
