@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-testing-library';
 
-import { Icon } from '../../../src/components/nodes/icons/icon';
+import { Icon } from '../../../src/components/icons/icon';
 
 describe('<Icon />', () => {
   let iconList, icon, iconColor;

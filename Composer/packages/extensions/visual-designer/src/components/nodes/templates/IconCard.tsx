@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
-import { Icon } from '../icons/icon';
+import { Icon } from '../../icons/icon';
 
 const boxWidth = 240;
 const boxHeight = 125;
