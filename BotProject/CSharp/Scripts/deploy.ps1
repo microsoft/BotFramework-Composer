@@ -1,16 +1,25 @@
-#Requires -Version 6
+﻿#Requires -Version 6
 
 Param(
-    [string] $name,
-	[string] $resourceGroup,
-	[string] $location,
+	[string] $name,
+	[string] $environment,
+	# [string] $luisAuthoringKey,
+	# [string] $luisAuthoringRegion,
+	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
-	[string] $appId,
-    [string] $appPassword,
-	[string] $languages = "en-us",
-	[string] $projDir = $(Get-Location),
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
+
+# Write-Host "name: $name, resourceGroup: $resourceGroup, projFolder:  $projFolder"
+
+# Get mandatory parameters
+if (-not $name) {
+    $name = Read-Host "? Bot Web App Name"
+}
+
+# if (-not $resourceGroup) {
+#     $resourceGroup = Read-Host "? Bot Resource Group"
+# }
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -20,163 +29,67 @@ else {
 	New-Item -Path $logFile | Out-Null
 }
 
-if (-not (Test-Path (Join-Path $projDir 'appsettings.json')))
-{
-	Write-Host "! Could not find an 'appsettings.json' file in the current directory." -ForegroundColor DarkRed
-	Write-Host "+ Please re-run this script from your project directory." -ForegroundColor Magenta
-	Break
+# Check for existing deployment files
+if (-not (Test-Path (Join-Path $projFolder '.deployment'))) {
+	# Add needed deployment files for az
+	az bot prepare-deploy --lang Csharp --code-dir $projFolder --proj-file-path BotProject.csproj --output json | Out-Null
 }
 
-# Get mandatory parameters
-if (-not $name) {
-    $name = Read-Host "? Bot Name (used as default name for resource group and deployed resources)"
+# Delete src zip, if it exists
+$zipPath = $(Join-Path $projFolder 'code.zip')
+if (Test-Path $zipPath) {
+	Remove-Item $zipPath -Force | Out-Null
 }
 
-if (-not $resourceGroup) {
-	$resourceGroup = $name
-}
+# Add Luis Config to appsettings
+# if ($luisAuthoringKey -and $luisAuthoringRegion)
+# {
+# 	if (Test-Path $(Join-Path $projDir appsettings.json)) {
+# 		$settings = Get-Content $(Join-Path $projDir appsettings.json) | ConvertFrom-Json
+# 	}
+# 	else {
+# 		$settings = New-Object PSObject
+# 	}
 
-if (-not $location) {
-    $location = Read-Host "? Azure resource group region"
-}
+# 	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
 
-if (-not $appPassword) {
-    $appPassword = Read-Host "? Password for MSA app registration (must be at least 16 characters long, contain at least 1 special character, and contain at least 1 numeric character)"
-}
+# 	$luisConfig = @{}
 
-if (-not $appId) {
-	# Create app registration
-	$app = (az ad app create `
-		--display-name $name `
-		--password `"$($appPassword)`" `
-		--available-to-other-tenants `
-		--reply-urls 'https://token.botframework.com/.auth/web/redirect' `
-        --output json)
+# 	$luisConfig["endpointKey"] = $luisAuthoringKey
+# 	$luisConfig["endpoint"] = $luisEndpoint
 
-	# Retrieve AppId
-	if ($app) {
-		$appId = ($app | ConvertFrom-Json) | Select-Object -ExpandProperty appId
-	}
+# 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
 
-	if(-not $appId) {
-		Write-Host "! Could not provision Microsoft App Registration automatically. Review the log for more information." -ForegroundColor DarkRed
-		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
-		Write-Host "+ Provision an app manually in the Azure Portal, then try again providing the -appId and -appPassword arguments. See https://aka.ms/vamanualappcreation for more information." -ForegroundColor Magenta
-		Break
-	}
-}
-
-# Get timestamp
-$timestamp = Get-Date -f MMddyyyyHHmmss
-
-# Create resource group
-Write-Host "> Creating resource group ..."
-(az group create --name $resourceGroup --location $location --output json) 2>> $logFile | Out-Null
-
-# Deploy Azure services (deploys LUIS, QnA Maker, Content Moderator, CosmosDB)
-
-Write-Host "> Validating Azure deployment ..."
-$validation = az group deployment validate `
-	--resource-group $resourcegroup `
-	--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-	--parameters appId=$appId appSecret="`"$($appPassword)`"" newAppServicePlanName=$name appServicePlanLocation=$location botId=$name `
-	--output json
-
-if ($validation) {
-	$validation >> $logFile
-	$validation = $validation | ConvertFrom-Json
-
-	if (-not $validation.error) {
-		Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow
-		$deployment = az group deployment create `
-			--name $timestamp `
-			--resource-group $resourceGroup `
-			--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-			--parameters appId=$appId appSecret="`"$($appPassword)`"" newAppServicePlanName=$name appServicePlanLocation=$location botId=$name `
-			--output json
-	}
-	else {
-		Write-Host "! Template is not valid with provided parameters. Review the log for more information." -ForegroundColor DarkRed
-		Write-Host "! Error: $($validation.error.message)"  -ForegroundColor DarkRed
-		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
-		Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
-		Break
-	}
-}
+# 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.json)
+# }
 
 
-# Get deployment outputs
-$outputs = az group deployment show `
-	--name $timestamp `
-	--resource-group $resourceGroup `
-    --output json 2>> $logFile
+# Perform dotnet publish step ahead of zipping up
+$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
+dotnet publish -c release -o $publishFolder -v q > $logFile
 
-# If it succeeded then we perform the remainder of the steps
-if ($outputs)
-{
-	# Log and convert to JSON
-	$outputs >> $logFile
-	$outputs = $outputs | ConvertFrom-Json
-	$outputMap = @{}
-	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }
+$resourceGroup = "$name-$environment"
 
-	# Update appsettings.json
-	Write-Host "> Updating appsettings.json ..."
-	if (Test-Path $(Join-Path $projDir appsettings.json)) {
-		$settings = Get-Content $(Join-Path $projDir appsettings.json) | ConvertFrom-Json
-	}
-	else {
-		$settings = New-Object PSObject
-	}
+if($?) 
+{     
+	# Copy bot files to running folder
+	$remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
+	Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
+	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
 
-	$settings | Add-Member -Type NoteProperty -Force -Name 'microsoftAppId' -Value $appId
-	$settings | Add-Member -Type NoteProperty -Force -Name 'microsoftAppPassword' -Value $appPassword
-	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "RunningInstance"
-	foreach ($key in $outputMap.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $outputMap[$key].value }
-	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.json)
-	
-	if ($outputs.qnaMaker.value.key) { $qnaSubscriptionKey = $outputs.qnaMaker.value.key }
+	# Compress source code
+	Get-ChildItem -Path "$($publishFolder)" | Compress-Archive -DestinationPath "$($zipPath)" -Force | Out-Null
 
-	# # Delay to let QnA Maker finish setting up
-	# Start-Sleep -s 30
-
-	# # Deploy cognitive models
-	# Invoke-Expression "& '$(Join-Path $PSScriptRoot 'deploy_cognitive_models.ps1')' -name $($name) -luisAuthoringRegion $($luisAuthoringRegion) -luisAuthoringKey $($luisAuthoringKey) -luisAccountName $($outputs.luis.value.accountName) -luisAccountRegion $($outputs.luis.value.region) -luisSubscriptionKey $($outputs.luis.value.key) -resourceGroup $($resourceGroup) -qnaSubscriptionKey '$($qnaSubscriptionKey)' -outFolder '$($projDir)' -languages '$($languages)'"
-	
-	# Publish bot
-	Invoke-Expression "& '$(Join-Path $PSScriptRoot 'publish.ps1')' -botPath $($botPath) -name $($name) -resourceGroup $($resourceGroup) -projFolder '$($projDir)'"
-
-	Write-Host "> Done."
-}
-else
-{
-	# Check for failed deployments
-	$operations = az group deployment operation list -g $resourceGroup -n $timestamp --output json 2>> $logFile | Out-Null 
-	
-	if ($operations) {
-		$operations = $operations | ConvertFrom-Json
-		$failedOperations = $operations | Where { $_.properties.statusmessage.error -ne $null }
-		if ($failedOperations) {
-			foreach ($operation in $failedOperations) {
-				switch ($operation.properties.statusmessage.error.code) {
-					"MissingRegistrationForLocation" {
-						Write-Host "! Deployment failed for resource of type $($operation.properties.targetResource.resourceType). This resource is not avaliable in the location provided." -ForegroundColor DarkRed
-						Write-Host "+ Update the .\Deployment\Resources\parameters.template.json file with a valid region for this resource and provide the file path in the -parametersFile parameter." -ForegroundColor Magenta
-					}
-					default {
-						Write-Host "! Deployment failed for resource of type $($operation.properties.targetResource.resourceType)."
-						Write-Host "! Code: $($operation.properties.statusMessage.error.code)."
-						Write-Host "! Message: $($operation.properties.statusMessage.error.message)."
-					}
-				}
-			}
-		}
-	}
-	else {
-		Write-Host "! Deployment failed. Please refer to the log file for more information." -ForegroundColor DarkRed
-		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
-	}
-	
-	Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
-	Break
-}
+	# Publish zip to Azure
+	Write-Host "> Publishing to Azure ..." -ForegroundColor Green
+	(az webapp deployment source config-zip `
+		--resource-group $resourceGroup `
+		--name $name `
+		--src $zipPath `
+        --output json) 2>> $logFile | Out-Null
+} 
+else 
+{       
+	Write-Host "! Could not deploy automatically to Azure. Review the log for more information." -ForegroundColor DarkRed
+	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed    
+}       
