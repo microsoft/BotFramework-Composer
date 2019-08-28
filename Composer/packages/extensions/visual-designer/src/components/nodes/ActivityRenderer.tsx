@@ -3,10 +3,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { NodeColors } from '../../shared/elementColors';
 import { DialogGroup } from '../../shared/appschema';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 
+import { NodeColors } from './shared/elementColors';
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
 

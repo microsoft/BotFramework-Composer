@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { CollapsedEventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
-import { getElementColor } from '../../shared/elementColors';
+import { getElementColor } from '../nodes/shared/elementColors';
 import { DialogGroup } from '../../shared/appschema';
 
 const ElementWidth = CollapsedEventNodeSize.width;

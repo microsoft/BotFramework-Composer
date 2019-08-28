@@ -7,10 +7,10 @@ import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { NodeMenu } from '../shared/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
 import { getDialogGroupByType } from '../../shared/appschema';
-import { getElementColor } from '../../shared/elementColors';
 import { ObiTypes } from '../../shared/ObiTypes';
 import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
 
+import { getElementColor } from './shared/elementColors';
 import { getFriendlyName } from './utils';
 import { FormCard } from './templates/FormCard';
 

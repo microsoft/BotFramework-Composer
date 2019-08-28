@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
-import { getElementColor } from '../../../shared/elementColors';
+import { getElementColor } from '../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';
 
 export const Diamond = ({ onClick, ...rest }) => (
