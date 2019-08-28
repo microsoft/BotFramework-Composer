@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
-import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { DialogGroup } from '../../../shared/appschema';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';

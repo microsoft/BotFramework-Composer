@@ -4,7 +4,7 @@ import React from 'react';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { ObiTypes } from '../../../shared/ObiTypes';

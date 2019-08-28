@@ -5,9 +5,8 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
-import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { getElementColor } from '../shared/elementColors';
 import { FormCard } from '../templates/FormCard';

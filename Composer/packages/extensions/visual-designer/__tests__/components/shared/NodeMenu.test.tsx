@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, findAllByText } from 'react-testing-library';
 
-import { NodeMenu } from '../../../src/components/shared/NodeMenu';
+import { NodeMenu } from '../../../src/components/menus/NodeMenu';
 import { NodeEventTypes } from '../../../src/shared/NodeEventTypes';
 
 describe('<NodeMenu />', () => {

@@ -4,7 +4,7 @@ import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
-import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';

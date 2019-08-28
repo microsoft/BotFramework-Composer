@@ -2,9 +2,8 @@ import React from 'react';
 import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-// eslint-disable-next-line no-unused-vars
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
-import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
