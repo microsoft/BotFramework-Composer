@@ -3,23 +3,17 @@
 Param(
 	[string] $name,
 	[string] $environment,
-	# [string] $luisAuthoringKey,
-	# [string] $luisAuthoringRegion,
+	[string] $luisAuthoringKey,
+	[string] $luisAuthoringRegion,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
 
-# Write-Host "name: $name, resourceGroup: $resourceGroup, projFolder:  $projFolder"
-
 # Get mandatory parameters
 if (-not $name) {
     $name = Read-Host "? Bot Web App Name"
 }
-
-# if (-not $resourceGroup) {
-#     $resourceGroup = Read-Host "? Bot Resource Group"
-# }
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -42,26 +36,39 @@ if (Test-Path $zipPath) {
 }
 
 # Add Luis Config to appsettings
-# if ($luisAuthoringKey -and $luisAuthoringRegion)
-# {
-# 	if (Test-Path $(Join-Path $projDir appsettings.json)) {
-# 		$settings = Get-Content $(Join-Path $projDir appsettings.json) | ConvertFrom-Json
-# 	}
-# 	else {
-# 		$settings = New-Object PSObject
-# 	}
+if ($luisAuthoringKey -and $luisAuthoringRegion)
+{
+	if (Test-Path $(Join-Path $projFolder appsettings.json)) {
+		$settings = Get-Content $(Join-Path $projFolder appsettings.json) | ConvertFrom-Json
+	}
+	else {
+		$settings = New-Object PSObject
+	}
 
-# 	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
+	$luisConfigFiles = Get-ChildItem -Include "luis.settings*" -Recurse -Force
 
-# 	$luisConfig = @{}
+	$luisAppIds = @{}
 
-# 	$luisConfig["endpointKey"] = $luisAuthoringKey
-# 	$luisConfig["endpoint"] = $luisEndpoint
+	foreach ($luisConfigFile in $luisConfigFiles)
+	{
+		$luisSetting = Get-Content $luisConfigFile.FullName | ConvertFrom-Json
+		$luis = $luisSetting.luis
+		$luis.PSObject.Properties | Foreach-Object { $luisAppIds[$_.Name] = $_.Value }
+	}
 
-# 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
+	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
 
-# 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.json)
-# }
+	$luisConfig = @{}
+
+	$luisConfig["endpointKey"] = $luisAuthoringKey
+	$luisConfig["endpoint"] = $luisEndpoint
+	
+	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
+
+	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
+
+	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projFolder appsettings.json)
+}
 
 
 # Perform dotnet publish step ahead of zipping up
