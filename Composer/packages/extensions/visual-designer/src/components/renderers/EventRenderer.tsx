@@ -3,7 +3,7 @@ import { jsx, css } from '@emotion/core';
 import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
-import { ObiTypes } from '../../shared/ObiTypes';
+import { ObiTypes } from '../../constants/ObiTypes';
 import {
   DefaultRenderer,
   IntentRule,

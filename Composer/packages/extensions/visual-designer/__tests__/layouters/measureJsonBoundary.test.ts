@@ -1,6 +1,6 @@
 import { Boundary } from '../../src/models/Boundary';
 import { measureJsonBoundary } from '../../src/layouters/measureJsonBoundary';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 import {
   DiamondSize,
   InitNodeSize,

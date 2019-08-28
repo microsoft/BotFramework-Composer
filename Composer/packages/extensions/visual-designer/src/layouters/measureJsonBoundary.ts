@@ -1,4 +1,4 @@
-import { ObiTypes } from '../shared/ObiTypes';
+import { ObiTypes } from '../constants/ObiTypes';
 import { Boundary } from '../models/Boundary';
 import { DiamondSize, InitNodeSize, LoopIconSize, ChoiceInputSize, ChoiceInputMarginTop } from '../shared/elementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';

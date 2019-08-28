@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
-import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { Collapse } from '../components/lib/Collapse';

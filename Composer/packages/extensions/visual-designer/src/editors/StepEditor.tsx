@@ -6,7 +6,7 @@ import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { Edge } from '../components/lib/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { Boundary } from '../models/Boundary';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../shared/elementSizes';
 import { EdgeMenu } from '../components/menus/EdgeMenu';

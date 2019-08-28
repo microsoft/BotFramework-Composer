@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Panel } from '../components/lib/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { EventMenu } from '../components/menus/EventMenu';
 
 import { EditorProps } from './editorProps';

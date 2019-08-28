@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { DialogGroup } from '../../../shared/appschema';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
 import { NodeColors } from '../../../shared/elementColors';

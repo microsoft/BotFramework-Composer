@@ -3,11 +3,11 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getDialogGroupByType } from '../../../shared/appschema';
-import { ObiTypes } from '../../../shared/ObiTypes';
+import { ObiTypes } from '../../../constants/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { getElementColor } from '../../../shared/elementColors';
 import { getFriendlyName } from '../utils';

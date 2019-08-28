@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { useMemo, FC, useContext } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { queryNode } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';

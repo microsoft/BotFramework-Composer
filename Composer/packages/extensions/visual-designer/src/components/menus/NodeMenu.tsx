@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
 
 import { IconMenu } from './IconMenu';
 

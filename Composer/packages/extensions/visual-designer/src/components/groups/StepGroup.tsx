@@ -6,7 +6,7 @@ import { GraphNode } from '../../models/GraphNode';
 import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { OffsetContainer } from '../lib/OffsetContainer';

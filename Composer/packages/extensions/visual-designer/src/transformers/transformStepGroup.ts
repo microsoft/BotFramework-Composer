@@ -1,4 +1,4 @@
-import { ObiTypes } from '../shared/ObiTypes';
+import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../shared/elementBuilder';
 

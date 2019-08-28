@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from 'react-testing-library';
 
 import { ChoiceInput } from '../../../src/components/nodes/steps/ChoiceInput';
-import { ObiTypes } from '../../../src/shared/ObiTypes';
+import { ObiTypes } from '../../../src/constants/ObiTypes';
 
 describe('<ChoiceInput />', () => {
   let renderResult, id, data, onEvent;

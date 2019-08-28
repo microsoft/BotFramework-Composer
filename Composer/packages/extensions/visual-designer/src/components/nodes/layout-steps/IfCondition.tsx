@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../../transformers/transformIfCondition';
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { GraphNode } from '../../../models/GraphNode';
 import { areBoundariesEqual } from '../../../models/Boundary';
 import { ifElseLayouter } from '../../../layouters/ifelseLayouter';

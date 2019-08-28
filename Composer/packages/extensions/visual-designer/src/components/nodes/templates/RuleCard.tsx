@@ -3,9 +3,9 @@ import { jsx } from '@emotion/core';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { ObiTypes } from '../../../shared/ObiTypes';
+import { ObiTypes } from '../../../constants/ObiTypes';
 import { normalizeObiStep } from '../../../shared/elementBuilder';
 import { getElementColor } from '../../../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';

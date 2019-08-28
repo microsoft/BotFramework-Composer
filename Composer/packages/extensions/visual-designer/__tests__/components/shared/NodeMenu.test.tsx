@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, findAllByText } from 'react-testing-library';
 
 import { NodeMenu } from '../../../src/components/menus/NodeMenu';
-import { NodeEventTypes } from '../../../src/shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 
 describe('<NodeMenu />', () => {
   let id, onEvent, renderResult, clickResults;

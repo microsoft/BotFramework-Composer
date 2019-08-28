@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { ObiTypes } from '../../../shared/ObiTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { ObiTypes } from '../../../constants/ObiTypes';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';

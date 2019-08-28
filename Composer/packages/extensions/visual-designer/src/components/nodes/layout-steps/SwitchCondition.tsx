@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { GraphNode } from '../../../models/GraphNode';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';

@@ -1,4 +1,4 @@
-import { ObiTypes } from './ObiTypes';
+import { ObiTypes } from '../constants/ObiTypes';
 
 export function normalizeObiStep(data) {
   let step = data;

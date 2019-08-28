@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
-import { NodeEventTypes } from '../shared/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { deleteNode, insert } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';

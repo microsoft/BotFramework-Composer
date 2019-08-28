@@ -6,7 +6,7 @@ import { transformForeach } from '../../../transformers/transformForeach';
 import { foreachLayouter } from '../../../layouters/foreachLayouter';
 import { areBoundariesEqual } from '../../../models/Boundary';
 import { GraphNode } from '../../../models/GraphNode';
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { NodeProps, defaultNodeProps } from '../nodeProps';

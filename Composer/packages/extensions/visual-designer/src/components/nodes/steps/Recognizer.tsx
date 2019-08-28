@@ -1,7 +1,7 @@
 import React from 'react';
 import { getDialogGroupByType } from 'shared-menus';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../shared/elementColors';
