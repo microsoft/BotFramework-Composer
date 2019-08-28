@@ -12,8 +12,7 @@ import {
   UnknownIntentRule,
 } from '../nodes/index';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-
-import { NodeProps, defaultNodeProps } from './sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.EventRule]: EventRule,

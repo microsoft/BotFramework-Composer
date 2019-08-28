@@ -7,7 +7,7 @@ import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { GraphNode } from '../../../shared/GraphNode';
 import { areBoundariesEqual } from '../../../shared/Boundary';
 import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { StepGroup } from '../../groups';
 import { Edge } from '../../lib/EdgeComponents';

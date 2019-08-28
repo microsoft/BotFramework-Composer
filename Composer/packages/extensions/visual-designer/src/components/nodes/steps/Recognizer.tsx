@@ -2,7 +2,7 @@ import React from 'react';
 import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';

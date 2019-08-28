@@ -5,7 +5,7 @@ import React from 'react';
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';

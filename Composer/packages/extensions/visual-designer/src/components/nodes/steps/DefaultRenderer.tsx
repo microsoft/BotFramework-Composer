@@ -3,7 +3,7 @@ import React from 'react';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { getDialogGroupByType } from '../../../shared/appschema';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';

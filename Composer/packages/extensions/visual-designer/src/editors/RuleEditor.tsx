@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { GraphNode } from '../shared/GraphNode';
-import { defaultNodeProps } from '../components/shared/sharedProps';
+import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { Collapse } from '../components/lib/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../shared/outlineObiJson';

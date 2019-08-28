@@ -3,8 +3,9 @@ import React, { FC } from 'react';
 import { Panel } from '../components/lib/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { EditorProps } from '../components/shared/sharedProps';
 import { EventMenu } from '../components/menus/EventMenu';
+
+import { EditorProps } from './editorProps';
 
 export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
   const ruleCount = data.children.length;

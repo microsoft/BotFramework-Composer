@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { GraphNode } from '../../../shared/GraphNode';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';

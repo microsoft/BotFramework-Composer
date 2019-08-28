@@ -1,13 +1,3 @@
-export interface LgTemplate {
-  Name: string;
-  Body: string;
-}
-
-export interface EditorProps {
-  id: string;
-  data: any;
-  onEvent: (action, id) => object | void;
-}
 export interface NodeProps {
   id: string;
   data: any;

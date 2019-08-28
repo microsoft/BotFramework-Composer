@@ -4,13 +4,13 @@ import { useMemo, FC, useContext } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
 import { GraphNode } from '../shared/GraphNode';
 import { queryNode } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
+import { EditorProps, defaultEditorProps } from './editorProps';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformRootDialog(data);
@@ -63,4 +63,4 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   );
 };
 
-AdaptiveDialogEditor.defaultProps = defaultNodeProps;
+AdaptiveDialogEditor.defaultProps = defaultEditorProps;

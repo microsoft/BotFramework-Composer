@@ -9,7 +9,7 @@ import { GraphNode } from '../../../shared/GraphNode';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
-import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { StepGroup } from '../../groups';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
