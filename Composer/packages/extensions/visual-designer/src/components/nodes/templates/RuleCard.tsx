@@ -7,8 +7,7 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { normalizeObiStep } from '../../../shared/elementBuilder';
-import { getElementColor } from '../../../shared/elementColors';
-import { DialogGroup } from '../../../shared/appschema';
+import { EventColor } from '../../../constants/ElementColors';
 
 import { IconCard } from './IconCard';
 
@@ -97,8 +96,8 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
 
   return (
     <IconCard
-      themeColor={getElementColor(DialogGroup.RULE).expanded}
-      iconColor={getElementColor(DialogGroup.RULE).iconColor}
+      themeColor={EventColor.expanded}
+      iconColor={EventColor.iconColor}
       corner={
         <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />

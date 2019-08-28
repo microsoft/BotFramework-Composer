@@ -1,10 +1,12 @@
-import { DialogGroup } from 'shared-menus';
+import { DialogGroup, getDialogGroupByType } from 'shared-menus';
 
 import { NodeColors } from '../constants/ElementColors';
 
-export function getElementColor(type) {
-  if (NodeColors[type]) {
-    return NodeColors[type];
+export function getElementColor($type) {
+  const nodeGroup = getDialogGroupByType($type);
+
+  if (NodeColors[nodeGroup]) {
+    return NodeColors[nodeGroup];
   } else {
     return NodeColors[DialogGroup.STEP];
   }

@@ -6,7 +6,6 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getDialogGroupByType } from '../../../shared/appschema';
 import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
@@ -41,7 +40,7 @@ export class BeginDialog extends React.Component<NodeProps, object> {
 
   render() {
     const { id, data, onEvent } = this.props;
-    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+    const nodeColors = getElementColor(data.$type);
     return (
       <FormCard
         nodeColors={nodeColors}

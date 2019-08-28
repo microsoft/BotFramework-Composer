@@ -1,5 +1,4 @@
 import React from 'react';
-import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
@@ -155,9 +154,8 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
       label = '';
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : { label: '', details: '' };
-    const dialogGroup = getDialogGroupByType(data.$type);
     const icon = getElementIcon(data.$type);
-    const nodeColors = getElementColor(dialogGroup);
+    const nodeColors = getElementColor(data.$type);
 
     if (keyMap) {
       header = header || keyMap.header || '';

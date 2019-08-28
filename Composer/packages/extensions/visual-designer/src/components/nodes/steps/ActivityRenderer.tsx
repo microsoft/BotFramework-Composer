@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -46,7 +45,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
     updateTemplateText();
   });
 
-  const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+  const nodeColors = getElementColor(data.$type);
 
   return (
     <FormCard

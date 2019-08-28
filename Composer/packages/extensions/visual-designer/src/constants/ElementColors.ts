@@ -40,6 +40,8 @@ const Colors = {
   YellewGreen40: 'rgba(140, 189, 24, 0.4)',
 };
 
+export const ObiColors = Colors;
+
 export const EventColor = {
   expanded: Colors.AcidGreen,
   iconColor: Colors.DarkGreen,

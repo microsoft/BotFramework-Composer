@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { getDialogGroupByType } from 'shared-menus';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -22,8 +21,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
       label = '';
 
     const keyMap: { [key: string]: string } = { label: 'prompt', details: 'property' };
-    const dialogGroup = getDialogGroupByType(data.$type);
-    const nodeColors = getElementColor(dialogGroup);
+    const nodeColors = getElementColor(data.$type);
     const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
     let children: any = null;
     const { height } = measureJsonBoundary(data);

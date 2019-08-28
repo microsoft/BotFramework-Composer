@@ -1,5 +1,4 @@
 import React from 'react';
-import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
@@ -12,7 +11,7 @@ export class Recognizer extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;
   render() {
     const { id, data, onEvent } = this.props;
-    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+    const nodeColors = getElementColor(data.$type);
     return (
       <FormCard
         nodeColors={nodeColors}

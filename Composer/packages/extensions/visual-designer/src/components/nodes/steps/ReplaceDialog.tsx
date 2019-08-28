@@ -7,7 +7,6 @@ import formatMessage from 'format-message';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getDialogGroupByType } from '../../../shared/appschema';
 import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
@@ -45,7 +44,7 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
 
   render() {
     const { id, data, onEvent } = this.props;
-    const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+    const nodeColors = getElementColor(data.$type);
     return (
       <FormCard
         nodeColors={nodeColors}

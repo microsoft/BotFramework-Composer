@@ -10,7 +10,7 @@ describe('<FormCard />', () => {
   beforeEach(() => {
     header = 'InputFormCard';
     label = 'FormCard';
-    nodeColors = getElementColor('DialogGroup.INPUT');
+    nodeColors = getElementColor('Microsoft.SendActivity');
 
     onClick = jest.fn();
 
