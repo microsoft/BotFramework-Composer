@@ -23,7 +23,7 @@ const containerStyle = {
 
 interface NodeProps {
   header: string;
-  corner: any;
+  corner?: any;
   label: any;
   icon?: string;
   styles?: object;
@@ -86,9 +86,11 @@ export const FormCard: FunctionComponent<NodeProps> = ({
             alignItems: 'center',
           }}
         >
-          <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon} color={iconColor} size={30} />
-          </div>
+          {icon !== 'none' && (
+            <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
+              <Icon icon={icon} color={iconColor} size={30} />
+            </div>
+          )}
           <div
             css={{
               height: '100%',

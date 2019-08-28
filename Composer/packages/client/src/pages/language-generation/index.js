@@ -1,15 +1,10 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
+import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
-import { BASEPATH } from '../../constants';
 import { StoreContext } from '../../store';
-import { resolveToBasePath } from '../../utils/fileUtil';
 import {
   ContentHeaderStyle,
   ContentStyle,
@@ -18,14 +13,13 @@ import {
   contentEditor,
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
+import { navigateTo } from '../../utils';
 
 import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
-
-const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LGPage = props => {
   const { state, actions } = useContext(StoreContext);
@@ -90,15 +84,15 @@ export const LGPage = props => {
 
     //  fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
-      navigate(mapNavPath('/language-generation'));
+      navigateTo('/language-generation');
     }
   }, [subPath, dialogs]);
 
   function onSelect(id) {
     if (id === '_all') {
-      navigate(mapNavPath('/language-generation'));
+      navigateTo('/language-generation');
     } else {
-      navigate(mapNavPath(`language-generation/${id}`));
+      navigateTo(`language-generation/${id}`);
     }
   }
 
@@ -120,7 +114,7 @@ export const LGPage = props => {
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
   function onTableViewClickEdit() {
-    navigate(mapNavPath(`/language-generation`));
+    navigateTo(`/language-generation`);
     setEditMode(true);
   }
 

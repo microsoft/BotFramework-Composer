@@ -4,7 +4,7 @@ import ApiClient from '../../src/messenger/ApiClient';
 
 jest.mock('nanoid');
 
-nanoid.mockReturnValue('uniqueId');
+(nanoid as jest.Mock).mockReturnValue('uniqueId');
 
 const oldPostMessage = window.postMessage;
 

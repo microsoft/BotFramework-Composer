@@ -1,5 +1,5 @@
 import { css } from '@emotion/core';
-import { NeutralColors, Depths, SharedColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const main = css`
@@ -11,7 +11,6 @@ export const sideBar = isExpand => css`
   width: ${isExpand ? '220' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
-  box-shadow: ${Depths.depth8};
   transition: width 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -39,7 +38,7 @@ export const globalNav = css`
   line-height: 44px;
   cursor: pointer;
   font-size: ${FontSizes.size16};
-  color: ${SharedColors.cyanBlue10};
+  color: #106ebe;
   &:hover {
     background: ${NeutralColors.gray40};
   }
@@ -68,7 +67,7 @@ export const rightPanel = () => css`
 `;
 
 export const data = css`
-  height: calc(100vh - 105px);
+  height: calc(100vh - 50px);
 `;
 
 export const bot = css`
@@ -83,7 +82,7 @@ export const botButton = css`
 `;
 
 export const calloutLabel = css`
-  font-size: ${FontSizes.large};
+  font-size: ${FontSizes.size18};
   font-weight: ${FontWeights.bold};
 `;
 

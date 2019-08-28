@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -18,7 +16,7 @@ import { CreationFlow } from './CreationFlow';
 initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
-const Content = forwardRef((props, ref) => <div css={content} {...props} ref={ref} />);
+const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
 const topLinks = [
   {
@@ -92,9 +90,9 @@ const bottomLinks = [
   },
 ];
 
-export function App() {
+export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
-  const [sideBarExpand, setSideBarExpand] = useState('');
+  const [sideBarExpand, setSideBarExpand] = useState(false);
   const { botName, creationFlowStatus } = state;
   const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
@@ -103,11 +101,14 @@ export function App() {
     init();
   }, []);
 
-  async function init() {
-    const data = await fetchProject();
-    if (data && data.botName) {
-      setLuisConfig(data.botName);
+  useEffect(() => {
+    if (botName) {
+      setLuisConfig(botName);
     }
+  }, [botName]);
+
+  async function init() {
+    await fetchProject();
   }
 
   return (
@@ -170,4 +171,4 @@ export function App() {
       </div>
     </Fragment>
   );
-}
+};

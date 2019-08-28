@@ -7,7 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, ILuisStatusOperation } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -41,7 +41,7 @@ export class BotProject {
 
     this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
-    this.luIndexer = new LUIndexer(this.fileStorage, this.dir);
+    this.luIndexer = new LUIndexer();
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
@@ -51,6 +51,7 @@ export class BotProject {
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this._checkProjectStructure();
+    await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
 
   public getIndexes = () => {
@@ -58,9 +59,22 @@ export class BotProject {
       botName: this.name,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
-      luFiles: this.luIndexer.getLuFiles(),
+      luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
     };
+  };
+
+  // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
+  private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
+    return luFiles.map(x => {
+      if (!luStatus[x.relativePath]) {
+        throw new Error(`No luis status for lu file ${x.relativePath}`);
+      }
+      return {
+        ...x,
+        status: luStatus[x.relativePath],
+      };
+    });
   };
 
   public getSchemas = () => {
@@ -125,8 +139,11 @@ export class BotProject {
   };
 
   public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
+    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    if (dialog) {
+      throw new Error(`${id} dialog already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
@@ -161,6 +178,10 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
+    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+    if (lgFile) {
+      throw new Error(`${id} lg file already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     const absolutePath = `${this.dir}/${relativePath}`;
     const diagnostics = this.lgIndexer.check(content, absolutePath);
@@ -197,27 +218,23 @@ export class BotProject {
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
     if (!isUpdate) return this.luIndexer.getLuFiles();
 
-    const updateTime = Date.now();
+    await this._updateFile(luFile.relativePath, content);
+    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
 
-    const data: ILuisStatusOperation = {};
-    data[id] = {
-      content,
-      parsedContent: currentLufileParsedContentLUISJsonStructure,
-      lastUpdateTime: updateTime,
-    };
-
-    this.luIndexer.updateLuInMemoryIfUpdate(this.files, data, content);
-    await this.luIndexer.flush(this.files, luFile.relativePath);
-
-    const luFiles = this.luIndexer.getLuFiles();
-    return luFiles;
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
+    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+    if (luFile) {
+      throw new Error(`${id} lu file already exist`);
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
-    await this.luIndexer.updateLuInMemoryIfCreate(this.files, content, relativePath, id);
-    await this.luIndexer.flush(this.files, relativePath);
-    return this.luIndexer.getLuFiles();
+
+    // TODO: validate before save
+    await this._createFile(relativePath, content);
+    await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
   };
 
   public removeLuFile = async (id: string): Promise<LUFile[]> => {
@@ -225,32 +242,25 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    this.luIndexer.updateLuInMemoryIfRemove(this.files, luFile.relativePath, id);
-    await this.luIndexer.flush(this.files, luFile.relativePath);
-    return this.luIndexer.getLuFiles();
+    await this._removeFile(luFile.relativePath);
+    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public setLuisConfig = async (config: ILuisConfig) => {
+  public setLuisConfig = async (config: ILuisConfig, botName: string) => {
+    if (botName !== this.name) {
+      throw new Error(`The opened bot ${this.name} does not match to the bot ${botName} you are trying to config`);
+    }
     this.luPublisher.setLuisConfig(config);
   };
 
   public publishLuis = async () => {
-    //TODO luIndexer.getLuFiles() depends on luIndexer.index() not reliable when http call publish
-    const toPublish = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(toPublish);
-    if (unpublished.length === 0) {
-      return this.luIndexer.getLuFiles();
-    }
+    const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
-      const msg = invalidLuFile.reduce((msg, file) => {
-        const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
-          text += `\n ${diagnostic.text}`;
-          return text;
-        }, `In ${file.id}.lu: `);
-        msg += `\n ${fileErrorText} \n`;
-        return msg;
-      }, '');
+      const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
     const emptyLuFiles = unpublished.filter(this.isEmpty);
@@ -259,24 +269,14 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    const toUpdateLuId = unpublished.map(file => file.id);
-    const publishTime = Date.now();
-    const data: ILuisStatusOperation = {};
-    toUpdateLuId.forEach(
-      id =>
-        (data[id] = {
-          lastPublishTime: publishTime,
-        })
-    );
-
     try {
-      await this.luPublisher.publish(unpublished);
-      this.luIndexer.updateLuInMemoryIfPublish(this.files, data);
-      await this.luIndexer.flush(this.files);
+      if (unpublished.length > 0) {
+        await this.luPublisher.publish(unpublished);
+      }
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
-    return this.luIndexer.getLuFiles();
+    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
   public checkLuisPublished = async () => {
@@ -415,16 +415,6 @@ export class BotProject {
       }
     }
 
-    const luisStatusPath = Path.join(this.dir, 'generated/luis.status.json');
-    if (await this.fileStorage.exists(luisStatusPath)) {
-      const content = await this.fileStorage.readFile(luisStatusPath);
-      fileList.push({
-        name: Path.basename(luisStatusPath),
-        content,
-        path: luisStatusPath,
-        relativePath: Path.relative(this.dir, luisStatusPath),
-      });
-    }
     return fileList;
   };
 
@@ -490,5 +480,16 @@ export class BotProject {
       return true;
     }
     return false;
+  };
+
+  private generateErrorMessage = (invalidLuFile: LUFile[]) => {
+    return invalidLuFile.reduce((msg, file) => {
+      const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
+        text += `\n ${diagnostic.text}`;
+        return text;
+      }, `In ${file.id}.lu: `);
+      msg += `\n ${fileErrorText} \n`;
+      return msg;
+    }, '');
   };
 }

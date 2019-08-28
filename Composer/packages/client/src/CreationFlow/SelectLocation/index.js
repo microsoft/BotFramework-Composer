@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
-import { navigate } from '@reach/router';
+
+import { navigateTo } from '../../utils';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
 import { StoreContext } from './../../store';
@@ -23,13 +22,13 @@ export function SelectLocation(props) {
       ) {
         startBot(true);
         onDismiss();
+        navigateTo('/dialogs/Main');
       } else {
         setErrorMessage(formatMessage('Please select one of these options.'));
       }
     } else {
       onOpen(selected);
     }
-    navigate('/dialogs/Main');
   }
 
   function TemplateItem(props) {

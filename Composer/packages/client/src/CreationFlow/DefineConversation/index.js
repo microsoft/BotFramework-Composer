@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
 
@@ -24,6 +22,7 @@ const validateForm = data => {
 export function DefineConversation(props) {
   const { onSubmit, onGetErrorMessage, onDismiss } = props;
   const [formData, setFormData] = useState({ errors: {} });
+  const [disable, setDisable] = useState(false);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -50,6 +49,24 @@ export function DefineConversation(props) {
     });
   };
 
+  //disable the next button if the text has errors.
+  const getErrorMessage = text => {
+    if (typeof onGetErrorMessage === 'function') {
+      const result = onGetErrorMessage(text);
+      if (result === '' && disable) {
+        setDisable(false);
+      }
+
+      if (result !== '' && !disable) {
+        setDisable(true);
+      }
+
+      return result;
+    } else {
+      return '';
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
@@ -58,7 +75,7 @@ export function DefineConversation(props) {
           styles={name}
           onChange={updateForm('name')}
           errorMessage={formData.errors.name}
-          onGetErrorMessage={onGetErrorMessage}
+          onGetErrorMessage={getErrorMessage}
           data-testid="NewDialogName"
         />
         <TextField
@@ -71,7 +88,7 @@ export function DefineConversation(props) {
       </Stack>
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+        <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
       </DialogFooter>
     </form>
   );

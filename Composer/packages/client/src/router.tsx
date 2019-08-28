@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React from 'react';
 import { Router, Match, Redirect } from '@reach/router';
 
 import DesignPage from './pages/design';
