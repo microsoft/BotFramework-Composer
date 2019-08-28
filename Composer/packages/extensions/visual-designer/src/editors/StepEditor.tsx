@@ -8,7 +8,7 @@ import { Edge } from '../components/lib/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { Boundary } from '../models/Boundary';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../shared/elementSizes';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { Terminator } from '../components/decorations/Terminator';
 

@@ -5,7 +5,7 @@ import {
   calculateForeachBoundary,
 } from '../../src/layouters/calculateNodeBoundary';
 import { Boundary } from '../../src/models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft } from '../../src/shared/elementSizes';
+import { ElementInterval, LoopEdgeMarginLeft } from '../../src/constants/ElementSizes';
 
 const boundary = new Boundary();
 const BranchIntervalX = ElementInterval.x;

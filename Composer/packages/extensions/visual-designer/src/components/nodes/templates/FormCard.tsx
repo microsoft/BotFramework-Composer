@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
 import { Icon } from '../../decorations/icon';
-import { InitNodeSize } from '../../../shared/elementSizes';
+import { InitNodeSize } from '../../../constants/ElementSizes';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;

@@ -5,7 +5,7 @@ import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 import { GraphNode } from '../../models/GraphNode';
 import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
+import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';

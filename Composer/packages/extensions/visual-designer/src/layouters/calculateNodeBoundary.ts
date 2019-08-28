@@ -1,5 +1,5 @@
 import { Boundary } from '../models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX } from '../shared/elementSizes';
+import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX } from '../constants/ElementSizes';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;

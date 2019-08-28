@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
+import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../nodeProps';

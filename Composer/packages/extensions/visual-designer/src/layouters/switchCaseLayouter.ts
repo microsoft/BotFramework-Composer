@@ -1,4 +1,4 @@
-import { ElementInterval, BranchIntervalMinX } from '../shared/elementSizes';
+import { ElementInterval, BranchIntervalMinX } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { EdgeData } from '../models/EdgeData';

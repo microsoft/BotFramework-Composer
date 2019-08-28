@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
-import { CollapsedEventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
+import { CollapsedEventNodeSize, EventNodeLayout } from '../../constants/ElementSizes';
 import { EventColor } from '../../constants/ElementColors';
 
 const ElementWidth = CollapsedEventNodeSize.width;

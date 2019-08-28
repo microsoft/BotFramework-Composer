@@ -1,5 +1,5 @@
 import { GraphNode } from '../models/GraphNode';
-import { ElementInterval } from '../shared/elementSizes';
+import { ElementInterval } from '../constants/ElementSizes';
 import { GraphLayout } from '../models/GraphLayout';
 import { EdgeData } from '../models/EdgeData';
 

@@ -7,7 +7,7 @@ import {
   LoopIconSize,
   ChoiceInputSize,
   ChoiceInputMarginTop,
-} from '../../src/shared/elementSizes';
+} from '../../src/constants/ElementSizes';
 
 describe('measureJsonBoundary', () => {
   const boundary = new Boundary();
