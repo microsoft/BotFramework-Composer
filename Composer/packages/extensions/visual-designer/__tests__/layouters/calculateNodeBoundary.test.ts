@@ -4,7 +4,7 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
 } from '../../src/layouters/calculateNodeBoundary';
-import { Boundary } from '../../src/shared/Boundary';
+import { Boundary } from '../../src/models/Boundary';
 import { ElementInterval, LoopEdgeMarginLeft } from '../../src/shared/elementSizes';
 
 const boundary = new Boundary();

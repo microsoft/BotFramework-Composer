@@ -1,5 +1,5 @@
 import { ObiTypes } from '../shared/ObiTypes';
-import { IndexedNode } from '../shared/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 
 const IfBranchKey = 'steps';
 const ElseBranchKey = 'elseSteps';

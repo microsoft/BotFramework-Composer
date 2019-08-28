@@ -4,7 +4,7 @@ import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { GraphNode } from '../shared/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { Collapse } from '../components/lib/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';

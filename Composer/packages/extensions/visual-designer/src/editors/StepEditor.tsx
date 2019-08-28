@@ -7,7 +7,7 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { Edge } from '../components/lib/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { Boundary } from '../shared/Boundary';
+import { Boundary } from '../models/Boundary';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../shared/elementSizes';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { Terminator } from '../components/decorations/Terminator';

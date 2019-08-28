@@ -2,8 +2,8 @@
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
 
-import { GraphNode } from '../../shared/GraphNode';
-import { areBoundariesEqual } from '../../shared/Boundary';
+import { GraphNode } from '../../models/GraphNode';
+import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
@@ -12,7 +12,7 @@ import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { OffsetContainer } from '../lib/OffsetContainer';
 import { StepRenderer } from '../renderers/StepRenderer';
 import { Edge } from '../lib/EdgeComponents';
-import { GraphLayout } from '../../shared/GraphLayout';
+import { GraphLayout } from '../../models/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
 
 const StepInterval = ElementInterval.y;

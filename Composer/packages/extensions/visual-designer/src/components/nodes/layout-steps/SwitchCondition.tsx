@@ -4,10 +4,10 @@ import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { GraphNode } from '../../../shared/GraphNode';
+import { GraphNode } from '../../../models/GraphNode';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';
-import { areBoundariesEqual } from '../../../shared/Boundary';
+import { areBoundariesEqual } from '../../../models/Boundary';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';

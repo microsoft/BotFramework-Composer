@@ -4,7 +4,7 @@ import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { EventRenderer } from '../renderers/EventRenderer';
-import { Boundary } from '../../shared/Boundary';
+import { Boundary } from '../../models/Boundary';
 import { EventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
 
 const RuleElementHeight = EventNodeSize.height;

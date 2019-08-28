@@ -4,8 +4,8 @@ import React, { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
 import { transformForeach } from '../../../transformers/transformForeach';
 import { foreachLayouter } from '../../../layouters/foreachLayouter';
-import { areBoundariesEqual } from '../../../shared/Boundary';
-import { GraphNode } from '../../../shared/GraphNode';
+import { areBoundariesEqual } from '../../../models/Boundary';
+import { GraphNode } from '../../../models/GraphNode';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';

@@ -1,5 +1,5 @@
-import { Boundary } from '../../src/shared/Boundary';
-import { GraphNode } from '../../src/shared/GraphNode';
+import { Boundary } from '../../src/models/Boundary';
+import { GraphNode } from '../../src/models/GraphNode';
 import { switchCaseLayouter } from '../../src/layouters/switchCaseLayouter';
 
 describe('switchCaseLayouter', () => {

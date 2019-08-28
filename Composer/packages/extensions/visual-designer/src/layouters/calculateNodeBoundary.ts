@@ -1,4 +1,4 @@
-import { Boundary } from '../shared/Boundary';
+import { Boundary } from '../models/Boundary';
 import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX } from '../shared/elementSizes';
 
 const BranchIntervalX = ElementInterval.x;

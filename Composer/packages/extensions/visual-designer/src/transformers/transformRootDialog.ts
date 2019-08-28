@@ -1,5 +1,5 @@
 import { ObiTypes } from '../shared/ObiTypes';
-import { IndexedNode } from '../shared/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../shared/elementBuilder';
 
 function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {

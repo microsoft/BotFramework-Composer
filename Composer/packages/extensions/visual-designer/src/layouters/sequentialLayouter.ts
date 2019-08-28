@@ -1,7 +1,7 @@
-import { GraphNode } from '../shared/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { ElementInterval } from '../shared/elementSizes';
-import { GraphLayout } from '../shared/GraphLayout';
-import { EdgeData } from '../shared/EdgeData';
+import { GraphLayout } from '../models/GraphLayout';
+import { EdgeData } from '../models/EdgeData';
 
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
 

@@ -4,7 +4,7 @@ import { useMemo, FC, useContext } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { GraphNode } from '../shared/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { queryNode } from '../shared/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
