@@ -13,7 +13,7 @@ context('Creating a new bot', () => {
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewProject').should('exist');
+      cy.getByText('__TestNewProject.Main').should('exist');
     });
   });
 
@@ -25,7 +25,7 @@ context('Creating a new bot', () => {
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewProject').should('exist');
+      cy.getByText('__TestNewProject.Main').should('exist');
       cy.getByText('AddToDo').should('exist');
       cy.getByText('ClearToDos').should('exist');
       cy.getByText('DeleteToDo').should('exist');

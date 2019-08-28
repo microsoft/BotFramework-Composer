@@ -2,6 +2,18 @@ import { css } from '@emotion/core';
 import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+export const pageRoot = css`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const projectContainer = css`
   display: flex;
   flex-direction: column;
@@ -10,6 +22,7 @@ export const projectContainer = css`
   width: 255px;
 `;
 
+//remove TODO
 export const projectWrapper = css``;
 
 export const projectHeader = css`
@@ -32,6 +45,7 @@ export const assetTree = css`
   flex-grow: 2;
   flex-shrink: 2;
 `;
+/*******/
 
 export const editorContainer = css`
   display: flex;

@@ -13,7 +13,7 @@ context('Luis Deploy', () => {
   it('can deploy luis success', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
     cy.get('[data-testid="LUEditor"]').within(() => {
-      cy.getAllByText('ToDoLuisBot').should('exist');
+      cy.getAllByText('ToDoLuisBot.Main').should('exist');
     });
 
     cy.route('POST', '/api/projects/opened/luFiles/publish', 'fixture:luPublish/success').as('publish');
