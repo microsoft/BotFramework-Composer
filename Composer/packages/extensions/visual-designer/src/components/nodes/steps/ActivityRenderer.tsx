@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { getDialogGroupByType } from 'shared-menus';
 
-import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { DialogGroup } from '../../../shared/appschema';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
-import { NodeColors } from '../../../shared/elementColors';
-import { getFriendlyName } from '../utils';
+import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { getFriendlyName } from '../utils';
 
 const isAnonymousTemplateReference = activity => {
   return activity && activity.indexOf('bfdactivity-') !== -1;
@@ -46,9 +46,11 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
     updateTemplateText();
   });
 
+  const nodeColors = getElementColor(getDialogGroupByType(data.$type));
+
   return (
     <FormCard
-      nodeColors={NodeColors[DialogGroup.RESPONSE]}
+      nodeColors={nodeColors}
       header={getFriendlyName(data) || 'Activity'}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       icon="MessageBot"
