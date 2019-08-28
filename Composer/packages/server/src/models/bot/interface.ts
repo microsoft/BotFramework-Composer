@@ -24,6 +24,7 @@ export interface Dialog {
   luIntents: string[];
   lgTemplates: string[];
   relativePath: string;
+  triggers: any[];
 }
 
 export interface LGTemplate {

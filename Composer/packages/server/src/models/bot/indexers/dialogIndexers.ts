@@ -3,9 +3,9 @@ import { has, uniq } from 'lodash';
 import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { DialogChecker } from '../dialogChecker';
+import { conceptLabels } from '../../asset/trigger';
 
 import { FileInfo, Dialog } from './../interface';
-
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
   private botName: string;
@@ -111,6 +111,23 @@ export class DialogIndexer {
     return uniq(dialogs);
   }
 
+  private ExtractTriggers(dialog: any) {
+    const rules = dialog.rules;
+    const triggers = rules.map((r: { $designer: { name: string; id: string }; intent: string; $type: string }) => {
+      if (r.$designer && r.$designer.name) {
+        return { name: r.$designer.name, id: r.$designer.id };
+      } else if (r.intent) {
+        return { name: r.intent, id: r.$designer.id };
+      } else {
+        return {
+          name: conceptLabels[r.$type].title,
+          id: r.$designer.id,
+        };
+      }
+    });
+    return triggers;
+  }
+
   // check all fields
   private CheckFields(dialog: Dialog): string[] {
     const errors: string[] = [];
@@ -171,6 +188,7 @@ export class DialogIndexer {
               luFile: Path.basename(luFile, '.lu'),
               lgFile: Path.basename(lgFile, '.lg'),
               relativePath: file.relativePath,
+              triggers: this.ExtractTriggers(dialogJson),
             };
 
             this.dialogs.push(dialog);

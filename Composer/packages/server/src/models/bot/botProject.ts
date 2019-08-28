@@ -7,17 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 
 import { IFileStorage } from './../storage/interface';
-import {
-  LocationRef,
-  FileInfo,
-  LGFile,
-  Dialog,
-  LUFile,
-  ILuisConfig,
-  LuisStatus,
-  FileUpdateType,
-  Schema,
-} from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
@@ -67,30 +57,11 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
-      dialogs: this.mergeDialogStatus(this.dialogIndexer.getDialogs(), this.getSchemas()),
+      dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
     };
-  };
-
-  private mergeDialogStatus = (dialogs: Dialog[], schema: Schema) => {
-    return dialogs.map(dialog => {
-      const rules = dialog.content.rules;
-      const triggers = rules.map((r: { $designer: { name: string; id: string }; intent: string; $type: string }) => {
-        if (r.$designer && r.$designer.name) {
-          return { name: r.$designer.name, id: r.$designer.id };
-        } else if (r.intent) {
-          return { name: r.intent, id: r.$designer.id };
-        } else {
-          return {
-            name: schema.editor.content.SDKOverrides[r.$type].title,
-            id: r.$designer.id,
-          };
-        }
-      });
-      return { ...dialog, triggers };
-    });
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
@@ -106,7 +77,7 @@ export class BotProject {
     });
   };
 
-  public getSchemas = (): Schema => {
+  public getSchemas = () => {
     let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
