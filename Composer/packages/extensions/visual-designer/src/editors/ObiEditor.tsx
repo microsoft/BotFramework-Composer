@@ -4,12 +4,14 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { deleteNode, insert } from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
+import { KeyboardZone } from './KeyboardZone';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
@@ -88,6 +90,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     selectedIds: [],
   });
 
+  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
+
   useEffect(
     (): void => {
       selection.setItems(nodeIndexGenerator.current.getItemList());
@@ -97,6 +101,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   useEffect((): void => {
     resetSelectionData();
   }, [data]);
+
+  useEffect((): void => {
+    if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else {
+      setKeyBoardStatus('nomal');
+    }
+  }, [focusedId, selectionContext]);
 
   const selection = new Selection({
     onSelectionChanged: (): void => {
@@ -111,43 +125,59 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
+  const handleKeyboardCommand = command => {
+    switch (command) {
+      case KeyboardCommandTypes.Up:
+        break;
+      case KeyboardCommandTypes.Down:
+        break;
+      case KeyboardCommandTypes.Left:
+        break;
+      case KeyboardCommandTypes.Right:
+        break;
+      case KeyboardCommandTypes.Copy:
+        break;
+      case KeyboardCommandTypes.Paste:
+        break;
+      case KeyboardCommandTypes.Delete:
+        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        break;
+    }
+  };
+
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <MarqueeSelection selection={selection}>
-        <div
-          tabIndex={0}
-          className="obi-editor-container"
-          data-testid="obi-editor-container"
-          css={{
-            width: '100%',
-            height: '100%',
-            padding: '20px',
-            boxSizing: 'border-box',
-            '&:focus': { outline: 'none' },
-          }}
-          ref={el => (divRef = el)}
-          onKeyUp={e => {
-            const keyString = e.key;
-            if (keyString === 'Delete' && focusedId) {
-              dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-            }
-          }}
-          onClick={e => {
-            e.stopPropagation();
-            dispatchEvent(NodeEventTypes.Focus, '');
-          }}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.focus({ preventScroll: true });
-              dispatchEvent(eventName, eventData);
+      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+        <MarqueeSelection selection={selection}>
+          <div
+            tabIndex={0}
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '20px',
+              boxSizing: 'border-box',
+              '&:focus': { outline: 'none' },
             }}
-          />
-        </div>
-      </MarqueeSelection>
+            ref={el => (divRef = el)}
+            onClick={e => {
+              e.stopPropagation();
+              dispatchEvent(NodeEventTypes.Focus, '');
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.focus({ preventScroll: true });
+                dispatchEvent(eventName, eventData);
+              }}
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
     </SelectionContext.Provider>
   );
 };
