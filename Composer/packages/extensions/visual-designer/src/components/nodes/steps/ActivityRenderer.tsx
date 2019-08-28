@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
-import { getElementColor } from '../../../shared/elementColors';
+import { getElementColor } from '../../../shared/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getFriendlyName } from '../utils';

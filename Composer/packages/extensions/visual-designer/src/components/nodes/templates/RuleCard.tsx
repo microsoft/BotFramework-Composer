@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { ObiTypes } from '../../../constants/ObiTypes';
-import { normalizeObiStep } from '../../../shared/elementBuilder';
+import { normalizeObiStep } from '../../../shared/stepBuilder';
 import { EventColor } from '../../../constants/ElementColors';
 
 import { IconCard } from './IconCard';

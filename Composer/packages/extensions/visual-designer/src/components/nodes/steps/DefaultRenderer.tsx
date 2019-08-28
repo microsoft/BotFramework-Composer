@@ -4,10 +4,9 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getElementColor } from '../../../shared/elementColors';
+import { getElementColor, getElementIcon } from '../../../shared/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
-import { getElementIcon } from '../../../shared/elementIcon';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 

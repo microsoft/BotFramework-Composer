@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getElementColor } from '../../../shared/elementColors';
+import { getElementColor } from '../../../shared/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 

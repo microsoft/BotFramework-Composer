@@ -8,7 +8,7 @@ import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
-import { getElementColor } from '../../../shared/elementColors';
+import { getElementColor } from '../../../shared/obiPropertyResolver';
 import { getFriendlyName } from '../utils';
 import { FormCard } from '../templates/FormCard';
 
