@@ -53,6 +53,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
     return (
       <IconButton
+        data-testid="iconMenu"
         styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
