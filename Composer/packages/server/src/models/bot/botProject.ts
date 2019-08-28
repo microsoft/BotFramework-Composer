@@ -14,6 +14,11 @@ import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 
+const oauthInput = () => ({
+  MicrosoftAppId: process.env['MicrosoftAppId'] || '',
+  MicrosoftAppPassword: process.env['MicrosoftAppPassword'] || '',
+});
+
 export class BotProject {
   public ref: LocationRef;
 
@@ -63,6 +68,7 @@ export class BotProject {
       luFiles: this.luIndexer.getLuFiles(),
       schemas: this.getSchemas(),
       botEnvironment: absHosted ? this.name : undefined,
+      OAuthInput: oauthInput(),
     };
   };
 

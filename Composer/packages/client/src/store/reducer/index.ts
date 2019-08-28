@@ -1,5 +1,6 @@
 import { ReducerFunc } from '../types';
 import { getExtension } from '../../utils';
+import oauthStorage from '../../utils/oauthStorage';
 import { ActionTypes, FileTypes } from '../../constants';
 
 import createReducer from './createReducer';
@@ -13,6 +14,10 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.botEnvironment = response.data.botEnvironment || 'production';
+  if (response.data.OAuthInput) {
+    oauthStorage.set({ OAuthInput: response.data.OAuthInput });
+    state.oAuth = response.data.OAuthInput;
+  }
   return state;
 };
 

@@ -46,7 +46,10 @@ export interface State {
   luFiles: LuFile[];
   designPageLocation: any;
   error: StateError | null;
-  oAuth: any;
+  oAuth: {
+    MicrosoftAppId: string;
+    MicrosoftAppPassword: string;
+  };
   breadcrumb: any[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
