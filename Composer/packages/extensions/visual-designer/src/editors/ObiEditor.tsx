@@ -4,12 +4,14 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { deleteNode, insert, moveFocusNode, insertByClipboard } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { deleteNode, insert } from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
+import { KeyboardZone } from './KeyboardZone';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
@@ -88,6 +90,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     selectedIds: [],
   });
 
+  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
+
   useEffect(
     (): void => {
       selection.setItems(nodeIndexGenerator.current.getItemList());
@@ -97,6 +101,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   useEffect((): void => {
     resetSelectionData();
   }, [data]);
+
+  useEffect((): void => {
+    if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else {
+      setKeyBoardStatus('nomal');
+    }
+  }, [focusedId, selectionContext]);
 
   const selection = new Selection({
     onSelectionChanged: (): void => {
@@ -111,43 +125,96 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
+  const handleKeyboardCommand = command => {
+    let path = focusedId;
+    const idSelectors = focusedId.split('.');
+    switch (command) {
+      case KeyboardCommandTypes.Up:
+      case KeyboardCommandTypes.Down:
+      case KeyboardCommandTypes.Left:
+      case KeyboardCommandTypes.Right:
+        path = moveFocusNode(data, focusedId, command);
+        onFocusSteps([path]);
+        break;
+      case KeyboardCommandTypes.Copy:
+        if (keyboardStatus === 'selected') {
+          const selectedIds = selectionContext.selectedIds;
+          let shortestLength = selectedIds[0].split('.').length;
+          selectedIds.forEach(id => {
+            if (id.split('.').length < shortestLength) {
+              shortestLength = id.split('.').length;
+            }
+          });
+          const ids = new Set<string>(
+            selectedIds.map(
+              item =>
+                (item = item
+                  .split('.')
+                  .slice(0, shortestLength)
+                  .join('.'))
+            )
+          );
+          navigator.clipboard.writeText(Array.from(ids).join(','));
+        } else if (keyboardStatus === 'focused' && !idSelectors[idSelectors.length - 1].includes('rules')) {
+          navigator.clipboard.writeText(focusedId);
+        }
+        break;
+      case KeyboardCommandTypes.Paste:
+        navigator.clipboard.readText().then(text => {
+          if (text) {
+            const clipboardData = text.split(',');
+            const { dialog, focusedPath } = insertByClipboard(data, focusedId, clipboardData);
+            onChange(dialog);
+            onFocusSteps([focusedPath as string]);
+            navigator.clipboard.writeText('');
+          }
+        });
+        break;
+      case KeyboardCommandTypes.Delete:
+        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        break;
+    }
+  };
+
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-        <div
-          tabIndex={0}
-          className="obi-editor-container"
-          data-testid="obi-editor-container"
-          css={{
-            width: '100%',
-            height: '100%',
-            padding: '48px 20px',
-            boxSizing: 'border-box',
-            '&:focus': { outline: 'none' },
-          }}
-          ref={el => (divRef = el)}
-          onKeyUp={e => {
-            const keyString = e.key;
-            if (keyString === 'Delete' && focusedId) {
-              dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-            }
-          }}
-          onClick={e => {
-            e.stopPropagation();
-            dispatchEvent(NodeEventTypes.Focus, '');
-          }}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.focus({ preventScroll: true });
-              dispatchEvent(eventName, eventData);
+      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+          <div
+            tabIndex={0}
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '48px 20px',
+              boxSizing: 'border-box',
+              '&:focus': { outline: 'none' },
             }}
-          />
-        </div>
-      </MarqueeSelection>
+            ref={el => (divRef = el)}
+            onKeyUp={e => {
+              const keyString = e.key;
+              if (keyString === 'Delete' && focusedId) {
+                dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+              }
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              dispatchEvent(NodeEventTypes.Focus, '');
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.focus({ preventScroll: true });
+                dispatchEvent(eventName, eventData);
+              }}
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
     </SelectionContext.Provider>
   );
 };
