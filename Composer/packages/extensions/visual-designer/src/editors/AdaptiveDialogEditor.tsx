@@ -5,7 +5,7 @@ import { useMemo, FC, useContext } from 'react';
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { queryNode } from '../shared/jsonTracker';
+import { queryNode } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { EventsEditor } from './EventsEditor';

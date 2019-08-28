@@ -4,7 +4,7 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getElementColor, getElementIcon } from '../../../shared/obiPropertyResolver';
+import { getElementColor, getElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 

@@ -6,7 +6,7 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { getElementColor } from '../../../shared/obiPropertyResolver';
+import { getElementColor } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from 'react-testing-library';
 
 import { FormCard } from '../../../src/components/nodes/templates/FormCard';
-import { getElementColor } from '../../../src/shared/obiPropertyResolver';
+import { getElementColor } from '../../../src/utils/obiPropertyResolver';
 
 describe('<FormCard />', () => {
   let renderResult, header, label, nodeColors, onClick;

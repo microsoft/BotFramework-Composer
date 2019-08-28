@@ -1,6 +1,6 @@
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
-import { normalizeObiStep } from '../shared/stepBuilder';
+import { normalizeObiStep } from '../utils/stepBuilder';
 
 export function transformStepGroup(input, groupId): IndexedNode[] {
   if (!input || input.$type !== ObiTypes.StepGroup) return [];

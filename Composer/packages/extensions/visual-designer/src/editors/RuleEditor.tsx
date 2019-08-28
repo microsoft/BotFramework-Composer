@@ -8,7 +8,7 @@ import { GraphNode } from '../models/GraphNode';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { Collapse } from '../components/lib/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
-import { outlineObiJson } from '../shared/outlineObiJson';
+import { outlineObiJson } from '../utils/outlineObiJson';
 import { Trigger } from '../components/nodes/Trigger';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
