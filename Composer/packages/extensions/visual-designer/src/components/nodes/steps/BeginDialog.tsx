@@ -3,15 +3,14 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 // eslint-disable-next-line no-unused-vars
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeMenu } from '../shared/NodeMenu';
-import { getDialogGroupByType } from '../../shared/appschema';
-
-import { getElementColor } from './shared/elementColors';
-import { FormCard } from './templates/FormCard';
-import { getFriendlyName } from './utils';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeMenu } from '../../shared/NodeMenu';
+import { getDialogGroupByType } from '../../../shared/appschema';
+import { getElementColor } from '../shared/elementColors';
+import { FormCard } from '../templates/FormCard';
+import { getFriendlyName } from '../utils';
 
 export class BeginDialog extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;

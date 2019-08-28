@@ -2,18 +2,18 @@
 import { jsx } from '@emotion/core';
 import React, { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
-import { transformForeach } from '../../transformers/transformForeach';
-import { foreachLayouter } from '../../layouters/foreachLayouter';
-import { areBoundariesEqual } from '../../shared/Boundary';
-import { GraphNode } from '../../shared/GraphNode';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { OffsetContainer } from '../shared/OffsetContainer';
-import { Edge } from '../shared/EdgeComponents';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { StepGroup } from '../groups';
+import { transformForeach } from '../../../transformers/transformForeach';
+import { foreachLayouter } from '../../../layouters/foreachLayouter';
+import { areBoundariesEqual } from '../../../shared/Boundary';
+import { GraphNode } from '../../../shared/GraphNode';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { OffsetContainer } from '../../shared/OffsetContainer';
+import { Edge } from '../../shared/EdgeComponents';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { StepGroup } from '../../groups';
+import { LoopIndicator } from '../templates/LoopIndicator';
 
 import { DefaultRenderer } from './DefaultRenderer';
-import { LoopIndicator } from './templates/LoopIndicator';
 
 const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
   const result = transformForeach(data, jsonpath);

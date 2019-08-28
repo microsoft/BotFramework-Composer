@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { ObiTypes } from '../../shared/ObiTypes';
-import { getDialogGroupByType } from '../../shared/appschema';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { NodeMenu } from '../shared/NodeMenu';
-
-import { getElementColor } from './shared/elementColors';
-import { FormCard } from './templates/FormCard';
-import { getFriendlyName } from './utils';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { ObiTypes } from '../../../shared/ObiTypes';
+import { getDialogGroupByType } from '../../../shared/appschema';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { NodeMenu } from '../../shared/NodeMenu';
+import { getElementColor } from '../shared/elementColors';
+import { FormCard } from '../templates/FormCard';
+import { getFriendlyName } from '../utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 

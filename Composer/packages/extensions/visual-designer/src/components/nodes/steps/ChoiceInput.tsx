@@ -2,17 +2,16 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { ChoiceInputSize, ChoiceInputMarginTop } from '../../shared/elementSizes';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { NodeMenu } from '../shared/NodeMenu';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { getDialogGroupByType } from '../../shared/appschema';
-import { ObiTypes } from '../../shared/ObiTypes';
-import { measureJsonBoundary } from '../../layouters/measureJsonBoundary';
-
-import { getElementColor } from './shared/elementColors';
-import { getFriendlyName } from './utils';
-import { FormCard } from './templates/FormCard';
+import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeMenu } from '../../shared/NodeMenu';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { getDialogGroupByType } from '../../../shared/appschema';
+import { ObiTypes } from '../../../shared/ObiTypes';
+import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
+import { getElementColor } from '../shared/elementColors';
+import { getFriendlyName } from '../utils';
+import { FormCard } from '../templates/FormCard';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 export class ChoiceInput extends React.Component<NodeProps, {}> {

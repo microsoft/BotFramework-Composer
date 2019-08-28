@@ -2,17 +2,17 @@
 import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { transformIfCondtion } from '../../transformers/transformIfCondition';
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { GraphNode } from '../../shared/GraphNode';
-import { areBoundariesEqual } from '../../shared/Boundary';
-import { ifElseLayouter } from '../../layouters/ifelseLayouter';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { OffsetContainer } from '../shared/OffsetContainer';
-import { StepGroup } from '../groups';
-import { Edge } from '../shared/EdgeComponents';
+import { transformIfCondtion } from '../../../transformers/transformIfCondition';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { GraphNode } from '../../../shared/GraphNode';
+import { areBoundariesEqual } from '../../../shared/Boundary';
+import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { OffsetContainer } from '../../shared/OffsetContainer';
+import { StepGroup } from '../../groups';
+import { Edge } from '../../shared/EdgeComponents';
+import { Diamond } from '../templates/Diamond';
 
-import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
 
 const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {

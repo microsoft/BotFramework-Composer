@@ -2,17 +2,17 @@
 import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { NodeEventTypes } from '../../shared/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { GraphNode } from '../../shared/GraphNode';
-import { transformSwitchCondition } from '../../transformers/transformSwitchCondition';
-import { switchCaseLayouter } from '../../layouters/switchCaseLayouter';
-import { areBoundariesEqual } from '../../shared/Boundary';
-import { OffsetContainer } from '../shared/OffsetContainer';
-import { Edge } from '../shared/EdgeComponents';
-import { StepGroup } from '../groups';
+import { NodeEventTypes } from '../../../shared/NodeEventTypes';
+import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
+import { GraphNode } from '../../../shared/GraphNode';
+import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
+import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';
+import { areBoundariesEqual } from '../../../shared/Boundary';
+import { OffsetContainer } from '../../shared/OffsetContainer';
+import { Edge } from '../../shared/EdgeComponents';
+import { StepGroup } from '../../groups';
+import { Diamond } from '../templates/Diamond';
 
-import { Diamond } from './templates/Diamond';
 import { DefaultRenderer } from './DefaultRenderer';
 
 const calculateNodeMap = (path, data) => {
