@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Panel } from '../components/nodes/templates/Panel';
+import { Panel } from '../components/lib/Panel';
 import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { EditorProps } from '../components/shared/sharedProps';

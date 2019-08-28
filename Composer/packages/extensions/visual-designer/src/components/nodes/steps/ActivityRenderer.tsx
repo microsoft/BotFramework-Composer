@@ -5,7 +5,7 @@ import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { DialogGroup } from '../../../shared/appschema';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
-import { NodeColors } from '../shared/elementColors';
+import { NodeColors } from '../../../shared/elementColors';
 import { getFriendlyName } from '../utils';
 import { FormCard } from '../templates/FormCard';
 

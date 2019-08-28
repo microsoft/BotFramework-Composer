@@ -7,11 +7,11 @@ import { foreachLayouter } from '../../../layouters/foreachLayouter';
 import { areBoundariesEqual } from '../../../shared/Boundary';
 import { GraphNode } from '../../../shared/GraphNode';
 import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { OffsetContainer } from '../../shared/OffsetContainer';
-import { Edge } from '../../shared/EdgeComponents';
+import { OffsetContainer } from '../../lib/OffsetContainer';
+import { Edge } from '../../lib/EdgeComponents';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
 import { StepGroup } from '../../groups';
-import { LoopIndicator } from '../templates/LoopIndicator';
+import { LoopIndicator } from '../../decorations/LoopIndicator';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
 
 const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {

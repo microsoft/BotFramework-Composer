@@ -7,7 +7,7 @@ import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { normalizeObiStep } from '../../../shared/elementBuilder';
-import { getElementColor } from '../shared/elementColors';
+import { getElementColor } from '../../../shared/elementColors';
 import { DialogGroup } from '../../../shared/appschema';
 
 import { IconCard } from './IconCard';

@@ -9,9 +9,9 @@ import { ElementInterval, EdgeAddButtonSize } from '../../shared/elementSizes';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { OffsetContainer } from '../shared/OffsetContainer';
+import { OffsetContainer } from '../lib/OffsetContainer';
 import { StepRenderer } from '../shared/StepRenderer';
-import { Edge } from '../shared/EdgeComponents';
+import { Edge } from '../lib/EdgeComponents';
 import { GraphLayout } from '../../shared/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
 

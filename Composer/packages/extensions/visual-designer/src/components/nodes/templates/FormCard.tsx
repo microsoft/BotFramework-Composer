@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
-import { Icon } from '../../icons/icon';
+import { Icon } from '../../decorations/icon';
 import { InitNodeSize } from '../../../shared/elementSizes';
 
 const boxWidth = InitNodeSize.width;

@@ -3,14 +3,14 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 
 import { StepGroup } from '../components/groups';
-import { OffsetContainer } from '../components/shared/OffsetContainer';
-import { Edge } from '../components/shared/EdgeComponents';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { Edge } from '../components/lib/EdgeComponents';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { NodeEventTypes } from '../shared/NodeEventTypes';
 import { Boundary } from '../shared/Boundary';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../shared/elementSizes';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
-import { Terminator } from '../components/nodes/Terminator';
+import { Terminator } from '../components/decorations/Terminator';
 
 const HeadSize = {
   width: TriggerSize.width,

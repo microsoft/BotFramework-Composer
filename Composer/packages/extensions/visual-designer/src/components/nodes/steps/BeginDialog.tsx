@@ -7,7 +7,7 @@ import { NodeEventTypes } from '../../../shared/NodeEventTypes';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { getDialogGroupByType } from '../../../shared/appschema';
-import { getElementColor } from '../shared/elementColors';
+import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 

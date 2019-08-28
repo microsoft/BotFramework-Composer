@@ -1,4 +1,4 @@
-import { DialogGroup } from '../../../shared/appschema';
+import { DialogGroup } from './appschema';
 
 const Colors = {
   // Neutral Colors

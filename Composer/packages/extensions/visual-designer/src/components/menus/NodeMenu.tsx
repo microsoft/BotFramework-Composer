@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { IconMenu } from '../nodes/templates/IconMenu';
 import { NodeEventTypes } from '../../shared/NodeEventTypes';
 
-export const NodeMenu = ({ id, onEvent }) => {
+import { IconMenu } from './IconMenu';
+
+export const NodeMenu = ({ id, onEvent }): JSX.Element => {
   const menuItems = [
     {
       key: 'delete',
@@ -11,5 +12,5 @@ export const NodeMenu = ({ id, onEvent }) => {
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
-  return <IconMenu iconName="MoreVertical" menuItems={menuItems} menuWidth={100} />;
+  return <IconMenu iconName="MoreVertical" iconStyles={{ color: '#0078D4' }} menuItems={menuItems} menuWidth={100} />;
 };

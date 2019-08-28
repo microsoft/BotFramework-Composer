@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-testing-library';
 
-import { Edge } from '../../../src/components/shared/EdgeComponents';
+import { Edge } from '../../../src/components/lib/EdgeComponents';
 
 describe('<Edge />', () => {
   let direction, x, y, length, text;

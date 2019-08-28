@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { useState, useLayoutEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react';
 
-import { PanelSize } from '../../../shared/elementSizes';
+import { PanelSize } from '../../shared/elementSizes';
 
 export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent }) => {
   const [collapsed, setCollapsed] = useState(false);

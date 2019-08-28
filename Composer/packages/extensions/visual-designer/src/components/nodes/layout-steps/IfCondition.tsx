@@ -8,9 +8,9 @@ import { GraphNode } from '../../../shared/GraphNode';
 import { areBoundariesEqual } from '../../../shared/Boundary';
 import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
-import { OffsetContainer } from '../../shared/OffsetContainer';
+import { OffsetContainer } from '../../lib/OffsetContainer';
 import { StepGroup } from '../../groups';
-import { Edge } from '../../shared/EdgeComponents';
+import { Edge } from '../../lib/EdgeComponents';
 import { Diamond } from '../templates/Diamond';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
 

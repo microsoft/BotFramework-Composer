@@ -9,7 +9,7 @@ import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
 import { getDialogGroupByType } from '../../../shared/appschema';
 import { ObiTypes } from '../../../shared/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
-import { getElementColor } from '../shared/elementColors';
+import { getElementColor } from '../../../shared/elementColors';
 import { getFriendlyName } from '../utils';
 import { FormCard } from '../templates/FormCard';
 

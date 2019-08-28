@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Icon as FabricIcon } from 'office-ui-fabric-react/lib/Icon';
 
-import { iconCss } from './styles';
+import { iconCss } from './iconStyles';
 
 const FriendSVG = fill => {
   return (
