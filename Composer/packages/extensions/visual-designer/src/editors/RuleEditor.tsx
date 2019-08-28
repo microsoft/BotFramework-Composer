@@ -3,14 +3,14 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
+import { Collapse } from '../components/lib/Collapse';
+import { Trigger } from '../components/nodes/Trigger';
+import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { defaultNodeProps } from '../components/nodes/nodeProps';
-import { Collapse } from '../components/lib/Collapse';
+import { NodeRendererContext } from '../store/NodeRendererContext';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../utils/outlineObiJson';
-import { Trigger } from '../components/nodes/Trigger';
-import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { StepEditor } from './StepEditor';
 

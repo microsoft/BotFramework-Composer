@@ -4,6 +4,7 @@ import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 import {
   DefaultRenderer,
   IntentRule,
@@ -11,7 +12,6 @@ import {
   EventRule,
   UnknownIntentRule,
 } from '../nodes/index';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {

@@ -4,10 +4,10 @@ import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { ObiTypes } from '../../../constants/ObiTypes';
-import { normalizeObiStep } from '../../../utils/stepBuilder';
 import { EventColor } from '../../../constants/ElementColors';
+import { normalizeObiStep } from '../../../utils/stepBuilder';
+import { NodeMenu } from '../../menus/NodeMenu';
 
 import { IconCard } from './IconCard';
 

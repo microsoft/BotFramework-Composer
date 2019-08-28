@@ -2,15 +2,15 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 
-import { StepGroup } from '../components/groups';
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { Edge } from '../components/lib/EdgeComponents';
-import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { Boundary } from '../models/Boundary';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
-import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { Terminator } from '../components/decorations/Terminator';
+import { StepGroup } from '../components/groups';
+import { Edge } from '../components/lib/EdgeComponents';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { EdgeMenu } from '../components/menus/EdgeMenu';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { Boundary } from '../models/Boundary';
 
 const HeadSize = {
   width: TriggerSize.width,

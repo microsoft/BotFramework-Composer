@@ -5,10 +5,10 @@ import { Icon as FabricIcon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getFriendlyName } from '../utils';
 
 export class ReplaceDialog extends React.Component<NodeProps, {}> {

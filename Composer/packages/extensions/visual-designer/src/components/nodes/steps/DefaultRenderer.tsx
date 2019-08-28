@@ -2,10 +2,10 @@ import React from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor, getElementIcon } from '../../../utils/obiPropertyResolver';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getFriendlyName } from '../utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');

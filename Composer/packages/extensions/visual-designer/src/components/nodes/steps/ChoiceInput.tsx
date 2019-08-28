@@ -4,13 +4,13 @@ import React from 'react';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeMenu } from '../../menus/NodeMenu';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
-import { getFriendlyName } from '../utils';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
+import { getFriendlyName } from '../utils';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 export class ChoiceInput extends React.Component<NodeProps, {}> {

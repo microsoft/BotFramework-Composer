@@ -9,10 +9,10 @@ import { GraphNode } from '../../../models/GraphNode';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { StepGroup } from '../../groups';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { StepGroup } from '../../groups';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
   const result = transformForeach(data, jsonpath);

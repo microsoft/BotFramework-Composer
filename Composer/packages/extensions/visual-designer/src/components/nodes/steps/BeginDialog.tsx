@@ -4,10 +4,10 @@ import React from 'react';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
+import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getFriendlyName } from '../utils';
 
 export class BeginDialog extends React.Component<NodeProps, object> {

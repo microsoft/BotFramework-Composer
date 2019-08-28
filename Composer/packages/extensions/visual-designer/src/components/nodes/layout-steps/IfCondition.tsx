@@ -3,16 +3,16 @@ import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../../transformers/transformIfCondition';
+import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { GraphNode } from '../../../models/GraphNode';
 import { areBoundariesEqual } from '../../../models/Boundary';
-import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
-import { StepGroup } from '../../groups';
 import { Edge } from '../../lib/EdgeComponents';
+import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
   const result = transformIfCondtion(data, path);

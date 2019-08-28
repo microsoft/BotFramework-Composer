@@ -3,16 +3,16 @@ import { jsx } from '@emotion/core';
 import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { GraphNode } from '../../../models/GraphNode';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';
+import { GraphNode } from '../../../models/GraphNode';
 import { areBoundariesEqual } from '../../../models/Boundary';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
 import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);

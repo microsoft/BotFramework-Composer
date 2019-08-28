@@ -2,8 +2,8 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
-import { Icon } from '../../decorations/icon';
 import { InitNodeSize } from '../../../constants/ElementSizes';
+import { Icon } from '../../decorations/icon';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;

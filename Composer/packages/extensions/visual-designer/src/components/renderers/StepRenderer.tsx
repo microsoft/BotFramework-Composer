@@ -4,6 +4,8 @@ import React, { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { SelectionContext } from '../../store/SelectionContext';
 import {
   DefaultRenderer,
   Recognizer,
@@ -15,8 +17,6 @@ import {
   Foreach,
   ChoiceInput,
 } from '../nodes/index';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectionContext } from '../../store/SelectionContext';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
