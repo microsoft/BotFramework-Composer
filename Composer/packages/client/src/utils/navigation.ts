@@ -30,14 +30,21 @@ export function updateBreadcrumb(breadcrumb: BreadcrumbItem[], type: string, sub
     return breadcrumbCopy;
   }
 
-  const lastIndex = breadcrumbCopy.length - 1;
-  if (breadcrumbCopy[lastIndex] && breadcrumbCopy[lastIndex][type]) {
+  let lastIndex = breadcrumbCopy.length - 1;
+  //if selected === focused, don't remove the last one
+  if (
+    lastIndex >= 0 &&
+    breadcrumbCopy[lastIndex][type] &&
+    breadcrumbCopy[lastIndex].selected !== breadcrumbCopy[lastIndex].focused
+  ) {
+    breadcrumbCopy.pop();
+    lastIndex--;
+  }
+  //deselect when subPath is empty
+  if (!subPath || (lastIndex > 0 && subPath === breadcrumbCopy[lastIndex].selected)) {
     breadcrumbCopy.pop();
   }
-  //deselect if subPath is empty
-  if (!subPath) {
-    breadcrumbCopy.pop();
-  }
+
   return breadcrumbCopy;
 }
 

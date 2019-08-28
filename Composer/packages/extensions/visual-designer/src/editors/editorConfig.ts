@@ -1,5 +1,5 @@
 export const EditorConfig = {
   features: {
-    showEvents: true,
+    showEvents: false,
   },
 };

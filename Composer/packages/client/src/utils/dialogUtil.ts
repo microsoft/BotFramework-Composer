@@ -21,17 +21,23 @@ export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   }, {});
 }
 
-const getTitle = (editorSchema: any, type: string) => {
-  const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
+const getTitle = (dialog: DialogInfo, dataPath: string, editorSchema: BotSchemas) => {
+  const name = get(dialog, `${dataPath}.$designer.name`);
+  if (name) return '#' + name;
 
-  return (sdkOverrides && sdkOverrides.title) || '';
+  const intent = get(dialog, `${dataPath}.intent`);
+  if (intent) return '#' + intent;
+
+  const type = get(dialog, `${dataPath}.$type`);
+  const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
+  return (sdkOverrides && '#' + sdkOverrides.title) || '';
 };
 
 export function getbreadcrumbLabel(
   dialogs: DialogInfo[],
   dialogId: string,
-  focused: string,
   selected: string,
+  focused: string,
   schemas: BotSchemas
 ) {
   let label = '';
@@ -40,11 +46,9 @@ export function getbreadcrumbLabel(
     const dialog = dialogs.find(d => d.id === dialogId);
     label = (dialog && dialog.displayName) || '';
   } else {
-    const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
-    const type = get(dialog, current);
-    label = getTitle(schemas.editor, type);
+    label = getTitle(dialog, dataPath, schemas.editor);
   }
 
   label = upperCaseName(label || '');

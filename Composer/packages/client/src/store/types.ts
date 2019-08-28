@@ -70,6 +70,7 @@ export interface DialogInfo {
   content: any;
   diagnostics: string[];
   luFile: string;
+  triggers: any[];
 }
 
 export interface Intent {

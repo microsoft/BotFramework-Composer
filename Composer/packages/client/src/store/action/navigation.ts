@@ -12,12 +12,21 @@ export const setDesignPageLocation: ActionCreator = (
   });
 };
 
-export const navTo: ActionCreator = ({ state }, path, breadcrumb = null) => {
+export const navTo: ActionCreator = ({ state }, path, currentBreadcrumb = []) => {
   if (!path) return;
-  const currentUri = `/dialogs/${path}`;
+  const { breadcrumb } = state;
+  let currentUri = `/dialogs/${path}`;
+  let dialogId = path;
+  //If no selected add 'rules[0]' as default. add root dialog to breadcrumb
+  if (path.split('?').length <= 1) {
+    currentUri = `${currentUri}?selected=rules[0]`;
+  } else {
+    dialogId = path.split('?')[0];
+  }
+  currentBreadcrumb = [...currentBreadcrumb, { dialogId, selected: '', focused: '' }];
 
-  if (checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: breadcrumb || [] } });
+  if (breadcrumb.length - 1 === currentBreadcrumb && checkUrl(currentUri, state.designPageLocation)) return;
+  navigateTo(currentUri, { state: { breadcrumb: currentBreadcrumb } });
 };
 
 export const selectTrigger: ActionCreator = ({ state }, subPath) => {
@@ -40,6 +49,8 @@ export const focusTo: ActionCreator = ({ state }, subPath) => {
   let currentUri = `/dialogs/${dialogId}?selected=${selected}`;
   if (subPath) {
     currentUri = `${currentUri}&focused=${subPath}`;
+  } else {
+    currentUri = `${currentUri}&focused=${selected}`;
   }
 
   if (checkUrl(currentUri, state.designPageLocation)) return;

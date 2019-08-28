@@ -82,10 +82,6 @@ function DesignPage(props) {
     }
   }
 
-  // function handleFileClick(id) {
-  //   navTo(id);
-  // }
-
   const getErrorMessage = text => {
     if (
       dialogs.findIndex(dialog => {
@@ -130,9 +126,9 @@ function DesignPage(props) {
     const items =
       dialogs.length > 0
         ? breadcrumb.map((item, index) => {
-            const { dialogId, focusedEvent, focusedSteps } = item;
+            const { dialogId, selected, focused } = item;
             return {
-              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas),
+              text: getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas),
               ...item,
               index,
               onClick: handleBreadcrumbItemClick,

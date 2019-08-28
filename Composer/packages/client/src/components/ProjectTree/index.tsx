@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ActionButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { cloneDeep } from 'lodash';
+
+import { DialogInfo } from '../../store/types';
 
 import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
@@ -13,7 +16,7 @@ interface Link {
 }
 
 interface ProjectTreeProps {
-  dialogs: { [key: string]: any }[];
+  dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
   onAdd: () => void;
@@ -24,10 +27,22 @@ interface ProjectTreeProps {
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   const { dialogs, onAdd, dialogId, selected, onSelect, onDelete } = props;
 
+  const links = useMemo<DialogInfo[]>(() => {
+    const dialogsCopy = cloneDeep(dialogs);
+    return dialogsCopy.reduce((result: DialogInfo[], item) => {
+      if (item.isRoot) {
+        result = [item, ...result];
+      } else {
+        result.push(item);
+      }
+      return result;
+    }, []);
+  }, [dialogs]);
+
   return (
     <div css={root} data-testid="ProjectTree">
       <ul>
-        {dialogs.map(link => {
+        {links.map(link => {
           return (
             <li key={link.id}>
               <TreeItem
