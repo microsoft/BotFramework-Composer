@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { getDialogGroupByType } from 'shared-menus';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../shared/elementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { getDialogGroupByType } from '../../../shared/appschema';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { getElementColor } from '../../../shared/elementColors';
@@ -24,7 +24,6 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
     const keyMap: { [key: string]: string } = { label: 'prompt', details: 'property' };
     const dialogGroup = getDialogGroupByType(data.$type);
     const nodeColors = getElementColor(dialogGroup);
-    const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
     const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
     let children: any = null;
     const { height } = measureJsonBoundary(data);
@@ -95,7 +94,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
         nodeColors={nodeColors}
         header={header}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
-        icon={icon}
+        icon={'User'}
         label={label}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);

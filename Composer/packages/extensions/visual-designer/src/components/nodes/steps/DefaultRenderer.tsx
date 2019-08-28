@@ -1,13 +1,14 @@
 import React from 'react';
+import { getDialogGroupByType } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
-import { getDialogGroupByType } from '../../../shared/appschema';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { getElementColor } from '../../../shared/elementColors';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
+import { getElementIcon } from '../../../shared/elementIcon';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
@@ -155,8 +156,8 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
 
     const keyMap = data.$type ? ContentKeyByTypes[data.$type] || DefaultKeyMap : { label: '', details: '' };
     const dialogGroup = getDialogGroupByType(data.$type);
+    const icon = getElementIcon(data.$type);
     const nodeColors = getElementColor(dialogGroup);
-    const icon = dialogGroup === 'INPUT' ? 'User' : 'MessageBot';
 
     if (keyMap) {
       header = header || keyMap.header || '';
