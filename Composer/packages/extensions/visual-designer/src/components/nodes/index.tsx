@@ -1,13 +1,13 @@
-export * from './steps/IfCondition';
-
 export * from './steps/ActivityRenderer';
 export * from './steps/BeginDialog';
 export * from './steps/DefaultRenderer';
-export * from './steps/Foreach';
 export * from './steps/Recognizer';
 export * from './steps/ReplaceDialog';
-export * from './steps/SwitchCondition';
 export * from './steps/ChoiceInput';
+
+export * from './layout-steps/Foreach';
+export * from './layout-steps/IfCondition';
+export * from './layout-steps/SwitchCondition';
 
 export * from './events/EventRule';
 export * from './events/IntentRule';

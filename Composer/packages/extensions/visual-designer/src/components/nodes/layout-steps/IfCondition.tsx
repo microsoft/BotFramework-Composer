@@ -12,8 +12,7 @@ import { OffsetContainer } from '../../shared/OffsetContainer';
 import { StepGroup } from '../../groups';
 import { Edge } from '../../shared/EdgeComponents';
 import { Diamond } from '../templates/Diamond';
-
-import { DefaultRenderer } from './DefaultRenderer';
+import { DefaultRenderer } from '../steps/DefaultRenderer';
 
 const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
   const result = transformIfCondtion(data, path);

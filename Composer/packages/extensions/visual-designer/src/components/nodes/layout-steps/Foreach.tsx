@@ -12,8 +12,7 @@ import { Edge } from '../../shared/EdgeComponents';
 import { NodeProps, defaultNodeProps } from '../../shared/sharedProps';
 import { StepGroup } from '../../groups';
 import { LoopIndicator } from '../templates/LoopIndicator';
-
-import { DefaultRenderer } from './DefaultRenderer';
+import { DefaultRenderer } from '../steps/DefaultRenderer';
 
 const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
   const result = transformForeach(data, jsonpath);

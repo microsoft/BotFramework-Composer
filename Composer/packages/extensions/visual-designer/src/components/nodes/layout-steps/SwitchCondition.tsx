@@ -12,8 +12,7 @@ import { OffsetContainer } from '../../shared/OffsetContainer';
 import { Edge } from '../../shared/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
-
-import { DefaultRenderer } from './DefaultRenderer';
+import { DefaultRenderer } from '../steps/DefaultRenderer';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);
