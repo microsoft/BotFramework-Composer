@@ -126,10 +126,6 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
     state.focusPath = dialogId + '#.' + focused;
   }
 
-  if (!focused && selected) {
-    state.focusPath = dialogId + '#.' + selected;
-  }
-
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 

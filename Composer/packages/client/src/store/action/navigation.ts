@@ -50,7 +50,7 @@ export const focusTo: ActionCreator = ({ state }, focusPath) => {
     currentUri = `${currentUri}&focused=${selected}`;
   }
 
-  if (checkUrl(currentUri, state.designPageLocation)) return;
+  if (state.breadcrumb.length === breadcrumb.length && checkUrl(currentUri, state.designPageLocation)) return;
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, 'focused') } });
 };
 

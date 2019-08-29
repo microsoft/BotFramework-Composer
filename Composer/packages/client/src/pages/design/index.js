@@ -111,17 +111,6 @@ function DesignPage(props) {
 
   const toolbarItems = [
     {
-      type: 'action',
-      text: formatMessage('Add'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'CirclePlus',
-        },
-        onClick: () => actions.createDialogBegin(onCreateDialogComplete),
-      },
-      align: 'left',
-    },
-    {
       type: 'element',
       element: <TestController />,
       align: 'right',

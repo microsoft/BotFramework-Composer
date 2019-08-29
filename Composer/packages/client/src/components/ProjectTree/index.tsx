@@ -9,13 +9,6 @@ import { getTitle } from '../../utils';
 import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
 
-interface Link {
-  id: string;
-  displayName: string;
-  depth: number;
-  children?: Link[];
-}
-
 interface ProjectTreeProps {
   dialogs: DialogInfo[];
   schemas: BotSchemas;
