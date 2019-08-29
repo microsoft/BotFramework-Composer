@@ -1,4 +1,6 @@
-export function getReferredFiles(luFiles, dialogs) {
+import { LuFile, DialogInfo, LuDiagnostic } from '../store/types';
+
+export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
     if (dialogs.findIndex(dialog => dialog.luFile === file.id) !== -1) {
       return true;
@@ -7,11 +9,11 @@ export function getReferredFiles(luFiles, dialogs) {
   });
 }
 
-export function isValid(diagnostics) {
+export function isValid(diagnostics: LuDiagnostic[]) {
   return diagnostics.length === 0;
 }
 
-export function combineMessage(diagnostics) {
+export function combineMessage(diagnostics: LuDiagnostic[]) {
   return diagnostics.reduce((msg, d) => {
     msg += `${d.text}\n`;
     return msg;

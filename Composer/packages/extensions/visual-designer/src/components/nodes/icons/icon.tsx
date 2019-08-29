@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { Icon as FabricIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { iconCss } from './styles';
 
@@ -68,4 +69,6 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) =>
     <span role="icon" css={iconCss(size, color)}>
       {svgByIconName[icon](fill)}
     </span>
-  ) : null;
+  ) : (
+    <FabricIcon iconName={icon} />
+  );

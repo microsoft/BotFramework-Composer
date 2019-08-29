@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
 import { NodeEventTypes } from '../shared/NodeEventTypes';
@@ -9,6 +9,8 @@ import { defaultNodeProps } from '../components/shared/sharedProps';
 import { Collapse } from '../components/nodes/templates/Collapse';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../shared/outlineObiJson';
+import { Trigger } from '../components/nodes/Trigger';
+import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { StepEditor } from './StepEditor';
 
@@ -39,6 +41,8 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
     return calculateNodeMap(id, data);
   }, [id, data]);
 
+  const { focusedId } = useContext(NodeRendererContext);
+
   const { stepGroup } = nodeMap;
 
   return (
@@ -63,6 +67,15 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
           id={stepGroup.id}
           data={stepGroup.data}
           onEvent={onEvent}
+          trigger={
+            <Trigger
+              data={data}
+              focused={focusedId === id}
+              onClick={() => {
+                onEvent(NodeEventTypes.Focus, id);
+              }}
+            />
+          }
         />
       </Collapse>
     </div>

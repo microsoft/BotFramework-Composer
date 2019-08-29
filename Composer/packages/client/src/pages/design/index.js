@@ -1,27 +1,21 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect, useMemo } from 'react';
+import React, { Fragment, useContext, useEffect, useMemo } from 'react';
 import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-
+import { toLower } from 'lodash';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel } from '../../utils';
 
-import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { StoreContext } from './../../store';
 import {
+  pageRoot,
+  contentWrapper,
   breadcrumbClass,
-  projectWrapper,
-  projectContainer,
-  projectHeader,
-  projectTree,
-  // assetTree,
   editorContainer,
   visualEditor,
   formEditor,
@@ -29,7 +23,6 @@ import {
   deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
-import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
@@ -77,21 +70,21 @@ function DesignPage(props) {
         focusedSteps: params.getAll('focusedSteps[]'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
       });
+      globalHistory._onTransitionComplete();
     }
-    globalHistory._onTransitionComplete();
   }, [location]);
 
   function handleFileClick(id) {
     navTo(id);
   }
 
-  const getErrorMessage = name => {
+  const getErrorMessage = text => {
     if (
       dialogs.findIndex(dialog => {
-        return dialog.name === name;
+        return toLower(dialog.id) === toLower(text);
       }) >= 0
     ) {
-      return 'duplication of name';
+      return `${text} has been used, please choose another name`;
     }
     return '';
   };
@@ -185,25 +178,16 @@ function DesignPage(props) {
 
   return (
     <Fragment>
-      {match && <ToolBar toolbarItems={toolbarItems} />}
-      <MainContent>
-        <Fragment>
-          <div css={projectContainer}>
-            <Tree variant="large" extraCss={projectTree}>
-              <div css={projectWrapper}>
-                <div css={projectHeader}>
-                  <div>{formatMessage('Dialogs')}</div>
-                </div>
-                <ProjectTree
-                  files={dialogs}
-                  activeNode={dialogId || ''}
-                  onSelect={handleFileClick}
-                  onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-                  onDelete={handleDeleteDialog}
-                />
-              </div>
-            </Tree>
-          </div>
+      <div css={pageRoot}>
+        <ProjectTree
+          dialogs={dialogs}
+          activeNode={dialogId || ''}
+          onSelect={handleFileClick}
+          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onDelete={handleDeleteDialog}
+        />
+        <div css={contentWrapper}>
+          {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation extraCss={editorContainer}>
             <Fragment>
               {breadcrumbItems}
@@ -223,8 +207,8 @@ function DesignPage(props) {
               </div>
             </Fragment>
           </Conversation>
-        </Fragment>
-      </MainContent>
+        </div>
+      </div>
       <NewDialogModal
         isOpen={state.showCreateDialogModal}
         onDismiss={() => actions.createDialogCancel()}

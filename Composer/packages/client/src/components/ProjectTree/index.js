@@ -1,63 +1,43 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PropTypes } from 'prop-types';
-import { Nav, Link } from 'office-ui-fabric-react';
+import { ActionButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { cloneDeep, find, filter } from 'lodash';
 
-import { nav, addButton } from './styles';
+import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
 
-const onRenderLink = (link, render) => {
-  return <TreeItem link={link} render={render} />;
-};
-
 export const ProjectTree = props => {
-  const { files, onSelect, activeNode, onAdd, onDelete } = props;
+  const { dialogs, onAdd, activeNode, onSelect, onDelete } = props;
 
   const links = useMemo(() => {
-    const links = files.reduce((result, file) => {
-      if (result.length === 0) {
-        result = [{ links: [] }];
-      }
-      const item = { key: file.id, ...file, forceAnchor: true, onDelete: onDelete };
-
-      item.name = file.displayName;
-
-      if (file.isRoot) {
-        result[0] = { ...result[0], ...item, isExpanded: true, hiddenMore: true };
-      } else {
-        result[0].links.push(item);
-      }
-      return result;
-    }, []);
-    return links;
-  }, [files]);
+    if (dialogs.length === 0) return [];
+    let links = cloneDeep(dialogs);
+    const root = find(dialogs, dialog => dialog.isRoot);
+    links = filter(dialogs, dialog => !dialog.isRoot);
+    return [root, ...links];
+  }, [dialogs]);
 
   return (
-    <div>
-      <Nav
-        onLinkClick={(ev, item) => {
-          onSelect(item.id || files[0].id);
-          ev.preventDefault();
-        }}
-        onLinkExpandClick={(ev, item) => {
-          onSelect(item.id || files[0].id);
-        }}
-        groups={[{ links: links }]}
-        selectedKey={activeNode}
-        styles={nav}
-        onRenderLink={onRenderLink}
-      />
-      <Link css={addButton} onClick={onAdd}>
-        {formatMessage('Add ..')}
-      </Link>
+    <div css={root} data-testid="ProjectTree">
+      <ul>
+        {links.map(link => {
+          return (
+            <li key={link.id}>
+              <TreeItem link={link} activeNode={activeNode} onSelect={onSelect} onDelete={onDelete} />
+            </li>
+          );
+        })}
+      </ul>
+      <ActionButton iconProps={{ iconName: 'CircleAddition' }} css={addButton} onClick={onAdd}>
+        {formatMessage('New Dialog ..')}
+      </ActionButton>
     </div>
   );
 };
 
 ProjectTree.propTypes = {
-  files: PropTypes.array,
+  dialogs: PropTypes.array,
   activeNode: PropTypes.string,
   onSelect: PropTypes.func,
   onAdd: PropTypes.func,
