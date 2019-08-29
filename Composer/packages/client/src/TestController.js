@@ -27,9 +27,9 @@ const openInEmulator = (url, authSettings) => {
   const i = document.createElement('iframe');
   i.style.display = 'none';
   i.onload = () => i.parentNode.removeChild(i);
-  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&MicrosoftAppId=${
+  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
     authSettings.MicrosoftAppId
-  }&MicrosoftAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
+  }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
   document.body.appendChild(i);
 };
 
