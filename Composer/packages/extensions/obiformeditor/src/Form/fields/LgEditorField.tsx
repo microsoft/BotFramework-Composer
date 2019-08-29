@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { LgEditor } from 'code-editor';
+import { RichEditor } from 'code-editor';
 import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { BFDFieldProps } from '../types';
@@ -88,11 +88,10 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
             paddingBottom: '19px',
           }}
         >
-          <LgEditor
+          <RichEditor
             editorDidMount={editor => {
               focusEditor(editor);
             }}
-            hidePlaceholder={true}
             errorMsg={errorMsg}
             value={Body}
             onChange={onChange}

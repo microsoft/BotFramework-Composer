@@ -8,5 +8,5 @@ const placeholder = `>To learn more about the LU file format, read the documenta
 > ${LU_HELP}`;
 
 export function LuEditor(props: RichEditorProps) {
-  return <RichEditor placeholder={placeholder} helpURL={LU_HELP} {...props} language={'typescript'} />;
+  return <RichEditor placeholder={placeholder} helpURL={LU_HELP} {...props} />;
 }
