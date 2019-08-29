@@ -1,8 +1,8 @@
 import React, { Fragment, useContext, useEffect, useMemo } from 'react';
-import { Breadcrumb } from 'office-ui-fabric-react';
+import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower } from 'lodash';
+import { toLower, cloneDeep } from 'lodash';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
@@ -17,6 +17,7 @@ import {
   contentWrapper,
   breadcrumbClass,
   editorContainer,
+  visualPanel,
   visualEditor,
   formEditor,
   editorWrapper,
@@ -26,7 +27,7 @@ import NewDialogModal from './new-dialog-modal';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
-import { clearBreadcrumb, getUrlSearch } from './../../utils/navigation';
+import { clearBreadcrumb } from './../../utils/navigation';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -35,6 +36,15 @@ function onRenderContent(subTitle, style) {
       {subTitle && <div style={style}>{subTitle}</div>}
       <p>{DialogDeleting.CONFIRM_CONTENT}</p>
     </div>
+  );
+}
+
+function onRenderBreadcrumbItem(item, render) {
+  return (
+    <span>
+      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
+      {render(item)}
+    </span>
   );
 }
 
@@ -55,20 +65,20 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, designPageLocation, breadcrumb, schemas } = state;
-  const { removeDialog, setDesignPageLocation, navTo } = actions;
+  const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
 
   useEffect(() => {
     if (match) {
-      const { dialogId, uri } = match;
+      const { dialogId } = match;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
-        uri: uri,
         selected: params.get('selected'),
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+        onBreadcrumbItemClick: handleBreadcrumbItemClick,
       });
       globalHistory._onTransitionComplete();
     }
@@ -76,7 +86,7 @@ function DesignPage(props) {
 
   function handleSelect(id, selected = '') {
     if (selected) {
-      navTo(`${id}?selected=${selected}`);
+      selectTo(selected);
     } else {
       navTo(id);
     }
@@ -119,7 +129,7 @@ function DesignPage(props) {
   ];
 
   function handleBreadcrumbItemClick(_event, { dialogId, selected, focused, index }) {
-    navTo(`${dialogId}${getUrlSearch(selected, focused)}`, clearBreadcrumb(breadcrumb, index));
+    setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
   }
 
   const breadcrumbItems = useMemo(() => {
@@ -129,6 +139,7 @@ function DesignPage(props) {
             const { dialogId, selected, focused } = item;
             return {
               text: getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas),
+              isRoot: !selected && !focused,
               ...item,
               index,
               onClick: handleBreadcrumbItemClick,
@@ -141,6 +152,7 @@ function DesignPage(props) {
         ariaLabel={formatMessage('Navigation Path')}
         styles={breadcrumbClass}
         data-testid="Breadcrumb"
+        onRenderItem={onRenderBreadcrumbItem}
       />
     );
   }, [dialogs, breadcrumb]);
@@ -180,29 +192,46 @@ function DesignPage(props) {
     }
   }
 
+  async function handleDeleteTrigger(id, index) {
+    const dialogsCopy = cloneDeep(dialogs);
+    const dialog = dialogsCopy.find(item => item.id === id);
+    if (dialog) {
+      dialog.content.rules.splice(index, 1);
+      await updateDialog({ id, content: dialog.content });
+      //if the deleted node was selected, navTo the first one;
+      if (id === dialogId && selected === `rules[${index}]`) {
+        navTo(id);
+      }
+    }
+  }
+
   return (
     <Fragment>
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
+          schemas={schemas}
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-          onDelete={handleDeleteDialog}
+          onDeleteDialog={handleDeleteDialog}
+          onDeleteTrigger={handleDeleteTrigger}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation extraCss={editorContainer}>
             <Fragment>
-              {breadcrumbItems}
               <div css={editorWrapper}>
-                <iframe
-                  key="VisualEditor"
-                  name="VisualEditor"
-                  css={visualEditor}
-                  src={`${rootPath}/extensionContainer.html`}
-                />
+                <div css={visualPanel}>
+                  {breadcrumbItems}
+                  <iframe
+                    key="VisualEditor"
+                    name="VisualEditor"
+                    css={visualEditor}
+                    src={`${rootPath}/extensionContainer.html`}
+                  />
+                </div>
                 <iframe
                   key="FormEditor"
                   name="FormEditor"

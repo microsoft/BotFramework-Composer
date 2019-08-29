@@ -63,6 +63,13 @@ export interface State {
 
 export type ReducerFunc = (state: State, payload: any) => State;
 
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
+}
+
 export interface DialogInfo {
   id: string;
   displayName: string;
@@ -70,7 +77,7 @@ export interface DialogInfo {
   content: any;
   diagnostics: string[];
   luFile: string;
-  triggers: any[];
+  triggers: ITrigger[];
 }
 
 export interface Intent {
@@ -112,7 +119,6 @@ export interface LgTemplate {
 
 export interface DesignPageLocation {
   dialogId: string;
-  uri: string;
   selected: string;
   focused: string;
 }

@@ -57,30 +57,11 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
-      dialogs: this.mergeDialogStatus(this.dialogIndexer.getDialogs(), this.getSchemas()),
+      dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
     };
-  };
-
-  private mergeDialogStatus = (dialogs: Dialog[], schema: any) => {
-    return dialogs.map(dialog => {
-      const rules = dialog.content.rules;
-      const triggers = rules.map((r: { $designer: { name: string; id: string }; intent: string; $type: string }) => {
-        if (r.$designer && r.$designer.name) {
-          return { displayName: '#' + r.$designer.name, id: r.$designer.id };
-        } else if (r.intent) {
-          return { displayName: '#' + r.intent, id: r.$designer.id };
-        } else {
-          return {
-            displayName: '#' + schema.editor.content.SDKOverrides[r.$type].title,
-            id: r.$designer.id,
-          };
-        }
-      });
-      return { ...dialog, triggers };
-    });
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface

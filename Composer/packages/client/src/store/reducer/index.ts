@@ -119,7 +119,7 @@ const updateOAuth: ReducerFunc = (state, { oAuth }) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, uri, breadcrumb }) => {
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
@@ -132,8 +132,17 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
 
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
+
+  //if use navigateto to design page, add rules[0] for default select
+  if (!selected) {
+    const dialog = state.dialogs.find(item => dialogId === item.id);
+    if (dialog && dialog.triggers.length > 0) {
+      selected = `rules[0]`;
+      breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
+    }
+  }
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused, uri };
+  state.designPageLocation = { dialogId, selected, focused };
   return state;
 };
 

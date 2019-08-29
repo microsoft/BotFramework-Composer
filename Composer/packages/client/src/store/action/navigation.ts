@@ -1,58 +1,67 @@
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
-import { updateBreadcrumb, navigateTo, checkUrl } from './../../utils/navigation';
+import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch } from './../../utils/navigation';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
-  { dialogId = '', uri = '', selected = '', focused = '', breadcrumb = [] }
+  { dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick }
 ) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
-    payload: { dialogId, focused, selected, uri, breadcrumb },
+    payload: { dialogId, focused, selected, breadcrumb, onBreadcrumbItemClick },
   });
 };
 
-export const navTo: ActionCreator = ({ state }, path, currentBreadcrumb = []) => {
-  if (!path) return;
-  const { breadcrumb } = state;
-  let currentUri = `/dialogs/${path}`;
-  let dialogId = path;
-  //If no selected add 'rules[0]' as default. add root dialog to breadcrumb
-  if (path.split('?').length <= 1) {
-    currentUri = `${currentUri}?selected=rules[0]`;
-  } else {
-    dialogId = path.split('?')[0];
-  }
-  currentBreadcrumb = [...currentBreadcrumb, { dialogId, selected: '', focused: '' }];
+export const navTo: ActionCreator = ({ state }, dialogId, breadcrumb = []) => {
+  const { dialogs } = state;
+  let currentUri = `/dialogs/${dialogId}`;
 
-  if (breadcrumb.length - 1 === currentBreadcrumb && checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: currentBreadcrumb } });
+  const dialog = dialogs.find(item => dialogId === item.id);
+  if (dialog && dialog.triggers.length > 0) {
+    currentUri = `${currentUri}?selected=rules[0]`;
+
+    breadcrumb = [...breadcrumb, { dialogId, selected: '', focused: '' }];
+  }
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigateTo(currentUri, { state: { breadcrumb } });
 };
 
-export const selectTrigger: ActionCreator = ({ state }, subPath) => {
+export const selectTo: ActionCreator = ({ state }, selectPath) => {
+  if (!selectPath) return;
   const { dialogId } = state.designPageLocation;
   const { breadcrumb } = state;
   let currentUri = `/dialogs/${dialogId}`;
 
-  if (subPath) {
-    currentUri = `${currentUri}?selected=${subPath}`;
-  }
+  currentUri = `${currentUri}?selected=${selectPath}`;
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, 'selected', subPath) } });
+  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, 'selected') } });
 };
 
-export const focusTo: ActionCreator = ({ state }, subPath) => {
+export const focusTo: ActionCreator = ({ state }, focusPath) => {
   const { dialogId, selected } = state.designPageLocation;
   const { breadcrumb } = state;
 
   let currentUri = `/dialogs/${dialogId}?selected=${selected}`;
-  if (subPath) {
-    currentUri = `${currentUri}&focused=${subPath}`;
+  if (focusPath) {
+    currentUri = `${currentUri}&focused=${focusPath}`;
   } else {
     currentUri = `${currentUri}&focused=${selected}`;
   }
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, 'focused', subPath) } });
+  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, 'focused') } });
+};
+
+export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focusPath, breadcrumb = []) => {
+  const search = getUrlSearch(selectPath, focusPath);
+  if (search) {
+    const currentUri = `/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
+
+    if (checkUrl(currentUri, store.state.designPageLocation)) return;
+    navigateTo(currentUri, { state: { breadcrumb } });
+  } else {
+    navTo(store, dialogId, breadcrumb);
+  }
 };

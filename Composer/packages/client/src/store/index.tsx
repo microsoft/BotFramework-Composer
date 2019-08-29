@@ -25,7 +25,6 @@ const initialState: State = {
   luFiles: [],
   designPageLocation: {
     dialogId: '',
-    uri: '',
     focused: '',
     selected: '',
   },

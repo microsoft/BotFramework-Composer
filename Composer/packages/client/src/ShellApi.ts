@@ -151,7 +151,7 @@ export const ShellApi: React.FC = () => {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
+      return getDialogData(dialogsMap, dialogId, focused || '');
     }
 
     return '';
@@ -170,7 +170,7 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
-      focusedSteps: [focused],
+      focusedSteps: focused ? [focused] : [],
     };
   }
 
@@ -303,7 +303,7 @@ export const ShellApi: React.FC = () => {
 
   function focusEvent({ subPath }) {
     cleanData();
-    actions.selectTrigger(subPath);
+    actions.selectTo(subPath);
   }
 
   function focusSteps({ subPaths = [] }) {

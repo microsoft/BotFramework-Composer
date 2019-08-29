@@ -1,5 +1,5 @@
 import React from 'react';
-import { OverflowSet, IconButton, ActionButton, Icon } from 'office-ui-fabric-react';
+import { OverflowSet, IconButton, Icon } from 'office-ui-fabric-react';
 
 import { moreButton, overflowSet, moreMenu, navItem, itemText } from './styles';
 
@@ -27,10 +27,16 @@ const onRenderOverflowButton = overflowItems => {
 export const TreeItem = props => {
   const { link, isActive, depth, onDelete, onSelect } = props;
   return (
-    <ActionButton
+    <div
+      tabIndex={1}
       css={navItem(isActive, depth)}
       onClick={() => {
         onSelect(link.id);
+      }}
+      onKeyDown={e => {
+        if (e.key === 'Enter') {
+          onSelect(link.id);
+        }
       }}
     >
       <OverflowSet
@@ -53,6 +59,6 @@ export const TreeItem = props => {
         onRenderItem={onRenderItem}
         onRenderOverflowButton={link.isRoot ? () => {} : onRenderOverflowButton}
       />
-    </ActionButton>
+    </div>
   );
 };

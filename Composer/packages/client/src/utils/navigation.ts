@@ -24,25 +24,16 @@ export function clearBreadcrumb(breadcrumb: BreadcrumbItem[], fromIndex?: number
   return breadcrumbCopy;
 }
 
-export function updateBreadcrumb(breadcrumb: BreadcrumbItem[], type: string, subPath: string): BreadcrumbItem[] {
+export function updateBreadcrumb(breadcrumb: BreadcrumbItem[], type: string): BreadcrumbItem[] {
   const breadcrumbCopy = cloneDeep(breadcrumb);
   if (breadcrumbCopy.length === 0) {
     return breadcrumbCopy;
   }
 
   let lastIndex = breadcrumbCopy.length - 1;
-  //if selected === focused, don't remove the last one
-  if (
-    lastIndex >= 0 &&
-    breadcrumbCopy[lastIndex][type] &&
-    breadcrumbCopy[lastIndex].selected !== breadcrumbCopy[lastIndex].focused
-  ) {
+  while (lastIndex > 0 && breadcrumbCopy[lastIndex][type]) {
     breadcrumbCopy.pop();
     lastIndex--;
-  }
-  //deselect when subPath is empty
-  if (!subPath || (lastIndex > 0 && subPath === breadcrumbCopy[lastIndex].selected)) {
-    breadcrumbCopy.pop();
   }
 
   return breadcrumbCopy;
