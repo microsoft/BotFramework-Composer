@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import { ActionButton, IIconProps } from 'office-ui-fabric-react';
+import { ActionButton, IIconProps, IContextualMenuProps, IContextualMenuItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { cloneDeep } from 'lodash';
 
 import { DialogInfo, ITrigger, BotSchemas } from '../../store/types';
 import { getTitle } from '../../utils';
+import { NewTriggerType } from '../../constants';
 
 import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
@@ -16,7 +17,7 @@ interface ProjectTreeProps {
   selected: string;
   onAdd: () => void;
   onSelect: (id: string, selected?: string) => void;
-  onAddTrigger: (id: string) => void;
+  onAddTrigger: (id: string, type: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
 }
@@ -25,6 +26,29 @@ const addIconProps: IIconProps = {
   iconName: 'CircleAddition',
   styles: { root: { fontSize: '12px' } },
 };
+
+const createMenuProps = (
+  dialogId: string,
+  index: number,
+  onItemClick: (ev, item: IContextualMenuItem) => any
+): IContextualMenuProps => {
+  return {
+    items: NewTriggerType.map(type => {
+      return {
+        key: type,
+        text: type,
+        index,
+        dialogId,
+        onClick: onItemClick,
+      } as IContextualMenuItem;
+    }),
+  };
+};
+
+const menuIconProps: IIconProps = {
+  iconName: '',
+};
+
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   const {
     dialogs,
@@ -57,6 +81,10 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
       return result;
     }, []);
   }, [dialogs]);
+
+  const handleAddTrigger = (ev, item) => {
+    onAddTrigger(item.dialogId, item.key, item.index);
+  };
 
   return (
     <div css={root} data-testid="ProjectTree">
@@ -98,10 +126,8 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  onClick={() => {
-                    onAddTrigger(link.id);
-                  }}
-                  disabled
+                  menuProps={createMenuProps(link.id, link.triggers.length, handleAddTrigger)}
+                  menuIconProps={menuIconProps}
                 >
                   {formatMessage('New Trigger ..')}
                 </ActionButton>

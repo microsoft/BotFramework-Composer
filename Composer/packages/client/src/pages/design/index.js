@@ -7,7 +7,7 @@ import { toLower, cloneDeep } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel } from '../../utils';
+import { getbreadcrumbLabel, addNewTrigger } from '../../utils';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -181,6 +181,12 @@ function DesignPage(props) {
     }
   }
 
+  async function handleAddTrigger(id, type, index) {
+    const content = addNewTrigger(dialogs, id, type);
+    await updateDialog({ id, content });
+    selectTo(`rules[${index}]`);
+  }
+
   async function handleDeleteTrigger(id, index) {
     const dialogsCopy = cloneDeep(dialogs);
     const dialog = dialogsCopy.find(item => item.id === id);
@@ -204,6 +210,7 @@ function DesignPage(props) {
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
         />

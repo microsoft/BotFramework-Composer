@@ -2,6 +2,7 @@ import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
+import nanoid from 'nanoid/generate';
 
 import { BotSchemas } from '../store/types';
 
@@ -12,6 +13,24 @@ const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
+}
+
+export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
+  const dialog = dialogs.find(item => item.id === dialogId);
+  const dialogCopy = cloneDeep(dialog);
+  if (dialogCopy === undefined) return;
+  const content = dialogCopy.content;
+  const newTrigger = {
+    $type,
+    $designer: {
+      id: nanoid('1234567890', 6),
+    },
+  };
+  if (!content.rules) {
+    content.rules = [];
+  }
+  content.rules.push(newTrigger);
+  return content;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
