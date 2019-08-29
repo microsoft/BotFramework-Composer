@@ -3,7 +3,6 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
-import { Collapse } from '../components/lib/Collapse';
 import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -61,23 +60,21 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      <Collapse text="Actions">
-        <StepEditor
-          key={stepGroup.id + '?version=' + outlineVersion.current}
-          id={stepGroup.id}
-          data={stepGroup.data}
-          onEvent={onEvent}
-          trigger={
-            <Trigger
-              data={data}
-              focused={focusedId === id}
-              onClick={() => {
-                onEvent(NodeEventTypes.Focus, id);
-              }}
-            />
-          }
-        />
-      </Collapse>
+      <StepEditor
+        key={stepGroup.id + '?version=' + outlineVersion.current}
+        id={stepGroup.id}
+        data={stepGroup.data}
+        onEvent={onEvent}
+        trigger={
+          <Trigger
+            data={data}
+            focused={focusedId === id}
+            onClick={() => {
+              onEvent(NodeEventTypes.Focus, id);
+            }}
+          />
+        }
+      />
     </div>
   );
 };

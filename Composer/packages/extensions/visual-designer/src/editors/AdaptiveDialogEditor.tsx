@@ -7,10 +7,12 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { queryNode } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { Collapse } from '../components/lib/Collapse';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
 import { EditorProps, defaultEditorProps } from './editorProps';
+import { EditorConfig } from './editorConfig';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformRootDialog(data);
@@ -23,7 +25,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
@@ -41,6 +43,15 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   };
 
   const activeEventData = queryNode(data, focusedEvent);
+
+  const eventActions = activeEventData ? (
+    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+  ) : null;
+
+  if (!EditorConfig.features.showEvents) {
+    return eventActions;
+  }
+
   return (
     <div
       css={{
@@ -58,7 +69,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
-      {activeEventData && <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />}
+      <Collapse text="Actions">{eventActions}</Collapse>
     </div>
   );
 };
