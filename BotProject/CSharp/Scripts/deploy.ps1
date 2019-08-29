@@ -15,6 +15,17 @@ if (-not $name) {
     $name = Read-Host "? Bot Web App Name"
 }
 
+if (-not $environment)
+{
+	$environment = Read-Host "? Environment Name (single word, all lowercase)"
+	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
+}
+
+if (-not $botPath) {
+	$botPath = Read-Host "? The Reletive Path Of Bot"
+}
+
+
 # Reset log file
 if (Test-Path $logFile) {
 	Clear-Content $logFile -Force | Out-Null
@@ -35,17 +46,48 @@ if (Test-Path $zipPath) {
 	Remove-Item $zipPath -Force | Out-Null
 }
 
-# Add Luis Config to appsettings
-if ($luisAuthoringKey -and $luisAuthoringRegion)
+# Perform dotnet publish step ahead of zipping up
+$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
+dotnet publish -c release -o $publishFolder -v q > $logFile
+
+# Copy bot files to running folder
+$remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
+Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
+Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
+
+
+# Merge from custom config files
+$customConfigFiles = Get-ChildItem -Path $remoteBotPath -Include "appsettings.json" -Recurse -Force
+if ($customConfigFiles)
 {
-	if (Test-Path $(Join-Path $projFolder appsettings.json)) {
-		$settings = Get-Content $(Join-Path $projFolder appsettings.json) | ConvertFrom-Json
+	if (Test-Path $(Join-Path $publishFolder appsettings.json)) {
+		$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
 	}
 	else {
 		$settings = New-Object PSObject
 	}
 
-	$luisConfigFiles = Get-ChildItem -Include "luis.settings*" -Recurse -Force
+	$customConfig = @{}
+	$customSetting = Get-Content $customConfigFiles.FullName | ConvertFrom-Json
+	$customSetting.PSObject.Properties | Foreach-Object { $customConfig[$_.Name] = $_.Value }
+	foreach ($key in $customConfig.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $customConfig[$key] }
+
+	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
+}
+
+
+# Add Luis Config to appsettings
+if ($luisAuthoringKey -and $luisAuthoringRegion)
+{
+	# change setting file in publish folder
+	if (Test-Path $(Join-Path $publishFolder appsettings.json)) {
+		$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
+	}
+	else {
+		$settings = New-Object PSObject
+	}
+
+	$luisConfigFiles = Get-ChildItem -Path $publishFolder -Include "luis.settings*" -Recurse -Force
 
 	$luisAppIds = @{}
 
@@ -67,23 +109,13 @@ if ($luisAuthoringKey -and $luisAuthoringRegion)
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
 
-	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projFolder appsettings.json)
+	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
 }
-
-
-# Perform dotnet publish step ahead of zipping up
-$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
-dotnet publish -c release -o $publishFolder -v q > $logFile
 
 $resourceGroup = "$name-$environment"
 
 if($?) 
 {     
-	# Copy bot files to running folder
-	$remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
-	Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
-	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
-
 	# Compress source code
 	Get-ChildItem -Path "$($publishFolder)" | Compress-Archive -DestinationPath "$($zipPath)" -Force | Out-Null
 

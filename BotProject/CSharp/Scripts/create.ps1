@@ -43,8 +43,6 @@ if (-not $environment)
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
 }
 
-
-
 if (-not $location) {
     $location = Read-Host "? Azure resource group region"
 }
