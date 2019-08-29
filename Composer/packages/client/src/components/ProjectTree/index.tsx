@@ -27,24 +27,6 @@ const addIconProps: IIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-const createMenuProps = (
-  dialogId: string,
-  index: number,
-  onItemClick: (ev, item: IContextualMenuItem) => any
-): IContextualMenuProps => {
-  return {
-    items: NewTriggerType.map(type => {
-      return {
-        key: type,
-        text: type,
-        index,
-        dialogId,
-        onClick: onItemClick,
-      } as IContextualMenuItem;
-    }),
-  };
-};
-
 const menuIconProps: IIconProps = {
   iconName: '',
 };
@@ -62,9 +44,27 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     schemas,
   } = props;
 
-  const showName = (dialog: DialogInfo, trigger: ITrigger) => {
+  const createMenuProps = (
+    dialogId: string,
+    index: number,
+    onItemClick: (ev, item: IContextualMenuItem) => any
+  ): IContextualMenuProps => {
+    return {
+      items: NewTriggerType.map(type => {
+        return {
+          key: type,
+          text: getTitle(type, schemas),
+          index,
+          dialogId,
+          onClick: onItemClick,
+        } as IContextualMenuItem;
+      }),
+    };
+  };
+
+  const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
-      return getTitle(dialog, trigger.type, schemas);
+      return getTitle(trigger.type, schemas);
     }
     return trigger.displayName;
   };
@@ -106,12 +106,12 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                 {dialogId === link.id &&
                   link.triggers.map((trigger, index) => {
                     const current = `rules[${index}]`;
-                    trigger.displayName = showName(link, trigger);
+                    trigger.displayName = showName(trigger);
                     return (
                       <li key={trigger.id}>
                         <TreeItem
                           link={trigger}
-                          showName={item => showName(link, item)}
+                          showName={item => showName(item)}
                           depth={1}
                           isActive={current === selected}
                           onSelect={() => onSelect(link.id, `rules[${index}]`)}
@@ -123,6 +123,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
               </ul>
               {dialogId === link.id && (
                 <ActionButton
+                  data-testid="AddNewTrigger"
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}

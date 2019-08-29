@@ -48,10 +48,10 @@ const getLabel = (dialog: DialogInfo, dataPath: string, editorSchema: BotSchemas
   if (intent) return '#' + intent;
 
   const type = get(dialog, `${dataPath}.$type`);
-  return getTitle(dialog, type, editorSchema);
+  return getTitle(type, editorSchema);
 };
 
-export function getTitle(dialog: DialogInfo, type: string, editorSchema: BotSchemas) {
+export function getTitle(type: string, editorSchema: BotSchemas) {
   const sdkOverrides = get(editorSchema, ['editor', 'content', 'SDKOverrides', type]);
   return (sdkOverrides && sdkOverrides.title) || '';
 }
