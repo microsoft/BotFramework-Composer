@@ -29,7 +29,7 @@ const openInEmulator = (url, authSettings) => {
   i.onload = () => i.parentNode.removeChild(i);
   i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&MicrosoftAppId=${
     authSettings.MicrosoftAppId
-  }&MicrosoftAppPassword=${authSettings.MicrosoftAppPassword}`;
+  }&MicrosoftAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
   document.body.appendChild(i);
 };
 
