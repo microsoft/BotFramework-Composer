@@ -131,11 +131,8 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
 
   //if use navigateto to design page, add rules[0] for default select
   if (!selected) {
-    const dialog = state.dialogs.find(item => dialogId === item.id);
-    if (dialog && dialog.triggers.length > 0) {
-      selected = `rules[0]`;
-      breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
-    }
+    selected = `rules[0]`;
+    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
   }
   state.breadcrumb = breadcrumb;
   state.designPageLocation = { dialogId, selected, focused };
