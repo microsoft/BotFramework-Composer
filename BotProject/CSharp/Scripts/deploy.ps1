@@ -1,6 +1,4 @@
-﻿#Requires -Version 6
-
-Param(
+﻿Param(
 	[string] $name,
 	[string] $environment,
 	[string] $luisAuthoringKey,
@@ -9,6 +7,13 @@ Param(
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
+
+if ($PSVersionTable.PSVersion.Major -lt 6){
+	Write-Host "! Powershell 6 is required, current version is $($PSVersionTable.PSVersion.Major), please refer following documents for help."
+	Write-Host "For Windows - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-6"
+	Write-Host "For Mac - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-6"
+	Break
+}
 
 # Get mandatory parameters
 if (-not $name) {
@@ -55,7 +60,6 @@ $remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
 
-
 # Merge from custom config files
 $customConfigFiles = Get-ChildItem -Path $remoteBotPath -Include "appsettings.json" -Recurse -Force
 if ($customConfigFiles)
@@ -74,7 +78,6 @@ if ($customConfigFiles)
 
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
 }
-
 
 # Add Luis Config to appsettings
 if ($luisAuthoringKey -and $luisAuthoringRegion)

@@ -1,5 +1,3 @@
-# Requires -Version 6
-
 Param(
     [string] $name,
 	[string] $location,
@@ -83,8 +81,7 @@ $timestamp = Get-Date -f MMddyyyyHHmmss
 Write-Host "> Creating resource group ..."
 (az group create --name $resourceGroup --location $location --output json) 2>> $logFile | Out-Null
 
-# Deploy Azure services (deploys LUIS, QnA Maker, Content Moderator, CosmosDB)
-
+# Deploy Azure services
 Write-Host "> Validating Azure deployment ..."
 $validation = az group deployment validate `
 	--resource-group $resourcegroup `
@@ -142,26 +139,9 @@ if ($outputs)
 	$settings | Add-Member -Type NoteProperty -Force -Name 'microsoftAppId' -Value $appId
 	$settings | Add-Member -Type NoteProperty -Force -Name 'microsoftAppPassword' -Value $appPassword
 	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "RunningInstance"
-	# $luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
-
-	# $luisConfig = @{}
-
-	# $luisConfig["endpointKey"] = $luisAuthoringKey
-	# $luisConfig["endpoint"] = $luisEndpoint
-
-	# $settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
 
 	foreach ($key in $outputMap.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $outputMap[$key].value }
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.json)
-	
-	# # Delay to let QnA Maker finish setting up
-	# Start-Sleep -s 30
-
-	# # Deploy cognitive models
-	# Invoke-Expression "& '$(Join-Path $PSScriptRoot 'deploy_cognitive_models.ps1')' -name $($name) -luisAuthoringRegion $($luisAuthoringRegion) -luisAuthoringKey $($luisAuthoringKey) -luisAccountName $($outputs.luis.value.accountName) -luisAccountRegion $($outputs.luis.value.region) -luisSubscriptionKey $($outputs.luis.value.key) -resourceGroup $($resourceGroup) -qnaSubscriptionKey '$($qnaSubscriptionKey)' -outFolder '$($projDir)' -languages '$($languages)'"
-	
-	# Publish bot
-	# Invoke-Expression "& '$(Join-Path $PSScriptRoot 'publish.ps1')' -botPath $($botPath) -name $($name) -resourceGroup $($resourceGroup) -projFolder '$($projDir)'"
 
 	Write-Host "> Done."
 	Write-Host "- App Id: $appId"
