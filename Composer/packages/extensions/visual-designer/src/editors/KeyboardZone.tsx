@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, Fragment, useState, useEffect } from 'react';
-import { KeyboardCommandTypes } from '../shared/KeyboardCommandTypes';
+import { FC } from 'react';
+import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 interface NodeProps {
   when: string;
   onCommand: (action) => object | void;
@@ -17,7 +17,7 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
     switch (when) {
       case 'focused':
         if (keyName.includes('Arrow')) {
-          onCommand(KeyboardCommandTypes[keyName]);
+          onCommand(KeyboardCommandTypes[keyName.substr(5)]);
         } else if (keyName === 'c' && ((isMac() && e.metaKey) || (!isMac() && e.ctrlKey))) {
           onCommand(KeyboardCommandTypes.Copy);
         } else if (keyName === 'Delete') {
@@ -35,15 +35,5 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
         break;
     }
   };
-  useEffect(
-    (): void => {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-  );
-  return (
-    <Fragment>
-      <div>{when}</div>
-      {children}
-    </Fragment>
-  );
+  return <div onKeyDown={handleKeyDown}>{children}</div>;
 };

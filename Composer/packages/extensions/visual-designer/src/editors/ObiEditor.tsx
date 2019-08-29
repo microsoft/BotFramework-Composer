@@ -5,9 +5,9 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { deleteNode, insert, moveFocusNode } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { deleteNode, insert } from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
@@ -126,14 +126,15 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   });
 
   const handleKeyboardCommand = command => {
+    console.log('keyboard');
+    let path = focusedId;
     switch (command) {
       case KeyboardCommandTypes.Up:
-        break;
       case KeyboardCommandTypes.Down:
-        break;
       case KeyboardCommandTypes.Left:
-        break;
       case KeyboardCommandTypes.Right:
+        path = moveFocusNode(data, focusedId, command);
+        onFocusSteps([path]);
         break;
       case KeyboardCommandTypes.Copy:
         break;
