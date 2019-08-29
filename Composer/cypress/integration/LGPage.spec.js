@@ -9,7 +9,7 @@ context('check language generation page', () => {
   it('can open language generation page', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonBot Says"]').click();
     // left nav tree
-    cy.contains('ToDoBot');
+    cy.contains('ToDoBot.Main');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -24,7 +24,7 @@ context('check language generation page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.get('.dialogNavTree button[title="ToDoBot"]').click();
+    cy.get('.dialogNavTree button[title="ToDoBot.Main"]').click();
     cy.wait(300);
 
     // dialog filter, edit mode button is disabled.

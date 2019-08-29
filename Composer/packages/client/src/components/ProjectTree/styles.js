@@ -1,21 +1,47 @@
 import { css } from '@emotion/core';
+import { FontWeights } from '@uifabric/styling';
 
-export const nav = {
-  groupContent: {
-    marginBottom: '0px',
-  },
-  link: {
-    paddingRight: '8px',
-  },
-};
+export const root = css`
+  width: 180px;
+  border-right: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  ul,
+  li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+  }
+`;
+
+export const navItem = selected => css`
+  width: 100%;
+  font-size: 12px;
+  color: #605e5c;
+  padding-left: 12px;
+  background: ${selected ? '#f2f2f2' : 'transparent'};
+  font-weight: ${selected ? FontWeights.semibold : FontWeights.regular};
+  &: hover {
+    color: #605e5c;
+    background: #f2f2f2;
+  }
+`;
+
+export const itemText = css`
+  max-width: 130px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
 
 export const moreButton = {
   root: {
-    minWidth: 0,
     padding: '0 4px',
     alignSelf: 'stretch',
     height: 'auto',
     visibility: 'hidden',
+    width: '16px',
   },
   menuIcon: {
     fontSize: '14px',
@@ -32,6 +58,8 @@ export const moreMenu = {
 
 export const overflowSet = css`
   width: 100%;
+  height: 100%;
+  line-height: 40px;
   justify-content: space-between;
   & : hover {
     .dialog-more-btn {
@@ -41,5 +69,6 @@ export const overflowSet = css`
 `;
 
 export const addButton = css`
-  margin-left: 10px;
+  font-size: 12px;
+  color: #0078d4;
 `;
