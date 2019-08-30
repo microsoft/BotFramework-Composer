@@ -1,14 +1,17 @@
+import 'dotenv/config';
 import path from 'path';
 
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
+import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
+import { BASEURL } from './constants';
 
 const app: Express = express();
 
-const BASEURL = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+const { login, authorize } = getAuthProvider();
 
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -27,7 +30,12 @@ app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
   res.send('fortest');
 });
 
-app.use(`${BASEURL}/api`, apiRouter);
+// only register the login route if the auth provider defines one
+if (login) {
+  app.get(`${BASEURL}/api/login`, login);
+}
+// always authorize all api routes, it will be a no-op if no auth provider set
+app.use(`${BASEURL}/api`, authorize, apiRouter);
 
 app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   if (err) {
