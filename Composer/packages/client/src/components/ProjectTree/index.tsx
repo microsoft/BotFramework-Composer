@@ -51,11 +51,13 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   ): IContextualMenuProps => {
     return {
       items: NewTriggerType.map(type => {
+        const text = getTitle(type, schemas);
         return {
           key: type,
-          text: getTitle(type, schemas),
+          text,
           index,
           dialogId,
+          'data-testid': text,
           onClick: onItemClick,
         } as IContextualMenuItem;
       }),

@@ -178,7 +178,7 @@ export const ShellApi: React.FC = () => {
   function handleValueChange({ newData, updatePath }, event) {
     let dataPath = '';
     if (event.source.name === FORM_EDITOR) {
-      dataPath = updatePath || getFocusPath(selected, focused);
+      dataPath = updatePath || focused || '';
     }
 
     const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);

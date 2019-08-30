@@ -7,13 +7,13 @@ context('SwitchCondition', () => {
   });
 
   //will remove skip after add trigger is ok
-  it.skip('can manage cases', () => {
+  it('can manage cases', () => {
     cy.addEventHandler('Handle Unknown Intent');
 
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Unknown Intent').click({ force: true });
+      cy.getByText(/UnknownIntentRule/).click({ force: true });
       cy.wait(100);
-      cy.getByText('Unknown Intent').click({ force: true });
+      cy.getByText(/UnknownIntent/).click({ force: true });
       cy.wait(100);
       cy.getByTestId('StepGroupAdd').click({ force: true });
       cy.getByText('Flow').click({ force: true });
