@@ -1,6 +1,6 @@
 import { sequentialLayouter } from '../../src/layouters/sequentialLayouter';
-import { Boundary } from '../../src/shared/Boundary';
-import { GraphNode } from '../../src/shared/GraphNode';
+import { Boundary } from '../../src/models/Boundary';
+import { GraphNode } from '../../src/models/GraphNode';
 import { calculateSequenceBoundary } from '../../src/layouters/calculateNodeBoundary';
 
 describe('sequentialLayouter', () => {

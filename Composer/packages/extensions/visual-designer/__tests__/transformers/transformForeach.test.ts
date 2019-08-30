@@ -1,5 +1,5 @@
 import { transformForeach } from '../../src/transformers/transformForeach';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 
 test('should return NULL when input is invalid', () => {
   expect(transformForeach(null, '')).toBeNull();

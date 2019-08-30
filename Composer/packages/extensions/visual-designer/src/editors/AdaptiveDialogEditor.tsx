@@ -3,15 +3,15 @@ import { jsx } from '@emotion/core';
 import { useMemo, FC, useContext } from 'react';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
-import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { defaultNodeProps, EditorProps } from '../components/shared/sharedProps';
-import { GraphNode } from '../shared/GraphNode';
-import { queryNode } from '../shared/jsonTracker';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { GraphNode } from '../models/GraphNode';
+import { queryNode } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
-import { Collapse } from '../components/nodes/templates/Collapse';
+import { Collapse } from '../components/lib/Collapse';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
+import { EditorProps, defaultEditorProps } from './editorProps';
 import { EditorConfig } from './editorConfig';
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
@@ -74,4 +74,4 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   );
 };
 
-AdaptiveDialogEditor.defaultProps = defaultNodeProps;
+AdaptiveDialogEditor.defaultProps = defaultEditorProps;
