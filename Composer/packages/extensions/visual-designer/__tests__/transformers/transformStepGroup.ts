@@ -1,5 +1,5 @@
 import { transformStepGroup } from '../../src/transformers/transformStepGroup';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 
 test('should return safely when input null value', () => {
   const result = transformStepGroup(null, '');

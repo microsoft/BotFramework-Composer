@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
-import { TriggerSize } from '../../shared/elementSizes';
+import { TriggerSize } from '../../constants/ElementSizes';
 
 import { FormCard } from './templates/FormCard';
 
