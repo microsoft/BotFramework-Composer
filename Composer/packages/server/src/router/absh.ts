@@ -101,7 +101,7 @@ const absh: AuthProviderInit = {
         'state',
         querystring.stringify({
           botId,
-          resource: req.query.redirectUrl || `${BASEURL}/home`,
+          resource: req.query.resource || `${BASEURL}/home`,
         })
       );
 

@@ -1,5 +1,4 @@
-import React, { forwardRef } from 'react';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import React, { forwardRef, useContext, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -12,6 +11,7 @@ import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow';
+import { RequireAuth } from './components/RequireAuth';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -102,7 +102,7 @@ export const App: React.FC = () => {
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
-    <Fragment>
+    <RequireAuth>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -159,6 +159,6 @@ export const App: React.FC = () => {
           <Routes component={Content} />
         </div>
       </div>
-    </Fragment>
+    </RequireAuth>
   );
 };
