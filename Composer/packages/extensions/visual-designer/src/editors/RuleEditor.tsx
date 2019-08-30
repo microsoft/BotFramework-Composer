@@ -3,14 +3,13 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
-import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { GraphNode } from '../shared/GraphNode';
-import { defaultNodeProps } from '../components/shared/sharedProps';
-import { Collapse } from '../components/nodes/templates/Collapse';
-import { transformObiRules } from '../transformers/transformObiRules';
-import { outlineObiJson } from '../shared/outlineObiJson';
 import { Trigger } from '../components/nodes/Trigger';
+import { defaultNodeProps } from '../components/nodes/nodeProps';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { GraphNode } from '../models/GraphNode';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { transformObiRules } from '../transformers/transformObiRules';
+import { outlineObiJson } from '../utils/outlineObiJson';
 
 import { StepEditor } from './StepEditor';
 
@@ -61,23 +60,21 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         onEvent(NodeEventTypes.Focus, '');
       }}
     >
-      <Collapse text="Actions">
-        <StepEditor
-          key={stepGroup.id + '?version=' + outlineVersion.current}
-          id={stepGroup.id}
-          data={stepGroup.data}
-          onEvent={onEvent}
-          trigger={
-            <Trigger
-              data={data}
-              focused={focusedId === id}
-              onClick={() => {
-                onEvent(NodeEventTypes.Focus, id);
-              }}
-            />
-          }
-        />
-      </Collapse>
+      <StepEditor
+        key={stepGroup.id + '?version=' + outlineVersion.current}
+        id={stepGroup.id}
+        data={stepGroup.data}
+        onEvent={onEvent}
+        trigger={
+          <Trigger
+            data={data}
+            focused={focusedId === id}
+            onClick={() => {
+              onEvent(NodeEventTypes.Focus, id);
+            }}
+          />
+        }
+      />
     </div>
   );
 };
