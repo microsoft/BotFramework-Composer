@@ -1,6 +1,12 @@
-import { ObiTypes } from '../shared/ObiTypes';
-import { Boundary } from '../shared/Boundary';
-import { DiamondSize, InitNodeSize, LoopIconSize, ChoiceInputSize, ChoiceInputMarginTop } from '../shared/elementSizes';
+import { ObiTypes } from '../constants/ObiTypes';
+import { Boundary } from '../models/Boundary';
+import {
+  DiamondSize,
+  InitNodeSize,
+  LoopIconSize,
+  ChoiceInputSize,
+  ChoiceInputMarginTop,
+} from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
