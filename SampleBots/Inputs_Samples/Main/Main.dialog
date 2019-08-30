@@ -22,11 +22,11 @@
     }
   },
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
@@ -39,13 +39,13 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:25.506Z",
         "updatedAt": "2019-07-16T18:54:29.045Z",
         "id": "872701"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "TextInput"
@@ -54,13 +54,13 @@
       "intent": "TextInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:30.230Z",
         "updatedAt": "2019-07-16T18:54:34.404Z",
         "id": "454567"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "NumberInput"
@@ -69,13 +69,13 @@
       "intent": "NumberInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:35.719Z",
         "updatedAt": "2019-07-16T18:54:39.007Z",
         "id": "543817"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DateTimeInput"
@@ -84,13 +84,13 @@
       "intent": "DateTimeInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:40.362Z",
         "updatedAt": "2019-07-16T18:54:43.491Z",
         "id": "034901"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ConfirmInput"
@@ -99,13 +99,13 @@
       "intent": "ConfirmInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:44.886Z",
         "updatedAt": "2019-07-16T18:54:50.293Z",
         "id": "374825"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ChoiceInput"
@@ -114,13 +114,13 @@
       "intent": "ChoiceInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T18:54:51.534Z",
         "updatedAt": "2019-07-16T18:54:54.454Z",
         "id": "832993"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AttachmentInput"
@@ -129,13 +129,13 @@
       "intent": "AttachmentInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-11T06:07:25.376Z",
         "updatedAt": "2019-07-16T18:54:58.779Z",
         "id": "268314"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "OAuthInput"
@@ -144,13 +144,13 @@
       "intent": "OAuthInput"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-01T21:58:18.063Z",
         "updatedAt": "2019-07-16T18:55:04.129Z",
         "id": "566255"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -164,13 +164,13 @@
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "createdAt": "2019-07-11T06:53:07.521Z",
         "updatedAt": "2019-07-16T18:55:15.093Z",
         "id": "487768"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {

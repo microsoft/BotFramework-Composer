@@ -10,10 +10,10 @@
     }
   },
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.TextInput",
           "outputFormat": "none",
@@ -37,9 +37,6 @@
           }
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
       "$designer": {
         "createdAt": "2019-08-08T07:00:15.777Z",
         "updatedAt": "2019-08-08T07:00:15.790Z",
@@ -47,8 +44,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowMyEmail",
@@ -67,8 +64,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowSentItems"
@@ -82,8 +79,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SendMyEmail"

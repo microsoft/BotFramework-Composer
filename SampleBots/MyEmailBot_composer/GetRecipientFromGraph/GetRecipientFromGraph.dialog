@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.HttpRequest",
           "url": "https://graph.microsoft.com/v1.0/me/contacts?$filter=startswith(displayName,'{user.recipient}')or startswith(surname, '{user.recipient}')",
@@ -15,9 +15,7 @@
           "Property": "user.intentRecipient"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:01:19.426Z",
         "updatedAt": "2019-08-08T07:01:19.437Z",

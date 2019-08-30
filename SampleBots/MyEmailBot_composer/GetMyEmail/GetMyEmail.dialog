@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
@@ -38,9 +38,6 @@
           "arrayProperty": "user.emails",
           "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}+2]"
         }
-      ],
-      "events": [
-        "beginDialog"
       ],
       "$designer": {
         "createdAt": "2019-08-08T07:01:26.311Z",

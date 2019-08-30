@@ -2,11 +2,11 @@
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
   "recognizer": "Main.lu",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "constraint": "@meat && ignore(!turn.setmeat)",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Set conversation.order.meat to {@meat}"
@@ -39,9 +39,9 @@
       }
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "constraint": "@cheese && ignore(!turn.setcheese)",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Set conversation.order.cheese to {@cheese}"
@@ -72,12 +72,12 @@
       }
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "@bread && ignore(!turn.setbread)",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Set conversation.order.bread to {@bread}"
@@ -100,12 +100,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "@topping && ignore(!turn.settopping)",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Set conversation.order.topping to {join(foreach(@@topping, list, first(list)), ', ')}"
@@ -128,12 +128,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "@confirmation && ignore(!turn.setconfirmation)",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Set conversation.order.confirmation to {@confirmation}"
@@ -157,12 +157,12 @@
     },
     {
       "$comment": "**** This is the start of prompts ****",
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.meat && !conversation.order.bread",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[MeatAndBread]"
@@ -170,12 +170,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "conversation.order.meat && conversation.order.bread && !conversation.order.cheese && !conversation.order.topping",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[CheeseAndToppingsWithMeatAndBread]"
@@ -183,12 +183,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.confirmation && conversation.order.meat && conversation.order.bread && conversation.order.cheese && conversation.order.topping",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Confirmation]"
@@ -196,13 +196,13 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$comment": "Should update this to use actual http with failure.",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "conversation.order.confirmation == 'yes' && !conversation.order.alldone",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[BeingProcessed]"
@@ -215,12 +215,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "conversation.order.confirmation == 'no'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[StartAgain]"
@@ -236,12 +236,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$comment": "This is the kind of thing we should build in a default for.",
       "events": [
         "recognizedIntent"
       ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[NoIntent]"
@@ -249,12 +249,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "conversation.order.meat && conversation.order.cheese && !conversation.order.bread && !conversation.order.topping",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[BreadAndToppingsWithMeatAndCheese]"
@@ -262,12 +262,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.meat && conversation.order.bread",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[MeatWithBread]"
@@ -276,12 +276,12 @@
     },
     {
       "$comment": "*** Ideally these would be a generic template rule against any slot value. ***",
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.meat",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Meat]"
@@ -292,9 +292,9 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "constraint": "!conversation.order.cheese",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Cheese]"
@@ -310,12 +310,12 @@
       }
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.bread",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Bread]"
@@ -323,12 +323,12 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "recognizedIntent"
       ],
       "constraint": "!conversation.order.topping",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Toppings]"

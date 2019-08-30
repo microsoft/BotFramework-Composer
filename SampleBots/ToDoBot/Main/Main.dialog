@@ -19,16 +19,16 @@
     }
   },
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "createdAt": "2019-07-01T22:02:14.960Z",
         "updatedAt": "2019-07-16T20:00:24.788Z",
         "id": "376720"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -41,13 +41,13 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:59:32.772Z",
         "updatedAt": "2019-07-16T19:59:36.277Z",
         "id": "064505"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddToDo"
@@ -56,13 +56,13 @@
       "intent": "AddIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:59:37.184Z",
         "updatedAt": "2019-08-01T23:46:50.759Z",
         "id": "114961"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteToDo",
@@ -76,13 +76,13 @@
       "intent": "DeleteIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:59:41.352Z",
         "updatedAt": "2019-07-16T19:59:44.427Z",
         "id": "088050"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ClearToDos"
@@ -91,13 +91,13 @@
       "intent": "ClearIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:59:50.315Z",
         "updatedAt": "2019-07-16T19:59:54.774Z",
         "id": "633942"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -111,13 +111,13 @@
       "intent": "HelpIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T20:00:00.082Z",
         "updatedAt": "2019-07-16T20:00:03.344Z",
         "id": "794124"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowToDos"
@@ -126,13 +126,13 @@
       "intent": "ShowIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T20:00:08.499Z",
         "updatedAt": "2019-07-16T20:00:12.504Z",
         "id": "179728"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "ok."
@@ -144,13 +144,13 @@
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "createdAt": "2019-07-16T20:00:13.577Z",
         "updatedAt": "2019-07-16T20:00:19.435Z",
         "id": "677447"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."

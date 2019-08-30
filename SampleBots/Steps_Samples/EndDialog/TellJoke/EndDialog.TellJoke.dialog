@@ -12,15 +12,15 @@
       "CancelIntent": "(?i)cancel|never mind"
     }
   },
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:53:25.585Z",
         "updatedAt": "2019-07-16T19:53:31.381Z",
         "id": "241317"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.CancelAllDialogs"
         }
@@ -28,15 +28,13 @@
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "120822",
         "updatedAt": "2019-07-22T08:04:13.891Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {

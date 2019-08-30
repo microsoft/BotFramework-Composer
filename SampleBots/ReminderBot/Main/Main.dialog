@@ -9,16 +9,16 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "createdAt": "2019-07-08T08:29:34.449Z",
         "updatedAt": "2019-07-16T19:38:54.655Z",
         "id": "134916"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
@@ -26,13 +26,13 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:10.898Z",
         "updatedAt": "2019-07-16T19:39:00.986Z",
         "id": "899834"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
@@ -46,13 +46,13 @@
       "intent": "AddReminder"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:19.739Z",
         "updatedAt": "2019-07-16T19:39:04.451Z",
         "id": "295024"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
@@ -66,13 +66,13 @@
       "intent": "DeleteReminder"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:40.553Z",
         "updatedAt": "2019-07-16T19:39:07.824Z",
         "id": "583948"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
@@ -86,13 +86,13 @@
       "intent": "DeleteAllReminders"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:45.611Z",
         "updatedAt": "2019-07-16T19:39:11.639Z",
         "id": "622298"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
@@ -106,13 +106,13 @@
       "intent": "ShowReminder"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:57.477Z",
         "updatedAt": "2019-07-16T19:39:15.047Z",
         "id": "597721"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[help]"
@@ -121,13 +121,13 @@
       "intent": "HelpIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:58.020Z",
         "updatedAt": "2019-07-16T19:39:18.070Z",
         "id": "720611"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "ok."
@@ -139,13 +139,13 @@
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "createdAt": "2019-07-08T08:28:58.881Z",
         "updatedAt": "2019-07-16T19:39:23.811Z",
         "id": "146624"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.",

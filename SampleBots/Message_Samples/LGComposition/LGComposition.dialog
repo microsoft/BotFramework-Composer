@@ -7,17 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "432892",
         "updatedAt": "2019-07-22T07:54:16.386Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
@@ -27,7 +24,7 @@
           },
           "property": "user.name",
           "prompt": "Hello, I'm Zoidberg. What is your name?",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "never",
           "outputFormat": "none"

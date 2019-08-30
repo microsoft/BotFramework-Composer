@@ -10,16 +10,16 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-04T07:31:13.192Z",
         "updatedAt": "2019-07-16T20:03:51.301Z",
         "id": "842277"
       },
       "constraint": "#AddToDo.score>0.6",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddItem"
@@ -28,13 +28,13 @@
       "intent": "AddToDo"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-04T07:31:14.654Z",
         "updatedAt": "2019-07-16T20:03:54.762Z",
         "id": "905057"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteItem"
@@ -44,13 +44,13 @@
       "constraint": "#DeleteToDo.score>0.6"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T20:03:55.674Z",
         "updatedAt": "2019-07-16T20:03:58.931Z",
         "id": "735961"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowItems"
@@ -60,13 +60,13 @@
       "constraint": "#ShowToDo.score>0.6"
     },
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "createdAt": "2019-07-04T19:37:38.354Z",
         "updatedAt": "2019-07-16T20:04:06.035Z",
         "id": "265106"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -79,14 +79,14 @@
       ]
     },
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Handle ConversationUpdate",
         "id": "954390",
         "updatedAt": "2019-08-02T03:17:42.774Z"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {

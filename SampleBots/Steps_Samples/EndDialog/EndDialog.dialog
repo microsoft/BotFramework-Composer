@@ -13,13 +13,13 @@
       "CancelIntent": "(?i)cancel|never mind"
     }
   },
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "events": [
         "cancelDialog"
       ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "ok."
@@ -30,9 +30,9 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "JokeIntent",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndDialog.TellJoke"
@@ -40,15 +40,13 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "917307",
         "updatedAt": "2019-07-22T08:04:02.873Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -57,7 +55,7 @@
             "id": "964165"
           },
           "condition": "user.name == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.TextInput",
               "$designer": {

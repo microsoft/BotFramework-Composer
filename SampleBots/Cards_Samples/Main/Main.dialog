@@ -8,10 +8,10 @@
   },
   "autoEndDialog": false,
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.UnknownIntentRule",
-      "steps": [
+      "$type": "Microsoft.OnUnknownIntent",
+      "actions": [
         {
           "$type": "Microsoft.ChoiceInput",
           "$designer": {
@@ -71,7 +71,7 @@
           "cases": [
             {
               "value": "HeroCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -85,7 +85,7 @@
             },
             {
               "value": "ThumbnailCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -99,7 +99,7 @@
             },
             {
               "value": "SigninCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -113,7 +113,7 @@
             },
             {
               "value": "AnimationCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -127,7 +127,7 @@
             },
             {
               "value": "VideoCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -141,7 +141,7 @@
             },
             {
               "value": "AudioCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -155,7 +155,7 @@
             },
             {
               "value": "AdaptiveCard",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -169,7 +169,7 @@
             },
             {
               "value": "AllCards",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -204,9 +204,9 @@
       }
     },
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
