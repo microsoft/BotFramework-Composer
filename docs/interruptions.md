@@ -2,7 +2,6 @@
 This is a living document that lists possilbe conversation modelling scenarios as they relate to consultation/ interruption handling. 
 
 ## 1.  Basic multi-turn conversation
-MI
 
 Basic scenario of multi-input form flow. Here the user answers the questions directly in all cases.
 
@@ -17,7 +16,6 @@ Basic scenario of multi-input form flow. Here the user answers the questions dir
 |Bot:   | Thank you. I have your age as 36                          |    
 
 ## 2. Multi-turn with validations
-MI
 
 Here's the next level of sophistication where the bot can set **validation constraints** on user input and re-prompt in a more elegant way
 
@@ -40,7 +38,6 @@ Here's the next level of sophistication where the bot can set **validation const
 |Bot:   | Thank you. I have your age as 36                                                  |    
 
 ## 3. Unrecognized re-prompt
-MI
 
 Next up, the bot can understand that the user is not answering the question using the **input's internal entity recognizer** (for non TextInput cases) and can come back with a re-prompt that is approrpiate for this scenario. 
 
@@ -57,7 +54,6 @@ Next up, the bot can understand that the user is not answering the question usin
 |Bot:   | Thank you. I have your age as 36                                          |    
 
 ## 4. Max retry based multi-turn
-MI
 
 Bot might decide to set a limit on how many times it reprompts for a piece of information 
 
@@ -108,7 +104,6 @@ In the above example, the bot took '36' as user's age assuming that was set as t
 
 
 ## 5. Using LUIS for entity extraction
-MI
 
 User can answer requested information as a sentence. 
 
@@ -144,7 +139,6 @@ Note: You need something more flexible like LUIS beyond this point.
 
 
 ## 5a. Multi-entity extraction
-MI
 
 User can specify multiple pieces of information in one go
 
@@ -156,7 +150,6 @@ User can specify multiple pieces of information in one go
 |Bot:   | Hello vishwac, nice to meet you. I have your age as 36                    |
 
 ## 5b. Out of order entity extraction
-MI
 
 <a id="s-g-3"></a>
 
@@ -172,7 +165,6 @@ MI
 |Bot:   | Hello 'I'm 36 years old', nice to meet you. I have your age as 36         |
 
 ## 6. Disambiguation
-MI
 
 Bot might choose to disambiguate on user's response
 
@@ -185,7 +177,6 @@ Bot might choose to disambiguate on user's response
 Bot might choose to confirm user input before proceeding
 
 ### 7.a Basic confirmation
-MI
 
 Yes path. 
 
@@ -216,7 +207,6 @@ No path.
 |Bot:   | Ok. let's start over                                      |
 
 ### 7.b Confirmation flow with change handling
-MI
 
 <a id="s-g-5"></a>
 
@@ -240,7 +230,6 @@ No built-in constructs available for change handling. User is in control of dete
 |Bot:   | Thank you. You are all set.                               |   
 
 ### 7.c. Confirmation with inline change mangement
-MI
 
 | Who?  | Message                                                   |
 |------:|:----------------------------------------------------------|
@@ -257,7 +246,6 @@ MI
 |Bot:   | Thank you. You are all set.                               |   
 
 ## 8. Local intents
-MI
 
 Next up, the user can ask clarifying questions (help or locally relevant intents) while the bot is executing a multi-turn conversation with the user. 
 
@@ -296,7 +284,6 @@ At this point, it is better to get set up with one dialog per scenario.
 
 
 ## 9. Interruption
-Not MI
 
 The user could have expressed intent to intiate a conversation about a completely different topic. There are different ways the bot could decide to handle this interruption - 
 
@@ -357,7 +344,6 @@ Here's an example conversation that shows the interruption being queued up after
 
 
 ## 10. Interruption with confirmation, resumption
-Not MI
 
 Bot could chooce to confirm with the user before deciding an action plan for handling interruption
 
@@ -409,7 +395,6 @@ Bot could choose to carry context forward across interrupting conversations
 |...    | ...                                                                               |
 
 ## 12. QnA
-Not MI 
 
 Bot could choose to look up a knowledge base to come back with an answer. 
 
