@@ -1,7 +1,7 @@
-import { ElementInterval, BranchIntervalMinX } from '../shared/elementSizes';
-import { GraphNode } from '../shared/GraphNode';
-import { GraphLayout } from '../shared/GraphLayout';
-import { EdgeData } from '../shared/EdgeData';
+import { ElementInterval, BranchIntervalMinX } from '../constants/ElementSizes';
+import { GraphNode } from '../models/GraphNode';
+import { GraphLayout } from '../models/GraphLayout';
+import { EdgeData } from '../models/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
