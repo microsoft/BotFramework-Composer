@@ -50,6 +50,13 @@ export interface LUFile {
   [key: string]: any;
 }
 
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
+}
+
 export interface ILuisSettings {
   luis: {
     [key: string]: string;
