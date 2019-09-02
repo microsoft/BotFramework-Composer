@@ -5,14 +5,12 @@ import { LocalDiskStorage } from '../storage/localDiskStorage';
 
 import { DialogSetting } from './interface';
 
-const keyword: any = ['OAuthInput.MicrosoftAppPassword', 'LuisConfig.authoringKey'];
+const keyword: any = ['MicrosoftAppPassword', 'luis.authoringKey'];
 const subPath = 'settings/appsettings.json';
 const defaultSetting: DialogSetting = {
-  OAuthInput: {
-    MicrosoftAppPassword: '',
-    MicrosoftAppId: '',
-  },
-  LuisConfig: {
+  MicrosoftAppPassword: '',
+  MicrosoftAppId: '',
+  luis: {
     name: '',
     authoringKey: '',
     authoringRegion: 'westus',

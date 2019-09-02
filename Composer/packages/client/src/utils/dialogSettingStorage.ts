@@ -1,7 +1,5 @@
 import { set } from 'lodash';
 
-// import { OAuthInput, ILuisConfig } from '../store/types';
-
 import storage from './storage';
 
 const KEY = 'DialogSetting';

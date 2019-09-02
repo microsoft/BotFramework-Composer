@@ -56,7 +56,7 @@ export class BotProject {
     await this.luIndexer.index(this.files); // ludown parser is async
     await this._checkProjectStructure();
     if (this.settings) {
-      await this.luPublisher.setLuisConfig(this.settings.LuisConfig);
+      await this.luPublisher.setLuisConfig(this.settings.luis);
     }
     await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
@@ -79,7 +79,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (config: DialogSetting) => {
     await this.settingManager.set(config);
-    await this.luPublisher.setLuisConfig(config.LuisConfig);
+    await this.luPublisher.setLuisConfig(config.luis);
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface

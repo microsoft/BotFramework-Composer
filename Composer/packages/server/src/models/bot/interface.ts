@@ -92,13 +92,9 @@ export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
 }
 
-export interface OAuthInput {
+export interface DialogSetting {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
-}
-
-export interface DialogSetting {
-  OAuthInput: OAuthInput;
-  LuisConfig: ILuisConfig;
+  luis: ILuisConfig;
   [key: string]: any;
 }

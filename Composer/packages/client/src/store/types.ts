@@ -109,10 +109,7 @@ export interface LgTemplate {
   Name: string;
   Body: string;
 }
-export interface OAuthInput {
-  MicrosoftAppId: string;
-  MicrosoftAppPassword: string;
-}
+
 export interface ILuisConfig {
   name: string;
   authoringKey: string;
@@ -121,7 +118,8 @@ export interface ILuisConfig {
   environment: string | 'composer';
 }
 export interface DialogSetting {
-  OAuthInput?: OAuthInput;
-  LuisConfig?: ILuisConfig;
+  MicrosoftAppId?: string;
+  MicrosoftAppPassword?: string;
+  luis?: ILuisConfig;
   [key: string]: any;
 }

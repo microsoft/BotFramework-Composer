@@ -16,9 +16,9 @@ import { LuisConfig, Text, BotStatus } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
-import { DialogInfo, OAuthInput } from './store/types';
+import { DialogInfo } from './store/types';
 
-const openInEmulator = (url, authSettings: OAuthInput) => {
+const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
   // and start up the emulator
   const i = document.createElement('iframe');
@@ -72,7 +72,7 @@ export const TestController: React.FC = () => {
       });
       return;
     }
-    const config = settings.LuisConfig;
+    const config = settings.luis;
 
     if (getReferredFiles(luFiles, dialogs).length > 0) {
       if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
@@ -98,8 +98,8 @@ export const TestController: React.FC = () => {
     setFetchState(STATE.PUBLISHING);
     try {
       await setEnvSettings(settings);
-      if (settings.LuisConfig) {
-        await publishLuis(settings.LuisConfig.authoringKey);
+      if (settings.luis) {
+        await publishLuis(settings.luis.authoringKey);
         return true;
       } else {
         throw new Error('Please Set Luis Config');
@@ -136,7 +136,9 @@ export const TestController: React.FC = () => {
             onClick={() =>
               openInEmulator(
                 'http://localhost:3979/api/messages',
-                settings.OAuthInput ? settings.OAuthInput : { MicrosoftAppId: '', MicrosoftAppPassword: '' }
+                settings.MicrosoftAppId && settings.MicrosoftAppPassword
+                  ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+                  : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
               )
             }
           >

@@ -101,14 +101,14 @@ export const PublishLuis = props => {
   const { setEnvSettings, setEnvSettingUpdated } = actions;
   const { settings } = state;
   const { onPublish, onDismiss, workState, botName } = props;
-  const [formData, setFormData] = useState({ ...settings.LuisConfig, errors: {} });
+  const [formData, setFormData] = useState({ ...settings.luis, errors: {} });
 
   const updateForm = field => (e, newValue) => {
-    if (botName && SensitiveProperties.indexOf(`LuisConfig.${field}`) >= 0) {
-      DialogSettingStorage.setField(botName, `LuisConfig.${field}`, newValue);
+    if (botName && SensitiveProperties.indexOf(`luis.${field}`) >= 0) {
+      DialogSettingStorage.setField(botName, `luis.${field}`, newValue);
     }
-    set(settings, `LuisConfig.${field}`, newValue);
-    setFormData({ ...settings.LuisConfig, errors: {}, [field]: newValue });
+    set(settings, `luis.${field}`, newValue);
+    setFormData({ ...settings.luis, errors: {}, [field]: newValue });
     setEnvSettings(settings);
     setEnvSettingUpdated();
   };
