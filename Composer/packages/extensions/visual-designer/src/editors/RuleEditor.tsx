@@ -44,6 +44,10 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
 
   const { stepGroup } = nodeMap;
 
+  (window as any).insertStepAt = ($type, index) => {
+    onEvent(NodeEventTypes.Insert, { id: `${id}.steps`, $type, position: index });
+  };
+
   return (
     <div
       className="rule-editor"

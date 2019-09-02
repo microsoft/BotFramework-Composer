@@ -193,6 +193,7 @@ function DesignPage(props) {
               {breadcrumbItems}
               <div css={editorWrapper}>
                 <iframe
+                  id="VisualEditorIframe"
                   key="VisualEditor"
                   name="VisualEditor"
                   css={visualEditor}
