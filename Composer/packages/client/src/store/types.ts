@@ -104,7 +104,6 @@ export interface LuFile {
     };
   };
   diagnostics: LuDiagnostic[];
-  publishing: boolean;
 }
 
 export interface LgFile {

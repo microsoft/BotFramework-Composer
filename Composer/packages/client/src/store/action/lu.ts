@@ -57,28 +57,14 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
 };
 
 export const publishLuis: ActionCreator = async ({ dispatch }) => {
-  let unpublishedLuFileIds = [];
   try {
-    let response = await axios.get(`${BASEURL}/projects/opened/luFiles/unpublished`);
-    unpublishedLuFileIds = response.data.unpublishedLuFileIds;
-    if (unpublishedLuFileIds && unpublishedLuFileIds.length > 0) {
-      dispatch({
-        type: ActionTypes.SET_PUBLISHING_LU,
-        payload: { unpublishedLuFileIds },
-      });
-      response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`);
-      dispatch({
-        type: ActionTypes.PUBLISH_LU_SUCCCESS,
-        payload: { response },
-      });
-    }
-  } catch (err) {
-    throw err;
-  } finally {
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`);
     dispatch({
-      type: ActionTypes.RESET_PUBLISHING_LU,
-      payload: { publishingLuFileIds: unpublishedLuFileIds },
+      type: ActionTypes.PUBLISH_LU_SUCCCESS,
+      payload: { response },
     });
+  } catch (err) {
+    throw new Error(err.response.data.message);
   }
 };
 

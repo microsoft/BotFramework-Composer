@@ -14,14 +14,13 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as luUtil from '../../utils/luUtil';
-import { BotStatus } from '../../constants';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { navTo } = actions;
-  const { dialogs, luFiles, botStatus } = state;
+  const { dialogs, luFiles } = state;
   const { activeDialog, onClickEdit } = props;
   const [intents, setIntents] = useState([]);
   const listRef = useRef(null);
@@ -63,7 +62,7 @@ export default function TableView(props) {
       const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, botStatus]);
+  }, [luFiles, activeDialog]);
 
   function checkErrors(files) {
     return files.filter(file => {
@@ -74,21 +73,9 @@ export default function TableView(props) {
   function getIntentState(file) {
     if (!file.diagnostics) {
       return formatMessage('Error');
-    } else if (file.publishing) {
-      return formatMessage('Publishing');
     } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
       return formatMessage('Not yet published');
-    } else if (
-      file.status &&
-      file.status.lastPublishTime > file.status.lastUpdateTime &&
-      botStatus === BotStatus.connected
-    ) {
-      return formatMessage('Published & Connected');
-    } else if (
-      file.status &&
-      file.status.lastPublishTime > file.status.lastUpdateTime &&
-      botStatus !== BotStatus.connected
-    ) {
+    } else if (file.status && file.status.lastPublishTime > file.status.lastUpdateTime) {
       return formatMessage('Published');
     } else {
       return formatMessage('Unknown State'); // It's a bug in most cases.
@@ -204,9 +191,9 @@ export default function TableView(props) {
         },
       },
       {
-        key: 'State',
-        name: formatMessage('State'),
-        fieldName: 'State',
+        key: 'Activity',
+        name: formatMessage('Activity'),
+        fieldName: 'Activity',
         minWidth: 100,
         maxWidth: 100,
         isResizable: true,
