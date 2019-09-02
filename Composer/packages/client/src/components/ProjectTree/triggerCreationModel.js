@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import nanoid from 'nanoid/generate';
 import { get, set, cloneDeep } from 'lodash';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
@@ -8,23 +8,64 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles } from './styles';
+import { styles, dropdownStyles, name } from './styles';
+
+const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+const validateForm = data => {
+  const errors = {};
+  const { name, $type, event } = data;
+  if (!name || !nameRegex.test(name)) {
+    errors.name = formatMessage(
+      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+    );
+  }
+
+  if (!$type) {
+    errors.$type = formatMessage('please select a trigger type');
+  }
+
+  if ($type === 'Microsoft.EventRule' && !event) {
+    errors.event = formatMessage('please select a event type');
+  }
+  return errors;
+};
 export const TriggerCreationModel = props => {
   // eslint-disable-next-line react/prop-types
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  //const [triggerType, setTriggerType] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [triggerType, setTriggerType] = useState(null);
+  const [formData, setFormData] = useState({ errors: {} });
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
-  const onClickSubmitButton = () => {
+  const resetState = () => {
+    setTriggerType(null);
+    setFormData({ errors: {} });
+  };
+
+  const onClickSubmitButton = e => {
+    e.preventDefault();
+    const errors = validateForm(formData);
+
+    if (Object.keys(errors).length) {
+      setFormData({
+        ...formData,
+        errors,
+      });
+      return;
+    }
     const inputDialog = dialogs.find(d => d.id === dialogId);
     const newDialog = generateDialogWithNewTrigger(inputDialog, formData);
     onSubmit(newDialog);
+    onDismiss();
+    resetState();
   };
 
   const onSelectTriggerType = (e, option) => {
-    //setTriggerType(option.$type);
+    setTriggerType(option.$type);
     setFormData({ ...formData, $type: option.$type });
+  };
+
+  const onSelectEvent = (e, option) => {
+    setFormData({ ...formData, event: option.event });
   };
 
   const updateForm = field => (e, newValue) => {
@@ -33,10 +74,6 @@ export const TriggerCreationModel = props => {
       [field]: newValue,
     });
   };
-
-  //   const onSelectIntents = (e, option) => {
-  //     setFormData({ ...formData, intent: option.key });
-  //   };
 
   const initialDialogShape = {
     'Microsoft.ConversationUpdateActivityRule': {
@@ -61,6 +98,9 @@ export const TriggerCreationModel = props => {
       //intent: data.intent,
       ...seedNewDialog(data.$type),
     };
+    if (data.event) {
+      newStep.events = [data.event];
+    }
 
     rules.push(newStep);
 
@@ -97,17 +137,37 @@ export const TriggerCreationModel = props => {
     },
   ];
 
-  //   const showIntentDropDown = triggerType === 'Microsoft.IntentRule';
-  //   const showEventDropDown = triggerType === 'Microsoft.EventRule';
+  const eventTypes = [
+    {
+      text: 'beginDialog',
+      event: 'beginDialog',
+    },
+    {
+      text: 'resumeDialog',
+      event: 'resumeDialog',
+    },
+    {
+      text: 'cancelDialog',
+      event: 'cancelDialog',
+    },
+    {
+      text: 'endDialog',
+      event: 'endDialog',
+    },
+  ];
+
+  const showEventDropDown = triggerType === 'Microsoft.EventRule';
 
   return (
     <Dialog
       hidden={!isOpen}
-      onDismiss={onDismiss}
+      onDismiss={() => {
+        resetState();
+        onDismiss();
+      }}
       dialogContentProps={{
         type: DialogType.normal,
-        title: 'subTitle',
-        subText: 'subText',
+        title: 'Create a trigger',
         styles: styles.dialog,
       }}
       modalProps={{
@@ -123,43 +183,34 @@ export const TriggerCreationModel = props => {
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
+            errorMessage={formData.errors.$type}
           />
+          {showEventDropDown && (
+            <Dropdown
+              placeholder="select a event type"
+              label="What is the event?"
+              options={eventTypes}
+              styles={dropdownStyles}
+              onChange={onSelectEvent}
+              errorMessage={formData.errors.event}
+            />
+          )}
           <TextField
             label={formatMessage('Name')}
             styles={name}
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
-            onGetErrorMessage={getErrorMessage}
           />
-          <TextField
-            styles={description}
-            label={formatMessage('Description')}
-            multiline
-            resizable={false}
-            onChange={updateForm('description')}
-          />
-          {/* {showIntentDropDown && (
-            <Dropdown
-              placeholder="Create a new or select an intent"
-              label="Select a trigger type"
-              options={}
-              styles={dropdownStyles}
-              onChange={onSelectIntents}
-            />
-          )}
-          {showEventDropDown && (
-            <Dropdown
-              placeholder="event event"
-              label="Select a trigger type"
-              options={intentsOptions}
-              styles={}
-              onChange={onSelectTriggerType}
-            />
-          )} */}
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+        <DefaultButton
+          onClick={() => {
+            resetState();
+            onDismiss();
+          }}
+          text={formatMessage('Cancel')}
+        />
         <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} />
       </DialogFooter>
     </Dialog>

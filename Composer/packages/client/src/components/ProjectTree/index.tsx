@@ -28,10 +28,6 @@ const addIconProps: IIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-// const menuIconProps: IIconProps = {
-//   iconName: '',
-// };
-
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, schemas } = props;
   const { state, actions } = useContext(StoreContext);
@@ -57,11 +53,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     }, []);
   }, [dialogs]);
 
-  // const handleAddTrigger = (ev, item) => {
-  //   onAddTrigger(item.dialogId, item.key, item.index);
-  // };
-
-  const OnTriggerCreationDisMiss = () => {
+  const OnTriggerCreationDisMiss = async () => {
     actions.createTriggerCancel();
   };
 

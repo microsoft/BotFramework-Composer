@@ -109,7 +109,7 @@ export const styles = {
   },
   modal: {
     main: {
-      maxWidth: '416px !important',
+      maxWidth: '600px !important',
     },
   },
 };
@@ -119,3 +119,29 @@ export const dropdownStyles = css`
     width: 300;
   }
 `;
+
+export const dialogWindow = { height: '300px', width: '500px' };
+
+export const textFieldlabel = {
+  label: {
+    root: [
+      {
+        fontWeight: FontWeights.semibold,
+      },
+    ],
+  },
+};
+
+export const name = {
+  fieldGroup: {
+    width: 500,
+  },
+  root: {
+    height: '90px',
+  },
+  subComponentStyles: textFieldlabel,
+};
+
+export const description = {
+  subComponentStyles: textFieldlabel,
+};
