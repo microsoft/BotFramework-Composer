@@ -103,10 +103,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   }, [data]);
 
   useEffect((): void => {
-    if (focusedId) {
-      setKeyBoardStatus('focused');
-    } else if (selectionContext.selectedIds.length > 0) {
+    if (selectionContext.selectedIds.length > 0) {
       setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
     } else {
       setKeyBoardStatus('nomal');
     }
@@ -137,9 +137,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         onFocusSteps([path]);
         break;
       case KeyboardCommandTypes.Copy:
-        if (keyboardStatus === 'focused' && !idSelectors[idSelectors.length - 1].includes('rules')) {
-          navigator.clipboard.writeText(focusedId);
-        } else if (keyboardStatus !== 'normal') {
+        if (keyboardStatus === 'selected') {
           const selectedIds = selectionContext.selectedIds;
           let shortestLength = selectedIds[0].split('.').length;
           selectedIds.forEach(id => {
@@ -157,6 +155,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             )
           );
           navigator.clipboard.writeText(Array.from(ids).join(','));
+        } else if (keyboardStatus === 'focused' && !idSelectors[idSelectors.length - 1].includes('rules')) {
+          navigator.clipboard.writeText(focusedId);
         }
         break;
       case KeyboardCommandTypes.Paste:
