@@ -350,9 +350,10 @@ export function insertByClipboard(inputDialog, path, clipboardData) {
   const target = locateNode(dialog, path);
   if (!target) return {};
   const lastIndexOfSteps = path.lastIndexOf('[');
-  const currentPath = path.substr(0, lastIndexOfSteps);
+  const isRoot = path.substr(0, lastIndexOfSteps) === 'rules';
+  const currentPath = isRoot ? path + '.steps' : path.substr(0, lastIndexOfSteps);
   const current: any[] = get(dialog, currentPath, []);
-  const position = Number(target.currentKey) + 1;
+  const position = isRoot ? 0 : Number(target.currentKey) + 1;
   let insertStep;
   const insertSteps: any[] = [];
   clipboardData.forEach(insertId => {

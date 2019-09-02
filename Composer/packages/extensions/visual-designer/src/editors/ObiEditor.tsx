@@ -127,6 +127,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const handleKeyboardCommand = command => {
     let path = focusedId;
+    const idSelectors = focusedId.split('.');
     switch (command) {
       case KeyboardCommandTypes.Up:
       case KeyboardCommandTypes.Down:
@@ -136,9 +137,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         onFocusSteps([path]);
         break;
       case KeyboardCommandTypes.Copy:
-        if (keyboardStatus === 'focused') {
+        if (keyboardStatus === 'focused' && !idSelectors[idSelectors.length - 1].includes('rules')) {
           navigator.clipboard.writeText(focusedId);
-        } else if (keyboardStatus === 'selected') {
+        } else if (keyboardStatus !== 'normal') {
           const selectedIds = selectionContext.selectedIds;
           let shortestLength = selectedIds[0].split('.').length;
           selectedIds.forEach(id => {
