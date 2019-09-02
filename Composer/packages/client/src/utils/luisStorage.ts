@@ -1,8 +1,7 @@
-import { set } from 'lodash';
+import { set, cloneDeep } from 'lodash';
 
 import storage, { ClientStorage } from './storage';
 import { LuisConfig } from './../constants';
-
 export interface LuisStorageConfig {
   [LuisConfig.PROJECT_NAME]: string;
   [LuisConfig.ENVIRONMENT]: string;
@@ -28,7 +27,7 @@ class LuisStorage {
   }
 
   get(botName: string): LuisStorageConfig {
-    return this._all[botName] || LuisStorage.defaultConfig;
+    return this._all[botName] || cloneDeep(LuisStorage.defaultConfig);
   }
 
   set(botName: string, field: string, value: string) {
