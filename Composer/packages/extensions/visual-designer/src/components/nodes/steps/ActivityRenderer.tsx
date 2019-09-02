@@ -29,7 +29,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
 
       const templateName = data.activity.slice(1, data.activity.length - 1);
       const templates = getLgTemplates ? await getLgTemplates('common', `${templateName}`) : [];
-      const [template] = templates.filter(template => {
+      const [template] = (templates || []).filter(template => {
         return template.Name === templateName;
       });
       if (template && template.Body) {

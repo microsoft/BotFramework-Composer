@@ -27,7 +27,7 @@ const apiClient = new ApiClient();
 
 const subEditorCallbacks = {};
 
-const shellApi = {
+export const shellApi = {
   getState: (): Promise<ShellData> => {
     return apiClient.apiCall('getState', {});
   },

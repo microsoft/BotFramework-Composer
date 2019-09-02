@@ -3,11 +3,13 @@ import { Breadcrumb } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower } from 'lodash';
+import VisualDesigner from 'composer-extensions/visual-designer';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel } from '../../utils';
+import { getbreadcrumbLabel, getDialogsMap, getDialogData } from '../../utils';
+import { shellApi } from '../../extension-container/ExtensionContainer';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -58,6 +60,8 @@ function DesignPage(props) {
   const { removeDialog, setDesignPageLocation, navTo } = actions;
   const { location, match } = props;
   const { dialogId } = designPageLocation;
+
+  const data = getDialogData(getDialogsMap(dialogs), designPageLocation.dialogId);
 
   useEffect(() => {
     if (match) {
@@ -192,13 +196,15 @@ function DesignPage(props) {
             <Fragment>
               {breadcrumbItems}
               <div css={editorWrapper}>
-                <iframe
-                  id="VisualEditorIframe"
-                  key="VisualEditor"
-                  name="VisualEditor"
-                  css={visualEditor}
-                  src={`${rootPath}/extensionContainer.html`}
-                />
+                <div id="VisualEditorIframe" key="VisualEditor" name="VisualEditor" css={visualEditor}>
+                  <VisualDesigner
+                    data-test-id="VisualDesignerElm"
+                    {...designPageLocation}
+                    data={data}
+                    shellApi={shellApi}
+                    onChange={shellApi.saveData}
+                  />
+                </div>
                 <iframe
                   key="FormEditor"
                   name="FormEditor"

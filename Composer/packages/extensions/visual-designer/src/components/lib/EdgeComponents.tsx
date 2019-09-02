@@ -24,7 +24,7 @@ export const HorizontalEdge = ({ length, color, text, x, y, dashed, directed }):
         height: BAR_SIZE,
         transitionDuration: '50ms',
         transitionProperty: 'left, right, top, bottom, length',
-        zIndex: -1,
+        zIndex: 0,
       }}
       data-testid="HorizontalEdge"
     >
@@ -62,7 +62,7 @@ export const VerticalEdge = ({ length, color, text, x, y, dashed, directed }): J
         height: length,
         transitionDuration: '50ms',
         transitionProperty: 'left, right, top, bottom, length',
-        zIndex: -1,
+        zIndex: 0,
       }}
       data-testid="VerticalEdge"
     >
