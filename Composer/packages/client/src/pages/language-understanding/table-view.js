@@ -40,6 +40,7 @@ export default function TableView(props) {
       get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
         const updateIntent = items.find(item => item.name === name && item.fileId === luFile.id);
+        const state = getIntentState(luFile);
         if (updateIntent) {
           updateIntent.phrases.push(utterance.text);
         } else {
@@ -48,6 +49,7 @@ export default function TableView(props) {
             phrases: [utterance.text],
             fileId: luFile.id,
             used: luDialog.luIntents.indexOf(name) !== -1, // used by it's dialog or not
+            state,
           });
         }
       });
@@ -66,6 +68,18 @@ export default function TableView(props) {
     return files.filter(file => {
       return luUtil.isValid(file.diagnostics) === false;
     });
+  }
+
+  function getIntentState(file) {
+    if (!file.diagnostics) {
+      return formatMessage('Error');
+    } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
+      return formatMessage('Not yet published');
+    } else if (file.status && file.status.lastPublishTime > file.status.lastUpdateTime) {
+      return formatMessage('Published');
+    } else {
+      return formatMessage('Unknown State'); // It's a bug in most cases.
+    }
   }
 
   async function showErrors(files) {
@@ -174,6 +188,19 @@ export default function TableView(props) {
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
+        },
+      },
+      {
+        key: 'Activity',
+        name: formatMessage('Activity'),
+        fieldName: 'Activity',
+        minWidth: 100,
+        maxWidth: 100,
+        isResizable: true,
+        isCollapsable: true,
+        data: 'string',
+        onRender: item => {
+          return item.state;
         },
       },
     ];

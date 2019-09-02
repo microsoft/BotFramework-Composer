@@ -27,7 +27,7 @@ const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
 
 const ObiFormEditor: React.FC<FormEditorProps> = props => {
   const onChange = data => {
-    props.onChange(data, props.focusedSteps[0] || props.focusedEvent);
+    props.onChange(data, props.focusedSteps[0]);
   };
 
   return (
