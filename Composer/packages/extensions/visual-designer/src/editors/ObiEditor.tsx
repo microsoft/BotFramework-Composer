@@ -3,11 +3,11 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
-import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { deleteNode, insert } from '../shared/jsonTracker';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { NodeIndexGenerator } from '../shared/NodeIndexGetter';
+import { deleteNode, insert } from '../utils/jsonTracker';
+import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 

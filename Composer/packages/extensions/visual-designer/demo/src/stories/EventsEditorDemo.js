@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { transformRootDialog } from '../../../src/transformers/transformRootDialog';
-import { NodeEventTypes } from '../../../src/shared/NodeEventTypes';
+import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 import { EventsEditor } from '../../../src/editors/EventsEditor';
 import { NodeRendererContext } from '../../../src/store/NodeRendererContext';
 import { JsonBlock } from '../components/json-block';
