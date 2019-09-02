@@ -1,15 +1,16 @@
-import React, { useMemo } from 'react';
-import { ActionButton, IIconProps, IContextualMenuProps, IContextualMenuItem } from 'office-ui-fabric-react';
+import React, { useMemo, useContext } from 'react';
+import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { cloneDeep } from 'lodash';
 
 import { DialogInfo, ITrigger, BotSchemas } from '../../store/types';
 import { getTitle } from '../../utils';
-import { NewTriggerType } from '../../constants';
 
+//import { NewTriggerType } from '../../constants';
+import { TriggerCreationModel } from './triggerCreationModel';
 import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
-
+import { StoreContext } from './../../store';
 interface ProjectTreeProps {
   dialogs: DialogInfo[];
   schemas: BotSchemas;
@@ -27,42 +28,14 @@ const addIconProps: IIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-const menuIconProps: IIconProps = {
-  iconName: '',
-};
+// const menuIconProps: IIconProps = {
+//   iconName: '',
+// };
 
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
-  const {
-    dialogs,
-    onAdd,
-    dialogId,
-    selected,
-    onSelect,
-    onDeleteDialog,
-    onDeleteTrigger,
-    onAddTrigger,
-    schemas,
-  } = props;
-
-  const createMenuProps = (
-    dialogId: string,
-    index: number,
-    onItemClick: (ev, item: IContextualMenuItem) => any
-  ): IContextualMenuProps => {
-    return {
-      items: NewTriggerType.map(type => {
-        const text = getTitle(type, schemas);
-        return {
-          key: type,
-          text,
-          index,
-          dialogId,
-          'data-testid': text,
-          onClick: onItemClick,
-        } as IContextualMenuItem;
-      }),
-    };
-  };
+  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, schemas } = props;
+  const { state, actions } = useContext(StoreContext);
+  const { showCreateTriggerModal } = state;
 
   const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
@@ -84,8 +57,20 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     }, []);
   }, [dialogs]);
 
-  const handleAddTrigger = (ev, item) => {
-    onAddTrigger(item.dialogId, item.key, item.index);
+  // const handleAddTrigger = (ev, item) => {
+  //   onAddTrigger(item.dialogId, item.key, item.index);
+  // };
+
+  const OnTriggerCreationDisMiss = () => {
+    actions.createTriggerCancel();
+  };
+
+  const OnTriggerCreationSubmit = dialog => {
+    const payload = {
+      id: dialog.id,
+      content: dialog.content,
+    };
+    actions.updateDialog(payload);
   };
 
   return (
@@ -131,12 +116,17 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  menuProps={createMenuProps(link.id, link.triggers.length, handleAddTrigger)}
-                  menuIconProps={menuIconProps}
+                  onClick={() => actions.createTriggerBegin()}
                 >
                   {formatMessage('New Trigger ..')}
                 </ActionButton>
               )}
+              <TriggerCreationModel
+                dialogId={dialogId}
+                isOpen={showCreateTriggerModal}
+                onDismiss={OnTriggerCreationDisMiss}
+                onSubmit={OnTriggerCreationSubmit}
+              />
             </li>
           );
         })}
