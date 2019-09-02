@@ -43,6 +43,21 @@ const createDialogCancel: ReducerFunc = state => {
   return state;
 };
 
+const createTriggerBegin: ReducerFunc = state => {
+  state.showCreateTriggerModal = true;
+  return state;
+};
+
+const createTriggerCancel: ReducerFunc = state => {
+  state.showCreateTriggerModal = false;
+  return state;
+};
+
+const createTriggerSuccess: ReducerFunc = state => {
+  state.showCreateTriggerModal = false;
+  return state;
+};
+
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
@@ -160,6 +175,9 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.CREATE_TRIGGER_BEGIN]: createTriggerBegin,
+  [ActionTypes.CREATE_TRIGGER_CANCEL]: createTriggerCancel,
+  [ActionTypes.CREATE_TRIGGER_SUCCESS]: createTriggerSuccess,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,

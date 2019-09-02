@@ -32,6 +32,7 @@ const initialState: State = {
   error: null, // a object with structure {summary: "", message: ""}
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
+  showCreateTriggerModal: false,
   toStartBot: false,
 };
 

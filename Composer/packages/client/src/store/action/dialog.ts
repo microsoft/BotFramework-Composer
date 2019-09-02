@@ -84,3 +84,21 @@ export const createDialogCancel: ActionCreator = store => {
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
 };
+
+export const createTriggerBegin: ActionCreator = ({ dispatch }) => {
+  dispatch({
+    type: ActionTypes.CREATE_TRIGGER_BEGIN,
+  });
+};
+
+export const createTriggerCancel: ActionCreator = store => {
+  store.dispatch({
+    type: ActionTypes.CREATE_TRIGGER_CANCEL,
+  });
+};
+
+export const createTriggerSuccess: ActionCreator = store => {
+  store.dispatch({
+    type: ActionTypes.CREATE_TRIGGER_SUCCESS,
+  });
+};

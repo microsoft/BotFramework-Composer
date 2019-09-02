@@ -57,6 +57,7 @@ export interface State {
   oAuth: any;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
+  showCreateTriggerModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
 }

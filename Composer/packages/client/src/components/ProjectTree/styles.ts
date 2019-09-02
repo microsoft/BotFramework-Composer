@@ -1,7 +1,7 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { IButtonStyles, ICalloutContentStyles } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 export const root = css`
   width: 180px;
   border-right: 1px solid #c4c4c4;
@@ -92,4 +92,29 @@ export const addButton = (depth: number) => css`
   margin-left: ${depth * 16}px;
   font-size: 12px;
   color: #0078d4;
+`;
+
+export const styles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '416px !important',
+    },
+  },
+};
+
+export const dropdownStyles = css`
+  dropdown: {
+    width: 300;
+  }
 `;
