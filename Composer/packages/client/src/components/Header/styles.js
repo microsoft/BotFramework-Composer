@@ -1,6 +1,6 @@
-import { css } from '@emotion/core';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { css } from '@emotion/core';
 
 export const headerContainer = css`
   position: relative;
@@ -23,7 +23,8 @@ export const title = css`
     bottom: 0px;
     width: 0px;
     height: 24px;
-    border: 1px solid #979797;
+    border: none;
+    border-right: 1px solid #979797;
     border-image: initial;
     outline: none;
   }
