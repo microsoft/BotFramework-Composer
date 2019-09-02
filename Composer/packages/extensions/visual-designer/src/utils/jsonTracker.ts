@@ -3,7 +3,6 @@ import nanoid from 'nanoid/generate';
 import { seedNewDialog } from 'shared-menus';
 
 import { ObiTypes } from '../constants/ObiTypes';
-
 import { getFriendlyName } from '../components/nodes/utils';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 
@@ -82,7 +81,7 @@ export function moveFocusNode(inputDialog, path, action) {
     const target = locateNode(inputDialog, path);
     if (!target) return path;
     const currentData = target.currentData;
-    const targetObiType = target.currentData['$type'];
+    const targetObiType = target.currentData.$type;
     let resultPath = path;
     switch (targetObiType) {
       case ObiTypes.IfCondition:
@@ -121,7 +120,7 @@ export function moveFocusNode(inputDialog, path, action) {
   };
 
   const getParentData = path => {
-    let parentData, parentPath, parentPathWithStep, parentTargetObiType, parentTarget;
+    let parentPath, parentPathWithStep;
     let lastIndexOfBracket = 0;
     let lastIndexOfSteps = 0;
 
@@ -134,15 +133,15 @@ export function moveFocusNode(inputDialog, path, action) {
       lastIndexOfBracket = path.lastIndexOf('[');
       parentPathWithStep = path.substr(0, lastIndexOfBracket);
     }
-    parentTarget = locateNode(inputDialog, parentPath);
-    parentData = parentTarget ? parentTarget.currentData : {};
-    parentTargetObiType = parentTarget ? parentTarget.currentData['$type'] : null;
+    const parentTarget = locateNode(inputDialog, parentPath);
+    const parentData = parentTarget ? parentTarget.currentData : {};
+    const parentTargetObiType = parentTarget ? parentTarget.currentData.$type : null;
 
     return { parentData, parentPath, parentPathWithStep, parentTargetObiType, parentTarget };
   };
   const currentData = target.currentData;
   const currentKey = target.currentKey as number;
-  const targetObiType = target.currentData['$type'];
+  const targetObiType = target.currentData.$type;
   let resultPath = path;
   const { parentData, parentPath, parentPathWithStep, parentTargetObiType } = getParentData(path);
   switch (action) {
