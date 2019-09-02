@@ -343,3 +343,24 @@ export function insert(inputDialog, path, position, $type) {
 
   return dialog;
 }
+
+// insert steps as sibling
+export function insertByClipboard(inputDialog, path, clipboardData) {
+  const dialog = cloneDeep(inputDialog);
+  const target = locateNode(dialog, path);
+  if (!target) return {};
+  const lastIndexOfSteps = path.lastIndexOf('[');
+  const currentPath = path.substr(0, lastIndexOfSteps);
+  const current: any[] = get(dialog, currentPath, []);
+  const position = Number(target.currentKey) + 1;
+  let insertStep;
+  const insertSteps: any[] = [];
+  clipboardData.forEach(insertId => {
+    insertStep = cloneDeep(locateNode(dialog, insertId));
+    if (!insertStep) return;
+    insertSteps.push(insertStep.currentData);
+  });
+  current.splice(position, 0, ...insertSteps);
+  set(dialog, currentPath, current);
+  return { dialog, focusedPath: `${currentPath}[${position}]` };
+}

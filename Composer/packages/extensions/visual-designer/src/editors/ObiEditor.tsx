@@ -5,7 +5,7 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
-import { deleteNode, insert, moveFocusNode } from '../utils/jsonTracker';
+import { deleteNode, insert, moveFocusNode, insertByClipboard } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
@@ -126,7 +126,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   });
 
   const handleKeyboardCommand = command => {
-    console.log('keyboard');
     let path = focusedId;
     switch (command) {
       case KeyboardCommandTypes.Up:
@@ -137,8 +136,38 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         onFocusSteps([path]);
         break;
       case KeyboardCommandTypes.Copy:
+        if (keyboardStatus === 'focused') {
+          navigator.clipboard.writeText(focusedId);
+        } else if (keyboardStatus === 'selected') {
+          const selectedIds = selectionContext.selectedIds;
+          let shortestLength = selectedIds[0].split('.').length;
+          selectedIds.forEach(id => {
+            if (id.split('.').length < shortestLength) {
+              shortestLength = id.split('.').length;
+            }
+          });
+          const ids = new Set<string>(
+            selectedIds.map(
+              item =>
+                (item = item
+                  .split('.')
+                  .slice(0, shortestLength)
+                  .join('.'))
+            )
+          );
+          navigator.clipboard.writeText(Array.from(ids).join(','));
+        }
         break;
       case KeyboardCommandTypes.Paste:
+        navigator.clipboard.readText().then(text => {
+          if (text) {
+            const clipboardData = text.split(',');
+            const { dialog, focusedPath } = insertByClipboard(data, focusedId, clipboardData);
+            onChange(dialog);
+            onFocusSteps([focusedPath as string]);
+            navigator.clipboard.writeText('');
+          }
+        });
         break;
       case KeyboardCommandTypes.Delete:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
