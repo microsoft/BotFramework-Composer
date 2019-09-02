@@ -2534,6 +2534,16 @@
     "@uifabric/utilities" "^6.38.3"
     tslib "^1.7.1"
 
+"@uifabric/foundation@^0.8.2":
+  version "0.8.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/foundation/-/@uifabric/foundation-0.8.2.tgz#619acdd877f8d676bb71baef4c71eeb239568f5f"
+  integrity sha1-YZrN2Hf41na7cbrvTHHusjlWj18=
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.3"
+    "@uifabric/utilities" "^6.41.6"
+    tslib "^1.7.1"
+
 "@uifabric/icons@^6.5.2":
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/@uifabric/icons/-/icons-6.5.2.tgz#88524fa4fcc55b96b26e174798b0f362485df9b8"
@@ -2543,10 +2553,27 @@
     "@uifabric/styling" "^6.47.6"
     tslib "^1.7.1"
 
+"@uifabric/icons@^6.5.4":
+  version "6.5.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/icons/-/@uifabric/icons-6.5.4.tgz#14e93d2a5bc3b0d378321b1af750ae6035041ca2"
+  integrity sha1-FOk9KlvDsNN4Mhsa91CuYDUEHKI=
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.3"
+    tslib "^1.7.1"
+
 "@uifabric/merge-styles@^6.17.4", "@uifabric/merge-styles@^6.18.0":
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/@uifabric/merge-styles/-/merge-styles-6.18.0.tgz#af41d769b34749d1cf98850606c7aa010dde4a26"
   integrity sha512-ja2jyFfDiiDe9/Fa2cqSjZmr4yGcVIuJ6E9fWSNutjn49xs+apkIn2xDSF15zuGwFXKcibrwhdRM1vnLz8NAZg==
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    tslib "^1.7.1"
+
+"@uifabric/merge-styles@^6.19.3":
+  version "6.19.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/merge-styles/-/@uifabric/merge-styles-6.19.3.tgz#cfc89cfbd3f148b559e30f1ac30eac2a8259687d"
+  integrity sha1-z8ic+9PxSLVZ4w8aww6sKoJZaH0=
   dependencies:
     "@uifabric/set-version" "^1.1.3"
     tslib "^1.7.1"
@@ -2569,12 +2596,33 @@
     "@uifabric/utilities" "^6.40.0"
     tslib "^1.7.1"
 
+"@uifabric/styling@^6.50.3", "@uifabric/styling@^6.50.6":
+  version "6.50.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/styling/-/@uifabric/styling-6.50.6.tgz#04544688083cc1bdeaaa50870ec56a3cf82f8e06"
+  integrity sha1-BFRGiAg8wb3qqlCHDsVqPPgvjgY=
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.7.13"
+    "@uifabric/merge-styles" "^6.19.3"
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/utilities" "^6.41.6"
+    tslib "^1.7.1"
+
 "@uifabric/utilities@^6.38.3", "@uifabric/utilities@^6.40.0", "@uifabric/utilities@^6.40.1":
   version "6.40.1"
   resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-6.40.1.tgz#9427ff147a2ce2d0c4c59b48f130635dd438d5a8"
   integrity sha512-JXUxRzzr22xlmQM8+V3Co7azglZTUYOg6FggTrbDhJqvfMxHm1IXFgYh0C+X9ttn2AinWX/s9zsVhxLOJzyLVg==
   dependencies:
     "@uifabric/merge-styles" "^6.18.0"
+    "@uifabric/set-version" "^1.1.3"
+    prop-types "^15.5.10"
+    tslib "^1.7.1"
+
+"@uifabric/utilities@^6.41.6":
+  version "6.41.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/utilities/-/@uifabric/utilities-6.41.6.tgz#3e9c04b06edbfdabe2b5dd16761be4edbbab3db7"
+  integrity sha1-PpwEsG7b/avitd0Wdhvk7burPbc=
+  dependencies:
+    "@uifabric/merge-styles" "^6.19.3"
     "@uifabric/set-version" "^1.1.3"
     prop-types "^15.5.10"
     tslib "^1.7.1"
@@ -13818,15 +13866,21 @@ moment@2.24.0, "moment@>= 2.9.0":
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
+"monaco-editor-webpack-plugin@https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-1.7.0-composer.1.tgz":
+  version "1.7.0-composer.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-1.7.0-composer.1.tgz#7648a97318de7c54da6902c85b06e25f944244bf"
+  dependencies:
+    "@types/webpack" "^4.4.19"
+
 "monaco-editor-webpack-plugin@https://github.com/zhixzhan/monaco-editor-webpack-plugin/releases/download/11.7.1/monaco-editor-webpack-plugin-11.7.1.tgz":
   version "11.7.1"
   resolved "https://github.com/zhixzhan/monaco-editor-webpack-plugin/releases/download/11.7.1/monaco-editor-webpack-plugin-11.7.1.tgz#7e085f0c61adb6d912284e235a53cb015e6cb56f"
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"monaco-editor@https://github.com/zhixzhan/monaco-editor/releases/download/1.17.5/monaco-editor-1.17.5.tgz":
-  version "1.17.5"
-  resolved "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.5/monaco-editor-1.17.5.tgz#d8561c7bf37dce78e9aed87d788bebc8872daca4"
+"monaco-editor@https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor/-/monaco-editor-0.17.1-composer.1.tgz":
+  version "0.17.1-composer.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor/-/monaco-editor-0.17.1-composer.1.tgz#81d1e2ae23446cd65b1c705311366a9106681fbf"
 
 morgan@^1.9.1:
   version "1.9.1"
@@ -14583,7 +14637,7 @@ obuf@^1.0.0, obuf@^1.1.1, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabric-react@^6.165.1, office-ui-fabric-react@^6.180.0, office-ui-fabric-react@^6.181.1, office-ui-fabric-react@^6.184.0:
+office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabric-react@^6.165.1, office-ui-fabric-react@^6.181.1, office-ui-fabric-react@^6.184.0:
   version "6.189.1"
   resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-6.189.1.tgz#972e7df555e548f428b4762e29dc9cd213f47c9f"
   integrity sha512-hiGQ8InH8NmPJBdpLjMm8732L01n0KUkKyZiJmVW8yYLnoyMapCKTv7Oz0tx8gMI4yG0z860bUBy+LnpHWfP5A==
@@ -14595,6 +14649,21 @@ office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabr
     "@uifabric/set-version" "^1.1.3"
     "@uifabric/styling" "^6.48.0"
     "@uifabric/utilities" "^6.40.1"
+    prop-types "^15.5.10"
+    tslib "^1.7.1"
+
+office-ui-fabric-react@^6.192.0:
+  version "6.202.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/office-ui-fabric-react/-/office-ui-fabric-react-6.202.3.tgz#424595a78142fc2e13510835dce21e36792a1219"
+  integrity sha1-QkWVp4FC/C4TUQg13OIeNnkqEhk=
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.7.13"
+    "@uifabric/foundation" "^0.8.2"
+    "@uifabric/icons" "^6.5.4"
+    "@uifabric/merge-styles" "^6.19.3"
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.6"
+    "@uifabric/utilities" "^6.41.6"
     prop-types "^15.5.10"
     tslib "^1.7.1"
 
@@ -16523,12 +16592,12 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-"react-monaco-editor@https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.5/react-monaco-editor-1.30.5.tgz":
-  version "1.30.5"
-  resolved "https://github.com/zhixzhan/react-monaco-editor/releases/download/1.30.5/react-monaco-editor-1.30.5.tgz#fd41862a986ba8f147a6d2f663a05e8b4db2f954"
+"react-monaco-editor@https://botbuilder.myget.org/F/botbuilder-declarative/npm/react-monaco-editor/-/react-monaco-editor-0.30.1-composer.1.tgz":
+  version "0.30.1-composer.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/react-monaco-editor/-/react-monaco-editor-0.30.1-composer.1.tgz#b5126c0131dd0ded270e331d4b12c7e4c80359e6"
   dependencies:
     "@types/react" "^16.9.2"
-    monaco-editor "https://github.com/zhixzhan/monaco-editor/releases/download/1.17.5/monaco-editor-1.17.5.tgz"
+    monaco-editor "https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor/-/monaco-editor-0.17.1-composer.1.tgz"
     prop-types "^15.7.2"
 
 react-proxy@^1.1.7:
