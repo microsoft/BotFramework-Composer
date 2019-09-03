@@ -50,10 +50,16 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('Please publish your Luis models');
     }
 
-    form.append('config', JSON.stringify(luisConfig));
-    BotProjectService.currentBotProject.settingManager.get();
-    if (config.MicrosoftAppId && config.MicrosoftAppPassword) {
-      form.append('microsoftAppId', config.MicrosoftAppId);
+    // form.append('config', JSON.stringify(luisConfig));
+    if (luisConfig) {
+      form.append(
+        'config',
+        JSON.stringify({ authoringKey: luisConfig.authoringKey, endpointKey: luisConfig.endpointKey })
+      );
+    }
+
+    config = { ...(await BotProjectService.currentBotProject.settingManager.get()), ...config };
+    if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {

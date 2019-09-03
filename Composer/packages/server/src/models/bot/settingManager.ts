@@ -5,7 +5,7 @@ import { LocalDiskStorage } from '../storage/localDiskStorage';
 
 import { DialogSetting } from './interface';
 
-const keyword: any = ['MicrosoftAppPassword', 'luis.authoringKey'];
+const keyword: any = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];
 const subPath = 'settings/appsettings.json';
 const defaultSetting: DialogSetting = {
   MicrosoftAppPassword: '',
@@ -13,6 +13,7 @@ const defaultSetting: DialogSetting = {
   luis: {
     name: '',
     authoringKey: '',
+    endpointKey: '',
     authoringRegion: 'westus',
     defaultLanguage: 'en-us',
     environment: 'composer',
@@ -41,6 +42,7 @@ export class SettingManager {
       return JSON.parse(file);
     } else {
       // does not have setting file, return default value
+      await this.set(defaultSetting);
       return defaultSetting;
     }
   };

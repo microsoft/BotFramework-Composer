@@ -192,4 +192,4 @@ export const SupportedFileTypes = [
   'xsn',
 ];
 
-export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey'];
+export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];
