@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useMemo, useContext, useState } from 'react';
 import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { cloneDeep } from 'lodash';
@@ -30,9 +30,8 @@ const addIconProps: IIconProps = {
 
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, schemas } = props;
-  const { state, actions } = useContext(StoreContext);
-  const { showCreateTriggerModal } = state;
-
+  const { actions } = useContext(StoreContext);
+  const [openNewTriggerModel, setopenNewTriggerModel] = useState(false);
   const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
       return getTitle(trigger.type, schemas);
@@ -54,7 +53,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   }, [dialogs]);
 
   const OnTriggerCreationDisMiss = async () => {
-    actions.createTriggerCancel();
+    setopenNewTriggerModel(false);
   };
 
   const OnTriggerCreationSubmit = dialog => {
@@ -108,21 +107,23 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  onClick={() => actions.createTriggerBegin()}
+                  onClick={() => setopenNewTriggerModel(true)}
                 >
                   {formatMessage('New Trigger ..')}
                 </ActionButton>
               )}
-              <TriggerCreationModel
-                dialogId={dialogId}
-                isOpen={showCreateTriggerModal}
-                onDismiss={OnTriggerCreationDisMiss}
-                onSubmit={OnTriggerCreationSubmit}
-              />
             </li>
           );
         })}
       </ul>
+      {openNewTriggerModel && (
+        <TriggerCreationModel
+          dialogId={dialogId}
+          isOpen={openNewTriggerModel}
+          onDismiss={OnTriggerCreationDisMiss}
+          onSubmit={OnTriggerCreationSubmit}
+        />
+      )}
       <ActionButton tabIndex={1} iconProps={addIconProps} css={addButton(0)} onClick={onAdd}>
         {formatMessage('New Dialog ..')}
       </ActionButton>

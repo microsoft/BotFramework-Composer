@@ -8,7 +8,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, name } from './styles';
+import { styles, dropdownStyles, name, dialogWindow, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = data => {
@@ -36,10 +36,6 @@ export const TriggerCreationModel = props => {
   const [formData, setFormData] = useState({ errors: {} });
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
-  const resetState = () => {
-    setTriggerType(null);
-    setFormData({ errors: {} });
-  };
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -56,7 +52,6 @@ export const TriggerCreationModel = props => {
     const newDialog = generateDialogWithNewTrigger(inputDialog, formData);
     onSubmit(newDialog);
     onDismiss();
-    resetState();
   };
 
   const onSelectTriggerType = (e, option) => {
@@ -94,6 +89,7 @@ export const TriggerCreationModel = props => {
       $designer: {
         name: data.name,
         id: nanoid('1234567890', 6),
+        description: data.description,
       },
       //intent: data.intent,
       ...seedNewDialog(data.$type),
@@ -161,10 +157,7 @@ export const TriggerCreationModel = props => {
   return (
     <Dialog
       hidden={!isOpen}
-      onDismiss={() => {
-        resetState();
-        onDismiss();
-      }}
+      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: 'Create a trigger',
@@ -175,7 +168,7 @@ export const TriggerCreationModel = props => {
         styles: styles.modal,
       }}
     >
-      <div css={{ height: '300px', width: '500px' }}>
+      <div css={dialogWindow}>
         <Stack>
           <Dropdown
             placeholder="select a trigger type"
@@ -201,16 +194,17 @@ export const TriggerCreationModel = props => {
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
           />
+          <TextField
+            styles={description}
+            label={formatMessage('Description')}
+            multiline
+            resizable={false}
+            onChange={updateForm('description')}
+          />
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton
-          onClick={() => {
-            resetState();
-            onDismiss();
-          }}
-          text={formatMessage('Cancel')}
-        />
+        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
         <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} />
       </DialogFooter>
     </Dialog>

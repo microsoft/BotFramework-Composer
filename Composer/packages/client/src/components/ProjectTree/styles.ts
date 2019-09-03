@@ -120,7 +120,11 @@ export const dropdownStyles = css`
   }
 `;
 
-export const dialogWindow = { height: '300px', width: '500px' };
+export const dialogWindow = css`
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+`;
 
 export const textFieldlabel = {
   label: {
@@ -134,7 +138,7 @@ export const textFieldlabel = {
 
 export const name = {
   fieldGroup: {
-    width: 500,
+    width: 200,
   },
   root: {
     height: '90px',
