@@ -1,6 +1,8 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useLayoutEffect } from 'react';
+import { once } from 'lodash';
 
 import oauthStorage from '../utils/oauthStorage';
+import { prepareAxios } from '../utils/auth';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -54,6 +56,8 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
+const prepareAxiosWithStore = once(prepareAxios);
+
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
@@ -63,6 +67,8 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     actions: boundActions,
     dispatch,
   };
+
+  prepareAxiosWithStore({ dispatch, state });
 
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

@@ -1,11 +1,13 @@
 import querystring from 'query-string';
 import axios from 'axios';
+import formatMessage from 'format-message';
 
-import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
+import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
+import { Store } from '../store/types';
 
 import storage from './storage';
 
-export function prepareAxios() {
+export function prepareAxios(store: Store) {
   const cancelSource = axios.CancelToken.source();
 
   axios.interceptors.request.use(config => {
@@ -25,9 +27,26 @@ export function prepareAxios() {
     err => {
       if (err.response && err.response.status === 401) {
         cancelSource.cancel('Unauthorized access.');
-        // TODO: set up store to display unauthorized page and ask use to log in again
-        console.error('Unauthorized Access.');
+
+        let payload = {
+          summary: formatMessage('Unauthorized'),
+          message: formatMessage('Try logging in again.'),
+        };
+
+        if (err.response.data.error === 'Session expired') {
+          payload = {
+            summary: formatMessage('Session Expired'),
+            message: formatMessage('Try logging in again.'),
+          };
+        }
+
+        store.dispatch({
+          type: ActionTypes.SET_ERROR,
+          payload,
+        });
       }
+
+      return Promise.reject(err);
     }
   );
 }
@@ -61,7 +80,7 @@ export async function loginUser() {
   }
 
   const loginUrl =
-    BASEURL + `/login?${querystring.stringify({ reource: window.location.pathname + window.location.search })}`;
+    BASEURL + `/login?${querystring.stringify({ resource: window.location.pathname + window.location.search })}`;
 
   window.location.replace(loginUrl);
 }

@@ -1,7 +1,7 @@
 import { URL } from 'url';
 import querystring from 'querystring';
 
-import jwt, { GetPublicKeyOrSecret } from 'jsonwebtoken';
+import jwt, { GetPublicKeyOrSecret, TokenExpiredError } from 'jsonwebtoken';
 import JWKSClient, { CertSigningKey, RsaSigningKey } from 'jwks-rsa';
 import { RequestHandler } from 'express';
 
@@ -79,7 +79,13 @@ const absh: AuthProviderInit = {
         jwt.verify(bearer, getKey, (err, _token) => {
           if (err) {
             console.error(err);
-            res.status(401).json({ error: 'Unauthorized' });
+
+            // used by the client to display correct message
+            if (err instanceof TokenExpiredError) {
+              res.status(401).json({ error: 'Session expired' });
+            } else {
+              res.status(401).json({ error: 'Unauthorized' });
+            }
             return;
           }
           next();
