@@ -24,17 +24,7 @@
           },
           "property": "dialog.todo",
           "value": "@title"
-        },
-        {
-          "$type": "Microsoft.IfCondition",
-          "condition": "dialog.todo == ''",
-          "actions": [
-            {
-              "$type": "Microsoft.DeleteProperty",
-              "property": "dialog.todo"
-            }
-          ]
-        },
+        },      
         {
           "$type": "Microsoft.TextInput",
           "$designer": {

@@ -3,11 +3,26 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "ShowEmailIntent": "(?i)show inbox email",
-      "SendEmailIntent": "(?i)send email",
-      "SentItemsIntent": "(?i)show sent items"
-    }
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ShowEmailIntent",
+        "pattern": "(?i)show inbox email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SendEmailIntent",
+        "pattern": "(?i)send email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SentItemsIntent",
+        "pattern": "(?i)show sent items"
+      }
+    ] 
   },
   "generator": "common.lg",
   "events": [

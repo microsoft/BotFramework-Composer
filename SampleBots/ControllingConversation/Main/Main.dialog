@@ -10,15 +10,50 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "IfCondition": "IfCondition|01",
-      "SwitchCondition": "SwitchCondition|02",
-      "ForeachStep": "ForeachStep|03",
-      "ForeachPageStep": "ForeachPageStep|04",
-      "Cancel": "Cancel|05",
-      "EndTurn": "EndTurn|06",
-      "RepeatDialog": "RepeatDialog|07"
-    }
+    "intents": [
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "IfCondition",
+        "pattern": "(?i)IfCondition|01"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SwitchCondition",
+        "pattern": "SwitchCondition|02"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ForeachStep",
+        "pattern": "ForeachStep|03"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ForeachPageStep",
+        "pattern": "ForeachPageStep|04"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "Cancel",
+        "pattern": "Cancel|05"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndTurn",
+        "pattern": "EndTurn|06"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "RepeatDialog",
+        "pattern": "RepeatDialog|07"
+      }
+    ]
   },
   "generator": "common.lg",
   "events": [

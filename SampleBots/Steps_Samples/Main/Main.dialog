@@ -8,21 +8,86 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "Actions": "Actions|01",
-      "EndTurn": "EndTurn|02",
-      "IfCondition": "IfCondition|03",
-      "EditArray": "EditArray|04",
-      "EndDialog": "EndDialog|05",
-      "HttpRequest": "HttpRequest|06",
-      "SwitchCondition": "SwitchCondition|07",
-      "RepeatDialog": "RepeatDialog|08",
-      "TraceAndLog": "TraceAndLog|trace|log|09",
-      "EditActions": "EditActions|10",
-      "ReplaceDialog": "ReplaceDialog|11",
-      "EmitEvent": "EmitEvent|12",
-      "CancelIntent": "cancel"
-    }
+    "intents": [
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "Actions",
+        "pattern": "Actions|01" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndTurn",
+        "pattern": "EndTurn|02" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "IfCondition",
+        "pattern": "IfCondition|03"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditArray",
+        "pattern": "EditArray|04" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndDialog",
+        "pattern": "EndDialog|05" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HttpRequest",
+        "pattern": "HttpRequest|06"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SwitchCondition",
+        "pattern": "SwitchCondition|07" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "RepeatDialog",
+        "pattern": "RepeatDialog|08" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "TraceAndLog",
+        "pattern": "TraceAndLog|trace|log|09"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditActions",
+        "pattern": "EditActions|10" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ReplaceDialog",
+        "pattern": "ReplaceDialog|11" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EmitEvent",
+        "pattern": "EmitEvent|12"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
   },
   "generator": "common.lg",
   "events": [

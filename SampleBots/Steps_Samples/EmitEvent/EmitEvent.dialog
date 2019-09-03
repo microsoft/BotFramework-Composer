@@ -53,10 +53,20 @@
             "autoEndDialog": false,
             "recognizer": {
               "$type": "Microsoft.RegexRecognizer",
-              "intents": {
-                "EmitEvent": "emit",
-                "CowboyIntent": "moo"
-              }
+              "intents": [
+                {
+
+                  "$type": "Microsoft.IntentPattern",
+                  "intent": "EmitEvent",
+                  "pattern": "emit" 
+                },
+                {
+  
+                  "$type": "Microsoft.IntentPattern",
+                  "intent": "CowboyIntent",
+                  "pattern": "moo"
+                }
+              ]
             },
             "events": [
               {

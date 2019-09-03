@@ -3,10 +3,20 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "SignInIntent": "(?i)sign in",
-      "HelpIntent": "(?i)help"
-    }
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SignInIntent",
+        "pattern": "(?i)sign in" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HelpIntent",
+        "pattern": "(?i)help"
+      }
+    ]
   },
   "generator": "common.lg",
   "events": [

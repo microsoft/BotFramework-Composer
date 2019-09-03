@@ -8,9 +8,14 @@
   "autoEndDialog": true,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "CancelIntent": "(?i)cancel|never mind"
-    }
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ] 
   },
   "events": [
     {

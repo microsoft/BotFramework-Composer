@@ -10,16 +10,56 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "TextInput": "TextInput|01",
-      "NumberInput": "NumberInput|02",
-      "ConfirmInput": "ConfirmInput|03",
-      "ChoiceInput": "ChoiceInput|04",
-      "AttachmentInput": "AttachmentInput|05",
-      "DateTimeInput": "DateTimeInput|06",
-      "OAuthInput": "OAuthInput|07",
-      "CancelIntent": "cancel"
-    }
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "TextInput",
+        "pattern": "TextInput|01" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "NumberInput",
+        "pattern": "NumberInput|02" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ConfirmInput",
+        "pattern": "ConfirmInput|03"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ChoiceInput",
+        "pattern": "ChoiceInput|04" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "AttachmentInput",
+        "pattern": "AttachmentInput|05" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "DateTimeInput",
+        "pattern": "DateTimeInput|06"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "OAuthInput",
+        "pattern": "OAuthInput|07" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "cancel",
+        "pattern": "cancel" 
+      }
+    ] 
   },
   "generator": "common.lg",
   "events": [
