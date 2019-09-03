@@ -21,10 +21,10 @@ describe('<RuleCard />', () => {
   afterEach(cleanup);
   describe('focusedId is equal to id', () => {
     beforeEach(() => {
-      focusedId = id = 'steps[0]';
+      focusedId = id = 'actions[0]';
     });
 
-    describe('data has no steps', () => {
+    describe('data has no actions', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
@@ -45,10 +45,10 @@ describe('<RuleCard />', () => {
         expect(clickResults.onEvent).toEqual([[NodeEventTypes.Expand, id]]);
       });
     });
-    describe('data has steps', () => {
+    describe('data has actions', () => {
       beforeEach(() => {
         data = {
-          steps: [
+          actions: [
             {
               $type: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',
@@ -123,7 +123,7 @@ describe('<RuleCard />', () => {
     describe('data has steps', () => {
       beforeEach(() => {
         data = {
-          steps: [
+          actions: [
             {
               $type: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',

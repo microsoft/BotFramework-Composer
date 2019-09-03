@@ -40,12 +40,12 @@ export function transformSwitchCondition(
   if (!cases || !Array.isArray(cases)) return result;
 
   result.branches.push(
-    ...cases.map(({ value, steps }, index) => {
+    ...cases.map(({ value, actions }, index) => {
       const prefix = `${jsonpath}.${CasesKey}[${index}]`;
       return new IndexedNode(`${prefix}.${CaseStepKey}`, {
         $type: ObiTypes.StepGroup,
         label: value,
-        children: steps || [],
+        children: actions || [],
       });
     })
   );
