@@ -74,7 +74,7 @@ export const ShellApi: React.FC = () => {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, focusedEvent, focusedSteps } = designPageLocation;
+  const { dialogId, selected, focused } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -128,14 +128,14 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, focusedEvent, focusedSteps]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -151,7 +151,7 @@ export const ShellApi: React.FC = () => {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
+      return getDialogData(dialogsMap, dialogId, focused || '');
     }
 
     return '';
@@ -169,8 +169,8 @@ export const ShellApi: React.FC = () => {
       luFiles,
       currentDialog,
       dialogId,
-      focusedEvent,
-      focusedSteps,
+      focusedEvent: selected,
+      focusedSteps: focused ? [focused] : [],
     };
   }
 
@@ -178,7 +178,7 @@ export const ShellApi: React.FC = () => {
   function handleValueChange({ newData, updatePath }, event) {
     let dataPath = '';
     if (event.source.name === FORM_EDITOR) {
-      dataPath = updatePath || getFocusPath(focusedEvent, focusedSteps[0]);
+      dataPath = updatePath || focused || '';
     }
 
     const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
@@ -190,7 +190,7 @@ export const ShellApi: React.FC = () => {
     updateDialog(payload);
 
     //make sure focusPath always valid
-    const data = getDialogData(dialogsMap, dialogId, getFocusPath(focusedEvent, focusedSteps[0]));
+    const data = getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
     if (typeof data === 'undefined') {
       actions.navTo(dialogId);
     }
@@ -303,12 +303,16 @@ export const ShellApi: React.FC = () => {
 
   function focusEvent({ subPath }) {
     cleanData();
-    actions.focusEvent(subPath);
+    actions.selectTo(subPath);
   }
 
-  function focusSteps({ subPaths = [] }) {
+  function focusSteps({ subPaths = [] }, event) {
     cleanData();
-    actions.focusSteps(subPaths);
+    let dataPath: string = subPaths[0];
+    if (event.source.name === FORM_EDITOR && focused) {
+      dataPath = `${focused}.${dataPath}`;
+    }
+    actions.focusTo(dataPath);
   }
 
   return null;
