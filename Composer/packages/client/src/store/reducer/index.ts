@@ -43,21 +43,6 @@ const createDialogCancel: ReducerFunc = state => {
   return state;
 };
 
-const createTriggerBegin: ReducerFunc = state => {
-  state.showCreateTriggerModal = true;
-  return state;
-};
-
-const createTriggerCancel: ReducerFunc = state => {
-  state.showCreateTriggerModal = false;
-  return state;
-};
-
-const createTriggerSuccess: ReducerFunc = state => {
-  state.showCreateTriggerModal = false;
-  return state;
-};
-
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
