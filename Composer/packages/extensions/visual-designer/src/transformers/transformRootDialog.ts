@@ -1,19 +1,22 @@
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../utils/stepBuilder';
 
+const { Events, Actions } = ObiFieldNames;
+
 function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {
   if (!input) return null;
 
-  const rules = input.rules || [];
-  const steps = input.steps || [];
+  const rules = input[Events] || [];
+  const steps = input[Actions] || [];
 
-  const ruleGroup = new IndexedNode('rules', {
+  const ruleGroup = new IndexedNode(Events, {
     $type: ObiTypes.RuleGroup,
     children: [...rules],
   });
 
-  const stepGroup = new IndexedNode('steps', {
+  const stepGroup = new IndexedNode(Actions, {
     $type: ObiTypes.StepGroup,
     children: steps.map(x => normalizeObiStep(x)),
   });

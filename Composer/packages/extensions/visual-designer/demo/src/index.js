@@ -3,12 +3,16 @@ import { render } from 'react-dom';
 import { Nav } from 'office-ui-fabric-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
+import { EditorConfig } from '../../src/editors/editorConfig';
+
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
 import { StepEditorDemo } from './stories/StepEditorDemo';
 import { EventsEditorDemo } from './stories/EventsEditorDemo';
 import './index.css';
 
 initializeIcons(undefined, { disableWarnings: true });
+
+EditorConfig.features.showEvents = true;
 
 const DemoMaps = {
   VisualEditorDemo: {

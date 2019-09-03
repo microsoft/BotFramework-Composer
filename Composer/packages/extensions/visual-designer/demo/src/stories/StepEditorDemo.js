@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { transformRootDialog } from '../../../src/transformers/transformRootDialog';
+import { transformObiRules } from '../../../src/transformers/transformObiRules';
 import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 import { StepEditor } from '../../../src/editors/StepEditor';
 import { NodeRendererContext } from '../../../src/store/NodeRendererContext';
@@ -15,7 +15,7 @@ const defaultFile = sampleFileNames[1];
 // Simulate the condition that json is always mutated.
 const copyJson = json => JSON.parse(JSON.stringify(json));
 
-const getStepData = obiJson => transformRootDialog(obiJson).stepGroup;
+const getStepData = obiJson => transformObiRules(obiJson.events[0]).stepGroup;
 
 export class StepEditorDemo extends Component {
   state = {

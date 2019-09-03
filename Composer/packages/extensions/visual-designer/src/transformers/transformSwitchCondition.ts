@@ -1,10 +1,11 @@
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 
-const ConditionKey = 'condition';
-const CasesKey = 'cases';
-const CaseStepKey = 'steps';
-const DefaultBranchKey = 'default';
+const ConditionKey = ObiFieldNames.Condition;
+const CasesKey = ObiFieldNames.Cases;
+const CaseStepKey = ObiFieldNames.Actions;
+const DefaultBranchKey = ObiFieldNames.DefaultCase;
 
 export function transformSwitchCondition(
   input,

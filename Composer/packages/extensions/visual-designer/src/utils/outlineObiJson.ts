@@ -1,10 +1,11 @@
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 
-const DEFAULT_CHILDREN_KEYS = ['steps'];
+const DEFAULT_CHILDREN_KEYS = [ObiFieldNames.Actions];
 const childrenMap = {
-  [ObiTypes.AdaptiveDialog]: ['steps'],
-  [ObiTypes.IfCondition]: ['steps', 'elseSteps'],
-  [ObiTypes.SwitchCondition]: ['cases', 'default'],
+  [ObiTypes.AdaptiveDialog]: [ObiFieldNames.Actions],
+  [ObiTypes.IfCondition]: [ObiFieldNames.Actions, ObiFieldNames.ElseActions],
+  [ObiTypes.SwitchCondition]: [ObiFieldNames.Cases, ObiFieldNames.DefaultCase],
 };
 
 export function outlineObiJson(input: any) {
