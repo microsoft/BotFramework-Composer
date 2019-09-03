@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 
-import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { SystemKeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 interface NodeProps {
   when: string;
   onCommand: (action) => object | void;
@@ -12,29 +12,26 @@ const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
 export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
+  const key_pressed = {};
   const handleKeyDown = e => {
-    const keyName = e.key;
-
-    switch (when) {
-      case 'focused':
-        if (keyName.includes('Arrow')) {
-          onCommand(KeyboardCommandTypes[keyName.substr(5)]);
-        } else if (keyName === 'c' && ((isMac() && e.metaKey) || (!isMac() && e.ctrlKey))) {
-          onCommand(KeyboardCommandTypes.Copy);
-        } else if (keyName === 'Delete') {
-          onCommand(KeyboardCommandTypes.Delete);
-        } else if (keyName === 'v' && ((isMac() && e.metaKey) || (!isMac() && e.ctrlKey))) {
-          onCommand(KeyboardCommandTypes.Paste);
-        }
-        break;
-      case 'selected':
-        if (keyName === 'c' && ((isMac() && e.metaKey) || (!isMac() && e.ctrlKey))) {
-          onCommand(KeyboardCommandTypes.Copy);
-        }
-        break;
-      default:
-        break;
-    }
+    key_pressed[e.key] = true;
   };
-  return <div onKeyDown={handleKeyDown}>{children}</div>;
+
+  const handleKeyUp = e => {
+    if (when !== 'nomal') {
+      let command = isMac() ? 'Mac' : 'Windows';
+      for (let key in key_pressed) {
+        if (key_pressed[key]) {
+          command += `.${key}`;
+        }
+      }
+      onCommand(SystemKeyboardCommandTypes[command]);
+    }
+    key_pressed[e.key] = false;
+  };
+  return (
+    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+      {children}
+    </div>
+  );
 };
