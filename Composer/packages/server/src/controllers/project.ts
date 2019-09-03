@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { Request, Response } from 'express';
 import { merge } from 'lodash';
 
@@ -17,9 +19,20 @@ async function createProject(req: Request, res: Response) {
     templateId = 'EmptyBot';
   }
 
+  // default the path to the default folder.
+  let path = settings.development.defaultFolder;
+  // however, if path is specified as part of post body, use that one.
+  // this allows developer to specify a custom home for their bot.
+  if (req.body.location) {
+    // validate that this path exists
+    if (fs.existsSync(req.body.location) === true) {
+      path = req.body.location;
+    }
+  }
+
   const locationRef: LocationRef = {
     storageId,
-    path: Path.resolve(settings.development.defaultFolder, name),
+    path: Path.resolve(path, name),
   };
 
   try {

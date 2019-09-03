@@ -26,6 +26,7 @@ export function CreationFlow(props) {
     saveProjectAs,
     saveTemplateId,
     setLuisConfig,
+    fetchStorages,
   } = actions;
   const { botName, templateId } = state;
 
@@ -48,6 +49,9 @@ export function CreationFlow(props) {
       getTemplates();
       await getAllBots();
     }
+
+    // load storage system list
+    fetchStorages();
 
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW:
@@ -79,7 +83,7 @@ export function CreationFlow(props) {
   };
 
   const handleCreateNew = async formData => {
-    await createProject(templateId || '', formData.name, formData.description);
+    await createProject(templateId || '', formData.name, formData.description, formData.location);
   };
 
   const handleSaveAs = async formData => {

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
+
+import { LocationPicker } from '../LocationBrowser/LocationPicker';
 
 import { name, description } from './styles';
 
@@ -23,6 +25,7 @@ export function DefineConversation(props) {
   const { onSubmit, onGetErrorMessage, onDismiss } = props;
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
+  const [locationActive, setLocationActive] = useState(false);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -67,24 +70,37 @@ export function DefineConversation(props) {
     }
   };
 
+  const activateLocationPicker = active => {
+    setLocationActive(active);
+  };
+
+  const changeLocation = path => {
+    updateForm('location')(null, path);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
-        <TextField
-          label={formatMessage('Name')}
-          styles={name}
-          onChange={updateForm('name')}
-          errorMessage={formData.errors.name}
-          onGetErrorMessage={getErrorMessage}
-          data-testid="NewDialogName"
-        />
-        <TextField
-          styles={description}
-          label={formatMessage('Description')}
-          multiline
-          resizable={false}
-          onChange={updateForm('description')}
-        />
+        {!locationActive && (
+          <Fragment>
+            <TextField
+              label={formatMessage('Name')}
+              styles={name}
+              onChange={updateForm('name')}
+              errorMessage={formData.errors.name}
+              onGetErrorMessage={getErrorMessage}
+              data-testid="NewDialogName"
+            />
+            <TextField
+              styles={description}
+              label={formatMessage('Description')}
+              multiline
+              resizable={false}
+              onChange={updateForm('description')}
+            />
+          </Fragment>
+        )}
+        <LocationPicker onActivate={activateLocationPicker} onChange={changeLocation} />
       </Stack>
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

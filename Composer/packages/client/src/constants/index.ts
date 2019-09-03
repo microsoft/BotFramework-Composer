@@ -119,6 +119,13 @@ export const FileTypes = {
   UNKNOW: 'unknow',
 };
 
+export const OpenStatus = {
+  NEW: 'New',
+  SAVEAS: 'Save as',
+  OPEN: 'Open',
+  CLOSE: '',
+};
+
 export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
