@@ -78,10 +78,10 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.EVENTS]: {
     label: 'Events',
     types: [
-      'Microsoft.EventRule',
-      'Microsoft.IntentRule',
-      'Microsoft.UnknownIntentRule',
-      'Microsoft.ConversationUpdateActivityRule',
+      'Microsoft.OnEvent',
+      'Microsoft.OnIntent',
+      'Microsoft.OnUnknownIntent',
+      'Microsoft.OnConversationUpdateActivity',
     ],
   },
   [DialogGroup.RECOGNIZER]: {

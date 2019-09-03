@@ -4,10 +4,10 @@ export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'inputBindi
 /** Types that can be represented by a sub tree in the graph */
 export const COMPOUND_TYPES = [
   'Microsoft.AdaptiveDialog',
-  'Microsoft.EventRule',
-  'Microsoft.IntentRule',
-  'Microsoft.UnknownIntentRule',
-  'Microsoft.ConversationUpdateActivityRule',
+  'Microsoft.OnEvent',
+  'Microsoft.OnIntent',
+  'Microsoft.OnUnknownIntent',
+  'Microsoft.OnConversationUpdateActivity',
 ];
 
 export const appschema: JSONSchema6 = {
@@ -1348,7 +1348,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.EventRule': {
+    'Microsoft.OnEvent': {
       title: 'Event Rule',
       description: 'Defines actions the bot will take in response to an event.',
       type: 'object',
@@ -1360,7 +1360,7 @@ export const appschema: JSONSchema6 = {
             'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EventRule',
+          const: 'Microsoft.OnEvent',
         },
         $copy: {
           title: '$copy',
@@ -1690,9 +1690,9 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.ConfirmInput',
         },
         {
-          title: 'Microsoft.ConversationUpdateActivityRule',
+          title: 'Microsoft.OnConversationUpdateActivity',
           description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
-          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+          $ref: '#/definitions/Microsoft.OnConversationUpdateActivity',
         },
         {
           title: 'Microsoft.DateTimeInput',
@@ -1882,19 +1882,19 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType',
       oneOf: [
         {
-          title: 'Microsoft.ConversationUpdateActivityRule',
+          title: 'Microsoft.OnConversationUpdateActivity',
           description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
-          $ref: '#/definitions/Microsoft.ConversationUpdateActivityRule',
+          $ref: '#/definitions/Microsoft.OnConversationUpdateActivity',
         },
         {
-          title: 'Microsoft.EventRule',
+          title: 'Microsoft.OnEvent',
           description: 'This defines a rule for an event that is triggered by some source',
-          $ref: '#/definitions/Microsoft.EventRule',
+          $ref: '#/definitions/Microsoft.OnEvent',
         },
         {
-          title: 'Microsoft.IntentRule',
+          title: 'Microsoft.OnIntent',
           description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
-          $ref: '#/definitions/Microsoft.IntentRule',
+          $ref: '#/definitions/Microsoft.OnIntent',
         },
         {
           title: 'Microsoft.Rule',
@@ -1902,9 +1902,9 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.Rule',
         },
         {
-          title: 'Microsoft.UnknownIntentRule',
+          title: 'Microsoft.OnUnknownIntent',
           description: 'Defines a sequence of actions to take if there is no other trigger or plan operating',
-          $ref: '#/definitions/Microsoft.UnknownIntentRule',
+          $ref: '#/definitions/Microsoft.OnUnknownIntent',
         },
       ],
     },
@@ -2037,7 +2037,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.IntentRule': {
+    'Microsoft.OnIntent': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'Intent Rule',
       description:
@@ -2050,7 +2050,7 @@ export const appschema: JSONSchema6 = {
             'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.IntentRule',
+          const: 'Microsoft.OnIntent',
         },
         $copy: {
           title: '$copy',
@@ -2107,7 +2107,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.ConversationUpdateActivityRule': {
+    'Microsoft.OnConversationUpdateActivity': {
       $role: 'unionType(Microsoft.IRule)',
       title: 'ConversationUpdateActivity Rule',
       description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
@@ -2119,7 +2119,7 @@ export const appschema: JSONSchema6 = {
             'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ConversationUpdateActivityRule',
+          const: 'Microsoft.OnConversationUpdateActivity',
         },
         $copy: {
           title: '$copy',
@@ -3168,7 +3168,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.UnknownIntentRule': {
+    'Microsoft.OnUnknownIntent': {
       title:
         'This defines the steps to take when an utterence is not recognized (aka, the None Intent). NOTE: UnknownIntent will defer to any specific intent that fires in a parent dialog',
       description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
@@ -3181,7 +3181,7 @@ export const appschema: JSONSchema6 = {
             'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.UnknownIntentRule',
+          const: 'Microsoft.OnUnknownIntent',
         },
         $copy: {
           title: '$copy',

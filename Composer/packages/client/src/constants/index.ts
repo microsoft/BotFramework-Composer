@@ -82,10 +82,10 @@ export enum ActionTypes {
 }
 
 export const NewTriggerType = [
-  'Microsoft.EventRule',
-  'Microsoft.IntentRule',
-  'Microsoft.UnknownIntentRule',
-  'Microsoft.ConversationUpdateActivityRule',
+  'Microsoft.OnEvent',
+  'Microsoft.OnIntent',
+  'Microsoft.OnUnknownIntent',
+  'Microsoft.OnConversationUpdateActivity',
 ];
 
 export const Tips = {

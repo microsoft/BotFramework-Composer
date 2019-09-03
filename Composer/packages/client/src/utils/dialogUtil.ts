@@ -26,10 +26,10 @@ export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: st
       id: nanoid('1234567890', 6),
     },
   };
-  if (!content.rules) {
-    content.rules = [];
+  if (!content.events) {
+    content.events = [];
   }
-  content.rules.push(newTrigger);
+  content.events.push(newTrigger);
   return content;
 }
 

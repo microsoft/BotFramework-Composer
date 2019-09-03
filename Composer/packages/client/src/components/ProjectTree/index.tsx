@@ -107,7 +107,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
               <ul>
                 {dialogId === link.id &&
                   link.triggers.map((trigger, index) => {
-                    const current = `rules[${index}]`;
+                    const current = `events[${index}]`;
                     trigger.displayName = showName(trigger);
                     return (
                       <li key={trigger.id}>
@@ -116,7 +116,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                           showName={item => showName(item)}
                           depth={1}
                           isActive={current === selected}
-                          onSelect={() => onSelect(link.id, `rules[${index}]`)}
+                          onSelect={() => onSelect(link.id, `events[${index}]`)}
                           onDelete={() => onDeleteTrigger(link.id, index)}
                         />
                       </li>

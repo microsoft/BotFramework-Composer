@@ -129,9 +129,9 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 
-  //if use navigateto to design page, add rules[0] for default select
+  //if use navigateto to design page, add events[0] for default select
   if (!selected) {
-    selected = `rules[0]`;
+    selected = `events[0]`;
     breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
   }
   state.breadcrumb = breadcrumb;
