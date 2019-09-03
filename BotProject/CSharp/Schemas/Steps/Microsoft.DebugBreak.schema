@@ -1,7 +1,0 @@
-﻿{
-    "$schema": "https://raw.githubusercontent.com/Microsoft/botbuilder-tools/master/packages/DialogSchema/src/dialogSchema.schema",
-    "$role": "unionType(Microsoft.IDialog)",
-    "title": "Debugger Break Step",
-    "description": "If debugger is attached, do a debugger break at this point",
-    "type": "object"
-}
