@@ -100,7 +100,7 @@ export class DialogIndexer {
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
       if (has(value, 'events')) {
-        value.rules.forEach((rule: any, index: number) => {
+        value.events.forEach((rule: any, index: number) => {
           const trigger: ITrigger = {
             id: `events[${index}]`,
             displayName: '',
