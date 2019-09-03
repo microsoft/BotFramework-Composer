@@ -6,7 +6,8 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types';
+import { State, ActionHandlers, BoundActionHandlers } from './types';
+import { ActionType } from './action/types';
 
 const initialState: State = {
   dialogs: [],

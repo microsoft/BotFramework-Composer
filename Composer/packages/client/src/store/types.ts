@@ -5,11 +5,7 @@ import React from 'react';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
-export interface ActionType {
-  type: string;
-  payload?: any;
-  error?: any;
-}
+import { ActionType } from './action/types';
 
 export interface Store {
   dispatch: React.Dispatch<ActionType>;

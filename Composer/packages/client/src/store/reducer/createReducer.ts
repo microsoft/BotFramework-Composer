@@ -1,6 +1,7 @@
 import producer from 'immer';
 
-import { State, ActionType, ReducerFunc } from '../types';
+import { State, ReducerFunc } from '../types';
+import { ActionType } from '../action/types';
 
 import { ActionTypes } from './../../constants';
 
