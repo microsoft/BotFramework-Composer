@@ -9,7 +9,7 @@ import { ActionType } from './action/types';
 
 export interface Store {
   dispatch: React.Dispatch<ActionType>;
-  state: State;
+  getState: () => State;
 }
 
 export type ActionCreator<T extends any[] = any[]> = (store: Store, ...args: T) => Promise<void> | void;
