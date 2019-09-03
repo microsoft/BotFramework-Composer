@@ -99,10 +99,10 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (has(value, 'rules')) {
+      if (has(value, 'events')) {
         value.rules.forEach((rule: any, index: number) => {
           const trigger: ITrigger = {
-            id: `rules[${index}]`,
+            id: `events[${index}]`,
             displayName: '',
             type: rule.$type,
             isIntent: rule.$type === 'Microsoft.IntentRule',

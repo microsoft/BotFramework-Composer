@@ -184,17 +184,17 @@ function DesignPage(props) {
   async function handleAddTrigger(id, type, index) {
     const content = addNewTrigger(dialogs, id, type);
     await updateDialog({ id, content });
-    selectTo(`rules[${index}]`);
+    selectTo(`events[${index}]`);
   }
 
   async function handleDeleteTrigger(id, index) {
     const dialogsCopy = cloneDeep(dialogs);
     const dialog = dialogsCopy.find(item => item.id === id);
     if (dialog) {
-      dialog.content.rules.splice(index, 1);
+      dialog.content.events.splice(index, 1);
       await updateDialog({ id, content: dialog.content });
       //if the deleted node was selected, navTo the first one;
-      if (id === dialogId && selected === `rules[${index}]`) {
+      if (id === dialogId && selected === `events[${index}]`) {
         navTo(id);
       }
     }
