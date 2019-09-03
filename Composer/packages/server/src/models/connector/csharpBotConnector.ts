@@ -53,8 +53,8 @@ export class CSharpBotConnector implements IBotConnector {
     // form.append('config', JSON.stringify(luisConfig));
     if (luisConfig) {
       form.append(
-        'config',
-        JSON.stringify({ authoringKey: luisConfig.authoringKey, endpointKey: luisConfig.endpointKey })
+        'endpointKey',
+        luisConfig.endpointKey && luisConfig.endpointKey !== '' ? luisConfig.endpointKey : luisConfig.authoringKey
       );
     }
 
@@ -63,6 +63,7 @@ export class CSharpBotConnector implements IBotConnector {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
+      console.log(form);
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');
