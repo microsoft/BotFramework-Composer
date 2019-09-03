@@ -6,7 +6,7 @@ export const COMPOUND_TYPES = [
   'Microsoft.AdaptiveDialog',
   'Microsoft.OnEvent',
   'Microsoft.OnIntent',
-  'Microsoft.UnknownOnIntent',
+  'Microsoft.OnUnknownIntent',
   'Microsoft.OnConversationUpdateActivity',
 ];
 
@@ -3168,7 +3168,7 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.UnknownOnIntent': {
+    'Microsoft.OnUnknownIntent': {
       title:
         'This defines the steps to take when an utterence is not recognized (aka, the None Intent). NOTE: UnknownIntent will defer to any specific intent that fires in a parent dialog',
       description: 'Defines a sequence of steps to take if there is no other trigger or plan operating',
@@ -3181,7 +3181,7 @@ export const appschema: JSONSchema6 = {
             'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
           type: 'string',
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.UnknownOnIntent',
+          const: 'Microsoft.OnUnknownIntent',
         },
         $copy: {
           title: '$copy',
