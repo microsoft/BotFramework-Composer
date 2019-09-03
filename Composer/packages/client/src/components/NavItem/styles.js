@@ -13,13 +13,13 @@ export const link = (active, underTest) => css`
       content: '';
       position: absolute;
       top: 0px;
-      right: 0px;
+      right: 1px;
       bottom: 0px;
-      left: 0px;
+      left: 1px;
     }
 
     &:hover {
-      background-color: ${NeutralColors.gray30};
+      background-color: ${active ? NeutralColors.gray40 : NeutralColors.gray30};
     }
 
     &:focus {
@@ -36,9 +36,6 @@ export const link = (active, underTest) => css`
 
     ${active &&
       `background-color: ${NeutralColors.gray40};
-      &:hover {
-        background-color: ${NeutralColors.gray50} !important;
-      }
 
       &::after {
         border-left: 3px solid ${CommunicationColors.primary};
@@ -52,9 +49,9 @@ export const outer = css`
   background-color: transparent;
 `;
 
-export const commandBarButton = () => ({
+export const commandBarButton = active => ({
   root: {
-    color: '#000000',
+    color: active ? '#000' : '#4f4f4f',
     height: '36px',
     width: '220px',
     fontSize: `${FontSizes.size14}`,
@@ -64,7 +61,7 @@ export const commandBarButton = () => ({
     backgroundColor: 'transparent',
   },
   icon: {
-    color: '#000000',
+    color: active ? '#000' : '#4f4f4f',
     padding: '0 13px',
     marginLeft: '0px',
     boxSizing: 'border-box',

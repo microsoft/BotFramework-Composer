@@ -1,39 +1,33 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect, useMemo } from 'react';
-import { Breadcrumb } from 'office-ui-fabric-react';
+import React, { Fragment, useContext, useEffect, useMemo } from 'react';
+import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-
+import { toLower, cloneDeep } from 'lodash';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel } from '../../utils';
+import { getbreadcrumbLabel, addNewTrigger } from '../../utils';
 
-import { Tree } from './../../components/Tree';
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
 import { StoreContext } from './../../store';
 import {
+  pageRoot,
+  contentWrapper,
   breadcrumbClass,
-  projectWrapper,
-  projectContainer,
-  projectHeader,
-  projectTree,
-  // assetTree,
   editorContainer,
+  visualPanel,
   visualEditor,
   formEditor,
   editorWrapper,
   deleteDialogContent,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
-import { MainContent } from './../../components/MainContent/index';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
-import { clearBreadcrumb, getUrlSearch } from './../../utils/navigation';
+import { clearBreadcrumb } from './../../utils/navigation';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -42,6 +36,15 @@ function onRenderContent(subTitle, style) {
       {subTitle && <div style={style}>{subTitle}</div>}
       <p>{DialogDeleting.CONFIRM_CONTENT}</p>
     </div>
+  );
+}
+
+function onRenderBreadcrumbItem(item, render) {
+  return (
+    <span>
+      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
+      {render(item)}
+    </span>
   );
 }
 
@@ -62,36 +65,40 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, designPageLocation, breadcrumb, schemas } = state;
-  const { removeDialog, setDesignPageLocation, navTo } = actions;
+  const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
   const { location, match } = props;
-  const { dialogId } = designPageLocation;
+  const { dialogId, selected } = designPageLocation;
 
   useEffect(() => {
     if (match) {
-      const { dialogId, uri } = match;
+      const { dialogId } = match;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
-        uri: uri,
-        focusedEvent: params.get('focusedEvent'),
-        focusedSteps: params.getAll('focusedSteps[]'),
+        selected: params.get('selected'),
+        focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
+        onBreadcrumbItemClick: handleBreadcrumbItemClick,
       });
+      globalHistory._onTransitionComplete();
     }
-    globalHistory._onTransitionComplete();
   }, [location]);
 
-  function handleFileClick(id) {
-    navTo(id);
+  function handleSelect(id, selected = '') {
+    if (selected) {
+      selectTo(selected);
+    } else {
+      navTo(id);
+    }
   }
 
-  const getErrorMessage = name => {
+  const getErrorMessage = text => {
     if (
       dialogs.findIndex(dialog => {
-        return dialog.name === name;
+        return toLower(dialog.id) === toLower(text);
       }) >= 0
     ) {
-      return 'duplication of name';
+      return `${text} has been used, please choose another name`;
     }
     return '';
   };
@@ -104,34 +111,24 @@ function DesignPage(props) {
 
   const toolbarItems = [
     {
-      type: 'action',
-      text: formatMessage('Add'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'CirclePlus',
-        },
-        onClick: () => actions.createDialogBegin(onCreateDialogComplete),
-      },
-      align: 'left',
-    },
-    {
       type: 'element',
       element: <TestController />,
       align: 'right',
     },
   ];
 
-  function handleBreadcrumbItemClick(_event, { dialogId, focusedEvent, focusedSteps, index }) {
-    navTo(`${dialogId}${getUrlSearch(focusedEvent, focusedSteps)}`, clearBreadcrumb(breadcrumb, index));
+  function handleBreadcrumbItemClick(_event, { dialogId, selected, focused, index }) {
+    setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
   }
 
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
         ? breadcrumb.map((item, index) => {
-            const { dialogId, focusedEvent, focusedSteps } = item;
+            const { dialogId, selected, focused } = item;
             return {
-              text: getbreadcrumbLabel(dialogs, dialogId, focusedEvent, focusedSteps, schemas),
+              text: getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas),
+              isRoot: !selected && !focused,
               ...item,
               index,
               onClick: handleBreadcrumbItemClick,
@@ -144,6 +141,7 @@ function DesignPage(props) {
         ariaLabel={formatMessage('Navigation Path')}
         styles={breadcrumbClass}
         data-testid="Breadcrumb"
+        onRenderItem={onRenderBreadcrumbItem}
       />
     );
   }, [dialogs, breadcrumb]);
@@ -183,37 +181,53 @@ function DesignPage(props) {
     }
   }
 
+  async function handleAddTrigger(id, type, index) {
+    const content = addNewTrigger(dialogs, id, type);
+    await updateDialog({ id, content });
+    selectTo(`rules[${index}]`);
+  }
+
+  async function handleDeleteTrigger(id, index) {
+    const dialogsCopy = cloneDeep(dialogs);
+    const dialog = dialogsCopy.find(item => item.id === id);
+    if (dialog) {
+      dialog.content.rules.splice(index, 1);
+      await updateDialog({ id, content: dialog.content });
+      //if the deleted node was selected, navTo the first one;
+      if (id === dialogId && selected === `rules[${index}]`) {
+        navTo(id);
+      }
+    }
+  }
+
   return (
     <Fragment>
-      {match && <ToolBar toolbarItems={toolbarItems} />}
-      <MainContent>
-        <Fragment>
-          <div css={projectContainer}>
-            <Tree variant="large" extraCss={projectTree}>
-              <div css={projectWrapper}>
-                <div css={projectHeader}>
-                  <div>{formatMessage('Dialogs')}</div>
-                </div>
-                <ProjectTree
-                  files={dialogs}
-                  activeNode={dialogId || ''}
-                  onSelect={handleFileClick}
-                  onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-                  onDelete={handleDeleteDialog}
-                />
-              </div>
-            </Tree>
-          </div>
+      <div css={pageRoot}>
+        <ProjectTree
+          dialogs={dialogs}
+          schemas={schemas}
+          dialogId={dialogId}
+          selected={selected}
+          onSelect={handleSelect}
+          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAddTrigger={handleAddTrigger}
+          onDeleteDialog={handleDeleteDialog}
+          onDeleteTrigger={handleDeleteTrigger}
+        />
+        <div css={contentWrapper}>
+          {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation extraCss={editorContainer}>
             <Fragment>
-              {breadcrumbItems}
               <div css={editorWrapper}>
-                <iframe
-                  key="VisualEditor"
-                  name="VisualEditor"
-                  css={visualEditor}
-                  src={`${rootPath}/extensionContainer.html`}
-                />
+                <div css={visualPanel}>
+                  {breadcrumbItems}
+                  <iframe
+                    key="VisualEditor"
+                    name="VisualEditor"
+                    css={visualEditor}
+                    src={`${rootPath}/extensionContainer.html`}
+                  />
+                </div>
                 <iframe
                   key="FormEditor"
                   name="FormEditor"
@@ -223,8 +237,8 @@ function DesignPage(props) {
               </div>
             </Fragment>
           </Conversation>
-        </Fragment>
-      </MainContent>
+        </div>
+      </div>
       <NewDialogModal
         isOpen={state.showCreateDialogModal}
         onDismiss={() => actions.createDialogCancel()}

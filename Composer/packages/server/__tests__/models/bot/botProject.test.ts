@@ -194,6 +194,8 @@ describe('lu operation', () => {
   afterAll(() => {
     try {
       fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/generated/luis.status.json`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/generated`));
     } catch (err) {
       throw new Error(err);
     }

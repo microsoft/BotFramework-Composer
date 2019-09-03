@@ -8,7 +8,9 @@ context('RemoveDialog', () => {
 
   it('can remove dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.get('[data-testid="DialogTreeItemAddItem"]').trigger('mousedown');
+      cy.get('[data-testid="DialogTreeItemAddItem"]')
+        .click()
+        .trigger('mousedown');
       cy.get('[data-testid="dialogMoreButton"]')
         .first()
         .invoke('attr', 'style', 'visibility: visible')

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { navigate } from '@reach/router';
 
-import { BASEPATH, CreationFlowStatus } from '../constants';
+import { CreationFlowStatus } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
@@ -10,6 +9,7 @@ import { SelectLocation } from './SelectLocation';
 import { StoreContext } from './../store';
 import { DialogInfo } from './../constants/index';
 import { StepWizard } from './StepWizard/StepWizard';
+import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
@@ -69,7 +69,8 @@ export function CreationFlow(props) {
 
   const openBot = async botFolder => {
     const { botName } = await openBotProject(botFolder);
-    setLuisConfig(botName);
+    await setLuisConfig(botName);
+    navigateTo('/dialogs/Main');
     handleDismiss();
   };
 
@@ -92,10 +93,11 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigate(BASEPATH);
+        navigateTo('/dialogs/Main');
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
+        navigateTo('/dialogs/Main');
         break;
       default:
         setStep(Steps.NONE);

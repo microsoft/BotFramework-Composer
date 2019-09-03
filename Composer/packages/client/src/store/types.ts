@@ -26,6 +26,16 @@ interface StateError {
   message: string;
 }
 
+export interface BreadcrumbItem {
+  dialogId: string;
+  selected: string;
+  focused: string;
+}
+
+export interface BotSchemas {
+  editor?: any;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
@@ -41,27 +51,38 @@ export interface State {
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
-  schemas: any;
+  schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  designPageLocation: any;
+  designPageLocation: DesignPageLocation;
   error: StateError | null;
   oAuth: {
     MicrosoftAppId: string;
     MicrosoftAppPassword: string;
   };
-  breadcrumb: any[];
+  breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
+  toStartBot: boolean;
 }
 
 export type ReducerFunc = (state: State, payload: any) => State;
+
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
+}
 
 export interface DialogInfo {
   id: string;
   displayName: string;
   isRoot: boolean;
   content: any;
+  diagnostics: string[];
+  luFile: string;
+  triggers: ITrigger[];
 }
 
 export interface Intent {
@@ -70,6 +91,10 @@ export interface Intent {
 
 export interface Utterance {
   intent: string;
+  text: string;
+}
+
+export interface LuDiagnostic {
   text: string;
 }
 
@@ -83,6 +108,7 @@ export interface LuFile {
       utterances: Utterance[];
     };
   };
+  diagnostics: LuDiagnostic[];
 }
 
 export interface LgFile {
@@ -94,4 +120,10 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+
+export interface DesignPageLocation {
+  dialogId: string;
+  selected: string;
+  focused: string;
 }

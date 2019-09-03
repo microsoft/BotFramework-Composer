@@ -3,6 +3,7 @@ import { initializeIcons } from 'office-ui-fabric-react';
 
 import ApiClient from '../messenger/ApiClient';
 import { ShellData } from '../ShellApi';
+import { LuFile } from '../store/types';
 
 import getEditor from './EditorMap';
 
@@ -27,31 +28,31 @@ const apiClient = new ApiClient();
 const subEditorCallbacks = {};
 
 const shellApi = {
-  getState: () => {
+  getState: (): Promise<ShellData> => {
     return apiClient.apiCall('getState', {});
   },
 
-  saveData: newData => {
-    return apiClient.apiCall('saveData', newData);
+  saveData: (newData, updatePath) => {
+    return apiClient.apiCall('saveData', { newData, updatePath });
   },
 
-  navTo: (path, rest) => {
+  navTo: (path: string, rest) => {
     return apiClient.apiCall('navTo', { path, rest });
   },
 
-  navDown: subPath => {
+  navDown: (subPath: string) => {
     return apiClient.apiCall('navDown', { subPath: subPath });
   },
 
-  focusTo: subPath => {
+  focusTo: (subPath: string) => {
     return apiClient.apiCall('focusTo', { subPath: subPath });
   },
 
-  onFocusEvent: subPath => {
+  onFocusEvent: (subPath: string) => {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: subPaths => {
+  onFocusSteps: (subPaths: string[]) => {
     return apiClient.apiCall('onFocusSteps', { subPaths });
   },
 
@@ -59,27 +60,27 @@ const shellApi = {
     return apiClient.apiCall('shellNavigate', { shellPage, opts });
   },
 
-  createLuFile: id => {
+  createLuFile: (id: string) => {
     return apiClient.apiCall('createLuFile', { id });
   },
 
-  updateLuFile: luFile => {
+  updateLuFile: (luFile: LuFile) => {
     return apiClient.apiCall('updateLuFile', luFile);
   },
 
-  getLgTemplates: id => {
+  getLgTemplates: (id: string) => {
     return apiClient.apiCall('getLgTemplates', { id });
   },
 
-  createLgTemplate: (id, template, position) => {
+  createLgTemplate: (id: string, template: string, position?: number) => {
     return apiClient.apiCall('createLgTemplate', { id, template, position });
   },
 
-  removeLgTemplate: (id, templateName) => {
+  removeLgTemplate: (id: string, templateName: string) => {
     return apiClient.apiCall('removeLgTemplate', { id, templateName });
   },
 
-  updateLgTemplate: (id, templateName, template) => {
+  updateLgTemplate: (id: string, templateName: string, template: string) => {
     return apiClient.apiCall('updateLgTemplate', {
       id,
       templateName,
@@ -103,7 +104,6 @@ function ExtensionContainer() {
     apiClient.connect();
 
     apiClient.registerApi('reset', newShellData => {
-      console.log('FORM: apiReset');
       setShellData(newShellData);
     });
 
@@ -124,8 +124,6 @@ function ExtensionContainer() {
   }, []);
 
   const RealEditor = shellData.data ? getEditor() : null;
-
-  console.log('FORM: extension container');
 
   return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }

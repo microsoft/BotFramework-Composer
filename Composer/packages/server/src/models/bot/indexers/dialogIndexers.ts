@@ -4,7 +4,7 @@ import { Path } from '../../../utility/path';
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { DialogChecker } from '../dialogChecker';
 
-import { FileInfo, Dialog } from './../interface';
+import { FileInfo, Dialog, ITrigger } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
@@ -45,7 +45,7 @@ export class DialogIndexer {
         if (target && typeof target === 'string') {
           // match a template name
           // match a temlate func  e.g. `showDate()`
-          const reg = /\[([A-Za-z_]\w+)(\(.*\))?\]/g;
+          const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
           let matchResult;
           while ((matchResult = reg.exec(target)) !== null) {
             const templateName = matchResult[1];
@@ -84,6 +84,48 @@ export class DialogIndexer {
     JsonWalk('$', dialog, visitor);
 
     return uniq(intents);
+  }
+
+  // find out all triggers given dialog
+  private ExtractTriggers(dialog: Dialog): ITrigger[] {
+    const trigers: ITrigger[] = [];
+
+    /**
+     *
+     * @param path , jsonPath string
+     * @param value , current node value
+     *
+     * @return boolean, true to stop walk
+     */
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, 'rules')) {
+        value.rules.forEach((rule: any, index: number) => {
+          const trigger: ITrigger = {
+            id: `rules[${index}]`,
+            displayName: '',
+            type: rule.$type,
+            isIntent: rule.$type === 'Microsoft.IntentRule',
+          };
+
+          if (has(rule, '$designer.name')) {
+            trigger.displayName = rule.$designer.name;
+          } else if (trigger.isIntent && has(rule, 'intent')) {
+            trigger.displayName = rule.intent;
+          }
+
+          if (trigger.isIntent && trigger.displayName) {
+            trigger.displayName = '#' + trigger.displayName;
+          }
+          trigers.push(trigger);
+        });
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return trigers;
   }
 
   // find out all referred dialog
@@ -162,7 +204,7 @@ export class DialogIndexer {
             const dialog = {
               id,
               isRoot,
-              displayName: isRoot ? botName : id,
+              displayName: isRoot ? `${botName}.Main` : id,
               content: dialogJson,
               diagnostics,
               referredDialogs: this.ExtractReferredDialogs(dialogJson),
@@ -171,6 +213,7 @@ export class DialogIndexer {
               luFile: Path.basename(luFile, '.lu'),
               lgFile: Path.basename(lgFile, '.lg'),
               relativePath: file.relativePath,
+              triggers: this.ExtractTriggers(dialogJson),
             };
 
             this.dialogs.push(dialog);

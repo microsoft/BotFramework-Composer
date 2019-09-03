@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useState, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
 
@@ -50,8 +48,7 @@ export function CreateOptions(props) {
           required={true}
         />
         <div css={placeholder}>
-          {checked &&
-            formatMessage(template ? `${template.description}` : "Select a template to see it's description.")}
+          {checked && template ? template.description : formatMessage("Select a template to see it's description.")}
         </div>
       </Fragment>
     );

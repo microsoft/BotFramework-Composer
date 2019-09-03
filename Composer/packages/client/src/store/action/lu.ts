@@ -13,6 +13,11 @@ export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content })
       payload: { response },
     });
   } catch (err) {
+    dispatch({
+      type: ActionTypes.UPDATE_LU_FAILURE,
+      payload: null,
+      error: err,
+    });
     throw new Error(err.response.data.message);
   }
 };
@@ -66,7 +71,7 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
 export async function setLuisConfig(store, botName) {
   try {
     const config = luisStorage.get(botName);
-    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config });
+    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config, botName });
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,

@@ -81,6 +81,13 @@ export enum ActionTypes {
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
 }
 
+export const NewTriggerType = [
+  'Microsoft.EventRule',
+  'Microsoft.IntentRule',
+  'Microsoft.UnknownIntentRule',
+  'Microsoft.ConversationUpdateActivityRule',
+];
+
 export const Tips = {
   PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
     (projectname-environment-LUfilename)`),
@@ -106,12 +113,12 @@ export const Text = {
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
 };
 
-export const LuisConfig = {
-  STORAGE_KEY: 'luisConfig',
-  AUTHORING_KEY: 'authoringKey',
-  ENVIRONMENT: 'environment',
-  PROJECT_NAME: 'name',
-};
+export enum LuisConfig {
+  STORAGE_KEY = 'luisConfig',
+  AUTHORING_KEY = 'authoringKey',
+  ENVIRONMENT = 'environment',
+  PROJECT_NAME = 'name',
+}
 
 export const FileTypes = {
   FOLDER: 'folder',

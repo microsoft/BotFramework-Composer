@@ -2,8 +2,8 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
-import { Icon } from '../icons/icon';
-import { InitNodeSize } from '../../../shared/elementSizes';
+import { InitNodeSize } from '../../../constants/ElementSizes';
+import { Icon } from '../../decorations/icon';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;
@@ -23,7 +23,7 @@ const containerStyle = {
 
 interface NodeProps {
   header: string;
-  corner: any;
+  corner?: any;
   label: any;
   icon?: string;
   styles?: object;
@@ -86,9 +86,11 @@ export const FormCard: FunctionComponent<NodeProps> = ({
             alignItems: 'center',
           }}
         >
-          <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon} color={iconColor} size={30} />
-          </div>
+          {icon !== 'none' && (
+            <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
+              <Icon icon={icon} color={iconColor} size={30} />
+            </div>
+          )}
           <div
             css={{
               height: '100%',

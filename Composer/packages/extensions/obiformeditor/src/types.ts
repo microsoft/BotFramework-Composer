@@ -61,7 +61,7 @@ export interface FormData {
 export interface ShellApi {
   getState: <T = any>() => Promise<T>;
   getDialogs: <T = any>() => Promise<T>;
-  saveData: <T = any>(newData: T) => Promise<void>;
+  saveData: <T = any>(newData: T, updatePath: string) => Promise<void>;
   navTo: (path: string) => Promise<void>;
   onFocusSteps: (stepIds: string[]) => Promise<void>;
   onFocusEvent: (eventId: string) => Promise<void>;

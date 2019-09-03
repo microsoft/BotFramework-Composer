@@ -1,417 +1,248 @@
-{
-    "dialogs": [
-        {
-            "id": "Main",
-            "isRoot": true,
-            "displayName": "ToDoBot",
-            "content": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "autoEndDialog": false,
-                "recognizer": {
-                    "$type": "Microsoft.RegexRecognizer",
-                    "intents": {
-                        "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-                        "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-                        "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
-                        "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
-                        "HelpIntent": "(?i)help",
-                        "CancelIntent": "(?i)cancel|never mind"
-                    }
-                },
-                "steps": [
-                    {
-                        "$type": "Microsoft.SendActivity",
-                        "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started. test reload",
-                        "$designer": {
-                            "createdAt": "2019-05-06T20:59:09.555Z",
-                            "updatedAt": "2019-05-06T20:59:18.580Z",
-                            "id": "446870",
-                            "name": "Welcome User"
-                        }
-                    }
-                ],
-                "rules": [
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.BeginDialog",
-                                "dialog": "AddToDo",
-                                "$designer": {
-                                    "createdAt": "2019-05-06T20:59:37.193Z",
-                                    "updatedAt": "2019-05-06T20:59:37.204Z",
-                                    "id": "162768"
-                                }
-                            }
-                        ],
-                        "intent": "AddIntent",
-                        "$designer": {
-                            "createdAt": "2019-05-06T20:59:36.050Z",
-                            "updatedAt": "2019-05-06T20:59:36.073Z",
-                            "id": "682505"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "DeleteIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.BeginDialog",
-                                "dialog": "DeleteToDo"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "ClearIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.BeginDialog",
-                                "dialog": "ClearToDos"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "ShowIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.BeginDialog",
-                                "dialog": "ShowToDos"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "HelpIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "I can add a todo, show todos, remove a todo, and clear all todos\n"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CancelIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "ok."
-                            },
-                            {
-                                "$type": "Microsoft.EndDialog"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.UnknownIntentRule",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
-                            }
-                        ]
-                    }
-                ],
-                "$schema": "../../app.schema",
-                "$designer": {
-                    "createdAt": "2019-05-06T20:58:45.201Z",
-                    "updatedAt": "2019-05-06T20:58:45.289Z",
-                    "id": "612830"
-                }
-            },
-            "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ToDoBot.main.dialog"
-        },
-        {
-            "id": "AddToDo",
-            "isRoot": false,
-            "displayName": "AddToDo",
-            "content": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "steps": [
-                    {
-                        "$type": "Microsoft.SaveEntity",
-                        "entity": "title",
-                        "property": "dialog.todo"
-                    },
-                    {
-                        "$type": "Microsoft.IfCondition",
-                        "condition": "dialog.todo == null",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.TextInput",
-                                "$designer": {
-                                    "createdAt": "2019-05-06T21:47:25.237Z",
-                                    "updatedAt": "2019-05-06T22:02:05.226Z",
-                                    "id": "694019",
-                                    "name": "Get Todo Title"
-                                },
-                                "property": "dialog.todo",
-                                "prompt": "OK, please enter the title of your todo."
-                            }
-                        ],
-                        "$designer": {
-                            "createdAt": "2019-05-06T20:59:45.134Z",
-                            "updatedAt": "2019-05-06T20:59:45.155Z",
-                            "id": "533700"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.IfCondition",
-                        "condition": "user.todos == null",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.InitProperty",
-                                "$designer": {
-                                    "createdAt": "2019-05-06T21:47:36.409Z",
-                                    "updatedAt": "2019-05-06T22:02:16.530Z",
-                                    "id": "141822",
-                                    "name": "Initialize Todos"
-                                },
-                                "property": "user.todos",
-                                "type": "array"
-                            }
-                        ],
-                        "$designer": {
-                            "createdAt": "2019-05-06T20:59:50.248Z",
-                            "updatedAt": "2019-05-06T20:59:50.272Z",
-                            "id": "615921"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.EditArray",
-                        "changeType": "Push",
-                        "arrayProperty": "user.todos",
-                        "itemProperty": "dialog.todo",
-                        "$designer": {
-                            "createdAt": "2019-05-06T21:59:50.489Z",
-                            "updatedAt": "2019-05-06T21:59:56.726Z",
-                            "id": "299687",
-                            "name": "Add To Todos"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.SendActivity",
-                        "activity": "Successfully added a todo named \"{dialog.todo}\"",
-                        "$designer": {
-                            "createdAt": "2019-05-06T21:59:58.444Z",
-                            "updatedAt": "2019-05-06T21:59:58.450Z",
-                            "id": "364411"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.DeleteProperty",
-                        "property": "dialog.todo",
-                        "$designer": {
-                            "createdAt": "2019-05-06T22:00:02.296Z",
-                            "updatedAt": "2019-05-06T22:00:02.301Z",
-                            "id": "114276"
-                        }
-                    }
-                ],
-                "rules": [
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CancelIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.CancelAllDialogs"
-                            }
-                        ]
-                    }
-                ],
-                "$schema": "../../app.schema",
-                "$designer": {
-                    "createdAt": "2019-05-06T20:59:38.499Z",
-                    "updatedAt": "2019-05-06T20:59:38.555Z",
-                    "id": "841829"
-                }
-            },
-            "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/AddToDo.dialog"
-        },
-        {
-            "id": "ClearToDos",
-            "isRoot": false,
-            "displayName": "ClearToDos",
-            "content": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "steps": [
-                    {
-                        "$type": "Microsoft.EditArray",
-                        "changeType": "Clear",
-                        "arrayProperty": "user.todos",
-                        "$designer": {
-                            "createdAt": "2019-05-06T22:00:12.384Z",
-                            "updatedAt": "2019-05-06T22:00:16.151Z",
-                            "id": "448545",
-                            "name": "Clear Todos"
-                        }
-                    },
-                    {
-                        "$type": "Microsoft.SendActivity",
-                        "activity": "Successfully clear the todo list."
-                    }
-                ],
-                "rules": [
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CancelIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.CancelAllDialogs"
-                            }
-                        ]
-                    }
-                ],
-                "$schema": "../../app.schema",
-                "$designer": {
-                    "createdAt": "2019-05-06T22:00:07.509Z",
-                    "updatedAt": "2019-05-06T22:00:07.537Z",
-                    "id": "208808"
-                }
-            },
-            "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ClearToDos.dialog"
-        },
-        {
-            "id": "DeleteToDo",
-            "isRoot": false,
-            "displayName": "DeleteToDo",
-            "content": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "steps": [
-                    {
-                        "$type": "Microsoft.SaveEntity",
-                        "entity": "title",
-                        "property": "dialog.todo"
-                    },
-                    {
-                        "$type": "Microsoft.IfCondition",
-                        "condition": "dialog.todo == null",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.TextInput",
-                                "prompt": "OK, please enter the title of the todo you want to remove.",
-                                "property": "dialog.todo"
-                            }
-                        ]
-                    },
-                    {
-                        "$type": "Microsoft.EditArray",
-                        "changeType": "Remove",
-                        "arrayProperty": "user.todos",
-                        "itemProperty": "dialog.todo"
-                    },
-                    {
-                        "$type": "Microsoft.SendActivity",
-                        "activity": "Successfully removed a todo named \"{dialog.todo}\""
-                    },
-                    {
-                        "$type": "Microsoft.DeleteProperty",
-                        "property": "dialog.todo"
-                    }
-                ],
-                "rules": [
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CancelIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.CancelAllDialogs"
-                            }
-                        ]
-                    }
-                ],
-                "$schema": "../../app.schema",
-                "$designer": {
-                    "createdAt": "2019-05-06T22:02:22.975Z",
-                    "updatedAt": "2019-05-06T22:02:23.010Z",
-                    "id": "281122"
-                }
-            },
-            "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/DeleteToDo.dialog"
-        },
-        {
-            "id": "ShowToDos",
-            "isRoot": false,
-            "displayName": "ShowToDos",
-            "content": {
-                "$type": "Microsoft.AdaptiveDialog",
-                "steps": [
-                    {
-                        "$type": "Microsoft.IfCondition",
-                        "condition": "user.todos == null",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "You have no todos."
-                            }
-                        ],
-                        "elseSteps": [
-                            {
-                                "$type": "Microsoft.SendActivity",
-                                "activity": "[ShowTodo]"
-                            }
-                        ]
-                    }
-                ],
-                "rules": [
-                    {
-                        "$type": "Microsoft.IntentRule",
-                        "intent": "CancelIntent",
-                        "steps": [
-                            {
-                                "$type": "Microsoft.CancelAllDialogs"
-                            }
-                        ]
-                    }
-                ],
-                "$schema": "../../app.schema",
-                "$designer": {
-                    "createdAt": "2019-05-06T22:02:20.262Z",
-                    "updatedAt": "2019-05-06T22:02:20.290Z",
-                    "id": "211799"
-                }
-            },
-            "path": "D:/BotFramework-Composer/SampleBots/ToDoBot/ShowToDos.dialog"
-        }
-    ],
-    "lgFiles": [
-        {
-            "id": "common",
-            "absolutePath": "D:/BotFramework-Composer/SampleBots/ToDoBot/common.lg",
-            "templates": [
-                {
-                    "name": "Hello",
-                    "body": "- [Welcome(time)] {name}"
-                },
-                {
-                    "name": "Welcome(time)",
-                    "body": "- IF: {time == 'morning'}\r\n - Good morning\r\n- ELSEIF: {time == 'evening'}\r\n - Good evening\r\n- ELSE:\r\n - How are you doing,"
-                },
-                {
-                    "name": "Exit",
-                    "body": "- Thanks for using todo bot."
-                }
-            ]
-        },
-        {
-            "id": "todo",
-            "absolutePath": "D:/BotFramework-Composer/SampleBots/ToDoBot/todo.lg",
-            "templates": [
-                {
-                    "name": "ShowTodo",
-                    "body": "- IF: {count(user.todos) > 0}\r\n    - ```\r\n    Your most recent @{count(user.todos)} tasks are \r\n    @{join(foreach(user.todos, x, showSingleTodo(x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos test reload lalala."
-                },
-                {
-                    "name": "showSingleTodo(x)",
-                    "body": "- * {x}"
-                },
-                {
-                    "name": "ShowGrocery",
-                    "body": "- IF: {count(user.groceryList) > 0}\r\n    - ```\r\n    Your most recent @{count(user.groceryList)} tasks are \r\n    @{join(foreach(user.groceryList, x, showSingleTodo(x)), '\\n')}\r\n      ```\r\n- ELSE:\r\n    - You don't have any todos in grocery."
-                }
-            ]
-        }
-    ]
-}
+{"dialogs": [
+  {
+      "id": "AddToDo",
+      "isRoot": false,
+      "displayName": "AddToDo",
+      "content": {
+          "$type": "Microsoft.AdaptiveDialog",
+          "$designer": {
+              "id": "808722"
+          },
+          "rules": [
+              {
+                  "$type": "Microsoft.EventRule",
+                  "$designer": {
+                      "id": "335456",
+                      "updatedAt": "2019-07-22T08:10:44.402Z"
+                  },
+                  "steps": []
+              }
+          ]
+      },
+      "triggers": [
+          {
+              "id": "rules[0]",
+              "displayName": "",
+              "type": "Microsoft.EventRule",
+              "isIntent": false
+          }
+      ]
+  },
+  {
+      "id": "ClearToDos",
+      "isRoot": false,
+      "displayName": "ClearToDos",
+      "content": {
+          "$type": "Microsoft.AdaptiveDialog",
+          "$designer": {
+              "id": "316336"
+          },
+          "rules": [
+              {
+                  "$type": "Microsoft.EventRule",
+                  "$designer": {
+                      "id": "480162",
+                      "updatedAt": "2019-07-22T08:10:50.068Z"
+                  },
+                  "events": [
+                      "beginDialog"
+                  ],
+                  "steps": []
+              }
+          ]
+      },
+      "triggers": [
+          {
+              "id": "rules[0]",
+              "displayName": "",
+              "type": "Microsoft.EventRule",
+              "isIntent": false
+          }
+      ]
+  },
+  {
+      "id": "DeleteToDo",
+      "isRoot": false,
+      "displayName": "DeleteToDo",
+      "content": {
+          "$type": "Microsoft.AdaptiveDialog",
+          "$designer": {
+              "id": "114909"
+          },
+          "autoEndDialog": true,
+          "$schema": "../../app.schema",
+          "rules": [
+              {
+                  "$type": "Microsoft.EventRule",
+                  "$designer": {
+                      "id": "768658"
+                  },
+                  "steps": []
+              }
+          ]
+      },
+      "triggers": [
+          {
+              "id": "rules[0]",
+              "displayName": "",
+              "type": "Microsoft.EventRule",
+              "isIntent": false
+          }
+      ]
+  },
+  {
+      "id": "Main",
+      "isRoot": true,
+      "displayName": "ToDoBot.Main",
+      "content": {
+          "$type": "Microsoft.AdaptiveDialog",
+          "$designer": {
+              "id": "288769",
+              "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+          },
+          "rules": [
+              {
+                  "$type": "Microsoft.ConversationUpdateActivityRule",
+                  "$designer": {
+                      "id": "376720"
+                  },
+                  "steps": []
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "064505"
+                  },
+                  "steps": [],
+                  "intent": "AddIntent"
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "114961"
+                  },
+                  "steps": [],
+                  "intent": "DeleteIntent"
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "088050"
+                  },
+                  "steps": [],
+                  "intent": "ClearIntent"
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "633942"
+                  },
+                  "steps": [],
+                  "intent": "HelpIntent"
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "794124"
+                  },
+                  "steps": [],
+                  "intent": "ShowIntent"
+              },
+              {
+                  "$type": "Microsoft.IntentRule",
+                  "$designer": {
+                      "id": "179728"
+                  },
+                  "steps": [],
+                  "intent": "CancelIntent"
+              },
+              {
+                  "$type": "Microsoft.UnknownIntentRule",
+                  "$designer": {
+                      "id": "677447"
+                  },
+                  "steps": []
+              }
+          ],
+          "$schema": "../../app.schema"
+      },
+      "triggers": [
+          {
+              "id": "rules[0]",
+              "displayName": "",
+              "type": "Microsoft.ConversationUpdateActivityRule",
+              "isIntent": false
+          },
+          {
+              "id": "rules[1]",
+              "displayName": "#AddIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[2]",
+              "displayName": "#DeleteIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[3]",
+              "displayName": "#ClearIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[4]",
+              "displayName": "#HelpIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[5]",
+              "displayName": "#ShowIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[6]",
+              "displayName": "#CancelIntent",
+              "type": "Microsoft.IntentRule",
+              "isIntent": true
+          },
+          {
+              "id": "rules[7]",
+              "displayName": "",
+              "type": "Microsoft.UnknownIntentRule",
+              "isIntent": false
+          }
+      ]
+  },
+  {
+      "id": "ShowToDos",
+      "isRoot": false,
+      "displayName": "ShowToDos",
+      "content": {
+          "$type": "Microsoft.AdaptiveDialog",
+          "$designer": {
+              "id": "709692"
+          },
+          "rules": [
+              {
+                  "$type": "Microsoft.EventRule",
+                  "$designer": {
+                      "id": "783343"
+                  },
+                  "steps": []
+              }
+          ]
+      },
+      "triggers": [
+          {
+              "id": "rules[0]",
+              "displayName": "",
+              "type": "Microsoft.EventRule",
+              "isIntent": false
+          }
+      ]
+  }
+]}

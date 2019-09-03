@@ -1,8 +1,7 @@
 /* eslint-disable react/display-name */
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { useContext, useRef, useEffect, useState } from 'react';
+import { isEmpty, get } from 'lodash';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react';
@@ -11,9 +10,10 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { get } from 'lodash';
 
+import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
+import * as luUtil from '../../utils/luUtil';
 
 import { formCell, luPhraseCell } from './styles';
 
@@ -21,18 +21,26 @@ export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
   const { navTo } = actions;
   const { dialogs, luFiles } = state;
-  const activeDialog = props.activeDialog;
+  const { activeDialog, onClickEdit } = props;
   const [intents, setIntents] = useState([]);
   const listRef = useRef(null);
 
   useEffect(() => {
-    // make up intents data
+    if (isEmpty(luFiles)) return;
+
+    const errorFiles = checkErrors(luFiles);
+    if (errorFiles.length !== 0) {
+      showErrors(errorFiles);
+      return;
+    }
+
     const allIntents = luFiles.reduce((result, luFile) => {
       const items = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
       get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
         const name = utterance.intent;
-        const updateIntent = items.find(item => item.name === name);
+        const updateIntent = items.find(item => item.name === name && item.fileId === luFile.id);
+        const state = getIntentState(luFile);
         if (updateIntent) {
           updateIntent.phrases.push(utterance.text);
         } else {
@@ -41,27 +49,52 @@ export default function TableView(props) {
             phrases: [utterance.text],
             fileId: luFile.id,
             used: luDialog.luIntents.indexOf(name) !== -1, // used by it's dialog or not
+            state,
           });
         }
       });
       return result.concat(items);
     }, []);
 
-    // all view, show all lu intents
     if (!activeDialog) {
       setIntents(allIntents);
-      // dialog view, show dialog intents
     } else {
-      const dialogIntents = allIntents.filter(item => {
-        return item.fileId === activeDialog.id;
-      });
-
+      const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog, dialogs]);
+  }, [luFiles, activeDialog]);
 
-  function navigateToDialog(id) {
-    navTo(id);
+  function checkErrors(files) {
+    return files.filter(file => {
+      return luUtil.isValid(file.diagnostics) === false;
+    });
+  }
+
+  function getIntentState(file) {
+    if (!file.diagnostics) {
+      return formatMessage('Error');
+    } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
+      return formatMessage('Not yet published');
+    } else if (file.status && file.status.lastPublishTime > file.status.lastUpdateTime) {
+      return formatMessage('Published');
+    } else {
+      return formatMessage('Unknown State'); // It's a bug in most cases.
+    }
+  }
+
+  async function showErrors(files) {
+    for (const file of files) {
+      const errorMsg = luUtil.combineMessage(file.diagnostics);
+      const errorTitle = formatMessage('There was a problem parsing {fileId}.lu file.', { fileId: file.id });
+      const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
+        style: DialogStyle.Console,
+        confirmBtnText: formatMessage('Edit'),
+      });
+      if (confirmed === true) {
+        onClickEdit({ fileId: file.id });
+        break;
+      }
+    }
   }
 
   const getTemplatesMoreButtons = (item, index) => {
@@ -70,7 +103,7 @@ export default function TableView(props) {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          props.onEdit(intents[index]);
+          onClickEdit(intents[index]);
         },
       },
     ];
@@ -117,7 +150,7 @@ export default function TableView(props) {
         onRender: item => {
           const id = item.fileId;
           return (
-            <div key={id} onClick={() => navigateToDialog(id)}>
+            <div key={id} onClick={() => navTo(id)}>
               <Link>{id}</Link>
             </div>
           );
@@ -157,6 +190,19 @@ export default function TableView(props) {
           );
         },
       },
+      {
+        key: 'Activity',
+        name: formatMessage('Activity'),
+        fieldName: 'Activity',
+        minWidth: 100,
+        maxWidth: 100,
+        isResizable: true,
+        isCollapsable: true,
+        data: 'string',
+        onRender: item => {
+          return item.state;
+        },
+      },
     ];
 
     // all view, hide defineIn column
@@ -189,6 +235,12 @@ export default function TableView(props) {
           styles={{
             root: {
               overflowX: 'hidden',
+              // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
+              selectors: {
+                'div[role="row"]:hover': {
+                  background: 'none',
+                },
+              },
             },
           }}
           className="table-view-list"
@@ -204,7 +256,6 @@ export default function TableView(props) {
 }
 
 TableView.propTypes = {
-  onChange: PropTypes.func,
   activeDialog: PropTypes.object,
-  onEdit: PropTypes.func,
+  onClickEdit: PropTypes.func,
 };

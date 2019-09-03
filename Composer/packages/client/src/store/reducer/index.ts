@@ -127,22 +127,23 @@ const updateOAuth: ReducerFunc = (state, { oAuth }) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
-  const focusedStep = focusedSteps[0] || '';
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
-  if (focusedStep) {
-    state.focusPath = dialogId + '#.' + focusedStep;
-  }
-
-  if (focusedSteps.length === 0 && focusedEvent) {
-    state.focusPath = dialogId + '#.' + focusedEvent;
+  if (focused) {
+    state.focusPath = dialogId + '#.' + focused;
   }
 
   //add current path to the breadcrumb
-  breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
+  breadcrumb.push({ dialogId, selected, focused });
+
+  //if use navigateto to design page, add rules[0] for default select
+  if (!selected) {
+    selected = `rules[0]`;
+    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
+  }
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
+  state.designPageLocation = { dialogId, selected, focused };
   return state;
 };
 
@@ -165,6 +166,7 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,

@@ -1,16 +1,10 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useContext, Fragment, useEffect, useState, useMemo } from 'react';
+import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { navigate } from '@reach/router';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
-import { BASEPATH } from '../../constants';
-import { checkLgContent } from '../../store/action/lg';
 import { StoreContext } from '../../store';
-import { resolveToBasePath } from '../../utils/fileUtil';
 import {
   ContentHeaderStyle,
   ContentStyle,
@@ -19,15 +13,13 @@ import {
   contentEditor,
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
+import { navigateTo } from '../../utils';
 
 import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
-import '../language-understanding/style.css';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
-
-const mapNavPath = x => resolveToBasePath(BASEPATH, x);
 
 export const LGPage = props => {
   const { state, actions } = useContext(StoreContext);
@@ -35,13 +27,12 @@ export const LGPage = props => {
   const [editMode, setEditMode] = useState(false);
 
   const subPath = props['*'];
-
-  const activePath = subPath === '' ? '_all' : subPath;
+  const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
-  const lgFile = lgFiles.length && lgFiles[0];
+  const lgFile = lgFiles.length ? lgFiles[0] : null;
 
   const navLinks = useMemo(() => {
     const subLinks = dialogs.reduce((result, file) => {
@@ -85,31 +76,27 @@ export const LGPage = props => {
     ];
   }, [dialogs]);
 
-  // if dialog not find, navigate to all.
   useEffect(() => {
-    if (!activeDialog && subPath && dialogs.length) {
-      navigate(mapNavPath('language-generation'));
+    // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
+    if (!isRoot) {
+      setEditMode(false);
     }
-  }, [activePath, dialogs]);
+
+    //  fall back to the all-up page if we don't have an active dialog
+    if (!isRoot && !activeDialog && dialogs.length) {
+      navigateTo('/language-generation');
+    }
+  }, [subPath, dialogs]);
 
   function onSelect(id) {
     if (id === '_all') {
-      navigate(mapNavPath('/language-generation'));
+      navigateTo('/language-generation');
     } else {
-      navigate(mapNavPath(`language-generation/${id}`));
+      navigateTo(`language-generation/${id}`);
     }
-    setEditMode(false); // back to table view
   }
 
   async function onChange(newContent) {
-    try {
-      checkLgContent(newContent);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      return;
-    }
-
     const payload = {
       id: lgFile.id,
       content: newContent,
@@ -126,7 +113,8 @@ export const LGPage = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewWantEdit() {
+  function onTableViewClickEdit() {
+    navigateTo(`/language-generation`);
     setEditMode(true);
   }
 
@@ -150,7 +138,7 @@ export const LGPage = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             checked={editMode}
-            disabled={activePath !== '_all' && editMode === false}
+            disabled={!isRoot && editMode === false}
             onChange={() => setEditMode(!editMode)}
           />
         </div>
@@ -164,7 +152,17 @@ export const LGPage = props => {
                   onSelect(item.id);
                   ev.preventDefault();
                 }}
-                selectedKey={activePath}
+                styles={{
+                  root: {
+                    /* override dulplicate selected mark bellow All*/
+                    selectors: {
+                      'ul>li>ul button.ms-Nav-chevronButton:after': {
+                        borderLeft: 'none',
+                      },
+                    },
+                  },
+                }}
+                selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}
                 className={'dialogNavTree'}
                 data-testid={'dialogNavTree'}
@@ -176,7 +174,7 @@ export const LGPage = props => {
           {editMode ? (
             <CodeEditor file={lgFile} onChange={onChange} />
           ) : (
-            <TableView file={lgFile} activeDialog={activeDialog} onEdit={onTableViewWantEdit} />
+            <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}
         </div>
       </div>

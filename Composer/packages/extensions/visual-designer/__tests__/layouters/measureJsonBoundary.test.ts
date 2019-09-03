@@ -1,16 +1,16 @@
-import { Boundary } from '../../src/shared/Boundary';
+import { Boundary } from '../../src/models/Boundary';
 import { measureJsonBoundary } from '../../src/layouters/measureJsonBoundary';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 import {
   DiamondSize,
   InitNodeSize,
   LoopIconSize,
   ChoiceInputSize,
   ChoiceInputMarginTop,
-} from '../../src/shared/elementSizes';
+} from '../../src/constants/ElementSizes';
 
 describe('measureJsonBoundary', () => {
-  let boundary = new Boundary();
+  const boundary = new Boundary();
 
   it('should return an empty boundary when json is null or json.$type is null', () => {
     expect(measureJsonBoundary(null)).toEqual(boundary);
@@ -31,7 +31,7 @@ describe('measureJsonBoundary', () => {
     );
   });
   it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
-    let data: { [key: string]: any } = {
+    const data: { [key: string]: any } = {
       $type: ObiTypes.ChoiceInput,
       choices: [{ value: '1' }],
     };

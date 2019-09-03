@@ -201,7 +201,7 @@ async function updateLuFile(req: Request, res: Response) {
       const luFiles = await ProjectService.currentBotProject.updateLuFile(req.body.id, req.body.content);
       res.status(200).json({ luFiles });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ message: error.message });
     }
   } else {
     res.status(404).json({
@@ -223,8 +223,14 @@ async function createLuFile(req: Request, res: Response) {
 
 async function setLuisConfig(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
-    await ProjectService.currentBotProject.setLuisConfig(req.body.config);
-    res.send('ok');
+    try {
+      await ProjectService.currentBotProject.setLuisConfig(req.body.config, req.body.botName);
+      res.send('ok');
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -246,8 +252,8 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const status = await ProjectService.currentBotProject.publishLuis();
-      res.status(200).json({ status });
+      const luFiles = await ProjectService.currentBotProject.publishLuis();
+      res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
         message: error instanceof Error ? error.message : error,

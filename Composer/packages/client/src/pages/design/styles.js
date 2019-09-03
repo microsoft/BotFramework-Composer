@@ -2,6 +2,18 @@ import { css } from '@emotion/core';
 import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
+export const pageRoot = css`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const projectContainer = css`
   display: flex;
   flex-direction: column;
@@ -10,6 +22,7 @@ export const projectContainer = css`
   width: 255px;
 `;
 
+//remove TODO
 export const projectWrapper = css``;
 
 export const projectHeader = css`
@@ -32,6 +45,7 @@ export const assetTree = css`
   flex-grow: 2;
   flex-shrink: 2;
 `;
+/*******/
 
 export const editorContainer = css`
   display: flex;
@@ -46,12 +60,19 @@ export const editorWrapper = css`
   flex-grow: 1;
 `;
 
-export const visualEditor = css`
+export const visualPanel = css`
   height: 100%;
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  border: 0px;
-  background-color: ${NeutralColors.gray20};
+  border-right: 1px solid #c4c4c4;
   min-height: 80vh;
+`;
+
+export const visualEditor = css`
+  border: 0px;
+  flex: 1;
+  background-color: #e5e5e5;
 `;
 
 export const formEditor = css`
@@ -70,12 +91,12 @@ export const breadcrumbClass = mergeStyleSets({
   },
   itemLink: {
     fontSize: FontSizes.medium,
-    fontWeight: FontWeights.bold,
+    fontWeight: FontWeights.semilight,
+    color: '#333',
     padding: '4px 8px',
   },
   chevron: {
     fontSize: FontSizes.mini,
-    fontWeight: FontWeights.bold,
   },
 });
 

@@ -1,6 +1,6 @@
-import { ObiTypes } from '../shared/ObiTypes';
-import { IndexedNode } from '../shared/IndexedNode';
-import { normalizeObiStep } from '../shared/elementBuilder';
+import { ObiTypes } from '../constants/ObiTypes';
+import { IndexedNode } from '../models/IndexedNode';
+import { normalizeObiStep } from '../utils/stepBuilder';
 
 function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {
   if (!input) return null;

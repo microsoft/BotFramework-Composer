@@ -25,12 +25,13 @@ export interface FormEditorProps {
   dialogs: DialogInfo[];
   focusPath: string;
   focusedEvent: string;
+  focusedSteps: string[];
   isRoot: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   memory: FormMemory;
   onBlur?: () => void;
-  onChange: (newData: object) => void;
+  onChange: (newData: object, updatePath?: string) => void;
   schemas: EditorSchema;
   shellApi: ShellApi;
 }
@@ -44,7 +45,7 @@ function updateDesigner(data) {
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, schemas, focusedEvent, memory, dialogs, shellApi } = props;
+  const { data, schemas, memory, dialogs, shellApi } = props;
   const type = getType(data);
 
   if (!type) {
@@ -115,7 +116,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           formContext={{
             shellApi: {
               ...shellApi,
-              onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds.map(stepId => `${focusedEvent}.${stepId}`)),
+              onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds),
             },
             dialogOptions,
             editorSchema: schemas.editor,

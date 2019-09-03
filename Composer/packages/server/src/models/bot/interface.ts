@@ -1,3 +1,5 @@
+import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+
 export interface LocationRef {
   storageId: string;
   path: string;
@@ -25,15 +27,17 @@ export interface Dialog {
 }
 
 export interface LGTemplate {
-  name: string;
-  body: string;
+  Name: string;
+  Body: string;
+  Parameters: string[];
 }
 
 export interface LGFile {
   id: string;
   relativePath: string;
   content: string;
-  diagnostics: any[]; // LGParser output, TODO:
+  diagnostics: LGDiagnostic[];
+  templates: LGTemplate[];
 }
 
 export interface LUFile {
@@ -42,11 +46,15 @@ export interface LUFile {
   relativePath: string;
   content: string;
   parsedContent: { [key: string]: any };
+  status?: LuisStatus;
+  [key: string]: any;
 }
 
-export enum FileState {
-  PUBLISHED = 'published',
-  UNPUBLISHED = 'unpublished',
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
 }
 
 export interface ILuisSettings {
@@ -55,12 +63,18 @@ export interface ILuisSettings {
     endpoint: string;
     endpointKey: string;
   };
-  status: {
-    [key: string]: {
-      version: string | undefined;
-      state: FileState;
-    };
-  };
+}
+
+export interface LuisStatus {
+  lastUpdateTime: number;
+  lastPublishTime: number;
+}
+
+// we will probably also use this interface to consolidate the processing of lu\lg\dialog
+export enum FileUpdateType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
 }
 
 export interface ILuisConfig {
