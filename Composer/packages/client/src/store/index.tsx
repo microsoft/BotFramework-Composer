@@ -32,7 +32,7 @@ const initialState: State = {
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
-  oAuth: oauthStorage.get(),
+  oAuth: oauthStorage.get().OAuthInput,
   showCreateDialogModal: false,
   toStartBot: false,
 };
