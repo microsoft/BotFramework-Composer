@@ -74,7 +74,7 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (has(value, '$type') && value.$type === 'Microsoft.IntentRule') {
+      if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
         const intentName = value.intent;
         intents.push(intentName);
       }
@@ -105,7 +105,7 @@ export class DialogIndexer {
             id: `events[${index}]`,
             displayName: '',
             type: rule.$type,
-            isIntent: rule.$type === 'Microsoft.IntentRule',
+            isIntent: rule.$type === 'Microsoft.OnIntent',
           };
 
           if (has(rule, '$designer.name')) {

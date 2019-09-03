@@ -79,14 +79,14 @@ export const uiSchema = {
       'ui:field': 'StepsField',
     },
   },
-  'Microsoft.ConversationUpdateActivityRule': {
+  'Microsoft.OnConversationUpdateActivity': {
     steps: {
       'ui:field': 'StepsField',
     },
     ...globalFields,
     'ui:order': ['events', 'constraint', '*', 'steps'],
   },
-  'Microsoft.EventRule': {
+  'Microsoft.OnEvent': {
     steps: {
       'ui:field': 'StepsField',
     },
@@ -131,7 +131,7 @@ export const uiSchema = {
     },
     ...globalFields,
   },
-  'Microsoft.IntentRule': {
+  'Microsoft.OnIntent': {
     intent: {
       'ui:widget': 'IntentWidget',
     },
@@ -321,7 +321,7 @@ export const uiSchema = {
     },
     ...globalFields,
   },
-  'Microsoft.UnknownIntentRule': {
+  'Microsoft.OnUnknownIntent': {
     steps: {
       'ui:field': 'StepsField',
     },

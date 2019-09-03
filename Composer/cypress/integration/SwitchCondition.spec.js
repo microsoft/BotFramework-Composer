@@ -11,7 +11,7 @@ context('SwitchCondition', () => {
     cy.addEventHandler('Handle Unknown Intent');
 
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/UnknownIntentRule/).click({ force: true });
+      cy.getByText(/OnUnknownIntent/).click({ force: true });
       cy.wait(100);
       cy.getByText(/UnknownIntent/).click({ force: true });
       cy.wait(100);

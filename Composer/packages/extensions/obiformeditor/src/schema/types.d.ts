@@ -135,13 +135,13 @@ interface RuleBase extends BaseSchema {
 }
 
 /** Defines a rule for an event which is triggered by some source */
-interface EventRule extends RuleBase {
+interface OnEvent extends RuleBase {
   /** Events to trigger this rule for */
   events: DialogEvent[];
 }
 
 /** This defines the steps to take when an Intent is recognized (and optionally entities) */
-interface IntentRule extends RuleBase {
+interface OnIntent extends RuleBase {
   /** Intent name to trigger on */
   intent: string;
   /** The entities required to trigger this rule */
@@ -152,9 +152,9 @@ interface IntentRule extends RuleBase {
 interface Rule extends RuleBase {}
 
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
-interface UnknownIntentRule extends RuleBase {}
+interface OnUnknownIntent extends RuleBase {}
 
-type MicrosoftIRule = EventRule | IntentRule | Rule | UnknownIntentRule;
+type MicrosoftIRule = OnEvent | OnIntent | Rule | OnUnknownIntent;
 
 /**
  * Conversational Flow and Dialog Management
