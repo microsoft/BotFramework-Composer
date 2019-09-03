@@ -15,9 +15,13 @@ interface DialogsMap {
   [dialogId: string]: any;
 }
 
+export function getCurrentDialog(dialogs: DialogInfo[], currentId: string) {
+  const dialog = dialogs.find(item => item.id === currentId);
+  return cloneDeep(dialog);
+}
+
 export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
-  const dialog = dialogs.find(item => item.id === dialogId);
-  const dialogCopy = cloneDeep(dialog);
+  const dialogCopy = getCurrentDialog(dialogs, dialogId);
   if (dialogCopy === undefined) return;
   const content = dialogCopy.content;
   const newTrigger = {
@@ -30,6 +34,14 @@ export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: st
     content.rules = [];
   }
   content.rules.push(newTrigger);
+  return content;
+}
+
+export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
+  const dialogCopy = getCurrentDialog(dialogs, dialogId);
+  if (dialogCopy === undefined) return null;
+  const content = dialogCopy.content;
+  content.rules.splice(index, 1);
   return content;
 }
 
