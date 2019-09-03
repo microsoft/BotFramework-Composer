@@ -48,7 +48,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
   let dialog = null;
 
   switch (data.$type) {
-    case ObiTypes.IntentRule:
+    case ObiTypes.OnIntent:
       if (data.intent) {
         trigger = data.intent;
       } else {
@@ -56,7 +56,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       }
       break;
 
-    case ObiTypes.EventRule:
+    case ObiTypes.OnEvent:
       if (data.events && data.events.length) {
         trigger = formatMessage(
           `{event} {
@@ -74,11 +74,11 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       }
       break;
 
-    case ObiTypes.UnknownIntentRule:
+    case ObiTypes.OnUnknownIntent:
       trigger = formatMessage('Unknown Intent');
       break;
 
-    case ObiTypes.ConversationUpdateActivityRule:
+    case ObiTypes.OnConversationUpdateActivity:
       trigger = formatMessage('Conversation Update');
       break;
   }

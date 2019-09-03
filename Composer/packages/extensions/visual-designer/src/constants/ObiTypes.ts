@@ -8,12 +8,11 @@ export const ObiTypes = {
   MultiLanguageRecognizer: 'Microsoft.MultiLanguageRecognizer',
   QnARecognizer: 'Microsoft.QnARecognizer',
 
-  // rules
-  RuleGroup: 'Microsoft.RuleGroup',
-  UnknownIntentRule: 'Microsoft.UnknownIntentRule',
-  IntentRule: 'Microsoft.IntentRule',
-  EventRule: 'Microsoft.EventRule',
-  ConversationUpdateActivityRule: 'Microsoft.ConversationUpdateActivityRule',
+  // events
+  OnUnknownIntent: 'Microsoft.OnUnknownIntent',
+  OnIntent: 'Microsoft.OnIntent',
+  OnEvent: 'Microsoft.OnEvent',
+  OnConversationUpdateActivity: 'Microsoft.OnConversationUpdateActivity',
 
   // steps
   BeginDialog: 'Microsoft.BeginDialog',
@@ -55,6 +54,7 @@ export const ObiTypes = {
   TraceActivity: 'Microsoft.TraceActivity',
 
   // virtual
+  RuleGroup: 'VisualSDK.RuleGroup',
   StepGroup: 'VisualSDK.StepGroup',
   ChoiceDiamond: 'VisualSDK.ChoiceDiamond',
   ConditionNode: 'VisualSDK.ConditionNode',
