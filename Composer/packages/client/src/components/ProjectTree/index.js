@@ -19,7 +19,7 @@ export const ProjectTree = props => {
   }, [dialogs]);
 
   return (
-    <div css={root} data-testid="ProjectTree">
+    <div css={root} data-testid="ProjectTree" data-step="1" data-intro="This is nav tree">
       <ul>
         {links.map(link => {
           return (

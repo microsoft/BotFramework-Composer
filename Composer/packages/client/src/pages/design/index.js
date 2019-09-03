@@ -194,9 +194,18 @@ function DesignPage(props) {
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation extraCss={editorContainer}>
             <Fragment>
-              {breadcrumbItems}
+              <div data-step="2" data-intro="This is your dialog path">
+                {breadcrumbItems}
+              </div>
               <div css={editorWrapper}>
-                <div id="VisualEditorIframe" key="VisualEditor" name="VisualEditor" css={visualEditor}>
+                <div
+                  id="VisualEditorIframe"
+                  key="VisualEditor"
+                  name="VisualEditor"
+                  data-step="3"
+                  data-intro="This is your step editor"
+                  css={visualEditor}
+                >
                   <VisualDesigner
                     data-test-id="VisualDesignerElm"
                     {...designPageLocation}
