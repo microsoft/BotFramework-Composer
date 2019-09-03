@@ -138,9 +138,17 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, foc
   return state;
 };
 
+const setTemplateProjects: ReducerFunc = (state, { data }) => {
+  if (data && Array.isArray(data) && data.length > 0) {
+    state.templateProjects = data;
+  }
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,

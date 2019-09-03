@@ -14,6 +14,7 @@ const initialState: State = {
   botName: '',
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
+  templateProjects: [],
   storages: [],
   focusedStorageFolder: {},
   botStatus: BotStatus.unConnected,

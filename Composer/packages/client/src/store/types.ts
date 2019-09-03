@@ -37,6 +37,7 @@ export interface State {
   botName: string;
   /** the data path for FormEditor */
   focusPath: string;
+  templateProjects: any[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: any;
