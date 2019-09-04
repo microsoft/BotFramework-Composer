@@ -1418,6 +1418,18 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@bfcomposer/monaco-editor-webpack-plugin@^1.7.2":
+  version "1.7.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor-webpack-plugin/-/@bfcomposer/monaco-editor-webpack-plugin-1.7.2.tgz#f00ac5cec496dc3d44713d9142956b3336033eab"
+  integrity sha1-8ArFzsSW3D1EcT2RQpVrMzYDPqs=
+  dependencies:
+    "@types/webpack" "^4.4.19"
+
+"@bfcomposer/monaco-editor@^0.17.3":
+  version "0.17.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.3.tgz#7ffc34139f8d02b8fdf296a727114430053c8454"
+  integrity sha1-f/w0E5+NArj98panJxFEMAU8hFQ=
+
 "@bfcomposer/react-jsonschema-form@1.6.0":
   version "1.6.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-jsonschema-form/-/@bfcomposer/react-jsonschema-form-1.6.0.tgz#19362224d67763cca2882d7f70057b0651e81fd6"
@@ -1428,6 +1440,15 @@
     core-js "^2.5.7"
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
+
+"@bfcomposer/react-monaco-editor@^0.30.3":
+  version "0.30.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.3.tgz#65c4b2b747b80c5bd8f6ce572cae47cc677fbc30"
+  integrity sha1-ZcSyt0e4DFvY9s5XLK5HzGd/vDA=
+  dependencies:
+    "@bfcomposer/monaco-editor" "^0.17.3"
+    "@types/react" "^16.9.2"
+    prop-types "^15.7.2"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
@@ -2287,10 +2308,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.23":
+"@types/react@*", "@types/react@^16.8.13", "@types/react@^16.8.23", "@types/react@^16.9.2":
   version "16.9.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.2.tgz#6d1765431a1ad1877979013906731aae373de268"
-  integrity sha512-jYP2LWwlh+FTqGd9v7ynUKZzjj98T8x7Yclz479QdRhHfuW9yQ+0jjnD31eXSXutmBpppj5PYNLYLRfnZJvcfg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/react/-/@types/react-16.9.2.tgz#6d1765431a1ad1877979013906731aae373de268"
+  integrity sha1-bRdlQxoa0Yd5eQE5BnMarjc94mg=
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -2310,6 +2331,11 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/source-list-map@*":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
+  integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
@@ -2369,15 +2395,25 @@
     "@types/unist" "*"
     "@types/vfile-message" "*"
 
+"@types/webpack-sources@*":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@types/webpack-sources/-/webpack-sources-0.1.5.tgz#be47c10f783d3d6efe1471ff7f042611bd464a92"
+  integrity sha512-zfvjpp7jiafSmrzJ2/i3LqOyTYTuJ7u1KOXlKgDlvsj9Rr0x7ZiYu5lZbXwobL7lmsRNtPXlBfmaUD8eU2Hu8w==
+  dependencies:
+    "@types/node" "*"
+    "@types/source-list-map" "*"
+    source-map "^0.6.1"
+
 "@types/webpack@^4.4.19":
-  version "4.4.32"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.4.32.tgz#2d460cd33a15e568e93f38de5e628cf846396c51"
-  integrity sha512-mNARoaSJTzbiHxtZbf9NULFilu2frqD+g9Iyl9V2jPYJWXi+AC3Hz8lQWPZ5LLtgUm7iF4SDDMB/1bPrbRQgFw==
+  version "4.39.1"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.39.1.tgz#d76cd551cc851198f67f75ff3e26551d204530e9"
+  integrity sha512-rgO9ihNu/l72Sjx3shqwc9r6gi+tOMsqxhMEZhOEVIZt82GFOeUyEdpTk1BO2HqEHLS/XJW8ldUTIIfIMMyYFQ==
   dependencies:
     "@types/anymatch" "*"
     "@types/node" "*"
     "@types/tapable" "*"
     "@types/uglify-js" "*"
+    "@types/webpack-sources" "*"
     source-map "^0.6.0"
 
 "@types/yargs@^12.0.2", "@types/yargs@^12.0.9":
@@ -2519,6 +2555,16 @@
     "@uifabric/utilities" "^6.38.3"
     tslib "^1.7.1"
 
+"@uifabric/foundation@^0.8.2":
+  version "0.8.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/foundation/-/@uifabric/foundation-0.8.2.tgz#619acdd877f8d676bb71baef4c71eeb239568f5f"
+  integrity sha1-YZrN2Hf41na7cbrvTHHusjlWj18=
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.3"
+    "@uifabric/utilities" "^6.41.6"
+    tslib "^1.7.1"
+
 "@uifabric/icons@^6.5.2":
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/@uifabric/icons/-/icons-6.5.2.tgz#88524fa4fcc55b96b26e174798b0f362485df9b8"
@@ -2528,10 +2574,27 @@
     "@uifabric/styling" "^6.47.6"
     tslib "^1.7.1"
 
+"@uifabric/icons@^6.5.4":
+  version "6.5.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/icons/-/@uifabric/icons-6.5.4.tgz#14e93d2a5bc3b0d378321b1af750ae6035041ca2"
+  integrity sha1-FOk9KlvDsNN4Mhsa91CuYDUEHKI=
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.3"
+    tslib "^1.7.1"
+
 "@uifabric/merge-styles@^6.17.4", "@uifabric/merge-styles@^6.18.0":
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/@uifabric/merge-styles/-/merge-styles-6.18.0.tgz#af41d769b34749d1cf98850606c7aa010dde4a26"
   integrity sha512-ja2jyFfDiiDe9/Fa2cqSjZmr4yGcVIuJ6E9fWSNutjn49xs+apkIn2xDSF15zuGwFXKcibrwhdRM1vnLz8NAZg==
+  dependencies:
+    "@uifabric/set-version" "^1.1.3"
+    tslib "^1.7.1"
+
+"@uifabric/merge-styles@^6.19.3":
+  version "6.19.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/merge-styles/-/@uifabric/merge-styles-6.19.3.tgz#cfc89cfbd3f148b559e30f1ac30eac2a8259687d"
+  integrity sha1-z8ic+9PxSLVZ4w8aww6sKoJZaH0=
   dependencies:
     "@uifabric/set-version" "^1.1.3"
     tslib "^1.7.1"
@@ -2554,12 +2617,33 @@
     "@uifabric/utilities" "^6.40.0"
     tslib "^1.7.1"
 
+"@uifabric/styling@^6.50.3", "@uifabric/styling@^6.50.6":
+  version "6.50.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/styling/-/@uifabric/styling-6.50.6.tgz#04544688083cc1bdeaaa50870ec56a3cf82f8e06"
+  integrity sha1-BFRGiAg8wb3qqlCHDsVqPPgvjgY=
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.7.13"
+    "@uifabric/merge-styles" "^6.19.3"
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/utilities" "^6.41.6"
+    tslib "^1.7.1"
+
 "@uifabric/utilities@^6.38.3", "@uifabric/utilities@^6.40.0", "@uifabric/utilities@^6.40.1":
   version "6.40.1"
   resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-6.40.1.tgz#9427ff147a2ce2d0c4c59b48f130635dd438d5a8"
   integrity sha512-JXUxRzzr22xlmQM8+V3Co7azglZTUYOg6FggTrbDhJqvfMxHm1IXFgYh0C+X9ttn2AinWX/s9zsVhxLOJzyLVg==
   dependencies:
     "@uifabric/merge-styles" "^6.18.0"
+    "@uifabric/set-version" "^1.1.3"
+    prop-types "^15.5.10"
+    tslib "^1.7.1"
+
+"@uifabric/utilities@^6.41.6":
+  version "6.41.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@uifabric/utilities/-/@uifabric/utilities-6.41.6.tgz#3e9c04b06edbfdabe2b5dd16761be4edbbab3db7"
+  integrity sha1-PpwEsG7b/avitd0Wdhvk7burPbc=
+  dependencies:
+    "@uifabric/merge-styles" "^6.19.3"
     "@uifabric/set-version" "^1.1.3"
     prop-types "^15.5.10"
     tslib "^1.7.1"
@@ -13803,18 +13887,6 @@ moment@2.24.0, "moment@>= 2.9.0":
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
-monaco-editor-webpack-plugin@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-1.7.0.tgz#920cbeecca25f15d70d568a7e11b0ba4daf1ae83"
-  integrity sha512-oItymcnlL14Sjd7EF7q+CMhucfwR/2BxsqrXIBrWL6LQplFfAfV+grLEQRmVHeGSBZ/Gk9ptzfueXnWcoEcFuA==
-  dependencies:
-    "@types/webpack" "^4.4.19"
-
-monaco-editor@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.17.0.tgz#d1d035c6f512ab88503cbee8213cab34b85ab954"
-  integrity sha512-8BQQHCFxy3DF0GYFOy5BmcCWlwm/XaTMPbPbN4gwItFGctZErSfX82uQSBpojJSlPNyudB5Q5qnukoorD3/UuA==
-
 morgan@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -14570,7 +14642,7 @@ obuf@^1.0.0, obuf@^1.1.1, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabric-react@^6.165.1, office-ui-fabric-react@^6.180.0, office-ui-fabric-react@^6.181.1, office-ui-fabric-react@^6.184.0:
+office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabric-react@^6.165.1, office-ui-fabric-react@^6.181.1, office-ui-fabric-react@^6.184.0:
   version "6.189.1"
   resolved "https://registry.yarnpkg.com/office-ui-fabric-react/-/office-ui-fabric-react-6.189.1.tgz#972e7df555e548f428b4762e29dc9cd213f47c9f"
   integrity sha512-hiGQ8InH8NmPJBdpLjMm8732L01n0KUkKyZiJmVW8yYLnoyMapCKTv7Oz0tx8gMI4yG0z860bUBy+LnpHWfP5A==
@@ -14582,6 +14654,21 @@ office-ui-fabric-react@^6.146.1, office-ui-fabric-react@^6.152.0, office-ui-fabr
     "@uifabric/set-version" "^1.1.3"
     "@uifabric/styling" "^6.48.0"
     "@uifabric/utilities" "^6.40.1"
+    prop-types "^15.5.10"
+    tslib "^1.7.1"
+
+office-ui-fabric-react@^6.192.0:
+  version "6.202.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/office-ui-fabric-react/-/office-ui-fabric-react-6.202.3.tgz#424595a78142fc2e13510835dce21e36792a1219"
+  integrity sha1-QkWVp4FC/C4TUQg13OIeNnkqEhk=
+  dependencies:
+    "@microsoft/load-themed-styles" "^1.7.13"
+    "@uifabric/foundation" "^0.8.2"
+    "@uifabric/icons" "^6.5.4"
+    "@uifabric/merge-styles" "^6.19.3"
+    "@uifabric/set-version" "^1.1.3"
+    "@uifabric/styling" "^6.50.6"
+    "@uifabric/utilities" "^6.41.6"
     prop-types "^15.5.10"
     tslib "^1.7.1"
 
@@ -16509,15 +16596,6 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-monaco-editor@^0.26.1, react-monaco-editor@^0.26.2:
-  version "0.26.2"
-  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.26.2.tgz#a12b188529cb9ca4859a9d688ad35701c7d9c933"
-  integrity sha512-a7/w6l8873ankpa5cdAwXSRnwEis8V/2YVeQA0JdTh0edFhQ/2TKlgm8bOFYmGX3taBk+EVp9OMNQvYH1O73iA==
-  dependencies:
-    "@types/react" "*"
-    monaco-editor "^0.17.0"
-    prop-types "^15.7.2"
 
 react-proxy@^1.1.7:
   version "1.1.8"
