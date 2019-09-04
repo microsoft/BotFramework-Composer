@@ -57,7 +57,6 @@ export function LocationSelectContent(props) {
   };
 
   const checkShowItem = item => {
-    console.log('Show item?', item);
     // this is a file->open browser
     if (onOpen) {
       if (item.type === 'bot' || item.type === 'folder') {

@@ -3,7 +3,7 @@
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
+// import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -21,15 +21,16 @@ import { Fragment } from 'react';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
 
-import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
+// import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
+import { detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 import { loading } from './styles';
 
 export function FileSelector(props) {
   const {
-    saveAction,
+    // saveAction,
     onSelectionChanged,
-    currentPath,
-    updateCurrentPath,
+    // currentPath,
+    // updateCurrentPath,
     focusedStorageFolder,
     checkShowItem,
     storageExplorerStatus,
@@ -127,7 +128,7 @@ export function FileSelector(props) {
 
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
-    return focusedStorageFolder.children.reduce((result, file) => {
+    const files = focusedStorageFolder.children.reduce((result, file) => {
       const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
       if (check(file)) {
         result.push({
@@ -142,6 +143,15 @@ export function FileSelector(props) {
       }
       return result;
     }, []);
+    // add parent folder
+    files.unshift({
+      name: '..',
+      value: '..',
+      fileType: 'folder',
+      iconName: 'folder',
+      filePath: focusedStorageFolder.parent,
+    });
+    return files;
   }, [focusedStorageFolder, storageExplorerStatus]);
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -165,22 +175,22 @@ export function FileSelector(props) {
   });
 
   // split will filter posix root, if path to call server api is not absolute, must add / back
-  const separator = '/';
-  const pathItems = currentPath
-    .replace(/\\/g, '/')
-    .split(separator)
-    .filter(p => p !== '');
-  const breadcrumbItems = pathItems.map((item, index) => {
-    let itemPath = getNavItemPath(pathItems, separator, 0, index);
-    itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
-    return {
-      text: item,
-      key: itemPath,
-      onClick: () => {
-        updateCurrentPath(itemPath);
-      },
-    };
-  });
+  // const separator = '/';
+  // const pathItems = currentPath
+  //   .replace(/\\/g, '/')
+  //   .split(separator)
+  //   .filter(p => p !== '');
+  // const breadcrumbItems = pathItems.map((item, index) => {
+  //   let itemPath = getNavItemPath(pathItems, separator, 0, index);
+  //   itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
+  //   return {
+  //     text: item,
+  //     key: itemPath,
+  //     onClick: () => {
+  //       updateCurrentPath(itemPath);
+  //     },
+  //   };
+  // });
 
   function getFileEditDate(file) {
     if (file && file.lastModified) {
@@ -218,24 +228,24 @@ export function FileSelector(props) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  function getNavItemPath(array, seperator, start, end) {
-    if (end === 0) return array[0] + seperator;
-    if (!start) start = 0;
-    if (!end) end = array.length - 1;
-    end++;
-    return array.slice(start, end).join(seperator);
-  }
+  // function getNavItemPath(array, seperator, start, end) {
+  //   if (end === 0) return array[0] + seperator;
+  //   if (!start) start = 0;
+  //   if (!end) end = array.length - 1;
+  //   end++;
+  //   return array.slice(start, end).join(seperator);
+  // }
 
-  function onBackIconClicked() {
-    const path = focusedStorageFolder.parent;
-    updateCurrentPath(path);
-  }
+  // function onBackIconClicked() {
+  //   const path = focusedStorageFolder.parent;
+  //   updateCurrentPath(path);
+  // }
 
   return (
     <div css={fileSelectorContainer}>
       {storageFileLoadingStatus === 'success' && (
         <Fragment>
-          <div css={pathNav}>
+          {/* <div css={pathNav}>
             <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
             <div
               style={{
@@ -245,7 +255,7 @@ export function FileSelector(props) {
               <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
             </div>
           </div>
-          {saveAction}
+          {saveAction} */}
           <div data-is-scrollable="true" css={detailListContainer}>
             <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
               <DetailsList
