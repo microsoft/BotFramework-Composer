@@ -19,7 +19,7 @@ function getDownPath(inputDialog: { [key: string]: any }, path: string) {
 
 function getUpPath(inputDialog: { [key: string]: any }, path: string) {
   const target = locateNode(inputDialog, path);
-  if (!target) return path;
+  if (!target) return '';
   const currentData = target.currentData;
   const targetObiType = target.currentData.$type;
   let resultPath = path;
@@ -46,12 +46,15 @@ function getUpPath(inputDialog: { [key: string]: any }, path: string) {
       break;
     case ObiTypes.Foreach:
     case ObiTypes.ForeachPage:
-    case ObiTypes.IntentRule:
-    case ObiTypes.UnknownIntentRule:
-    case ObiTypes.EventRule:
       if (currentData.steps && currentData.steps.length > 0) {
         resultPath = getUpPath(inputDialog, resultPath + `.steps[${currentData.steps.length - 1}]`);
       }
+      break;
+    case ObiTypes.IntentRule:
+    case ObiTypes.UnknownIntentRule:
+    case ObiTypes.EventRule:
+    case ObiTypes.ConversationUpdateActivityRule:
+      resultPath = '';
       break;
     default:
       break;
@@ -93,7 +96,7 @@ export function moveFocusNode(inputDialog, path, action) {
       if (currentKey === 0) {
         resultPath = parentPath || path;
       } else if (currentKey > 0) {
-        resultPath = getUpPath(inputDialog, parentPathWithStep + `[${currentKey - 1}]`);
+        resultPath = getUpPath(inputDialog, parentPathWithStep + `[${currentKey - 1}]`) || path;
       }
       break;
     case KeyboardCommandTypes.MoveDown:
@@ -104,7 +107,7 @@ export function moveFocusNode(inputDialog, path, action) {
           } else if (currentData.elseSteps && currentData.elseSteps.length > 0) {
             resultPath += '.elseSteps[0]';
           } else {
-            resultPath = getDownPath(inputDialog, path);
+            resultPath = getDownPath(inputDialog, path) || path;
           }
           break;
         case ObiTypes.SwitchCondition:
@@ -127,6 +130,7 @@ export function moveFocusNode(inputDialog, path, action) {
         case ObiTypes.IntentRule:
         case ObiTypes.UnknownIntentRule:
         case ObiTypes.EventRule:
+        case ObiTypes.ConversationUpdateActivityRule:
           if (currentData.steps && currentData.steps.length > 0) {
             resultPath += '.steps[0]';
           } else {
@@ -146,7 +150,7 @@ export function moveFocusNode(inputDialog, path, action) {
             if (parentData.steps.length > currentKey) {
               resultPath = parentPath + `.steps[${currentKey}]`;
             } else {
-              resultPath = parentPath + `steps[${parentData.steps.length - 1}]`;
+              resultPath = parentPath + `.steps[${parentData.steps.length - 1}]`;
             }
           }
           break;
@@ -193,7 +197,7 @@ export function moveFocusNode(inputDialog, path, action) {
             if (parentData.elseSteps.length > currentKey) {
               resultPath = parentPath + `.elseSteps[${currentKey}]`;
             } else {
-              resultPath = parentPath + `elseSteps[${parentData.elseSteps.length - 1}]`;
+              resultPath = parentPath + `.elseSteps[${parentData.elseSteps.length - 1}]`;
             }
           }
           break;
