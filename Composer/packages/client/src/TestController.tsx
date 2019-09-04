@@ -45,7 +45,7 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, publishLuis, startBot, setEnvSettings } = actions;
+  const { connectBot, reloadBot, publishLuis, startBot, syncEnvSettings } = actions;
   const connected = botStatus === BotStatus.connected;
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await setEnvSettings(settings);
+      await syncEnvSettings(settings);
       if (settings.luis) {
         await publishLuis(settings.luis.authoringKey);
         return true;

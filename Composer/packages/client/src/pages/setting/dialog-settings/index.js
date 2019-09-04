@@ -33,7 +33,7 @@ export const DialogSettings = () => {
   const [value, setValue] = useState('');
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, isEnvSettingUpdated } = state;
-  const { setEnvSettings } = actions;
+  const { syncEnvSettings } = actions;
   useEffect(() => {
     setValue(settings);
   }, [botName, isEnvSettingUpdated]);
@@ -46,7 +46,7 @@ export const DialogSettings = () => {
           const propertyValue = get(result, property);
           settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
         }
-        setEnvSettings(result);
+        syncEnvSettings(result);
       } catch (err) {
         console.error(err.message);
       }

@@ -148,12 +148,12 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   state.designPageLocation = { dialogId, selected, focused };
   return state;
 };
-const updateEnvSetting: ReducerFunc = (state, { settings }) => {
+const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
 };
 
-const updateLuisSettings: ReducerFunc = state => {
+const updateEnvSetting: ReducerFunc = state => {
   state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
   return state;
 };
@@ -185,5 +185,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
-  [ActionTypes.UPDATE_LUIS_SETTING]: updateLuisSettings,
+  [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
 } as { [type in ActionTypes]: ReducerFunc });
