@@ -116,6 +116,7 @@ export enum LuisConfig {
 export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
+  BOT: 'bot',
   UNKNOW: 'unknow',
 };
 

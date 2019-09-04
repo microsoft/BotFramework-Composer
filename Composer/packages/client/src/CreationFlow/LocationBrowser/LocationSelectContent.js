@@ -4,17 +4,16 @@ import path from 'path';
 
 import { jsx } from '@emotion/core';
 import { Fragment, useEffect, useState, useContext, useRef } from 'react';
-// import findindex from 'lodash.findindex';
 
 import { FileSelector } from './FileSelector';
 // import { SaveAction } from './SaveAction';
 import { StoreContext } from './../../store';
-import { OpenStatus, FileTypes } from './../../constants';
+// import { OpenStatus, FileTypes } from './../../constants';
+import { FileTypes } from './../../constants';
 
 export function LocationSelectContent(props) {
   const { state, actions } = useContext(StoreContext);
   const { storages, storageExplorerStatus, focusedStorageFolder, storageFileLoadingStatus } = state;
-  //   const { onSaveAs, onOpen } = props;
   const { onOpen, onChange } = props;
 
   const { fetchFolderItemsByPath } = actions;
@@ -49,51 +48,30 @@ export function LocationSelectContent(props) {
       const path = item.filePath;
       if (type === FileTypes.FOLDER) {
         updateCurrentPath(path, storageId);
-      } else {
+      } else if (type === FileTypes.BOT) {
         onOpen(path, storageId);
+      } else {
+        // onOpen(path, storageId);
       }
     }
   };
 
   const checkShowItem = item => {
-    if (storageExplorerStatus === OpenStatus.SAVEAS && item.type !== 'folder') {
+    console.log('Show item?', item);
+    // this is a file->open browser
+    if (onOpen) {
+      if (item.type === 'bot' || item.type === 'folder') {
+        return true;
+      }
       return false;
+    } else {
+      return item.type === 'folder';
     }
-    return true;
   };
-
-  //   const checkDuplicate = value => {
-  //     if (focusedStorageFolder.children) {
-  //       const index = findindex(focusedStorageFolder.children, function(child) {
-  //         return child.name.toLowerCase() === value.toLowerCase();
-  //       });
-  //       if (index >= 0) {
-  //         return 'Duplicate folder name';
-  //       }
-  //     }
-  //     return '';
-  //   };
-
-  //   const handleSaveAs = async value => {
-  //     let parent = focusedStorageFolder.parent;
-  //     if (parent === '/') {
-  //       parent = '';
-  //     }
-  //     const dir = `${parent}/${focusedStorageFolder.name}`;
-  //     const absolutePath = `${dir}/${value}`;
-  //     await onSaveAs(storages[currentStorageIndex.current].id, absolutePath);
-  //   };
 
   return (
     <Fragment>
       <FileSelector
-        // saveAction={
-        //   storageExplorerStatus === OpenStatus.OPEN ? (
-        //     <div />
-        //   ) : (
-        //     <SaveAction onSave={handleSaveAs} onGetErrorMessage={checkDuplicate} />
-        //   )
-        // }
         storageExplorerStatus={storageExplorerStatus}
         storageFileLoadingStatus={storageFileLoadingStatus}
         checkShowItem={checkShowItem}

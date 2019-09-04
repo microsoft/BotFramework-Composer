@@ -56,7 +56,16 @@ export function FileSelector(props) {
               style={{
                 fontSize: '16px',
               }}
-              iconName="Folder"
+              iconName="OpenFolderHorizontal"
+            />
+          );
+        } else if (iconName === FileTypes.BOT) {
+          return (
+            <Icon
+              style={{
+                fontSize: '16px',
+              }}
+              iconName="Robot"
             />
           );
         } else if (iconName === FileTypes.UNKNOW) {
@@ -187,6 +196,8 @@ export function FileSelector(props) {
     const path = file.path;
     let docType = file.type;
     if (docType === FileTypes.FOLDER) {
+      return docType;
+    } else if (docType === FileTypes.BOT) {
       return docType;
     } else {
       docType = path.substring(path.lastIndexOf('.') + 1, path.length);
