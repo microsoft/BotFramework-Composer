@@ -4,7 +4,6 @@
     "createdAt": "2019-07-03T08:57:58.939Z",
     "updatedAt": "2019-07-16T18:54:22.992Z",
     "id": "400830",
-
     "description": "This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs."
   },
   "autoEndDialog": false,
@@ -29,7 +28,12 @@
       "steps": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-09-04T09:03:51.456Z",
+            "updatedAt": "2019-09-04T09:03:52.572Z",
+            "id": "591520"
+          },
+          "activity": "[bfdactivity-591520]"
         }
       ],
       "$designer": {
