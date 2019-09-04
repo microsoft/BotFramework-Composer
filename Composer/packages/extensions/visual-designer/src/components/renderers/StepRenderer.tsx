@@ -16,6 +16,7 @@ import {
   ActivityRenderer,
   Foreach,
   ChoiceInput,
+  TextInput,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
@@ -31,6 +32,7 @@ const rendererByObiType = {
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
   [ObiTypes.ChoiceInput]: ChoiceInput,
+  [ObiTypes.TextInput]: TextInput,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 

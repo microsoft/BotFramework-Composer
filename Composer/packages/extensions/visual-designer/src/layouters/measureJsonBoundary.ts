@@ -16,6 +16,7 @@ import {
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
+  calculateTextInputBoundary,
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {
@@ -63,6 +64,10 @@ function measureChoiceInputBoundary(data): Boundary {
   return new Boundary(width, height);
 }
 
+function measureTextInputBoundary(textInput): Boundary {
+  return calculateTextInputBoundary(new Boundary(InitNodeSize.width, InitNodeSize.height));
+}
+
 export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
@@ -91,6 +96,9 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case ObiTypes.ChoiceInput:
       boundary = measureChoiceInputBoundary(json);
+      break;
+    case ObiTypes.TextInput:
+      boundary = measureTextInputBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);

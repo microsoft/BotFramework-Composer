@@ -1,5 +1,5 @@
 import { Boundary } from '../models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX } from '../constants/ElementSizes';
+import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX, DiamondSize } from '../constants/ElementSizes';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -111,4 +111,21 @@ function measureBranchingContainerBoundary(
   containerBoundary.height = containerHeight;
   containerBoundary.axisX = containerAxisX;
   return containerBoundary;
+}
+
+export function calculateTextInputBoundary(nodeBoundary: Boundary): Boundary {
+  const boundary = new Boundary();
+
+  boundary.axisX = nodeBoundary.axisX;
+  boundary.height =
+    nodeBoundary.height + // [Text Input]
+    2 * BranchIntervalY + //      |
+    nodeBoundary.height + //  [property]
+    BranchIntervalY + //      |
+    DiamondSize.height + //     < >
+    BranchIntervalY + //      |
+    DiamondSize.height; //     < >
+  boundary.width = 3 * nodeBoundary.width + 3 * BranchIntervalX;
+
+  return boundary;
 }
