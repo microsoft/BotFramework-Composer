@@ -126,15 +126,9 @@ function DesignPage(props) {
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
             const { dialogId, selected, focused } = item;
-            const test = getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas);
-            if (test) {
-              result.push({
-                text: getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas),
-                isRoot: !selected && !focused,
-                ...item,
-                index,
-                onClick: handleBreadcrumbItemClick,
-              });
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas);
+            if (text) {
+              result.push({ text, isRoot: !selected && !focused, ...item, index, onClick: handleBreadcrumbItemClick });
             }
             return result;
           }, [])
