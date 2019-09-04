@@ -11,7 +11,10 @@ export function prepareAxios(store: Store) {
   const cancelSource = axios.CancelToken.source();
 
   axios.interceptors.request.use(config => {
-    config.cancelToken = cancelSource.token;
+    // only attach cancellation token to api requests
+    if (config.url && config.url.includes('/api/')) {
+      config.cancelToken = cancelSource.token;
+    }
 
     const token = getUserTokenFromCache();
     if (token) {
