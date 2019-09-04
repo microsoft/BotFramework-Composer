@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class actionsTests
+    public class ActionsTests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
