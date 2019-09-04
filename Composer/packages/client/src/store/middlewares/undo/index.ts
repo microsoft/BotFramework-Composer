@@ -24,8 +24,12 @@ export const undoActionsMiddleware = ({ dispatch, getState }) => next => {
   };
 };
 
-export const undoable = (actionCreate: ActionCreator, mapStateToArgs: MapStateToArgs): ActionCreator => {
-  const stack = undoHistory.createStack(actionCreate);
+export const undoable = (
+  actionCreate: ActionCreator,
+  mapStateToArgs: MapStateToArgs,
+  revertActionCreate?: ActionCreator
+): ActionCreator => {
+  const stack = undoHistory.createStack(revertActionCreate === undefined ? actionCreate : revertActionCreate);
 
   return (store: Store, ...args: any[]) => {
     if (stack.isEmpty()) {
