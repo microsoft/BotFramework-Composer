@@ -1,7 +1,7 @@
 import React, { useMemo, useContext, useState } from 'react';
 import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, get } from 'lodash';
 
 import { DialogInfo, ITrigger, BotSchemas } from '../../store/types';
 import { getTitle } from '../../utils';
@@ -29,7 +29,17 @@ const addIconProps: IIconProps = {
 };
 
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
-  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, schemas } = props;
+  const {
+    dialogs,
+    onAdd,
+    dialogId,
+    selected,
+    onSelect,
+    onDeleteDialog,
+    onDeleteTrigger,
+    schemas,
+    onAddTrigger,
+  } = props;
   const { actions } = useContext(StoreContext);
   const [openNewTriggerModel, setopenNewTriggerModel] = useState(false);
   const showName = (trigger: ITrigger) => {
@@ -61,6 +71,8 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
       id: dialog.id,
       content: dialog.content,
     };
+    const index = get(dialog, 'content.rules', []).length - 1;
+    actions.selectTo(`rules[${index}]`);
     actions.updateDialog(payload);
   };
 
@@ -122,6 +134,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
           isOpen={openNewTriggerModel}
           onDismiss={OnTriggerCreationDisMiss}
           onSubmit={OnTriggerCreationSubmit}
+          onAddTrigger={onAddTrigger}
         />
       )}
       <ActionButton tabIndex={1} iconProps={addIconProps} css={addButton(0)} onClick={onAdd}>
