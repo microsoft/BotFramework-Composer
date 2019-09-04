@@ -26,7 +26,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           header={'Text Input'}
           corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={'MessageBot'}
-          label={"What's your birthday"}
+          label={data.prompt || '<initPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
           }}
@@ -35,10 +35,9 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
       <OffsetContainer offset={propertyBox.offset}>
         <FormCard
           nodeColors={NodeColors[DialogGroup.INPUT]}
-          header={'Text Input'}
-          corner={<NodeMenu id={id} onEvent={onEvent} />}
+          header={'Property'}
           icon={'User'}
-          label={'value.birthday'}
+          label={data.property || '<property>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
           }}
@@ -48,9 +47,8 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={'Unrecognized prompt'}
-          corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={'MessageBot'}
-          label={'Wait what???'}
+          label={data.unrecognizedPrompt || '<unrecognizedPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
           }}
@@ -60,9 +58,8 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={'Invalid prompt'}
-          corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={'MessageBot'}
-          label={'You not born in 1980'}
+          label={data.invalidPrompt || '<invalidPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
           }}
