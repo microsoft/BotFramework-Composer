@@ -79,6 +79,7 @@ export function textInputLayouter(id: string): GraphLayout {
       x: TextInputBoundary.axisX,
       y: Row2BaselineY,
       length: invalidPrompt.offset.x + invalidPrompt.boundary.axisX - TextInputBoundary.axisX,
+      invertDirected: true,
     },
     {
       id: `edge/${id}/row2-baseline->unrecognizedPrompt`,
@@ -110,6 +111,7 @@ export function textInputLayouter(id: string): GraphLayout {
         diamond1.offset.y +
         diamond1.boundary.axisY -
         (unrecognizedPrompt.offset.y + unrecognizedPrompt.boundary.height),
+      invertDirected: true,
     },
     {
       id: `edge/${id}/diamond2-baseline|invalidPrompt`,
@@ -124,6 +126,7 @@ export function textInputLayouter(id: string): GraphLayout {
       x: invalidPrompt.offset.x + invalidPrompt.boundary.axisX,
       y: invalidPrompt.offset.y + invalidPrompt.boundary.height,
       length: diamond2.offset.y + diamond2.boundary.axisY - (invalidPrompt.offset.y + invalidPrompt.boundary.height),
+      invertDirected: true,
     },
   ];
 
