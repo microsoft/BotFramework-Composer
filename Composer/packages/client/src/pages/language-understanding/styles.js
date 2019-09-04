@@ -44,7 +44,7 @@ export const contentEditor = css`
   margin: 20px;
   height: calc(100vh - 200px);
   position: relative;
-  overflow: auto;
+  overflow: visible;
 `;
 
 export const codeEditorContainer = css`
