@@ -1,13 +1,13 @@
-import React, { Fragment, useContext, useEffect, useMemo } from 'react';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower } from 'lodash';
-// import { getDialogData } from '../../utils';
+import { toLower, get } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, deleteTrigger } from '../../utils';
+import { getbreadcrumbLabel } from '../../utils';
+import { TriggerCreationModel } from '../../components/ProjectTree/triggerCreationModel';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -68,7 +68,7 @@ function DesignPage(props) {
   const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
-
+  const [openNewTriggerModel, setopenNewTriggerModel] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -83,6 +83,20 @@ function DesignPage(props) {
       globalHistory._onTransitionComplete();
     }
   }, [location]);
+
+  const OnTriggerCreationDisMiss = () => {
+    setopenNewTriggerModel(false);
+  };
+
+  const OnTriggerCreationSubmit = dialog => {
+    const payload = {
+      id: dialog.id,
+      content: dialog.content,
+    };
+    const index = get(dialog, 'content.rules', []).length - 1;
+    actions.selectTo(`rules[${index}]`);
+    actions.updateDialog(payload);
+  };
 
   function handleSelect(id, selected = '') {
     if (selected) {
@@ -213,6 +227,9 @@ function DesignPage(props) {
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          openNewTriggerModel={() => {
+            setopenNewTriggerModel(true);
+          }}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
@@ -245,6 +262,14 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
+      {openNewTriggerModel && (
+        <TriggerCreationModel
+          dialogId={dialogId}
+          isOpen={openNewTriggerModel}
+          onDismiss={OnTriggerCreationDisMiss}
+          onSubmit={OnTriggerCreationSubmit}
+        />
+      )}
     </Fragment>
   );
 }
