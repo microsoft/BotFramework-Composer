@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
     "@emotion/core": "^10.0.7",
     "@reach/router": "^1.2.1",
     "@svgr/webpack": "4.1.0",
@@ -45,7 +46,6 @@
     "lodash.set": "^4.3.2",
     "lodash.startcase": "^4.4.0",
     "mini-css-extract-plugin": "0.5.0",
-    "monaco-editor-webpack-plugin": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-1.7.0-composer.1.tgz",
     "nanoid": "^2.0.1",
     "office-ui-fabric-react": "^6.146.1",
     "optimize-css-assets-webpack-plugin": "5.0.1",

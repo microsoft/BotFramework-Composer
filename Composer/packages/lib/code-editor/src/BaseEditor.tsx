@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
-import MonacoEditor, { MonacoEditorProps } from 'react-monaco-editor';
+import MonacoEditor, { MonacoEditorProps } from '@bfcomposer/react-monaco-editor';
 import throttle from 'lodash.throttle';
 
 const defaultOptions = {

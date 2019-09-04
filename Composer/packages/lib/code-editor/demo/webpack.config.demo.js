@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.tsx'),

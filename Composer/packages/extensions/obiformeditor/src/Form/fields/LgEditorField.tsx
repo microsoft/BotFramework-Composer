@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { RichEditor } from 'code-editor';
-import * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as Monaco from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { BFDFieldProps } from '../types';
 
