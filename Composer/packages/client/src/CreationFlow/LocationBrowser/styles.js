@@ -27,12 +27,12 @@ export const detailListContainer = css`
   position: relative;
   padding-top: 20px;
   overflow: hidden;
-  width: 645px;
+  width: 360px;
   flex-grow: 1;
 `;
 
 export const fileSelectorContainer = css`
-  width: 100 %;
+  width: 360px;
   height: 300px;
   display: flex;
   flex-direction: column;

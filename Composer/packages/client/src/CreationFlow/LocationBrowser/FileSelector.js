@@ -88,7 +88,7 @@ export function FileSelector(props) {
       name: 'Name',
       fieldName: 'name',
       minWidth: 150,
-      maxWidth: 350,
+      maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
       isSorted: true,
@@ -102,8 +102,8 @@ export function FileSelector(props) {
       key: 'column3',
       name: formatMessage('Date Modified'),
       fieldName: 'dateModifiedValue',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 60,
+      maxWidth: 70,
       isResizable: true,
       data: 'number',
       onRender: item => {
@@ -111,19 +111,19 @@ export function FileSelector(props) {
       },
       isPadded: true,
     },
-    {
-      key: 'column4',
-      name: formatMessage('File Size'),
-      fieldName: 'fileSizeRaw',
-      minWidth: 70,
-      maxWidth: 90,
-      isResizable: true,
-      isCollapsible: true,
-      data: 'number',
-      onRender: item => {
-        return <span>{item.fileSize}</span>;
-      },
-    },
+    // {
+    //   key: 'column4',
+    //   name: formatMessage('File Size'),
+    //   fieldName: 'fileSizeRaw',
+    //   minWidth: 70,
+    //   maxWidth: 90,
+    //   isResizable: true,
+    //   isCollapsible: true,
+    //   data: 'number',
+    //   onRender: item => {
+    //     return <span>{item.fileSize}</span>;
+    //   },
+    // },
   ];
 
   const storageFiles = useMemo(() => {
