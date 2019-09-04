@@ -1,5 +1,5 @@
-import { ObiTypes } from '../shared/ObiTypes';
-import { IndexedNode } from '../shared/IndexedNode';
+import { ObiTypes } from '../constants/ObiTypes';
+import { IndexedNode } from '../models/IndexedNode';
 
 const StepsKey = 'steps';
 export function transformForeach(

@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { LgTemplate } from '../components/shared/sharedProps';
+interface LgTemplate {
+  Name: string;
+  Body: string;
+}
 
 export const NodeRendererContext = React.createContext({
   focusedId: '',

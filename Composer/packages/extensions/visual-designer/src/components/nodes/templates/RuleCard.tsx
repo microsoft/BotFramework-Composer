@@ -3,12 +3,11 @@ import { jsx } from '@emotion/core';
 import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes } from '../../../shared/NodeEventTypes';
-import { NodeMenu } from '../../shared/NodeMenu';
-import { ObiTypes } from '../../../shared/ObiTypes';
-import { normalizeObiStep } from '../../../shared/elementBuilder';
-import { getElementColor } from '../../../shared/elementColors';
-import { DialogGroup } from '../../../shared/appschema';
+import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { ObiTypes } from '../../../constants/ObiTypes';
+import { EventColor } from '../../../constants/ElementColors';
+import { normalizeObiStep } from '../../../utils/stepBuilder';
+import { NodeMenu } from '../../menus/NodeMenu';
 
 import { IconCard } from './IconCard';
 
@@ -97,8 +96,8 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
 
   return (
     <IconCard
-      themeColor={getElementColor(DialogGroup.RULE).expanded}
-      iconColor={getElementColor(DialogGroup.RULE).iconColor}
+      themeColor={EventColor.expanded}
+      iconColor={EventColor.iconColor}
       corner={
         <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />

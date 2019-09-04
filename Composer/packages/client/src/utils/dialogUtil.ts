@@ -2,6 +2,7 @@ import { get, set, cloneDeep } from 'lodash';
 import { ConceptLabels } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
+import nanoid from 'nanoid/generate';
 
 import { BotSchemas } from '../store/types';
 
@@ -14,6 +15,24 @@ interface DialogsMap {
   [dialogId: string]: any;
 }
 
+export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
+  const dialog = dialogs.find(item => item.id === dialogId);
+  const dialogCopy = cloneDeep(dialog);
+  if (dialogCopy === undefined) return;
+  const content = dialogCopy.content;
+  const newTrigger = {
+    $type,
+    $designer: {
+      id: nanoid('1234567890', 6),
+    },
+  };
+  if (!content.rules) {
+    content.rules = [];
+  }
+  content.rules.push(newTrigger);
+  return content;
+}
+
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   return dialogs.reduce((result, dialog) => {
     result[dialog.id] = dialog.content;
@@ -21,30 +40,38 @@ export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   }, {});
 }
 
-const getTitle = (editorSchema: any, type: string) => {
-  const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', type]);
+const getLabel = (dialog: DialogInfo, dataPath: string, editorSchema: BotSchemas) => {
+  const name = get(dialog, `${dataPath}.$designer.name`);
+  if (name) return '#' + name;
 
-  return (sdkOverrides && sdkOverrides.title) || '';
+  const intent = get(dialog, `${dataPath}.intent`);
+  if (intent) return '#' + intent;
+
+  const type = get(dialog, `${dataPath}.$type`);
+  return getTitle(type, editorSchema);
 };
+
+export function getTitle(type: string, editorSchema: BotSchemas) {
+  const sdkOverrides = get(editorSchema, ['editor', 'content', 'SDKOverrides', type]);
+  return (sdkOverrides && sdkOverrides.title) || '';
+}
 
 export function getbreadcrumbLabel(
   dialogs: DialogInfo[],
   dialogId: string,
-  focusedEvent: string,
-  focusedSteps: string[],
+  selected: string,
+  focused: string,
   schemas: BotSchemas
 ) {
   let label = '';
-  const dataPath = getFocusPath(focusedEvent, focusedSteps[0]);
+  const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
     const dialog = dialogs.find(d => d.id === dialogId);
     label = (dialog && dialog.displayName) || '';
   } else {
-    const current = `${dataPath}.$type`;
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
-    const type = get(dialog, current);
-    label = getTitle(schemas.editor, type);
+    label = getLabel(dialog, dataPath, schemas);
   }
 
   label = upperCaseName(label || '');

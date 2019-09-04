@@ -3,13 +3,13 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef, useContext } from 'react';
 import { isEqual } from 'lodash';
 
-import { NodeEventTypes } from '../shared/NodeEventTypes';
-import { GraphNode } from '../shared/GraphNode';
-import { defaultNodeProps } from '../components/shared/sharedProps';
-import { transformObiRules } from '../transformers/transformObiRules';
-import { outlineObiJson } from '../shared/outlineObiJson';
 import { Trigger } from '../components/nodes/Trigger';
+import { defaultNodeProps } from '../components/nodes/nodeProps';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { GraphNode } from '../models/GraphNode';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { transformObiRules } from '../transformers/transformObiRules';
+import { outlineObiJson } from '../utils/outlineObiJson';
 
 import { StepEditor } from './StepEditor';
 

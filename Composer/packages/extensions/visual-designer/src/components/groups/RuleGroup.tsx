@@ -2,10 +2,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { NodeProps, defaultNodeProps } from '../shared/sharedProps';
-import { EventRenderer } from '../shared/EventRenderer';
-import { Boundary } from '../../shared/Boundary';
-import { EventNodeSize, EventNodeLayout } from '../../shared/elementSizes';
+import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { EventRenderer } from '../renderers/EventRenderer';
+import { Boundary } from '../../models/Boundary';
+import { EventNodeSize, EventNodeLayout } from '../../constants/ElementSizes';
 
 const RuleElementHeight = EventNodeSize.height;
 const RuleElementWidth = EventNodeSize.width;

@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
-import { getElementColor } from '../../../shared/elementColors';
-import { DialogGroup } from '../../../shared/appschema';
+import { ObiColors } from '../../../constants/ElementColors';
 
-export const Diamond = ({ onClick, ...rest }) => (
+export const Diamond = ({ color = ObiColors.AzureGray2, onClick, ...rest }) => (
   <div
     {...rest}
     css={{
@@ -18,7 +17,7 @@ export const Diamond = ({ onClick, ...rest }) => (
     }}
   >
     <svg width="50" height="20" viewBox="0 0 50 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill={getElementColor(DialogGroup.STEP).themeColor} />
+      <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill={color} />
     </svg>
   </div>
 );

@@ -1,5 +1,5 @@
 import { transformIfCondtion } from '../../src/transformers/transformIfCondition';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 
 test('should return {} when input is not IfCondition', () => {
   const json = { $type: '' };

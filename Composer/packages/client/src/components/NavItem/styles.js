@@ -13,9 +13,9 @@ export const link = (active, underTest) => css`
       content: '';
       position: absolute;
       top: 0px;
-      right: 0px;
+      right: 1px;
       bottom: 0px;
-      left: 0px;
+      left: 1px;
     }
 
     &:hover {
