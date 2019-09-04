@@ -56,7 +56,10 @@ export interface State {
   showCreateDialogModal: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
-  userToken: string | null;
+  currentUser: {
+    token: string | null;
+    sessionExpired: boolean;
+  };
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

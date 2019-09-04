@@ -38,7 +38,10 @@ const initialState: State = {
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
   toStartBot: false,
-  userToken: null,
+  currentUser: {
+    token: null,
+    sessionExpired: false,
+  },
 };
 
 interface StoreContextValue {

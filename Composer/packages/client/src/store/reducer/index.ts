@@ -148,10 +148,17 @@ const setTemplateProjects: ReducerFunc = (state, { data }) => {
 
 const setUserToken: ReducerFunc<UserTokenPayload> = (state, { token } = {}) => {
   if (token) {
-    state.userToken = token;
+    state.currentUser.token = token;
+    state.currentUser.sessionExpired = false;
   } else {
-    state.userToken = null;
+    state.currentUser.token = null;
   }
+
+  return state;
+};
+
+const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
+  state.currentUser.sessionExpired = !!expired;
 
   return state;
 };
@@ -187,5 +194,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
-  [ActionTypes.USER_SESSION_EXPIRED]: setUserToken, // will be invoked with token = undefined
+  [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
 } as { [type in ActionTypes]: ReducerFunc });

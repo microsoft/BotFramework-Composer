@@ -1,6 +1,5 @@
 import querystring from 'query-string';
 import axios from 'axios';
-import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
 import { Store } from '../store/types';
@@ -37,23 +36,7 @@ export function prepareAxios(store: Store) {
 
         store.dispatch({
           type: ActionTypes.USER_SESSION_EXPIRED,
-        });
-
-        let payload = {
-          summary: formatMessage('Unauthorized'),
-          message: formatMessage('Try logging in again.'),
-        };
-
-        if (err.response.data.error === 'Session expired') {
-          payload = {
-            summary: formatMessage('Session Expired'),
-            message: formatMessage('Try logging in again.'),
-          };
-        }
-
-        store.dispatch({
-          type: ActionTypes.SET_ERROR,
-          payload,
+          payload: { expired: true },
         });
       }
 

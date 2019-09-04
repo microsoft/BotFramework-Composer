@@ -7,19 +7,7 @@ export const loginUser: ActionCreator = async ({ dispatch }) => {
     return;
   }
 
-  const cachedToken = getUserTokenFromCache();
-
-  if (cachedToken) {
-    dispatch({
-      type: ActionTypes.USER_LOGIN_SUCCESS,
-      payload: {
-        token: cachedToken,
-      },
-    });
-    return;
-  }
-
-  const token = await refreshTokenPopup();
+  const token = getUserTokenFromCache() || (await refreshTokenPopup());
 
   if (token) {
     dispatch({

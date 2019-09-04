@@ -82,9 +82,9 @@ const absh: AuthProviderInit = {
 
             // used by the client to display correct message
             if (err instanceof TokenExpiredError) {
-              res.status(401).json({ error: 'Session expired' });
+              res.status(401).json({ message: 'Session expired' });
             } else {
-              res.status(401).json({ error: 'Unauthorized' });
+              res.status(401).json({ message: 'Unauthorized' });
             }
             return;
           }

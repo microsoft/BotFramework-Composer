@@ -45,6 +45,9 @@ interface UserLoginFailureAction {
 
 interface UserSessionExpiredAction {
   type: ActionTypes.USER_SESSION_EXPIRED;
+  payload: {
+    expired: boolean;
+  };
 }
 
 export type ActionType =

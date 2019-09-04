@@ -11,6 +11,7 @@ import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -102,7 +103,7 @@ export const App: React.FC = () => {
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
-    <RequireAuth>
+    <>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -155,10 +156,14 @@ export const App: React.FC = () => {
           </div>
         </nav>
         <div css={rightPanel}>
-          <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-          <Routes component={Content} />
+          <ErrorBoundary>
+            <RequireAuth>
+              <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
+              <Routes component={Content} />
+            </RequireAuth>
+          </ErrorBoundary>
         </div>
       </div>
-    </RequireAuth>
+    </>
   );
 };
