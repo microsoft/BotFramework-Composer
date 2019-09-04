@@ -7,4 +7,7 @@ export interface ResourceValidator {
 
 export interface Diagnostic {
   name: string;
+  // servity
+  // position
+  // message
 }

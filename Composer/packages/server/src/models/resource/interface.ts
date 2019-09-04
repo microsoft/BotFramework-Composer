@@ -21,5 +21,5 @@ export enum ResourceType {
 // given a start point and a reference string, resolver will resolve another resource
 // this will a very common-used interface
 export interface ResourceResolver {
-  Resolve(srcResource: Resource, reference: string): Resource;
+  resolve(srcResource: Resource, reference: string): Resource;
 }
