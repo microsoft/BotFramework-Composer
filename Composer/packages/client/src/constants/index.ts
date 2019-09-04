@@ -85,22 +85,18 @@ export const EventTypes = ['beginDialog', 'resumeDialog', 'cancelDialog', 'endDi
 
 export const NewTriggerType = [
   {
-    $type: 'Microsoft.EventRule',
     key: 'Microsoft.EventRule',
     text: 'Handle an Event',
   },
   {
-    $type: 'Microsoft.IntentRule',
     key: 'Microsoft.IntentRule',
     text: 'Handle an Intent',
   },
   {
-    $type: 'Microsoft.UnknownIntentRule',
     key: 'Microsoft.UnknownIntentRule',
     text: 'Handle Unknown Intent',
   },
   {
-    $type: 'Microsoft.ConversationUpdateActivityRule',
     key: 'Microsoft.ConversationUpdateActivityRule',
     text: 'Handle Conversation Update',
   },

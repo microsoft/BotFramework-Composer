@@ -27,7 +27,7 @@ const initialDialogShape = {
   },
 };
 
-const seedNewDialog = $type => {
+const seedNewDialog = ($type: string) => {
   return initialDialogShape[$type] ? initialDialogShape[$type] : {};
 };
 

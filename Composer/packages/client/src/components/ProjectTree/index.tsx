@@ -51,7 +51,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     }, []);
   }, [dialogs]);
 
-  const OnTriggerCreationDisMiss = async () => {
+  const OnTriggerCreationDisMiss = () => {
     setopenNewTriggerModel(false);
   };
 
