@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 
-import { SystemKeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
+import { findCommand } from '../../constants/KeyboardCommandTypes';
 
 interface NodeProps {
   when: string;
@@ -20,13 +20,13 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
 
   const handleKeyUp = e => {
     if (when !== 'nomal') {
-      let command = isMac() ? 'Mac' : 'Windows';
+      let keyCode = isMac() ? 'Mac' : 'Windows';
       for (const key in keyPressed) {
         if (keyPressed[key]) {
-          command += `.${key}`;
+          keyCode += `.${key}`;
         }
       }
-      onCommand(SystemKeyboardCommandTypes[command]);
+      onCommand(findCommand(keyCode));
     }
     keyPressed[e.key] = false;
   };

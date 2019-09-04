@@ -7,7 +7,7 @@ export enum KeyboardCommandTypes {
 }
 
 // Map system name and keyboard key
-export enum SystemKeyboardCommandTypes {
+enum SystemKeyboardCommandTypes {
   // Windows keyboard shotcuts
   'Windows.ArrowUp' = KeyboardCommandTypes.MoveUp,
   'Windows.ArrowDown' = KeyboardCommandTypes.MoveDown,
@@ -21,4 +21,8 @@ export enum SystemKeyboardCommandTypes {
   'Mac.ArrowLeft' = KeyboardCommandTypes.MoveLeft,
   'Mac.ArrowRight' = KeyboardCommandTypes.MoveRight,
   'Mac.Delete' = KeyboardCommandTypes.DeleteNode,
+}
+
+export function findCommand(keyCode) {
+  return SystemKeyboardCommandTypes[keyCode];
 }
