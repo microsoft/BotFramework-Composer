@@ -86,34 +86,45 @@ export function clearUserTokenFromCache(): void {
   storage.remove(USER_TOKEN_STORAGE_KEY);
 }
 
-const MAX_WAIT = 1000 * 60; // 1 minute
+const MAX_WAIT = 1000 * 60 * 2; // 2 minutes
 
 export async function refreshTokenPopup(): Promise<string | null> {
+  const windowLoc = window.location;
+
   return new Promise(resolve => {
-    const loginUrl = BASEURL + `/login?${querystring.stringify({ reource: '/' })}`;
+    const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
     /**
-     * adding winLeft and winTop to account for dual monitor
-     * using screenLeft and screenTop for IE8 and earlier
-     */
-    const winLeft = window.screenLeft ? window.screenLeft : window.screenX;
-    const winTop = window.screenTop ? window.screenTop : window.screenY;
-    /**
      * window.innerWidth displays browser window"s height and width excluding toolbars
-     * using document.documentElement.clientWidth for IE8 and earlier
      */
-    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    const left = width / 2 - 483 / 2 + winLeft;
-    const top = height / 2 - 600 / 2 + winTop;
+    const width = window.innerWidth || document.body.clientWidth;
+    const height = window.innerHeight || document.body.clientHeight;
+    const left = width / 2 - 483 / 2 + window.screenX;
+    const top = height / 2 - 600 / 2 + window.screenY;
 
     const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
 
+    // if popups are blocked, use a redirect flow
+    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+      windowLoc.replace(loginUrl);
+
+      resolve(null);
+      return;
+    }
+
+    popup.focus();
+
+    /**
+     * Start an interval to check the url fragment to see if it includes an access token.
+     * If a token is found, resolve with it.
+     * If the popup is out of scope, clear the interval and resolve with null.
+     * if the max timeout is reached, clear the interval and resolve with null.
+     */
     const startTime = Date.now();
     const popupTimer = setInterval(() => {
       try {
         if (popup) {
-          if (popup.location.href.includes(window.location.hostname)) {
+          if (popup.location.href.includes(windowLoc.hostname)) {
             const { access_token } = querystring.parse(popup.location.hash);
 
             if (access_token) {
