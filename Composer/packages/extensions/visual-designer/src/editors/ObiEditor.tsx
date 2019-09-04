@@ -5,13 +5,14 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
-import { deleteNode, insert, moveFocusNode, insertByClipboard } from '../utils/jsonTracker';
+import { deleteNode, insert } from '../utils/jsonTracker';
+import { moveFocusNode } from '../utils/cursorTraker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-import { KeyboardZone } from './KeyboardZone';
+import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
@@ -129,48 +130,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let path = focusedId;
     const idSelectors = focusedId.split('.');
     switch (command) {
-      case KeyboardCommandTypes.Up:
-      case KeyboardCommandTypes.Down:
-      case KeyboardCommandTypes.Left:
-      case KeyboardCommandTypes.Right:
+      case KeyboardCommandTypes.MoveUp:
+      case KeyboardCommandTypes.MoveDown:
+      case KeyboardCommandTypes.MoveLeft:
+      case KeyboardCommandTypes.MoveRight:
         path = moveFocusNode(data, focusedId, command);
         onFocusSteps([path]);
         break;
-      case KeyboardCommandTypes.Copy:
-        if (keyboardStatus === 'selected') {
-          const selectedIds = selectionContext.selectedIds;
-          let shortestLength = selectedIds[0].split('.').length;
-          selectedIds.forEach(id => {
-            if (id.split('.').length < shortestLength) {
-              shortestLength = id.split('.').length;
-            }
-          });
-          const ids = new Set<string>(
-            selectedIds.map(
-              item =>
-                (item = item
-                  .split('.')
-                  .slice(0, shortestLength)
-                  .join('.'))
-            )
-          );
-          navigator.clipboard.writeText(Array.from(ids).join(','));
-        } else if (keyboardStatus === 'focused' && !idSelectors[idSelectors.length - 1].includes('rules')) {
-          navigator.clipboard.writeText(focusedId);
-        }
-        break;
-      case KeyboardCommandTypes.Paste:
-        navigator.clipboard.readText().then(text => {
-          if (text) {
-            const clipboardData = text.split(',');
-            const { dialog, focusedPath } = insertByClipboard(data, focusedId, clipboardData);
-            onChange(dialog);
-            onFocusSteps([focusedPath as string]);
-            navigator.clipboard.writeText('');
-          }
-        });
-        break;
-      case KeyboardCommandTypes.Delete:
+      case KeyboardCommandTypes.DeleteNode:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
         break;
     }

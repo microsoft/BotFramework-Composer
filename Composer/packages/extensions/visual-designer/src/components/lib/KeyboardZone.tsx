@@ -2,7 +2,8 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 
-import { SystemKeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { SystemKeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
+
 interface NodeProps {
   when: string;
   onCommand: (action) => object | void;
