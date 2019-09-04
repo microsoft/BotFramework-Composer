@@ -1,4 +1,3 @@
-import { URL } from 'url';
 import querystring from 'querystring';
 
 import jwt, { GetPublicKeyOrSecret, TokenExpiredError } from 'jsonwebtoken';
@@ -9,6 +8,7 @@ import { BASEURL } from '../constants';
 
 import { AuthProviderInit } from './types';
 const BEARER_PREFIX = 'Bearer ';
+const LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
 class AuthProviderConfigurationError extends Error {
   constructor(name: string) {
@@ -28,14 +28,21 @@ function validateConfig(name: string, configValue?: string): string {
 
 const absh: AuthProviderInit = {
   initialize: () => {
-    const { COMPOSER_AUTH_PROVIDER, COMPOSER_BOT_ID, COMPOSER_AUTH_LOGIN_URL, COMPOSER_AUTH_JWKS_URL } = process.env;
+    const {
+      COMPOSER_AUTH_PROVIDER,
+      COMPOSER_BOT_ID,
+      COMPOSER_AUTH_CLIENT_ID,
+      COMPOSER_AUTH_REDIRECT_URI,
+      COMPOSER_AUTH_JWKS_URL,
+    } = process.env;
 
     // validate required config settings
     const botId = validateConfig('COMPOSER_BOT_ID', COMPOSER_BOT_ID);
-    const loginUrl = validateConfig('COMPOSER_AUTH_LOGIN_URL', COMPOSER_AUTH_LOGIN_URL);
+    const clientId = validateConfig('COMPOSER_AUTH_CLIENT_ID', COMPOSER_AUTH_CLIENT_ID);
+    const redirectUri = validateConfig('COMPOSER_AUTH_REDIRECT_URI', COMPOSER_AUTH_REDIRECT_URI);
     const jwksUri = validateConfig('COMPOSER_AUTH_JWKS_URL', COMPOSER_AUTH_JWKS_URL);
 
-    const client = JWKSClient({ jwksUri });
+    const jwksClient = JWKSClient({ jwksUri });
 
     const getKey: GetPublicKeyOrSecret = (header, callback) => {
       const { kid } = header;
@@ -45,7 +52,7 @@ const absh: AuthProviderInit = {
         return;
       }
 
-      client.getSigningKey(kid, (err, key) => {
+      jwksClient.getSigningKey(kid, (err, key) => {
         if (err) {
           callback(err);
           return;
@@ -96,22 +103,21 @@ const absh: AuthProviderInit = {
     };
 
     const login: RequestHandler = (req, res) => {
-      const redirectUrl = new URL(loginUrl);
-
-      if (!redirectUrl) {
-        res.redirect(`${BASEURL}/`);
-        return;
-      }
-
-      redirectUrl.searchParams.set(
-        'state',
-        querystring.stringify({
+      /* eslint-disable @typescript-eslint/camelcase */
+      const query = querystring.stringify({
+        response_type: 'token',
+        response_mode: 'form_post',
+        client_id: clientId,
+        resource: 'https://management.core.windows.net/',
+        redirect_uri: redirectUri,
+        state: querystring.stringify({
           botId,
           resource: req.query.resource || `${BASEURL}/home`,
-        })
-      );
+        }),
+      });
+      /* eslint-enable @typescript-eslint/camelcase */
 
-      res.redirect(redirectUrl.toString());
+      res.redirect(`${LOGIN_URL}?${query}`);
     };
 
     return {
