@@ -7,3 +7,4 @@ export * from './lu';
 export * from './navigation';
 export * from './project';
 export * from './storage';
+export * from './user';

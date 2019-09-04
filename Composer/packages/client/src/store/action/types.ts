@@ -1,22 +1,56 @@
 import { ActionTypes } from '../../constants';
 
-interface GenericActionType {
-  type: Exclude<ActionTypes, ActionTypes.CREATE_DIALOG_SUCCESS | ActionTypes.SET_ERROR>;
+// Actions that have concrete types that should not be included in the generic type
+type ConcreteActions =
+  | ActionTypes.CREATE_DIALOG_SUCCESS
+  | ActionTypes.SET_ERROR
+  | ActionTypes.USER_LOGIN_SUCCESS
+  | ActionTypes.USER_LOGIN_FAILURE
+  | ActionTypes.USER_SESSION_EXPIRED;
+
+export interface GenericActionType {
+  type: Exclude<ActionTypes, ConcreteActions>;
   payload?: any;
   error?: any;
 }
 
-type SetErrorActionType = {
+interface SetErrorActionType {
   type: ActionTypes.SET_ERROR;
   payload: {
     summary: string;
     message?: string;
   };
-};
+}
 
-type AnotherAction = {
+interface CreateDialogSuccessAction {
   type: ActionTypes.CREATE_DIALOG_SUCCESS;
   payload: { response: any };
-};
+}
 
-export type ActionType = SetErrorActionType | AnotherAction | GenericActionType;
+// User Actions
+export interface UserTokenPayload {
+  token?: string | null;
+}
+
+interface UserLoginSuccessAction {
+  type: ActionTypes.USER_LOGIN_SUCCESS;
+  payload: {
+    token: string | null;
+  };
+}
+
+interface UserLoginFailureAction {
+  type: ActionTypes.USER_LOGIN_FAILURE;
+}
+
+interface UserSessionExpiredAction {
+  type: ActionTypes.USER_SESSION_EXPIRED;
+}
+
+export type ActionType =
+  | SetErrorActionType
+  | CreateDialogSuccessAction
+  | UserLoginSuccessAction
+  | UserLoginFailureAction
+  | UserSessionExpiredAction
+  | GenericActionType;

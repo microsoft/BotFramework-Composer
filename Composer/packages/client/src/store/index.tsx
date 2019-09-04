@@ -2,7 +2,7 @@ import React, { useReducer, useLayoutEffect } from 'react';
 import { once } from 'lodash';
 
 import oauthStorage from '../utils/oauthStorage';
-import { prepareAxios } from '../utils/auth';
+import { prepareAxios, getUserTokenFromCache } from '../utils/auth';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -38,6 +38,7 @@ const initialState: State = {
   oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
   toStartBot: false,
+  userToken: null,
 };
 
 interface StoreContextValue {

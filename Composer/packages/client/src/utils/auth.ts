@@ -13,7 +13,7 @@ export function prepareAxios(store: Store) {
   axios.interceptors.request.use(config => {
     config.cancelToken = cancelSource.token;
 
-    const token = getUserToken();
+    const token = getUserTokenFromCache();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,7 +26,15 @@ export function prepareAxios(store: Store) {
     },
     err => {
       if (err.response && err.response.status === 401) {
-        cancelSource.cancel('Unauthorized access.');
+        // cancel all other requests
+        cancelSource.cancel('Unauthorized');
+
+        // remove user token from the cache
+        clearUserTokenFromCache();
+
+        store.dispatch({
+          type: ActionTypes.USER_SESSION_EXPIRED,
+        });
 
         let payload = {
           summary: formatMessage('Unauthorized'),
@@ -51,7 +59,7 @@ export function prepareAxios(store: Store) {
   );
 }
 
-export function getUserToken(): string | null {
+export function getUserTokenFromCache(): string | null {
   // first see if there is a token in the hash
   const { access_token } = querystring.parse(location.hash);
 
@@ -74,13 +82,63 @@ export function getUserToken(): string | null {
   return null;
 }
 
-export async function loginUser() {
-  if (getUserToken() || !process.env.COMPOSER_REQUIRE_AUTH) {
-    return;
-  }
+export function clearUserTokenFromCache(): void {
+  storage.remove(USER_TOKEN_STORAGE_KEY);
+}
 
-  const loginUrl =
-    BASEURL + `/login?${querystring.stringify({ resource: window.location.pathname + window.location.search })}`;
+const MAX_WAIT = 1000 * 60; // 1 minute
 
-  window.location.replace(loginUrl);
+export async function refreshTokenPopup(): Promise<string | null> {
+  return new Promise(resolve => {
+    const loginUrl = BASEURL + `/login?${querystring.stringify({ reource: '/' })}`;
+
+    /**
+     * adding winLeft and winTop to account for dual monitor
+     * using screenLeft and screenTop for IE8 and earlier
+     */
+    const winLeft = window.screenLeft ? window.screenLeft : window.screenX;
+    const winTop = window.screenTop ? window.screenTop : window.screenY;
+    /**
+     * window.innerWidth displays browser window"s height and width excluding toolbars
+     * using document.documentElement.clientWidth for IE8 and earlier
+     */
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    const left = width / 2 - 483 / 2 + winLeft;
+    const top = height / 2 - 600 / 2 + winTop;
+
+    const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
+
+    const startTime = Date.now();
+    const popupTimer = setInterval(() => {
+      try {
+        if (popup) {
+          if (popup.location.href.includes(window.location.hostname)) {
+            const { access_token } = querystring.parse(popup.location.hash);
+
+            if (access_token) {
+              popup.close();
+              clearInterval(popupTimer);
+              storage.set(USER_TOKEN_STORAGE_KEY, access_token);
+              const token = Array.isArray(access_token) ? access_token[0] : access_token;
+              resolve(token);
+            }
+          }
+        } else {
+          // clear the interval if there is no popup to inspect.
+          clearInterval(popupTimer);
+          resolve(null);
+        }
+      } catch (e) {
+        // Ignore the cross-domain errors thrown by trying to access a window not on our domain
+      }
+
+      // wait for MAX_WAIT and then clean up -- maybe user stalled?
+      if (Date.now() - startTime >= MAX_WAIT) {
+        if (popup) popup.close();
+        clearInterval(popupTimer);
+        resolve(null);
+      }
+    }, 1);
+  });
 }

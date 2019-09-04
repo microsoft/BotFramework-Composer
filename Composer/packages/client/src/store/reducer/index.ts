@@ -1,6 +1,7 @@
 import { ReducerFunc } from '../types';
 import { getExtension } from '../../utils';
 import { ActionTypes, FileTypes } from '../../constants';
+import { UserTokenPayload } from '../action/types';
 
 import createReducer from './createReducer';
 
@@ -145,6 +146,16 @@ const setTemplateProjects: ReducerFunc = (state, { data }) => {
   return state;
 };
 
+const setUserToken: ReducerFunc<UserTokenPayload> = (state, { token } = {}) => {
+  if (token) {
+    state.userToken = token;
+  } else {
+    state.userToken = null;
+  }
+
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -174,4 +185,7 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
+  [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
+  [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
+  [ActionTypes.USER_SESSION_EXPIRED]: setUserToken, // will be invoked with token = undefined
 } as { [type in ActionTypes]: ReducerFunc });

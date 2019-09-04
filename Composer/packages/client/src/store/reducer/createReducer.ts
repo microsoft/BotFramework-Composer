@@ -1,7 +1,7 @@
 import producer from 'immer';
 
 import { State, ReducerFunc } from '../types';
-import { ActionType } from '../action/types';
+import { ActionType, GenericActionType } from '../action/types';
 
 import { ActionTypes } from './../../constants';
 
@@ -19,7 +19,7 @@ const createReducer: CreateReducerFunc = handlers => {
   });
 
   return (state, action) => {
-    const { type, payload } = action;
+    const { type, payload } = action as GenericActionType;
 
     // ensure action dispatched is defined in constants/index.js#ActionTypes
     if (ActionTypes.hasOwnProperty(type) === false) {
