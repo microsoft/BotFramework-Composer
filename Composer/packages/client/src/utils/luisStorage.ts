@@ -1,4 +1,4 @@
-import { set, cloneDeep } from 'lodash';
+import { set } from 'lodash';
 
 import storage, { ClientStorage } from './storage';
 import { LuisConfig } from './../constants';
