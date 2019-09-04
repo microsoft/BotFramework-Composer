@@ -66,7 +66,15 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, designPageLocation, breadcrumb } = state;
-  const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
+  const {
+    removeDialog,
+    setDesignPageLocation,
+    navTo,
+    selectTo,
+    setectAndfocus,
+    updateDialog,
+    clearUndoHistory,
+  } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
 
@@ -82,6 +90,13 @@ function DesignPage(props) {
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
       });
       globalHistory._onTransitionComplete();
+      if (designPageLocation.dialogId !== dialogId) {
+        //change dialog clear the history
+        clearUndoHistory();
+      }
+    } else {
+      //leave design page should clear the history
+      clearUndoHistory();
     }
   }, [location]);
 

@@ -1,3 +1,5 @@
+import { keys } from 'lodash';
+
 import { ActionCreator } from '../../types';
 
 import UndoStack from './stack';
@@ -35,6 +37,9 @@ class UndoHistory {
   public clear() {
     this.history = [];
     this.pointer = -1;
+    keys(this.stacks).every(key => {
+      this.stacks[key].clear();
+    });
   }
 
   canUndo = () => this.pointer > 0;
