@@ -14,9 +14,7 @@
         "id": "865027",
         "updatedAt": "2019-07-22T07:50:53.182Z"
       },
-      "events": [
-        "beginDialog"
-      ],
+      "events": ["beginDialog"],
       "steps": [
         {
           "$type": "Microsoft.ChoiceInput",
@@ -65,31 +63,6 @@
             "id": "004212"
           },
           "activity": "[bfdactivity-004212]"
-        },
-        {
-          "$type": "Microsoft.IfCondition",
-          "$designer": {
-            "name": "Branch: If/Else",
-            "id": "321896"
-          },
-          "steps": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "name": "Send an Activity",
-                "id": "374772"
-              }
-            }
-          ],
-          "elseSteps": [
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "name": "Send an Activity",
-                "id": "956060"
-              }
-            }
-          ]
         }
       ]
     }
