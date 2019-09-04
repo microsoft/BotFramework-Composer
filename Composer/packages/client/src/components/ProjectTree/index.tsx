@@ -18,7 +18,6 @@ interface ProjectTreeProps {
   selected: string;
   onAdd: () => void;
   onSelect: (id: string, selected?: string) => void;
-  onAddTrigger: (id: string, type: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
 }
@@ -29,17 +28,7 @@ const addIconProps: IIconProps = {
 };
 
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
-  const {
-    dialogs,
-    onAdd,
-    dialogId,
-    selected,
-    onSelect,
-    onDeleteDialog,
-    onDeleteTrigger,
-    schemas,
-    onAddTrigger,
-  } = props;
+  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, schemas } = props;
   const { actions } = useContext(StoreContext);
   const [openNewTriggerModel, setopenNewTriggerModel] = useState(false);
   const showName = (trigger: ITrigger) => {
@@ -134,7 +123,6 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
           isOpen={openNewTriggerModel}
           onDismiss={OnTriggerCreationDisMiss}
           onSubmit={OnTriggerCreationSubmit}
-          onAddTrigger={onAddTrigger}
         />
       )}
       <ActionButton tabIndex={1} iconProps={addIconProps} css={addButton(0)} onClick={onAdd}>

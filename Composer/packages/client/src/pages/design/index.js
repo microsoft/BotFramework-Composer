@@ -7,7 +7,7 @@ import { toLower } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, addNewTrigger, deleteTrigger } from '../../utils';
+import { getbreadcrumbLabel, deleteTrigger } from '../../utils';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -179,12 +179,6 @@ function DesignPage(props) {
     }
   }
 
-  async function handleAddTrigger(id, type, index) {
-    const content = addNewTrigger(dialogs, id, type);
-    await updateDialog({ id, content });
-    selectTo(`rules[${index}]`);
-  }
-
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
@@ -217,7 +211,6 @@ function DesignPage(props) {
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-          onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
         />

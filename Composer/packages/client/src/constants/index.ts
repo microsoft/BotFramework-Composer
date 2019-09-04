@@ -81,11 +81,29 @@ export enum ActionTypes {
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
 }
 
+export const EventTypes = ['beginDialog', 'resumeDialog', 'cancelDialog', 'endDialog'];
+
 export const NewTriggerType = [
-  'Microsoft.EventRule',
-  'Microsoft.IntentRule',
-  'Microsoft.UnknownIntentRule',
-  'Microsoft.ConversationUpdateActivityRule',
+  {
+    $type: 'Microsoft.EventRule',
+    key: 'Microsoft.EventRule',
+    text: 'Handle an Event',
+  },
+  {
+    $type: 'Microsoft.IntentRule',
+    key: 'Microsoft.IntentRule',
+    text: 'Handle an Intent',
+  },
+  {
+    $type: 'Microsoft.UnknownIntentRule',
+    key: 'Microsoft.UnknownIntentRule',
+    text: 'Handle Unknown Intent',
+  },
+  {
+    $type: 'Microsoft.ConversationUpdateActivityRule',
+    key: 'Microsoft.ConversationUpdateActivityRule',
+    text: 'Handle Conversation Update',
+  },
 ];
 
 export const Tips = {

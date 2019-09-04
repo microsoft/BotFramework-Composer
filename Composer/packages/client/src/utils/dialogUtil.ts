@@ -20,21 +20,36 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
-  const dialogCopy = getDialog(dialogs, dialogId);
-  if (!dialogCopy) return;
-  const content = dialogCopy.content;
-  const newTrigger = {
-    $type,
+const initialDialogShape = {
+  'Microsoft.ConversationUpdateActivityRule': {
+    $type: 'Microsoft.ConversationUpdateActivityRule',
+    constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+  },
+};
+
+const seedNewDialog = $type => {
+  return initialDialogShape[$type] ? initialDialogShape[$type] : {};
+};
+
+export function generateDialogWithNewTrigger(inputDialog, data) {
+  const dialog = cloneDeep(inputDialog);
+  const rules = get(dialog, 'content.rules', []);
+  const newStep = {
+    $type: data.$type,
     $designer: {
+      name: data.name,
       id: nanoid('1234567890', 6),
+      description: data.description,
     },
+    //intent: data.intent,
+    ...seedNewDialog(data.$type),
   };
-  if (!content.rules) {
-    content.rules = [];
+  if (data.event) {
+    newStep.events = [data.event];
   }
-  content.rules.push(newTrigger);
-  return content;
+  rules.push(newStep);
+  set(dialog, 'content.rules', rules);
+  return dialog;
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {

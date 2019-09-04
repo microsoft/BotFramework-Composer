@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import nanoid from 'nanoid/generate';
-import { get, set, cloneDeep } from 'lodash';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
+import { generateDialogWithNewTrigger } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
+import { NewTriggerType, EventTypes } from '../../constants';
 
 import { styles, dropdownStyles, name, dialogWindow, description } from './styles';
 
@@ -15,9 +15,7 @@ const validateForm = data => {
   const errors = {};
   const { name, $type, event } = data;
   if (!name || !nameRegex.test(name)) {
-    errors.name = formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
+    errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if (!$type) {
@@ -70,87 +68,22 @@ export const TriggerCreationModel = props => {
     });
   };
 
-  const initialDialogShape = {
-    'Microsoft.ConversationUpdateActivityRule': {
-      $type: 'Microsoft.ConversationUpdateActivityRule',
-      constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-    },
-  };
-
-  const seedNewDialog = $type => {
-    return initialDialogShape[$type] ? initialDialogShape[$type] : {};
-  };
-
-  function generateDialogWithNewTrigger(inputDialog, data) {
-    const dialog = cloneDeep(inputDialog);
-    const rules = get(dialog, 'content.rules', []);
-    const newStep = {
-      $type: data.$type,
-      $designer: {
-        name: data.name,
-        id: nanoid('1234567890', 6),
-        description: data.description,
-      },
-      //intent: data.intent,
-      ...seedNewDialog(data.$type),
-    };
-    if (data.event) {
-      newStep.events = [data.event];
-    }
-
-    rules.push(newStep);
-
-    set(dialog, 'content.rules', rules);
-    return dialog;
-  }
-
   const triggerTypeOptions = [
     {
-      $type: null,
+      $type: '',
       key: '',
       text: '',
-      disable: true,
+      disabled: true,
     },
-    {
-      $type: 'Microsoft.EventRule',
-      key: 'Microsoft.EventRule',
-      text: 'Handle an Event',
-    },
-    {
-      $type: 'Microsoft.IntentRule',
-      key: 'Microsoft.IntentRule',
-      text: 'Handle an Intent',
-    },
-    {
-      $type: 'Microsoft.UnknownIntentRule',
-      key: 'Microsoft.UnknownIntentRule',
-      text: 'Handle Unknown Intent',
-    },
-    {
-      $type: 'Microsoft.ConversationUpdateActivityRule',
-      key: 'Microsoft.ConversationUpdateActivityRule',
-      text: 'Handle ConversationUpdate',
-    },
+    ...NewTriggerType,
   ];
 
-  const eventTypes = [
-    {
-      text: 'beginDialog',
-      event: 'beginDialog',
-    },
-    {
-      text: 'resumeDialog',
-      event: 'resumeDialog',
-    },
-    {
-      text: 'cancelDialog',
-      event: 'cancelDialog',
-    },
-    {
-      text: 'endDialog',
-      event: 'endDialog',
-    },
-  ];
+  const eventTypes = EventTypes.map(t => {
+    return {
+      text: t,
+      event: t,
+    };
+  });
 
   const showEventDropDown = triggerType === 'Microsoft.EventRule';
 
@@ -177,6 +110,7 @@ export const TriggerCreationModel = props => {
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$type}
+            data-testid={'triggerTypeDropDown'}
           />
           {showEventDropDown && (
             <Dropdown
@@ -186,6 +120,7 @@ export const TriggerCreationModel = props => {
               styles={dropdownStyles}
               onChange={onSelectEvent}
               errorMessage={formData.errors.event}
+              data-testid={'eventTypeDropDown'}
             />
           )}
           <TextField
@@ -193,6 +128,7 @@ export const TriggerCreationModel = props => {
             styles={name}
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
+            data-testid={'triggerName'}
           />
           <TextField
             styles={description}
@@ -200,12 +136,13 @@ export const TriggerCreationModel = props => {
             multiline
             resizable={false}
             onChange={updateForm('description')}
+            data-testid={'triggerDescription'}
           />
         </Stack>
       </div>
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} />
+        <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} data-testid={'triggerFormSubmit'} />
       </DialogFooter>
     </Dialog>
   );
