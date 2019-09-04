@@ -100,7 +100,9 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                 isActive={dialogId === link.id}
                 activeNode={dialogId}
                 onSelect={() => {
-                  onSelect(link.id);
+                  if (dialogId !== link.id) {
+                    onSelect(link.id);
+                  }
                 }}
                 onDelete={onDeleteDialog}
               />
