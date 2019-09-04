@@ -6,6 +6,11 @@ import { BreadcrumbItem } from '../store/types';
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
 
+export const BreadcrumbUpdateType = {
+  Selected: 'selected',
+  Focused: 'focused',
+};
+
 export function getFocusPath(selected: string, focused: string): string {
   if (selected && focused) return focused;
 
