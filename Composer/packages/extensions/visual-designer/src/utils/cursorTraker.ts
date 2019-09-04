@@ -1,6 +1,7 @@
-import { locateNode } from './jsonTracker';
 import { ObiTypes } from '../constants/ObiTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+
+import { locateNode } from './jsonTracker';
 
 function getDownPath(inputDialog: { [key: string]: any }, path: string) {
   const target = locateNode(inputDialog, path);

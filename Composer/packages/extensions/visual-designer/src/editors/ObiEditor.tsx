@@ -10,9 +10,9 @@ import { moveFocusNode } from '../utils/cursorTraker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
+import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
