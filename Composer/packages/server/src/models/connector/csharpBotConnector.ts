@@ -50,7 +50,6 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('Please publish your Luis models');
     }
 
-    // form.append('config', JSON.stringify(luisConfig));
     if (luisConfig) {
       form.append(
         'endpointKey',

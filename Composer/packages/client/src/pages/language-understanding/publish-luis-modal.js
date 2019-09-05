@@ -41,14 +41,14 @@ const onRenderLabel = info => props => (
 );
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
+const validationProperties = ['name', 'authoringKey', 'environment'];
 const validateForm = data => {
   const errors = {};
   const dataKeys = keys(data);
 
   dataKeys.forEach(key => {
     const value = data[key];
-    if (key === 'authoringKey' && (!value || !nameRegex.test(value))) {
+    if (validationProperties.indexOf(key) > -1 && (!value || !nameRegex.test(value))) {
       errors[key] = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
