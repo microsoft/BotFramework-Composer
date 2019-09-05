@@ -109,7 +109,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else if (focusedId) {
       setKeyBoardStatus('focused');
     } else {
-      setKeyBoardStatus('nomal');
+      setKeyBoardStatus('normal');
     }
   }, [focusedId, selectionContext]);
 

@@ -19,7 +19,7 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
   };
 
   const handleKeyUp = e => {
-    if (when !== 'nomal') {
+    if (when !== 'normal') {
       let keyCode = isMac() ? 'Mac' : 'Windows';
       for (const key in keyPressed) {
         if (keyPressed[key]) {
