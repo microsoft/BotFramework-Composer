@@ -3,7 +3,6 @@
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-// import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -21,16 +20,12 @@ import { Fragment } from 'react';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
 
-// import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
 import { detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 import { loading } from './styles';
 
 export function FileSelector(props) {
   const {
-    // saveAction,
     onSelectionChanged,
-    // currentPath,
-    // updateCurrentPath,
     focusedStorageFolder,
     checkShowItem,
     storageExplorerStatus,
@@ -111,19 +106,6 @@ export function FileSelector(props) {
       },
       isPadded: true,
     },
-    // {
-    //   key: 'column4',
-    //   name: formatMessage('File Size'),
-    //   fieldName: 'fileSizeRaw',
-    //   minWidth: 70,
-    //   maxWidth: 90,
-    //   isResizable: true,
-    //   isCollapsible: true,
-    //   data: 'number',
-    //   onRender: item => {
-    //     return <span>{item.fileSize}</span>;
-    //   },
-    // },
   ];
 
   const storageFiles = useMemo(() => {
@@ -174,24 +156,6 @@ export function FileSelector(props) {
     },
   });
 
-  // split will filter posix root, if path to call server api is not absolute, must add / back
-  // const separator = '/';
-  // const pathItems = currentPath
-  //   .replace(/\\/g, '/')
-  //   .split(separator)
-  //   .filter(p => p !== '');
-  // const breadcrumbItems = pathItems.map((item, index) => {
-  //   let itemPath = getNavItemPath(pathItems, separator, 0, index);
-  //   itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
-  //   return {
-  //     text: item,
-  //     key: itemPath,
-  //     onClick: () => {
-  //       updateCurrentPath(itemPath);
-  //     },
-  //   };
-  // });
-
   function getFileEditDate(file) {
     if (file && file.lastModified) {
       return new Date(file.lastModified).toLocaleDateString();
@@ -228,34 +192,10 @@ export function FileSelector(props) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  // function getNavItemPath(array, seperator, start, end) {
-  //   if (end === 0) return array[0] + seperator;
-  //   if (!start) start = 0;
-  //   if (!end) end = array.length - 1;
-  //   end++;
-  //   return array.slice(start, end).join(seperator);
-  // }
-
-  // function onBackIconClicked() {
-  //   const path = focusedStorageFolder.parent;
-  //   updateCurrentPath(path);
-  // }
-
   return (
     <div css={fileSelectorContainer}>
       {storageFileLoadingStatus === 'success' && (
         <Fragment>
-          {/* <div css={pathNav}>
-            <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
-            <div
-              style={{
-                flexGrow: 1,
-              }}
-            >
-              <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
-            </div>
-          </div>
-          {saveAction} */}
           <div data-is-scrollable="true" css={detailListContainer}>
             <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
               <DetailsList

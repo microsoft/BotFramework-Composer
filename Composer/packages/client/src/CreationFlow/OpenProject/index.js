@@ -25,7 +25,6 @@ export function OpenProject(props) {
       <LocationSelectContent onChange={onPathChange} onOpen={handleOpen} />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        {/* <PrimaryButton onClick={handleOpen} text={formatMessage('Open')} data-testid="SelectLocationOpen" /> */}
       </DialogFooter>
     </Fragment>
   );

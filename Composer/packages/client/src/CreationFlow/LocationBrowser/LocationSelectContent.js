@@ -6,9 +6,7 @@ import { jsx } from '@emotion/core';
 import { Fragment, useEffect, useState, useContext, useRef } from 'react';
 
 import { FileSelector } from './FileSelector';
-// import { SaveAction } from './SaveAction';
 import { StoreContext } from './../../store';
-// import { OpenStatus, FileTypes } from './../../constants';
 import { FileTypes } from './../../constants';
 
 export function LocationSelectContent(props) {
@@ -30,7 +28,6 @@ export function LocationSelectContent(props) {
     if (!storageId) {
       storageId = currentStorageId;
     }
-
     if (newPath) {
       const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
       await fetchFolderItemsByPath(storageId, formatedPath);

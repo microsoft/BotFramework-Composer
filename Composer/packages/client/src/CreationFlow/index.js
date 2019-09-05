@@ -5,7 +5,6 @@ import { CreationFlowStatus } from '../constants';
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
 import { Steps } from './../constants/index';
-// import { SelectLocation } from './SelectLocation';
 import { OpenProject } from './OpenProject';
 import { StoreContext } from './../store';
 import { DialogInfo } from './../constants/index';
@@ -29,7 +28,6 @@ export function CreationFlow(props) {
     setLuisConfig,
     fetchStorages,
   } = actions;
-  // const { botName, templateId } = state;
   const { templateId } = state;
 
   useEffect(() => {
@@ -136,7 +134,6 @@ export function CreationFlow(props) {
     [Steps.LOCATION]: {
       ...DialogInfo.SELECT_LOCATION,
       children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} />,
-      // children: <SelectLocation folders={bots} defaultKey={botName || ''} onOpen={openBot} onDismiss={handleDismiss} />,
     },
     [Steps.DEFINE]: {
       ...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE,
