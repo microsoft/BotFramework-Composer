@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { DialogGroup } from 'shared-menus';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
+import { NodeColors } from '../../../constants/ElementColors';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
-import { getElementColor } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
@@ -19,9 +20,8 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
     let header = getFriendlyName(data),
       label = '';
 
-    const keyMap: { [key: string]: string } = { label: 'prompt', details: 'property' };
-    const nodeColors = getElementColor(data.$type);
-    const choices = data.$type === ObiTypes.ChoiceInput && data.choices ? data.choices : null;
+    const keyMap: { [key: string]: string } = { label: 'property', details: 'property' };
+    const choices = data.choices;
     let children: any = null;
     const { height } = measureJsonBoundary(data);
     const styles = { height };
@@ -88,7 +88,7 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
     }
     return (
       <FormCard
-        nodeColors={nodeColors}
+        nodeColors={NodeColors[DialogGroup.INPUT]}
         header={header}
         icon={'User'}
         label={label}

@@ -17,7 +17,7 @@ import { IconBrick } from '../../decorations/IconBrick';
 
 import { UserAnswers } from './UserAnswers';
 
-const calculateNodes = (jsonpath, data) => {
+const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers } = transformBaseInput(data, jsonpath);
   return {
     botAsksNode: GraphNode.fromIndexedJson(botAsks),
@@ -48,7 +48,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
         />
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <UserAnswers id={id} data={data} onEvent={onEvent} onResize={onResize} />
+        <UserAnswers id={id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
       </OffsetContainer>
       <OffsetContainer offset={iconNode.offset}>
         <IconBrick onClick={() => {}} />
