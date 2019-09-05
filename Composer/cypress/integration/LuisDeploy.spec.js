@@ -43,7 +43,7 @@ context('Luis Deploy', () => {
       .type('0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
     cy.wait(1000);
-    cy.get('[data-testid="publish-LUIS-models-publish"]').click();
+    cy.getByText('Publish').click();
     cy.getByText('Restart Bot').should('exist');
     cy.getByText('Test in Emulator').should('exist');
 
