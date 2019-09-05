@@ -6,7 +6,7 @@ import { toLower, get } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel } from '../../utils';
+import { getbreadcrumbLabel, deleteTrigger } from '../../utils';
 import { TriggerCreationModel } from '../../components/ProjectTree/triggerCreationModel';
 
 import { Conversation } from './../../components/Conversation';
