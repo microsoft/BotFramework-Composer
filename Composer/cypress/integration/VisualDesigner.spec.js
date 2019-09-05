@@ -29,7 +29,7 @@ context('Visual Designer', () => {
       cy.contains('Microsoft.UnknownIntentRule').should('exist');
     });
 
-    cy.addEventHandler('Conversation Update Activity');
+    cy.addEventHandler('Handle ConversationUpdate');
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {

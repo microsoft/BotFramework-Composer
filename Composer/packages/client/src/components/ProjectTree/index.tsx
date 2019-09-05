@@ -40,6 +40,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
         false,
         (e, item): any => onAddTrigger(dialogId, item.$type, position)
       ),
+      id: 'AddNewTriggerMenu',
     };
   };
 
