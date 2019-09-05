@@ -1,5 +1,5 @@
 import { ReducerFunc } from '../types';
-import { getExtension } from '../../utils';
+import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes } from '../../constants';
 
 import createReducer from './createReducer';
@@ -131,7 +131,7 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
 
   //if use navigateto to design page, add rules[0] for default select
   if (!selected) {
-    selected = `rules[0]`;
+    selected = createSelectedPath(0);
     breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
   }
   state.breadcrumb = breadcrumb;
