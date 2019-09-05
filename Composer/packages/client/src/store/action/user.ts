@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode';
 
 import { ActionCreator } from '../types';
-import { getUserTokenFromCache, refreshTokenPopup } from '../../utils/auth';
+import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
 import { ActionTypes } from '../../constants';
 
 enum ClaimNames {
@@ -10,12 +10,14 @@ enum ClaimNames {
   expiration = 'exp',
 }
 
-export const loginUser: ActionCreator = async ({ dispatch }) => {
+const REFRESH_WATERMARK = 1000 * 60 * 5; // 5 minutes
+
+export const loginUser: ActionCreator = async store => {
   if (!process.env.COMPOSER_REQUIRE_AUTH) {
     return;
   }
 
-  const token = getUserTokenFromCache() || (await refreshTokenPopup());
+  const token = getUserTokenFromCache() || (await loginPopup());
 
   if (token) {
     let decoded = {};
@@ -26,7 +28,7 @@ export const loginUser: ActionCreator = async ({ dispatch }) => {
       console.error(err);
     }
 
-    dispatch({
+    store.dispatch({
       type: ActionTypes.USER_LOGIN_SUCCESS,
       payload: {
         token,
@@ -35,8 +37,27 @@ export const loginUser: ActionCreator = async ({ dispatch }) => {
         expiration: (decoded[ClaimNames.expiration] || 0) * 1000, // convert to ms
       },
     });
+
+    // try to refresh the token before the expiration
+    if (decoded[ClaimNames.expiration]) {
+      // set timeout to 5 min before expiration
+      const refreshTimeout = decoded[ClaimNames.expiration] * 1000 - Date.now() - REFRESH_WATERMARK;
+
+      const updateToken = async () => {
+        try {
+          await refreshToken();
+          loginUser(store);
+        } catch (e) {
+          console.error('Problem refreshing token');
+        }
+      };
+
+      setTimeout(() => {
+        updateToken();
+      }, refreshTimeout);
+    }
   } else {
-    dispatch({
+    store.dispatch({
       type: ActionTypes.USER_LOGIN_FAILURE,
     });
   }
