@@ -101,8 +101,13 @@ export function measureJsonBoundary(json): Boundary {
     case ObiTypes.Foreach:
       boundary = measureForeachBoundary(json);
       break;
-    case ObiTypes.TextInput:
+    case ObiTypes.AttachmentInput:
     case ObiTypes.ChoiceInput:
+    case ObiTypes.ConfirmInput:
+    case ObiTypes.DateTimeInput:
+    case ObiTypes.NumberInput:
+    case ObiTypes.OAuthInput:
+    case ObiTypes.TextInput:
       boundary = measureBaseInputBoundary(json);
       break;
     case ObiTypes.ChoiceInputDetail:

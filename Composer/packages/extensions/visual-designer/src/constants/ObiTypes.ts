@@ -27,16 +27,16 @@ export const ObiTypes = {
 
   IfCondition: 'Microsoft.IfCondition',
   SwitchCondition: 'Microsoft.SwitchCondition',
-  AttachmentInput: 'Microsoft.AttachmentInput',
   Foreach: 'Microsoft.Foreach',
   ForeachPage: 'Microsoft.ForeachPage',
 
-  TextInput: 'Microsoft.TextInput',
-  NumberInput: 'Microsoft.NumberInput',
-  IntegerInput: 'Microsoft.IntegerInput',
-  FloatInput: 'Microsoft.FloatInput',
-  ConfirmInput: 'Microsoft.ConfirmInput',
+  AttachmentInput: 'Microsoft.AttachmentInput',
   ChoiceInput: 'Microsoft.ChoiceInput',
+  ConfirmInput: 'Microsoft.ConfirmInput',
+  DateTimeInput: 'Microsoft.DateTimeInput',
+  NumberInput: 'Microsoft.NumberInput',
+  OAuthInput: 'Microsoft.OAuthInput',
+  TextInput: 'Microsoft.TextInput',
 
   EndDialog: 'Microsoft.EndDialog',
   CancelAllDialogs: 'Microsoft.CancelAllDialogs',
