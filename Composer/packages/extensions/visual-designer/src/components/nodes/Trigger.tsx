@@ -6,7 +6,7 @@ import { TriggerSize } from '../../constants/ElementSizes';
 import { FormCard } from './templates/FormCard';
 
 export const Trigger = ({ data, focused, onClick }): JSX.Element => (
-  <div css={{ ...TriggerSize, outline: focused ? '2px solid grey' : 'none' }}>
+  <div css={{ ...TriggerSize, outline: focused ? '1px solid #0078d4' : 'none' }}>
     <FormCard
       nodeColors={{
         themeColor: '#BFEAE9',
