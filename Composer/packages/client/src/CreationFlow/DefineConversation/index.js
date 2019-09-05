@@ -23,7 +23,7 @@ const validateForm = data => {
 };
 
 export function DefineConversation(props) {
-  const { onSubmit, onGetErrorMessage, onDismiss } = props;
+  const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
   const { state } = useContext(StoreContext);
   const { storages } = state;
   const currentStorageIndex = useRef(0);
@@ -144,21 +144,23 @@ export function DefineConversation(props) {
               resizable={false}
               onChange={updateForm('description')}
             />
-            <Stack horizontal>
-              <Stack.Item grow>
-                <TextField
-                  styles={locationBrowse}
-                  value={displayPath}
-                  suffix={'/' + (formData.name || formatMessage('[BotName]'))}
-                  readOnly={true}
-                  label={formatMessage('Destination folder')}
-                  resizable={false}
-                />
-              </Stack.Item>
-              <Stack.Item align="end" disableShrink>
-                <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Browse')} />
-              </Stack.Item>
-            </Stack>
+            {enableLocationBrowse && (
+              <Stack horizontal>
+                <Stack.Item grow>
+                  <TextField
+                    styles={locationBrowse}
+                    value={displayPath}
+                    suffix={'/' + (formData.name || formatMessage('[BotName]'))}
+                    readOnly={true}
+                    label={formatMessage('Destination folder')}
+                    resizable={false}
+                  />
+                </Stack.Item>
+                <Stack.Item align="end" disableShrink>
+                  <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Browse')} />
+                </Stack.Item>
+              </Stack>
+            )}
           </Stack>
           <DialogFooter>
             <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

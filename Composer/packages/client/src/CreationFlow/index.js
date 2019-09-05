@@ -141,7 +141,12 @@ export function CreationFlow(props) {
     [Steps.DEFINE]: {
       ...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
-        <DefineConversation onSubmit={handleSubmit} onGetErrorMessage={getErrorMessage} onDismiss={handleDismiss} />
+        <DefineConversation
+          onSubmit={handleSubmit}
+          onGetErrorMessage={getErrorMessage}
+          onDismiss={handleDismiss}
+          enableLocationBrowse={true}
+        />
       ),
     },
   };
