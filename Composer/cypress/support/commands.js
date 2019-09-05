@@ -68,8 +68,8 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 
 Cypress.Commands.add('addEventHandler', handler => {
   cy.getByTestId('AddNewTrigger').click();
-  const triggerTypeDropDown = cy.get(`[data-testid="triggerTypeDropDown"]`).click();
-  triggerTypeDropDown.within(() => cy.getByText(handler).click());
+  cy.get(`[data-testid="triggerTypeDropDown"]`).click();
+  cy.getByText(handler).click();
   const eventDropDown = cy.get(`[data-testid="eventTypeDropDown"]`);
   eventDropDown.click();
   eventDropDown.within(() => cy.getByText('beginDialog').click());
