@@ -15,12 +15,11 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys, set, debounce } from 'lodash';
+import { keys, set } from 'lodash';
 
-import DialogSettingStorage from '../../utils/dialogSettingStorage';
 import { StoreContext } from '../../store';
 
-import { Text, Tips, Links, SensitiveProperties } from './../../constants';
+import { Text, Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {
@@ -100,18 +99,12 @@ export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
   const { setEnvSettings } = actions;
   const { settings } = state;
-  const { onPublish, onDismiss, workState, botName } = props;
+  const { onPublish, onDismiss, workState } = props;
   const [formData, setFormData] = useState({ ...settings.luis, errors: {} });
 
-  const updateForm = field =>
-    debounce((e, newValue) => {
-      if (botName && SensitiveProperties.indexOf(`luis.${field}`) >= 0) {
-        DialogSettingStorage.setField(botName, `luis.${field}`, newValue);
-      }
-      set(settings, `luis.${field}`, newValue);
-      setEnvSettings();
-      setFormData({ ...settings.luis, errors: {}, [field]: newValue });
-    }, 500);
+  const updateForm = field => (e, newValue) => {
+    setFormData({ ...formData, errors: {}, [field]: newValue });
+  };
 
   const handlePublish = async e => {
     e.preventDefault();
@@ -121,6 +114,11 @@ export const PublishLuis = props => {
       setFormData({ ...formData, errors });
       return;
     }
+    // save the settings change to store and persist to server
+    const newValue = { ...formData };
+    delete newValue.errors;
+    set(settings, 'luis', newValue);
+    setEnvSettings();
 
     await onPublish({ ...formData });
   };
