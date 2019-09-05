@@ -10,6 +10,7 @@ import {
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
+import { transformBaseInput } from '../transformers/transformBaseInput';
 
 import {
   calculateIfElseBoundary,
@@ -17,6 +18,7 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
   calculateTextInputBoundary,
+  calculateBaseInputBoundary,
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {
@@ -54,7 +56,7 @@ function measureSwitchConditionBoundary(json): Boundary {
   );
 }
 
-function measureChoiceInputBoundary(data): Boundary {
+function measureChoiceInputDetailBoundary(data): Boundary {
   const width = InitNodeSize.width;
   const height =
     InitNodeSize.height +
@@ -66,6 +68,11 @@ function measureChoiceInputBoundary(data): Boundary {
 
 function measureTextInputBoundary(textInput): Boundary {
   return calculateTextInputBoundary(new Boundary(InitNodeSize.width, InitNodeSize.height));
+}
+
+function measureBaseInputBoundary(data): Boundary {
+  const { botAsks, userAnswers } = transformBaseInput(data, '');
+  return calculateBaseInputBoundary(measureJsonBoundary(botAsks.json), measureJsonBoundary(userAnswers.json));
 }
 
 export function measureJsonBoundary(json): Boundary {
@@ -94,11 +101,12 @@ export function measureJsonBoundary(json): Boundary {
     case ObiTypes.Foreach:
       boundary = measureForeachBoundary(json);
       break;
-    case ObiTypes.ChoiceInput:
-      boundary = measureChoiceInputBoundary(json);
-      break;
     case ObiTypes.TextInput:
-      boundary = measureTextInputBoundary(json);
+    case ObiTypes.ChoiceInput:
+      boundary = measureBaseInputBoundary(json);
+      break;
+    case ObiTypes.ChoiceInputDetail:
+      boundary = measureChoiceInputDetailBoundary(json);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);

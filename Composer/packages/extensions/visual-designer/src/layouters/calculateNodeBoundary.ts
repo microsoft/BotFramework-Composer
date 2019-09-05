@@ -1,5 +1,12 @@
 import { Boundary } from '../models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft, BranchIntervalMinX, DiamondSize } from '../constants/ElementSizes';
+import {
+  ElementInterval,
+  LoopEdgeMarginLeft,
+  BranchIntervalMinX,
+  DiamondSize,
+  IconBrickSize,
+  BoxMargin,
+} from '../constants/ElementSizes';
 
 const BranchIntervalX = ElementInterval.x;
 const BranchIntervalY = ElementInterval.y / 2;
@@ -111,6 +118,21 @@ function measureBranchingContainerBoundary(
   containerBoundary.height = containerHeight;
   containerBoundary.axisX = containerAxisX;
   return containerBoundary;
+}
+
+export function calculateBaseInputBoundary(botAsksBoundary: Boundary, userAnswersBoundary: Boundary): Boundary {
+  const boundary = new Boundary();
+
+  boundary.axisX = Math.max(botAsksBoundary.axisX, userAnswersBoundary.axisX);
+  boundary.width =
+    boundary.axisX +
+    Math.max(
+      botAsksBoundary.width - botAsksBoundary.axisX,
+      userAnswersBoundary.width - userAnswersBoundary.axisX + IconBrickSize.width + LoopEdgeMarginLeft + BoxMargin
+    );
+  boundary.height = botAsksBoundary.height + ElementInterval.y + userAnswersBoundary.height + ElementInterval.y / 2;
+
+  return boundary;
 }
 
 export function calculateTextInputBoundary(nodeBoundary: Boundary): Boundary {

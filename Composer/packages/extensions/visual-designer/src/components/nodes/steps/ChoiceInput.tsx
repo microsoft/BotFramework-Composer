@@ -7,7 +7,6 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { getFriendlyName } from '../utils';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
@@ -91,7 +90,6 @@ export class ChoiceInput extends React.Component<NodeProps, {}> {
       <FormCard
         nodeColors={nodeColors}
         header={header}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
         icon={'User'}
         label={label}
         onClick={() => {

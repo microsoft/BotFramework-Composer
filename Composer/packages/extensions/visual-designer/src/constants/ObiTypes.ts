@@ -61,4 +61,7 @@ export const ObiTypes = {
   LoopIndicator: 'VisualSDK.LoopIndicator',
   ForeachDetail: 'VisualSDK.ForeachDetail',
   ForeachPageDetail: 'VisualSDK.ForeachPageDetail',
+  BotAsks: 'VisualSDK.BotAsks',
+  UserAnswers: 'VisualSDK.UserAnswers',
+  ChoiceInputDetail: 'VisualSDK.ChoiceInputDetail',
 };

@@ -5,6 +5,7 @@ export * from './steps/Recognizer';
 export * from './steps/ReplaceDialog';
 export * from './steps/ChoiceInput';
 export * from './steps/TextInput';
+export * from './steps/BaseInput';
 
 export * from './layout-steps/Foreach';
 export * from './layout-steps/IfCondition';
