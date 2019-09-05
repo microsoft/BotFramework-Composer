@@ -23,3 +23,17 @@ export const name = {
 export const description = {
   subComponentStyles: textFieldlabel,
 };
+
+export const locationBrowse = {
+  root: {
+    marginTop: '20px',
+  },
+  subComponentStyles: textFieldlabel,
+};
+
+export const locationOnly = {
+  root: {
+    marginBottom: '20px',
+  },
+  subComponentStyles: textFieldlabel,
+};

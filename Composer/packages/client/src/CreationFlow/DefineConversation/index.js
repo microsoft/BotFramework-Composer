@@ -1,10 +1,11 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 
-import { name, description } from './styles';
+import { StoreContext } from './../../store';
+import { name, description, locationOnly, locationBrowse } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
@@ -23,10 +24,27 @@ const validateForm = data => {
 
 export function DefineConversation(props) {
   const { onSubmit, onGetErrorMessage, onDismiss } = props;
+  const { state } = useContext(StoreContext);
+  const { storages } = state;
+  const currentStorageIndex = useRef(0);
+
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
   const [locationActive, setLocationActive] = useState(false);
-  const [customPath, setCustomPath] = useState('');
+  const [customPath, setCustomPath] = useState();
+  const [displayPath, setDisplayPath] = useState();
+
+  // set the default path
+  useEffect(() => {
+    const index = currentStorageIndex.current;
+    setCustomPath(storages[index].path);
+    updateForm('location')(null, storages[index].path);
+  }, [storages]);
+
+  // update the dislpay path only when the form data is updated.
+  useEffect(() => {
+    setDisplayPath(shortenPath(formData.location));
+  }, [formData]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -75,17 +93,33 @@ export function DefineConversation(props) {
     setLocationActive(!locationActive);
   };
 
-  const changeLocation = path => {
-    setCustomPath(path);
-  };
-
+  // update the path in the form and toggle the location picker.
   const updateLocation = () => {
     updateForm('location')(null, customPath);
     toggleLocationPicker();
   };
 
-  const shortenPath = path => {
-    return path;
+  /**
+   * Truncate a path in a way that maintains the last element
+   * @param {*} path
+   * @param {*} length
+   */
+  const shortenPath = (incoming_path, length = 30) => {
+    if (incoming_path && incoming_path.length > length) {
+      let str = '';
+      const bits = incoming_path.split(/\//);
+      const adjusted_length = length - (4 + bits[1].length);
+      for (let b = bits.length - 1; b > 1; b--) {
+        if (str.length + bits[b].length + 1 <= adjusted_length) {
+          str = '/' + bits[b] + str;
+        }
+      }
+      // results in something like /user/.../folders
+      str = '/' + bits[1] + '/...' + str;
+      return str;
+    }
+    // else
+    return incoming_path;
   };
 
   return (
@@ -113,9 +147,9 @@ export function DefineConversation(props) {
             <Stack horizontal>
               <Stack.Item grow>
                 <TextField
-                  styles={description}
-                  value={shortenPath(formData.location)}
-                  suffix={'/' + (formData.name || '[BotName]')}
+                  styles={locationBrowse}
+                  value={displayPath}
+                  suffix={'/' + (formData.name || formatMessage('[BotName]'))}
                   readOnly={true}
                   label={formatMessage('Destination folder')}
                   resizable={false}
@@ -136,14 +170,14 @@ export function DefineConversation(props) {
         <Fragment>
           <Stack>
             <TextField
-              styles={description}
+              styles={locationOnly}
               value={shortenPath(customPath)}
-              suffix={'/' + (formData.name || '[BotName]')}
+              suffix={'/' + (formData.name || formatMessage('[BotName]'))}
               readOnly={true}
               label={formatMessage('Destination folder')}
               resizable={false}
             />
-            <LocationSelectContent onChange={changeLocation} />
+            <LocationSelectContent onChange={setCustomPath} />
           </Stack>
           <DialogFooter>
             <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Cancel')} />

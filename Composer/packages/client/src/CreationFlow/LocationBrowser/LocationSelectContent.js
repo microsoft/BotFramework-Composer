@@ -50,8 +50,6 @@ export function LocationSelectContent(props) {
         updateCurrentPath(path, storageId);
       } else if (type === FileTypes.BOT) {
         onOpen(path, storageId);
-      } else {
-        // onOpen(path, storageId);
       }
     }
   };
