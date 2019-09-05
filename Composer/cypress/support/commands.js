@@ -70,9 +70,6 @@ Cypress.Commands.add('addEventHandler', handler => {
   cy.getByTestId('AddNewTrigger').click();
   cy.get(`[data-testid="triggerTypeDropDown"]`).click();
   cy.getByText(handler).click();
-  const eventDropDown = cy.get(`[data-testid="eventTypeDropDown"]`);
-  eventDropDown.click();
-  eventDropDown.within(() => cy.getByText('beginDialog').click());
   cy.get('input[data-testid="triggerName"]').type(`__TestTrigger`);
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });
