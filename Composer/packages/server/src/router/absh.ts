@@ -34,6 +34,7 @@ const absh: AuthProviderInit = {
       COMPOSER_AUTH_CLIENT_ID,
       COMPOSER_AUTH_REDIRECT_URI,
       COMPOSER_AUTH_JWKS_URL,
+      COMPOSER_AUTH_RESOURCE,
     } = process.env;
 
     // validate required config settings
@@ -41,6 +42,7 @@ const absh: AuthProviderInit = {
     const clientId = validateConfig('COMPOSER_AUTH_CLIENT_ID', COMPOSER_AUTH_CLIENT_ID);
     const redirectUri = validateConfig('COMPOSER_AUTH_REDIRECT_URI', COMPOSER_AUTH_REDIRECT_URI);
     const jwksUri = validateConfig('COMPOSER_AUTH_JWKS_URL', COMPOSER_AUTH_JWKS_URL);
+    const resource = validateConfig('COMPOSER_AUTH_RESOURCE', COMPOSER_AUTH_RESOURCE);
 
     const jwksClient = JWKSClient({ jwksUri });
 
@@ -108,7 +110,7 @@ const absh: AuthProviderInit = {
         response_type: 'token',
         response_mode: 'form_post',
         client_id: clientId,
-        resource: 'https://management.core.windows.net/',
+        resource,
         redirect_uri: redirectUri,
         state: querystring.stringify({
           botId,

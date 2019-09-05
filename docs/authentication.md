@@ -21,6 +21,7 @@ COMPOSER_AUTH_CLIENT_ID=<Microsoft App Id for Authenticating App> # provided by 
 COMPOSER_AUTH_REDIRECT_URI=<a redirect uri to complete oauth2 authentication> # provided by the ABS-H host machine
 COMPOSER_BOT_ID=<botId> # provided by the ABS-H host machine
 COMPOSER_AUTH_JWKS_URL=<a public url that provides keys for verifying auth token> # provided by the ABS-H host machine
+COMPOSER_AUTH_RESOURCE="https://management.core.windows.net/" # could change based on abs-h env (i.e. gov cloud)
 ```
 
 ##### Client
