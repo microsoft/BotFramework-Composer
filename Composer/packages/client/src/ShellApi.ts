@@ -187,7 +187,6 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id: dialogId,
       content: updatedDialog,
-      operationId: event.source.name === FORM_EDITOR ? '1' : '2',
     };
     dialogsMap[dialogId] = updatedDialog;
     updateDialog(payload);
