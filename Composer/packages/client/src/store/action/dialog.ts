@@ -68,7 +68,7 @@ export const updateDialog: ActionCreator = undoable(
   (state: State) => {
     const id = state.designPageLocation.dialogId;
     const dialog = state.dialogs.find(dialog => dialog.id === id);
-    return [{ id, content: dialog ? dialog.content : {} }];
+    return { id, content: dialog ? dialog.content : {} };
   }
 );
 

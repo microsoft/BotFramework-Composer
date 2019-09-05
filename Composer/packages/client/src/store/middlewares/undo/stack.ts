@@ -33,7 +33,7 @@ export default class UndoStack {
     return this.history[this.pointer];
   };
 
-  add = (state: any[]) => {
+  add = (state: any) => {
     const length = this.history.length;
     if (this.pointer < length - 1) {
       this.history.splice(this.pointer + 1, length - this.pointer);
