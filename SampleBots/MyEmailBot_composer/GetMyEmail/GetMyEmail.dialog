@@ -24,19 +24,19 @@
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.emails",
-          "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}]"
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.emails",
-          "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}+1]"
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+1]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.emails",
-          "value": "user.getGraphEmails.value[{user.pages}*{user.itemsPerPage}+2]"
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+2]"
         }
       ],
       "$designer": {

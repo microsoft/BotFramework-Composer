@@ -194,7 +194,7 @@
                 "updatedAt": "2019-07-16T20:17:39.938Z",
                 "id": "678664"
               },
-              "property": "user.lists.{dialog.listName}",
+              "property": "getProperty(user.lists, dialog.listName)",
               "type": "array"
             }
           ]
@@ -207,7 +207,7 @@
             "id": "451376"
           },
           "changeType": "Remove",
-          "arrayProperty": "user.lists.{dialog.listName}",
+          "arrayProperty": "getProperty(user.lists, dialog.listName)",
           "value": "dialog.item"
         },
         {

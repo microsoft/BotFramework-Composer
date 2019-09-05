@@ -59,7 +59,7 @@
       "intent": "ResetProfile",
       "actions": [
         {
-          "$type": "Microsoft.Editactions",
+          "$type": "Microsoft.EditActions",
           "$designer": {
             "name": "Modify active dialog",
             "id": "216094",

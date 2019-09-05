@@ -15,7 +15,6 @@
         "id": "735800",
         "updatedAt": "2019-07-22T08:12:19.686Z"
       },
-      "events": ["beginDialog"],
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
@@ -178,7 +177,7 @@
                 "updatedAt": "2019-07-16T20:19:25.307Z",
                 "id": "907210"
               },
-              "property": "user.lists.{dialog.listName}",
+              "property": "getProperty(user.lists, dialog.listName)",
               "type": "array"
             }
           ]
@@ -191,7 +190,7 @@
             "id": "644924"
           },
           "changeType": "Push",
-          "arrayProperty": "user.lists.{dialog.listName}",
+          "arrayProperty": "getProperty(user.lists, dialog.listName)",
           "value": "dialog.item"
         },
         {

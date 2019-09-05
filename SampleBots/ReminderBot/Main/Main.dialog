@@ -21,7 +21,12 @@
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
-          "activity": "[help]"
+          "$designer": {
+            "createdAt": "2019-09-05T02:51:48.096Z",
+            "updatedAt": "2019-09-05T02:51:49.063Z",
+            "id": "060246"
+          },
+          "activity": "[bfdactivity-060246]"
         }
       ]
     },

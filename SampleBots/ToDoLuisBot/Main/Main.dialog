@@ -22,7 +22,12 @@
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "AddItem"
+          "dialog": "AddItem",
+          "$designer": {
+            "createdAt": "2019-09-05T08:31:25.267Z",
+            "updatedAt": "2019-09-05T08:31:25.279Z",
+            "id": "618477"
+          }
         }
       ],
       "intent": "AddToDo"

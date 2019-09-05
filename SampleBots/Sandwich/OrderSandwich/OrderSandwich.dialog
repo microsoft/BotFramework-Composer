@@ -4,7 +4,7 @@
   "recognizer": "Main.lu",
   "events": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "constraint": "@meat && ignore(!turn.setmeat)",
       "actions": [
         {
@@ -39,7 +39,7 @@
       }
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "constraint": "@cheese && ignore(!turn.setcheese)",
       "actions": [
         {
@@ -72,7 +72,7 @@
       }
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -100,7 +100,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -128,7 +128,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -157,7 +157,7 @@
     },
     {
       "$comment": "**** This is the start of prompts ****",
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -170,7 +170,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -183,7 +183,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -196,7 +196,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "$comment": "Should update this to use actual http with failure.",
       "events": [
         "recognizedIntent"
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -236,7 +236,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "$comment": "This is the kind of thing we should build in a default for.",
       "events": [
         "recognizedIntent"
@@ -249,7 +249,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -262,7 +262,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -276,7 +276,7 @@
     },
     {
       "$comment": "*** Ideally these would be a generic template rule against any slot value. ***",
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -292,7 +292,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "constraint": "!conversation.order.cheese",
       "actions": [
         {
@@ -310,7 +310,7 @@
       }
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],
@@ -323,7 +323,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$type": "Microsoft.OnDialogEvent",
       "events": [
         "recognizedIntent"
       ],

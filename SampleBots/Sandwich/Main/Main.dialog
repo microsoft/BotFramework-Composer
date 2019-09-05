@@ -72,7 +72,6 @@
     },
     {
       "$type": "Microsoft.OnBeginDialog",
-      "events": ["beginDialog"],
       "actions": [
         {
           "$type": "Microsoft.SendActivity",

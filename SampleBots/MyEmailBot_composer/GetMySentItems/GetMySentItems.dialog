@@ -24,19 +24,19 @@
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+1]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+1]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+2]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+2]"
         }
       ],
        
