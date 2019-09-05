@@ -81,27 +81,6 @@ export enum ActionTypes {
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
 }
 
-export const EventTypes = ['beginDialog', 'resumeDialog', 'cancelDialog', 'endDialog'];
-
-export const NewTriggerType = [
-  {
-    key: 'Microsoft.EventRule',
-    text: 'Handle an Event',
-  },
-  {
-    key: 'Microsoft.IntentRule',
-    text: 'Handle an Intent',
-  },
-  {
-    key: 'Microsoft.UnknownIntentRule',
-    text: 'Handle Unknown Intent',
-  },
-  {
-    key: 'Microsoft.ConversationUpdateActivityRule',
-    text: 'Handle Conversation Update',
-  },
-];
-
 export const Tips = {
   PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
     (projectname-environment-LUfilename)`),

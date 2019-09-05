@@ -7,7 +7,7 @@ import { toLower, get } from 'lodash';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel, deleteTrigger } from '../../utils';
-import { TriggerCreationModel } from '../../components/ProjectTree/triggerCreationModel';
+import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -68,7 +68,7 @@ function DesignPage(props) {
   const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
-  const [openNewTriggerModel, setopenNewTriggerModel] = useState(false);
+  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -84,8 +84,8 @@ function DesignPage(props) {
     }
   }, [location]);
 
-  const OnTriggerCreationDisMiss = () => {
-    setopenNewTriggerModel(false);
+  const OnTriggerCreationDismiss = () => {
+    setTriggerModalVisibility(false);
   };
 
   const OnTriggerCreationSubmit = dialog => {
@@ -227,8 +227,8 @@ function DesignPage(props) {
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
-          openNewTriggerModel={() => {
-            setopenNewTriggerModel(true);
+          openNewTriggerModal={() => {
+            setTriggerModalVisibility(true);
           }}
         />
         <div css={contentWrapper}>
@@ -262,11 +262,11 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
-      {openNewTriggerModel && (
-        <TriggerCreationModel
+      {triggerModalVisible && (
+        <TriggerCreationModal
           dialogId={dialogId}
-          isOpen={openNewTriggerModel}
-          onDismiss={OnTriggerCreationDisMiss}
+          isOpen={triggerModalVisible}
+          onDismiss={OnTriggerCreationDismiss}
           onSubmit={OnTriggerCreationSubmit}
         />
       )}

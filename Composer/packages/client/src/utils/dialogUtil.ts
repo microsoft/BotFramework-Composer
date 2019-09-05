@@ -1,5 +1,5 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels, seedNewDialog } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 import nanoid from 'nanoid/generate';
@@ -20,17 +20,6 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-const initialDialogShape = {
-  'Microsoft.ConversationUpdateActivityRule': {
-    $type: 'Microsoft.ConversationUpdateActivityRule',
-    constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-  },
-};
-
-const seedNewDialog = ($type: string) => {
-  return initialDialogShape[$type] ? initialDialogShape[$type] : {};
-};
-
 export function generateDialogWithNewTrigger(inputDialog, data) {
   const dialog = cloneDeep(inputDialog);
   const rules = get(dialog, 'content.rules', []);
@@ -41,12 +30,8 @@ export function generateDialogWithNewTrigger(inputDialog, data) {
       id: nanoid('1234567890', 6),
       description: data.description,
     },
-    //intent: data.intent,
     ...seedNewDialog(data.$type),
   };
-  if (data.event) {
-    newStep.events = [data.event];
-  }
   rules.push(newStep);
   set(dialog, 'content.rules', rules);
   return dialog;

@@ -3,62 +3,72 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { dialogGroups, DialogGroup } from 'shared-menus';
 
 import { generateDialogWithNewTrigger } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
-import { NewTriggerType, EventTypes } from '../../constants';
 import { DialogInfo } from '../../store/types';
 
 import { styles, dropdownStyles, name, dialogWindow, description } from './styles';
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-const validateForm = data => {
-  const errors: TriggerFromDataErrors = {};
-  const { name, $type, event } = data;
-  if (!name || !nameRegex.test(name)) {
+const isValidName = name => {
+  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+  return nameRegex.test(name);
+};
+const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
+  const errors: TriggerFormDataErrors = {};
+  const { name, $type } = data;
+  if (!name || !isValidName(name)) {
     errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if (!$type) {
     errors.$type = formatMessage('please select a trigger type');
   }
-
-  if ($type === 'Microsoft.EventRule' && !event) {
-    errors.event = formatMessage('please select a event type');
-  }
   return errors;
 };
 
-interface TriggerCreationModelProps {
+interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
   onSubmit: (dialog: DialogInfo) => void;
 }
 
-interface TriggerFromData {
-  errors: TriggerFromDataErrors;
+interface TriggerFormData {
+  errors: TriggerFormDataErrors;
   $type: string;
   name: string;
-  event: string;
 }
 
-interface TriggerFromDataErrors {
+interface TriggerFormDataErrors {
   $type?: string;
   name?: string;
-  event?: string;
 }
 
-const initialFormData: TriggerFromData = {
+const initialFormData: TriggerFormData = {
   errors: {},
   $type: '',
   name: '',
-  event: '',
 };
 
-export const TriggerCreationModel: React.FC<TriggerCreationModelProps> = props => {
+const TriggerTypes = dialogGroups[DialogGroup.EVENTS].types;
+
+const triggerTypeOptions: IDropdownOption[] = [
+  {
+    key: '',
+    text: '',
+  },
+  ...TriggerTypes.map(t => {
+    return {
+      text: t,
+      key: t,
+    };
+  }),
+];
+
+export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   // eslint-disable-next-line react/prop-types
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const [triggerType, setTriggerType] = useState(null);
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
@@ -81,12 +91,7 @@ export const TriggerCreationModel: React.FC<TriggerCreationModelProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    setTriggerType(option.key);
     setFormData({ ...formData, $type: option.key });
-  };
-
-  const onSelectEvent = (e, option) => {
-    setFormData({ ...formData, event: option.key });
   };
 
   const updateForm = field => (e, newValue) => {
@@ -95,23 +100,6 @@ export const TriggerCreationModel: React.FC<TriggerCreationModelProps> = props =
       [field]: newValue,
     });
   };
-
-  const triggerTypeOptions: IDropdownOption[] = [
-    {
-      key: '',
-      text: '',
-    },
-    ...NewTriggerType,
-  ];
-
-  const eventTypes: IDropdownOption[] = EventTypes.map(t => {
-    return {
-      text: t,
-      key: t,
-    };
-  });
-
-  const showEventDropDown = triggerType === 'Microsoft.EventRule';
 
   return (
     <Dialog
@@ -138,17 +126,6 @@ export const TriggerCreationModel: React.FC<TriggerCreationModelProps> = props =
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}
           />
-          {showEventDropDown && (
-            <Dropdown
-              placeholder="select a event type"
-              label="What is the event?"
-              options={eventTypes}
-              css={dropdownStyles}
-              onChange={onSelectEvent}
-              errorMessage={formData.errors.event}
-              data-testid={'eventTypeDropDown'}
-            />
-          )}
           <TextField
             label={formatMessage('Name')}
             styles={name}

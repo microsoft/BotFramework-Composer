@@ -19,9 +19,7 @@ interface ProjectTreeProps {
   onSelect: (id: string, selected?: string) => void;
   onDeleteDialog: (id: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
-  OnTriggerCreationDisMiss: () => void;
-  OnTriggerCreationSubmit: () => void;
-  openNewTriggerModel: () => void;
+  openNewTriggerModal: () => void;
 }
 
 const addIconProps: IIconProps = {
@@ -39,7 +37,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     onDeleteDialog,
     onDeleteTrigger,
     schemas,
-    openNewTriggerModel,
+    openNewTriggerModal,
   } = props;
   const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
@@ -104,7 +102,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  onClick={openNewTriggerModel}
+                  onClick={openNewTriggerModal}
                 >
                   {formatMessage('New Trigger ..')}
                 </ActionButton>
