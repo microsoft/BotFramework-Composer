@@ -1,8 +1,8 @@
-import React, { useReducer, useLayoutEffect } from 'react';
+import React, { useReducer } from 'react';
 import { once } from 'lodash';
 
 import oauthStorage from '../utils/oauthStorage';
-import { prepareAxios, getUserTokenFromCache } from '../utils/auth';
+import { prepareAxios } from '../utils/auth';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';

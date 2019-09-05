@@ -30,13 +30,14 @@ interface CreateDialogSuccessAction {
 // User Actions
 export interface UserTokenPayload {
   token?: string | null;
+  email?: string;
+  name?: string;
+  expiration?: number;
 }
 
 interface UserLoginSuccessAction {
   type: ActionTypes.USER_LOGIN_SUCCESS;
-  payload: {
-    token: string | null;
-  };
+  payload: UserTokenPayload;
 }
 
 interface UserLoginFailureAction {

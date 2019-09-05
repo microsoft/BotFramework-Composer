@@ -146,12 +146,18 @@ const setTemplateProjects: ReducerFunc = (state, { data }) => {
   return state;
 };
 
-const setUserToken: ReducerFunc<UserTokenPayload> = (state, { token } = {}) => {
-  if (token) {
-    state.currentUser.token = token;
-    state.currentUser.sessionExpired = false;
+const setUserToken: ReducerFunc<UserTokenPayload> = (state, user = {}) => {
+  if (user.token) {
+    state.currentUser = {
+      ...user,
+      token: user.token,
+      sessionExpired: false,
+    };
   } else {
-    state.currentUser.token = null;
+    state.currentUser = {
+      token: null,
+      sessionExpired: false,
+    };
   }
 
   return state;

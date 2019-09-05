@@ -58,6 +58,9 @@ export interface State {
   toStartBot: boolean;
   currentUser: {
     token: string | null;
+    email?: string;
+    name?: string;
+    expiration?: number;
     sessionExpired: boolean;
   };
 }
