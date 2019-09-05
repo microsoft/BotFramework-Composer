@@ -97,7 +97,6 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      await syncEnvSettings(settings);
       if (settings.luis) {
         await publishLuis(settings.luis.authoringKey);
         return true;
