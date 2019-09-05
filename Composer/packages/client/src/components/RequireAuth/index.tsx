@@ -41,7 +41,7 @@ export const RequireAuth: React.FC = props => {
         styles: { main: { maxWidth: 450 } },
       }}
     >
-      <div css={consoleStyle}>{formatMessage('Log in and try agin.')}</div>
+      <div css={consoleStyle}>{formatMessage('Please log in before continuing.')}</div>
       <DialogFooter>
         <PrimaryButton onClick={() => actions.loginUser()} text={formatMessage('Login')} />
       </DialogFooter>
