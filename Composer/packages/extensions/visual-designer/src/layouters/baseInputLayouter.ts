@@ -74,7 +74,7 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
       direction: 'y',
       x: iconNode.offset.x + iconNode.boundary.axisX,
       y: baseline1OffsetY,
-      length: iconNode.offset.y - iconNode.boundary.axisY - baseline1OffsetY,
+      length: iconNode.offset.y - baseline1OffsetY,
       dashed: true,
     },
     {
