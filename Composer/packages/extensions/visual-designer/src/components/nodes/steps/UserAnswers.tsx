@@ -20,7 +20,7 @@ export const UserAnswers: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX
     <FormCard
       nodeColors={NodeColors[DialogGroup.INPUT]}
       header={'User Answers'}
-      label={'User Answers'}
+      label={data.property || '<property>'}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, id);
       }}
