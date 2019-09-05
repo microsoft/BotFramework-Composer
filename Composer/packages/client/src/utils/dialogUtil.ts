@@ -1,10 +1,10 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog } from 'shared-menus';
+import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 import nanoid from 'nanoid/generate';
+import { IDropdownOption } from 'office-ui-fabric-react';
 
-import { BotSchemas } from '../store/types';
+import { BotSchemas, DialogInfo } from '../store/types';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
@@ -15,12 +15,24 @@ interface DialogsMap {
   [dialogId: string]: any;
 }
 
+interface TriggerFormData {
+  errors: TriggerFormDataErrors;
+  $type: string;
+  name: string;
+  description: string;
+}
+
+interface TriggerFormDataErrors {
+  $type?: string;
+  name?: string;
+}
+
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find(item => item.id === dialogId);
   return cloneDeep(dialog);
 }
 
-export function generateDialogWithNewTrigger(inputDialog, data) {
+export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: TriggerFormData) {
   const dialog = cloneDeep(inputDialog);
   const rules = get(dialog, 'content.rules', []);
   const newStep = {
@@ -167,4 +179,17 @@ export function isExpression(str: string): boolean {
   }
 
   return true;
+}
+
+export function getTriggerTypes(): IDropdownOption[] {
+  const TriggerTypes: IDropdownOption[] = [
+    {
+      key: '',
+      text: '',
+    },
+    ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
+      return { key: t, text: ConceptLabels[t].title };
+    }),
+  ];
+  return TriggerTypes;
 }

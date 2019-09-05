@@ -3,9 +3,8 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { dialogGroups, DialogGroup } from 'shared-menus';
 
-import { generateDialogWithNewTrigger } from '../../utils/dialogUtil';
+import { generateDialogWithNewTrigger, getTriggerTypes } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
@@ -38,6 +37,7 @@ interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
   name: string;
+  description: string;
 }
 
 interface TriggerFormDataErrors {
@@ -49,22 +49,10 @@ const initialFormData: TriggerFormData = {
   errors: {},
   $type: '',
   name: '',
+  description: '',
 };
 
-const TriggerTypes = dialogGroups[DialogGroup.EVENTS].types;
-
-const triggerTypeOptions: IDropdownOption[] = [
-  {
-    key: '',
-    text: '',
-  },
-  ...TriggerTypes.map(t => {
-    return {
-      text: t,
-      key: t,
-    };
-  }),
-];
+const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   // eslint-disable-next-line react/prop-types
@@ -85,6 +73,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       return;
     }
     const inputDialog = dialogs.find(d => d.id === dialogId);
+    if (!inputDialog) {
+      throw new Error(`${dialogId} does not exist`);
+    }
     const newDialog = generateDialogWithNewTrigger(inputDialog, formData);
     onSubmit(newDialog);
     onDismiss();
