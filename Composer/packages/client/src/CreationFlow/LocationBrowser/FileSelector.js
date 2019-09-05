@@ -91,6 +91,9 @@ export function FileSelector(props) {
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
       data: 'string',
+      onRender: item => {
+        return <span aria-label={item.name}>{item.name}</span>;
+      },
       isPadded: true,
     },
     {

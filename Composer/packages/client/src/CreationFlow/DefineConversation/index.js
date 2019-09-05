@@ -123,10 +123,11 @@ export function DefineConversation(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <Fragment>
       {!locationActive && (
-        <Fragment>
+        <form onSubmit={handleSubmit}>
           <Stack>
+            <input type="submit" style={{ display: 'none' }} />
             <TextField
               label={formatMessage('Name')}
               value={formData.name}
@@ -166,7 +167,7 @@ export function DefineConversation(props) {
             <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
             <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
           </DialogFooter>
-        </Fragment>
+        </form>
       )}
       {locationActive && (
         <Fragment>
@@ -187,6 +188,6 @@ export function DefineConversation(props) {
           </DialogFooter>
         </Fragment>
       )}
-    </form>
+    </Fragment>
   );
 }

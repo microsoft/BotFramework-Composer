@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { DialogFooter, DefaultButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
@@ -21,11 +21,11 @@ export function OpenProject(props) {
   };
 
   return (
-    <Fragment>
+    <div data-testid="SelectLocation">
       <LocationSelectContent onChange={onPathChange} onOpen={handleOpen} />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
       </DialogFooter>
-    </Fragment>
+    </div>
   );
 }
