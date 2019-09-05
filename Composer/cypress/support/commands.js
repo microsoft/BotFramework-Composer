@@ -68,7 +68,7 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 
 Cypress.Commands.add('addEventHandler', handler => {
   cy.getByTestId('AddNewTrigger').click();
-  cy.get(`[data-testid="${handler}"]`).within(() => {
+  cy.getByText(handler).within(() => {
     cy.getByText(handler).click();
   });
 });
