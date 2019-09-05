@@ -84,6 +84,10 @@ export function DefineConversation(props) {
     toggleLocationPicker();
   };
 
+  const shortenPath = path => {
+    return path;
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {!locationActive && (
@@ -106,12 +110,21 @@ export function DefineConversation(props) {
               resizable={false}
               onChange={updateForm('description')}
             />
-            <p>
-              <label>Location</label>
-              <br />
-              <i>{formData.location}</i>
-              <button onClick={toggleLocationPicker}>Browse</button>
-            </p>
+            <Stack horizontal>
+              <Stack.Item grow>
+                <TextField
+                  styles={description}
+                  value={shortenPath(formData.location)}
+                  suffix={'/' + (formData.name || '[BotName]')}
+                  readOnly={true}
+                  label={formatMessage('Destination folder')}
+                  resizable={false}
+                />
+              </Stack.Item>
+              <Stack.Item align="end" disableShrink>
+                <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Browse')} />
+              </Stack.Item>
+            </Stack>
           </Stack>
           <DialogFooter>
             <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
@@ -122,11 +135,14 @@ export function DefineConversation(props) {
       {locationActive && (
         <Fragment>
           <Stack>
-            <p>
-              <label>Location</label>
-              <br />
-              <i>{customPath}</i>
-            </p>
+            <TextField
+              styles={description}
+              value={shortenPath(customPath)}
+              suffix={'/' + (formData.name || '[BotName]')}
+              readOnly={true}
+              label={formatMessage('Destination folder')}
+              resizable={false}
+            />
             <LocationSelectContent onChange={changeLocation} />
           </Stack>
           <DialogFooter>
