@@ -3,42 +3,57 @@ import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 
 import { locateNode } from './jsonTracker';
 
-function getDownPath(inputDialog: { [key: string]: any }, path: string) {
-  const target = locateNode(inputDialog, path);
-  if (!target) return path;
-  const currentKey = target.currentKey as number;
-  const { parentPath, parentPathWithStep } = getParentData(inputDialog, path);
-  let result = path;
-  if (locateNode(inputDialog, parentPathWithStep + `[${currentKey + 1}]`)) {
-    result = parentPathWithStep + `[${currentKey + 1}]`;
+// locate the next path
+function locateNextPath(inputDialog: { [key: string]: any }, path: string): string {
+  let targetPath = path;
+  const target = locateNode(inputDialog, targetPath);
+  /**
+   * if target exits return targetPath
+   * else locating next path in parent level
+   *  */
+
+  if (target) {
+    return targetPath;
   } else {
-    result = getDownPath(inputDialog, parentPath);
+    const { parentPath, parentKey } = locateParentNode(inputDialog, targetPath);
+    if (parentPath) {
+      targetPath = locateParentNode(inputDialog, parentPath).parentPathWithStep + `[${parentKey + 1}]`;
+      return locateNextPath(inputDialog, targetPath);
+    } else {
+      return '';
+    }
   }
-  return result;
 }
 
-function getUpPath(inputDialog: { [key: string]: any }, path: string) {
+// get the previous path
+function locatePreviousPath(inputDialog: { [key: string]: any }, path: string): string {
   const target = locateNode(inputDialog, path);
   if (!target) return '';
   const currentData = target.currentData;
   const targetObiType = target.currentData.$type;
   let resultPath = path;
+  /**
+   * locate previous path based on target type
+   */
   switch (targetObiType) {
     case ObiTypes.IfCondition:
       if (currentData.steps && currentData.steps.length > 0) {
-        resultPath = getUpPath(inputDialog, resultPath + `.steps[${currentData.steps.length - 1}]`);
+        resultPath = locatePreviousPath(inputDialog, resultPath + `.steps[${currentData.steps.length - 1}]`);
       } else if (currentData.elseSteps && currentData.elseSteps.length > 0) {
-        resultPath = getUpPath(inputDialog, resultPath + `.elseSteps[${currentData.elseSteps.length - 1}]`);
+        resultPath = locatePreviousPath(inputDialog, resultPath + `.elseSteps[${currentData.elseSteps.length - 1}]`);
       }
       break;
     case ObiTypes.SwitchCondition:
       if (currentData.default && currentData.default.length > 0) {
-        resultPath = getUpPath(inputDialog, resultPath + `.default[${currentData.default.length - 1}]`);
+        resultPath = locatePreviousPath(inputDialog, resultPath + `.default[${currentData.default.length - 1}]`);
       } else if (currentData.cases && currentData.cases.length > 0) {
         let findChild = false;
         currentData.cases.forEach((switchCase, index) => {
           if (!findChild && switchCase.steps && switchCase.steps.length > 0) {
-            resultPath = getUpPath(inputDialog, resultPath + `.cases[${index}].steps[${switchCase.steps.length - 1}]`);
+            resultPath = locatePreviousPath(
+              inputDialog,
+              resultPath + `.cases[${index}].steps[${switchCase.steps.length - 1}]`
+            );
             findChild = true;
           }
         });
@@ -47,7 +62,7 @@ function getUpPath(inputDialog: { [key: string]: any }, path: string) {
     case ObiTypes.Foreach:
     case ObiTypes.ForeachPage:
       if (currentData.steps && currentData.steps.length > 0) {
-        resultPath = getUpPath(inputDialog, resultPath + `.steps[${currentData.steps.length - 1}]`);
+        resultPath = locatePreviousPath(inputDialog, resultPath + `.steps[${currentData.steps.length - 1}]`);
       }
       break;
     case ObiTypes.IntentRule:
@@ -62,10 +77,12 @@ function getUpPath(inputDialog: { [key: string]: any }, path: string) {
   return resultPath;
 }
 
-function getParentData(inputDialog: { [key: string]: any }, path: string) {
-  let parentPath, parentPathWithStep;
-  let lastIndexOfBracket = 0;
+// locate the parent node corresponding to the path
+function locateParentNode(inputDialog: { [key: string]: any }, path: string): { [key: string]: any } {
+  let parentPath;
   let lastIndexOfSteps = 0;
+  const lastIndexOfBracket = path.lastIndexOf('[');
+  const parentPathWithStep = path.substr(0, lastIndexOfBracket);
 
   if (path.includes('cases')) {
     lastIndexOfSteps = path.lastIndexOf('.cases');
@@ -73,30 +90,30 @@ function getParentData(inputDialog: { [key: string]: any }, path: string) {
   } else {
     lastIndexOfSteps = path.lastIndexOf('.');
     parentPath = path.substr(0, lastIndexOfSteps);
-    lastIndexOfBracket = path.lastIndexOf('[');
-    parentPathWithStep = path.substr(0, lastIndexOfBracket);
   }
   const parentTarget = locateNode(inputDialog, parentPath);
   const parentData = parentTarget ? parentTarget.currentData : {};
-  const parentTargetObiType = parentTarget ? parentTarget.currentData.$type : null;
+  const parentKey = parentTarget ? parentTarget.currentKey : null;
 
-  return { parentData, parentPath, parentPathWithStep, parentTargetObiType, parentTarget };
+  return { parentData, parentPath, parentPathWithStep, parentKey };
 }
 
-export function moveFocusNode(inputDialog, path, action) {
+// get the focused node after the cursor has moved
+export function moveCursor(inputDialog: { [key: string]: any }, path: string, action: string): string {
   const target = locateNode(inputDialog, path);
   if (!target) return path;
   const currentData = target.currentData;
   const currentKey = target.currentKey as number;
   const targetObiType = target.currentData.$type;
   let resultPath = path;
-  const { parentData, parentPath, parentPathWithStep, parentTargetObiType } = getParentData(inputDialog, path);
+  const { parentData, parentPath, parentPathWithStep } = locateParentNode(inputDialog, path);
+  const parentTargetObiType = parentData.$type;
   switch (action) {
     case KeyboardCommandTypes.MoveUp:
       if (currentKey === 0) {
         resultPath = parentPath || path;
       } else if (currentKey > 0) {
-        resultPath = getUpPath(inputDialog, parentPathWithStep + `[${currentKey - 1}]`) || path;
+        resultPath = locatePreviousPath(inputDialog, parentPathWithStep + `[${currentKey - 1}]`) || path;
       }
       break;
     case KeyboardCommandTypes.MoveDown:
@@ -107,7 +124,7 @@ export function moveFocusNode(inputDialog, path, action) {
           } else if (currentData.elseSteps && currentData.elseSteps.length > 0) {
             resultPath += '.elseSteps[0]';
           } else {
-            resultPath = getDownPath(inputDialog, path) || path;
+            resultPath = locateNextPath(inputDialog, parentPathWithStep + `[${currentKey + 1}]`) || path;
           }
           break;
         case ObiTypes.SwitchCondition:
@@ -122,7 +139,7 @@ export function moveFocusNode(inputDialog, path, action) {
               }
             });
           } else {
-            resultPath = getDownPath(inputDialog, path) || path;
+            resultPath = locateNextPath(inputDialog, parentPathWithStep + `[${currentKey + 1}]`) || path;
           }
           break;
         case ObiTypes.Foreach:
@@ -134,11 +151,11 @@ export function moveFocusNode(inputDialog, path, action) {
           if (currentData.steps && currentData.steps.length > 0) {
             resultPath += '.steps[0]';
           } else {
-            resultPath = getDownPath(inputDialog, path) || path;
+            resultPath = locateNextPath(inputDialog, parentPathWithStep + `[${currentKey + 1}]`) || path;
           }
           break;
         default:
-          resultPath = getDownPath(inputDialog, path) || path;
+          resultPath = locateNextPath(inputDialog, parentPathWithStep + `[${currentKey + 1}]`) || path;
           break;
       }
       break;
@@ -191,6 +208,7 @@ export function moveFocusNode(inputDialog, path, action) {
       }
       break;
     case KeyboardCommandTypes.MoveRight:
+      if (!parentTargetObiType) break;
       switch (parentTargetObiType) {
         case ObiTypes.IfCondition:
           if (parentData.elseSteps && parentData.elseSteps.length > 0) {
