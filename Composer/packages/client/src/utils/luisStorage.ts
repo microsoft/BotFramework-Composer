@@ -2,7 +2,6 @@ import { set } from 'lodash';
 
 import storage, { ClientStorage } from './storage';
 import { LuisConfig } from './../constants';
-
 export interface LuisStorageConfig {
   [LuisConfig.PROJECT_NAME]: string;
   [LuisConfig.ENVIRONMENT]: string;
@@ -12,13 +11,16 @@ export interface LuisStorageConfig {
 }
 
 class LuisStorage {
-  static defaultConfig: LuisStorageConfig = {
-    [LuisConfig.PROJECT_NAME]: '',
-    [LuisConfig.ENVIRONMENT]: '',
-    [LuisConfig.AUTHORING_KEY]: '',
-    authoringRegion: 'westus',
-    defaultLanguage: 'en-us',
-  };
+  public static getDefaultConfig(): LuisStorageConfig {
+    return {
+      [LuisConfig.PROJECT_NAME]: '',
+      [LuisConfig.ENVIRONMENT]: '',
+      [LuisConfig.AUTHORING_KEY]: '',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+    };
+  }
+
   private storage: ClientStorage;
   private _all: { [botName: string]: LuisStorageConfig };
 
@@ -28,7 +30,7 @@ class LuisStorage {
   }
 
   get(botName: string): LuisStorageConfig {
-    return this._all[botName] || LuisStorage.defaultConfig;
+    return this._all[botName] || LuisStorage.getDefaultConfig();
   }
 
   set(botName: string, field: string, value: string) {
