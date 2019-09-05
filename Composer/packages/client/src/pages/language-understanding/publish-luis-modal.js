@@ -17,11 +17,12 @@ import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
 import { keys } from 'lodash';
 
+import { LuisConfig } from '../../constants';
+
 import { Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 import { Text } from './../../constants/index';
 import LuisStorage from './../../utils/luisStorage';
-
 const STATE = {
   INPUT: 0,
   PUBLISHPENDING: 1,
@@ -40,7 +41,6 @@ const onRenderLabel = info => props => (
 );
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
 const validateForm = data => {
   const errors = {};
   const dataKeys = keys(data);
@@ -97,7 +97,16 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { onPublish, onDismiss, workState, botName } = props;
-  const [formData, setFormData] = useState({ ...LuisStorage.get(botName), errors: {} });
+
+  const config = LuisStorage.get(botName);
+  const initialFormData = {
+    [LuisConfig.PROJECT_NAME]: config[LuisConfig.PROJECT_NAME] || botName,
+    [LuisConfig.ENVIRONMENT]: config[LuisConfig.ENVIRONMENT],
+    [LuisConfig.AUTHORING_KEY]: config[LuisConfig.AUTHORING_KEY],
+    authoringRegion: config.authoringRegion,
+    defaultLanguage: config.defaultLanguage,
+  };
+  const [formData, setFormData] = useState({ ...initialFormData, errors: {} });
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
