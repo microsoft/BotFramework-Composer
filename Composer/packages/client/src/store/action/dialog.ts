@@ -6,7 +6,7 @@ import { undoable } from '../middlewares/undo';
 import { BASEURL, ActionTypes } from './../../constants/index';
 import { navTo } from './navigation';
 
-export const removeDialog: ActionCreator = async (store, id) => {
+export const removeDialog: ActionCreator = async (store, { id }) => {
   try {
     const response = await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
     store.dispatch({
@@ -15,7 +15,7 @@ export const removeDialog: ActionCreator = async (store, id) => {
         response,
       },
     });
-    navTo(store, 'Main');
+    navTo(store, { dialogId: 'Main' });
   } catch (err) {
     store.dispatch({ type: ActionTypes.REMOVE_DIALOG_FAILURE, payload: null, error: err });
   }
@@ -34,7 +34,7 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
         response,
       },
     });
-    navTo(store, id);
+    navTo(store, { dialogId: id });
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -72,7 +72,7 @@ export const updateDialog: ActionCreator = undoable(
   }
 );
 
-export const createDialogBegin: ActionCreator = ({ dispatch }, onComplete) => {
+export const createDialogBegin: ActionCreator = ({ dispatch }, { onComplete }) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {

@@ -150,7 +150,7 @@ export default function TableView(props) {
         onRender: item => {
           const id = item.fileId;
           return (
-            <div key={id} onClick={() => navTo(id)}>
+            <div key={id} onClick={() => navTo({ dialogId: id })}>
               <Link>{id}</Link>
             </div>
           );

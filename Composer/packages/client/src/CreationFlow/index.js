@@ -54,21 +54,21 @@ export function CreationFlow(props) {
   };
 
   const openBot = async botFolder => {
-    await openBotProject(botFolder);
+    await openBotProject({ absolutePath: botFolder });
     navigateTo('/dialogs/Main');
     handleDismiss();
   };
 
   const handleDismiss = () => {
-    setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.CLOSE });
   };
 
   const handleCreateNew = async formData => {
-    await createProject(templateId || '', formData.name, formData.description);
+    await createProject({ templateId: templateId || '', name: formData.name, description: formData.description });
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description);
+    await saveProjectAs({ name: formData.name, description: formData.description });
   };
 
   const handleSubmit = formData => {
@@ -91,7 +91,7 @@ export function CreationFlow(props) {
   };
 
   const handleCreateNext = data => {
-    saveTemplateId(data);
+    saveTemplateId({ templateId: data });
     setStep(Steps.DEFINE);
   };
 

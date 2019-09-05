@@ -105,8 +105,10 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
       return new Promise(resolve => {
-        actions.createDialogBegin((newDialog: string | null) => {
-          resolve(newDialog);
+        actions.createDialogBegin({
+          onComplete: (newDialog: string | null) => {
+            resolve(newDialog);
+          },
         });
       });
     });
@@ -192,7 +194,7 @@ export const ShellApi: React.FC = () => {
     //make sure focusPath always valid
     const data = getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
     if (typeof data === 'undefined') {
-      actions.navTo(dialogId);
+      actions.navTo({ dialogId });
     }
 
     return true;
@@ -298,12 +300,12 @@ export const ShellApi: React.FC = () => {
 
   function navTo({ path }) {
     cleanData();
-    actions.navTo(path, breadcrumb);
+    actions.navTo({ dialogId: path, breadcrumb });
   }
 
   function focusEvent({ subPath }) {
     cleanData();
-    actions.selectTo(subPath);
+    actions.selectTo({ selectPath: subPath });
   }
 
   function focusSteps({ subPaths = [] }, event) {
@@ -312,7 +314,7 @@ export const ShellApi: React.FC = () => {
     if (event.source.name === FORM_EDITOR && focused) {
       dataPath = `${focused}.${dataPath}`;
     }
-    actions.focusTo(dataPath);
+    actions.focusTo({ focusPath: dataPath });
   }
 
   return null;

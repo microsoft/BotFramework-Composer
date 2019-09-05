@@ -14,7 +14,7 @@ export const setDesignPageLocation: ActionCreator = (
   });
 };
 
-export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) => {
+export const navTo: ActionCreator = ({ getState }, { dialogId, breadcrumb = [] }) => {
   const state = getState();
   const { dialogs } = state;
   let currentUri = `/dialogs/${dialogId}`;
@@ -30,7 +30,7 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 
-export const selectTo: ActionCreator = ({ getState }, selectPath) => {
+export const selectTo: ActionCreator = ({ getState }, { selectPath }) => {
   const state = getState();
   if (!selectPath) return;
   const { dialogId } = state.designPageLocation;
@@ -43,7 +43,7 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
 };
 
-export const focusTo: ActionCreator = ({ getState }, focusPath) => {
+export const focusTo: ActionCreator = ({ getState }, { focusPath }) => {
   const state = getState();
   const { dialogId, selected } = state.designPageLocation;
   const { breadcrumb } = state;
@@ -61,7 +61,7 @@ export const focusTo: ActionCreator = ({ getState }, focusPath) => {
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, breadcrumbUpdateType) } });
 };
 
-export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focusPath, breadcrumb = []) => {
+export const setectAndfocus: ActionCreator = (store, { dialogId, selectPath, focusPath, breadcrumb = [] }) => {
   const search = getUrlSearch(selectPath, focusPath);
   if (search) {
     const currentUri = `/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
@@ -69,6 +69,6 @@ export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focus
     if (checkUrl(currentUri, store.getState().designPageLocation)) return;
     navigateTo(currentUri, { state: { breadcrumb } });
   } else {
-    navTo(store, dialogId, breadcrumb);
+    navTo(store, { dialogId, breadcrumb });
   }
 };

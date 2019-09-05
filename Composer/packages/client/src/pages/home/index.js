@@ -37,17 +37,17 @@ export const Home = () => {
   const botNumLimit = 4;
 
   const onClickRecentBotProject = async path => {
-    await openBotProject(path);
+    await openBotProject({ absolutePath: path });
     navigate(BASEPATH);
   };
 
   const onClickNewBotProject = async () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
+    setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.NEW_FROM_SCRATCH });
   };
 
   const onClickTemplate = async id => {
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    saveTemplateId({ templateId: id });
+    setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.NEW_FROM_TEMPLATE });
   };
 
   const toolbarItems = [
@@ -58,7 +58,7 @@ export const Home = () => {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+        onClick: () => setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.NEW }),
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
@@ -70,7 +70,7 @@ export const Home = () => {
         iconProps: {
           iconName: 'OpenFolderHorizontal',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+        onClick: () => setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.OPEN }),
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
@@ -82,7 +82,7 @@ export const Home = () => {
         iconProps: {
           iconName: 'Save',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+        onClick: () => setCreationFlowStatus({ creationFlowStatus: CreationFlowStatus.SAVEAS }),
       },
       align: 'left',
     },

@@ -8,7 +8,7 @@ import { startBot } from './bot';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 
-export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
+export const setCreationFlowStatus: ActionCreator = ({ dispatch }, { creationFlowStatus }) => {
   dispatch({
     type: ActionTypes.SET_CREATION_FLOW_STATUS,
     payload: {
@@ -17,7 +17,7 @@ export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowS
   });
 };
 
-export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
+export const saveTemplateId: ActionCreator = ({ dispatch }, { templateId }) => {
   dispatch({
     type: ActionTypes.SAVE_TEMPLATE_ID,
     payload: {
@@ -56,7 +56,7 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const openBotProject: ActionCreator = async (store, absolutePath) => {
+export const openBotProject: ActionCreator = async (store, { absolutePath }) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -73,8 +73,8 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
-      startBot(store, true);
+      navTo(store, { dialogId: 'Main' });
+      startBot(store, { toStartBot: true });
     }
     return response.data;
   } catch (err) {
@@ -88,7 +88,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   }
 };
 
-export const saveProjectAs: ActionCreator = async (store, name, description) => {
+export const saveProjectAs: ActionCreator = async (store, { name, description }) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -106,7 +106,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
+      navTo(store, { dialogId: 'Main' });
     }
     return response.data;
   } catch (err) {
@@ -114,7 +114,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
   }
 };
 
-export const createProject: ActionCreator = async (store, templateId, name, description) => {
+export const createProject: ActionCreator = async (store, { templateId, name, description }) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -134,7 +134,7 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
+      navTo(store, { dialogId: 'Main' });
     }
     return response.data;
   } catch (err) {
