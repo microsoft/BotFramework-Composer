@@ -18,15 +18,7 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const {
-    fetchTemplates,
-    getAllProjects,
-    openBotProject,
-    createProject,
-    saveProjectAs,
-    saveTemplateId,
-    setLuisConfig,
-  } = actions;
+  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs, saveTemplateId } = actions;
   const { botName, templateId } = state;
 
   useEffect(() => {
@@ -68,8 +60,7 @@ export function CreationFlow(props) {
   };
 
   const openBot = async botFolder => {
-    const { botName } = await openBotProject(botFolder);
-    await setLuisConfig(botName);
+    await openBotProject(botFolder);
     navigateTo('/dialogs/Main');
     handleDismiss();
   };
@@ -83,8 +74,7 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    const { botName } = await saveProjectAs(formData.name, formData.description);
-    setLuisConfig(botName);
+    await saveProjectAs(formData.name, formData.description);
   };
 
   const handleSubmit = formData => {
