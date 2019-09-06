@@ -10,7 +10,7 @@ export const Trigger = ({ data, focused, onClick }): JSX.Element => (
     css={{
       ...TriggerSize,
       outline: focused ? '1px solid #0078d4' : 'none',
-      '&:hover': { outline: '1px solid #323130' },
+      '&:hover': !focused && { outline: '1px solid #323130' },
     }}
   >
     <FormCard
