@@ -164,7 +164,7 @@ interface CaseCondition {
   /** Value which must match the condition property */
   value: string;
   /** Steps to execute if case is equal to condition */
-  steps: MicrosoftIDialog[];
+  actions: MicrosoftIDialog[];
 }
 
 /** Step which conditionally decides which step to execute next. */
@@ -185,10 +185,8 @@ interface MicrosoftAdaptiveDialog extends BaseSchema {
   recognizer?: MicrosoftIRecognizer;
   /** Language generator to use for this dialog. (aka: LG file) */
   generator?: string;
-  /** This is the initial sequence of steps to execute when this dialog is started. */
-  steps: MicrosoftIDialog[];
   /** This is the array of rules to use to evaluate conversation */
-  rules: MicrosoftIRule[];
+  events: MicrosoftIRule[];
 }
 
 /* Union of components which implement the IDialog interface */
