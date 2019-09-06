@@ -75,7 +75,8 @@ export enum ActionTypes {
   CONNECT_BOT_FAILURE = 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
-  UPDATE_OAUTH = 'UPDATE_OAUTH',
+  UPDATE_ENV_SETTING = 'UPDATE_ENV_SETTING',
+  SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
@@ -190,3 +191,5 @@ export const SupportedFileTypes = [
   'xlsx',
   'xsn',
 ];
+
+export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];
