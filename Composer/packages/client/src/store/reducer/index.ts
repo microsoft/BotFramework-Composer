@@ -158,7 +158,9 @@ const updateEnvSetting: ReducerFunc = state => {
   return state;
 };
 
-const setTemplateProjects: ReducerFunc = (state, { data }) => {
+const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
+  const data = response && response.data;
+
   if (data && Array.isArray(data) && data.length > 0) {
     state.templateProjects = data;
   }
