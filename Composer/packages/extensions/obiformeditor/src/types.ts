@@ -87,6 +87,11 @@ declare module 'json-schema' {
   interface OBISchema {
     $role?: string;
     $type?: string;
+    $copy?: string;
+    $id?: string;
+    $designer?: {
+      [key: string]: any;
+    };
   }
 
   interface JSONSchema6 extends OBISchema {
