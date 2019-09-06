@@ -17,8 +17,18 @@ export const IconBrick = ({ onClick }): JSX.Element => {
       }}
       onClick={onClick}
     >
-      <div css={{ position: 'absolute', left: 4, top: 4 }}>
-        <Icon iconName="ErrorBadge" />
+      <div
+        css={{
+          position: 'absolute',
+          left: 4,
+          top: 4,
+          background: '#FED9CC',
+          width: 16,
+          height: 16,
+          borderRadius: '8px',
+        }}
+      >
+        <Icon iconName="ErrorBadge" style={{ fontSize: 8, position: 'absolute', left: 4, top: 4 }} />
       </div>
     </div>
   );
