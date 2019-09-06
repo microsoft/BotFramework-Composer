@@ -13,20 +13,13 @@ import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 
 const Routes = props => {
-  const { actions, state } = useContext(StoreContext);
-  const { botName } = state;
+  const { actions } = useContext(StoreContext);
   const Content = props.component;
   const parentProps = props;
 
   useEffect(() => {
     actions.fetchProject();
   }, []);
-
-  useEffect(() => {
-    if (botName) {
-      actions.setLuisConfig(botName);
-    }
-  }, [botName]);
 
   return (
     <Match path={`/dialogs/:dialogId/*`} {...props}>
