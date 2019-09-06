@@ -1,10 +1,8 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels, seedNewDialog } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 import nanoid from 'nanoid/generate';
-
-import { BotSchemas } from '../store/types';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
@@ -20,21 +18,52 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
+export function getFriendlyName(data) {
+  if (get(data, '$designer.name')) {
+    return get(data, '$designer.name');
+  }
+
+  if (get(data, 'intent')) {
+    return `#${get(data, 'intent')}`;
+  }
+
+  if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
+    return ConceptLabels[data.$type].title;
+  }
+}
+
+export function insert(content, path: string, position: number | undefined, $type: string) {
+  const current = get(content, path, []);
+  const newStep = {
+    $type,
+    $designer: {
+      name: getFriendlyName({ $type }),
+      id: nanoid('1234567890', 6),
+    },
+    ...seedNewDialog($type),
+  };
+
+  const insertAt = typeof position === 'undefined' ? current.length : position;
+
+  current.splice(insertAt, 0, newStep);
+
+  set(content, path, current);
+
+  return content;
+}
+
 export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return;
-  const content = dialogCopy.content;
-  const newTrigger = {
-    $type,
-    $designer: {
-      id: nanoid('1234567890', 6),
-    },
-  };
-  if (!content.rules) {
-    content.rules = [];
-  }
-  content.rules.push(newTrigger);
-  return content;
+  return insert(dialogCopy.content, 'rules', undefined, $type);
+}
+
+export function createSelectedPath(selected: number) {
+  return `rules[${selected}]`;
+}
+
+export function createFocusedPath(selected: number, focused: number) {
+  return `rules[${selected}].steps[${focused}]`;
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
@@ -52,29 +81,13 @@ export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   }, {});
 }
 
-const getLabel = (dialog: DialogInfo, dataPath: string, editorSchema: BotSchemas) => {
-  const name = get(dialog, `${dataPath}.$designer.name`);
-  if (name) return '#' + name;
-
-  const intent = get(dialog, `${dataPath}.intent`);
-  if (intent) return '#' + intent;
-
-  const type = get(dialog, `${dataPath}.$type`);
-  return getTitle(type, editorSchema);
+const getLabel = (dialog: DialogInfo, dataPath: string) => {
+  const data = get(dialog, dataPath);
+  if (!data) return '';
+  return getFriendlyName(data);
 };
 
-export function getTitle(type: string, editorSchema: BotSchemas) {
-  const sdkOverrides = get(editorSchema, ['editor', 'content', 'SDKOverrides', type]);
-  return (sdkOverrides && sdkOverrides.title) || '';
-}
-
-export function getbreadcrumbLabel(
-  dialogs: DialogInfo[],
-  dialogId: string,
-  selected: string,
-  focused: string,
-  schemas: BotSchemas
-) {
+export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, selected: string, focused: string) {
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
@@ -83,7 +96,7 @@ export function getbreadcrumbLabel(
   } else {
     const dialogsMap = getDialogsMap(dialogs);
     const dialog = dialogsMap[dialogId];
-    label = getLabel(dialog, dataPath, schemas);
+    label = getLabel(dialog, dataPath);
   }
 
   label = upperCaseName(label || '');
