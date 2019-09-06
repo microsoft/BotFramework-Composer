@@ -1,7 +1,6 @@
 import React, { useReducer } from 'react';
 import { once } from 'lodash';
 
-import oauthStorage from '../utils/oauthStorage';
 import { prepareAxios } from '../utils/auth';
 
 import { reducer } from './reducer';
@@ -29,14 +28,14 @@ const initialState: State = {
   luFiles: [],
   designPageLocation: {
     dialogId: '',
-    uri: '',
-    focusedEvent: '',
-    focusedSteps: [],
+    focused: '',
+    selected: '',
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
-  oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
+  isEnvSettingUpdated: false,
+  settings: {},
   toStartBot: false,
   currentUser: {
     token: null,

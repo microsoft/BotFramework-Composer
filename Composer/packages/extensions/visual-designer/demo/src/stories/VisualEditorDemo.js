@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import VisualDesigner from '../../../src';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
+import { EditorConfig } from '../../../src/editors/editorConfig';
 import './VisualEditorDemo.css';
 
 const sampleFileNames = Object.keys(ObiExamples);
@@ -10,6 +11,8 @@ const defaultFile = sampleFileNames[1];
 
 // Simulate the condition that json is always mutated.
 const copyJson = json => JSON.parse(JSON.stringify(json));
+
+EditorConfig.features.showEvents = true;
 
 export class VisualEditorDemo extends Component {
   state = {

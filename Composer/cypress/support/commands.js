@@ -67,8 +67,8 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 });
 
 Cypress.Commands.add('addEventHandler', handler => {
-  cy.withinEditor('VisualEditor', () => {
-    cy.getByTestId('EventsEditorAdd').click();
+  cy.getByTestId('AddNewTrigger').click();
+  cy.get(`[id=AddNewTriggerMenu]`).within(() => {
     cy.getByText(handler).click();
   });
 });

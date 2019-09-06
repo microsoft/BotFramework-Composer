@@ -1,6 +1,9 @@
+import { get, set } from 'lodash';
+
 import { ReducerFunc } from '../types';
-import { getExtension } from '../../utils';
-import { ActionTypes, FileTypes } from '../../constants';
+import { getExtension, createSelectedPath } from '../../utils';
+import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
+import settingStorage from '../../utils/dialogSettingStorage';
 import { UserTokenPayload } from '../action/types';
 
 import createReducer from './createReducer';
@@ -13,6 +16,17 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.settings = response.data.settings;
+  // merge setting in localStorage
+  const localSetting = settingStorage.get(response.data.botName);
+  if (localSetting) {
+    for (const property of SensitiveProperties) {
+      const value = get(localSetting, property);
+      if (value) {
+        set(state.settings as object, property, value);
+      }
+    }
+  }
   return state;
 };
 
@@ -115,27 +129,32 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const updateOAuth: ReducerFunc = (state, { oAuth }) => {
-  state.oAuth = oAuth;
-  return state;
-};
-
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, focusedEvent, focusedSteps, uri, breadcrumb }) => {
-  const focusedStep = focusedSteps[0] || '';
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
-  if (focusedStep) {
-    state.focusPath = dialogId + '#.' + focusedStep;
-  }
-
-  if (focusedSteps.length === 0 && focusedEvent) {
-    state.focusPath = dialogId + '#.' + focusedEvent;
+  if (focused) {
+    state.focusPath = dialogId + '#.' + focused;
   }
 
   //add current path to the breadcrumb
-  breadcrumb.push({ dialogId, focusedEvent, focusedSteps });
+  breadcrumb.push({ dialogId, selected, focused });
+
+  //if use navigateto to design page, add rules[0] for default select
+  if (!selected) {
+    selected = createSelectedPath(0);
+    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
+  }
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, focusedEvent, focusedSteps, uri };
+  state.designPageLocation = { dialogId, selected, focused };
+  return state;
+};
+const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+  state.settings = settings;
+  return state;
+};
+
+const updateEnvSetting: ReducerFunc = state => {
+  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
   return state;
 };
 
@@ -195,9 +214,10 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
+  [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
+  [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,

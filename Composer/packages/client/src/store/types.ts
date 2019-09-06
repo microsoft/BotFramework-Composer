@@ -24,8 +24,8 @@ interface StateError {
 
 export interface BreadcrumbItem {
   dialogId: string;
-  focusedEvent?: string;
-  focusedSteps: string;
+  selected: string;
+  focused: string;
 }
 
 export interface BotSchemas {
@@ -49,11 +49,12 @@ export interface State {
   schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  designPageLocation: any;
+  designPageLocation: DesignPageLocation;
   error: StateError | null;
-  oAuth: any;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
+  isEnvSettingUpdated: boolean;
+  settings: DialogSetting;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
   currentUser: {
@@ -67,6 +68,13 @@ export interface State {
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
 
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
+}
+
 export interface DialogInfo {
   id: string;
   displayName: string;
@@ -74,6 +82,7 @@ export interface DialogInfo {
   content: any;
   diagnostics: string[];
   luFile: string;
+  triggers: ITrigger[];
 }
 
 export interface Intent {
@@ -111,4 +120,25 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  endpointKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}
+export interface DialogSetting {
+  MicrosoftAppId?: string;
+  MicrosoftAppPassword?: string;
+  luis?: ILuisConfig;
+  [key: string]: any;
+}
+
+export interface DesignPageLocation {
+  dialogId: string;
+  selected: string;
+  focused: string;
 }

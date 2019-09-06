@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { BaseEditor } from '../../src';
+import { RichEditor } from '../../src';
 
 const LU_HELP =
   'https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format';
@@ -13,7 +13,7 @@ export default function App() {
 
   return (
     <div style={{ height: 'calc(100vh - 20px)', width: '100%' }}>
-      <BaseEditor onChange={newVal => setValue(newVal)} value={value} placeholder={placeholder} />
+      <RichEditor onChange={newVal => setValue(newVal)} value={value} placeholder={placeholder} />
     </div>
   );
 }

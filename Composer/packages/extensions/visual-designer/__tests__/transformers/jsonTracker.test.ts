@@ -1,4 +1,4 @@
-import { insert, deleteNode, queryNode } from '../../src/shared/jsonTracker';
+import { insert, deleteNode, queryNode } from '../../src/utils/jsonTracker';
 
 describe('queryNode', () => {
   describe('can query correct result', () => {

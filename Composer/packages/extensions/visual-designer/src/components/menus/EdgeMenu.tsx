@@ -2,7 +2,7 @@ import React from 'react';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 
-import { EdgeAddButtonSize } from '../../shared/elementSizes';
+import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 
 import { IconMenu } from './IconMenu';
 

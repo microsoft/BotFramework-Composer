@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from 'react-testing-library';
 
 import { FormCard } from '../../../src/components/nodes/templates/FormCard';
-import { getElementColor } from '../../../src/shared/elementColors';
+import { getElementColor } from '../../../src/utils/obiPropertyResolver';
 
 describe('<FormCard />', () => {
   let renderResult, header, label, nodeColors, onClick;
@@ -10,7 +10,7 @@ describe('<FormCard />', () => {
   beforeEach(() => {
     header = 'InputFormCard';
     label = 'FormCard';
-    nodeColors = getElementColor('DialogGroup.INPUT');
+    nodeColors = getElementColor('Microsoft.SendActivity');
 
     onClick = jest.fn();
 

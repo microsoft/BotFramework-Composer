@@ -1,5 +1,5 @@
 import { transformSwitchCondition } from '../../src/transformers/transformSwitchCondition';
-import { ObiTypes } from '../../src/shared/ObiTypes';
+import { ObiTypes } from '../../src/constants/ObiTypes';
 
 test('should return NULL when input is not SwitchCondition', () => {
   expect(transformSwitchCondition(null, '')).toBeNull();
