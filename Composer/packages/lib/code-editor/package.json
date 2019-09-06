@@ -20,7 +20,6 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "monaco-editor-webpack-plugin": "^1.7.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   },
@@ -60,7 +59,8 @@
     "webpack-dev-server": "^3.7.0"
   },
   "dependencies": {
-    "lodash.throttle": "^4.1.1",
-    "react-monaco-editor": "^0.26.2"
+    "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
+    "@bfcomposer/react-monaco-editor": "^0.30.3",
+    "lodash.throttle": "^4.1.1"
   }
 }

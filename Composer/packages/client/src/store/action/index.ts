@@ -7,3 +7,4 @@ export * from './bot';
 export * from './storage';
 export * from './navigation';
 export * from './error';
+export * from './setting';
