@@ -86,7 +86,7 @@ export class LuPublisher {
       await this.saveStatus();
     } catch (error) {
       console.error(error);
-      throw new Error('Error publishing to LUIS.');
+      throw new Error(error.body.error.message ? error.body.error.message : 'Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);
@@ -120,6 +120,11 @@ export class LuPublisher {
     }
   };
 
+  public setAuthoringKey = async (key: string) => {
+    if (this.config) {
+      this.config.authoringKey = key;
+    }
+  };
   //delete files in generated folder
   private async _deleteGenerated(path: string) {
     if (await this.storage.exists(path)) {
