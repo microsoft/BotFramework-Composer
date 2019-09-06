@@ -6,8 +6,26 @@ export interface ResourceValidator {
 }
 
 export interface Diagnostic {
-  name: string;
-  // servity
-  // position
-  // message
+  severity: DiagnosticSeverity;
+  message: string;
+  range: Range;
+  source?: string;
+  code?: string;
+}
+
+export interface Range {
+  start: Position;
+  end: Position;
+}
+
+export interface Position {
+  line: number;
+  character: number;
+}
+
+export enum DiagnosticSeverity {
+  Error = 0,
+  Warning = 1,
+  Information = 2,
+  Hint = 3,
 }
