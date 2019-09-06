@@ -25,7 +25,6 @@ export function CreationFlow(props) {
     createProject,
     saveProjectAs,
     saveTemplateId,
-    setLuisConfig,
     fetchStorages,
   } = actions;
   const { templateId } = state;
@@ -72,8 +71,7 @@ export function CreationFlow(props) {
   };
 
   const openBot = async botFolder => {
-    const { botName } = await openBotProject(botFolder);
-    await setLuisConfig(botName);
+    await openBotProject(botFolder);
     navigateTo('/dialogs/Main');
     handleDismiss();
   };
@@ -87,8 +85,7 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    const { botName } = await saveProjectAs(formData.name, formData.description);
-    setLuisConfig(botName);
+    await saveProjectAs(formData.name, formData.description);
   };
 
   const handleSubmit = formData => {

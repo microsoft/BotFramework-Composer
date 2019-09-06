@@ -1,3 +1,5 @@
+import { createSelectedPath } from '../../utils';
+
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
@@ -18,7 +20,7 @@ export const navTo: ActionCreator = ({ state }, dialogId, breadcrumb = []) => {
 
   const dialog = dialogs.find(item => dialogId === item.id);
   if (dialog && dialog.triggers.length > 0) {
-    currentUri = `${currentUri}?selected=rules[0]`;
+    currentUri = `${currentUri}?selected=${createSelectedPath(0)}`;
 
     breadcrumb = [...breadcrumb, { dialogId, selected: '', focused: '' }];
   }
