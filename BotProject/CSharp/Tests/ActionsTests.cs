@@ -118,26 +118,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_06HttpRequest()
-    {
-      await BuildTestFlow(getFolderPath("Steps_Samples"))
-      .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("06")
-          .AssertReply("Welcome! Here is a http request sample, please enter a name for you visual pet.")
-      .Send("TestPetName")
-          .AssertReply("Great! Your pet's name is TestPetName")
-          .AssertReply("Now please enter the id of your pet, this could help you find your pet later.")
-      .Send("88888")
-          .AssertReply("Done! You have added a pet named \"TestPetName\" with id \"88888\"")
-          .AssertReply("Now try to specify the id of your pet, and I will help your find it out from the store.")
-      .Send("88888")
-          .AssertReply("Great! I found your pet named \"TestPetName\"")
-      .StartTestAsync();
-    }
-
-    [TestMethod]
-    public async Task Actions_07SwitchCondition()
+    public async Task Actions_06SwitchCondition()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
@@ -151,7 +132,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_08RepeatDialog()
+    public async Task Actions_07RepeatDialog()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
@@ -168,7 +149,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_09TraceAndLog()
+    public async Task Actions_08TraceAndLog()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"), sendTrace: true)
       .SendConversationUpdate()
@@ -186,7 +167,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_10Editactions()
+    public async Task Actions_09EditActions()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
@@ -200,7 +181,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_11ReplaceDialog()
+    public async Task Actions_10ReplaceDialog()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
@@ -221,7 +202,7 @@ namespace Tests
     }
 
     [TestMethod]
-    public async Task Actions_12EmitEvent()
+    public async Task Actions_11EmitEvent()
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
