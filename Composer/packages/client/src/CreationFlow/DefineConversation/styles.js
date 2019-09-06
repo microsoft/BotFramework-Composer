@@ -32,8 +32,5 @@ export const locationBrowse = {
 };
 
 export const locationOnly = {
-  root: {
-    marginBottom: '20px',
-  },
   subComponentStyles: textFieldlabel,
 };

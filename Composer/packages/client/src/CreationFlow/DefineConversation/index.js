@@ -1,9 +1,19 @@
 import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
+import {
+  Dialog,
+  DialogType,
+  DialogFooter,
+  PrimaryButton,
+  DefaultButton,
+  Stack,
+  TextField,
+} from 'office-ui-fabric-react';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
+import { styles } from '../StepWizard/styles';
 
+import { DialogInfo } from './../../constants/index';
 import { StoreContext } from './../../store';
 import { name, description, locationOnly, locationBrowse } from './styles';
 
@@ -170,23 +180,38 @@ export function DefineConversation(props) {
         </form>
       )}
       {locationActive && (
-        <Fragment>
-          <Stack>
-            <TextField
-              styles={locationOnly}
-              value={shortenPath(customPath)}
-              suffix={'/' + (formData.name || formatMessage('[BotName]'))}
-              readOnly={true}
-              label={formatMessage('Destination folder')}
-              resizable={false}
-            />
-            <LocationSelectContent onChange={setCustomPath} />
-          </Stack>
-          <DialogFooter>
-            <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Cancel')} />
-            <PrimaryButton onClick={updateLocation} text={formatMessage('OK')} />
-          </DialogFooter>
-        </Fragment>
+        <Dialog
+          hidden={false}
+          onDismiss={toggleLocationPicker}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: DialogInfo.SELECT_DESTINATION.title,
+            subText: DialogInfo.SELECT_DESTINATION.subText,
+            styles: styles.dialog,
+          }}
+          modalProps={{
+            isBlocking: false,
+            styles: styles.modal,
+          }}
+        >
+          <Fragment>
+            <Stack>
+              <TextField
+                styles={locationOnly}
+                value={shortenPath(customPath)}
+                suffix={'/' + (formData.name || formatMessage('[BotName]'))}
+                readOnly={true}
+                label={formatMessage('Destination folder')}
+                resizable={false}
+              />
+              <LocationSelectContent onChange={setCustomPath} />
+            </Stack>
+            <DialogFooter>
+              <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Cancel')} />
+              <PrimaryButton onClick={updateLocation} text={formatMessage('OK')} />
+            </DialogFooter>
+          </Fragment>
+        </Dialog>
       )}
     </Fragment>
   );

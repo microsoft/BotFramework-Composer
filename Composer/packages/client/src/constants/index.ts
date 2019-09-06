@@ -164,6 +164,10 @@ export const DialogInfo = {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
   },
+  SELECT_DESTINATION: {
+    title: formatMessage('Set destination folder'),
+    subText: formatMessage('Choose a location for your new bot project.'),
+  },
 };
 
 export const DialogDeleting = {

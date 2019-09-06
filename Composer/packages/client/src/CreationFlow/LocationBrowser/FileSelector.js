@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
+import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -20,7 +21,7 @@ import { Fragment } from 'react';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
 
-import { detailListContainer, detailListClass, fileSelectorContainer } from './styles';
+import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
 import { loading } from './styles';
 
 export function FileSelector(props) {
@@ -28,6 +29,8 @@ export function FileSelector(props) {
     onSelectionChanged,
     focusedStorageFolder,
     checkShowItem,
+    currentPath,
+    updateCurrentPath,
     storageExplorerStatus,
     storageFileLoadingStatus,
   } = props;
@@ -195,10 +198,51 @@ export function FileSelector(props) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
+  function getNavItemPath(array, seperator, start, end) {
+    if (end === 0) return array[0] + seperator;
+    if (!start) start = 0;
+    if (!end) end = array.length - 1;
+    end++;
+    return array.slice(start, end).join(seperator);
+  }
+
+  function onBackIconClicked() {
+    const path = focusedStorageFolder.parent;
+    updateCurrentPath(path);
+  }
+
+  // split will filter posix root, if path to call server api is not absolute, must add / back
+  const separator = '/';
+  const pathItems = currentPath
+    .replace(/\\/g, '/')
+    .split(separator)
+    .filter(p => p !== '');
+  const breadcrumbItems = pathItems.map((item, index) => {
+    let itemPath = getNavItemPath(pathItems, separator, 0, index);
+    itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
+    return {
+      text: item,
+      key: itemPath,
+      onClick: () => {
+        updateCurrentPath(itemPath);
+      },
+    };
+  });
+
   return (
     <div css={fileSelectorContainer}>
       {storageFileLoadingStatus === 'success' && (
         <Fragment>
+          <div css={pathNav}>
+            <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
+            <div
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
+            </div>
+          </div>
           <div data-is-scrollable="true" css={detailListContainer}>
             <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
               <DetailsList
