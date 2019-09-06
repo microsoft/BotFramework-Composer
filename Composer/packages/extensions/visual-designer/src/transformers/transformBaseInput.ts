@@ -5,10 +5,12 @@ export function transformBaseInput(input: any, jsonpath: string): { botAsks: Ind
   return {
     botAsks: new IndexedNode(jsonpath, {
       ...input,
+      _type: input.$type,
       $type: ObiTypes.BotAsks,
     }),
     userAnswers: new IndexedNode(jsonpath, {
       ...input,
+      _type: input.$type,
       $type: input.$type === ObiTypes.ChoiceInput ? ObiTypes.ChoiceInputDetail : ObiTypes.UserAnswers,
     }),
   };

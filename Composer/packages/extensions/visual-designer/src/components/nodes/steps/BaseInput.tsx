@@ -38,10 +38,10 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={botAsksNode.offset}>
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
-          header={'Text Input'}
+          header={'Bot Asks'}
           corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={'MessageBot'}
-          label={data.prompt || '<initPrompt>'}
+          label={data.prompt || '<prompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
           }}
