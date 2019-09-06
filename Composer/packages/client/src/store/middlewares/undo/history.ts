@@ -15,8 +15,8 @@ class UndoHistory {
   private pointer: number = -1;
   private _limit: number = 5;
 
-  public createStack(actionCreate: ActionCreator) {
-    const stack = new UndoStack(actionCreate);
+  public createStack(undo: ActionCreator, redo: ActionCreator) {
+    const stack = new UndoStack(undo, redo);
     this.stacks[stack.id] = stack;
     return stack;
   }

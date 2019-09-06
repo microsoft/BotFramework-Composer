@@ -1,6 +1,6 @@
 import { uniqueId } from 'lodash';
 
-import { ActionCreator } from '../../types';
+import { ActionCreator, Store } from '../../types';
 
 const PREFIX = 'undoStack';
 
@@ -8,29 +8,27 @@ export default class UndoStack {
   private history: any[] = [];
   private pointer: number = -1;
   private _id: string;
-  private _actionCreate: ActionCreator;
+  private _undo: ActionCreator;
+  private _redo: ActionCreator;
 
-  constructor(actionCreate: ActionCreator) {
+  constructor(undo: ActionCreator, redo: ActionCreator) {
     this._id = uniqueId(PREFIX);
-    this._actionCreate = actionCreate;
+    this._undo = undo;
+    this._redo = redo;
   }
 
   public get id() {
     return this._id;
   }
 
-  public get actionCreate() {
-    return this._actionCreate;
-  }
-
-  undo = () => {
+  undo = async (store: Store) => {
     this.pointer--;
-    return this.history[this.pointer];
+    return await this._undo(store, this.history[this.pointer]);
   };
 
-  redo = () => {
+  redo = async (store: Store) => {
     this.pointer++;
-    return this.history[this.pointer];
+    return await this._redo(store, this.history[this.pointer]);
   };
 
   add = (state: any) => {

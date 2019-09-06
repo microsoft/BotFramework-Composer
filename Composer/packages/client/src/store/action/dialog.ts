@@ -46,30 +46,38 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
   }
 };
 
+export const updateDialogBase: ActionCreator = async ({ dispatch }, { id, content }) => {
+  try {
+    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
+    dispatch({
+      type: ActionTypes.UPDATE_DIALOG,
+      payload: {
+        response,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.UPDATE_DIALOG_FAILURE,
+      payload: {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+      },
+    });
+  }
+};
+
 export const updateDialog: ActionCreator = undoable(
-  async ({ dispatch }, { id, content }) => {
-    try {
-      const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
-      dispatch({
-        type: ActionTypes.UPDATE_DIALOG,
-        payload: {
-          response,
-        },
-      });
-    } catch (err) {
-      dispatch({
-        type: ActionTypes.UPDATE_DIALOG_FAILURE,
-        payload: {
-          message: err.response && err.response.data.message ? err.response.data.message : err,
-        },
-      });
+  updateDialogBase,
+  (state: State, args, isEmpty) => {
+    if (isEmpty) {
+      const id = state.designPageLocation.dialogId;
+      const dialog = state.dialogs.find(dialog => dialog.id === id);
+      return { id, content: dialog ? dialog.content : {} };
+    } else {
+      return args;
     }
   },
-  (state: State) => {
-    const id = state.designPageLocation.dialogId;
-    const dialog = state.dialogs.find(dialog => dialog.id === id);
-    return { id, content: dialog ? dialog.content : {} };
-  }
+  updateDialogBase,
+  updateDialogBase
 );
 
 export const createDialogBegin: ActionCreator = ({ dispatch }, { onComplete }) => {

@@ -2,22 +2,20 @@ import { ActionTypes } from './../../../constants/index';
 import { Store, ActionType, ActionCreator, State } from './../../types';
 import undoHistory from './history';
 
-export type MapStateToArgs = (state: State) => { [key: string]: any };
+export type Pick = (state: State, args: any, isStackEmpty: boolean) => { [key: string]: any };
 
-export const undoActionsMiddleware = ({ dispatch, getState }) => next => {
+export const undoActionsMiddleware = (store: Store) => next => {
   return async (action: ActionType) => {
     if (action.type === ActionTypes.UNDO && undoHistory.canUndo()) {
       const undoStacks = undoHistory.undo();
       for (const stack of undoStacks) {
-        const args = stack.undo();
-        await stack.actionCreate({ dispatch, getState }, args);
+        await stack.undo(store);
       }
       return;
     } else if (action.type === ActionTypes.REDO && undoHistory.canRedo()) {
       const redoStacks = undoHistory.redo();
       for (const stack of redoStacks) {
-        const args = stack.redo();
-        await stack.actionCreate({ dispatch, getState }, args);
+        await stack.redo(store);
       }
       return;
     } else if (action.type === ActionTypes.HISTORY_CLEAR) {
@@ -30,22 +28,23 @@ export const undoActionsMiddleware = ({ dispatch, getState }) => next => {
 
 export const undoable = (
   actionCreate: ActionCreator,
-  mapStateToArgs: MapStateToArgs,
-  revertActionCreate?: ActionCreator
+  pick: Pick,
+  undo: ActionCreator,
+  redo: ActionCreator
 ): ActionCreator => {
-  //revertActionCreate is used to do some side effect
-  const stack = undoHistory.createStack(!revertActionCreate ? actionCreate : revertActionCreate);
+  const stack = undoHistory.createStack(undo, redo);
 
   return (store: Store, args) => {
     //operatioId is used to sign the same state actions as user action.
     const { operationId } = args;
 
     if (stack.isEmpty()) {
-      const pastArgs = mapStateToArgs(store.getState());
-      stack.add(pastArgs);
+      const partialState = pick(store.getState(), args, true);
+      stack.add(partialState);
       undoHistory.add(stack.id, operationId);
     }
-    stack.add(args);
+    const partialState = pick(store.getState(), args, false);
+    stack.add(partialState);
     undoHistory.add(stack.id, operationId);
     return actionCreate(store, args);
   };
