@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
+import { get, debounce } from 'lodash';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/neat.css';
@@ -9,9 +10,9 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 
 import './style.css';
-import oauthStorage from './../../../utils/oauthStorage';
+import settingsStorage from './../../../utils/dialogSettingStorage';
 import { StoreContext } from './../../../store';
-
+import { SensitiveProperties } from './../../../constants';
 window.jsonlint = jsonlint;
 
 const cmOptions = {
@@ -30,27 +31,38 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const [value, setValue] = useState('');
-  const { actions } = useContext(StoreContext);
-
-  const { updateOAuth } = actions;
-
+  const { state, actions } = useContext(StoreContext);
+  const { settings, botName, isEnvSettingUpdated } = state;
+  const { syncEnvSettings } = actions;
   useEffect(() => {
-    setValue(oauthStorage.get());
-  }, []);
+    setValue(settings);
+  }, [botName, isEnvSettingUpdated]);
 
   const updateFormData = (editor, data, value) => {
     try {
       const result = JSON.parse(value);
       try {
-        oauthStorage.set(result);
-        updateOAuth(result);
+        for (const property of SensitiveProperties) {
+          const propertyValue = get(result, property);
+          settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+        }
+        syncEnvSettings(result);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
       }
     } catch (err) {
       //Do Nothing
     }
   };
 
-  return <CodeMirror value={JSON.stringify(value, null, 2)} options={cmOptions} onChange={updateFormData} autoCursor />;
+  return botName ? (
+    <CodeMirror
+      value={JSON.stringify(value, null, 2)}
+      options={cmOptions}
+      onChange={debounce(updateFormData, 500)}
+      autoCursor
+    />
+  ) : (
+    <div>Data Loading...</div>
+  );
 };

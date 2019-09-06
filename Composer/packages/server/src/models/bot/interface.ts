@@ -50,6 +50,13 @@ export interface LUFile {
   [key: string]: any;
 }
 
+export interface ITrigger {
+  id: string;
+  displayName: string;
+  type: string;
+  isIntent: boolean;
+}
+
 export interface ILuisSettings {
   luis: {
     [key: string]: string;
@@ -73,7 +80,29 @@ export enum FileUpdateType {
 export interface ILuisConfig {
   name: string;
   authoringKey: string;
+  endpointKey: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
+}
+
+export interface IOperationLUFile {
+  diagnostics?: any[]; // ludown parser output
+  relativePath?: string;
+  content?: string;
+  parsedContent?: { [key: string]: any };
+  lastUpdateTime?: number;
+  lastPublishTime?: number;
+  [key: string]: any;
+}
+
+export interface ILuisStatusOperation {
+  [key: string]: IOperationLUFile;
+}
+
+export interface DialogSetting {
+  MicrosoftAppId: string;
+  MicrosoftAppPassword: string;
+  luis: ILuisConfig;
+  [key: string]: any;
 }

@@ -16,7 +16,7 @@ export const Trigger = ({ data, focused, onClick }): JSX.Element => (
         themeColor: '#BFEAE9',
         iconColor: 'black',
       }}
-      icon={'Relationship'}
+      icon={'Flow'}
       header={'Trigger'}
       label={data.intent || data.$type}
       onClick={onClick}

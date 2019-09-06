@@ -6,36 +6,34 @@ context('Visual Designer', () => {
     cy.startFromTemplate('EmptyBot', 'VisualDesignerTest');
   });
 
-  function clickAddEvent(event) {
-    cy.getByTestId('EventsEditorAdd').click();
-    cy.getByText(event).click();
-  }
-
+  //will remove skip after add trigger is ok
   it('can add a rule from the visual designer', () => {
+    cy.addEventHandler('Handle an Event');
+    cy.wait(100);
+
     cy.withinEditor('VisualEditor', () => {
-      clickAddEvent('Handle an Event');
-      cy.wait(100);
-      cy.get('.event-renderer-container--focused').within(() => {
-        cy.contains('Handle an Event').should('exist');
-      });
+      cy.contains('Microsoft.EventRule').should('exist');
+    });
 
-      clickAddEvent('Handle an Intent');
-      cy.wait(100);
-      cy.get('.event-renderer-container--focused').within(() => {
-        cy.contains('Handle an Intent').should('exist');
-      });
+    cy.addEventHandler('Handle an Intent');
+    cy.wait(100);
 
-      clickAddEvent('Handle Unknown Intent');
-      cy.wait(100);
-      cy.get('.event-renderer-container--focused').within(() => {
-        cy.contains('Handle Unknown Intent').should('exist');
-      });
+    cy.withinEditor('VisualEditor', () => {
+      cy.contains('Microsoft.IntentRule').should('exist');
+    });
 
-      clickAddEvent('Handle ConversationUpdate');
-      cy.wait(100);
-      cy.get('.event-renderer-container--focused').within(() => {
-        cy.contains('Handle ConversationUpdate').should('exist');
-      });
+    cy.addEventHandler('Handle Unknown Intent');
+    cy.wait(100);
+
+    cy.withinEditor('VisualEditor', () => {
+      cy.contains('Microsoft.UnknownIntentRule').should('exist');
+    });
+
+    cy.addEventHandler('Handle ConversationUpdate');
+    cy.wait(100);
+
+    cy.withinEditor('VisualEditor', () => {
+      cy.contains('Microsoft.ConversationUpdateActivityRule').should('exist');
     });
   });
 });
