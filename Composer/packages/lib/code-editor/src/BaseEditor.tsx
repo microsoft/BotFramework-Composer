@@ -1,6 +1,5 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
-import MonacoEditor, { MonacoEditorProps } from 'react-monaco-editor';
-import { NeutralColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
+import MonacoEditor, { MonacoEditorProps } from '@bfcomposer/react-monaco-editor';
 import throttle from 'lodash.throttle';
 
 const defaultOptions = {
@@ -58,8 +57,6 @@ export function BaseEditor(props: BaseEditorProps) {
       ref={containerRef}
       style={{
         height: '100%',
-        border: `1px solid ${NeutralColors.gray30}`,
-        overflow: 'hidden',
         boxSizing: 'border-box',
       }}
     >
