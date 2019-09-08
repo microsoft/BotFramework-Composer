@@ -50,7 +50,7 @@ export const TestController: React.FC = () => {
 
   useEffect(() => {
     toStartBot && handleClick();
-    startBot({ toStartBot: false });
+    startBot(false);
   }, [toStartBot]);
 
   async function handleClick() {
@@ -115,7 +115,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      await (connected ? reloadBot({ settings }) : connectBot({ settings }));
+      await (connected ? reloadBot(settings) : connectBot(settings));
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);

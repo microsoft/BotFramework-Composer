@@ -43,17 +43,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   unhandledrejectionHandler(event) {
     event.preventDefault();
     console.error(event.reason);
-    this.context.actions.setError({ error: errorToShow });
+    this.context.actions.setError(errorToShow);
   }
 
   eventHandler(error) {
     console.error(error);
-    this.context.actions.setError({ error: errorToShow });
+    this.context.actions.setError(errorToShow);
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
     console.error({ message, source, lineno, colno, error });
-    this.context.actions.setError({ error: errorToShow });
+    this.context.actions.setError(errorToShow);
     return true;
   }
 
@@ -66,12 +66,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   // catch all render errors for children components
   componentDidCatch(error) {
     console.log(error);
-    this.context.actions.setError({ error: errorToShow });
+    this.context.actions.setError(errorToShow);
   }
 
   componentWillUnmount() {
     // set error into null;
-    this.context.actions.setError({ error: null });
+    this.context.actions.setError(null);
     window.onerror = null;
     window.removeEventListener('unhandledrejection', this.unhandledrejectionHandler);
     window.removeEventListener('error', this.eventHandler);
@@ -86,7 +86,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             error={state.error.message}
             title={state.error.summary}
             onDismiss={() => {
-              actions.setError({ error: null });
+              actions.setError(null);
             }}
           />
         ) : null}

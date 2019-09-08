@@ -23,12 +23,12 @@ export default class UndoStack {
 
   undo = async (store: Store) => {
     this.pointer--;
-    return await this._undo(store, this.history[this.pointer]);
+    return await this._undo(store, ...this.history[this.pointer]);
   };
 
   redo = async (store: Store) => {
     this.pointer++;
-    return await this._redo(store, this.history[this.pointer]);
+    return await this._redo(store, ...this.history[this.pointer]);
   };
 
   add = (state: any) => {

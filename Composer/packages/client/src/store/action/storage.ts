@@ -37,7 +37,7 @@ export async function fetchTemplates({ dispatch }) {
   }
 }
 
-export const addNewStorage: ActionCreator = async ({ dispatch }, { storageData }) => {
+export const addNewStorage: ActionCreator = async ({ dispatch }, storageData) => {
   try {
     const response = await axios.post(`${BASEURL}/storages`, storageData);
     dispatch({
@@ -52,7 +52,7 @@ export const addNewStorage: ActionCreator = async ({ dispatch }, { storageData }
 };
 
 // todo: enable this if we have more storage, currently we only have one.
-export const fetchStorageByName: ActionCreator = async ({ dispatch }, { fileName }) => {
+export const fetchStorageByName: ActionCreator = async ({ dispatch }, fileName) => {
   try {
     const response = await axios.get(`${BASEURL}/storage/${fileName}`);
     dispatch({
@@ -66,7 +66,7 @@ export const fetchStorageByName: ActionCreator = async ({ dispatch }, { fileName
   }
 };
 
-export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, { id, path }) => {
+export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, path) => {
   try {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,

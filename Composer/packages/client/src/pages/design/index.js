@@ -102,9 +102,9 @@ function DesignPage(props) {
 
   function handleSelect(id, selected = '') {
     if (selected) {
-      selectTo({ selectPath: selected });
+      selectTo(selected);
     } else {
-      navTo({ dialogId: id });
+      navTo(id);
     }
   }
 
@@ -121,7 +121,7 @@ function DesignPage(props) {
 
   const onCreateDialogComplete = newDialog => {
     if (newDialog) {
-      navTo({ dialogId: newDialog });
+      navTo(newDialog);
     }
   };
 
@@ -158,12 +158,7 @@ function DesignPage(props) {
   ];
 
   function handleBreadcrumbItemClick(_event, { dialogId, selected, focused, index }) {
-    setectAndfocus({
-      dialogId,
-      selectPath: selected,
-      focusPath: focused,
-      breadcrumb: clearBreadcrumb(breadcrumb, index),
-    });
+    setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
   }
 
   const breadcrumbItems = useMemo(() => {
@@ -220,7 +215,7 @@ function DesignPage(props) {
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog({ id });
+      await removeDialog(id);
     }
   }
 
@@ -243,7 +238,7 @@ function DesignPage(props) {
           selectTo(createSelectedPath(current - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo({ dialogId: id });
+          navTo(id);
         }
       } else if (index < current) {
         //if the deleted node is at the front, navTo the current one;
@@ -260,7 +255,7 @@ function DesignPage(props) {
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin({ onComplete: onCreateDialogComplete })}
+          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
           onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}

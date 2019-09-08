@@ -184,7 +184,7 @@ export default function TableView(props) {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={id} onClick={() => navTo({ dialogId: id })}>
+              <div key={id} onClick={() => navTo(id)}>
                 <Link>{id}</Link>
               </div>
             );

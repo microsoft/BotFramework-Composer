@@ -20,7 +20,7 @@ export function SelectLocation(props) {
           return item.name === defaultKey;
         }) >= 0
       ) {
-        startBot({ toStartBot: true });
+        startBot(true);
         onDismiss();
         navigateTo('/dialogs/Main');
       } else {

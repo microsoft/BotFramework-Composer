@@ -2,7 +2,7 @@ import { ActionTypes } from './../../../constants/index';
 import { Store, ActionType, ActionCreator, State } from './../../types';
 import undoHistory from './history';
 
-export type Pick = (state: State, args: any, isStackEmpty: boolean) => { [key: string]: any };
+export type Pick = (state: State, args: any[], isStackEmpty: boolean) => any;
 
 export const undoActionsMiddleware = (store: Store) => next => {
   return async (action: ActionType) => {
@@ -34,10 +34,9 @@ export const undoable = (
 ): ActionCreator => {
   const stack = undoHistory.createStack(undo, redo);
 
-  return (store: Store, args) => {
+  return (store: Store, ...args: any[]) => {
     //operatioId is used to sign the same state actions as user action.
-    const { operationId } = args;
-
+    const operationId = undefined;
     if (stack.isEmpty()) {
       const partialState = pick(store.getState(), args, true);
       stack.add(partialState);
@@ -46,7 +45,7 @@ export const undoable = (
     const partialState = pick(store.getState(), args, false);
     stack.add(partialState);
     undoHistory.add(stack.id, operationId);
-    return actionCreate(store, args);
+    return actionCreate(store, ...args);
   };
 };
 
