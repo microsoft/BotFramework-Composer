@@ -11,6 +11,7 @@ import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel, getDialogsMap, getDialogData } from '../../utils';
 import { addNewTrigger, deleteTrigger, createSelectedPath } from '../../utils';
 import { shellApi } from '../../extension-container/ExtensionContainer';
+import Webchat from '../webchat/MinimizableWebchat';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -266,6 +267,7 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
+      <Webchat />
     </Fragment>
   );
 }
