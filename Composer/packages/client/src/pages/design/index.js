@@ -1,13 +1,13 @@
-import React, { Fragment, useContext, useEffect, useMemo } from 'react';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower } from 'lodash';
-// import { getDialogData } from '../../utils';
+import { toLower, get } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, addNewTrigger, deleteTrigger, createSelectedPath } from '../../utils';
+import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
+import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -78,7 +78,7 @@ function DesignPage(props) {
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
-
+  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -96,6 +96,20 @@ function DesignPage(props) {
       clearUndoHistory();
     }
   }, [location]);
+
+  const OnTriggerCreationDismiss = () => {
+    setTriggerModalVisibility(false);
+  };
+
+  const OnTriggerCreationSubmit = dialog => {
+    const payload = {
+      id: dialog.id,
+      content: dialog.content,
+    };
+    const index = get(dialog, 'content.rules', []).length - 1;
+    actions.selectTo(`rules[${index}]`);
+    actions.updateDialog(payload);
+  };
 
   function handleSelect(id, selected = '') {
     if (selected) {
@@ -211,12 +225,6 @@ function DesignPage(props) {
     }
   }
 
-  async function handleAddTrigger(id, type, index) {
-    const content = addNewTrigger(dialogs, id, type);
-    await updateDialog({ id, content });
-    selectTo(createSelectedPath(index));
-  }
-
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
@@ -248,9 +256,11 @@ function DesignPage(props) {
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-          onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          openNewTriggerModal={() => {
+            setTriggerModalVisibility(true);
+          }}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
@@ -283,6 +293,14 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
+      {triggerModalVisible && (
+        <TriggerCreationModal
+          dialogId={dialogId}
+          isOpen={triggerModalVisible}
+          onDismiss={OnTriggerCreationDismiss}
+          onSubmit={OnTriggerCreationSubmit}
+        />
+      )}
     </Fragment>
   );
 }

@@ -1,16 +1,46 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog } from 'shared-menus';
+import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 import nanoid from 'nanoid/generate';
+import { IDropdownOption } from 'office-ui-fabric-react';
+
+import { DialogInfo } from '../store/types';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
-
 const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
+}
+
+interface TriggerFormData {
+  errors: TriggerFormDataErrors;
+  $type: string;
+  name: string;
+  description: string;
+}
+
+interface TriggerFormDataErrors {
+  $type?: string;
+  name?: string;
+}
+
+export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: TriggerFormData) {
+  const dialog = cloneDeep(inputDialog);
+  const rules = get(dialog, 'content.rules', []);
+  const newStep = {
+    $type: data.$type,
+    $designer: {
+      name: data.name,
+      id: nanoid('1234567890', 6),
+      description: data.description,
+    },
+    ...seedNewDialog(data.$type),
+  };
+  rules.push(newStep);
+  set(dialog, 'content.rules', rules);
+  return dialog;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -78,6 +108,19 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
   const content = dialogCopy.content;
   content.events.splice(index, 1);
   return content;
+}
+
+export function getTriggerTypes(): IDropdownOption[] {
+  const TriggerTypes: IDropdownOption[] = [
+    {
+      key: '',
+      text: '',
+    },
+    ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
+      return { key: t, text: ConceptLabels[t].title };
+    }),
+  ];
+  return TriggerTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
