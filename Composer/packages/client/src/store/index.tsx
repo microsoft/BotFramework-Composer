@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { once } from 'lodash';
+import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
 
