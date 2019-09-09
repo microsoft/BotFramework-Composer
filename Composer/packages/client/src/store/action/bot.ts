@@ -2,11 +2,9 @@ import axios from 'axios';
 
 import { ActionCreator } from '../types';
 
-import oauthStorage from './../../utils/oauthStorage';
 import { BASEURL, ActionTypes } from './../../constants';
-import LuisStorage from './../../utils/luisStorage';
 
-export const connectBot: ActionCreator = async (store, botName) => {
+export const connectBot: ActionCreator = async (store, settings) => {
   const path = `${BASEURL}/launcher/connect`;
   try {
     await axios.get(path);
@@ -16,16 +14,16 @@ export const connectBot: ActionCreator = async (store, botName) => {
         status: 'connected',
       },
     });
-    await reloadBot(store, botName);
+    await reloadBot(store, settings);
   } catch (err) {
     throw new Error(err.response.data.message);
   }
 };
 
-export const reloadBot: ActionCreator = async ({ dispatch }, botName) => {
+export const reloadBot: ActionCreator = async ({ dispatch }, settings) => {
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput });
+    await axios.post(path, settings);
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

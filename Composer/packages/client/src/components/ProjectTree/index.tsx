@@ -1,18 +1,17 @@
 import React, { useMemo } from 'react';
-import { ActionButton, IIconProps, IContextualMenuProps, IContextualMenuItem } from 'office-ui-fabric-react';
+import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { cloneDeep } from 'lodash';
+import { createStepMenu, DialogGroup } from 'shared-menus';
 
-import { DialogInfo, ITrigger, BotSchemas } from '../../store/types';
-import { getTitle } from '../../utils';
-import { NewTriggerType } from '../../constants';
+import { DialogInfo, ITrigger } from '../../store/types';
+import { getFriendlyName, createSelectedPath } from '../../utils';
 
 import { addButton, root } from './styles';
 import { TreeItem } from './treeItem';
 
 interface ProjectTreeProps {
   dialogs: DialogInfo[];
-  schemas: BotSchemas;
   dialogId: string;
   selected: string;
   onAdd: () => void;
@@ -32,41 +31,22 @@ const menuIconProps: IIconProps = {
 };
 
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
-  const {
-    dialogs,
-    onAdd,
-    dialogId,
-    selected,
-    onSelect,
-    onDeleteDialog,
-    onDeleteTrigger,
-    onAddTrigger,
-    schemas,
-  } = props;
+  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, onAddTrigger } = props;
 
-  const createMenuProps = (
-    dialogId: string,
-    index: number,
-    onItemClick: (ev, item: IContextualMenuItem) => any
-  ): IContextualMenuProps => {
+  const createMenuProps = (position: number) => {
     return {
-      items: NewTriggerType.map(type => {
-        const text = getTitle(type, schemas);
-        return {
-          key: type,
-          text,
-          index,
-          dialogId,
-          'data-testid': text,
-          onClick: onItemClick,
-        } as IContextualMenuItem;
-      }),
+      items: createStepMenu(
+        [DialogGroup.EVENTS],
+        false,
+        (e, item): any => onAddTrigger(dialogId, item.$type, position)
+      ),
+      id: 'AddNewTriggerMenu',
     };
   };
 
   const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
-      return getTitle(trigger.type, schemas);
+      return getFriendlyName({ $type: trigger.type });
     }
     return trigger.displayName;
   };
@@ -84,10 +64,6 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
     }, []);
   }, [dialogs]);
 
-  const handleAddTrigger = (ev, item) => {
-    onAddTrigger(item.dialogId, item.key, item.index);
-  };
-
   return (
     <div css={root} data-testid="ProjectTree">
       <ul>
@@ -100,14 +76,16 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                 isActive={dialogId === link.id}
                 activeNode={dialogId}
                 onSelect={() => {
-                  onSelect(link.id);
+                  if (dialogId !== link.id) {
+                    onSelect(link.id);
+                  }
                 }}
                 onDelete={onDeleteDialog}
               />
               <ul>
                 {dialogId === link.id &&
                   link.triggers.map((trigger, index) => {
-                    const current = `rules[${index}]`;
+                    const current = createSelectedPath(index);
                     trigger.displayName = showName(trigger);
                     return (
                       <li key={trigger.id}>
@@ -116,7 +94,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                           showName={item => showName(item)}
                           depth={1}
                           isActive={current === selected}
-                          onSelect={() => onSelect(link.id, `rules[${index}]`)}
+                          onSelect={() => onSelect(link.id, createSelectedPath(index))}
                           onDelete={() => onDeleteTrigger(link.id, index)}
                         />
                       </li>
@@ -129,7 +107,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  menuProps={createMenuProps(link.id, link.triggers.length, handleAddTrigger)}
+                  menuProps={createMenuProps(link.triggers.length)}
                   menuIconProps={menuIconProps}
                 >
                   {formatMessage('New Trigger ..')}

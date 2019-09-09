@@ -8,17 +8,15 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "515654",
         "updatedAt": "2019-07-22T08:12:34.596Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -37,7 +35,7 @@
             "id": "049005"
           },
           "condition": "user.lists == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
@@ -58,7 +56,7 @@
             "id": "488882"
           },
           "condition": "dialog.listName == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.ChoiceInput",
               "$designer": {
@@ -68,7 +66,7 @@
               },
               "property": "dialog.listName",
               "prompt": "Which list do you want to show?",
-              "maxTurnCount": 0,
+              "maxTurnCount": 3,
               "alwaysPrompt": true,
               "allowInterruptions": false,
               "outputFormat": "value",
@@ -125,7 +123,7 @@
             "id": "064151"
           },
           "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -136,7 +134,7 @@
               "activity": "[bfdactivity-896478]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

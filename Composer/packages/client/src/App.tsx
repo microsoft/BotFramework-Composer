@@ -1,5 +1,4 @@
-import React, { forwardRef } from 'react';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import React, { forwardRef, useContext, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -12,13 +11,15 @@ import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { RequireAuth } from './components/RequireAuth';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = [
+const topLinks = (botLoaded: boolean) => [
   {
     to: '/home',
     iconName: 'Home',
@@ -32,6 +33,7 @@ const topLinks = [
     labelName: 'Design Flow',
     activeIfUrlContains: 'dialogs',
     exact: false,
+    underTest: !botLoaded,
   },
   {
     to: '/test-conversation',
@@ -47,6 +49,7 @@ const topLinks = [
     labelName: 'Bot Says',
     activeIfUrlContains: 'language-generation',
     exact: false,
+    underTest: !botLoaded,
   },
   {
     to: 'language-understanding/',
@@ -54,6 +57,7 @@ const topLinks = [
     labelName: 'User Says',
     activeIfUrlContains: 'language-understanding',
     exact: false,
+    underTest: !botLoaded,
   },
   {
     to: '/evaluate-performance',
@@ -69,6 +73,7 @@ const topLinks = [
     labelName: 'Settings',
     activeIfUrlContains: 'setting',
     exact: false,
+    underTest: !botLoaded,
   },
 ];
 
@@ -94,25 +99,11 @@ export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { botName, creationFlowStatus } = state;
-  const { fetchProject, setCreationFlowStatus, setLuisConfig } = actions;
+  const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
-  useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
-    if (botName) {
-      setLuisConfig(botName);
-    }
-  }, [botName]);
-
-  async function init() {
-    await fetchProject();
-  }
-
   return (
-    <Fragment>
+    <>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -129,7 +120,7 @@ export const App: React.FC = () => {
               ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            {topLinks.map((link, index) => {
+            {topLinks(!!botName).map((link, index) => {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
@@ -165,10 +156,14 @@ export const App: React.FC = () => {
           </div>
         </nav>
         <div css={rightPanel}>
-          <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-          <Routes component={Content} />
+          <ErrorBoundary>
+            <RequireAuth>
+              <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
+              <Routes component={Content} />
+            </RequireAuth>
+          </ErrorBoundary>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 };

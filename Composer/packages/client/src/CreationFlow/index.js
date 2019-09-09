@@ -13,30 +13,16 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  const [templates, setTemplates] = useState([]);
   const [bots, setBots] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const {
-    fetchTemplates,
-    getAllProjects,
-    openBotProject,
-    createProject,
-    saveProjectAs,
-    saveTemplateId,
-    setLuisConfig,
-  } = actions;
-  const { botName, templateId } = state;
+  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs, saveTemplateId } = actions;
+  const { botName, templateId, templateProjects } = state;
 
   useEffect(() => {
     init();
   }, [creationFlowStatus]);
-
-  const getTemplates = async () => {
-    const data = await fetchTemplates();
-    setTemplates(data);
-  };
 
   const getAllBots = async () => {
     const data = await getAllProjects();
@@ -45,7 +31,7 @@ export function CreationFlow(props) {
 
   const init = async () => {
     if (creationFlowStatus !== CreationFlowStatus.CLOSE) {
-      getTemplates();
+      fetchTemplates();
       await getAllBots();
     }
 
@@ -68,8 +54,7 @@ export function CreationFlow(props) {
   };
 
   const openBot = async botFolder => {
-    const { botName } = await openBotProject(botFolder);
-    await setLuisConfig(botName);
+    await openBotProject(botFolder);
     navigateTo('/dialogs/Main');
     handleDismiss();
   };
@@ -83,8 +68,7 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    const { botName } = await saveProjectAs(formData.name, formData.description);
-    setLuisConfig(botName);
+    await saveProjectAs(formData.name, formData.description);
   };
 
   const handleSubmit = formData => {
@@ -125,7 +109,7 @@ export function CreationFlow(props) {
   const steps = {
     [Steps.CREATE]: {
       ...DialogInfo.CREATE_NEW_BOT,
-      children: <CreateOptions templates={templates} onDismiss={handleDismiss} onNext={handleCreateNext} />,
+      children: <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />,
     },
     [Steps.LOCATION]: {
       ...DialogInfo.SELECT_LOCATION,

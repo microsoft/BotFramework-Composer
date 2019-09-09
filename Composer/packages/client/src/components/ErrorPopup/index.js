@@ -35,7 +35,7 @@ export const ErrorPopup = props => {
 };
 
 ErrorPopup.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.node,
   title: PropTypes.string,
   onDismiss: PropTypes.func,
 };

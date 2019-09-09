@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
@@ -33,7 +33,7 @@ export function RichEditor(props: RichEditorProps) {
         style={{
           height: 'calc(100% - 40px)',
           border: '1px solid transparent',
-          borderColor: isInvalid ? SharedColors.red20 : 'transparent',
+          borderColor: isInvalid ? SharedColors.red20 : NeutralColors.gray30,
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
       >

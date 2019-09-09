@@ -1,6 +1,10 @@
+import { get, set } from 'lodash';
+
 import { ReducerFunc } from '../types';
-import { getExtension } from '../../utils';
-import { ActionTypes, FileTypes } from '../../constants';
+import { getExtension, createSelectedPath } from '../../utils';
+import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
+import settingStorage from '../../utils/dialogSettingStorage';
+import { UserTokenPayload } from '../action/types';
 
 import createReducer from './createReducer';
 
@@ -12,6 +16,17 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
+  state.settings = response.data.settings;
+  // merge setting in localStorage
+  const localSetting = settingStorage.get(response.data.botName);
+  if (localSetting) {
+    for (const property of SensitiveProperties) {
+      const value = get(localSetting, property);
+      if (value) {
+        set(state.settings as object, property, value);
+      }
+    }
+  }
   return state;
 };
 
@@ -114,11 +129,6 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const updateOAuth: ReducerFunc = (state, { oAuth }) => {
-  state.oAuth = oAuth;
-  return state;
-};
-
 const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
@@ -129,19 +139,61 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 
-  //if use navigateto to design page, add rules[0] for default select
+  //if use navigateto to design page, add events[0] for default select
   if (!selected) {
-    selected = `rules[0]`;
+    selected = createSelectedPath(0);
     breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
   }
   state.breadcrumb = breadcrumb;
   state.designPageLocation = { dialogId, selected, focused };
   return state;
 };
+const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+  state.settings = settings;
+  return state;
+};
+
+const updateEnvSetting: ReducerFunc = state => {
+  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
+  return state;
+};
+
+const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
+  const data = response && response.data;
+
+  if (data && Array.isArray(data) && data.length > 0) {
+    state.templateProjects = data;
+  }
+  return state;
+};
+
+const setUserToken: ReducerFunc<UserTokenPayload> = (state, user = {}) => {
+  if (user.token) {
+    state.currentUser = {
+      ...user,
+      token: user.token,
+      sessionExpired: false,
+    };
+  } else {
+    state.currentUser = {
+      token: null,
+      sessionExpired: false,
+    };
+  }
+
+  return state;
+};
+
+const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
+  state.currentUser.sessionExpired = !!expired;
+
+  return state;
+};
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
@@ -164,7 +216,11 @@ export const reducer = createReducer({
   [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  [ActionTypes.UPDATE_OAUTH]: updateOAuth,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
+  [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
+  [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
+  [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
+  [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
+  [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
 } as { [type in ActionTypes]: ReducerFunc });

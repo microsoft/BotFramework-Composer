@@ -5,18 +5,14 @@ import React from 'react';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
-export interface ActionType {
-  type: string;
-  payload?: any;
-  error?: any;
-}
+import { ActionType } from './action/types';
 
 export interface Store {
   dispatch: React.Dispatch<ActionType>;
   state: State;
 }
 
-export type ActionCreator = (store: Store, ...args: any[]) => Promise<void> | void;
+export type ActionCreator<T extends any[] = any[]> = (store: Store, ...args: T) => Promise<void> | void;
 export type ActionHandlers = { [action: string]: ActionCreator };
 export type BoundAction = (...args: any[]) => void;
 export type BoundActionHandlers = { [action: string]: BoundAction };
@@ -41,6 +37,7 @@ export interface State {
   botName: string;
   /** the data path for FormEditor */
   focusPath: string;
+  templateProjects: any[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: any;
@@ -54,14 +51,22 @@ export interface State {
   luFiles: LuFile[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
-  oAuth: any;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
+  isEnvSettingUpdated: boolean;
+  settings: DialogSetting;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
+  currentUser: {
+    token: string | null;
+    email?: string;
+    name?: string;
+    expiration?: number;
+    sessionExpired: boolean;
+  };
 }
 
-export type ReducerFunc = (state: State, payload: any) => State;
+export type ReducerFunc<T = any> = (state: State, payload: T) => State;
 
 export interface ITrigger {
   id: string;
@@ -115,6 +120,21 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  endpointKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}
+export interface DialogSetting {
+  MicrosoftAppId?: string;
+  MicrosoftAppPassword?: string;
+  luis?: ILuisConfig;
+  [key: string]: any;
 }
 
 export interface DesignPageLocation {

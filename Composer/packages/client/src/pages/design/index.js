@@ -2,12 +2,12 @@ import React, { Fragment, useContext, useEffect, useMemo } from 'react';
 import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower, cloneDeep } from 'lodash';
+import { toLower } from 'lodash';
 // import { getDialogData } from '../../utils';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, addNewTrigger } from '../../utils';
+import { getbreadcrumbLabel, addNewTrigger, deleteTrigger, createSelectedPath } from '../../utils';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -64,7 +64,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, schemas } = state;
+  const { dialogs, designPageLocation, breadcrumb } = state;
   const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
@@ -124,16 +124,14 @@ function DesignPage(props) {
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
-        ? breadcrumb.map((item, index) => {
+        ? breadcrumb.reduce((result, item, index) => {
             const { dialogId, selected, focused } = item;
-            return {
-              text: getbreadcrumbLabel(dialogs, dialogId, selected, focused, schemas),
-              isRoot: !selected && !focused,
-              ...item,
-              index,
-              onClick: handleBreadcrumbItemClick,
-            };
-          })
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({ text, isRoot: !selected && !focused, ...item, index, onClick: handleBreadcrumbItemClick });
+            }
+            return result;
+          }, [])
         : [];
     return (
       <Breadcrumb
@@ -184,18 +182,27 @@ function DesignPage(props) {
   async function handleAddTrigger(id, type, index) {
     const content = addNewTrigger(dialogs, id, type);
     await updateDialog({ id, content });
-    selectTo(`rules[${index}]`);
+    selectTo(createSelectedPath(index));
   }
 
   async function handleDeleteTrigger(id, index) {
-    const dialogsCopy = cloneDeep(dialogs);
-    const dialog = dialogsCopy.find(item => item.id === id);
-    if (dialog) {
-      dialog.content.rules.splice(index, 1);
-      await updateDialog({ id, content: dialog.content });
-      //if the deleted node was selected, navTo the first one;
-      if (id === dialogId && selected === `rules[${index}]`) {
-        navTo(id);
+    const content = deleteTrigger(dialogs, id, index);
+    if (content) {
+      await updateDialog({ id, content });
+      let current = /\[(\d+)\]/g.exec(selected)[1];
+      if (!current) return;
+      current = parseInt(current);
+      if (index === current) {
+        if (current - 1 >= 0) {
+          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
+          selectTo(createSelectedPath(current - 1));
+        } else {
+          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
+          navTo(id);
+        }
+      } else if (index < current) {
+        //if the deleted node is at the front, navTo the current one;
+        selectTo(createSelectedPath(current - 1));
       }
     }
   }
@@ -205,7 +212,6 @@ function DesignPage(props) {
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
-          schemas={schemas}
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}

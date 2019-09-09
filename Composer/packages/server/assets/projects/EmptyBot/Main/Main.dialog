@@ -7,7 +7,7 @@
   "generator": "common.lg",
   "rules": [
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720"
       },

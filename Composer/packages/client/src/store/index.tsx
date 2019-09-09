@@ -1,18 +1,21 @@
 import React, { useReducer } from 'react';
+import once from 'lodash.once';
 
-import oauthStorage from '../utils/oauthStorage';
+import { prepareAxios } from '../utils/auth';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionType, ActionHandlers, BoundActionHandlers } from './types';
+import { State, ActionHandlers, BoundActionHandlers } from './types';
+import { ActionType } from './action/types';
 
 const initialState: State = {
   dialogs: [],
   botName: '',
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
+  templateProjects: [],
   storages: [],
   focusedStorageFolder: {},
   botStatus: BotStatus.unConnected,
@@ -30,9 +33,14 @@ const initialState: State = {
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
-  oAuth: oauthStorage.get(),
   showCreateDialogModal: false,
+  isEnvSettingUpdated: false,
+  settings: {},
   toStartBot: false,
+  currentUser: {
+    token: null,
+    sessionExpired: false,
+  },
 };
 
 interface StoreContextValue {
@@ -51,15 +59,19 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
+const prepareAxiosWithStore = once(prepareAxios);
+
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // @ts-ignore some actions are not action creations and cannot be cast as such (e.g. textFromTemplates in lg.ts)
+  // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
   const boundActions = bindActions({ dispatch, state }, actions);
   const value = {
     state,
     actions: boundActions,
     dispatch,
   };
+
+  prepareAxiosWithStore({ dispatch, state });
 
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

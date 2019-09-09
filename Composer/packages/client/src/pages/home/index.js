@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
@@ -32,10 +32,9 @@ const linksRight = [
 
 export const Home = () => {
   const { state, actions } = useContext(StoreContext);
-  const { recentProjects } = state;
+  const { recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 4;
-  const [templates, setTemplates] = useState([]);
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
@@ -49,10 +48,6 @@ export const Home = () => {
   const onClickTemplate = async id => {
     saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-  };
-  const fetchTemplatesAction = async () => {
-    const data = await fetchTemplates();
-    setTemplates(data);
   };
 
   const toolbarItems = [
@@ -95,7 +90,7 @@ export const Home = () => {
 
   useEffect(() => {
     fetchRecentProjects();
-    fetchTemplatesAction();
+    fetchTemplates();
   }, []);
 
   return (
@@ -166,7 +161,7 @@ export const Home = () => {
         <div css={home.templateArea}>
           <div css={home.templateTitle}>{formatMessage(`Or start with a conversation template`)} </div>
           <div css={home.templateContainer}>
-            {templates.map(template => {
+            {templateProjects.map(template => {
               return (
                 <div
                   css={home.templateContent}

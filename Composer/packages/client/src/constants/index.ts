@@ -36,6 +36,8 @@ export enum ActionTypes {
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
+  GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
+  GET_TEMPLATE_PROJECTS_FAILURE = 'GET_TEMPLATE_PROJECTS_FAILURE',
   UPDATE_DIALOG = 'UPDATE_DIALOG',
   UPDATE_DIALOG_FAILURE = 'UPDATE_DIALOG_FAILURE',
   CREATE_DIALOG_BEGIN = 'CREATE_DIALOG_BEGIN',
@@ -75,18 +77,15 @@ export enum ActionTypes {
   CONNECT_BOT_FAILURE = 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
-  UPDATE_OAUTH = 'UPDATE_OAUTH',
+  UPDATE_ENV_SETTING = 'UPDATE_ENV_SETTING',
+  SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
+  USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
+  USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
+  USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',
 }
-
-export const NewTriggerType = [
-  'Microsoft.EventRule',
-  'Microsoft.IntentRule',
-  'Microsoft.UnknownIntentRule',
-  'Microsoft.ConversationUpdateActivityRule',
-];
 
 export const Tips = {
   PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
@@ -190,3 +189,6 @@ export const SupportedFileTypes = [
   'xlsx',
   'xsn',
 ];
+
+export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];

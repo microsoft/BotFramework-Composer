@@ -11,7 +11,7 @@
   "$schema": "../../app.schema",
   "rules": [
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "821845"
       },
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720"
       },
