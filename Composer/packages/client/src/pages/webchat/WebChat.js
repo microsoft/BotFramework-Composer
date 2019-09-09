@@ -1,14 +1,15 @@
+import memoize from 'memoize-one';
 import React from 'react';
 import ReactWebChat, { createDirectLine, createStyleSet } from 'botframework-webchat';
 
 import './WebChat.css';
 
-export default class WebchatBase extends React.Component {
-  directline;
-
+export default class WebChatBase extends React.Component {
   constructor(props) {
     super(props);
-    this.directline = createDirectLine({ token: props.token });
+
+    this.createDirectLine = memoize(token => createDirectLine({ token }));
+
     this.state = {
       styleSet: createStyleSet({
         backgroundColor: 'Transparent',
@@ -16,19 +17,32 @@ export default class WebchatBase extends React.Component {
     };
   }
 
+  componentDidMount() {
+    !this.props.token && this.props.onFetchToken();
+  }
+
   render() {
     const {
-      props: { className, store },
+      props: { className, store, token },
       state: { styleSet },
     } = this;
 
-    return (
+    return token ? (
       <ReactWebChat
         className={`${className || ''} web-chat`}
-        directLine={this.directline}
+        directLine={this.createDirectLine(token)}
         store={store}
         styleSet={styleSet}
       />
+    ) : (
+      <div className={`${className || ''} connect-spinner`}>
+        <div className="content">
+          <div className="icon">
+            <span className="ms-Icon ms-Icon--Robot" />
+          </div>
+          <p>Please wait while we are connecting.</p>
+        </div>
+      </div>
     );
   }
 }

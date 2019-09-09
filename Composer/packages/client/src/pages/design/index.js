@@ -268,7 +268,7 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
-      <Webchat />
+      <Webchat token={window.webchatToken} bearer={window.bearerToken} />
     </Fragment>
   );
 }
