@@ -6,6 +6,7 @@ import { isEqual } from 'lodash';
 import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { GraphNode } from '../models/GraphNode';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { transformObiRules } from '../transformers/transformObiRules';
@@ -44,8 +45,12 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
 
   const { stepGroup } = nodeMap;
 
-  (window as any).insertStepAt = ($type, index) => {
-    onEvent(NodeEventTypes.Insert, { id: `${id}.steps`, $type, position: index });
+  (window as any).insertTypeAt = ($type, index) => {
+    onEvent(NodeEventTypes.Insert, { id: `${id}.${ObiFieldNames.Actions}`, $type, position: index });
+  };
+
+  (window as any).insertStepAt = (stepJson, index) => {
+    onEvent(NodeEventTypes.InsertJson, { id: `${id}.${ObiFieldNames.Actions}`, json: stepJson, position: index });
   };
 
   return (

@@ -6,7 +6,7 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { deleteNode, insert } from '../utils/jsonTracker';
+import { deleteNode, insert, inserStep } from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
@@ -61,6 +61,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const dialog = insert(data, e.id, e.position, e.$type);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
+        };
+        break;
+      case NodeEventTypes.InsertJson:
+        handler = e => {
+          const dialog = inserStep(data, e.id, e.position, e.json);
+          onChange(dialog);
+          onFocusSteps([`${e.id}[${e.position || 0}]`]);
         };
         break;
       default:

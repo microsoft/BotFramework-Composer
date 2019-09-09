@@ -8,4 +8,5 @@ export enum NodeEventTypes {
   InsertAfter = 'event.data.insert-after',
   Insert = 'event.data.insert',
   InsertEvent = 'event.data.insert-event',
+  InsertJson = 'event.data.inserJson',
 }
