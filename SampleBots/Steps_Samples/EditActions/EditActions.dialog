@@ -7,27 +7,25 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "createdAt": "2019-07-16T19:52:15.850Z",
         "updatedAt": "2019-07-16T19:52:21.863Z",
         "id": "250234"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
-          "$type": "Microsoft.EditSteps",
+          "$type": "Microsoft.EditActions",
           "$designer": {
             "createdAt": "2019-07-16T19:52:15.850Z",
             "updatedAt": "2019-07-16T19:52:21.863Z",
             "id": "250234"
           },
-          "changeType": "InsertSteps",
-          "steps": [
+          "changeType": "Insertactions",
+          "actions": [
             {
               "$type": "Microsoft.TextInput",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
@@ -36,14 +34,14 @@
           ]
         },
         {
-          "$type": "Microsoft.EditSteps",
+          "$type": "Microsoft.EditActions",
           "$designer": {
             "createdAt": "2019-07-01T21:33:10.633Z",
             "updatedAt": "2019-07-16T19:52:26.709Z",
             "id": "443878"
           },
-          "changeType": "AppendSteps",
-          "steps": [
+          "changeType": "Appendactions",
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "Goodbye!"

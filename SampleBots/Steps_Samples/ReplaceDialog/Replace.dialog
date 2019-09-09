@@ -8,20 +8,30 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "JokeIntent": "(?i)joke",
-      "FortuneTellerIntent": "(?i)fortune|future"
-    }
+    "intents": [
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "JokeIntent",
+        "pattern": "(?i)joke" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "FortuneTellerIntent",
+        "pattern": "(?i)fortune|future"
+      }
+    ]
   },
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:55:56.379Z",
         "updatedAt": "2019-07-16T19:56:03.854Z",
         "id": "563828"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
           "dialog": "TellJokeDialog"
@@ -30,13 +40,13 @@
       "intent": "JokeIntent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:56:04.841Z",
         "updatedAt": "2019-07-16T19:56:11.047Z",
         "id": "473201"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
           "dialog": "FortuneTellerDialog"
@@ -45,15 +55,13 @@
       "intent": "FortuneTellerIntent"
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "644475",
         "updatedAt": "2019-07-22T08:04:53.812Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -62,7 +70,7 @@
             "id": "646692"
           },
           "condition": "user.name == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.TextInput",
               "$designer": {

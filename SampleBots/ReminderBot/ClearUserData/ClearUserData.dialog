@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../BotProject/CSharp/Schemas/app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "258852",
         "updatedAt": "2019-07-22T08:01:38.855Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.DeleteProperty",
           "$designer": {
