@@ -1,33 +1,55 @@
 {
-  "$schema": "../../app.schema",
-  "$type": "Microsoft.AdaptiveDialog",
-  "steps": [
-    {
-      "$type": "Microsoft.IfCondition",
-      "condition": "user.todos == null",
-      "steps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "You have no todos."
-        }
-      ],
-      "elseSteps": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "activity": "[ShowTodo]"
-        }
-      ]
-    }
-  ],
-  "rules": [
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
-      "steps": [
-        {
-          "$type": "Microsoft.CancelAllDialog"
-        }
-      ]
-    }
-  ]
-}
+    "$type": "Microsoft.AdaptiveDialog",
+    "$designer": {
+      "createdAt": "2019-07-03T06:51:43.763Z",
+      "updatedAt": "2019-07-16T20:00:49.889Z",
+      "id": "709692"
+    },
+    "autoEndDialog": true,
+    "$schema": "../../app.schema",
+    "events": [
+      {
+        "$type": "Microsoft.OnBeginDialog",
+        "$designer": {
+          "id": "783343",
+          "updatedAt": "2019-07-22T08:11:00.380Z"
+        },
+         
+        "actions": [
+          {
+            "$type": "Microsoft.IfCondition",
+            "$designer": {
+              "createdAt": "2019-07-01T22:05:03.290Z",
+              "updatedAt": "2019-07-16T20:02:34.141Z",
+              "id": "662084"
+            },
+            "condition": "user.todos == null",
+            "actions": [
+              {
+                "$type": "Microsoft.SendActivity",
+                "$designer": {
+                  "createdAt": "2019-07-01T22:04:54.741Z",
+                  "updatedAt": "2019-07-16T20:02:29.357Z",
+                  "id": "339580",
+                  "name": "Send an Activity"
+                },
+                "activity": "[bfdactivity-339580]"
+              }
+            ],
+            "elseActions": [
+              {
+                "$type": "Microsoft.SendActivity",
+                "$designer": {
+                  "createdAt": "2019-07-01T22:05:03.290Z",
+                  "updatedAt": "2019-07-16T20:02:34.141Z",
+                  "id": "662084",
+                  "name": "Send an Activity"
+                },
+                "activity": "[bfdactivity-662084]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

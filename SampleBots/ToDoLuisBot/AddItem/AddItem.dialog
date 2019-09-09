@@ -8,15 +8,14 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "735800",
         "updatedAt": "2019-07-22T08:12:19.686Z"
       },
-      "events": ["beginDialog"],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -45,7 +44,7 @@
             "id": "965232"
           },
           "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -73,7 +72,7 @@
             "id": "739777"
           },
           "condition": "user.lists == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
@@ -94,7 +93,7 @@
             "id": "431309"
           },
           "condition": "dialog.listName == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.ChoiceInput",
               "$designer": {
@@ -104,7 +103,7 @@
               },
               "property": "dialog.listName",
               "prompt": "Which list do you want to expand?",
-              "maxTurnCount": 0,
+              "maxTurnCount": 3,
               "alwaysPrompt": true,
               "allowInterruptions": "never",
               "outputFormat": "value",
@@ -145,7 +144,7 @@
             "id": "982253"
           },
           "condition": "dialog.item == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.TextInput",
               "$designer": {
@@ -155,7 +154,7 @@
               },
               "property": "dialog.item",
               "prompt": "Please enter the title of your item.",
-              "maxTurnCount": 0,
+              "maxTurnCount": 3,
               "alwaysPrompt": false,
               "allowInterruptions": "never",
               "outputFormat": "none"
@@ -170,7 +169,7 @@
             "id": "075604"
           },
           "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
@@ -178,7 +177,7 @@
                 "updatedAt": "2019-07-16T20:19:25.307Z",
                 "id": "907210"
               },
-              "property": "user.lists.{dialog.listName}",
+              "property": "getProperty(user.lists, dialog.listName)",
               "type": "array"
             }
           ]
@@ -191,7 +190,7 @@
             "id": "644924"
           },
           "changeType": "Push",
-          "arrayProperty": "user.lists.{dialog.listName}",
+          "arrayProperty": "getProperty(user.lists, dialog.listName)",
           "value": "dialog.item"
         },
         {

@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "OK! Let's Start To Forward this Email. ",
@@ -78,7 +78,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.confirmed",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.BeginDialog",
               "dialog": "ForwardMyEmailThroughGraph"
@@ -88,16 +88,13 @@
               "activity": "Your Email has been Sent Succsessfully. "
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "[MissionCancel]"
             }
           ]
         }
-      ],
-      "events": [
-        "beginDialog"
       ],
       "$designer": {
         "createdAt": "2019-08-08T06:53:45.695Z",

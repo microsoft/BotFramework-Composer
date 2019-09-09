@@ -26,7 +26,7 @@
     "Microsoft.ConfirmInput": {
       "title": "Prompt for confirmation"
     },
-    "Microsoft.ConversationUpdateActivityRule": {
+    "Microsoft.OnConversationUpdateActivity": {
       "title": "Conversation Update Activity",
       "description": "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
     },
@@ -48,7 +48,7 @@
     "Microsoft.EndTurn": {
       "title": "End Turn"
     },
-    "Microsoft.EventRule": {
+    "Microsoft.OnEvent": {
       "title": "Handle an Event"
     },
     "Microsoft.FirstSelector": {
@@ -63,7 +63,7 @@
     "Microsoft.InitProperty": {
       "title": "Initialize Property"
     },
-    "Microsoft.IntentRule": {
+    "Microsoft.OnIntent": {
       "title": "Handle an Intent"
     },
     "Microsoft.LanguagePolicy": {
@@ -140,7 +140,7 @@
     "Microsoft.TrueSelector": {
       "title": "TrueSelector"
     },
-    "Microsoft.UnknownIntentRule": {
+    "Microsoft.OnUnknownIntent": {
       "title": "Handle Unknown Intent"
     },
     "Microsoft.Foreach": {

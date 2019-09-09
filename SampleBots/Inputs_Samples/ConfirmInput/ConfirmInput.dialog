@@ -6,15 +6,14 @@
     "id": "556076"
   },
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "030235",
         "updatedAt": "2019-07-22T07:51:03.850Z"
       },
-      "events": ["beginDialog"],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.ConfirmInput",
           "$designer": {

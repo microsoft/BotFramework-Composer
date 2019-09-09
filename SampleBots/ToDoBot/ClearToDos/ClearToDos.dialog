@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "480162",
         "updatedAt": "2019-07-22T08:10:50.068Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.EditArray",
           "$designer": {
@@ -37,7 +35,7 @@
             "id": "983761"
           },
           "condition": "dialog.cleared",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -48,7 +46,7 @@
               "activity": "[bfdactivity-832307]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
