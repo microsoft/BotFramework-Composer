@@ -19,42 +19,44 @@ export function isTokenExpired(token: string): boolean {
 }
 
 export function prepareAxios(store: Store) {
-  const cancelSource = axios.CancelToken.source();
+  if (process.env.COMPOSER_REQUIRE_AUTH) {
+    const cancelSource = axios.CancelToken.source();
 
-  axios.interceptors.request.use(config => {
-    // only attach cancellation token to api requests
-    if (config.url && config.url.includes('/api/')) {
-      config.cancelToken = cancelSource.token;
-    }
-
-    const token = getUserTokenFromCache();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  });
-
-  axios.interceptors.response.use(
-    res => {
-      return res;
-    },
-    err => {
-      if (err.response && err.response.status === 401) {
-        // cancel all other requests
-        cancelSource.cancel('Unauthorized');
-
-        // remove user token from the cache
-        clearUserTokenFromCache();
-
-        store.dispatch({
-          type: ActionTypes.USER_SESSION_EXPIRED,
-          payload: { expired: true },
-        });
+    axios.interceptors.request.use(config => {
+      // only attach cancellation token to api requests
+      if (config.url && config.url.includes('/api/')) {
+        config.cancelToken = cancelSource.token;
       }
 
-      return Promise.reject(err);
-    }
-  );
+      const token = getUserTokenFromCache();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+
+    axios.interceptors.response.use(
+      res => {
+        return res;
+      },
+      err => {
+        if (err.response && err.response.status === 401) {
+          // cancel all other requests
+          cancelSource.cancel('Unauthorized');
+
+          // remove user token from the cache
+          clearUserTokenFromCache();
+
+          store.dispatch({
+            type: ActionTypes.USER_SESSION_EXPIRED,
+            payload: { expired: true },
+          });
+        }
+
+        return Promise.reject(err);
+      }
+    );
+  }
 }
 
 export function getUserTokenFromCache(): string | null {
