@@ -362,7 +362,7 @@ const Demo: React.FC = () => {
           luFiles={luFiles}
           lgFiles={lgFiles}
           currentDialog={dialogFiles[0]}
-          isRoot={true}
+          isRoot={false}
           focusedSteps={[]}
         />
       </div>

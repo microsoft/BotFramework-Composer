@@ -1,6 +1,4 @@
 import React from 'react';
-import { Customizer } from 'office-ui-fabric-react';
-import { FluentCustomizations } from '@uifabric/fluent-theme';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
@@ -12,8 +10,6 @@ import { uiSchema } from './schema/uischema';
 import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
-
-import './FormEditor.css';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
@@ -93,46 +89,44 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const memoryOptions = getMemoryOptions(memory);
 
   return (
-    <Customizer {...FluentCustomizations}>
-      <div className="App">
-        {memoryOptions.length > 0 && (
-          <Dropdown
-            style={{ width: '300px', paddingBottom: '10px' }}
-            placeholder="Memory available to this Dialog"
-            options={memoryOptions}
-            onChange={onMemoryDropdownChange}
-            onFocus={() => {}}
-            selectedKey={null}
-          />
-        )}
-        <Form
-          noValidate
-          className="schemaForm"
-          onChange={onChange}
-          formData={data}
-          onBlur={props.onBlur}
-          schema={dialogSchema}
-          uiSchema={dialogUiSchema}
-          formContext={{
-            shellApi: {
-              ...shellApi,
-              onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds),
-            },
-            dialogOptions,
-            editorSchema: schemas.editor,
-            rootId: props.focusPath,
-            luFiles: props.luFiles,
-            lgFiles: props.lgFiles,
-            currentDialog: props.currentDialog,
-            dialogId: get(data, '$designer.id'),
-            isRoot: props.focusPath.endsWith('#'),
-          }}
-          idPrefix={props.focusPath}
-        >
-          <button style={{ display: 'none' }} />
-        </Form>
-      </div>
-    </Customizer>
+    <div>
+      {memoryOptions.length > 0 && (
+        <Dropdown
+          style={{ width: '300px', paddingBottom: '10px', paddingLeft: '18px', paddingTop: '18px' }}
+          placeholder="Memory available to this Dialog"
+          options={memoryOptions}
+          onChange={onMemoryDropdownChange}
+          onFocus={() => {}}
+          selectedKey={null}
+        />
+      )}
+      <Form
+        noValidate
+        className="schemaForm"
+        onChange={onChange}
+        formData={data}
+        onBlur={props.onBlur}
+        schema={dialogSchema}
+        uiSchema={dialogUiSchema}
+        formContext={{
+          shellApi: {
+            ...shellApi,
+            onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds),
+          },
+          dialogOptions,
+          editorSchema: schemas.editor,
+          rootId: props.focusPath,
+          luFiles: props.luFiles,
+          lgFiles: props.lgFiles,
+          currentDialog: props.currentDialog,
+          dialogId: get(data, '$designer.id'),
+          isRoot: props.focusPath.endsWith('#'),
+        }}
+        idPrefix={props.focusPath}
+      >
+        <button style={{ display: 'none' }} />
+      </Form>
+    </div>
   );
 };
 
