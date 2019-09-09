@@ -10,7 +10,7 @@
           },
           "rules": [
               {
-                  "$type": "Microsoft.EventRule",
+                  "$type": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "335456",
                       "updatedAt": "2019-07-22T08:10:44.402Z"
@@ -23,7 +23,7 @@
           {
               "id": "rules[0]",
               "displayName": "",
-              "type": "Microsoft.EventRule",
+              "type": "Microsoft.OnEvent",
               "isIntent": false
           }
       ]
@@ -39,7 +39,7 @@
           },
           "rules": [
               {
-                  "$type": "Microsoft.EventRule",
+                  "$type": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "480162",
                       "updatedAt": "2019-07-22T08:10:50.068Z"
@@ -55,7 +55,7 @@
           {
               "id": "rules[0]",
               "displayName": "",
-              "type": "Microsoft.EventRule",
+              "type": "Microsoft.OnEvent",
               "isIntent": false
           }
       ]
@@ -73,7 +73,7 @@
           "$schema": "../../app.schema",
           "rules": [
               {
-                  "$type": "Microsoft.EventRule",
+                  "$type": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "768658"
                   },
@@ -85,7 +85,7 @@
           {
               "id": "rules[0]",
               "displayName": "",
-              "type": "Microsoft.EventRule",
+              "type": "Microsoft.OnEvent",
               "isIntent": false
           }
       ]
@@ -102,14 +102,14 @@
           },
           "rules": [
               {
-                  "$type": "Microsoft.ConversationUpdateActivityRule",
+                  "$type": "Microsoft.OnConversationUpdateActivity",
                   "$designer": {
                       "id": "376720"
                   },
                   "steps": []
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "064505"
                   },
@@ -117,7 +117,7 @@
                   "intent": "AddIntent"
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "114961"
                   },
@@ -125,7 +125,7 @@
                   "intent": "DeleteIntent"
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "088050"
                   },
@@ -133,7 +133,7 @@
                   "intent": "ClearIntent"
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "633942"
                   },
@@ -141,7 +141,7 @@
                   "intent": "HelpIntent"
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "794124"
                   },
@@ -149,7 +149,7 @@
                   "intent": "ShowIntent"
               },
               {
-                  "$type": "Microsoft.IntentRule",
+                  "$type": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "179728"
                   },
@@ -157,7 +157,7 @@
                   "intent": "CancelIntent"
               },
               {
-                  "$type": "Microsoft.UnknownIntentRule",
+                  "$type": "Microsoft.OnUnknownIntent",
                   "$designer": {
                       "id": "677447"
                   },
@@ -170,49 +170,49 @@
           {
               "id": "rules[0]",
               "displayName": "",
-              "type": "Microsoft.ConversationUpdateActivityRule",
+              "type": "Microsoft.OnConversationUpdateActivity",
               "isIntent": false
           },
           {
               "id": "rules[1]",
               "displayName": "#AddIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[2]",
               "displayName": "#DeleteIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[3]",
               "displayName": "#ClearIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[4]",
               "displayName": "#HelpIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[5]",
               "displayName": "#ShowIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[6]",
               "displayName": "#CancelIntent",
-              "type": "Microsoft.IntentRule",
+              "type": "Microsoft.OnIntent",
               "isIntent": true
           },
           {
               "id": "rules[7]",
               "displayName": "",
-              "type": "Microsoft.UnknownIntentRule",
+              "type": "Microsoft.OnUnknownIntent",
               "isIntent": false
           }
       ]
@@ -228,7 +228,7 @@
           },
           "rules": [
               {
-                  "$type": "Microsoft.EventRule",
+                  "$type": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "783343"
                   },
@@ -240,7 +240,7 @@
           {
               "id": "rules[0]",
               "displayName": "",
-              "type": "Microsoft.EventRule",
+              "type": "Microsoft.OnEvent",
               "isIntent": false
           }
       ]

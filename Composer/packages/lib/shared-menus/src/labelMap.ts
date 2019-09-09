@@ -48,7 +48,7 @@ export const ConceptLabels = {
   'Microsoft.EndTurn': {
     title: formatMessage('End Turn'),
   },
-  'Microsoft.EventRule': {
+  'Microsoft.OnEvent': {
     title: formatMessage('Handle an Event'),
   },
   'Microsoft.FirstSelector': {
@@ -63,7 +63,7 @@ export const ConceptLabels = {
   'Microsoft.InitProperty': {
     title: formatMessage('Initialize a Property'),
   },
-  'Microsoft.IntentRule': {
+  'Microsoft.OnIntent': {
     title: formatMessage('Handle an Intent'),
   },
   'Microsoft.LanguagePolicy': {
@@ -142,10 +142,10 @@ export const ConceptLabels = {
   'Microsoft.TrueSelector': {
     title: formatMessage('TrueSelector'),
   },
-  'Microsoft.UnknownIntentRule': {
+  'Microsoft.OnUnknownIntent': {
     title: formatMessage('Handle Unknown Intent'),
   },
-  'Microsoft.ConversationUpdateActivityRule': {
+  'Microsoft.OnConversationUpdateActivity': {
     title: formatMessage('Handle ConversationUpdate'),
   },
   'Microsoft.Foreach': {

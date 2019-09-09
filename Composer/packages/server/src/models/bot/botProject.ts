@@ -8,11 +8,13 @@ import StorageService from '../../services/storage';
 import { absHosted } from '../../settings/env';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
 import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
+import { SettingManager } from './settingManager';
+import { DialogSetting } from './interface';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env['MicrosoftAppId'] || '',
@@ -32,7 +34,8 @@ export class BotProject {
   public luPublisher: LuPublisher;
   public defaultSDKSchema: { [key: string]: string };
   public defaultEditorSchema: { [key: string]: string };
-
+  public settingManager: SettingManager;
+  public settings: DialogSetting | null = null;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -42,7 +45,7 @@ export class BotProject {
     this.defaultEditorSchema = JSON.parse(
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
-
+    this.settingManager = new SettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
     this.dialogIndexer = new DialogIndexer(this.name);
@@ -53,10 +56,14 @@ export class BotProject {
 
   public index = async () => {
     this.files = await this._getFiles();
+    this.settings = await this.getDialogSetting();
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
     await this._checkProjectStructure();
+    if (this.settings) {
+      await this.luPublisher.setLuisConfig(this.settings.luis);
+    }
     await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
 
@@ -68,8 +75,18 @@ export class BotProject {
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
       botEnvironment: absHosted ? this.name : undefined,
-      OAuthInput: oauthInput(),
+      settings: this.settings,
     };
+  };
+
+  private getDialogSetting = async () => {
+    return <DialogSetting>{ ...(await this.settingManager.get()), ...oauthInput() };
+  };
+
+  // create or update dialog settings
+  public updateEnvSettings = async (config: DialogSetting) => {
+    await this.settingManager.set(config);
+    await this.luPublisher.setLuisConfig(config.luis);
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
@@ -255,14 +272,8 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public setLuisConfig = async (config: ILuisConfig, botName: string) => {
-    if (botName !== this.name) {
-      throw new Error(`The opened bot ${this.name} does not match to the bot ${botName} you are trying to config`);
-    }
-    this.luPublisher.setLuisConfig(config);
-  };
-
-  public publishLuis = async () => {
+  public publishLuis = async (authoringKey: string) => {
+    await this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
 

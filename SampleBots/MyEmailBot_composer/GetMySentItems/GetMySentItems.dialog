@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
@@ -24,24 +24,22 @@
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+1]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+1]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "arrayProperty": "user.sentItems",
-          "value": "user.getGraphSentItems.value[{user.sentPages}*{user.itemsPerPage}+2]"
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+2]"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:01:21.073Z",
         "updatedAt": "2019-08-08T07:01:21.087Z",

@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.HttpRequest",
           "url": "https://graph.microsoft.com/v1.0/me/sendMail",
@@ -31,9 +31,7 @@
           "Property": "user.response"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:01:04.468Z",
         "updatedAt": "2019-08-08T07:01:04.477Z",

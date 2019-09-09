@@ -5,22 +5,16 @@ import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-import {
-  DefaultRenderer,
-  IntentRule,
-  ConversationUpdateActivityRule,
-  EventRule,
-  UnknownIntentRule,
-} from '../nodes/index';
+import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRule } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
-  [ObiTypes.EventRule]: EventRule,
-  [ObiTypes.IntentRule]: IntentRule,
-  [ObiTypes.UnknownIntentRule]: UnknownIntentRule,
-  [ObiTypes.ConversationUpdateActivityRule]: ConversationUpdateActivityRule,
+  [ObiTypes.OnEvent]: EventRule,
+  [ObiTypes.OnIntent]: IntentRule,
+  [ObiTypes.OnUnknownIntent]: UnknownIntentRule,
+  [ObiTypes.OnConversationUpdateActivity]: ConversationUpdateActivityRule,
 };
-const DEFAULT_RENDERER = DefaultRenderer;
+const DEFAULT_RENDERER = UnknownIntentRule;
 
 function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
   const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;

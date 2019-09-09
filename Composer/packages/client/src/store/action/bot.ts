@@ -2,11 +2,9 @@ import axios from 'axios';
 
 import { ActionCreator } from '../types';
 
-import oauthStorage from './../../utils/oauthStorage';
 import { BASEURL, ActionTypes } from './../../constants';
-import LuisStorage from './../../utils/luisStorage';
 
-export const connectBot: ActionCreator = async (store, botName) => {
+export const connectBot: ActionCreator = async (store, settings) => {
   const botEnvironment = store.state.botEnvironment;
   const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
 
@@ -19,19 +17,19 @@ export const connectBot: ActionCreator = async (store, botName) => {
         botEndpoint: res.data.botEndpoint,
       },
     });
-    await reloadBot(store, botName);
+    await reloadBot(store, settings);
   } catch (err) {
     throw new Error(err.response.data.message);
   }
 };
 
-export const reloadBot: ActionCreator = async ({ state, dispatch }, botName) => {
+export const reloadBot: ActionCreator = async ({ dispatch, state }, settings) => {
   const { botEnvironment } = state;
   const path = `${BASEURL}/launcher/sync`;
   try {
     const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';
 
-    await axios.post(path, { luis: LuisStorage.get(botName), ...oauthStorage.get().OAuthInput, targetEnvironment });
+    await axios.post(path, { ...settings, targetEnvironment });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

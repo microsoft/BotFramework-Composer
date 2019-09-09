@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/botbuilder-dotnet/4.Future/schemas/component.schema",
-    "$id": "app.schema",
+    "$id": "sdk.schema",
     "type": "object",
     "title": "Component types",
     "description": "These are all of the types that can be created by the loader.",
@@ -369,16 +369,6 @@
             "title": "Microsoft.UrlEntityRecognizer",
             "description": "Recognizer which recognizes urls (example: http://bing.com)",
             "$ref": "#/definitions/Microsoft.UrlEntityRecognizer"
-        },
-        {
-            "title": "Testbot.JavascriptAction",
-            "description": "This gives you the ability to execute javascript to manipulate memory",
-            "$ref": "#/definitions/Testbot.JavascriptAction"
-        },
-        {
-            "title": "Testbot.Multiply",
-            "description": "This will return the result of arg1*arg2",
-            "$ref": "#/definitions/Testbot.Multiply"
         }
     ],
     "definitions": {
@@ -3393,16 +3383,6 @@
                 {
                     "type": "string",
                     "title": "string"
-                },
-                {
-                    "title": "Testbot.JavascriptAction",
-                    "description": "This gives you the ability to execute javascript to manipulate memory",
-                    "$ref": "#/definitions/Testbot.JavascriptAction"
-                },
-                {
-                    "title": "Testbot.Multiply",
-                    "description": "This will return the result of arg1*arg2",
-                    "$ref": "#/definitions/Testbot.Multiply"
                 }
             ]
         },
@@ -7170,152 +7150,6 @@
                 }
             },
             "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$type"
-                    ]
-                }
-            ]
-        },
-        "Testbot.JavascriptAction": {
-            "$role": "unionType(Microsoft.IDialog)",
-            "title": "Javascript Action",
-            "description": "This gives you the ability to execute javascript to manipulate memory",
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "$type": {
-                    "title": "$type",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Testbot.JavascriptAction"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "inputBindings": {
-                    "type": "object",
-                    "title": "Input Bindings",
-                    "description": "map of named arguments and the property path to bind to them",
-                    "examples": [
-                        {
-                            "name": "user.name",
-                            "problemId": "conversation.problem.id"
-                        }
-                    ],
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "outputBinding": {
-                    "type": "string",
-                    "title": "Output Binding",
-                    "description": "This will be the property which the result will be put into",
-                    "examples": [
-                        "conversation.resolution"
-                    ]
-                },
-                "script": {
-                    "type": "string",
-                    "title": "Script",
-                    "description": "name of the script file"
-                }
-            },
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$type"
-                    ]
-                }
-            ]
-        },
-        "Testbot.Multiply": {
-            "$role": "unionType(Microsoft.IDialog)",
-            "title": "Multiply",
-            "description": "This will return the result of arg1*arg2",
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "$type": {
-                    "title": "$type",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Testbot.Multiply"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "arg1": {
-                    "type": "number",
-                    "title": "Arg1",
-                    "description": "Value from callers memory to use as arg 1"
-                },
-                "arg2": {
-                    "type": "number",
-                    "title": "Arg2",
-                    "description": "Value from callers memory to use as arg 2"
-                },
-                "result": {
-                    "type": "number",
-                    "title": "Result",
-                    "description": "Value from callers memory to store the result"
-                }
-            },
             "patternProperties": {
                 "^\\$": {
                     "type": "string"

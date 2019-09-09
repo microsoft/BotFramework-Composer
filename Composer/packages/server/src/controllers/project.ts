@@ -221,10 +221,10 @@ async function createLuFile(req: Request, res: Response) {
   }
 }
 
-async function setLuisConfig(req: Request, res: Response) {
+async function updateEnvSettings(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      await ProjectService.currentBotProject.setLuisConfig(req.body.config, req.body.botName);
+      await ProjectService.currentBotProject.updateEnvSettings(req.body.settings);
       res.send('ok');
     } catch (err) {
       res.status(404).json({
@@ -252,7 +252,7 @@ async function removeLuFile(req: Request, res: Response) {
 async function publishLuis(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const luFiles = await ProjectService.currentBotProject.publishLuis();
+      const luFiles = await ProjectService.currentBotProject.publishLuis(req.body.authoringKey);
       res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
@@ -287,7 +287,7 @@ export const ProjectController = {
   updateLgFile,
   createLgFile,
   removeLgFile,
-  setLuisConfig,
+  updateEnvSettings,
   updateLuFile,
   createLuFile,
   removeLuFile,

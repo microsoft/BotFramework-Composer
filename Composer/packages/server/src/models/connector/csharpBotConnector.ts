@@ -5,12 +5,12 @@ import archiver from 'archiver';
 import FormData from 'form-data';
 
 import BotProjectService from '../../services/project';
+import { DialogSetting } from '../bot/interface';
 
-import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
-
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -30,30 +30,42 @@ export class CSharpBotConnector implements IBotConnector {
     return `${this.endpoint}/api/messages`;
   };
 
-  sync = async (config: BotConfig) => {
+  sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
     if (BotProjectService.currentBotProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    BotProjectService.currentBotProject.luPublisher.setLuisConfig(config.luis);
-    const luisConfig = config.luis;
+    await BotProjectService.currentBotProject.luPublisher.setAuthoringKey(config.luis.authoringKey);
+    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
-    if (luisConfig.authoringKey !== null && !(await BotProjectService.currentBotProject.checkLuisPublished())) {
+
+    if (
+      luisConfig &&
+      luisConfig.authoringKey !== null &&
+      !(await BotProjectService.currentBotProject.checkLuisPublished())
+    ) {
       throw new Error('Please publish your Luis models');
     }
 
-    form.append('config', JSON.stringify(luisConfig));
-    if (config.MicrosoftAppId && config.MicrosoftAppPassword) {
-      form.append('microsoftAppId', config.MicrosoftAppId);
+    if (luisConfig) {
+      form.append(
+        'endpointKey',
+        luisConfig.endpointKey && luisConfig.endpointKey !== '' ? luisConfig.endpointKey : luisConfig.authoringKey
+      );
+    }
+
+    config = { ...(await BotProjectService.currentBotProject.settingManager.get()), ...config };
+    if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
+      console.log(form);
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');

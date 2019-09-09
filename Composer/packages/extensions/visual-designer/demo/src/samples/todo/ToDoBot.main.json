@@ -1,97 +1,193 @@
 {
-    "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
+    "$designer": {
+      "createdAt": "2019-07-04T08:14:01.139Z",
+      "updatedAt": "2019-08-01T23:45:38.308Z",
+      "id": "288769",
+      "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+    },
     "autoEndDialog": false,
     "recognizer": {
-        "$type": "Microsoft.RegexRecognizer",
-        "intents": {
-            "AddIntent": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-            "DeleteIntent": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?",
-            "ShowIntent": "(?i)(?:show|see|view) .*(?:to-do|todo|task)",
-            "ClearIntent": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)",
-            "HelpIntent": "(?i)help",
-            "CancelIntent": "(?i)cancel|never mind"
-        }
-    },
-    "steps": [
+      "$type": "Microsoft.RegexRecognizer",
+      "intents": [
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started. test reload"
-        }
-    ],
-    "rules": [
-        {
-            "$type": "Microsoft.IntentRule",
+  
+            "$type": "Microsoft.IntentPattern",
             "intent": "AddIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "AddToDo"
-                }
-
-            ]
+            "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
         },
         {
-            "$type": "Microsoft.IntentRule",
-            "intent": "DeleteIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "DeleteToDo"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.IntentRule",
+  
+            "$type": "Microsoft.IntentPattern",
             "intent": "ClearIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ClearToDos"
-                }
-            ]
+            "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)" 
         },
         {
-            "$type": "Microsoft.IntentRule",
+  
+            "$type": "Microsoft.IntentPattern",
+            "intent": "DeleteIntent",
+            "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
+        },
+        {
+  
+            "$type": "Microsoft.IntentPattern",
             "intent": "ShowIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "ShowToDos"
-                }
-            ]
+            "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)" 
         },
         {
-            "$type": "Microsoft.IntentRule",
+  
+            "$type": "Microsoft.IntentPattern",
             "intent": "HelpIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "I can add a todo, show todos, remove a todo, and clear all todos\n"
-                }
-            ]
+            "pattern": "(?i)help" 
         },
         {
-            "$type": "Microsoft.IntentRule",
+  
+            "$type": "Microsoft.IntentPattern",
             "intent": "CancelIntent",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "ok."
-                },
-                {
-                    "$type": "Microsoft.EndDialog"
-                }
-            ]
-        },
-        {
-            "$type": "Microsoft.UnknownIntentRule",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
-                }
-            ]
+            "pattern": "(?i)cancel|never mind"
         }
     ]
-}
+    },
+    "generator": "common.lg",
+    "events": [
+      {
+        "$type": "Microsoft.OnConversationUpdateActivity",
+        "$designer": {
+          "createdAt": "2019-07-01T22:02:14.960Z",
+          "updatedAt": "2019-07-16T20:00:24.788Z",
+          "id": "376720"
+        },
+        "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+        "actions": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "$designer": {
+              "createdAt": "2019-08-02T22:18:56.943Z",
+              "updatedAt": "2019-08-02T22:36:20.947Z",
+              "id": "157674"
+            },
+            "activity": "[bfdactivity-157674]"
+          }
+        ]
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T19:59:32.772Z",
+          "updatedAt": "2019-07-16T19:59:36.277Z",
+          "id": "064505"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "AddToDo"
+          }
+        ],
+        "intent": "AddIntent"
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T19:59:37.184Z",
+          "updatedAt": "2019-08-01T23:46:50.759Z",
+          "id": "114961"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "DeleteToDo",
+            "$designer": {
+              "createdAt": "2019-08-01T23:47:15.255Z",
+              "updatedAt": "2019-08-01T23:47:15.258Z",
+              "id": "978613"
+            }
+          }
+        ],
+        "intent": "DeleteIntent"
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T19:59:41.352Z",
+          "updatedAt": "2019-07-16T19:59:44.427Z",
+          "id": "088050"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "ClearToDos"
+          }
+        ],
+        "intent": "ClearIntent"
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T19:59:50.315Z",
+          "updatedAt": "2019-07-16T19:59:54.774Z",
+          "id": "633942"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "$designer": {
+              "createdAt": "2019-08-01T23:44:56.704Z",
+              "updatedAt": "2019-08-01T23:44:57.629Z",
+              "id": "696707"
+            },
+            "activity": "[bfdactivity-696707]"
+          }
+        ],
+        "intent": "HelpIntent"
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T20:00:00.082Z",
+          "updatedAt": "2019-07-16T20:00:03.344Z",
+          "id": "794124"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "ShowToDos"
+          }
+        ],
+        "intent": "ShowIntent"
+      },
+      {
+        "$type": "Microsoft.OnIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T20:00:08.499Z",
+          "updatedAt": "2019-07-16T20:00:12.504Z",
+          "id": "179728"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "ok."
+          },
+          {
+            "$type": "Microsoft.EndDialog"
+          }
+        ],
+        "intent": "CancelIntent"
+      },
+      {
+        "$type": "Microsoft.OnUnknownIntent",
+        "$designer": {
+          "createdAt": "2019-07-16T20:00:13.577Z",
+          "updatedAt": "2019-07-16T20:00:19.435Z",
+          "id": "677447"
+        },
+        "actions": [
+          {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+          }
+        ]
+      }
+    ],
+    "$schema": "../../app.schema"
+  }
+  

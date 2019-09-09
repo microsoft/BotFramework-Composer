@@ -7,15 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "050101",
         "updatedAt": "2019-07-22T07:46:06.571Z"
       },
-      "events": ["beginDialog"],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.ChoiceInput",
           "$designer": {
@@ -73,7 +72,7 @@
           "cases": [
             {
               "value": "Susan",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -86,7 +85,7 @@
             },
             {
               "value": "Nick",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -99,7 +98,7 @@
             },
             {
               "value": "Tom",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {

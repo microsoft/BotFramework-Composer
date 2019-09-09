@@ -1,24 +1,62 @@
 {
-  "$schema": "../../app.schema",
   "$type": "Microsoft.AdaptiveDialog",
-  "steps": [
+  "$designer": {
+    "createdAt": "2019-07-03T06:51:38.784Z",
+    "updatedAt": "2019-07-16T20:00:42.988Z",
+    "id": "316336"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "events": [
     {
-      "$type": "Microsoft.EditArray",
-      "changeType": "Clear",
-      "arrayProperty": "user.todos"
-    },
-    {
-      "$type": "Microsoft.SendActivity",
-      "activity": "Successfully clear the todo list."
-    }
-  ],
-  "rules": [
-    {
-      "$type": "Microsoft.IntentRule",
-      "intent": "CancelIntent",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "480162",
+        "updatedAt": "2019-07-22T08:10:50.068Z"
+      },
+       
+      "actions": [
         {
-          "$type": "Microsoft.CancelAllDialog"
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:18.901Z",
+            "updatedAt": "2019-07-16T20:01:43.249Z",
+            "id": "832307"
+          },
+          "changeType": "Clear",
+          "arrayProperty": "user.todos",
+          "resultProperty": "dialog.cleared"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "createdAt": "2019-07-01T22:03:36.091Z",
+            "updatedAt": "2019-07-16T20:01:47.803Z",
+            "id": "983761"
+          },
+          "condition": "dialog.cleared",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:18.901Z",
+                "updatedAt": "2019-07-16T20:01:43.249Z",
+                "id": "832307"
+              },
+              "activity": "[bfdactivity-832307]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "createdAt": "2019-07-01T22:03:36.091Z",
+                "updatedAt": "2019-07-16T20:01:47.803Z",
+                "id": "983761"
+              },
+              "activity": "[bfdactivity-983761]"
+            }
+          ]
         }
       ]
     }

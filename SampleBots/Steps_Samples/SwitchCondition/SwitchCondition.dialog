@@ -7,20 +7,20 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "851391",
         "updatedAt": "2019-07-22T08:05:10.334Z"
       },
       "events": ["beginDialog"],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.ChoiceInput",
           "property": "user.style",
           "prompt": "Please select a value from below:",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": true,
           "allowInterruptions": "never",
           "outputFormat": "value",
@@ -73,7 +73,7 @@
           "cases": [
             {
               "value": "Test1",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -87,7 +87,7 @@
             },
             {
               "value": "Test2",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
@@ -101,7 +101,7 @@
             },
             {
               "value": "Test3",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {

@@ -7,18 +7,16 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "createdAt": "2019-07-16T19:55:03.213Z",
         "updatedAt": "2019-07-16T19:55:06.022Z",
         "id": "475044"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -27,7 +25,7 @@
             "id": "719594"
           },
           "condition": "user.name == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.TextInput",
               "$designer": {

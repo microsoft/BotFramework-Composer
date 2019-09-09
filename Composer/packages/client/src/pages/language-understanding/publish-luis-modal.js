@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 import {
   Dialog,
   DialogType,
@@ -15,12 +15,12 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys } from 'lodash';
+import { keys, set } from 'lodash';
 
-import { Tips, Links } from './../../constants';
+import { StoreContext } from '../../store';
+
+import { Text, Tips, Links } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
-import { Text } from './../../constants/index';
-import LuisStorage from './../../utils/luisStorage';
 
 const STATE = {
   INPUT: 0,
@@ -40,14 +40,14 @@ const onRenderLabel = info => props => (
 );
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
+const validationProperties = ['name', 'authoringKey', 'environment'];
 const validateForm = data => {
   const errors = {};
   const dataKeys = keys(data);
 
   dataKeys.forEach(key => {
     const value = data[key];
-    if (key !== 'errors' && (!value || !nameRegex.test(value))) {
+    if (validationProperties.indexOf(key) > -1 && (!value || !nameRegex.test(value))) {
       errors[key] = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
@@ -96,13 +96,25 @@ const DeployFailure = props => {
 };
 
 export const PublishLuis = props => {
-  const { onPublish, onDismiss, workState, botName } = props;
-  const [formData, setFormData] = useState({ ...LuisStorage.get(botName), errors: {} });
+  const { state, actions } = useContext(StoreContext);
+  const { setEnvSettings, botName } = actions;
+  const { settings } = state;
+  const { onPublish, onDismiss, workState } = props;
+
+  const initialFormData = {
+    name: settings.luis.name || botName,
+    authoringKey: settings.luis.authoringKey,
+    endpointKey: settings.luis.endpointKey,
+    authoringRegion: settings.luis.authoringRegion,
+    defaultLanguage: settings.luis.defaultLanguage,
+    environment: settings.luis.environment,
+    errors: {},
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
-    // storage.set(field, newValue);
-    LuisStorage.set(botName, field, newValue);
   };
 
   const handlePublish = async e => {
@@ -113,6 +125,11 @@ export const PublishLuis = props => {
       setFormData({ ...formData, errors });
       return;
     }
+    // save the settings change to store and persist to server
+    const newValue = { ...formData };
+    delete newValue.errors;
+    set(settings, 'luis', newValue);
+    setEnvSettings();
 
     await onPublish({ ...formData });
   };

@@ -56,12 +56,10 @@ export interface State {
   luFiles: LuFile[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
-  oAuth: {
-    MicrosoftAppId: string;
-    MicrosoftAppPassword: string;
-  };
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
+  isEnvSettingUpdated: boolean;
+  settings: DialogSetting;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
 }
@@ -120,6 +118,21 @@ export interface LgFile {
 export interface LgTemplate {
   Name: string;
   Body: string;
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  endpointKey: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}
+export interface DialogSetting {
+  MicrosoftAppId?: string;
+  MicrosoftAppPassword?: string;
+  luis?: ILuisConfig;
+  [key: string]: any;
 }
 
 export interface DesignPageLocation {

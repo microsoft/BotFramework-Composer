@@ -3,7 +3,6 @@ import axios from 'axios';
 import { ActionCreator } from '../types';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import luisStorage from './../../utils/luisStorage';
 
 export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
@@ -56,9 +55,9 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
   }
 };
 
-export const publishLuis: ActionCreator = async ({ dispatch }) => {
+export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey) => {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`);
+    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { authoringKey });
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },
@@ -67,18 +66,3 @@ export const publishLuis: ActionCreator = async ({ dispatch }) => {
     throw new Error(err.response.data.message);
   }
 };
-
-export async function setLuisConfig(store, botName) {
-  try {
-    const config = luisStorage.get(botName);
-    await axios.post(`${BASEURL}/projects/opened/luFiles/config`, { config, botName });
-  } catch (err) {
-    store.dispatch({
-      type: ActionTypes.SET_ERROR,
-      payload: {
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'SET LUIS CONFIG ERROR',
-      },
-    });
-  }
-}

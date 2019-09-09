@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "028243",
         "updatedAt": "2019-07-22T08:01:24.349Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -60,7 +58,7 @@
             "id": "530560"
           },
           "condition": "user.remindtime != null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
@@ -72,7 +70,7 @@
               "value": "user.remindtime.datetime[0].timex[0]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.DateTimeInput",
               "$designer": {
@@ -131,7 +129,7 @@
             "id": "819123"
           },
           "condition": "user.confirmresult",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.HttpRequest",
               "$designer": {
@@ -168,7 +166,7 @@
               "dialog": "ClearUserData"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.BeginDialog",
               "$designer": {
