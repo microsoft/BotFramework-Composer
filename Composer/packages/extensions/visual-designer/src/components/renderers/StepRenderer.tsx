@@ -47,7 +47,7 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
-const nodeBorderFocusedStyle = css`
+const nodeBorderHoveredStyle = css`
   outline: 1px solid #323130;
 `;
 
@@ -73,10 +73,10 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
       css={css`
         display: inline-block;
         position: relative;
-        ${nodeFocused && nodeBorderFocusedStyle};
+        ${nodeFocused && nodeBorderSelectedStyle};
         ${nodeSelected && nodeBorderSelectedStyle};
         &:hover {
-          ${nodeBorderFocusedStyle}
+          ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
       data-is-focusable={true}
