@@ -1,0 +1,85 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Here are the steps",
+      "size": "medium",
+      "spacing":"large"
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/1.png",
+              "size": "small"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Create a trigger: ConversationUpdate",
+              "size": "medium",
+              "weight": "bolder"
+            },
+            {
+              "type": "TextBlock",
+              "text": "This trigger is created by default. If not deleted, you could select this trigger instead of creating one",
+              "spacing": "none",
+              "isSubtle": 'true',
+              "wrap": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/2.png",
+              "size": "small"
+            }
+          ]
+        },{
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "Add action: send a message",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "Type the welcome message in the editor",
+            "spacing": "none",
+            "isSubtle": true
+          }
+        ]
+      }
+      ]
+    }
+  ]
+}

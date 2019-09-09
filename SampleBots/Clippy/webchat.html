@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Bot Framework Composer Getting Started</title>
+    <link href="composerbot.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+  </head>
+   <body>
+    <div id="webchat" role="main"></div>
+    <script>
+    function fontFamily(fonts) {
+      return fonts.map(font => `'${font}'`).join(', ');
+    }
+
+    store = window.WebChat.createStore(
+      {},
+      ({ dispatch }) => next => action => {
+        if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+          const activity = action.payload.activity;
+          console.log(activity);
+
+          if (activity.type === 'message' && /^{/.test(activity.text)) {
+            const json = JSON.parse(activity.text);//this is json that connects web chat and Composer front end
+
+            /**
+            //Json structure
+            json = {'type':'event', 'name': 'composer-rpc', 'value':{'para1':para1, 'para2':para2,...}}
+
+            //api type 1: AddStep
+            if (json.name =='composer-rpc')
+              then AddStep(json.value) => {value contains data such as action Type, messageContent, etc.}
+
+            //api type 2: EditMsg -> only editing welcome message
+            if (json.name == 'composer-edit-welcomeMsg')
+                then EditMsg (json.value) => {value contains the new message}
+
+            //api type 3: show bubble -> only show one bubble is sufficient, and I think this should be easier.
+            if (json.name =='show-bubble')
+              then ShowBubble(json.value) =>{
+                if (json.value.query == 'addFunction'), then bubble points to "+ new trigger"
+                if (json.value.query == 'addWelcomeMsg'), then bubble points to "ConversationUpdate trigger"
+            }
+
+            **/
+
+            console.log('composer-rpc received', json);
+            window.alert(JSON.stringify(json));
+
+            return;
+          }
+        }
+
+        return next(action);
+      }
+    );
+
+     (async function () {
+       // const token1 = 'secret: FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w';
+       // const res = await fetch('https://webchat-mockbot.azurewebsites.net/directline/"secret: FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w"', { method: 'POST' });
+       // const { token } = await res.json();
+       const PADDING_REGULAR = 10;
+       //const DEFAULT_SUBTLE = '#9b51e0';
+       const DEFAULT_SUBTLE = '#0078D4';
+       const DEFAULT_ACCENT = '#767676'
+       const groupTimestamp = false; //timestamp options
+       const res = await fetch(
+         'https://directline.botframework.com/v3/directline/tokens/generate',
+         {
+           //I used ngrok to do all these. It's somehow connected to Azure, and my localhost
+           headers: { Authorization: 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w' },
+           method: 'POST'
+         }
+       );
+       const { token } = await res.json();
+
+       const styleOptions = {
+
+           // Fonts
+          fontSizeSmall: '80%',
+          monospaceFont: fontFamily(['Segoe UI','Consolas', 'Courier New', 'monospace']),
+          primaryFont: fontFamily(['Segoe UI','Calibri', 'Helvetica Neue', 'Arial', 'sans-serif']),
+
+          // bubble
+          bubbleBackground: 'white',
+          bubbleBorderColor: '#cccccc',
+          bubbleBorderRadius: 20,
+          bubbleBorderStyle: 'solid',
+          bubbleBorderWidth: 1,
+          bubbleFromUserBackground: '#efefef',
+          bubbleFromUserBorderColor: '#efefef',
+          bubbleFromUserBorderRadius: 20,
+          bubbleFromUserBorderStyle: 'solid',
+          bubbleFromUserBorderWidth: 1,
+          bubbleFromUserNubOffset: 'bottom',
+          bubbleFromUserNubSize: 0,
+          bubbleFromUserTextColor: DEFAULT_ACCENT,
+          bubbleImageHeight: 240,
+          bubbleMaxWidth: 480, // screen width = 600px
+          bubbleMinHeight: 40,
+          bubbleMinWidth: 250, // min screen width = 300px, Edge requires 372px (https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/13621468/)
+          bubbleNubOffset: 'bottom',
+          bubbleNubSize: 0,
+          bubbleTextColor: '#323130',
+
+          // Suggested actions
+          suggestedActionBackground: 'White',
+          suggestedActionBorder: `solid 1px #efefef`,
+          suggestedActionBorderRadius: 20,
+          suggestedActionImageHeight: 20,
+          suggestedActionTextColor: DEFAULT_SUBTLE,
+          suggestedActionDisabledBackground: 'White',
+          suggestedActionDisabledBorder: `solid 2px #E6E6E6`,
+          suggestedActionDisabledTextColor: DEFAULT_SUBTLE,
+          suggestedActionHeight: 40,
+
+
+       };
+
+       window.WebChat.renderWebChat({
+         directLine: window.WebChat.createDirectLine({ token }),styleOptions,
+         groupTimestamp: groupTimestamp,
+         store,
+       }, document.getElementById('webchat'));
+       document.querySelector('#webchat > *').focus();
+     })().catch(err => console.error(err));
+    </script>
+  </body>
+</html>

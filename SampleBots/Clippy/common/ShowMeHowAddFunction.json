@@ -1,0 +1,157 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Here are the steps",
+      "size": "medium",
+      "spacing":"large"
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/1.png",
+              "size": "small"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Add an intent",
+              "size": "medium",
+              "weight": "bolder"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Define intent; Add as many example phrases as you can think of",
+              "spacing": "none",
+              "isSubtle": 'true',
+              "wrap": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/2.png",
+              "size": "small"
+            }
+          ]
+        },{
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "Create a trigger",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "Select handle an intent as the trigger type",
+            "spacing": "none",
+            "isSubtle": true
+          }
+        ]
+      }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/3.png",
+              "size": "small"
+            }
+          ]
+        },
+        {
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "Connect trigger with intent",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "Select the intent in the right panel",
+            "spacing": "none",
+            "isSubtle": true
+          }
+        ]
+      }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/color/48/000000/4.png",
+              "size": "small"
+            }
+          ]
+        },
+        {
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "Add actions",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "Define how the bot take actions",
+            "spacing": "none",
+            "isSubtle": true
+          }
+        ]
+      }
+      ]
+    }
+  ]
+}

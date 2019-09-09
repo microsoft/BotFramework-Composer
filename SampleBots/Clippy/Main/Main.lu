@@ -1,0 +1,53 @@
+>To learn more about the LU file format, read the documentation at
+> https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format
+
+# showAnswers
+- What is {queryTerm=trigger}
+- What is the meaning of {queryTerm=trigger}
+- What is {queryTerm=dialog}
+- What is the meaning of {queryTerm=dialog}
+- What is {queryTerm=intent}
+- What is the meaning of {queryTerm=intent}
+- What is a {queryTerm=trigger}
+- What is a {queryTerm=dialog}
+- What is an {queryTerm=intent} 
+
+# LG
+- What is Language Generation
+- What is LG
+- How to write LG file
+- How to write LG
+- LG format
+
+# LU
+- What is Language Understanding
+- What is LUIS
+- What is LU
+
+# showBubbles
+- How to {queryHowTo=add a trigger}
+- How to {queryHowTo= add an intent}
+- Where to {queryHowTo=add a trigger}
+- Where to {queryHowTo= add an intent}
+- Show me how to {queryHowTo= add a function}
+- Show me how to {queryHowTo= add a function to my bot}
+- How to {queryHowTo=add a welcome message}
+- Show me how to {queryHowTo = add a welcome message}
+
+# addAction
+- Add an action
+- Add a step
+- Help me add an action
+- Help me add a step
+
+# chitchat
+- What can you do?
+- Who are you?
+- Who build you?
+- Back to home
+- Main menu
+
+# greeting
+- Hi
+- Hello
+- Good morning

@@ -1,0 +1,40 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+
+        {
+            "type": "ColumnSet",
+            "columns": [
+              {
+                    "type": "Column",
+                    "width": 2,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Language Generation (LG)",
+                            "size": "Large",
+                            "spacing": "None",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "As the bot takes actions and sends messages, the **language generator** is called into play. This allows messages sent by the bot to be composed from variables and templates. ",
+                            "size": "default",
+                            "wrap": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "How to use LG",
+            "url": "https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md",
+            "iconUrl": "https://img.icons8.com/windows/24/000000/github.png"
+        }
+    ]
+}

@@ -1,0 +1,146 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Concepts",
+              "size": "medium",
+              "weight": "bolder"
+            },
+            {
+              "type": "TextBlock",
+              "text": "'What is dialog'",
+              "spacing": "small",
+              "isSubtle": true
+            },
+            {
+              "type": "TextBlock",
+              "text": "'What is trigger'",
+              "spacing": "small",
+              "isSubtle": true
+            },
+            {
+              "type": "TextBlock",
+              "text": "'What is LU'",
+              "spacing": "small",
+              "isSubtle": true
+            },
+            {
+              "type": "TextBlock",
+              "text": "'What is LG'",
+              "spacing": "small",
+              "isSubtle": true
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+
+            {
+              "type": "Image",
+              "url": "https://img.icons8.com/ultraviolet/40/000000/ask-question.png",
+              "size": "stretch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [{
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "How-to guides",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "'How to add a function'",
+            "spacing": "small",
+            "isSubtle": true
+          },
+          {
+            "type": "TextBlock",
+            "text": "'How to add a welcome message'",
+            "spacing": "small",
+            "isSubtle": true
+          }
+        ]
+      },
+      {
+        "type": "Column",
+        "width": "auto",
+        "items": [
+
+          {
+            "type": "Image",
+            "url": "https://img.icons8.com/ultraviolet/40/000000/training.png",
+            "size": "stretch"
+          }
+        ]
+      }
+      ]
+    },
+    {
+      "type": "ColumnSet",
+      "separator": true,
+      "columns": [
+
+        {
+        "type": "Column",
+        "width": "stretch",
+        "items": [
+          {
+            "type": "TextBlock",
+            "text": "Quick-authoring",
+            "size": "medium",
+            "weight": "bolder"
+          },
+          {
+            "type": "TextBlock",
+            "text": "'Add an action for me'",
+            "spacing": "small",
+            "isSubtle": true
+          },
+          {
+            "type": "TextBlock",
+            "text": "'Edit welcome message",
+            "spacing": "small",
+            "isSubtle": true
+          }
+        ]
+      },
+      {
+        "type": "Column",
+        "width": "auto",
+        "items": [
+
+          {
+            "type": "Image",
+            "url": "https://img.icons8.com/ultraviolet/40/000000/bot.png",
+            "size": "stretch"
+          }
+        ]
+      }
+      ]
+    }
+  ]
+}

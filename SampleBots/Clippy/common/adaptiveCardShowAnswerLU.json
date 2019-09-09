@@ -1,0 +1,40 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+
+        {
+            "type": "ColumnSet",
+            "columns": [
+              {
+                    "type": "Column",
+                    "width": 2,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Language Understanding (LUIS)",
+                            "size": "Large",
+                            "spacing": "None",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Language Understanding (LUIS) is a cloud-based API service that applies custom machine-learning intelligence to a user's conversational, natural language text to predict overall meaning, and pull out relevant, detailed information.",
+                            "size": "default",
+                            "wrap": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "More Info",
+            "url": "https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis",
+            "iconUrl": "https://img.icons8.com/color/48/000000/azure-1.png"
+        }
+    ]
+}
