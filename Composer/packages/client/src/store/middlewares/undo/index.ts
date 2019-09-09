@@ -40,7 +40,6 @@ export const undoable = (
     if (stack.isEmpty()) {
       const partialState = pick(store.getState(), args, true);
       stack.add(partialState);
-      undoHistory.add(stack.id, operationId);
     }
     const partialState = pick(store.getState(), args, false);
     stack.add(partialState);

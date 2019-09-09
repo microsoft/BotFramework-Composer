@@ -179,6 +179,7 @@ export const ShellApi: React.FC = () => {
     let dataPath = '';
     if (event.source.name === FORM_EDITOR) {
       dataPath = updatePath || focused || '';
+      //return;
     }
 
     const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);

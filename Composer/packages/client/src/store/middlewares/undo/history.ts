@@ -23,19 +23,18 @@ class UndoHistory {
 
   public undo() {
     const operationId = this.history[this.pointer].operationId;
-    this.pointer--;
-    const result = [this.stacks[this.history[this.pointer].stackId]];
+    const result = [this.stacks[this.history[this.pointer--].stackId]];
     if (operationId === undefined) return result;
-    while (this.pointer > 0 && this.history[this.pointer - 1].operationId === operationId) {
-      this.pointer--;
+    while (this.pointer > -1 && this.history[this.pointer].operationId === operationId) {
       result.push(this.stacks[this.history[this.pointer].stackId]);
+      this.pointer--;
     }
     return result;
   }
 
   public redo() {
-    const operationId = this.history[this.pointer].operationId;
     this.pointer++;
+    const operationId = this.history[this.pointer].operationId;
     const result = [this.stacks[this.history[this.pointer].stackId]];
     if (operationId === undefined) return result;
     while (this.pointer < this.history.length - 1 && this.history[this.pointer + 1].operationId === operationId) {
@@ -66,7 +65,7 @@ class UndoHistory {
     this._limit = limit;
   }
 
-  canUndo = () => this.pointer > 0;
+  canUndo = () => this.pointer > -1;
   canRedo = () => this.pointer < this.history.length - 1;
 }
 
