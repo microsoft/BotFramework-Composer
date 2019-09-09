@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "768658",
         "updatedAt": "2019-07-22T08:10:54.685Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -37,7 +35,7 @@
           },
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of the todo you want to remove.",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "never",
           "outputFormat": "none"
@@ -62,7 +60,7 @@
             "id": "549615"
           },
           "condition": "dialog.removed",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -73,7 +71,7 @@
               "activity": "[bfdactivity-725469]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

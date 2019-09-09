@@ -1,8 +1,8 @@
 # help
 - ```
-    I can show you examples on how to use Steps. Enter the number next to the entity that you with to see in action.
-    [Suggestions=Steps|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|EditSteps|ReplaceDialog|EmitEvent]
-	01 - Steps
+    I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.
+    [Suggestions=Actions|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|Editactions|ReplaceDialog|EmitEvent]
+	01 - Actions
 	02 - EndTurn
 	03 - IfCondiftion
 	04 - EditArray, Foreach
@@ -11,7 +11,7 @@
 	07 - SwitchCondition
 	08 - RepeatDialog
 	09 - TraceAndLog
-	10 - EditSteps
+	10 - EditActions
 	11 - ReplaceDialog
 	12 - EmitEvent
     ```
@@ -50,10 +50,10 @@
 -Great! Your pet's name is {user.petname}
 
 # bfdactivity-200761
--Done! You have added a pet named "{user.postResponse.name}" with id "{user.postResponse.id}"
+-Done! You have added a pet named "{user.postResponse.content.name}" with id "{user.postResponse.content.id}"
 
 # bfdactivity-212615
--Great! I found your pet named "{user.getResponse.name}"
+-Great! I found your pet named "{user.getResponse.content.name}"
 
 # bfdactivity-485963
 -Hello {user.name}, nice to talk to you!

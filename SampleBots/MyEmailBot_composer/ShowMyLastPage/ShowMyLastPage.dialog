@@ -1,14 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "condition": "equals(user.pages, 0)",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -39,9 +39,7 @@
           "property": "user.pages"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:00:52.754Z",
         "updatedAt": "2019-08-08T07:00:52.763Z",

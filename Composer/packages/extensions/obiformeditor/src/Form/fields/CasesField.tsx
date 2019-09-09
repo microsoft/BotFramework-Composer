@@ -103,7 +103,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
       if (i.value === caseName) {
         return {
           ...i,
-          steps: caseSteps,
+          actions: caseSteps,
         };
       }
 
@@ -134,8 +134,8 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
           <TableField<MicrosoftIDialog>
             {...props}
             title={`Branch: ${item.value}`}
-            formData={item.steps}
-            navPrefix={`cases[${itemIdx}].steps`}
+            formData={item.actions}
+            navPrefix={`cases[${itemIdx}].actions`}
             onChange={handleStepsUpdate(item.value)}
           >
             {({ createNewItemAtIndex }) => (
@@ -160,7 +160,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
                 }}
                 type="button"
               >
-                {formatMessage('Add New Step for { caseName }', { caseName: item.value })}
+                {formatMessage('Add New Action for { caseName }', { caseName: item.value })}
               </PrimaryButton>
             )}
           </TableField>

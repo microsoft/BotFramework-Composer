@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.DeleteProperty",
           "property": "user.subject",
@@ -23,9 +23,6 @@
             "id": "929603"
           }
         }
-      ],
-      "events": [
-        "beginDialog"
       ],
       "$designer": {
         "createdAt": "2019-08-08T06:53:37.746Z",

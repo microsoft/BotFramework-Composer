@@ -6,17 +6,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "057973",
         "updatedAt": "2019-07-22T07:36:15.077Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.NumberInput",
           "$designer": {
@@ -25,7 +22,7 @@
           },
           "property": "user.age",
           "prompt": "Hello, What's your age?",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": false,
           "outputFormat": "float",
@@ -38,7 +35,7 @@
             "id": "463418"
           },
           "condition": "user.age >= 18",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -48,7 +45,7 @@
               "activity": "[bfdactivity-164444]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

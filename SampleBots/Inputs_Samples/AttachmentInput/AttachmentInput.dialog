@@ -7,17 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "883342",
         "updatedAt": "2019-07-22T07:50:42.820Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.AttachmentInput",
           "$designer": {
@@ -27,9 +24,9 @@
           },
           "property": "dialog.attachments",
           "prompt": "Please send an image or music.",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "All"
         },
         {

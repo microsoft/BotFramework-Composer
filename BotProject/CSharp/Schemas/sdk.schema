@@ -400,7 +400,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -531,7 +531,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -583,7 +583,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -764,7 +764,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -860,7 +860,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -971,7 +971,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -1252,7 +1252,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "condition": {
                     "$role": "expression",
@@ -1348,7 +1348,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -1596,7 +1596,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -1648,7 +1648,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -1700,7 +1700,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -1752,7 +1752,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -1929,7 +1929,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2001,7 +2001,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2080,7 +2080,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -2132,7 +2132,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2227,7 +2227,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2334,7 +2334,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -2386,7 +2386,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2495,7 +2495,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2575,7 +2575,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2745,7 +2745,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -2797,7 +2797,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -2903,7 +2903,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -3008,7 +3008,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -3060,7 +3060,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -3112,7 +3112,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -3597,7 +3597,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -3698,7 +3698,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -3790,7 +3790,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -3843,7 +3843,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "patternProperties": {
@@ -3894,7 +3894,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -3979,7 +3979,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "applicationId": {
                     "type": "string"
@@ -4042,7 +4042,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -4094,7 +4094,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "selector": {
                     "$type": "Microsoft.IEventSelector",
@@ -4150,7 +4150,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "languagePolicy": {
                     "$type": "Microsoft.ILanguagePolicy",
@@ -4219,7 +4219,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -4271,7 +4271,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -4458,7 +4458,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -4510,7 +4510,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -4702,7 +4702,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -4778,7 +4778,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -4848,7 +4848,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -4918,7 +4918,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5008,7 +5008,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5078,7 +5078,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5148,7 +5148,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5218,7 +5218,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5288,7 +5288,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5372,7 +5372,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5442,7 +5442,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5512,7 +5512,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5582,7 +5582,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5652,7 +5652,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5722,7 +5722,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5792,7 +5792,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "constraint": {
                     "$role": "expression",
@@ -5863,7 +5863,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -5915,7 +5915,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -5967,7 +5967,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -6020,7 +6020,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "endpoint": {
                     "type": "object",
@@ -6113,7 +6113,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "seed": {
                     "type": "integer"
@@ -6168,7 +6168,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "name": {
                     "type": "string",
@@ -6232,7 +6232,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "intents": {
                     "type": "array",
@@ -6314,7 +6314,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -6386,7 +6386,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -6481,7 +6481,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -6559,7 +6559,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -6651,7 +6651,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -6771,7 +6771,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -6823,7 +6823,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -7006,7 +7006,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 },
                 "id": {
                     "type": "string",
@@ -7094,7 +7094,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,
@@ -7146,7 +7146,7 @@
                 "$designer": {
                     "title": "$designer",
                     "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
+                    "description": "Extra information for the Bot Framework Composer."
                 }
             },
             "additionalProperties": false,

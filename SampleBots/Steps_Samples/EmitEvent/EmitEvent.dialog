@@ -6,10 +6,10 @@
     "id": "701087"
   },
   "autoEndDialog": false,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "CustomEvent Fired."
@@ -25,15 +25,13 @@
       }
     },
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "360314",
         "updatedAt": "2019-07-22T08:03:52.948Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -55,16 +53,26 @@
             "autoEndDialog": false,
             "recognizer": {
               "$type": "Microsoft.RegexRecognizer",
-              "intents": {
-                "EmitEvent": "emit",
-                "CowboyIntent": "moo"
-              }
+              "intents": [
+                {
+
+                  "$type": "Microsoft.IntentPattern",
+                  "intent": "EmitEvent",
+                  "pattern": "emit" 
+                },
+                {
+  
+                  "$type": "Microsoft.IntentPattern",
+                  "intent": "CowboyIntent",
+                  "pattern": "moo"
+                }
+              ]
             },
-            "rules": [
+            "events": [
               {
-                "$type": "Microsoft.IntentRule",
+                "$type": "Microsoft.OnIntent",
                 "intent": "EmitEvent",
-                "steps": [
+                "actions": [
                   {
                     "$type": "Microsoft.EmitEvent",
                     "EventName": "CustomEvent",
@@ -73,9 +81,9 @@
                 ]
               },
               {
-                "$type": "Microsoft.IntentRule",
+                "$type": "Microsoft.OnIntent",
                 "intent": "CowboyIntent",
-                "steps": [
+                "actions": [
                   {
                     "$type": "Microsoft.SendActivity",
                     "activity": "Yippee ki-yay!"
