@@ -2,10 +2,10 @@
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": false,
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         "GetMyEmail",
         {
           "$type": "Microsoft.SendActivity",
@@ -85,7 +85,7 @@
           "cases": [
             {
               "value": "Show me the 1st Email. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SetProperty",
                   "property": "user.selectedEmail",
@@ -104,7 +104,7 @@
             },
             {
               "value": "Show me the 2nd Email. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SetProperty",
                   "property": "user.selectedEmail",
@@ -123,7 +123,7 @@
             },
             {
               "value": "Show me the 3rd Email. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SetProperty",
                   "property": "user.selectedEmail",
@@ -137,7 +137,7 @@
             },
             {
               "value": "Next Page. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.BeginDialog",
                   "dialog": "ShowMyNextPage"
@@ -146,7 +146,7 @@
             },
             {
               "value": "Last Page. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.BeginDialog",
                   "dialog": "ShowMyLastPage"
@@ -155,7 +155,7 @@
             },
             {
               "value": "Go back. ",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.EndDialog"
                 }
@@ -167,9 +167,7 @@
           "$type": "Microsoft.RepeatDialog"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:00:56.276Z",
         "updatedAt": "2019-08-08T07:00:56.283Z",

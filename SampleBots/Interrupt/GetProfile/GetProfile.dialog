@@ -7,18 +7,15 @@
     "name": "GetProfile"
   },
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "Handle an Event",
         "id": "151697",
         "updatedAt": "2019-08-02T21:23:15.465Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
@@ -74,14 +71,14 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
         "id": "661298",
         "updatedAt": "2019-08-02T21:43:30.949Z"
       },
       "intent": "Why",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -90,7 +87,7 @@
             "updatedAt": "2019-08-02T21:43:47.008Z"
           },
           "condition": "exists(user.profile.name)",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -101,7 +98,7 @@
               "activity": "[bfdactivity-907674]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -116,14 +113,14 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
         "id": "449648",
         "updatedAt": "2019-08-02T21:43:34.915Z"
       },
       "intent": "NoValue",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -132,7 +129,7 @@
             "updatedAt": "2019-08-02T21:45:15.030Z"
           },
           "condition": "exists(user.profile.name)",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -153,7 +150,7 @@
               "value": "30"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

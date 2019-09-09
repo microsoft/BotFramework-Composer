@@ -3,17 +3,32 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "ShowEmailIntent": "(?i)show inbox email",
-      "SendEmailIntent": "(?i)send email",
-      "SentItemsIntent": "(?i)show sent items"
-    }
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ShowEmailIntent",
+        "pattern": "(?i)show inbox email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SendEmailIntent",
+        "pattern": "(?i)send email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SentItemsIntent",
+        "pattern": "(?i)show sent items"
+      }
+    ] 
   },
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.TextInput",
           "outputFormat": "none",
@@ -37,9 +52,6 @@
           }
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
       "$designer": {
         "createdAt": "2019-08-08T07:00:15.777Z",
         "updatedAt": "2019-08-08T07:00:15.790Z",
@@ -47,8 +59,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowMyEmail",
@@ -67,8 +79,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "ShowSentItems"
@@ -82,8 +94,8 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SendMyEmail"

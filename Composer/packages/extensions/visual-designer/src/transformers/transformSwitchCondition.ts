@@ -1,10 +1,11 @@
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 
-const ConditionKey = 'condition';
-const CasesKey = 'cases';
-const CaseStepKey = 'steps';
-const DefaultBranchKey = 'default';
+const ConditionKey = ObiFieldNames.Condition;
+const CasesKey = ObiFieldNames.Cases;
+const CaseStepKey = ObiFieldNames.Actions;
+const DefaultBranchKey = ObiFieldNames.DefaultCase;
 
 export function transformSwitchCondition(
   input,
@@ -39,12 +40,12 @@ export function transformSwitchCondition(
   if (!cases || !Array.isArray(cases)) return result;
 
   result.branches.push(
-    ...cases.map(({ value, steps }, index) => {
+    ...cases.map(({ value, actions }, index) => {
       const prefix = `${jsonpath}.${CasesKey}[${index}]`;
       return new IndexedNode(`${prefix}.${CaseStepKey}`, {
         $type: ObiTypes.StepGroup,
         label: value,
-        children: steps || [],
+        children: actions || [],
       });
     })
   );

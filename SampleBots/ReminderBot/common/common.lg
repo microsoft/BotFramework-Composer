@@ -8,7 +8,7 @@
 - IF: {count(singlepage) > 0}
     - ```
     Your have following reminders:
-    @{join(foreach(singlepage, x, lgTemplate('showSingleReminder', x)), '\n')}
+    @{join(foreach(singlepage, x, showSingleReminder(x)), '\n')}
       ```
 
 
@@ -35,3 +35,7 @@
 
 # bfdactivity-670207
 -OK.
+
+
+# bfdactivity-060246
+-[help]
