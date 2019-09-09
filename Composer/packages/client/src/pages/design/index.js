@@ -243,7 +243,8 @@ function DesignPage(props) {
                 >
                   <VisualDesigner
                     data-test-id="VisualDesignerElm"
-                    {...designPageLocation}
+                    dialogId={designPageLocation.dialogId}
+                    focusedSteps={[designPageLocation.focused]}
                     focusedEvent={designPageLocation.selected}
                     data={data}
                     shellApi={shellApi}
