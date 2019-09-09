@@ -16,7 +16,7 @@ const renderTitle = (item: MicrosoftIRule) => {
     return friendlyName;
   }
 
-  const intentName = (item as IntentRule).intent;
+  const intentName = (item as OnIntent).intent;
   if (intentName) {
     return intentName;
   }
@@ -33,7 +33,7 @@ export function RulesField(props: FieldProps) {
       {...overrides}
       dialogOptionsOpts={{ include: [DialogGroup.EVENTS], subMenu: false }}
       label={formatMessage('Add New Rule')}
-      navPrefix="rules"
+      navPrefix="events"
       renderTitle={renderTitle}
     >
       {({ createNewItemAtIndex }) => (

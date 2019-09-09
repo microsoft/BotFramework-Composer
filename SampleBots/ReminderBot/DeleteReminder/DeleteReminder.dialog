@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "453840",
         "updatedAt": "2019-07-22T08:01:46.134Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -46,7 +44,7 @@
             "id": "043822"
           },
           "condition": "user.remindtime != null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
@@ -80,7 +78,7 @@
               "responseTypes": "json"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.TextInput",
               "$designer": {

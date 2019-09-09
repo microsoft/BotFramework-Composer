@@ -7,17 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "272503",
         "updatedAt": "2019-07-22T07:51:20.256Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.NumberInput",
           "$designer": {
@@ -54,7 +51,7 @@
           "prompt": "2 * 2.2 equals?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
+          "allowInterruptions": "never",
           "outputFormat": "float",
           "defaultLocale": "en-us"
         },
@@ -66,7 +63,7 @@
             "id": "622462"
           },
           "condition": "(user.result - 4.4) < 0.0000001",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -77,7 +74,7 @@
               "activity": "[bfdactivity-284482]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

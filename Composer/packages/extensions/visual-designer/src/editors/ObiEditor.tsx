@@ -114,7 +114,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <MarqueeSelection selection={selection}>
+      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
         <div
           tabIndex={0}
           className="obi-editor-container"
