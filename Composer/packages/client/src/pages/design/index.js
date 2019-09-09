@@ -243,6 +243,7 @@ function DesignPage(props) {
                   <VisualDesigner
                     data-test-id="VisualDesignerElm"
                     {...designPageLocation}
+                    focusedEvent={designPageLocation.selected}
                     data={data}
                     shellApi={shellApi}
                     onChange={shellApi.saveData}
