@@ -6,17 +6,15 @@
     "id": "126960"
   },
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "218388",
         "updatedAt": "2019-07-22T08:05:04.387Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -80,7 +78,7 @@
             "id": "634904"
           },
           "condition": "user.age != null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -91,7 +89,7 @@
               "activity": "[bfdactivity-166131]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

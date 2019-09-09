@@ -7,18 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "createdAt": "2019-08-08T06:39:20.949Z",
         "updatedAt": "2019-08-08T06:39:20.967Z",
         "id": "987708"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.DeleteProperty",
           "property": "user.recipient",

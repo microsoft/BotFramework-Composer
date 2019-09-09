@@ -2,10 +2,10 @@
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteContactInfo",
@@ -41,7 +41,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "condition": "not(contains(user.recipient, '@'))",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.BeginDialog",
               "dialog": "GetRecipientFromGraph",
@@ -63,7 +63,7 @@
             {
               "$type": "Microsoft.IfCondition",
               "condition": "count(user.intentRecipient.value) != 1",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.RepeatDialog",
                   "$designer": {
@@ -99,7 +99,7 @@
               "activity": "[bfdactivity-993453]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SetProperty",
               "property": "user.emailAddr",
@@ -126,9 +126,6 @@
             "id": "824184"
           }
         }
-      ],
-      "events": [
-        "beginDialog"
       ],
       "$designer": {
         "createdAt": "2019-08-08T07:01:31.939Z",

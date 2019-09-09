@@ -1,14 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "condition": "user.sentPages == 0",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SendActivity",
               "activity": "This Is the First Page !"
@@ -24,9 +24,7 @@
           "property": "user.sentPages"
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:00:45.925Z",
         "updatedAt": "2019-08-08T07:00:45.932Z",

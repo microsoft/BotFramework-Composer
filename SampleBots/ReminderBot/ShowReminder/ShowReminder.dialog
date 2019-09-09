@@ -7,17 +7,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "560402",
         "updatedAt": "2019-07-22T08:01:54.930Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -26,7 +24,7 @@
             "id": "755693"
           },
           "condition": "user.index == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
@@ -58,7 +56,7 @@
             "id": "999357"
           },
           "condition": "user.remindtime != null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
@@ -92,7 +90,7 @@
               "responseTypes": "json"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.HttpRequest",
               "$designer": {
@@ -134,7 +132,7 @@
             "id": "633090"
           },
           "condition": "(user.index + 1) * 5 < count(user.data)",
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -197,7 +195,7 @@
             "id": "152409"
           },
           "condition": "user.choice == true",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
@@ -217,7 +215,7 @@
               }
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {

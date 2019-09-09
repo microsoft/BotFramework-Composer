@@ -55,22 +55,22 @@ export function insert(content, path: string, position: number | undefined, $typ
 export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return;
-  return insert(dialogCopy.content, 'rules', undefined, $type);
+  return insert(dialogCopy.content, 'events', undefined, $type);
 }
 
 export function createSelectedPath(selected: number) {
-  return `rules[${selected}]`;
+  return `events[${selected}]`;
 }
 
 export function createFocusedPath(selected: number, focused: number) {
-  return `rules[${selected}].steps[${focused}]`;
+  return `events[${selected}].actions[${focused}]`;
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
   const content = dialogCopy.content;
-  content.rules.splice(index, 1);
+  content.events.splice(index, 1);
   return content;
 }
 
