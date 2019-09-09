@@ -6,17 +6,14 @@
     "id": "847208"
   },
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "455902",
         "updatedAt": "2019-07-22T07:40:35.808Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
@@ -25,7 +22,7 @@
             "id": "400171"
           },
           "condition": "dialog.ids == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
@@ -91,11 +88,11 @@
           "listProperty": "dialog.ids",
           "PageSize": "2",
           "ValueProperty": "dialog.page",
-          "Steps": [
+          "actions": [
             {
               "$type": "Microsoft.Foreach",
               "listProperty": "dialog.page",
-              "Steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
                   "activity": "{dialog.index}: {dialog.value}"

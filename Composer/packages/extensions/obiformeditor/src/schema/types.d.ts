@@ -135,13 +135,13 @@ interface RuleBase extends BaseSchema {
 }
 
 /** Defines a rule for an event which is triggered by some source */
-interface EventRule extends RuleBase {
+interface OnEvent extends RuleBase {
   /** Events to trigger this rule for */
   events: DialogEvent[];
 }
 
 /** This defines the steps to take when an Intent is recognized (and optionally entities) */
-interface IntentRule extends RuleBase {
+interface OnIntent extends RuleBase {
   /** Intent name to trigger on */
   intent: string;
   /** The entities required to trigger this rule */
@@ -152,9 +152,9 @@ interface IntentRule extends RuleBase {
 interface Rule extends RuleBase {}
 
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
-interface UnknownIntentRule extends RuleBase {}
+interface OnUnknownIntent extends RuleBase {}
 
-type MicrosoftIRule = EventRule | IntentRule | Rule | UnknownIntentRule;
+type MicrosoftIRule = OnEvent | OnIntent | Rule | OnUnknownIntent;
 
 /**
  * Conversational Flow and Dialog Management
@@ -164,7 +164,7 @@ interface CaseCondition {
   /** Value which must match the condition property */
   value: string;
   /** Steps to execute if case is equal to condition */
-  steps: MicrosoftIDialog[];
+  actions: MicrosoftIDialog[];
 }
 
 /** Step which conditionally decides which step to execute next. */
@@ -185,10 +185,8 @@ interface MicrosoftAdaptiveDialog extends BaseSchema {
   recognizer?: MicrosoftIRecognizer;
   /** Language generator to use for this dialog. (aka: LG file) */
   generator?: string;
-  /** This is the initial sequence of steps to execute when this dialog is started. */
-  steps: MicrosoftIDialog[];
   /** This is the array of rules to use to evaluate conversation */
-  rules: MicrosoftIRule[];
+  events: MicrosoftIRule[];
 }
 
 /* Union of components which implement the IDialog interface */

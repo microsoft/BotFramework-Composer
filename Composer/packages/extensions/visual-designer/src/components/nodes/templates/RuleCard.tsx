@@ -4,6 +4,7 @@ import { ConceptLabels } from 'shared-menus';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { ObiFieldNames } from '../../../constants/ObiFieldNames';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
@@ -11,8 +12,10 @@ import { NodeMenu } from '../../menus/NodeMenu';
 
 import { IconCard } from './IconCard';
 
+const StepsKey = ObiFieldNames.Actions;
+
 const getDirectJumpDialog = data => {
-  const { steps } = data;
+  const steps = data[StepsKey];
   if (!Array.isArray(steps) || steps.length !== 1) {
     return null;
   }
@@ -45,7 +48,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
   let dialog = null;
 
   switch (data.$type) {
-    case ObiTypes.IntentRule:
+    case ObiTypes.OnIntent:
       if (data.intent) {
         trigger = data.intent;
       } else {
@@ -53,7 +56,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       }
       break;
 
-    case ObiTypes.EventRule:
+    case ObiTypes.OnEvent:
       if (data.events && data.events.length) {
         trigger = formatMessage(
           `{event} {
@@ -71,19 +74,19 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       }
       break;
 
-    case ObiTypes.UnknownIntentRule:
+    case ObiTypes.OnUnknownIntent:
       trigger = formatMessage('Unknown Intent');
       break;
 
-    case ObiTypes.ConversationUpdateActivityRule:
+    case ObiTypes.OnConversationUpdateActivity:
       trigger = formatMessage('Conversation Update');
       break;
   }
 
-  if (!data.steps) {
+  if (!data[StepsKey]) {
     summary = formatMessage('No actions');
-  } else if (data.steps.length == 1) {
-    const step = normalizeObiStep(data.steps[0]);
+  } else if (data[StepsKey].length == 1) {
+    const step = normalizeObiStep(data[StepsKey][0]);
     if (step.$type === ObiTypes.BeginDialog) {
       dialog = step.dialog;
       summary = ConceptLabels[step.$type].title || step.$type;
@@ -91,7 +94,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
     }
   } else {
-    summary = formatMessage('{count} actions', { count: data.steps.length });
+    summary = formatMessage('{count} actions', { count: data[StepsKey].length });
   }
 
   return (

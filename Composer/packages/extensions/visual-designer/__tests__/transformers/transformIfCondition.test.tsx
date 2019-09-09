@@ -8,7 +8,7 @@ test('should return {} when input is not IfCondition', () => {
 });
 
 test('should return correct schema when input choice and empty branches', () => {
-  const json = { $type: ObiTypes.IfCondition, conditon: 'a==b', steps: [], elseSteps: [] };
+  const json = { $type: ObiTypes.IfCondition, conditon: 'a==b', actions: [], elseActions: [] };
   const result = transformIfCondtion(json, '');
   if (!result) throw new Error('IfCondition got a wrong result');
 
@@ -47,8 +47,8 @@ test('should return correct schema when input complete json', () => {
   const json = {
     $type: ObiTypes.IfCondition,
     conditon: 'a==b',
-    steps: [{ $type: 'any' }],
-    elseSteps: [{ $type: 'any' }, { $type: 'any' }],
+    actions: [{ $type: 'any' }],
+    elseActions: [{ $type: 'any' }, { $type: 'any' }],
   };
   const result = transformIfCondtion(json, '');
   if (!result) throw new Error('IfCondition got a wrong result');
@@ -68,8 +68,8 @@ test('should jsonpath be passed down to children', () => {
   const json = {
     $type: ObiTypes.IfCondition,
     conditon: 'a==b',
-    steps: [{ $type: 'any' }],
-    elseSteps: [{ $type: 'any' }, { $type: 'any' }],
+    actions: [{ $type: 'any' }],
+    elseActions: [{ $type: 'any' }, { $type: 'any' }],
   };
   const currentPath = 'current';
   const result = transformIfCondtion(json, currentPath);
@@ -79,8 +79,8 @@ test('should jsonpath be passed down to children', () => {
   expect(result.choice.id).toEqual(currentPath);
 
   expect(result.ifGroup).toBeTruthy();
-  expect(result.ifGroup.id).toEqual(`${currentPath}.steps`);
+  expect(result.ifGroup.id).toEqual(`${currentPath}.actions`);
 
   expect(result.elseGroup).toBeTruthy();
-  expect(result.elseGroup.id).toEqual(`${currentPath}.elseSteps`);
+  expect(result.elseGroup.id).toEqual(`${currentPath}.elseActions`);
 });

@@ -8,17 +8,15 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "044028",
         "updatedAt": "2019-07-22T08:05:18.175Z"
       },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+       
+      "actions": [
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
@@ -26,9 +24,9 @@
             "updatedAt": "2019-07-16T19:58:19.512Z",
             "id": "107670"
           },
-          "outputBinding": "user.name",
+          "property": "user.name",
           "prompt": "Hello, what is your name?",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "never",
           "outputFormat": "none"
@@ -41,10 +39,10 @@
             "id": "774586"
           },
           "valueType": "memory",
-          "value": "{user}"
+          "value": "user"
         },
         {
-          "$type": "Microsoft.LogStep",
+          "$type": "Microsoft.LogAction",
           "$designer": {
             "createdAt": "2019-07-16T19:58:24.944Z",
             "updatedAt": "2019-07-16T19:58:29.674Z",
