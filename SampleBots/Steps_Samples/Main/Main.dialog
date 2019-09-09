@@ -8,35 +8,100 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": {
-      "Steps": "Steps|01",
-      "EndTurn": "EndTurn|02",
-      "IfCondition": "IfCondition|03",
-      "EditArray": "EditArray|04",
-      "EndDialog": "EndDialog|05",
-      "HttpRequest": "HttpRequest|06",
-      "SwitchCondition": "SwitchCondition|07",
-      "RepeatDialog": "RepeatDialog|08",
-      "TraceAndLog": "TraceAndLog|trace|log|09",
-      "EditSteps": "EditSteps|10",
-      "ReplaceDialog": "ReplaceDialog|11",
-      "EmitEvent": "EmitEvent|12",
-      "CancelIntent": "cancel"
-    }
+    "intents": [
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "Actions",
+        "pattern": "Actions|01" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndTurn",
+        "pattern": "EndTurn|02" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "IfCondition",
+        "pattern": "IfCondition|03"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditArray",
+        "pattern": "EditArray|04" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndDialog",
+        "pattern": "EndDialog|05" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HttpRequest",
+        "pattern": "HttpRequest|06"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SwitchCondition",
+        "pattern": "SwitchCondition|07" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "RepeatDialog",
+        "pattern": "RepeatDialog|08" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "TraceAndLog",
+        "pattern": "TraceAndLog|trace|log|09"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditActions",
+        "pattern": "EditActions|10" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ReplaceDialog",
+        "pattern": "ReplaceDialog|11" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EmitEvent",
+        "pattern": "EmitEvent|12"
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
   },
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:47:51.216Z",
         "updatedAt": "2019-07-16T19:47:55.250Z",
         "id": "764307"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "Steps",
+          "dialog": "Actions",
           "$designer": {
             "createdAt": "2019-07-22T07:32:51.372Z",
             "updatedAt": "2019-07-22T07:32:51.385Z",
@@ -44,16 +109,16 @@
           }
         }
       ],
-      "intent": "Steps"
+      "intent": "Actions"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:47:56.248Z",
         "updatedAt": "2019-07-16T19:47:59.827Z",
         "id": "691722"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndTurn"
@@ -62,13 +127,13 @@
       "intent": "EndTurn"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:01.339Z",
         "updatedAt": "2019-07-16T19:48:04.483Z",
         "id": "343907"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "IfCondition"
@@ -77,13 +142,13 @@
       "intent": "IfCondition"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:06.249Z",
         "updatedAt": "2019-07-16T19:48:12.601Z",
         "id": "608729"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EndDialog"
@@ -92,13 +157,13 @@
       "intent": "EndDialog"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:13.837Z",
         "updatedAt": "2019-07-16T19:48:17.400Z",
         "id": "818726"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EditArray"
@@ -107,13 +172,13 @@
       "intent": "EditArray"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:18.386Z",
         "updatedAt": "2019-07-16T19:48:21.918Z",
         "id": "894760"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "HttpRequest"
@@ -122,13 +187,13 @@
       "intent": "HttpRequest"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:23.804Z",
         "updatedAt": "2019-07-16T19:48:30.199Z",
         "id": "273555"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SwitchCondition"
@@ -137,13 +202,13 @@
       "intent": "SwitchCondition"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:31.492Z",
         "updatedAt": "2019-07-16T19:48:35.496Z",
         "id": "277723"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "RepeatDialog"
@@ -152,13 +217,13 @@
       "intent": "RepeatDialog"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:36.440Z",
         "updatedAt": "2019-07-16T19:48:40.412Z",
         "id": "226996"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "TraceAndLog"
@@ -167,28 +232,28 @@
       "intent": "TraceAndLog"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:42.911Z",
         "updatedAt": "2019-07-16T19:48:46.325Z",
         "id": "602168"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "EditSteps"
+          "dialog": "EditActions"
         }
       ],
-      "intent": "EditSteps"
+      "intent": "EditActions"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:48.073Z",
         "updatedAt": "2019-07-16T19:48:58.391Z",
         "id": "413376"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "Replace"
@@ -197,13 +262,13 @@
       "intent": "ReplaceDialog"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:48:55.889Z",
         "updatedAt": "2019-07-16T19:49:02.918Z",
         "id": "173056"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "EmitEvent"
@@ -212,13 +277,13 @@
       "intent": "EmitEvent"
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:49:03.945Z",
         "updatedAt": "2019-07-16T19:49:07.358Z",
         "id": "242117"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.EndDialog"
         }
@@ -226,13 +291,13 @@
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.UnknownIntentRule",
+      "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "createdAt": "2019-07-01T21:30:37.124Z",
         "updatedAt": "2019-07-16T19:49:14.554Z",
         "id": "560915"
       },
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
@@ -245,14 +310,14 @@
       ]
     },
     {
-      "$type": "Microsoft.ConversationUpdateActivityRule",
+      "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Handle ConversationUpdate",
         "id": "954390",
         "updatedAt": "2019-07-18T11:25:59.878Z"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {

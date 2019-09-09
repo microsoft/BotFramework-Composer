@@ -2,10 +2,10 @@
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
   "generator": "common.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[ShowEmailCard(user.selectedEmail)]"
@@ -34,7 +34,7 @@
           "cases": [
             {
               "value": "Reply This Email",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.BeginDialog",
                   "dialog": "ReplyMyEmail",
@@ -48,7 +48,7 @@
             },
             {
               "value": "Forward This Email",
-              "steps": [
+              "actions": [
                 {
                   "$type": "Microsoft.BeginDialog",
                   "dialog": "ForwardMyEmail",
@@ -66,9 +66,7 @@
           ]
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:00:58.789Z",
         "updatedAt": "2019-08-08T07:00:58.799Z",

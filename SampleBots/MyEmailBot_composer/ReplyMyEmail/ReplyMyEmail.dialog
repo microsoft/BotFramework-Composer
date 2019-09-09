@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteReplyInfo"
@@ -44,7 +44,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.addTime",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.SetProperty",
               "property": "user.toContent",
@@ -88,7 +88,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.confirmed",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.BeginDialog",
               "dialog": "ReplyMyEmailThroughGraph",
@@ -108,7 +108,7 @@
               "activity": "[bfdactivity-477196]"
             }
           ],
-          "elseSteps": [
+          "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
@@ -126,9 +126,7 @@
           }
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:01:10.603Z",
         "updatedAt": "2019-08-08T07:01:10.610Z",

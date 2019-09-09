@@ -1,14 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "condition": "dialog.token == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.OAuthInput",
               "timeout": "900000",
@@ -54,9 +54,7 @@
           }
         }
       ],
-      "events": [
-        "beginDialog"
-      ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:00:40.216Z",
         "updatedAt": "2019-08-08T07:00:40.230Z",

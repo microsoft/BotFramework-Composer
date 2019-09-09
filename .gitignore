@@ -390,6 +390,7 @@ typings/
 SampleBots/Local*
 SampleBots/__Test*
 SampleBots/*/generated/
+SampleBots/*/settings
 
 #tmp.zip
 *.zip

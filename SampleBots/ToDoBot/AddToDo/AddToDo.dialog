@@ -7,17 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.EventRule",
+      "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "335456",
         "updatedAt": "2019-07-22T08:10:44.402Z"
-      },
-      "events": [
-        "beginDialog"
-      ],
-      "steps": [
+      },      
+      "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
@@ -27,7 +24,7 @@
           },
           "property": "dialog.todo",
           "value": "@title"
-        },
+        },      
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
@@ -37,9 +34,9 @@
           },
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of your todo.",
-          "maxTurnCount": 0,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "always",
           "outputFormat": "none"
         },
         {
@@ -50,7 +47,7 @@
             "id": "015420"
           },
           "condition": "user.todos == null",
-          "steps": [
+          "actions": [
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
