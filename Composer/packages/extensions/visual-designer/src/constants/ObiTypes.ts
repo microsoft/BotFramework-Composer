@@ -13,6 +13,7 @@ export const ObiTypes = {
   OnIntent: 'Microsoft.OnIntent',
   OnEvent: 'Microsoft.OnEvent',
   OnConversationUpdateActivity: 'Microsoft.OnConversationUpdateActivity',
+  OnBeginDialog: 'Microsoft.OnBeginDialog',
 
   // steps
   BeginDialog: 'Microsoft.BeginDialog',

@@ -2,20 +2,19 @@ export const mockData = {
   $type: 'Microsoft.AdaptiveDialog',
   $designer: {
     createdAt: '2019-07-03T06:51:37.526Z',
-    updatedAt: '2019-07-16T20:00:39.131Z',
+    updatedAt: '2019-09-09T09:26:46.014Z',
     id: '808722',
   },
   autoEndDialog: true,
-  $schema: '../../app.schema',
-  rules: [
+  defaultResultProperty: 'dialog.result',
+  events: [
     {
-      $type: 'Microsoft.EventRule',
+      $type: 'Microsoft.OnBeginDialog',
       $designer: {
         id: '335456',
         updatedAt: '2019-07-22T08:10:44.402Z',
       },
-      events: ['beginDialog'],
-      steps: [
+      actions: [
         {
           $type: 'Microsoft.SetProperty',
           $designer: {
@@ -35,9 +34,9 @@ export const mockData = {
           },
           property: 'dialog.todo',
           prompt: 'OK, please enter the title of your todo.',
-          maxTurnCount: 0,
+          maxTurnCount: 3,
           alwaysPrompt: false,
-          allowInterruptions: 'never',
+          allowInterruptions: 'always',
           outputFormat: 'none',
         },
         {
@@ -48,7 +47,7 @@ export const mockData = {
             id: '015420',
           },
           condition: 'user.todos == null',
-          steps: [
+          actions: [
             {
               $type: 'Microsoft.InitProperty',
               $designer: {
@@ -60,18 +59,18 @@ export const mockData = {
               type: 'array',
             },
           ],
-          elseSteps: [
+          elseActions: [
             {
               $type: 'Microsoft.TextInput',
               $designer: {
                 name: 'Prompt for text',
-                id: '620430',
-                updatedAt: '2019-09-04T09:30:26.615Z',
+                id: '931472',
+                updatedAt: '2019-09-09T09:28:16.499Z',
               },
-              outputFormat: 'none',
-              allowInterruptions: 'never',
               maxTurnCount: 2147483647,
               alwaysPrompt: false,
+              allowInterruptions: 'notRecognized',
+              outputFormat: 'none',
             },
           ],
         },
@@ -98,4 +97,5 @@ export const mockData = {
       ],
     },
   ],
+  $schema: '../../app.schema',
 };
