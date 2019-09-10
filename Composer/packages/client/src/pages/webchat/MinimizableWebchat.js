@@ -15,6 +15,22 @@ export default class extends React.Component {
     this.handleMinimizeButtonClick = this.handleMinimizeButtonClick.bind(this);
     this.handleSwitchButtonClick = this.handleSwitchButtonClick.bind(this);
 
+    window.startWizard = () => {
+      this.handleMaximizeButtonClick();
+      introJs().start();
+    };
+
+    window.insertStepAt =
+      window.insertStepAt ||
+      (() => {
+        console.log('Cannot find API insertStepAt');
+      });
+    window.insertTypeAt =
+      window.insertTypeAt ||
+      (() => {
+        console.log('Cannot find API insertStepAt');
+      });
+
     const store = createStore({}, ({ dispatch }) => next => action => {
       if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
         setTimeout(() => {
@@ -38,11 +54,11 @@ export default class extends React.Component {
           const activity = action.payload.activity;
           if (activity.type === 'event' && activity.name === 'composer-rpc') {
             console.log('composer-rpc received', activity);
-            window.alert(activity.value);
             try {
               eval(activity.value);
             } catch (e) {
               console.error(e.message);
+              window.alert(activity.value);
             }
           }
         }
