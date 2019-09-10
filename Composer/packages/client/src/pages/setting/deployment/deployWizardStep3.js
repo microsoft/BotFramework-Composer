@@ -1,17 +1,15 @@
 import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
-import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
+import { Stack, DialogFooter, PrimaryButton, StackItem, TextField } from 'office-ui-fabric-react';
 
 import { styles } from './styles';
 
-export const DeployWizardStep2 = props => {
-  const { nextStep, closeModal, botValues } = props;
+export const DeployWizardStep3 = props => {
+  const { closeModal, botValues } = props;
 
   const scriptValue = [
     `cd project_folder`,
-    `pwsh ./scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
-      botValues.region.key
-    } -appPassword=${botValues.secret}`,
+    `pwsh ./scripts/deploy.ps1 -name ${botValues.name} -environment ${botValues.environment}`,
   ].join('\n');
 
   const copyToClipboard = () => {
@@ -42,8 +40,7 @@ export const DeployWizardStep2 = props => {
         <StackItem align="end" grow={1} styles={styles.halfstack} />
       </Stack>
       <DialogFooter>
-        <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={nextStep} text={formatMessage('Next')} />
+        <PrimaryButton onClick={closeModal} text={formatMessage('Done')} />
       </DialogFooter>
     </Fragment>
   );

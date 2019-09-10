@@ -24,6 +24,7 @@ export const DeployWizardStep1 = props => {
   const [formData, setFormData] = useState({
     name: botName,
     secret: '',
+    environment: '',
     region: regionOptions[0].key,
     errors: {},
   });
@@ -36,6 +37,8 @@ export const DeployWizardStep1 = props => {
     });
   };
 
+  // todo: disable the next button until its valid
+  // todo: do not autocomplete app secret
   const validateForm = () => {
     const errors = {};
     if (validateSecret(formData.secret) !== undefined) {
@@ -54,6 +57,7 @@ export const DeployWizardStep1 = props => {
     return true;
   };
   // TODO: enhance validation of secret value
+  // 16 characters at least one special char
   const validateSecret = val => {
     console.log('validate secret', val);
     setFormData({
@@ -83,7 +87,6 @@ export const DeployWizardStep1 = props => {
               defaultValue={botName}
               onChange={updateForm('name')}
               errorMessage={formData.errors.name}
-              // onGetErrorMessage={getErrorMessage}
               data-testid="displayname"
               required
             />
@@ -92,24 +95,40 @@ export const DeployWizardStep1 = props => {
             <p>{formatMessage('This is the name that your user will see.')}</p>
           </StackItem>
         </Stack>
-
+        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+          <StackItem grow={1} styles={styles.halfstack}>
+            <TextField
+              label={formatMessage('Environment Name')}
+              styles={styles.input}
+              onChange={updateForm('environment')}
+              errorMessage={formData.errors.environment}
+              data-testid="displayname"
+              required
+            />
+          </StackItem>
+          <StackItem align="end" grow={1} styles={styles.halfstack}>
+            <p>{formatMessage('A name for this instance of your bot on Azure. (Staging, Production, testing, etc)')}</p>
+          </StackItem>
+        </Stack>
         <Stack horizontal gap="2rem" styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
               label={formatMessage('App Secret')}
               styles={styles.input}
               mask="****************"
-              validateOnLoad={false}
               onChange={updateForm('secret')}
               errorMessage={formData.errors.secret}
-              onGetErrorMessage={validateSecret}
               data-testid="appsecret"
               required
               maxLength={16}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
-            <p>{formatMessage('A 16-character secret used to securely identify and validate your bot.')}</p>
+            <p>
+              {formatMessage(
+                'A 16-character secret used to securely identify and validate your bot. Must include at least 1 special character.'
+              )}
+            </p>
           </StackItem>
         </Stack>
 
