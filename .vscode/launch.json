@@ -5,14 +5,13 @@
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "runtimeArgs": [
-        "-r",
-        "ts-node/register"
-      ],
-      "args": [
-        "${workspaceFolder}/Composers/packages/server/src/server.ts"
-      ],
-      "restart": true
+      "args": ["./build/server.js"],
+      "preLaunchTask": "server: build",
+      "restart": true,
+      "outFiles": ["./build/*"],
+      "envFile": "${workspaceFolder}/Composer/packages/server/.env",
+      "outputCapture": "std",
+      "cwd": "${workspaceFolder}/Composer/packages/server"
     },
     {
       "type": "node",
@@ -21,14 +20,8 @@
       "name": "Jest Debug",
       "program": "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
       "stopOnEntry": false,
-      "args": [
-        "--runInBand",
-        "--env=jsdom",
-        "--config=jest.config.js"
-      ],
-      "runtimeArgs": [
-        "--inspect-brk"
-      ],
+      "args": ["--runInBand", "--env=jsdom", "--config=jest.config.js"],
+      "runtimeArgs": ["--inspect-brk"],
       "cwd": "${workspaceRoot}/Composer/packages/server",
       "sourceMaps": true,
       "console": "integratedTerminal"
@@ -40,9 +33,7 @@
       "port": 9229,
       "sourceMaps": true,
       "restart": true,
-      "outFiles": [
-        "${workspaceFolder}/Composer/pacakges/server/build/**/*.js"
-      ]
+      "outFiles": ["${workspaceFolder}/Composer/pacakges/server/build/**/*.js"]
     }
   ]
 }

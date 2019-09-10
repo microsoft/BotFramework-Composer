@@ -58,10 +58,9 @@ export const updateDialog: ActionCreator = async ({ dispatch }, { id, content })
     });
   } catch (err) {
     dispatch({
-      type: ActionTypes.SET_ERROR,
+      type: ActionTypes.UPDATE_DIALOG_FAILURE,
       payload: {
         message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'UPDATE DIALOG ERROR',
       },
     });
   }
