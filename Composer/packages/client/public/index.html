@@ -40,9 +40,34 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.css">
     <script>
+      (async function () {
+        const res = await fetch(
+          'https://directline.botframework.com/v3/directline/tokens/generate',
+          {
+            //I used ngrok to do all these. It's somehow connected to Azure, and my localhost
+            headers: {
+              Authorization: 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w',
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+              User: { Id: 'dl_' + Math.random().toString(36).substr(2, 5) }
+            })
+          }
+        );
+
+        const { token } = await res.json();
+
+        window.webchatToken = token;
+
+        console.log('Using enhanced token');
+      })();
+
       /* Priority: webchatToken > bearerToken. Remove the webchatToken if you want to fetch token dynamically. */
-      window.webchatToken = 'Ym2dwjOol_s.zwUFtHQWmILhoDaI-jjPyKv3KMD9QOT69blqz-bcC10';
+      // window.webchatToken = 'Ym2dwjOol_s.zwUFtHQWmILhoDaI-jjPyKv3KMD9QOT69blqz-bcC10';
       // window.bearerToken = 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w';
+
+      // Xi's bot token
     </script>
   </body>
 </html>
