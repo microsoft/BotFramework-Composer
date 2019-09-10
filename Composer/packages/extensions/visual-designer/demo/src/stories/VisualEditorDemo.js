@@ -18,7 +18,7 @@ export class VisualEditorDemo extends Component {
   state = {
     selectedFile: defaultFile,
     obiJson: ObiExamples[defaultFile],
-    focusedEvent: 'rules[0]',
+    focusedEvent: '',
     focusedSteps: [],
   };
 
