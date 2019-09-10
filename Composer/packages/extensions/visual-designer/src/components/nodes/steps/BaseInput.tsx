@@ -35,7 +35,6 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
-      baseInput
       <OffsetContainer offset={botAsksNode.offset}>
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
