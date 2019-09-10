@@ -1,0 +1,46 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+
+        {
+            "type": "ColumnSet",
+            "columns": [
+              {
+                    "type": "Column",
+                    "width": 2,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Trigger/Event Handler",
+                            "size": "Large",
+                            "spacing": "None",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "The functionality of a dialog is contained within event handlers/triggers - rules that tell the bot how to process incoming messages.",
+                            "size": "default",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Event handlers contain a series of actions that the bot will undertake to fulfill a user's request.",
+                            "size": "default",
+                            "wrap": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "More Info",
+            "url": "https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md",
+            "iconUrl": "https://img.icons8.com/windows/24/000000/github.png"
+        }
+    ]
+}

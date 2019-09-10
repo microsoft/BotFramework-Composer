@@ -1,0 +1,8 @@
+html, body { height: 100% }
+body { margin: 0 }
+#webchat {
+  height: 1000px;
+  width: 25%;
+  border: 1px solid #ccc;
+  margin: 30px auto;
+}

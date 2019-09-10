@@ -1,0 +1,300 @@
+
+# bfdactivity-407729
+- [welcomeMessage]
+
+
+# bfdactivity-189258
+- You can ask me these things. [AdaptiveCard]
+
+
+# bfdactivity-138235
+- https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md
+
+# HeroCard
+- ```
+  [Herocard
+      title = Add an intent
+      subtitle = An intent is the connection between what user says and what bot responses
+      text = Add an intent here. 
+      image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
+      buttons = Add intent]
+  ```
+
+  # AdaptiveCard
+
+- ```
+  [Attachment=../../SampleBots/Clippy/common/adaptiveCardWelcome.json adaptivecard]
+  ```
+# ShowAnswerDialog
+-```
+  [Attachment=../../SampleBots/Clippy/common/adaptiveCardShowAnswerDialog.json adaptivecard]
+  ```
+# ShowAnswerTrigger
+-```
+  [Attachment=../../SampleBots/Clippy/common/adaptiveCardShowAnswerTrigger.json adaptivecard]
+  ```
+# ShowAnswerLG
+-```
+  [Attachment=../../SampleBots/Clippy/common/adaptiveCardShowAnswerLG.json adaptivecard]
+  ```
+# ShowAnswerLU
+-```
+  [Attachment=../../SampleBots/Clippy/common/adaptiveCardShowAnswerLU.json adaptivecard]
+  ```
+# ShowMeHowAddFunction
+-```
+  [Attachment=../../SampleBots/Clippy/common/ShowMeHowAddFunction.json adaptivecard]
+  ```
+# ShowMeHowAddWelcomeMsg
+-```
+  [Attachment=../../SampleBots/Clippy/common/ShowMeHowAddWelcomeMsg.json adaptivecard]
+  ```
+
+
+# bfdactivity-463346
+- IF: @{user.queryTerm == 'dialog'}
+    - [ShowAnswerDialog] 
+- ELSEIF: @{user.queryTerm == 'trigger'}
+    - [ShowAnswerTrigger] 
+- ELSE: 
+    - Sorry I don't understand. You can ask things like: what is a trigger.
+
+
+
+# bfdactivity-736596
+- Hi! Here are somethings you can ask.
+
+
+# bfdactivity-198633
+- ``` user asks: how to ***@{user.queryHowTo}***
+        - for this request, we show teaching bubbles
+        - e.g. "how to add a trigger', bubbles appear
+        ```
+
+
+# bfdactivity-610605
+- ```
+{
+    "foo" : "bar",
+    "hello": "Aloha!",
+    "oneTwoThree": 123,
+    "yes": true,
+    "list": [
+        1,
+        "abc"
+    ],
+    "map": {
+        "sixSevenEight": 678
+    }
+}
+```
+
+# welcomeMessage
+- ```You can ask things like
+        - What is a trigger/dialog/intent
+        - Show me how to add a function to my bot/how to add welcome message
+        - How to write LG/LU/How to use template?
+        - Help me add an action
+        ```
+
+# showAnswersTemplate (queryTerm)
+- IF: @{queryTerm == 'dialog'}
+    - This is the definition of dialog
+- ELSEIF: @{param1 == 'trigger'}
+    - This is the definition of trigger
+- ELSEIF: @{param1 == 'intent'}
+    - This is the definition of intent    
+- ELSE: 
+    - Sorry I don't understand. You can ask things like: what is a trigger.
+
+# bfdactivity-434806
+- ``` user asks: ***help me to add an action***
+        - for this request, we add actions for them. need to ask follow-up questions.
+        - intent/trigger name/ID, i.e. where the action lives ***confirm with Ze***
+        - select an action type: send message, ask a question
+        - if send message: message details
+        - if ask a question: text or number or provide multi-choices
+        - Initial prompt
+        - Retry prompt
+        - Once data collected, create the step
+        ```
+
+
+# bfdactivity-764475
+- ``` action successfully added
+- intent name: {dialog.intentName}
+- action type: {dialog.actionType}
+- the following data are collected for "send a message" type
+- 1. message content: {dialog.sendMsgContent}
+- the following data are collected for prompt
+- 1. prompt type: {dialog.promptType}
+- 2. initial prompt: {dialog.initialPrompt}
+- 3. Save to property: {dialog.promptProperty}
+```
+
+
+# bfdactivity-239840
+-[AdaptiveCard]
+
+
+# bfdactivity-871922
+-[AdaptiveCard]
+
+
+# bfdactivity-397383
+- Hello. Here are somethings you can ask.
+
+
+# bfdactivity-400393
+-[AdaptiveCard]
+
+
+# bfdactivity-508455
+- IF: @{user.queryHowTo=="add a function"}
+    - [ShowMeHowAddFunction] 
+- ELSEIF: @{user.queryHowTo=="add a welcome message"}
+    - [ShowMeHowAddWelcomeMsg]
+- ELSE:
+    - Show me how
+
+
+# bfdactivity-269481
+- ```
+{
+    "foo" : "bar",
+    "hello": "Aloha!",
+    "oneTwoThree": 123,
+    "yes": true,
+    "list": [
+        1,
+        "abc"
+    ],
+    "map": {
+        "sixSevenEight": 678
+    }
+}
+```
+
+
+# bfdactivity-689844
+- okay.
+
+
+# bfdactivity-242478
+- ```
+{
+    "showBubble" : true,
+    "whichBubble": "@{user.queryHowTo}",
+    "oneTwoThree": 123,
+    "yes": true,
+    "list": [
+        1,
+        "abc"
+    ],
+    "map": {
+        "sixSevenEight": 678
+    }
+}
+```
+
+
+
+# bfdactivity-879409
+- An action has been successfully added.
+
+
+# bfdactivity-653803
+- ```
+{
+    "intentName" : "@{dialog.intentName}",
+    "actionType": "@{dialog.actionType}",
+    "hello": "Aloha!",
+    "oneTwoThree": 123,
+    "yes": true,
+    "list": [
+        1,
+        "abc"
+    ],
+    "map": {
+        "sixSevenEight": 678
+    }
+}
+```
+
+
+# bfdactivity-642634
+- ```
+{
+    "intentName" : "@{dialog.intentName}",
+    "actionType": "@{dialog.actionType}",
+    "messageContent": "@{dialog.sendMsgContent}"
+}
+```
+
+
+# bfdactivity-808641
+- ```
+{
+    "intentName" : "@{dialog.intentName}",
+    "actionType": "@{dialog.actionType}",
+    "PromptType": "@{dialog.promptType}",
+    "InitialPrompt": "@{dialog.initialPrompt}",
+    "SaveTo": "@{dialog.promptProperty}"
+}
+```
+
+
+# bfdactivity-863374
+- Okay.
+
+
+# bfdactivity-559462
+- IF: @{user.queryTerm == 'dialog'}
+    - [ShowAnswerDialog] 
+- ELSEIF: @{user.queryTerm == 'Trigger'}
+    - [ShowAnswerTrigger]
+- ELSEIF: @{user.queryTerm == 'intent'}
+    - This is the definition of ***intent***. No action required on Composer    
+- ELSE: 
+    - Sorry I don't understand. You can ask things like: what is a trigger.
+
+
+# bfdactivity-956253
+-[ShowAnswerLG]
+
+
+# bfdactivity-460872
+-[ShowAnswerLU]
+
+
+# bfdactivity-673569
+-[AdaptiveCard]
+
+
+# bfdactivity-982147
+-[bfdactivity-463346]
+
+
+# bfdactivity-635104
+-IF:@{user.queryHowTo=="add a function"}
+    -[ShowMeHowAddFunction] 
+-ELSEIF:@{user.queryHowTo=="add a welcome message"}
+    -[ShowMeHowAddWelcomeMsg]
+-ELSE:
+    -Show me how
+
+
+# bfdactivity-046065
+-[ShowAnswerLG]
+
+
+# bfdactivity-255695
+-[ShowAnswerLU]
+
+
+# bfdactivity-272059
+- Hi! Here are the things you can ask me.
+
+
+# bfdactivity-706247
+-

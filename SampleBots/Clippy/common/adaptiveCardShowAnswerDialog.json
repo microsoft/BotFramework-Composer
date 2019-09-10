@@ -1,0 +1,46 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+
+        {
+            "type": "ColumnSet",
+            "columns": [
+              {
+                    "type": "Column",
+                    "width": 2,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Dialog",
+                            "size": "Large",
+                            "spacing": "None",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Each dialog represents a piece of the bot's functionality. They contain instructions for how the bot will react to input.",
+                            "size": "default",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "As a dialog is called into action, its **recognizer** will process the message, attempting to extract the primary **intent** represented by the message, along with any **entity values** the message includes.",
+                            "size": "default",
+                            "wrap": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "More Info",
+            "url": "https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md",
+            "iconUrl": "https://img.icons8.com/windows/24/000000/github.png"
+        }
+    ]
+}
