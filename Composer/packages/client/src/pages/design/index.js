@@ -29,6 +29,7 @@ import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
 import { clearBreadcrumb } from './../../utils/navigation';
 import undoHistory from './../../store/middlewares/undo/history';
+import { getNewDesigner } from './../../utils/dialogUtil';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -181,12 +182,7 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data) {
-    const content = {
-      $designer: {
-        name: data.name,
-        description: data.description,
-      },
-    };
+    const content = getNewDesigner(data.name, data.description);
     await actions.createDialog({ id: data.name, content });
   }
 

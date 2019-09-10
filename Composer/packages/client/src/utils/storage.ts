@@ -30,7 +30,9 @@ export class ClientStorage {
     this.storage.clear();
   }
 
-  getAll(): { [key: string]: any } {
+  getAll(): {
+    [key: string]: any;
+  } {
     const ret = {};
     this._forEach((key, val) => {
       ret[key] = val;
@@ -63,3 +65,7 @@ export class ClientStorage {
     }
   }
 }
+
+const storage = new ClientStorage();
+
+export default storage;

@@ -1,5 +1,6 @@
 import { ActionTypes } from './../../../constants/index';
-import { Store, ActionType, ActionCreator, State } from './../../types';
+import { Store, ActionCreator, State } from './../../types';
+import { ActionType } from './../../action/types';
 import undoHistory from './history';
 
 export type Pick = (state: State, args: any[], isStackEmpty: boolean) => any;

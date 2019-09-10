@@ -85,7 +85,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     dispatch: interceptDispatch,
   };
 
-  prepareAxiosWithStore({ dispatch, state });
+  prepareAxiosWithStore({ dispatch, getState });
 
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };
