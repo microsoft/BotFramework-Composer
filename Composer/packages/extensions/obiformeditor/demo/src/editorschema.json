@@ -47,8 +47,8 @@
     "Microsoft.EndTurn": {
       "title": "EndTurn"
     },
-    "Microsoft.EventRule": {
-      "title": "EventRule"
+    "Microsoft.OnEvent": {
+      "title": "OnEvent"
     },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
@@ -62,8 +62,8 @@
     "Microsoft.InitProperty": {
       "title": "InitProperty"
     },
-    "Microsoft.IntentRule": {
-      "title": "IntentRule"
+    "Microsoft.OnIntent": {
+      "title": "OnIntent"
     },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
@@ -129,8 +129,8 @@
     "Microsoft.TrueSelector": {
       "title": "TrueSelector"
     },
-    "Microsoft.UnknownIntentRule": {
-      "title": "UnknownIntentRule"
+    "Microsoft.OnUnknownIntent": {
+      "title": "OnUnknownIntent"
     },
     "Microsoft.OAuthInput": {
       "title": "OAuth Login"

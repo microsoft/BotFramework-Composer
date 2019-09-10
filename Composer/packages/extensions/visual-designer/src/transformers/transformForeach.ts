@@ -1,7 +1,9 @@
+import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 
-const StepsKey = 'steps';
+const StepsKey = ObiFieldNames.Actions;
+
 export function transformForeach(
   input: any,
   jsonpath: string
@@ -14,7 +16,7 @@ export function transformForeach(
   });
 
   const steps = input[StepsKey] || [];
-  const stepsNode = new IndexedNode(`${jsonpath}.steps`, {
+  const stepsNode = new IndexedNode(`${jsonpath}.${StepsKey}`, {
     $type: ObiTypes.StepGroup,
     children: steps,
   });

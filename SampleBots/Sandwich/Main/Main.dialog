@@ -3,17 +3,17 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "Main.lg",
-  "rules": [
+  "events": [
     {
-      "$type": "Microsoft.IntentRule",
-      "steps": [
+      "$type": "Microsoft.OnIntent",
+      "actions": [
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "OrderSandwich"
         }
       ],
       "intent": "OrderSandwich",
-      "$comment": "**** This is the start of top-level intent rules ****",
+      "$comment": "**** This is the start of top-level intent events ****",
       "$designer": {
         "createdAt": "2019-05-14T20:33:33.353Z",
         "updatedAt": "2019-05-14T20:33:33.451Z",
@@ -21,9 +21,9 @@
       }
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "SandwichOptions",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[SandwichOptions]"
@@ -31,9 +31,9 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "BreadOptions",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[BreadOptions]"
@@ -41,9 +41,9 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "ToppingOptions",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[ToppingOptions]"
@@ -51,9 +51,9 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "CheeseOptions",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[CheeseOptions]"
@@ -61,9 +61,9 @@
       ]
     },
     {
-      "$type": "Microsoft.IntentRule",
+      "$type": "Microsoft.OnIntent",
       "intent": "Greeting",
-      "steps": [
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Greeting]"
@@ -71,9 +71,8 @@
       ]
     },
     {
-      "$type": "Microsoft.EventRule",
-      "events": ["beginDialog"],
-      "steps": [
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "activity": "[Initial]"

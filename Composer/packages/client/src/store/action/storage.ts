@@ -19,12 +19,21 @@ export const fetchStorages: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export async function fetchTemplates() {
+export async function fetchTemplates({ dispatch }) {
   try {
     const response = await axios.get(`${BASEURL}/assets/projectTemplates`);
-    return response.data;
+
+    dispatch({
+      type: ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS,
+      payload: {
+        response,
+      },
+    });
   } catch (err) {
-    console.log(err);
+    dispatch({
+      type: ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE,
+      error: err,
+    });
   }
 }
 
