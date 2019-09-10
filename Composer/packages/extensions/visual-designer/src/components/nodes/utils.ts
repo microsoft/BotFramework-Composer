@@ -23,7 +23,7 @@ export function getUserAnswersTitle($type: string): string {
   }
 
   if ($type.indexOf('Input') > -1) {
-    return `User Answers (${$type.replace(/Microsoft.(.*)Input/, '$1'))`;
+    return `User Answers (${$type.replace(/Microsoft.(.*)Input/, '$1')})`;
   }
 
   return '';
