@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
+import formatMessage from 'format-message';
 import { DialogGroup } from 'shared-menus';
 
 import { NodeColors } from '../../../constants/ElementColors';
