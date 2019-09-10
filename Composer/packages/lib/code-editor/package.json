@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
-    "@bfcomposer/react-monaco-editor": "^0.30.3",
+    "@bfcomposer/react-monaco-editor": "^0.30.4",
     "lodash.throttle": "^4.1.1"
   }
 }

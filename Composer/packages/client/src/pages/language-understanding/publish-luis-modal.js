@@ -97,10 +97,21 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
-  const { setEnvSettings } = actions;
+  const { setEnvSettings, botName } = actions;
   const { settings } = state;
   const { onPublish, onDismiss, workState } = props;
-  const [formData, setFormData] = useState({ ...settings.luis, errors: {} });
+
+  const initialFormData = {
+    name: settings.luis.name || botName,
+    authoringKey: settings.luis.authoringKey,
+    endpointKey: settings.luis.endpointKey,
+    authoringRegion: settings.luis.authoringRegion,
+    defaultLanguage: settings.luis.defaultLanguage,
+    environment: settings.luis.environment,
+    errors: {},
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });

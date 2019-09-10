@@ -1,8 +1,8 @@
 export class ClientStorage {
   private storage: Storage;
 
-  constructor() {
-    this.storage = window.localStorage;
+  constructor(storageLocation: Storage = window.localStorage) {
+    this.storage = storageLocation;
   }
 
   set<T = any>(key: string, val: T): T | void {
