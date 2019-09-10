@@ -4,7 +4,7 @@ describe('textInputLayouter', () => {
   let id;
 
   beforeEach(() => {
-    id = 'events[0].steps[0]';
+    id = 'events[0].actions[0]';
   });
 
   it('should reuturn a graphLayout with correct nodes', () => {
