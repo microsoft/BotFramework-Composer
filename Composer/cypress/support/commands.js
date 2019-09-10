@@ -84,8 +84,8 @@ Cypress.Commands.add('addIntentHandler', handler => {
 
 Cypress.Commands.add('addConversationHandler', handler => {
   cy.getByTestId('AddNewTrigger').click();
-  cy.get(`[data-testid="triggerTypeDropDown"]`);
-  cy.getByText(handler).click();
+  cy.get(`[data-testid="triggerTypeDropDown"]`).click();
+  cy.getByTitle(handler).click();
   cy.get('input[data-testid="triggerName"]').type(`__TestTrigger`);
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });
