@@ -38,7 +38,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={botAsksNode.offset}>
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
-          header={'Bot Asks'}
+          header={formatMessage('Bot Asks')}
           corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={'MessageBot'}
           label={data.prompt || '<prompt>'}
