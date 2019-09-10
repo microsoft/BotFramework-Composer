@@ -6,6 +6,17 @@ import WebChat from './WebChat';
 import './fabric-icons-inline.css';
 import './MinimizableWebchat.css';
 
+const RpcPrefix = 'composer-rpc://';
+
+const runRpcCommand = command => {
+  try {
+    eval(command);
+  } catch (e) {
+    console.error(e.message);
+    window.alert(activity.value);
+  }
+};
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
@@ -52,14 +63,21 @@ export default class extends React.Component {
         // composer-rpc
         if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
           const activity = action.payload.activity;
+
           if (activity.type === 'event' && activity.name === 'composer-rpc') {
-            console.log('composer-rpc received', activity);
-            try {
-              eval(activity.value);
-            } catch (e) {
-              console.error(e.message);
-              window.alert(activity.value);
-            }
+            // trigger RPC call by firing RPC event
+            console.log('composer-rpc event received', activity);
+
+            const cmd = activity.value;
+            runRpcCommand(cmd);
+            return;
+          } else if (activity.type === 'message' && activity.text.indexOf(RpcPrefix) === 0) {
+            // trigger RPC call by string protocol
+            console.log('composer-rpc text protocol', activity);
+
+            const cmd = activity.text.replace(RpcPrefix, '');
+            runRpcCommand(cmd);
+            return;
           }
         }
       }
