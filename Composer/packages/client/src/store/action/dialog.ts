@@ -91,7 +91,7 @@ export const createDialog = undoable(
       await removeDialogBase(store, target.id);
     }
   },
-  createDialogBase
+  (store, { id, content }) => createDialogBase(store, { id, content })
 );
 
 export const updateDialogBase: ActionCreator = async ({ dispatch }, { id, content }) => {
