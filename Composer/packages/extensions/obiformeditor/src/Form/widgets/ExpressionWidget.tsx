@@ -1,6 +1,7 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react';
+import omit from 'lodash.omit';
 
 import { FormContext } from '../types';
 
@@ -47,5 +48,5 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
-  return <TextField {...props} onGetErrorMessage={onGetErrorMessage} />;
+  return <TextField {...omit(props, ['label', 'description'])} onGetErrorMessage={onGetErrorMessage} />;
 };

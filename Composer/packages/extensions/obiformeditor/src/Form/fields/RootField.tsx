@@ -1,9 +1,9 @@
 import { startCase, get } from 'lodash';
 import React, { useState } from 'react';
-import { FontClassNames, FontSizes, FontWeights } from '@uifabric/styling';
+import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
@@ -49,26 +49,27 @@ const EditableTitle: React.FC<EditableTitleProps> = props => {
 
   return (
     <div onMouseEnter={() => setEditing(true)} onMouseLeave={() => !hasFocus && setEditing(false)}>
-      {editing ? (
-        <form onSubmit={handleCommit}>
-          <TextField
-            placeholder={props.title}
-            value={title}
-            styles={{
-              root: { margin: '5px 0 7px -9px' },
-              field: { fontSize: FontSizes.large, fontWeight: FontWeights.semibold },
-            }}
-            onBlur={handleCommit}
-            onFocus={() => setHasFocus(true)}
-            onChange={handleChange}
-          />
-          <button type="submit" hidden />
-        </form>
-      ) : (
-        <h2 style={{ fontSize: FontSizes.large, fontWeight: FontWeights.semibold as number, margin: '10px 0' }}>
-          {title || props.title}
-        </h2>
-      )}
+      <TextField
+        placeholder={props.title}
+        value={title}
+        styles={{
+          root: { margin: '5px 0 7px -9px' },
+          field: { fontSize: FontSizes.size20, fontWeight: FontWeights.semibold },
+          fieldGroup: {
+            borderColor: editing ? undefined : 'transparent',
+            transition: 'border-color 0.1s linear',
+            selectors: {
+              ':hover': {
+                borderColor: hasFocus ? undefined : NeutralColors.gray30,
+              },
+            },
+          },
+        }}
+        onBlur={handleCommit}
+        onFocus={() => setHasFocus(true)}
+        onChange={handleChange}
+        autoComplete="off"
+      />
     </div>
   );
 };
@@ -102,7 +103,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
         <EditableTitle title={getTitle()} onChange={handleTitleChange} />
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p
-            className={classnames('RootFieldDescription', FontClassNames.small)}
+            className={classnames('RootFieldDescription', FontClassNames.smallPlus)}
             dangerouslySetInnerHTML={{ __html: getDescription() }}
           />
         )}
@@ -110,7 +111,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
 
       {props.children}
 
-      <div style={{ padding: '18px', display: 'flex' }}>
+      <div className="RootFieldMetaData">
         <div style={{ marginRight: '36px' }}>
           <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
             {formatMessage('ID number')}

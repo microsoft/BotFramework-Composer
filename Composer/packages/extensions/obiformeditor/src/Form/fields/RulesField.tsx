@@ -1,6 +1,6 @@
 import React from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
 import { createStepMenu, DialogGroup } from 'shared-menus';
@@ -37,7 +37,7 @@ export function RulesField(props: FieldProps) {
       renderTitle={renderTitle}
     >
       {({ createNewItemAtIndex }) => (
-        <PrimaryButton
+        <DefaultButton
           data-testid="RulesFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
@@ -48,7 +48,7 @@ export function RulesField(props: FieldProps) {
           type="button"
         >
           {formatMessage('Add')}
-        </PrimaryButton>
+        </DefaultButton>
       )}
     </TableField>
   );

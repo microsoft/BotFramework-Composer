@@ -1,5 +1,6 @@
 import React from 'react';
-import { ColorClassNames, FontClassNames } from '@uifabric/styling';
+import { ColorClassNames, FontClassNames, FontWeights } from '@uifabric/styling';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
@@ -7,7 +8,6 @@ import get from 'lodash.get';
 import classnames from 'classnames';
 
 import { FormContext } from '../types';
-import SectionSeparator from '../SectionSeparator';
 
 import { RootField } from './RootField';
 
@@ -70,16 +70,19 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
       {children}
     </RootField>
   ) : (
-    <div className={classnames('BaseField', className)} key={key} id={key.replace(/\.|#/g, '')}>
-      <SectionSeparator label={getTitle()}>
+    <div
+      className={classnames('BaseField', className)}
+      key={key}
+      id={key.replace(/\.|#/g, '')}
+      style={{ borderBottom: `1px solid ${NeutralColors.gray60}` }}
+    >
+      <div>
+        <h3 className="BaseFieldTitle">{getTitle()}</h3>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-          <p
-            className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
-            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
-          />
+          <p className="BaseFieldDescription" dangerouslySetInnerHTML={descriptionMarkup(getDescription())} />
         )}
-        {children}
-      </SectionSeparator>
+      </div>
+      {children}
     </div>
   );
 }

@@ -164,14 +164,20 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
       minWidth: 30,
       maxWidth: 150,
       isResizable: true,
-      onRender: renderTitle,
+      // eslint-disable-next-line react/display-name
+      onRender: item => (
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>{renderTitle(item)}</div>
+      ),
     },
     {
       key: 'description',
       name: formatMessage('Description'),
       minWidth: 30,
       isResizable: true,
-      onRender: renderDescription,
+      onRender: renderDescription
+        ? // eslint-disable-next-line react/display-name
+          item => <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>{renderDescription(item)}</div>
+        : undefined,
     },
     ...additionalColumns,
     {
@@ -204,6 +210,10 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
           items={items}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
+          styles={{
+            // offset the header padding
+            root: { marginTop: '-16px' },
+          }}
         />
       )}
       {children && children({ onChange, createNewItemAtIndex })}

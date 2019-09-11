@@ -7,7 +7,6 @@ import {
   ISelectableOption,
   Icon,
 } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { BFDWidgetProps } from '../types';
@@ -15,8 +14,7 @@ import { BFDWidgetProps } from '../types';
 const ADD_DIALOG = 'ADD_DIALOG';
 
 export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
-  const { formContext, label, onChange, onFocus, onBlur, value, schema, id, placeholder } = props;
-  const { description } = schema;
+  const { formContext, onChange, onFocus, onBlur, value, id, placeholder } = props;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
   useEffect(() => {
@@ -84,25 +82,17 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
   // Using a Combobox allows us more control over invoking props.onChange via
   // onItemClick prop.
   return (
-    <>
-      <ComboBox
-        id={id}
-        placeholder={placeholder}
-        label={label}
-        onBlur={() => onBlur(id, value)}
-        onFocus={() => onFocus(id, value)}
-        options={options}
-        selectedKey={comboboxTitle ? 'customTitle' : value || ''}
-        onItemClick={handleChange}
-        onRenderOption={onRenderOption}
-        autoComplete="off"
-        useComboBoxAsMenuWidth
-      />
-      {description && (
-        <span style={{ fontSize: '14px' }}>
-          <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-        </span>
-      )}
-    </>
+    <ComboBox
+      id={id}
+      placeholder={placeholder}
+      onBlur={() => onBlur(id, value)}
+      onFocus={() => onFocus(id, value)}
+      options={options}
+      selectedKey={comboboxTitle ? 'customTitle' : value || ''}
+      onItemClick={handleChange}
+      onRenderOption={onRenderOption}
+      autoComplete="off"
+      useComboBoxAsMenuWidth
+    />
   );
 };

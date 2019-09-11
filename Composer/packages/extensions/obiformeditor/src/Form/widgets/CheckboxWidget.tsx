@@ -15,13 +15,12 @@ export function CheckboxWidget(props: WidgetProps) {
         onChange={(_, checked?: boolean) => onChange(checked)}
         onBlur={() => onBlur(rest.id, Boolean(value))}
         onFocus={() => onFocus(rest.id, Boolean(value))}
-        label={label}
       />
-      {description && (
+      {/* {description && (
         <span style={{ fontSize: '14px' }}>
           <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
         </span>
-      )}
+      )} */}
     </>
   );
 }

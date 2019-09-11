@@ -1,10 +1,10 @@
 import React from 'react';
 import { DatePicker } from 'office-ui-fabric-react';
 import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
+import omit from 'lodash.omit';
 
 export function DateTimeWidget(props: WidgetProps) {
-  const { onChange, onBlur, onFocus, required, value, schema, ...rest } = props;
-  const { description } = schema;
+  const { onChange, onBlur, onFocus, required, value, ...rest } = props;
 
   const onSelectDate = (date?: Date | null) => {
     onChange(date ? date.toISOString() : null);
@@ -12,12 +12,11 @@ export function DateTimeWidget(props: WidgetProps) {
 
   return (
     <DatePicker
-      {...rest}
+      {...omit(rest, ['label', 'description'])}
       isRequired={required}
       onBlur={() => onBlur(rest.id, value)}
       onFocus={() => onFocus(rest.id, value)}
       onSelectDate={onSelectDate}
-      textField={{ description }}
       value={value ? new Date(value) : undefined}
     />
   );

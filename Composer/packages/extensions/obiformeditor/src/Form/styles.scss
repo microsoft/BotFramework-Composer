@@ -26,3 +26,37 @@
     }
   }
 }
+
+.FieldTemplate {
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px;
+
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 14px;
+
+    & > label {
+      margin-right: 8px;
+      margin-top: 0;
+    }
+  }
+
+  &--reverse {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+
+    & > label {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+  }
+
+  &Info {
+    &:focus {
+      outline: 1px solid #323130;
+    }
+  }
+}

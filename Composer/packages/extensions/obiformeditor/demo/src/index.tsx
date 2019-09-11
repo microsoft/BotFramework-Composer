@@ -9,7 +9,7 @@ import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import Example from '../../src';
 import { ShellApi, LuFile, DialogInfo } from '../../src/types';
-import { buildDialogOptions } from '../../src/Form/utils';
+import { buildDialogOptions, getTimestamp } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
 
@@ -39,6 +39,11 @@ const cmOptions = {
 
 const defaultData = {
   $type: 'Microsoft.TextInput',
+  $designer: {
+    id: 123456,
+    updatedAt: getTimestamp(),
+    createdAt: getTimestamp(),
+  },
 };
 
 const defaultMemory = {
@@ -267,7 +272,7 @@ const Demo: React.FC = () => {
 
   return (
     <div className="DemoContainer">
-      <div style={{ display: 'flex', flexDirection: 'column' }} className="DemoJSONContainer">
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }} className="DemoJSONContainer">
         <div style={{ fontSize: '20px', display: 'flex', justifyContent: 'space-between' }}>
           <div>
             <DefaultButton

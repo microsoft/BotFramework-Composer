@@ -3,8 +3,8 @@ import { TextField } from 'office-ui-fabric-react';
 import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
 export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
-  const { label, onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled } = props;
-  const { description, examples = [] } = schema;
+  const { onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled } = props;
+  const { examples = [] } = schema;
 
   let placeholderText = placeholder;
 
@@ -14,10 +14,8 @@ export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
 
   return (
     <TextField
-      description={description}
       disabled={disabled}
       id={id}
-      label={label}
       multiline
       onBlur={() => onBlur(id, value)}
       onChange={(_, newValue?: string) => onChange(newValue)}
@@ -25,6 +23,11 @@ export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
       placeholder={placeholderText}
       readOnly={readonly}
       value={value}
+      styles={{
+        subComponentStyles: {
+          label: { root: { fontSize: '12px', fontWeight: '400' } },
+        },
+      }}
     />
   );
 };

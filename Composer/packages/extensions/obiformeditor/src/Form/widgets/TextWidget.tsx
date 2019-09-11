@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { Label } from 'office-ui-fabric-react';
 
 import { BFDWidgetProps } from '../types';
 
@@ -62,38 +63,35 @@ export function TextWidget(props: BFDWidgetProps) {
     const step = type === 'integer' ? 1 : 0.1;
 
     return (
-      <>
-        <SpinButton
-          label={getLabel()}
-          labelPosition={Position.top}
-          onDecrement={updateValue(-step)}
-          onIncrement={updateValue(step)}
-          onValidate={updateValue(0)}
-          disabled={Boolean(schema.const) || readonly || disabled}
-          step={step}
-          value={value}
-        />
-        {description && (
-          <span style={{ fontSize: '14px' }}>
-            <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-          </span>
-        )}
-      </>
+      <SpinButton
+        onDecrement={updateValue(-step)}
+        onIncrement={updateValue(step)}
+        onValidate={updateValue(0)}
+        disabled={Boolean(schema.const) || readonly || disabled}
+        step={step}
+        value={value}
+        styles={{
+          labelWrapper: { display: 'none' },
+        }}
+      />
     );
   }
 
   const sharedProps = {
-    description,
     disabled,
     id,
     value,
-    label: getLabel(),
     autoComplete: 'off',
     onBlur: () => onBlur(id, value),
     onChange: (_, newValue?: string) => onChange(newValue),
     onFocus: () => onFocus(id, value),
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
+    styles: {
+      subComponentStyles: {
+        label: { root: { fontSize: '12px', fontWeight: '400' } },
+      },
+    },
   };
 
   if ($role === 'expression') {

@@ -42,16 +42,13 @@ body {
 .DemoContainer {
   display: flex;
   height: 100vh;
-
-  & > * {
-    flex: 0 0 50%;
-  }
 }
 
 .DemoForm {
   overflow-y: scroll;
   height: 100%;
   width: 100%;
+  max-width: 600px;
 
   .App {
     padding-top: 20px;

@@ -3,10 +3,6 @@
 
   .ObjectItemField {
     flex: 1;
-
-    .BaseField {
-      margin-top: 10px;
-    }
   }
 
   .ObjectItemContext {
@@ -14,9 +10,5 @@
     margin-left: 15px;
     display: flex;
     align-items: flex-end;
-  }
-
-  & + & {
-    margin-top: 10px;
   }
 }
