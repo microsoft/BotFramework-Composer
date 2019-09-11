@@ -4,10 +4,12 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { deleteNode, insert } from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
+import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -88,6 +90,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     selectedIds: [],
   });
 
+  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
+
+  useEffect((): void => {
+    if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else {
+      setKeyBoardStatus('normal');
+    }
+  }, [focusedId, selectionContext]);
+
   useEffect(
     (): void => {
       selection.setItems(nodeIndexGenerator.current.getItemList());
@@ -111,43 +125,55 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
+  const handleKeyboardCommand = command => {
+    let path = focusedId;
+    switch (command) {
+      case KeyboardCommandTypes.DeleteNode:
+        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        break;
+      default:
+        break;
+    }
+  };
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-        <div
-          tabIndex={0}
-          className="obi-editor-container"
-          data-testid="obi-editor-container"
-          css={{
-            width: '100%',
-            height: '100%',
-            padding: '48px 20px',
-            boxSizing: 'border-box',
-            '&:focus': { outline: 'none' },
-          }}
-          ref={el => (divRef = el)}
-          onKeyUp={e => {
-            const keyString = e.key;
-            if (keyString === 'Delete' && focusedId) {
-              dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-            }
-          }}
-          onClick={e => {
-            e.stopPropagation();
-            dispatchEvent(NodeEventTypes.Focus, '');
-          }}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.focus({ preventScroll: true });
-              dispatchEvent(eventName, eventData);
+      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+          <div
+            tabIndex={0}
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '48px 20px',
+              boxSizing: 'border-box',
+              '&:focus': { outline: 'none' },
             }}
-          />
-        </div>
-      </MarqueeSelection>
+            ref={el => (divRef = el)}
+            onKeyUp={e => {
+              const keyString = e.key;
+              if (keyString === 'Delete' && focusedId) {
+                dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+              }
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              dispatchEvent(NodeEventTypes.Focus, '');
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.focus({ preventScroll: true });
+                dispatchEvent(eventName, eventData);
+              }}
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
     </SelectionContext.Provider>
   );
 };
