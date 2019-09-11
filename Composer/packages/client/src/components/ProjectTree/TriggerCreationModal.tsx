@@ -112,7 +112,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             placeholder="select a trigger type"
             label="What is the trigger?"
             options={triggerTypeOptions}
-            css={dropdownStyles}
+            styles={dropdownStyles}
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}

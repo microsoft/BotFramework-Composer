@@ -1,8 +1,10 @@
-import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { Fragment, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
+import { ActionButton } from 'office-ui-fabric-react';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
@@ -22,6 +24,9 @@ import {
   formEditor,
   editorWrapper,
   deleteDialogContent,
+  middleTriggerContainer,
+  middleTriggerElements,
+  triggerButton,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -30,6 +35,11 @@ import { DialogStyle } from './../../components/Modal/styles';
 import { clearBreadcrumb } from './../../utils/navigation';
 import undoHistory from './../../store/middlewares/undo/history';
 import { getNewDesigner } from './../../utils/dialogUtil';
+
+const addIconProps = {
+  iconName: 'CircleAddition',
+  styles: { root: { fontSize: '12px' } },
+};
 
 function onRenderContent(subTitle, style) {
   return (
@@ -79,6 +89,7 @@ function DesignPage(props) {
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -97,8 +108,18 @@ function DesignPage(props) {
     }
   }, [location]);
 
+  useEffect(() => {
+    const dialog = dialogs.find(d => d.id === dialogId);
+    const visible = get(dialog, 'triggers', []).length === 0;
+    setTriggerButtonVisibility(visible);
+  }, [dialogs, dialogId]);
+
   const OnTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
+  };
+
+  const openNewTriggerModal = () => {
+    setTriggerModalVisibility(true);
   };
 
   const OnTriggerCreationSubmit = dialog => {
@@ -106,8 +127,8 @@ function DesignPage(props) {
       id: dialog.id,
       content: dialog.content,
     };
-    const index = get(dialog, 'content.rules', []).length - 1;
-    actions.selectTo(`rules[${index}]`);
+    const index = get(dialog, 'content.events', []).length - 1;
+    actions.selectTo(`events[${index}]`);
     actions.updateDialog(payload);
   };
 
@@ -258,9 +279,7 @@ function DesignPage(props) {
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
-          openNewTriggerModal={() => {
-            setTriggerModalVisibility(true);
-          }}
+          openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
@@ -273,8 +292,25 @@ function DesignPage(props) {
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}
+                    hidden={triggerButtonVisible}
                     src={`${rootPath}/extensionContainer.html`}
                   />
+                  {triggerButtonVisible && (
+                    <div css={middleTriggerContainer}>
+                      <div css={middleTriggerElements}>
+                        {formatMessage(`This dialog has no trigger yet.`)}
+                        <ActionButton
+                          data-testid="AddNewTrigger"
+                          tabIndex={1}
+                          iconProps={addIconProps}
+                          css={triggerButton}
+                          onClick={openNewTriggerModal}
+                        >
+                          {formatMessage('New Trigger ..')}
+                        </ActionButton>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <iframe
                   key="FormEditor"

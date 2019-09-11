@@ -28,7 +28,7 @@ interface TriggerFormDataErrors {
 
 export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: TriggerFormData) {
   const dialog = cloneDeep(inputDialog);
-  const rules = get(dialog, 'content.rules', []);
+  const events = get(dialog, 'content.events', []);
   const newStep = {
     $type: data.$type,
     $designer: {
@@ -38,8 +38,8 @@ export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: Trig
     },
     ...seedNewDialog(data.$type),
   };
-  rules.push(newStep);
-  set(dialog, 'content.rules', rules);
+  events.push(newStep);
+  set(dialog, 'content.events', events);
   return dialog;
 }
 

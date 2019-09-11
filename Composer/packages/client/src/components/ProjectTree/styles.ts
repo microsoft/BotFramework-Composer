@@ -114,11 +114,17 @@ export const styles = {
   },
 };
 
-export const dropdownStyles = css`
+export const dropdownStyles = {
+  label: {
+    fontWeight: FontWeights.semibold,
+  },
   dropdown: {
-    width: 300;
-  }
-`;
+    width: '300px',
+  },
+  root: {
+    paddingBottom: '20px',
+  },
+};
 
 export const dialogWindow = css`
   display: flex;
