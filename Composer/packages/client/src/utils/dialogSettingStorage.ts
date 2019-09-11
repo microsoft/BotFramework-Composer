@@ -1,14 +1,14 @@
 import { set } from 'lodash';
 
-import { ClientStorage } from './storage';
+import storage from './storage';
 
 const KEY = 'DialogSetting';
 
 class DialogSettingStorage {
-  private storage: ClientStorage;
+  private storage;
   private _all;
   constructor() {
-    this.storage = new ClientStorage(window.localStorage);
+    this.storage = storage;
     this._all = this.storage.get(KEY, {});
   }
   get(botName: string) {
