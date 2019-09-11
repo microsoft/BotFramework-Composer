@@ -13,8 +13,14 @@ export const LoopIconSize = {
   height: 24,
 };
 
+export const IconBrickSize = {
+  width: 24,
+  height: 24,
+};
+
 export const LoopEdgeMarginLeft = 20;
 
+export const BoxMargin = 5;
 export const TriggerSize = InitNodeSize;
 
 export const TerminatorSize = { width: 14, height: 14 };

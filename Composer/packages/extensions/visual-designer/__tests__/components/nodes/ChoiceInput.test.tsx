@@ -5,10 +5,11 @@ import { ChoiceInput } from '../../../src/components/nodes/steps/ChoiceInput';
 import { ObiTypes } from '../../../src/constants/ObiTypes';
 
 describe('<ChoiceInput />', () => {
-  let renderResult, id, data, onEvent;
+  let renderResult, id, data, onEvent, onResize;
 
   beforeEach(() => {
     onEvent = jest.fn();
+    onResize = jest.fn();
     id = 'choiceInput';
   });
   afterEach(cleanup);
@@ -19,7 +20,7 @@ describe('<ChoiceInput />', () => {
       choices: null,
     };
 
-    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} />);
+    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} />);
 
     const { queryByTestId } = renderResult;
     expect(queryByTestId('ChoiceInput')).toBeNull();
@@ -41,7 +42,7 @@ describe('<ChoiceInput />', () => {
       ],
     };
 
-    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} />);
+    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} />);
 
     const { getAllByRole } = renderResult;
     const choices = getAllByRole('choice');
@@ -68,7 +69,7 @@ describe('<ChoiceInput />', () => {
       ],
     };
 
-    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} />);
+    renderResult = render(<ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} />);
 
     const { getAllByRole, getByTestId } = renderResult;
     const choices = getAllByRole('choice');
