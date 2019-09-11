@@ -1,0 +1,39 @@
+.shepherd-header {
+  
+}
+
+.tippy-arrow {
+  border-right-color: #9852E3 !important;
+  border-left-color: #9852E3 !important;
+}
+
+.shepherd-content {
+  background: #9852E3;
+}
+
+.shepherd-text {
+  color: white;
+  font-size: 20px;
+  padding: 0 20px;
+}
+
+.shepherd-cancel-icon {
+  color: white;
+}
+
+.shepherd-footer {
+  display: 'flex';
+  justify-content: space-between;
+  padding: 20px 30px;
+}
+
+.shepherd-button {
+  background: white;
+  color: #9852E3;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.shepherd-button:hover {
+  background: #ccc;
+}

@@ -51,7 +51,11 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const editorAxisX = editorWidth / 2;
 
   return (
-    <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
+    <div
+      id="StepEditor"
+      className="step-editor"
+      css={{ position: 'relative', width: editorWidth, height: editorHeight }}
+    >
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>

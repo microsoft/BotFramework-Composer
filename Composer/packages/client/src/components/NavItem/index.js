@@ -6,7 +6,7 @@ import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
 import { link, outer, commandBarButton } from './styles';
 
 export const NavItem = props => {
-  const { to, exact, iconName, labelName, targetUrl, underTest } = props;
+  const { to, exact, iconName, labelName, targetUrl, underTest, tourId } = props;
   const [active, setActive] = useState(false);
 
   const isPartial = (targetUrl, currentUrl) => {
@@ -24,6 +24,7 @@ export const NavItem = props => {
           setActive(isActive);
         }}
         data-testid={'LeftNav-CommandBarButton' + labelName}
+        id={tourId}
         disabled={underTest}
         aria-disabled={underTest}
         aria-label={labelName}

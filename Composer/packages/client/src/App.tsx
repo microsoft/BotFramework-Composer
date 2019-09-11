@@ -28,6 +28,7 @@ const topLinks = [
   },
   {
     to: '/dialogs/Main',
+    tourId: 'AboutComposer-DesignFlow',
     iconName: 'SplitObject',
     labelName: 'Design Flow',
     activeIfUrlContains: 'dialogs',
@@ -45,6 +46,7 @@ const topLinks = [
     to: 'language-generation/',
     iconName: 'Robot',
     labelName: 'Bot Says',
+    tourId: 'AboutComposer-BotSays',
     activeIfUrlContains: 'language-generation',
     exact: false,
   },
@@ -52,6 +54,7 @@ const topLinks = [
     to: 'language-understanding/',
     iconName: 'People',
     labelName: 'User Says',
+    tourId: 'AboutComposer-UserSays',
     activeIfUrlContains: 'language-understanding',
     exact: false,
   },
@@ -67,6 +70,7 @@ const topLinks = [
     to: '/setting/',
     iconName: 'Settings',
     labelName: 'Settings',
+    tourId: 'AboutComposer-Settings',
     activeIfUrlContains: 'setting',
     exact: false,
   },
@@ -128,6 +132,7 @@ export const App: React.FC = () => {
                 <NavItem
                   key={'NavLeftBar' + index}
                   to={mapNavItemTo(link.to)}
+                  tourId={link.tourId}
                   iconName={link.iconName}
                   labelName={link.labelName}
                   labelHide={!sideBarExpand}

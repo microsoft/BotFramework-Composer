@@ -65,7 +65,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
   }, [dialogs]);
 
   return (
-    <div css={root} data-testid="ProjectTree">
+    <div css={root} id="ProjectTree" data-intro="U are ok" data-step="100" data-testid="ProjectTree">
       <ul>
         {links.map(link => {
           return (
@@ -103,6 +103,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
               </ul>
               {dialogId === link.id && (
                 <ActionButton
+                  id="AddNewTriggerBtn"
                   data-testid="AddNewTrigger"
                   tabIndex={1}
                   iconProps={addIconProps}

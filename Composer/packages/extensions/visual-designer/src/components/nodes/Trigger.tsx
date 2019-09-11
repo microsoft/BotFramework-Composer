@@ -7,6 +7,7 @@ import { FormCard } from './templates/FormCard';
 
 export const Trigger = ({ data, focused, onClick }): JSX.Element => (
   <div
+    id="TriggerNode"
     data-step="5"
     data-intro="This is your trigger"
     css={{
