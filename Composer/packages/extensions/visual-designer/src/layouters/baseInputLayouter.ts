@@ -1,7 +1,6 @@
 import { GraphLayout } from '../models/GraphLayout';
-import { Boundary } from '../models/Boundary';
 import { EdgeData } from '../models/EdgeData';
-import { ElementInterval, IconBrickSize, LoopEdgeMarginLeft } from '../constants/ElementSizes';
+import { ElementInterval, LoopEdgeMarginLeft } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 
 import { calculateBaseInputBoundary } from './calculateNodeBoundary';
@@ -9,13 +8,15 @@ import { calculateBaseInputBoundary } from './calculateNodeBoundary';
 /**
  *         |
  *     [Bot Asks]
- *         |
- *         |------------
- *   [User Answers]    |
- *   [____________]    x
- *         |------------
+ *         |-------------------
+ *   [User Answers]    [invalidPrompt]
+ *         |-------------------
  */
-export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: GraphNode): GraphLayout {
+export function baseInputLayouter(
+  botAsksNode: GraphNode,
+  userAnswersNode: GraphNode,
+  invalidPromptNode: GraphNode
+): GraphLayout {
   const boundary = calculateBaseInputBoundary(botAsksNode.boundary, userAnswersNode.boundary);
 
   botAsksNode.offset = { x: boundary.axisX - botAsksNode.boundary.axisX, y: 0 };
@@ -23,20 +24,14 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
     x: boundary.axisX - userAnswersNode.boundary.axisX,
     y: botAsksNode.offset.y + botAsksNode.boundary.height + ElementInterval.y,
   };
-
-  const iconNode = {
-    id: botAsksNode.id,
-    data: {},
-    boundary: new Boundary(IconBrickSize.width, IconBrickSize.height),
-    offset: {
-      x: userAnswersNode.offset.x + userAnswersNode.boundary.width + LoopEdgeMarginLeft,
-      y: userAnswersNode.offset.y + userAnswersNode.boundary.axisY - IconBrickSize.height / 2,
-    },
+  invalidPromptNode.offset = {
+    x: userAnswersNode.offset.x + userAnswersNode.boundary.width + LoopEdgeMarginLeft,
+    y: userAnswersNode.offset.y + userAnswersNode.boundary.axisY - invalidPromptNode.boundary.axisY,
   };
 
   const baseline1OffsetY = botAsksNode.offset.y + botAsksNode.boundary.height + ElementInterval.y / 2;
   const baseline2OffsetY = userAnswersNode.offset.y + userAnswersNode.boundary.height + ElementInterval.y / 2;
-  const baselineLength = iconNode.offset.x + iconNode.boundary.axisX - boundary.axisX;
+  const baselineLength = invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX - boundary.axisX;
 
   const edges: EdgeData[] = [
     {
@@ -54,7 +49,7 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
       length: ElementInterval.y / 2,
     },
     {
-      id: `edges/${iconNode.id}/baseline1->iconNode|`,
+      id: `edges/${invalidPromptNode.id}/baseline1->iconNode|`,
       direction: 'x',
       x: boundary.axisX,
       y: baseline1OffsetY,
@@ -62,7 +57,7 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
       dashed: true,
     },
     {
-      id: `edges/${iconNode.id}/baseline2->iconNode|`,
+      id: `edges/${invalidPromptNode.id}/baseline2->iconNode|`,
       direction: 'x',
       x: boundary.axisX,
       y: baseline2OffsetY,
@@ -70,19 +65,19 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
       dashed: true,
     },
     {
-      id: `edges/${iconNode.id}/baseline1->iconNode`,
+      id: `edges/${invalidPromptNode.id}/baseline1->iconNode`,
       direction: 'y',
-      x: iconNode.offset.x + iconNode.boundary.axisX,
+      x: invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX,
       y: baseline1OffsetY,
-      length: iconNode.offset.y - baseline1OffsetY,
+      length: invalidPromptNode.offset.y - baseline1OffsetY,
       dashed: true,
     },
     {
-      id: `edges/${iconNode.id}/iconNode->baseline2`,
+      id: `edges/${invalidPromptNode.id}/iconNode->baseline2`,
       direction: 'y',
-      x: iconNode.offset.x + iconNode.boundary.axisX,
-      y: iconNode.offset.y + iconNode.boundary.height,
-      length: baseline2OffsetY - (iconNode.offset.y + iconNode.boundary.height),
+      x: invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX,
+      y: invalidPromptNode.offset.y + invalidPromptNode.boundary.height,
+      length: baseline2OffsetY - (invalidPromptNode.offset.y + invalidPromptNode.boundary.height),
       dashed: true,
     },
   ];
@@ -92,7 +87,7 @@ export function baseInputLayouter(botAsksNode: GraphNode, userAnswersNode: Graph
     nodeMap: {
       botAsksNode,
       userAnswersNode,
-      iconNode,
+      invalidPromptNode,
     },
     edges,
     nodes: [],

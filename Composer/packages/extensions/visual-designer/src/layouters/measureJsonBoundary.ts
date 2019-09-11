@@ -6,6 +6,7 @@ import {
   LoopIconSize,
   ChoiceInputSize,
   ChoiceInputMarginTop,
+  IconBrickSize,
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
@@ -112,6 +113,9 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case ObiTypes.ChoiceInputDetail:
       boundary = measureChoiceInputDetailBoundary(json);
+      break;
+    case ObiTypes.InvalidPromptBrick:
+      boundary = new Boundary(IconBrickSize.width, IconBrickSize.height);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);

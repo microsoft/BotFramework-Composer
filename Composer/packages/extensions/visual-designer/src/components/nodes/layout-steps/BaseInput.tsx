@@ -18,19 +18,20 @@ import { IconBrick } from '../../decorations/IconBrick';
 import { UserAnswers } from '../steps/UserAnswers';
 
 const calculateNodes = (data, jsonpath: string) => {
-  const { botAsks, userAnswers } = transformBaseInput(data, jsonpath);
+  const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
   return {
     botAsksNode: GraphNode.fromIndexedJson(botAsks),
     userAnswersNode: GraphNode.fromIndexedJson(userAnswers),
+    invalidPromptNode: GraphNode.fromIndexedJson(invalidPrompt),
   };
 };
 
 export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const nodes = calculateNodes(data, id);
-  const layout = baseInputLayouter(nodes.botAsksNode, nodes.userAnswersNode);
+  const layout = baseInputLayouter(nodes.botAsksNode, nodes.userAnswersNode, nodes.invalidPromptNode);
 
   const { boundary, nodeMap, edges } = layout;
-  const { botAsksNode, userAnswersNode, iconNode } = nodeMap;
+  const { botAsksNode, userAnswersNode, invalidPromptNode } = nodeMap;
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
@@ -49,7 +50,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={userAnswersNode.offset}>
         <UserAnswers id={id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
       </OffsetContainer>
-      <OffsetContainer offset={iconNode.offset}>
+      <OffsetContainer offset={invalidPromptNode.offset}>
         <IconBrick onClick={() => {}} />
       </OffsetContainer>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
