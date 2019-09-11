@@ -30,16 +30,22 @@ export function getFriendlyName(data) {
   if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
     return ConceptLabels[data.$type].title;
   }
+
+  return data.$type;
+}
+
+export function getNewDesigner(name: string, description: string) {
+  const timestamp = new Date().toISOString();
+  return {
+    $designer: { name, description, createdAt: timestamp, updatedAt: timestamp, id: nanoid('1234567890', 6) },
+  };
 }
 
 export function insert(content, path: string, position: number | undefined, $type: string) {
   const current = get(content, path, []);
   const newStep = {
     $type,
-    $designer: {
-      name: getFriendlyName({ $type }),
-      id: nanoid('1234567890', 6),
-    },
+    ...getNewDesigner(getFriendlyName({ $type }), ''),
     ...seedNewDialog($type),
   };
 
