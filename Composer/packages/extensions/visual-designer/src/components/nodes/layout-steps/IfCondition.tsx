@@ -11,7 +11,7 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
-import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
@@ -62,7 +62,13 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
-        <DefaultRenderer key={condition.id} id={condition.id} data={condition.data} onEvent={onEvent} />
+        <ElementRenderer
+          key={condition.id}
+          id={condition.id}
+          data={condition.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
         <Diamond

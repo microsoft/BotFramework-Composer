@@ -15,8 +15,7 @@ import { Edge } from '../../lib/EdgeComponents';
 import { GraphNode } from '../../../models/GraphNode';
 import { transformBaseInput } from '../../../transformers/transformBaseInput';
 import { IconBrick } from '../../decorations/IconBrick';
-
-import { UserAnswers } from './UserAnswers';
+import { UserAnswers } from '../steps/UserAnswers';
 
 const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers } = transformBaseInput(data, jsonpath);
