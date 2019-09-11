@@ -126,7 +126,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   });
 
   const handleKeyboardCommand = command => {
-    let path = focusedId;
     switch (command) {
       case KeyboardCommandTypes.DeleteNode:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
