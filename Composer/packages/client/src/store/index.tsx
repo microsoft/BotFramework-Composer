@@ -13,6 +13,7 @@ import { ActionType } from './action/types';
 const initialState: State = {
   dialogs: [],
   botName: '',
+  location: '', // the path to the bot project
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
   templateProjects: [],

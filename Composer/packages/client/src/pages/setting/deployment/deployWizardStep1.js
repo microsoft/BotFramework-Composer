@@ -20,9 +20,10 @@ const regionOptions = [{ key: 'westus', text: 'westus' }];
 export const DeployWizardStep1 = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
-  const { botName } = state;
+  const { botName, location } = state;
   const [formData, setFormData] = useState({
     name: botName,
+    location: location,
     secret: '',
     environment: '',
     region: regionOptions[0].key,

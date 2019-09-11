@@ -8,7 +8,7 @@ export const DeployWizardStep3 = props => {
   const { closeModal, botValues } = props;
 
   const scriptValue = [
-    `cd project_folder`,
+    `cd ${botValues.location}`,
     `pwsh ./scripts/deploy.ps1 -name ${botValues.name} -environment ${botValues.environment}`,
   ].join('\n');
 

@@ -64,6 +64,7 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
+      location: this.dir,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),

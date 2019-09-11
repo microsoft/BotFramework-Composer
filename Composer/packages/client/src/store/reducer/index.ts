@@ -13,6 +13,7 @@ const projectFiles = ['bot', 'botproj'];
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botName = response.data.botName;
+  state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;

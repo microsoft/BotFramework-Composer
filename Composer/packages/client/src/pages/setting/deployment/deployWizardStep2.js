@@ -8,7 +8,7 @@ export const DeployWizardStep2 = props => {
   const { nextStep, closeModal, botValues } = props;
 
   const scriptValue = [
-    `cd project_folder`,
+    `cd ${botValues.location}`,
     `pwsh ./scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
       botValues.region.key
     } -appPassword=${botValues.secret}`,
