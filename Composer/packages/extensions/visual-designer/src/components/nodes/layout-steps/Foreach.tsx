@@ -10,7 +10,7 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
-import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { StepGroup } from '../../groups';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 
@@ -66,7 +66,13 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
-        <DefaultRenderer key={foreachNode.id} id={foreachNode.id} data={foreachNode.data} onEvent={onEvent} />
+        <ElementRenderer
+          key={foreachNode.id}
+          id={foreachNode.id}
+          data={foreachNode.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>
         <StepGroup

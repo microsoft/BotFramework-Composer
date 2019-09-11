@@ -7,4 +7,5 @@ export class EdgeData {
   text?: string = '';
   dashed?: boolean = false;
   directed?: boolean = false;
+  invertDirected?: boolean = false;
 }
