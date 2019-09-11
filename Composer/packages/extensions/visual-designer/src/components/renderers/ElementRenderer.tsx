@@ -6,7 +6,17 @@ import classnames from 'classnames';
 import { ObiTypes } from '../../constants/ObiTypes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
-import { DefaultRenderer, Recognizer, BeginDialog, ReplaceDialog, ActivityRenderer, ChoiceInput } from '../nodes/index';
+import {
+  DefaultRenderer,
+  Recognizer,
+  BeginDialog,
+  ReplaceDialog,
+  ActivityRenderer,
+  ChoiceInput,
+  BotAsks,
+  UserAnswers,
+  InvalidPromptBrick,
+} from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
@@ -17,6 +27,9 @@ const rendererByObiType = {
   [ObiTypes.ReplaceDialog]: ReplaceDialog,
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
+  [ObiTypes.BotAsks]: BotAsks,
+  [ObiTypes.UserAnswers]: UserAnswers,
+  [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
 };
 const DEFAULT_RENDERER = DefaultRenderer;
 
