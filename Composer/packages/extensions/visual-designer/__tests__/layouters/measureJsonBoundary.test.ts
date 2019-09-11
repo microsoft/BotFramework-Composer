@@ -32,7 +32,7 @@ describe('measureJsonBoundary', () => {
   });
   it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
     const data: { [key: string]: any } = {
-      $type: ObiTypes.ChoiceInput,
+      $type: ObiTypes.ChoiceInputDetail,
       choices: [{ value: '1' }],
     };
 
