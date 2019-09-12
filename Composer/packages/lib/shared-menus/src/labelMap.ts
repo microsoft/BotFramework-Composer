@@ -161,6 +161,6 @@ export const ConceptLabels = {
     title: formatMessage('Begin Dialog'),
   },
   'Microsoft.OnDialogEvent': {
-    title: formatMessage('handle an event'),
+    title: formatMessage('Handle a Dialog Event'),
   },
 };
