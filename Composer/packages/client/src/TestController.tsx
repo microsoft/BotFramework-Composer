@@ -193,15 +193,17 @@ export const TestController: React.FC = () => {
           </div>
         </Callout>
       </div>
-      <PublishLuisDialog
-        isOpen={modalOpen}
-        onDismiss={() => setModalOpen(false)}
-        onPublish={() => {
-          publishAndReload();
-          setModalOpen(false);
-        }}
-        botName={botName}
-      />
+      {modalOpen ? (
+        <PublishLuisDialog
+          isOpen={true}
+          onDismiss={() => setModalOpen(false)}
+          onPublish={() => {
+            publishAndReload();
+            setModalOpen(false);
+          }}
+          botName={botName}
+        />
+      ) : null}
     </Fragment>
   );
 };
