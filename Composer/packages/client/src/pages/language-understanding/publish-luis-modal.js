@@ -128,11 +128,8 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData };
     delete newValue.errors;
-    const tempSettings = { ...settings, luis: newValue };
-    // set(settings, 'luis', newValue);
-    await syncEnvSettings(tempSettings);
+    await syncEnvSettings({ ...settings, luis: newValue });
     await setEnvSettings();
-
     await onPublish({ ...formData });
   };
 
