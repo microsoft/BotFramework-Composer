@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-
+import { ConceptLabels } from 'shared-menus';
 import { TriggerSize } from '../../constants/ElementSizes';
 
 import { FormCard } from './templates/FormCard';
@@ -20,7 +20,7 @@ export const Trigger = ({ data, focused, onClick }): JSX.Element => (
       }}
       icon={'Flow'}
       header={'Trigger'}
-      label={data.intent || data.$type}
+      label={data.intent || (ConceptLabels[data.$type] ? ConceptLabels[data.$type].title : data.$type)}
       onClick={onClick}
     />
   </div>
