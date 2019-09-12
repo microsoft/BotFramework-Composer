@@ -5,7 +5,7 @@ import { ActionCreator } from '../types';
 import { BASEURL, ActionTypes } from './../../constants';
 
 export const connectBot: ActionCreator = async (store, settings) => {
-  const botEnvironment = store.state.botEnvironment;
+  const botEnvironment = store.getState().botEnvironment;
   const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
 
   try {
@@ -23,8 +23,8 @@ export const connectBot: ActionCreator = async (store, settings) => {
   }
 };
 
-export const reloadBot: ActionCreator = async ({ dispatch, state }, settings) => {
-  const { botEnvironment } = state;
+export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings) => {
+  const { botEnvironment } = getState();
   const path = `${BASEURL}/launcher/sync`;
   try {
     const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';

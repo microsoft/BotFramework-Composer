@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { LuisConfig, Text, BotStatus } from './constants';
+import { BASEPATH, BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
@@ -35,6 +35,8 @@ const STATE = {
   RELOADING: 1,
   SUCCESS: 2,
 };
+
+const isAbsHosted = () => BASEPATH !== '';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
@@ -74,7 +76,7 @@ export const TestController: React.FC = () => {
     }
     const config = settings.luis;
 
-    if (getReferredFiles(luFiles, dialogs).length > 0) {
+    if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
       if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
         setModalOpen(true);
       } else {
