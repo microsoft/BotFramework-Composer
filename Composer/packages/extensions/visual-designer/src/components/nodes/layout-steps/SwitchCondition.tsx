@@ -11,7 +11,7 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
-import { DefaultRenderer } from '../steps/DefaultRenderer';
+import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 
 const calculateNodeMap = (path, data) => {
@@ -62,7 +62,13 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
-        <DefaultRenderer key={conditionNode.id} id={conditionNode.id} data={conditionNode.data} onEvent={onEvent} />
+        <ElementRenderer
+          key={conditionNode.id}
+          id={conditionNode.id}
+          data={conditionNode.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
         <Diamond

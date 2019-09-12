@@ -14,7 +14,8 @@ export const setDesignPageLocation: ActionCreator = (
   });
 };
 
-export const navTo: ActionCreator = ({ state }, dialogId, breadcrumb = []) => {
+export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) => {
+  const state = getState();
   const { dialogs } = state;
   let currentUri = `/dialogs/${dialogId}`;
 
@@ -29,7 +30,8 @@ export const navTo: ActionCreator = ({ state }, dialogId, breadcrumb = []) => {
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 
-export const selectTo: ActionCreator = ({ state }, selectPath) => {
+export const selectTo: ActionCreator = ({ getState }, selectPath) => {
+  const state = getState();
   if (!selectPath) return;
   const { dialogId } = state.designPageLocation;
   const { breadcrumb } = state;
@@ -41,7 +43,8 @@ export const selectTo: ActionCreator = ({ state }, selectPath) => {
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
 };
 
-export const focusTo: ActionCreator = ({ state }, focusPath) => {
+export const focusTo: ActionCreator = ({ getState }, focusPath) => {
+  const state = getState();
   const { dialogId, selected } = state.designPageLocation;
   const { breadcrumb } = state;
 
@@ -63,7 +66,7 @@ export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focus
   if (search) {
     const currentUri = `/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
 
-    if (checkUrl(currentUri, store.state.designPageLocation)) return;
+    if (checkUrl(currentUri, store.getState().designPageLocation)) return;
     navigateTo(currentUri, { state: { breadcrumb } });
   } else {
     navTo(store, dialogId, breadcrumb);

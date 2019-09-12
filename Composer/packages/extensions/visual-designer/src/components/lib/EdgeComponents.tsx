@@ -6,7 +6,16 @@ const BAR_SIZE = 3;
 const TEXT_PADDING = 8;
 const FONT_SIZE = 14;
 const DEFAULT_EDGE_COLOR = '#979797';
-export const HorizontalEdge = ({ length, color, text, x, y, dashed, directed }): JSX.Element => {
+export const HorizontalEdge = ({
+  length,
+  color,
+  text,
+  x,
+  y,
+  dashed,
+  beginArrow = false,
+  endArrow = false,
+}): JSX.Element => {
   const strokeProps = {
     strokeDasharray: dashed ? '4' : 'none',
     strokeWidth: '1',
@@ -34,7 +43,13 @@ export const HorizontalEdge = ({ length, color, text, x, y, dashed, directed }):
         </text>
       ) : null}
       <line x1="0" y1="0" x2={length} y2="0" {...strokeProps} />
-      {directed ? (
+      {beginArrow ? (
+        <Fragment>
+          <line x1={5} y1="5" x2="0" y2="0" {...strokeProps} />
+          <line x1={5} y1="-5" x2="0" y2="0" {...strokeProps} />
+        </Fragment>
+      ) : null}
+      {endArrow ? (
         <Fragment>
           <line x1={length - 5} y1="5" x2={length} y2="0" {...strokeProps} />
           <line x1={length - 5} y1="-5" x2={length} y2="0" {...strokeProps} />
@@ -44,7 +59,16 @@ export const HorizontalEdge = ({ length, color, text, x, y, dashed, directed }):
   );
 };
 
-export const VerticalEdge = ({ length, color, text, x, y, dashed, directed }): JSX.Element => {
+export const VerticalEdge = ({
+  length,
+  color,
+  text,
+  x,
+  y,
+  dashed,
+  beginArrow = false,
+  endArrow = false,
+}): JSX.Element => {
   const strokeProps = {
     strokeDasharray: dashed ? '4' : 'none',
     strokeWidth: '1',
@@ -72,7 +96,13 @@ export const VerticalEdge = ({ length, color, text, x, y, dashed, directed }): J
         </text>
       ) : null}
       <line x1="0" y1="0" x2="0" y2={length} {...strokeProps} />
-      {directed ? (
+      {beginArrow ? (
+        <Fragment>
+          <line x1={-5} y1={5} x2={0} y2={0} {...strokeProps} />
+          <line x1={5} y1={5} x2={0} y2={0} {...strokeProps} />
+        </Fragment>
+      ) : null}
+      {endArrow ? (
         <Fragment>
           <line x1={-5} y1={length - 5} x2={0} y2={length} {...strokeProps} />
           <line x1={5} y1={length - 5} x2={0} y2={length} {...strokeProps} />
@@ -91,9 +121,28 @@ export const Edge = ({
   text = '',
   dashed = false,
   directed = false,
+  invertDirected = false,
 }): JSX.Element =>
   direction === 'x' ? (
-    <HorizontalEdge x={x} y={y} length={length} color={color} text={text} dashed={dashed} directed={directed} />
+    <HorizontalEdge
+      x={x}
+      y={y}
+      length={length}
+      color={color}
+      text={text}
+      dashed={dashed}
+      beginArrow={invertDirected}
+      endArrow={directed}
+    />
   ) : (
-    <VerticalEdge x={x} y={y} length={length} color={color} text={text} dashed={dashed} directed={directed} />
+    <VerticalEdge
+      x={x}
+      y={y}
+      length={length}
+      color={color}
+      text={text}
+      dashed={dashed}
+      beginArrow={invertDirected}
+      endArrow={directed}
+    />
   );

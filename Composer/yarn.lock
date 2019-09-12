@@ -1425,10 +1425,10 @@
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"@bfcomposer/monaco-editor@^0.17.3":
-  version "0.17.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.3.tgz#7ffc34139f8d02b8fdf296a727114430053c8454"
-  integrity sha1-f/w0E5+NArj98panJxFEMAU8hFQ=
+"@bfcomposer/monaco-editor@^0.17.4":
+  version "0.17.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.4.tgz#bc2d75c48fcbee1121ee4c168c508de81bcd2ee9"
+  integrity sha1-vC11xI/L7hEh7kwWjFCN6BvNLuk=
 
 "@bfcomposer/react-jsonschema-form@1.6.0":
   version "1.6.0"
@@ -1441,12 +1441,12 @@
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
 
-"@bfcomposer/react-monaco-editor@^0.30.3":
-  version "0.30.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.3.tgz#65c4b2b747b80c5bd8f6ce572cae47cc677fbc30"
-  integrity sha1-ZcSyt0e4DFvY9s5XLK5HzGd/vDA=
+"@bfcomposer/react-monaco-editor@^0.30.4":
+  version "0.30.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.4.tgz#3b7a6c60011218d3bc51f7eca5673341376db728"
+  integrity sha1-O3psYAESGNO8UffspWczQTdttyg=
   dependencies:
-    "@bfcomposer/monaco-editor" "^0.17.3"
+    "@bfcomposer/monaco-editor" "^0.17.4"
     "@types/react" "^16.9.2"
     prop-types "^15.7.2"
 
@@ -2344,8 +2344,8 @@
 
 "@types/react@*", "@types/react@^16.8.0", "@types/react@^16.8.13", "@types/react@^16.8.23", "@types/react@^16.9.2":
   version "16.9.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.2.tgz#6d1765431a1ad1877979013906731aae373de268"
-  integrity sha512-jYP2LWwlh+FTqGd9v7ynUKZzjj98T8x7Yclz479QdRhHfuW9yQ+0jjnD31eXSXutmBpppj5PYNLYLRfnZJvcfg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/react/-/@types/react-16.9.2.tgz#6d1765431a1ad1877979013906731aae373de268"
+  integrity sha1-bRdlQxoa0Yd5eQE5BnMarjc94mg=
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"

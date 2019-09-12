@@ -85,14 +85,6 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
-  [ObiTypes.IntegerInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
-  [ObiTypes.FloatInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
   [ObiTypes.ConfirmInput]: {
     label: 'prompt',
     details: 'property',
