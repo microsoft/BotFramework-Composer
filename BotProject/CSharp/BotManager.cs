@@ -7,6 +7,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,6 +71,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
               .UseState(userState, conversationState)
               .UseLanguageGeneration(resourceExplorer)
               .UseDebugger(4712)
+              .Use(new RegisterClassMiddleware<IConfiguration>(Config))
               .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
               .UseResourceExplorer(resourceExplorer);
               
@@ -110,11 +112,23 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             var settingsPath = settingsPaths.FirstOrDefault();
 
-            var settings = JsonConvert.DeserializeObject<Dictionary<object, object>>(File.ReadAllText(settingsPath));
+            var settings = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(settingsPath));
 
             foreach (var pair in settings)
             {
-                this.Config[pair.Key.ToString()] = pair.Value.ToString();
+                if (pair.Value is JObject)
+                {
+                    foreach (var token in pair.Value as JObject)
+                    {
+                        string subkey = token.Key;
+                        JToken subvalue = token.Value;
+                        this.Config[$"{pair.Key}:{subkey}"] = subvalue.Value<string>();
+                    }
+                }
+                else
+                {
+                    this.Config[pair.Key.ToString()] = pair.Value.ToString();
+                }
             }
 
             if (!String.IsNullOrEmpty(endpointKey))
