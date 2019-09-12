@@ -36,7 +36,7 @@ const STATE = {
   SUCCESS: 2,
 };
 
-const isAbsHosted = () => BASEPATH !== '';
+const isAbsHosted = () => BASEPATH !== '' && BASEPATH !== '/';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);

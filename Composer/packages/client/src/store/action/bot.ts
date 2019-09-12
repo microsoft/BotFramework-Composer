@@ -5,7 +5,8 @@ import { ActionCreator } from '../types';
 import { BASEURL, ActionTypes } from './../../constants';
 
 export const connectBot: ActionCreator = async (store, settings) => {
-  const botEnvironment = store.getState().botEnvironment;
+  const state = store.getState();
+  const { botEnvironment } = state;
   const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
 
   try {
