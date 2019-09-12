@@ -1,3 +1,11 @@
 # https://blog.github.com/2017-07-06-introducing-code-owners/
 
-* @cwhitten @boydc2014 @luhan2017 @a-b-r-o-w-n
+* @cwhitten @boydc2014 @a-b-r-o-w-n
+
+/BotProject/ @boydc2014 @luhan2017
+
+/Composer/ @cwhitten @boydc2014 @a-b-r-o-w-n
+
+/Composer/packages/extensions/visual-designer @yeze322 @cwhitten @boydc2014 @a-b-r-o-w-n
+
+/docs/ @cwhitten @boydc2014 @benbrown
