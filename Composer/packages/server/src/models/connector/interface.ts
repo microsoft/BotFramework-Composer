@@ -1,3 +1,4 @@
+import { ClaimNames } from '../../constants';
 import { ILuisConfig } from '../bot/interface';
 
 export enum BotStatus {
@@ -7,12 +8,17 @@ export enum BotStatus {
 
 export type BotEnvironments = 'production' | 'integration' | 'editing';
 
+export interface AuthenticatedUser {
+  [ClaimNames.name]: string;
+  [ClaimNames.upn]: string;
+}
+
 export interface BotConfig {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
   luis: ILuisConfig;
   targetEnvironment?: BotEnvironments;
-  user?: string;
+  user?: AuthenticatedUser;
 }
 
 export interface IBotConnector {

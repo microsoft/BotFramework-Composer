@@ -16,7 +16,7 @@ async function connect(req: any, res: any) {
 
 async function sync(req: any, res: any) {
   try {
-    await BotConnectorService.sync(req.body);
+    await BotConnectorService.sync({ ...req.body, user: req.user });
     res.send('OK');
   } catch (error) {
     res.status(400).json({

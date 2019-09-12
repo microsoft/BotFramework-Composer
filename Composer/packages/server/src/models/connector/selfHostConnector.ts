@@ -2,6 +2,7 @@
 import { handlerAsync as buildAsync } from 'commands/build';
 import { resolve } from 'path';
 
+import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
@@ -19,9 +20,11 @@ export class SelfHostBotConnector implements IBotConnector {
 
   public sync = async (config: BotConfig) => {
     const { targetEnvironment: env } = config;
-
+    const user = config.user ? config.user[ClaimNames.name] : 'unknown_user';
+    const userEmail = config.user ? config.user[ClaimNames.upn] : undefined;
     await buildAsync({
-      user: (config.user || 'unknown_user').replace(/\s/g, '_'),
+      user,
+      userEmail,
       dest: resolve(process.env['HOME']!, 'site/artifacts/bot'),
       env: env && env !== 'editing' ? env : 'integration',
     });

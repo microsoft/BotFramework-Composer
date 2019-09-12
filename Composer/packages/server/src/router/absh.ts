@@ -10,6 +10,14 @@ import { AuthProviderInit } from './types';
 const BEARER_PREFIX = 'Bearer ';
 const LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: Object;
+    }
+  }
+}
+
 class AuthProviderConfigurationError extends Error {
   constructor(name: string) {
     super(`Missing auth provider configutation for: ${name}`);
@@ -97,6 +105,7 @@ const absh: AuthProviderInit = {
             }
             return;
           }
+          req.user = _token;
           next();
         });
       } catch (err) {
