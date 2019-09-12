@@ -2,51 +2,46 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-08-01T23:45:38.308Z",
+    "updatedAt": "2019-09-12T21:37:34.286Z",
     "id": "288769",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
   "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "AddIntent",
-          "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
+        "$type": "Microsoft.IntentPattern",
+        "intent": "AddIntent",
+        "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
       },
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "ClearIntent",
-          "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)" 
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ClearIntent",
+        "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
       },
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "DeleteIntent",
-          "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
+        "$type": "Microsoft.IntentPattern",
+        "intent": "DeleteIntent",
+        "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
       },
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "ShowIntent",
-          "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)" 
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ShowIntent",
+        "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)"
       },
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "HelpIntent",
-          "pattern": "(?i)help" 
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HelpIntent",
+        "pattern": "(?i)help"
       },
       {
-
-          "$type": "Microsoft.IntentPattern",
-          "intent": "CancelIntent",
-          "pattern": "(?i)cancel|never mind"
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
       }
-  ]
+    ]
   },
   "generator": "common.lg",
   "events": [
@@ -109,7 +104,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "createdAt": "2019-07-16T19:59:41.352Z",
-        "updatedAt": "2019-07-16T19:59:44.427Z",
+        "updatedAt": "2019-09-12T21:38:34.235Z",
         "id": "088050"
       },
       "actions": [
@@ -117,8 +112,7 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "ClearToDos"
         }
-      ],
-      "intent": "ClearIntent"
+      ]
     },
     {
       "$type": "Microsoft.OnIntent",
