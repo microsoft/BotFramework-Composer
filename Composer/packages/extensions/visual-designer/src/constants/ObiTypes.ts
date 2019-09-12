@@ -63,5 +63,6 @@ export const ObiTypes = {
   ForeachPageDetail: 'VisualSDK.ForeachPageDetail',
   BotAsks: 'VisualSDK.BotAsks',
   UserAnswers: 'VisualSDK.UserAnswers',
+  InvalidPromptBrick: 'VisualSDK.InvalidPromptBrick',
   ChoiceInputDetail: 'VisualSDK.ChoiceInputDetail',
 };

@@ -15,7 +15,10 @@ export const IconBrick = ({ onClick }): JSX.Element => {
         position: 'relative',
         cursor: 'pointer',
       }}
-      onClick={onClick}
+      onClick={e => {
+        e.stopPropagation();
+        onClick(e);
+      }}
     >
       <div
         css={{
