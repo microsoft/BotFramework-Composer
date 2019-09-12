@@ -157,4 +157,10 @@ export const ConceptLabels = {
   'Microsoft.EditSteps': {
     title: formatMessage('Modify active dialog'),
   },
+  'Microsoft.OnBeginDialog': {
+    title: formatMessage('Begin Dialog'),
+  },
+  'Microsoft.OnDialogEvent': {
+    title: formatMessage('handle an event'),
+  },
 };
