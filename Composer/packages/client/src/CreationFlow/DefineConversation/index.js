@@ -1,21 +1,12 @@
 import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
-import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  Stack,
-  TextField,
-} from 'office-ui-fabric-react';
+import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { styles } from '../StepWizard/styles';
+import { styles as wizardStyles } from '../StepWizard/styles';
 
-import { DialogInfo } from './../../constants/index';
 import { StoreContext } from './../../store';
-import { name, description, locationOnly, locationBrowse } from './styles';
+import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
@@ -40,21 +31,12 @@ export function DefineConversation(props) {
 
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
-  const [locationActive, setLocationActive] = useState(false);
-  const [customPath, setCustomPath] = useState();
-  const [displayPath, setDisplayPath] = useState();
 
   // set the default path
   useEffect(() => {
     const index = currentStorageIndex.current;
-    setCustomPath(storages[index].path);
     updateForm('location')(null, storages[index].path);
   }, [storages]);
-
-  // update the dislpay path only when the form data is updated.
-  useEffect(() => {
-    setDisplayPath(shortenPath(formData.location));
-  }, [formData]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -99,45 +81,17 @@ export function DefineConversation(props) {
     }
   };
 
-  const toggleLocationPicker = () => {
-    setLocationActive(!locationActive);
-  };
-
-  // update the path in the form and toggle the location picker.
-  const updateLocation = () => {
-    updateForm('location')(null, customPath);
-    toggleLocationPicker();
-  };
-
-  /**
-   * Truncate a path in a way that maintains the last element
-   * @param {*} path
-   * @param {*} length
-   */
-  const shortenPath = (incoming_path, length = 30) => {
-    if (incoming_path && incoming_path.length > length) {
-      let str = '';
-      const bits = incoming_path.split(/\//);
-      const adjusted_length = length - (4 + bits[1].length);
-      for (let b = bits.length - 1; b > 1; b--) {
-        if (str.length + bits[b].length + 1 <= adjusted_length) {
-          str = '/' + bits[b] + str;
-        }
-      }
-      // results in something like /user/.../folders
-      str = '/' + bits[1] + '/...' + str;
-      return str;
-    }
-    // else
-    return incoming_path;
+  // // update the path in the form and toggle the location picker.
+  const updateLocation = path => {
+    updateForm('location')(null, path);
   };
 
   return (
     <Fragment>
-      {!locationActive && (
-        <form onSubmit={handleSubmit}>
-          <Stack>
-            <input type="submit" style={{ display: 'none' }} />
+      <form onSubmit={handleSubmit}>
+        <input type="submit" style={{ display: 'none' }} />
+        <Stack horizontal gap="2rem" styles={wizardStyles.stackinput}>
+          <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}
               value={formData.name}
@@ -147,6 +101,8 @@ export function DefineConversation(props) {
               onGetErrorMessage={getErrorMessage}
               data-testid="NewDialogName"
             />
+          </StackItem>
+          <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               styles={description}
               value={formData.description}
@@ -155,64 +111,15 @@ export function DefineConversation(props) {
               resizable={false}
               onChange={updateForm('description')}
             />
-            {enableLocationBrowse && (
-              <Stack horizontal>
-                <Stack.Item grow>
-                  <TextField
-                    styles={locationBrowse}
-                    value={displayPath}
-                    suffix={'/' + (formData.name || formatMessage('[BotName]'))}
-                    readOnly={true}
-                    label={formatMessage('Destination folder')}
-                    resizable={false}
-                  />
-                </Stack.Item>
-                <Stack.Item align="end" disableShrink>
-                  <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Browse')} />
-                </Stack.Item>
-              </Stack>
-            )}
-          </Stack>
-          <DialogFooter>
-            <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-            <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
-          </DialogFooter>
-        </form>
-      )}
-      {locationActive && (
-        <Dialog
-          hidden={false}
-          onDismiss={toggleLocationPicker}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: DialogInfo.SELECT_DESTINATION.title,
-            subText: DialogInfo.SELECT_DESTINATION.subText,
-            styles: styles.dialog,
-          }}
-          modalProps={{
-            isBlocking: false,
-            styles: styles.modal,
-          }}
-        >
-          <Fragment>
-            <Stack>
-              <TextField
-                styles={locationOnly}
-                value={shortenPath(customPath)}
-                suffix={'/' + (formData.name || formatMessage('[BotName]'))}
-                readOnly={true}
-                label={formatMessage('Destination folder')}
-                resizable={false}
-              />
-              <LocationSelectContent onChange={setCustomPath} />
-            </Stack>
-            <DialogFooter>
-              <DefaultButton onClick={toggleLocationPicker} text={formatMessage('Cancel')} />
-              <PrimaryButton onClick={updateLocation} text={formatMessage('OK')} />
-            </DialogFooter>
-          </Fragment>
-        </Dialog>
-      )}
+          </StackItem>
+        </Stack>
+        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} />}
+
+        <DialogFooter>
+          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
+        </DialogFooter>
+      </form>
     </Fragment>
   );
 }

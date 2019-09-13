@@ -24,6 +24,12 @@ export function LocationSelectContent(props) {
     updateCurrentPath(storages[index].path, storages[index].id);
   }, [storages]);
 
+  useEffect(() => {
+    if (onChange) {
+      onChange(currentPath);
+    }
+  }, [currentPath]);
+
   const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
       storageId = currentStorageId;
@@ -32,9 +38,6 @@ export function LocationSelectContent(props) {
       const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
       await fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
-      if (onChange) {
-        onChange(formatedPath);
-      }
     }
   };
 

@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
-import { Breadcrumb } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -18,11 +17,12 @@ import {
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
+import { Dropdown, Stack, StackItem } from 'office-ui-fabric-react';
 
 import { FileTypes, SupportedFileTypes } from '../../constants/index';
+import { styles as wizardStyles } from '../StepWizard/styles';
 
-import { backIcon, detailListContainer, detailListClass, fileSelectorContainer, pathNav } from './styles';
-import { loading } from './styles';
+import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
 export function FileSelector(props) {
   const {
@@ -83,7 +83,7 @@ export function FileSelector(props) {
     },
     {
       key: 'column2',
-      name: 'Name',
+      name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 150,
       maxWidth: 200,
@@ -91,8 +91,8 @@ export function FileSelector(props) {
       isResizable: true,
       isSorted: true,
       isSortedDescending: false,
-      sortAscendingAriaLabel: 'Sorted A to Z',
-      sortDescendingAriaLabel: 'Sorted Z to A',
+      sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
+      sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: item => {
         return <span aria-label={item.name}>{item.name}</span>;
@@ -199,16 +199,11 @@ export function FileSelector(props) {
   }
 
   function getNavItemPath(array, seperator, start, end) {
-    if (end === 0) return array[0] + seperator;
+    if (end === 0) return array[0]; //  + seperator; commented by BB this breaks the first element in the list on a mac
     if (!start) start = 0;
     if (!end) end = array.length - 1;
     end++;
     return array.slice(start, end).join(seperator);
-  }
-
-  function onBackIconClicked() {
-    const path = focusedStorageFolder.parent;
-    updateCurrentPath(path);
   }
 
   // split will filter posix root, if path to call server api is not absolute, must add / back
@@ -217,32 +212,38 @@ export function FileSelector(props) {
     .replace(/\\/g, '/')
     .split(separator)
     .filter(p => p !== '');
-  const breadcrumbItems = pathItems.map((item, index) => {
-    let itemPath = getNavItemPath(pathItems, separator, 0, index);
-    itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
-    return {
-      text: item,
-      key: itemPath,
-      onClick: () => {
-        updateCurrentPath(itemPath);
-      },
-    };
-  });
+
+  const breadcrumbItems = pathItems
+    .map((item, index) => {
+      let itemPath = getNavItemPath(pathItems, separator, 0, index);
+      itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
+      return {
+        text: itemPath, // displayed text
+        key: itemPath, // value returned
+        title: item, // title shown on hover
+      };
+    })
+    .reverse();
+
+  const updateLocation = (e, item) => {
+    updateCurrentPath(item.key);
+  };
 
   return (
     <div css={fileSelectorContainer}>
       {storageFileLoadingStatus === 'success' && (
         <Fragment>
-          <div css={pathNav}>
-            <Icon iconName="Back" css={backIcon} text={formatMessage('Back')} onClick={onBackIconClicked} />
-            <div
-              style={{
-                flexGrow: 1,
-              }}
-            >
-              <Breadcrumb items={breadcrumbItems} ariaLabel={formatMessage('File path')} maxDisplayedItems={1} />
-            </div>
-          </div>
+          <Stack horizontal gap="2rem" styles={wizardStyles.stackinput}>
+            <StackItem grow={0} styles={wizardStyles.halfstack}>
+              <Dropdown
+                label={formatMessage('Location')}
+                styles={dropdown}
+                options={breadcrumbItems}
+                onChange={updateLocation}
+                selectedKey={currentPath}
+              />
+            </StackItem>
+          </Stack>
           <div data-is-scrollable="true" css={detailListContainer}>
             <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
               <DetailsList
