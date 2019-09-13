@@ -2,9 +2,9 @@ import { get, set } from 'lodash';
 
 import { ReducerFunc } from '../types';
 import { getExtension, createSelectedPath } from '../../utils';
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
-import { SensitiveProperties } from '../../constants/index';
+import { UserTokenPayload } from '../action/types';
 
 import createReducer from './createReducer';
 
@@ -159,9 +159,43 @@ const updateEnvSetting: ReducerFunc = state => {
   state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
   return state;
 };
+
+const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
+  const data = response && response.data;
+
+  if (data && Array.isArray(data) && data.length > 0) {
+    state.templateProjects = data;
+  }
+  return state;
+};
+
+const setUserToken: ReducerFunc<UserTokenPayload> = (state, user = {}) => {
+  if (user.token) {
+    state.currentUser = {
+      ...user,
+      token: user.token,
+      sessionExpired: false,
+    };
+  } else {
+    state.currentUser = {
+      token: null,
+      sessionExpired: false,
+    };
+  }
+
+  return state;
+};
+
+const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
+  state.currentUser.sessionExpired = !!expired;
+
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
@@ -188,4 +222,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
+  [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
+  [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
+  [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
 } as { [type in ActionTypes]: ReducerFunc });

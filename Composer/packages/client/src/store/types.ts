@@ -5,18 +5,14 @@ import React from 'react';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
-export interface ActionType {
-  type: string;
-  payload?: any;
-  error?: any;
-}
+import { ActionType } from './action/types';
 
 export interface Store {
   dispatch: React.Dispatch<ActionType>;
-  state: State;
+  getState: () => State;
 }
 
-export type ActionCreator = (store: Store, ...args: any[]) => Promise<void> | void;
+export type ActionCreator<T extends any[] = any[]> = (store: Store, ...args: T) => Promise<void> | void;
 export type ActionHandlers = { [action: string]: ActionCreator };
 export type BoundAction = (...args: any[]) => void;
 export type BoundActionHandlers = { [action: string]: BoundAction };
@@ -41,6 +37,7 @@ export interface State {
   botName: string;
   /** the data path for FormEditor */
   focusPath: string;
+  templateProjects: any[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: any;
@@ -60,9 +57,22 @@ export interface State {
   settings: DialogSetting;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
+  currentUser: {
+    token: string | null;
+    email?: string;
+    name?: string;
+    expiration?: number;
+    sessionExpired: boolean;
+  };
 }
 
-export type ReducerFunc = (state: State, payload: any) => State;
+export type ReducerFunc<T = any> = (state: State, payload: T) => State;
+export interface MiddlewareApi {
+  getState: () => State;
+  dispatch: React.Dispatch<ActionType>;
+}
+
+export type MiddlewareFunc = (middlewareApi: MiddlewareApi) => (next: any) => React.Dispatch<ActionType>;
 
 export interface ITrigger {
   id: string;

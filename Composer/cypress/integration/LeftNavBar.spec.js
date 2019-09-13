@@ -2,7 +2,9 @@
 context('check Nav Expandion ', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.openBot('ToDoBot');
   });
+
   it('can expand left Nav Bar', () => {
     cy.get('[data-testid="LeftNavButton"]').click();
     cy.get('[data-testid="LeftNav-CommandBarButtonDesign Flow"]').should('exist');

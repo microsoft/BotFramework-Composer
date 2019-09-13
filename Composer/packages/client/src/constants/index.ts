@@ -3,6 +3,8 @@ import formatMessage from 'format-message';
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
 
+//the count about the undo/redo
+export const UNDO_LIMIT = 10;
 /**
  * Global ActionTypes Defination Instruction.
  * For unification consideration, please follow the naming pattern below
@@ -36,6 +38,8 @@ export enum ActionTypes {
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
+  GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
+  GET_TEMPLATE_PROJECTS_FAILURE = 'GET_TEMPLATE_PROJECTS_FAILURE',
   UPDATE_DIALOG = 'UPDATE_DIALOG',
   UPDATE_DIALOG_FAILURE = 'UPDATE_DIALOG_FAILURE',
   CREATE_DIALOG_BEGIN = 'CREATE_DIALOG_BEGIN',
@@ -80,6 +84,12 @@ export enum ActionTypes {
   SET_ERROR = 'SET_ERROR',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
+  USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
+  USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
+  USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',
+  UNDO = 'UNDO',
+  REDO = 'REDO',
+  HISTORY_CLEAR = 'HISTORY_CLEAR',
 }
 
 export const Tips = {
@@ -197,4 +207,5 @@ export const SupportedFileTypes = [
   'xsn',
 ];
 
+export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
 export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];

@@ -15,7 +15,7 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys, set } from 'lodash';
+import { keys } from 'lodash';
 
 import { StoreContext } from '../../store';
 
@@ -97,10 +97,21 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
-  const { setEnvSettings } = actions;
-  const { settings } = state;
+  const { setEnvSettings, syncEnvSettings } = actions;
+  const { botName, settings } = state;
   const { onPublish, onDismiss, workState } = props;
-  const [formData, setFormData] = useState({ ...settings.luis, errors: {} });
+
+  const initialFormData = {
+    name: settings.luis.name || botName,
+    authoringKey: settings.luis.authoringKey,
+    endpointKey: settings.luis.endpointKey,
+    authoringRegion: settings.luis.authoringRegion,
+    defaultLanguage: settings.luis.defaultLanguage,
+    environment: settings.luis.environment,
+    errors: {},
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
@@ -117,9 +128,8 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData };
     delete newValue.errors;
-    set(settings, 'luis', newValue);
-    setEnvSettings();
-
+    await syncEnvSettings({ ...settings, luis: newValue });
+    await setEnvSettings();
     await onPublish({ ...formData });
   };
 
