@@ -10,6 +10,18 @@ import { AuthProviderInit } from './types';
 const BEARER_PREFIX = 'Bearer ';
 const LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
+interface BFTokenPayload {
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn': string;
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': string;
+  tid: string;
+  oid: string;
+  serviceurl: string;
+  nbf: number;
+  exp: number;
+  iss: string;
+  aud: string;
+}
+
 class AuthProviderConfigurationError extends Error {
   constructor(name: string) {
     super(`Missing auth provider configutation for: ${name}`);
@@ -35,6 +47,7 @@ const absh: AuthProviderInit = {
       COMPOSER_AUTH_REDIRECT_URI,
       COMPOSER_AUTH_JWKS_URL,
       COMPOSER_AUTH_RESOURCE,
+      MicrosoftAppId,
     } = process.env;
 
     // validate required config settings
@@ -43,6 +56,7 @@ const absh: AuthProviderInit = {
     const redirectUri = validateConfig('COMPOSER_AUTH_REDIRECT_URI', COMPOSER_AUTH_REDIRECT_URI);
     const jwksUri = validateConfig('COMPOSER_AUTH_JWKS_URL', COMPOSER_AUTH_JWKS_URL);
     const resource = validateConfig('COMPOSER_AUTH_RESOURCE', COMPOSER_AUTH_RESOURCE);
+    const msAppId = validateConfig('MicrosoftAppId', MicrosoftAppId);
 
     const jwksClient = JWKSClient({ jwksUri });
 
@@ -85,7 +99,7 @@ const absh: AuthProviderInit = {
       }
 
       try {
-        jwt.verify(bearer, getKey, (err, _token) => {
+        jwt.verify(bearer, getKey, (err, token) => {
           if (err) {
             console.error(err);
 
@@ -97,6 +111,13 @@ const absh: AuthProviderInit = {
             }
             return;
           }
+
+          // make sure token.aud is authorized for this bot
+          if (typeof token !== 'object' || (token as BFTokenPayload).aud !== msAppId) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+          }
+
           next();
         });
       } catch (err) {
