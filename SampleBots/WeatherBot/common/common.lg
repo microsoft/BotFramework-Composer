@@ -1,0 +1,16 @@
+
+# bfdactivity-553179
+-Hello, I'm the weather bot. What can I help you with today? \n \[Suggestions=Current weather | Forecast | Set profile\]
+
+
+# bfdactivity-767328
+- ```
+I have 
+    - WeatherCondition : @{if(weatherCondition == null, '', weatherCondition)}
+    - City : @{if(city == null, '', city)}
+    - Date time: @{if(datetimeV2 == null, '', datetimeV2)}
+```
+
+
+# bfdactivity-650897
+-I have {$city} as city.

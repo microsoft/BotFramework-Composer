@@ -1,0 +1,32 @@
+>To learn more about the LU file format, read the documentation at
+> https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format
+
+# GetWeather
+- How is the weather?
+- Current weather
+- Get current weather
+- How is the weather in {city}
+- is it sunny in {city}?
+
+$ weatherCondition : sunny = 
+- Clear skies
+- bright
+- warm
+- hot
+
+$ weatherCondition : rainy = 
+- rain
+- pouring
+- down pour
+- wet
+- rain coat
+- rain jacket
+
+$ weatherCondition : cloudy = 
+- cloudy
+- gray skies
+- gray sky
+- sky covered
+
+$ prebuilt : datetimeV2
+

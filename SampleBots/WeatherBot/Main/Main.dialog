@@ -1,0 +1,91 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "createdAt": "2019-09-13T02:21:58.483Z",
+    "updatedAt": "2019-09-13T02:23:30.431Z",
+    "id": "790882",
+    "name": "WeatherBot"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "generator": "common.lg",
+  "events": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "createdAt": "2019-09-13T02:22:01.766Z",
+        "updatedAt": "2019-09-13T02:22:01.766Z",
+        "id": "248960"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "553179",
+            "updatedAt": "2019-09-13T02:22:11.523Z"
+          },
+          "activity": "[bfdactivity-553179]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "name": "Handle an Intent",
+        "createdAt": "2019-09-13T02:27:49.986Z",
+        "updatedAt": "2019-09-13T02:27:52.988Z",
+        "id": "840521"
+      },
+      "intent": "GetWeather",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "767328",
+            "updatedAt": "2019-09-13T02:28:01.211Z"
+          },
+          "activity": "[bfdactivity-767328]"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "name": "Prompt for text",
+            "id": "259501",
+            "updatedAt": "2019-09-13T03:02:04.826Z"
+          },
+          "prompt": "What city?",
+          "maxTurnCount": 2147483647,
+          "value": "@city",
+          "property": "$city",
+          "alwaysPrompt": false,
+          "allowInterruptions": "never",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "650897",
+            "updatedAt": "2019-09-13T03:01:25.930Z"
+          },
+          "activity": "[bfdactivity-650897]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "rules": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    }
+  ],
+  "recognizer": "Main.lu"
+}
