@@ -1,4 +1,4 @@
-///<reference path='../../../types/commands.d.ts'/>.
+///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
@@ -10,7 +10,7 @@ export class SelfHostBotConnector implements IBotConnector {
   constructor() {
     this.buildAsync = require('commands/build').handlerAsync;
   }
-  private buildAsync: (argv: any) => Promise<string>;
+  private buildAsync: SelfHostCommands.Build;
   public status: BotStatus = BotStatus.NotConnected;
 
   public connect = async (env: BotEnvironments, hostName: string) => {
