@@ -74,7 +74,6 @@ export const visualEditor = css`
   border: 0px;
   flex: 1;
   background-color: #e5e5e5;
-  hidden: true;
 `;
 
 export const formEditor = css`

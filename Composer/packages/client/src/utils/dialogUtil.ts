@@ -14,14 +14,14 @@ interface DialogsMap {
   [dialogId: string]: any;
 }
 
-interface TriggerFormData {
+export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
   name: string;
   description: string;
 }
 
-interface TriggerFormDataErrors {
+export interface TriggerFormDataErrors {
   $type?: string;
   name?: string;
 }
@@ -111,7 +111,7 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
 }
 
 export function getTriggerTypes(): IDropdownOption[] {
-  const TriggerTypes: IDropdownOption[] = [
+  const triggerTypes: IDropdownOption[] = [
     {
       key: '',
       text: '',
@@ -120,7 +120,7 @@ export function getTriggerTypes(): IDropdownOption[] {
       return { key: t, text: ConceptLabels[t].title };
     }),
   ];
-  return TriggerTypes;
+  return triggerTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
-import React, { Fragment, useContext, useEffect, useMemo, useState, useRef } from 'react';
-import { Breadcrumb, Icon } from 'office-ui-fabric-react';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton, Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
-import { ActionButton } from 'office-ui-fabric-react';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
@@ -114,7 +112,7 @@ function DesignPage(props) {
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
 
-  const OnTriggerCreationDismiss = () => {
+  const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
 
@@ -122,7 +120,7 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const OnTriggerCreationSubmit = dialog => {
+  const onTriggerCreationSubmit = dialog => {
     const payload = {
       id: dialog.id,
       content: dialog.content,
@@ -301,7 +299,6 @@ function DesignPage(props) {
                         {formatMessage(`This dialog has no trigger yet.`)}
                         <ActionButton
                           data-testid="MiddleAddNewTriggerButton"
-                          tabIndex={1}
                           iconProps={addIconProps}
                           css={triggerButton}
                           onClick={openNewTriggerModal}
@@ -333,8 +330,8 @@ function DesignPage(props) {
         <TriggerCreationModal
           dialogId={dialogId}
           isOpen={triggerModalVisible}
-          onDismiss={OnTriggerCreationDismiss}
-          onSubmit={OnTriggerCreationSubmit}
+          onDismiss={onTriggerCreationDismiss}
+          onSubmit={onTriggerCreationSubmit}
         />
       )}
     </Fragment>

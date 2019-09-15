@@ -8,7 +8,7 @@ context('SwitchCondition', () => {
 
   //will remove skip after add trigger is ok
   it('can manage cases', () => {
-    cy.addIntentHandler('Handle Unknown Intent');
+    cy.addEventHandler('Handle Unknown Intent');
 
     cy.withinEditor('VisualEditor', () => {
       cy.getByText(/OnUnknownIntent/).click({ force: true });

@@ -4,7 +4,12 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { generateDialogWithNewTrigger, getTriggerTypes } from '../../utils/dialogUtil';
+import {
+  generateDialogWithNewTrigger,
+  getTriggerTypes,
+  TriggerFormData,
+  TriggerFormDataErrors,
+} from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
@@ -33,18 +38,6 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo) => void;
 }
 
-interface TriggerFormData {
-  errors: TriggerFormDataErrors;
-  $type: string;
-  name: string;
-  description: string;
-}
-
-interface TriggerFormDataErrors {
-  $type?: string;
-  name?: string;
-}
-
 const initialFormData: TriggerFormData = {
   errors: {},
   $type: '',
@@ -55,7 +48,6 @@ const initialFormData: TriggerFormData = {
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
-  // eslint-disable-next-line react/prop-types
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
@@ -98,7 +90,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
-        title: 'Create a trigger',
+        title: formatMessage('Create a trigger'),
         styles: styles.dialog,
       }}
       modalProps={{
@@ -109,8 +101,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       <div css={dialogWindow}>
         <Stack>
           <Dropdown
-            placeholder="select a trigger type"
-            label="What is the trigger?"
+            placeholder={formatMessage('select a trigger type')}
+            label={formatMessage('What is the trigger?')}
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
