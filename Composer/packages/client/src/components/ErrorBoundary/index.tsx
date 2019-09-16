@@ -58,9 +58,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidMount() {
-    window.onerror = this.onErrorHandler;
-    window.addEventListener('unhandledrejection', this.unhandledrejectionHandler, true);
-    window.addEventListener('error', this.eventHandler, true);
+    // window.onerror = this.onErrorHandler;
+    // window.addEventListener('unhandledrejection', this.unhandledrejectionHandler, true);
+    // window.addEventListener('error', this.eventHandler, true);
   }
 
   // catch all render errors for children components
@@ -72,9 +72,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   componentWillUnmount() {
     // set error into null;
     this.context.actions.setError(null);
-    window.onerror = null;
-    window.removeEventListener('unhandledrejection', this.unhandledrejectionHandler);
-    window.removeEventListener('error', this.eventHandler);
+    // window.onerror = null;
+    // window.removeEventListener('unhandledrejection', this.unhandledrejectionHandler);
+    // window.removeEventListener('error', this.eventHandler);
   }
 
   render() {
