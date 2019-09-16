@@ -7,11 +7,13 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { deleteNode, insert } from '../utils/jsonTracker';
+import { deleteNode, insert, queryNode } from '../utils/jsonTracker';
+import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
+import { MenuTypes } from '../constants/MenuTypes';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
@@ -29,8 +31,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        resetSelectionData();
-        handler = id => onFocusSteps(id ? [id] : []);
+        handler = id => {
+          setSelectionContext({
+            getNodeIndex: selectionContext.getNodeIndex,
+            selectedIds: [id],
+          });
+          onFocusSteps(id ? [id] : []);
+        };
         break;
       case NodeEventTypes.FocusEvent:
         handler = onFocusEvent;
@@ -125,8 +132,40 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
+  useEffect((): void => {
+    setSelectedElements(querySelectedElements());
+  }, [focusedId]);
+  const querySelectedElements = () => {
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[data-is-selectable]`);
+    return items;
+  };
+  const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
+
   const handleKeyboardCommand = command => {
+    let path;
+    const currentSelectedId = selectionContext.selectedIds[0];
     switch (command) {
+      case KeyboardCommandTypes.MoveUp:
+      case KeyboardCommandTypes.MoveDown:
+      case KeyboardCommandTypes.MoveLeft:
+      case KeyboardCommandTypes.MoveRight:
+        path = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [path],
+        });
+        onFocusSteps([path]);
+        break;
+      case KeyboardCommandTypes.MovePrevious:
+      case KeyboardCommandTypes.MoveNext:
+        path = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [path],
+        });
+        let tmpPath = path.replace(MenuTypes.EdgeMenu, '').replace(MenuTypes.NodeMenu, '');
+        onFocusSteps([tmpPath]);
+        break;
       case KeyboardCommandTypes.DeleteNode:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
         break;

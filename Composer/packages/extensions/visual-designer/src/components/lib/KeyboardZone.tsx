@@ -15,6 +15,10 @@ const isMac = () => {
 export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
   const keyPressed = {};
   const handleKeyDown = e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     keyPressed[e.key] = true;
   };
 

@@ -64,19 +64,20 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
-        ${nodeFocused && nodeBorderSelectedStyle};
         ${nodeSelected && nodeBorderSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
+      data-is-node={true}
+      data-is-selectable={true}
       data-is-focusable={true}
+      data-selected-id={id}
       data-selection-index={getNodeIndex(id)}
     >
       <ChosenRenderer
         id={id}
         data={data}
-        focused={nodeFocused}
         onEvent={onEvent}
         onResize={size => {
           onResize(size, 'element');
