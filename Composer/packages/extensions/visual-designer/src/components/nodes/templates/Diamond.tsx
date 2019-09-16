@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 
 import { ObiColors } from '../../../constants/ElementColors';
 
-export const Diamond = ({ color = ObiColors.AzureGray2, onClick, ...rest }) => (
+export const Diamond = ({ color = ObiColors.AzureGray2, onClick = () => {}, ...rest }) => (
   <div
     {...rest}
     css={{

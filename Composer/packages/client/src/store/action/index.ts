@@ -9,3 +9,4 @@ export * from './project';
 export * from './setting';
 export * from './storage';
 export * from './user';
+export * from '../middlewares/undo/actions';

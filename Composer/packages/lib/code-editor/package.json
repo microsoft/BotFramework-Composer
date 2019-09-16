@@ -20,7 +20,7 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "react": "^16.8.4",
+    "react": "16.9.0",
     "react-dom": "^16.8.4"
   },
   "devDependencies": {
@@ -31,8 +31,8 @@
     "@babel/preset-react": "^7.0.0",
     "@types/jest": "^24.0.11",
     "@types/lodash.throttle": "^4.1.6",
-    "@types/react": "^16.8.13",
-    "@types/react-dom": "^16.8.4",
+    "@types/react": "16.9.0",
+    "@types/react-dom": "16.9.0",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "autoprefixer": "^9.5.1",
@@ -44,8 +44,8 @@
     "jest-dom": "^3.1.3",
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
-    "@bfcomposer/react-monaco-editor": "^0.30.3",
+    "@bfcomposer/react-monaco-editor": "^0.30.4",
     "lodash.throttle": "^4.1.1"
   }
 }
