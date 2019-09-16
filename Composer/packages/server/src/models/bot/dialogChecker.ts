@@ -5,7 +5,7 @@ const ExpressionParser = new ExpressionEngine();
 
 interface CheckerFunc {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (node: { path: string; value: any }): string; // error msg, '' for no error
+  (node: { path: string; value: any }): any; // error msg, string || string[]
 }
 
 function IsExpression(name: string): CheckerFunc {
@@ -50,11 +50,31 @@ function EditArrayValueChecker(node: { path: string; value: any }): string {
   return message;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ChoiceInputChoicesChecker(node: { path: string; value: any }): string[] {
+  const message: string[] = [];
+
+  const choices = get(node.value, 'choices', []);
+
+  for (const choice of choices) {
+    const exp = get(choice, 'value');
+    try {
+      ExpressionParser.parse(exp);
+    } catch (error) {
+      message.push(`In ${node.path}: choices: ${choice.value} must be an expression`);
+    }
+  }
+
+  return message;
+}
+
 /**
  * Dialog Validation Rules
  */
+// TODO: check field by schema.
 export const DialogChecker: { [key: string]: CheckerFunc[] } = {
   'Microsoft.IfCondition': [IsExpression('condition')],
+  'Microsoft.ChoiceInput': [ChoiceInputChoicesChecker],
   'Microsoft.SwitchCondition': [IsExpression('condition')],
   'Microsoft.SetProperty': [IsExpression('property'), IsExpression('value')],
   'Microsoft.ForeachPage': [IsExpression('listProperty')],
