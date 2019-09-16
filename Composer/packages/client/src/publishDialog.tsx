@@ -9,7 +9,7 @@ interface PublishLuisDialogProps {
   botName: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onPublish: () => void;
+  onPublish: (formdata: any) => void;
 }
 
 export const PublishLuisDialog: React.FC<PublishLuisDialogProps> = props => {

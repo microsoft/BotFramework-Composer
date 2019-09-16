@@ -6,13 +6,14 @@ import { BASEURL, ActionTypes } from './../../constants/index';
 
 export const syncEnvSettings: ActionCreator = async ({ dispatch }, settings: DialogSetting) => {
   try {
-    await axios.post(`${BASEURL}/projects/opened/settings`, { settings });
+    // update state then sync to backend
     dispatch({
       type: ActionTypes.SYNC_ENV_SETTING,
       payload: {
         settings,
       },
     });
+    await axios.post(`${BASEURL}/projects/opened/settings`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,

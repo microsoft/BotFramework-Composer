@@ -41,8 +41,10 @@ const onRenderLabel = info => props => (
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
+const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
 const validateForm = data => {
   const errors = {};
+  const result = { errors: errors };
   const dataKeys = keys(data);
 
   dataKeys.forEach(key => {
@@ -51,10 +53,12 @@ const validateForm = data => {
       errors[key] = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
+    } else if (key in defaultFields && value === '') {
+      result[key] = defaultFields[key];
     }
   });
 
-  return errors;
+  return result;
 };
 
 const DeploySuccess = props => {
@@ -120,17 +124,18 @@ export const PublishLuis = props => {
   const handlePublish = async e => {
     e.preventDefault();
 
-    const errors = validateForm(formData);
-    if (keys(errors).length) {
-      setFormData({ ...formData, errors });
+    const result = validateForm(formData);
+    if (keys(result.errors).length) {
+      setFormData({ ...formData, ...result });
       return;
     }
     // save the settings change to store and persist to server
-    const newValue = { ...formData };
+    const newValue = { ...formData, ...result };
     delete newValue.errors;
+    console.log(newValue);
     await syncEnvSettings({ ...settings, luis: newValue });
     await setEnvSettings();
-    await onPublish({ ...formData });
+    await onPublish(newValue);
   };
 
   return (
@@ -169,13 +174,13 @@ export const PublishLuis = props => {
           />
           <TextField
             label={formatMessage('Authoring Region')}
-            defaultValue="westus"
+            defaultValue={defaultFields.authoringRegion}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
             disabled
           />
           <TextField
             label={formatMessage('Default Language')}
-            defaultValue="en-us"
+            defaultValue={defaultFields.defaultLanguage}
             onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
             disabled
           />

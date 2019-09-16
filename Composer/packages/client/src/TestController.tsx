@@ -78,15 +78,15 @@ export const TestController: React.FC = () => {
       if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
         setModalOpen(true);
       } else {
-        await publishAndReload();
+        await publishAndReload(config);
       }
     } else {
       await handleLoadBot();
     }
   }
 
-  async function publishAndReload() {
-    if (await handlePublish()) {
+  async function publishAndReload(formData) {
+    if (await handlePublish(formData)) {
       setLuisPublishSucceed(true);
       await handleLoadBot();
     } else {
@@ -94,15 +94,11 @@ export const TestController: React.FC = () => {
     }
   }
 
-  async function handlePublish() {
+  async function handlePublish(formData) {
     setFetchState(STATE.PUBLISHING);
     try {
-      if (settings.luis) {
-        await publishLuis(settings.luis.authoringKey);
-        return true;
-      } else {
-        throw new Error('Please Set Luis Config');
-      }
+      await publishLuis(formData.authoringKey);
+      return true;
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
@@ -197,8 +193,8 @@ export const TestController: React.FC = () => {
         <PublishLuisDialog
           isOpen={true}
           onDismiss={() => setModalOpen(false)}
-          onPublish={() => {
-            publishAndReload();
+          onPublish={formData => {
+            publishAndReload(formData);
             setModalOpen(false);
           }}
           botName={botName}
