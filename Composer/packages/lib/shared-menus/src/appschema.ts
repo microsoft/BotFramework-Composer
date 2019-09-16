@@ -204,3 +204,92 @@ export function getDialogGroupByType(type) {
 
   return dialogType;
 }
+
+/**
+  All of the known SDK types. Update this list when we take a schema update.
+  To get this list copy the output of the following commands in a node repl from the project root:
+
+  ```js
+    const schema = JSON.parse(fs.readFileSync('./BotProject/CSharp/Schemas/sdk.schema', 'utf-8'));
+    const types = schema.oneOf.map(t => t.title);
+    let uType = 'export type SDKTypes =';
+    types.forEach(t => uType += `\n  | '${t}'`);
+    uType += ';';
+    console.log(uType);
+  ```
+*/
+
+export type SDKTypes =
+  | 'Microsoft.AdaptiveDialog'
+  | 'Microsoft.AgeEntityRecognizer'
+  | 'Microsoft.AttachmentInput'
+  | 'Microsoft.BeginDialog'
+  | 'Microsoft.CancelAllDialogs'
+  | 'Microsoft.ChoiceInput'
+  | 'Microsoft.ConditionalSelector'
+  | 'Microsoft.ConfirmInput'
+  | 'Microsoft.ConfirmationEntityRecognizer'
+  | 'Microsoft.CurrencyEntityRecognizer'
+  | 'Microsoft.DateTimeEntityRecognizer'
+  | 'Microsoft.DateTimeInput'
+  | 'Microsoft.DebugBreak'
+  | 'Microsoft.DeleteProperty'
+  | 'Microsoft.DimensionEntityRecognizer'
+  | 'Microsoft.EditActions'
+  | 'Microsoft.EditArray'
+  | 'Microsoft.EmailEntityRecognizer'
+  | 'Microsoft.EmitEvent'
+  | 'Microsoft.EndDialog'
+  | 'Microsoft.EndTurn'
+  | 'Microsoft.FirstSelector'
+  | 'Microsoft.Foreach'
+  | 'Microsoft.ForeachPage'
+  | 'Microsoft.GuidEntityRecognizer'
+  | 'Microsoft.HashtagEntityRecognizer'
+  | 'Microsoft.HttpRequest'
+  | 'Microsoft.IfCondition'
+  | 'Microsoft.InitProperty'
+  | 'Microsoft.IpEntityRecognizer'
+  | 'Microsoft.LanguagePolicy'
+  | 'Microsoft.LogAction'
+  | 'Microsoft.LuisRecognizer'
+  | 'Microsoft.MentionEntityRecognizer'
+  | 'Microsoft.MostSpecificSelector'
+  | 'Microsoft.MultiLanguageRecognizer'
+  | 'Microsoft.NumberEntityRecognizer'
+  | 'Microsoft.NumberInput'
+  | 'Microsoft.NumberRangeEntityRecognizer'
+  | 'Microsoft.OAuthInput'
+  | 'Microsoft.OnActivity'
+  | 'Microsoft.OnBeginDialog'
+  | 'Microsoft.OnConversationUpdateActivity'
+  | 'Microsoft.OnDialogEvent'
+  | 'Microsoft.OnEndOfConversationActivity'
+  | 'Microsoft.OnEvent'
+  | 'Microsoft.OnEventActivity'
+  | 'Microsoft.OnHandoffActivity'
+  | 'Microsoft.OnIntent'
+  | 'Microsoft.OnInvokeActivity'
+  | 'Microsoft.OnMessageActivity'
+  | 'Microsoft.OnMessageDeleteActivity'
+  | 'Microsoft.OnMessageReactionActivity'
+  | 'Microsoft.OnMessageUpdateActivity'
+  | 'Microsoft.OnTypingActivity'
+  | 'Microsoft.OnUnknownIntent'
+  | 'Microsoft.OrdinalEntityRecognizer'
+  | 'Microsoft.PercentageEntityRecognizer'
+  | 'Microsoft.PhoneNumberEntityRecognizer'
+  | 'Microsoft.QnAMakerDialog'
+  | 'Microsoft.RandomSelector'
+  | 'Microsoft.RegexEntityRecognizer'
+  | 'Microsoft.RegexRecognizer'
+  | 'Microsoft.RepeatDialog'
+  | 'Microsoft.ReplaceDialog'
+  | 'Microsoft.SendActivity'
+  | 'Microsoft.SetProperty'
+  | 'Microsoft.SwitchCondition'
+  | 'Microsoft.TemperatureEntityRecognizer'
+  | 'Microsoft.TextInput'
+  | 'Microsoft.TraceActivity'
+  | 'Microsoft.TrueSelector'
+  | 'Microsoft.UrlEntityRecognizer';
