@@ -8,7 +8,13 @@ export interface ResourceValidator {
 export interface Diagnostic {
   severity: DiagnosticSeverity;
   message: string;
-  range: Range;
+  /*
+   path and range are to help locate the error, 
+    path is used for json or any structured content
+    range is used for text-based content
+  */
+  path?: string;
+  range?: Range;
   source?: string;
   code?: string;
 }
