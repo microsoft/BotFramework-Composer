@@ -12,7 +12,16 @@ export function getElementColor($type) {
   }
 }
 
-export function getElementIcon($type): string {
+export enum ElementIcon {
+  MessageBot = 'MessageBot',
+  User = 'User',
+  Friend = 'Friend',
+  Play = 'Play',
+  Flow = 'Flow',
+  None = 'None',
+}
+
+export function getElementIcon($type): ElementIcon {
   const dialgGroup = getDialogGroupByType($type) as string;
-  return dialgGroup === 'INPUT' ? 'User' : 'MessageBot';
+  return dialgGroup === 'Response' ? ElementIcon.MessageBot : ElementIcon.None;
 }
