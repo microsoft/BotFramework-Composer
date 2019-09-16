@@ -1,4 +1,4 @@
-import { Resource, ResourceType } from './interface';
+import { Resource, ResourceType } from './resource';
 
 export class LUResource implements Resource {
   public id: string;
@@ -8,6 +8,6 @@ export class LUResource implements Resource {
   constructor(id: string, content: string) {
     this.id = id;
     this.content = content;
-    this.type = ResourceType.LG;
+    this.type = ResourceType.LU;
   }
 }
