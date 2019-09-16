@@ -80,15 +80,7 @@ export default class extends React.Component {
 
   async handleFetchToken() {
     if (!this.state.token) {
-      const url = 'https://directline.botframework.com/v3/directline/tokens/generate';
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: this.props.bearer,
-        },
-      });
-      const { token } = await res.json();
-
+      const token = await window.fetchWebChatToken();
       this.setState(() => ({ token }));
     }
   }

@@ -40,14 +40,19 @@
     <script src="https://cdn.jsdelivr.net/npm/shepherd.js@5.0.1/dist/js/shepherd.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.css">
-    <script>
-      (async function () {
+    <script>      
+      /* Priority: webchatToken > bearerToken. Remove the webchatToken if you want to fetch token dynamically. */
+      // window.webchatToken = 'Ym2dwjOol_s.zwUFtHQWmILhoDaI-jjPyKv3KMD9QOT69blqz-bcC10';
+
+      // Xi's bot token
+      window.bearerToken = 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w';
+      async function fetchWebChatToken() {
         const res = await fetch(
           'https://directline.botframework.com/v3/directline/tokens/generate',
           {
             //I used ngrok to do all these. It's somehow connected to Azure, and my localhost
             headers: {
-              Authorization: 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w',
+              Authorization: window.bearerToken,
               'content-type': 'application/json'
             },
             method: 'POST',
@@ -60,15 +65,10 @@
         const { token } = await res.json();
 
         window.webchatToken = token;
+        return token;
+      };
+      window.fetchWebChatToken = fetchWebChatToken;
 
-        console.log('Using enhanced token');
-      })();
-
-      /* Priority: webchatToken > bearerToken. Remove the webchatToken if you want to fetch token dynamically. */
-      // window.webchatToken = 'Ym2dwjOol_s.zwUFtHQWmILhoDaI-jjPyKv3KMD9QOT69blqz-bcC10';
-      // window.bearerToken = 'Bearer FXu8DyyIQvw.1eEaF87HNFFsFqXKi6igvdovLIASE4eY5ybF5SkhC6w';
-
-      // Xi's bot token
     </script>
   </body>
 </html>
