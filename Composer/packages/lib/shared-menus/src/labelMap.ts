@@ -154,7 +154,7 @@ export const ConceptLabels = {
   'Microsoft.ForeachPage': {
     title: formatMessage('Loop: For Each Page'),
   },
-  'Microsoft.EditSteps': {
+  'Microsoft.EditActions': {
     title: formatMessage('Modify active dialog'),
   },
   'Microsoft.OnBeginDialog': {

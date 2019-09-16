@@ -57,7 +57,7 @@ export const dialogGroups: DialogGroupsMap = {
       'Microsoft.EndTurn',
       'Microsoft.RepeatDialog',
       'Microsoft.ReplaceDialog',
-      'Microsoft.EditSteps',
+      'Microsoft.EditActions',
     ],
   },
   [DialogGroup.CODE]: {

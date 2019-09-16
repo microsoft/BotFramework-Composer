@@ -149,7 +149,7 @@
     "Microsoft.ForeachPage": {
       "title": "Loop: For Each Page"
     },
-    "Microsoft.EditSteps": {
+    "Microsoft.EditActions": {
       "title": "Modify active dialog"
     }
   }

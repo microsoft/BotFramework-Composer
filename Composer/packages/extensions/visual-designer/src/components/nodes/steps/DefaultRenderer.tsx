@@ -125,7 +125,7 @@ const ContentKeyByTypes: {
   [ObiTypes.LogAction]: {
     label: 'text',
   },
-  [ObiTypes.EditSteps]: {
+  [ObiTypes.EditActions]: {
     label: 'changeType',
   },
 };

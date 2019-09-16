@@ -43,7 +43,7 @@ export const ObiTypes = {
   RepeatDialog: 'Microsoft.RepeatDialog',
   EndTurn: 'Microsoft.EndTurn',
 
-  EditSteps: 'Microsoft.EditSteps',
+  EditActions: 'Microsoft.EditActions',
 
   EmitEvent: 'Microsoft.EmitEvent',
 
