@@ -255,20 +255,21 @@ export const createStepMenu = (
     return stepMenuItems;
   } else {
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
+      const name = ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item;
       const menuItem: IContextualMenuItem = {
         key: item,
-        text: ConceptLabels[item].title,
-        name: ConceptLabels[item].title,
+        text: name,
+        name: name,
         $type: item,
         $designer: {
-          name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
+          name: name,
           id: nanoid('1234567890', 6),
         },
         ...seedNewDialog(item),
         data: {
           $type: item,
           $designer: {
-            name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
+            name: name,
             id: nanoid('1234567890', 6),
           },
           ...seedNewDialog(item),
@@ -295,6 +296,7 @@ export function getDialogGroupByType(type) {
         case DialogGroup.RESPONSE:
         case DialogGroup.BRANCHING:
         case DialogGroup.EVENTS:
+        case DialogGroup.ADVANCED_EVENTS:
           dialogType = key;
           break;
         case DialogGroup.STEP:
