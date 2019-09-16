@@ -24,7 +24,7 @@
     "watch": "yarn build:ts --watch"
   },
   "dependencies": {
-    "@bfcomposer/react-jsonschema-form": "1.6.0",
+    "@bfcomposer/react-jsonschema-form": "1.6.2",
     "@uifabric/fluent-theme": "^0.16.2",
     "@uifabric/styling": "^6.45.3",
     "classnames": "^2.2.6",

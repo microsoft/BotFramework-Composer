@@ -103,9 +103,15 @@ interface LuisRecognizer extends BaseSchema {
   endpointKey: string;
 }
 
+interface IntentPattern {
+  $type: 'Microsoft.IntentPattern';
+  intent: string;
+  pattern: string;
+}
+
 interface RegexRecognizer extends BaseSchema {
   /** Pattern->Intents mappings */
-  intents: OpenObject;
+  intents: IntentPattern[];
 }
 
 type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
