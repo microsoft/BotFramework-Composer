@@ -50,7 +50,7 @@ export const ObiTypes = {
   HttpRequest: 'Microsoft.HttpRequest',
   CodeStep: 'Microsoft.CodeStep',
 
-  LogStep: 'Microsoft.LogStep',
+  LogAction: 'Microsoft.LogAction',
   TraceActivity: 'Microsoft.TraceActivity',
 
   // virtual

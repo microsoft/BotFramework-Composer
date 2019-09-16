@@ -69,7 +69,7 @@ export const ConceptLabels = {
   'Microsoft.LanguagePolicy': {
     title: formatMessage('LanguagePolicy'),
   },
-  'Microsoft.LogStep': {
+  'Microsoft.LogAction': {
     title: formatMessage('Log to console'),
   },
   'Microsoft.LuisRecognizer': {

@@ -34,8 +34,6 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       'Microsoft.TextInput',
       'Microsoft.NumberInput',
-      // 'Microsoft.IntegerInput',
-      // 'Microsoft.FloatInput',
       'Microsoft.ConfirmInput',
       'Microsoft.ChoiceInput',
       'Microsoft.AttachmentInput',
@@ -73,7 +71,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.LOG]: {
     label: 'Debugging',
-    types: [/* 'Microsoft.DebugBreak', */ 'Microsoft.LogStep', 'Microsoft.TraceActivity'],
+    types: [/* 'Microsoft.DebugBreak', */ 'Microsoft.LogAction', 'Microsoft.TraceActivity'],
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
