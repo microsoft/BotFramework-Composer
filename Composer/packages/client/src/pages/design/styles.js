@@ -106,25 +106,23 @@ export const deleteDialogContent = css`
 `;
 
 export const middleTriggerContainer = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #e5e5e5;
   width: 100%;
   margin-top: 48px;
   height: calc(100% - 48px);
   position: absolute;
-  box-pack: center;
-  box-align: center;
 `;
 
 export const middleTriggerElements = css`
   display: flex;
   flex-direction: column;
-  width: 50%;
-  margin-top: 40%;
-  margin-left: 40%;
+  align-items: center;
 `;
 
 export const triggerButton = css`
   font-size: 12px;
   color: #0078d4;
-  padding-left: 40px;
 `;
