@@ -25,7 +25,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, removeLgTemplate } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent, removeLgTemplate } = useContext(NodeRendererContext);
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
     setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
@@ -93,6 +93,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.AppendSelection:
         handler = e => {
+          // forbid paste to root level.
+          if (!e.target || e.target === focusedEvent) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
           onChange(dialog);
         };
