@@ -33,7 +33,8 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
       console.log(keyCode);
       onCommand(findCommand(keyCode));
     }
-    setKeyPressed({ ...keyPressed, [e.key]: false });
+    delete keyPressed[e.key];
+    setKeyPressed(keyPressed);
   };
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
