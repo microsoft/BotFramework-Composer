@@ -92,8 +92,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       <div css={dialogWindow}>
         <Stack>
           <Dropdown
-            placeholder={formatMessage('select a trigger type')}
-            label={formatMessage('What is the trigger?')}
+            label={formatMessage('What is the type of this trigger?')}
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
@@ -101,7 +100,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             data-testid={'triggerTypeDropDown'}
           />
           <TextField
-            label={formatMessage('Name')}
+            label={formatMessage('What is the name of this trigger?')}
             styles={name}
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
