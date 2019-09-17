@@ -29,7 +29,15 @@ export interface TriggerFormDataErrors {
 export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: TriggerFormData) {
   const dialog = cloneDeep(inputDialog);
   const events = get(dialog, 'content.events', []);
-  const newStep = seedNewDialog(data.$type, data.name, data.description);
+  const newStep = {
+    $type: data.$type,
+    $designer: {
+      name: data.name,
+      id: nanoid('1234567890', 6),
+      description: data.description,
+    },
+    ...seedNewDialog(data.$type),
+  };
   events.push(newStep);
   set(dialog, 'content.events', events);
   return dialog;
