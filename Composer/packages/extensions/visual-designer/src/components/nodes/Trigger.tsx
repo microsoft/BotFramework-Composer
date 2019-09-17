@@ -29,6 +29,7 @@ export const Trigger = ({ id, data, focused, onClick }): JSX.Element => (
       '&:hover': !focused && { outline: '1px solid #323130' },
     }}
     data-selected-id={id}
+    data-focused-id={id}
     data-is-node={true}
     data-is-selectable={true}
   >

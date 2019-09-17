@@ -18,6 +18,7 @@ import {
   InvalidPromptBrick,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { elementContainsAttribute } from '@uifabric/utilities';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -46,13 +47,30 @@ const nodeBorderSelectedStyle = css`
   outline: 1px solid #0078d4;
 `;
 
+const nodeBorderDoubleSelectedStyle = css`
+  box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
+`;
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
-
+  let elementType = '';
+  let doubleSelected = false;
+  switch (data.$type) {
+    case ObiTypes.BotAsks:
+    case ObiTypes.UserAnswers:
+    case ObiTypes.InvalidPromptBrick:
+      elementType = data.$type;
+      doubleSelected = true;
+      break;
+    default:
+      elementType = '';
+      doubleSelected = false;
+      break;
+  }
+  const selectedId = `${id}${elementType}`;
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
   const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
-  const nodeSelected = selectedIds.includes(id);
+  const nodeSelected = selectedIds.includes(selectedId);
 
   return (
     <div
@@ -64,7 +82,9 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
-        ${nodeSelected && nodeBorderSelectedStyle};
+        ${nodeSelected && !doubleSelected && nodeBorderSelectedStyle};
+        ${nodeSelected && doubleSelected && nodeBorderDoubleSelectedStyle};
+        ${nodeFocused && nodeBorderSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
@@ -72,13 +92,16 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       data-is-node={true}
       data-is-selectable={true}
       data-is-focusable={true}
-      data-selected-id={id}
+      data-selected-id={selectedId}
+      data-focused-id={id}
       data-selection-index={getNodeIndex(id)}
     >
       <ChosenRenderer
         id={id}
         data={data}
-        onEvent={onEvent}
+        onEvent={(action, id) => {
+          onEvent(action, id, selectedId);
+        }}
         onResize={size => {
           onResize(size, 'element');
         }}

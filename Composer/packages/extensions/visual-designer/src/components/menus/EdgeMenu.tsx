@@ -31,6 +31,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     >
       <IconMenu
         data-is-selectable={true}
+        data-is-edge-menu={true}
         data-selected-id={`${id}${MenuTypes.EdgeMenu}`}
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}

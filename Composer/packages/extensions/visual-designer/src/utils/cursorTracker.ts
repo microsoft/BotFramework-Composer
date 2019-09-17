@@ -6,16 +6,19 @@ function localeNearestElement(
   elements: NodeListOf<HTMLElement>,
   distanceKey: string,
   assistAxle: string,
-  filterKey?: string
+  filterKeys?: Array<string>
 ): HTMLElement {
   let neareastElement: HTMLElement = currentElement;
   let minDistance = 10000;
   let distance = minDistance;
-  const elementArr = Array.from(elements).filter(element => !filterKey || (filterKey && element.dataset[filterKey]));
+  const elementArr = Array.from(elements).filter(
+    element => !filterKeys || (filterKeys && filterKeys.find(key => !!element.dataset[key]))
+  );
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
+  let isInvolved: boolean = false;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
@@ -29,7 +32,10 @@ function localeNearestElement(
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
       );
-      if (assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
+      if (distanceKey === 'bottom') {
+        isInvolved = distance < currentElementBounds.height;
+      }
+      if (!isInvolved && assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
         neareastElement = element;
         minDistance = distance;
       }
@@ -88,30 +94,52 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
   }
   return selectedElement;
 }
-export function moveCursor(selectedElements: NodeListOf<HTMLElement>, focusedId: string, command: string): string {
-  const currentElement = Array.from(selectedElements).find(element => element.dataset['selectedId'] === focusedId);
-  if (!currentElement) return focusedId;
-  let movedToElemet: HTMLElement = currentElement;
+export function moveCursor(
+  selectedElements: NodeListOf<HTMLElement>,
+  id: string,
+  command: string
+): { [key: string]: string | undefined } {
+  const currentElement = Array.from(selectedElements).find(
+    element => element.dataset['selectedId'] === id || element.dataset['focusedId'] === id
+  );
+  if (!currentElement) return { selected: id, focused: undefined };
+  let element: HTMLElement = currentElement;
   switch (command) {
     case KeyboardCommandTypes.MoveDown:
-      movedToElemet = localeNearestElement(currentElement, selectedElements, 'top', 'x', 'isNode');
+      element = localeNearestElement(currentElement, selectedElements, 'top', 'x', ['isNode']);
       break;
     case KeyboardCommandTypes.MoveUp:
-      movedToElemet = localeNearestElement(currentElement, selectedElements, 'bottom', 'x', 'isNode');
+      element = localeNearestElement(currentElement, selectedElements, 'bottom', 'x', ['isNode']);
       break;
     case KeyboardCommandTypes.MoveLeft:
-      movedToElemet = localeNearestElement(currentElement, selectedElements, 'right', 'y', 'isNode');
+      element = localeNearestElement(currentElement, selectedElements, 'right', 'y', ['isNode']);
       break;
     case KeyboardCommandTypes.MoveRight:
-      movedToElemet = localeNearestElement(currentElement, selectedElements, 'left', 'y', 'isNode');
+      element = localeNearestElement(currentElement, selectedElements, 'left', 'y', ['isNode']);
+      break;
+    case KeyboardCommandTypes.ShortMoveDown:
+      element = localeNearestElement(currentElement, selectedElements, 'top', 'x', ['isNode', 'isEdgeMenu']);
+      break;
+    case KeyboardCommandTypes.ShortMoveUp:
+      element = localeNearestElement(currentElement, selectedElements, 'bottom', 'x', ['isNode', 'isEdgeMenu']);
+      break;
+    case KeyboardCommandTypes.ShortMoveLeft:
+      element = localeNearestElement(currentElement, selectedElements, 'right', 'y', ['isNode', 'isEdgeMenu']);
+      break;
+    case KeyboardCommandTypes.ShortMoveRight:
+      element = localeNearestElement(currentElement, selectedElements, 'left', 'y', ['isNode', 'isEdgeMenu']);
       break;
     case KeyboardCommandTypes.MovePrevious:
-      movedToElemet = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MovePrevious);
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MovePrevious);
       break;
     case KeyboardCommandTypes.MoveNext:
-      movedToElemet = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MoveNext);
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MoveNext);
       break;
   }
-  movedToElemet.scrollIntoView(true);
-  return movedToElemet.dataset['selectedId'] || focusedId;
+  element.scrollIntoView(true);
+
+  return {
+    selected: element.dataset['selectedId'] || id,
+    focused: element.dataset['focusedId'],
+  };
 }

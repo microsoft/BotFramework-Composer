@@ -7,13 +7,12 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { deleteNode, insert, queryNode } from '../utils/jsonTracker';
+import { deleteNode, insert } from '../utils/jsonTracker';
 import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-import { MenuTypes } from '../constants/MenuTypes';
 
 export const ObiEditor: FC<ObiEditorProps> = ({
   path,
@@ -31,10 +30,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        handler = id => {
+        handler = (id, selectedId?) => {
           setSelectionContext({
             getNodeIndex: selectionContext.getNodeIndex,
-            selectedIds: [id],
+            selectedIds: [selectedId || id],
           });
           onFocusSteps(id ? [id] : []);
         };
@@ -127,6 +126,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
+      onFocusSteps(selectedIds);
       console.log(selectedIds);
       setSelectionContext(newContext);
     },
@@ -145,31 +145,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let path;
     const currentSelectedId = selectionContext.selectedIds[0];
     switch (command) {
-      case KeyboardCommandTypes.MoveUp:
-      case KeyboardCommandTypes.MoveDown:
-      case KeyboardCommandTypes.MoveLeft:
-      case KeyboardCommandTypes.MoveRight:
-        path = moveCursor(selectedElements, currentSelectedId, command);
-        setSelectionContext({
-          getNodeIndex: selectionContext.getNodeIndex,
-          selectedIds: [path],
-        });
-        onFocusSteps([path]);
-        break;
-      case KeyboardCommandTypes.MovePrevious:
-      case KeyboardCommandTypes.MoveNext:
-        path = moveCursor(selectedElements, currentSelectedId, command);
-        setSelectionContext({
-          getNodeIndex: selectionContext.getNodeIndex,
-          selectedIds: [path],
-        });
-        let tmpPath = path.replace(MenuTypes.EdgeMenu, '').replace(MenuTypes.NodeMenu, '');
-        onFocusSteps([tmpPath]);
-        break;
       case KeyboardCommandTypes.DeleteNode:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
         break;
       default:
+        const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [selected as string],
+        });
+        focused && onFocusSteps([focused]);
         break;
     }
   };

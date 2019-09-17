@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { findCommand } from '../../constants/KeyboardCommandTypes';
 
@@ -13,13 +13,13 @@ const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
 export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
-  const keyPressed = {};
+  const [keyPressed, setKeyPressed] = useState({});
   const handleKeyDown = e => {
     if (e.key === 'Tab') {
       e.preventDefault();
       e.stopPropagation();
     }
-    keyPressed[e.key] = true;
+    setKeyPressed({ ...keyPressed, [e.key]: true });
   };
 
   const handleKeyUp = e => {
@@ -30,9 +30,10 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
           keyCode += `.${key}`;
         }
       }
+      console.log(keyCode);
       onCommand(findCommand(keyCode));
     }
-    keyPressed[e.key] = false;
+    setKeyPressed({ ...keyPressed, [e.key]: false });
   };
   return (
     <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
