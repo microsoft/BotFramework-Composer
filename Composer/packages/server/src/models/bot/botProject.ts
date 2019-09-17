@@ -104,6 +104,8 @@ export class BotProject {
   };
 
   public index = async () => {
+    await this.loadResources();
+
     this.files = await this._getFiles();
     this.settings = await this.getDialogSetting();
     this.dialogIndexer.index(this.files);
