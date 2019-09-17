@@ -38,7 +38,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   const [context, setContext] = useState({
     focusedId,
     focusedEvent,
-    clipboardActions: [],
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });

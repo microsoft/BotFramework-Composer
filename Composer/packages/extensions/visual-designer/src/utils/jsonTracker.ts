@@ -101,3 +101,60 @@ export function insert(inputDialog, path, position, $type) {
 
   return dialog;
 }
+
+export function copyNodes(inputDialog, nodeIds: string[]): any[] {
+  const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
+  return JSON.parse(JSON.stringify(nodes));
+}
+
+export function cutNodes(inputDialog, nodeIds: string[]) {
+  const dialog = cloneDeep(inputDialog);
+  const nodesData = copyNodes(dialog, nodeIds);
+
+  const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
+  nodeLocations.forEach(location => {
+    if (!location || !Array.isArray(location.parentData)) return;
+    location.parentData[location.currentKey] = null;
+  });
+
+  nodeLocations.forEach(location => {
+    if (!location || !Array.isArray(location.parentData)) return;
+    for (let i = location.parentData.length - 1; i >= 0; i--) {
+      if (location.parentData[i] === null) location.parentData.splice(i, 1);
+    }
+  });
+
+  return { dialog, cutData: nodesData };
+}
+
+export function appendNodesAfter(inputDialog, targetId, newNodes) {
+  if (!Array.isArray(newNodes) || newNodes.length === 0) {
+    return inputDialog;
+  }
+
+  const dialog = cloneDeep(inputDialog);
+  const prevNode = locateNode(dialog, targetId);
+
+  if (!prevNode || !Array.isArray(prevNode.parentData)) {
+    return inputDialog;
+  }
+
+  prevNode.parentData.splice(parseInt(prevNode.currentKey as string) + 1, 0, ...newNodes);
+  return dialog;
+}
+
+export function pasteNodes(inputDialog, targetPath, targetIndex, newNodes) {
+  if (!Array.isArray(newNodes) || newNodes.length === 0) {
+    return inputDialog;
+  }
+
+  const dialog = cloneDeep(inputDialog);
+  const targetArray = locateNode(dialog, targetPath);
+
+  if (!targetArray || !Array.isArray(targetArray.currentData)) {
+    return inputDialog;
+  }
+
+  targetArray.currentData.splice(targetIndex, 0, ...newNodes);
+  return dialog;
+}

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { ClipboardContext } from '../../store/ClipboardContext';
 
 import { IconMenu } from './IconMenu';
 
@@ -11,6 +12,30 @@ interface EdgeMenuProps {
 }
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ onClick, ...rest }) => {
+  const { clipboardActions } = useContext(ClipboardContext);
+  const menuItems = createStepMenu(
+    [
+      DialogGroup.RESPONSE,
+      DialogGroup.INPUT,
+      DialogGroup.BRANCHING,
+      DialogGroup.STEP,
+      DialogGroup.MEMORY,
+      DialogGroup.CODE,
+      DialogGroup.LOG,
+    ],
+    true,
+    (e, item) => onClick(item ? item.$type : null)
+  );
+
+  if (clipboardActions.length) {
+    menuItems.unshift({
+      key: 'Paste',
+      name: 'Paste',
+      style: { color: 'lightblue' },
+      onClick: () => onClick('PASTE'),
+    });
+  }
+
   return (
     <div
       style={{
@@ -27,19 +52,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ onClick, ...rest }) => {
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
-        menuItems={createStepMenu(
-          [
-            DialogGroup.RESPONSE,
-            DialogGroup.INPUT,
-            DialogGroup.BRANCHING,
-            DialogGroup.STEP,
-            DialogGroup.MEMORY,
-            DialogGroup.CODE,
-            DialogGroup.LOG,
-          ],
-          true,
-          (e, item) => onClick(item ? item.$type : null)
-        )}
+        menuItems={menuItems}
         label={formatMessage('Add')}
         {...rest}
       />
