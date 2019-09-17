@@ -1,0 +1,17 @@
+steps:
+  - task: NodeTool@0
+    displayName: "Use Node 10.15.3"
+    inputs:
+      versionSpec: 10.15.3
+
+  - task: CacheBeta@0
+    inputs:
+      key: yarn | $(Agent.OS) | Composer/yarn.lock
+      path: $(YARN_CACHE_FOLDER)
+    displayName: Cache Yarn packages
+
+  - script: cd Composer && yarn --frozen-lockfile
+    displayName: "yarn install"
+
+  - script: cd Composer && yarn build
+    displayName: "yarn build"
