@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 
 import { TriggerSize } from '../../constants/ElementSizes';
+import { ElementIcon } from '../../utils/obiPropertyResolver';
 
 import { FormCard } from './templates/FormCard';
 
@@ -18,7 +19,7 @@ export const Trigger = ({ data, focused, onClick }): JSX.Element => (
         themeColor: '#BFEAE9',
         iconColor: 'black',
       }}
-      icon={'Flow'}
+      icon={ElementIcon.Flow}
       header={'Trigger'}
       label={data.intent || data.$type}
       onClick={onClick}
