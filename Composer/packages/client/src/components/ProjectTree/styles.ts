@@ -1,20 +1,20 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { IButtonStyles, ICalloutContentStyles } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { IButtonStyles, ICalloutContentStyles, IGroupedListStyles } from 'office-ui-fabric-react';
+
+export const groupListStyle: Partial<IGroupedListStyles> = {
+  root: {
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+};
+
 export const root = css`
   width: 180px;
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
-
-  ul,
-  li {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-    cursor: pointer;
-  }
 `;
 
 export const navItem = (isActive: boolean, depth: number) => css`
@@ -52,6 +52,7 @@ export const itemText = (depth: number) => css`
   white-space: nowrap;
   overflow: hidden;
   text-align: left;
+  cursor: pointer;
 `;
 
 export const moreButton: IButtonStyles = {
