@@ -151,18 +151,14 @@ export const createStepMenu = (
         text: ConceptLabels[item].title,
         name: ConceptLabels[item].title,
         $type: item,
-        $designer: {
+        ...seedNewDialog(item, {
           name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
-          id: nanoid('1234567890', 6),
-        },
-        ...seedNewDialog(item),
+        }),
         data: {
           $type: item,
-          $designer: {
+          ...seedNewDialog(item, {
             name: ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item,
-            id: nanoid('1234567890', 6),
-          },
-          ...seedNewDialog(item),
+          }),
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {
