@@ -1,6 +1,8 @@
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import { get } from 'lodash';
 
+const lgStaticChecker = new StaticChecker();
+
 const lgImportResolver = new ImportResolver();
 
 export function isValid(diagnostics: Diagnostic[]): boolean {
@@ -9,7 +11,7 @@ export function isValid(diagnostics: Diagnostic[]): boolean {
 
 export function check(content: string, id = ''): Diagnostic[] {
   // @ts-ignore
-  return StaticChecker.checkText(content, id, lgImportResolver);
+  return lgStaticChecker.checkText(content, id, lgImportResolver);
 }
 
 export function parse(content: string, id = ''): LGTemplate[] {
