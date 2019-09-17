@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
-import { getElementColor } from '../../../utils/obiPropertyResolver';
+import { getElementColor, ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
@@ -52,7 +52,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
       nodeColors={nodeColors}
       header={getFriendlyName(data) || 'Activity'}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
-      icon="MessageBot"
+      icon={ElementIcon.MessageBot}
       label={templateText}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, id);
