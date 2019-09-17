@@ -1,3 +1,4 @@
+//eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
 ///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
@@ -28,7 +29,8 @@ export class SelfHostBotConnector implements IBotConnector {
     await this.buildAsync({
       user,
       userEmail,
-      dest: resolve(process.env['HOME']!, 'site/artifacts/bot'),
+      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
       env: env && env !== 'editing' ? env : 'integration',
     });
   };

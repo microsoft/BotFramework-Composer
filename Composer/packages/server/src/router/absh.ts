@@ -11,9 +11,10 @@ const BEARER_PREFIX = 'Bearer ';
 const LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
 declare global {
+  //eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
-      user?: Object;
+      user?: Record<string, any>;
     }
   }
 }

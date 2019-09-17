@@ -17,8 +17,8 @@ import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
 
 const oauthInput = () => ({
-  MicrosoftAppId: process.env['MicrosoftAppId'] || '',
-  MicrosoftAppPassword: process.env['MicrosoftAppPassword'] || '',
+  MicrosoftAppId: process.env.MicrosoftAppId || '',
+  MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
 
 export class BotProject {
@@ -80,7 +80,8 @@ export class BotProject {
   };
 
   private getDialogSetting = async () => {
-    return <DialogSetting>{ ...(await this.settingManager.get()), ...oauthInput() };
+    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return { ...(await this.settingManager.get())!, ...oauthInput() };
   };
 
   // create or update dialog settings
