@@ -187,3 +187,8 @@ export function isExpression(str: string): boolean {
 
   return true;
 }
+
+export function getSelected(focused: string): string {
+  if (!focused) return '';
+  return focused.split('.')[0];
+}
