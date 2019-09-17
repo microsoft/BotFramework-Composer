@@ -4,12 +4,7 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import {
-  generateDialogWithNewTrigger,
-  getTriggerTypes,
-  TriggerFormData,
-  TriggerFormDataErrors,
-} from '../../utils/dialogUtil';
+import { addNewTrigger, getTriggerTypes, TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
@@ -64,11 +59,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       });
       return;
     }
-    const inputDialog = dialogs.find(d => d.id === dialogId);
-    if (!inputDialog) {
-      throw new Error(`${dialogId} does not exist`);
-    }
-    const newDialog = generateDialogWithNewTrigger(inputDialog, formData);
+    const newDialog = addNewTrigger(dialogs, dialogId, formData);
     onSubmit(newDialog);
     onDismiss();
   };

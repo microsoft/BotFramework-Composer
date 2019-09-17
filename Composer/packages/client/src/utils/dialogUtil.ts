@@ -26,23 +26,6 @@ export interface TriggerFormDataErrors {
   name?: string;
 }
 
-export function generateDialogWithNewTrigger(inputDialog: DialogInfo, data: TriggerFormData) {
-  const dialog = cloneDeep(inputDialog);
-  const events = get(dialog, 'content.events', []);
-  const newStep = {
-    $type: data.$type,
-    $designer: {
-      name: data.name,
-      id: nanoid('1234567890', 6),
-      description: data.description,
-    },
-    ...seedNewDialog(data.$type),
-  };
-  events.push(newStep);
-  set(dialog, 'content.events', events);
-  return dialog;
-}
-
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find(item => item.id === dialogId);
   return cloneDeep(dialog);
@@ -71,12 +54,11 @@ export function getNewDesigner(name: string, description: string) {
   };
 }
 
-export function insert(content, path: string, position: number | undefined, $type: string) {
+export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const newStep = {
-    $type,
-    ...getNewDesigner(getFriendlyName({ $type }), ''),
-    ...seedNewDialog($type),
+    $type: data.$type,
+    ...seedNewDialog(data.$type, { name: data.name, description: data.description }),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -88,10 +70,11 @@ export function insert(content, path: string, position: number | undefined, $typ
   return content;
 }
 
-export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
+export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   const dialogCopy = getDialog(dialogs, dialogId);
-  if (!dialogCopy) return;
-  return insert(dialogCopy.content, 'events', undefined, $type);
+  if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
+  insert(dialogCopy.content, 'events', undefined, data);
+  return dialogCopy;
 }
 
 export function createSelectedPath(selected: number) {
