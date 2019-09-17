@@ -114,17 +114,50 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKTypes.OAuthInput]: {
     title: formatMessage('OAuth Login'),
   },
+  [SDKTypes.OnActivity]: {
+    title: formatMessage('Handle an Event: Activity'),
+  },
   [SDKTypes.OnBeginDialog]: {
-    title: formatMessage('Handle BeginDialog'),
+    title: formatMessage('Handle an Event: BeginDialog'),
   },
   [SDKTypes.OnConversationUpdateActivity]: {
     title: formatMessage('Handle ConversationUpdate'),
   },
+  [SDKTypes.OnDialogEvent]: {
+    title: formatMessage('Handle an Event: DialogEvent'),
+  },
+  [SDKTypes.OnEndOfConversationActivity]: {
+    title: formatMessage('Handle an Event: EndOfConversationActivity'),
+  },
   [SDKTypes.OnEvent]: {
     title: formatMessage('Handle an Event'),
   },
+  [SDKTypes.OnEventActivity]: {
+    title: formatMessage('Handle an Event: EventActivity'),
+  },
+  [SDKTypes.OnHandoffActivity]: {
+    title: formatMessage('Handle an Event: HandoffActivity'),
+  },
   [SDKTypes.OnIntent]: {
     title: formatMessage('Handle an Intent'),
+  },
+  [SDKTypes.OnInvokeActivity]: {
+    title: formatMessage('Handle an Event: InvokeActivity'),
+  },
+  [SDKTypes.OnMessageActivity]: {
+    title: formatMessage('Handle an Event: MessageActivity'),
+  },
+  [SDKTypes.OnMessageDeleteActivity]: {
+    title: formatMessage('Handle an Event: MessageDeleteActivity'),
+  },
+  [SDKTypes.OnMessageReactionActivity]: {
+    title: formatMessage('Handle an Event: MessageReactionActivity'),
+  },
+  [SDKTypes.OnMessageUpdateActivity]: {
+    title: formatMessage('Handle an Event: MessageUpdateActivity'),
+  },
+  [SDKTypes.OnTypingActivity]: {
+    title: formatMessage('Handle an Event: TypingActivity'),
   },
   [SDKTypes.OnUnknownIntent]: {
     title: formatMessage('Handle Unknown Intent'),
