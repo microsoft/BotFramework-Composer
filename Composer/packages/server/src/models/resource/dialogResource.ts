@@ -1,13 +1,163 @@
-import { Resource, ResourceType } from './resource';
+import { has, uniq } from 'lodash';
 
-export class DialogResource implements Resource {
+import { Diagnostic } from '../validator/interface';
+import { JsonWalk, VisitorFunc } from '../../utility/jsonWalk';
+import { ITrigger } from '../bot/interface';
+
+import { ResourceType } from './resource';
+import { FileResource } from './fileResource';
+
+export class DialogResource implements FileResource {
+  // Resource
   public id: string;
   public content: string;
   public type: ResourceType;
+  public diagnostics: Diagnostic[] = [];
 
-  constructor(id: string, content: string) {
+  // FileResource
+  public relativePath: string;
+
+  // DialogResource
+  public isRoot: boolean = false;
+  public displayName: string = '';
+  public dialogJson: { [key: string]: any } = {};
+  public triggers: ITrigger[] = [];
+
+  // references
+  public referredDialogs: string[] = [];
+  public referredLGFile: string = '';
+  public referredLUFile: string = '';
+
+  public referredLUIntents: string[] = [];
+  public referredLGTemplates: string[] = [];
+
+  constructor(id: string, content: string, relativePath: string) {
     this.id = id;
     this.content = content;
     this.type = ResourceType.DIALOG;
+    this.relativePath = relativePath;
+  }
+
+  public index = async () => {
+    this.dialogJson = JSON.parse(this.content);
+
+    this.isRoot = this.id === 'Main.dialog';
+    // TODO: pass bot name in
+    this.displayName = this.isRoot ? 'Main' : this.id;
+
+    this.referredLUFile = typeof this.dialogJson.recognizer === 'string' ? this.dialogJson.recognizer : '';
+    this.referredLGFile = typeof this.dialogJson.generator === 'string' ? this.dialogJson.generator : '';
+    this.referredDialogs = this.ExtractReferredDialogs(this.dialogJson);
+    this.referredLGTemplates = this.ExtractLgTemplates(this.dialogJson);
+    this.referredLUIntents = this.ExtractLuIntents(this.dialogJson);
+
+    this.triggers = this.ExtractTriggers(this.dialogJson);
+  };
+
+  private ExtractReferredDialogs(dialog: any): string[] {
+    const dialogs: string[] = [];
+
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+        const dialogName = value.dialog;
+        dialogs.push(dialogName);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(dialogs);
+  }
+
+  private ExtractLgTemplates(dialog: any): string[] {
+    const templates: string[] = [];
+
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type')) {
+        let target;
+        switch (value.$type) {
+          case 'Microsoft.SendActivity':
+            target = value.activity;
+            break;
+          case 'Microsoft.TextInput':
+            target = value.prompt;
+            break;
+
+          // if we want stop at some $type, do here
+          case 'location':
+            return true;
+        }
+
+        if (target && typeof target === 'string') {
+          // match a template name
+          // match a temlate func  e.g. `showDate()`
+          const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
+          let matchResult;
+          while ((matchResult = reg.exec(target)) !== null) {
+            const templateName = matchResult[1];
+            templates.push(templateName);
+          }
+        }
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(templates);
+  }
+
+  private ExtractLuIntents(dialog: any): string[] {
+    const intents: string[] = [];
+
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
+        const intentName = value.intent;
+        intents.push(intentName);
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return uniq(intents);
+  }
+
+  private ExtractTriggers(dialog: any): ITrigger[] {
+    const trigers: ITrigger[] = [];
+
+    const visitor: VisitorFunc = (path: string, value: any): boolean => {
+      // it's a valid schema dialog node.
+      if (has(value, 'events')) {
+        value.events.forEach((rule: any, index: number) => {
+          const trigger: ITrigger = {
+            id: `events[${index}]`,
+            displayName: '',
+            type: rule.$type,
+            isIntent: rule.$type === 'Microsoft.OnIntent',
+          };
+
+          if (has(rule, '$designer.name')) {
+            trigger.displayName = rule.$designer.name;
+          } else if (trigger.isIntent && has(rule, 'intent')) {
+            trigger.displayName = rule.intent;
+          }
+
+          if (trigger.isIntent && trigger.displayName) {
+            trigger.displayName = '#' + trigger.displayName;
+          }
+          trigers.push(trigger);
+        });
+      }
+      return false;
+    };
+
+    JsonWalk('$', dialog, visitor);
+
+    return trigers;
   }
 }

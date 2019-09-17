@@ -1,3 +1,5 @@
+import { Diagnostic } from '../validator/interface';
+
 // The basic interface for declartive resource
 // we need to model things as resource so that we can have a unified interface
 // for loading\validating\refering those declative assets, we will have a good
@@ -8,6 +10,10 @@ export interface Resource {
   id: string;
   content: string;
   type: ResourceType;
+  diagnostics?: Diagnostic[];
+
+  // index is the process of extracting userful information from raw content
+  index(): Promise<void>;
 }
 
 export enum ResourceType {

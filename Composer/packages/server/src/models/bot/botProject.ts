@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { Resource } from '../resource/resource';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -14,12 +15,17 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
+import { DialogResource } from '../resource/dialogResource';
+import { LGResource } from '../resource/lgResource';
+import { LUResource } from '../resource/luResource';
 
 export class BotProject {
   public ref: LocationRef;
 
   public name: string;
   public dir: string;
+
+  public resources: Resource[] = [];
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
@@ -47,6 +53,55 @@ export class BotProject {
     this.luIndexer = new LUIndexer();
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
+
+  public loadResources = async () => {
+    if (!(await this.exists())) {
+      throw new Error(`${this.dir} is not a valid path`);
+    }
+
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+    for (const pattern of patterns) {
+      const paths = await this.fileStorage.glob(pattern, this.dir);
+
+      for (const path of paths.sort()) {
+        if ((await this.fileStorage.stat(path)).isFile) {
+          const resource = await this.loadResource(path);
+          if (resource !== null) {
+            this.resources.push(resource);
+          }
+        }
+      }
+    }
+  };
+
+  public loadResource = async (path: string): Promise<Resource | null> => {
+    const id: string = Path.basename(path);
+    const content: string = await this.fileStorage.readFile(path);
+    const relativePath: string = Path.relative(this.dir, path);
+
+    let resource: Resource | null = null;
+
+    switch (Path.extname(path)) {
+      case '.dialog':
+        resource = new DialogResource(id, content, relativePath);
+        break;
+      case '.lg':
+        resource = new LGResource(id, content, relativePath);
+        break;
+      case '.lu':
+        resource = new LUResource(id, content, relativePath);
+        break;
+      default:
+        throw new Error(`Unrecnogizned format of resource file, expected: .dialog .lg or .lu actual${path} `);
+    }
+
+    if (resource !== null) {
+      await resource.index();
+      return resource;
+    }
+
+    return null;
+  };
 
   public index = async () => {
     this.files = await this._getFiles();
