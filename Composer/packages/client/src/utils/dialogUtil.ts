@@ -100,7 +100,9 @@ export function getTriggerTypes(): IDropdownOption[] {
       text: '',
     },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
-      return { key: t, text: ConceptLabels[t].title };
+      const name = ConceptLabels[t] && ConceptLabels[t]!.title;
+
+      return { key: t, text: name || t };
     }),
   ];
   return triggerTypes;
