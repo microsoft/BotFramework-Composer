@@ -7,9 +7,16 @@
     "StepsField": {}
   },
   "SDKOverrides": {
+    "Activity": {
+      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi",
+      "title": "Language Generation"
+    },
     "Microsoft.AdaptiveDialog": {
-      "title": "AdaptiveDialog",
-      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>"
+      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>",
+      "title": "AdaptiveDialog"
+    },
+    "Microsoft.AttachmentInput": {
+      "title": "Prompt for Attachment"
     },
     "Microsoft.BeginDialog": {
       "title": "Begin a Dialog"
@@ -26,15 +33,17 @@
     "Microsoft.ConfirmInput": {
       "title": "Prompt for confirmation"
     },
-    "Microsoft.OnConversationUpdateActivity": {
-      "title": "Conversation Update Activity",
-      "description": "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
+    "Microsoft.DateTimeInput": {
+      "title": "Prompt for a date"
     },
     "Microsoft.DebugBreak": {
       "title": "Debug Break"
     },
     "Microsoft.DeleteProperty": {
       "title": "Delete a Property"
+    },
+    "Microsoft.EditActions": {
+      "title": "Modify active dialog"
     },
     "Microsoft.EditArray": {
       "title": "Edit an Array Property"
@@ -48,11 +57,14 @@
     "Microsoft.EndTurn": {
       "title": "End Turn"
     },
-    "Microsoft.OnEvent": {
-      "title": "Handle an Event"
-    },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
+    },
+    "Microsoft.Foreach": {
+      "title": "Loop: For Each"
+    },
+    "Microsoft.ForeachPage": {
+      "title": "Loop: For Each Page"
     },
     "Microsoft.HttpRequest": {
       "title": "HTTP Request"
@@ -63,32 +75,78 @@
     "Microsoft.InitProperty": {
       "title": "Initialize Property"
     },
-    "Microsoft.OnIntent": {
-      "title": "Handle an Intent"
-    },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
     "Microsoft.LogAction": {
       "title": "Log to console"
     },
-    "Recognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
-    },
     "Microsoft.LuisRecognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
+      "title": "Language Understanding"
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
-      "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
+      "title": "Language Understanding"
     },
     "Microsoft.NumberInput": {
       "title": "Prompt for a number"
+    },
+    "Microsoft.OAuthInput": {
+      "title": "OAuth Login"
+    },
+    "Microsoft.OnActivity": {
+      "title": "Handle an Event: Activity"
+    },
+    "Microsoft.OnBeginDialog": {
+      "title": "Handle an Event: BeginDialog"
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "Handle ConversationUpdate",
+      "description":
+        "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
+    },
+    "Microsoft.OnDialogEvent": {
+      "title": "Handle an Event: DialogEvent"
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+      "title": "Handle an Event: EndOfConversationActivity"
+    },
+    "Microsoft.OnEvent": {
+      "title": "Handle an Event"
+    },
+    "Microsoft.OnEventActivity": {
+      "title": "Handle an Event: EventActivity"
+    },
+    "Microsoft.OnHandoffActivity": {
+      "title": "Handle an Event: HandoffActivity"
+    },
+    "Microsoft.OnIntent": {
+      "title": "Handle an Intent"
+    },
+    "Microsoft.OnInvokeActivity": {
+      "title": "Handle an Event: InvokeActivity"
+    },
+    "Microsoft.OnMessageActivity": {
+      "title": "Handle an Event: MessageActivity"
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+      "title": "Handle an Event: MessageDeleteActivity"
+    },
+    "Microsoft.OnMessageReactionActivity": {
+      "title": "Handle an Event: MessageReactionActivity"
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+      "title": "Handle an Event: MessageUpdateActivity"
+    },
+    "Microsoft.OnTypingActivity": {
+      "title": "Handle an Event: TypingActivity"
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "Handle Unknown Intent"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog"
@@ -97,8 +155,8 @@
       "title": "RandomSelector"
     },
     "Microsoft.RegexRecognizer": {
-      "title": false,
-      "description": false
+      "description": false,
+      "title": false
     },
     "Microsoft.RepeatDialog": {
       "title": "Repeat this Dialog"
@@ -115,16 +173,6 @@
     "Microsoft.SendActivity": {
       "title": "Send an Activity"
     },
-    "Microsoft.OAuthInput": {
-      "title": "OAuth Login"
-    },
-    "Microsoft.AttachmentInput": {
-      "title": "Prompt for Attachment"
-    },
-    "Activity": {
-      "title": "Language Generation",
-      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi"
-    },
     "Microsoft.SetProperty": {
       "title": "Set a Property"
     },
@@ -140,17 +188,9 @@
     "Microsoft.TrueSelector": {
       "title": "TrueSelector"
     },
-    "Microsoft.OnUnknownIntent": {
-      "title": "Handle Unknown Intent"
-    },
-    "Microsoft.Foreach": {
-      "title": "Loop: For Each"
-    },
-    "Microsoft.ForeachPage": {
-      "title": "Loop: For Each Page"
-    },
-    "Microsoft.EditActions": {
-      "title": "Modify active dialog"
+    "Recognizer": {
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
+      "title": "Language Understanding"
     }
   }
 }
