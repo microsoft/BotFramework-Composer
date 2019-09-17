@@ -6,6 +6,9 @@
 trigger:
 - master
 
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+
 jobs:
   - job: botproject
     displayName: BotProject Build&Test
@@ -16,10 +19,12 @@ jobs:
       inputs:
         command: 'build'
         projects: 'BotProject/CSharp/BotProject.csproj'
+
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
         projects: 'BotProject/CSharp/Tests/Tests.csproj'
+
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
@@ -33,15 +38,26 @@ jobs:
       displayName: 'Use Node 10.15.3'
       inputs:
         versionSpec: 10.15.3
-    - script: cd Composer && yarn install
+
+    - task: CacheBeta@0
+      inputs:
+        key: yarn | $(Agent.OS) | Composer/yarn.lock
+        path: $(YARN_CACHE_FOLDER)
+      displayName: Cache Yarn packages
+
+    - script: cd Composer && yarn --frozen-lockfile
       displayName: 'yarn install'
+
     - script: cd Composer && yarn build
       displayName: 'yarn build'
+
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
+
     - script: cd Composer && yarn test:coverage
       displayName: 'yarn test:coverage'
       condition: succeededOrFailed()
+
     - task: PublishCodeCoverageResults@1
       displayName: 'Publish code coverage from Composer/coverage/cobertura-coverage.xml'
       condition: succeededOrFailed()
@@ -49,6 +65,7 @@ jobs:
         codeCoverageTool: Cobertura
         summaryFileLocation: 'Composer/coverage/cobertura-coverage.xml'
         reportDirectory: 'Composer/coverage/lcov-report'
+
     - task: PublishTestResults@2
       displayName: Publish Unit Test Results
       condition: succeededOrFailed()
@@ -66,20 +83,31 @@ jobs:
       displayName: 'Use Node 10.15.3'
       inputs:
         versionSpec: 10.15.3
-    - script: cd Composer && yarn install
+
+    - task: CacheBeta@0
+      inputs:
+        key: yarn | $(Agent.OS) | Composer/yarn.lock
+        path: $(YARN_CACHE_FOLDER)
+      displayName: Cache Yarn packages
+
+    - script: cd Composer && yarn --frozen-lockfile
       displayName: 'yarn install'
+
     - script: cd Composer && yarn build
       displayName: 'yarn build'
+
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
       env:
         CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/cypress/screenshots
         CYPRESS_COMPOSER_URL: http://localhost:5000
+
     - task: PublishBuildArtifacts@1
       condition: failed()
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/cypress'
         artifactName: cypress
+
     - task: PublishTestResults@2
       displayName: Publish E2E Test Results
       condition: succeededOrFailed()
