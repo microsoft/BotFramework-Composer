@@ -1,5 +1,4 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
-import nanoid from 'nanoid/generate';
 
 import { ConceptLabels } from './labelMap';
 import { seedNewDialog } from './dialogFactory';
