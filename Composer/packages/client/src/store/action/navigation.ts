@@ -56,12 +56,14 @@ export const focusTo: ActionCreator = ({ getState }, focusPath) => {
       breadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
     }
     currentUri = `${currentUri}?selected=${targetSelected}&focused=${focusPath}`;
+    breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
   } else {
     currentUri = `${currentUri}?selected=${selected}`;
+    breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
   }
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused) } });
+  navigateTo(currentUri, { state: { breadcrumb } });
 };
 
 export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focusPath, breadcrumb = []) => {
