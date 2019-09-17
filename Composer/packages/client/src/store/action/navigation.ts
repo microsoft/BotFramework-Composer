@@ -1,4 +1,4 @@
-import { createSelectedPath } from '../../utils';
+import { createSelectedPath, getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
@@ -46,19 +46,22 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
 export const focusTo: ActionCreator = ({ getState }, focusPath) => {
   const state = getState();
   const { dialogId, selected } = state.designPageLocation;
-  const { breadcrumb } = state;
+  let { breadcrumb } = state;
 
-  let breadcrumbUpdateType = BreadcrumbUpdateType.Focused;
-  let currentUri = `/dialogs/${dialogId}?selected=${selected}`;
+  let currentUri = `/dialogs/${dialogId}`;
   if (focusPath) {
-    currentUri = `${currentUri}&focused=${focusPath}`;
+    const targetSelected = getSelected(focusPath);
+    if (targetSelected !== selected) {
+      breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
+      breadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
+    }
+    currentUri = `${currentUri}?selected=${targetSelected}&focused=${focusPath}`;
   } else {
-    currentUri = `${currentUri}`;
-    breadcrumbUpdateType = BreadcrumbUpdateType.Selected;
+    currentUri = `${currentUri}?selected=${selected}`;
   }
 
-  if (state.breadcrumb.length === breadcrumb.length && checkUrl(currentUri, state.designPageLocation)) return;
-  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, breadcrumbUpdateType) } });
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused) } });
 };
 
 export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focusPath, breadcrumb = []) => {
