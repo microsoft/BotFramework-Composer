@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { getElementColor } from '../../../utils/obiPropertyResolver';
+import { getElementColor, ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
@@ -18,7 +18,7 @@ export class Recognizer extends React.Component<NodeProps, object> {
         header={getFriendlyName(data) || 'Recognizer'}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={data.$type.split('.')[1]}
-        icon="Friend"
+        icon={ElementIcon.Friend}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, id);
         }}

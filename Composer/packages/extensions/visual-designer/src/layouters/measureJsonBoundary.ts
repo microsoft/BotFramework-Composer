@@ -100,6 +100,7 @@ export function measureJsonBoundary(json): Boundary {
       boundary = measureSwitchConditionBoundary(json);
       break;
     case ObiTypes.Foreach:
+    case ObiTypes.ForeachPage:
       boundary = measureForeachBoundary(json);
       break;
     case ObiTypes.AttachmentInput:

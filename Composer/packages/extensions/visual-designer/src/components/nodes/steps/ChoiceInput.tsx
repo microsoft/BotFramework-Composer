@@ -7,6 +7,7 @@ import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/Elemen
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
 import { getUserAnswersTitle } from '../utils';
@@ -71,7 +72,7 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
     <FormCard
       nodeColors={NodeColors[DialogGroup.INPUT]}
       header={getUserAnswersTitle(data._type)}
-      icon={'User'}
+      icon={ElementIcon.User}
       label={data.property || '<property>'}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, id);
