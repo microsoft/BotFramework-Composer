@@ -3,6 +3,8 @@ import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuil
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile, LGTemplate } from '../interface';
 
+const lgStaticChecker = new StaticChecker();
+
 export class LGIndexer {
   private lgFiles: LGFile[] = [];
 
@@ -12,7 +14,7 @@ export class LGIndexer {
     for (const file of files) {
       const extName = Path.extname(file.name);
       if (extName === '.lg') {
-        const diagnostics = StaticChecker.checkText(file.content, file.path);
+        const diagnostics = lgStaticChecker.checkText(file.content, file.path);
         let templates: LGTemplate[] = [];
         try {
           templates = this.parse(file.content, '');
@@ -40,7 +42,7 @@ export class LGIndexer {
   }
 
   public check(content: string, path: string): Diagnostic[] {
-    return StaticChecker.checkText(content, path);
+    return lgStaticChecker.checkText(content, path);
   }
 
   public parse(content: string, id: string): LGTemplate[] {

@@ -175,7 +175,7 @@ export class DialogIndexer {
             },
           ]);
           if (checkRes) {
-            errors.push(checkRes);
+            Array.isArray(checkRes) ? errors.push(...checkRes) : errors.push(checkRes);
           }
         });
       }

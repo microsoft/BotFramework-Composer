@@ -1,5 +1,4 @@
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
-import nanoid from 'nanoid/generate';
 
 import { ConceptLabels } from './labelMap';
 import { seedNewDialog } from './dialogFactory';
@@ -222,18 +221,14 @@ export const createStepMenu = (
           key: $type,
           name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
           $type: $type,
-          $designer: {
+          ...seedNewDialog($type, {
             name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-            id: nanoid('1234567890', 6),
-          },
-          ...seedNewDialog($type),
+          }),
           data: {
             $type: $type, // used by the steps field to create the item
-            $designer: {
+            ...seedNewDialog($type, {
               name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-              id: nanoid('1234567890', 6),
-            },
-            ...seedNewDialog($type),
+            }),
           },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
@@ -261,18 +256,14 @@ export const createStepMenu = (
         text: name,
         name: name,
         $type: item,
-        $designer: {
-          name: name,
-          id: nanoid('1234567890', 6),
-        },
-        ...seedNewDialog(item),
+        ...seedNewDialog(item, {
+          name,
+        }),
         data: {
           $type: item,
-          $designer: {
-            name: name,
-            id: nanoid('1234567890', 6),
-          },
-          ...seedNewDialog(item),
+          ...seedNewDialog(item, {
+            name,
+          }),
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {
