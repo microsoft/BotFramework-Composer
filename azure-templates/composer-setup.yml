@@ -4,6 +4,8 @@ steps:
     inputs:
       versionSpec: 10.15.3
 
+  - script: yarn cache dir
+
   - task: CacheBeta@0
     inputs:
       key: yarn | $(Agent.OS) | Composer/yarn.lock
