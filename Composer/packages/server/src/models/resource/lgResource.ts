@@ -1,8 +1,9 @@
-import { ResourceType } from './resource';
+import { LGParser } from 'botbuilder-lg';
 
 import { LGTemplate } from '../bot/interface';
-import { LGParser } from 'botbuilder-lg';
 import { Diagnostic } from '../validator/interface';
+
+import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
 
 export class LGResource implements FileResource {

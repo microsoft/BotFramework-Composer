@@ -1,11 +1,11 @@
 import { Resource, ResourceResolver } from '../resource/interface';
 
-import { ResourceValidator } from './interface';
+import { ResourceValidator } from './resourceValidator';
 
 // the interface here is design for dialogTracker
 // we should import dialog, lu, lg parser here
 
-export class DeclativeValidator implements ResourceValidator {
+export class Validator implements ResourceValidator {
   public validate = (resource: Resource, resolver: ResourceResolver) => {
     return [];
   };

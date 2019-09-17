@@ -1,8 +1,9 @@
 import ludown from 'ludown';
 
+import { Diagnostic } from '../validator/interface';
+
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
-import { Diagnostic } from '../validator/interface';
 
 export class LUResource implements FileResource {
   public id: string;

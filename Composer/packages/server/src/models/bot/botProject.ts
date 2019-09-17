@@ -6,6 +6,9 @@ import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { Resource } from '../resource/resource';
+import { DialogResource } from '../resource/dialogResource';
+import { LGResource } from '../resource/lgResource';
+import { LUResource } from '../resource/luResource';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -15,9 +18,6 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
-import { DialogResource } from '../resource/dialogResource';
-import { LGResource } from '../resource/lgResource';
-import { LUResource } from '../resource/luResource';
 
 export class BotProject {
   public ref: LocationRef;

@@ -1,4 +1,4 @@
-import { Diagnostic } from '../validator/interface';
+import { Diagnostic } from '../validator/validator';
 
 // The basic interface for declartive resource
 // we need to model things as resource so that we can have a unified interface
@@ -21,4 +21,5 @@ export enum ResourceType {
   LG = 'lg',
   LU = 'lu',
   JSON = 'json',
+  SCHEMA = 'schema',
 }
