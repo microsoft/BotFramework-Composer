@@ -1,13 +1,13 @@
-import React, { Fragment, useContext, useEffect, useMemo } from 'react';
-import { Breadcrumb, Icon } from 'office-ui-fabric-react';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton, Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower } from 'lodash';
-// import { getDialogData } from '../../utils';
+import { toLower, get } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, addNewTrigger, deleteTrigger, createSelectedPath } from '../../utils';
+import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
+import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -22,6 +22,9 @@ import {
   formEditor,
   editorWrapper,
   deleteDialogContent,
+  middleTriggerContainer,
+  middleTriggerElements,
+  triggerButton,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -30,6 +33,15 @@ import { DialogStyle } from './../../components/Modal/styles';
 import { clearBreadcrumb } from './../../utils/navigation';
 import undoHistory from './../../store/middlewares/undo/history';
 import { getNewDesigner } from './../../utils/dialogUtil';
+
+const addIconProps = {
+  iconName: 'CircleAddition',
+  styles: {
+    root: {
+      fontSize: '12px',
+    },
+  },
+};
 
 function onRenderContent(subTitle, style) {
   return (
@@ -44,7 +56,16 @@ function onRenderContent(subTitle, style) {
 function onRenderBreadcrumbItem(item, render) {
   return (
     <span>
-      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
+      {!item.isRoot && (
+        <Icon
+          iconName="Flow"
+          styles={{
+            root: {
+              marginLeft: '6px',
+            },
+          }}
+        />
+      )}
       {render(item)}
     </span>
   );
@@ -78,7 +99,8 @@ function DesignPage(props) {
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
-
+  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -96,6 +118,30 @@ function DesignPage(props) {
       clearUndoHistory();
     }
   }, [location]);
+
+  useEffect(() => {
+    const dialog = dialogs.find(d => d.id === dialogId);
+    const visible = get(dialog, 'triggers', []).length === 0;
+    setTriggerButtonVisibility(visible);
+  }, [dialogs, dialogId]);
+
+  const onTriggerCreationDismiss = () => {
+    setTriggerModalVisibility(false);
+  };
+
+  const openNewTriggerModal = () => {
+    setTriggerModalVisibility(true);
+  };
+
+  const onTriggerCreationSubmit = dialog => {
+    const payload = {
+      id: dialog.id,
+      content: dialog.content,
+    };
+    const index = get(dialog, 'content.events', []).length - 1;
+    actions.selectTo(`events[${index}]`);
+    actions.updateDialog(payload);
+  };
 
   function handleSelect(id, selected = '') {
     if (selected) {
@@ -165,7 +211,13 @@ function DesignPage(props) {
             const { dialogId, selected, focused } = item;
             const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
             if (text) {
-              result.push({ text, isRoot: !selected && !focused, ...item, index, onClick: handleBreadcrumbItemClick });
+              result.push({
+                text,
+                isRoot: !selected && !focused,
+                ...item,
+                index,
+                onClick: handleBreadcrumbItemClick,
+              });
             }
             return result;
           }, [])
@@ -211,12 +263,6 @@ function DesignPage(props) {
     }
   }
 
-  async function handleAddTrigger(id, type, index) {
-    const content = addNewTrigger(dialogs, id, type);
-    await updateDialog({ id, content });
-    selectTo(createSelectedPath(index));
-  }
-
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
@@ -226,10 +272,12 @@ function DesignPage(props) {
       current = parseInt(current);
       if (index === current) {
         if (current - 1 >= 0) {
-          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
+          // if the deleted node is selected and the selected one is not the first one,
+          // navTo the previous trigger;
           selectTo(createSelectedPath(current - 1));
         } else {
-          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
+          // if the deleted node is selected and the selected one is the first one, navTo
+          // the first trigger;
           navTo(id);
         }
       } else if (index < current) {
@@ -248,9 +296,9 @@ function DesignPage(props) {
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-          onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
@@ -263,8 +311,24 @@ function DesignPage(props) {
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}
+                    hidden={triggerButtonVisible}
                     src={`${rootPath}/extensionContainer.html`}
-                  />
+                  />{' '}
+                  {triggerButtonVisible && (
+                    <div css={middleTriggerContainer}>
+                      <div css={middleTriggerElements}>
+                        {formatMessage(`This dialog has no trigger yet.`)}
+                        <ActionButton
+                          data-testid="MiddleAddNewTriggerButton"
+                          iconProps={addIconProps}
+                          css={triggerButton}
+                          onClick={openNewTriggerModal}
+                        >
+                          {formatMessage('New Trigger ..')}
+                        </ActionButton>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <iframe
                   key="FormEditor"
@@ -282,7 +346,15 @@ function DesignPage(props) {
         onDismiss={() => actions.createDialogCancel()}
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
-      />
+      />{' '}
+      {triggerModalVisible && (
+        <TriggerCreationModal
+          dialogId={dialogId}
+          isOpen={triggerModalVisible}
+          onDismiss={onTriggerCreationDismiss}
+          onSubmit={onTriggerCreationSubmit}
+        />
+      )}
     </Fragment>
   );
 }
