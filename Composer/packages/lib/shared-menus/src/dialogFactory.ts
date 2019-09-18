@@ -14,6 +14,7 @@ const initialDialogShape = {
 
 export const seedNewDialog = ($type: string, designerAttributes: Partial<DesignerAttributes> = {}): object => {
   return {
+    $type,
     $designer: {
       id: nanoid('1234567890', 6),
       ...designerAttributes,
