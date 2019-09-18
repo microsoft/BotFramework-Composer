@@ -8,7 +8,15 @@ import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { ClipboardContext } from '../store/ClipboardContext';
-import { deleteNode, insert, cutNodes, copyNodes, appendNodesAfter, pasteNodes } from '../utils/jsonTracker';
+import {
+  deleteNode,
+  insert,
+  cutNodes,
+  copyNodes,
+  appendNodesAfter,
+  pasteNodes,
+  deleteNodes,
+} from '../utils/jsonTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
@@ -88,6 +96,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = e => {
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           clipboardContext.setClipboardActions(cutData);
+          onChange(dialog);
+          onFocusSteps([]);
+        };
+        break;
+      case NodeEventTypes.DeleteSelection:
+        handler = e => {
+          const dialog = deleteNodes(data, e.actionIds);
           onChange(dialog);
           onFocusSteps([]);
         };
@@ -181,12 +196,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).cutSelection = () =>
     dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
-  (window as any).deleteNode = () => dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+  (window as any).deleteSelection = () =>
+    dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
   const handleKeyboardCommand = (command): void => {
     switch (command) {
-      case KeyboardCommandTypes.DeleteNode:
-        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+      case KeyboardCommandTypes.Delete:
+        dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
         break;
       case KeyboardCommandTypes.Copy:
         dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });

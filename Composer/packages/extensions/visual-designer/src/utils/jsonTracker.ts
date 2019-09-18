@@ -81,6 +81,40 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
   return dialog;
 }
 
+export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedData?: (removedData: any) => any) {
+  const dialog = cloneDeep(inputDialog);
+
+  const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
+  const deletedNodes: any[] = [];
+
+  // mark deletion
+  nodeLocations.forEach(location => {
+    if (!location) return;
+    deletedNodes.push(location.currentData);
+
+    if (Array.isArray(location.parentData)) {
+      location.parentData[location.currentKey] = null;
+    } else {
+      delete location.parentData[location.currentKey];
+    }
+  });
+
+  // delete empty slots in array
+  nodeLocations.forEach(location => {
+    if (!location || !Array.isArray(location.parentData)) return;
+    for (let i = location.parentData.length - 1; i >= 0; i--) {
+      if (location.parentData[i] === null) location.parentData.splice(i, 1);
+    }
+  });
+
+  // invoke callback handler
+  if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
+    deletedNodes.forEach(x => callbackOnRemovedData(x));
+  }
+
+  return dialog;
+}
+
 export function insert(inputDialog, path, position, $type) {
   const dialog = cloneDeep(inputDialog);
   const current = get(dialog, path, []);
@@ -104,23 +138,10 @@ export function copyNodes(inputDialog, nodeIds: string[]): any[] {
 }
 
 export function cutNodes(inputDialog, nodeIds: string[]) {
-  const dialog = cloneDeep(inputDialog);
-  const nodesData = copyNodes(dialog, nodeIds);
+  const nodesData = copyNodes(inputDialog, nodeIds);
+  const newDialog = deleteNodes(inputDialog, nodeIds);
 
-  const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
-  nodeLocations.forEach(location => {
-    if (!location || !Array.isArray(location.parentData)) return;
-    location.parentData[location.currentKey] = null;
-  });
-
-  nodeLocations.forEach(location => {
-    if (!location || !Array.isArray(location.parentData)) return;
-    for (let i = location.parentData.length - 1; i >= 0; i--) {
-      if (location.parentData[i] === null) location.parentData.splice(i, 1);
-    }
-  });
-
-  return { dialog, cutData: nodesData };
+  return { dialog: newDialog, cutData: nodesData };
 }
 
 export function appendNodesAfter(inputDialog, targetId, newNodes) {
