@@ -117,6 +117,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
+    setSelectedElements(querySelectedElements());
   }, [data]);
 
   const selection = new Selection({
@@ -135,9 +136,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  useEffect((): void => {
-    setSelectedElements(querySelectedElements());
-  }, [focusedId]);
   const querySelectedElements = () => {
     const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
     return items;
