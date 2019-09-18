@@ -28,6 +28,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
+using Microsoft.Bot.Builder.Azure;
+using Microsoft.AspNetCore.Http.Connections.Internal;
+using Microsoft.Bot.Builder.ApplicationInsights;
+using Microsoft.ApplicationInsights;
+using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 
 namespace Microsoft.Bot.Builder.TestBot.Json
 {
@@ -55,14 +60,24 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             services.AddSingleton<InspectionMiddleware>();
 
+            // Load settings
+            var settings = new BotSettings();
+            Configuration.Bind(settings);
 
-            IStorage storage = new MemoryStorage();
-            var userState = new UserState(storage);
-            var conversationState = new ConversationState(storage);
-            var inspectionState = new InspectionState(storage);
+            // Configure storage for deployment
+            var cosmosDbStorage = new CosmosDbStorage(settings.CosmosDb);
+            services.AddSingleton<IStorage>(cosmosDbStorage);
+            var userState = new UserState(cosmosDbStorage);
+            var conversationState = new ConversationState(cosmosDbStorage);
+            var inspectionState = new InspectionState(cosmosDbStorage);
 
+            // Configure telemetry
+            services.AddApplicationInsightsTelemetry();
+            var telemetryClient = new BotTelemetryClient(new TelemetryClient());
+            services.AddSingleton<IBotTelemetryClient>(telemetryClient);
+            services.AddBotApplicationInsights(telemetryClient);
 
-            var botFile = Configuration.GetSection("bot").Value;
+            var botFile = Configuration.GetSection("bot").Get<string>();
 
             TypeFactory.Configuration = this.Configuration;
 
@@ -75,7 +90,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             {
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
                 adapter
-                .UseStorage(storage)
+                .UseStorage(cosmosDbStorage)
                 .UseState(userState, conversationState)
                 .UseLanguageGeneration(resourceExplorer)
                 .UseDebugger(4712)
@@ -85,14 +100,14 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
                     await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-
+                    telemetryClient.TrackException(new Exception("Exceptions: " + exception.Message));
                     await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
                     await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
                 };
                 return adapter;
             });
 
-            services.AddSingleton<IBot, TestBot>((sp) => new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry));
+            services.AddSingleton<IBot, TestBot>((sp) => new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry, telemetryClient));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

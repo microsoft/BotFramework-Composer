@@ -30,8 +30,9 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private IStatePropertyAccessor<DialogState> dialogState;
         private Source.IRegistry registry;
         private string rootDialogFile { get; set; }
+        private IBotTelemetryClient telemetryClient;
 
-        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry, IBotTelemetryClient telemetryClient)
         {
             this.conversationState = conversationState;
             this.userState = userState;
@@ -39,6 +40,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             this.registry = registry;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
+            this.telemetryClient = telemetryClient;
+
             // auto reload dialogs when file changes
             this.resourceExplorer.Changed += (resources) =>
             {
@@ -60,6 +63,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
+            this.telemetryClient.TrackTrace("Activity:" + turnContext.Activity.Text, Severity.Information, null);
             await this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
             await this.userState.SaveChangesAsync(turnContext, false, cancellationToken);

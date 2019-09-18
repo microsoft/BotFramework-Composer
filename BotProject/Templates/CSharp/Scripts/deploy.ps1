@@ -27,7 +27,7 @@ if (-not $environment)
 }
 
 if (-not $botPath) {
-	$botPath = Read-Host "? The Reletive Path Of Bot"
+	$botPath = Read-Host "? The Relative Path Of Bot"
 }
 
 
@@ -129,9 +129,11 @@ if($?)
 	Write-Host "> Publishing to Azure ..." -ForegroundColor Green
 	(az webapp deployment source config-zip `
 		--resource-group $resourceGroup `
-		--name $name `
+		--name "$name-$environment" `
 		--src $zipPath `
-        --output json) 2>> $logFile | Out-Null
+		--output json) 2>> $logFile | Out-Null
+		
+	Write-Host "Publish Success"
 } 
 else 
 {       

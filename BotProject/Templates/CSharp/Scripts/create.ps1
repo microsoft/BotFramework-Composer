@@ -86,7 +86,7 @@ Write-Host "> Validating Azure deployment ..."
 $validation = az group deployment validate `
 	--resource-group $resourcegroup `
 	--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-	--parameters appId=$appId appSecret="`"$($appPassword)`"" newAppServicePlanName=$servicePlanName appServicePlanLocation=$location botId=$name `
+	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name `
 	--output json
 
 if ($validation) {
@@ -99,7 +99,7 @@ if ($validation) {
 			--name $timestamp `
 			--resource-group $resourceGroup `
 			--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-			--parameters appId=$appId appSecret="`"$($appPassword)`"" newAppServicePlanName=$servicePlanName appServicePlanLocation=$location botId=$name `
+			--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name `
 			--output json
 	}
 	else {
@@ -113,10 +113,10 @@ if ($validation) {
 
 
 # Get deployment outputs
-$outputs = az group deployment show `
+$outputs = (az group deployment show `
 	--name $timestamp `
 	--resource-group $resourceGroup `
-    --output json 2>> $logFile
+    --output json) 2>> $logFile
 
 # If it succeeded then we perform the remainder of the steps
 if ($outputs)
@@ -124,6 +124,7 @@ if ($outputs)
 	# Log and convert to JSON
 	$outputs >> $logFile
 	$outputs = $outputs | ConvertFrom-Json
+	$outputs = $outputs.properties.outputs
 	$outputMap = @{}
 	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }
 
