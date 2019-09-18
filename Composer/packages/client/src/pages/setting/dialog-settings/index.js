@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
+import React, { useEffect, useContext, useState } from 'react';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
-import { get, debounce } from 'lodash';
+import { get } from 'lodash';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/neat.css';
@@ -30,22 +30,30 @@ const cmOptions = {
 };
 
 export const DialogSettings = () => {
-  const [value, setValue] = useState('');
   const { state, actions } = useContext(StoreContext);
-  const { settings, botName, isEnvSettingUpdated } = state;
+  const { botName, settings, isEnvSettingUpdated } = state;
   const { syncEnvSettings } = actions;
+  const [value, setValue] = useState('');
   useEffect(() => {
-    setValue(settings);
+    // need to refresh codemirror, if the value parse to string is the same as before, it will not refresh
+    setValue(JSON.stringify(settings, null, 2));
+    // setInterval(() =>{}, 500);
   }, [botName, isEnvSettingUpdated]);
 
-  const updateFormData = (editor, data, value) => {
+  const updateFormData = (editor, data, newValue) => {
+    setValue(newValue);
+    syncSettings(newValue);
+  };
+
+  const syncSettings = newValue => {
     try {
-      const result = JSON.parse(value);
+      const result = JSON.parse(newValue);
       try {
         for (const property of SensitiveProperties) {
           const propertyValue = get(result, property);
           settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
         }
+        console.log('sync');
         syncEnvSettings(result);
       } catch (err) {
         console.error(err.message);
@@ -55,12 +63,15 @@ export const DialogSettings = () => {
     }
   };
 
+  //debounce(updateFormData, 500)
   return botName ? (
     <CodeMirror
-      value={JSON.stringify(value, null, 2)}
+      value={value}
+      onBeforeChange={updateFormData}
+      onChange={(editor, value) => {
+        console.log('controlled', { value });
+      }}
       options={cmOptions}
-      onChange={debounce(updateFormData, 500)}
-      autoCursor
     />
   ) : (
     <div>Data Loading...</div>

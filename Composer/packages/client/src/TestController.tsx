@@ -73,22 +73,43 @@ export const TestController: React.FC = () => {
       return;
     }
     const config = settings.luis;
+    let complete = true;
+    for (const key in LuisConfig) {
+      if (config && config[LuisConfig[key]] === '') {
+        complete = false;
+        break;
+      }
+    }
+    // if (complete) {
+    //   if (getReferredFiles(luFiles, dialogs).length > 0) {
+    //     if (!luisPublishSucceed) {
+    //       setModalOpen(true);
+    //     } else {
+    //       await publishAndReload(config);
+    //     }
+    //   } else {
+    //     await handleLoadBot();
+    //   }
+    // } else {
+    //   setModalOpen(true);
+    // }
 
     if (getReferredFiles(luFiles, dialogs).length > 0) {
-      if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
+      console.log(luisPublishSucceed);
+      if (!luisPublishSucceed || !complete) {
         setModalOpen(true);
       } else {
         await publishAndReload(config);
       }
     } else {
-      await handleLoadBot();
+      await handleLoadBot(settings);
     }
   }
 
   async function publishAndReload(formData) {
     if (await handlePublish(formData)) {
       setLuisPublishSucceed(true);
-      await handleLoadBot();
+      await handleLoadBot({ ...settings, luis: formData });
     } else {
       setLuisPublishSucceed(false);
     }
@@ -108,7 +129,7 @@ export const TestController: React.FC = () => {
     }
   }
 
-  async function handleLoadBot() {
+  async function handleLoadBot(settings) {
     setFetchState(STATE.RELOADING);
     try {
       await (connected ? reloadBot(settings) : connectBot(settings));

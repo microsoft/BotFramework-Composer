@@ -34,8 +34,8 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    await BotProjectService.currentBotProject.luPublisher.setAuthoringKey(config.luis.authoringKey);
-    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
+    await BotProjectService.currentBotProject.luPublisher.setLuisConfig(config.luis);
+    const luisConfig = config.luis;
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 

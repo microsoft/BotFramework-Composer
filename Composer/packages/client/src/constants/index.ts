@@ -118,10 +118,11 @@ export const Text = {
 };
 
 export enum LuisConfig {
-  STORAGE_KEY = 'luisConfig',
   AUTHORING_KEY = 'authoringKey',
   ENVIRONMENT = 'environment',
   PROJECT_NAME = 'name',
+  REGION = 'authoringRegion',
+  LANGUAGE = 'defaultLanguage',
 }
 
 export const FileTypes = {
