@@ -14,12 +14,12 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as luUtil from '../../utils/luUtil';
+import { navigateTo } from '../../utils';
 
 import { formCell, luPhraseCell } from './styles';
 
 export default function TableView(props) {
-  const { state, actions } = useContext(StoreContext);
-  const { navTo } = actions;
+  const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const { activeDialog, onClickEdit } = props;
   const [intents, setIntents] = useState([]);
@@ -150,7 +150,7 @@ export default function TableView(props) {
         onRender: item => {
           const id = item.fileId;
           return (
-            <div key={id} onClick={() => navTo(id)}>
+            <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
               <Link>{id}</Link>
             </div>
           );

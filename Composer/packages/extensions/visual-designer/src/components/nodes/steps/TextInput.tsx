@@ -7,6 +7,7 @@ import { DialogGroup } from 'shared-menus';
 import { NodeColors } from '../../../constants/ElementColors';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { textInputLayouter } from '../../../layouters/textInputLayouter';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -26,7 +27,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={formatMessage('Text Input')}
           corner={<NodeMenu id={id} onEvent={onEvent} />}
-          icon={'MessageBot'}
+          icon={ElementIcon.MessageBot}
           label={data.prompt || '<initPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
@@ -37,7 +38,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.INPUT]}
           header={formatMessage('Property')}
-          icon={'User'}
+          icon={ElementIcon.User}
           label={data.property || '<property>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
@@ -48,7 +49,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={formatMessage('Unrecognized prompt')}
-          icon={'MessageBot'}
+          icon={ElementIcon.MessageBot}
           label={data.unrecognizedPrompt || '<unrecognizedPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);
@@ -59,7 +60,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={formatMessage('Invalid prompt')}
-          icon={'MessageBot'}
+          icon={ElementIcon.MessageBot}
           label={data.invalidPrompt || '<invalidPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, id);

@@ -5,7 +5,7 @@ const ExpressionParser = new ExpressionEngine();
 
 interface CheckerFunc {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (node: { path: string; value: any }): string; // error msg, '' for no error
+  (node: { path: string; value: any }): string; // error msg
 }
 
 function IsExpression(name: string): CheckerFunc {
@@ -53,6 +53,7 @@ function EditArrayValueChecker(node: { path: string; value: any }): string {
 /**
  * Dialog Validation Rules
  */
+// TODO: check field by schema.
 export const DialogChecker: { [key: string]: CheckerFunc[] } = {
   'Microsoft.IfCondition': [IsExpression('condition')],
   'Microsoft.SwitchCondition': [IsExpression('condition')],
