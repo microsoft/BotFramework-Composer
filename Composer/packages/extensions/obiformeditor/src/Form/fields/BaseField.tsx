@@ -1,6 +1,5 @@
 import React from 'react';
-import { ColorClassNames, FontClassNames, FontWeights } from '@uifabric/styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';

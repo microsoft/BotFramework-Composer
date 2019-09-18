@@ -1,8 +1,5 @@
 import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { Label } from 'office-ui-fabric-react';
 
 import { BFDWidgetProps } from '../types';
 
@@ -18,7 +15,6 @@ const getFloat = (value: string, step: number) => {
 
 export function TextWidget(props: BFDWidgetProps) {
   const {
-    label,
     onBlur,
     onChange,
     onFocus,
@@ -28,25 +24,16 @@ export function TextWidget(props: BFDWidgetProps) {
     schema,
     id,
     disabled,
-    options,
     formContext,
     rawErrors,
   } = props;
-  const { description, examples = [], type, $role } = schema;
+  const { examples = [], type, $role } = schema;
 
   let placeholderText = placeholder;
 
   if (!placeholderText && examples.length > 0) {
     placeholderText = `ex. ${examples.join(', ')}`;
   }
-
-  const getLabel = (): string | undefined => {
-    if (options.label === false) {
-      return;
-    }
-
-    return options.label || label;
-  };
 
   if (type === 'integer' || type === 'number') {
     const updateValue = (step: number) => (value: string) => {
@@ -87,11 +74,6 @@ export function TextWidget(props: BFDWidgetProps) {
     onFocus: () => onFocus(id, value),
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
-    styles: {
-      subComponentStyles: {
-        label: { root: { fontSize: '12px', fontWeight: '400' } },
-      },
-    },
   };
 
   if ($role === 'expression') {

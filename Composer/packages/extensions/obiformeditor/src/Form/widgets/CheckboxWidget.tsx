@@ -1,26 +1,18 @@
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
 import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 export function CheckboxWidget(props: WidgetProps) {
-  const { label, onChange, onBlur, onFocus, value, schema, ...rest } = props;
-  const { description } = schema;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { onChange, onBlur, onFocus, value, label, ...rest } = props;
 
   return (
-    <>
-      <Checkbox
-        {...rest}
-        checked={Boolean(value)}
-        onChange={(_, checked?: boolean) => onChange(checked)}
-        onBlur={() => onBlur(rest.id, Boolean(value))}
-        onFocus={() => onFocus(rest.id, Boolean(value))}
-      />
-      {/* {description && (
-        <span style={{ fontSize: '14px' }}>
-          <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-        </span>
-      )} */}
-    </>
+    <Checkbox
+      {...rest}
+      checked={Boolean(value)}
+      onChange={(_, checked?: boolean) => onChange(checked)}
+      onBlur={() => onBlur(rest.id, Boolean(value))}
+      onFocus={() => onFocus(rest.id, Boolean(value))}
+    />
   );
 }
