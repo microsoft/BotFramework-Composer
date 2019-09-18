@@ -2,6 +2,7 @@
 import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
+import { elementContainsAttribute } from '@uifabric/utilities';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -18,7 +19,6 @@ import {
   InvalidPromptBrick,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { elementContainsAttribute } from '@uifabric/utilities';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,

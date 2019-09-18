@@ -148,7 +148,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case KeyboardCommandTypes.DeleteNode:
         dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
         break;
-      default:
+      default: {
         const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
@@ -156,6 +156,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         });
         focused && onFocusSteps([focused]);
         break;
+      }
     }
   };
   if (!data) return renderFallbackContent();

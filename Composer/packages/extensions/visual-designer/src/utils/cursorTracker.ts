@@ -6,7 +6,7 @@ function localeNearestElement(
   elements: NodeListOf<HTMLElement>,
   distanceKey: string,
   assistAxle: string,
-  filterKeys?: Array<string>
+  filterKeys?: string[]
 ): HTMLElement {
   let neareastElement: HTMLElement = currentElement;
   let minDistance = 10000;
@@ -18,7 +18,7 @@ function localeNearestElement(
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
-  let isInvolved: boolean = false;
+  let isInvolved = false;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
@@ -100,7 +100,7 @@ export function moveCursor(
   command: string
 ): { [key: string]: string | undefined } {
   const currentElement = Array.from(selectedElements).find(
-    element => element.dataset['selectedId'] === id || element.dataset['focusedId'] === id
+    element => element.dataset.selectedId === id || element.dataset.focusedId === id
   );
   if (!currentElement) return { selected: id, focused: undefined };
   let element: HTMLElement = currentElement;
@@ -139,7 +139,7 @@ export function moveCursor(
   element.scrollIntoView(true);
 
   return {
-    selected: element.dataset['selectedId'] || id,
-    focused: element.dataset['focusedId'],
+    selected: element.dataset.selectedId || id,
+    focused: element.dataset.focusedId,
   };
 }
