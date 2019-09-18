@@ -127,13 +127,21 @@ if($?)
 
 	# Publish zip to Azure
 	Write-Host "> Publishing to Azure ..." -ForegroundColor Green
-	(az webapp deployment source config-zip `
+	$deployment = (az webapp deployment source config-zip `
 		--resource-group $resourceGroup `
 		--name "$name-$environment" `
 		--src $zipPath `
-		--output json) 2>> $logFile | Out-Null
+		--output json) 2>> $logFile
 		
-	Write-Host "Publish Success"
+	if ($deployment)
+	{
+		Write-Host "Publish Success"
+	}
+	else 
+	{
+		Write-Host "! Deploy failed. Review the log for more information." -ForegroundColor DarkRed
+		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
+	}
 } 
 else 
 {       
