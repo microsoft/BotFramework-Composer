@@ -57,11 +57,14 @@ export function BaseEditor(props: BaseEditorProps) {
     updateRect();
   }, []);
 
-  const editorDidMount = ref => {
+  const editorDidMount = (editor, monaco) => {
+    if (typeof props.editorDidMount === 'function') {
+      props.editorDidMount.apply(null, [editor, monaco]);
+    }
     if (codeRange) {
       // subtraction a hiddenAreaRange from CodeRange
       // Tips, monaco lineNumber start from 1
-      const lineCount = ref.getModel().getLineCount();
+      const lineCount = editor.getModel().getLineCount();
       const hiddenRanges = [
         {
           startLineNumber: 1,
@@ -80,7 +83,7 @@ export function BaseEditor(props: BaseEditorProps) {
         hiddenRanges.pop();
       }
 
-      ref.setHiddenAreas(hiddenRanges);
+      editor.setHiddenAreas(hiddenRanges);
     }
   };
 
