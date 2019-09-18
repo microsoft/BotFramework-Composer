@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useRef, useMemo } from 'react';
-import { debounce, isEqual, get } from 'lodash';
+import { isEqual, get, throttle } from 'lodash';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
@@ -40,7 +40,7 @@ const isEventSourceValid = event => {
   return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
 };
 
-const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
+const useThrottleFunc = (fn, th = 10) => useRef(throttle(fn, th)).current;
 
 const FileChangeTypes = {
   CREATE: 'create',
@@ -67,10 +67,10 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
-  const updateDialog = useDebouncedFunc(actions.updateDialog);
+  const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
-  const updateLgFile = useDebouncedFunc(actions.updateLgFile);
-  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
+  const updateLgFile = useThrottleFunc(actions.updateLgFile);
+  const updateLgTemplate = useThrottleFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
@@ -278,12 +278,6 @@ export const ShellApi: React.FC = () => {
     }
   }
 
-  function flushUpdates() {
-    if (updateDialog.flush) {
-      updateDialog.flush();
-    }
-  }
-
   function cleanData() {
     const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
     if (!isEqual(dialogsMap[dialogId], cleanedData)) {
@@ -293,7 +287,6 @@ export const ShellApi: React.FC = () => {
       };
       updateDialog(payload);
     }
-    flushUpdates();
   }
 
   function navTo({ path }) {
