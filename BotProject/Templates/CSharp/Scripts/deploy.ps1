@@ -51,9 +51,11 @@ if (Test-Path $zipPath) {
 	Remove-Item $zipPath -Force | Out-Null
 }
 
+
 # Perform dotnet publish step ahead of zipping up
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
 dotnet publish -c release -o $publishFolder -v q > $logFile
+
 
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
@@ -105,7 +107,8 @@ if ($luisAuthoringKey -and $luisAuthoringRegion)
 
 	$luisConfig = @{}
 
-	$luisConfig["endpointKey"] = $luisAuthoringKey
+	dotnet user-secrets set "luis:endpointKey" "$luisAuthoringKey" --project $publishFolder
+	
 	$luisConfig["endpoint"] = $luisEndpoint
 	
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
