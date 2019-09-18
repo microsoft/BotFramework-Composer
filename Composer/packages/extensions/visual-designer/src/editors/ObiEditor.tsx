@@ -89,6 +89,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           clipboardContext.setClipboardActions(cutData);
           onChange(dialog);
+          onFocusSteps([]);
         };
         break;
       case NodeEventTypes.AppendSelection:
@@ -126,6 +127,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const [keyboardStatus, setKeyBoardStatus] = useState('normal');
 
+  const isElementFocused = () => !!focusedId && focusedId !== focusedEvent;
+  const isElementSelected = () =>
+    !!(selectionContext && selectionContext.selectedIds && selectionContext.selectedIds.length) || isElementFocused();
+
   useEffect((): void => {
     if (selectionContext.selectedIds.length > 0) {
       setKeyBoardStatus('selected');
@@ -134,6 +139,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else {
       setKeyBoardStatus('normal');
     }
+
+    // HACK: expose selection state to global. Trigger forceupdate by invoking onChange.
+    (window as any).elementFocused = isElementFocused();
+    (window as any).elementSelected = isElementSelected();
+    onChange(data);
   }, [focusedId, selectionContext]);
 
   useEffect(
@@ -150,7 +160,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
       const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
-      const focusedIds = normalizeSelection(selectedIds);
 
       setSelectionContext({
         ...selectionContext,
@@ -166,6 +175,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     }
     return selectedActionIds;
   };
+
+  // HACK: use global handler before we solve iframe state sync problem
+  (window as any).copySelection = () =>
+    dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
+  (window as any).cutSelection = () =>
+    dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+  (window as any).deleteNode = () => dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
 
   const handleKeyboardCommand = (command): void => {
     switch (command) {

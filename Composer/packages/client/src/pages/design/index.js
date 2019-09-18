@@ -155,6 +155,13 @@ function DesignPage(props) {
     }
   };
 
+  const VisualEditorFrame = window.frames.VisualEditor || {};
+  const VisualEditorApi = {
+    copySelection: () => VisualEditorFrame && VisualEditorFrame.copySelection && VisualEditorFrame.copySelection(),
+    cutSelection: () => VisualEditorFrame && VisualEditorFrame.cutSelection && VisualEditorFrame.cutSelection(),
+    deleteNode: () => VisualEditorFrame && VisualEditorFrame.deleteNode && VisualEditorFrame.deleteNode(),
+  };
+
   const toolbarItems = [
     {
       type: 'action',
@@ -177,6 +184,42 @@ function DesignPage(props) {
           iconName: 'Redo',
         },
         onClick: () => actions.redo(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Cut'),
+      buttonProps: {
+        disabled: !VisualEditorFrame.elementSelected,
+        iconProps: {
+          iconName: 'Cut',
+        },
+        onClick: () => VisualEditorApi.cutSelection(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Copy'),
+      buttonProps: {
+        disabled: !VisualEditorFrame.elementSelected,
+        iconProps: {
+          iconName: 'Copy',
+        },
+        onClick: () => VisualEditorApi.copySelection(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Delete'),
+      buttonProps: {
+        disabled: !VisualEditorFrame.elementFocused,
+        iconProps: {
+          iconName: 'Delete',
+        },
+        onClick: () => VisualEditorApi.deleteNode(),
       },
       align: 'left',
     },
@@ -287,6 +330,7 @@ function DesignPage(props) {
                 <div css={visualPanel}>
                   {breadcrumbItems}
                   <iframe
+                    id="VisualEditor"
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}

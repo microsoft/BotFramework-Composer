@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useRef, useState, useEffect } from 'react';
-import { isEqual, throttle } from 'lodash';
+import { isEqual } from 'lodash';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
@@ -62,7 +62,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           focusedEvent={focusedEvent}
           onFocusEvent={onFocusEvent}
           onOpen={(x, rest) => navTo(x, rest)}
-          onChange={throttle(x => saveData(x), 10)}
+          onChange={x => saveData(x)}
         />
       </div>
     </NodeRendererContext.Provider>
