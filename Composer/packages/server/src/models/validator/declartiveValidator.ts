@@ -5,6 +5,10 @@ import { DialogValidator } from './dialogValidator';
 import { LGValidator } from './lgValidator';
 import { LUValidator } from './luValidator';
 
+/**
+ * This is the one single validation library for any declartive assets
+ * that can power both command-line tool and composer
+ */
 export class DeclartiveValidator implements ResourceValidator {
   public validate = (resource: Resource, resolver: ResourceResolver) => {
     let validator: ResourceValidator | null = null;

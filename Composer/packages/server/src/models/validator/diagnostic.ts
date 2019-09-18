@@ -1,6 +1,15 @@
 export interface Diagnostic {
+  /**
+   * Error
+   * Warning
+   * Information
+   * Hint
+   */
   severity: DiagnosticSeverity;
 
+  /**
+   * human-readable message
+   */
   message: string;
 
   /*
