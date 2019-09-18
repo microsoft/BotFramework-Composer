@@ -14,15 +14,21 @@ const defaultOptions = {
   },
 };
 
+interface ICodeRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
+
 export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
+  codeRange?: ICodeRange;
 }
 
 export function BaseEditor(props: BaseEditorProps) {
-  const { onChange, placeholder, value } = props;
-  const options = Object.assign({}, defaultOptions, props.options);
+  const { onChange, placeholder, value, codeRange } = props;
+  const options = Object.assign({ folding: !codeRange }, defaultOptions, props.options);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
@@ -51,6 +57,33 @@ export function BaseEditor(props: BaseEditorProps) {
     updateRect();
   }, []);
 
+  const editorDidMount = ref => {
+    if (codeRange) {
+      // subtraction a hiddenAreaRange from CodeRange
+      // Tips, monaco lineNumber start from 1
+      const lineCount = ref.getModel().getLineCount();
+      const hiddenRanges = [
+        {
+          startLineNumber: 1,
+          endLineNumber: codeRange.startLineNumber - 1,
+        },
+        {
+          startLineNumber: codeRange.endLineNumber + 1,
+          endLineNumber: lineCount,
+        },
+      ];
+
+      if (codeRange.startLineNumber === 1) {
+        hiddenRanges.shift();
+      }
+      if (codeRange.endLineNumber === lineCount) {
+        hiddenRanges.pop();
+      }
+
+      ref.setHiddenAreas(hiddenRanges);
+    }
+  };
+
   return (
     <div
       className="CodeEditor"
@@ -60,7 +93,14 @@ export function BaseEditor(props: BaseEditorProps) {
         boxSizing: 'border-box',
       }}
     >
-      <MonacoEditor {...props} {...rect} value={value || placeholder} onChange={onChange} options={options} />
+      <MonacoEditor
+        {...props}
+        {...rect}
+        value={value || placeholder}
+        onChange={onChange}
+        options={options}
+        editorDidMount={editorDidMount}
+      />
     </div>
   );
 }
