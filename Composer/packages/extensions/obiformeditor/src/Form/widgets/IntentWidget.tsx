@@ -38,7 +38,7 @@ function regexIntentOptions(currentDialog: DialogInfo): IDropdownOption[] {
   }
 
   if (recognizer.intents) {
-    options = options.concat(Object.keys(recognizer.intents).map(i => ({ key: i, text: i })));
+    options = options.concat(recognizer.intents.map(i => ({ key: i.intent, text: i.intent })));
   }
 
   return options;

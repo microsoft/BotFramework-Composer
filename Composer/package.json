@@ -2,7 +2,7 @@
   "name": "composer-root",
   "private": true,
   "resolutions": {
-    "@types/react": "^16.8.0"
+    "@types/react": "16.9.0"
   },
   "workspaces": [
     "packages/client",
@@ -35,7 +35,8 @@
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:cci-graph-lib\" \"yarn typecheck:server\"",
     "typecheck:cci-graph-lib": "yarn workspace cci-graph-lib typecheck",
-    "typecheck:server": "yarn workspace composer-api-server typecheck"
+    "typecheck:server": "yarn workspace composer-api-server typecheck",
+    "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
   },
   "husky": {
     "hooks": {

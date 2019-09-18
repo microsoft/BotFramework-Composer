@@ -67,6 +67,7 @@ export const visualPanel = css`
   flex: 1;
   border-right: 1px solid #c4c4c4;
   min-height: 80vh;
+  position: relative;
 `;
 
 export const visualEditor = css`
@@ -102,4 +103,26 @@ export const breadcrumbClass = mergeStyleSets({
 
 export const deleteDialogContent = css`
   color: #000;
+`;
+
+export const middleTriggerContainer = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e5e5e5;
+  width: 100%;
+  margin-top: 48px;
+  height: calc(100% - 48px);
+  position: absolute;
+`;
+
+export const middleTriggerElements = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const triggerButton = css`
+  font-size: 12px;
+  color: #0078d4;
 `;

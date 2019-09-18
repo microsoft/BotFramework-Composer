@@ -60,12 +60,12 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
       text: formatMessage('Edit'),
       iconProps: { iconName: 'Edit' },
       onClick: () => {
-        formContext.shellApi.onFocusSteps([`${navPrefix}[${index}]`]);
-
         // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
         if (COMPOUND_TYPES.includes(item.$type)) {
           formContext.shellApi.onFocusEvent(`${navPrefix}[${index}]`);
         }
+
+        formContext.shellApi.onFocusSteps([`${navPrefix}[${index}]`]);
       },
     },
     {
@@ -128,7 +128,15 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
 }
 
 export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props: TableFieldProps<T>): JSX.Element {
-  const { additionalColumns = [], columnHeader, dialogOptionsOpts, renderDescription, children } = props;
+  const {
+    additionalColumns = [],
+    columnHeader,
+    dialogOptionsOpts,
+    renderDescription,
+    children,
+    navPrefix,
+    formContext,
+  } = props;
 
   const fieldOverrides = get(props.formContext.editorSchema, `content.SDKOverrides`);
 
@@ -154,6 +162,12 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
 
   const createNewItemAtIndex = (idx: number = items.length) => (_: any, item: IContextualMenuItem) => {
     onChange(insertAt(items, item.data, idx));
+    // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
+    if (COMPOUND_TYPES.includes(item.$type)) {
+      formContext.shellApi.onFocusEvent(`${navPrefix}[${idx}]`);
+    }
+
+    formContext.shellApi.onFocusSteps([`${navPrefix}[${idx}]`]);
     return true;
   };
 

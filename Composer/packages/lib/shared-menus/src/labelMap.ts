@@ -1,160 +1,201 @@
 import formatMessage from 'format-message';
 
+import { SDKTypes } from './appschema';
+
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
+
+interface LabelOverride {
+  title?: string | false;
+  description?: string | false;
+}
+
+type ConceptLabelKey = SDKTypes | 'Activity';
 
 /**
  * These labels will be used when rendering the EdgeMenu
  * TODO: this is currently a copy of the SDKOverrides content from editor.schema. This should be drilled in from the shell.
  */
-export const ConceptLabels = {
-  'Microsoft.AdaptiveDialog': {
-    title: formatMessage('AdaptiveDialog'),
-  },
-  'Microsoft.BeginDialog': {
-    title: formatMessage('Begin a Dialog'),
-  },
-  'Microsoft.CancelAllDialogs': {
-    title: formatMessage('Cancel All Dialogs'),
-  },
-  'Microsoft.ChoiceInput': {
-    title: formatMessage('Prompt with multi-choice'),
-  },
-  'Microsoft.ConditionalSelector': {
-    title: formatMessage('ConditionalSelector'),
-  },
-  'Microsoft.ConfirmInput': {
-    title: formatMessage('Prompt for confirmation'),
-  },
-  'Microsoft.DateTimeInput': {
-    title: formatMessage('Type: Date'),
-  },
-  'Microsoft.DebugBreak': {
-    title: formatMessage('Debug Break'),
-  },
-  'Microsoft.DeleteProperty': {
-    title: formatMessage('Delete a Property'),
-  },
-  'Microsoft.EditArray': {
-    title: formatMessage('Edit an Array Property'),
-  },
-  'Microsoft.EmitEvent': {
-    title: formatMessage('Emit a custom event'),
-  },
-  'Microsoft.EndDialog': {
-    title: formatMessage('End Dialog'),
-  },
-  'Microsoft.EndTurn': {
-    title: formatMessage('End Turn'),
-  },
-  'Microsoft.OnEvent': {
-    title: formatMessage('Handle an Event'),
-  },
-  'Microsoft.FirstSelector': {
-    title: formatMessage('FirstSelector'),
-  },
-  'Microsoft.HttpRequest': {
-    title: formatMessage('HTTP Request'),
-  },
-  'Microsoft.IfCondition': {
-    title: formatMessage('Branch: If/Else'),
-  },
-  'Microsoft.InitProperty': {
-    title: formatMessage('Initialize a Property'),
-  },
-  'Microsoft.OnIntent': {
-    title: formatMessage('Handle an Intent'),
-  },
-  'Microsoft.LanguagePolicy': {
-    title: formatMessage('LanguagePolicy'),
-  },
-  'Microsoft.LogStep': {
-    title: formatMessage('Log to console'),
-  },
-  'Microsoft.LuisRecognizer': {
-    title: formatMessage('Language Understanding'),
-    description: formatMessage(
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
-    ),
-  },
-  'Microsoft.MostSpecificSelector': {
-    title: formatMessage('MostSpecificSelector'),
-  },
-  'Microsoft.MultiLanguageRecognizer': {
-    title: formatMessage('Language Understanding'),
-    description: formatMessage(
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
-    ),
-  },
-  'Microsoft.NumberInput': {
-    title: formatMessage('Prompt for a number'),
-  },
-  'Microsoft.QnAMakerDialog': {
-    title: formatMessage('QnAMakerDialog'),
-  },
-  'Microsoft.RandomSelector': {
-    title: formatMessage('RandomSelector'),
-  },
-  'Microsoft.RegexRecognizer': {
-    title: false,
-    description: false,
-  },
-  'Microsoft.RepeatDialog': {
-    title: formatMessage('Repeat this Dialog'),
-  },
-  'Microsoft.ReplaceDialog': {
-    title: formatMessage('Replace this Dialog'),
-  },
-  'Microsoft.Rule': {
-    title: formatMessage('Rule'),
-  },
-  'Microsoft.SaveEntity': {
-    title: formatMessage('Save an Entity'),
-  },
-  'Microsoft.SendActivity': {
-    title: formatMessage('Send an Activity'),
-  },
-  'Microsoft.OAuthInput': {
-    title: formatMessage('OAuth Login'),
-  },
-  'Microsoft.AttachmentInput': {
-    title: formatMessage('Prompt for Attachment'),
-  },
+export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   Activity: {
-    title: formatMessage('Language Generation'),
     description: formatMessage(
       'What your Bot says to the user. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
     ),
+    title: formatMessage('Language Generation'),
   },
-  'Microsoft.SetProperty': {
-    title: formatMessage('Set a Property'),
+  [SDKTypes.AdaptiveDialog]: {
+    title: formatMessage('AdaptiveDialog'),
   },
-  'Microsoft.SwitchCondition': {
-    title: formatMessage('Branch: Switch'),
+  [SDKTypes.AttachmentInput]: {
+    title: formatMessage('Prompt for Attachment'),
   },
-  'Microsoft.TextInput': {
-    title: formatMessage('Prompt for text'),
+  [SDKTypes.BeginDialog]: {
+    title: formatMessage('Begin a Dialog'),
   },
-  'Microsoft.TraceActivity': {
-    title: formatMessage('Emit a trace event'),
+  [SDKTypes.CancelAllDialogs]: {
+    title: formatMessage('Cancel All Dialogs'),
   },
-  'Microsoft.TrueSelector': {
-    title: formatMessage('TrueSelector'),
+  [SDKTypes.ChoiceInput]: {
+    title: formatMessage('Prompt with multi-choice'),
   },
-  'Microsoft.OnUnknownIntent': {
-    title: formatMessage('Handle Unknown Intent'),
+  [SDKTypes.ConditionalSelector]: {
+    title: formatMessage('ConditionalSelector'),
   },
-  'Microsoft.OnConversationUpdateActivity': {
-    title: formatMessage('Handle ConversationUpdate'),
+  [SDKTypes.ConfirmInput]: {
+    title: formatMessage('Prompt for confirmation'),
   },
-  'Microsoft.Foreach': {
+  [SDKTypes.DateTimeInput]: {
+    title: formatMessage('Prompt for a date'),
+  },
+  [SDKTypes.DebugBreak]: {
+    title: formatMessage('Debug Break'),
+  },
+  [SDKTypes.DeleteProperty]: {
+    title: formatMessage('Delete a Property'),
+  },
+  [SDKTypes.EditActions]: {
+    title: formatMessage('Modify active dialog'),
+  },
+  [SDKTypes.EditArray]: {
+    title: formatMessage('Edit an Array Property'),
+  },
+  [SDKTypes.EmitEvent]: {
+    title: formatMessage('Emit a custom event'),
+  },
+  [SDKTypes.EndDialog]: {
+    title: formatMessage('End Dialog'),
+  },
+  [SDKTypes.EndTurn]: {
+    title: formatMessage('End Turn'),
+  },
+  [SDKTypes.FirstSelector]: {
+    title: formatMessage('FirstSelector'),
+  },
+  [SDKTypes.Foreach]: {
     title: formatMessage('Loop: For Each'),
   },
-  'Microsoft.ForeachPage': {
+  [SDKTypes.ForeachPage]: {
     title: formatMessage('Loop: For Each Page'),
   },
-  'Microsoft.EditSteps': {
-    title: formatMessage('Modify active dialog'),
+  [SDKTypes.HttpRequest]: {
+    title: formatMessage('HTTP Request'),
+  },
+  [SDKTypes.IfCondition]: {
+    title: formatMessage('Branch: If/Else'),
+  },
+  [SDKTypes.InitProperty]: {
+    title: formatMessage('Initialize a Property'),
+  },
+  [SDKTypes.LanguagePolicy]: {
+    title: formatMessage('LanguagePolicy'),
+  },
+  [SDKTypes.LogAction]: {
+    title: formatMessage('Log to console'),
+  },
+  [SDKTypes.LuisRecognizer]: {
+    description: formatMessage(
+      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+    ),
+    title: formatMessage('Language Understanding'),
+  },
+  [SDKTypes.MostSpecificSelector]: {
+    title: formatMessage('MostSpecificSelector'),
+  },
+  [SDKTypes.MultiLanguageRecognizer]: {
+    description: formatMessage(
+      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+    ),
+    title: formatMessage('Language Understanding'),
+  },
+  [SDKTypes.NumberInput]: {
+    title: formatMessage('Prompt for a number'),
+  },
+  [SDKTypes.OAuthInput]: {
+    title: formatMessage('OAuth Login'),
+  },
+  [SDKTypes.OnActivity]: {
+    title: formatMessage('Handle an Event: Activity'),
+  },
+  [SDKTypes.OnBeginDialog]: {
+    title: formatMessage('Handle an Event: BeginDialog'),
+  },
+  [SDKTypes.OnConversationUpdateActivity]: {
+    title: formatMessage('Handle ConversationUpdate'),
+    description:
+      'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
+  },
+  [SDKTypes.OnDialogEvent]: {
+    title: formatMessage('Handle a Dialog Event'),
+  },
+  [SDKTypes.OnEndOfConversationActivity]: {
+    title: formatMessage('Handle an Event: EndOfConversationActivity'),
+  },
+  [SDKTypes.OnEvent]: {
+    title: formatMessage('Handle an Event'),
+  },
+  [SDKTypes.OnEventActivity]: {
+    title: formatMessage('Handle an Event: EventActivity'),
+  },
+  [SDKTypes.OnHandoffActivity]: {
+    title: formatMessage('Handle an Event: HandoffActivity'),
+  },
+  [SDKTypes.OnIntent]: {
+    title: formatMessage('Handle an Intent'),
+  },
+  [SDKTypes.OnInvokeActivity]: {
+    title: formatMessage('Handle an Event: InvokeActivity'),
+  },
+  [SDKTypes.OnMessageActivity]: {
+    title: formatMessage('Handle an Event: MessageActivity'),
+  },
+  [SDKTypes.OnMessageDeleteActivity]: {
+    title: formatMessage('Handle an Event: MessageDeleteActivity'),
+  },
+  [SDKTypes.OnMessageReactionActivity]: {
+    title: formatMessage('Handle an Event: MessageReactionActivity'),
+  },
+  [SDKTypes.OnMessageUpdateActivity]: {
+    title: formatMessage('Handle an Event: MessageUpdateActivity'),
+  },
+  [SDKTypes.OnTypingActivity]: {
+    title: formatMessage('Handle an Event: TypingActivity'),
+  },
+  [SDKTypes.OnUnknownIntent]: {
+    title: formatMessage('Handle Unknown Intent'),
+  },
+  [SDKTypes.QnAMakerDialog]: {
+    title: formatMessage('QnAMakerDialog'),
+  },
+  [SDKTypes.RandomSelector]: {
+    title: formatMessage('RandomSelector'),
+  },
+  [SDKTypes.RegexRecognizer]: {
+    description: false,
+    title: false,
+  },
+  [SDKTypes.RepeatDialog]: {
+    title: formatMessage('Repeat this Dialog'),
+  },
+  [SDKTypes.ReplaceDialog]: {
+    title: formatMessage('Replace this Dialog'),
+  },
+  [SDKTypes.SendActivity]: {
+    title: formatMessage('Send an Activity'),
+  },
+  [SDKTypes.SetProperty]: {
+    title: formatMessage('Set a Property'),
+  },
+  [SDKTypes.SwitchCondition]: {
+    title: formatMessage('Branch: Switch'),
+  },
+  [SDKTypes.TextInput]: {
+    title: formatMessage('Prompt for text'),
+  },
+  [SDKTypes.TraceActivity]: {
+    title: formatMessage('Emit a trace event'),
+  },
+  [SDKTypes.TrueSelector]: {
+    title: formatMessage('TrueSelector'),
   },
 };

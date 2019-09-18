@@ -1,3 +1,10 @@
+import nanoid from 'nanoid/generate';
+
+interface DesignerAttributes {
+  name: string;
+  description: string;
+}
+
 const initialDialogShape = {
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
@@ -5,6 +12,12 @@ const initialDialogShape = {
   },
 };
 
-export const seedNewDialog = ($type: string): object => {
-  return initialDialogShape[$type] ? initialDialogShape[$type] : {};
+export const seedNewDialog = ($type: string, designerAttributes: Partial<DesignerAttributes> = {}): object => {
+  return {
+    $designer: {
+      id: nanoid('1234567890', 6),
+      ...designerAttributes,
+    },
+    ...(initialDialogShape[$type] || {}),
+  };
 };

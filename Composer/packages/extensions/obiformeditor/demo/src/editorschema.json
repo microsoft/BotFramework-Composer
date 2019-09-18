@@ -69,7 +69,7 @@
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
-    "Microsoft.LogStep": {
+    "Microsoft.LogAction": {
       "title": "Log to console"
     },
     "Recognizer": {

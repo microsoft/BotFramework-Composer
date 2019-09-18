@@ -20,7 +20,9 @@ export const StepsField: React.FC<BFDFieldProps> = props => {
     <TableField<MicrosoftIDialog>
       {...props}
       {...overrides}
-      dialogOptionsOpts={{ exclude: [DialogGroup.EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER] }}
+      dialogOptionsOpts={{
+        exclude: [DialogGroup.EVENTS, DialogGroup.ADVANCED_EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER],
+      }}
       navPrefix={props.name}
     >
       {({ createNewItemAtIndex }) => (
