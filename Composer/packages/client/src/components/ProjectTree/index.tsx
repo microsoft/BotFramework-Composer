@@ -142,7 +142,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   };
 
   return (
-    <div css={root}>
+    <div css={root} data-testid="ProjectTree">
       <SearchBox placeholder="Filter Dialog" onChange={onFilter} iconProps={{ iconName: 'Filter' }} />
       <GroupedList
         items={items}
