@@ -5147,27 +5147,28 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-botbuilder-expression-parser@^4.5.6:
-  version "4.5.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.6.tgz#2bbf7f9cbc6922fdb757c8319db2965d3638d63a"
-  integrity sha1-K79/nLxpIv23V8gxnbKWXTY41jo=
+botbuilder-expression-parser@^4.5.9:
+  version "4.5.9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
+  integrity sha1-aWZD2l4f8L8gckmZvHOo44rNnac=
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
 
-"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz":
-  version "4.5.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz#2bbf7f9cbc6922fdb757c8319db2965d3638d63a"
+"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz":
+  version "4.5.9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
 
-"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz":
-  version "4.5.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz#5a232132ff924d5c53c35ef19b9d30dd8c179e11"
+"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz":
+  version "4.5.9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz#76c54ed691c4cdd5ab9bbe5bac69e0bc67588044"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     antlr4ts "0.5.0-alpha.1"
+    jspath "^0.4.0"
     lru-cache "^5.1.1"
     moment "2.24.0"
     moment-timezone "^0.5.25"
@@ -5175,13 +5176,13 @@ botbuilder-expression-parser@^4.5.6:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.1.tgz":
-  version "4.6.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.1.tgz#5908bcb995ef345c1305dd68687155e72ae05dd7"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz":
+  version "4.6.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz#2c699f475c05492239d83ab0863c8c85d369a284"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.6.tgz"
-    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.6.tgz"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
+    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz"
     lodash "^4.17.11"
 
 boxen@^1.2.1:
@@ -12460,6 +12461,11 @@ jsonwebtoken@^8.5.1:
     ms "^2.1.1"
     semver "^5.6.0"
 
+jspath@^0.4.0:
+  version "0.4.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/jspath/-/jspath-0.4.0.tgz#2f5fd1808ff2249a88a3c45e642288a226f85e1d"
+  integrity sha1-L1/RgI/yJJqIo8ReZCKIoib4Xh0=
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -14018,8 +14024,8 @@ mock-fs@^4.10.1:
 
 moment-timezone@^0.5.25:
   version "0.5.26"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.26.tgz#c0267ca09ae84631aa3dc33f65bedbe6e8e0d772"
-  integrity sha512-sFP4cgEKTCymBBKgoxZjYzlSovC20Y6J7y3nanDc5RoBIXKlZhoYwBoZGe3flwU6A372AcRwScH8KiwV6zjy1g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/moment-timezone/-/moment-timezone-0.5.26.tgz#c0267ca09ae84631aa3dc33f65bedbe6e8e0d772"
+  integrity sha1-wCZ8oJroRjGqPcM/Zb7b5ujg13I=
   dependencies:
     moment ">= 2.9.0"
 
@@ -20782,7 +20788,7 @@ xmlbuilder@^9.0.7, xmlbuilder@~9.0.1:
 
 xmldom@^0.1.27:
   version "0.1.27"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
   integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
 
 xmlhttprequest-ssl@~1.5.4:
@@ -20797,8 +20803,8 @@ xmlhttprequest@1:
 
 xpath@0.0.27:
   version "0.0.27"
-  resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.27.tgz#dd3421fbdcc5646ac32c48531b4d7e9d0c2cfa92"
-  integrity sha512-fg03WRxtkCV6ohClePNAECYsmpKKTv5L8y/X3Dn1hQrec3POx2jHZ/0P2qQ6HvsrU1BmeqXcof3NGGueG6LxwQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/xpath/-/xpath-0.0.27.tgz#dd3421fbdcc5646ac32c48531b4d7e9d0c2cfa92"
+  integrity sha1-3TQh+9zFZGrDLEhTG01+nQws+pI=
 
 xregexp@2.0.0:
   version "2.0.0"
