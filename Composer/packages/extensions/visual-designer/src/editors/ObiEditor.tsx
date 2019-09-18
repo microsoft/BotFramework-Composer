@@ -4,7 +4,8 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
+import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { deleteNode, insert } from '../utils/jsonTracker';
@@ -126,6 +127,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
+
+      // TODO: normalize selectedIds
       onFocusSteps(selectedIds);
       console.log(selectedIds);
       setSelectionContext(newContext);
@@ -136,19 +139,20 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     setSelectedElements(querySelectedElements());
   }, [focusedId]);
   const querySelectedElements = () => {
-    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[data-is-selectable]`);
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
     return items;
   };
   const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
 
-  const handleKeyboardCommand = command => {
-    let path;
+  const handleKeyboardCommand = ({ primaryType, command }) => {
     const currentSelectedId = selectionContext.selectedIds[0];
-    switch (command) {
-      case KeyboardCommandTypes.DeleteNode:
-        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+    switch (primaryType) {
+      case KeyboardPrimaryTypes.Node:
+        if (command === KeyboardCommandTypes.Node.Delete) {
+          dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        }
         break;
-      default: {
+      case KeyboardPrimaryTypes.Cursor: {
         const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
@@ -157,6 +161,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         focused && onFocusSteps([focused]);
         break;
       }
+      default:
+        break;
     }
   };
   if (!data) return renderFallbackContent();

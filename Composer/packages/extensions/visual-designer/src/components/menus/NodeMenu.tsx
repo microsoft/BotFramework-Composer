@@ -2,10 +2,17 @@ import React, { useContext } from 'react';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
+import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
 
+const declareElementAttributes = (id: string) => {
+  return {
+    [AttrNames.SelectableElement]: true,
+    [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
+  };
+};
 export const NodeMenu = ({ id, onEvent }): JSX.Element => {
   const menuItems = [
     {
@@ -27,8 +34,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
         iconStyles={{ color: '#0078D4' }}
         menuItems={menuItems}
         menuWidth={100}
-        data-is-selectable={true}
-        data-selected-id={`${id}${MenuTypes.NodeMenu}`}
+        {...declareElementAttributes(id)}
       />
     </div>
   );

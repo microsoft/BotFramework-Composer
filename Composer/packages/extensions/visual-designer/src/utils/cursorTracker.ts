@@ -1,18 +1,39 @@
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { InitNodeSize } from '../constants/ElementSizes';
+import { AttrNames } from '../constants/ElementAttributes';
 
+enum BoundRect {
+  Top = 'top',
+  Bottom = 'bottom',
+  Left = 'left',
+  Right = 'right',
+}
+
+enum Axle {
+  X,
+  Y,
+}
+
+/**
+ *
+ * @param currentElement current element
+ * @param elements all elements have AttrNames.SelectableElements attribute
+ * @param boundRectKey key to calculate shortest distance
+ * @param assistAxle assist axle for calculating.
+ * @param filterAttrs filtering elements
+ */
 function localeNearestElement(
   currentElement: HTMLElement,
   elements: NodeListOf<HTMLElement>,
-  distanceKey: string,
-  assistAxle: string,
-  filterKeys?: string[]
+  boundRectKey: BoundRect,
+  assistAxle: Axle,
+  filterAttrs?: AttrNames[]
 ): HTMLElement {
   let neareastElement: HTMLElement = currentElement;
   let minDistance = 10000;
   let distance = minDistance;
   const elementArr = Array.from(elements).filter(
-    element => !filterKeys || (filterKeys && filterKeys.find(key => !!element.dataset[key]))
+    element => !filterAttrs || (filterAttrs && filterAttrs.find(key => !!element.getAttribute(key)))
   );
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
@@ -22,17 +43,17 @@ function localeNearestElement(
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
-    if (distanceKey === 'top' || distanceKey === 'left') {
-      distance = bounds[distanceKey] - currentElementBounds[distanceKey];
+    if (boundRectKey === BoundRect.Top || boundRectKey === BoundRect.Left) {
+      distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
     } else {
-      distance = currentElementBounds[distanceKey] - bounds[distanceKey];
+      distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
     }
 
-    if (assistAxle === 'x') {
+    if (assistAxle === Axle.X) {
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
       );
-      if (distanceKey === 'bottom') {
+      if (boundRectKey === BoundRect.Bottom) {
         isInvolved = distance < currentElementBounds.height;
       }
       if (!isInvolved && assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
@@ -59,7 +80,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
   let bounds: ClientRect;
   let isInvolved = false;
   let selectedElement: HTMLElement = currentElement;
-  if (command === KeyboardCommandTypes.MoveNext) {
+  if (command === KeyboardCommandTypes.Cursor.MoveNext) {
     elementArr.forEach(element => {
       bounds = element.getBoundingClientRect();
       if (
@@ -73,7 +94,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, 'top', 'x');
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X);
     }
   } else {
     elementArr.forEach(element => {
@@ -89,7 +110,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, 'bottom', 'x');
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X);
     }
   }
   return selectedElement;
@@ -105,35 +126,51 @@ export function moveCursor(
   if (!currentElement) return { selected: id, focused: undefined };
   let element: HTMLElement = currentElement;
   switch (command) {
-    case KeyboardCommandTypes.MoveDown:
-      element = localeNearestElement(currentElement, selectedElements, 'top', 'x', ['isNode']);
+    case KeyboardCommandTypes.Cursor.MoveDown:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [AttrNames.NodeElement]);
       break;
-    case KeyboardCommandTypes.MoveUp:
-      element = localeNearestElement(currentElement, selectedElements, 'bottom', 'x', ['isNode']);
+    case KeyboardCommandTypes.Cursor.MoveUp:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+      ]);
       break;
-    case KeyboardCommandTypes.MoveLeft:
-      element = localeNearestElement(currentElement, selectedElements, 'right', 'y', ['isNode']);
+    case KeyboardCommandTypes.Cursor.MoveLeft:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
+        AttrNames.NodeElement,
+      ]);
       break;
-    case KeyboardCommandTypes.MoveRight:
-      element = localeNearestElement(currentElement, selectedElements, 'left', 'y', ['isNode']);
+    case KeyboardCommandTypes.Cursor.MoveRight:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [AttrNames.NodeElement]);
       break;
-    case KeyboardCommandTypes.ShortMoveDown:
-      element = localeNearestElement(currentElement, selectedElements, 'top', 'x', ['isNode', 'isEdgeMenu']);
+    case KeyboardCommandTypes.Cursor.ShortMoveDown:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
       break;
-    case KeyboardCommandTypes.ShortMoveUp:
-      element = localeNearestElement(currentElement, selectedElements, 'bottom', 'x', ['isNode', 'isEdgeMenu']);
+    case KeyboardCommandTypes.Cursor.ShortMoveUp:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
       break;
-    case KeyboardCommandTypes.ShortMoveLeft:
-      element = localeNearestElement(currentElement, selectedElements, 'right', 'y', ['isNode', 'isEdgeMenu']);
+    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
       break;
-    case KeyboardCommandTypes.ShortMoveRight:
-      element = localeNearestElement(currentElement, selectedElements, 'left', 'y', ['isNode', 'isEdgeMenu']);
+    case KeyboardCommandTypes.Cursor.ShortMoveRight:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
       break;
-    case KeyboardCommandTypes.MovePrevious:
-      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MovePrevious);
+    case KeyboardCommandTypes.Cursor.MovePrevious:
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MovePrevious);
       break;
-    case KeyboardCommandTypes.MoveNext:
-      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.MoveNext);
+    case KeyboardCommandTypes.Cursor.MoveNext:
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MoveNext);
       break;
   }
   element.scrollIntoView(true);

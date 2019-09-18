@@ -2,9 +2,9 @@
 import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
-import { elementContainsAttribute } from '@uifabric/utilities';
 
 import { ObiTypes } from '../../constants/ObiTypes';
+import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
@@ -72,6 +72,17 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeSelected = selectedIds.includes(selectedId);
 
+  const declareElementAttributes = (selectedId: string, id: string) => {
+    return {
+      [AttrNames.SelectableElement]: true,
+      [AttrNames.NodeElement]: true,
+      [AttrNames.FocusedId]: id,
+      [AttrNames.SelectedId]: selectedId,
+      [AttrNames.FocusableElement]: true,
+      [AttrNames.SelectionIndex]: getNodeIndex(id),
+    };
+  };
+
   return (
     <div
       className={classnames(
@@ -89,12 +100,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
-      data-is-node={true}
-      data-is-selectable={true}
-      data-is-focusable={true}
-      data-selected-id={selectedId}
-      data-focused-id={id}
-      data-selection-index={getNodeIndex(id)}
+      {...declareElementAttributes(selectedId, id)}
     >
       <ChosenRenderer
         id={id}

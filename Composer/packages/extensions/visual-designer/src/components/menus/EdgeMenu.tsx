@@ -3,6 +3,7 @@ import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { SelectionContext } from '../../store/SelectionContext';
 
@@ -13,6 +14,13 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
+const declareElementAttributes = (id: string) => {
+  return {
+    [AttrNames.SelectableElement]: true,
+    [AttrNames.EdgeMenuElement]: true,
+    [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
+  };
+};
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -30,9 +38,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
       }}
     >
       <IconMenu
-        data-is-selectable={true}
-        data-is-edge-menu={true}
-        data-selected-id={`${id}${MenuTypes.EdgeMenu}`}
+        {...declareElementAttributes(id)}
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
