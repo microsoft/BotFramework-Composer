@@ -159,7 +159,8 @@ function DesignPage(props) {
   const VisualEditorApi = {
     copySelection: () => VisualEditorFrame && VisualEditorFrame.copySelection && VisualEditorFrame.copySelection(),
     cutSelection: () => VisualEditorFrame && VisualEditorFrame.cutSelection && VisualEditorFrame.cutSelection(),
-    deleteNode: () => VisualEditorFrame && VisualEditorFrame.deleteNode && VisualEditorFrame.deleteNode(),
+    deleteSelection: () =>
+      VisualEditorFrame && VisualEditorFrame.deleteSelection && VisualEditorFrame.deleteSelection(),
   };
 
   const toolbarItems = [
@@ -215,11 +216,11 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: !VisualEditorFrame.elementFocused,
+        disabled: !VisualEditorFrame.elementSelected,
         iconProps: {
           iconName: 'Delete',
         },
-        onClick: () => VisualEditorApi.deleteNode(),
+        onClick: () => VisualEditorApi.deleteSelection(),
       },
       align: 'left',
     },
