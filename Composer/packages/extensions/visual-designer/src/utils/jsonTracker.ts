@@ -1,10 +1,9 @@
 import { cloneDeep, get, set } from 'lodash';
-import nanoid from 'nanoid/generate';
 import { seedNewDialog } from 'shared-menus';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
-function locateNode(dialog: { [key: string]: any }, path: string) {
+function parseSelector(path: string): null | string[] {
   if (!path) return null;
 
   const selectors = path.split('.');
@@ -12,13 +11,13 @@ function locateNode(dialog: { [key: string]: any }, path: string) {
     return null;
   }
 
-  if (selectors[0] === '$') {
+  if (selectors[0] === '$' || selectors[0] === '') {
     selectors.shift();
   }
 
   const normalizedSelectors = selectors.reduce(
     (result, selector) => {
-      // e.g. steps[0]
+      // e.g. actions[0]
       const parseResult = selector.match(/(\w+)\[(\d+)\]/);
 
       if (parseResult) {
@@ -34,17 +33,54 @@ function locateNode(dialog: { [key: string]: any }, path: string) {
     [] as any[]
   );
 
-  // Locate the manipulated json node
+  return normalizedSelectors;
+}
+
+function locateNode(dialog: { [key: string]: any }, path: string) {
+  const selectors = parseSelector(path);
+  if (!Array.isArray(selectors)) return null;
+  if (selectors.length === 0) return dialog;
+
+  // Locate the to be manipulated json node
   let parentData: object = {};
   let currentKey: number | string = '';
   let currentData = dialog;
 
-  for (const selector of normalizedSelectors) {
+  for (const selector of selectors) {
     parentData = currentData;
     currentData = parentData[selector];
     currentKey = selector;
 
     if (currentData === undefined) return null;
+  }
+
+  return { parentData, currentData, currentKey };
+}
+
+/**
+ * The difference between `prepareNode` and `locateNode` is,
+ * `prepareNode` will create new container to make sure your path is always valid.
+ */
+function prepareTargetArray(dialog: { [key: string]: any }, arrayPath: string) {
+  const selectors = parseSelector(arrayPath);
+  if (!Array.isArray(selectors)) return null;
+  if (selectors.length === 0) return { parentData: null, currentKey: null, currentData: dialog };
+
+  // Locate the manipulated json node
+  let parentData: object = {};
+  let currentKey: number | string = '';
+  let currentData = dialog;
+
+  for (const selector of selectors) {
+    parentData = currentData;
+    currentData = parentData[selector];
+    currentKey = selector;
+
+    if (currentData === undefined) {
+      // lodash.set will create `[ null ]` which is not expected.
+      currentData = [];
+      parentData[currentKey] = currentData;
+    }
   }
 
   return { parentData, currentData, currentKey };
@@ -160,18 +196,18 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export function pasteNodes(inputDialog, targetPath, targetIndex, newNodes) {
+export function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
 
   const dialog = cloneDeep(inputDialog);
-  const targetArray = locateNode(dialog, targetPath);
+  const targetArray = prepareTargetArray(dialog, arrayPath);
 
   if (!targetArray || !Array.isArray(targetArray.currentData)) {
     return inputDialog;
   }
 
-  targetArray.currentData.splice(targetIndex, 0, ...newNodes);
+  targetArray.currentData.splice(arrayIndex, 0, ...newNodes);
   return dialog;
 }
