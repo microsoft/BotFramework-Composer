@@ -1,6 +1,6 @@
 import ludown from 'ludown';
 
-import { Diagnostic } from '../validator/interface';
+import { Diagnostic } from '../validator';
 
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';

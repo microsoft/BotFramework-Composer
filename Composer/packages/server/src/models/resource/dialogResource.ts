@@ -1,6 +1,6 @@
 import { has, uniq } from 'lodash';
 
-import { Diagnostic } from '../validator/interface';
+import { Diagnostic } from '../validator';
 import { JsonWalk, VisitorFunc } from '../../utility/jsonWalk';
 import { ITrigger } from '../bot/interface';
 

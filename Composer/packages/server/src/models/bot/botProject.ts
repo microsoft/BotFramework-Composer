@@ -5,10 +5,8 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { Resource } from '../resource/resource';
-import { DialogResource } from '../resource/dialogResource';
-import { LGResource } from '../resource/lgResource';
-import { LUResource } from '../resource/luResource';
+
+import { Resource, DialogResource, LGResource, LUResource } from '../resource';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';

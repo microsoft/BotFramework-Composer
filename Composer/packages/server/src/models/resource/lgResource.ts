@@ -1,7 +1,7 @@
 import { LGParser } from 'botbuilder-lg';
 
 import { LGTemplate } from '../bot/interface';
-import { Diagnostic } from '../validator/interface';
+import { Diagnostic } from '../validator';
 
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
