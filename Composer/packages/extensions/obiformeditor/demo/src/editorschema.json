@@ -68,8 +68,8 @@
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
-    "Microsoft.LogStep": {
-      "title": "LogStep"
+    "Microsoft.LogAction": {
+      "title": "LogAction"
     },
     "Microsoft.LuisRecognizer": {
       "title": "Language Understanding",
