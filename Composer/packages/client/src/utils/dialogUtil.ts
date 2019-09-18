@@ -1,13 +1,13 @@
-import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup, SDKTypes } from 'shared-menus';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
-import nanoid from 'nanoid/generate';
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared-menus';
+import { cloneDeep, get, set } from 'lodash';
 
 import { DialogInfo } from '../store/types';
-
-import { upperCaseName } from './fileUtil';
+import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { IDropdownOption } from 'office-ui-fabric-react';
 import { getFocusPath } from './navigation';
+import nanoid from 'nanoid/generate';
+import { upperCaseName } from './fileUtil';
+
 const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
@@ -42,7 +42,7 @@ export function getFriendlyName(data) {
   }
 
   if (get(data, 'intent')) {
-    return `#${get(data, 'intent')}`;
+    return `${get(data, 'intent')}`;
   }
 
   if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
@@ -55,7 +55,13 @@ export function getFriendlyName(data) {
 export function getNewDesigner(name: string, description: string) {
   const timestamp = new Date().toISOString();
   return {
-    $designer: { name, description, createdAt: timestamp, updatedAt: timestamp, id: nanoid('1234567890', 6) },
+    $designer: {
+      name,
+      description,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      id: nanoid('1234567890', 6),
+    },
   };
 }
 
