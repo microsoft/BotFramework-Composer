@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { cloneDeep } from 'lodash';
-import { createStepMenu, DialogGroup } from 'shared-menus';
 
 import { DialogInfo, ITrigger } from '../../store/types';
 import { getFriendlyName, createSelectedPath } from '../../utils';
@@ -14,11 +13,13 @@ interface ProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
+  isOpen: boolean;
   onAdd: () => void;
   onSelect: (id: string, selected?: string) => void;
   onAddTrigger: (id: string, type: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
+  openNewTriggerModal: () => void;
 }
 
 const addIconProps: IIconProps = {
@@ -26,23 +27,8 @@ const addIconProps: IIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-const menuIconProps: IIconProps = {
-  iconName: '',
-};
-
 export const ProjectTree: React.FC<ProjectTreeProps> = props => {
-  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, onAddTrigger } = props;
-
-  const createMenuProps = (position: number) => {
-    return {
-      items: createStepMenu(
-        [DialogGroup.EVENTS],
-        false,
-        (e, item): any => onAddTrigger(dialogId, item.$type, position)
-      ),
-      id: 'AddNewTriggerMenu',
-    };
-  };
+  const { dialogs, onAdd, dialogId, selected, onSelect, onDeleteDialog, onDeleteTrigger, openNewTriggerModal } = props;
 
   const showName = (trigger: ITrigger) => {
     if (!trigger.displayName) {
@@ -107,8 +93,7 @@ export const ProjectTree: React.FC<ProjectTreeProps> = props => {
                   tabIndex={1}
                   iconProps={addIconProps}
                   css={addButton(1)}
-                  menuProps={createMenuProps(link.triggers.length)}
-                  menuIconProps={menuIconProps}
+                  onClick={openNewTriggerModal}
                 >
                   {formatMessage('New Trigger ..')}
                 </ActionButton>

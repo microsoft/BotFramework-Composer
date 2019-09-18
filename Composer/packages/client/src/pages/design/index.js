@@ -1,13 +1,13 @@
-import React, { Fragment, useContext, useEffect, useMemo } from 'react';
-import { Breadcrumb, Icon } from 'office-ui-fabric-react';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton, Breadcrumb, Icon } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower } from 'lodash';
-// import { getDialogData } from '../../utils';
+import { toLower, get } from 'lodash';
 
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, addNewTrigger, deleteTrigger, createSelectedPath } from '../../utils';
+import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
+import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 
 import { Conversation } from './../../components/Conversation';
 import { ProjectTree } from './../../components/ProjectTree';
@@ -22,12 +22,22 @@ import {
   formEditor,
   editorWrapper,
   deleteDialogContent,
+  middleTriggerContainer,
+  middleTriggerElements,
+  triggerButton,
 } from './styles';
 import NewDialogModal from './new-dialog-modal';
 import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { DialogStyle } from './../../components/Modal/styles';
 import { clearBreadcrumb } from './../../utils/navigation';
+import undoHistory from './../../store/middlewares/undo/history';
+import { getNewDesigner } from './../../utils/dialogUtil';
+
+const addIconProps = {
+  iconName: 'CircleAddition',
+  styles: { root: { fontSize: '12px' } },
+};
 
 function onRenderContent(subTitle, style) {
   return (
@@ -65,10 +75,19 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, designPageLocation, breadcrumb } = state;
-  const { removeDialog, setDesignPageLocation, navTo, selectTo, setectAndfocus, updateDialog } = actions;
+  const {
+    removeDialog,
+    setDesignPageLocation,
+    navTo,
+    selectTo,
+    setectAndfocus,
+    updateDialog,
+    clearUndoHistory,
+  } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
-
+  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -81,8 +100,35 @@ function DesignPage(props) {
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
       });
       globalHistory._onTransitionComplete();
+    } else {
+      //leave design page should clear the history
+      clearUndoHistory();
     }
   }, [location]);
+
+  useEffect(() => {
+    const dialog = dialogs.find(d => d.id === dialogId);
+    const visible = get(dialog, 'triggers', []).length === 0;
+    setTriggerButtonVisibility(visible);
+  }, [dialogs, dialogId]);
+
+  const onTriggerCreationDismiss = () => {
+    setTriggerModalVisibility(false);
+  };
+
+  const openNewTriggerModal = () => {
+    setTriggerModalVisibility(true);
+  };
+
+  const onTriggerCreationSubmit = dialog => {
+    const payload = {
+      id: dialog.id,
+      content: dialog.content,
+    };
+    const index = get(dialog, 'content.events', []).length - 1;
+    actions.selectTo(`events[${index}]`);
+    actions.updateDialog(payload);
+  };
 
   function handleSelect(id, selected = '') {
     if (selected) {
@@ -110,6 +156,30 @@ function DesignPage(props) {
   };
 
   const toolbarItems = [
+    {
+      type: 'action',
+      text: formatMessage('Undo'),
+      buttonProps: {
+        disabled: !undoHistory.canUndo(),
+        iconProps: {
+          iconName: 'Undo',
+        },
+        onClick: () => actions.undo(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Redo'),
+      buttonProps: {
+        disabled: !undoHistory.canRedo(),
+        iconProps: {
+          iconName: 'Redo',
+        },
+        onClick: () => actions.redo(),
+      },
+      align: 'left',
+    },
     {
       type: 'element',
       element: <TestController />,
@@ -145,12 +215,7 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data) {
-    const content = {
-      $designer: {
-        name: data.name,
-        description: data.description,
-      },
-    };
+    const content = getNewDesigner(data.name, data.description);
     await actions.createDialog({ id: data.name, content });
   }
 
@@ -177,12 +242,6 @@ function DesignPage(props) {
     if (result) {
       await removeDialog(id);
     }
-  }
-
-  async function handleAddTrigger(id, type, index) {
-    const content = addNewTrigger(dialogs, id, type);
-    await updateDialog({ id, content });
-    selectTo(createSelectedPath(index));
   }
 
   async function handleDeleteTrigger(id, index) {
@@ -216,9 +275,9 @@ function DesignPage(props) {
           selected={selected}
           onSelect={handleSelect}
           onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
-          onAddTrigger={handleAddTrigger}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
@@ -231,8 +290,24 @@ function DesignPage(props) {
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}
+                    hidden={triggerButtonVisible}
                     src={`${rootPath}/extensionContainer.html`}
                   />
+                  {triggerButtonVisible && (
+                    <div css={middleTriggerContainer}>
+                      <div css={middleTriggerElements}>
+                        {formatMessage(`This dialog has no trigger yet.`)}
+                        <ActionButton
+                          data-testid="MiddleAddNewTriggerButton"
+                          iconProps={addIconProps}
+                          css={triggerButton}
+                          onClick={openNewTriggerModal}
+                        >
+                          {formatMessage('New Trigger ..')}
+                        </ActionButton>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <iframe
                   key="FormEditor"
@@ -251,6 +326,14 @@ function DesignPage(props) {
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
       />
+      {triggerModalVisible && (
+        <TriggerCreationModal
+          dialogId={dialogId}
+          isOpen={triggerModalVisible}
+          onDismiss={onTriggerCreationDismiss}
+          onSubmit={onTriggerCreationSubmit}
+        />
+      )}
     </Fragment>
   );
 }

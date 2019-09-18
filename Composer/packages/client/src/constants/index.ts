@@ -3,6 +3,8 @@ import formatMessage from 'format-message';
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
 
+//the count about the undo/redo
+export const UNDO_LIMIT = 10;
 /**
  * Global ActionTypes Defination Instruction.
  * For unification consideration, please follow the naming pattern below
@@ -85,6 +87,9 @@ export enum ActionTypes {
   USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
   USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
   USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',
+  UNDO = 'UNDO',
+  REDO = 'REDO',
+  HISTORY_CLEAR = 'HISTORY_CLEAR',
 }
 
 export const Tips = {
