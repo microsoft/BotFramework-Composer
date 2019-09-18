@@ -36,11 +36,7 @@ import { getNewDesigner } from './../../utils/dialogUtil';
 
 const addIconProps = {
   iconName: 'CircleAddition',
-  styles: {
-    root: {
-      fontSize: '12px',
-    },
-  },
+  styles: { root: { fontSize: '12px' } },
 };
 
 function onRenderContent(subTitle, style) {
@@ -56,16 +52,7 @@ function onRenderContent(subTitle, style) {
 function onRenderBreadcrumbItem(item, render) {
   return (
     <span>
-      {!item.isRoot && (
-        <Icon
-          iconName="Flow"
-          styles={{
-            root: {
-              marginLeft: '6px',
-            },
-          }}
-        />
-      )}
+      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
       {render(item)}
     </span>
   );
@@ -211,13 +198,7 @@ function DesignPage(props) {
             const { dialogId, selected, focused } = item;
             const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
             if (text) {
-              result.push({
-                text,
-                isRoot: !selected && !focused,
-                ...item,
-                index,
-                onClick: handleBreadcrumbItemClick,
-              });
+              result.push({ text, isRoot: !selected && !focused, ...item, index, onClick: handleBreadcrumbItemClick });
             }
             return result;
           }, [])
@@ -272,12 +253,10 @@ function DesignPage(props) {
       current = parseInt(current);
       if (index === current) {
         if (current - 1 >= 0) {
-          // if the deleted node is selected and the selected one is not the first one,
-          // navTo the previous trigger;
+          //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
           selectTo(createSelectedPath(current - 1));
         } else {
-          // if the deleted node is selected and the selected one is the first one, navTo
-          // the first trigger;
+          //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
           navTo(id);
         }
       } else if (index < current) {
@@ -313,7 +292,7 @@ function DesignPage(props) {
                     css={visualEditor}
                     hidden={triggerButtonVisible}
                     src={`${rootPath}/extensionContainer.html`}
-                  />{' '}
+                  />
                   {triggerButtonVisible && (
                     <div css={middleTriggerContainer}>
                       <div css={middleTriggerElements}>
@@ -346,7 +325,7 @@ function DesignPage(props) {
         onDismiss={() => actions.createDialogCancel()}
         onSubmit={onSubmit}
         onGetErrorMessage={getErrorMessage}
-      />{' '}
+      />
       {triggerModalVisible && (
         <TriggerCreationModal
           dialogId={dialogId}

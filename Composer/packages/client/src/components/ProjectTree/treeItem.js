@@ -43,7 +43,7 @@ export const TreeItem = props => {
         items={[
           {
             key: link.id,
-            depth: depth,
+            depth,
             ...link,
           },
         ]}
