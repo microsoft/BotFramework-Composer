@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { ConceptLabels } from 'shared-menus';
 
 import { TriggerSize } from '../../constants/ElementSizes';
 import { ElementIcon } from '../../utils/obiPropertyResolver';
 
 import { FormCard } from './templates/FormCard';
-import { ConceptLabels } from 'shared-menus';
 
 function getLabel(data: any): string {
   if (data.intent) {
