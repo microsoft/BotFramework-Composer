@@ -53,7 +53,7 @@ const SystemKeyboardCommandTypes = {
 export function findCommand(keyCode) {
   const command = SystemKeyboardCommandTypes[keyCode];
   let commands: { [key: string]: string };
-  let primaryType: string = '';
+  let primaryType = '';
   let commandKey: string | undefined;
   Object.keys(KeyboardCommandTypes).forEach(key => {
     commands = KeyboardCommandTypes[key];
