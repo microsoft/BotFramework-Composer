@@ -1,7 +1,7 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
-import { get } from 'lodash';
+import { get, debounce } from 'lodash';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/neat.css';
@@ -37,7 +37,6 @@ export const DialogSettings = () => {
   useEffect(() => {
     // need to refresh codemirror, if the value parse to string is the same as before, it will not refresh
     setValue(JSON.stringify(settings, null, 2));
-    // setInterval(() =>{}, 500);
   }, [botName, isEnvSettingUpdated]);
 
   const updateFormData = (editor, data, newValue) => {
@@ -45,23 +44,24 @@ export const DialogSettings = () => {
     syncSettings(newValue);
   };
 
-  const syncSettings = newValue => {
-    try {
-      const result = JSON.parse(newValue);
+  const syncSettings = useRef(
+    debounce(newValue => {
       try {
-        for (const property of SensitiveProperties) {
-          const propertyValue = get(result, property);
-          settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+        const result = JSON.parse(newValue);
+        try {
+          for (const property of SensitiveProperties) {
+            const propertyValue = get(result, property);
+            settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+          }
+          syncEnvSettings(result);
+        } catch (err) {
+          console.error(err.message);
         }
-        console.log('sync');
-        syncEnvSettings(result);
       } catch (err) {
-        console.error(err.message);
+        //Do Nothing
       }
-    } catch (err) {
-      //Do Nothing
-    }
-  };
+    }, 500)
+  ).current;
 
   //debounce(updateFormData, 500)
   return botName ? (

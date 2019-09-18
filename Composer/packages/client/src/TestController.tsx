@@ -82,7 +82,6 @@ export const TestController: React.FC = () => {
     }
 
     if (getReferredFiles(luFiles, dialogs).length > 0) {
-      console.log(luisPublishSucceed);
       if (!luisPublishSucceed || !complete) {
         setModalOpen(true);
       } else {

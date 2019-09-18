@@ -132,7 +132,6 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    console.log(newValue);
     await syncEnvSettings({ ...settings, luis: newValue });
     await setEnvSettings();
     await onPublish(newValue);
