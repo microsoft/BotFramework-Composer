@@ -14,6 +14,7 @@ export class LuPublisher {
   public statusFile: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
+  public previousConfig: ILuisConfig | null = null;
 
   // key: filePath relative to bot dir
   // value: lastUpdateTime && lastPublishTime
@@ -25,6 +26,10 @@ export class LuPublisher {
     this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
     this.storage = storage;
   }
+
+  public isConfigEqual = () => {
+    return JSON.stringify(this.config) === JSON.stringify(this.previousConfig);
+  };
 
   // load luis status from luis.status.json
   public loadStatus = async (files: string[] = []) => {
@@ -84,6 +89,8 @@ export class LuPublisher {
         this.status[f.relativePath].lastPublishTime = curTime;
       });
       await this.saveStatus();
+
+      this.previousConfig = this.config ? { ...this.config } : null;
     } catch (error) {
       console.error(error);
       throw new Error(error.body.error.message ? error.body.error.message : 'Error publishing to LUIS.');
@@ -162,7 +169,7 @@ export class LuPublisher {
   };
 
   private _getConfig = (luFiles: LUFile[]) => {
-    const luConfig: any = this.config;
+    const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;

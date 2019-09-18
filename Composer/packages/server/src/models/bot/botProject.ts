@@ -268,7 +268,13 @@ export class BotProject {
   public publishLuis = async (authoringKey: string) => {
     await this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+    let unpublished;
+    // if the luis config changed, publish with another config again, not cover previous lusi models
+    if (this.luPublisher.isConfigEqual()) {
+      unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+    } else {
+      unpublished = referred;
+    }
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {

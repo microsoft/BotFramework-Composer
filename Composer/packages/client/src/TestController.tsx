@@ -80,19 +80,6 @@ export const TestController: React.FC = () => {
         break;
       }
     }
-    // if (complete) {
-    //   if (getReferredFiles(luFiles, dialogs).length > 0) {
-    //     if (!luisPublishSucceed) {
-    //       setModalOpen(true);
-    //     } else {
-    //       await publishAndReload(config);
-    //     }
-    //   } else {
-    //     await handleLoadBot();
-    //   }
-    // } else {
-    //   setModalOpen(true);
-    // }
 
     if (getReferredFiles(luFiles, dialogs).length > 0) {
       console.log(luisPublishSucceed);
@@ -102,7 +89,7 @@ export const TestController: React.FC = () => {
         await publishAndReload(config);
       }
     } else {
-      await handleLoadBot(settings);
+      await handleLoadBot(config);
     }
   }
 
