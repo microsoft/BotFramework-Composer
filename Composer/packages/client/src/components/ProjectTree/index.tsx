@@ -1,22 +1,21 @@
-import React, { useRef, useMemo, useState } from 'react';
-import { cloneDeep } from 'lodash';
 import {
+  ActionButton,
   GroupedList,
   IGroup,
   IGroupHeaderProps,
   IGroupRenderProps,
   IGroupedList,
-  ActionButton,
   IIconProps,
   SearchBox,
 } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
-
 import { DialogInfo, ITrigger } from '../../store/types';
-import { getFriendlyName, createSelectedPath } from '../../utils';
+import React, { useMemo, useRef, useState } from 'react';
+import { addButton, groupListStyle, root, searchBox } from './styles';
+import { createSelectedPath, getFriendlyName } from '../../utils';
 
-import { groupListStyle, addButton, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
+import { cloneDeep } from 'lodash';
+import formatMessage from 'format-message';
 
 export function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
   return {
@@ -103,19 +102,16 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
-      if (groupRef.current && props.group) {
-        groupRef.current.toggleCollapseAll(true);
-        props.onToggleCollapse!(props.group);
-        if (dialogId !== props.group.key) {
-          onSelect(props.group.key);
-        }
-      }
+      groupRef.current!.toggleCollapseAll(true);
+      props.onToggleCollapse!(props.group!);
+      onSelect(props.group!.key);
     };
     return (
       <TreeItem
         link={props.group!.data}
         depth={0}
         isActive={!props.group!.isCollapsed}
+        isSubItemActive={!!selected}
         onSelect={toggleCollapse}
         onDelete={onDeleteDialog}
       />

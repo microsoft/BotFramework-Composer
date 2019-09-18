@@ -1,10 +1,9 @@
+import { Dialog, FileInfo, ITrigger } from './../interface';
+import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { has, uniq } from 'lodash';
 
-import { Path } from '../../../utility/path';
-import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { DialogChecker } from '../dialogChecker';
-
-import { FileInfo, Dialog, ITrigger } from './../interface';
+import { Path } from '../../../utility/path';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];
@@ -116,9 +115,6 @@ export class DialogIndexer {
               trigger.displayName = rule.intent;
             }
 
-            if (trigger.isIntent && trigger.displayName) {
-              trigger.displayName = '#' + trigger.displayName;
-            }
             trigers.push(trigger);
           }
         });

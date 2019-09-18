@@ -25,11 +25,11 @@ const onRenderOverflowButton = overflowItems => {
 };
 
 export const TreeItem = props => {
-  const { link, isActive, depth, onDelete, onSelect } = props;
+  const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
       tabIndex={1}
-      css={navItem(isActive, depth)}
+      css={navItem(isActive, isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
       }}

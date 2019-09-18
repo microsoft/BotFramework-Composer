@@ -1,38 +1,37 @@
-import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { ActionButton, Breadcrumb, Icon } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
-import { globalHistory } from '@reach/router';
-import { toLower, get } from 'lodash';
-
-import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
-import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
-
-import { Conversation } from './../../components/Conversation';
-import { ProjectTree } from './../../components/ProjectTree';
-import { StoreContext } from './../../store';
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import {
-  pageRoot,
-  contentWrapper,
   breadcrumbClass,
-  editorContainer,
-  visualPanel,
-  visualEditor,
-  formEditor,
-  editorWrapper,
+  contentWrapper,
   deleteDialogContent,
+  editorContainer,
+  editorWrapper,
+  formEditor,
   middleTriggerContainer,
   middleTriggerElements,
+  pageRoot,
   triggerButton,
+  visualEditor,
+  visualPanel,
 } from './styles';
-import NewDialogModal from './new-dialog-modal';
-import { ToolBar } from './../../components/ToolBar/index';
-import { OpenConfirmModal } from './../../components/Modal/Confirm';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
+import { get, toLower } from 'lodash';
+
+import { Conversation } from './../../components/Conversation';
 import { DialogStyle } from './../../components/Modal/styles';
+import NewDialogModal from './new-dialog-modal';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
+import { ProjectTree } from './../../components/ProjectTree';
+import { StoreContext } from './../../store';
+import { TestController } from '../../TestController';
+import { ToolBar } from './../../components/ToolBar/index';
+import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 import { clearBreadcrumb } from './../../utils/navigation';
-import undoHistory from './../../store/middlewares/undo/history';
+import formatMessage from 'format-message';
 import { getNewDesigner } from './../../utils/dialogUtil';
+import { globalHistory } from '@reach/router';
+import undoHistory from './../../store/middlewares/undo/history';
 
 const addIconProps = {
   iconName: 'CircleAddition',
@@ -55,6 +54,32 @@ function onRenderBreadcrumbItem(item, render) {
       {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
       {render(item)}
     </span>
+  );
+}
+
+function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
+  return (
+    <div css={middleTriggerContainer}>
+      <div css={middleTriggerElements}>
+        {isTriggerEmpty ? (
+          <Fragment>
+            {formatMessage(`This dialog has no trigger yet.`)}
+            <ActionButton
+              data-testid="MiddleAddNewTriggerButton"
+              iconProps={addIconProps}
+              css={triggerButton}
+              onClick={onClickAddTrigger}
+            >
+              {formatMessage('New Trigger ..')}
+            </ActionButton>
+          </Fragment>
+        ) : (
+          <div>
+            {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -290,24 +315,10 @@ function DesignPage(props) {
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}
-                    hidden={triggerButtonVisible}
+                    hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
                   />
-                  {triggerButtonVisible && (
-                    <div css={middleTriggerContainer}>
-                      <div css={middleTriggerElements}>
-                        {formatMessage(`This dialog has no triggers configured`)}
-                        <ActionButton
-                          data-testid="MiddleAddNewTriggerButton"
-                          iconProps={addIconProps}
-                          css={triggerButton}
-                          onClick={openNewTriggerModal}
-                        >
-                          {formatMessage('New Trigger ..')}
-                        </ActionButton>
-                      </div>
-                    </div>
-                  )}
+                  {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>
                 <iframe
                   key="FormEditor"
