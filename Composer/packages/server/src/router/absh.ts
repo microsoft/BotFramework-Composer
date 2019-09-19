@@ -10,6 +10,15 @@ import { AuthProviderInit } from './types';
 const BEARER_PREFIX = 'Bearer ';
 const LOGIN_URL = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
+declare global {
+  //eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    interface Request {
+      user?: Record<string, any>;
+    }
+  }
+}
+
 interface BFTokenPayload {
   'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn': string;
   'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': string;
@@ -111,13 +120,13 @@ const absh: AuthProviderInit = {
             }
             return;
           }
-
           // make sure token.aud is authorized for this bot
           if (typeof token !== 'object' || (token as BFTokenPayload).aud !== msAppId) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
           }
 
+          req.user = token;
           next();
         });
       } catch (err) {

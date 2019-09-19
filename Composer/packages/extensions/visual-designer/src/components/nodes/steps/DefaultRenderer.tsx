@@ -122,10 +122,10 @@ const ContentKeyByTypes: {
   [ObiTypes.TraceActivity]: {
     label: 'valueProperty',
   },
-  [ObiTypes.LogStep]: {
+  [ObiTypes.LogAction]: {
     label: 'text',
   },
-  [ObiTypes.EditSteps]: {
+  [ObiTypes.EditActions]: {
     label: 'changeType',
   },
 };
