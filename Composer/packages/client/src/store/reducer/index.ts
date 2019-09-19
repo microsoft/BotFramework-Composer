@@ -12,6 +12,7 @@ const projectFiles = ['bot', 'botproj'];
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
@@ -76,8 +77,10 @@ const updateLuTemplate: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const setBotStatus: ReducerFunc = (state, { status }) => {
-  return (state.botStatus = status);
+const setBotStatus = (state, { status, botEndpoint }) => {
+  state.botEndpoint = botEndpoint || state.botEndpoint;
+  state.botStatus = status;
+  return state;
 };
 
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
