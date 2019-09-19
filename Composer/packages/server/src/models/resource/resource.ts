@@ -1,4 +1,4 @@
-import { Diagnostic } from '../validator/validator';
+import { Diagnostic } from '../validator';
 
 // The basic interface for declartive resource
 // we need to model things as resource so that we can have a unified interface
