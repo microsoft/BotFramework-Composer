@@ -12,14 +12,14 @@ context('Visual Designer', () => {
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Handle an Intent').should('exist');
+      cy.contains('Handle a Dialog Event').should('exist');
     });
 
     cy.addEventHandler('Handle an Intent');
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Microsoft.OnIntent').should('exist');
+      cy.contains('Handle an Intent').should('exist');
     });
 
     cy.addEventHandler('Handle Unknown Intent');
