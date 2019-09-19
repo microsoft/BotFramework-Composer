@@ -39,7 +39,7 @@ function localeNearestElement(
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
-  let isInvolved = false;
+  const isInvolved = false;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
@@ -53,10 +53,7 @@ function localeNearestElement(
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
       );
-      if (boundRectKey === BoundRect.Bottom) {
-        isInvolved = distance < currentElementBounds.height;
-      }
-      if (!isInvolved && assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
+      if (assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
         neareastElement = element;
         minDistance = distance;
       }
@@ -78,39 +75,51 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
   const elementArr = Array.from(elements);
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
-  let isInvolved = false;
   let selectedElement: HTMLElement = currentElement;
+  let selectedElementBounds: ClientRect;
+  let isInvolved = false;
+  const judgeElementRelation = (parentBounds, childBounds) => {
+    return (
+      parentBounds.left < childBounds.left &&
+      parentBounds.right >= childBounds.right &&
+      parentBounds.top < childBounds.top &&
+      parentBounds.bottom > childBounds.bottom
+    );
+  };
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
     elementArr.forEach(element => {
       bounds = element.getBoundingClientRect();
-      if (
-        currentElementBounds.left < bounds.left &&
-        currentElementBounds.right >= bounds.right &&
-        currentElementBounds.top < bounds.top &&
-        currentElementBounds.bottom > bounds.bottom
-      ) {
+      if (judgeElementRelation(currentElementBounds, bounds)) {
         isInvolved = true;
         selectedElement = element;
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X);
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
     }
   } else {
     elementArr.forEach(element => {
       bounds = element.getBoundingClientRect();
-      if (
-        currentElementBounds.left > bounds.left &&
-        currentElementBounds.right <= bounds.right &&
-        currentElementBounds.top > bounds.top &&
-        currentElementBounds.bottom < bounds.bottom
-      ) {
+      if (judgeElementRelation(bounds, currentElementBounds)) {
         isInvolved = true;
         selectedElement = element;
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X);
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      selectedElementBounds = selectedElement.getBoundingClientRect();
+      elementArr.forEach(element => {
+        bounds = element.getBoundingClientRect();
+        if (judgeElementRelation(selectedElementBounds, bounds)) {
+          selectedElement = element;
+        }
+      });
     }
   }
   return selectedElement;
