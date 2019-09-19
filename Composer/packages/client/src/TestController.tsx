@@ -84,7 +84,7 @@ export const TestController: React.FC = () => {
     }
 
     if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
-      if (!luisPublishSucceed && !complete) {
+      if (!luisPublishSucceed || !complete) {
         setModalOpen(true);
       } else {
         await publishAndReload(config);
