@@ -34,4 +34,9 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="ComposerDialogs\" />
+  </ItemGroup>
+
 </Project>

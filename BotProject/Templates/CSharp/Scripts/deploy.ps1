@@ -58,7 +58,7 @@ dotnet publish -c release -o $publishFolder -v q > $logFile
 
 
 # Copy bot files to running folder
-$remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
+$remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
 

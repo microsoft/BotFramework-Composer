@@ -141,7 +141,7 @@ if ($outputs)
 	
 	dotnet user-secrets set "MicrosoftAppPassword" $appPassword --project $projDir
 
-	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "RunningInstance"
+	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "ComposerDialogs"
 
 	foreach ($key in $outputMap.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $outputMap[$key].value }
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.json)
