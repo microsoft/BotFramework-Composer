@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from 'shared-menus';
 
@@ -36,12 +37,14 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         background: 'white',
         outline: nodeSelected ? '1px solid #0078d4' : '',
       }}
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
+      {...declareElementAttributes(id)}
     >
       <IconMenu
-        {...declareElementAttributes(id)}
         iconName="Add"
         iconStyles={{ background: 'white', color: '#005CE6' }}
         iconSize={10}
+        nodeSelected={nodeSelected}
         menuItems={createStepMenu(
           [
             DialogGroup.RESPONSE,

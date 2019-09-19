@@ -36,7 +36,7 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
     delete keyPressed.current[e.key];
   };
   return (
-    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} data-test-id="keyboard-zone">
       {children}
     </div>
   );
