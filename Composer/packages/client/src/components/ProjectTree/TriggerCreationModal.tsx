@@ -5,13 +5,17 @@ import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdown
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
 
-import { addNewTrigger, getTriggerTypes, TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
+import {
+  addNewTrigger,
+  getTriggerTypes,
+  TriggerFormData,
+  TriggerFormDataErrors,
+  eventTypeKey,
+} from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
 import { styles, dropdownStyles, name, dialogWindow, constraint } from './styles';
-
-const eventTypeKey = 'Microsoft.OnDialogEvent';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;

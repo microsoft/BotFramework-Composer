@@ -1,5 +1,5 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup } from 'shared-menus';
+import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup, SDKTypes } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import nanoid from 'nanoid/generate';
 import { IDropdownOption } from 'office-ui-fabric-react';
@@ -32,6 +32,8 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find(item => item.id === dialogId);
   return cloneDeep(dialog);
 }
+
+export const eventTypeKey = SDKTypes.OnDialogEvent;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
