@@ -33,7 +33,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-export const eventTypeKey = SDKTypes.OnDialogEvent;
+export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -111,7 +111,7 @@ export function getTriggerTypes(): IDropdownOption[] {
       text: '',
     },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
-      return { key: t, text: ConceptLabels[t].title };
+      return { key: String(t), text: ConceptLabels[String(t)].title };
     }),
   ];
   return triggerTypes;
