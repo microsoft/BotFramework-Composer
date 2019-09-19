@@ -1,7 +1,8 @@
 .BaseField {
-  padding: 24px 18px;
+  // padding: 24px 18px;
 
   &Title {
+    // padding: 0px 18px;
     font-size: 16px;
     font-weight: 600;
     margin: 0;
@@ -9,6 +10,7 @@
   }
 
   &Description {
+    // padding: 0px 18px;
     font-size: 12px;
     margin: 0;
     margin-bottom: 20px;
@@ -16,7 +18,9 @@
 }
 
 .RootFieldTitle {
-  margin: 0;
+  border-bottom: 1px solid #c8c6c4;
+  padding: 0 18px;
+  margin-bottom: 16px;
 }
 
 .RootFieldDescription {
@@ -26,6 +30,8 @@
 .RootFieldMetaData {
   padding: 18px;
   display: flex;
+  border-top: 1px solid #c8c6c4;
+  margin-top: 14px;
 }
 
 .PromptField {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
@@ -69,12 +68,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
       {children}
     </RootField>
   ) : (
-    <div
-      className={classnames('BaseField', className)}
-      key={key}
-      id={key.replace(/\.|#/g, '')}
-      style={{ borderBottom: `1px solid ${NeutralColors.gray60}` }}
-    >
+    <div className={classnames('BaseField', className)} key={key} id={key.replace(/\.|#/g, '')}>
       <div>
         <h3 className="BaseFieldTitle">{getTitle()}</h3>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (

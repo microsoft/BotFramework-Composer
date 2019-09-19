@@ -99,7 +99,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
 
   return (
     <div id={props.id} className="RootField">
-      <div style={{ borderBottom: `1px solid ${NeutralColors.gray60}`, padding: '0 18px' }}>
+      <div className="RootFieldTitle">
         <EditableTitle title={getTitle()} onChange={handleTitleChange} />
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p

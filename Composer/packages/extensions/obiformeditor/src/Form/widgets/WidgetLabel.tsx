@@ -69,7 +69,6 @@ export const WidgetLabel: React.FC<WidgetLabelProps> = props => {
           fontWeight: '400',
           display: 'flex',
           alignItems: 'center',
-          marginTop: inline ? '0' : '14px',
           marginLeft: inline ? '4px' : '0',
         },
       }}

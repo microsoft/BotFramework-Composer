@@ -86,7 +86,6 @@ export function TextWidget(props: BFDWidgetProps) {
       <ExpressionWidget
         {...sharedProps}
         label={label}
-        description={description}
         schema={schema}
         formContext={formContext}
         rawErrors={rawErrors}

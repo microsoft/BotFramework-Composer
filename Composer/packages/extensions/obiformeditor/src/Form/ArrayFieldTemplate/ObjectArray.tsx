@@ -4,7 +4,6 @@ import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 
 import { BaseField } from '../fields/BaseField';
-import SectionSeparator from '../SectionSeparator';
 
 import ArrayItem from './ArrayItem';
 
@@ -18,7 +17,12 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
           <ArrayItem {...element} key={idx} />
         ))}
         {canAdd && (
-          <DefaultButton type="button" onClick={onAddClick} data-testid="ArrayContainerAdd">
+          <DefaultButton
+            type="button"
+            onClick={onAddClick}
+            data-testid="ArrayContainerAdd"
+            styles={{ root: { marginTop: '14px' } }}
+          >
             {formatMessage('Add')}
           </DefaultButton>
         )}
