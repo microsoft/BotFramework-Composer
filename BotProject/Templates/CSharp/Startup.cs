@@ -95,6 +95,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 .UseLanguageGeneration(resourceExplorer)
                 .UseDebugger(4712)
                 .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
+                .Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)))
                 .UseResourceExplorer(resourceExplorer);
 
                 adapter.OnTurnError = async (turnContext, exception) =>

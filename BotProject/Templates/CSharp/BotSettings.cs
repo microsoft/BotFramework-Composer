@@ -14,9 +14,25 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
         }
 
+        public BlobStorageConfiguration BlobStorage { get; set; }
+
         public string MicrosoftAppId { get; set; }
+
         public string MicrosoftAppPassword { get; set; }
+
         public CosmosDbStorageOptions CosmosDb { get; set; }
+
         public TelemetryConfiguration AppInsights { get; set; }
+
+        public class BlobStorageConfiguration
+        {
+            public BlobStorageConfiguration()
+            {
+
+            }
+
+            public string ConnectionString { get; set; }
+            public string Container { get; set; }
+        }
     }
 }

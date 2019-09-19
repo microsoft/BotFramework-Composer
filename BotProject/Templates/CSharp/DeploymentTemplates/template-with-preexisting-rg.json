@@ -90,6 +90,14 @@
         "appInsightsLocation": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]"
+        },
+        "useStorage": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
         }
     },
     "variables": {
@@ -100,7 +108,8 @@
         "cosmosDbAccountName": "[toLower(take(replace(parameters('cosmosDbName'), '_', ''), 31))]",
         "webAppName": "[if(empty(parameters('newWebAppName')), parameters('botId'), parameters('newWebAppName'))]",
         "siteHost": "[concat(variables('webAppName'), '.azurewebsites.net')]",
-        "botEndpoint": "[concat('https://', variables('siteHost'), '/api/messages')]"
+        "botEndpoint": "[concat('https://', variables('siteHost'), '/api/messages')]",
+        "storageAccountName": "[toLower(take(replace(replace(parameters('storageAccountName'), '-', ''), '_', ''), 24))]"
     },
     "resources": [
         {
@@ -203,6 +212,18 @@
             "properties": {
                 "Application_Type": "web"
             }
+        },
+        {
+            "comments": "storage account",
+            "type": "Microsoft.Storage/storageAccounts",
+            "kind": "StorageV2",
+            "apiVersion": "2018-07-01",
+            "name": "[variables('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "condition": "[parameters('useStorage')]"
         }
     ],
     "outputs": {
@@ -219,6 +240,13 @@
                 "authKey": "[if(parameters('useCosmosDb'), listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', variables('cosmosDbAccountName')), '2015-04-08').primaryMasterKey, '')]",
                 "databaseId": "botstate-db",
                 "collectionId": "botstate-collection"
+            }
+        },
+        "blobStorage": {
+            "type": "object",
+            "value": {
+                "connectionString": "[if(parameters('useStorage'), concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2018-07-01').keys[0].value, ';EndpointSuffix=core.windows.net'), '')]",
+                "container": "transcripts"
             }
         }
     }
