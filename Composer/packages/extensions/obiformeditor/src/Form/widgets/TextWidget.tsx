@@ -4,6 +4,7 @@ import { TextField, SpinButton } from 'office-ui-fabric-react';
 import { BFDWidgetProps } from '../types';
 
 import { ExpressionWidget } from './ExpressionWidget';
+import { WidgetLabel } from './WidgetLabel';
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
@@ -15,6 +16,7 @@ const getFloat = (value: string, step: number) => {
 
 export function TextWidget(props: BFDWidgetProps) {
   const {
+    label,
     onBlur,
     onChange,
     onFocus,
@@ -27,7 +29,7 @@ export function TextWidget(props: BFDWidgetProps) {
     formContext,
     rawErrors,
   } = props;
-  const { examples = [], type, $role } = schema;
+  const { description, examples = [], type, $role } = schema;
 
   let placeholderText = placeholder;
 
@@ -50,17 +52,20 @@ export function TextWidget(props: BFDWidgetProps) {
     const step = type === 'integer' ? 1 : 0.1;
 
     return (
-      <SpinButton
-        onDecrement={updateValue(-step)}
-        onIncrement={updateValue(step)}
-        onValidate={updateValue(0)}
-        disabled={Boolean(schema.const) || readonly || disabled}
-        step={step}
-        value={value}
-        styles={{
-          labelWrapper: { display: 'none' },
-        }}
-      />
+      <>
+        <WidgetLabel label={label} description={description} id={id} />
+        <SpinButton
+          onDecrement={updateValue(-step)}
+          onIncrement={updateValue(step)}
+          onValidate={updateValue(0)}
+          disabled={Boolean(schema.const) || readonly || disabled}
+          step={step}
+          value={value}
+          styles={{
+            labelWrapper: { display: 'none' },
+          }}
+        />
+      </>
     );
   }
 
@@ -77,10 +82,24 @@ export function TextWidget(props: BFDWidgetProps) {
   };
 
   if ($role === 'expression') {
-    return <ExpressionWidget {...sharedProps} formContext={formContext} rawErrors={rawErrors} />;
+    return (
+      <ExpressionWidget
+        {...sharedProps}
+        label={label}
+        description={description}
+        schema={schema}
+        formContext={formContext}
+        rawErrors={rawErrors}
+      />
+    );
   }
 
-  return <TextField {...sharedProps} />;
+  return (
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <TextField {...sharedProps} />
+    </>
+  );
 }
 
 TextWidget.defaultProps = {

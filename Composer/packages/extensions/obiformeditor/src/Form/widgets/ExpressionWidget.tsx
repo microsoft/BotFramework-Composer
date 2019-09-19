@@ -1,9 +1,11 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react';
-import omit from 'lodash.omit';
+import { JSONSchema6 } from 'json-schema';
 
 import { FormContext } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
 
 const getErrorMessage = () =>
   formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation <a>here</a>', {
@@ -23,12 +25,14 @@ const getErrorMessage = () =>
 interface ExpresionWidgetProps extends ITextFieldProps {
   formContext: FormContext;
   rawErrors: string[];
+  schema: JSONSchema6;
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext } = props;
+  const { rawErrors, formContext, schema, id, label, ...rest } = props;
   const { shellApi } = formContext;
+  const { description } = schema;
 
   const onGetErrorMessage = async (value: string) => {
     if (!value) {
@@ -48,5 +52,10 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
-  return <TextField {...omit(props, ['label', 'description'])} onGetErrorMessage={onGetErrorMessage} />;
+  return (
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <TextField {...rest} id={id} onGetErrorMessage={onGetErrorMessage} />
+    </>
+  );
 };

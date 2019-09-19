@@ -11,10 +11,13 @@ import formatMessage from 'format-message';
 
 import { BFDWidgetProps } from '../types';
 
+import { WidgetLabel } from './WidgetLabel';
+
 const ADD_DIALOG = 'ADD_DIALOG';
 
 export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
-  const { formContext, onChange, onFocus, onBlur, value, id, placeholder } = props;
+  const { formContext, onChange, onFocus, onBlur, value, id, placeholder, label, schema } = props;
+  const { description } = schema;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
   useEffect(() => {
@@ -82,17 +85,20 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
   // Using a Combobox allows us more control over invoking props.onChange via
   // onItemClick prop.
   return (
-    <ComboBox
-      id={id}
-      placeholder={placeholder}
-      onBlur={() => onBlur(id, value)}
-      onFocus={() => onFocus(id, value)}
-      options={options}
-      selectedKey={comboboxTitle ? 'customTitle' : value || ''}
-      onItemClick={handleChange}
-      onRenderOption={onRenderOption}
-      autoComplete="off"
-      useComboBoxAsMenuWidth
-    />
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <ComboBox
+        id={id}
+        placeholder={placeholder}
+        onBlur={() => onBlur(id, value)}
+        onFocus={() => onFocus(id, value)}
+        options={options}
+        selectedKey={comboboxTitle ? 'customTitle' : value || ''}
+        onItemClick={handleChange}
+        onRenderOption={onRenderOption}
+        autoComplete="off"
+        useComboBoxAsMenuWidth
+      />
+    </>
   );
 };

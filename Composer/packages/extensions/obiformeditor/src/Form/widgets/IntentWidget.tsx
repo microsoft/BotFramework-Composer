@@ -2,10 +2,11 @@ import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import formatMessage from 'format-message';
-import omit from 'lodash.omit';
 
 import { LuFile, DialogInfo } from '../../types';
 import { BFDWidgetProps, FormContext } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
@@ -63,7 +64,8 @@ function luIntentOptions(formContext: FormContext): IDropdownOption[] {
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
-  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, ...rest } = props;
+  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
+  const { description } = schema;
   let options: IDropdownOption[] = [];
 
   switch (recognizerType(formContext.currentDialog)) {
@@ -86,8 +88,8 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
 
   return (
     <>
+      <WidgetLabel label={label} description={description} id={id} />
       <Dropdown
-        {...omit(rest, ['label', 'description'])}
         id={id.replace(/\.|#/g, '')}
         onBlur={() => onBlur(id, value)}
         onChange={handleChange}
