@@ -12,7 +12,10 @@ interface IconMenuProps {
   dataTestId?: string;
   iconName: string;
   iconSize?: number;
-  iconStyles?: object;
+  iconStyles?: {
+    background?: string;
+    color?: string;
+  };
   label?: string;
   menuItems: any[];
   menuWidth?: number;
@@ -40,14 +43,23 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       return null;
     }
 
+    const { background, color } = iconStyles || { background: undefined, color: undefined };
+
     const buttonStyles: IButtonStyles = {
       root: {
         minWidth: 0,
         padding: '0 4px',
+        margin: 0,
         alignSelf: 'stretch',
         height: 'auto',
         color: '#000000',
-        ...iconStyles,
+        background: background || 'transparent',
+      },
+      rootHovered: {
+        background: background || 'transparent',
+      },
+      rootChecked: {
+        background: background || 'transparent',
       },
     };
 
@@ -55,7 +67,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       <IconButton
         data-testid="iconMenu"
         styles={buttonStyles}
-        menuIconProps={{ iconName, style: { fontSize: iconSize } }}
+        menuIconProps={{ iconName, style: { fontSize: iconSize, color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
         ariaLabel={label}
         {...rest}

@@ -6,7 +6,7 @@
   "module": "es/index.js",
   "dependencies": {
     "dagre": "^0.8.4",
-    "office-ui-fabric-react": "^6.152.0"
+    "office-ui-fabric-react": "7.36.0"
   },
   "devDependencies": {
     "@babel/cli": "7.2.3",
@@ -23,7 +23,7 @@
     "@types/react-dom": "16.9.0",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
-    "@uifabric/fluent-theme": "^0.16.0",
+    "@uifabric/fluent-theme": "7.1.4",
     "awesome-typescript-loader": "^5.2.1",
     "babel-jest": "24.0.0",
     "clean-webpack-plugin": "^2.0.1",
