@@ -17,13 +17,15 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
+  eventType: string;
   name: string;
-  description: string;
+  constraint: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
   name?: string;
+  eventType?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -56,9 +58,16 @@ export function getNewDesigner(name: string, description: string) {
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
+  const optionalAttributes: { constraint?: string; events?: string[] } = {};
+  if (data.constraint) {
+    optionalAttributes.constraint = data.constraint;
+  }
+  if (data.eventType) {
+    optionalAttributes.events = [data.eventType];
+  }
   const newStep = {
     $type: data.$type,
-    ...seedNewDialog(data.$type, { name: data.name, description: data.description }),
+    ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -100,14 +109,7 @@ export function getTriggerTypes(): IDropdownOption[] {
       text: '',
     },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
+      return { key: t, text: ConceptLabels[t].title };
     }),
   ];
   return triggerTypes;
