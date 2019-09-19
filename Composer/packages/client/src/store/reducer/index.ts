@@ -23,8 +23,10 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
-      if (value) {
+      if (value && (!state.settings[property] || state.settings[property] === '')) {
         set(state.settings as object, property, value);
+      } else if (state.settings[property] && state.settings[property] !== '') {
+        settingStorage.setField(response.data.botName, property, state.settings[property]);
       }
     }
   }

@@ -17,6 +17,7 @@ import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
 import { keys } from 'lodash';
 
+import settingsStorage from '../../utils/dialogSettingStorage';
 import { StoreContext } from '../../store';
 
 import { Text, Tips, Links } from './../../constants';
@@ -115,6 +116,11 @@ export const PublishLuis = props => {
 
   const updateForm = field => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
+    updateLocalStorage(field, newValue);
+  };
+
+  const updateLocalStorage = (luisfield, newValue) => {
+    settingsStorage.setField(botName, `luis.${luisfield}`, newValue ? newValue : '');
   };
 
   const handlePublish = async e => {
@@ -130,7 +136,7 @@ export const PublishLuis = props => {
     delete newValue.errors;
     await syncEnvSettings({ ...settings, luis: newValue });
     await setEnvSettings();
-    await onPublish({ ...formData });
+    await onPublish();
   };
 
   return (

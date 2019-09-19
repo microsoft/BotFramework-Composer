@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
+import React, { useEffect, useContext, useState, useRef } from 'react';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import { get, debounce } from 'lodash';
 import 'codemirror/lib/codemirror.css';
@@ -30,17 +30,25 @@ const cmOptions = {
 };
 
 export const DialogSettings = () => {
-  const [value, setValue] = useState('');
   const { state, actions } = useContext(StoreContext);
-  const { settings, botName, isEnvSettingUpdated } = state;
-  const { syncEnvSettings } = actions;
+  const { botName, settings, isEnvSettingUpdated } = state;
+  const syncEnvSettings = useRef(debounce(actions.syncEnvSettings, 500)).current;
+  const [value, setValue] = useState('');
   useEffect(() => {
-    setValue(settings);
+    // need to refresh codemirror, if the value parse to string is the same as before, it will not refresh
+    setValue(JSON.stringify(settings, null, 2));
   }, [botName, isEnvSettingUpdated]);
 
-  const updateFormData = (editor, data, value) => {
+  const updateFormData = (editor, data, newValue) => {
+    if (botName && botName !== '') {
+      setValue(newValue);
+      syncSettings(newValue);
+    }
+  };
+
+  const syncSettings = newValue => {
     try {
-      const result = JSON.parse(value);
+      const result = JSON.parse(newValue);
       try {
         for (const property of SensitiveProperties) {
           const propertyValue = get(result, property);
@@ -55,13 +63,8 @@ export const DialogSettings = () => {
     }
   };
 
-  return botName ? (
-    <CodeMirror
-      value={JSON.stringify(value, null, 2)}
-      options={cmOptions}
-      onChange={debounce(updateFormData, 500)}
-      autoCursor
-    />
+  return botName && botName !== '' ? (
+    <CodeMirror value={value} onBeforeChange={updateFormData} options={cmOptions} />
   ) : (
     <div>Data Loading...</div>
   );
