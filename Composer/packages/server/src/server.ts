@@ -34,7 +34,13 @@ app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
 // only register the login route if the auth provider defines one
 if (login) {
   app.get(`${BASEURL}/api/login`, login);
+} else {
+  // register the route so that client that requires_auth knows not try repeatedly
+  app.get(`${BASEURL}/api/login`, (req, res) => {
+    res.redirect(`${BASEURL}#error=${encodeURIComponent('NoSupport')}`);
+  });
 }
+
 // always authorize all api routes, it will be a no-op if no auth provider set
 app.use(`${BASEURL}/api`, authorize, apiRouter);
 

@@ -4,7 +4,7 @@
     "createdAt": "2019-07-03T06:51:23.522Z",
     "updatedAt": "2019-07-16T19:50:46.367Z",
     "id": "714773",
-    "description": "This is a bot that demonstrates use of the TraceActivity & LogStep concepts in Adaptive Dialogs."
+    "description": "This is a bot that demonstrates use of the TraceActivity & LogAction concepts in Adaptive Dialogs."
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
@@ -15,7 +15,7 @@
         "id": "044028",
         "updatedAt": "2019-07-22T08:05:18.175Z"
       },
-       
+
       "actions": [
         {
           "$type": "Microsoft.TextInput",
