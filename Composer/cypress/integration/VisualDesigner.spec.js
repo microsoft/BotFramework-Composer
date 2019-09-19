@@ -12,7 +12,7 @@ context('Visual Designer', () => {
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Microsoft.OnDialogEvent').should('exist');
+      cy.contains('Handle an Intent').should('exist');
     });
 
     cy.addEventHandler('Handle an Intent');
@@ -26,14 +26,14 @@ context('Visual Designer', () => {
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Microsoft.OnUnknownIntent').should('exist');
+      cy.contains('Handle Unknown Intent').should('exist');
     });
 
     cy.addEventHandler('Handle ConversationUpdate');
     cy.wait(100);
 
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Microsoft.OnConversationUpdateActivity').should('exist');
+      cy.contains('Handle ConversationUpdate').should('exist');
     });
   });
 });
