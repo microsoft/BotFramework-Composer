@@ -40,7 +40,7 @@ const isEventSourceValid = event => {
   return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
 };
 
-const useDebounceFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
+const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
 
 const FileChangeTypes = {
   CREATE: 'create',
@@ -69,8 +69,8 @@ export const ShellApi: React.FC = () => {
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
-  const updateLgFile = useDebounceFunc(actions.updateLgFile);
-  const updateLgTemplate = useDebounceFunc(actions.updateLgTemplate);
+  const updateLgFile = useDebouncedFunc(actions.updateLgFile);
+  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
