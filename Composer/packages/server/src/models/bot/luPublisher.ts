@@ -28,7 +28,7 @@ export class LuPublisher {
   }
 
   public isConfigEqual = () => {
-    return JSON.stringify(this.config) === JSON.stringify(this.previousConfig);
+    return isEqual(this.config, this.previousConfig);
   };
 
   // load luis status from luis.status.json
@@ -77,6 +77,10 @@ export class LuPublisher {
 
   public publish = async (luFiles: LUFile[]) => {
     const config = this._getConfig(luFiles);
+    if (!(await this.storage.exists(this._getSettingPath(config)))) {
+      await this._deleteGenerated(this.generatedFolderPath);
+    }
+
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
@@ -121,9 +125,6 @@ export class LuPublisher {
   public setLuisConfig = async (config: ILuisConfig) => {
     if (!isEqual(config, this.config)) {
       this.config = config;
-      if (!(await this.storage.exists(this._getSettingPath(config)))) {
-        await this._deleteGenerated(this.generatedFolderPath);
-      }
     }
   };
 
