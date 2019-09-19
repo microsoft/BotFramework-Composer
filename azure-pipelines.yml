@@ -24,6 +24,7 @@ jobs:
       inputs:
         command: 'test'
         projects: 'BotProject/CSharp/Tests/Tests.csproj'
+    - task: ComponentGovernanceComponentDetection@0
   - job: test
     displayName: Unit Tests
     pool:
@@ -57,6 +58,7 @@ jobs:
         testResultsFiles: '**/junit.xml'
         testRunTitle: Unit Tests
         mergeTestResults: true
+    - task: ComponentGovernanceComponentDetection@0
   - job: e2e
     displayName: E2E Tests
     pool:
