@@ -200,7 +200,7 @@ const Demo: React.FC = () => {
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
   const [navPath, setNavPath] = useState(nanoid());
-  const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
+  const debouncedOnChange = useRef(debounce(newData => setFormData(newData), 200)).current;
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
