@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useRef, useMemo } from 'react';
-import { isEqual, get, throttle } from 'lodash';
+import { debounce, isEqual, get } from 'lodash';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
@@ -40,7 +40,7 @@ const isEventSourceValid = event => {
   return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
 };
 
-const useThrottleFunc = (fn, th = 10) => useRef(throttle(fn, th)).current;
+const useDebounceFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
 
 const FileChangeTypes = {
   CREATE: 'create',
@@ -69,8 +69,8 @@ export const ShellApi: React.FC = () => {
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
-  const updateLgFile = useThrottleFunc(actions.updateLgFile);
-  const updateLgTemplate = useThrottleFunc(actions.updateLgTemplate);
+  const updateLgFile = useDebounceFunc(actions.updateLgFile);
+  const updateLgTemplate = useDebounceFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
