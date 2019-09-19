@@ -39,25 +39,28 @@ export function createItem(trigger: ITrigger, index: number) {
   };
 }
 
+export function sortDialog(dialogs: DialogInfo[]) {
+  const dialogsCopy = cloneDeep(dialogs);
+  return dialogsCopy.sort((x, y) => {
+    if (x.isRoot) {
+      return -1;
+    } else if (y.isRoot) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+}
+
 export function createGroup(
   dialogs: DialogInfo[],
   dialogId: string,
   filter: string
 ): { items: any[]; groups: IGroup[] } {
-  const dialogsCopy = cloneDeep(dialogs);
   let position = 0;
-  const result = dialogsCopy
+  const result = dialogs
     .filter(dialog => {
-      return dialog.displayName.toLowerCase().indexOf(filter.toLowerCase()) === 0;
-    })
-    .sort((x, y) => {
-      if (x.isRoot) {
-        return -1;
-      } else if (y.isRoot) {
-        return 1;
-      } else {
-        return 0;
-      }
+      return dialog.displayName.toLowerCase().indexOf(filter.toLowerCase()) > -1;
     })
     .reduce(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
@@ -94,16 +97,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
   const [filter, setFilter] = useState('');
 
-  const { items, groups } = useMemo(() => {
-    return createGroup(dialogs, dialogId, filter);
-  }, [dialogs, dialogId, selected, filter]);
+  const sortedDialogs = useMemo(() => {
+    return sortDialog(dialogs);
+  }, [dialogs]);
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
-      groupRef.current!.toggleCollapseAll(true);
-      props.onToggleCollapse!(props.group!);
-      if (dialogId !== props.group!.key) {
-        onSelect(props.group!.key);
+      if (groupRef.current && props.group) {
+        groupRef.current.toggleCollapseAll(true);
+        props.onToggleCollapse!(props.group);
+        if (dialogId !== props.group.key) {
+          onSelect(props.group.key);
+        }
       }
     };
     return (
@@ -143,10 +148,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
 
   return (
     <div css={root} data-testid="ProjectTree">
-      <SearchBox placeholder="Filter Dialog" onChange={onFilter} iconProps={{ iconName: 'Filter' }} />
+      <SearchBox placeholder={formatMessage('Filter Dialogs')} onChange={onFilter} iconProps={{ iconName: 'Filter' }} />
       <GroupedList
-        items={items}
-        groups={groups}
+        {...createGroup(sortedDialogs, dialogId, filter)}
         onRenderCell={onRenderCell}
         componentRef={groupRef}
         groupProps={
