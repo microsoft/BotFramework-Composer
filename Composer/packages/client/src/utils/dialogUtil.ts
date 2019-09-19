@@ -111,7 +111,14 @@ export function getTriggerTypes(): IDropdownOption[] {
       text: '',
     },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
-      return { key: String(t), text: ConceptLabels[String(t)].title };
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
     }),
   ];
   return triggerTypes;
