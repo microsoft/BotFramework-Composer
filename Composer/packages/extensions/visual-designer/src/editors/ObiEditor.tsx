@@ -6,6 +6,7 @@ import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeS
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { AttrNames } from '../constants/ElementAttributes';
+import { ObiTypes } from '../constants/ObiTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { ClipboardContext } from '../store/ClipboardContext';
@@ -63,7 +64,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Delete:
         handler = e => {
           const cleanLgTemplate = (removedData: any): void => {
-            if (removedData && removedData.$type === 'Microsoft.SendActivity') {
+            if (removedData && removedData.$type === ObiTypes.SendActivity) {
               if (removedData.activity && removedData.activity.indexOf('[bfdactivity-') !== -1) {
                 removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
               }
