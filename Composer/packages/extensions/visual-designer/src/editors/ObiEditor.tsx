@@ -103,6 +103,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
+          if (!Array.isArray(e.actionIds) || e.actionIds.length === 0) return;
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           clipboardContext.setClipboardActions(cutData);
           onChange(dialog);
@@ -111,6 +112,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
+          if (!Array.isArray(e.actionIds) || e.actionIds.length === 0) return;
           const dialog = deleteNodes(data, e.actionIds);
           onChange(dialog);
           onFocusSteps([]);
@@ -120,6 +122,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = e => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
+          if (!Array.isArray(e.actionIds) || e.actionIds.length === 0) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
           onChange(dialog);
         };
