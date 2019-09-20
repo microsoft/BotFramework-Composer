@@ -100,7 +100,7 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      const luisConfig = settingsStorage.get(botName).luis;
+      const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
       if (luisConfig) {
         await publishLuis(luisConfig.authoringKey);
         return true;

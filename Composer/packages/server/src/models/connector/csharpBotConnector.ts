@@ -37,9 +37,6 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('no project is opened, nothing to sync');
     }
     const dir = BotProjectService.currentBotProject.dir;
-    if (config.luis) {
-      await BotProjectService.currentBotProject.luPublisher.setAuthoringKey(config.luis.authoringKey);
-    }
     const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
@@ -67,7 +64,6 @@ export class CSharpBotConnector implements IBotConnector {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
-      console.log(form);
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');

@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc } from '../types';
+import { ReducerFunc, DialogSetting } from '../types';
 import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
@@ -18,19 +18,30 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.settings = response.data.settings;
-  // merge setting in localStorage
-  const localSetting = settingStorage.get(response.data.botName);
+  refreshLocalStorage(response.data.botName, state.settings);
+  mergeLocalStorage(response.data.botName, state.settings);
+  return state;
+};
+
+const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
+  for (const property of SensitiveProperties) {
+    const value = get(settings, property);
+    if (value) {
+      settingStorage.setField(botName, property, value);
+    }
+  }
+};
+
+const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(botName);
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
-      if (value && (!state.settings[property] || state.settings[property] === '')) {
-        set(state.settings as object, property, value);
-      } else if (state.settings[property] && state.settings[property] !== '') {
-        settingStorage.setField(response.data.botName, property, state.settings[property]);
+      if (value) {
+        set(settings, property, value);
       }
     }
   }
-  return state;
 };
 
 const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
