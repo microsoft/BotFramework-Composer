@@ -4,7 +4,8 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
+import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { ClipboardContext } from '../store/ClipboardContext';
@@ -17,6 +18,7 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
+import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
@@ -43,8 +45,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        resetSelectionData();
-        handler = id => onFocusSteps(id ? [id] : []);
+        handler = (id, selectedId?) => {
+          setSelectionContext({
+            getNodeIndex: selectionContext.getNodeIndex,
+            selectedIds: [selectedId || id],
+          });
+          onFocusSteps(id ? [id] : []);
+        };
         break;
       case NodeEventTypes.FocusEvent:
         handler = onFocusEvent;
@@ -169,6 +176,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
+    setSelectedElements(querySelectedElements());
   }, [data]);
 
   const selection = new Selection({
@@ -182,6 +190,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       });
     },
   });
+
+  const querySelectedElements = () => {
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
+    return items;
+  };
+  const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -199,23 +213,37 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   (window as any).deleteSelection = () =>
     dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
-  const handleKeyboardCommand = (command): void => {
-    switch (command) {
-      case KeyboardCommandTypes.Delete:
-        dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
+  const handleKeyboardCommand = ({ primaryType, command }) => {
+    const currentSelectedId = selectionContext.selectedIds[0];
+    switch (primaryType) {
+      case KeyboardPrimaryTypes.Node:
+        switch (command) {
+          case KeyboardCommandTypes.Node.Delete:
+            dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Copy:
+            dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Cut:
+            dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Paste:
+            dispatchEvent(NodeEventTypes.AppendSelection, {
+              target: focusedId,
+              actions: clipboardContext.clipboardActions,
+            });
+            break;
+        }
         break;
-      case KeyboardCommandTypes.Copy:
-        dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
-        break;
-      case KeyboardCommandTypes.Cut:
-        dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
-        break;
-      case KeyboardCommandTypes.Paste:
-        dispatchEvent(NodeEventTypes.AppendSelection, {
-          target: focusedId,
-          actions: clipboardContext.clipboardActions,
+      case KeyboardPrimaryTypes.Cursor: {
+        const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [selected as string],
         });
+        focused && onFocusSteps([focused]);
         break;
+      }
       default:
         break;
     }

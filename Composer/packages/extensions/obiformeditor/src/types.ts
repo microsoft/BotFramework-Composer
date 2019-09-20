@@ -17,9 +17,16 @@ export interface FormMemory {
 
 export interface DialogInfo {
   id: string;
-  displayName: string;
   isRoot: boolean;
+  displayName: string;
   content: MicrosoftAdaptiveDialog;
+  diagnostics: string[];
+  referredDialogs: string[];
+  lgFile: string;
+  luFile: string;
+  luIntents: string[];
+  lgTemplates: string[];
+  relativePath: string;
 }
 
 export interface Intent {

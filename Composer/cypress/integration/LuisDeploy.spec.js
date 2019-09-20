@@ -3,7 +3,7 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/launcher/connect', 'OK');
+    cy.route('GET', '/api/launcher/connect?botEnvironment=production', 'OK');
     cy.route('POST', '/api/launcher/sync', 'OK');
     cy.route('POST', 'api/projects/opened/settings', 'OK');
     cy.visit(Cypress.env('COMPOSER_URL'));
