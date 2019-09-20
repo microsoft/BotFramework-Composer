@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
 import { findCommand } from '../../constants/KeyboardCommandTypes';
 
@@ -13,25 +13,30 @@ const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
 export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
-  const keyPressed = {};
+  const keyPressed = useRef({});
   const handleKeyDown = e => {
-    keyPressed[e.key] = true;
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    keyPressed.current[e.key] = true;
   };
 
   const handleKeyUp = e => {
     if (when !== 'normal') {
       let keyCode = isMac() ? 'Mac' : 'Windows';
-      for (const key in keyPressed) {
-        if (keyPressed[key]) {
+      for (const key in keyPressed.current) {
+        if (keyPressed.current[key]) {
           keyCode += `.${key}`;
         }
       }
+      console.log(keyCode);
       onCommand(findCommand(keyCode));
     }
-    keyPressed[e.key] = false;
+    delete keyPressed.current[e.key];
   };
   return (
-    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} data-test-id="keyboard-zone">
       {children}
     </div>
   );
