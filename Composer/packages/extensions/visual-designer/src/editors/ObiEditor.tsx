@@ -143,7 +143,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
 
   const handleKeyboardCommand = ({ primaryType, command }) => {
-    const currentSelectedId = selectionContext.selectedIds[0];
+    const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
     switch (primaryType) {
       case KeyboardPrimaryTypes.Node:
         if (command === KeyboardCommandTypes.Node.Delete) {
