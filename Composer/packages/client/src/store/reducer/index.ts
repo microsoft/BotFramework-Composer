@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc } from '../types';
+import { ReducerFunc, DialogSetting } from '../types';
 import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
@@ -12,22 +12,38 @@ const projectFiles = ['bot', 'botproj'];
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
+  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.settings = response.data.settings;
-  // merge setting in localStorage
-  const localSetting = settingStorage.get(response.data.botName);
+  refreshLocalStorage(response.data.botName, state.settings);
+  mergeLocalStorage(response.data.botName, state.settings);
+  return state;
+};
+
+// if user set value in terminal or appsetting.json, it should update the value in localStorage
+const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
+  for (const property of SensitiveProperties) {
+    const value = get(settings, property);
+    if (value) {
+      settingStorage.setField(botName, property, value);
+    }
+  }
+};
+
+// merge sensitive values in localStorage
+const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(botName);
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
       if (value) {
-        set(state.settings as object, property, value);
+        set(settings, property, value);
       }
     }
   }
-  return state;
 };
 
 const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
@@ -76,8 +92,10 @@ const updateLuTemplate: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const setBotStatus: ReducerFunc = (state, { status }) => {
-  return (state.botStatus = status);
+const setBotStatus = (state, { status, botEndpoint }) => {
+  state.botEndpoint = botEndpoint || state.botEndpoint;
+  state.botStatus = status;
+  return state;
 };
 
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {

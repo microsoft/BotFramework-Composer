@@ -11,7 +11,7 @@ import { BaseField } from '../fields/BaseField';
 import ObjectItem from './ObjectItem';
 import NewPropertyModal from './NewPropertyModal';
 
-import './styles.scss';
+import './styles.css';
 
 function canExpand({ formData, schema, uiSchema }: ObjectFieldTemplateProps): boolean {
   if (!schema.additionalProperties) {

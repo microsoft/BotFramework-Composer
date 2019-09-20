@@ -19,7 +19,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/neat.css';
 
-import './styles.scss';
+import './styles.css';
 
 initializeIcons(undefined, { disableWarnings: true });
 

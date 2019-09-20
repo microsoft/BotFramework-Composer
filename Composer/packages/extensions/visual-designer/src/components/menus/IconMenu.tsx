@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   OverflowSet,
   IconButton,
@@ -6,9 +6,12 @@ import {
   IRenderFunction,
   IContextualMenuItem,
   IButtonStyles,
+  IButton,
+  createRef,
 } from 'office-ui-fabric-react';
 
 interface IconMenuProps {
+  nodeSelected?: boolean;
   dataTestId?: string;
   iconName: string;
   iconSize?: number;
@@ -22,6 +25,7 @@ interface IconMenuProps {
 }
 
 export const IconMenu: React.FC<IconMenuProps> = ({
+  nodeSelected,
   iconName,
   iconSize,
   iconStyles,
@@ -38,6 +42,13 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
+  const buttonRef = createRef<IButton>();
+
+  useEffect((): void => {
+    if (nodeSelected) {
+      buttonRef.current && buttonRef.current.focus();
+    }
+  }, [nodeSelected]);
   const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = overflowItems => {
     if (!overflowItems) {
       return null;
@@ -65,6 +76,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
     return (
       <IconButton
+        componentRef={buttonRef}
         data-testid="iconMenu"
         styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, color } }}
@@ -93,4 +105,5 @@ IconMenu.defaultProps = {
   iconStyles: {},
   menuItems: [],
   menuWidth: 0,
+  nodeSelected: false,
 };

@@ -97,7 +97,7 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
-  const { setEnvSettings, syncEnvSettings } = actions;
+  const { setSettings } = actions;
   const { botName, settings } = state;
   const { onPublish, onDismiss, workState } = props;
 
@@ -128,9 +128,8 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData };
     delete newValue.errors;
-    await syncEnvSettings({ ...settings, luis: newValue });
-    await setEnvSettings();
-    await onPublish({ ...formData });
+    await setSettings(botName, { ...settings, luis: newValue });
+    await onPublish();
   };
 
   return (

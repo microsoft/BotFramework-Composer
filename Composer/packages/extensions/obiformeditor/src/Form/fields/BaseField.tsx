@@ -9,7 +9,7 @@ import { FormContext } from '../types';
 
 import { RootField } from './RootField';
 
-import './styles.scss';
+import './styles.css';
 
 const descriptionMarkup = (description: string): { __html: string } => {
   return { __html: description };

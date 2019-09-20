@@ -10,7 +10,7 @@ import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 import InlineLuEditor from './InlineLuEditor';
 
-import './styles.scss';
+import './styles.css';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData } = props;

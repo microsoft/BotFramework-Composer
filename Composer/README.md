@@ -10,7 +10,7 @@ Prerequisite:
 To build for hosting as site extension
 
 ```cmd
-set PUBLIC_URL=/composer/
+set PUBLIC_URL=/composer
 ```
 
 Commands:
