@@ -1,3 +1,7 @@
+import ApiClient from './ApiClient';
+
+const apiClient = new ApiClient();
+
 export class FrameAPI {
   frameId: string;
   frameRef: any;
@@ -10,15 +14,15 @@ export class FrameAPI {
   /**
    * Initialize the frame ref at first invocation.
    */
-  invoke = (handlerName: string, ...rest) => {
+  invoke = (method: string, ...rest) => {
     if (!this.frameRef) {
       this.frameRef = window.frames[this.frameId];
     }
 
-    if (this.frameRef && this.frameRef[handlerName]) {
-      return this.frameRef[handlerName](...rest);
+    if (this.frameRef && this.frameRef[method]) {
+      return apiClient.apiCall('rpc', [method, ...rest], this.frameRef);
     }
-    return;
+    return Promise.reject();
   };
 }
 

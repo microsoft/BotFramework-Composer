@@ -89,6 +89,7 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
+  const [nodeOperationAvailable, setNodeOperationAvailability] = useState(false);
 
   useEffect(() => {
     if (match) {
@@ -157,7 +158,14 @@ function DesignPage(props) {
     }
   };
 
-  const shouldDisableNodeOperation = !VisualEditorAPI.hasElementSelected();
+  VisualEditorAPI.hasElementSelected()
+    .then(selected => {
+      setNodeOperationAvailability(selected);
+    })
+    .catch(() => {
+      setNodeOperationAvailability(false);
+    });
+
   const toolbarItems = [
     {
       type: 'action',
@@ -187,7 +195,7 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
-        disabled: shouldDisableNodeOperation,
+        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Cut',
         },
@@ -199,7 +207,7 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
-        disabled: shouldDisableNodeOperation,
+        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Copy',
         },
@@ -211,7 +219,7 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: shouldDisableNodeOperation,
+        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Delete',
         },
