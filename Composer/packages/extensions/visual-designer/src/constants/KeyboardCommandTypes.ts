@@ -60,7 +60,17 @@ const ArrowMoveShortcuts = {
   'Mac.Shift.ArrowRight': KeyboardCommandTypes.Cursor.ShortMoveRight,
 };
 
-const KeyboardNodeEditingShortcuts = {};
+const KeyboardNodeEditingShortcuts = {
+  'Windows.Control.C': KeyboardCommandTypes.Node.Copy,
+  'Windows.Control.c': KeyboardCommandTypes.Node.Copy,
+  'Windows.Control.X': KeyboardCommandTypes.Node.Cut,
+  'Windows.Control.x': KeyboardCommandTypes.Node.Cut,
+
+  'Mac.Meta.C': KeyboardCommandTypes.Node.Copy,
+  'Mac.Meta.c': KeyboardCommandTypes.Node.Copy,
+  'Mac.Meta.X': KeyboardCommandTypes.Node.Cut,
+  'Mac.Meta.x': KeyboardCommandTypes.Node.Cut,
+};
 
 const { arrowNavigation, tabNavigation, keyboardNodeEditing } = EditorConfig.features;
 
