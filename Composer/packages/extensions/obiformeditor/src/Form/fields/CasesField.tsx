@@ -11,7 +11,7 @@ import { swap } from '../utils';
 
 import { TableField } from './TableField';
 
-import './styles.scss';
+import './styles.css';
 
 interface CaseFormData {
   oldValue?: string;
