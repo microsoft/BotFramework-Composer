@@ -1,7 +1,7 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useContext } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
-import { get, debounce } from 'lodash';
+import { get } from 'lodash';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/neat.css';
@@ -31,17 +31,10 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings, isEnvSettingUpdated } = state;
-  const syncEnvSettings = useRef(debounce(actions.syncEnvSettings, 500)).current;
-  const [value, setValue] = useState('');
-  useEffect(() => {
-    // need to refresh codemirror, if the value parse to string is the same as before, it will not refresh
-    setValue(JSON.stringify(settings, null, 2));
-  }, [botName, isEnvSettingUpdated]);
+  const { botName, settings } = state;
 
   const updateFormData = (editor, data, newValue) => {
     if (botName && botName !== '') {
-      setValue(newValue);
       syncSettings(newValue);
     }
   };
@@ -54,7 +47,7 @@ export const DialogSettings = () => {
           const propertyValue = get(result, property);
           settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
         }
-        syncEnvSettings(result);
+        actions.syncEnvSettings(result);
       } catch (err) {
         console.error(err.message);
       }
@@ -64,7 +57,7 @@ export const DialogSettings = () => {
   };
 
   return botName && botName !== '' ? (
-    <CodeMirror value={value} onBeforeChange={updateFormData} options={cmOptions} />
+    <CodeMirror value={JSON.stringify(settings, null, 2)} onBeforeChange={updateFormData} options={cmOptions} />
   ) : (
     <div>Data Loading...</div>
   );
