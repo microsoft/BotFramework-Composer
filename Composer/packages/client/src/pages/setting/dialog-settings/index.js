@@ -42,7 +42,7 @@ export const DialogSettings = () => {
     try {
       const result = JSON.parse(newValue);
       try {
-        actions.syncEnvSettings(botName, result);
+        actions.setSettings(botName, result);
       } catch (err) {
         console.error(err.message);
       }

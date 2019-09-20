@@ -23,6 +23,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
+// if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
     const value = get(settings, property);
@@ -32,6 +33,7 @@ const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
+// merge sensitive values in localStorage
 const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   const localSetting = settingStorage.get(botName);
   if (localSetting) {

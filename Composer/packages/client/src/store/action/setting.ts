@@ -6,7 +6,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { SensitiveProperties } from '../../constants';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-export const syncEnvSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
+export const setSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
   try {
     // set value to store
     dispatch({
