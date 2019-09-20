@@ -33,12 +33,6 @@ export const DialogSettings = () => {
   const { botName, settings } = state;
 
   const updateFormData = (editor, data, newValue) => {
-    if (botName) {
-      syncSettings(newValue);
-    }
-  };
-
-  const syncSettings = newValue => {
     try {
       const result = JSON.parse(newValue);
       try {
@@ -51,7 +45,7 @@ export const DialogSettings = () => {
     }
   };
 
-  return botName && botName !== '' ? (
+  return botName ? (
     <CodeMirror value={JSON.stringify(settings, null, 2)} onBeforeChange={updateFormData} options={cmOptions} />
   ) : (
     <div>Data Loading...</div>
