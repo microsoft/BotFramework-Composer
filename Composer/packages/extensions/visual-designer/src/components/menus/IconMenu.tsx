@@ -7,7 +7,6 @@ import {
   IContextualMenuItem,
   IButtonStyles,
   IButton,
-  createRef,
 } from 'office-ui-fabric-react';
 
 interface IconMenuProps {
@@ -18,6 +17,7 @@ interface IconMenuProps {
   iconStyles?: {
     background?: string;
     color?: string;
+    selectors?: { [key: string]: any };
   };
   label?: string;
   menuItems: any[];
@@ -42,7 +42,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = createRef<IButton>();
+  const buttonRef = useRef<IButton>();
 
   useEffect((): void => {
     if (nodeSelected) {
@@ -54,7 +54,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       return null;
     }
 
-    const { background, color } = iconStyles || { background: undefined, color: undefined };
+    const { background, color, selectors } = iconStyles || {
+      background: undefined,
+      color: undefined,
+      selectors: undefined,
+    };
 
     const buttonStyles: IButtonStyles = {
       root: {
@@ -65,6 +69,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         height: 'auto',
         color: '#000000',
         background: background || 'transparent',
+        selectors,
       },
       rootHovered: {
         background: background || 'transparent',
@@ -76,6 +81,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
     return (
       <IconButton
+        // @ts-ignore
         componentRef={buttonRef}
         data-testid="iconMenu"
         styles={buttonStyles}

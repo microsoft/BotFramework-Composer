@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react';
 import { getUiOptions } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import get from 'lodash.get';
 import omit from 'lodash.omit';
@@ -67,9 +67,9 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
           ))}
         {canExpand(props) && (
           <>
-            <PrimaryButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
+            <DefaultButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
               {formatMessage('Add')}
-            </PrimaryButton>
+            </DefaultButton>
             {showModal && (
               <NewPropertyModal
                 onSubmit={handlePropertyEdit}
