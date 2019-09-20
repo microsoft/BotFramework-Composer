@@ -214,7 +214,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
   const handleKeyboardCommand = ({ area, command }) => {
-    const currentSelectedId = selectionContext.selectedIds[0];
     switch (area) {
       case KeyboardPrimaryTypes.Node:
         switch (command) {
@@ -236,6 +235,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
+        const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
         const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
