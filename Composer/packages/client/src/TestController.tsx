@@ -10,6 +10,7 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
+import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
 import { BASEPATH, BotStatus, LuisConfig, Text } from './constants';
@@ -99,8 +100,9 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      if (settings.luis) {
-        await publishLuis(settings.luis.authoringKey);
+      const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
+      if (luisConfig) {
+        await publishLuis(luisConfig.authoringKey);
         return true;
       } else {
         throw new Error('Please Set Luis Config');
@@ -117,7 +119,8 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      await (connected ? reloadBot(settings) : connectBot(settings));
+      const sensitiveSettings = settingsStorage.get(botName);
+      await (connected ? reloadBot(sensitiveSettings) : connectBot(sensitiveSettings));
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
