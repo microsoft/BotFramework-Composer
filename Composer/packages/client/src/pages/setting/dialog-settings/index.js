@@ -10,9 +10,9 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 
 import './style.css';
-import settingsStorage from './../../../utils/dialogSettingStorage';
+
 import { StoreContext } from './../../../store';
-import { SensitiveProperties } from './../../../constants';
+
 window.jsonlint = jsonlint;
 
 const cmOptions = {
@@ -31,13 +31,13 @@ const cmOptions = {
 
 export const DialogSettings = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings, isEnvSettingUpdated } = state;
+  const { botName, settings } = state;
   const syncEnvSettings = useRef(debounce(actions.syncEnvSettings, 500)).current;
   const [value, setValue] = useState('');
   useEffect(() => {
     // need to refresh codemirror, if the value parse to string is the same as before, it will not refresh
     setValue(JSON.stringify(settings, null, 2));
-  }, [botName, isEnvSettingUpdated]);
+  }, [botName]);
 
   const updateFormData = (editor, data, newValue) => {
     if (botName && botName !== '') {
@@ -50,11 +50,7 @@ export const DialogSettings = () => {
     try {
       const result = JSON.parse(newValue);
       try {
-        for (const property of SensitiveProperties) {
-          const propertyValue = get(result, property);
-          settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
-        }
-        syncEnvSettings(result);
+        syncEnvSettings(botName, result);
       } catch (err) {
         console.error(err.message);
       }
