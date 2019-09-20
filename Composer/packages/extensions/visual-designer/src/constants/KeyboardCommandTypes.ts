@@ -21,6 +21,22 @@ export const KeyboardCommandTypes = {
   },
 };
 
+const findCommandAreaByValue = (() => {
+  // Construct a inverted index to find shortcut area quickly.
+  const cmdAreaByValue: { [_: string]: string } = {};
+  const areaKeys = Object.keys(KeyboardCommandTypes);
+
+  for (const areaKey of areaKeys) {
+    const cmdsUnderArea = KeyboardCommandTypes[areaKey];
+    const cmdValues: string[] = Object.values(cmdsUnderArea);
+    for (const cmd of cmdValues) {
+      cmdAreaByValue[cmd as string] = areaKey;
+    }
+  }
+
+  return (command: string) => cmdAreaByValue[command];
+})();
+
 export const KeyboardPrimaryTypes = {
   Cursor: 'Cursor',
   Node: 'Node',
@@ -83,22 +99,7 @@ const SupportedShortcuts = {
 
 export function mapShortcutToKeyboardCommand(keyCode) {
   const command = SupportedShortcuts[keyCode];
-  let commands: { [key: string]: string };
-  let primaryType = '';
-  let commandKey: string | undefined;
-  Object.keys(KeyboardCommandTypes).forEach(key => {
-    commands = KeyboardCommandTypes[key];
-    Object.keys(commands).forEach(action => {
-      if (commands[action] === command) {
-        commandKey = action;
-        primaryType = key;
-      }
-    });
-  });
+  const area = findCommandAreaByValue(command);
 
-  if (commandKey) {
-    return { primaryType, command };
-  } else {
-    return {};
-  }
+  return { area, command };
 }

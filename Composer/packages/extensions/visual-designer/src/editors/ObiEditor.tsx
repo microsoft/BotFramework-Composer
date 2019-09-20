@@ -213,9 +213,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   (window as any).deleteSelection = () =>
     dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
-  const handleKeyboardCommand = ({ primaryType, command }) => {
+  const handleKeyboardCommand = ({ area, command }) => {
     const currentSelectedId = selectionContext.selectedIds[0];
-    switch (primaryType) {
+    switch (area) {
       case KeyboardPrimaryTypes.Node:
         switch (command) {
           case KeyboardCommandTypes.Node.Delete:
