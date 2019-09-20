@@ -1,3 +1,5 @@
+import { EditorConfig } from '../editors/editorConfig';
+
 export const KeyboardCommandTypes = {
   Cursor: {
     MoveUp: 'cursor move up',
@@ -24,36 +26,53 @@ export const KeyboardPrimaryTypes = {
   Node: 'Node',
 };
 
-// Map system name and keyboard key
-const SystemKeyboardCommandTypes = {
+const BasicShortcuts = {
+  'Windows.Delete': KeyboardCommandTypes.Node.Delete,
+  'Mac.Delete': KeyboardCommandTypes.Node.Delete,
+};
+
+const TabNavShortcuts = {
+  'Windows.Tab': KeyboardCommandTypes.Cursor.MoveNext,
+  'Windows.Shift.Tab': KeyboardCommandTypes.Cursor.MovePrevious,
+  'Mac.Tab': KeyboardCommandTypes.Cursor.MoveNext,
+  'Mac.Shift.Tab': KeyboardCommandTypes.Cursor.MovePrevious,
+};
+
+const ArrowMoveShortcuts = {
   'Windows.ArrowUp': KeyboardCommandTypes.Cursor.MoveUp,
   'Windows.ArrowDown': KeyboardCommandTypes.Cursor.MoveDown,
   'Windows.ArrowLeft': KeyboardCommandTypes.Cursor.MoveLeft,
   'Windows.ArrowRight': KeyboardCommandTypes.Cursor.MoveRight,
+
   'Windows.Shift.ArrowUp': KeyboardCommandTypes.Cursor.ShortMoveUp,
   'Windows.Shift.ArrowDown': KeyboardCommandTypes.Cursor.ShortMoveDown,
   'Windows.Shift.ArrowLeft': KeyboardCommandTypes.Cursor.ShortMoveLeft,
   'Windows.Shift.ArrowRight': KeyboardCommandTypes.Cursor.ShortMoveRight,
-  'Windows.Tab': KeyboardCommandTypes.Cursor.MoveNext,
-  'Windows.Shift.Tab': KeyboardCommandTypes.Cursor.MovePrevious,
-  'Windows.Delete': KeyboardCommandTypes.Node.Delete,
 
-  // Mac keyboard shotcuts
   'Mac.ArrowUp': KeyboardCommandTypes.Cursor.MoveUp,
   'Mac.ArrowDown': KeyboardCommandTypes.Cursor.MoveDown,
   'Mac.ArrowLeft': KeyboardCommandTypes.Cursor.MoveLeft,
   'Mac.ArrowRight': KeyboardCommandTypes.Cursor.MoveRight,
+
   'Mac.Shift.ArrowUp': KeyboardCommandTypes.Cursor.ShortMoveUp,
   'Mac.Shift.ArrowDown': KeyboardCommandTypes.Cursor.ShortMoveDown,
   'Mac.Shift.ArrowLeft': KeyboardCommandTypes.Cursor.ShortMoveLeft,
   'Mac.Shift.ArrowRight': KeyboardCommandTypes.Cursor.ShortMoveRight,
-  'Mac.Tab': KeyboardCommandTypes.Cursor.MoveNext,
-  'Mac.Shift.Tab': KeyboardCommandTypes.Cursor.MovePrevious,
-  'Mac.Delete': KeyboardCommandTypes.Node.Delete,
 };
 
-export function findCommand(keyCode) {
-  const command = SystemKeyboardCommandTypes[keyCode];
+const KeyboardNodeEditingShortcuts = {};
+
+const { arrowNavigation, tabNavigation, keyboardNodeEditing } = EditorConfig.features;
+
+const SupportedShortcuts = {
+  ...BasicShortcuts,
+  ...(arrowNavigation ? ArrowMoveShortcuts : null),
+  ...(tabNavigation ? TabNavShortcuts : null),
+  ...(keyboardNodeEditing ? KeyboardNodeEditingShortcuts : null),
+};
+
+export function mapShortcutToKeyboardCommand(keyCode) {
+  const command = SupportedShortcuts[keyCode];
   let commands: { [key: string]: string };
   let primaryType = '';
   let commandKey: string | undefined;
