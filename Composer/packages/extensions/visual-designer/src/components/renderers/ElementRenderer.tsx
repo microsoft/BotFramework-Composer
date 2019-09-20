@@ -106,7 +106,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
         id={id}
         data={data}
         onEvent={(action, id) => {
-          onEvent(action, id, selectedId);
+          onEvent(action, id);
         }}
         onResize={size => {
           onResize(size, 'element');

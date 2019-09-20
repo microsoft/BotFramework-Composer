@@ -45,12 +45,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        handler = (id, selectedId?) => {
+        handler = id => {
+          const newFocusedIds = id ? [id] : [];
           setSelectionContext({
-            getNodeIndex: selectionContext.getNodeIndex,
-            selectedIds: [selectedId || id],
+            ...selectionContext,
+            selectedIds: [...newFocusedIds],
           });
-          onFocusSteps(id ? [id] : []);
+          onFocusSteps([...newFocusedIds]);
         };
         break;
       case NodeEventTypes.FocusEvent:
@@ -149,10 +150,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const [keyboardStatus, setKeyBoardStatus] = useState('normal');
 
-  const isElementFocused = () => !!focusedId && focusedId !== focusedEvent;
-  const isElementSelected = () =>
-    !!(selectionContext && selectionContext.selectedIds && selectionContext.selectedIds.length) || isElementFocused();
-
   useEffect((): void => {
     if (selectionContext.selectedIds.length > 0) {
       setKeyBoardStatus('selected');
@@ -162,9 +159,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       setKeyBoardStatus('normal');
     }
 
-    // HACK: expose selection state to global. Trigger forceupdate by invoking onChange.
-    (window as any).elementFocused = isElementFocused();
-    (window as any).elementSelected = isElementSelected();
     onChange(data);
   }, [focusedId, selectionContext]);
 
@@ -206,6 +200,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   };
 
   // HACK: use global handler before we solve iframe state sync problem
+  (window as any).hasElementFocused = () => !!focusedId && focusedId !== focusedEvent;
+  (window as any).hasElementSelected = () =>
+    !!(selectionContext && selectionContext.selectedIds && selectionContext.selectedIds.length) ||
+    (window as any).hasElementFocused();
+
   (window as any).copySelection = () =>
     dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).cutSelection = () =>

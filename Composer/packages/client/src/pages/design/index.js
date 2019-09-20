@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
 
+import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
@@ -88,6 +89,7 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
+
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -155,14 +157,7 @@ function DesignPage(props) {
     }
   };
 
-  const VisualEditorFrame = window.frames.VisualEditor || {};
-  const VisualEditorApi = {
-    copySelection: () => VisualEditorFrame && VisualEditorFrame.copySelection && VisualEditorFrame.copySelection(),
-    cutSelection: () => VisualEditorFrame && VisualEditorFrame.cutSelection && VisualEditorFrame.cutSelection(),
-    deleteSelection: () =>
-      VisualEditorFrame && VisualEditorFrame.deleteSelection && VisualEditorFrame.deleteSelection(),
-  };
-
+  const shouldDisableNodeOperation = !VisualEditorAPI.hasElementSelected();
   const toolbarItems = [
     {
       type: 'action',
@@ -192,11 +187,11 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
-        disabled: !VisualEditorFrame.elementSelected,
+        disabled: shouldDisableNodeOperation,
         iconProps: {
           iconName: 'Cut',
         },
-        onClick: () => VisualEditorApi.cutSelection(),
+        onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
     },
@@ -204,11 +199,11 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
-        disabled: !VisualEditorFrame.elementSelected,
+        disabled: shouldDisableNodeOperation,
         iconProps: {
           iconName: 'Copy',
         },
-        onClick: () => VisualEditorApi.copySelection(),
+        onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
     },
@@ -216,11 +211,11 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: !VisualEditorFrame.elementSelected,
+        disabled: shouldDisableNodeOperation,
         iconProps: {
           iconName: 'Delete',
         },
-        onClick: () => VisualEditorApi.deleteSelection(),
+        onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
     },
