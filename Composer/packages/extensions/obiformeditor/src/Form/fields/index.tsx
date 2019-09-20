@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles.css';
 
 export * from './CasesField';
 export * from './CodeField';
