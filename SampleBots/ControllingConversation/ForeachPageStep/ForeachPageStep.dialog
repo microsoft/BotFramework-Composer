@@ -6,7 +6,7 @@
     "id": "847208"
   },
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -43,7 +43,7 @@
             "id": "834603"
           },
           "changeType": "Push",
-          "arrayProperty": "dialog.ids",
+          "itemsProperty": "dialog.ids",
           "value": "10000+1000+100+10+1"
         },
         {
@@ -54,7 +54,7 @@
             "id": "048190"
           },
           "changeType": "Push",
-          "arrayProperty": "dialog.ids",
+          "itemsProperty": "dialog.ids",
           "value": "200*200"
         },
         {
@@ -65,7 +65,7 @@
             "id": "434590"
           },
           "changeType": "Push",
-          "arrayProperty": "dialog.ids",
+          "itemsProperty": "dialog.ids",
           "value": "888888/4"
         },
         {
@@ -84,18 +84,16 @@
             "id": "993283"
           },
           "pageSize": 10,
-          "valueProperty": "dialog.value",
-          "listProperty": "dialog.ids",
+          "itemsProperty": "dialog.ids",
           "PageSize": "2",
-          "ValueProperty": "dialog.page",
           "actions": [
             {
               "$type": "Microsoft.Foreach",
-              "listProperty": "dialog.page",
+              "itemsProperty": "dialog.foreach.page",
               "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "{dialog.index}: {dialog.value}"
+                  "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
                 }
               ]
             }

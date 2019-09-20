@@ -6,6 +6,7 @@
     "id": "892616"
   },
   "autoEndDialog": false,
+  "generator": "common.lg",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
@@ -89,8 +90,7 @@
       }
     ]
   },
-  "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {

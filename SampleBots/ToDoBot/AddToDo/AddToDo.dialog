@@ -7,7 +7,7 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -68,7 +68,7 @@
             "id": "567087"
           },
           "changeType": "Push",
-          "arrayProperty": "user.todos",
+          "itemsProperty": "user.todos",
           "value": "dialog.todo"
         },
         {

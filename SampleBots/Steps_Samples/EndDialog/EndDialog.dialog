@@ -23,10 +23,10 @@
       }
     ]
   },
-  "events": [
+  "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
-      "events": [
+      "$type": "Microsoft.OnCustomEvent",
+      "triggers": [
         "cancelDialog"
       ],
       "actions": [

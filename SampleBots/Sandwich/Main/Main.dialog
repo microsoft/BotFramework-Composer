@@ -3,7 +3,7 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "Main.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnIntent",
       "actions": [

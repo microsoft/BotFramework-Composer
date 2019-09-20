@@ -8,7 +8,7 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -207,7 +207,7 @@
             "id": "451376"
           },
           "changeType": "Remove",
-          "arrayProperty": "getProperty(user.lists, dialog.listName)",
+          "itemsProperty": "getProperty(user.lists, dialog.listName)",
           "value": "dialog.item"
         },
         {

@@ -7,7 +7,7 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {

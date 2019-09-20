@@ -1,7 +1,7 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
@@ -33,12 +33,12 @@
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.emails"
+          "itemsProperty": "user.emails"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.sentItems"
+          "itemsProperty": "user.sentItems"
         },
         {
           "$type": "Microsoft.BeginDialog",

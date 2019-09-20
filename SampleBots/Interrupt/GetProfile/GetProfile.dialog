@@ -7,7 +7,7 @@
     "name": "GetProfile"
   },
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {

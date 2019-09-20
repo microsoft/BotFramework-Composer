@@ -17,7 +17,7 @@
       }
     ] 
   },
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {

@@ -6,7 +6,7 @@
     "id": "395991"
   },
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -45,7 +45,7 @@
             "id": "076427"
           },
           "changeType": "Push",
-          "arrayProperty": "user.ids",
+          "itemsProperty": "user.ids",
           "value": "10000+1000+100+10+1"
         },
         {
@@ -56,13 +56,13 @@
             "id": "162360"
           },
           "changeType": "Push",
-          "arrayProperty": "user.ids",
+          "itemsProperty": "user.ids",
           "value": "200*200"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.ids",
+          "itemsProperty": "user.ids",
           "value": "888888/4",
           "$designer": {
             "createdAt": "2019-07-16T19:51:21.579Z",
@@ -86,13 +86,11 @@
             "updatedAt": "2019-07-16T19:51:36.827Z",
             "id": "995811"
           },
-          "indexProperty": "dialog.index",
-          "valueProperty": "dialog.value",
-          "listProperty": "user.ids",
+          "itemsProperty": "user.ids",
           "actions": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "{dialog.index}: {dialog.value}"
+              "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
             }
           ]
         },
@@ -113,18 +111,15 @@
             "id": "087387"
           },
           "pageSize": "2",
-          "valueProperty": "dialog.page",
-          "listProperty": "user.ids",
+          "itemsProperty": "user.ids",
           "actions": [
             {
               "$type": "Microsoft.Foreach",
-              "listProperty": "dialog.page",
-              "indexProperty": "dialog.index",
-              "valueProperty": "dialog.value",
+              "itemsProperty": "dialog.foreach.page",
               "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "{dialog.index}: {dialog.value}"
+                  "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
                 }
               ],
               "$designer": {

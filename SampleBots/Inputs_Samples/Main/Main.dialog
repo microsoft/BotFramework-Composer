@@ -62,7 +62,7 @@
     ] 
   },
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",

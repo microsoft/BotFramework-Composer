@@ -10,7 +10,7 @@
   "autoEndDialog": false,
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {

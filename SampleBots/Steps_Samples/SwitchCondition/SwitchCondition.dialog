@@ -7,14 +7,14 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "851391",
         "updatedAt": "2019-07-22T08:05:10.334Z"
       },
-      "events": ["beginDialog"],
+      "triggers": ["beginDialog"],
       "actions": [
         {
           "$type": "Microsoft.ChoiceInput",

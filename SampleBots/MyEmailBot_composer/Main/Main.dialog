@@ -19,7 +19,7 @@
     ]
   },
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [

@@ -6,7 +6,8 @@
     "id": "126960"
   },
   "autoEndDialog": true,
-  "events": [
+  "generator": "common.lg",
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {

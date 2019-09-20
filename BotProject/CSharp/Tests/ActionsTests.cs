@@ -6,6 +6,8 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
+using Microsoft.Bot.Builder.LanguageGeneration;
+using Microsoft.Bot.Builder.LanguageGeneration.Templates;
 using Microsoft.Bot.Builder.TestBot.Json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +36,6 @@ namespace Tests
     public static void ClassInitialize(TestContext context)
     {
       TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-      TypeFactory.RegisterAdaptiveTypes();
       string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory));
     }
 
@@ -228,12 +229,13 @@ namespace Tests
       adapter
           .UseStorage(storage)
           .UseState(userState, convoState)
-          .UseLanguageGeneration(resourceExplorer)
+          .UseAdaptiveDialogs()
+          .UseLanguageGeneration(resourceExplorer, "common.lg")
           .UseResourceExplorer(resourceExplorer)
           .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
       var resource = resourceExplorer.GetResource("Main.dialog");
-      var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
+      var dialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
       DialogManager dm = new DialogManager(dialog);
 
       return new TestFlow(adapter, async (turnContext, cancellationToken) =>

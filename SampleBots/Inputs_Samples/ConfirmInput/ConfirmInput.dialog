@@ -6,7 +6,7 @@
     "id": "556076"
   },
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {

@@ -8,7 +8,7 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {

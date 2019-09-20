@@ -7,7 +7,7 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -48,7 +48,7 @@
             "id": "492096"
           },
           "changeType": "Remove",
-          "arrayProperty": "user.todos",
+          "itemsProperty": "user.todos",
           "resultProperty": "dialog.removed",
           "value": "dialog.todo"
         },

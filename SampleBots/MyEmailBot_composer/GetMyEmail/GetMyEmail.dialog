@@ -1,14 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.Emails",
+          "itemsProperty": "user.Emails",
           "$designer": {
             "createdAt": "2019-08-08T09:26:57.785Z",
             "updatedAt": "2019-08-08T09:26:57.791Z",
@@ -23,19 +23,19 @@
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.emails",
+          "itemsProperty": "user.emails",
           "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.emails",
+          "itemsProperty": "user.emails",
           "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+1]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.emails",
+          "itemsProperty": "user.emails",
           "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+2]"
         }
       ],

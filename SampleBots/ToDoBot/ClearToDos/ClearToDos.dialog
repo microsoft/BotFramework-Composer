@@ -7,7 +7,7 @@
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
@@ -24,7 +24,7 @@
             "id": "832307"
           },
           "changeType": "Clear",
-          "arrayProperty": "user.todos",
+          "itemsProperty": "user.todos",
           "resultProperty": "dialog.cleared"
         },
         {

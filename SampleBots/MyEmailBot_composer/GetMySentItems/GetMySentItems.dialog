@@ -1,14 +1,14 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.sentItems"
+          "itemsProperty": "user.sentItems"
         },
         {
           "$type": "Microsoft.SetProperty",
@@ -23,19 +23,19 @@
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.sentItems",
+          "itemsProperty": "user.sentItems",
           "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.sentItems",
+          "itemsProperty": "user.sentItems",
           "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+1]"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
-          "arrayProperty": "user.sentItems",
+          "itemsProperty": "user.sentItems",
           "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+2]"
         }
       ],
