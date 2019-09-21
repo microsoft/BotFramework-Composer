@@ -31,7 +31,7 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.getByText('Start Bot').click();
-    cy.wait(500);
+    cy.wait(5000);
     // clear its settings before
     cy.get('[data-testid="ProjectNameInput"]')
       .clear()
