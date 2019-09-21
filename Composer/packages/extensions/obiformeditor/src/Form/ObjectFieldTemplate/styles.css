@@ -1,0 +1,18 @@
+.ObjectItem {
+  display: flex;
+}
+.ObjectItem .ObjectItemField {
+  flex: 1;
+}
+.ObjectItem .ObjectItemField .BaseField {
+  margin-top: 10px;
+}
+.ObjectItem .ObjectItemContext {
+  flex-basis: auto;
+  margin-left: 15px;
+  display: flex;
+  align-items: flex-end;
+}
+.ObjectItem + .ObjectItem {
+  margin-top: 10px;
+}

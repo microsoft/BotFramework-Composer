@@ -3,11 +3,9 @@
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-
 .DesignerFieldSection {
   flex: 1;
-
-  & + & {
-    margin-left: 50px;
-  }
+}
+.DesignerFieldSection + .DesignerFieldSection {
+  margin-left: 50px;
 }
