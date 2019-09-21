@@ -3,7 +3,7 @@ name: Bot Framework Composer Bug
 about: Create a report for a bug you found in the Bot Framework Composer (including
   documentation)
 title: ''
-labels: 'Type: bug'
+labels: 'Needs-triage, Type: bug'
 assignees: ''
 
 ---
