@@ -5,13 +5,17 @@ import { ActionCreator } from '../types';
 import { BASEURL, ActionTypes } from './../../constants';
 
 export const connectBot: ActionCreator = async (store, settings) => {
-  const path = `${BASEURL}/launcher/connect`;
+  const state = store.getState();
+  const { botEnvironment } = state;
+  const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
+
   try {
-    await axios.get(path);
+    const res = await axios.get(path);
     store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
         status: 'connected',
+        botEndpoint: res.data.botEndpoint,
       },
     });
     await reloadBot(store, settings);
@@ -20,10 +24,13 @@ export const connectBot: ActionCreator = async (store, settings) => {
   }
 };
 
-export const reloadBot: ActionCreator = async ({ dispatch }, settings) => {
+export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings) => {
+  const { botEnvironment } = getState();
   const path = `${BASEURL}/launcher/sync`;
   try {
-    await axios.post(path, settings);
+    const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';
+
+    await axios.post(path, { ...settings, targetEnvironment });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {

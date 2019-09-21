@@ -15,11 +15,11 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
+import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
-  const { navTo } = actions;
   const { dialogs, lgFiles } = state;
   const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
@@ -184,7 +184,7 @@ export default function TableView(props) {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
             return (
-              <div key={id} onClick={() => navTo(id)}>
+              <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
                 <Link>{id}</Link>
               </div>
             );

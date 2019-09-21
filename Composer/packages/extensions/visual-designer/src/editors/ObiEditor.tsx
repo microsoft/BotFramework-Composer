@@ -4,10 +4,12 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
+import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
+import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { deleteNode, insert } from '../utils/jsonTracker';
+import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 
@@ -29,8 +31,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        resetSelectionData();
-        handler = id => onFocusSteps(id ? [id] : []);
+        handler = (id, selectedId?) => {
+          setSelectionContext({
+            getNodeIndex: selectionContext.getNodeIndex,
+            selectedIds: [selectedId || id],
+          });
+          onFocusSteps(id ? [id] : []);
+        };
         break;
       case NodeEventTypes.FocusEvent:
         handler = onFocusEvent;
@@ -110,6 +117,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
+    setSelectedElements(querySelectedElements());
   }, [data]);
 
   const selection = new Selection({
@@ -120,16 +128,37 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
+
+      // TODO: normalize selectedIds
+      onFocusSteps(selectedIds);
       console.log(selectedIds);
       setSelectionContext(newContext);
     },
   });
 
-  const handleKeyboardCommand = command => {
-    switch (command) {
-      case KeyboardCommandTypes.DeleteNode:
-        dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+  const querySelectedElements = () => {
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
+    return items;
+  };
+  const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
+
+  const handleKeyboardCommand = ({ primaryType, command }) => {
+    const currentSelectedId = selectionContext.selectedIds[0];
+    switch (primaryType) {
+      case KeyboardPrimaryTypes.Node:
+        if (command === KeyboardCommandTypes.Node.Delete) {
+          dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        }
         break;
+      case KeyboardPrimaryTypes.Cursor: {
+        const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [selected as string],
+        });
+        focused && onFocusSteps([focused]);
+        break;
+      }
       default:
         break;
     }

@@ -1,9 +1,12 @@
+import { BotEnvironments } from '../models/connector';
 import BotConnectorService from '../services/connector';
 
 async function connect(req: any, res: any) {
   try {
-    await BotConnectorService.connect();
-    res.send('OK');
+    const hostName = req.hostname;
+    const env: BotEnvironments = req.query && req.query.botEnvironment ? req.query.botEnvironment : 'production';
+    const botEndpoint = await BotConnectorService.connect(env, hostName);
+    res.send({ botEndpoint });
   } catch (error) {
     res.status(400).json({
       message: 'cannot connect to a bot runtime, make sure you start the bot runtime',
@@ -13,7 +16,7 @@ async function connect(req: any, res: any) {
 
 async function sync(req: any, res: any) {
   try {
-    await BotConnectorService.sync(req.body);
+    await BotConnectorService.sync({ ...req.body, user: req.user });
     res.send('OK');
   } catch (error) {
     res.status(400).json({
