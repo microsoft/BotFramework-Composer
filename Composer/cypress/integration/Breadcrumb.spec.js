@@ -51,16 +51,17 @@ context('breadcrumb', () => {
   });
 
   it('can show action name in breadcrumb', () => {
+    cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('ToDoBot.Main').click();
-      cy.wait(100);
+      cy.wait(500);
     });
 
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.getByTestId('RuleEditor').within(() => {
-        cy.getByText('Send an Activity').click();
-        cy.wait(300);
+        cy.getByTexwt('Send an Activity').click();
+        cy.wait(500);
       });
     });
 
