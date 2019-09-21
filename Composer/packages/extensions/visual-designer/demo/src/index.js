@@ -13,7 +13,6 @@ import './index.css';
 initializeIcons(undefined, { disableWarnings: true });
 
 EditorConfig.features.showEvents = true;
-EditorConfig.features.keyboardNodeEditing = true;
 
 const DemoMaps = {
   VisualEditorDemo: {
