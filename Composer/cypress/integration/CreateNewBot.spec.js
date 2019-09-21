@@ -3,9 +3,11 @@
 context('Creating a new bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.wait(500);
   });
 
   beforeEach(() => {
+    cy.wait(500);
     cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
     cy.wait(500);
     cy.get('[data-testid="homePage-ToolBar-New"]').click();
