@@ -59,13 +59,13 @@ context('breadcrumb', () => {
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.getByTestId('RuleEditor').within(() => {
-        cy.getByText('Set a Property').click();
+        cy.getByText('Send an Activity').click();
         cy.wait(300);
       });
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /ToDoBot.+Set a Property/);
+      .should('match', /ToDoBot.+Send an Activity/);
   });
 });
