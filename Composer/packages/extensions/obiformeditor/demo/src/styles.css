@@ -3,78 +3,61 @@
   font-weight: 700;
   src: url("./fonts/segoe-ui-bold.woff2") format("woff2");
 }
-
 @font-face {
   font-family: Segoe UI;
   font-weight: 600;
   src: url("./fonts/segoe-ui-semibold.woff2") format("woff2");
 }
-
 @font-face {
   font-family: Segoe UI;
   font-weight: 400;
   src: url("./fonts/segoe-ui.woff2") format("woff2");
 }
-
 @font-face {
   font-family: Segoe UI;
   font-weight: 300;
   src: url("./fonts/segoe-ui-semilight.woff2") format("woff2");
 }
-
 @font-face {
   font-family: Segoe UI;
   font-weight: 200;
   src: url("./fonts/segoe-ui-light.woff2") format("woff2");
 }
-
-
 body {
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 .DemoContainer {
   display: flex;
   height: 100vh;
-
-  & > * {
-    flex: 0 0 50%;
-  }
 }
-
+.DemoContainer > * {
+  flex: 0 0 50%;
+}
 .DemoForm {
   overflow-y: scroll;
   height: 100%;
   width: 100%;
-
-  .App {
-    padding-top: 20px;
-  }
 }
-
-.DemoJSONContainer {
-  .react-codemirror2 {
-    margin-top: 0;
-    height: 100%;
-    position: relative;
-  }
-
-  .CodeMirror {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-  }
-
-  .CodeMirror--error {
-    border: 10px solid #e81123;
-  }
+.DemoForm .App {
+  padding-top: 20px;
+}
+.DemoJSONContainer .react-codemirror2 {
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}
+.DemoJSONContainer .CodeMirror {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+.DemoJSONContainer .CodeMirror--error {
+  border: 10px solid #e81123;
 }

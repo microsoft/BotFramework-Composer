@@ -5,8 +5,8 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/lib/codemirror.css';
 
-import './codemirror-fabric.scss';
-import './styles.scss';
+import './codemirror-fabric.css';
+import './styles.css';
 import { BaseField } from './BaseField';
 
 const cmOptions = {

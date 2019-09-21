@@ -7,7 +7,7 @@ import { BaseField } from '../fields/BaseField';
 
 import ArrayItem from './ArrayItem';
 
-import './styles.scss';
+import './styles.css';
 
 const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   return (
