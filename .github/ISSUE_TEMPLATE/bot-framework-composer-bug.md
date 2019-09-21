@@ -8,8 +8,6 @@ assignees: ''
 
 ---
 
-### [Github issues](https://github.com/Microsoft/botframework-emulator/issues) should be used for bugs and feature requests. Use [Stack Overflow](https://stackoverflow.com/questions/tagged/botframework) for general "how-to" questions. 
-
 ## Version
 What version of the Emulator are you using.
 
