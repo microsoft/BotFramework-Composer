@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Luis Deploy', () => {
-  beforeEach(() => {
+  before(() => {
     cy.server();
     cy.route('GET', '/api/launcher/connect?botEnvironment=production', 'OK');
     cy.route('POST', '/api/launcher/sync', 'OK');
