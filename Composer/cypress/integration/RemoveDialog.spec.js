@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('RemoveDialog', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.copyBot('ToDoLuisBot', 'ToDoLuisBotSpec');
   });

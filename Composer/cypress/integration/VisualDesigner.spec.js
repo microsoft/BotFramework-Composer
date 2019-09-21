@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Visual Designer', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.startFromTemplate('EmptyBot', 'VisualDesignerTest');
   });

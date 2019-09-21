@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 context('check Nav Expandion ', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
   });
   it('can open buttons in home page', () => {

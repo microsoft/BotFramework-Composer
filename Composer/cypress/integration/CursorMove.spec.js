@@ -4,7 +4,7 @@ require('cypress-plugin-tab');
 // this test is too unstable right now
 // re-enable when stablized
 context('Cursor move', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
   });

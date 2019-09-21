@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Saving As', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
   });
 
