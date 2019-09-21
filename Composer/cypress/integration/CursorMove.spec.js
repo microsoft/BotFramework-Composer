@@ -11,7 +11,7 @@ context('Cursor move', () => {
 
   beforeEach(() => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ClearToDos').click();
+      cy.getByText('AddToDo').click();
       cy.wait(100);
     });
   });
