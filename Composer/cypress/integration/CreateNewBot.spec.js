@@ -3,15 +3,17 @@
 context('Creating a new bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.wait(500);
+    cy.wait(1000);
   });
 
   beforeEach(() => {
-    cy.wait(500);
+    cy.wait(5000);
     cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-    cy.wait(500);
-    cy.get('[data-testid="homePage-ToolBar-New"]').click();
-    cy.wait(500);
+    cy.wait(5000);
+    cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
+      cy.getByText('New').click();
+    });
+    cy.wait(5000);
   });
 
   it('can create a new bot', () => {
