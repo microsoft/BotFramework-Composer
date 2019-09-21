@@ -7,9 +7,9 @@ context('Creating a new bot', () => {
 
   beforeEach(() => {
     cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-    cy.wait(100);
+    cy.wait(500);
     cy.get('[data-testid="homePage-ToolBar-New"]').click();
-    cy.wait(100);
+    cy.wait(500);
   });
 
   it('can create a new bot', () => {
