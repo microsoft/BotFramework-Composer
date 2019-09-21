@@ -60,7 +60,7 @@ context('breadcrumb', () => {
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.getByTestId('RuleEditor').within(() => {
-        cy.getByTexwt('Send an Activity').click();
+        cy.getByText('Send an Activity').click();
         cy.wait(500);
       });
     });
