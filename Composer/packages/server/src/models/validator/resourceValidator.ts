@@ -1,5 +1,5 @@
-import { Resource } from '../resource/resource';
-import { ResourceResolver } from '../resource/resourceResolver';
+import { Resource, ResourceResolver } from '../resource';
+import { Diagnostic } from './diagnostic';
 
 // Validator interface is also resource-based
 export interface ResourceValidator {

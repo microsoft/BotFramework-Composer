@@ -18,6 +18,8 @@ export class LUValidator implements ResourceValidator {
     } catch (err) {
       diagnostics.push(new Diagnostic(err, resource.id));
     }
+
+    return diagnostics;
   };
 
   private parse(content: string): any {

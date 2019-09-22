@@ -96,7 +96,7 @@ export class BotProject {
         resource = new LUResource(id, content, relativePath);
         break;
       default:
-        throw new Error(`Unrecnogizned format of resource file, expected: .dialog .lg or .lu actual${path} `);
+        throw new Error(`Unrecnogizned format of resource file, expected: .dialog .lg or .lu, actual ${path} `);
     }
 
     if (resource !== null) {
