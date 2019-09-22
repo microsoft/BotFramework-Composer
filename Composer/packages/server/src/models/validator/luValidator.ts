@@ -1,3 +1,5 @@
+import ludown from 'ludown';
+
 import { Resource, ResourceResolver, ResourceType } from '../resource';
 
 import { ResourceValidator } from './resourceValidator';
@@ -8,5 +10,20 @@ export class LUValidator implements ResourceValidator {
     if (resource.type !== ResourceType.LU) {
       throw new Error(`Can't apply LUValidator to resource type ${resource.type}`);
     }
+
+    let diagnostics: Diagnostic[] = [];
+
+    try {
+      this.parse(resource.content);
+    } catch (err) {
+      diagnostics.push(new Diagnostic(err, resource.id));
+    }
   };
+
+  private parse(content: string): any {
+    const log = false;
+    const locale = 'en-us';
+
+    return ludown.parser.parseFile(content, log, locale);
+  }
 }

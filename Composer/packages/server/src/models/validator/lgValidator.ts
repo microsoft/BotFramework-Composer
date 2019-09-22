@@ -19,7 +19,7 @@ export class LGValidator implements ResourceValidator {
     });
   };
 
-  // LGDiagnostic is defined in PascalCase which should be corrected
+  // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
   private convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
     let result = new Diagnostic(d.Message, source, d.Severity);
 
