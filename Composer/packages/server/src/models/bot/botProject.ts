@@ -65,7 +65,7 @@ export class BotProject {
 
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
     for (const pattern of patterns) {
-      const paths = await this.fileStorage.glob(pattern, this.dir);
+      const paths = (await this.fileStorage.glob(pattern, this.dir)).map(x => Path.join(this.dir, x));
 
       for (const path of paths.sort()) {
         if ((await this.fileStorage.stat(path)).isFile) {
