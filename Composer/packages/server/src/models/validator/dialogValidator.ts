@@ -6,6 +6,12 @@ import { VisitorFunc, JsonWalk } from '../../utility/jsonWalk';
 import { DialogChecker } from '../bot/dialogChecker';
 import { has } from 'lodash';
 
+/**
+ * TODO:
+ *   1. use schema to verify json structure
+ *   2. use schema to verify role like "expression"
+ *   3. return the correct location(json path) in each diagonstic
+ */
 export class DialogValidator implements ResourceValidator {
   public validate = (resource: Resource, _resolver: ResourceResolver): Diagnostic[] => {
     if (resource.type !== ResourceType.DIALOG) {
