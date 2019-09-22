@@ -1,4 +1,4 @@
-export interface Diagnostic {
+export class Diagnostic {
   /**
    * Error
    * Warning
@@ -12,19 +12,19 @@ export interface Diagnostic {
    */
   message: string;
 
-  /*
+  /**
+   * source is used to indentify the source of this error
+   * ie, resource id or file name
+   */
+  source: string;
+
+  /**
    * path and range are to help locate the error,
    * path is used for json or any structured content
    * range is used for text-based content
    */
-  path?: string;
   range?: Range;
-
-  /*
-   * source is used to indentify the source of this error
-   * usually it's a resource id
-   */
-  source?: string;
+  path?: string;
 
   /*
    * code is a machine readable idenfier to classify error
@@ -32,16 +32,32 @@ export interface Diagnostic {
    * for example CA2001
    */
   code?: string;
+
+  constructor(message: string, source: string, severity?: DiagnosticSeverity) {
+    this.message = message;
+    this.source = source;
+    this.severity = severity ? severity : DiagnosticSeverity.Error;
+  }
 }
 
-export interface Range {
+export class Range {
   start: Position;
   end: Position;
+
+  constructor(start: Position, end: Position) {
+    this.start = start;
+    this.end = end;
+  }
 }
 
-export interface Position {
+export class Position {
   line: number;
   character: number;
+
+  constructor(line: number, character: number) {
+    this.line = line;
+    this.character = character;
+  }
 }
 
 export enum DiagnosticSeverity {
