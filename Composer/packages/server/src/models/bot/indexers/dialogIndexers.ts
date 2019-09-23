@@ -122,6 +122,7 @@ export class DialogIndexer {
             trigers.push(trigger);
           }
         });
+        return true;
       }
       return false;
     };
