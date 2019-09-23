@@ -67,7 +67,9 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 });
 
 Cypress.Commands.add('addEventHandler', handler => {
-  cy.getByTestId('AddNewTrigger').click();
+  cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.getByText(/New Trigger ../).click();
+  });
   cy.get(`[data-testid="triggerTypeDropDown"]`).click();
   cy.getByText(handler).click();
   if (handler === 'Handle a Dialog Event') {
