@@ -15,7 +15,7 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '../../store/types';
 import { getFriendlyName, createSelectedPath } from '../../utils';
 
-import { groupListStyle, addButton, root } from './styles';
+import { groupListStyle, addButton, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
 
 export function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
@@ -148,7 +148,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
 
   return (
     <div css={root} data-testid="ProjectTree">
-      <SearchBox placeholder={formatMessage('Filter Dialogs')} onChange={onFilter} iconProps={{ iconName: 'Filter' }} />
+      <SearchBox
+        placeholder={formatMessage('Filter Dialogs')}
+        styles={searchBox}
+        onChange={onFilter}
+        iconProps={{ iconName: 'Filter' }}
+      />
       <GroupedList
         {...createGroup(sortedDialogs, dialogId, filter)}
         onRenderCell={onRenderCell}

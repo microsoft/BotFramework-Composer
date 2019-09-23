@@ -10,6 +10,15 @@ export const groupListStyle: Partial<IGroupedListStyles> = {
   },
 };
 
+export const searchBox = {
+  root: {
+    outline: 'none',
+    border: 'none',
+    borderBottom: '1px solid #edebe9',
+    height: '45px',
+  },
+};
+
 export const root = css`
   width: 180px;
   border-right: 1px solid #c4c4c4;
