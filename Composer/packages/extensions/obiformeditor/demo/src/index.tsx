@@ -8,7 +8,7 @@ import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import Example from '../../src';
-import { ShellApi, LuFile } from '../../src/types';
+import { ShellApi, LuFile, DialogInfo } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -18,7 +18,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/neat.css';
 
-import './styles.scss';
+import './styles.css';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -50,52 +50,37 @@ const defaultMemory = {
   turn: {},
 };
 
-const dialogFiles = [
-  {
-    id: 'Main',
-    displayName: 'MyCustomDialog1',
-    name: 'Main.dialog',
-    relativePath: 'Main/Main.dialog',
-    path: '/Some/Cool/Path/Main/Main.dialog',
-    isRoot: true,
+function createDialogInfo(id: string, content: Partial<MicrosoftAdaptiveDialog> = {}, customName?: string): DialogInfo {
+  return {
+    id,
+    displayName: customName || id,
+    relativePath: `${id}/${id}.dialog`,
+    isRoot: id === 'Main',
     content: {
       $type: 'Microsoft.AdaptiveDialog',
+      events: [],
+      ...content,
+    },
+    lgFile: '',
+    luFile: '',
+    diagnostics: [],
+    referredDialogs: [],
+    luIntents: [],
+    lgTemplates: [],
+  };
+}
+
+const dialogFiles: DialogInfo[] = [
+  createDialogInfo(
+    'Main',
+    {
       recognizer: 'Main',
     },
-  },
-  {
-    id: 'MyCustomDialog2',
-    displayName: 'MyCustomDialog2',
-    name: 'MyCustomDialog2.dialog',
-    relativePath: 'MyCustomDialog2.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog2.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
-  {
-    id: 'MyCustomDialog3',
-    displayName: 'MyCustomDialog3',
-    name: 'MyCustomDialog3.dialog',
-    relativePath: 'MyCustomDialog3.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog3.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
-  {
-    id: 'MyCustomDialog4',
-    displayName: 'MyCustomDialog4',
-    name: 'MyCustomDialog4.dialog',
-    relativePath: 'MyCustomDialog4.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog4.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
+    'MyCustomDialog1'
+  ),
+  createDialogInfo('MyCustomDialog2'),
+  createDialogInfo('MyCustomDialog3'),
+  createDialogInfo('MyCustomDialog4'),
 ];
 
 const luFiles: LuFile[] = [
@@ -378,6 +363,7 @@ const Demo: React.FC = () => {
           lgFiles={lgFiles}
           currentDialog={dialogFiles[0]}
           isRoot={true}
+          focusedSteps={[]}
         />
       </div>
     </div>

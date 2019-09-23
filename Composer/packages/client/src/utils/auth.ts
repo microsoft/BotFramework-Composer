@@ -132,7 +132,7 @@ export async function loginPopup(): Promise<string | null> {
       try {
         if (popup) {
           if (popup.location.href.includes(windowLoc.hostname)) {
-            const { access_token } = querystring.parse(popup.location.hash);
+            const { access_token, error } = querystring.parse(popup.location.hash);
 
             if (access_token) {
               popup.close();
@@ -140,6 +140,8 @@ export async function loginPopup(): Promise<string | null> {
               const token = Array.isArray(access_token) ? access_token[0] : access_token;
               storage.set(USER_TOKEN_STORAGE_KEY, token);
               resolve(token);
+            } else if (error) {
+              resolve(null);
             }
           }
         } else {

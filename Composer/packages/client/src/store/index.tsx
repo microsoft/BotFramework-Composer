@@ -14,6 +14,8 @@ import { ActionType } from './action/types';
 const initialState: State = {
   dialogs: [],
   botName: '',
+  botEnvironment: 'production',
+  botEndpoint: '',
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
   templateProjects: [],

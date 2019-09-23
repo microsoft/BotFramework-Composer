@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { absHosted } from '../../settings/env';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -14,6 +15,11 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
+
+const oauthInput = () => ({
+  MicrosoftAppId: process.env.MicrosoftAppId || '',
+  MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
+});
 
 export class BotProject {
   public ref: LocationRef;
@@ -68,12 +74,20 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
+      botEnvironment: absHosted ? this.name : undefined,
       settings: this.settings,
     };
   };
 
   private getDialogSetting = async () => {
-    return await this.settingManager.get();
+    const settings = await this.settingManager.get();
+    if (settings && oauthInput().MicrosoftAppId !== '') {
+      settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
+    }
+    if (settings && oauthInput().MicrosoftAppPassword !== '') {
+      settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
+    }
+    return settings;
   };
 
   // create or update dialog settings
