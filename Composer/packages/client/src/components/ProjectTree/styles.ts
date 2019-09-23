@@ -162,6 +162,6 @@ export const name = {
   subComponentStyles: textFieldlabel,
 };
 
-export const description = {
+export const constraint = {
   subComponentStyles: textFieldlabel,
 };
