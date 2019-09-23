@@ -26,7 +26,7 @@
   "dependencies": {
     "@bfcomposer/react-jsonschema-form": "1.6.2",
     "@uifabric/fluent-theme": "7.1.4",
-    "@uifabric/styling": "7.6.2",
+    "@uifabric/styling": "7.7.1",
     "classnames": "^2.2.6",
     "code-editor": "*",
     "format-message": "^6.2.1",
@@ -36,7 +36,7 @@
     "lodash.merge": "^4.6.1",
     "lodash.omit": "^4.5.0",
     "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "7.36.0",
+    "office-ui-fabric-react": "7.37.1",
     "react-error-boundary": "^1.2.5",
     "shared-menus": "0.0.0"
   },
