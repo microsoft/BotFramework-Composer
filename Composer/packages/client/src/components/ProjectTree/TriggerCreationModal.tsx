@@ -3,21 +3,33 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { get } from 'lodash';
 
-import { addNewTrigger, getTriggerTypes, TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
+import {
+  addNewTrigger,
+  getTriggerTypes,
+  TriggerFormData,
+  TriggerFormDataErrors,
+  eventTypeKey,
+} from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, name, dialogWindow, description } from './styles';
+import { styles, dropdownStyles, name, dialogWindow, constraint } from './styles';
+
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
   return nameRegex.test(name);
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { name, $type } = data;
+  const { name, $type, eventType } = data;
   if (!name || !isValidName(name)) {
     errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+  }
+
+  if ($type === eventTypeKey && !eventType) {
+    errors.eventType = formatMessage('please select a event type');
   }
 
   if (!$type) {
@@ -37,7 +49,8 @@ const initialFormData: TriggerFormData = {
   errors: {},
   $type: '',
   name: '',
-  description: '',
+  constraint: '',
+  eventType: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -46,7 +59,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, schemas } = state;
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -65,7 +78,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
+    delete formData.eventType;
     setFormData({ ...formData, $type: option.key });
+  };
+
+  const onSelectEventType = (e, option) => {
+    setFormData({ ...formData, eventType: option.key });
   };
 
   const updateForm = field => (e, newValue) => {
@@ -74,7 +92,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       [field]: newValue,
     });
   };
-
+  const eventTypes = get(schemas, `sdk.content.definitions.['${eventTypeKey}'].properties.events.items.enum`, []).map(
+    t => {
+      return { key: t, text: t };
+    }
+  );
+  const showEventDropDown = formData.$type === eventTypeKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -99,6 +122,18 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}
           />
+
+          {showEventDropDown && (
+            <Dropdown
+              placeholder="select a event type"
+              label="What is the event?"
+              options={eventTypes}
+              styles={dropdownStyles}
+              onChange={onSelectEventType}
+              errorMessage={formData.errors.eventType}
+              data-testid={'eventTypeDropDown'}
+            />
+          )}
           <TextField
             label={formatMessage('What is the name of this trigger?')}
             styles={name}
@@ -107,12 +142,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             data-testid={'triggerName'}
           />
           <TextField
-            styles={description}
-            label={formatMessage('Description')}
+            styles={constraint}
+            label={formatMessage('Constraint')}
             multiline
             resizable={false}
-            onChange={updateForm('description')}
-            data-testid={'triggerDescription'}
+            onChange={updateForm('constraint')}
+            data-testid={'triggerConstraint'}
           />
         </Stack>
       </div>
