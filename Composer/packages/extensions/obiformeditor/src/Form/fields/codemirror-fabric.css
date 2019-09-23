@@ -1,0 +1,47 @@
+.cm-s-fabric span.cm-comment {
+    color: #008000;
+  }
+  .cm-s-fabric span.cm-keyword {
+    color: #0000ff;
+  }
+  .cm-s-fabric span.cm-def {
+    color: #267f99;
+  }
+  .cm-s-fabric span.cm-string {
+    color: #a31515;
+  }
+  .cm-s-fabric span.cm-property {
+    color: #00188f;
+  }
+  .cm-s-fabric span.cm-builtin {
+    line-height: 1em;
+    font-weight: bold;
+    color: #077;
+  }
+  .cm-s-fabric span.cm-special {
+    line-height: 1em;
+    font-weight: bold;
+    color: #0aa;
+  }
+  .cm-s-fabric span.cm-variable {
+    color: black;
+  }
+  .cm-s-fabric span.cm-number, .cm-s-fabric span.cm-atom {
+    color: #09885a;
+  }
+  .cm-s-fabric span.cm-meta {
+    color: #555;
+  }
+  .cm-s-fabric span.cm-link {
+    color: #3a3;
+  }
+  .cm-s-fabric .CodeMirror-activeline-background {
+    background: #6a7583;
+  }
+  .cm-s-fabric .CodeMirror-matchingbracket {
+    outline: 1px solid grey;
+    color: black !important;
+  }
+  .cm-s-fabric .CodeMirror-selected {
+    background: #add6ff80;
+  }

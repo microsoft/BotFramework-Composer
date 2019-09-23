@@ -33,8 +33,7 @@
     "test:integration:clean": "rimraf ../SampleBots/__Test* packages/server/data.json && git checkout ../SampleBots",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
-    "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:cci-graph-lib\" \"yarn typecheck:server\"",
-    "typecheck:cci-graph-lib": "yarn workspace cci-graph-lib typecheck",
+    "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:server\"",
     "typecheck:server": "yarn workspace composer-api-server typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
   },
