@@ -13,5 +13,5 @@ export default function FieldTemplate(props: FieldTemplateProps) {
     return null;
   }
 
-  return <>{children}</>;
+  return <div className="FieldTemplate">{children}</div>;
 }

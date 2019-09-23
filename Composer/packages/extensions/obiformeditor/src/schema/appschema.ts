@@ -1,4 +1,14 @@
 import { JSONSchema6 } from 'json-schema';
+import { SDKTypes } from 'shared-menus';
+
+export const PROMPT_TYPES = [
+  SDKTypes.AttachmentInput,
+  SDKTypes.ChoiceInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+];
 
 export const FIELDS_TO_HIDE = [
   '$id',

@@ -1,20 +1,16 @@
 import { SDKTypes } from 'shared-menus';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
+import { PROMPT_TYPES } from './appschema';
+
 const globalHidden = ['property', 'inputBindings', 'outputBinding', 'id', 'tags'];
 
-const activityFields = {
-  prompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  unrecognizedPrompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  invalidPrompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  'ui:hidden': ['id', 'tags', 'value', 'inputBindings', 'outputBinding'],
-};
+const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
+  schemas[type] = {
+    'ui:field': 'PromptField',
+  };
+  return schemas;
+}, {});
 
 export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.AdaptiveDialog]: {
@@ -198,116 +194,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:hidden': [...globalHidden],
   },
-  [SDKTypes.TextInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  [SDKTypes.NumberInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  [SDKTypes.ConfirmInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'style',
-      'defaultLocale',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
-    // - must provide yes/no in special format along with alternatives that have to be handled
-    // TODO: Implement confirmChoices-specific widget with appropriate business events.
-    'ui:hidden': ['confirmChoices'],
-  },
-  [SDKTypes.ChoiceInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    choices: {
-      items: {
-        value: {
-          'ui:options': {
-            label: false,
-          },
-        },
-      },
-    },
-    ...activityFields,
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'style',
-      'defaultLocale',
-      'choices',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
   [SDKTypes.OAuthInput]: {
     prompt: {
       'ui:widget': 'TextareaWidget',
@@ -319,29 +205,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:widget': 'TextareaWidget',
     },
     'ui:order': ['connectionName', '*'],
-  },
-  [SDKTypes.AttachmentInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
   },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
@@ -364,18 +227,5 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:hidden': [...globalHidden],
   },
-  [SDKTypes.DateTimeInput]: {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    defaultValue: {
-      'ui:widget': 'DateTimeWidget',
-    },
-  },
+  ...promptFieldsSchemas,
 };
