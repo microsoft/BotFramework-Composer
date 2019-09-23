@@ -30,6 +30,8 @@ export interface BreadcrumbItem {
 
 export interface BotSchemas {
   editor?: any;
+  sdk?: any;
+  diagnostics?: any[];
 }
 
 export interface State {
