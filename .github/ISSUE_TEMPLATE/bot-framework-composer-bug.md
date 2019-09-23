@@ -3,12 +3,10 @@ name: Bot Framework Composer Bug
 about: Create a report for a bug you found in the Bot Framework Composer (including
   documentation)
 title: ''
-labels: 'Type: bug'
+labels: 'Needs-triage, Type: bug'
 assignees: ''
 
 ---
-
-### [Github issues](https://github.com/Microsoft/botframework-emulator/issues) should be used for bugs and feature requests. Use [Stack Overflow](https://stackoverflow.com/questions/tagged/botframework) for general "how-to" questions. 
 
 ## Version
 What version of the Emulator are you using.

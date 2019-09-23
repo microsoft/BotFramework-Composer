@@ -5,6 +5,11 @@ interface DesignerAttributes {
   description: string;
 }
 
+interface OptionalAttributes {
+  constraint?: string;
+  events?: string[];
+}
+
 const initialDialogShape = {
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
@@ -19,6 +24,7 @@ export const seedNewDialog = ($type: string, designerAttributes: Partial<Designe
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
+    ...optionalAttributes,
     ...(initialDialogShape[$type] || {}),
   };
 };
