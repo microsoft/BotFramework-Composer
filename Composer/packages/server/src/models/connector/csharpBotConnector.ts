@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import BotProjectService from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 
-import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishVersion } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
@@ -81,6 +81,24 @@ export class CSharpBotConnector implements IBotConnector {
 
       output.on('close', () => resolve(archive));
       archive.on('error', err => reject(err));
+    });
+  };
+
+  getEditingStatus = (): Promise<boolean> => {
+    return new Promise(resolve => {
+      resolve(true);
+    });
+  };
+
+  getPublishVersions = (): Promise<IPublishVersion[]> => {
+    return new Promise(resolve => {
+      resolve([]);
+    });
+  };
+
+  publish = (config: BotConfig, label: string): Promise<void> => {
+    return new Promise(resolve => {
+      resolve();
     });
   };
 }
