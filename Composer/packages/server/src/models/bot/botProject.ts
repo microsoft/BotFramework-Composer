@@ -112,6 +112,22 @@ export class BotProject {
     return null;
   };
 
+  public getResource(id: string, type: ResourceType): Resource {
+    const result = this.resources.filter(r => {
+      r.id === id && r.type === type;
+    });
+
+    if (result.length === 0) {
+      throw new Error(`No such resource, id: ${id}, type: ${type}`);
+    }
+
+    return result[0];
+  }
+
+  public isDialog = (r: Resource) => r.type === ResourceType.DIALOG;
+  public isLG = (r: Resource) => r.type === ResourceType.LG;
+  public isLU = (r: Resource) => r.type === ResourceType.LU;
+
   public index = async () => {
     this.resources = await this.loadResources();
 
