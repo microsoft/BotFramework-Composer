@@ -7,7 +7,7 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { absHosted } from '../../settings/env';
 
-import { Resource, DialogResource, LGResource, LUResource } from '../resource';
+import { Resource, DialogResource, LGResource, LUResource, ResourceType } from '../resource';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -58,11 +58,12 @@ export class BotProject {
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
-  public loadResources = async () => {
+  public loadResources = async (): Promise<Resource[]> => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
+    const resources: Resource[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
     for (const pattern of patterns) {
       const paths = (await this.fileStorage.glob(pattern, this.dir)).map(x => Path.join(this.dir, x));
@@ -71,21 +72,25 @@ export class BotProject {
         if ((await this.fileStorage.stat(path)).isFile) {
           const resource = await this.loadResource(path);
           if (resource !== null) {
-            this.resources.push(resource);
+            resources.push(resource);
           }
         }
       }
     }
+
+    return resources;
   };
 
   public loadResource = async (path: string): Promise<Resource | null> => {
-    const id: string = Path.basename(path);
+    const extname: string = Path.extname(path);
+    const id: string = Path.basename(path, extname);
+
     const content: string = await this.fileStorage.readFile(path);
     const relativePath: string = Path.relative(this.dir, path);
 
     let resource: Resource | null = null;
 
-    switch (Path.extname(path)) {
+    switch (extname) {
       case '.dialog':
         resource = new DialogResource(id, content, relativePath);
         break;
@@ -108,7 +113,7 @@ export class BotProject {
   };
 
   public index = async () => {
-    await this.loadResources();
+    this.resources = await this.loadResources();
 
     this.files = await this._getFiles();
     this.settings = await this.getDialogSetting();
@@ -125,7 +130,8 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
-      dialogs: this.dialogIndexer.getDialogs(),
+      //dialogs: this.dialogIndexer.getDialogs(),
+      dialogs: this.resources.filter(r => r.type === ResourceType.DIALOG),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),

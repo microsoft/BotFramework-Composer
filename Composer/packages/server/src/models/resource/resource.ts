@@ -7,12 +7,23 @@ import { Diagnostic } from '../validator';
 
 // maybe call this DeclativeResource ?
 export interface Resource {
+  // id + type can indentify one resource
+  // the reason why not just id is
+  //  1. that's the previous design that works well with res api
+  //  2. in declartive SDK, we really don't have a uniformed id for dialog, lg, lu
+  //     like if you want to refer a dialog, you can inline put "dialogB" without ".dialog",
+  //     but when you want to refer a lg file, you must specifiy "a.lg", with ".lg".
+  //  So for now, id is only unique each type
   id: string;
   content: string;
   type: ResourceType;
   diagnostics?: Diagnostic[];
 
-  // index is the process of extracting userful information from raw content
+  // index is the process of extracting userful information from raw content or an initlization process.
+  // there are many alternative ways to model this than creating add such a method in here,
+  // like delegating to a ResourceFactory to do the create + index\init
+  // which is probably better, I just keep it here for the inteheriance of previous setup.
+  // but we do note that this don't feels too right here
   index(): Promise<void>;
 }
 
