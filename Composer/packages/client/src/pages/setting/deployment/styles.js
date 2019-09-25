@@ -2,6 +2,12 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
 export const styles = {
+  page: {
+    padding: '1rem',
+  },
+  header: {
+    marginTop: '0',
+  },
   halfstack: {
     root: [
       {
@@ -34,12 +40,6 @@ export const styles = {
     },
   },
   input: {
-    // fieldGroup: {
-    //   width: 200,
-    // },
-    // root: {
-    //   height: '90px',
-    // },
     subComponentStyles: {
       label: {
         root: [

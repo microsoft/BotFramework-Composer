@@ -1,14 +1,6 @@
 import React, { Fragment, useContext, useState } from 'react';
 import formatMessage from 'format-message';
-import {
-  Stack,
-  Dropdown,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  StackItem,
-  TextField,
-} from 'office-ui-fabric-react';
+import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../../store';
 
@@ -17,7 +9,7 @@ import { styles } from './styles';
 // TODO: get a complete list of azure regions
 const regionOptions = [{ key: 'westus', text: 'westus' }];
 
-export const DeployWizardStep1 = props => {
+export const DeployWizardStepDeploy = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
   const { botName, location } = state;
@@ -111,45 +103,6 @@ export const DeployWizardStep1 = props => {
             <p>{formatMessage('A name for this instance of your bot on Azure. (Staging, Production, testing, etc)')}</p>
           </StackItem>
         </Stack>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
-          <StackItem grow={1} styles={styles.halfstack}>
-            <TextField
-              label={formatMessage('App Secret')}
-              styles={styles.input}
-              mask="****************"
-              onChange={updateForm('secret')}
-              errorMessage={formData.errors.secret}
-              data-testid="appsecret"
-              required
-              maxLength={16}
-            />
-          </StackItem>
-          <StackItem align="end" grow={1} styles={styles.halfstack}>
-            <p>
-              {formatMessage(
-                'A 16-character secret used to securely identify and validate your bot. Must include at least 1 special character.'
-              )}
-            </p>
-          </StackItem>
-        </Stack>
-
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
-          <StackItem grow={1} styles={styles.halfstack}>
-            <Dropdown
-              label={formatMessage('Azure Region')}
-              styles={styles.input}
-              options={regionOptions}
-              onChange={updateForm('region')}
-              errorMessage={formData.errors.region}
-              data-testid="region"
-              required
-            />
-          </StackItem>
-          <StackItem align="end" grow={1} styles={styles.halfstack}>
-            <p>{formatMessage('Choose an Azure region for your resources to be located in')}</p>
-          </StackItem>
-        </Stack>
-
         <DialogFooter>
           <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
           <PrimaryButton onClick={submit} text={formatMessage('Next')} />
