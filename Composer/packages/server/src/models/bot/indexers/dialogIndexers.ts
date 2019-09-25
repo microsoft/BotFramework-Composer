@@ -99,26 +99,30 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (has(value, 'events')) {
+      if (has(value, 'events') && Array.isArray(value.events)) {
         value.events.forEach((rule: any, index: number) => {
-          const trigger: ITrigger = {
-            id: `events[${index}]`,
-            displayName: '',
-            type: rule.$type,
-            isIntent: rule.$type === 'Microsoft.OnIntent',
-          };
+          // make sure event is actualy an event type, not OnDialogEvent.events array
+          if (rule && typeof rule === 'object' && rule.$type) {
+            const trigger: ITrigger = {
+              id: `events[${index}]`,
+              displayName: '',
+              type: rule.$type,
+              isIntent: rule.$type === 'Microsoft.OnIntent',
+            };
 
-          if (has(rule, '$designer.name')) {
-            trigger.displayName = rule.$designer.name;
-          } else if (trigger.isIntent && has(rule, 'intent')) {
-            trigger.displayName = rule.intent;
-          }
+            if (has(rule, '$designer.name')) {
+              trigger.displayName = rule.$designer.name;
+            } else if (trigger.isIntent && has(rule, 'intent')) {
+              trigger.displayName = rule.intent;
+            }
 
-          if (trigger.isIntent && trigger.displayName) {
-            trigger.displayName = '#' + trigger.displayName;
+            if (trigger.isIntent && trigger.displayName) {
+              trigger.displayName = '#' + trigger.displayName;
+            }
+            trigers.push(trigger);
           }
-          trigers.push(trigger);
         });
+        return true;
       }
       return false;
     };
@@ -175,7 +179,7 @@ export class DialogIndexer {
             },
           ]);
           if (checkRes) {
-            errors.push(checkRes);
+            Array.isArray(checkRes) ? errors.push(...checkRes) : errors.push(checkRes);
           }
         });
       }

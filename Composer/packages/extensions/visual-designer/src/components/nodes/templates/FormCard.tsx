@@ -3,6 +3,7 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
 
 import { InitNodeSize } from '../../../constants/ElementSizes';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { Icon } from '../../decorations/icon';
 
 const boxWidth = InitNodeSize.width;
@@ -35,7 +36,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
   header,
   corner,
   label,
-  icon = 'MessageBot',
+  icon,
   nodeColors,
   onClick,
   children = null,
@@ -86,7 +87,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
             alignItems: 'center',
           }}
         >
-          {icon !== 'none' && (
+          {icon && icon !== ElementIcon.None && (
             <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
               <Icon icon={icon} color={iconColor} size={30} />
             </div>

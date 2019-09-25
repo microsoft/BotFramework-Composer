@@ -30,11 +30,15 @@ export interface BreadcrumbItem {
 
 export interface BotSchemas {
   editor?: any;
+  sdk?: any;
+  diagnostics?: any[];
 }
 
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
+  botEnvironment: string;
+  botEndpoint: string;
   /** the data path for FormEditor */
   focusPath: string;
   templateProjects: any[];

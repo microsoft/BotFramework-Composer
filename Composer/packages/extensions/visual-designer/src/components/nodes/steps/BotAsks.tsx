@@ -6,6 +6,7 @@ import { DialogGroup } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -14,7 +15,7 @@ export const BotAsks: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Ele
   return (
     <FormCard
       nodeColors={NodeColors[DialogGroup.RESPONSE]}
-      icon={'MessageBot'}
+      icon={ElementIcon.MessageBot}
       header={formatMessage('Bot Asks')}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       label={data.prompt || '<prompt>'}

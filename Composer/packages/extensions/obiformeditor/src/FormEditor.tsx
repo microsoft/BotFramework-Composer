@@ -114,10 +114,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           schema={dialogSchema}
           uiSchema={dialogUiSchema}
           formContext={{
-            shellApi: {
-              ...shellApi,
-              onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds),
-            },
+            shellApi,
             dialogOptions,
             editorSchema: schemas.editor,
             rootId: props.focusPath,

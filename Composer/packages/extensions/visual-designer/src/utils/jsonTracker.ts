@@ -86,11 +86,7 @@ export function insert(inputDialog, path, position, $type) {
   const current = get(dialog, path, []);
   const newStep = {
     $type,
-    $designer: {
-      name: getFriendlyName({ $type }),
-      id: nanoid('1234567890', 6),
-    },
-    ...seedNewDialog($type),
+    ...seedNewDialog($type, { name: getFriendlyName({ $type }) }),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
