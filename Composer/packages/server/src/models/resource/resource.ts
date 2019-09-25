@@ -17,6 +17,9 @@ export interface Resource {
   id: string;
   content: string;
   type: ResourceType;
+
+  // put here for coveninence sometime, we also aggregate all diagnostics into one place
+  // perhaps we can put this down instead of this generic interface
   diagnostics?: Diagnostic[];
 
   // index is the process of extracting userful information from raw content or an initlization process.
