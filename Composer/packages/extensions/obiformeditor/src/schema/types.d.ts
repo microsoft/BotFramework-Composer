@@ -14,6 +14,8 @@ interface BaseSchema {
 /* Union of components which implement the IActivityTemplate interface */
 type MicrosoftIActivityTemplate = string;
 
+type MicrosoftIExpression = string;
+
 interface IBaseDialog extends BaseSchema {
   /** This is that will be passed in as InputProperty and also set as the OutputProperty */
   property?: string;
@@ -21,15 +23,6 @@ interface IBaseDialog extends BaseSchema {
   inputProperties?: { [x: string]: string };
   /** This is the property which the EndDialog(result) will be set to when EndDialog() is called */
   outputProperty?: string;
-}
-
-declare enum ListStyle {
-  None = 'None',
-  Auto = 'Auto',
-  Inline = 'Inline',
-  List = 'List',
-  SuggestedAction = 'SuggestedAction',
-  HeroCard = 'HeroCard',
 }
 
 interface OpenObject<T = string> {
@@ -46,52 +39,111 @@ interface IChoice {
   synonyms?: string[];
 }
 
-/**
- * Steps
- */
+type IListStyle = 'None' | 'Auto' | 'Inline' | 'List' | 'SuggestedAction' | 'HeroCard';
 
-/** This represents a dialog which gathers a choice responses */
-interface ChoiceInput extends IBaseDialog {
-  /** The message to send to as prompt for this input. */
-  prompt?: MicrosoftIActivityTemplate;
-  /** The message to send to prompt again. */
-  retryPrompt?: MicrosoftIActivityTemplate;
-  /** The message to send to when then input was not recognized or not valid for the input type. */
-  invalidPrompt?: MicrosoftIActivityTemplate;
-  /** The kind of choice list style to generate */
-  style?: ListStyle;
-
-  choicesProperty?: string;
-
-  choices?: IChoice[];
+interface IChoiceOption {
+  /** Character used to separate individual choices when there are more than 2 choices */
+  inlineSeparator?: string;
+  /** Separator inserted between the choices when their are only 2 choices */
+  inlineOr?: string;
+  /** Separator inserted between the last 2 choices when their are more than 2 choices. */
+  inlineOrMore?: string;
+  /** If true, inline and list style choices will be prefixed with the index of the choice. */
+  includeNumbers?: boolean;
 }
 
-/** A dialog step that executes custom code */
-interface CodeStep extends IBaseDialog {
-  codeHandler: string;
+interface IConfirmChoice {
+  /** the value to return when selected. */
+  value?: string;
+  /** Card action for the choice */
+  action?: OpenObject;
+  /** The list of synonyms to recognize in addition to the value. This is optional. */
+  synonyms?: string[];
+}
+
+interface IRecognizerOption {
+  /** If true, the choices value field will NOT be search over */
+  noValue?: boolean;
+}
+
+/**
+ * Inputs
+ */
+
+interface InputDialog extends BaseSchema {
+  /** (Optional) id for the dialog */
+  id: string;
+  /** The message to send to as prompt for this input. */
+  prompt: MicrosoftIActivityTemplate;
+  /** The message to send if the last input is not recognized. */
+  unrecognizedPrompt: MicrosoftIActivityTemplate;
+  /** The message to send to when then input was not valid for the input type. */
+  invalidPrompt: MicrosoftIActivityTemplate;
+  /** The message to send to when max turn count has been exceeded and the default value is selected as the value. */
+  defaultValueResponse: MicrosoftIActivityTemplate;
+  /** The max retry count for this prompt. */
+  maxTurnCount: number;
+  /** Expressions to validate an input. */
+  validations: MicrosoftIExpression[];
+  /** Property that this input dialog is bound to */
+  property: MicrosoftIExpression;
+  /** Value to return if the value expression can't be evaluated. */
+  defaultValue: MicrosoftIExpression;
+  /** If set to true this will always prompt the user regardless if you already have the value or not. */
+  alwaysPrompt: boolean;
+  /** Always will always consult parent dialogs first, never will not consult parent dialogs, notRecognized will consult parent only when it's not recognized */
+  allowInterruptions: 'always' | 'never' | 'notRecognized';
+}
+
+/** This represents a dialog which gathers an attachment such as image or music */
+interface AttachmentInput extends Partial<InputDialog> {
+  /** The attachment output format. */
+  outputFormat?: 'all' | 'first';
+}
+
+/** This represents a dialog which gathers a choice responses */
+interface ChoiceInput extends Partial<InputDialog> {
+  /** The output format. */
+  outputFormat?: 'value' | 'index';
+  choices?: IChoice[];
+  /** Compose an output activity containing a set of choices */
+  appendChoices?: boolean;
+  /** The prompts default locale that should be recognized. */
+  defaultLocale: string;
+  /** The kind of choice list style to generate */
+  style?: IListStyle;
+  choiceOptions?: IChoiceOption;
+  recognizerOptions?: IRecognizerOption;
 }
 
 /** This represents a dialog which gathers a yes/no style responses */
-interface ConfirmInput extends IBaseDialog {
-  /** The message to send to as prompt for this input. */
-  prompt?: MicrosoftIActivityTemplate;
-  /** The message to send to prompt again. */
-  retryPrompt?: MicrosoftIActivityTemplate;
-  /** The message to send to when then input was not recognized or not valid for the input type. */
-  invalidPrompt?: MicrosoftIActivityTemplate;
+interface ConfirmInput extends Partial<InputDialog> {
+  /** The prompts default locale that should be recognized. */
+  defaultLocale?: string;
+  /** The kind of choice list style to generate */
+  style?: IListStyle;
+  choiceOptions?: IChoiceOption;
+  confirmChoices?: IConfirmChoice[];
+}
+
+interface DateTimeInput extends Partial<InputDialog> {
+  /** The prompts default locale that should be recognized. */
+  defaultLocale?: string;
+}
+interface NumberInput extends Partial<InputDialog> {
+  /** The output format. */
+  outputFormat?: 'float' | 'integer';
+  /** The prompts default locale that should be recognized. */
+  defaultLocale?: string;
 }
 
 /** This represents a dialog which gathers a text from the user */
-interface TextInput extends IBaseDialog {
-  /** The message to send to as prompt for this input. */
-  prompt?: MicrosoftIActivityTemplate;
-  /** The message to send to prompt again. */
-  retryPrompt?: MicrosoftIActivityTemplate;
-  /** The message to send to when then input was not recognized or not valid for the input type. */
-  invalidPrompt?: MicrosoftIActivityTemplate;
-  /** A regular expression pattern which must match */
-  pattern?: string;
+interface TextInput extends Partial<InputDialog> {
+  /** The output format. */
+  outputFormat?: 'none' | 'trim' | 'lowercase' | 'uppercase';
 }
+
+type MicrosoftInputDialog = AttachmentInput | ChoiceInput | ConfirmInput | DateTimeInput | NumberInput | TextInput;
 
 /**
  * Recognizers

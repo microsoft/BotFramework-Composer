@@ -1,5 +1,5 @@
 import { startCase, get } from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
@@ -36,9 +36,17 @@ const EditableTitle: React.FC<EditableTitleProps> = props => {
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [title, setTitle] = useState<string | undefined>(props.title);
+  const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!hasBeenEdited) {
+      setTitle(props.title);
+    }
+  }, [props.title]);
 
   const handleChange = (_e: any, newValue?: string) => {
     setTitle(newValue);
+    setHasBeenEdited(true);
     props.onChange(newValue);
   };
 
@@ -54,7 +62,15 @@ const EditableTitle: React.FC<EditableTitleProps> = props => {
         value={title}
         styles={{
           root: { margin: '5px 0 7px -9px' },
-          field: { fontSize: FontSizes.size20, fontWeight: FontWeights.semibold },
+          field: {
+            fontSize: FontSizes.size20,
+            fontWeight: FontWeights.semibold,
+            selectors: {
+              '::placeholder': {
+                fontSize: FontSizes.size20,
+              },
+            },
+          },
           fieldGroup: {
             borderColor: editing ? undefined : 'transparent',
             transition: 'border-color 0.1s linear',
@@ -89,7 +105,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
   const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
 
-    return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
+    return formData.$designer.name || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
   const getDescription = (): string => {
