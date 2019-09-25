@@ -78,7 +78,6 @@ export const RootField: React.FC<RootFieldProps> = props => {
   const { title, name, description, schema, formData, formContext } = props;
   const { currentDialog, editorSchema, isRoot } = formContext;
 
-  // const fieldOverrides = get(editorSchema, 'content.fieldTemplateOverrides.RootField', overrideDefaults);
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
   const handleTitleChange = (newTitle?: string): void => {
