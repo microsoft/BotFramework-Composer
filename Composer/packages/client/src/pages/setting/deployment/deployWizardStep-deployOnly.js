@@ -34,9 +34,6 @@ export const DeployWizardStepDeploy = props => {
   // todo: do not autocomplete app secret
   const validateForm = () => {
     const errors = {};
-    if (validateSecret(formData.secret) !== undefined) {
-      errors.secret = validateSecret(formData.secret);
-    }
 
     setFormData({
       ...formData,
@@ -48,18 +45,6 @@ export const DeployWizardStepDeploy = props => {
       return false;
     }
     return true;
-  };
-  // TODO: enhance validation of secret value
-  // 16 characters at least one special char
-  const validateSecret = val => {
-    console.log('validate secret', val);
-    setFormData({
-      ...formData,
-      errors: {},
-    });
-    if (val.length !== 16) {
-      return formatMessage('App secret must be exactly 16 characters long');
-    }
   };
 
   const submit = e => {

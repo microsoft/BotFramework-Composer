@@ -18,9 +18,14 @@ export const DeployWizard = props => {
     setCurrentStep(initialStep);
   }, [initialStep]);
 
-  const completeStep1 = form => {
+  const completeStepCreate = form => {
     setBotValues(form);
     setCurrentStep(2);
+  };
+
+  const completeStepDeploy = form => {
+    setBotValues(form);
+    setCurrentStep(3);
   };
 
   const completeStep2 = () => {
@@ -36,12 +41,12 @@ export const DeployWizard = props => {
     {
       title: formatMessage('Set bot name and password'),
       subText: 'Make sure to sign in to the Azure Portal or create an account',
-      children: <DeployWizardStepCreate nextStep={completeStep1} closeModal={resetModal} />,
+      children: <DeployWizardStepCreate nextStep={completeStepCreate} closeModal={resetModal} />,
     },
     {
       title: formatMessage('Set bot name and password'),
       subText: 'Make sure to sign in to the Azure Portal or create an account',
-      children: <DeployWizardStepDeploy nextStep={completeStep1} closeModal={resetModal} />,
+      children: <DeployWizardStepDeploy nextStep={completeStepDeploy} closeModal={resetModal} />,
     },
     {
       title: formatMessage('Create Azure Resources'),
