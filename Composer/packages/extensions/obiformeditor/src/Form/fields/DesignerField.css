@@ -1,0 +1,11 @@
+.DesignerField {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.DesignerFieldSection {
+  flex: 1;
+}
+.DesignerFieldSection + .DesignerFieldSection {
+  margin-left: 50px;
+}

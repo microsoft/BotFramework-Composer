@@ -26,13 +26,13 @@ describe('measureJsonBoundary', () => {
     expect(measureJsonBoundary({ $type: ObiTypes.LoopIndicator })).toEqual(
       new Boundary(LoopIconSize.width, LoopIconSize.height)
     );
-    expect(measureJsonBoundary({ $type: ObiTypes.LogStep })).toEqual(
+    expect(measureJsonBoundary({ $type: ObiTypes.LogAction })).toEqual(
       new Boundary(InitNodeSize.width, InitNodeSize.height)
     );
   });
   it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
     const data: { [key: string]: any } = {
-      $type: ObiTypes.ChoiceInput,
+      $type: ObiTypes.ChoiceInputDetail,
       choices: [{ value: '1' }],
     };
 

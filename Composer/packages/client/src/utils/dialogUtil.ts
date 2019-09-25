@@ -1,22 +1,39 @@
 import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog } from 'shared-menus';
+import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup, SDKTypes } from 'shared-menus';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { DialogInfo } from 'composer-extensions/obiformeditor/lib/types';
 import nanoid from 'nanoid/generate';
+import { IDropdownOption } from 'office-ui-fabric-react';
+
+import { DialogInfo } from '../store/types';
 
 import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
-
 const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
 }
 
+export interface TriggerFormData {
+  errors: TriggerFormDataErrors;
+  $type: string;
+  eventType: string;
+  name: string;
+  constraint: string;
+}
+
+export interface TriggerFormDataErrors {
+  $type?: string;
+  name?: string;
+  eventType?: string;
+}
+
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find(item => item.id === dialogId);
   return cloneDeep(dialog);
 }
+
+export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -30,17 +47,29 @@ export function getFriendlyName(data) {
   if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
     return ConceptLabels[data.$type].title;
   }
+
+  return data.$type;
 }
 
-export function insert(content, path: string, position: number | undefined, $type: string) {
+export function getNewDesigner(name: string, description: string) {
+  const timestamp = new Date().toISOString();
+  return {
+    $designer: { name, description, createdAt: timestamp, updatedAt: timestamp, id: nanoid('1234567890', 6) },
+  };
+}
+
+export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
+  const optionalAttributes: { constraint?: string; events?: string[] } = {};
+  if (data.constraint) {
+    optionalAttributes.constraint = data.constraint;
+  }
+  if (data.eventType) {
+    optionalAttributes.events = [data.eventType];
+  }
   const newStep = {
-    $type,
-    $designer: {
-      name: getFriendlyName({ $type }),
-      id: nanoid('1234567890', 6),
-    },
-    ...seedNewDialog($type),
+    $type: data.$type,
+    ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -52,10 +81,11 @@ export function insert(content, path: string, position: number | undefined, $typ
   return content;
 }
 
-export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, $type: string) {
+export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   const dialogCopy = getDialog(dialogs, dialogId);
-  if (!dialogCopy) return;
-  return insert(dialogCopy.content, 'events', undefined, $type);
+  if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
+  insert(dialogCopy.content, 'events', undefined, data);
+  return dialogCopy;
 }
 
 export function createSelectedPath(selected: number) {
@@ -72,6 +102,26 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
   const content = dialogCopy.content;
   content.events.splice(index, 1);
   return content;
+}
+
+export function getTriggerTypes(): IDropdownOption[] {
+  const triggerTypes: IDropdownOption[] = [
+    {
+      key: '',
+      text: '',
+    },
+    ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return triggerTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
@@ -180,4 +230,9 @@ export function isExpression(str: string): boolean {
   }
 
   return true;
+}
+
+export function getSelected(focused: string): string {
+  if (!focused) return '';
+  return focused.split('.')[0];
 }

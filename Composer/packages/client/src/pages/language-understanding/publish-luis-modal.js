@@ -15,7 +15,7 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys, set } from 'lodash';
+import { keys } from 'lodash';
 
 import { StoreContext } from '../../store';
 
@@ -97,8 +97,8 @@ const DeployFailure = props => {
 
 export const PublishLuis = props => {
   const { state, actions } = useContext(StoreContext);
-  const { setEnvSettings, botName } = actions;
-  const { settings } = state;
+  const { setSettings } = actions;
+  const { botName, settings } = state;
   const { onPublish, onDismiss, workState } = props;
 
   const initialFormData = {
@@ -128,10 +128,8 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData };
     delete newValue.errors;
-    set(settings, 'luis', newValue);
-    setEnvSettings();
-
-    await onPublish({ ...formData });
+    await setSettings(botName, { ...settings, luis: newValue });
+    await onPublish();
   };
 
   return (

@@ -4,10 +4,14 @@ import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
+import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { deleteNode, insert } from '../utils/jsonTracker';
+import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
+import { KeyboardZone } from '../components/lib/KeyboardZone';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -27,8 +31,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        resetSelectionData();
-        handler = id => onFocusSteps(id ? [id] : []);
+        handler = (id, selectedId?) => {
+          setSelectionContext({
+            getNodeIndex: selectionContext.getNodeIndex,
+            selectedIds: [selectedId || id],
+          });
+          onFocusSteps(id ? [id] : []);
+        };
         break;
       case NodeEventTypes.FocusEvent:
         handler = onFocusEvent;
@@ -88,6 +97,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     selectedIds: [],
   });
 
+  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
+
+  useEffect((): void => {
+    if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else {
+      setKeyBoardStatus('normal');
+    }
+  }, [focusedId, selectionContext]);
+
   useEffect(
     (): void => {
       selection.setItems(nodeIndexGenerator.current.getItemList());
@@ -96,6 +117,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
+    setSelectedElements(querySelectedElements());
   }, [data]);
 
   const selection = new Selection({
@@ -106,48 +128,80 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         getNodeIndex: selectionContext.getNodeIndex,
         selectedIds,
       };
+
+      // TODO: normalize selectedIds
+      onFocusSteps(selectedIds);
       console.log(selectedIds);
       setSelectionContext(newContext);
     },
   });
 
+  const querySelectedElements = () => {
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
+    return items;
+  };
+  const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
+
+  const handleKeyboardCommand = ({ primaryType, command }) => {
+    const currentSelectedId = selectionContext.selectedIds[0];
+    switch (primaryType) {
+      case KeyboardPrimaryTypes.Node:
+        if (command === KeyboardCommandTypes.Node.Delete) {
+          dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+        }
+        break;
+      case KeyboardPrimaryTypes.Cursor: {
+        const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [selected as string],
+        });
+        focused && onFocusSteps([focused]);
+        break;
+      }
+      default:
+        break;
+    }
+  };
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-        <div
-          tabIndex={0}
-          className="obi-editor-container"
-          data-testid="obi-editor-container"
-          css={{
-            width: '100%',
-            height: '100%',
-            padding: '48px 20px',
-            boxSizing: 'border-box',
-            '&:focus': { outline: 'none' },
-          }}
-          ref={el => (divRef = el)}
-          onKeyUp={e => {
-            const keyString = e.key;
-            if (keyString === 'Delete' && focusedId) {
-              dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-            }
-          }}
-          onClick={e => {
-            e.stopPropagation();
-            dispatchEvent(NodeEventTypes.Focus, '');
-          }}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.focus({ preventScroll: true });
-              dispatchEvent(eventName, eventData);
+      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+          <div
+            tabIndex={0}
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '48px 20px',
+              boxSizing: 'border-box',
+              '&:focus': { outline: 'none' },
             }}
-          />
-        </div>
-      </MarqueeSelection>
+            ref={el => (divRef = el)}
+            onKeyUp={e => {
+              const keyString = e.key;
+              if (keyString === 'Delete' && focusedId) {
+                dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
+              }
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              dispatchEvent(NodeEventTypes.Focus, '');
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.focus({ preventScroll: true });
+                dispatchEvent(eventName, eventData);
+              }}
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
     </SelectionContext.Provider>
   );
 };

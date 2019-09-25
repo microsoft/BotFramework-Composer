@@ -85,14 +85,6 @@ const ContentKeyByTypes: {
     label: 'prompt',
     details: 'property',
   },
-  [ObiTypes.IntegerInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
-  [ObiTypes.FloatInput]: {
-    label: 'prompt',
-    details: 'property',
-  },
   [ObiTypes.ConfirmInput]: {
     label: 'prompt',
     details: 'property',
@@ -130,10 +122,10 @@ const ContentKeyByTypes: {
   [ObiTypes.TraceActivity]: {
     label: 'valueProperty',
   },
-  [ObiTypes.LogStep]: {
+  [ObiTypes.LogAction]: {
     label: 'text',
   },
-  [ObiTypes.EditSteps]: {
+  [ObiTypes.EditActions]: {
     label: 'changeType',
   },
 };

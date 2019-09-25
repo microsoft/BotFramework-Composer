@@ -67,6 +67,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         onEvent={onEvent}
         trigger={
           <Trigger
+            id={id}
             data={data}
             focused={focusedId === id}
             onClick={() => {

@@ -3,7 +3,7 @@ import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import './styles.scss';
+import './styles.css';
 
 import { FIELDS_TO_HIDE } from '../../schema/appschema';
 
