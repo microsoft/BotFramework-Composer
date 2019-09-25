@@ -1,17 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { RichEditor } from 'code-editor';
-import * as Monaco from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { BFDFieldProps } from '../types';
 
 import { BaseField } from './BaseField';
-
-const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null): void => {
-  if (editor !== null) {
-    editor.focus();
-  }
-};
 
 const getInitialTemplate = (formData?: string): string => {
   let newTemplate = formData || '';
@@ -88,14 +81,7 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
             paddingBottom: '19px',
           }}
         >
-          <RichEditor
-            editorDidMount={editor => {
-              focusEditor(editor);
-            }}
-            errorMsg={errorMsg}
-            value={Body}
-            onChange={onChange}
-          />
+          <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} />
         </div>
       </BaseField>
     </div>
