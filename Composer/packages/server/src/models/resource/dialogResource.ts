@@ -10,7 +10,7 @@ import { FileResource } from './fileResource';
 export class DialogResource implements FileResource {
   // Resource
   public id: string;
-  public content: string;
+  public content: any;
   public type: ResourceType;
   public diagnostics: Diagnostic[] = [];
 
@@ -20,7 +20,6 @@ export class DialogResource implements FileResource {
   // DialogResource
   public isRoot: boolean = false;
   public displayName: string = '';
-  public dialogJson: { [key: string]: any } = {};
   public triggers: ITrigger[] = [];
 
   // references
@@ -39,19 +38,20 @@ export class DialogResource implements FileResource {
   }
 
   public index = async () => {
-    this.dialogJson = JSON.parse(this.content);
+    // TODO: clarify content vs parsedContent
+    this.content = JSON.parse(this.content);
 
     this.isRoot = this.id === 'Main.dialog';
     // TODO: pass bot name in
     this.displayName = this.isRoot ? 'Main' : this.id;
 
-    this.referredLUFile = typeof this.dialogJson.recognizer === 'string' ? this.dialogJson.recognizer : '';
-    this.referredLGFile = typeof this.dialogJson.generator === 'string' ? this.dialogJson.generator : '';
-    this.referredDialogs = this.ExtractReferredDialogs(this.dialogJson);
-    this.referredLGTemplates = this.ExtractLgTemplates(this.dialogJson);
-    this.referredLUIntents = this.ExtractLuIntents(this.dialogJson);
+    this.referredLUFile = typeof this.content.recognizer === 'string' ? this.content.recognizer : '';
+    this.referredLGFile = typeof this.content.generator === 'string' ? this.content.generator : '';
+    this.referredDialogs = this.ExtractReferredDialogs(this.content);
+    this.referredLGTemplates = this.ExtractLgTemplates(this.content);
+    this.referredLUIntents = this.ExtractLuIntents(this.content);
 
-    this.triggers = this.ExtractTriggers(this.dialogJson);
+    this.triggers = this.ExtractTriggers(this.content);
   };
 
   private ExtractReferredDialogs(dialog: any): string[] {

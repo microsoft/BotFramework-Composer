@@ -20,7 +20,7 @@ export class DialogValidator implements ResourceValidator {
 
     let dialog = resource as DialogResource;
 
-    const errors = this.CheckFields(dialog.dialogJson);
+    const errors = this.CheckFields(dialog.content);
 
     return errors.map(x => new Diagnostic(x, dialog.id));
   };

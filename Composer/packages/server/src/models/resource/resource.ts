@@ -15,8 +15,13 @@ export interface Resource {
   //     but when you want to refer a lg file, you must specifiy "a.lg", with ".lg".
   //  So for now, id is only unique each type
   id: string;
-  content: string;
+
   type: ResourceType;
+
+  // the reason the type is "any" is because today dialog's content is json
+  // while lg, lu file is raw content
+  // TODO: unify this to content + parsedContent later because it's a big change
+  content: any;
 
   // put here for coveninence sometime, we also aggregate all diagnostics into one place
   // perhaps we can put this down instead of this generic interface
@@ -27,13 +32,11 @@ export interface Resource {
   // like delegating to a ResourceFactory to do the create + index\init
   // which is probably better, I just keep it here for the inteheriance of previous setup.
   // but we do note that this don't feels too right here
-  index(): Promise<void>;
+  index(botName?: string): Promise<void>;
 }
 
 export enum ResourceType {
   DIALOG = 'dialog',
   LG = 'lg',
   LU = 'lu',
-  JSON = 'json',
-  SCHEMA = 'schema',
 }
