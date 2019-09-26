@@ -47,7 +47,7 @@ export default function TableView(props) {
       setTemplates(allTemplates);
     } else {
       const dialogsTemplates = [];
-      activeDialog.lgTemplates.forEach(item => {
+      activeDialog.referredLGTemplates.forEach(item => {
         const template = allTemplates.find(t => t.Name === item);
         if (template) {
           dialogsTemplates.push(template);
@@ -167,7 +167,7 @@ export default function TableView(props) {
       // build usedIn map
       templates.forEach(template => {
         templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
-          if (dialog.lgTemplates.indexOf(template.Name) !== -1) {
+          if (dialog.referredLGTemplates.indexOf(template.Name) !== -1) {
             result.push(dialog.id);
           }
           return result;
