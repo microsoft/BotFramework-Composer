@@ -48,7 +48,7 @@ export default function TableView(props) {
             name,
             phrases: [utterance.text],
             fileId: luFile.id,
-            used: luDialog.luIntents.indexOf(name) !== -1, // used by it's dialog or not
+            used: luDialog.referredLUIntents.indexOf(name) !== -1, // used by it's dialog or not
             state,
           });
         }

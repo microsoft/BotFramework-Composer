@@ -2,7 +2,7 @@ import { LuFile, DialogInfo, LuDiagnostic } from '../store/types';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
-    if (dialogs.findIndex(dialog => dialog.luFile === file.id) !== -1) {
+    if (dialogs.findIndex(dialog => dialog.referredLUFile === file.id) !== -1) {
       return true;
     }
     return false;

@@ -91,7 +91,8 @@ export interface DialogInfo {
   isRoot: boolean;
   content: any;
   diagnostics: string[];
-  luFile: string;
+  referredLUFile: string;
+  referredLUIntents: string[];
   triggers: ITrigger[];
 }
 
@@ -101,10 +102,6 @@ export interface Intent {
 
 export interface Utterance {
   intent: string;
-  text: string;
-}
-
-export interface LuDiagnostic {
   text: string;
 }
 
@@ -118,7 +115,7 @@ export interface LuFile {
       utterances: Utterance[];
     };
   };
-  diagnostics: LuDiagnostic[];
+  diagnostics: Diagnostic[];
 }
 
 export interface LgFile {
@@ -151,4 +148,32 @@ export interface DesignPageLocation {
   dialogId: string;
   selected: string;
   focused: string;
+}
+
+export interface Diagnostic {
+  severity: DiagnosticSeverity;
+  message: string;
+
+  source: string;
+
+  range?: Range;
+  path?: string;
+  code?: string;
+}
+
+export interface Range {
+  start: Position;
+  end: Position;
+}
+
+export interface Position {
+  line: number;
+  character: number;
+}
+
+export enum DiagnosticSeverity {
+  Error = 0,
+  Warning = 1,
+  Information = 2,
+  Hint = 3,
 }
