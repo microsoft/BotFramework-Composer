@@ -241,14 +241,27 @@ export class LgServer {
     const templates = lgResources.Templates;
     const hoverItemList = [];
     const wordRange = this.getRangeAtPosition(document, params.position);
-    const word = document.getText(wordRange);
+    let word = document.getText(wordRange);
     const matchItem: lg.LGTemplate = templates.find(u => u.Name === word);
     if (matchItem !== undefined) {
       const hoveritem: Hover = { contents: [matchItem.Source, matchItem.Body] };
       return Promise.resolve(hoveritem);
     }
+    if (word.indexOf('builtin.') == 0) {
+      word = word.substring('builtin.'.length);
+    }
 
-    //return
+    if (buildInfunctionsMap.has(word)) {
+      const functionEntity = buildInfunctionsMap.get(word);
+      const hoveritem: Hover = {
+        contents: [
+          `Parameters: ${functionEntity.Params.join(', ')}`,
+          `Documentation: ${functionEntity.Introduction}`,
+          `ReturnType: ${functionEntity.Returntype.valueOf()}`,
+        ],
+      };
+      return Promise.resolve(hoveritem);
+    }
   }
 
   protected async resovleSchema(url: string): Promise<string> {
