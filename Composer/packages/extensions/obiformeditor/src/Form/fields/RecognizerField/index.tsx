@@ -78,7 +78,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     },
     {
       key: 'luis',
-      text: 'BF Language Understanding',
+      text: 'LUIS',
     },
     {
       key: 'regex',
