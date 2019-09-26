@@ -70,7 +70,7 @@ export class LuPublisher {
     await this.saveStatus();
   };
 
-  public publish = async (luFiles: LUFile[]) => {
+  public publish = async (luFiles: string[]) => {
     const config = this._getConfig(luFiles);
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
@@ -81,7 +81,7 @@ export class LuPublisher {
 
       // update pubish status after sucessfully published
       luFiles.forEach(f => {
-        this.status[f.relativePath].lastPublishTime = curTime;
+        this.status[f].lastPublishTime = curTime;
       });
       await this.saveStatus();
     } catch (error) {
@@ -92,21 +92,11 @@ export class LuPublisher {
     await this._copyDialogsToTargetFolder(config);
   };
 
-  public getUnpublisedFiles = async (files: LUFile[]) => {
+  public isUnPublished = (f: string): boolean => {
     // unpublished means either
     // 1. there is no status tracking
     // 2. the status shows that lastPublishTime < lastUpdateTime
-    return files.filter(f => {
-      return (
-        !this.status[f.relativePath] ||
-        this.status[f.relativePath].lastPublishTime <= this.status[f.relativePath].lastUpdateTime
-      );
-    });
-  };
-
-  public checkLuisPublised = async (files: LUFile[]) => {
-    const unpublished = await this.getUnpublisedFiles(files);
-    return unpublished.length === 0;
+    return !this.status[f] || this.status[f].lastPublishTime <= this.status[f].lastUpdateTime;
   };
 
   public getLuisConfig = () => this.config;
@@ -161,7 +151,7 @@ export class LuPublisher {
     return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
   };
 
-  private _getConfig = (luFiles: LUFile[]) => {
+  private _getConfig = (luFiles: string[]) => {
     const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
@@ -169,7 +159,7 @@ export class LuPublisher {
     luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
     luFiles.forEach(file => {
-      luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
+      luConfig.models.push(Path.resolve(this.botDir, file));
     });
 
     return luConfig;

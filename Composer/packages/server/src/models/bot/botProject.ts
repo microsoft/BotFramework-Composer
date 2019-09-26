@@ -130,7 +130,7 @@ export class BotProject {
   public isLU = (r: Resource) => r.type === ResourceType.LU;
   public isSameResource = (id: string, type: ResourceType) => (r: Resource) => r.id === id && r.type === type;
 
-  public updateResource = async (id: string, type: ResourceType, content: string) => {
+  public updateResource = async (id: string, type: ResourceType, content: string): Promise<Resource> => {
     const index = this.resources.findIndex(this.isSameResource(id, type));
     if (index < 0) {
       throw new Error(`No such resource, id: ${id}, type: ${type}`);
@@ -143,9 +143,15 @@ export class BotProject {
       throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
     }
     this.resources[index] = newResource;
+    return newResource;
   };
 
-  public createResource = async (id: string, type: ResourceType, content: string, relativePath: string) => {
+  public createResource = async (
+    id: string,
+    type: ResourceType,
+    content: string,
+    relativePath: string
+  ): Promise<Resource> => {
     const index = this.resources.findIndex(this.isSameResource(id, type));
 
     if (index >= 0) {
@@ -159,6 +165,7 @@ export class BotProject {
       throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
     }
     this.resources.push(newResource);
+    return newResource;
   };
 
   public removeResource = async (id: string, type: ResourceType) => {
@@ -192,9 +199,9 @@ export class BotProject {
     return {
       botName: this.name,
       //dialogs: this.dialogIndexer.getDialogs(),
-      dialogs: this.resources.filter(r => r.type === ResourceType.DIALOG),
+      dialogs: this.resources.filter(this.isDialog),
       lgFiles: this.lgIndexer.getLgFiles(),
-      luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
+      luFiles: this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status),
       schemas: this.getSchemas(),
       botEnvironment: absHosted ? this.name : undefined,
       settings: this.settings,
@@ -219,7 +226,7 @@ export class BotProject {
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
-  private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
+  private mergeLuStatus = (luFiles: LUResource[], luStatus: { [key: string]: LuisStatus }) => {
     return luFiles.map(x => {
       if (!luStatus[x.relativePath]) {
         throw new Error(`No luis status for lu file ${x.relativePath} `);
@@ -337,54 +344,37 @@ export class BotProject {
   };
 
   public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
-    if (luFile === undefined) {
-      throw new Error(`no such lu file ${id}`);
+    const previousParsedContent = (this.getResource(id, ResourceType.LU) as LUResource).parsedContent;
+    const currentResource = (await this.updateResource(id, ResourceType.LU, content)) as LUResource;
+    const currentParsedContent = currentResource.parsedContent;
+
+    const isUpdated = !isEqual(previousParsedContent, currentParsedContent);
+
+    if (isUpdated) {
+      await this.luPublisher.onFileChange(currentResource.relativePath, FileUpdateType.UPDATE);
     }
-    let currentLufileParsedContentLUISJsonStructure = null;
-    try {
-      currentLufileParsedContentLUISJsonStructure = await this.luIndexer.parse(content);
-    } catch (error) {
-      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
-    }
-
-    const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
-    const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) return this.luIndexer.getLuFiles();
-
-    await this._updateFile(luFile.relativePath, content);
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
-
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+    return this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status);
   };
 
   public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
-    if (luFile) {
-      throw new Error(`${id} lu file already exist`);
-    }
     const relativePath = Path.join(dir, `${id.trim()}.lu`);
-
-    // TODO: validate before save
-    await this._createFile(relativePath, content);
+    await this.createResource(id, ResourceType.LU, content, relativePath);
     await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
+    return this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status);
   };
 
-  public removeLuFile = async (id: string): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
-    if (luFile === undefined) {
-      throw new Error(`no such lu file ${id}`);
-    }
-    await this._removeFile(luFile.relativePath);
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+  public removeLuFile = async (id: string): Promise<Resource[]> => {
+    const resource = this.getResource(id, ResourceType.LU) as FileResource;
+    await this.removeResource(id, ResourceType.LU);
+    await this.luPublisher.onFileChange(resource.relativePath, FileUpdateType.DELETE);
+    return this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status);
   };
 
   public publishLuis = async (authoringKey: string) => {
     await this.luPublisher.setAuthoringKey(authoringKey);
-    const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+
+    const referred = this.resources.filter(this.isLU).filter(this.isLuReferred) as LUResource[];
+    const unpublished = referred.filter(r => this.luPublisher.isUnPublished(r.relativePath));
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
@@ -399,21 +389,18 @@ export class BotProject {
 
     try {
       if (unpublished.length > 0) {
-        await this.luPublisher.publish(unpublished);
+        await this.luPublisher.publish(unpublished.map(x => x.relativePath));
       }
     } catch (error) {
       throw error;
     }
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+    return this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status);
   };
 
   public checkLuisPublished = async () => {
-    const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
-    if (referredLuFiles.length <= 0) {
-      return true;
-    } else {
-      return await this.luPublisher.checkLuisPublised(referredLuFiles);
-    }
+    const referred = this.resources.filter(this.isLU).filter(this.isLuReferred) as LUResource[];
+    const unpublished = referred.filter(r => this.luPublisher.isUnPublished(r.relativePath));
+    return unpublished.length <= 0;
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
@@ -551,7 +538,16 @@ export class BotProject {
     return true;
   };
 
-  private isReferred = (LUFile: LUFile) => {
+  private isLuReferred = (r: Resource) => {
+    const lu = r as LUResource;
+    const index = this.resources.filter(this.isDialog).findIndex((re: Resource) => {
+      const dialog = re as DialogResource;
+      dialog.referredLUFile === lu.id;
+    });
+    return index !== -1;
+  };
+
+  private isReferred = (r: LUFile) => {
     const dialogs = this.dialogIndexer.getDialogs();
     if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
       return true;
