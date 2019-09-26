@@ -117,9 +117,7 @@ export class BotProject {
   };
 
   public getResource = (id: string, type: ResourceType): Resource => {
-    const result = this.resources.filter(r => {
-      r.id === id && r.type === type;
-    });
+    const result = this.resources.filter(this.isSameResource(id, type));
 
     if (result.length === 0) {
       throw new Error(`No such resource, id: ${id}, type: ${type}`);
