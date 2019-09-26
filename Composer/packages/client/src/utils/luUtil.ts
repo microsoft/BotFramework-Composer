@@ -1,4 +1,4 @@
-import { LuFile, DialogInfo, LuDiagnostic } from '../store/types';
+import { LuFile, DialogInfo, Diagnostic } from '../store/types';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
@@ -9,13 +9,13 @@ export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   });
 }
 
-export function isValid(diagnostics: LuDiagnostic[]) {
+export function isValid(diagnostics: Diagnostic[]) {
   return diagnostics.length === 0;
 }
 
-export function combineMessage(diagnostics: LuDiagnostic[]) {
+export function combineMessage(diagnostics: Diagnostic[]) {
   return diagnostics.reduce((msg, d) => {
-    msg += `${d.text}\n`;
+    msg += `${d.message}\n`;
     return msg;
   }, '');
 }
