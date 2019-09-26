@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as rpc from 'vscode-ws-jsonrpc';
 import * as server from 'vscode-ws-jsonrpc/lib/server';
 import * as lsp from 'vscode-languageserver';
-import { start } from './lg-server';
+import { start } from './server';
 
 export function launch(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
@@ -14,7 +14,7 @@ export function launch(socket: rpc.IWebSocket) {
   const asExternalProccess = process.argv.findIndex(value => value === '--external') !== -1;
   if (asExternalProccess) {
     // start the language server as an external process
-    const extLgServerPath = path.resolve(__dirname, 'ext-lg-server.js');
+    const extLgServerPath = path.resolve(__dirname, 'extServer.js');
     const socketConnection = server.createConnection(reader, writer, () => socket.dispose());
     const serverConnection = server.createServerProcess('LG', 'node', [extLgServerPath]);
     server.forward(socketConnection, serverConnection, message => {
