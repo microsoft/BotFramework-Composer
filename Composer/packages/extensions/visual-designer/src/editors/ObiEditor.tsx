@@ -159,9 +159,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else {
       setKeyBoardStatus('normal');
     }
-
-    onChange(data);
   }, [focusedId, selectionContext]);
+
+  useEffect(() => {
+    onChange(data);
+  }, [selectionContext]);
 
   useEffect(
     (): void => {
