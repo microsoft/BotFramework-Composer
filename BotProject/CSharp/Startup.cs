@@ -55,44 +55,8 @@ namespace Microsoft.Bot.Builder.TestBot.Json
 
             services.AddSingleton<InspectionMiddleware>();
 
-
-            IStorage storage = new MemoryStorage();
-            var userState = new UserState(storage);
-            var conversationState = new ConversationState(storage);
-            var inspectionState = new InspectionState(storage);
-
-
-            var botFile = Configuration.GetSection("bot").Value;
-
             TypeFactory.Configuration = this.Configuration;
-
-            // manage all bot resources
-            var resourceExplorer = new ResourceExplorer().AddFolder(botFile);
-
-            var credentials = new MicrosoftAppCredentials(this.Configuration["MicrosoftAppId"], this.Configuration["MicrosoftAppPassword"]);
-
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
-            {
-                var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-                adapter
-                .UseStorage(storage)
-                .UseState(userState, conversationState)
-                .UseLanguageGeneration(resourceExplorer)
-                .UseDebugger(4712)
-                .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
-                .UseResourceExplorer(resourceExplorer);
-
-                adapter.OnTurnError = async (turnContext, exception) =>
-                {
-                    await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-
-                    await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
-                    await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
-                };
-                return adapter;
-            });
-
-            services.AddSingleton<IBot, TestBot>((sp) => new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry));
+            services.AddSingleton<IBotManager, BotManager>((sp) => new BotManager(this.Configuration));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
