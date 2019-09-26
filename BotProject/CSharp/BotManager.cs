@@ -86,7 +86,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap);
         }
 
         public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null)

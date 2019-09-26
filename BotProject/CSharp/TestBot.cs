@@ -12,6 +12,7 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
+using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.LanguageGeneration.Templates;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -29,15 +30,15 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private DialogManager dialogManager;
         private ConversationState conversationState;
         private IStatePropertyAccessor<DialogState> dialogState;
-        private Source.IRegistry registry;
+        private ISourceMap sourceMap;
         private string rootDialogFile { get; set; }
 
-        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap)
         {
             this.conversationState = conversationState;
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
-            this.registry = registry;
+            this.sourceMap = sourceMap;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
             // auto reload dialogs when file changes
@@ -55,7 +56,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, registry);
+            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, sourceMap);
             this.dialogManager = new DialogManager(rootDialog);
         }
 

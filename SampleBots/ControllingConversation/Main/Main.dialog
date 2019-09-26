@@ -126,7 +126,8 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "CancelDialog"
         }
       ],
       "intent": "Cancel"
