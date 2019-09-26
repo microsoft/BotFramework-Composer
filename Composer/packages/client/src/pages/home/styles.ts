@@ -1,4 +1,5 @@
 import { css } from '@emotion/core';
+import { IButtonStyles } from 'office-ui-fabric-react';
 
 export const outline = css`
   display: block;
@@ -61,8 +62,8 @@ export const introLink = css`
   width: 100%;
 `;
 export const link = css`
-  display: 'block',
-  textDecoration: 'none',
+  display: 'block';
+  textdecoration: 'none';
 `;
 
 export const linkContainer = css`
@@ -192,10 +193,17 @@ export const footer = css`
 `;
 
 export const button = () => {
-  const normal = {
+  const normal: IButtonStyles = {
     root: {
       marginLeft: '84px',
       marginTop: '43px',
+      background: 'transparent',
+    },
+    rootHovered: {
+      background: 'transparent',
+    },
+    rootChecked: {
+      background: 'transparent',
     },
     icon: {
       fontSize: '24px',
