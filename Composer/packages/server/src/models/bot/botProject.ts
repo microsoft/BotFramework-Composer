@@ -58,15 +58,15 @@ export class BotProject {
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
-  public loadResources = async (): Promise<Resource[]> => {
+  public loadResources = async (dir: string): Promise<Resource[]> => {
     if (!(await this.exists())) {
-      throw new Error(`${this.dir} is not a valid path`);
+      throw new Error(`${dir} is not a valid path`);
     }
 
     const resources: Resource[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
     for (const pattern of patterns) {
-      const paths = (await this.fileStorage.glob(pattern, this.dir)).map(x => Path.join(this.dir, x));
+      const paths = (await this.fileStorage.glob(pattern, dir)).map(x => Path.join(dir, x));
 
       for (const path of paths.sort()) {
         if ((await this.fileStorage.stat(path)).isFile) {
@@ -129,7 +129,7 @@ export class BotProject {
   public isLU = (r: Resource) => r.type === ResourceType.LU;
 
   public index = async () => {
-    this.resources = await this.loadResources();
+    this.resources = await this.loadResources(this.dir);
 
     this.files = await this._getFiles();
     this.settings = await this.getDialogSetting();
