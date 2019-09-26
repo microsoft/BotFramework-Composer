@@ -200,7 +200,7 @@ export class BotProject {
       botName: this.name,
       //dialogs: this.dialogIndexer.getDialogs(),
       dialogs: this.resources.filter(this.isDialog),
-      lgFiles: this.lgIndexer.getLgFiles(),
+      lgFiles: this.resources.filter(this.isLG),
       luFiles: this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status),
       schemas: this.getSchemas(),
       botEnvironment: absHosted ? this.name : undefined,
@@ -303,44 +303,20 @@ export class BotProject {
     return this.resources.filter(this.isDialog);
   };
 
-  public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
-    if (lgFile === undefined) {
-      throw new Error(`no such lg file ${id}`);
-    }
-    const absolutePath = `${this.dir}/${lgFile.relativePath}`;
-    const diagnostics = this.lgIndexer.check(content, absolutePath);
-    if (this.lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
-      throw new Error(errorMsg);
-    }
-    await this._updateFile(lgFile.relativePath, content);
-    return this.lgIndexer.getLgFiles();
+  public updateLgFile = async (id: string, content: string): Promise<Resource[]> => {
+    await this.updateResource(id, ResourceType.LG, content);
+    return this.resources.filter(this.isLG);
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
-    if (lgFile) {
-      throw new Error(`${id} lg file already exist`);
-    }
+  public createLgFile = async (id: string, content: string, dir: string = ''): Promise<Resource[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    const absolutePath = `${this.dir}/${relativePath}`;
-    const diagnostics = this.lgIndexer.check(content, absolutePath);
-    if (this.lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
-      throw new Error(errorMsg);
-    }
-    await this._createFile(relativePath, content);
-    return this.lgIndexer.getLgFiles();
+    await this.createResource(id, ResourceType.LG, content, relativePath);
+    return this.resources.filter(this.isLG);
   };
 
-  public removeLgFile = async (id: string): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
-    if (lgFile === undefined) {
-      throw new Error(`no such lg file ${id}`);
-    }
-    await this._removeFile(lgFile.relativePath);
-    return this.lgIndexer.getLgFiles();
+  public removeLgFile = async (id: string): Promise<Resource[]> => {
+    await this.removeResource(id, ResourceType.LG);
+    return this.resources.filter(this.isLG);
   };
 
   public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
@@ -545,14 +521,6 @@ export class BotProject {
       dialog.referredLUFile === lu.id;
     });
     return index !== -1;
-  };
-
-  private isReferred = (r: LUFile) => {
-    const dialogs = this.dialogIndexer.getDialogs();
-    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
-      return true;
-    }
-    return false;
   };
 
   private generateErrorMessage = (invalidLuFile: LUFile[]) => {
