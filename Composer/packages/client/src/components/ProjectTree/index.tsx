@@ -142,8 +142,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     );
   };
 
-  const onFilter = (newValue: string): void => {
-    setFilter(newValue);
+  const onFilter = (_e?: any, newValue?: string): void => {
+    if (typeof newValue === 'string') {
+      setFilter(newValue);
+    }
   };
 
   return (

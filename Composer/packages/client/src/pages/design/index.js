@@ -344,7 +344,7 @@ function DesignPage(props) {
                   {triggerButtonVisible && (
                     <div css={middleTriggerContainer}>
                       <div css={middleTriggerElements}>
-                        {formatMessage(`This dialog has no trigger yet.`)}
+                        {formatMessage(`This dialog has no triggers configured`)}
                         <ActionButton
                           data-testid="MiddleAddNewTriggerButton"
                           iconProps={addIconProps}
