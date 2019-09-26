@@ -6,7 +6,7 @@ import { ITrigger } from '../bot/interface';
 
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
-import { Path } from 'src/utility/path';
+import { Path } from '../../utility/path';
 
 export class DialogResource implements FileResource {
   // Resource
