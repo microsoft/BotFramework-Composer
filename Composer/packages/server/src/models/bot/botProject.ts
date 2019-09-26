@@ -17,6 +17,7 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
+import { FileResource } from '../resource/fileResource';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -112,7 +113,7 @@ export class BotProject {
     return null;
   };
 
-  public getResource(id: string, type: ResourceType): Resource {
+  public getResource = (id: string, type: ResourceType): Resource => {
     const result = this.resources.filter(r => {
       r.id === id && r.type === type;
     });
@@ -122,11 +123,55 @@ export class BotProject {
     }
 
     return result[0];
-  }
+  };
 
   public isDialog = (r: Resource) => r.type === ResourceType.DIALOG;
   public isLG = (r: Resource) => r.type === ResourceType.LG;
   public isLU = (r: Resource) => r.type === ResourceType.LU;
+  public isSameResource = (id: string, type: ResourceType) => (r: Resource) => r.id === id && r.type === type;
+
+  public updateResource = async (id: string, type: ResourceType, content: string) => {
+    const index = this.resources.findIndex(this.isSameResource(id, type));
+    if (index < 0) {
+      throw new Error(`No such resource, id: ${id}, type: ${type}`);
+    }
+
+    const resource = this.resources[index] as FileResource;
+    await this._updateFile(resource.relativePath, content);
+    const newResource = await this.loadResource(Path.join(this.dir, resource.relativePath));
+    if (newResource === null) {
+      throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
+    }
+    this.resources[index] = newResource;
+  };
+
+  public createResource = async (id: string, type: ResourceType, content: string, relativePath: string) => {
+    const index = this.resources.findIndex(this.isSameResource(id, type));
+
+    if (index >= 0) {
+      throw new Error(`Can't add resource with the same id and type, id: ${id}, type: ${type}`);
+    }
+
+    await this._createFile(relativePath, content);
+
+    const newResource = await this.loadResource(Path.join(this.dir, relativePath));
+    if (newResource === null) {
+      throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
+    }
+    this.resources.push(newResource);
+  };
+
+  public removeResource = async (id: string, type: ResourceType) => {
+    const index = this.resources.findIndex(this.isSameResource(id, type));
+
+    if (index < 0) {
+      throw new Error(`No such resource, id: ${id}, type: ${type}`);
+    }
+
+    const resource = this.resources[index] as FileResource;
+    await this._removeFile(resource.relativePath);
+    this.resources.splice(index);
+  };
 
   public index = async () => {
     this.resources = await this.loadResources(this.dir);
@@ -177,7 +222,7 @@ export class BotProject {
   private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
     return luFiles.map(x => {
       if (!luStatus[x.relativePath]) {
-        throw new Error(`No luis status for lu file ${x.relativePath}`);
+        throw new Error(`No luis status for lu file ${x.relativePath} `);
       }
       return {
         ...x,
@@ -200,7 +245,7 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse editor schema as JSON failed');
-        diagnostics.push(`Error in editor.schema, ${error.message}`);
+        diagnostics.push(`Error in editor.schema, ${error.message} `);
       }
     }
 
@@ -210,7 +255,7 @@ export class BotProject {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Attempt to parse sdk schema as JSON failed');
-        diagnostics.push(`Error in sdk.schema, ${error.message}`);
+        diagnostics.push(`Error in sdk.schema, ${error.message} `);
       }
     }
 
@@ -234,41 +279,21 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
-    if (dialog === undefined) {
-      throw new Error(`no such dialog ${id}`);
-    }
-
-    const relativePath = dialog.relativePath;
+  public updateDialog = async (id: string, dialogContent: any): Promise<Resource[]> => {
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
-    await this._updateFile(relativePath, content);
-
-    return this.dialogIndexer.getDialogs();
+    await this.updateResource(id, ResourceType.DIALOG, content);
+    return this.resources.filter(this.isDialog);
   };
 
-  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
-    if (dialog) {
-      throw new Error(`${id} dialog already exist`);
-    }
+  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Resource[]> => {
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    await this._createFile(relativePath, content);
-    return this.dialogIndexer.getDialogs();
+    await this.createResource(id, ResourceType.DIALOG, content, relativePath);
+    return this.resources.filter(this.isDialog);
   };
 
-  public removeDialog = async (id: string): Promise<Dialog[]> => {
-    if (id === 'Main') {
-      throw new Error(`Main dialog can't be removed`);
-    }
-
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
-    if (dialog === undefined) {
-      throw new Error(`no such dialog ${id}`);
-    }
-
-    await this._removeFile(dialog.relativePath);
-    return this.dialogIndexer.getDialogs();
+  public removeDialog = async (id: string): Promise<Resource[]> => {
+    await this.removeResource(id, ResourceType.DIALOG);
+    return this.resources.filter(this.isDialog);
   };
 
   public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
@@ -416,71 +441,20 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  // create file in this project this function will gurantee the memory cache
-  // (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
-
-    // update this.files which is memory cache of all files
-    this.files.push({
-      name: Path.basename(relativePath),
-      content: content,
-      path: absolutePath,
-      relativePath: relativePath,
-    });
-
-    await this.reindex(relativePath);
   };
 
-  // update file in this project this function will gurantee the memory cache
-  // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
-    const index = this.files.findIndex(f => f.relativePath === relativePath);
-    if (index === -1) {
-      throw new Error(`no such file at ${relativePath}`);
-    }
-
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.writeFile(absolutePath, content);
-
-    this.files[index].content = content;
-    await this.reindex(relativePath);
   };
 
-  // remove file in this project this function will gurantee the memory cache
-  // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
-    const index = this.files.findIndex(f => f.relativePath === relativePath);
-    if (index === -1) {
-      throw new Error(`no such file at ${relativePath}`);
-    }
-
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
-
-    this.files.splice(index, 1);
-    await this.reindex(relativePath);
-  };
-
-  // re index according to file change in a certain path
-  private reindex = async (filePath: string) => {
-    const fileExtension = Path.extname(filePath);
-    // only call the specific indexer to re-index
-    switch (fileExtension) {
-      case '.dialog':
-        this.dialogIndexer.index(this.files);
-        break;
-      case '.lg':
-        this.lgIndexer.index(this.files);
-        break;
-      case '.lu':
-        await this.luIndexer.index(this.files); // ludown parser is async
-        break;
-      default:
-        throw new Error(`${filePath} is not dialog or lg or lu file`);
-    }
   };
 
   // ensure dir exist, dir is a absolute dir path
