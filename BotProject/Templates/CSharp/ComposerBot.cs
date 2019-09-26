@@ -42,15 +42,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             this.rootDialogFile = rootDialogFile;
             this.telemetryClient = telemetryClient;
 
-            // auto reload dialogs when file changes
-            this.resourceExplorer.Changed += (resources) =>
-            {
-                if (resources.Any(resource => resource.Id == ".dialog"))
-                {
-                    Task.Run(() => this.LoadRootDialogAsync());
-                }
-            };
-
             LoadRootDialogAsync();
         }
 
