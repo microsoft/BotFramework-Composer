@@ -18,7 +18,9 @@ export const PromptField: React.FC<FieldProps> = props => {
         <PivotItem headerText={formatMessage('Bot Asks')}>
           <BotAsks {...props} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('User Answers')}>user answers</PivotItem>
+        <PivotItem headerText={formatMessage('User Answers')}>
+          <UserAnswers {...props} />
+        </PivotItem>
         <PivotItem headerText={formatMessage('Exceptions')}>exceptions</PivotItem>
       </Pivot>
     </BaseField>

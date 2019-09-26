@@ -1437,10 +1437,10 @@
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.4.tgz#bc2d75c48fcbee1121ee4c168c508de81bcd2ee9"
   integrity sha1-vC11xI/L7hEh7kwWjFCN6BvNLuk=
 
-"@bfcomposer/react-jsonschema-form@1.6.2":
-  version "1.6.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-jsonschema-form/-/@bfcomposer/react-jsonschema-form-1.6.2.tgz#0615d0b8d84c180d58386489dee3de6370fd47f0"
-  integrity sha1-BhXQuNhMGA1YOGSJ3uPeY3D9R/A=
+"@bfcomposer/react-jsonschema-form@1.6.5":
+  version "1.6.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-jsonschema-form/-/@bfcomposer/react-jsonschema-form-1.6.5.tgz#afd08049270eb00afe305cc756fd200011e12b4c"
+  integrity sha1-r9CASScOsAr+MFzHVv0gABHhK0w=
   dependencies:
     ajv "^6.7.0"
     babel-runtime "^6.26.0"

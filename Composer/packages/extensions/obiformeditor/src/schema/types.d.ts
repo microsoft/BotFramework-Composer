@@ -85,6 +85,8 @@ interface InputDialog extends BaseSchema {
   maxTurnCount: number;
   /** Expressions to validate an input. */
   validations: MicrosoftIExpression[];
+  /** The expression that you evaluated for input. */
+  value: MicrosoftIExpression;
   /** Property that this input dialog is bound to */
   property: MicrosoftIExpression;
   /** Value to return if the value expression can't be evaluated. */
@@ -118,6 +120,7 @@ interface ChoiceInput extends Partial<InputDialog> {
 
 /** This represents a dialog which gathers a yes/no style responses */
 interface ConfirmInput extends Partial<InputDialog> {
+  outputFormat: undefined;
   /** The prompts default locale that should be recognized. */
   defaultLocale?: string;
   /** The kind of choice list style to generate */
@@ -127,6 +130,7 @@ interface ConfirmInput extends Partial<InputDialog> {
 }
 
 interface DateTimeInput extends Partial<InputDialog> {
+  outputFormat: undefined;
   /** The prompts default locale that should be recognized. */
   defaultLocale?: string;
 }

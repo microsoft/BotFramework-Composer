@@ -39,3 +39,7 @@ export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props =>
     </>
   );
 };
+
+SelectWidget.defaultProps = {
+  schema: {},
+};
