@@ -41,7 +41,7 @@ export class DialogResource implements FileResource {
     // TODO: clarify content vs parsedContent
     this.content = JSON.parse(this.content);
 
-    this.isRoot = this.id === 'Main.dialog';
+    this.isRoot = this.id === 'Main';
     // TODO: pass bot name in
     this.displayName = this.isRoot ? 'Main' : this.id;
 

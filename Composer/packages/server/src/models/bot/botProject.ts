@@ -177,7 +177,7 @@ export class BotProject {
 
     const resource = this.resources[index] as FileResource;
     await this._removeFile(resource.relativePath);
-    this.resources.splice(index);
+    this.resources.splice(index, 1);
   };
 
   public index = async () => {
@@ -198,7 +198,6 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
-      //dialogs: this.dialogIndexer.getDialogs(),
       dialogs: this.resources.filter(this.isDialog),
       lgFiles: this.resources.filter(this.isLG),
       luFiles: this.mergeLuStatus(this.resources.filter(this.isLU) as LUResource[], this.luPublisher.status),

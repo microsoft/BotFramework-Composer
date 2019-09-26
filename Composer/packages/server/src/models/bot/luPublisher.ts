@@ -3,7 +3,7 @@ import { runBuild } from 'lubuild';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 
 const GENERATEDFOLDER = 'generated';
 const LU_STATUS_FILE = 'luis.status.json';
