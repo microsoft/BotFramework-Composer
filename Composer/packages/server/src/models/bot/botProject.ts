@@ -449,7 +449,7 @@ export class BotProject {
     const lu = r as LUResource;
     const index = this.resources.filter(this.isDialog).findIndex((re: Resource) => {
       const dialog = re as DialogResource;
-      dialog.referredLUFile === lu.id;
+      return dialog.referredLUFile === lu.id;
     });
     return index !== -1;
   };
