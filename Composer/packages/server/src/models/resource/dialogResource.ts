@@ -37,13 +37,12 @@ export class DialogResource implements FileResource {
     this.relativePath = relativePath;
   }
 
-  public index = async () => {
+  public index = async (botName: string) => {
     // TODO: clarify content vs parsedContent
     this.content = JSON.parse(this.content);
 
     this.isRoot = this.id === 'Main';
-    // TODO: pass bot name in
-    this.displayName = this.isRoot ? 'Main' : this.id;
+    this.displayName = this.isRoot ? botName + '.Main' : this.id;
 
     this.referredLUFile = typeof this.content.recognizer === 'string' ? this.content.recognizer : '';
     this.referredLGFile = typeof this.content.generator === 'string' ? this.content.generator : '';

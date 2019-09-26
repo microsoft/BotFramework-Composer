@@ -109,7 +109,7 @@ export class BotProject {
     }
 
     if (resource !== null) {
-      await resource.index();
+      await resource.index(this.name);
       return resource;
     }
 
