@@ -70,6 +70,9 @@ export class BotProject {
       const paths = (await this.fileStorage.glob(pattern, dir)).map(x => Path.join(dir, x));
 
       for (const path of paths.sort()) {
+        if (path.endsWith('.lu.dialog')) {
+          continue;
+        }
         if ((await this.fileStorage.stat(path)).isFile) {
           const resource = await this.loadResource(path);
           if (resource !== null) {
