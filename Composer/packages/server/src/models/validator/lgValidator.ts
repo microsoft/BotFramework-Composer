@@ -12,11 +12,16 @@ export class LGValidator implements ResourceValidator {
     }
 
     // TODO: when we have multiple lg, we should make StaticChecker accept resource resolver
-    const diagnostics = new StaticChecker().checkText(resource.content, resource.id);
-
-    return diagnostics.map(d => {
-      return this.convertLGDiagnostic(d, resource.id);
-    });
+    try {
+      // NOTE: there is an issue with LG StaticChecker that requires a full path as id
+      // which should be fixed later in lg package
+      const diagnostics = new StaticChecker().checkText(resource.content, 'c:/common.lg');
+      return diagnostics.map(d => {
+        return this.convertLGDiagnostic(d, resource.id);
+      });
+    } catch (err) {
+      return [new Diagnostic(err.message, resource.id)];
+    }
   };
 
   // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
