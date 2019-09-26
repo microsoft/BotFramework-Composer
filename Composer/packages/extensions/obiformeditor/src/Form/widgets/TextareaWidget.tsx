@@ -1,10 +1,11 @@
 import React from 'react';
 import { TextField } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
+
+import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
 
-export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
+export const TextareaWidget: React.FunctionComponent<BFDWidgetProps> = props => {
   const { onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled, label } = props;
   const { description, examples = [] } = schema;
 

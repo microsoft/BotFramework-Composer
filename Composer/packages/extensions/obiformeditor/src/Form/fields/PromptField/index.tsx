@@ -10,6 +10,7 @@ import { BaseField } from '../BaseField';
 import { tabs } from './styles';
 import { BotAsks } from './BotAsks';
 import { UserAnswers } from './UserAnswers';
+import { Exceptions } from './Exceptions';
 
 export const PromptField: React.FC<FieldProps> = props => {
   return (
@@ -21,7 +22,9 @@ export const PromptField: React.FC<FieldProps> = props => {
         <PivotItem headerText={formatMessage('User Answers')}>
           <UserAnswers {...props} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Exceptions')}>exceptions</PivotItem>
+        <PivotItem headerText={formatMessage('Exceptions')}>
+          <Exceptions {...props} />
+        </PivotItem>
       </Pivot>
     </BaseField>
   );
