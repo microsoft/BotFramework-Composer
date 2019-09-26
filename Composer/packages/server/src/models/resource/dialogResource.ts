@@ -6,6 +6,7 @@ import { ITrigger } from '../bot/interface';
 
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
+import { Path } from 'src/utility/path';
 
 export class DialogResource implements FileResource {
   // Resource
@@ -45,7 +46,10 @@ export class DialogResource implements FileResource {
     this.displayName = this.isRoot ? botName + '.Main' : this.id;
 
     this.referredLUFile = typeof this.content.recognizer === 'string' ? this.content.recognizer : '';
+    this.referredLUFile = Path.basename(this.referredLUFile, '.lu');
     this.referredLGFile = typeof this.content.generator === 'string' ? this.content.generator : '';
+    this.referredLGFile = Path.basename(this.referredLGFile, '.lg');
+
     this.referredDialogs = this.ExtractReferredDialogs(this.content);
     this.referredLGTemplates = this.ExtractLgTemplates(this.content);
     this.referredLUIntents = this.ExtractLuIntents(this.content);
