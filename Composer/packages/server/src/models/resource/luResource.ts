@@ -24,7 +24,7 @@ export class LUResource implements FileResource {
   }
 
   public index = async () => {
-    this.parsedContent = this.parse(this.content);
+    this.parsedContent = await this.parse(this.content);
   };
 
   private parse(content: string): Promise<any> {
