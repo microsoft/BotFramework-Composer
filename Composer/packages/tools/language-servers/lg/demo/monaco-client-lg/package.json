@@ -18,12 +18,8 @@
     "normalize-url": "^2.0.1",
     "reconnecting-websocket": "^3.2.2",
     "request-light": "^0.2.2",
-    "vscode": "^1.1.34",
-    "vscode-json-languageservice": "^3.3.1",
-    "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz"
+    "ws": "^5.0.0"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
