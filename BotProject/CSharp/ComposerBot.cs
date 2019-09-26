@@ -18,9 +18,9 @@ using Microsoft.Recognizers.Text;
 using Newtonsoft.Json;
 
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
-    public class TestBot : ActivityHandler
+    public class ComposerBot : ActivityHandler
     {
         private AdaptiveDialog rootDialog;
         private readonly ResourceExplorer resourceExplorer;
@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private Source.IRegistry registry;
         private string rootDialogFile { get; set; }
 
-        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
         {
             this.conversationState = conversationState;
             this.userState = userState;

@@ -34,7 +34,7 @@ using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
     public class Startup
     {
@@ -108,7 +108,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
                 return adapter;
             });
 
-            services.AddSingleton<IBot, TestBot>((sp) => new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry, telemetryClient));
+            services.AddSingleton<IBot, ComposerBot>((sp) => new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry, telemetryClient));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

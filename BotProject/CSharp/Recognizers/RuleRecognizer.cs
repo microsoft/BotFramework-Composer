@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder.TestBot.Json.Recognizers
+namespace Microsoft.Bot.Builder.ComposerBot.json.Recognizers
 {
     public class RuleRecognizer : IRecognizer
     {
