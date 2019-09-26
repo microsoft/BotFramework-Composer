@@ -20,9 +20,12 @@ export class DialogValidator implements ResourceValidator {
 
     let dialog = resource as DialogResource;
 
-    const errors = this.CheckFields(dialog.content);
-
-    return errors.map(x => new Diagnostic(x, dialog.id));
+    try {
+      const errors = this.CheckFields(dialog.content);
+      return errors.map(x => new Diagnostic(x, dialog.id));
+    } catch (error) {
+      return [new Diagnostic(error.message, dialog.id)];
+    }
   };
 
   private CheckFields(dialog: any): string[] {

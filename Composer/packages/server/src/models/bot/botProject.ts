@@ -15,6 +15,7 @@ import {
   LUResource,
   ResourceType,
   SchemaResource,
+  ResourceResolver,
 } from '../resource';
 
 import { IFileStorage } from './../storage/interface';
@@ -22,19 +23,22 @@ import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
+import { ResourceValidator, DeclartiveValidator } from '../validator';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
 
-export class BotProject {
+export class BotProject implements ResourceResolver {
   public ref: LocationRef;
 
   public name: string;
   public dir: string;
 
   public resources: Resource[] = [];
+  public validator: ResourceValidator;
+
   public fileStorage: IFileStorage;
 
   public luPublisher: LuPublisher;
@@ -55,6 +59,7 @@ export class BotProject {
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
+    this.validator = new DeclartiveValidator();
   }
 
   public loadResources = async (dir: string): Promise<Resource[]> => {
@@ -111,7 +116,11 @@ export class BotProject {
     }
 
     if (resource !== null) {
-      await resource.index(this.name);
+      try {
+        await resource.index(this.name);
+      } catch (err) {
+        // index is just a best-effort, validator will report more detailed issues
+      }
       return resource;
     }
 
@@ -147,6 +156,7 @@ export class BotProject {
       throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
     }
     this.resources[index] = newResource;
+    await this.validateResources();
     return newResource;
   };
 
@@ -169,6 +179,8 @@ export class BotProject {
       throw new Error(`Unable to reload resource, id: ${id}, type: ${type}`);
     }
     this.resources.push(newResource);
+
+    await this.validateResources();
     return newResource;
   };
 
@@ -182,10 +194,45 @@ export class BotProject {
     const resource = this.resources[index] as FileResource;
     await this._removeFile(resource.relativePath);
     this.resources.splice(index, 1);
+    await this.validateResources();
   };
+
+  // We now do a full validation each time resources are updated
+  // we might do smarter re-validaton in the furture
+  public validateResources = async () => {
+    this.resources.forEach(r => {
+      r.diagnostics = this.validator.validate(r, this);
+    });
+  };
+
+  public resolve(srcResource: Resource, reference: string): Resource {
+    // default to source resource type, incase we can't judge type from reference
+    let resourceType = srcResource.type;
+    const extname = Path.extname(reference);
+
+    const typeMap: { [key: string]: ResourceType } = {
+      '.dialog': ResourceType.DIALOG,
+      '.lg': ResourceType.LG,
+      '.lu': ResourceType.LU,
+      '.schema': ResourceType.SCHEMA,
+    };
+
+    if (extname in typeMap) {
+      resourceType = typeMap[extname];
+    }
+
+    const id = Path.basename(reference, extname);
+
+    const matches = this.resources.filter(this.isSameResource(id, resourceType));
+    if (matches.length == 0) {
+      throw new Error(`Can't resolve such a reference: ${reference}, no such resource`);
+    }
+    return matches[0];
+  }
 
   public index = async () => {
     this.resources = await this.loadResources(this.dir);
+    await this.validateResources();
 
     this.settings = await this.getDialogSetting();
 

@@ -16,7 +16,7 @@ export class LUValidator implements ResourceValidator {
     try {
       this.parse(resource.content);
     } catch (err) {
-      diagnostics.push(new Diagnostic(err, resource.id));
+      diagnostics.push(new Diagnostic(err.message, resource.id));
     }
 
     return diagnostics;
