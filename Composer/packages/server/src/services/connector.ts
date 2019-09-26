@@ -1,16 +1,22 @@
 import settings from '../settings/settings';
-import { IBotConnector, BotStatus } from '../models/connector/interface';
-import { CSharpBotConnector } from '../models/connector/csharpBotConnector';
+import { absHosted } from '../settings/env';
+import {
+  BotEnvironments,
+  BotStatus,
+  CSharpBotConnector,
+  IBotConnector,
+  SelfHostBotConnector,
+} from '../models/connector';
 
 class BotConnectorService {
   private connector: IBotConnector;
   constructor() {
-    this.connector = new CSharpBotConnector(settings.botRuntime);
+    this.connector = absHosted ? new SelfHostBotConnector() : new CSharpBotConnector(settings.botRuntime);
   }
 
   // start the current bot
-  public connect = async () => {
-    return await this.connector.connect();
+  public connect = async (env: BotEnvironments, hostName: string) => {
+    return await this.connector.connect(env || 'production', hostName);
   };
 
   public sync = async (config: any) => {
