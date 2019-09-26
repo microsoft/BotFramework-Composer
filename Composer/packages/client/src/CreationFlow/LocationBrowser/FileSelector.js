@@ -200,12 +200,12 @@ export function FileSelector(props) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
-  function getNavItemPath(array, seperator, start, end) {
-    if (end === 0) return array[0]; //  + seperator; commented by BB this breaks the first element in the list on a mac
+  function getNavItemPath(array, separator, start, end) {
+    if (end === 0) return array[0];
     if (!start) start = 0;
     if (!end) end = array.length - 1;
     end++;
-    return array.slice(start, end).join(seperator);
+    return array.slice(start, end).join(separator);
   }
 
   const separator = path.sep;
@@ -217,8 +217,8 @@ export function FileSelector(props) {
 
       // put a leading / back on the path if it started as a unix style path
       itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
-      // add a trailing \ if the last path is something like c:
-      itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}\\` : itemPath;
+      // add a trailing / if the last path is something like c:
+      itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
 
       return {
         text: itemPath, // displayed text
