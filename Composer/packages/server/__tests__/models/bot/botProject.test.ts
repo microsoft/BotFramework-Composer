@@ -5,6 +5,7 @@ import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
 
 import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
+import { LGResource, LUResource } from '../../../src/models/resource';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -31,8 +32,8 @@ describe('index', () => {
     expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
-    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.length).toBe(3);
-    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredLGTemplates.length).toBe(3);
+    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).referredLGTemplates.join(',')).toBe(
       ['hello', 'bye', 'ShowImage'].join(',')
     );
 
@@ -143,9 +144,9 @@ describe('lg operation', () => {
     const dir = 'root';
     const content = '# hello \n - hello';
     const lgFiles = await proj.createLgFile(id, content, dir);
-    const result = lgFiles.find(f => f.id === id);
+    const result = lgFiles.find(f => f.id === id) as LGResource;
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.resources.length).toEqual(8);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -159,9 +160,9 @@ describe('lg operation', () => {
     const id = 'root';
     const content = '# hello \n - hello2';
     const lgFiles = await proj.updateLgFile(id, content);
-    const result = lgFiles.find(f => f.id === id);
+    const result = lgFiles.find(f => f.id === id) as LGResource;
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.resources.length).toEqual(8);
     expect(lgFiles.length).toEqual(2);
 
     expect(result).not.toBeUndefined();
@@ -171,19 +172,12 @@ describe('lg operation', () => {
     }
   });
 
-  it('should throw error when lg content is invalid', async () => {
-    const id = 'root';
-    const content = '# hello \n hello3';
-
-    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
-  });
-
   it('should delete lg file and update index', async () => {
     const id = 'root';
     const lgFiles = await proj.removeLgFile(id);
-    const result = lgFiles.find(f => f.id === id);
+    const result = lgFiles.find(f => f.id === id) as LGResource;
 
-    expect(proj.files.length).toEqual(7);
+    expect(proj.resources.length).toEqual(7);
     expect(lgFiles.length).toEqual(1);
 
     expect(result).toBeUndefined();
@@ -206,9 +200,9 @@ describe('lu operation', () => {
     const dir = 'root';
     const content = '## hello \n - hello';
     const luFiles = await proj.createLuFile(id, content, dir);
-    const result = luFiles.find(f => f.id === id);
+    const result = luFiles.find(f => f.id === id) as LUResource;
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.resources.length).toEqual(8);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -222,9 +216,9 @@ describe('lu operation', () => {
     const id = 'root';
     const content = '## hello \n - hello2';
     const luFiles = await proj.updateLuFile(id, content);
-    const result = luFiles.find(f => f.id === id);
+    const result = luFiles.find(f => f.id === id) as LUResource;
 
-    expect(proj.files.length).toEqual(8);
+    expect(proj.resources.length).toEqual(8);
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
@@ -234,19 +228,12 @@ describe('lu operation', () => {
     }
   });
 
-  it('should throw error when lu content is invalid', async () => {
-    const id = 'root';
-    const content = 'hello \n hello3';
-
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
-  });
-
   it('should delete lu file and update index', async () => {
     const id = 'root';
     const luFiles = await proj.removeLuFile(id);
-    const result = luFiles.find(f => f.id === id);
+    const result = luFiles.find(f => f.id === id) as LUResource;
 
-    expect(proj.files.length).toEqual(7);
+    expect(proj.resources.length).toEqual(7);
     expect(luFiles.length).toEqual(3);
 
     expect(result).toBeUndefined();
