@@ -1,13 +1,9 @@
 /// <reference types="Cypress" />
 
 context('Creating a new bot', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.wait(1000);
-  });
-
-  beforeEach(() => {
-    cy.wait(5000);
     cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
     cy.wait(5000);
     cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {

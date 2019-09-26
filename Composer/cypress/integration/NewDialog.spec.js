@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Creating a new Dialog', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.copyBot('ToDoBot', 'ToDoBotCopy');
     cy.get('[data-testid="LeftNav-CommandBarButtonDesign Flow"]').click();

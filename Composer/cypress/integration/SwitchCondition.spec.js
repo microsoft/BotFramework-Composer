@@ -3,7 +3,7 @@
 // this test is too unstable right now
 // re-enable when stablized
 context.skip('SwitchCondition', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.startFromTemplate('EmptyBot', 'SwitchConditionSpec');
   });
