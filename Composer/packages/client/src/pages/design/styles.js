@@ -61,12 +61,10 @@ export const editorWrapper = css`
 `;
 
 export const visualPanel = css`
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
   border-right: 1px solid #c4c4c4;
-  min-height: 80vh;
   position: relative;
 `;
 
@@ -77,12 +75,10 @@ export const visualEditor = css`
 `;
 
 export const formEditor = css`
-  height: 100%;
   max-width: 600px;
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  min-height: 80vh;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
