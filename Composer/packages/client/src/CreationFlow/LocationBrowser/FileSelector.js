@@ -208,17 +208,18 @@ export function FileSelector(props) {
     return array.slice(start, end).join(seperator);
   }
 
-  // split will filter posix root, if path to call server api is not absolute, must add / back
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter(p => p !== '');
-  // removed by bb - not sure if necessary  need to test on windows
-  // .replace(/\\/g, '/')
 
   const breadcrumbItems = pathItems
     .map((item, index) => {
       let itemPath = getNavItemPath(pathItems, separator, 0, index);
+
       // put a leading / back on the path if it started as a unix style path
       itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
+      // add a trailing \ if the last path is something like c:
+      itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}\\` : itemPath;
+
       return {
         text: itemPath, // displayed text
         key: itemPath, // value returned
