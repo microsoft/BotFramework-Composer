@@ -39,4 +39,5 @@ export enum ResourceType {
   DIALOG = 'dialog',
   LG = 'lg',
   LU = 'lu',
+  SCHEMA = 'schema',
 }
