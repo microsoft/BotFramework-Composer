@@ -1,5 +1,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
+import path from 'path';
+
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -207,15 +209,15 @@ export function FileSelector(props) {
   }
 
   // split will filter posix root, if path to call server api is not absolute, must add / back
-  const separator = '/';
-  const pathItems = currentPath
-    .replace(/\\/g, '/')
-    .split(separator)
-    .filter(p => p !== '');
+  const separator = path.sep;
+  const pathItems = currentPath.split(separator).filter(p => p !== '');
+  // removed by bb - not sure if necessary  need to test on windows
+  // .replace(/\\/g, '/')
 
   const breadcrumbItems = pathItems
     .map((item, index) => {
       let itemPath = getNavItemPath(pathItems, separator, 0, index);
+      // put a leading / back on the path if it started as a unix style path
       itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
       return {
         text: itemPath, // displayed text

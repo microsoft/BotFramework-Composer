@@ -35,7 +35,8 @@ export function LocationSelectContent(props) {
       storageId = currentStorageId;
     }
     if (newPath) {
-      const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
+      // const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
+      const formatedPath = path.normalize(newPath);
       await fetchFolderItemsByPath(storageId, formatedPath);
       setCurrentPath(formatedPath);
     }
