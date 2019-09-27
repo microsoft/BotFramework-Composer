@@ -18,10 +18,10 @@
     "BotProject": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "http://localhost:3979",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:3979"
+      }
     }
   }
 }

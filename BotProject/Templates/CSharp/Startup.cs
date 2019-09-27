@@ -64,12 +64,23 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             var settings = new BotSettings();
             Configuration.Bind(settings);
 
+            IStorage storage = null;
+
             // Configure storage for deployment
-            var cosmosDbStorage = new CosmosDbStorage(settings.CosmosDb);
-            services.AddSingleton<IStorage>(cosmosDbStorage);
-            var userState = new UserState(cosmosDbStorage);
-            var conversationState = new ConversationState(cosmosDbStorage);
-            var inspectionState = new InspectionState(cosmosDbStorage);
+            if (!string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            {
+                storage = new CosmosDbStorage(settings.CosmosDb);
+            }
+            else
+            {
+                Console.WriteLine("The settings of CosmosDbStorage is incomplete, please check following settings: settings.CosmosDb");
+                storage = new MemoryStorage();
+            }
+
+            services.AddSingleton(storage);
+            var userState = new UserState(storage);
+            var conversationState = new ConversationState(storage);
+            var inspectionState = new InspectionState(storage);
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();
@@ -90,13 +101,23 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             {
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
                 adapter
-                .UseStorage(cosmosDbStorage)
+                .UseStorage(storage)
                 .UseState(userState, conversationState)
                 .UseLanguageGeneration(resourceExplorer)
                 .UseDebugger(4712)
                 .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
-                .Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)))
                 .UseResourceExplorer(resourceExplorer);
+
+                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
+                {
+                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
+                }
+                else
+                {
+                    Console.WriteLine("The settings of TranscriptLoggerMiddleware is incomplete, please check following settings: settings.BlobStorage.ConnectionString, settings.BlobStorage.Container");
+                }
+
+
 
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
