@@ -6,6 +6,7 @@ import {
   CSharpBotConnector,
   IBotConnector,
   SelfHostBotConnector,
+  IPublishVersion,
 } from '../models/connector';
 
 class BotConnectorService {
@@ -25,6 +26,18 @@ class BotConnectorService {
 
   public status = (): BotStatus => {
     return this.connector.status;
+  };
+
+  public publish = async (config: any, label: string) => {
+    return await this.connector.publish(config, label);
+  };
+
+  public getEditingStatus = async (): Promise<boolean> => {
+    return await this.connector.getEditingStatus();
+  };
+
+  public getPublishVersions = async (): Promise<IPublishVersion[]> => {
+    return await this.connector.getPublishVersions();
   };
 }
 
