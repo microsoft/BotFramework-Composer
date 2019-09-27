@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { PrimaryButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
+import { DefaultButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { createStepMenu, DialogGroup } from 'shared-menus';
@@ -139,7 +139,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
             onChange={handleStepsUpdate(item.value)}
           >
             {({ createNewItemAtIndex }) => (
-              <PrimaryButton
+              <DefaultButton
                 styles={{ root: { marginTop: '20px' } }}
                 menuProps={{
                   items: createStepMenu(
@@ -161,7 +161,7 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
                 type="button"
               >
                 {formatMessage('Add New Action for { caseName }', { caseName: item.value })}
-              </PrimaryButton>
+              </DefaultButton>
             )}
           </TableField>
           <div className="CasesFieldConditionsMenu">
@@ -178,9 +178,9 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
           </div>
         </div>
       ))}
-      <PrimaryButton type="button" styles={{ root: { marginTop: '20px' } }} onClick={() => setShowModal(true)}>
+      <DefaultButton type="button" styles={{ root: { marginTop: '20px' } }} onClick={() => setShowModal(true)}>
         {newLabel}
-      </PrimaryButton>
+      </DefaultButton>
       {showModal && (
         <Modal onDismiss={() => setShowModal(false)}>
           <form onSubmit={handleCaseUpdate}>
@@ -196,9 +196,9 @@ export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
                 }
               }}
             />
-            <PrimaryButton type="submit" styles={{ root: { width: '100%', marginTop: '20px' } }}>
+            <DefaultButton type="submit" styles={{ root: { width: '100%', marginTop: '20px' } }}>
               {newLabel}
-            </PrimaryButton>
+            </DefaultButton>
           </form>
         </Modal>
       )}
