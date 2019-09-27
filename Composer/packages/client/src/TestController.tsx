@@ -47,7 +47,7 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, botEndpoint, dialogs, toStartBot, luFiles, settings } = state;
+  const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
