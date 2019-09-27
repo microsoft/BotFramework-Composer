@@ -1,0 +1,67 @@
+.BaseFieldTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 11px;
+}
+.BaseFieldDescription {
+  font-size: 12px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+.RootFieldTitle {
+  border-bottom: 1px solid #c8c6c4;
+  padding: 0 18px;
+  margin-bottom: 16px;
+}
+.RootFieldDescription {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.RootFieldMetaData {
+  padding: 18px;
+  display: flex;
+  border-top: 1px solid #c8c6c4;
+  margin-top: 14px;
+}
+.PromptField {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+.CasesFieldConditions {
+  display: flex;
+}
+.CasesFieldConditions .ObjectFieldTemplate {
+  flex: 1;
+}
+.CasesFieldConditions .BaseField {
+  flex: 1;
+}
+.CasesFieldConditions .CasesFieldConditionsMenu {
+  flex-grow: 0;
+  margin-left: 20px;
+  margin-top: 30px;
+  padding-top: 4px;
+}
+.JsonField .react-codemirror2, .CodeField .react-codemirror2 {
+  margin-top: 0;
+  border: 1px solid #a19f9d;
+  border-radius: 2px;
+  max-height: 600px;
+  overflow: scroll;
+}
+.JsonField .CodeMirror, .CodeField .CodeMirror {
+  height: auto;
+}
+.JsonField .CodeMirror--error, .CodeField .CodeMirror--error {
+  border: 2px solid #e81123;
+}
+.CodeFieldModeSelector {
+  margin-bottom: 20px;
+  max-width: 300px;
+}
+a {
+  color: black;
+}

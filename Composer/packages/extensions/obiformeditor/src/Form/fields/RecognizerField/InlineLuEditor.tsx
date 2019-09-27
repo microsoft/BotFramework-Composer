@@ -19,7 +19,7 @@ const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   };
 
   return (
-    <div style={{ height: '500px', paddingBottom: '19px' }}>
+    <div style={{ height: '500px', padding: '0 18px', paddingBottom: errorMsg ? '19px' : 0 }}>
       <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} />
     </div>
   );
