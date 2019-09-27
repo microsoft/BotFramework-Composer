@@ -139,7 +139,7 @@ export const TestController: React.FC = () => {
             }}
             onClick={() =>
               openInEmulator(
-                botEndpoint || 'http://localhost:3979/api/messages',
+                'http://localhost:3979/api/messages', // todo: this is broken botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword
                   ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                   : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
