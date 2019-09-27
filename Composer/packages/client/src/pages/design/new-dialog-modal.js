@@ -9,7 +9,12 @@ export default function NewDialogModal(props) {
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE}>
-      <DefineConversation onSubmit={onSubmit} onDismiss={onDismiss} onGetErrorMessage={onGetErrorMessage} />
+      <DefineConversation
+        onSubmit={onSubmit}
+        onDismiss={onDismiss}
+        onGetErrorMessage={onGetErrorMessage}
+        enableLocationBrowse={false}
+      />
     </DialogWrapper>
   );
 }
