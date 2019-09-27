@@ -1,3 +1,30 @@
+export class Range {
+  start: Position;
+  end: Position;
+
+  constructor(start: Position, end: Position) {
+    this.start = start;
+    this.end = end;
+  }
+}
+
+export class Position {
+  line: number;
+  character: number;
+
+  constructor(line: number, character: number) {
+    this.line = line;
+    this.character = character;
+  }
+}
+
+export enum DiagnosticSeverity {
+  Error = 0,
+  Warning = 1,
+  Information = 2,
+  Hint = 3,
+}
+
 export class Diagnostic {
   /**
    * Error
@@ -38,31 +65,4 @@ export class Diagnostic {
     this.source = source;
     this.severity = severity ? severity : DiagnosticSeverity.Error;
   }
-}
-
-export class Range {
-  start: Position;
-  end: Position;
-
-  constructor(start: Position, end: Position) {
-    this.start = start;
-    this.end = end;
-  }
-}
-
-export class Position {
-  line: number;
-  character: number;
-
-  constructor(line: number, character: number) {
-    this.line = line;
-    this.character = character;
-  }
-}
-
-export enum DiagnosticSeverity {
-  Error = 0,
-  Warning = 1,
-  Information = 2,
-  Hint = 3,
 }

@@ -108,6 +108,7 @@ export class BotProject implements ResourceResolver {
         break;
       case '.schema':
         resource = new SchemaResource(id, content, relativePath);
+        break;
       default:
         throw new Error(
           `Unrecnogizned format of resource file, expected: .dialog .lg or .lu or .schema, actual ${path} `
