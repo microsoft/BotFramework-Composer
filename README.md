@@ -110,9 +110,9 @@ yarn build
 This command build the Composer app. The build process can take few minutes.
 
 ```
-yarn start
+yarn startall
 ```
-This command runs the Composer app. 
+This command starts the Composer authoring application and the CSharp Bot runtime. 
 
  To use Composer, open a browser and navigate to http://localhost:3000
  
