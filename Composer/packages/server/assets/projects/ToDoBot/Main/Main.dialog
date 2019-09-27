@@ -14,11 +14,11 @@
             "CancelIntent": "(?i)cancel|never mind"
         }
     },
-    "rules": [
+    "events": [
         {
             "$type": "Microsoft.OnIntent",
             "intent": "AddIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "AddToDo"
@@ -28,7 +28,7 @@
         {
             "$type": "Microsoft.OnIntent",
             "intent": "DeleteIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "DeleteToDo"
@@ -38,7 +38,7 @@
         {
             "$type": "Microsoft.OnIntent",
             "intent": "ClearIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "ClearToDos"
@@ -48,7 +48,7 @@
         {
             "$type": "Microsoft.OnIntent",
             "intent": "ShowIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.BeginDialog",
                     "dialog": "ShowToDos"
@@ -58,7 +58,7 @@
         {
             "$type": "Microsoft.OnIntent",
             "intent": "HelpIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "[help]"
@@ -68,7 +68,7 @@
         {
             "$type": "Microsoft.OnIntent",
             "intent": "CancelIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "ok."
@@ -80,7 +80,7 @@
         },
         {
             "$type": "Microsoft.OnUnknownIntent",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."

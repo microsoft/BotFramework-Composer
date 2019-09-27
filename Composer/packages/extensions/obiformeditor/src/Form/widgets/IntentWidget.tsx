@@ -1,11 +1,12 @@
 import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react';
 import get from 'lodash.get';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { LuFile, DialogInfo } from '../../types';
 import { BFDWidgetProps, FormContext } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
@@ -63,7 +64,7 @@ function luIntentOptions(formContext: FormContext): IDropdownOption[] {
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
-  const { label, disabled, onChange, id, onFocus, onBlur, value, formContext, schema, placeholder, ...rest } = props;
+  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
   const { description } = schema;
   let options: IDropdownOption[] = [];
 
@@ -87,10 +88,9 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
 
   return (
     <>
+      <WidgetLabel label={label} description={description} id={id} />
       <Dropdown
-        {...rest}
         id={id.replace(/\.|#/g, '')}
-        label={label}
         onBlur={() => onBlur(id, value)}
         onChange={handleChange}
         onFocus={() => onFocus(id, value)}
@@ -100,11 +100,6 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
         disabled={disabled || options.length === 1}
         placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
       />
-      {description && (
-        <span style={{ fontSize: '14px' }}>
-          <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-        </span>
-      )}
     </>
   );
 };

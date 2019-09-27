@@ -1,9 +1,12 @@
 import React from 'react';
 import { DatePicker } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
-export function DateTimeWidget(props: WidgetProps) {
-  const { onChange, onBlur, onFocus, required, value, schema, ...rest } = props;
+import { BFDWidgetProps } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
+
+export function DateTimeWidget(props: BFDWidgetProps) {
+  const { onChange, onBlur, onFocus, required, value, label, id, schema } = props;
   const { description } = schema;
 
   const onSelectDate = (date?: Date | null) => {
@@ -11,15 +14,17 @@ export function DateTimeWidget(props: WidgetProps) {
   };
 
   return (
-    <DatePicker
-      {...rest}
-      isRequired={required}
-      onBlur={() => onBlur(rest.id, value)}
-      onFocus={() => onFocus(rest.id, value)}
-      onSelectDate={onSelectDate}
-      textField={{ description }}
-      value={value ? new Date(value) : undefined}
-    />
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <DatePicker
+        id={id}
+        isRequired={required}
+        onBlur={() => onBlur(id, value)}
+        onFocus={() => onFocus(id, value)}
+        onSelectDate={onSelectDate}
+        value={value ? new Date(value) : undefined}
+      />
+    </>
   );
 }
 
