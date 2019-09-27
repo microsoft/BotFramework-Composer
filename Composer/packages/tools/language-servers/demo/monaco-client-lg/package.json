@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "lsp-cs-example",
+  "name": "lsp-lg-example",
   "version": "0.10.0",
   "engines": {
     "vscode": "^1.25"
@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack",
     "start:client": "webpack-dev-server",
-    "start:server": "node node_modules/lg-lsp-server/lib/index.js"
+    "start:server": "ts-node ./src/test.ts"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
@@ -20,7 +20,7 @@
     "request-light": "^0.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0",
-    "lg-lsp-server": "file:../../lg/server/lg-lsp-server-0.1.0.tgz"
+    "lg-lsp-server": "0.1.0"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",

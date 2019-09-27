@@ -10,15 +10,18 @@
     "packages/extensions",
     "packages/extensions/*",
     "packages/lib",
-    "packages/lib/*"
+    "packages/lib/*",
+    "packages/tools/language-servers",
+    "packages/tools/language-servers/*"
   ],
   "scripts": {
-    "build": "yarn build:dev && yarn build:server && yarn build:client",
+    "build": "yarn build:dev && yarn build:server && yarn build:client && yarn build:tools",
     "build:dev": "yarn build:lib && yarn build:extensions",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
     "build:server": "cd packages/server && yarn build",
     "build:client": "cd packages/client && yarn build",
+    "build:tools": "cd packages/tools && yarn build",
     "start": "concurrently --kill-others-on-fail \"npm:start:*\"",
     "start:client": "cd packages/client && yarn start",
     "start:server": "cd packages/server && yarn start",

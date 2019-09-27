@@ -1,0 +1,12 @@
+{
+    "name": "composer-tools",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "yarn build:language-servers",
+        "build:language-servers": "cd language-servers && yarn build"
+    },
+    "author": "",
+    "license": "ISC"
+}

@@ -1,0 +1,12 @@
+{
+    "name": "tools-language-servers",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "yarn build:lg",
+        "build:lg": "cd lg-server && yarn build"
+    },
+    "author": "",
+    "license": "ISC"
+}

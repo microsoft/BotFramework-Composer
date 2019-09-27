@@ -1,12 +1,10 @@
 {
-  "private": true,
   "name": "lg-lsp-server",
   "version": "0.1.0",
-  "engines": {
-    "vscode": "^1.25"
-  },
+  "main": "lib/index.js",
   "scripts": {
-    "start:server": "node lib/index.js"
+    "build": "tsc",
+    "start:server": "ts-node src/index.ts"
   },
   "dependencies": {
     "@types/node": "^12.0.4",

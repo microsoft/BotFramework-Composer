@@ -1,14 +1,10 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) 2018 TypeFox GmbH (http://www.typefox.io). All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
+import { launch } from 'lg-lsp-server';
 import * as ws from 'ws';
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
 import * as express from 'express';
 import * as rpc from 'vscode-ws-jsonrpc';
-import { launch } from './launcher';
 
 process.on('uncaughtException', function(err: any) {
   console.error('Uncaught Exception: ', err.toString());
