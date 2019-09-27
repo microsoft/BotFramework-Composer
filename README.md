@@ -91,7 +91,7 @@ With this option you need to use [Yarn](https://yarnpkg.com) to build the Compos
 * [Node.js](https://nodejs.org/en/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
-* [.NET Core SDK](https://dotnet.microsoft.com/download)
+* [.NET Core SDK 2.2.109](https://dotnet.microsoft.com/download)
 
 
 #### Instructions
