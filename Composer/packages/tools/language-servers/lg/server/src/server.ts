@@ -10,31 +10,32 @@ import { IConnection, TextDocuments, createConnection } from 'vscode-languageser
 import {
   TextDocument,
   Diagnostic,
-  Command,
+  //Command,
   CompletionList,
-  CompletionItem,
+  //CompletionItem,
   Hover,
-  Range,
-  SymbolInformation,
-  TextEdit,
-  FoldingRange,
-  ColorInformation,
-  ColorPresentation,
+  // Range,
+  // SymbolInformation,
+  // TextEdit,
+  // FoldingRange,
+  // ColorInformation,
+  // ColorPresentation,
   Position,
-  DiagnosticSeverity,
+  //DiagnosticSeverity,
   CompletionItemKind,
 } from 'vscode-languageserver-types';
 import {
   TextDocumentPositionParams,
-  DocumentRangeFormattingParams,
-  ExecuteCommandParams,
-  CodeActionParams,
-  FoldingRangeRequestParam,
-  DocumentColorParams,
-  ColorPresentationParams,
+  // DocumentRangeFormattingParams,
+  // ExecuteCommandParams,
+  // CodeActionParams,
+  // FoldingRangeRequestParam,
+  // DocumentColorParams,
+  // ColorPresentationParams,
 } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
 import { buildInfunctionsMap } from './builtinFunctions';
+import { getRangeAtPosition, convertSeverity, getLGResources } from './utils';
 
 export function start(reader: MessageReader, writer: MessageWriter): LgServer {
   const connection = createConnection(reader, writer);
@@ -197,50 +198,15 @@ export class LgServer {
   //     }
   // }
 
-  protected getRangeAtPosition(document: TextDocument, position: Position): Range {
-    let range: Range;
-    const text = document.getText();
-    const line = position.line;
-    const character = position.character;
-    const lineText = text.split('\n')[line];
-    let lastIdx = -1;
-    let start: number = -1;
-    let end: number = -1;
-    const regex = /[a-zA-Z0-9_/.]+/;
-    for (let idx = 0; idx < lineText.length; idx++) {
-      if (!regex.test(lineText[idx])) {
-        if (idx > character && character > lastIdx) {
-          start = lastIdx + 1;
-          end = idx;
-          break;
-        } else {
-          lastIdx = idx;
-        }
-      }
-      if (idx === lineText.length - 1) {
-        start = lineText.lastIndexOf(' ') + 1;
-        end = idx + 1;
-      }
-    }
-
-    if (start < 0 || end < 0) {
-      return;
-    } else {
-      range = Range.create(line, start, line, end);
-    }
-
-    return range;
-  }
-
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgResources = this.getLGResources(document);
+    const lgResources = getLGResources(document);
     const templates = lgResources.Templates;
     const hoverItemList = [];
-    const wordRange = this.getRangeAtPosition(document, params.position);
+    const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem: lg.LGTemplate = templates.find(u => u.Name === word);
     if (matchItem !== undefined) {
@@ -290,7 +256,7 @@ export class LgServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgResources = this.getLGResources(document);
+    const lgResources = getLGResources(document);
     const templates = lgResources.Templates;
     const completionList = [];
     templates.forEach(template => {
@@ -337,19 +303,6 @@ export class LgServer {
     }
   }
 
-  protected convertSeverity(severity: lg.DiagnosticSeverity): DiagnosticSeverity {
-    switch (severity) {
-      case lg.DiagnosticSeverity.Error:
-        return DiagnosticSeverity.Error;
-      case lg.DiagnosticSeverity.Hint:
-        return DiagnosticSeverity.Hint;
-      case lg.DiagnosticSeverity.Information:
-        return DiagnosticSeverity.Information;
-      case lg.DiagnosticSeverity.Warning:
-        return DiagnosticSeverity.Warning;
-    }
-  }
-
   protected doValidate(document: TextDocument): void {
     if (document.getText().length === 0) {
       this.cleanDiagnostics(document);
@@ -365,7 +318,7 @@ export class LgServer {
     let diagnostics: Diagnostic[] = [];
     lgDiags.forEach(diag => {
       let diagnostic: Diagnostic = {
-        severity: this.convertSeverity(diag.Severity),
+        severity: convertSeverity(diag.Severity),
         range: {
           start: Position.create(diag.Range.Start.Line, diag.Range.Start.Character),
           end: Position.create(diag.Range.End.Line, diag.Range.End.Character),
@@ -388,13 +341,5 @@ export class LgServer {
       uri: document.uri,
       diagnostics,
     });
-  }
-
-  // protected getJSONDocument(document: TextDocument): JSONDocument {
-  //     return this.jsonService.parseJSONDocument(document);
-  // }
-
-  protected getLGResources(document: TextDocument): lg.LGResource {
-    return lg.LGParser.parse(document.getText(), ' ');
   }
 }

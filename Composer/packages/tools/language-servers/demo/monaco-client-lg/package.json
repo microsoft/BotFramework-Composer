@@ -8,7 +8,7 @@
   "scripts": {
     "build": "webpack",
     "start:client": "webpack-dev-server",
-    "start:server": "ts-node src/server/server.ts"
+    "start:server": "node node_modules/lg-lsp-server/lib/index.js"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
@@ -19,7 +19,8 @@
     "reconnecting-websocket": "^3.2.2",
     "request-light": "^0.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0"
+    "ws": "^5.0.0",
+    "lg-lsp-server": "file:../../lg/server/lg-lsp-server-0.1.0.tgz"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",

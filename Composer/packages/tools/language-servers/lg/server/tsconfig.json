@@ -2,11 +2,11 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "outDir": "dist",
+        "outDir": "lib",
         "sourceMap": true
     },
     "include": [
-        "src/client/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules"

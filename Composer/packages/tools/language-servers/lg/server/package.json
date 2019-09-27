@@ -1,13 +1,12 @@
 {
   "private": true,
-  "name": "lsp-cs-example",
-  "version": "0.10.0",
+  "name": "lg-lsp-server",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.25"
   },
   "scripts": {
-    "build": "webpack",
-    "start:server": "ts-node src/index.ts"
+    "start:server": "node lib/index.js"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
