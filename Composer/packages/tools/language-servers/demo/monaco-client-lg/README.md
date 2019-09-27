@@ -1,6 +1,16 @@
-# lsp-cs-example
+# lsp-lp-example
 
-## Install
+## go to Composer directory
+```
+yarn install
+```
+
+```
+yarn build
+```
+
+
+## In Demo/monaco-client-lg directory, Install
 ```
 npm install
 ```
