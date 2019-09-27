@@ -28,7 +28,7 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 
 Next,you have two options for running Composer locally:
 * [Using a docker image](#Using-docker-image) (Recommended) 
-* [Build and run Composer](#Build-and-run-Composer)
+* [Build and run Composer locally](#Build-and-run-Composer)
 
 
 ### Using docker image 
@@ -39,6 +39,7 @@ Using a docker provides a more controled and isolated environment for you to run
 * [docker-compose](https://docs.docker.com/compose/install/)
 * [docker](https://www.docker.com/)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+* [.NET Core SDK](https://dotnet.microsoft.com/download)
 
   NOTE: If you follow the instructions of installing docker for Windows or MacOs, the Docker Desktop  and Docker Toolbox already include Compose along with other Docker apps, so most  users do not need to install Compose separately.  
 
@@ -90,6 +91,7 @@ With this option you need to use [Yarn](https://yarnpkg.com) to build the Compos
 * [Node.js](https://nodejs.org/en/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+* [.NET Core SDK](https://dotnet.microsoft.com/download)
 
 
 #### Instructions
