@@ -11,7 +11,7 @@ context('ToDo Bot', () => {
       cy.getByText('ToDoBot.Main').click();
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('ToDoBot.Main').should('exist');
+      cy.getByDisplayValue('ToDoBot.Main').should('exist');
     });
   });
 
@@ -22,7 +22,7 @@ context('ToDo Bot', () => {
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('AddToDo').should('exist');
+      cy.getByDisplayValue('AddToDo').should('exist');
     });
 
     cy.withinEditor('VisualEditor', () => {
@@ -36,7 +36,7 @@ context('ToDo Bot', () => {
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('ClearToDos').should('exist');
+      cy.getByDisplayValue('ClearToDos').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
       cy.getByText(/Successfully cleared items/).should('exist');
@@ -49,7 +49,7 @@ context('ToDo Bot', () => {
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('DeleteToDo').should('exist');
+      cy.getByDisplayValue('DeleteToDo').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('Edit an Array Property').should('exist');
@@ -62,7 +62,7 @@ context('ToDo Bot', () => {
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByText('ShowToDos').should('exist');
+      cy.getByDisplayValue('ShowToDos').should('exist');
     });
     cy.withinEditor('VisualEditor', () => {
       cy.getByText('You have no todos.').should('exist');

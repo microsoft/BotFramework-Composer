@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react';
 import { getUiOptions } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import get from 'lodash.get';
 import omit from 'lodash.omit';
@@ -30,6 +30,7 @@ function canExpand({ formData, schema, uiSchema }: ObjectFieldTemplateProps): bo
 }
 
 const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = props => {
+  const { uiSchema } = props;
   const [showModal, setShowModal] = useState(false);
   const [editableProperty, setEditableProperty] = useState('');
 
@@ -52,17 +53,23 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
     setShowModal(false);
   };
 
+  const isHidden = (property: string) => {
+    return uiSchema['ui:hidden'] && Array.isArray(uiSchema['ui:hidden']) && uiSchema['ui:hidden'].includes(property);
+  };
+
   return (
     <div className="ObjectFieldTemplate" key={props.idSchema.__id}>
       <BaseField {...props}>
-        {props.properties.map(p => (
-          <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
-        ))}
+        {props.properties
+          .filter(p => !isHidden(p.name))
+          .map(p => (
+            <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
+          ))}
         {canExpand(props) && (
           <>
-            <PrimaryButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
+            <DefaultButton type="button" onClick={() => setShowModal(true)} styles={{ root: { marginTop: '10px' } }}>
               {formatMessage('Add')}
-            </PrimaryButton>
+            </DefaultButton>
             {showModal && (
               <NewPropertyModal
                 onSubmit={handlePropertyEdit}
