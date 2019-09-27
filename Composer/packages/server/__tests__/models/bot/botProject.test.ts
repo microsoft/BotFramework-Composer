@@ -3,9 +3,9 @@ import fs from 'fs';
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
+import { LGResource, LUResource } from '../../../src/models/resource';
 
 import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
-import { LGResource, LUResource } from '../../../src/models/resource';
 
 jest.mock('azure-storage', () => {
   return {};

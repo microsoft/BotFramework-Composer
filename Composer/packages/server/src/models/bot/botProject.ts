@@ -6,7 +6,6 @@ import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { absHosted } from '../../settings/env';
-
 import {
   Resource,
   FileResource,
@@ -17,13 +16,13 @@ import {
   SchemaResource,
   ResourceResolver,
 } from '../resource';
+import { ResourceValidator, DeclartiveValidator } from '../validator';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
-import { ResourceValidator, DeclartiveValidator } from '../validator';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',

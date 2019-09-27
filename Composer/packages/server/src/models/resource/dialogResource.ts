@@ -3,10 +3,10 @@ import { has, uniq } from 'lodash';
 import { Diagnostic } from '../validator';
 import { JsonWalk, VisitorFunc } from '../../utility/jsonWalk';
 import { ITrigger } from '../bot/interface';
+import { Path } from '../../utility/path';
 
 import { ResourceType } from './resource';
 import { FileResource } from './fileResource';
-import { Path } from '../../utility/path';
 
 export class DialogResource implements FileResource {
   // Resource

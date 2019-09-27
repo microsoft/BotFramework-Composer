@@ -11,7 +11,7 @@ export class LUValidator implements ResourceValidator {
       throw new Error(`Can't apply LUValidator to resource type ${resource.type}`);
     }
 
-    let diagnostics: Diagnostic[] = [];
+    const diagnostics: Diagnostic[] = [];
 
     try {
       this.parse(resource.content);

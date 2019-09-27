@@ -1,9 +1,9 @@
+import { StaticChecker, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+
 import { Resource, ResourceResolver, ResourceType } from '../resource';
 
 import { ResourceValidator } from './resourceValidator';
 import { Diagnostic, Range, Position } from './diagnostic';
-
-import { StaticChecker, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 
 export class LGValidator implements ResourceValidator {
   public validate = (resource: Resource, _resolver: ResourceResolver): Diagnostic[] => {
@@ -26,7 +26,7 @@ export class LGValidator implements ResourceValidator {
 
   // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
   private convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
-    let result = new Diagnostic(d.Message, source, d.Severity);
+    const result = new Diagnostic(d.Message, source, d.Severity);
 
     const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
     const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);

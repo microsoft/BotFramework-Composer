@@ -1,10 +1,11 @@
+import { has } from 'lodash';
+
 import { Resource, ResourceResolver, ResourceType, DialogResource } from '../resource';
+import { VisitorFunc, JsonWalk } from '../../utility/jsonWalk';
+import { DialogChecker } from '../bot/dialogChecker';
 
 import { ResourceValidator } from './resourceValidator';
 import { Diagnostic } from './diagnostic';
-import { VisitorFunc, JsonWalk } from '../../utility/jsonWalk';
-import { DialogChecker } from '../bot/dialogChecker';
-import { has } from 'lodash';
 
 /**
  * TODO:
@@ -18,7 +19,7 @@ export class DialogValidator implements ResourceValidator {
       throw new Error(`Can't apply DialogValidator to resource type ${resource.type}`);
     }
 
-    let dialog = resource as DialogResource;
+    const dialog = resource as DialogResource;
 
     try {
       const errors = this.CheckFields(dialog.content);
