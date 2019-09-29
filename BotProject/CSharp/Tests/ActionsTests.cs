@@ -156,13 +156,11 @@ namespace Tests
       .SendConversationUpdate()
           .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
       .Send("09")
-          .AssertReply("Hello, what is your name?")
-      .Send("luhan")
+      .Send("luhan")          
           .AssertReply(activity =>
           {
             var trace = (Activity)activity;
             Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
-            Assert.AreEqual("memory", trace.ValueType, "value type should be memory");
           })
       .StartTestAsync();
     }

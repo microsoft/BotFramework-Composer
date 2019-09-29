@@ -15,7 +15,6 @@
         "id": "044028",
         "updatedAt": "2019-07-22T08:05:18.175Z"
       },
-
       "actions": [
         {
           "$type": "Microsoft.TextInput",
@@ -38,8 +37,7 @@
             "updatedAt": "2019-07-16T19:58:24.020Z",
             "id": "774586"
           },
-          "valueType": "memory",
-          "value": "user"
+          "valueType": "memory"
         },
         {
           "$type": "Microsoft.LogAction",
