@@ -1,12 +1,14 @@
 import { css } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
+import { IButtonStyles } from 'office-ui-fabric-react';
 
 export const link = (active, underTest) => css`
   display: block;
   text-decoration: none;
   color: #4f4f4f;
   position: relative;
+
   ${underTest && `pointer-events: none;`}
   ${!underTest &&
     `&::after {
@@ -49,27 +51,30 @@ export const outer = css`
   background-color: transparent;
 `;
 
-export const commandBarButton = active => ({
-  root: {
-    color: active ? '#000' : '#4f4f4f',
-    height: '36px',
-    width: '220px',
-    fontSize: `${FontSizes.size14}`,
-    paddingLeft: '0px',
-    paddingRight: '0px',
-    marginLeft: '0px',
-    backgroundColor: 'transparent',
-  },
-  icon: {
-    color: active ? '#000' : '#4f4f4f',
-    padding: '0 13px',
-    marginLeft: '0px',
-    boxSizing: 'border-box',
-    fontSize: `${FontSizes.size16}`,
-  },
-  textContainer: {
-    textAlign: 'left',
-    zIndex: '1',
-    // display: isExpand ? 'inline-block' : 'none',
-  },
-});
+export const commandBarButton = active =>
+  ({
+    root: {
+      color: active ? '#000' : '#4f4f4f',
+      height: '36px',
+      width: '220px',
+      fontSize: `${FontSizes.size14}`,
+      paddingLeft: '0px',
+      paddingRight: '0px',
+      marginLeft: '0px',
+      backgroundColor: 'transparent',
+    },
+    rootDisabled: {
+      backgroundColor: 'transparent',
+    },
+    icon: {
+      color: active ? '#000' : '#4f4f4f',
+      padding: '0 16px',
+      marginLeft: '0px',
+      boxSizing: 'border-box',
+      fontSize: `${FontSizes.size16}`,
+    },
+    textContainer: {
+      textAlign: 'left',
+      zIndex: 1,
+    },
+  } as IButtonStyles);

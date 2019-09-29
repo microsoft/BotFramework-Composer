@@ -78,7 +78,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     },
     {
       key: 'luis',
-      text: 'BF Language Understanding',
+      text: 'LUIS',
     },
     {
       key: 'regex',
@@ -117,39 +117,41 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   };
 
   return (
-    <BaseField {...props}>
-      <Dropdown
-        styles={{ root: { paddingRight: '47px' } }}
-        label={formatMessage('Recognizer Type')}
-        onChange={handleChange}
-        options={options}
-        selectedKey={getSelectedType()}
-        responsiveMode={ResponsiveMode.large}
-        onRenderTitle={onRenderTitle}
-      />
-      <ToggleEditor
-        key={getSelectedType()}
-        title={isLuFileSelected ? 'text editor' : 'regular expression editor'}
-        loaded={Boolean(!loading && formData)}
-      >
-        {() => {
-          if (selectedFile && isLuFileSelected) {
-            const updateLuFile = (newValue?: string): void => {
-              shellApi
-                .updateLuFile({ id: selectedFile.id, content: newValue })
-                .then(() => setErrorMsg(''))
-                .catch(error => {
-                  setErrorMsg(error);
-                });
-            };
+    <div className="RecognizerField">
+      <BaseField {...props}>
+        <Dropdown
+          styles={{ root: { paddingRight: '47px' } }}
+          label={formatMessage('Recognizer Type')}
+          onChange={handleChange}
+          options={options}
+          selectedKey={getSelectedType()}
+          responsiveMode={ResponsiveMode.large}
+          onRenderTitle={onRenderTitle}
+        />
+        <ToggleEditor
+          key={getSelectedType()}
+          title={isLuFileSelected ? 'text editor' : 'regular expression editor'}
+          loaded={Boolean(!loading && formData)}
+        >
+          {() => {
+            if (selectedFile && isLuFileSelected) {
+              const updateLuFile = (newValue?: string): void => {
+                shellApi
+                  .updateLuFile({ id: selectedFile.id, content: newValue })
+                  .then(() => setErrorMsg(''))
+                  .catch(error => {
+                    setErrorMsg(error);
+                  });
+              };
 
-            return <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />;
-          }
-          if (isRegex) {
-            return <RegexEditor {...props} />;
-          }
-        }}
-      </ToggleEditor>
-    </BaseField>
+              return <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />;
+            }
+            if (isRegex) {
+              return <RegexEditor {...props} />;
+            }
+          }}
+        </ToggleEditor>
+      </BaseField>
+    </div>
   );
 };

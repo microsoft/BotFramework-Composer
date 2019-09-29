@@ -2,6 +2,8 @@ import React from 'react';
 import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import classnames from 'classnames';
+import { JSONSchema6 } from 'json-schema';
 
 import './styles.css';
 
@@ -13,9 +15,7 @@ interface ObjectItemProps {
   onDropPropertyClick: (name: string) => (e) => void;
   onEdit: (e) => void;
   onAdd: (e) => void;
-  schema: {
-    __additional_property?: boolean;
-  };
+  schema: JSONSchema6;
 }
 
 export default function ObjectItem(props: ObjectItemProps) {
@@ -54,8 +54,10 @@ export default function ObjectItem(props: ObjectItemProps) {
     });
   }
 
+  const compoundType = schema.type && typeof schema.type === 'string' && ['array', 'object'].includes(schema.type);
+
   return (
-    <div className="ObjectItem">
+    <div className={classnames('ObjectItem', { ObjectItemContainer: compoundType })}>
       <div className="ObjectItemField">{content}</div>
       {contextItems.length > 0 && (
         <div className="ObjectItemContext">
