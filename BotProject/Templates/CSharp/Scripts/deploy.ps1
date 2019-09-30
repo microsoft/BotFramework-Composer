@@ -26,10 +26,6 @@ if (-not $environment)
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
 }
 
-if (-not $botPath) {
-	$botPath = Read-Host "? The Relative Path Of Bot"
-}
-
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -62,7 +58,11 @@ dotnet publish -c release -o $publishFolder -v q > $logFile
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
-Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
+
+if ($botPath)
+{
+	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
+}
 
 # Merge from custom config files
 $customConfigFiles = Get-ChildItem -Path $remoteBotPath -Include "appsettings.json" -Recurse -Force
