@@ -51,6 +51,8 @@ if (Test-Path $zipPath) {
 	Remove-Item $zipPath -Force | Out-Null
 }
 
+# Init user secret id
+dotnet user-secrets init
 
 # Perform dotnet publish step ahead of zipping up
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')

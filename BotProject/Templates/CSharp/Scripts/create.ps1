@@ -139,6 +139,7 @@ if ($outputs)
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'microsoftAppId' -Value $appId
 	
+	dotnet user-secrets init --project $projDir
 	dotnet user-secrets set "MicrosoftAppPassword" $appPassword --project $projDir
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "ComposerDialogs"
