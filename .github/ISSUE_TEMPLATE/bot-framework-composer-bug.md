@@ -9,7 +9,7 @@ assignees: ''
 ---
 
 ## Version
-What version of the Emulator are you using.
+What version of the Composer are you using? Paste the build SHA found on the about page.
 
 ## Describe the bug
 Give a clear and concise description of what the bug is.
@@ -29,5 +29,3 @@ If applicable, add screenshots to help explain your problem.
 
 ## Additional context
 Add any other context about the problem here.
-
-[bug]
