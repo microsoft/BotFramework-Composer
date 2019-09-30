@@ -15,6 +15,7 @@ module.exports = {
   },
   rules: {
     'react/no-deprecated': 'warn',
+    'react/display-name': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'off',
 
