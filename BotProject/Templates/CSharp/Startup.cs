@@ -104,7 +104,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 .UseStorage(storage)
                 .UseState(userState, conversationState)
                 .UseLanguageGeneration(resourceExplorer)
-                .UseDebugger(4712)
                 .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
                 .UseResourceExplorer(resourceExplorer);
 
