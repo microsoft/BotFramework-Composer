@@ -4,6 +4,8 @@ declare namespace SelfHostCommands {
     userEmail?: string;
     env: 'production' | 'integration';
     dest: string;
+    accessToken: string | undefined;
+    botId: string | undefined;
   }
   export interface Build {
     (argv: ARGV): Promise<string>;
@@ -34,8 +36,11 @@ declare namespace SelfHostCommands {
   }
   export interface PublishARGV {
     user: string;
+    userEmail: string | undefined;
     dest: string;
-    tag: string;
+    label: string | undefined;
+    accessToken: string | undefined;
+    botId: string | undefined;
   }
   export interface Publish {
     (argv: PublishARGV): Promise<string>;

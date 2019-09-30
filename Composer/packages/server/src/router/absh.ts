@@ -126,7 +126,11 @@ const absh: AuthProviderInit = {
             return;
           }
 
-          req.user = token;
+          req.user = {
+            decodedToken: token,
+            accessToken: bearer,
+          };
+
           next();
         });
       } catch (err) {

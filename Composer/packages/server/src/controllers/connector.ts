@@ -14,9 +14,32 @@ async function connect(req: any, res: any) {
   }
 }
 
+async function getPublishVersions(req: any, res: any) {
+  try {
+    const publishVersions = await BotConnectorService.getPublishVersions();
+    res.send(publishVersions);
+  } catch (error) {
+    res.status(400).json({
+      message: 'Unable to get publish versions: ' + (error instanceof Error ? error.message : error),
+    });
+  }
+}
+
 async function sync(req: any, res: any) {
   try {
     await BotConnectorService.sync({ ...req.body, user: req.user });
+    res.send('OK');
+  } catch (error) {
+    res.status(400).json({
+      message: error instanceof Error ? error.message : error,
+    });
+  }
+}
+
+async function publish(req: any, res: any) {
+  try {
+    const label = req.params ? req.params.label : undefined;
+    await BotConnectorService.publish({ ...req.body, user: req.user }, label);
     res.send('OK');
   } catch (error) {
     res.status(400).json({
@@ -33,4 +56,6 @@ export const BotConnectorController = {
   connect: connect,
   sync: sync,
   status: status,
+  publish: publish,
+  getPublishVersions: getPublishVersions,
 };

@@ -10,6 +10,7 @@ export class MockHostBotConnector implements IBotConnector {
 
   public status: BotStatus = BotStatus.NotConnected;
   private history: IPublishVersion[] = [];
+  private lastSync: IPublishVersion = this.createIntegrationVersion('no one');
 
   public connect = async (env: BotEnvironments, hostName: string) => {
     this.status = BotStatus.Connected;
@@ -20,7 +21,8 @@ export class MockHostBotConnector implements IBotConnector {
   };
 
   public sync = async (config: BotConfig) => {
-    // No-op
+    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
+    this.lastSync = this.createIntegrationVersion(user);
   };
 
   public getEditingStatus = async (): Promise<boolean> => {
@@ -28,11 +30,14 @@ export class MockHostBotConnector implements IBotConnector {
   };
 
   public getPublishVersions = async (): Promise<IPublishVersion[]> => {
-    return this.history;
+    let versions = [];
+    this.history.forEach(x => versions.push(x));
+    versions.push(this.lastSync);
+    return versions;
   };
 
   public publish = async (config: BotConfig, label: string) => {
-    const user = config.user ? config.user[ClaimNames.name] : 'unknown_user';
+    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
 
     this.history.forEach(x => (x.isInProduction = false));
 
@@ -73,5 +78,15 @@ export class MockHostBotConnector implements IBotConnector {
       wasInProduction: true,
       isInProduction: false,
     };
+  }
+
+  private createIntegrationVersion(user: string): IPublishVersion {
+    const timestamp = new Date();
+    const datetimeStamp = timestamp.toISOString().replace(/:/g, '.');
+    const tag = `integration_${datetimeStamp}`;
+    let version = this.createPublishVersion(user);
+    version.label = tag;
+    version.wasInProduction = false;
+    return version;
   }
 }
