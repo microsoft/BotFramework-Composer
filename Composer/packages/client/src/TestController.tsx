@@ -37,7 +37,7 @@ const STATE = {
   SUCCESS: 2,
 };
 
-const isAbsHosted = () => BASEPATH !== '' && BASEPATH !== '/';
+const isAbsHosted = () => process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
