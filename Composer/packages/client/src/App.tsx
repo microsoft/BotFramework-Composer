@@ -79,7 +79,7 @@ const topLinks = (botLoaded: boolean) => {
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.slice(1);
+    links = links.filter(link => link.to !== '/home');
   }
 
   return links;
