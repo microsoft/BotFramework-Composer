@@ -1,11 +1,12 @@
-import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
-import { DialogSetting, ReducerFunc } from '../types';
 import { get, set } from 'lodash';
 
+import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
+import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import createReducer from './createReducer';
 import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
+
+import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 

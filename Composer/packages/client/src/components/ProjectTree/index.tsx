@@ -8,14 +8,15 @@ import {
   IIconProps,
   SearchBox,
 } from 'office-ui-fabric-react';
-import { DialogInfo, ITrigger } from '../../store/types';
 import React, { useMemo, useRef, useState } from 'react';
-import { addButton, groupListStyle, root, searchBox } from './styles';
-import { createSelectedPath, getFriendlyName } from '../../utils';
-
-import { TreeItem } from './treeItem';
 import { cloneDeep } from 'lodash';
 import formatMessage from 'format-message';
+
+import { DialogInfo, ITrigger } from '../../store/types';
+import { createSelectedPath, getFriendlyName } from '../../utils';
+
+import { addButton, groupListStyle, root, searchBox } from './styles';
+import { TreeItem } from './treeItem';
 
 export function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
   return {

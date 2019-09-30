@@ -1,9 +1,10 @@
-import { Dialog, FileInfo, ITrigger } from './../interface';
-import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { has, uniq } from 'lodash';
 
+import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { DialogChecker } from '../dialogChecker';
 import { Path } from '../../../utility/path';
+
+import { Dialog, FileInfo, ITrigger } from './../interface';
 
 export class DialogIndexer {
   public dialogs: Dialog[] = [];

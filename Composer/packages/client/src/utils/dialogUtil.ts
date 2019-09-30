@@ -1,11 +1,12 @@
 import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared-menus';
 import { cloneDeep, get, set } from 'lodash';
-
-import { DialogInfo } from '../store/types';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react';
-import { getFocusPath } from './navigation';
 import nanoid from 'nanoid/generate';
+
+import { DialogInfo } from '../store/types';
+
+import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
 const ExpressionParser = new ExpressionEngine();

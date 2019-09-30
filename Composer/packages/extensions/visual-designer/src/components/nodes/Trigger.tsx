@@ -1,10 +1,13 @@
 /** @jsx jsx */
 
 import { ConceptLabels } from 'shared-menus';
-import { ElementIcon } from '../../utils/obiPropertyResolver';
-import { FormCard } from './templates/FormCard';
-import { TriggerSize } from '../../constants/ElementSizes';
 import { jsx } from '@emotion/core';
+
+import { AttrNames } from '../../constants/ElementAttributes';
+import { ElementIcon } from '../../utils/obiPropertyResolver';
+import { TriggerSize } from '../../constants/ElementSizes';
+
+import { FormCard } from './templates/FormCard';
 
 function getLabel(data: any): string {
   if (data.intent) {
