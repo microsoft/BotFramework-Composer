@@ -1,4 +1,12 @@
 {
   "$schema": "../../BotProject/CSharp/Schemas/app.schema",
-  "$type": "Microsoft.AdaptiveDialog"
+  "$type": "Microsoft.AdaptiveDialog",
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      }
+    }
+  ]
 }

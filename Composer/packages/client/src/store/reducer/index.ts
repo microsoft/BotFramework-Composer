@@ -108,6 +108,8 @@ const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
   focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
     if (file.type === FileTypes.FOLDER) {
       files.push(file);
+    } else if (file.type === FileTypes.BOT) {
+      files.push(file);
     } else {
       const path = file.path;
       const extension = getExtension(path);

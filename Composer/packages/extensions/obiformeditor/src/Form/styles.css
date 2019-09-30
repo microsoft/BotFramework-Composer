@@ -5,20 +5,35 @@
    * on fieldset does not work. :(
    */
 }
-.FormContainer fieldset {
-  border: none;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-}
-.FormContainer fieldset > p {
-  margin: 0;
-}
-.FormContainer fieldset fieldset {
-  padding: 0;
-}
-.FormContainer fieldset > * {
-  grid-column: auto / span 4;
+
+.FieldTemplate {
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px;
 }
 
+.FieldTemplate--inline {
+  flex-direction: row;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.FieldTemplate--inline>label {
+  margin-right: 8px;
+  margin-top: 0;
+}
+
+.FieldTemplate--reverse {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.FieldTemplate--reverse>label {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.FieldTemplateInfo:focus {
+  outline: 1px solid #323130;
+}
