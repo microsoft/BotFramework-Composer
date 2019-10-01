@@ -59,7 +59,7 @@ export class CSharpBotConnector implements IBotConnector {
       );
     }
 
-    config = { ...(await BotProjectService.currentBotProject.settingManager.get()), ...config };
+    config = { ...(await BotProjectService.currentBotProject.settingManager.get(false, 'integration')), ...config };
     if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
