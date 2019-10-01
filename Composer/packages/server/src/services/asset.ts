@@ -5,7 +5,7 @@ class AssetService {
   public manager: AssetManager;
 
   constructor() {
-    this.manager = new AssetManager(settings.assetsLibray);
+    this.manager = new AssetManager(settings.assetsLibray, settings.runtimeFolder);
   }
 }
 

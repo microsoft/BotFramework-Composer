@@ -33,18 +33,38 @@ const templates: TemplateData = {
   },
 };
 
+const runtimes: TemplateData = {
+  CSharp: {
+    name: 'CSharp Runtime',
+    description: 'A Bot Framework runtime using the CSharp/dotnet version of the SDK',
+  },
+};
+
+// set a default runtime template.
+// when we have multiple runtimes this will be a parameter.
+const DEFAULT_RUNTIME: string = 'CSharp';
+
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
-  private assetsLibrayPath: string;
+  private assetsLibraryPath: string;
+  private runtimesPath: string;
   private projectTemplates: IProjectTemplate[] = [];
+  private runtimeTemplates: IProjectTemplate[] = [];
 
-  constructor(assetsLibrayPath: string) {
-    this.assetsLibrayPath = assetsLibrayPath;
+  constructor(assetsLibraryPath: string, runtimesPath: string) {
+    this.assetsLibraryPath = assetsLibraryPath;
+    this.runtimesPath = runtimesPath;
     this.templateStorage = new LocalDiskStorage();
+
+    // initialize the list of project tempaltes
+    this.getProjectTemplate();
+
+    // initialize the list of runtimes.
+    this.getProjectRuntime();
   }
 
   public async getProjectTemplate() {
-    const path = this.assetsLibrayPath + '/projects';
+    const path = this.assetsLibraryPath + '/projects';
     const output = [];
 
     if (await this.templateStorage.exists(path)) {
@@ -63,11 +83,37 @@ export class AssetManager {
     return output;
   }
 
+  public async getProjectRuntime() {
+    const path = this.runtimesPath;
+    const output = [];
+
+    if (await this.templateStorage.exists(path)) {
+      const folders = await this.templateStorage.readDir(path);
+      this.runtimeTemplates = [];
+      for (const name of folders) {
+        const absPath = Path.join(path, name);
+        if ((await this.templateStorage.stat(absPath)).isDir) {
+          const base = { id: name, name: runtimes[name].name, description: runtimes[name].description };
+          this.runtimeTemplates.push({ ...base, path: absPath });
+          output.push(base);
+        }
+      }
+    }
+
+    return output;
+  }
+
   public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
     }
+
+    const runtime = find(this.runtimeTemplates, { id: DEFAULT_RUNTIME });
+    if (runtime === undefined || runtime.path === undefined) {
+      throw new Error(`no such runtime with id ${DEFAULT_RUNTIME}`);
+    }
+
     // user storage maybe diff from template storage
     const dstStorage = StorageService.getStorageClient(ref.storageId);
     const dstDir = Path.resolve(ref.path);
@@ -75,7 +121,12 @@ export class AssetManager {
       throw new Error('already have this folder, please give another name');
     }
 
+    // copy Composer data files
     await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+
+    // copy runtime code files
+    await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
+
     return ref;
   }
 }

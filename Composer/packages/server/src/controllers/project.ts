@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { merge } from 'lodash';
 
 import ProjectService from '../services/project';
-import AssectService from '../services/asset';
+import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings/settings.json';
@@ -36,7 +36,7 @@ async function createProject(req: Request, res: Response) {
   };
 
   try {
-    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef);
+    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef);
     await ProjectService.openProject(newProjRef);
     if (ProjectService.currentBotProject !== undefined) {
       await ProjectService.currentBotProject.updateBotInfo(name, description);
