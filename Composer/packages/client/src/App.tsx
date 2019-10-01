@@ -19,63 +19,71 @@ initializeIcons(undefined, { disableWarnings: true });
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (botLoaded: boolean) => [
-  {
-    to: '/home',
-    iconName: 'Home',
-    labelName: 'Home',
-    activeIfUrlContains: 'home',
-    exact: true,
-  },
-  {
-    to: '/dialogs/Main',
-    iconName: 'SplitObject',
-    labelName: 'Design Flow',
-    activeIfUrlContains: 'dialogs',
-    exact: false,
-    underTest: !botLoaded,
-  },
-  {
-    to: '/test-conversation',
-    iconName: 'WaitListConfirm',
-    labelName: 'Test Conversation',
-    activeIfUrlContains: '',
-    exact: false,
-    underTest: true, // will delete
-  },
-  {
-    to: 'language-generation/',
-    iconName: 'Robot',
-    labelName: 'Bot Says',
-    activeIfUrlContains: 'language-generation',
-    exact: false,
-    underTest: !botLoaded,
-  },
-  {
-    to: 'language-understanding/',
-    iconName: 'People',
-    labelName: 'User Says',
-    activeIfUrlContains: 'language-understanding',
-    exact: false,
-    underTest: !botLoaded,
-  },
-  {
-    to: '/evaluate-performance',
-    iconName: 'Chart',
-    labelName: 'Evaluate performance',
-    activeIfUrlContains: '',
-    exact: false,
-    underTest: true, // will delete
-  },
-  {
-    to: '/setting/',
-    iconName: 'Settings',
-    labelName: 'Settings',
-    activeIfUrlContains: 'setting',
-    exact: false,
-    underTest: !botLoaded,
-  },
-];
+const topLinks = (botLoaded: boolean) => {
+  let links = [
+    {
+      to: '/home',
+      iconName: 'Home',
+      labelName: 'Home',
+      activeIfUrlContains: 'home',
+      exact: true,
+    },
+    {
+      to: '/dialogs/Main',
+      iconName: 'SplitObject',
+      labelName: 'Design Flow',
+      activeIfUrlContains: 'dialogs',
+      exact: false,
+      underTest: !botLoaded,
+    },
+    {
+      to: '/test-conversation',
+      iconName: 'WaitListConfirm',
+      labelName: 'Test Conversation',
+      activeIfUrlContains: '',
+      exact: false,
+      underTest: true, // will delete
+    },
+    {
+      to: 'language-generation/',
+      iconName: 'Robot',
+      labelName: 'Bot Says',
+      activeIfUrlContains: 'language-generation',
+      exact: false,
+      underTest: !botLoaded,
+    },
+    {
+      to: 'language-understanding/',
+      iconName: 'People',
+      labelName: 'User Says',
+      activeIfUrlContains: 'language-understanding',
+      exact: false,
+      underTest: !botLoaded,
+    },
+    {
+      to: '/evaluate-performance',
+      iconName: 'Chart',
+      labelName: 'Evaluate performance',
+      activeIfUrlContains: '',
+      exact: false,
+      underTest: true, // will delete
+    },
+    {
+      to: '/setting/',
+      iconName: 'Settings',
+      labelName: 'Settings',
+      activeIfUrlContains: 'setting',
+      exact: false,
+      underTest: !botLoaded,
+    },
+  ];
+
+  if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
+    links = links.filter(link => link.to !== '/home');
+  }
+
+  return links;
+};
 
 const bottomLinks = [
   {
