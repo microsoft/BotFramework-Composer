@@ -1,17 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { RichEditor } from 'code-editor';
-import * as Monaco from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { BFDFieldProps } from '../types';
 
 import { BaseField } from './BaseField';
 
-const focusEditor = (editor: Monaco.editor.IStandaloneCodeEditor | null): void => {
-  if (editor !== null) {
-    editor.focus();
-  }
-};
+const LG_HELP =
+  'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 
 const getInitialTemplate = (formData?: string): string => {
   let newTemplate = formData || '';
@@ -88,14 +84,7 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
             paddingBottom: '19px',
           }}
         >
-          <RichEditor
-            editorDidMount={editor => {
-              focusEditor(editor);
-            }}
-            errorMsg={errorMsg}
-            value={Body}
-            onChange={onChange}
-          />
+          <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} helpURL={LG_HELP} />
         </div>
       </BaseField>
     </div>

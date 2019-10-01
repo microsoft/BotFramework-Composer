@@ -10,9 +10,10 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
+import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { BASEPATH, BotStatus, LuisConfig, Text } from './constants';
+import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
@@ -36,7 +37,7 @@ const STATE = {
   SUCCESS: 2,
 };
 
-const isAbsHosted = () => BASEPATH !== '' && BASEPATH !== '/';
+const isAbsHosted = () => process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
@@ -46,7 +47,7 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, botEndpoint, dialogs, toStartBot, luFiles, settings } = state;
+  const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
@@ -99,8 +100,9 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setFetchState(STATE.PUBLISHING);
     try {
-      if (settings.luis) {
-        await publishLuis(settings.luis.authoringKey);
+      const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
+      if (luisConfig) {
+        await publishLuis(luisConfig.authoringKey);
         return true;
       } else {
         throw new Error('Please Set Luis Config');
@@ -117,7 +119,8 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      await (connected ? reloadBot(settings) : connectBot(settings));
+      const sensitiveSettings = settingsStorage.get(botName);
+      await (connected ? reloadBot(sensitiveSettings) : connectBot(sensitiveSettings));
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
@@ -136,7 +139,7 @@ export const TestController: React.FC = () => {
             }}
             onClick={() =>
               openInEmulator(
-                botEndpoint || 'http://localhost:3979/api/messages',
+                'http://localhost:3979/api/messages', // todo: this is broken botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword
                   ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                   : { MicrosoftAppPassword: '', MicrosoftAppId: '' }

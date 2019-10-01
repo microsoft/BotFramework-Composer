@@ -21,12 +21,10 @@ function getLabel(data: any): string {
   return data.$type;
 }
 
-export const Trigger = ({ data, focused, onClick }): JSX.Element => (
+export const Trigger = ({ id, data, onClick = () => {} }): JSX.Element => (
   <div
     css={{
       ...TriggerSize,
-      outline: focused ? '1px solid #0078d4' : 'none',
-      '&:hover': !focused && { outline: '1px solid #323130' },
     }}
   >
     <FormCard

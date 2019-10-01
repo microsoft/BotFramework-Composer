@@ -4,6 +4,7 @@ import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
+import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
@@ -46,13 +47,41 @@ const nodeBorderSelectedStyle = css`
   outline: 1px solid #0078d4;
 `;
 
+const nodeBorderDoubleSelectedStyle = css`
+  box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
+`;
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
-
+  let elementType = '';
+  let doubleSelected = false;
+  switch (data.$type) {
+    case ObiTypes.BotAsks:
+    case ObiTypes.UserAnswers:
+    case ObiTypes.InvalidPromptBrick:
+      elementType = data.$type;
+      doubleSelected = true;
+      break;
+    default:
+      elementType = '';
+      doubleSelected = false;
+      break;
+  }
+  const selectedId = `${id}${elementType}`;
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
   const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
-  const nodeSelected = selectedIds.includes(id);
+  const nodeSelected = selectedIds.includes(selectedId);
+
+  const declareElementAttributes = (selectedId: string, id: string) => {
+    return {
+      [AttrNames.SelectableElement]: true,
+      [AttrNames.NodeElement]: true,
+      [AttrNames.FocusedId]: id,
+      [AttrNames.SelectedId]: selectedId,
+      [AttrNames.FocusableElement]: true,
+      [AttrNames.SelectionIndex]: getNodeIndex(id),
+    };
+  };
 
   return (
     <div
@@ -64,19 +93,18 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
+        ${nodeSelected && !doubleSelected && nodeBorderSelectedStyle};
+        ${nodeSelected && doubleSelected && nodeBorderDoubleSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
-        ${nodeSelected && nodeBorderSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
-      data-is-focusable={true}
-      data-selection-index={getNodeIndex(id)}
+      {...declareElementAttributes(selectedId, id)}
     >
       <ChosenRenderer
         id={id}
         data={data}
-        focused={nodeFocused}
         onEvent={onEvent}
         onResize={size => {
           onResize(size, 'element');

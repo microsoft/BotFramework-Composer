@@ -3,15 +3,13 @@ name: Bot Framework Composer Bug
 about: Create a report for a bug you found in the Bot Framework Composer (including
   documentation)
 title: ''
-labels: 'Type: bug'
+labels: 'Needs-triage, Type: bug'
 assignees: ''
 
 ---
 
-### [Github issues](https://github.com/Microsoft/botframework-emulator/issues) should be used for bugs and feature requests. Use [Stack Overflow](https://stackoverflow.com/questions/tagged/botframework) for general "how-to" questions. 
-
 ## Version
-What version of the Emulator are you using.
+What version of the Composer are you using? Paste the build SHA found on the about page.
 
 ## Describe the bug
 Give a clear and concise description of what the bug is.
@@ -31,5 +29,3 @@ If applicable, add screenshots to help explain your problem.
 
 ## Additional context
 Add any other context about the problem here.
-
-[bug]

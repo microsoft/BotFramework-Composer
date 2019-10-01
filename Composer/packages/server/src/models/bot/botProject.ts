@@ -80,8 +80,14 @@ export class BotProject {
   };
 
   private getDialogSetting = async () => {
-    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return { ...(await this.settingManager.get())!, ...oauthInput() };
+    const settings = await this.settingManager.get();
+    if (settings && oauthInput().MicrosoftAppId !== '') {
+      settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
+    }
+    if (settings && oauthInput().MicrosoftAppPassword !== '') {
+      settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
+    }
+    return settings;
   };
 
   // create or update dialog settings

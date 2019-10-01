@@ -9,7 +9,7 @@ import ObjectFieldTemplate from './ObjectFieldTemplate';
 import FieldTemplate from './FieldTemplate';
 import { FormContext } from './types';
 
-import './styles.scss';
+import './styles.css';
 
 function removeUndefinedOrEmpty(object: any): any {
   if (object === null) {

@@ -1,6 +1,16 @@
 import { JSONSchema6 } from 'json-schema';
 
-export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'inputBindings', 'outputBinding', 'selector'];
+export const FIELDS_TO_HIDE = [
+  '$id',
+  '$type',
+  '$copy',
+  '$designer',
+  'inputBindings',
+  'outputBinding',
+  'selector',
+  'id',
+  'tags',
+];
 /** Types that can be represented by a sub tree in the graph */
 export const COMPOUND_TYPES = [
   'Microsoft.AdaptiveDialog',

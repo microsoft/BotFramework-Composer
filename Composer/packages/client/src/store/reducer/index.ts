@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc } from '../types';
+import { ReducerFunc, DialogSetting } from '../types';
 import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import settingStorage from '../../utils/dialogSettingStorage';
@@ -18,17 +18,32 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.settings = response.data.settings;
-  // merge setting in localStorage
-  const localSetting = settingStorage.get(response.data.botName);
+  refreshLocalStorage(response.data.botName, state.settings);
+  mergeLocalStorage(response.data.botName, state.settings);
+  return state;
+};
+
+// if user set value in terminal or appsetting.json, it should update the value in localStorage
+const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
+  for (const property of SensitiveProperties) {
+    const value = get(settings, property);
+    if (value) {
+      settingStorage.setField(botName, property, value);
+    }
+  }
+};
+
+// merge sensitive values in localStorage
+const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(botName);
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
       if (value) {
-        set(state.settings as object, property, value);
+        set(settings, property, value);
       }
     }
   }
-  return state;
 };
 
 const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
@@ -91,6 +106,8 @@ const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
   const focusedStorageFolder = response.data;
   focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
     if (file.type === FileTypes.FOLDER) {
+      files.push(file);
+    } else if (file.type === FileTypes.BOT) {
       files.push(file);
     } else {
       const path = file.path;
