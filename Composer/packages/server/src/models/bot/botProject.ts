@@ -36,6 +36,7 @@ export class BotProject {
   public defaultEditorSchema: { [key: string]: string };
   public settingManager: SettingManager;
   public settings: DialogSetting | null = null;
+  public productionSettings: DialogSetting | null = null;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -56,7 +57,8 @@ export class BotProject {
 
   public index = async () => {
     this.files = await this._getFiles();
-    this.settings = await this.getDialogSetting();
+    this.settings = await this.getEnvSettings(false, 'integration');
+    this.productionSettings = await this.getEnvSettings(false, 'production');
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
@@ -76,23 +78,24 @@ export class BotProject {
       schemas: this.getSchemas(),
       botEnvironment: absHosted ? this.name : undefined,
       settings: this.settings,
+      productionSettings: this.productionSettings,
     };
   };
 
-  private getDialogSetting = async () => {
-    const settings = await this.settingManager.get();
-    if (settings && oauthInput().MicrosoftAppId !== '') {
+  public getEnvSettings = async (hideValues: boolean, env: 'integration' | 'production') => {
+    const settings = await this.settingManager.get(hideValues, env);
+    if (settings && oauthInput().MicrosoftAppId !== '*****') {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
-    if (settings && oauthInput().MicrosoftAppPassword !== '') {
+    if (settings && oauthInput().MicrosoftAppPassword !== '*****') {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
     }
     return settings;
   };
 
   // create or update dialog settings
-  public updateEnvSettings = async (config: DialogSetting) => {
-    await this.settingManager.set(config);
+  public updateEnvSettings = async (config: DialogSetting, env: 'integration' | 'production') => {
+    await this.settingManager.set(config, env);
     await this.luPublisher.setLuisConfig(config.luis);
   };
 

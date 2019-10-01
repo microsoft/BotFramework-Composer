@@ -234,10 +234,27 @@ async function createLuFile(req: Request, res: Response) {
   }
 }
 
+async function getEnvSettings(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    try {
+      const settings = await ProjectService.currentBotProject.getEnvSettings(req.query.hideValues, req.params.env);
+      res.send(settings);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      await ProjectService.currentBotProject.updateEnvSettings(req.body.settings);
+      await ProjectService.currentBotProject.updateEnvSettings(req.body.settings, req.params.env);
       res.send('ok');
     } catch (err) {
       res.status(404).json({
@@ -300,6 +317,7 @@ export const ProjectController = {
   updateLgFile,
   createLgFile,
   removeLgFile,
+  getEnvSettings,
   updateEnvSettings,
   updateLuFile,
   createLuFile,

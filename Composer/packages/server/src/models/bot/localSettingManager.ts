@@ -3,6 +3,7 @@ import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { DialogSetting, ISettingManager } from './interface';
 
 const subPath = 'settings/appsettings.json';
+const unknown = 'unknown';
 
 const defaultSetting: DialogSetting = {
   MicrosoftAppPassword: '',
@@ -17,7 +18,7 @@ const defaultSetting: DialogSetting = {
   },
 };
 
-export class SettingManager implements ISettingManager {
+export class LocalSettingManager implements ISettingManager {
   private basePath: string;
   private storage: LocalDiskStorage;
   private settings: any;
@@ -28,32 +29,36 @@ export class SettingManager implements ISettingManager {
     this.settings = {};
   }
 
-  public get = async (hideValues: boolean, env: 'integration' | 'production'): Promise<DialogSetting | null> => {
+  public get = async (
+    hideValues: boolean,
+    env?: 'editing' | 'integration' | 'production'
+  ): Promise<DialogSetting | null> => {
     let settings: DialogSetting;
+    let envKey = env ? env : unknown;
 
-    if (this.settings[env]) {
+    if (env && this.settings[env]) {
       settings = this.settings;
     } else {
       let path = this.getPath(env);
-      settings = await this._getFromStorage(path, env);
-      this.settings[env] = settings;
+      settings = await this._getFromStorage(path);
+      this.settings[envKey] = settings;
     }
 
     return hideValues ? this.obfuscateValues(settings) : settings;
   };
 
-  private _getFromStorage = async (path: string, env: 'integration' | 'production') => {
+  private _getFromStorage = async (path: string) => {
     if (await this.storage.exists(path)) {
       const file = await this.storage.readFile(path);
       return JSON.parse(file);
     } else {
       // does not have setting file, return default value
-      await this.set(defaultSetting, env);
+      await this.set(defaultSetting);
       return defaultSetting;
     }
   };
 
-  public set = async (settings: DialogSetting, env: 'integration' | 'production'): Promise<void> => {
+  public set = async (settings: DialogSetting, env?: 'editing' | 'integration' | 'production'): Promise<void> => {
     let path = this.getPath(env);
 
     const dir = Path.dirname(path);
@@ -61,8 +66,6 @@ export class SettingManager implements ISettingManager {
       await this.storage.mkDir(dir, { recursive: true });
     }
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));
-
-    this.settings[env] = settings;
   };
 
   private obfuscateValues = (obj: any): any => {
@@ -85,7 +88,7 @@ export class SettingManager implements ISettingManager {
     return '*****';
   };
 
-  private getPath = (env: 'integration' | 'production'): string => {
-    return Path.join(this.basePath, env, subPath);
+  private getPath = (env?: 'editing' | 'integration' | 'production'): string => {
+    return env ? Path.join(this.basePath, env, subPath) : Path.join(this.basePath, subPath);
   };
 }
