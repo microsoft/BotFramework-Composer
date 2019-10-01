@@ -2,7 +2,8 @@ import React, { Fragment, useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import {
   Stack,
-  Dropdown,
+  // Dropdown,
+  ComboBox,
   DialogFooter,
   PrimaryButton,
   DefaultButton,
@@ -13,14 +14,15 @@ import {
 import { StoreContext } from '../../../store';
 
 import { styles } from './styles';
-
-// TODO: get a complete list of azure regions
-const regionOptions = [{ key: 'westus', text: 'westus' }];
+// TODO: verify that this is the correct/complete list of azure regions
+// https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.documents.locationnames?view=azure-dotnet
+import { regionOptions } from './luisRegions.js';
 
 export const DeployWizardStepCreate = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
   const { botName, location } = state;
+  const [disable, setDisable] = useState(false);
   const [formData, setFormData] = useState({
     name: botName,
     location: location,
@@ -36,14 +38,25 @@ export const DeployWizardStepCreate = props => {
       errors: {},
       [field]: newValue,
     });
+    setDisable(false);
   };
 
   // todo: disable the next button until its valid
   // todo: do not autocomplete app secret
   const validateForm = () => {
     const errors = {};
-    if (validateSecret(formData.secret) !== undefined) {
+
+    if (validateSecret(formData.secret) !== true) {
       errors.secret = validateSecret(formData.secret);
+    }
+    if (validateName(formData.name) !== true) {
+      errors.name = validateName(formData.name);
+    }
+    if (validateEnvironment(formData.environment) !== true) {
+      errors.environment = validateName(formData.environment);
+    }
+    if (validateRegion(formData.region) !== true) {
+      errors.region = validateRegion(formData.region);
     }
 
     setFormData({
@@ -52,22 +65,58 @@ export const DeployWizardStepCreate = props => {
     });
 
     if (Object.keys(errors).length) {
-      console.log('found some errors', errors);
+      setDisable(true);
       return false;
+    }
+    setDisable(false);
+    return true;
+  };
+
+  const validateName = name => {
+    if (name.length === 0) {
+      return formatMessage('Bot name is a required field');
     }
     return true;
   };
-  // TODO: enhance validation of secret value
+
+  const validateEnvironment = name => {
+    if (name.length === 0) {
+      return formatMessage('Environment name is a required field');
+    }
+    return true;
+  };
+
+  const validateRegion = region => {
+    if (!region || !region.key) {
+      return formatMessage('Azure region is a required field');
+    }
+    if (
+      regionOptions.filter(r => {
+        return r.key === region.key;
+      }).length === 0
+    ) {
+      return formatMessage('Select an Azure region from the list');
+    }
+    return true;
+  };
+
   // 16 characters at least one special char
   const validateSecret = val => {
-    console.log('validate secret', val);
-    setFormData({
-      ...formData,
-      errors: {},
-    });
     if (val.length !== 16) {
       return formatMessage('App secret must be exactly 16 characters long');
     }
+    if (!val.match(/[a-z]/i)) {
+      return formatMessage('App secret must contain at least 1 alpha character');
+    }
+    if (!val.match(/[0-9]/)) {
+      return formatMessage('App secret must contain at least 1 number');
+    }
+    // eslint-disable-next-line no-useless-escape
+    if (!val.match(/[!@$%^&#\?\.\+\*_\-\(\)\[\]]/)) {
+      return formatMessage('App secret must contain at least 1 special character');
+    }
+
+    return true;
   };
 
   const submit = e => {
@@ -127,7 +176,7 @@ export const DeployWizardStepCreate = props => {
           <StackItem align="end" grow={1} styles={styles.halfstack}>
             <p>
               {formatMessage(
-                'A 16-character secret used to securely identify and validate your bot. Must include at least 1 special character.'
+                'A 16-character secret used to securely identify and validate your bot. Must include at least 1 number and 1 special character.'
               )}
             </p>
           </StackItem>
@@ -135,7 +184,7 @@ export const DeployWizardStepCreate = props => {
 
         <Stack horizontal gap="2rem" styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
-            <Dropdown
+            <ComboBox
               label={formatMessage('Azure Region')}
               styles={styles.input}
               options={regionOptions}
@@ -143,6 +192,7 @@ export const DeployWizardStepCreate = props => {
               errorMessage={formData.errors.region}
               data-testid="region"
               required
+              autoComplete={'on'}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -152,7 +202,7 @@ export const DeployWizardStepCreate = props => {
 
         <DialogFooter>
           <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Next')} />
+          <PrimaryButton onClick={submit} text={formatMessage('Next')} disabled={disable} />
         </DialogFooter>
       </form>
     </Fragment>
