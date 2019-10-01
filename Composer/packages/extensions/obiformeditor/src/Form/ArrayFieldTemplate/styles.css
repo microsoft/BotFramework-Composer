@@ -10,6 +10,9 @@
 .ArrayItem .ArrayItemField .ObjectFieldTemplate > .BaseField {
   margin-top: 0;
 }
+.ArrayItem .FieldTemplate {
+  padding: 0;
+}
 .ArrayItem .ArrayItemContext {
   flex-basis: auto;
   margin-left: 15px;
