@@ -7,6 +7,7 @@ import { JSONSchema6 } from 'json-schema';
 import { TextareaWidget } from '../../widgets';
 
 import { Validations } from './Validations';
+import { field } from './styles';
 
 const getSchema = (schema: JSONSchema6, field: keyof MicrosoftInputDialog): JSONSchema6 => {
   const fieldSchema = get(schema, ['properties', field]);
@@ -19,32 +20,49 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
 
   const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
     if (onChange) {
-      console.log('data', data);
       onChange({ ...props.formData, [field]: data });
     }
   };
 
   return (
     <>
-      <TextareaWidget
-        {...rest}
-        onChange={handleChange}
-        schema={getSchema(schema, 'unrecognizedPrompt')}
-        id={idSchema.unrecognizedPrompt.__id}
-        value={formData.unrecognizedPrompt}
-        label={formatMessage('Unrecognized Prompt')}
-        formContext={props.formContext}
-        rawErrors={errorSchema.unrecognizedPrompt && errorSchema.unrecognizedPrompt.__errors}
-        options={{}}
-        onFocus={() => {}}
-        onBlur={() => {}}
-      />
+      <div css={field}>
+        <TextareaWidget
+          {...rest}
+          onChange={handleChange}
+          schema={getSchema(schema, 'unrecognizedPrompt')}
+          id={idSchema.unrecognizedPrompt.__id}
+          value={formData.unrecognizedPrompt}
+          label={formatMessage('Unrecognized Prompt')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.unrecognizedPrompt && errorSchema.unrecognizedPrompt.__errors}
+          options={{}}
+          onFocus={() => {}}
+          onBlur={() => {}}
+        />
+      </div>
       <Validations
         onChange={handleChange('validations')}
         formData={props.formData.validations || []}
         schema={getSchema(schema, 'validations')}
         id={idSchema.validations.__id}
+        formContext={props.formContext}
       />
+      <div css={field}>
+        <TextareaWidget
+          {...rest}
+          onChange={handleChange}
+          schema={getSchema(schema, 'invalidPrompt')}
+          id={idSchema.invalidPrompt.__id}
+          value={formData.invalidPrompt}
+          label={formatMessage('Invalid Prompt')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.invalidPrompt && errorSchema.invalidPrompt.__errors}
+          options={{}}
+          onFocus={() => {}}
+          onBlur={() => {}}
+        />
+      </div>
     </>
   );
 };

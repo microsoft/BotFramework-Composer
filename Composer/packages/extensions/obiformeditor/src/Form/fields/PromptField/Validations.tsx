@@ -3,13 +3,14 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { TextField, IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
+import { IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { WidgetLabel } from '../../widgets/WidgetLabel';
 import { swap, remove } from '../../utils';
+import { ExpressionWidget } from '../../widgets/ExpressionWidget';
+import { FormContext } from '../../types';
 
-import { validationItem, validationItemValue } from './styles';
+import { validationItem, validationItemValue, field } from './styles';
 
 interface ValidationItemProps {
   index: number;
@@ -53,7 +54,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
   ];
 
   return (
-    <div css={validationItem}>
+    <div css={[validationItem, field]}>
       <div css={validationItemValue}>{value}</div>
       <IconButton
         menuProps={{ items: contextItems }}
@@ -70,12 +71,12 @@ interface ValidationsProps {
   formData: string[];
   schema: JSONSchema6;
   id: string;
+  formContext: FormContext;
 }
 
 export const Validations: React.FC<ValidationsProps> = props => {
-  const { schema, id, formData } = props;
+  const { schema, id, formData, formContext } = props;
   const [newValidation, setNewValidation] = useState<string>('');
-  console.log('props', formData);
 
   const handleChange = (_e: any, newValue?: string) => {
     setNewValidation(newValue || '');
@@ -83,7 +84,6 @@ export const Validations: React.FC<ValidationsProps> = props => {
 
   const submitNewValidation = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.toLowerCase() === 'enter') {
-      console.log('in submit', newValidation);
       e.preventDefault();
 
       if (newValidation) {
@@ -103,14 +103,17 @@ export const Validations: React.FC<ValidationsProps> = props => {
 
   return (
     <div>
-      <div>
-        <WidgetLabel label={formatMessage('Validation Rules')} description={schema.description} id={id} />
-        <TextField
+      <div css={field}>
+        <ExpressionWidget
+          label={formatMessage('Validation Rules')}
           id={id}
           value={newValidation}
           onChange={handleChange}
           placeholder={formatMessage('Add new validation rule here')}
           onKeyDown={submitNewValidation}
+          schema={schema}
+          formContext={formContext}
+          rawErrors={[]}
         />
       </div>
       <div>

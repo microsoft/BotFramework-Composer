@@ -34,3 +34,7 @@ export const validationItem = css`
 export const validationItemValue = css`
   flex: 1;
 `;
+
+export const field = css`
+  margin: 10px 0;
+`;

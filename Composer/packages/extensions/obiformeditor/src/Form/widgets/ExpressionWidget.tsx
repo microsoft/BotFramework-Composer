@@ -55,7 +55,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
   return (
     <>
       <WidgetLabel label={label} description={description} id={id} />
-      <TextField {...rest} id={id} onGetErrorMessage={onGetErrorMessage} />
+      <TextField {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
     </>
   );
 };
