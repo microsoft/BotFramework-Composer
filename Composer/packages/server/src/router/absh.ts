@@ -130,7 +130,6 @@ const absh: AuthProviderInit = {
             decodedToken: token,
             accessToken: bearer,
           };
-
           next();
         });
       } catch (err) {

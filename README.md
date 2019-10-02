@@ -13,6 +13,9 @@ Bot Framework Composer is an integrated development environment (IDE) for buildi
 
 Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK without writing code. The Composer app reads and writes from the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a [declarative](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog/declarative) JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates. 
 
+## Documentation
+The documentation for Composer [can be found here](/blob/master/docs/).
+
 ## Get Started
 To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
 
@@ -28,7 +31,7 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 
 Next,you have two options for running Composer locally:
 * [Using a docker image](#Using-docker-image) (Recommended) 
-* [Build and run Composer](#Build-and-run-Composer)
+* [Build and run Composer locally](#Build-and-run-Composer)
 
 
 ### Using docker image 
@@ -39,6 +42,7 @@ Using a docker provides a more controled and isolated environment for you to run
 * [docker-compose](https://docs.docker.com/compose/install/)
 * [docker](https://www.docker.com/)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+* [.NET Core SDK](https://dotnet.microsoft.com/download)
 
   NOTE: If you follow the instructions of installing docker for Windows or MacOs, the Docker Desktop  and Docker Toolbox already include Compose along with other Docker apps, so most  users do not need to install Compose separately.  
 
@@ -90,6 +94,7 @@ With this option you need to use [Yarn](https://yarnpkg.com) to build the Compos
 * [Node.js](https://nodejs.org/en/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
+* [.NET Core SDK 2.2.109](https://dotnet.microsoft.com/download)
 
 
 #### Instructions
@@ -108,9 +113,9 @@ yarn build
 This command build the Composer app. The build process can take few minutes.
 
 ```
-yarn start
+yarn startall
 ```
-This command runs the Composer app. 
+This command starts the Composer authoring application and the CSharp Bot runtime. 
 
  To use Composer, open a browser and navigate to http://localhost:3000
  
