@@ -1,0 +1,40 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+name: Composer E2E
+
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-16.04
+
+steps:
+  - task: NodeTool@0
+    displayName: "Use Node 10.15.3"
+    inputs:
+      versionSpec: 10.15.3
+  - script: cd Composer && yarn install
+    displayName: "yarn install"
+  - script: cd Composer && yarn build
+    displayName: "yarn build"
+  - script: cd Composer && yarn test:integration
+    displayName: yarn test:integration
+    env:
+      CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/cypress/screenshots
+      CYPRESS_COMPOSER_URL: http://localhost:5000
+  - task: PublishBuildArtifacts@1
+    condition: failed()
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)/cypress"
+      artifactName: cypress
+  - task: PublishTestResults@2
+    displayName: Publish E2E Test Results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "**/cypress/results/results-*.xml"
+      testRunTitle: E2E Tests
+      mergeTestResults: true

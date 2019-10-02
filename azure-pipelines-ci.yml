@@ -1,0 +1,61 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+name: Composer CI
+
+trigger:
+  - master
+
+jobs:
+  - job: botproject
+    displayName: BotProject Build&Test
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: "build"
+          projects: "BotProject/CSharp/BotProject.csproj"
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: "build"
+          projects: "BotProject/CSharp/Tests/Tests.csproj"
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: "test"
+          projects: "BotProject/CSharp/Tests/Tests.csproj"
+  - job: test
+    displayName: Unit Tests
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - task: NodeTool@0
+        displayName: "Use Node 10.15.3"
+        inputs:
+          versionSpec: 10.15.3
+      - script: cd Composer && yarn install
+        displayName: "yarn install"
+      - script: cd Composer && yarn build
+        displayName: "yarn build"
+      - script: cd Composer && yarn lint
+        displayName: "yarn lint"
+      - script: cd Composer && yarn test:coverage
+        displayName: "yarn test:coverage"
+        condition: succeededOrFailed()
+      - task: PublishCodeCoverageResults@1
+        displayName: "Publish code coverage from Composer/coverage/cobertura-coverage.xml"
+        condition: succeededOrFailed()
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "Composer/coverage/cobertura-coverage.xml"
+          reportDirectory: "Composer/coverage/lcov-report"
+      - task: PublishTestResults@2
+        displayName: Publish Unit Test Results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: "JUnit"
+          testResultsFiles: "**/junit.xml"
+          testRunTitle: Unit Tests
+          mergeTestResults: true
