@@ -89,4 +89,8 @@ jobs:
         testResultsFiles: '**/cypress/results/results-*.xml'
         testRunTitle: E2E Tests
         mergeTestResults: true
+  - job: security
+    displayName: Security Analysis
+    steps:
+      - task: ComponentGovernanceComponentDetection@0
 
