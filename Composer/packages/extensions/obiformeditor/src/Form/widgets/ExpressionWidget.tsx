@@ -24,7 +24,7 @@ const getErrorMessage = () =>
 
 interface ExpresionWidgetProps extends ITextFieldProps {
   formContext: FormContext;
-  rawErrors: string[];
+  rawErrors?: string[];
   schema: JSONSchema6;
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
 }

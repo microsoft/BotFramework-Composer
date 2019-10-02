@@ -1,4 +1,5 @@
 import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
+import { JSONSchema6 } from 'json-schema';
 
 import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
 
@@ -28,7 +29,10 @@ export interface BFDFieldProps extends FieldProps {
   formContext: FormContext;
 }
 
-export interface BFDWidgetProps extends WidgetProps {
+export interface BFDWidgetProps extends Partial<WidgetProps> {
+  id: string;
+  schema: JSONSchema6;
+  onChange: (data: any) => void;
   formContext: FormContext;
   options: {
     label?: string | false;

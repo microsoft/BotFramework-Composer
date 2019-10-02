@@ -1,10 +1,11 @@
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
+
+import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
 
-export function CheckboxWidget(props: WidgetProps) {
+export function CheckboxWidget(props: BFDWidgetProps) {
   const { onChange, onBlur, onFocus, value, label, id, schema } = props;
   const { description } = schema;
 
@@ -14,10 +15,15 @@ export function CheckboxWidget(props: WidgetProps) {
         id={id}
         checked={Boolean(value)}
         onChange={(_, checked?: boolean) => onChange(checked)}
-        onBlur={() => onBlur(id, Boolean(value))}
-        onFocus={() => onFocus(id, Boolean(value))}
+        onBlur={() => onBlur && onBlur(id, Boolean(value))}
+        onFocus={() => onFocus && onFocus(id, Boolean(value))}
       />
       <WidgetLabel label={label} description={description} id={id} inline />
     </div>
   );
 }
+
+CheckboxWidget.defaultProps = {
+  schema: {},
+  options: {},
+};

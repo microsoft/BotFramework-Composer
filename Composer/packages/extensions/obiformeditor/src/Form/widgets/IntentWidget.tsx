@@ -91,9 +91,9 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
       <WidgetLabel label={label} description={description} id={id} />
       <Dropdown
         id={id.replace(/\.|#/g, '')}
-        onBlur={() => onBlur(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
         onChange={handleChange}
-        onFocus={() => onFocus(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         options={options}
         selectedKey={value || null}
         responsiveMode={ResponsiveMode.large}

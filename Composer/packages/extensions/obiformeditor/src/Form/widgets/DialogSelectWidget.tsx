@@ -90,8 +90,8 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
       <ComboBox
         id={id}
         placeholder={placeholder}
-        onBlur={() => onBlur(id, value)}
-        onFocus={() => onFocus(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         options={options}
         selectedKey={comboboxTitle ? 'customTitle' : value || ''}
         onItemClick={handleChange}

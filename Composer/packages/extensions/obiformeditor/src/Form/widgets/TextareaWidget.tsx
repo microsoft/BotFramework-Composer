@@ -22,9 +22,9 @@ export const TextareaWidget: React.FunctionComponent<BFDWidgetProps> = props => 
         disabled={disabled}
         id={id}
         multiline
-        onBlur={() => onBlur(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
         onChange={(_, newValue?: string) => onChange(newValue)}
-        onFocus={() => onFocus(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         placeholder={placeholderText}
         readOnly={readonly}
         value={value}
@@ -40,4 +40,7 @@ export const TextareaWidget: React.FunctionComponent<BFDWidgetProps> = props => 
 
 TextareaWidget.defaultProps = {
   schema: {},
+  options: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

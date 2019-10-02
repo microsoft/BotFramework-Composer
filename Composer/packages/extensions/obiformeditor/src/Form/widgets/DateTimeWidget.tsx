@@ -19,8 +19,8 @@ export function DateTimeWidget(props: BFDWidgetProps) {
       <DatePicker
         id={id}
         isRequired={required}
-        onBlur={() => onBlur(id, value)}
-        onFocus={() => onFocus(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         onSelectDate={onSelectDate}
         value={value ? new Date(value) : undefined}
       />
