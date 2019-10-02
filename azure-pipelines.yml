@@ -75,6 +75,7 @@ jobs:
       env:
         CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/cypress/screenshots
         CYPRESS_COMPOSER_URL: http://localhost:5000
+      continueOnError: true
     - task: PublishBuildArtifacts@1
       condition: failed()
       inputs:
