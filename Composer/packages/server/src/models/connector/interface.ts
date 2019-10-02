@@ -32,8 +32,12 @@ export interface IPublishVersion {
   user: string;
   userEmail: string;
   label: string;
-  isInProduction: boolean;
-  wasInProduction: boolean;
+}
+
+export interface IPublishHistory {
+  production: IPublishVersion | undefined;
+  previousProduction: IPublishVersion | undefined;
+  integration: IPublishVersion | undefined;
 }
 
 export interface IBotConnector {
@@ -43,5 +47,5 @@ export interface IBotConnector {
   // publishes a build to production, if label is undefined then what is currently in integration is published
   publish(config: BotConfig, label: string): Promise<void>;
   getEditingStatus(): Promise<boolean>; // gets whether the editor has unsaved changes
-  getPublishVersions(): Promise<IPublishVersion[]>; // gets a list of saved builds that can be published
+  getPublishHistory(): Promise<IPublishHistory>; // gets a list of builds that are in production, inttegration, or can be published
 }

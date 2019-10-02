@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import BotProjectService from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 
-import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishVersion } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
@@ -90,9 +90,13 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 
-  getPublishVersions = (): Promise<IPublishVersion[]> => {
+  getPublishHistory = (): Promise<IPublishHistory> => {
     return new Promise(resolve => {
-      resolve([]);
+      resolve({
+        production: undefined,
+        previousProduction: undefined,
+        integration: undefined,
+      });
     });
   };
 

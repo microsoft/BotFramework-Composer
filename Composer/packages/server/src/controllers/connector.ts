@@ -14,10 +14,10 @@ async function connect(req: any, res: any) {
   }
 }
 
-async function getPublishVersions(req: any, res: any) {
+async function getPublishHistory(req: any, res: any) {
   try {
-    const publishVersions = await BotConnectorService.getPublishVersions();
-    res.send(publishVersions);
+    const history = await BotConnectorService.getPublishHistory();
+    res.send(history);
   } catch (error) {
     res.status(400).json({
       message: 'Unable to get publish versions: ' + (error instanceof Error ? error.message : error),
@@ -57,5 +57,5 @@ export const BotConnectorController = {
   sync: sync,
   status: status,
   publish: publish,
-  getPublishVersions: getPublishVersions,
+  getPublishHistory: getPublishHistory,
 };

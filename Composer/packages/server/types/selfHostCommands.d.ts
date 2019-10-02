@@ -10,7 +10,7 @@ declare namespace SelfHostCommands {
   export interface Build {
     (argv: ARGV): Promise<string>;
   }
-  export interface PublishVersionARGV {
+  export interface GetPublishHistoryARGV {
     dest: string;
   }
   export interface IPublishVersion {
@@ -19,11 +19,14 @@ declare namespace SelfHostCommands {
     user: string;
     userEmail: string;
     label: string;
-    isInProduction: boolean;
-    wasInProduction: boolean;
   }
-  export interface GetPublishVersions {
-    (argv: PublishVersionARGV): Promise<IPublishVersion[]>;
+  export interface IPublishHistory {
+    production: IPublishVersion;
+    previousProduction: IPublishVersion | undefined;
+    integration: IPublishVersion;
+  }
+  export interface GetPublishHistory {
+    (argv: GetPublishHistoryARGV): Promise<IPublishHistory>;
   }
   export interface EditingStatusARGV {
     dest: string;

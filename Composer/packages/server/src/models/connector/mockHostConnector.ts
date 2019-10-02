@@ -1,16 +1,15 @@
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
-import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishVersion } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory, IPublishVersion } from './interface';
 
 export class MockHostBotConnector implements IBotConnector {
-  constructor() {
-    this.history.push(this.createPublishVersion('initial'));
-  }
-
   public status: BotStatus = BotStatus.NotConnected;
-  private history: IPublishVersion[] = [];
-  private lastSync: IPublishVersion = this.createIntegrationVersion('no one');
+  private history: IPublishHistory = {
+    production: undefined,
+    previousProduction: undefined,
+    integration: undefined,
+  };
 
   public connect = async (env: BotEnvironments, hostName: string) => {
     this.status = BotStatus.Connected;
@@ -22,45 +21,33 @@ export class MockHostBotConnector implements IBotConnector {
 
   public sync = async (config: BotConfig) => {
     const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
-    this.lastSync = this.createIntegrationVersion(user);
+    this.history.integration = this.createIntegrationVersion(user);
   };
 
   public getEditingStatus = async (): Promise<boolean> => {
     return false;
   };
 
-  public getPublishVersions = async (): Promise<IPublishVersion[]> => {
-    let versions = [];
-    this.history.forEach(x => versions.push(x));
-    versions.push(this.lastSync);
-    return versions;
+  public getPublishHistory = async (): Promise<IPublishHistory> => {
+    return this.history;
   };
 
   public publish = async (config: BotConfig, label: string) => {
     const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
 
-    this.history.forEach(x => (x.isInProduction = false));
-
     if (!label) {
-      // make a new mock and include it in the list
-      let newVersion = this.createPublishVersion(user);
-      newVersion.isInProduction = true;
-      this.history.push(newVersion);
+      // make a new mock and updatre history
+      this.history.previousProduction = this.history.production;
+      this.history.production = this.createPublishVersion(user);
+    } else if (this.history.previousProduction && label === this.history.previousProduction.label) {
+      // rollback
+      this.history.production = this.history.previousProduction;
+      this.history.production.publishTimestamp = new Date();
+
+      // can't rollback twice
+      this.history.previousProduction = undefined;
     } else {
-      // find the one they want to publish and mark it as in production
-      let found: boolean = false;
-
-      this.history.forEach(x => {
-        if (x.label === label) {
-          x.isInProduction = true;
-          x.publishTimestamp = new Date();
-          found = true;
-        }
-      });
-
-      if (!found) {
-        throw new Error('Could not publish. Label not found.');
-      }
+      throw new Error('Could not publish. Label not found.');
     }
   };
 
@@ -75,8 +62,6 @@ export class MockHostBotConnector implements IBotConnector {
       user: user,
       userEmail: '',
       label: tag,
-      wasInProduction: true,
-      isInProduction: false,
     };
   }
 
@@ -86,7 +71,6 @@ export class MockHostBotConnector implements IBotConnector {
     const tag = `integration_${datetimeStamp}`;
     let version = this.createPublishVersion(user);
     version.label = tag;
-    version.wasInProduction = false;
     return version;
   }
 }

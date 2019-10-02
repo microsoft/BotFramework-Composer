@@ -5,19 +5,19 @@ import { resolve } from 'path';
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
-import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishVersion } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class SelfHostBotConnector implements IBotConnector {
   constructor() {
     this.buildAsync = require('commands/build').handlerAsync;
     this.publishAsync = require('commands/publish').handlerAsync;
     this.getEditingStatusAsync = require('commands/editingStatus').handlerAsync;
-    this.getPublishVersionsAsync = require('commands/getPublishVersions').handlerAsync;
+    this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
   }
   private buildAsync: SelfHostCommands.Build;
   private publishAsync: SelfHostCommands.Publish;
   private getEditingStatusAsync: SelfHostCommands.GetEditingStatus;
-  private getPublishVersionsAsync: SelfHostCommands.GetPublishVersions;
+  private getPublishHistoryAsync: SelfHostCommands.GetPublishHistory;
   public status: BotStatus = BotStatus.NotConnected;
 
   public connect = async (env: BotEnvironments, hostName: string) => {
@@ -51,8 +51,8 @@ export class SelfHostBotConnector implements IBotConnector {
     return status ? status.hasChanges : false;
   };
 
-  public getPublishVersions = async (): Promise<IPublishVersion[]> => {
-    return await this.getPublishVersionsAsync({
+  public getPublishHistory = async (): Promise<IPublishHistory> => {
+    return await this.getPublishHistoryAsync({
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
     });
   };
