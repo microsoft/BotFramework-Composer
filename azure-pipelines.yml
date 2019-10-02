@@ -8,7 +8,7 @@ trigger:
 
 jobs:
   - job: botproject
-    displayName: BotProject Build&Test
+    displayName: BotProject
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -25,7 +25,7 @@ jobs:
         command: 'test'
         projects: 'BotProject/CSharp/Tests/Tests.csproj'
   - job: test
-    displayName: Unit Tests
+    displayName: Composer
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -75,8 +75,9 @@ jobs:
       env:
         CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/cypress/screenshots
         CYPRESS_COMPOSER_URL: http://localhost:5000
+      continueOnError: true
     - task: PublishBuildArtifacts@1
-      condition: failed()
+      condition: in(variables['Agent.JobStatus'], 'SucceededWithIssues', 'Failed')
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/cypress'
         artifactName: cypress
