@@ -34,7 +34,7 @@ export interface BFDWidgetProps extends Partial<WidgetProps> {
   schema: JSONSchema6;
   onChange: (data: any) => void;
   formContext: FormContext;
-  options: {
+  options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
   };

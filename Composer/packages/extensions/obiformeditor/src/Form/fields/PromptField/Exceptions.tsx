@@ -16,7 +16,7 @@ const getSchema = (schema: JSONSchema6, field: keyof MicrosoftInputDialog): JSON
 };
 
 export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, schema, idSchema, formData, errorSchema, ...rest } = props;
+  const { onChange, schema, idSchema, formData, errorSchema } = props;
 
   const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
     if (onChange) {
@@ -28,7 +28,6 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
     <>
       <div css={field}>
         <TextareaWidget
-          {...rest}
           onChange={handleChange}
           schema={getSchema(schema, 'unrecognizedPrompt')}
           id={idSchema.unrecognizedPrompt.__id}
@@ -36,9 +35,6 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
           label={formatMessage('Unrecognized Prompt')}
           formContext={props.formContext}
           rawErrors={errorSchema.unrecognizedPrompt && errorSchema.unrecognizedPrompt.__errors}
-          options={{}}
-          onFocus={() => {}}
-          onBlur={() => {}}
         />
       </div>
       <Validations
@@ -50,7 +46,6 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
       />
       <div css={field}>
         <TextareaWidget
-          {...rest}
           onChange={handleChange}
           schema={getSchema(schema, 'invalidPrompt')}
           id={idSchema.invalidPrompt.__id}
@@ -58,9 +53,17 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
           label={formatMessage('Invalid Prompt')}
           formContext={props.formContext}
           rawErrors={errorSchema.invalidPrompt && errorSchema.invalidPrompt.__errors}
-          options={{}}
-          onFocus={() => {}}
-          onBlur={() => {}}
+        />
+      </div>
+      <div css={field}>
+        <TextareaWidget
+          onChange={handleChange}
+          schema={getSchema(schema, 'defaultValueResponse')}
+          id={idSchema.defaultValueResponse.__id}
+          value={formData.defaultValueResponse}
+          label={formatMessage('Default value response')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.defaultValueResponse && errorSchema.defaultValueResponse.__errors}
         />
       </div>
     </>

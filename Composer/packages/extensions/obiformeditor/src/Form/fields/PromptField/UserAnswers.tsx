@@ -53,7 +53,7 @@ const getOutputFormatOptions = (schema: JSONSchema6) => {
 };
 
 export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, schema, idSchema, formData, errorSchema, ...rest } = props;
+  const { onChange, schema, idSchema, formData, errorSchema } = props;
 
   const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
     if (onChange) {
@@ -65,7 +65,6 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
     <>
       <div css={field}>
         <TextWidget
-          {...rest}
           onChange={handleChange('property')}
           schema={getSchema(schema, 'property')}
           id={idSchema.property.__id}
@@ -73,14 +72,10 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
           label={formatMessage('Property to fill')}
           formContext={props.formContext}
           rawErrors={errorSchema.property && errorSchema.property.__errors}
-          options={{}}
-          onFocus={() => {}}
-          onBlur={() => {}}
         />
       </div>
       <div css={field}>
         <SelectWidget
-          {...rest}
           onChange={handleChange('$type')}
           schema={getSchema(schema, '$type')}
           id={idSchema.$type.__id}
@@ -96,7 +91,6 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
       {getSchema(schema, 'outputFormat') && (
         <div css={field}>
           <SelectWidget
-            {...rest}
             onChange={handleChange('outputFormat')}
             schema={getSchema(schema, 'outputFormat')}
             id={idSchema.outputFormat.__id}
@@ -112,7 +106,6 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
       )}
       <div css={field}>
         <TextWidget
-          {...rest}
           onChange={handleChange('value')}
           schema={getSchema(schema, 'value')}
           id={idSchema.value.__id}
@@ -120,9 +113,6 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
           label={formatMessage('Value')}
           formContext={props.formContext}
           rawErrors={errorSchema.value && errorSchema.value.__errors}
-          options={{}}
-          onFocus={() => {}}
-          onBlur={() => {}}
         />
       </div>
     </>
