@@ -11,6 +11,7 @@ import {
   TriggerFormData,
   TriggerFormDataErrors,
   eventTypeKey,
+  intentTypeKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
@@ -47,7 +48,7 @@ interface TriggerCreationModalProps {
 
 const initialFormData: TriggerFormData = {
   errors: {},
-  $type: '',
+  $type: intentTypeKey,
   name: '',
   constraint: '',
   eventType: '',
@@ -121,6 +122,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}
+            defaultSelectedKey={intentTypeKey}
           />
 
           {showEventDropDown && (

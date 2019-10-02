@@ -13,6 +13,9 @@ Bot Framework Composer is an integrated development environment (IDE) for buildi
 
 Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK without writing code. The Composer app reads and writes from the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a [declarative](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog/declarative) JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates. 
 
+## Documentation
+The documentation for Composer [can be found here](/blob/master/docs/).
+
 ## Get Started
 To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
 
