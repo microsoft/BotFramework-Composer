@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
+import formatMessage, { date } from 'format-message';
 
 import { FormContext } from '../types';
 
@@ -139,9 +139,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           </span>
           <span>
             {get(formData, '$designer.updatedAt')
-              ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
-                  updatedAt: Date.parse(get(formData, '$designer.updatedAt')),
-                })
+              ? date(Date.parse(get(formData, '$designer.updatedAt')), 'short')
               : 'N/A'}
           </span>
         </div>
