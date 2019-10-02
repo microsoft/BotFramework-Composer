@@ -15,14 +15,14 @@ import { Exceptions } from './Exceptions';
 export const PromptField: React.FC<FieldProps> = props => {
   return (
     <BaseField {...props}>
-      <Pivot linkSize={PivotLinkSize.large} styles={tabs}>
-        <PivotItem headerText={formatMessage('Bot Asks')}>
+      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey="exceptions">
+        <PivotItem headerText={formatMessage('Bot Asks')} itemKey="botAsks">
           <BotAsks {...props} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('User Answers')}>
+        <PivotItem headerText={formatMessage('User Answers')} itemKey="userAnswers">
           <UserAnswers {...props} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Exceptions')}>
+        <PivotItem headerText={formatMessage('Exceptions')} itemKey="exceptions">
           <Exceptions {...props} />
         </PivotItem>
       </Pivot>

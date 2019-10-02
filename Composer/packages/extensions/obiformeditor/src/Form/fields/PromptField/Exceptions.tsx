@@ -6,6 +6,8 @@ import { JSONSchema6 } from 'json-schema';
 
 import { TextareaWidget } from '../../widgets';
 
+import { Validations } from './Validations';
+
 const getSchema = (schema: JSONSchema6, field: keyof MicrosoftInputDialog): JSONSchema6 => {
   const fieldSchema = get(schema, ['properties', field]);
 
@@ -17,6 +19,7 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
 
   const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
     if (onChange) {
+      console.log('data', data);
       onChange({ ...props.formData, [field]: data });
     }
   };
@@ -35,6 +38,12 @@ export const Exceptions: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
         options={{}}
         onFocus={() => {}}
         onBlur={() => {}}
+      />
+      <Validations
+        onChange={handleChange('validations')}
+        formData={props.formData.validations || []}
+        schema={getSchema(schema, 'validations')}
+        id={idSchema.validations.__id}
       />
     </>
   );

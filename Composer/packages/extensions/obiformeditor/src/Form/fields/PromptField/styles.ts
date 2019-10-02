@@ -20,3 +20,17 @@ export const tabs: Partial<IPivotStyles> = {
     padding: '18px',
   },
 };
+
+export const validationItem = css`
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+
+  & + & {
+    margin-top: 10px;
+  }
+`;
+
+export const validationItemValue = css`
+  flex: 1;
+`;
