@@ -47,7 +47,7 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
+  const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
@@ -139,7 +139,7 @@ export const TestController: React.FC = () => {
             }}
             onClick={() =>
               openInEmulator(
-                'http://localhost:3979/api/messages', // todo: this is broken botEndpoint || 'http://localhost:3979/api/messages',
+                botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword
                   ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                   : { MicrosoftAppPassword: '', MicrosoftAppId: '' }

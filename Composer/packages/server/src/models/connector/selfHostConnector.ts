@@ -24,14 +24,17 @@ export class SelfHostBotConnector implements IBotConnector {
 
   public sync = async (config: BotConfig) => {
     const { targetEnvironment: env } = config;
-    const user = config.user ? config.user[ClaimNames.name] : 'unknown_user';
-    const userEmail = config.user ? config.user[ClaimNames.upn] : undefined;
+    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
+    const userEmail = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.upn] : undefined;
+    const accessToken = config.user ? config.user.accessToken : undefined;
     await this.buildAsync({
       user,
       userEmail,
       //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
       env: env && env !== 'editing' ? env : 'integration',
+      botId: undefined,
+      accessToken,
     });
   };
 }

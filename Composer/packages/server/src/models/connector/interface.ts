@@ -8,6 +8,11 @@ export enum BotStatus {
 
 export type BotEnvironments = 'production' | 'integration' | 'editing';
 
+export interface AuthenticatedToken {
+  accessToken: string;
+  deocdedToken?: AuthenticatedUser;
+}
+
 export interface AuthenticatedUser {
   [ClaimNames.name]: string;
   [ClaimNames.upn]: string;
@@ -18,7 +23,7 @@ export interface BotConfig {
   MicrosoftAppPassword: string;
   luis: ILuisConfig;
   targetEnvironment?: BotEnvironments;
-  user?: AuthenticatedUser;
+  user?: AuthenticatedToken;
 }
 
 export interface IBotConnector {
