@@ -23,13 +23,14 @@
           "$designer": {
             "name": "Prompt for text",
             "id": "362298",
-            "updatedAt": "2019-10-03T01:21:29.550Z"
+            "updatedAt": "2019-10-03T01:24:19.651Z"
           },
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "maxTurnCount": 3,
           "validations": [
-            "length(turn.value) <= 150"
+            "length(turn.value) <= 150",
+            "length(turn.value) > 2"
           ],
           "value": "concat(toUpper(substring(@userName, 0, 1)), substring(@userName, 1))",
           "property": "user.profile.name",
