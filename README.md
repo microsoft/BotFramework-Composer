@@ -17,7 +17,7 @@ Bot Framework Composer, an open source tool, enables teams working to create bot
 ## Get Started
 
 - To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
-- To get started [install the Bot Framework Composer](#Installing-Bot-Framework-Composer) on your local machine, [create your first bot](./docs/Create-Your-First-bot.md) and review the various [samples](./docs/samples.md).
+- To get started [install the Bot Framework Composer](./docs/Installing-Bot-Framework-Composer) on your local machine, [create your first bot](./docs/Create-Your-First-bot.md) and review the various [samples](./docs/samples.md).
 
 
 ## Documentation
