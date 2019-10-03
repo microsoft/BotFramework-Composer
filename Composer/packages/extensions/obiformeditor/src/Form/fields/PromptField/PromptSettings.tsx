@@ -2,29 +2,21 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import get from 'lodash.get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 
 import { TextWidget, SelectWidget, CheckboxWidget } from '../../widgets';
 
 import { field, settingsFields, settingsFieldHalf, settingsFieldFull, settingsFieldInline } from './styles';
 
-const getSchema = (schema: JSONSchema6, field: keyof MicrosoftInputDialog): JSONSchema6 => {
-  const fieldSchema = get(schema, ['properties', field]);
+interface PromptSettingsrops extends FieldProps<MicrosoftInputDialog> {
+  onChange: (field: keyof MicrosoftInputDialog) => (data: any) => void;
+  getSchema: (field: keyof MicrosoftInputDialog) => JSONSchema6;
+}
 
-  return fieldSchema;
-};
+export const PromptSettings: React.FC<PromptSettingsrops> = props => {
+  const { formData, idSchema, getSchema, onChange, errorSchema } = props;
 
-export const PromptSettings: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
-  const { formData, idSchema, schema, onChange, errorSchema } = props;
-
-  const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
-    if (onChange) {
-      onChange({ ...props.formData, [field]: data });
-    }
-  };
-
-  const interruptionOptions = (getSchema(schema, 'allowInterruptions').enum || []).map(o => ({
+  const interruptionOptions = (getSchema('allowInterruptions').enum || []).map(o => ({
     label: o as string,
     value: o as string,
   }));
@@ -33,8 +25,8 @@ export const PromptSettings: React.FC<FieldProps<MicrosoftInputDialog>> = props 
     <div css={settingsFields}>
       <div css={[field, settingsFieldHalf]}>
         <TextWidget
-          onChange={handleChange('maxTurnCount')}
-          schema={getSchema(schema, 'maxTurnCount')}
+          onChange={onChange('maxTurnCount')}
+          schema={getSchema('maxTurnCount')}
           id={idSchema.maxTurnCount.__id}
           value={formData.maxTurnCount}
           label={formatMessage('Max turn count')}
@@ -44,8 +36,8 @@ export const PromptSettings: React.FC<FieldProps<MicrosoftInputDialog>> = props 
       </div>
       <div css={[field, settingsFieldHalf]}>
         <TextWidget
-          onChange={handleChange('defaultValue')}
-          schema={getSchema(schema, 'defaultValue')}
+          onChange={onChange('defaultValue')}
+          schema={getSchema('defaultValue')}
           id={idSchema.defaultValue.__id}
           value={formData.defaultValue}
           label={formatMessage('Default value')}
@@ -55,8 +47,8 @@ export const PromptSettings: React.FC<FieldProps<MicrosoftInputDialog>> = props 
       </div>
       <div css={[field, settingsFieldFull]}>
         <SelectWidget
-          onChange={handleChange('allowInterruptions')}
-          schema={getSchema(schema, 'allowInterruptions')}
+          onChange={onChange('allowInterruptions')}
+          schema={getSchema('allowInterruptions')}
           id={idSchema.allowInterruptions.__id}
           value={formData.allowInterruptions}
           label={formatMessage('Allow interruptions')}
@@ -67,8 +59,8 @@ export const PromptSettings: React.FC<FieldProps<MicrosoftInputDialog>> = props 
       </div>
       <div css={[field, settingsFieldFull, settingsFieldInline]}>
         <CheckboxWidget
-          onChange={handleChange('alwaysPrompt')}
-          schema={getSchema(schema, 'alwaysPrompt')}
+          onChange={onChange('alwaysPrompt')}
+          schema={getSchema('alwaysPrompt')}
           id={idSchema.alwaysPrompt.__id}
           value={formData.alwaysPrompt}
           label={formatMessage('Always prompt')}

@@ -1,5 +1,4 @@
 import React from 'react';
-import get from 'lodash.get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
@@ -36,37 +35,28 @@ const PROMPT_TYPES = [
   },
 ];
 
-const getSchema = (schema: JSONSchema6, field: keyof MicrosoftInputDialog): JSONSchema6 => {
-  const fieldSchema = get(schema, ['properties', field]);
-
-  return fieldSchema;
-};
-
-const getOutputFormatOptions = (schema: JSONSchema6) => {
-  const outputFormatSchema = get(schema, 'properties.outputFormat');
-
+const getOutputFormatOptions = (outputFormatSchema: JSONSchema6) => {
   if (!outputFormatSchema || !outputFormatSchema.enum || !Array.isArray(outputFormatSchema.enum)) {
     return [];
   }
 
-  return outputFormatSchema.enum.map(o => ({ label: o, value: o }));
+  return outputFormatSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
-export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, schema, idSchema, formData, errorSchema } = props;
+interface UserAnswersProps extends FieldProps<MicrosoftInputDialog> {
+  onChange: (field: keyof MicrosoftInputDialog) => (data: any) => void;
+  getSchema: (field: keyof MicrosoftInputDialog) => JSONSchema6;
+}
 
-  const handleChange = (field: keyof MicrosoftInputDialog) => (data: any) => {
-    if (onChange) {
-      onChange({ ...props.formData, [field]: data });
-    }
-  };
+export const UserAnswers: React.FC<UserAnswersProps> = props => {
+  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
 
   return (
     <>
       <div css={field}>
         <TextWidget
-          onChange={handleChange('property')}
-          schema={getSchema(schema, 'property')}
+          onChange={onChange('property')}
+          schema={getSchema('property')}
           id={idSchema.property.__id}
           value={formData.property}
           label={formatMessage('Property to fill')}
@@ -76,8 +66,8 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
       </div>
       <div css={field}>
         <SelectWidget
-          onChange={handleChange('$type')}
-          schema={getSchema(schema, '$type')}
+          onChange={onChange('$type')}
+          schema={getSchema('$type')}
           id={idSchema.$type.__id}
           value={formData.$type}
           label={formatMessage('Answer type')}
@@ -88,17 +78,17 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
           onBlur={() => {}}
         />
       </div>
-      {getSchema(schema, 'outputFormat') && (
+      {getSchema('outputFormat') && (
         <div css={field}>
           <SelectWidget
-            onChange={handleChange('outputFormat')}
-            schema={getSchema(schema, 'outputFormat')}
+            onChange={onChange('outputFormat')}
+            schema={getSchema('outputFormat')}
             id={idSchema.outputFormat.__id}
             value={formData.outputFormat}
             label={formatMessage('Output Format')}
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
-            options={{ enumOptions: getOutputFormatOptions(schema) }}
+            options={{ enumOptions: getOutputFormatOptions(getSchema('outputFormat')) }}
             onFocus={() => {}}
             onBlur={() => {}}
           />
@@ -106,8 +96,8 @@ export const UserAnswers: React.FC<FieldProps<MicrosoftInputDialog>> = props => 
       )}
       <div css={field}>
         <TextWidget
-          onChange={handleChange('value')}
-          schema={getSchema(schema, 'value')}
+          onChange={onChange('value')}
+          schema={getSchema('value')}
           id={idSchema.value.__id}
           value={formData.value}
           label={formatMessage('Value')}
