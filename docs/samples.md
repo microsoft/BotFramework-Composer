@@ -18,6 +18,3 @@ Samples are designed to illustrate scenarios you'll need to implement to build g
 |ToDoBot                  |is a simple To Do bot that uses RegEx for LU|
 |ToDoLuisBot              |is a simple To Do bot that uses LUIS for its LU|
 |ReminderBot              |is an advanced To Do bot that contains LUIS for its LU, uses HTTP backend service calls to deal with data store and supports paging by using expression for listing out reminders|
-
-
-
