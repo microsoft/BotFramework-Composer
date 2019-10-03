@@ -4,6 +4,7 @@
 * [Get Started](https://github.com/microsoft/BotFramework-Composer#get-started)
 * [Triggers and Events](triggers_and_events.md)
 * [Using Memory](using_memory.md)
+* [Using OAuth to access external services](how_to_use_oauth.md)
 * [Controlling Conversation Flow](controlling_conversation_flow.md)
 * [Testing and Debugging](testing_debugging.md)
 * [All About Interruption](all_about_interruption.md)
