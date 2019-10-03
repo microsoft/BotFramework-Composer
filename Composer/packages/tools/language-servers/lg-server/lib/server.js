@@ -273,8 +273,8 @@ class LgServer {
       let diagnostic = {
         severity: utils_1.convertSeverity(diag.Severity),
         range: {
-          start: vscode_languageserver_types_1.Position.create(diag.Range.Start.Line, diag.Range.Start.Character),
-          end: vscode_languageserver_types_1.Position.create(diag.Range.End.Line, diag.Range.End.Character),
+          start: vscode_languageserver_types_1.Position.create(diag.Range.Start.Line - 1, diag.Range.Start.Character),
+          end: vscode_languageserver_types_1.Position.create(diag.Range.End.Line - 1, diag.Range.End.Character),
         },
         message: diag.Message,
         source: document.uri,

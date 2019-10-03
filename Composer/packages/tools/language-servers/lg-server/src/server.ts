@@ -320,8 +320,8 @@ export class LgServer {
       let diagnostic: Diagnostic = {
         severity: convertSeverity(diag.Severity),
         range: {
-          start: Position.create(diag.Range.Start.Line, diag.Range.Start.Character),
-          end: Position.create(diag.Range.End.Line, diag.Range.End.Character),
+          start: Position.create(diag.Range.Start.Line - 1, diag.Range.Start.Character),
+          end: Position.create(diag.Range.End.Line - 1, diag.Range.End.Character),
         },
         message: diag.Message,
         source: document.uri,
