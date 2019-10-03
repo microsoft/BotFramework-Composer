@@ -12,30 +12,30 @@ At bot runtime, the Main Dialog is called and becomes an active dialog, triggeri
 ## Anatonmy of a Dialog 
 In Bot Composer, each dialog is a dialog class that contains a set of event handlers which can be triggered to handle different events. Currently, there are five different triggers (event handlers) in a dialog: _Handle an Intent_, _Handle Unknown Intent_, _Handle ConversationUpdate_, _Handle an Event: BeginDialog_, and _Handle a Dialog Event_. Most Dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. 
 
-![eventhandler_types](/media/eventhandlers.png)
+![eventhandler_types](~/media/eventhandlers.png)
 
 When a dialog is called into action, its **recognizer** will process the message with an attempt to extract the primamry **Intent** from the message along with any **entity values** the message includes. After processing the message, the information is passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: one powered by [LUIS.ai](https://www.luis.ai/) service and oen powered by regular expressions. A bot can have no recognizer. 
 
 Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Composer offers a wide range of actions such as sending messages, asking questions, and performing computational tasks, etc. You can also use branch and loop to design your dialog path, set and manipulate property and values for memory use. 
 
-![actions](/media/actions.png)
+![actions](~/media/actions.png)
 
 As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an Anatomy of Dialogs in Bot Composer. It also shows how different dialogs can be called with each other in a conversation flow. 
 
-![dialog anatomy](/media/DialogAnatomy.png)
+![dialog anatomy](~/media/DialogAnatomy.png)
 
 ## Use Dialogs
 A Dialog in Bot Composer represents a piece of the bot's functionality such as **OrderSandwich**. Since a bot will have a few dialogs or even dozens of hundres of invididual dialogs, it is a big challenge to manage the dialog system and the conversation with user. Bot Composer offers a set of built-in components to simplify sophisticated converesation modelling process and build a pluggable, extensible dialog system without worrying about the mechanics of dialog management. 
 
-|Dialog Function	     |Description |
-|-------------------------------|-------------| 
-|Begin Dialog        |An action which begins another dialog. When that dialog is completed, it will return the caller |
-|End Dialog	        | A command which ends the current dialog, returning the `resultProperty` as the result of the dialog|
-|Cancel All Dialogs	        | A command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating| 
-|End Turn       | A command to end the current turn without ending the dialog|
-|Repeat this Dialog         | An action which repeats the current dialog with the same dialog |
-|Replace this Dialog        | An action which replaces the current dialog with the target dialog |
-|Modify Active Dialog       | A command to edit current dialog with `changeType` and Actions |
+| Dialog Function      | Description                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Begin Dialog         | An action which begins another dialog. When that dialog is completed, it will return the caller                                  |
+| End Dialog           | A command which ends the current dialog, returning the `resultProperty` as the result of the dialog                              |
+| Cancel All Dialogs   | A command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating |
+| End Turn             | A command to end the current turn without ending the dialog                                                                      |
+| Repeat this Dialog   | An action which repeats the current dialog with the same dialog                                                                  |
+| Replace this Dialog  | An action which replaces the current dialog with the target dialog                                                               |
+| Modify Active Dialog | A command to edit current dialog with `changeType` and Actions                                                                   |
 
 ## Related Reading 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
