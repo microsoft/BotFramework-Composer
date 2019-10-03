@@ -17,5 +17,63 @@
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
     }
+  ],
+  "events": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "687910",
+        "name": "BookFlightIntentHandler",
+        "updatedAt": "2019-10-03T20:23:54.658Z"
+      },
+      "intent": "BookFlight",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "081321",
+            "name": "Begin a Dialog",
+            "updatedAt": "2019-10-03T20:24:07.489Z"
+          },
+          "dialog": "BookFlight"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "306684",
+        "name": "WeatherIntentHandler"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "138563",
+            "name": "Begin a Dialog",
+            "updatedAt": "2019-10-03T20:24:28.568Z"
+          },
+          "dialog": "Weather"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "302597",
+        "name": "UnknownIntentHandler"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "024079",
+            "name": "Send an Activity",
+            "updatedAt": "2019-10-03T20:27:17.026Z"
+          },
+          "activity": "[bfdactivity-024079]"
+        }
+      ]
+    }
   ]
 }

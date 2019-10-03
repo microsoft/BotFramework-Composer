@@ -1,0 +1,31 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "Weather",
+    "createdAt": "2019-10-03T20:23:00.866Z",
+    "updatedAt": "2019-10-03T20:23:01.192Z",
+    "id": "550787"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "175866",
+            "name": "Send an Activity",
+            "updatedAt": "2019-10-03T20:25:39.537Z"
+          },
+          "activity": "[bfdactivity-175866]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}

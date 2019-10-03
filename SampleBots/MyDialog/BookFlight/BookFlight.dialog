@@ -1,0 +1,31 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "BookFlight",
+    "createdAt": "2019-10-03T20:22:43.229Z",
+    "updatedAt": "2019-10-03T20:22:43.587Z",
+    "id": "578988"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "088588",
+            "name": "Send an Activity",
+            "updatedAt": "2019-10-03T20:25:13.895Z"
+          },
+          "activity": "[bfdactivity-088588]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}

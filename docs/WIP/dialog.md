@@ -20,7 +20,7 @@ Event handlers contain a series of actions that the bot will undertake to fulfil
 
 ![actions](./media/dialog/actions.png)
 
-As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an anatomy of Dialogs in Bot Composer. It also shows how different dialogs can be called with each other in a conversation flow. 
+As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an anatomy of a Dialog in Bot Composer. 
 
 <p align="left">
     <img alt="Open samples" src="./media/dialog/DialogAnatomy.png" style="max-width:780px;" />
@@ -29,7 +29,7 @@ As the bot takes actions and sends messages, the **language generator** is calle
 <!-- ![dialog anatomy](./media/dialog/DialogAnatomy.png) -->
 
 ## Use Dialogs
-A Dialog in Bot Composer represents a piece of the bot's functionality such as **OrderSandwich** to fulfill user's request. Since a bot will have a few dialogs or even dozens of hundres of individual dialogs, it is a big challenge to manage the dialog system and the conversation with user. To address this issue, Bot Composer offers a set of built-in components within the Dialogs component to simplify sophisticated converesation modelling process so that uesrs can build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
+A Dialog in Bot Composer represents a piece of the bot's functionality such as **OrderSandwich** to fulfill user's request. Since a bot will have a few dialogs or even dozens of hundres of individual dialogs, it is a big challenge to manage the dialog system and the conversation with user. To address this issue, Bot Composer offers a set of built-in components within the Dialogs component to simplify sophisticated converesation modelling process so that uesers can build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
 
 | Dialog Functions     | Description                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -40,7 +40,7 @@ A Dialog in Bot Composer represents a piece of the bot's functionality such as *
 | Repeat this Dialog   | An action which repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action which replaces the current dialog with the target dialog.                                                              |
 | Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
-
+With all these built-in dialog functions, dialogs can be called from each other during a conversation flow. 
 
 ## Related Reading 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
