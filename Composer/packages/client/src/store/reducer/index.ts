@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc, DialogSetting } from '../types';
-import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
-import settingStorage from '../../utils/dialogSettingStorage';
+import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
+import { getExtension } from '../../utils';
+import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
 
@@ -154,16 +154,13 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   state.focusPath = dialogId + '#';
   if (focused) {
     state.focusPath = dialogId + '#.' + focused;
+  } else if (selected) {
+    state.focusPath = dialogId + '#.' + selected;
   }
 
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 
-  //if use navigateto to design page, add events[0] for default select
-  if (!selected) {
-    selected = createSelectedPath(0);
-    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
-  }
   state.breadcrumb = breadcrumb;
   state.designPageLocation = { dialogId, selected, focused };
   return state;

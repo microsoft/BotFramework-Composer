@@ -26,7 +26,6 @@
     "startall": "concurrently --kill-others-on-fail \"npm:start:*\" \"npm:runtime\"",
     "start:client": "cd packages/client && yarn start",
     "start:server": "cd packages/server && yarn start",
-    "start:obieditor": "cd packages/extensions/obiformeditor && yarn start -- --no-clear",
     "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default --reporters=jest-junit",

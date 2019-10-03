@@ -26,7 +26,9 @@ import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-  cy.getByText('Open').click();
+  cy.get('[data-testid="homePage-ToolBar-Open"]').within(() => {
+    cy.getByText('Open').click();
+  });
   cy.get('[data-testid="SelectLocation"]').within(() => {
     cy.get(`[aria-label="${botName}"]`).click({ force: true });
     cy.wait(500);

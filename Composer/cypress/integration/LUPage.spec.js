@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('check language understanding page', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoLuisBot');
   });

@@ -1,10 +1,11 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { ConceptLabels } from 'shared-menus';
 
-import { TriggerSize } from '../../constants/ElementSizes';
+import { ConceptLabels } from 'shared-menus';
+import { jsx } from '@emotion/core';
+
 import { AttrNames } from '../../constants/ElementAttributes';
 import { ElementIcon } from '../../utils/obiPropertyResolver';
+import { TriggerSize } from '../../constants/ElementSizes';
 
 import { FormCard } from './templates/FormCard';
 
@@ -22,23 +23,11 @@ function getLabel(data: any): string {
   return data.$type;
 }
 
-const declareElementAttributes = (id: string) => {
-  return {
-    [AttrNames.SelectableElement]: true,
-    [AttrNames.NodeElement]: true,
-    [AttrNames.SelectedId]: id,
-    [AttrNames.FocusedId]: id,
-  };
-};
-
-export const Trigger = ({ id, data, focused, onClick }): JSX.Element => (
+export const Trigger = ({ id, data, onClick = () => {} }): JSX.Element => (
   <div
     css={{
       ...TriggerSize,
-      outline: focused ? '1px solid #0078d4' : 'none',
-      '&:hover': !focused && { outline: '1px solid #323130' },
     }}
-    {...declareElementAttributes(id)}
   >
     <FormCard
       nodeColors={{
