@@ -111,7 +111,7 @@ interface ChoiceInput extends Partial<InputDialog> {
   /** Compose an output activity containing a set of choices */
   appendChoices?: boolean;
   /** The prompts default locale that should be recognized. */
-  defaultLocale: string;
+  defaultLocale?: string;
   /** The kind of choice list style to generate */
   style?: IListStyle;
   choiceOptions?: IChoiceOption;

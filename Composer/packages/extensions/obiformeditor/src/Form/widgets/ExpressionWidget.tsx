@@ -4,6 +4,7 @@ import { TextField, ITextFieldProps } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 
 import { FormContext } from '../types';
+import { EditableField } from '../fields/EditableField';
 
 import { WidgetLabel } from './WidgetLabel';
 
@@ -27,10 +28,12 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   rawErrors?: string[];
   schema: JSONSchema6;
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
+  /** Set to true to display as inline text that is editable on hover */
+  editable?: boolean;
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, ...rest } = props;
+  const { rawErrors, formContext, schema, id, label, editable, ...rest } = props;
   const { shellApi } = formContext;
   const { description } = schema;
 
@@ -52,10 +55,12 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
+  const Field = editable ? EditableField : TextField;
+
   return (
     <>
       <WidgetLabel label={label} description={description} id={id} />
-      <TextField {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
+      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
     </>
   );
 };

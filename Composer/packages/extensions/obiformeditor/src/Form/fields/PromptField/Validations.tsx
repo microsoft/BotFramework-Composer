@@ -19,10 +19,13 @@ interface ValidationItemProps {
   hasMoveDown: boolean;
   onReorder: (a: number, b: number) => void;
   onDelete: (idx: number) => void;
+  formContext: FormContext;
+  schema: JSONSchema6;
+  onEdit: (idx: number, value?: string) => void;
 }
 
 const ValidationItem: React.FC<ValidationItemProps> = props => {
-  const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index } = props;
+  const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, formContext, onEdit, schema } = props;
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -53,9 +56,28 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
     },
   ];
 
+  const handleEdit = (_e: any, newVal?: string) => {
+    onEdit(index, newVal);
+  };
+
+  const handleBlur = () => {
+    if (!value) {
+      onDelete(index);
+    }
+  };
+
   return (
     <div css={[validationItem, field]}>
-      <div css={validationItemValue}>{value}</div>
+      <div css={validationItemValue}>
+        <ExpressionWidget
+          value={value}
+          editable
+          formContext={formContext}
+          schema={schema}
+          onChange={handleEdit}
+          onBlur={handleBlur}
+        />
+      </div>
       <IconButton
         menuProps={{ items: contextItems }}
         menuIconProps={{ iconName: 'MoreVertical' }}
@@ -101,6 +123,12 @@ export const Validations: React.FC<ValidationsProps> = props => {
     props.onChange(remove(props.formData, idx));
   };
 
+  const handleEdit = (idx, val) => {
+    const validationsCopy = [...props.formData];
+    validationsCopy[idx] = val;
+    props.onChange(validationsCopy);
+  };
+
   return (
     <div>
       <div css={field}>
@@ -119,13 +147,17 @@ export const Validations: React.FC<ValidationsProps> = props => {
       <div>
         {formData.map((v, i) => (
           <ValidationItem
-            key={`${v}-${i}`}
+            // need to use index + length to account for data changing
+            key={`${i}-${formData.length}`}
             value={v}
             index={i}
             onReorder={handleReorder}
             onDelete={handleDelete}
             hasMoveDown={i !== props.formData.length - 1}
             hasMoveUp={i !== 0}
+            onEdit={handleEdit}
+            formContext={formContext}
+            schema={schema}
           />
         ))}
       </div>
