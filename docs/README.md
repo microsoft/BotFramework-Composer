@@ -5,6 +5,7 @@
 * [Create your first bot using Composer](Create-Your-First-Bot.md) 
 * [Triggers and Events](triggers_and_events.md)
 * [Using Memory](using_memory.md)
+* [Using OAuth to access external services](how_to_use_oauth.md)
 * [Controlling Conversation Flow](controlling_conversation_flow.md)
 * [Testing and Debugging](testing_debugging.md)
 * [Learning from samples](samples.md)
