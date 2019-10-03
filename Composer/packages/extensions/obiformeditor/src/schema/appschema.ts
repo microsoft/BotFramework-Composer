@@ -269,7 +269,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -585,7 +585,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -850,7 +850,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -1175,7 +1175,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -3137,7 +3137,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -3328,7 +3328,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -5091,7 +5091,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
