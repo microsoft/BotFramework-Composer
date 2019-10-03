@@ -2,11 +2,13 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-08-02T20:09:07.865Z",
-    "updatedAt": "2019-08-02T20:25:15.773Z",
+    "updatedAt": "2019-10-03T01:15:12.382Z",
     "id": "179150",
     "name": "Interrupt"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "Main.lu",
   "generator": "common.lg",
   "events": [
     {
@@ -32,11 +34,10 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "GetStarted",
         "id": "629539",
-        "updatedAt": "2019-08-02T20:26:11.592Z"
+        "updatedAt": "2019-10-03T01:15:34.948Z"
       },
-      "intent": "GetStarted",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -47,16 +48,16 @@
           },
           "dialog": "GetProfile"
         }
-      ]
+      ],
+      "intent": "GetStarted"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "ResetProfile",
         "id": "921175",
-        "updatedAt": "2019-08-02T20:26:16.856Z"
+        "updatedAt": "2019-10-03T01:15:42.533Z"
       },
-      "intent": "ResetProfile",
       "actions": [
         {
           "$type": "Microsoft.EditActions",
@@ -87,16 +88,16 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "ResetProfile"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Cancel",
         "id": "870441",
-        "updatedAt": "2019-08-02T20:26:22.051Z"
+        "updatedAt": "2019-10-03T01:15:46.949Z"
       },
-      "intent": "Cancel",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -114,16 +115,16 @@
             "id": "362033"
           }
         }
-      ]
+      ],
+      "intent": "Cancel"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "ShowProfile",
         "id": "171791",
-        "updatedAt": "2019-08-02T20:29:37.653Z"
+        "updatedAt": "2019-10-03T01:15:51.468Z"
       },
-      "intent": "ShowProfile",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -165,16 +166,16 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "ShowProfile"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Help",
         "id": "160085",
-        "updatedAt": "2019-08-06T00:31:55.445Z"
+        "updatedAt": "2019-10-03T01:15:55.426Z"
       },
-      "intent": "Help",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -185,9 +186,9 @@
           },
           "activity": "[bfdactivity-924700]"
         }
-      ]
+      ],
+      "intent": "Help"
     }
   ],
-  "$schema": "../../app.schema",
-  "recognizer": "Main.lu"
+  "$schema": "../../app.schema"
 }

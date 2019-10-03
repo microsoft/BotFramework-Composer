@@ -2,18 +2,20 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-08-02T21:23:09.609Z",
-    "updatedAt": "2019-08-02T21:41:57.585Z",
+    "updatedAt": "2019-10-03T01:16:00.266Z",
     "id": "622543",
     "name": "GetProfile"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "GetProfile.lu",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "name": "Handle an Event",
+        "name": "OnBeginDialog",
         "id": "151697",
-        "updatedAt": "2019-08-02T21:23:15.465Z"
+        "updatedAt": "2019-10-03T01:16:08.941Z"
       },
       "actions": [
         {
@@ -21,20 +23,20 @@
           "$designer": {
             "name": "Prompt for text",
             "id": "362298",
-            "updatedAt": "2019-08-06T00:27:14.414Z"
+            "updatedAt": "2019-10-03T01:21:29.550Z"
           },
-          "outputFormat": "trim",
-          "allowInterruptions": "always",
-          "property": "user.profile.name",
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "maxTurnCount": 3,
           "validations": [
             "length(turn.value) <= 150"
           ],
+          "value": "concat(toUpper(substring(@userName, 0, 1)), substring(@userName, 1))",
+          "property": "user.profile.name",
           "defaultValue": "'Human'",
           "alwaysPrompt": false,
-          "value": "@userName"
+          "allowInterruptions": "always",
+          "outputFormat": "trim"
         },
         {
           "$type": "Microsoft.NumberInput",
@@ -73,11 +75,10 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Why",
         "id": "661298",
-        "updatedAt": "2019-08-02T21:43:30.949Z"
+        "updatedAt": "2019-10-03T01:16:12.900Z"
       },
-      "intent": "Why",
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
@@ -110,16 +111,16 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "Why"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "NoValue",
         "id": "449648",
-        "updatedAt": "2019-08-02T21:43:34.915Z"
+        "updatedAt": "2019-10-03T01:16:18.662Z"
       },
-      "intent": "NoValue",
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
@@ -172,9 +173,18 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "NoValue"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "372804",
+        "name": "GetProfileInputs",
+        "updatedAt": "2019-10-03T01:16:42.468Z"
+      },
+      "intent": "GetProfileInputs"
     }
   ],
-  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
-  "recognizer": "GetProfile.lu"
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
 }
