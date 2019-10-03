@@ -40,7 +40,6 @@ A Dialog in Bot Composer represents a piece of the bot's functionality such as *
 | Repeat this Dialog   | An action which repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action which replaces the current dialog with the target dialog.                                                              |
 | Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
-With all these built-in dialog functions, dialogs can be called from each other during a conversation flow. 
 
 ## Related Reading 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
