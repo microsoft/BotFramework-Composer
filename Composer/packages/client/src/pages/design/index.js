@@ -7,33 +7,33 @@ import { toLower, get } from 'lodash';
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
-import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 
 import { Conversation } from './../../components/Conversation';
+import { DialogStyle } from './../../components/Modal/styles';
+import NewDialogModal from './new-dialog-modal';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ProjectTree } from './../../components/ProjectTree';
 import { StoreContext } from './../../store';
+import { ToolBar } from './../../components/ToolBar/index';
+import { clearBreadcrumb } from './../../utils/navigation';
+import { getNewDesigner } from './../../utils/dialogUtil';
+import undoHistory from './../../store/middlewares/undo/history';
 import {
-  pageRoot,
-  contentWrapper,
   breadcrumbClass,
-  editorContainer,
-  visualPanel,
-  visualEditor,
-  formEditor,
-  editorWrapper,
+  contentWrapper,
   deleteDialogContent,
+  editorContainer,
+  editorWrapper,
+  formEditor,
   middleTriggerContainer,
   middleTriggerElements,
+  pageRoot,
   triggerButton,
+  visualEditor,
+  visualPanel,
 } from './styles';
-import NewDialogModal from './new-dialog-modal';
-import { ToolBar } from './../../components/ToolBar/index';
-import { OpenConfirmModal } from './../../components/Modal/Confirm';
-import { DialogStyle } from './../../components/Modal/styles';
-import { clearBreadcrumb } from './../../utils/navigation';
-import undoHistory from './../../store/middlewares/undo/history';
-import { getNewDesigner } from './../../utils/dialogUtil';
 
 const addIconProps = {
   iconName: 'CircleAddition',
@@ -56,6 +56,32 @@ function onRenderBreadcrumbItem(item, render) {
       {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
       {render(item)}
     </span>
+  );
+}
+
+function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
+  return (
+    <div css={middleTriggerContainer}>
+      <div css={middleTriggerElements}>
+        {isTriggerEmpty ? (
+          <Fragment>
+            {formatMessage(`This dialog has no trigger yet.`)}
+            <ActionButton
+              data-testid="MiddleAddNewTriggerButton"
+              iconProps={addIconProps}
+              css={triggerButton}
+              onClick={onClickAddTrigger}
+            >
+              {formatMessage('New Trigger ..')}
+            </ActionButton>
+          </Fragment>
+        ) : (
+          <div>
+            {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -338,24 +364,10 @@ function DesignPage(props) {
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}
-                    hidden={triggerButtonVisible}
+                    hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
                   />
-                  {triggerButtonVisible && (
-                    <div css={middleTriggerContainer}>
-                      <div css={middleTriggerElements}>
-                        {formatMessage(`This dialog has no triggers configured`)}
-                        <ActionButton
-                          data-testid="MiddleAddNewTriggerButton"
-                          iconProps={addIconProps}
-                          css={triggerButton}
-                          onClick={openNewTriggerModal}
-                        >
-                          {formatMessage('New Trigger ..')}
-                        </ActionButton>
-                      </div>
-                    </div>
-                  )}
+                  {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>
                 <iframe
                   key="FormEditor"
