@@ -26,6 +26,9 @@ If you want to test bot, you should have your bot runtime running for composer t
 
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
+## Documentation
+The documentation for Composer [can be found here](/blob/master/docs/).
+
 ## Extension Framework
 Composer is built on top of an extension framework, which allows anyone to provide an extension as the editor of certain type of bot assets.
 
