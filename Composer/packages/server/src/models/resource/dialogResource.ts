@@ -150,9 +150,6 @@ export class DialogResource implements FileResource {
             trigger.displayName = rule.intent;
           }
 
-          if (trigger.isIntent && trigger.displayName) {
-            trigger.displayName = '#' + trigger.displayName;
-          }
           trigers.push(trigger);
         });
       }
