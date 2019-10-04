@@ -8,4 +8,9 @@ export enum NodeEventTypes {
   InsertAfter = 'event.data.insert-after',
   Insert = 'event.data.insert',
   InsertEvent = 'event.data.insert-event',
+  CopySelection = 'event.data.copy-selection',
+  CutSelection = 'event.data.cut-selection',
+  DeleteSelection = 'event.data.delete-selection',
+  AppendSelection = 'event.data.paste-selection--keyboard',
+  InsertSelection = 'event.data.paste-selection--menu',
 }

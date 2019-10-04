@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField } from 'office-ui-fabric-react';
+import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
 
+import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
+import { styles as wizardStyles } from '../StepWizard/styles';
+
+import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -20,9 +24,19 @@ const validateForm = data => {
 };
 
 export function DefineConversation(props) {
-  const { onSubmit, onGetErrorMessage, onDismiss } = props;
+  const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
+  const { state } = useContext(StoreContext);
+  const { storages } = state;
+  const currentStorageIndex = useRef(0);
+
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
+
+  // set the default path
+  useEffect(() => {
+    const index = currentStorageIndex.current;
+    updateForm('location')(null, storages[index].path);
+  }, [storages]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -67,29 +81,45 @@ export function DefineConversation(props) {
     }
   };
 
+  // // update the path in the form and toggle the location picker.
+  const updateLocation = path => {
+    updateForm('location')(null, path);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack>
-        <TextField
-          label={formatMessage('Name')}
-          styles={name}
-          onChange={updateForm('name')}
-          errorMessage={formData.errors.name}
-          onGetErrorMessage={getErrorMessage}
-          data-testid="NewDialogName"
-        />
-        <TextField
-          styles={description}
-          label={formatMessage('Description')}
-          multiline
-          resizable={false}
-          onChange={updateForm('description')}
-        />
-      </Stack>
-      <DialogFooter>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
-      </DialogFooter>
-    </form>
+    <Fragment>
+      <form onSubmit={handleSubmit}>
+        <input type="submit" style={{ display: 'none' }} />
+        <Stack horizontal={enableLocationBrowse} gap="2rem" styles={wizardStyles.stackinput}>
+          <StackItem grow={0} styles={wizardStyles.halfstack}>
+            <TextField
+              label={formatMessage('Name')}
+              value={formData.name}
+              styles={name}
+              onChange={updateForm('name')}
+              errorMessage={formData.errors.name}
+              onGetErrorMessage={getErrorMessage}
+              data-testid="NewDialogName"
+            />
+          </StackItem>
+          <StackItem grow={0} styles={wizardStyles.halfstack}>
+            <TextField
+              styles={description}
+              value={formData.description}
+              label={formatMessage('Description')}
+              multiline
+              resizable={false}
+              onChange={updateForm('description')}
+            />
+          </StackItem>
+        </Stack>
+        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} />}
+
+        <DialogFooter>
+          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
+        </DialogFooter>
+      </form>
+    </Fragment>
   );
 }

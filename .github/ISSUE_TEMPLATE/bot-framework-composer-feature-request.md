@@ -2,7 +2,7 @@
 name: Bot Framework Composer Feature request
 about: Suggest an idea for the Bot Framework Composer
 title: ''
-labels: Enhancement, Needs-triage
+labels: 'Type: suggestion, Needs-triage'
 assignees: ''
 
 ---

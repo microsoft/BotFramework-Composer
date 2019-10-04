@@ -114,7 +114,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
   }
 };
 
-export const createProject: ActionCreator = async (store, templateId, name, description) => {
+export const createProject: ActionCreator = async (store, templateId, name, description, location) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -123,6 +123,7 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
       templateId,
       name,
       description,
+      location,
     };
     const response = await axios.post(`${BASEURL}/projects`, data);
     const dialogs = response.data.dialogs;

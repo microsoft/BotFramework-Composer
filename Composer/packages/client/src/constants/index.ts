@@ -127,7 +127,15 @@ export enum LuisConfig {
 export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
+  BOT: 'bot',
   UNKNOW: 'unknow',
+};
+
+export const OpenStatus = {
+  NEW: 'New',
+  SAVEAS: 'Save as',
+  OPEN: 'Open',
+  CLOSE: '',
 };
 
 export enum BotStatus {
@@ -165,6 +173,10 @@ export const DialogInfo = {
   SELECT_LOCATION: {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
+  },
+  SELECT_DESTINATION: {
+    title: formatMessage('Set destination folder'),
+    subText: formatMessage('Choose a location for your new bot project.'),
   },
 };
 

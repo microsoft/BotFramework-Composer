@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
 
+import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { getbreadcrumbLabel, deleteTrigger, createSelectedPath } from '../../utils';
@@ -88,6 +89,8 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
+  const [nodeOperationAvailable, setNodeOperationAvailability] = useState(false);
+
   useEffect(() => {
     if (match) {
       const { dialogId } = match;
@@ -155,6 +158,14 @@ function DesignPage(props) {
     }
   };
 
+  VisualEditorAPI.hasElementSelected()
+    .then(selected => {
+      setNodeOperationAvailability(selected);
+    })
+    .catch(() => {
+      setNodeOperationAvailability(false);
+    });
+
   const toolbarItems = [
     {
       type: 'action',
@@ -177,6 +188,42 @@ function DesignPage(props) {
           iconName: 'Redo',
         },
         onClick: () => actions.redo(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Cut'),
+      buttonProps: {
+        disabled: !nodeOperationAvailable,
+        iconProps: {
+          iconName: 'Cut',
+        },
+        onClick: () => VisualEditorAPI.cutSelection(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Copy'),
+      buttonProps: {
+        disabled: !nodeOperationAvailable,
+        iconProps: {
+          iconName: 'Copy',
+        },
+        onClick: () => VisualEditorAPI.copySelection(),
+      },
+      align: 'left',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Delete'),
+      buttonProps: {
+        disabled: !nodeOperationAvailable,
+        iconProps: {
+          iconName: 'Delete',
+        },
+        onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
     },
@@ -287,6 +334,7 @@ function DesignPage(props) {
                 <div css={visualPanel}>
                   {breadcrumbItems}
                   <iframe
+                    id="VisualEditor"
                     key="VisualEditor"
                     name="VisualEditor"
                     css={visualEditor}

@@ -34,6 +34,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 }
 
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
+export const intentTypeKey: string = SDKTypes.OnIntent;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -106,10 +107,6 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
 
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
-    {
-      key: '',
-      text: '',
-    },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];

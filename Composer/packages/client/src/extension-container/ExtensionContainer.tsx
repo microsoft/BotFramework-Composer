@@ -114,6 +114,16 @@ function ExtensionContainer() {
       }
     });
 
+    apiClient.registerApi('rpc', (method, ...params) => {
+      const handler = (window as any)[method];
+      let result;
+      if (handler) {
+        result = handler(...params);
+      }
+
+      return result;
+    });
+
     shellApi.getState().then(result => {
       setShellData(result);
     });
