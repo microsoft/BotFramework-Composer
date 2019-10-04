@@ -106,8 +106,3 @@ export interface DialogSetting {
   luis: ILuisConfig;
   [key: string]: any;
 }
-
-export interface ISettingManager {
-  get(hideValues: boolean, env: 'integration' | 'production'): Promise<DialogSetting | null>;
-  set(settings: DialogSetting, env: 'integration' | 'production'): Promise<void>;
-}

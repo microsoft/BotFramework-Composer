@@ -234,10 +234,27 @@ async function createLuFile(req: Request, res: Response) {
   }
 }
 
+async function getDefaultSlotEnvSettings(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    try {
+      const settings = await ProjectService.currentBotProject.getDefaultSlotEnvSettings(req.query.obfuscate);
+      res.send(settings);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function getEnvSettings(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      const settings = await ProjectService.currentBotProject.getEnvSettings(req.query.hideValues, req.params.env);
+      const settings = await ProjectService.currentBotProject.getEnvSettings(req.params.slot, req.query.obfuscate);
       res.send(settings);
     } catch (err) {
       res.status(404).json({
@@ -254,7 +271,24 @@ async function getEnvSettings(req: Request, res: Response) {
 async function updateEnvSettings(req: Request, res: Response) {
   if (ProjectService.currentBotProject !== undefined) {
     try {
-      await ProjectService.currentBotProject.updateEnvSettings(req.body.settings, req.params.env);
+      await ProjectService.currentBotProject.updateEnvSettings(req.params.slot, req.body.settings);
+      res.send('ok');
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
+async function updateDefaultSlotEnvSettings(req: Request, res: Response) {
+  if (ProjectService.currentBotProject !== undefined) {
+    try {
+      await ProjectService.currentBotProject.updateDefaultSlotEnvSettings(req.body.settings);
       res.send('ok');
     } catch (err) {
       res.status(404).json({
@@ -318,7 +352,9 @@ export const ProjectController = {
   createLgFile,
   removeLgFile,
   getEnvSettings,
+  getDefaultSlotEnvSettings,
   updateEnvSettings,
+  updateDefaultSlotEnvSettings,
   updateLuFile,
   createLuFile,
   removeLuFile,

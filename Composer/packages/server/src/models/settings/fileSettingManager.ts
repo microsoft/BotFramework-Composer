@@ -1,68 +1,53 @@
 import { Path } from '../../utility/path';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
-import { DialogSetting, ISettingManager } from './interface';
+import { ISettingManager } from '.';
 
 const subPath = 'settings/appsettings.json';
 
-const defaultSetting: DialogSetting = {
-  MicrosoftAppPassword: '',
-  MicrosoftAppId: '',
-  luis: {
-    name: '',
-    authoringKey: '',
-    endpointKey: '',
-    authoringRegion: 'westus',
-    defaultLanguage: 'en-us',
-    environment: 'composer',
-  },
-};
-
-export class SettingManager implements ISettingManager {
+export class FileSettingManager implements ISettingManager {
   private basePath: string;
   private storage: LocalDiskStorage;
-  private settings: any;
 
   constructor(basePath: string) {
     this.basePath = basePath;
     this.storage = new LocalDiskStorage();
-    this.settings = {};
   }
 
-  public get = async (hideValues: boolean, env: 'integration' | 'production'): Promise<DialogSetting | null> => {
-    let settings: DialogSetting;
+  public get = async (slot: string, obfuscate: boolean): Promise<any> => {
+    this.validateSlot(slot);
 
-    if (this.settings[env]) {
-      settings = this.settings;
-    } else {
-      let path = this.getPath(env);
-      settings = await this._getFromStorage(path, env);
-      this.settings[env] = settings;
-    }
+    let path = this.getPath(slot);
+    let settings = await this._getFromStorage(path, slot);
 
-    return hideValues ? this.obfuscateValues(settings) : settings;
+    return obfuscate ? this.obfuscateValues(settings) : settings;
   };
 
-  private _getFromStorage = async (path: string, env: 'integration' | 'production') => {
+  private _getFromStorage = async (path: string, slot: string) => {
     if (await this.storage.exists(path)) {
       const file = await this.storage.readFile(path);
       return JSON.parse(file);
     } else {
       // does not have setting file, return default value
-      await this.set(defaultSetting, env);
-      return defaultSetting;
+      const defaultValue = this.createDefaultSettings();
+      await this.set(slot, defaultValue);
+      return defaultValue;
     }
   };
 
-  public set = async (settings: DialogSetting, env: 'integration' | 'production'): Promise<void> => {
-    let path = this.getPath(env);
+  protected createDefaultSettings = (): any => {
+    return {};
+  };
+
+  public set = async (slot: string, settings: any): Promise<void> => {
+    this.validateSlot(slot);
+
+    let path = this.getPath(slot);
 
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
       await this.storage.mkDir(dir, { recursive: true });
     }
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));
-
-    this.settings[env] = settings;
   };
 
   private obfuscateValues = (obj: any): any => {
@@ -85,7 +70,13 @@ export class SettingManager implements ISettingManager {
     return '*****';
   };
 
-  private getPath = (env: 'integration' | 'production'): string => {
-    return Path.join(this.basePath, env, subPath);
+  private getPath = (slot: string): string => {
+    if (slot && slot.length > 0) {
+      return Path.join(this.basePath, slot, subPath);
+    } else {
+      return Path.join(this.basePath, subPath);
+    }
   };
+
+  protected validateSlot = (slot: string): void => {};
 }
