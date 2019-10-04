@@ -37,12 +37,12 @@ const PROMPT_TYPES = [
   },
 ];
 
-const getOutputFormatOptions = (outputFormatSchema: JSONSchema6) => {
-  if (!outputFormatSchema || !outputFormatSchema.enum || !Array.isArray(outputFormatSchema.enum)) {
+const getOptions = (enumSchema: JSONSchema6) => {
+  if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
     return [];
   }
 
-  return outputFormatSchema.enum.map(o => ({ label: o as string, value: o as string }));
+  return enumSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
 interface UserAnswersProps extends FieldProps<MicrosoftInputDialog> {
@@ -88,7 +88,7 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
             label={formatMessage('Output Format')}
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
-            options={{ enumOptions: getOutputFormatOptions(getSchema('outputFormat')) }}
+            options={{ enumOptions: getOptions(getSchema('outputFormat')) }}
           />
         </div>
       )}
@@ -113,6 +113,20 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
             label={formatMessage('Default locale')}
             formContext={props.formContext}
             rawErrors={errorSchema.defaultLocale && errorSchema.defaultLocale.__errors}
+          />
+        </div>
+      )}
+      {getSchema('style') && (
+        <div css={field}>
+          <SelectWidget
+            onChange={onChange('style')}
+            schema={getSchema('style')}
+            id={idSchema.style.__id}
+            value={(formData as ChoiceInput).style}
+            label={formatMessage('List style')}
+            formContext={props.formContext}
+            rawErrors={errorSchema.style && errorSchema.style.__errors}
+            options={{ enumOptions: getOptions(getSchema('style')) }}
           />
         </div>
       )}
