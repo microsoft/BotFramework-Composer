@@ -1,16 +1,16 @@
 import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
-import { JSONSchema6 } from 'json-schema';
 
 import { TextareaWidget } from '../../widgets';
 
 import { Validations } from './Validations';
 import { field } from './styles';
+import { PromptFieldChangeHandler, GetSchema } from './types';
 
 interface ExceptionsProps extends FieldProps<MicrosoftInputDialog> {
-  onChange: (field: keyof MicrosoftInputDialog) => (data: any) => void;
-  getSchema: (field: keyof MicrosoftInputDialog) => JSONSchema6;
+  onChange: PromptFieldChangeHandler;
+  getSchema: GetSchema;
 }
 
 export const Exceptions: React.FC<ExceptionsProps> = props => {

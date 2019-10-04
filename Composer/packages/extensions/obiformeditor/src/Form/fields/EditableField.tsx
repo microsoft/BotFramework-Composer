@@ -35,6 +35,12 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
     onBlur && onBlur(e);
   };
 
+  let borderColor: string | undefined = undefined;
+
+  if (!editing) {
+    borderColor = localValue ? 'transparent' : NeutralColors.gray30;
+  }
+
   return (
     <div onMouseEnter={() => setEditing(true)} onMouseLeave={() => !hasFocus && setEditing(false)}>
       <TextField
@@ -55,7 +61,7 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
           ),
           fieldGroup: mergeStyles(
             {
-              borderColor: editing ? undefined : 'transparent',
+              borderColor,
               transition: 'border-color 0.1s linear',
               selectors: {
                 ':hover': {

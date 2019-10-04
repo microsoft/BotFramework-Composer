@@ -1,16 +1,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { JSONSchema6 } from 'json-schema';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 
 import { TextWidget, SelectWidget, CheckboxWidget } from '../../widgets';
 
 import { field, settingsFields, settingsFieldHalf, settingsFieldFull, settingsFieldInline } from './styles';
+import { PromptFieldChangeHandler, GetSchema } from './types';
 
 interface PromptSettingsrops extends FieldProps<MicrosoftInputDialog> {
-  onChange: (field: keyof MicrosoftInputDialog) => (data: any) => void;
-  getSchema: (field: keyof MicrosoftInputDialog) => JSONSchema6;
+  onChange: PromptFieldChangeHandler;
+  getSchema: GetSchema;
 }
 
 export const PromptSettings: React.FC<PromptSettingsrops> = props => {

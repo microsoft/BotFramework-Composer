@@ -63,3 +63,17 @@ export const settingsFieldHalf = css`
 export const settingsFieldInline = css`
   margin: 0;
 `;
+
+export const choiceItemContainer = (align: string = 'center') => css`
+  display: flex;
+  align-items: ${align};
+`;
+
+export const choiceItemValue = css`
+  width: 180px;
+`;
+
+export const choiceItemSynonyms = css`
+  flex: 1;
+  margin-left: 20px;
+`;

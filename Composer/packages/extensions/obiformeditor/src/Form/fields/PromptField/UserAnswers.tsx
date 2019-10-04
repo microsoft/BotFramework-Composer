@@ -7,6 +7,8 @@ import { SDKTypes } from 'shared-menus';
 import { TextWidget, SelectWidget } from '../../widgets';
 
 import { field } from './styles';
+import { GetSchema, PromptFieldChangeHandler } from './types';
+import { ChoiceInputSettings } from './ChoiceInput';
 
 const PROMPT_TYPES = [
   {
@@ -44,8 +46,8 @@ const getOutputFormatOptions = (outputFormatSchema: JSONSchema6) => {
 };
 
 interface UserAnswersProps extends FieldProps<MicrosoftInputDialog> {
-  onChange: (field: keyof MicrosoftInputDialog) => (data: any) => void;
-  getSchema: (field: keyof MicrosoftInputDialog) => JSONSchema6;
+  onChange: PromptFieldChangeHandler;
+  getSchema: GetSchema;
 }
 
 export const UserAnswers: React.FC<UserAnswersProps> = props => {
@@ -74,8 +76,6 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
           formContext={props.formContext}
           rawErrors={errorSchema.$type && errorSchema.$type.__errors}
           options={{ enumOptions: PROMPT_TYPES }}
-          onFocus={() => {}}
-          onBlur={() => {}}
         />
       </div>
       {getSchema('outputFormat') && (
@@ -89,8 +89,6 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
             options={{ enumOptions: getOutputFormatOptions(getSchema('outputFormat')) }}
-            onFocus={() => {}}
-            onBlur={() => {}}
           />
         </div>
       )}
@@ -105,6 +103,20 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
           rawErrors={errorSchema.value && errorSchema.value.__errors}
         />
       </div>
+      {getSchema('defaultLocale') && (
+        <div css={field}>
+          <TextWidget
+            onChange={onChange('defaultLocale')}
+            schema={getSchema('defaultLocale')}
+            id={idSchema.defaultLocale.__id}
+            value={(formData as ChoiceInput).defaultLocale}
+            label={formatMessage('Default locale')}
+            formContext={props.formContext}
+            rawErrors={errorSchema.defaultLocale && errorSchema.defaultLocale.__errors}
+          />
+        </div>
+      )}
+      {formData.$type === SDKTypes.ChoiceInput && <ChoiceInputSettings {...props} formData={formData as ChoiceInput} />}
     </>
   );
 };
