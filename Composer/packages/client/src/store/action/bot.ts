@@ -42,18 +42,46 @@ export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings)
   }
 };
 
-export const getPublishVersions: ActionCreator = async ({ dispatch, getState }, settings) => {
-  const path = `${BASEURL}/launcher/publishVersions`;
+export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
+  const path = `${BASEURL}/launcher/publishHistory`;
   try {
-    var res = await axios.get(path);
-    /* TODO:
+    const res = await axios.get(path);
     dispatch({
       type: ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS,
       payload: {
         versions: res.data,
-        error: '',
       },
-    });*/
+    });
+  } catch (err) {
+    throw new Error(err.response.data.message);
+  }
+};
+
+export const publish: ActionCreator = async ({ dispatch }) => {
+  const path = `${BASEURL}/launcher/publish`;
+  try {
+    const res = await axios.post(path);
+    dispatch({
+      type: ActionTypes.PUBLISH_SUCCESS,
+      payload: {
+        versions: res.data,
+      },
+    });
+  } catch (err) {
+    throw new Error(err.response.data.message);
+  }
+};
+
+export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
+  const path = `${BASEURL}/launcher/publish/${version}`;
+  try {
+    const res = await axios.post(path);
+    dispatch({
+      type: ActionTypes.PUBLISH_SUCCESS,
+      payload: {
+        versions: res.data,
+      },
+    });
   } catch (err) {
     throw new Error(err.response.data.message);
   }

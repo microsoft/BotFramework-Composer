@@ -6,13 +6,18 @@ import {
   CSharpBotConnector,
   IBotConnector,
   SelfHostBotConnector,
+  MockHostBotConnector,
   IPublishHistory,
 } from '../models/connector';
 
 class BotConnectorService {
   private connector: IBotConnector;
   constructor() {
-    this.connector = absHosted ? new SelfHostBotConnector() : new CSharpBotConnector(settings.botRuntime);
+    this.connector = process.env.MOCK_ABS
+      ? absHosted
+        ? new SelfHostBotConnector()
+        : new MockHostBotConnector()
+      : new CSharpBotConnector(settings.botRuntime);
   }
 
   // start the current bot

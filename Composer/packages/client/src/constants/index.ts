@@ -90,6 +90,8 @@ export enum ActionTypes {
   UNDO = 'UNDO',
   REDO = 'REDO',
   HISTORY_CLEAR = 'HISTORY_CLEAR',
+  GET_PUBLISH_VERSIONS_SUCCESS = 'GET_PUBLISH_VERSIONS_SUCCESS', // remote publish
+  PUBLISH_SUCCESS = 'PUBLISH_SUCCESS', // remote publish
 }
 
 export const Tips = {

@@ -11,6 +11,26 @@ export class MockHostBotConnector implements IBotConnector {
     integration: undefined,
   };
 
+  constructor() {
+    const config: BotConfig = {
+      user: { accessToken: '123' },
+      MicrosoftAppId: '123',
+      MicrosoftAppPassword: '123',
+      luis: {
+        name: '123',
+        authoringKey: '1232',
+        authoringRegion: '123',
+        endpointKey: '123',
+        defaultLanguage: 'en',
+        environment: 'dev',
+      },
+    };
+
+    this.sync(config).then(() => {
+      this.publish(config);
+    });
+  }
+
   public connect = async (env: BotEnvironments, hostName: string) => {
     this.status = BotStatus.Connected;
     const prefix = env === 'production' ? '' : 'integration/';
@@ -32,7 +52,7 @@ export class MockHostBotConnector implements IBotConnector {
     return this.history;
   };
 
-  public publish = async (config: BotConfig, label: string) => {
+  public publish = async (config: BotConfig, label?: string) => {
     const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
 
     if (!label) {
@@ -69,7 +89,7 @@ export class MockHostBotConnector implements IBotConnector {
     const timestamp = new Date();
     const datetimeStamp = timestamp.toISOString().replace(/:/g, '.');
     const tag = `integration_${datetimeStamp}`;
-    let version = this.createPublishVersion(user);
+    const version = this.createPublishVersion(user);
     version.label = tag;
     return version;
   }

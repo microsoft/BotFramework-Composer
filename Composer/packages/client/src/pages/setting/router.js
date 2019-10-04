@@ -9,6 +9,7 @@ import { DialogSettings } from './dialog-settings';
 import { Services } from './services';
 import { ComposerConfiguration } from './composer-configuration/index';
 import { PublishingStaging } from './publishing-staging/index';
+import { RemotePublish } from './remote-publish/index';
 
 const mapNavTo = x => resolveToBasePath(BASEPATH, x);
 
@@ -17,6 +18,7 @@ const Routes = () => (
     <Router basepath={mapNavTo('setting')}>
       <Redirect from="*" to={mapNavTo('setting/dialog-settings')} noThrow />
       <DialogSettings path="dialog-settings" />
+      <RemotePublish path="remote-publish" />
       <Services path="services" />
       <ComposerConfiguration path="composer-configuration" />
       <PublishingStaging path="publishing-staging" />

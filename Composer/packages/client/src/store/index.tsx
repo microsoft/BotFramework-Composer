@@ -44,6 +44,8 @@ const initialState: State = {
     token: null,
     sessionExpired: false,
   },
+  publishVersions: {},
+  lastPublishChange: null,
 };
 
 interface StoreContextValue {

@@ -210,6 +210,15 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
+const setPublishVersions: ReducerFunc = (state, { versions } = {}) => {
+  state.publishVersions = versions;
+  return state;
+};
+
+const updatePublishStatus: ReducerFunc = state => {
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -243,4 +252,6 @@ export const reducer = createReducer({
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
+  [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
+  [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
 } as { [type in ActionTypes]: ReducerFunc });
