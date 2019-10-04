@@ -8,6 +8,7 @@ export interface IEnvironmentConfig {
 }
 
 export interface IEnvironment {
+  getEnvironmentName(projectName: string): string | undefined;
   getSlotNames(): string[];
   getDefaultSlot(): string;
   getSettingsManager(): ISettingManager;

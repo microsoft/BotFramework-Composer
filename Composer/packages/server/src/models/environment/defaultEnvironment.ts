@@ -17,6 +17,10 @@ export class DefaultEnvironment implements IEnvironment {
     this.botConnector = new CSharpBotConnector(this.config.endpoint);
   }
 
+  public getEnvironmentName(projectName: string): string | undefined {
+    return undefined;
+  }
+
   public getDefaultSlot(): string {
     return this.defaultSlot;
   }

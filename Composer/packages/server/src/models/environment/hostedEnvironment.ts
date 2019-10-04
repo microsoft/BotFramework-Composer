@@ -17,6 +17,10 @@ export class HostedEnvironment implements IEnvironment {
     this.botConnector = new SelfHostBotConnector();
   }
 
+  public getEnvironmentName(projectName: string): string | undefined {
+    return projectName;
+  }
+
   public getDefaultSlot(): string {
     return this.defaultSlot;
   }

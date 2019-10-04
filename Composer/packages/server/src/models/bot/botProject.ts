@@ -78,7 +78,7 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
-      botEnvironment: absHosted ? this.name : undefined,
+      botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
     };
   };
