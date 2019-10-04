@@ -4,10 +4,9 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
+import { FIELDS_TO_HIDE } from 'shared-menus';
 
 import './styles.css';
-
-import { FIELDS_TO_HIDE } from '../../schema/appschema';
 
 interface ObjectItemProps {
   content: React.ReactNode;

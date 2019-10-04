@@ -75,6 +75,7 @@ export function insert(content, path: string, position: number | undefined, data
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
+
   const newStep = {
     $type: data.$type,
     ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),

@@ -4,10 +4,10 @@ import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
+import { appschema } from 'shared-menus';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { appschema } from './schema/appschema';
 import { getMemoryOptions, getTimestamp } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 

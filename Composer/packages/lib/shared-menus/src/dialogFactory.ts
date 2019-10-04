@@ -1,5 +1,7 @@
 import nanoid from 'nanoid/generate';
 
+import { appschema } from './appschema';
+
 interface DesignerAttributes {
   name: string;
   description: string;
@@ -10,6 +12,17 @@ const initialDialogShape = {
     $type: 'Microsoft.OnConversationUpdateActivity',
     constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
   },
+};
+
+const seedDefaults = (type: string) => {
+  const obj = {};
+  for (const field in appschema.definitions[type].properties) {
+    if (appschema.definitions[type].properties[field].default) {
+      console.log('SETTING DEFAULT');
+      obj[field] = appschema.definitions[type].properties[field].default;
+    }
+  }
+  return obj;
 };
 
 export const seedNewDialog = (
@@ -23,6 +36,7 @@ export const seedNewDialog = (
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
+    ...seedDefaults($type),
     ...(initialDialogShape[$type] || {}),
     ...optionalAttributes,
   };
