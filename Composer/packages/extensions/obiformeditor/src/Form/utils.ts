@@ -26,10 +26,6 @@ export interface DialogOptionsOpts {
   onClick?: (e: any, item: IContextualMenuItem) => void;
 }
 
-export function getTimestamp(): string {
-  return new Date().toISOString();
-}
-
 /**
  * This method is used to build out the content of many popout menus in the form view
  * like context menus, "+Add" buttons and others.
@@ -70,8 +66,6 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
         $type: dialog,
         $designer: {
           id: nanoid('1234567890', 6),
-          createdAt: getTimestamp(),
-          updatedAt: getTimestamp(),
         },
       },
       onClick: subMenu ? undefined : handleClick,

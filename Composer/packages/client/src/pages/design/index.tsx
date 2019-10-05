@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
 import { PromptTab } from 'shared-menus';
+import { getNewDesigner } from 'shared-menus';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -17,7 +18,6 @@ import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
-import { getNewDesigner } from '../../utils/dialogUtil';
 import undoHistory from '../../store/middlewares/undo/history';
 
 import NewDialogModal from './new-dialog-modal';

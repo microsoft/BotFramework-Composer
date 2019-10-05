@@ -77,16 +77,6 @@ export const RootField: React.FC<RootFieldProps> = props => {
           </span>
           <span style={{ minWidth: '75px', display: 'inline-block' }}>{get(formData, '$designer.id')}</span>
         </div>
-        <div>
-          <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
-            {formatMessage('Last Edited')}
-          </span>
-          <span>
-            {get(formData, '$designer.updatedAt')
-              ? date(Date.parse(get(formData, '$designer.updatedAt')), 'short')
-              : 'N/A'}
-          </span>
-        </div>
       </div>
     </div>
   );

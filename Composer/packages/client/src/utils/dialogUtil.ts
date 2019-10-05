@@ -53,19 +53,6 @@ export function getFriendlyName(data) {
   return data.$type;
 }
 
-export function getNewDesigner(name: string, description: string) {
-  const timestamp = new Date().toISOString();
-  return {
-    $designer: {
-      name,
-      description,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-      id: nanoid('1234567890', 6),
-    },
-  };
-}
-
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const optionalAttributes: { constraint?: string; events?: string[] } = {};

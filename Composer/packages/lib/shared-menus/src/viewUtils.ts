@@ -221,18 +221,28 @@ export const createStepMenu = (
           key: $type,
           name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
           $type: $type,
-          ...seedNewDialog($type, {
-            name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-          }),
-          data: {
-            $type: $type, // used by the steps field to create the item
-            ...seedNewDialog($type, {
-              name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-            }),
-          },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {
+            item = {
+              ...item,
+              $type: item.$type,
+              ...seedNewDialog(item.$type, {
+                name:
+                  ConceptLabels[item.$type] && ConceptLabels[item.$type].title
+                    ? ConceptLabels[item.$type].title
+                    : item.$type,
+              }),
+              data: {
+                $type: item.$type, // used by the steps field to create the item
+                ...seedNewDialog(item.$type, {
+                  name:
+                    ConceptLabels[item.$type] && ConceptLabels[item.$type].title
+                      ? ConceptLabels[item.$type].title
+                      : item.$type,
+                }),
+              },
+            };
             return handleType(e, item);
           }
         },

@@ -1,21 +1,11 @@
 import React, { useEffect } from 'react';
-import nanoid from 'nanoid/generate';
 import formatMessage from 'format-message';
+import { getDesignerId, DesignerData } from 'shared-menus';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import get from 'lodash.get';
 
-import { getTimestamp } from '../utils';
-
 import './DesignerField.css';
-
-interface DesignerData {
-  name?: string;
-  description?: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 interface DesignerFieldProps {
   placeholder: string;
@@ -29,14 +19,7 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
   useEffect(() => {
     // create new designer metadata
     if (!data || !data.id) {
-      const timestamp = getTimestamp();
-      const newDesigner: DesignerData = {
-        createdAt: timestamp,
-        updatedAt: timestamp,
-        id: nanoid('1234567890', 6),
-        ...data,
-      };
-
+      const newDesigner = getDesignerId(data);
       onChange(newDesigner);
     }
   }, [data]);
@@ -45,7 +28,6 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
     onChange({
       ...data,
       [field]: val,
-      updatedAt: getTimestamp(),
     });
   };
 
@@ -67,20 +49,6 @@ export const DesignerField: React.FC<DesignerFieldProps> = props => {
         />
       </div>
       <div className="DesignerFieldSection">
-        <TextField
-          value={
-            get(data, 'updatedAt')
-              ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
-                  updatedAt: Date.parse(get(data, 'updatedAt')),
-                })
-              : 'N/A'
-          }
-          label={formatMessage('Last Edited')}
-          borderless
-          readOnly
-          styles={{ field: { color: NeutralColors.gray140, paddingLeft: 0 } }}
-        />
-        {/* HIDE ID UNTIL WE ACTUALLY HAVE A USE FOR IT */}
         <TextField
           value={get(data, 'id')}
           label={formatMessage('ID number')}

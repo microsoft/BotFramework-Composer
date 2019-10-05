@@ -7,6 +7,12 @@ interface DesignerAttributes {
   description: string;
 }
 
+export interface DesignerData {
+  name?: string;
+  description?: string;
+  id: string;
+}
+
 const initialDialogShape = {
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
@@ -14,15 +20,37 @@ const initialDialogShape = {
   },
 };
 
+export function getNewDesigner(name: string, description: string) {
+  return {
+    $designer: {
+      name,
+      description,
+      id: nanoid('1234567890', 6),
+    },
+  };
+}
+
+export const getDesignerId = (data: DesignerData) => {
+  const newDesigner: DesignerData = {
+    id: nanoid('1234567890', 6),
+    ...data,
+  };
+
+  return newDesigner;
+};
+
 const seedDefaults = (type: string) => {
-  const obj = {};
-  for (const field in appschema.definitions[type].properties) {
-    if (appschema.definitions[type].properties[field].default) {
-      console.log('SETTING DEFAULT');
-      obj[field] = appschema.definitions[type].properties[field].default;
+  const dialogSeed = {};
+
+  if (!appschema.definitions[type]) return dialogSeed;
+  const { properties } = appschema.definitions[type];
+
+  for (const field in properties) {
+    if (properties[field].default !== null && properties[field].default !== undefined) {
+      dialogSeed[field] = properties[field].default;
     }
   }
-  return obj;
+  return dialogSeed;
 };
 
 export const seedNewDialog = (
@@ -36,8 +64,8 @@ export const seedNewDialog = (
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
-    ...seedDefaults($type),
     ...(initialDialogShape[$type] || {}),
     ...optionalAttributes,
+    ...seedDefaults($type),
   };
 };
