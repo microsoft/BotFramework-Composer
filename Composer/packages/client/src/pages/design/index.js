@@ -184,13 +184,19 @@ function DesignPage(props) {
     }
   };
 
-  VisualEditorAPI.hasElementSelected()
-    .then(selected => {
-      setNodeOperationAvailability(selected);
-    })
-    .catch(() => {
-      setNodeOperationAvailability(false);
-    });
+  useEffect(() => {
+    // HACK: wait until visual editor finish rerender.
+    // TODO: expose visual editor store to Shell.
+    setTimeout(() => {
+      VisualEditorAPI.hasElementSelected()
+        .then(selected => {
+          setNodeOperationAvailability(selected);
+        })
+        .catch(() => {
+          setNodeOperationAvailability(false);
+        });
+    }, 100);
+  });
 
   const toolbarItems = [
     {
