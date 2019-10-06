@@ -186,7 +186,7 @@ function DesignPage(props) {
 
   useEffect(() => {
     // HACK: wait until visual editor finish rerender.
-    // TODO: expose visual editor store to Shell.
+    // TODO: (ze) expose visual editor store to Shell and (leilei) intercept store events.
     setTimeout(() => {
       VisualEditorAPI.hasElementSelected()
         .then(selected => {

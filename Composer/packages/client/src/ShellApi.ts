@@ -65,7 +65,8 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states, fix it when refactoring shell state management.
+  // HACK: `onSelect` should actually change some states
+  // TODO: (leilei, ze) fix it when refactoring shell state management.
   const [, forceUpdate] = useState();
 
   const { state, actions } = useContext(StoreContext);
