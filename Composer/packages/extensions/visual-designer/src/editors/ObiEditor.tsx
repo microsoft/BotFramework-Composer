@@ -160,11 +160,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else {
       setKeyBoardStatus('normal');
     }
-  }, [focusedId, selectionContext]);
 
-  useEffect(() => {
+    // Notify container at every selection change.
     onSelect(selectionContext.selectedIds);
-  }, [selectionContext]);
+  }, [focusedId, selectionContext]);
 
   useEffect(
     (): void => {
