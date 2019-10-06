@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -65,6 +65,9 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
+  // HACK: `onSelect` should actually change some states, fix it when refactoring shell state management.
+  const [, forceUpdate] = useState();
+
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = actions.updateDialog;
@@ -101,6 +104,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
+    apiClient.registerApi('onSelect', onSelect);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -306,6 +310,10 @@ export const ShellApi: React.FC = () => {
       dataPath = `${focused}.${dataPath}`;
     }
     actions.focusTo(dataPath);
+  }
+
+  function onSelect(ids) {
+    forceUpdate(ids);
   }
 
   return null;
