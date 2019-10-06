@@ -63,6 +63,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           onFocusEvent={onFocusEvent}
           onOpen={(x, rest) => navTo(x, rest)}
           onChange={x => saveData(x)}
+          onSelect={() => {
+            console.log('on select change');
+          }}
         />
       </div>
     </NodeRendererContext.Provider>

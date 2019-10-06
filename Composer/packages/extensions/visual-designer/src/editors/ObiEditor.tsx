@@ -33,6 +33,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onFocusSteps,
   onOpen,
   onChange,
+  onSelect,
 }): JSX.Element | null => {
   let divRef;
 
@@ -162,7 +163,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   }, [focusedId, selectionContext]);
 
   useEffect(() => {
-    onChange(data);
+    onSelect(selectionContext.selectedIds);
   }, [selectionContext]);
 
   useEffect(
@@ -309,6 +310,7 @@ ObiEditor.defaultProps = {
   onFocusEvent: () => {},
   onOpen: () => {},
   onChange: () => {},
+  onSelect: () => {},
 };
 
 interface ObiEditorProps {
@@ -321,4 +323,5 @@ interface ObiEditorProps {
   onFocusEvent: (eventId: string) => any;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
+  onSelect: (selection: any) => any;
 }
