@@ -74,7 +74,6 @@ Each intent contains a series of sample utterances which will be used as trainin
         <img alt="BookFlight_configure" src="./media/events_triggers/BookFlight_configure.png" style="max-width:300px;" />
     </p>
 
-
 In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
 
 Extracted entities are passed along to any triggered actions or child dialogs using the syntax memory path `@[Entity Name]`. For example, given an intent definition like below:
@@ -104,15 +103,12 @@ To define triggers with Regular Expression recognizer you need to:
 3. Define `Intent Handlers` as `New Triggers`for each intent and configure each `Intent Handler` with specific intent as shown in the last step of defining LUIS recognizer. 
 
 ## Related Reading 
-[Events vs Triggers](http://ftp.magicsoftware.com/www/help/unipaas/mergedprojects/technical%20notes/Events,_Triggers,_and_Handlers.htm)
 
 [LUIS.ai docs](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)
 
-[Adaptive Dialog[_Preview_]](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme)
-
 [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
 
-[Language Generation[_Preview_]](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+[.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 
 ## Next 
 [Defining Triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md)
