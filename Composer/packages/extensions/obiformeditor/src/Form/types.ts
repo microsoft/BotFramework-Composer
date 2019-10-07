@@ -13,6 +13,8 @@ export interface FormContext {
   currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
+  focusedEvent: string;
+  focusedSteps: string[];
 }
 
 interface EnumOption {

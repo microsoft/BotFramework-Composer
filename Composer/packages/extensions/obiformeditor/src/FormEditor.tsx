@@ -121,6 +121,8 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           currentDialog: props.currentDialog,
           dialogId: get(data, '$designer.id'),
           isRoot: props.focusPath.endsWith('#'),
+          focusedEvent: props.focusedEvent,
+          focusedSteps: props.focusedSteps,
         }}
         idPrefix={props.focusPath}
       >
