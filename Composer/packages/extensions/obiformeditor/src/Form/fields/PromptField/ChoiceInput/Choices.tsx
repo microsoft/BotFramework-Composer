@@ -19,8 +19,6 @@ interface ChoiceItemProps {
   hasMoveDown: boolean;
   onReorder: (a: number, b: number) => void;
   onDelete: (idx: number) => void;
-  // formContext: FormContext;
-  // schema: JSONSchema6;
   onEdit: (idx: number, value?: IChoice) => void;
 }
 
@@ -28,6 +26,7 @@ interface ChoicesProps {
   id: string;
   schema: JSONSchema6;
   formData?: IChoice[];
+  label: string;
   onChange: (data: IChoice[]) => void;
 }
 
@@ -99,7 +98,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
 };
 
 export const Choices: React.FC<ChoicesProps> = props => {
-  const { onChange, formData = [], id } = props;
+  const { onChange, formData = [], id, label } = props;
   const [newChoice, setNewChoice] = useState<IChoice | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -116,13 +115,6 @@ export const Choices: React.FC<ChoicesProps> = props => {
     choices[idx] = val;
     onChange(choices);
   };
-
-  // const addNewChoice = () => {
-  //   if (newChoice) {
-  //     onChange([...formData, newChoice]);
-  //     setNewChoice(null);
-  //   }
-  // };
 
   const handleNewChoiceEdit = (field: 'value' | 'synonyms') => (_e: any, data?: string) => {
     if (field === 'synonyms') {
@@ -142,7 +134,7 @@ export const Choices: React.FC<ChoicesProps> = props => {
           setNewChoice(null);
           setErrorMsg('');
         } else {
-          setErrorMsg(formatMessage('choice option is required'));
+          setErrorMsg(formatMessage('value required'));
         }
       }
     }
@@ -153,7 +145,7 @@ export const Choices: React.FC<ChoicesProps> = props => {
       <div css={field}>
         <div>
           <WidgetLabel
-            label={formatMessage('Choice options')}
+            label={label}
             description={formatMessage(
               "A list of options to present to the user. Synonyms can be used to allow for variation in a user's response."
             )}

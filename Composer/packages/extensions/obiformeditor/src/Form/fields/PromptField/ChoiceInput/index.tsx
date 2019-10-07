@@ -32,6 +32,7 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
         schema={getSchema('choices')}
         onChange={onChange('choices')}
         id={idSchema.choices && idSchema.choices.__id}
+        label={formatMessage('Choice Options')}
       />
       <ChoiceOptions
         schema={getSchema('choiceOptions')}
@@ -40,6 +41,16 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
         formData={formData.choiceOptions || {}}
         formContext={formContext}
       />
+      <div css={field}>
+        <CheckboxWidget
+          onChange={onChange('appendChoices')}
+          schema={getSchema('appendChoices')}
+          id={idSchema.appendChoices && idSchema.appendChoices.__id}
+          value={formData.appendChoices}
+          label={formatMessage('Append choices')}
+          formContext={formContext}
+        />
+      </div>
       <div css={field}>
         <CheckboxWidget
           onChange={data => onChange('recognizerOptions')({ noValue: data })}

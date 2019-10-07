@@ -651,11 +651,11 @@ export const appschema: JSONSchema6 = {
                 title: 'Value',
                 description: 'the value to return when selected.',
               },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-              },
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
@@ -943,31 +943,29 @@ export const appschema: JSONSchema6 = {
         },
         confirmChoices: {
           type: 'array',
-          items: [
-            {
-              type: 'object',
-              properties: {
-                value: {
+          items: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'the value to return when selected.',
+              },
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              // },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'The list of synonyms to recognize in addition to the value. This is optional.',
+                items: {
                   type: 'string',
-                  title: 'Value',
-                  description: 'the value to return when selected.',
-                },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
-                synonyms: {
-                  type: 'array',
-                  title: 'Synonyms',
-                  description: 'The list of synonyms to recognize in addition to the value. This is optional.',
-                  items: {
-                    type: 'string',
-                  },
                 },
               },
             },
-          ],
+          },
         },
       },
       additionalProperties: false,

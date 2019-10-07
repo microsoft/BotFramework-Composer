@@ -9,33 +9,7 @@ import { TextWidget, SelectWidget } from '../../widgets';
 import { field } from './styles';
 import { GetSchema, PromptFieldChangeHandler } from './types';
 import { ChoiceInputSettings } from './ChoiceInput';
-
-const PROMPT_TYPES = [
-  {
-    label: formatMessage('Attachment'),
-    value: SDKTypes.AttachmentInput,
-  },
-  {
-    label: formatMessage('Multiple Choice'),
-    value: SDKTypes.ChoiceInput,
-  },
-  {
-    label: formatMessage('Confirmation'),
-    value: SDKTypes.ConfirmInput,
-  },
-  {
-    label: formatMessage('Date or time'),
-    value: SDKTypes.DateTimeInput,
-  },
-  {
-    label: formatMessage('Number'),
-    value: SDKTypes.NumberInput,
-  },
-  {
-    label: formatMessage('Text'),
-    value: SDKTypes.TextInput,
-  },
-];
+import { ConfirmInputSettings } from './ConfirmInput';
 
 const getOptions = (enumSchema: JSONSchema6) => {
   if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
@@ -64,18 +38,6 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
           label={formatMessage('Property to fill')}
           formContext={props.formContext}
           rawErrors={errorSchema.property && errorSchema.property.__errors}
-        />
-      </div>
-      <div css={field}>
-        <SelectWidget
-          onChange={onChange('$type')}
-          schema={getSchema('$type')}
-          id={idSchema.$type.__id}
-          value={formData.$type}
-          label={formatMessage('Answer type')}
-          formContext={props.formContext}
-          rawErrors={errorSchema.$type && errorSchema.$type.__errors}
-          options={{ enumOptions: PROMPT_TYPES }}
         />
       </div>
       {getSchema('outputFormat') && (
@@ -131,6 +93,9 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
         </div>
       )}
       {formData.$type === SDKTypes.ChoiceInput && <ChoiceInputSettings {...props} formData={formData as ChoiceInput} />}
+      {formData.$type === SDKTypes.ConfirmInput && (
+        <ConfirmInputSettings {...props} formData={formData as ConfirmInput} />
+      )}
     </>
   );
 };
