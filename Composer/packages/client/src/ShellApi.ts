@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
 import { debounce, isEqual, get } from 'lodash';
+import { PromptTab } from 'shared-menus';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
@@ -28,6 +29,7 @@ export interface ShellData {
   dialogId: string;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab?: string;
 }
 
 const apiClient = new ApiClient();
@@ -78,7 +80,7 @@ export const ShellApi: React.FC = () => {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, selected, focused } = designPageLocation;
+  const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -140,7 +142,7 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -176,6 +178,7 @@ export const ShellApi: React.FC = () => {
       dialogId,
       focusedEvent: selected,
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
+      focusedTab: promptTab,
     };
   }
 
@@ -307,7 +310,7 @@ export const ShellApi: React.FC = () => {
   function focusSteps({ subPaths = [], fragment }, event) {
     cleanData();
     let dataPath: string = subPaths[0];
-    if (event.source.name === FORM_EDITOR && focused) {
+    if (event.source.name === FORM_EDITOR && focused && dataPath !== focused) {
       dataPath = `${focused}.${dataPath}`;
     }
     actions.focusTo(dataPath, fragment);

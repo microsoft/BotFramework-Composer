@@ -1,5 +1,3 @@
-import querystring from 'query-string';
-
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
@@ -8,11 +6,11 @@ import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateT
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
-  { dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick }
+  { dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick, promptTab }
 ) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
-    payload: { dialogId, focused, selected, breadcrumb, onBreadcrumbItemClick },
+    payload: { dialogId, focused, selected, breadcrumb, onBreadcrumbItemClick, promptTab },
   });
 };
 
@@ -56,10 +54,10 @@ export const focusTo: ActionCreator = ({ getState }, focusPath, fragment) => {
     breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
   }
 
-  if (checkUrl(currentUri, state.designPageLocation)) return;
   if (fragment && typeof fragment === 'string') {
     currentUri += `#${fragment}`;
   }
+  if (checkUrl(currentUri, state.designPageLocation)) return;
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 

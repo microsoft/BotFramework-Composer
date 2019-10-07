@@ -15,6 +15,7 @@ export interface FormContext {
   isRoot: boolean;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab?: string;
 }
 
 interface EnumOption {
