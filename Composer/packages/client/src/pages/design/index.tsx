@@ -4,7 +4,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
 import { PromptTab } from 'shared-menus';
-import { getNewDesigner } from 'shared-menus';
+import { getNewDesigner, seedNewDialog } from 'shared-menus';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -315,7 +315,8 @@ function DesignPage(props) {
 
   async function onSubmit(data) {
     const content = getNewDesigner(data.name, data.description);
-    await actions.createDialog({ id: data.name, content });
+    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content);
+    await actions.createDialog({ id: data.name, content: seededContent });
   }
 
   async function handleDeleteDialog(id) {

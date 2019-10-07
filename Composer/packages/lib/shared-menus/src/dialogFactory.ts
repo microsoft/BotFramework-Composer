@@ -14,6 +14,17 @@ export interface DesignerData {
 }
 
 const initialDialogShape = {
+  'Microsoft.AdaptiveDialog': {
+    $type: 'Microsoft.AdaptiveDialog',
+    events: [
+      {
+        $type: 'Microsoft.OnBeginDialog',
+        $designer: {
+          name: 'BeginDialog',
+        },
+      },
+    ],
+  },
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
     constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
