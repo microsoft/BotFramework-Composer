@@ -215,7 +215,14 @@ const setPublishVersions: ReducerFunc = (state, { versions } = {}) => {
   return state;
 };
 
-const updatePublishStatus: ReducerFunc = state => {
+const updatePublishStatus: ReducerFunc = (state, payload) => {
+  if (payload.versions) {
+    state.publishStatus = 'ok';
+  } else if (payload.error) {
+    state.publishStatus = payload.error;
+  } else if (payload.start === true) {
+    state.publishStatus = 'start';
+  }
   return state;
 };
 
@@ -254,4 +261,6 @@ export const reducer = createReducer({
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
   [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
+  [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
+  [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
 } as { [type in ActionTypes]: ReducerFunc });

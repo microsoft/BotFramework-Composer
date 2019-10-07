@@ -45,6 +45,7 @@ const initialState: State = {
     sessionExpired: false,
   },
   publishVersions: {},
+  publishStatus: 'inactive',
   lastPublishChange: null,
 };
 

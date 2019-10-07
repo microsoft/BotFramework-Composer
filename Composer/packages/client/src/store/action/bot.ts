@@ -24,6 +24,26 @@ export const connectBot: ActionCreator = async (store, settings) => {
   }
 };
 
+// return only the connect URL -- do not reload
+export const getConnect: ActionCreator = async store => {
+  const state = store.getState();
+  const { botEnvironment } = state;
+  const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
+
+  try {
+    const res = await axios.get(path);
+    store.dispatch({
+      type: ActionTypes.CONNECT_BOT_SUCCESS,
+      payload: {
+        status: 'connected',
+        botEndpoint: res.data.botEndpoint,
+      },
+    });
+  } catch (err) {
+    throw new Error(err.response.data.message);
+  }
+};
+
 export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings) => {
   const { botEnvironment } = getState();
   const path = `${BASEURL}/launcher/sync`;
@@ -59,8 +79,18 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
 
 export const publish: ActionCreator = async ({ dispatch }) => {
   const path = `${BASEURL}/launcher/publish`;
+
+  dispatch({
+    type: ActionTypes.PUBLISH_BEGIN,
+    payload: {
+      start: true,
+    },
+  });
+
   try {
     const res = await axios.post(path);
+
+    // test for error
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {
@@ -68,12 +98,25 @@ export const publish: ActionCreator = async ({ dispatch }) => {
       },
     });
   } catch (err) {
-    throw new Error(err.response.data.message);
+    dispatch({
+      type: ActionTypes.PUBLISH_ERROR,
+      payload: {
+        error: err.response.data.message,
+      },
+    });
   }
 };
 
 export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
   const path = `${BASEURL}/launcher/publish/${version}`;
+
+  dispatch({
+    type: ActionTypes.PUBLISH_BEGIN,
+    payload: {
+      start: true,
+    },
+  });
+
   try {
     const res = await axios.post(path);
     dispatch({
@@ -83,7 +126,12 @@ export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
       },
     });
   } catch (err) {
-    throw new Error(err.response.data.message);
+    dispatch({
+      type: ActionTypes.PUBLISH_ERROR,
+      payload: {
+        error: err.response.data.message,
+      },
+    });
   }
 };
 

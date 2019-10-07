@@ -69,6 +69,7 @@ export interface State {
     sessionExpired: boolean;
   };
   publishVersions: any;
+  publishStatus: any;
   lastPublishChange: any;
 }
 
