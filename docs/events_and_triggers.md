@@ -1,5 +1,6 @@
 # Events and Triggers
-<!-- This article is primarily based on the original [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md) doc.  -->
+
+This article is primarily based on the original [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md) doc with some coherent content and updated screenshots. 
 
 Like most event-driven architecture, events, triggers, and handlers are three basic elements in Bot Composer. An event is an abstract idea which indicates that something has occurred. When a bot starts at runtime, its main dialog is activated and an event occurs. In order to respond to events, we declare a trigger or a set of triggers to handle the events. In Bot Composer, we use event handlers to declare triggers.   
 
@@ -12,7 +13,7 @@ There are several different types of event handlers available within Composer. T
 
 The base type of event handlers are dialog event handlers. Almost all events start as dialog events which are related fo the "lifecycle" of the dialog. Currently, there are two dialog event handlers in the Composer menu: `Handle a Dialog Event` and `Handle an Event: BeginDialog`. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
 
-Use event handlers when you want to do things like:
+Use dialog event handlers when you want to do things like:
 
     - Take actions immediately when the dialog starts, even before the recognizer is called
     - Take actions when a "cancel" signal is detected
