@@ -15,12 +15,15 @@ import { TestController } from './../../TestController';
 
 const links = [
   { key: '/setting/dialog-settings', name: formatMessage('Dialog settings') },
-  { key: '/setting/remote-publish', name: formatMessage('Publish') },
 
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
+
+if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h' || process.env.MOCK_ABS) {
+  links.push({ key: '/setting/remote-publish', name: formatMessage('Publish') });
+}
 
 export const SettingPage = () => {
   const [active, setActive] = useState();
