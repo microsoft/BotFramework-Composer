@@ -8,7 +8,7 @@
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
 )
 
-if ($PSVersionTable.PSVersion.Major -lt 6) {
+if ($PSVersionTable.PSVersion.Major -lt 6){
 	Write-Host "! Powershell 6 is required, current version is $($PSVersionTable.PSVersion.Major), please refer following documents for help."
 	Write-Host "For Windows - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-6"
 	Write-Host "For Mac - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-6"
@@ -17,12 +17,17 @@ if ($PSVersionTable.PSVersion.Major -lt 6) {
 
 # Get mandatory parameters
 if (-not $name) {
-	$name = Read-Host "? Bot Web App Name"
+    $name = Read-Host "? Bot Web App Name"
 }
 
-if (-not $environment) {
+if (-not $environment)
+{
 	$environment = Read-Host "? Environment Name (single word, all lowercase)"
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
+}
+
+if (-not $botPath) {
+	$botPath = Read-Host "? The Reletive Path Of Bot"
 }
 
 
@@ -46,30 +51,19 @@ if (Test-Path $zipPath) {
 	Remove-Item $zipPath -Force | Out-Null
 }
 
-# Init user secret id
-dotnet user-secrets init
-
 # Perform dotnet publish step ahead of zipping up
 $publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
 dotnet publish -c release -o $publishFolder -v q > $logFile
 
-
 # Copy bot files to running folder
-$remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
-$localBotPath = $(Join-Path $projFolder "ComposerDialogs")
+$remoteBotPath = $(Join-Path $publishFolder "RunningInstance")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
-
-if ($botPath) {
-	Write-Host "Publishing dialogs from external bot project: $($botPath)"
-	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
-}
-else {
-	Copy-Item -Path $localBotPath -Recurse -Destination $remoteBotPath -Container -Force
-}
+Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
 
 # Merge from custom config files
 $customConfigFiles = Get-ChildItem -Path $remoteBotPath -Include "appsettings.json" -Recurse -Force
-if ($customConfigFiles) {
+if ($customConfigFiles)
+{
 	if (Test-Path $(Join-Path $publishFolder appsettings.json)) {
 		$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
 	}
@@ -77,7 +71,7 @@ if ($customConfigFiles) {
 		$settings = New-Object PSObject
 	}
 
-	$customConfig = @{ }
+	$customConfig = @{}
 	$customSetting = Get-Content $customConfigFiles.FullName | ConvertFrom-Json
 	$customSetting.PSObject.Properties | Foreach-Object { $customConfig[$_.Name] = $_.Value }
 	foreach ($key in $customConfig.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $customConfig[$key] }
@@ -86,7 +80,8 @@ if ($customConfigFiles) {
 }
 
 # Add Luis Config to appsettings
-if ($luisAuthoringKey -and $luisAuthoringRegion) {
+if ($luisAuthoringKey -and $luisAuthoringRegion)
+{
 	# change setting file in publish folder
 	if (Test-Path $(Join-Path $publishFolder appsettings.json)) {
 		$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
@@ -97,9 +92,10 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$luisConfigFiles = Get-ChildItem -Path $publishFolder -Include "luis.settings*" -Recurse -Force
 
-	$luisAppIds = @{ }
+	$luisAppIds = @{}
 
-	foreach ($luisConfigFile in $luisConfigFiles) {
+	foreach ($luisConfigFile in $luisConfigFiles)
+	{
 		$luisSetting = Get-Content $luisConfigFile.FullName | ConvertFrom-Json
 		$luis = $luisSetting.luis
 		$luis.PSObject.Properties | Foreach-Object { $luisAppIds[$_.Name] = $_.Value }
@@ -107,10 +103,9 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
 
-	$luisConfig = @{ }
+	$luisConfig = @{}
 
-	dotnet user-secrets set "luis:endpointKey" "$luisAuthoringKey" --project $publishFolder
-	
+	$luisConfig["endpointKey"] = $luisAuthoringKey
 	$luisConfig["endpoint"] = $luisEndpoint
 	
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
@@ -122,27 +117,21 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 $resourceGroup = "$name-$environment"
 
-if ($?) {     
+if($?) 
+{     
 	# Compress source code
 	Get-ChildItem -Path "$($publishFolder)" | Compress-Archive -DestinationPath "$($zipPath)" -Force | Out-Null
 
 	# Publish zip to Azure
 	Write-Host "> Publishing to Azure ..." -ForegroundColor Green
-	$deployment = (az webapp deployment source config-zip `
-			--resource-group $resourceGroup `
-			--name "$name-$environment" `
-			--src $zipPath `
-			--output json) 2>> $logFile
-		
-	if ($deployment) {
-		Write-Host "Publish Success"
-	}
-	else {
-		Write-Host "! Deploy failed. Review the log for more information." -ForegroundColor DarkRed
-		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
-	}
+	(az webapp deployment source config-zip `
+		--resource-group $resourceGroup `
+		--name $name `
+		--src $zipPath `
+        --output json) 2>> $logFile | Out-Null
 } 
-else {       
+else 
+{       
 	Write-Host "! Could not deploy automatically to Azure. Review the log for more information." -ForegroundColor DarkRed
 	Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed    
 }       
