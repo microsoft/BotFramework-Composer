@@ -8,6 +8,7 @@ import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared-menus';
+import nanoid from 'nanoid/generate';
 
 import { FormMemory, MemoryScope } from '../types';
 
@@ -23,6 +24,10 @@ export interface DialogOptionsOpts {
   /** Returns non-nested options for usage in dropdown. Default: false */
   asDropdown?: boolean;
   onClick?: (e: any, item: IContextualMenuItem) => void;
+}
+
+export function getTimestamp(): string {
+  return new Date().toISOString();
 }
 
 /**
@@ -63,6 +68,11 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
       text: dialog,
       data: {
         $type: dialog,
+        $designer: {
+          id: nanoid('1234567890', 6),
+          createdAt: getTimestamp(),
+          updatedAt: getTimestamp(),
+        },
       },
       onClick: subMenu ? undefined : handleClick,
     }));
@@ -157,10 +167,6 @@ export function useFormState<T extends object>(initialData?: T): [T, FormUpdater
   };
 
   return [formData, update];
-}
-
-export function getTimestamp(): string {
-  return new Date().toISOString();
 }
 
 export function sweepUndefinedFields(fields) {

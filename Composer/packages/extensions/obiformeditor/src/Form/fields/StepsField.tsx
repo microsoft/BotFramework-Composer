@@ -1,7 +1,7 @@
 import React from 'react';
 import { DialogGroup, createStepMenu } from 'shared-menus';
 import formatMessage from 'format-message';
-import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
 
 import { setOverridesOnField } from '../utils';
 import { BFDFieldProps } from '../types';
@@ -26,7 +26,7 @@ export const StepsField: React.FC<BFDFieldProps> = props => {
       navPrefix={props.name}
     >
       {({ createNewItemAtIndex }) => (
-        <PrimaryButton
+        <DefaultButton
           data-testid="StepsFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
@@ -49,7 +49,7 @@ export const StepsField: React.FC<BFDFieldProps> = props => {
           type="button"
         >
           {formatMessage('Add')}
-        </PrimaryButton>
+        </DefaultButton>
       )}
     </TableField>
   );

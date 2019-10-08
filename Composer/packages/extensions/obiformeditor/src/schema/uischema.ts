@@ -1,28 +1,6 @@
-const globalFields = {
-  property: {
-    'ui:field': 'NullField',
-  },
-  inputBindings: {
-    'ui:field': 'NullField',
-  },
-  outputBinding: {
-    'ui:field': 'NullField',
-  },
-  id: {
-    'ui:field': 'NullField',
-  },
-  tags: {
-    'ui:field': 'NullField',
-  },
-};
+const globalHidden = ['property', 'inputBindings', 'outputBinding', 'id', 'tags'];
 
 const activityFields = {
-  id: {
-    'ui:field': 'NullField',
-  },
-  tags: {
-    'ui:field': 'NullField',
-  },
   prompt: {
     'ui:widget': 'TextareaWidget',
   },
@@ -32,9 +10,7 @@ const activityFields = {
   invalidPrompt: {
     'ui:widget': 'TextareaWidget',
   },
-  value: {
-    'ui:field': 'NullField',
-  },
+  'ui:hidden': ['id', 'tags', 'value', 'inputBindings', 'outputBinding'],
 };
 
 export const uiSchema = {
@@ -48,31 +24,20 @@ export const uiSchema = {
     actions: {
       'ui:field': 'StepsField',
     },
-    autoEndDialog: {
-      'ui:field': 'NullField',
-    },
-    generator: {
-      'ui:field': 'NullField',
-    },
-    ...globalFields,
     'ui:order': ['property', 'outputBinding', 'recognizer', 'events', '*'],
+    'ui:hidden': ['autoEndDialog', 'generator', ...globalHidden],
   },
   'Microsoft.BeginDialog': {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    inputBindings: {
-      'ui:field': 'NullField',
-    },
-    outputBinding: {
-      'ui:field': 'NullField',
-    },
+    'ui:hidden': ['inputBindings', 'outputBinding'],
   },
   'Microsoft.CodeStep': {
     codeHandler: {
       'ui:field': 'CodeField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.ConditionalSelector': {
     ifFalse: {
@@ -81,7 +46,7 @@ export const uiSchema = {
     ifTrue: {
       'ui:field': 'SelectorField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.EditActions': {
     actions: {
@@ -104,7 +69,6 @@ export const uiSchema = {
     body: {
       'ui:field': 'JsonField',
     },
-    // ...globalFields,  // we do not want to exclude the property field here
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   'Microsoft.IfCondition': {
@@ -114,7 +78,7 @@ export const uiSchema = {
     elseActions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.IfPropertyRule': {
     conditionals: {
@@ -124,63 +88,63 @@ export const uiSchema = {
         },
       },
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnBeginDialog': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnConversationUpdateActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnDialogEvent': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['events', 'constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnEndOfConversationActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnEvent': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnEventActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnHandoffActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnIntent': {
     intent: {
@@ -189,63 +153,63 @@ export const uiSchema = {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['intent', 'constraint', 'entities', '*'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnInvokeActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnMessageActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnMessageDeleteActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnMessageReactionActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnMessageUpdateActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnTypingActivity': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.OnUnknownIntent': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
     'ui:order': ['constraint', '*', 'actions'],
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.MostSpecificSelector': {
     selector: {
       'ui:field': 'SelectorField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.TextInput': {
     prompt: {
@@ -303,12 +267,6 @@ export const uiSchema = {
     invalidPrompt: {
       'ui:widget': 'TextareaWidget',
     },
-    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
-    // - must provide yes/no in special format along with alternatives that have to be handled
-    // TODO: Implement confirmChoices-specific widget with appropriate business events.
-    confirmChoices: {
-      'ui:field': 'NullField',
-    },
     'ui:order': [
       'prompt',
       'property',
@@ -322,14 +280,12 @@ export const uiSchema = {
       'defaultValue',
       '*',
     ],
+    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
+    // - must provide yes/no in special format along with alternatives that have to be handled
+    // TODO: Implement confirmChoices-specific widget with appropriate business events.
+    'ui:hidden': ['confirmChoices'],
   },
   'Microsoft.ChoiceInput': {
-    inputBindings: {
-      'ui:field': 'NullField',
-    },
-    outputBinding: {
-      'ui:field': 'NullField',
-    },
     prompt: {
       'ui:widget': 'TextareaWidget',
     },
@@ -404,13 +360,13 @@ export const uiSchema = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.Rule': {
     actions: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.SwitchCondition': {
     cases: {
@@ -419,13 +375,13 @@ export const uiSchema = {
     default: {
       'ui:field': 'StepsField',
     },
-    ...globalFields,
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.SendActivity': {
-    ...globalFields,
     activity: {
       'ui:field': 'LgEditorField',
     },
+    'ui:hidden': [...globalHidden],
   },
   'Microsoft.DateTimeInput': {
     prompt: {

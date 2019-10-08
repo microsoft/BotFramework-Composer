@@ -13,7 +13,7 @@ import formatMessage from 'format-message';
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
-import { BASEPATH, BotStatus, LuisConfig, Text } from './constants';
+import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getReferredFiles } from './utils/luUtil';
@@ -37,7 +37,7 @@ const STATE = {
   SUCCESS: 2,
 };
 
-const isAbsHosted = () => BASEPATH !== '' && BASEPATH !== '/';
+const isAbsHosted = () => process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
@@ -47,7 +47,7 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, botEndpoint, dialogs, toStartBot, luFiles, settings } = state;
+  const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 

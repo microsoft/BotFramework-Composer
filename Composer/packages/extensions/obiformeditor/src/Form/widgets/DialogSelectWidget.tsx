@@ -7,15 +7,16 @@ import {
   ISelectableOption,
   Icon,
 } from 'office-ui-fabric-react';
-import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { BFDWidgetProps } from '../types';
 
+import { WidgetLabel } from './WidgetLabel';
+
 const ADD_DIALOG = 'ADD_DIALOG';
 
 export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
-  const { formContext, label, onChange, onFocus, onBlur, value, schema, id, placeholder } = props;
+  const { formContext, onChange, onFocus, onBlur, value, id, placeholder, label, schema } = props;
   const { description } = schema;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
@@ -85,10 +86,10 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
   // onItemClick prop.
   return (
     <>
+      <WidgetLabel label={label} description={description} id={id} />
       <ComboBox
         id={id}
         placeholder={placeholder}
-        label={label}
         onBlur={() => onBlur(id, value)}
         onFocus={() => onFocus(id, value)}
         options={options}
@@ -98,11 +99,6 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
         autoComplete="off"
         useComboBoxAsMenuWidth
       />
-      {description && (
-        <span style={{ fontSize: '14px' }}>
-          <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-        </span>
-      )}
     </>
   );
 };

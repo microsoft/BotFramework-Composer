@@ -7,7 +7,7 @@ import get from 'lodash.get';
 
 import { getTimestamp } from '../utils';
 
-import './DesignerField.scss';
+import './DesignerField.css';
 
 interface DesignerData {
   name?: string;

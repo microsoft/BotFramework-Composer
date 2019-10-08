@@ -26,12 +26,13 @@ import 'cypress-testing-library/add-commands';
 
 Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-  cy.getByText('Open').click();
+  cy.get('[data-testid="homePage-ToolBar-Open"]').within(() => {
+    cy.getByText('Open').click();
+  });
   cy.get('[data-testid="SelectLocation"]').within(() => {
     cy.get(`[aria-label="${botName}"]`).click({ force: true });
     cy.wait(500);
   });
-  cy.getByTestId('SelectLocationOpen').click({ force: true });
   cy.wait(500);
 });
 
@@ -67,9 +68,15 @@ Cypress.Commands.add('copyBot', (bot, name) => {
 });
 
 Cypress.Commands.add('addEventHandler', handler => {
-  cy.getByTestId('AddNewTrigger').click();
+  cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.getByText(/New Trigger ../).click();
+  });
   cy.get(`[data-testid="triggerTypeDropDown"]`).click();
   cy.getByText(handler).click();
+  if (handler === 'Handle a Dialog Event') {
+    cy.get(`[data-testid="eventTypeDropDown"]`).click();
+    cy.getByText('consultDialog').click();
+  }
   cy.get('input[data-testid="triggerName"]').type(`__TestTrigger`);
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });

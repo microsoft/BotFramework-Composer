@@ -6,6 +6,7 @@ import debounce from 'lodash.debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { seedNewDialog } from 'shared-menus';
 
 import Example from '../../src';
 import { ShellApi, LuFile, DialogInfo } from '../../src/types';
@@ -18,7 +19,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/neat.css';
 
-import './styles.scss';
+import './styles.css';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -37,9 +38,7 @@ const cmOptions = {
   smartIndent: true,
 };
 
-const defaultData = {
-  $type: 'Microsoft.TextInput',
-};
+const defaultData = seedNewDialog('Microsoft.TextInput');
 
 const defaultMemory = {
   user: {
@@ -194,12 +193,14 @@ const Demo: React.FC = () => {
   const [memorySelected, setMemorySelected] = useState(false);
   const [editorSchemaSelected, setEditorSchemaSelected] = useState(false);
   const [editorSchemaData, setEditorSchemaData] = useState(JSON.stringify(editorSchema, null, 2));
-  const [editorSchemaFormData, setEditorSchemaFormData] = useState({ content: editorSchema });
+  const [editorSchemaFormData, setEditorSchemaFormData] = useState({
+    content: editorSchema,
+  });
   const [editorSchemaValid, setEditorSchemaValid] = useState(true);
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
   const [navPath, setNavPath] = useState(nanoid());
-  const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
+  const debouncedOnChange = useRef(debounce(newData => setFormData(newData), 200)).current;
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
@@ -267,8 +268,14 @@ const Demo: React.FC = () => {
 
   return (
     <div className="DemoContainer">
-      <div style={{ display: 'flex', flexDirection: 'column' }} className="DemoJSONContainer">
-        <div style={{ fontSize: '20px', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }} className="DemoJSONContainer">
+        <div
+          style={{
+            fontSize: '20px',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <div>
             <DefaultButton
               data-automation-id="test"
@@ -297,7 +304,9 @@ const Demo: React.FC = () => {
               style={{ width: '200px' }}
               title="Dialog Types"
               menuProps={{
-                items: buildDialogOptions({ onClick: (_, item) => setFormData(item.data) }),
+                items: buildDialogOptions({
+                  onClick: (_, item) => setFormData(item.data),
+                }),
                 directionalHint: DirectionalHint.bottomAutoEdge,
               }}
             >

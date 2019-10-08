@@ -1,6 +1,7 @@
 import React from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { debounce } from 'lodash';
 
 import { FormEditor, FormEditorProps } from './FormEditor';
 
@@ -30,9 +31,11 @@ const ObiFormEditor: React.FC<FormEditorProps> = props => {
     props.onChange(data, props.focusedSteps[0]);
   };
 
+  const debouncedOnChange = debounce(onChange, 750);
+
   return (
     <ErrorBoundary key={props.focusPath} FallbackComponent={ErrorInfo}>
-      <FormEditor {...props} onChange={onChange} />
+      <FormEditor {...props} onChange={debouncedOnChange} />
     </ErrorBoundary>
   );
 };

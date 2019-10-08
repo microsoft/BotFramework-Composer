@@ -167,11 +167,11 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.EVENTS]: {
     label: 'Events',
     types: [
-      SDKTypes.OnDialogEvent,
       SDKTypes.OnIntent,
       SDKTypes.OnUnknownIntent,
       SDKTypes.OnConversationUpdateActivity,
       SDKTypes.OnBeginDialog,
+      SDKTypes.OnDialogEvent,
     ],
   },
   [DialogGroup.ADVANCED_EVENTS]: {

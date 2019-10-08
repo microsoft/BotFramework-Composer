@@ -9,6 +9,7 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
+  "recognizer": "Main.lu",
   "rules": [
     {
       "$type": "Microsoft.OnUnknownIntent",
