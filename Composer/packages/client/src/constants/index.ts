@@ -122,6 +122,8 @@ export enum LuisConfig {
   AUTHORING_KEY = 'authoringKey',
   ENVIRONMENT = 'environment',
   PROJECT_NAME = 'name',
+  REGION = 'authoringRegion',
+  LANGUAGE = 'defaultLanguage',
 }
 
 export const FileTypes = {
