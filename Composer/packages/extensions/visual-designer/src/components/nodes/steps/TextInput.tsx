@@ -14,11 +14,13 @@ import { NodeProps } from '../nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Diamond } from '../templates/Diamond';
 import { Edge } from '../../lib/EdgeComponents';
+import { useLgTemplate } from '../../../utils/hooks';
 
 export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const layout = textInputLayouter(id);
   const { boundary, nodeMap, edges } = layout;
   const { initPrompt, propertyBox, unrecognizedPrompt, invalidPrompt, diamond1, diamond2 } = nodeMap;
+  const templateText = useLgTemplate(data.prompt, data.$designer && data.$designer.id);
 
   return (
     <div className="Action-TextInput" css={{ width: boundary.width, height: boundary.height }}>
@@ -28,7 +30,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           header={formatMessage('Text Input')}
           corner={<NodeMenu id={id} onEvent={onEvent} />}
           icon={ElementIcon.MessageBot}
-          label={data.prompt || '<initPrompt>'}
+          label={templateText || '<initPrompt>'}
           onClick={() => {
             onEvent(NodeEventTypes.Focus, { id });
           }}
