@@ -4,15 +4,18 @@ import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField
 
 import { StoreContext } from '../../../store';
 
+import { validateEnvironment, validateName } from './validators';
 import { styles } from './styles';
-
 // TODO: get a complete list of azure regions
-const regionOptions = [{ key: 'westus', text: 'westus' }];
+// TODO: verify that this is the correct/complete list of azure regions
+// https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.documents.locationnames?view=azure-dotnet
+import { regionOptions } from './luisRegions.js';
 
 export const DeployWizardStepDeploy = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
   const { botName, location } = state;
+  const [disable, setDisable] = useState(false);
   const [formData, setFormData] = useState({
     name: botName,
     location: location,
@@ -28,6 +31,7 @@ export const DeployWizardStepDeploy = props => {
       errors: {},
       [field]: newValue,
     });
+    setDisable(false);
   };
 
   // todo: disable the next button until its valid
@@ -35,15 +39,23 @@ export const DeployWizardStepDeploy = props => {
   const validateForm = () => {
     const errors = {};
 
+    if (validateName(formData.name) !== true) {
+      errors.name = validateName(formData.name);
+    }
+    if (validateEnvironment(formData.environment) !== true) {
+      errors.environment = validateEnvironment(formData.environment);
+    }
+
     setFormData({
       ...formData,
       errors,
     });
 
     if (Object.keys(errors).length) {
-      console.log('found some errors', errors);
+      setDisable(true);
       return false;
     }
+    setDisable(false);
     return true;
   };
 
@@ -90,7 +102,7 @@ export const DeployWizardStepDeploy = props => {
         </Stack>
         <DialogFooter>
           <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Next')} />
+          <PrimaryButton onClick={submit} text={formatMessage('Next')} disabled={disable} />
         </DialogFooter>
       </form>
     </Fragment>

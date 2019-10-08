@@ -11,7 +11,7 @@ export const DeployWizardStep2 = props => {
     `cd ${botValues.location}`,
     `pwsh ./scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
       botValues.region.key
-    } -appPassword=${botValues.secret}`,
+    } -appPassword ${botValues.secret}`,
   ].join('\n');
 
   const copyToClipboard = () => {

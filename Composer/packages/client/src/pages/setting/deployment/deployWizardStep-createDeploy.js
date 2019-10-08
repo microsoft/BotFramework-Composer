@@ -13,6 +13,7 @@ import {
 
 import { StoreContext } from '../../../store';
 
+import { validateEnvironment, validateName, validateRegion, validateSecret } from './validators';
 import { styles } from './styles';
 // TODO: verify that this is the correct/complete list of azure regions
 // https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.documents.locationnames?view=azure-dotnet
@@ -41,8 +42,6 @@ export const DeployWizardStepCreate = props => {
     setDisable(false);
   };
 
-  // todo: disable the next button until its valid
-  // todo: do not autocomplete app secret
   const validateForm = () => {
     const errors = {};
 
@@ -53,7 +52,7 @@ export const DeployWizardStepCreate = props => {
       errors.name = validateName(formData.name);
     }
     if (validateEnvironment(formData.environment) !== true) {
-      errors.environment = validateName(formData.environment);
+      errors.environment = validateEnvironment(formData.environment);
     }
     if (validateRegion(formData.region) !== true) {
       errors.region = validateRegion(formData.region);
@@ -69,53 +68,6 @@ export const DeployWizardStepCreate = props => {
       return false;
     }
     setDisable(false);
-    return true;
-  };
-
-  const validateName = name => {
-    if (name.length === 0) {
-      return formatMessage('Bot name is a required field');
-    }
-    return true;
-  };
-
-  const validateEnvironment = name => {
-    if (name.length === 0) {
-      return formatMessage('Environment name is a required field');
-    }
-    return true;
-  };
-
-  const validateRegion = region => {
-    if (!region || !region.key) {
-      return formatMessage('Azure region is a required field');
-    }
-    if (
-      regionOptions.filter(r => {
-        return r.key === region.key;
-      }).length === 0
-    ) {
-      return formatMessage('Select an Azure region from the list');
-    }
-    return true;
-  };
-
-  // 16 characters at least one special char
-  const validateSecret = val => {
-    if (val.length !== 16) {
-      return formatMessage('App secret must be exactly 16 characters long');
-    }
-    if (!val.match(/[a-z]/i)) {
-      return formatMessage('App secret must contain at least 1 alpha character');
-    }
-    if (!val.match(/[0-9]/)) {
-      return formatMessage('App secret must contain at least 1 number');
-    }
-    // eslint-disable-next-line no-useless-escape
-    if (!val.match(/[!@$%^&#\?\.\+\*_\-\(\)\[\]]/)) {
-      return formatMessage('App secret must contain at least 1 special character');
-    }
-
     return true;
   };
 
@@ -170,6 +122,7 @@ export const DeployWizardStepCreate = props => {
               errorMessage={formData.errors.secret}
               data-testid="appsecret"
               required
+              autoComplete={false}
               maxLength={16}
             />
           </StackItem>
