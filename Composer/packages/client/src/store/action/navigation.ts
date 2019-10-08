@@ -1,4 +1,4 @@
-import { createSelectedPath, getSelected } from '../../utils';
+import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
@@ -16,15 +16,7 @@ export const setDesignPageLocation: ActionCreator = (
 
 export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) => {
   const state = getState();
-  const { dialogs } = state;
-  let currentUri = `/dialogs/${dialogId}`;
-
-  const dialog = dialogs.find(item => dialogId === item.id);
-  if (dialog && dialog.triggers.length > 0) {
-    currentUri = `${currentUri}?selected=${createSelectedPath(0)}`;
-
-    breadcrumb = [...breadcrumb, { dialogId, selected: '', focused: '' }];
-  }
+  const currentUri = `/dialogs/${dialogId}`;
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
   navigateTo(currentUri, { state: { breadcrumb } });

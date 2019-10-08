@@ -1,9 +1,11 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { ConceptLabels } from 'shared-menus';
 
-import { TriggerSize } from '../../constants/ElementSizes';
+import { ConceptLabels } from 'shared-menus';
+import { jsx } from '@emotion/core';
+
+import { AttrNames } from '../../constants/ElementAttributes';
 import { ElementIcon } from '../../utils/obiPropertyResolver';
+import { TriggerSize } from '../../constants/ElementSizes';
 
 import { FormCard } from './templates/FormCard';
 

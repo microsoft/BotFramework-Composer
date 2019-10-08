@@ -45,23 +45,6 @@
   margin-top: 30px;
   padding-top: 4px;
 }
-.JsonField .react-codemirror2, .CodeField .react-codemirror2 {
-  margin-top: 0;
-  border: 1px solid #a19f9d;
-  border-radius: 2px;
-  max-height: 600px;
-  overflow: scroll;
-}
-.JsonField .CodeMirror, .CodeField .CodeMirror {
-  height: auto;
-}
-.JsonField .CodeMirror--error, .CodeField .CodeMirror--error {
-  border: 2px solid #e81123;
-}
-.CodeFieldModeSelector {
-  margin-bottom: 20px;
-  max-width: 300px;
-}
 a {
   color: black;
 }
