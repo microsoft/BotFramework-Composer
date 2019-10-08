@@ -22,13 +22,13 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 interface LgEditorWidgetProps {
   formContext: FormContext;
   name: string;
-  formData?: string;
-  height?: number;
+  value?: string;
+  height?: number | string;
   onChange: (template?: string) => void;
 }
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
-  const { formContext, name, formData, height = 250 } = props;
+  const { formContext, name, value, height = 250 } = props;
   const [templateToRender, setTemplateToRender] = useState({ Name: '', Body: '' });
   const lgId = `bfd${name}-${formContext.dialogId}`;
   const [errorMsg, setErrorMsg] = useState('');
@@ -77,13 +77,9 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   };
 
   useEffect(() => {
-    ensureTemplate(formData);
+    ensureTemplate(value);
   }, [formContext.dialogId]);
 
   const { Body } = templateToRender;
-  return (
-    <div style={{ height: `${height}px` }}>
-      <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} helpURL={LG_HELP} />
-    </div>
-  );
+  return <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} helpURL={LG_HELP} height={height} />;
 };

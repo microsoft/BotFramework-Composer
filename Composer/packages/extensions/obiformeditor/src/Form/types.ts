@@ -28,7 +28,7 @@ export interface BFDObjectFieldTemplateProps extends ObjectFieldTemplateProps {
   onChange: (any) => void;
 }
 
-export interface BFDFieldProps extends FieldProps {
+export interface BFDFieldProps<T = any> extends FieldProps<T> {
   formContext: FormContext;
 }
 

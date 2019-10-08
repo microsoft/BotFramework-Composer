@@ -1,28 +1,29 @@
 import React from 'react';
-import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 
-import { TextareaWidget } from '../../widgets';
+import { LgEditorWidget } from '../../widgets/LgEditorWidget';
+import { WidgetLabel } from '../../widgets/WidgetLabel';
+import { BFDFieldProps } from '../../types';
 
 import { GetSchema, PromptFieldChangeHandler } from './types';
 
-interface BotAsksProps extends FieldProps<MicrosoftInputDialog> {
+interface BotAsksProps extends BFDFieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
 export const BotAsks: React.FC<BotAsksProps> = props => {
-  const { onChange, getSchema, idSchema, formData, formContext } = props;
+  const { onChange, getSchema, formData, formContext } = props;
 
   return (
     <>
-      <TextareaWidget
+      <WidgetLabel label={formatMessage('Prompt')} description={getSchema('prompt').description} />
+      <LgEditorWidget
+        name="prompt"
         onChange={onChange('prompt')}
-        schema={getSchema('prompt')}
-        id={idSchema.prompt.__id}
         value={formData.prompt}
-        label={formatMessage('Prompt')}
         formContext={formContext}
+        height={125}
       />
     </>
   );

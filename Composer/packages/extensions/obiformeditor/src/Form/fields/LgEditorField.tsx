@@ -10,7 +10,7 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
     <BaseField {...props}>
       <LgEditorWidget
         name={props.name}
-        formData={props.formData}
+        value={props.formData}
         formContext={props.formContext}
         onChange={props.onChange}
       />

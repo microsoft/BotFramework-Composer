@@ -41,7 +41,7 @@ export function RichEditor(props: RichEditorProps) {
   };
 
   return (
-    <div>
+    <Fragment>
       <div
         style={{
           height: getHeight(),
@@ -57,6 +57,6 @@ export function RichEditor(props: RichEditorProps) {
           <span>{errorHelp}</span>
         </div>
       )}
-    </div>
+    </Fragment>
   );
 }
