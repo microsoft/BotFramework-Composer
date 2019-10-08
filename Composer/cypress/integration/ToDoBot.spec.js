@@ -25,10 +25,6 @@ context('ToDo Bot', () => {
     cy.withinEditor('FormEditor', () => {
       cy.getByDisplayValue('AddToDo').should('exist');
     });
-
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/Successfully added a todo named/).should('exist');
-    });
   });
 
   it('can open the ClearToDos dialog', () => {
@@ -39,9 +35,6 @@ context('ToDo Bot', () => {
 
     cy.withinEditor('FormEditor', () => {
       cy.getByDisplayValue('ClearToDos').should('exist');
-    });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText(/Successfully cleared items/).should('exist');
     });
   });
 
@@ -54,9 +47,6 @@ context('ToDo Bot', () => {
     cy.withinEditor('FormEditor', () => {
       cy.getByDisplayValue('DeleteToDo').should('exist');
     });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Edit an Array Property').should('exist');
-    });
   });
 
   it('can open the ShowToDos dialog', () => {
@@ -67,9 +57,6 @@ context('ToDo Bot', () => {
 
     cy.withinEditor('FormEditor', () => {
       cy.getByDisplayValue('ShowToDos').should('exist');
-    });
-    cy.withinEditor('VisualEditor', () => {
-      cy.getByText('You have no todos.').should('exist');
     });
   });
 });

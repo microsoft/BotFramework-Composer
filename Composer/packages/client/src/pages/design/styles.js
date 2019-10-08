@@ -116,6 +116,9 @@ export const middleTriggerElements = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 18px;
+  line-height: 24px;
+  color: #828282;
 `;
 
 export const triggerButton = css`
