@@ -1,9 +1,7 @@
 
 # Microsoft Bot Framework Composer
 ### Overview
-- Introduction to Bot Framework Composer
-  - Explain adavantages of using bot composer
-  - Use illustration to show the BF Composer design surface 
+- [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro-draft.md)
 - Known Issues (TBD)
 
 ### QuickStart
@@ -12,9 +10,9 @@
 ### Samples 
 - Bot Framework Composer samples 
 ### Concepts 
-- Dialogs
-- Triggers and Events
-- Conversation flow using Memory model
+- [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/dialog.md)
+- [Triggers and Events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/events_and_triggers.md)
+- [Conversation flow using Memory model](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/memory-concept-draft.md)
 - Language generation
 - Language understanding
 
