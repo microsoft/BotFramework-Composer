@@ -18,9 +18,12 @@ Use dialog event handlers when you want to do things like:
     - Take automatic action on every message as it is received or sent
     - Evaluate the raw content of the incoming activity
 
+> [!NOTE]
+> Since `BeginDialog` event is the most common dialog event, `Handle an Event: BeginDialog` is desgined as a seperate dialog event handler to make it handy when users want to use it. It makes no difference between the two approaches: one is when you create a `Handle a Dialog Event` handler and specify a `BeginDialog` event, and another is when you create `Handle an Event: BeginDialog` directly. 
+
 ### Handle Intent Events  
 
-Intent handlers are special types of event handlers that have been specialized to work with the Recognizers. There are two intent handlers in the Composer menu: `Handle an Intent` and `Handle Unknown Intent`. After the first round of events is fired, the bot will pass the incoming activity through the configured Recognizer. If an intent is captured, the intent will be passed onto the matching handler along with any entity values the message contains. If an intent is not detected by the recognizer, any congifured "Unknown Intent" handlers will fire. This will only fire if no matching intent handler is found.   
+Intent handlers are special types of event handlers that have been specialized to work with the Recognizers. There are two intent handlers in the Composer menu: `Handle an Intent` and `Handle Unknown Intent`. After the first round of events is fired, the bot will pass the incoming activity through the configured Recognizer. If an intent is captured, the intent will be passed onto the matching handler along with any entity values the message contains. If an intent is not detected by the recognizer, any congifured "Unknown Intent" handlers will fire. This will only fire if no matching intent handler is found. The `Handle Unknown Intent` handles "none" intent. It does not needs to be defined, but it needs to be created and configured.  
 
 Use intent handlers when you want to do things like:
 

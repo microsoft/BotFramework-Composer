@@ -14,7 +14,10 @@ In Bot Composer, each dialog is a dialog class that contains a set of event hand
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
-When a dialog is called into action, its **recognizer** will process the message with an attempt to extract the primary **Intent** from the message along with any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: one powered by [LUIS.ai](https://www.luis.ai/) service and one powered by [regular expressions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer). A bot can have no recognizer. 
+Usually when a dialog is called into action, its **recognizer** will process the message with an attempt to extract the primary **Intent** from the message along with any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: one powered by [LUIS.ai](https://www.luis.ai/) service and one powered by [regular expressions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer). A bot can have no recognizer. 
+
+> [!NOTE]
+> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you will design and model your dialog system.   
 
 Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Composer offers a wide range of actions for users to choose such as sending messages, asking questions, and performing computational tasks, etc. Users can also add branch and loop when design their dialog path, set and manipulate property and values for [memory use](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/using_memory.md). 
 
