@@ -1,7 +1,5 @@
 # Events and Triggers
 
-This article is primarily based on the original [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md) doc with some coherent content and updated screenshots. 
-
 Like most event-driven architecture, events, triggers, and handlers are three basic elements in Bot Composer. An event is an abstract idea which indicates that something has occurred. When a bot starts at runtime, its main dialog is activated and an event occurs. In order to respond to events, we declare a trigger or a set of triggers to handle the events. In Bot Composer, we use event handlers to declare triggers.   
 
 Each dialog in Composer includes a set of event handlers that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passed through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
@@ -107,9 +105,11 @@ To define triggers with Regular Expression recognizer you need to:
 
 [LUIS.ai docs](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)
 
+[events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md)
+
 [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
 
 [.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 
 ## Next 
-[Defining Triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md)
+[Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
