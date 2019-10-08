@@ -2,6 +2,10 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
 export const styles = {
+  gif: {
+    margin: '0px auto 1rem',
+    display: 'block',
+  },
   page: {
     padding: '1rem',
   },

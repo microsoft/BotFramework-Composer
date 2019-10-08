@@ -3,6 +3,7 @@ import formatMessage from 'format-message';
 import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
 
 import { styles } from './styles';
+import processGif from './deploy-create-output.gif';
 
 export const DeployWizardStep2 = props => {
   const { nextStep, closeModal, botValues } = props;
@@ -11,7 +12,7 @@ export const DeployWizardStep2 = props => {
     `cd ${botValues.location}`,
     `pwsh ./scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
       botValues.region.key
-    } -appPassword ${botValues.secret}`,
+    } -appPassword '${botValues.secret}'`,
   ].join('\n');
 
   const copyToClipboard = () => {
@@ -37,9 +38,17 @@ export const DeployWizardStep2 = props => {
       </Stack>
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
         <StackItem grow={1} styles={styles.halfstack}>
-          This is where the GIF goes.
+          <p>
+            {formatMessage(
+              'Copy the commands above, and paste them into your terminal.  The output will look like the screenshot below. Note that it will take > 5 minutes for the provisioning process to complete.'
+            )}
+          </p>
+          <img
+            style={styles.gif}
+            src={processGif}
+            alt={formatMessage('Animation showing the command line tool output')}
+          />
         </StackItem>
-        <StackItem align="end" grow={1} styles={styles.halfstack} />
       </Stack>
       <DialogFooter>
         <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
