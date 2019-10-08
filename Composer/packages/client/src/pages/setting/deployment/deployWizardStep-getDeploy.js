@@ -3,6 +3,7 @@ import formatMessage from 'format-message';
 import { Stack, DialogFooter, PrimaryButton, StackItem, TextField } from 'office-ui-fabric-react';
 
 import { styles } from './styles';
+import processGif from './deploy-deploy-output.gif';
 
 export const DeployWizardStep3 = props => {
   const { closeModal, botValues } = props;
@@ -34,10 +35,18 @@ export const DeployWizardStep3 = props => {
         </StackItem>
       </Stack>
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
-        <StackItem grow={1} styles={styles.halfstack}>
-          This is where the GIF goes.
+        <StackItem grow={1}>
+          <p>
+            {formatMessage(
+              'Copy the commands above, and paste them into your terminal.  The output will look like the screenshot below. Note that it may take several minutes for the deploy to complete.'
+            )}
+          </p>
+          <img
+            style={styles.gif}
+            src={processGif}
+            alt={formatMessage('Animation showing the command line tool output')}
+          />
         </StackItem>
-        <StackItem align="end" grow={1} styles={styles.halfstack} />
       </Stack>
       <DialogFooter>
         <PrimaryButton onClick={closeModal} text={formatMessage('Done')} />

@@ -37,7 +37,7 @@ export const DeployWizardStep2 = props => {
         </StackItem>
       </Stack>
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
-        <StackItem grow={1} styles={styles.halfstack}>
+        <StackItem grow={1}>
           <p>
             {formatMessage(
               'Copy the commands above, and paste them into your terminal.  The output will look like the screenshot below. Note that it will take > 5 minutes for the provisioning process to complete.'
