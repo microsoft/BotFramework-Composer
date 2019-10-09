@@ -34,6 +34,7 @@ export const DialogSettings = () => {
   const [value, setValue] = useState(JSON.stringify(settings, null, 2));
   const updateFormData = (editor, data, newValue) => {
     try {
+      setValue(newValue);
       const result = JSON.parse(newValue);
       try {
         actions.setSettings(botName, result);
@@ -45,12 +46,8 @@ export const DialogSettings = () => {
     }
   };
 
-  const beforeChange = (editor, data, value) => {
-    setValue(value);
-  };
-
   return botName ? (
-    <CodeMirror value={value} onBeforeChange={beforeChange} onChange={updateFormData} options={cmOptions} />
+    <CodeMirror value={value} onBeforeChange={updateFormData} options={cmOptions} />
   ) : (
     <div>Data Loading...</div>
   );
