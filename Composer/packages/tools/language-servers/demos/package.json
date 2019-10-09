@@ -1,11 +1,11 @@
 {
-    "name": "tools-language-servers",
+    "name": "tools-language-servers-demos",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "yarn build:lg",
-        "build:lg": "cd lg-language-server && yarn build"
+        "build": "yarn build:demos",
+        "build:lg": "cd monaco-client-lg && yarn build"
     },
     "author": "",
     "license": "ISC"

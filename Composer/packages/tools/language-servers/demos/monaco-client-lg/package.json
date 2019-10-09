@@ -2,13 +2,11 @@
   "private": true,
   "name": "lsp-lg-example",
   "version": "0.10.0",
-  "engines": {
-    "vscode": "^1.25"
-  },
   "scripts": {
     "build": "webpack",
+    "test_monaco_lg_demo": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
     "start:client": "webpack-dev-server",
-    "start:server": "ts-node ./src/test.ts"
+    "start:server": "ts-node ./src/server_launcher.ts"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
@@ -19,10 +17,12 @@
     "reconnecting-websocket": "^3.2.2",
     "request-light": "^0.2.2",
     "vscode-ws-jsonrpc": "^0.1.1",
-    "ws": "^5.0.0"
+    "ws": "^5.0.0",
+    "lg-lsp-server": "*"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^5.0.0",
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
     "source-map-loader": "^0.2.4",
