@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
 
@@ -14,11 +14,21 @@ import {
   eventTypeKey,
   intentTypeKey,
   activityTypeKey,
+  customerTypeKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, name, dialogWindow, constraint } from './styles';
+import {
+  styles,
+  dropdownStyles,
+  name,
+  dialogWindow,
+  constraint,
+  dialogFooterContainer,
+  dialogFooterRight,
+  marginRight,
+} from './styles';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -45,6 +55,15 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   return errors;
 };
 
+const validateFormOnFirstStep = (data: TriggerFormData): TriggerFormDataErrors => {
+  const errors: TriggerFormDataErrors = {};
+  const { $type } = data;
+  if (!$type) {
+    errors.$type = formatMessage('please select a trigger type');
+  }
+  return errors;
+};
+
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
@@ -54,7 +73,7 @@ interface TriggerCreationModalProps {
 
 const initialFormData: TriggerFormData = {
   errors: {},
-  $type: intentTypeKey,
+  $type: '',
   name: '',
   constraint: '',
   eventType: '',
@@ -66,11 +85,34 @@ const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
+  const [step, setStep] = useState(0);
   const { state } = useContext(StoreContext);
   const { dialogs, schemas } = state;
 
-  const onClickSubmitButton = e => {
-    e.preventDefault();
+  const onNext = () => {
+    if (step === 0) {
+      const errors = validateFormOnFirstStep(formData);
+
+      if (Object.keys(errors).length) {
+        setFormData({
+          ...formData,
+          errors,
+        });
+        return;
+      }
+      setStep(step + 1);
+      delete formData.errors.$type;
+      return;
+    } else if (step === 1) {
+      submitForm();
+    }
+  };
+
+  const onBack = () => {
+    setStep(step - 1);
+  };
+
+  const submitForm = () => {
     const errors = validateForm(formData);
 
     if (Object.keys(errors).length) {
@@ -112,8 +154,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const activityTypes: IDropdownOption[] = getActivityTypes();
 
-  const showEventDropDown = formData.$type === eventTypeKey;
-  const showActivityDropDown = formData.$type === activityTypeKey;
+  const showEventDropDown = formData.$type === eventTypeKey && step > 0;
+  const showActivityDropDown = formData.$type === activityTypeKey && step > 0;
+  const showNameField = (formData.$type === intentTypeKey || formData.$type === customerTypeKey) && step > 0;
   return (
     <Dialog
       hidden={!isOpen}
@@ -137,7 +180,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={intentTypeKey}
+            disabled={step > 0}
           />
 
           {showEventDropDown && (
@@ -163,27 +206,40 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'activityTypeDropDown'}
             />
           )}
-          <TextField
-            label={formatMessage('What is the name of this trigger?')}
-            styles={name}
-            onChange={updateForm('name')}
-            errorMessage={formData.errors.name}
-            data-testid={'triggerName'}
-          />
-          <TextField
-            styles={constraint}
-            label={formatMessage('Constraint')}
-            multiline
-            resizable={false}
-            onChange={updateForm('constraint')}
-            data-testid={'triggerConstraint'}
-          />
+          {showNameField && (
+            <TextField
+              label={formatMessage('What is the name of this trigger?')}
+              styles={name}
+              onChange={updateForm('name')}
+              errorMessage={formData.errors.name}
+              data-testid={'triggerName'}
+            />
+          )}
+          {step > 0 && (
+            <TextField
+              styles={constraint}
+              label={formatMessage('Constraint')}
+              multiline
+              resizable={false}
+              onChange={updateForm('constraint')}
+              data-testid={'triggerConstraint'}
+            />
+          )}
         </Stack>
       </div>
-      <DialogFooter>
+      <div css={dialogFooterContainer}>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} data-testid={'triggerFormSubmit'} />
-      </DialogFooter>
+        <div css={dialogFooterRight}>
+          {step > 0 && (
+            <div css={marginRight}>
+              <DefaultButton onClick={onBack} text={formatMessage('Back')} />
+            </div>
+          )}
+          <div>
+            <PrimaryButton onClick={onNext} text={formatMessage('Next')} data-testid={'triggerFormSubmit'} />
+          </div>
+        </div>
+      </div>
     </Dialog>
   );
 };

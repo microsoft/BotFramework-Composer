@@ -139,6 +139,7 @@ export const dropdownStyles = {
 export const dialogWindow = css`
   display: flex;
   width: 400px;
+  height: 300px;
   flex-direction: column;
 `;
 
@@ -165,3 +166,18 @@ export const name = {
 export const constraint = {
   subComponentStyles: textFieldlabel,
 };
+
+export const dialogFooterContainer = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const dialogFooterRight = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const marginRight = css`
+  margin-right: 10px;
+`;

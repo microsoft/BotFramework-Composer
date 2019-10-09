@@ -39,6 +39,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
+export const customerTypeKey: string = SDKTypes.OnCustomEvent;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
