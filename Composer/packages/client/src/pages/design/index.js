@@ -188,13 +188,9 @@ function DesignPage(props) {
     // HACK: wait until visual editor finish rerender.
     // TODO: (ze) expose visual editor store to Shell and (leilei) intercept store events.
     setTimeout(() => {
-      VisualEditorAPI.hasElementSelected()
-        .then(selected => {
-          setNodeOperationAvailability(selected);
-        })
-        .catch(() => {
-          setNodeOperationAvailability(false);
-        });
+      VisualEditorAPI.hasElementSelected().then(selected => {
+        setNodeOperationAvailability(selected);
+      });
     }, 100);
   });
 

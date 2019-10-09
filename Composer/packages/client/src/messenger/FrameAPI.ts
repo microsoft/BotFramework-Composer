@@ -14,14 +14,15 @@ export class FrameAPI {
   /**
    * Initialize the frame ref at first invocation.
    */
-  setFrameRef = () => {
+  invoke = (method: string, ...rest) => {
     if (!this.frameRef) {
       this.frameRef = window.frames[this.frameId];
     }
-  };
 
-  invoke = (method: string, ...rest) => {
-    return apiClient.apiCall('rpc', [method, ...rest], this.frameRef);
+    if (this.frameRef && this.frameRef[method]) {
+      return apiClient.apiCall('rpc', [method, ...rest], this.frameRef);
+    }
+    return Promise.reject();
   };
 }
 
@@ -33,18 +34,11 @@ export const VisualEditorAPI = (() => {
     visualEditorFrameAPI.invoke = () => Promise.resolve(false);
   }
 
-  const invoke = (method: string) => {
-    visualEditorFrameAPI.setFrameRef();
-    if (visualEditorFrameAPI.frameRef && visualEditorFrameAPI.frameRef[method]) {
-      return visualEditorFrameAPI.invoke(method);
-    }
-    return Promise.reject();
-  };
   return {
-    hasElementFocused: () => invoke('hasElementFocused'),
-    hasElementSelected: () => invoke('hasElementSelected'),
-    copySelection: () => invoke('copySelection'),
-    cutSelection: () => invoke('cutSelection'),
-    deleteSelection: () => invoke('deleteSelection'),
+    hasElementFocused: () => visualEditorFrameAPI.invoke('hasElementFocused'),
+    hasElementSelected: () => visualEditorFrameAPI.invoke('hasElementSelected').catch(() => false),
+    copySelection: () => visualEditorFrameAPI.invoke('copySelection'),
+    cutSelection: () => visualEditorFrameAPI.invoke('cutSelection'),
+    deleteSelection: () => visualEditorFrameAPI.invoke('deleteSelection'),
   };
 })();
