@@ -52,7 +52,7 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, { id });
         }}
       />
     );

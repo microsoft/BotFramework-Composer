@@ -46,7 +46,7 @@ export function TextWidget(props: BFDWidgetProps) {
 
       onChange(newValue);
       // need to allow form data to propagate before flushing to state
-      setTimeout(() => onBlur(id, value));
+      setTimeout(() => onBlur && onBlur(id, value));
     };
 
     const step = type === 'integer' ? 1 : 0.1;
@@ -74,9 +74,9 @@ export function TextWidget(props: BFDWidgetProps) {
     id,
     value,
     autoComplete: 'off',
-    onBlur: () => onBlur(id, value),
+    onBlur: () => onBlur && onBlur(id, value),
     onChange: (_, newValue?: string) => onChange(newValue),
-    onFocus: () => onFocus(id, value),
+    onFocus: () => onFocus && onFocus(id, value),
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
   };
@@ -103,4 +103,7 @@ export function TextWidget(props: BFDWidgetProps) {
 
 TextWidget.defaultProps = {
   schema: {},
+  options: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

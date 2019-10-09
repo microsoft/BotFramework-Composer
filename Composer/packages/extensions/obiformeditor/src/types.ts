@@ -70,7 +70,7 @@ export interface ShellApi {
   getDialogs: <T = any>() => Promise<T>;
   saveData: <T = any>(newData: T, updatePath: string) => Promise<void>;
   navTo: (path: string) => Promise<void>;
-  onFocusSteps: (stepIds: string[]) => Promise<void>;
+  onFocusSteps: (stepIds: string[], focusedTab?: string) => Promise<void>;
   onFocusEvent: (eventId: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;

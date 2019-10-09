@@ -20,7 +20,7 @@ export class Recognizer extends React.Component<NodeProps, object> {
         label={data.$type.split('.')[1]}
         icon={ElementIcon.Friend}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, { id });
         }}
       />
     );
