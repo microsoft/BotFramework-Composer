@@ -9,7 +9,7 @@ export const DeployWizardStep3 = props => {
 
   const scriptValue = [
     `cd ${botValues.location}`,
-    `pwsh ./scripts/deploy.ps1 -name ${botValues.name} -environment ${botValues.environment}`,
+    `pwsh ./Scripts/deploy.ps1 -name ${botValues.name} -environment ${botValues.environment}`,
   ].join('\n');
 
   const copyToClipboard = () => {

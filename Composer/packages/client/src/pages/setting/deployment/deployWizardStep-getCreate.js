@@ -9,7 +9,7 @@ export const DeployWizardStep2 = props => {
 
   const scriptValue = [
     `cd ${botValues.location}`,
-    `pwsh ./scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
+    `pwsh ./Scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
       botValues.region.key
     } -appPassword ${botValues.secret}`,
   ].join('\n');
