@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
+import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';

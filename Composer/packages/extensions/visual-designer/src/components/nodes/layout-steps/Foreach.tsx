@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useEffect, useState, FunctionComponent } from 'react';
+import { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
 import { transformForeach } from '../../../transformers/transformForeach';
 import { foreachLayouter } from '../../../layouters/foreachLayouter';

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
@@ -11,7 +11,6 @@ import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/Eleme
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
-import { MenuTypes } from '../constants/MenuTypes';
 
 const HeadSize = {
   width: TriggerSize.width,

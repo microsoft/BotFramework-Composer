@@ -24,11 +24,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
-  const focusNode = () => {
-    return onEvent(NodeEventTypes.Focus, { id });
-  };
-
+export const RuleCard = ({ id, data, label, onEvent }): JSX.Element => {
   const openNode = () => {
     return onEvent(NodeEventTypes.Expand, id);
   };
