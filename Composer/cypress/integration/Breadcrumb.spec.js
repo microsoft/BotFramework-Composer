@@ -53,7 +53,7 @@ context('breadcrumb', () => {
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoBot.Main').click();
+      cy.getByText('Handle ConversationUpdate').click();
       cy.wait(500);
     });
 

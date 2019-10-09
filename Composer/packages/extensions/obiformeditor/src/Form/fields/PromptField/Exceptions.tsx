@@ -1,8 +1,11 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 
-import { TextareaWidget } from '../../widgets';
+import { WidgetLabel } from '../../widgets/WidgetLabel';
+import { LgEditorWidget } from '../../widgets/LgEditorWidget';
 
 import { Validations } from './Validations';
 import { field } from './styles';
@@ -14,19 +17,21 @@ interface ExceptionsProps extends FieldProps<MicrosoftInputDialog> {
 }
 
 export const Exceptions: React.FC<ExceptionsProps> = props => {
-  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { onChange, getSchema, idSchema, formData } = props;
 
   return (
-    <>
+    <React.Fragment>
       <div css={field}>
-        <TextareaWidget
-          onChange={onChange('unrecognizedPrompt')}
-          schema={getSchema('unrecognizedPrompt')}
-          id={idSchema.unrecognizedPrompt.__id}
-          value={formData.unrecognizedPrompt}
+        <WidgetLabel
           label={formatMessage('Unrecognized Prompt')}
+          description={getSchema('unrecognizedPrompt').description}
+        />
+        <LgEditorWidget
+          name="unrecognizedPrompt"
+          onChange={onChange('unrecognizedPrompt')}
+          value={formData.unrecognizedPrompt}
           formContext={props.formContext}
-          rawErrors={errorSchema.unrecognizedPrompt && errorSchema.unrecognizedPrompt.__errors}
+          height={125}
         />
       </div>
       <Validations
@@ -37,27 +42,28 @@ export const Exceptions: React.FC<ExceptionsProps> = props => {
         formContext={props.formContext}
       />
       <div css={field}>
-        <TextareaWidget
-          onChange={onChange}
-          schema={getSchema('invalidPrompt')}
-          id={idSchema.invalidPrompt.__id}
+        <WidgetLabel label={formatMessage('Invalid Prompt')} description={getSchema('invalidPrompt').description} />
+        <LgEditorWidget
+          name="invalidPrompt"
+          onChange={onChange('invalidPrompt')}
           value={formData.invalidPrompt}
-          label={formatMessage('Invalid Prompt')}
           formContext={props.formContext}
-          rawErrors={errorSchema.invalidPrompt && errorSchema.invalidPrompt.__errors}
+          height={125}
         />
       </div>
       <div css={field}>
-        <TextareaWidget
-          onChange={onChange}
-          schema={getSchema('defaultValueResponse')}
-          id={idSchema.defaultValueResponse.__id}
-          value={formData.defaultValueResponse}
+        <WidgetLabel
           label={formatMessage('Default value response')}
+          description={getSchema('defaultValueResponse').description}
+        />
+        <LgEditorWidget
+          name="defaultValueResponse"
+          onChange={onChange('defaultValueResponse')}
+          value={formData.defaultValueResponse}
           formContext={props.formContext}
-          rawErrors={errorSchema.defaultValueResponse && errorSchema.defaultValueResponse.__errors}
+          height={125}
         />
       </div>
-    </>
+    </React.Fragment>
   );
 };

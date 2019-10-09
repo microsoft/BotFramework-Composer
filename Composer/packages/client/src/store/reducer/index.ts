@@ -149,7 +149,7 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb, promptTab }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
@@ -162,7 +162,7 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   breadcrumb.push({ dialogId, selected, focused });
 
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused };
+  state.designPageLocation = { dialogId, selected, focused, promptTab };
   return state;
 };
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {

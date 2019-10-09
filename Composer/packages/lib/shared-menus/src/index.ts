@@ -7,3 +7,4 @@ formatMessage.setup({
 export * from './labelMap';
 export * from './appschema';
 export * from './dialogFactory';
+export * from './promptTabs';
