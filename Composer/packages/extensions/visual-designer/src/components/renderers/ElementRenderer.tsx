@@ -39,48 +39,20 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
-// Node hover style
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;
 `;
 
-// Other nodes selected style except botAsks, UserAnswers and InvalidPromptBrick
 const nodeBorderSelectedStyle = css`
   box-shadow: 0px 0px 0px 2px #0078d4;
 `;
 
-// BotAsks, UserAnswers and InvalidPromptBrick nodes focused style
-const nodeBorderDoubleFocusedStyle = css`
-  outline: 2px solid #0078d4;
-`;
-
-// BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
-const nodeBorderDoubleSelectedStyle = css`
-  outline: 2px solid #0078d4;
-  border-radius: 0px;
-  box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
-`;
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
-  let elementType = '';
-  let doubleSelectable = false;
-  switch (data.$type) {
-    case ObiTypes.BotAsks:
-    case ObiTypes.UserAnswers:
-    case ObiTypes.InvalidPromptBrick:
-      elementType = data.$type;
-      doubleSelectable = true;
-      break;
-    default:
-      elementType = '';
-      doubleSelectable = false;
-      break;
-  }
-  const selectedId = `${id}${elementType}`;
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
   const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
-  const nodeSelected = selectedIds.includes(selectedId);
+  const nodeSelected = selectedIds.includes(id);
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
@@ -89,7 +61,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       [AttrNames.FocusedId]: id,
       [AttrNames.SelectedId]: selectedId,
       [AttrNames.FocusableElement]: true,
-      [AttrNames.SelectionIndex]: getNodeIndex(id),
+      [AttrNames.SelectionIndex]: getNodeIndex(selectedId),
     };
   };
 
@@ -106,13 +78,11 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
         border-radius: 1px 1px 0 0;
         ${nodeSelected && nodeBorderSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
-        ${nodeFocused && doubleSelectable && nodeBorderDoubleFocusedStyle};
-        ${nodeSelected && doubleSelectable && nodeBorderDoubleSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
-      {...declareElementAttributes(selectedId, id)}
+      {...declareElementAttributes(id, id)}
     >
       <ChosenRenderer
         id={id}
