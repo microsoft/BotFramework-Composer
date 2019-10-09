@@ -16,6 +16,8 @@ import { LuPublisher } from './luPublisher';
 import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
 
+const DIALOGFOLDER = 'ComposerDialogs';
+
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
@@ -176,7 +178,7 @@ export class BotProject {
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
-    const relativePath = Path.join(dir, `${id.trim()}.dialog`);
+    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.dialog`);
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
@@ -215,7 +217,7 @@ export class BotProject {
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
-    const relativePath = Path.join(dir, `${id.trim()}.lg`);
+    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.lg`);
     const absolutePath = `${this.dir}/${relativePath}`;
     const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
@@ -262,7 +264,7 @@ export class BotProject {
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
     }
-    const relativePath = Path.join(dir, `${id.trim()}.lu`);
+    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.lu`);
 
     // TODO: validate before save
     await this._createFile(relativePath, content);
