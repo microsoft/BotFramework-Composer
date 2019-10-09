@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import formatMessage from 'format-message';
-import { DialogGroup } from 'shared-menus';
+import { DialogGroup, PromptTab } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
@@ -20,7 +20,7 @@ export const BotAsks: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Ele
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       label={data.prompt || '<prompt>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, id);
+        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.BOT_ASKS });
       }}
     />
   );

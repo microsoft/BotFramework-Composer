@@ -87,7 +87,7 @@ VisualDesigner.defaultProps = {
   shellApi: {
     navTo: () => {},
     onFocusEvent: (eventId: string) => {},
-    onFocusSteps: (stepIds: string[]) => {},
+    onFocusSteps: (stepIds: string[], fragment?: string) => {},
     onSelect: (ids: string[]) => {},
     saveData: () => {},
   },

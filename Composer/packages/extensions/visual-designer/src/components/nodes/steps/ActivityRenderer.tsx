@@ -55,7 +55,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
       icon={ElementIcon.MessageBot}
       label={templateText}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, id);
+        onEvent(NodeEventTypes.Focus, { id });
       }}
     />
   );

@@ -75,7 +75,7 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
       icon={ElementIcon.User}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, id);
+        onEvent(NodeEventTypes.Focus, { id });
       }}
       styles={{ width: boundary.width, height: boundary.height }}
     >

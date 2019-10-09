@@ -1,3 +1,5 @@
+import querystring from 'query-string';
+
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
@@ -35,7 +37,7 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
 };
 
-export const focusTo: ActionCreator = ({ getState }, focusPath) => {
+export const focusTo: ActionCreator = ({ getState }, focusPath, fragment) => {
   const state = getState();
   const { dialogId, selected } = state.designPageLocation;
   let { breadcrumb } = state;
@@ -55,6 +57,9 @@ export const focusTo: ActionCreator = ({ getState }, focusPath) => {
   }
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
+  if (fragment && typeof fragment === 'string') {
+    currentUri += `#${fragment}`;
+  }
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 

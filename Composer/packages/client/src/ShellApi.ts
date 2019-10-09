@@ -304,13 +304,13 @@ export const ShellApi: React.FC = () => {
     actions.selectTo(subPath);
   }
 
-  function focusSteps({ subPaths = [] }, event) {
+  function focusSteps({ subPaths = [], fragment }, event) {
     cleanData();
     let dataPath: string = subPaths[0];
     if (event.source.name === FORM_EDITOR && focused) {
       dataPath = `${focused}.${dataPath}`;
     }
-    actions.focusTo(dataPath);
+    actions.focusTo(dataPath, fragment);
   }
 
   function onSelect(ids) {
