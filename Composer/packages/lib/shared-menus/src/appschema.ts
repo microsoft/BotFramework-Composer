@@ -60,7 +60,9 @@ export enum SDKTypes {
   OAuthInput = 'Microsoft.OAuthInput',
   OnActivity = 'Microsoft.OnActivity',
   OnBeginDialog = 'Microsoft.OnBeginDialog',
+  OnCondition = 'Microsoft.OnCondition',
   OnConversationUpdateActivity = 'Microsoft.OnConversationUpdateActivity',
+  OnCustomEvent = 'Microsoft.OnCustomEvent',
   OnDialogEvent = 'Microsoft.OnDialogEvent',
   OnEndOfConversationActivity = 'Microsoft.OnEndOfConversationActivity',
   OnEvent = 'Microsoft.OnEvent',
@@ -167,17 +169,20 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.EVENTS]: {
     label: 'Events',
     types: [
+      SDKTypes.OnCondition,
       SDKTypes.OnIntent,
       SDKTypes.OnUnknownIntent,
-      SDKTypes.OnConversationUpdateActivity,
       SDKTypes.OnBeginDialog,
       SDKTypes.OnDialogEvent,
+      SDKTypes.OnCustomEvent,
+      SDKTypes.OnActivity,
     ],
   },
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [
-      SDKTypes.OnActivity,
+      SDKTypes.OnConversationUpdateActivity,
+      SDKTypes.OnEndOfConversationActivity,
       SDKTypes.OnEventActivity,
       SDKTypes.OnHandoffActivity,
       SDKTypes.OnInvokeActivity,

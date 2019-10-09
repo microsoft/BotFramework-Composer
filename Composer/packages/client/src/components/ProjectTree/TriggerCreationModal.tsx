@@ -8,10 +8,12 @@ import { get } from 'lodash';
 import {
   addNewTrigger,
   getTriggerTypes,
+  getActivityTypes,
   TriggerFormData,
   TriggerFormDataErrors,
   eventTypeKey,
   intentTypeKey,
+  activityTypeKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
@@ -24,13 +26,17 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { name, $type, eventType } = data;
+  const { name, $type, eventType, activityType } = data;
   if (!name || !isValidName(name)) {
     errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if ($type === eventTypeKey && !eventType) {
     errors.eventType = formatMessage('please select a event type');
+  }
+
+  if ($type === activityTypeKey && !activityType) {
+    errors.eventType = formatMessage('please select an activity type');
   }
 
   if (!$type) {
@@ -52,6 +58,7 @@ const initialFormData: TriggerFormData = {
   name: '',
   constraint: '',
   eventType: '',
+  activityType: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -87,6 +94,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, eventType: option.key });
   };
 
+  const onSelectActivityType = (e, option) => {
+    setFormData({ ...formData, activityType: option.key });
+  };
+
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
@@ -98,7 +109,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       return { key: t, text: t };
     }
   );
+
+  const activityTypes: IDropdownOption[] = getActivityTypes();
+
   const showEventDropDown = formData.$type === eventTypeKey;
+  const showActivityDropDown = formData.$type === activityTypeKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -116,7 +131,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       <div css={dialogWindow}>
         <Stack>
           <Dropdown
-            label={formatMessage('What is the type of this trigger?')}
+            label={formatMessage('What do you want this trigger to handle?')}
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
@@ -134,6 +149,18 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               onChange={onSelectEventType}
               errorMessage={formData.errors.eventType}
               data-testid={'eventTypeDropDown'}
+            />
+          )}
+
+          {showActivityDropDown && (
+            <Dropdown
+              placeholder="select an activity type"
+              label="Which activity?"
+              options={activityTypes}
+              styles={dropdownStyles}
+              onChange={onSelectActivityType}
+              errorMessage={formData.errors.activityType}
+              data-testid={'activityTypeDropDown'}
             />
           )}
           <TextField
