@@ -52,19 +52,17 @@ Use **Set a Property** to set the value of a property.
 
 For example, set `user.onboarded` to `true`. The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](#expressions). When storing simple values, it is not necessary to initialize the property.
 
-Use **Initialize a Property** to create new properties that are objects or arrays. 
+Use **Initialize a Property** to create new properties that are objects or arrays. This allows your bot to use sub-properties, or store multiple values inside the property. 
 
 ![Initialize Property](./media/memory-concept/memory-initializeproperty.png)
 
-For example, initialize `user.profile` to `{}` or intialze `dialog.toppings` to `[]`. This allows your bot to use sub-properties, or store multiple values inside the property.  
-- need to clarify 
 It is important to note that before setting the value of a sub-property like `user.profile.age`, the `user.profile` must first be initialized. It is not necessary to further initialize `user.profile.age` unless `age` must also contain sub-values.
 
 Use **Edit an Array Property** to add and remove items from an array. Items can be added or removed from the top or bottom of an array using push, pop and take. Items can also be removed from an array. 
 
 ![Edit Array Property](./media/memory-concept/memory-editarrayproperty.png)
 
-Note that it is possible to push the value of an existing property into another Array property - for example: push `turn.choice` onto `dialog.choices`.
+Note that it is possible to push the value of an existing property into another Array property - for example, push `turn.choice` onto `dialog.choices`.
 
 Use **Delete a Property** to remove a property from memory.
 
@@ -76,15 +74,16 @@ Dialogs can return values to their parent dialogs. In this way, a child dialog c
 
 For example, a child dialog might first **initialize an object property** called `dialog.profile`.  Then, using prompts, build a compound property representing a user profile.  Finally, the dialog returns the compound value to the parent dialog:
 
-![Sample dialog](./existingdocs/Assets/dialog-with-return.png)
+![Sample Dialog](./media/memory-concept/memory-setwithdialog.png)
 
-The return value is specified as part of the **End Dialog** action:
+The return value is specified as the **Default Result Property** within the trigger for the child dialog:
 
-![Dialog return value property](./existingdocs/Assets/dialog-return-value.png)
+![Default Result Property](./media/memory-concept/memory-defaultresultproperty.png)
 
-Finally, the parent dialog is configured to capture the return value inside the **begin a dialog** action:
+Finally, the parent dialog is configured to capture the return value inside the **Begin a Dialog** action:
 
-![Return value stored in parent dialog](./existingdocs/Assets/dialog-property.png)
+![Return value stored in parent dialog](./media/memory-concept/memory-begindialog.png)
+
 
 When executed, the bot will perform the `profile` child dialog, collect the user's name and age in a _temporary_ scope, then return it to the parent dialog where it is captured into the `user.profile` property and stored permanently.
 
@@ -104,7 +103,6 @@ Some properties are automatically created and managed by the bot. These are avai
 Bots can retrieve and use values from memory for a variety of purposes. The bot may need to use a value in order to construct an outgoing message. The bot may need to make a decision based on a value and perform different actions based on that decision. The bot may need to use the value to calculate other values.
 
 Sometimes, you will refer directly to a property by its address in memory: `user.name`.  Other times, you will refer to one or more properties as part of an expression: `(dialog.orderTotal + dialog.orderTax) > 50`.  When refering to properties in memory, it is generally possibly to use either mechanism to access the necessary values.
-- do we know which is preferred/suggested?
 
 ### Expressions
 
@@ -119,11 +117,11 @@ When used in expressions, no special notation is necessary to refer to a propert
 
 A bot can evaluate values from memory when making decisions inside a branching action like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
 
-In the example below, the expression `user.profile.age > 13` will evaluate to either `TRUE` or `FALSE`, and the branch action will then execute the appropriate branch.
+In the example below, the expression `user.profile.age > 13` will evaluate to either `True` or `False`, and the branch action will then execute the appropriate branch.
 
 ![If/Else Condition](./media/memory-concept/memory-ifelse.png)
 
-In this second example, the value of `turn.choice` is used to match against multiple switch cases. Note that, while it looks like a raw reference to a property, this is actually an expression - since no operation is being taken on the property, the expression evaluates to the raw value.
+In this second example, the value of `turn.choice` is used to match against multiple `Switch` cases. Note that, while it looks like a raw reference to a property, this is actually an expression - since no operation is being taken on the property, the expression evaluates to the raw value.
 
 ![Switch condition](./existingdocs/Assets/switch-condition.png)
 
@@ -145,12 +143,13 @@ The screenshot below demonstrates how a bot can prompt a user for a value, then 
 
 ![LG memory](./media/memory-concept/memory-lg.png)
 
-
+- **ask for clarification on this**
+ 
 In addition to raw properties values, it is also possible to embed [expressions](#expressions) into the message template.  For example, it is possible to use the built-in `join()` and `foreach()` operators to format a list. 
 
 Given an array property held in `dialog.list`,  the expression `{ join(foreach(dialog.list, item, item), ',', ', and')) }` would result in a  grammatically correct list in the format, "item 1, item 2, and item 3"
 
-Properties from memory can also be used within an LG template to provide conditional variants of a messag and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
+Properties from memory can also be used within an LG template to provide conditional variants of a message and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
 
 ### Memory shorthands
 
