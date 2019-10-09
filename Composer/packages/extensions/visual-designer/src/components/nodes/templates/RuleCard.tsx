@@ -26,7 +26,7 @@ const getDirectJumpDialog = data => {
 
 export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
-    return onEvent(NodeEventTypes.Focus, id);
+    return onEvent(NodeEventTypes.Focus, { id });
   };
 
   const openNode = () => {

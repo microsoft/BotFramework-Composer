@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
+import { PromptTab } from 'shared-menus';
 
 import { NodeProps } from '../nodeProps';
 import { IconBrick } from '../../decorations/IconBrick';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 
 export const InvalidPromptBrick: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  return <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, id)} />;
+  return <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.EXCEPTIONS })} />;
 };
