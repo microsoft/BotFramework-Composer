@@ -1,13 +1,14 @@
 import { startCase, get } from 'lodash';
-import React, { useState } from 'react';
+import React from 'react';
 import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { TextField } from 'office-ui-fabric-react';
-import formatMessage from 'format-message';
+import { FontSizes } from '@uifabric/fluent-theme';
+import formatMessage, { date } from 'format-message';
 
 import { FormContext } from '../types';
+
+import { EditableField } from './EditableField';
 
 const overrideDefaults = {
   collapsable: true,
@@ -27,60 +28,13 @@ interface RootFieldProps {
   title?: string;
 }
 
-interface EditableTitleProps {
-  title: string;
-  onChange: (newTitle?: string) => void;
-}
-
-const EditableTitle: React.FC<EditableTitleProps> = props => {
-  const [editing, setEditing] = useState<boolean>(false);
-  const [hasFocus, setHasFocus] = useState<boolean>(false);
-  const [title, setTitle] = useState<string | undefined>(props.title);
-
-  const handleChange = (_e: any, newValue?: string) => {
-    setTitle(newValue);
-    props.onChange(newValue);
-  };
-
-  const handleCommit = () => {
-    setHasFocus(false);
-    setEditing(false);
-  };
-
-  return (
-    <div onMouseEnter={() => setEditing(true)} onMouseLeave={() => !hasFocus && setEditing(false)}>
-      <TextField
-        placeholder={props.title}
-        value={title}
-        styles={{
-          root: { margin: '5px 0 7px -9px' },
-          field: { fontSize: FontSizes.size20, fontWeight: FontWeights.semibold },
-          fieldGroup: {
-            borderColor: editing ? undefined : 'transparent',
-            transition: 'border-color 0.1s linear',
-            selectors: {
-              ':hover': {
-                borderColor: hasFocus ? undefined : NeutralColors.gray30,
-              },
-            },
-          },
-        }}
-        onBlur={handleCommit}
-        onFocus={() => setHasFocus(true)}
-        onChange={handleChange}
-        autoComplete="off"
-      />
-    </div>
-  );
-};
-
 export const RootField: React.FC<RootFieldProps> = props => {
   const { title, name, description, schema, formData, formContext } = props;
   const { currentDialog, editorSchema, isRoot } = formContext;
 
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
-  const handleTitleChange = (newTitle?: string): void => {
+  const handleTitleChange = (e: any, newTitle?: string): void => {
     if (props.onChange) {
       props.onChange({ ...formData, $designer: { ...formData.$designer, name: newTitle } });
     }
@@ -89,7 +43,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
   const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
 
-    return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
+    return formData.$designer.name || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
   const getDescription = (): string => {
@@ -99,7 +53,12 @@ export const RootField: React.FC<RootFieldProps> = props => {
   return (
     <div id={props.id} className="RootField">
       <div className="RootFieldTitle">
-        <EditableTitle title={getTitle()} onChange={handleTitleChange} />
+        <EditableField
+          value={getTitle()}
+          onChange={handleTitleChange}
+          styleOverrides={{ field: { fontWeight: FontWeights.semibold } }}
+          fontSize={FontSizes.size20}
+        />
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p
             className={classnames('RootFieldDescription', FontClassNames.smallPlus)}
@@ -123,9 +82,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           </span>
           <span>
             {get(formData, '$designer.updatedAt')
-              ? formatMessage('{ updatedAt, date, short } { updatedAt, time }', {
-                  updatedAt: Date.parse(get(formData, '$designer.updatedAt')),
-                })
+              ? date(Date.parse(get(formData, '$designer.updatedAt')), 'short')
               : 'N/A'}
           </span>
         </div>

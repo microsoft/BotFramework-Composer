@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup } from 'shared-menus';
+import { DialogGroup, PromptTab } from 'shared-menus';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { FormCard } from '../templates/FormCard';
@@ -25,7 +25,7 @@ export const UserAnswers: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX
       header={getUserAnswersTitle(data._type)}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, id);
+        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_ANSWERS });
       }}
     />
   );
