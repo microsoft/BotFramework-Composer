@@ -1,12 +1,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
+import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
+import { PromptTab } from 'shared-menus';
 
 import { BaseField } from '../BaseField';
+import { BFDFieldProps } from '../../types';
 
 import { tabs, tabsContainer, settingsContainer } from './styles';
 import { BotAsks } from './BotAsks';
@@ -15,7 +17,9 @@ import { Exceptions } from './Exceptions';
 import { PromptSettings } from './PromptSettings';
 import { GetSchema, PromptFieldChangeHandler } from './types';
 
-export const PromptField: React.FC<FieldProps> = props => {
+export const PromptField: React.FC<BFDFieldProps> = props => {
+  const { formContext } = props;
+  const { shellApi, focusedTab, focusedSteps } = formContext;
   const promptSettingsIdSchema = ({ __id: props.idSchema.__id + 'promptSettings' } as unknown) as IdSchema;
 
   const getSchema: GetSchema = field => {
@@ -28,17 +32,28 @@ export const PromptField: React.FC<FieldProps> = props => {
     props.onChange({ ...props.formData, [field]: data });
   };
 
+  const handleTabChange = (item?: PivotItem) => {
+    if (item) {
+      shellApi.onFocusSteps(focusedSteps, item.props.itemKey);
+    }
+  };
+
   return (
     <BaseField {...props}>
       <div css={tabsContainer}>
-        <Pivot linkSize={PivotLinkSize.large} styles={tabs}>
-          <PivotItem headerText={formatMessage('Bot Asks')} itemKey="botAsks">
+        <Pivot
+          linkSize={PivotLinkSize.large}
+          styles={tabs}
+          selectedKey={focusedTab || PromptTab.BOT_ASKS}
+          onLinkClick={handleTabChange}
+        >
+          <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
             <BotAsks {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('User Answers')} itemKey="userAnswers">
+          <PivotItem headerText={formatMessage('User Answers')} itemKey={PromptTab.USER_ANSWERS}>
             <UserAnswers {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('Exceptions')} itemKey="exceptions">
+          <PivotItem headerText={formatMessage('Exceptions')} itemKey={PromptTab.EXCEPTIONS}>
             <Exceptions {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
         </Pivot>
