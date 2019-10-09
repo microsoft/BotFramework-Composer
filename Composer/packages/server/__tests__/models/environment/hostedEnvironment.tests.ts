@@ -1,7 +1,6 @@
 import { absHostedConfig } from '../../../src/models/environment';
 import { HostedEnvironment } from '../../../src/models/environment/hostedEnvironment';
 import { Path } from '../../../src/utility/path';
-import { ExpressionContext } from 'botbuilder-expression-parser';
 
 const dir = './mocks';
 const defaultDir = Path.join(__dirname, dir);
