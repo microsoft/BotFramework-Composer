@@ -56,11 +56,11 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
-      [AttrNames.SelectableElement]: true,
       [AttrNames.NodeElement]: true,
-      [AttrNames.FocusedId]: id,
-      [AttrNames.SelectedId]: selectedId,
       [AttrNames.FocusableElement]: true,
+      [AttrNames.FocusedId]: id,
+      [AttrNames.SelectableElement]: true,
+      [AttrNames.SelectedId]: selectedId,
       [AttrNames.SelectionIndex]: getNodeIndex(selectedId),
     };
   };
