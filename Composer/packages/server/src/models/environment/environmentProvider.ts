@@ -1,7 +1,7 @@
-import { IEnvironmentConfig, IEnvironment } from './interface';
 import { HostedEnvironment } from './hostedEnvironment';
 import { DefaultEnvironment } from './defaultEnvironment';
-import { absHostedConfig, currentConfig } from '../../settings/env';
+
+import { absHostedConfig, currentConfig, IEnvironmentConfig, IEnvironment } from '.';
 
 export class EnvironmentProvider {
   private static environments: { [name: string]: IEnvironment } = {};
@@ -22,6 +22,20 @@ export class EnvironmentProvider {
 
   public static getCurrent() {
     return this.get(currentConfig);
+  }
+
+  public static getCurrentWithOverride(args: any) {
+    const config: any = { ...currentConfig };
+
+    if (args) {
+      Object.keys(args).forEach(function(key) {
+        if (args[key]) {
+          config[key] = args[key];
+        }
+      });
+    }
+
+    return this.get(config);
   }
 
   private static getConfigKey(config: IEnvironmentConfig): string {

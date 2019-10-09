@@ -1,8 +1,9 @@
-import { IEnvironmentConfig, IEnvironment } from '.';
 import { ISettingManager } from '../settings';
 import { HostedSettingManager } from '../settings/hostedSettingManager';
 import { IBotConnector } from '../connector';
 import { SelfHostBotConnector } from '../connector/selfHostConnector';
+
+import { IEnvironmentConfig, IEnvironment } from '.';
 
 export class HostedEnvironment implements IEnvironment {
   private config: IEnvironmentConfig;
@@ -11,10 +12,10 @@ export class HostedEnvironment implements IEnvironment {
   private defaultSlot: string = 'integration';
   private slots: string[] = ['integration', 'production'];
 
-  constructor(config: IEnvironmentConfig) {
+  constructor(config: IEnvironmentConfig, skipLoad?: boolean) {
     this.config = config;
     this.settingManager = new HostedSettingManager(this.config.basePath);
-    this.botConnector = new SelfHostBotConnector();
+    this.botConnector = new SelfHostBotConnector(skipLoad);
   }
 
   public getEnvironmentName(projectName: string): string | undefined {

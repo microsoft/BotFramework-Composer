@@ -1,8 +1,9 @@
-import { IEnvironmentConfig, IEnvironment } from '.';
 import { ISettingManager } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import { IBotConnector } from '../connector';
 import { CSharpBotConnector } from '../connector/csharpBotConnector';
+
+import { IEnvironmentConfig, IEnvironment } from '.';
 
 export class DefaultEnvironment implements IEnvironment {
   private config: IEnvironmentConfig;
@@ -17,7 +18,7 @@ export class DefaultEnvironment implements IEnvironment {
     this.botConnector = new CSharpBotConnector(this.config.endpoint);
   }
 
-  public getEnvironmentName(projectName: string): string | undefined {
+  public getEnvironmentName(_: string): string | undefined {
     return undefined;
   }
 

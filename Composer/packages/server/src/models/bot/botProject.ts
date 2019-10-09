@@ -5,8 +5,8 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { currentConfig } from '../../settings/env';
 import { IEnvironment, EnvironmentProvider } from '../environment';
+import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -14,7 +14,6 @@ import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
-import { ISettingManager } from '../settings';
 import { DialogSetting } from './interface';
 
 const oauthInput = () => ({
@@ -48,7 +47,7 @@ export class BotProject {
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
 
-    this.environment = EnvironmentProvider.get({ ...currentConfig, basePath: this.dir });
+    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir });
     this.settingManager = this.environment.getSettingsManager();
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
@@ -90,10 +89,10 @@ export class BotProject {
 
   public getEnvSettings = async (slot: string, obfuscate: boolean) => {
     const settings = await this.settingManager.get(slot, obfuscate);
-    if (settings && oauthInput().MicrosoftAppId !== '*****') {
+    if (settings && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
-    if (settings && oauthInput().MicrosoftAppPassword !== '*****') {
+    if (settings && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
     }
     return settings;

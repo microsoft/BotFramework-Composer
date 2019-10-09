@@ -1,6 +1,7 @@
 import { Path } from '../../utility/path';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
-import { ISettingManager } from '.';
+
+import { ISettingManager, OBFUSCATED_VALUE } from '.';
 
 const subPath = 'settings/appsettings.json';
 
@@ -16,8 +17,8 @@ export class FileSettingManager implements ISettingManager {
   public get = async (slot: string, obfuscate: boolean): Promise<any> => {
     this.validateSlot(slot);
 
-    let path = this.getPath(slot);
-    let settings = await this._getFromStorage(path, slot);
+    const path = this.getPath(slot);
+    const settings = await this._getFromStorage(path, slot);
 
     return obfuscate ? this.obfuscateValues(settings) : settings;
   };
@@ -41,7 +42,7 @@ export class FileSettingManager implements ISettingManager {
   public set = async (slot: string, settings: any): Promise<void> => {
     this.validateSlot(slot);
 
-    let path = this.getPath(slot);
+    const path = this.getPath(slot);
 
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
@@ -52,23 +53,25 @@ export class FileSettingManager implements ISettingManager {
 
   private obfuscateValues = (obj: any): any => {
     if (obj) {
-      let type = typeof obj;
+      const type = typeof obj;
       if (type === 'object') {
-        if (Object.prototype.toString.call(obj) === '[object Array]') {
-          let result: any[] = [];
-          (<Array<any>>obj).forEach(x => result.push(this.obfuscateValues(x)));
+        if (Array.isArray(obj)) {
+          const result: any[] = [];
+          (obj as any[]).forEach(x => result.push(this.obfuscateValues(x)));
           return result;
         } else {
-          let result: any = {};
-          for (let p in obj) {
+          const result: any = {};
+          for (const p in obj) {
             result[p] = this.obfuscateValues(obj[p]);
           }
           return result;
         }
       }
     }
-    return '*****';
+    return OBFUSCATED_VALUE;
   };
+
+  protected validateSlot = (_: string): void => {};
 
   private getPath = (slot: string): string => {
     if (slot && slot.length > 0) {
@@ -77,6 +80,4 @@ export class FileSettingManager implements ISettingManager {
       return Path.join(this.basePath, subPath);
     }
   };
-
-  protected validateSlot = (slot: string): void => {};
 }
