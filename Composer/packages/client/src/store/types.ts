@@ -2,8 +2,8 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-
 import { PromptTab } from 'shared-menus';
+
 import { CreationFlowStatus, BotStatus } from '../constants';
 
 import { ActionType } from './action/types';

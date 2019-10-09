@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
 import { debounce, isEqual, get } from 'lodash';
-import { PromptTab } from 'shared-menus';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
