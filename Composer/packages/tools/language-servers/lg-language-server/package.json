@@ -1,7 +1,7 @@
 {
   "name": "lg-lsp-server",
   "version": "0.1.0",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start:server": "ts-node src/index.ts"

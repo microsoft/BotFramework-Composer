@@ -4,7 +4,7 @@
   "version": "0.10.0",
   "scripts": {
     "build": "webpack",
-    "test_monaco_lg_demo": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
+    "test": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
     "start:client": "webpack-dev-server",
     "start:server": "ts-node ./src/server_launcher.ts"
   },
