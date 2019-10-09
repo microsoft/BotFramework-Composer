@@ -39,15 +39,25 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
+// Node hover style
 const nodeBorderHoveredStyle = css`
-  outline: 1px solid #323130;
+  box-shadow: 0px 0px 0px 1px #323130;
 `;
 
+// Other nodes selected style except botAsks, UserAnswers and InvalidPromptBrick
 const nodeBorderSelectedStyle = css`
-  outline: 1px solid #0078d4;
+  box-shadow: 0px 0px 0px 2px #0078d4;
 `;
 
+// BotAsks, UserAnswers and InvalidPromptBrick nodes focused style
+const nodeBorderDoubleFocusedStyle = css`
+  outline: 2px solid #0078d4;
+`;
+
+// BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
 const nodeBorderDoubleSelectedStyle = css`
+  outline: 2px solid #0078d4;
+  border-radius: 0px;
   box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
@@ -93,9 +103,11 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
+        border-radius: 1px 1px 0 0;
         ${nodeSelected && !doubleSelected && nodeBorderSelectedStyle};
+        ${nodeFocused && !doubleSelected && nodeBorderSelectedStyle};
+        ${nodeFocused && doubleSelected && nodeBorderDoubleFocusedStyle};
         ${nodeSelected && doubleSelected && nodeBorderDoubleSelectedStyle};
-        ${nodeFocused && nodeBorderSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
