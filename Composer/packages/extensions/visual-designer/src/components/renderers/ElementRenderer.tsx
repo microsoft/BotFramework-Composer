@@ -63,17 +63,17 @@ const nodeBorderDoubleSelectedStyle = css`
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   let elementType = '';
-  let doubleSelected = false;
+  let doubleSelectable = false;
   switch (data.$type) {
     case ObiTypes.BotAsks:
     case ObiTypes.UserAnswers:
     case ObiTypes.InvalidPromptBrick:
       elementType = data.$type;
-      doubleSelected = true;
+      doubleSelectable = true;
       break;
     default:
       elementType = '';
-      doubleSelected = false;
+      doubleSelectable = false;
       break;
   }
   const selectedId = `${id}${elementType}`;
@@ -104,10 +104,10 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
         display: inline-block;
         position: relative;
         border-radius: 1px 1px 0 0;
-        ${nodeSelected && !doubleSelected && nodeBorderSelectedStyle};
-        ${nodeFocused && !doubleSelected && nodeBorderSelectedStyle};
-        ${nodeFocused && doubleSelected && nodeBorderDoubleFocusedStyle};
-        ${nodeSelected && doubleSelected && nodeBorderDoubleSelectedStyle};
+        ${nodeSelected && nodeBorderSelectedStyle};
+        ${nodeFocused && nodeBorderSelectedStyle};
+        ${nodeFocused && doubleSelectable && nodeBorderDoubleFocusedStyle};
+        ${nodeSelected && doubleSelectable && nodeBorderDoubleSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
