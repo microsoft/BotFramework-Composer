@@ -210,7 +210,7 @@ export const dialogGroups: DialogGroupsMap = {
 
 export const createStepMenu = (
   stepLabels,
-  subMenu: boolean = true,
+  subMenu = true,
   handleType: (e: any, item: IContextualMenuItem) => void
 ): IContextualMenuItem[] => {
   if (subMenu) {
