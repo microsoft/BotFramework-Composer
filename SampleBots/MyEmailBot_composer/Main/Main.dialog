@@ -1,21 +1,17 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "$designer": {
-    "createdAt": "2019-08-07T09:13:14.901Z",
-    "updatedAt": "2019-10-10T17:41:44.494Z",
-    "id": "648082"
-  },
   "autoEndDialog": false,
-  "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents": [
+    "intents":[
       {
+
         "$type": "Microsoft.IntentPattern",
         "intent": "SignInIntent",
-        "pattern": "(?i)sign in"
+        "pattern": "(?i)sign in" 
       },
       {
+
         "$type": "Microsoft.IntentPattern",
         "intent": "HelpIntent",
         "pattern": "(?i)help"
@@ -49,6 +45,7 @@
           "$type": "Microsoft.RepeatDialog"
         }
       ],
+       
       "$designer": {
         "createdAt": "2019-08-08T07:26:47.918Z",
         "updatedAt": "2019-08-08T07:26:47.936Z",
@@ -119,5 +116,10 @@
       }
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "../../app.schema",
+  "$designer": {
+    "createdAt": "2019-08-07T09:13:14.901Z",
+    "updatedAt": "2019-08-07T09:13:14.937Z",
+    "id": "648082"
+  }
 }
