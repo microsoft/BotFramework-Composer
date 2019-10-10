@@ -2,7 +2,6 @@ import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } fro
 import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react';
-import nanoid from 'nanoid/generate';
 
 import { DialogInfo } from '../store/types';
 

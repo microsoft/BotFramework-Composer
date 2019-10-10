@@ -50,25 +50,26 @@ export const getDesignerId = (data: DesignerData) => {
   return newDesigner;
 };
 
-const seedDefaults = (type: string) => {
-  const dialogSeed = {};
-
-  if (!appschema.definitions[type]) return dialogSeed;
-  const { properties } = appschema.definitions[type];
-
-  for (const field in properties) {
-    // if (properties[field].type === 'object') {
-    // todo: recurse on properties
-    // const { properties } = properties[field];
-    // for (const field in properties) {
-    // }
-    // if (properties[field].const !== null && properties[field].const !== undefined) {
-    //   dialogSeed[field] = properties[field].const;
-    if (properties[field].default !== null && properties[field].default !== undefined) {
-      dialogSeed[field] = properties[field].default;
+const assignDefaults = (data: {}, currentSeed = {}) => {
+  for (const field in data) {
+    if (data[field].type === 'object') {
+      // recurse on subtree's properties
+      currentSeed[field] = assignDefaults(data[field].properties, currentSeed);
+    }
+    if (data[field].const !== null && data[field].const !== undefined) {
+      currentSeed[field] = data[field].const;
+    }
+    if (data[field].default !== null && data[field].default !== undefined) {
+      currentSeed[field] = data[field].default;
     }
   }
-  return dialogSeed;
+  return currentSeed;
+};
+
+export const seedDefaults = (type: string) => {
+  if (!appschema.definitions[type]) return {};
+  const { properties } = appschema.definitions[type];
+  return assignDefaults(properties);
 };
 
 export const seedNewDialog = (
