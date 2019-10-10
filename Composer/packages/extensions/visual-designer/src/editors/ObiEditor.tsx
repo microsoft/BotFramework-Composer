@@ -34,6 +34,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onOpen,
   onChange,
   onSelect,
+  undo,
+  redo,
 }): JSX.Element | null => {
   let divRef;
 
@@ -124,6 +126,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const dialog = appendNodesAfter(data, e.target, e.actions);
           onChange(dialog);
         };
+        break;
+      case NodeEventTypes.Undo:
+        handler = undo;
+        break;
+      case NodeEventTypes.Redo:
+        handler = redo;
         break;
       default:
         handler = onFocusSteps;
@@ -239,6 +247,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               actions: clipboardContext.clipboardActions,
             });
             break;
+          case KeyboardCommandTypes.Node.Undo:
+            dispatchEvent(NodeEventTypes.Undo, {});
+            break;
+          case KeyboardCommandTypes.Node.Redo:
+            dispatchEvent(NodeEventTypes.Redo, {});
+            break;
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
@@ -310,6 +324,8 @@ ObiEditor.defaultProps = {
   onOpen: () => {},
   onChange: () => {},
   onSelect: () => {},
+  undo: () => {},
+  redo: () => {},
 };
 
 interface ObiEditorProps {
@@ -323,4 +339,6 @@ interface ObiEditorProps {
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
   onSelect: (selection: any) => any;
+  undo?: () => any;
+  redo?: () => any;
 }

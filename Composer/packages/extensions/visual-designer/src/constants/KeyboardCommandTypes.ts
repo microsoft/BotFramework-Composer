@@ -18,6 +18,8 @@ export const KeyboardCommandTypes = {
     Copy: 'copy',
     Cut: 'cut',
     Paste: 'paste',
+    Redo: 'redo',
+    Undo: 'undo',
   },
 };
 
@@ -81,11 +83,23 @@ const KeyboardNodeEditingShortcuts = {
   'Windows.Control.c': KeyboardCommandTypes.Node.Copy,
   'Windows.Control.X': KeyboardCommandTypes.Node.Cut,
   'Windows.Control.x': KeyboardCommandTypes.Node.Cut,
+  'Windows.Control.v': KeyboardCommandTypes.Node.Paste,
+  'Windows.Control.V': KeyboardCommandTypes.Node.Paste,
+  'Windows.Control.Z': KeyboardCommandTypes.Node.Undo,
+  'Windows.Control.z': KeyboardCommandTypes.Node.Undo,
+  'Windows.Control.Shift.Z': KeyboardCommandTypes.Node.Redo,
+  'Windows.Control.Shift.z': KeyboardCommandTypes.Node.Redo,
 
   'Mac.Meta.C': KeyboardCommandTypes.Node.Copy,
   'Mac.Meta.c': KeyboardCommandTypes.Node.Copy,
   'Mac.Meta.X': KeyboardCommandTypes.Node.Cut,
   'Mac.Meta.x': KeyboardCommandTypes.Node.Cut,
+  'Mac.Meta.v': KeyboardCommandTypes.Node.Paste,
+  'Mac.Meta.V': KeyboardCommandTypes.Node.Paste,
+  'Mac.Meta.Z': KeyboardCommandTypes.Node.Undo,
+  'Mac.Meta.z': KeyboardCommandTypes.Node.Undo,
+  'Mac.Meta.Shift.Z': KeyboardCommandTypes.Node.Redo,
+  'Mac.Meta.Shift.z': KeyboardCommandTypes.Node.Redo,
 };
 
 const { arrowNavigation, tabNavigation, keyboardNodeEditing } = EditorConfig.features;
