@@ -12,4 +12,8 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/no-use-before-define': 'warn',
   },
+  parserOptions: {
+    // temp fix for https://github.com/typescript-eslint/typescript-eslint/issues/864
+    createDefaultProgram: true,
+  },
 };
