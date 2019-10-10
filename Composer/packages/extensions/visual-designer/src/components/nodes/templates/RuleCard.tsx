@@ -10,6 +10,7 @@ import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
+import { CardProps } from '../nodeProps';
 
 import { IconCard } from './IconCard';
 
@@ -24,7 +25,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, onEvent }): JSX.Element => {
+export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX.Element => {
   const openNode = () => {
     return onEvent(NodeEventTypes.Expand, id);
   };

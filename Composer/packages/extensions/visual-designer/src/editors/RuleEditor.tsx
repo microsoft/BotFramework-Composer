@@ -62,7 +62,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         id={stepGroup.id}
         data={stepGroup.data}
         onEvent={onEvent}
-        trigger={<Trigger id={id} data={data} />}
+        trigger={<Trigger data={data} />}
       />
     </div>
   );

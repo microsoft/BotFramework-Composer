@@ -86,6 +86,7 @@
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.0",
+    "typescript": "^3.5.1",
     "wsrun": "^3.6.4"
   }
 }

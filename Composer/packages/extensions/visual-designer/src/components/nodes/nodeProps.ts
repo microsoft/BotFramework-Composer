@@ -8,6 +8,16 @@ export interface NodeProps {
   isRoot?: boolean;
 }
 
+export interface CardProps {
+  id: string;
+  data: any;
+  label: string;
+  focused?: boolean;
+
+  onEvent: (action, id, ...rest) => object | void;
+  onResize?: (action?, id?) => object | void;
+}
+
 export const defaultNodeProps = {
   id: '',
   data: {},
