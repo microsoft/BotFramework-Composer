@@ -8,11 +8,19 @@ import { absHostRoot } from '../../settings/env';
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class SelfHostBotConnector implements IBotConnector {
-  constructor() {
-    this.buildAsync = require('commands/build').handlerAsync;
-    this.publishAsync = require('commands/publish').handlerAsync;
-    this.getEditingStatusAsync = require('commands/editingStatus').handlerAsync;
-    this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
+  constructor(skipLoad?: boolean) {
+    if (!skipLoad) {
+      // for production
+      this.buildAsync = require('commands/build').handlerAsync;
+      this.publishAsync = require('commands/publish').handlerAsync;
+      this.getEditingStatusAsync = require('commands/editingStatus').handlerAsync;
+      this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
+    } else {
+      // for testing
+      this.buildAsync = async _ => {
+        return 'done';
+      };
+    }
   }
   private buildAsync: SelfHostCommands.Build;
   private publishAsync: SelfHostCommands.Publish;
