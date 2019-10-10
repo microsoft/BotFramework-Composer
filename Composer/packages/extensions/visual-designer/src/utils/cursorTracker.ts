@@ -123,6 +123,62 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
   }
   return selectedElement;
 }
+
+function handleArrowkeyMove(currentElement: HTMLElement, selectedElements: NodeListOf<HTMLElement>, command: string) {
+  let element: HTMLElement = currentElement;
+  let boundRect: BoundRect = BoundRect.Bottom;
+  let axle: Axle = Axle.X;
+  let filterAttrs: AttrNames[] = [];
+
+  switch (command) {
+    case KeyboardCommandTypes.Cursor.MoveDown:
+      boundRect = BoundRect.Top;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveUp:
+      boundRect = BoundRect.Bottom;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveLeft:
+      boundRect = BoundRect.Right;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveRight:
+      boundRect = BoundRect.Left;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveDown:
+      boundRect = BoundRect.Top;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveUp:
+      boundRect = BoundRect.Bottom;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
+      boundRect = BoundRect.Right;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveRight:
+      boundRect = BoundRect.Left;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    default:
+      return element;
+  }
+
+  element = localeNearestElement(currentElement, selectedElements, boundRect, axle, filterAttrs);
+  return element;
+}
+
 export function moveCursor(
   selectedElements: NodeListOf<HTMLElement>,
   id: string,
@@ -134,51 +190,12 @@ export function moveCursor(
   if (!currentElement) return { selected: id, focused: undefined };
   let element: HTMLElement = currentElement;
   switch (command) {
-    case KeyboardCommandTypes.Cursor.MoveDown:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [AttrNames.NodeElement]);
-      break;
-    case KeyboardCommandTypes.Cursor.MoveUp:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
-        AttrNames.NodeElement,
-      ]);
-      break;
-    case KeyboardCommandTypes.Cursor.MoveLeft:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
-        AttrNames.NodeElement,
-      ]);
-      break;
-    case KeyboardCommandTypes.Cursor.MoveRight:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [AttrNames.NodeElement]);
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveDown:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveUp:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveRight:
-      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      break;
     case KeyboardCommandTypes.Cursor.MovePrevious:
-      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MovePrevious);
-      break;
     case KeyboardCommandTypes.Cursor.MoveNext:
-      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MoveNext);
+      element = localeElementByTab(currentElement, selectedElements, command);
+      break;
+    default:
+      element = handleArrowkeyMove(currentElement, selectedElements, command);
       break;
   }
   element.scrollIntoView(true);
