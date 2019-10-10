@@ -160,7 +160,12 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = dialog => {
+  const onTriggerCreationSubmit = (dialog, newDialogName) => {
+    if (newDialogName) {
+      const content = getNewDesigner(newDialogName);
+      actions.createDialog({ id: newDialogName, content });
+    }
+
     const payload = {
       id: dialog.id,
       content: dialog.content,

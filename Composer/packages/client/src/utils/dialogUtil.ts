@@ -22,6 +22,7 @@ export interface TriggerFormData {
   activityType: string;
   name: string;
   constraint: string;
+  toCreateNewDialog: boolean;
 }
 
 export interface TriggerFormDataErrors {
@@ -70,15 +71,35 @@ export function getNewDesigner(name: string, description: string) {
   };
 }
 
-export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
+export function insert(
+  content,
+  path: string,
+  position: number | undefined,
+  data: TriggerFormData,
+  newDialogName: string
+) {
   const current = get(content, path, []);
-  const optionalAttributes: { constraint?: string; events?: string[] } = {};
+  const optionalAttributes: { constraint?: string; events?: string[]; actions?: object[] } = {};
   if (data.constraint) {
     optionalAttributes.constraint = data.constraint;
   }
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
+
+  if (data.toCreateNewDialog) {
+    optionalAttributes.actions = [
+      {
+        $type: 'Microsoft.BeginDialog',
+        $designer: {
+          id: '800801',
+          name: 'Begin a Dialog',
+        },
+        dialog: newDialogName,
+      },
+    ];
+  }
+
   const newStep = {
     $type: data.$type,
     ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),
@@ -93,10 +114,15 @@ export function insert(content, path: string, position: number | undefined, data
   return content;
 }
 
-export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
+export function addNewTrigger(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  data: TriggerFormData,
+  newDialogName: string
+): DialogInfo {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
-  insert(dialogCopy.content, 'events', undefined, data);
+  insert(dialogCopy.content, 'events', undefined, data, newDialogName);
   return dialogCopy;
 }
 

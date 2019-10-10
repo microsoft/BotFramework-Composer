@@ -60,11 +60,12 @@ export enum SDKTypes {
   OAuthInput = 'Microsoft.OAuthInput',
   OnActivity = 'Microsoft.OnActivity',
   OnBeginDialog = 'Microsoft.OnBeginDialog',
-  OnCondition = 'Microsoft.OnCondition',
+  OnCancelDialog = 'Microsoft.OnCancelDialog',
   OnConversationUpdateActivity = 'Microsoft.OnConversationUpdateActivity',
   OnCustomEvent = 'Microsoft.OnCustomEvent',
   OnDialogEvent = 'Microsoft.OnDialogEvent',
   OnEndOfConversationActivity = 'Microsoft.OnEndOfConversationActivity',
+  OnError = 'Microsoft.OnError',
   OnEvent = 'Microsoft.OnEvent',
   OnEventActivity = 'Microsoft.OnEventActivity',
   OnHandoffActivity = 'Microsoft.OnHandoffActivity',
@@ -74,6 +75,7 @@ export enum SDKTypes {
   OnMessageDeleteActivity = 'Microsoft.OnMessageDeleteActivity',
   OnMessageReactionActivity = 'Microsoft.OnMessageReactionActivity',
   OnMessageUpdateActivity = 'Microsoft.OnMessageUpdateActivity',
+  OnRepromptDialog = 'Microsoft.OnRepromptDialog',
   OnTypingActivity = 'Microsoft.OnTypingActivity',
   OnUnknownIntent = 'Microsoft.OnUnknownIntent',
   OrdinalEntityRecognizer = 'Microsoft.OrdinalEntityRecognizer',
@@ -108,6 +110,7 @@ export enum DialogGroup {
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
   OTHER = 'OTHER',
+  DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
 }
 
 export interface DialogGroupItem {
@@ -169,15 +172,19 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.EVENTS]: {
     label: 'Events',
     types: [
-      SDKTypes.OnCondition,
       SDKTypes.OnIntent,
       SDKTypes.OnUnknownIntent,
-      SDKTypes.OnBeginDialog,
       SDKTypes.OnDialogEvent,
       SDKTypes.OnCustomEvent,
       SDKTypes.OnActivity,
     ],
   },
+
+  [DialogGroup.DIALOG_EVENT_TYPES]: {
+    label: 'OnDialogEvents Types',
+    types: [SDKTypes.OnBeginDialog, SDKTypes.OnCancelDialog, SDKTypes.OnError, SDKTypes.OnRepromptDialog],
+  },
+
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [

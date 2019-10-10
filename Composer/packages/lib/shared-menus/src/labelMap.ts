@@ -125,11 +125,20 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
+  [SDKTypes.OnCancelDialog]: {
+    title: formatMessage('Handle an Event: CancelDialog'),
+  },
+  [SDKTypes.OnCustomEvent]: {
+    title: formatMessage('Handle an Event: Custom Event'),
+  },
   [SDKTypes.OnDialogEvent]: {
     title: formatMessage('Handle a Dialog Event'),
   },
   [SDKTypes.OnEndOfConversationActivity]: {
     title: formatMessage('Handle an Event: EndOfConversationActivity'),
+  },
+  [SDKTypes.OnError]: {
+    title: formatMessage('Handle an Event: Error'),
   },
   [SDKTypes.OnEvent]: {
     title: formatMessage('Handle an Event'),
@@ -157,6 +166,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.OnMessageUpdateActivity]: {
     title: formatMessage('Handle an Event: MessageUpdateActivity'),
+  },
+  [SDKTypes.OnRepromptDialog]: {
+    title: formatMessage('Handle an Event: RepromptDialog'),
   },
   [SDKTypes.OnTypingActivity]: {
     title: formatMessage('Handle an Event: TypingActivity'),

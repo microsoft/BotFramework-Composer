@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption, Checkbox } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
 import {
@@ -28,6 +28,7 @@ import {
   dialogFooterContainer,
   dialogFooterRight,
   marginRight,
+  marginTop,
 } from './styles';
 
 const isValidName = name => {
@@ -68,7 +69,7 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo) => void;
+  onSubmit: (dialog: DialogInfo, newDailogName: string) => void;
 }
 
 const initialFormData: TriggerFormData = {
@@ -78,6 +79,7 @@ const initialFormData: TriggerFormData = {
   constraint: '',
   eventType: '',
   activityType: '',
+  toCreateNewDialog: false,
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -112,6 +114,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setStep(step - 1);
   };
 
+  const onCheck = (e, value) => {
+    setFormData({ ...formData, toCreateNewDialog: value });
+  };
+
   const submitForm = () => {
     const errors = validateForm(formData);
 
@@ -122,8 +128,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       });
       return;
     }
-    const newDialog = addNewTrigger(dialogs, dialogId, formData);
-    onSubmit(newDialog);
+    let newDialogName = '';
+    if (formData.toCreateNewDialog) {
+      newDialogName = formData.$type === intentTypeKey ? formData.name : 'newDialog';
+    }
+    const updatedDialog = addNewTrigger(dialogs, dialogId, formData, newDialogName);
+    onSubmit(updatedDialog, newDialogName);
     onDismiss();
   };
 
@@ -222,6 +232,18 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             />
           )}
         </Stack>
+        {step > 0 && (
+          <div css={marginTop}>
+            <Checkbox
+              label={
+                formData.$type === intentTypeKey
+                  ? formatMessage('Create a dialog with the same name as this trigger')
+                  : formatMessage('Create a dialog to contain this dialog')
+              }
+              onChange={onCheck}
+            />
+          </div>
+        )}
       </div>
       <div css={dialogFooterContainer}>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
