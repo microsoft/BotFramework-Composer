@@ -3,11 +3,11 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
-import { get } from 'lodash';
 
 import {
   addNewTrigger,
   getTriggerTypes,
+  getEventTypes,
   getActivityTypes,
   TriggerFormData,
   TriggerFormDataErrors,
@@ -37,7 +37,7 @@ const isValidName = name => {
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { name, $type, eventType, activityType } = data;
-  if (!name || !isValidName(name)) {
+  if (!!name && !isValidName(name)) {
     errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
@@ -87,7 +87,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const [formData, setFormData] = useState(initialFormData);
   const [step, setStep] = useState(0);
   const { state } = useContext(StoreContext);
-  const { dialogs, schemas } = state;
+  const { dialogs } = state;
 
   const onNext = () => {
     if (step === 0) {
@@ -146,12 +146,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       [field]: newValue,
     });
   };
-  const eventTypes = get(schemas, `sdk.content.definitions.['${eventTypeKey}'].properties.events.items.enum`, []).map(
-    t => {
-      return { key: t, text: t };
-    }
-  );
 
+  const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
 
   const showEventDropDown = formData.$type === eventTypeKey && step > 0;

@@ -132,6 +132,22 @@ export function getTriggerTypes(): IDropdownOption[] {
   return triggerTypes;
 }
 
+export function getEventTypes(): IDropdownOption[] {
+  const eventTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return eventTypes;
+}
+
 export function getActivityTypes(): IDropdownOption[] {
   const activityTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
