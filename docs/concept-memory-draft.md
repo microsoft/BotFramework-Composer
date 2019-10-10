@@ -143,11 +143,7 @@ The screenshot below demonstrates how a bot can prompt a user for a value, then 
 
 ![LG memory](./media/memory-concept/memory-lg.png)
 
-- **ask for clarification on this**
- 
-In addition to raw properties values, it is also possible to embed [expressions](#expressions) into the message template.  For example, it is possible to use the built-in `join()` and `foreach()` operators to format a list. 
-
-Given an array property held in `dialog.list`,  the expression `{ join(foreach(dialog.list, item, item), ',', ', and')) }` would result in a  grammatically correct list in the format, "item 1, item 2, and item 3"
+In addition to raw properties values, it is also possible to embed [expressions](#expressions) into the message template. See the full list of pre-built functions you can use in expression [here](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md).  
 
 Properties from memory can also be used within an LG template to provide conditional variants of a message and can be passed as parameters to built-in and custom functions.  [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
 
