@@ -41,6 +41,9 @@ export function BaseEditor(props: BaseEditorProps) {
         requestAnimationFrame(() => {
           setRect({ height, width });
         });
+      } else if (height + width === 0) {
+        // try again
+        setTimeout(updateRect, 50);
       }
     }
   }, 0);
