@@ -56,10 +56,15 @@ dotnet publish -c release -o $publishFolder -v q > $logFile
 
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
+$localBotPath = $(Join-Path $projFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 
 if ($botPath) {
+	Write-Host "Publishing dialogs from external bot project: $($botPath)"
 	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
+}
+else {
+	Copy-Item -Path $localBotPath -Recurse -Destination $remoteBotPath -Container -Force
 }
 
 # Merge from custom config files

@@ -6,6 +6,9 @@ import { BFDFieldProps } from '../types';
 
 import { BaseField } from './BaseField';
 
+const LG_HELP =
+  'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
+
 const getInitialTemplate = (formData?: string): string => {
   let newTemplate = formData || '';
 
@@ -81,7 +84,7 @@ export const LgEditorField: React.FC<BFDFieldProps> = props => {
             paddingBottom: '19px',
           }}
         >
-          <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} />
+          <RichEditor errorMsg={errorMsg} value={Body} onChange={onChange} helpURL={LG_HELP} />
         </div>
       </BaseField>
     </div>

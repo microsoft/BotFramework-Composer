@@ -67,7 +67,7 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
-  const updateDialog = useDebouncedFunc(actions.updateDialog);
+  const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = useDebouncedFunc(actions.updateLgFile);
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
@@ -278,12 +278,6 @@ export const ShellApi: React.FC = () => {
     }
   }
 
-  function flushUpdates() {
-    if (updateDialog.flush) {
-      updateDialog.flush();
-    }
-  }
-
   function cleanData() {
     const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
     if (!isEqual(dialogsMap[dialogId], cleanedData)) {
@@ -293,7 +287,6 @@ export const ShellApi: React.FC = () => {
       };
       updateDialog(payload);
     }
-    flushUpdates();
   }
 
   function navTo({ path }) {
