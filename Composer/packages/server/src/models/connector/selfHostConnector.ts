@@ -1,11 +1,12 @@
 //eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
-///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
+
+import '../../../types/selfHostCommands';
 
 export class SelfHostBotConnector implements IBotConnector {
   constructor() {
