@@ -1,8 +1,16 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, useRef } from 'react';
-
+import { FC } from 'react';
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
+
+const KeyNameByModifierAttr = {
+  ctrlKey: 'Control',
+  metaKey: 'Meta',
+  altKey: 'Alt',
+  shiftKey: 'Shift',
+};
+
+const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface NodeProps {
   when: string;
@@ -12,30 +20,31 @@ interface NodeProps {
 const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
+
+const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
+  let prefix = isMac() ? 'Mac.' : 'Windows.';
+  ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'].forEach(modifierAttr => {
+    if (e[modifierAttr]) {
+      prefix += `${KeyNameByModifierAttr[modifierAttr]}.`;
+    }
+  });
+  return prefix;
+};
+
 export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
-  const keyPressed = useRef({});
   const handleKeyDown = e => {
-    if (e.key === 'Tab') {
+    if (overriddenKeyCodes.find(x => x === e.key)) {
       e.preventDefault();
       e.stopPropagation();
     }
-    keyPressed.current[e.key] = true;
+
+    const modifierPrefix = buildModifierKeyPrefix(e);
+    const shortcut = modifierPrefix + e.key;
+    onCommand(mapShortcutToKeyboardCommand(shortcut));
   };
 
-  const handleKeyUp = e => {
-    if (when !== 'normal') {
-      let keyCode = isMac() ? 'Mac' : 'Windows';
-      for (const key in keyPressed.current) {
-        if (keyPressed.current[key]) {
-          keyCode += `.${key}`;
-        }
-      }
-      onCommand(mapShortcutToKeyboardCommand(keyCode));
-    }
-    delete keyPressed.current[e.key];
-  };
   return (
-    <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex={0} data-test-id="keyboard-zone">
+    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone">
       {children}
     </div>
   );
