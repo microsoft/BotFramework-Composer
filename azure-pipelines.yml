@@ -36,7 +36,7 @@ jobs:
     - script: cd Composer && yarn install
       displayName: 'yarn install'
     - script: cd Composer && yarn build
-      displayName: 'yarn build'
+      displayName: 'yarn build:prod'
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
     - script: cd Composer && yarn test:coverage
@@ -69,7 +69,7 @@ jobs:
     - script: cd Composer && yarn install
       displayName: 'yarn install'
     - script: cd Composer && yarn build
-      displayName: 'yarn build'
+      displayName: 'yarn build:prod'
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
       env:
