@@ -181,7 +181,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
-    setSelectedElements(querySelectedElements());
+    setSelectableElements(querySelectedElements());
   }, [data, focusedEvent]);
 
   const selection = new Selection({
@@ -205,7 +205,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
     return items;
   };
-  const [selectedElements, setSelectedElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
+  const [selectableElements, setSelectableElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -251,7 +251,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case KeyboardPrimaryTypes.Cursor: {
         const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
-        const { selected, focused, tab } = moveCursor(selectedElements, currentSelectedId, command);
+        const { selected, focused, tab } = moveCursor(selectableElements, currentSelectedId, command);
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
           selectedIds: [selected as string],
