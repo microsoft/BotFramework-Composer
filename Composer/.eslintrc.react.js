@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-hooks', 'format-message'],
   settings: {
     react: {
-      version: 'detect',
+      version: '16.9.0',
     },
   },
   parserOptions: {
