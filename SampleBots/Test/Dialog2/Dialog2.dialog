@@ -1,0 +1,40 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "Dialog2",
+    "createdAt": "2019-10-10T17:02:32.763Z",
+    "updatedAt": "2019-10-10T17:02:33.060Z",
+    "id": "815375"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "924412",
+            "name": "Begin a Dialog",
+            "updatedAt": "2019-10-10T17:03:00.791Z"
+          },
+          "dialog": "Main"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "422242",
+            "name": "Send an Activity",
+            "updatedAt": "2019-10-10T17:03:55.321Z"
+          },
+          "activity": "[bfdactivity-422242]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}
