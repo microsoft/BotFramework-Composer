@@ -4,7 +4,7 @@ import { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
 import { transformForeach } from '../../../transformers/transformForeach';
 import { foreachLayouter } from '../../../layouters/foreachLayouter';
-import { areBoundariesEqual } from '../../../models/Boundary';
+import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
 import { GraphNode } from '../../../models/GraphNode';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
@@ -14,7 +14,9 @@ import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { StepGroup } from '../../groups';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 
-const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
+import { NodeMap, BoundaryMap } from './types';
+
+const calculateNodeMap = (jsonpath, data): NodeMap => {
   const result = transformForeach(data, jsonpath);
   if (!result) return {};
 
@@ -27,7 +29,7 @@ const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
   };
 };
 
-const calculateLayout = (nodeMap, boundaryMap) => {
+const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
   Object.values(nodeMap)
     .filter(x => !!x)
     .forEach((x: GraphNode) => {
@@ -43,7 +45,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
   const accumulatedPatches = {};
 
-  const patchBoundary = (id, boundary) => {
+  const patchBoundary = (id, boundary?: Boundary) => {
     if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
       accumulatedPatches[id] = boundary;
       setBoundaryMap({

@@ -6,8 +6,6 @@ import { absHostRoot } from '../../settings/env';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
 
-import '../../../types/selfHostCommands';
-
 export class SelfHostBotConnector implements IBotConnector {
   constructor() {
     this.buildAsync = require('commands/build').handlerAsync;

@@ -101,7 +101,7 @@ function getAllRef(targetId, dialogs) {
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
 
-  if (Object.values(PromptTab).includes(tab)) {
+  if (Object.values<string>(PromptTab).includes(tab)) {
     return tab;
   }
 };

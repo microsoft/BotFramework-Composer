@@ -22,7 +22,7 @@ const TailSize = {
 };
 
 export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
-  const [stepGroupBoundary, setStepGroupBoundary] = useState(measureJsonBoundary(data));
+  const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -37,7 +37,9 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
       data={data}
       onEvent={onEvent}
       onResize={boundary => {
-        setStepGroupBoundary(boundary);
+        if (boundary) {
+          setStepGroupBoundary(boundary);
+        }
       }}
     />
   );
