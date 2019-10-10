@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { seedNewDialog } from 'shared-menus';
+import { seedNewDialog } from 'shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';

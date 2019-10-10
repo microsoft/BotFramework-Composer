@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
-import { getDesignerId, DesignerData } from 'shared-menus';
+import { getDesignerId, DesignerData } from 'shared';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import get from 'lodash.get';

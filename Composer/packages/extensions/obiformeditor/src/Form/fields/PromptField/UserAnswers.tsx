@@ -2,7 +2,7 @@ import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { SDKTypes } from 'shared-menus';
+import { SDKTypes } from 'shared';
 
 import { TextWidget, SelectWidget } from '../../widgets';
 

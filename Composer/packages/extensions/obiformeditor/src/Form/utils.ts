@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
-import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared-menus';
+import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared';
 import nanoid from 'nanoid/generate';
 
 import { FormMemory, MemoryScope } from '../types';

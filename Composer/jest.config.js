@@ -43,6 +43,6 @@ module.exports = {
     '<rootDir>/packages/extensions/sample-json-editor',
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/component-scaffold',
-    '<rootDir>/packages/lib/shared-menus',
+    '<rootDir>/packages/lib/shared',
   ],
 };

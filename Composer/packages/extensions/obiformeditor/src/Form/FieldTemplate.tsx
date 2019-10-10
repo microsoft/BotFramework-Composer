@@ -1,7 +1,7 @@
 import React from 'react';
 import get from 'lodash.get';
 import { FieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
-import { FIELDS_TO_HIDE } from 'shared-menus';
+import { FIELDS_TO_HIDE } from 'shared';
 
 export default function FieldTemplate(props: FieldTemplateProps) {
   const { children, label, uiSchema } = props;

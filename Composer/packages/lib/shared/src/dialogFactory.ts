@@ -52,9 +52,9 @@ export const getDesignerId = (data: DesignerData) => {
 
 const assignDefaults = (data: {}, currentSeed = {}) => {
   for (const field in data) {
-    if (data[field].type === 'object') {
+    if (field !== '$designer' && data[field].type === 'object') {
       // recurse on subtree's properties
-      currentSeed[field] = assignDefaults(data[field].properties, currentSeed);
+      currentSeed[field] = assignDefaults(data[field].properties);
     }
     if (data[field].const !== null && data[field].const !== undefined) {
       currentSeed[field] = data[field].const;
@@ -63,7 +63,7 @@ const assignDefaults = (data: {}, currentSeed = {}) => {
       currentSeed[field] = data[field].default;
     }
   }
-  return currentSeed;
+  return Object.keys(currentSeed).length > 0 ? currentSeed : undefined;
 };
 
 export const seedDefaults = (type: string) => {
