@@ -13,8 +13,8 @@ export class SelfHostBotConnector implements IBotConnector {
       this.buildAsync = require('commands/build').handlerAsync;
     } else {
       // for testing
-      this.buildAsync = async _ => {
-        return 'done';
+      this.buildAsync = _ => {
+        return Promise.resolve('done');
       };
     }
   }

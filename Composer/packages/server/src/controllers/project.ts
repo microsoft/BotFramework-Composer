@@ -58,7 +58,7 @@ async function getProject(req: Request, res: Response) {
   const currentProject = BotProjectService.getCurrentBotProject();
   if (currentProject !== undefined && (await currentProject.exists())) {
     await currentProject.index();
-    const project = await currentProject.getIndexes();
+    const project = currentProject.getIndexes();
     res.status(200).json({
       ...project,
     });
@@ -86,7 +86,7 @@ async function openProject(req: Request, res: Response) {
     await BotProjectService.openProject(location);
     const currentProject = BotProjectService.getCurrentBotProject();
     if (currentProject !== undefined) {
-      const project = await currentProject.getIndexes();
+      const project = currentProject.getIndexes();
       res.status(200).json({
         ...project,
       });
@@ -123,7 +123,7 @@ async function saveProjectAs(req: Request, res: Response) {
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
       await currentProject.index();
-      const project = await currentProject.getIndexes();
+      const project = currentProject.getIndexes();
       res.status(200).json({
         ...project,
       });
@@ -139,7 +139,7 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 }
 
-async function getRecentProjects(req: Request, res: Response) {
+function getRecentProjects(req: Request, res: Response) {
   const projects = BotProjectService.getRecentBotProjects();
   return res.status(200).json(projects);
 }
