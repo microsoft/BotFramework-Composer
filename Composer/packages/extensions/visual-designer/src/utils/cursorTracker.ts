@@ -22,7 +22,7 @@ enum Axle {
  * @param assistAxle assist axle for calculating.
  * @param filterAttrs filtering elements
  */
-function localeNearestElement(
+function locateNearestElement(
   currentElement: HTMLElement,
   elements: NodeListOf<HTMLElement>,
   boundRectKey: BoundRect,
@@ -70,7 +70,7 @@ function localeNearestElement(
   return neareastElement;
 }
 
-function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HTMLElement>, command: string) {
+function locateElementByTab(currentElement: HTMLElement, elements: NodeListOf<HTMLElement>, command: string) {
   const elementArr = Array.from(elements);
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
@@ -94,7 +94,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
+      selectedElement = locateNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -108,7 +108,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HT
       }
     });
     if (!isInvolved) {
-      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
+      selectedElement = locateNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -175,7 +175,7 @@ function handleArrowkeyMove(currentElement: HTMLElement, selectedElements: NodeL
       return element;
   }
 
-  element = localeNearestElement(currentElement, selectedElements, boundRect, axle, filterAttrs);
+  element = locateNearestElement(currentElement, selectedElements, boundRect, axle, filterAttrs);
   return element;
 }
 
@@ -192,7 +192,7 @@ export function moveCursor(
   switch (command) {
     case KeyboardCommandTypes.Cursor.MovePrevious:
     case KeyboardCommandTypes.Cursor.MoveNext:
-      element = localeElementByTab(currentElement, selectedElements, command);
+      element = locateElementByTab(currentElement, selectedElements, command);
       break;
     default:
       element = handleArrowkeyMove(currentElement, selectedElements, command);
