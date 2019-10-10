@@ -28,7 +28,7 @@ const calculateNodeMap = (jsonpath, data): { [id: string]: GraphNode } => {
 };
 
 const calculateLayout = (nodeMap, boundaryMap) => {
-  (Object.values(nodeMap) as GraphNode[])
+  Object.values(nodeMap)
     .filter(x => !!x)
     .forEach((x: GraphNode) => {
       x.boundary = boundaryMap[x.id] || x.boundary;

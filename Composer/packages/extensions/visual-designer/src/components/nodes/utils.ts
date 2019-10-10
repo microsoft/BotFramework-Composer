@@ -22,7 +22,7 @@ export function getUserAnswersTitle($type: string): string {
     return 'ChoiceInput';
   }
 
-  if ($type.indexOf('Input') > -1) {
+  if ($type.includes('Input')) {
     return `User Answers (${$type.replace(/Microsoft.(.*)Input/, '$1')})`;
   }
 
