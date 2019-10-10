@@ -49,11 +49,12 @@ const nodeBorderSelectedStyle = css`
 
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
-  const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeSelected = selectedIds.includes(id);
 
+  console.log('focused at:', focusedTab, focusedId);
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
       [AttrNames.NodeElement]: true,
