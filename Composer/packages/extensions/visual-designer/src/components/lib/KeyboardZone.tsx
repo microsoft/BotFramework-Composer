@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
+
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 const KeyNameByModifierAttr = {
@@ -31,7 +32,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   return prefix;
 };
 
-export const KeyboardZone: FC<KeyboardZoneProps> = ({ when, onCommand, children }): JSX.Element => {
+export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JSX.Element => {
   const handleKeyDown = e => {
     if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();
