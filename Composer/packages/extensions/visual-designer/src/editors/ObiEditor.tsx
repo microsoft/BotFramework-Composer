@@ -173,8 +173,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
-    setSelectedElements(querySelectedElements());
   }, [data]);
+
+  useEffect((): void => {
+    setSelectedElements(querySelectedElements());
+  }, [focusedEvent]);
 
   const selection = new Selection({
     onSelectionChanged: (): void => {
