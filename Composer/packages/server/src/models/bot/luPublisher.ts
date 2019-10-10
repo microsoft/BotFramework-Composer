@@ -111,12 +111,15 @@ export class LuPublisher {
 
   public getLuisConfig = () => this.config;
 
-  public setLuisConfig = async (config: ILuisConfig) => {
+  public setLuisConfig = async (config: ILuisConfig): Promise<boolean> => {
     if (!isEqual(config, this.config)) {
       this.config = config;
       if (!(await this.storage.exists(this._getSettingPath(config)))) {
         await this._deleteGenerated(this.generatedFolderPath);
       }
+      return true;
+    } else {
+      return false;
     }
   };
 

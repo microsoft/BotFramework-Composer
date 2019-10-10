@@ -37,6 +37,7 @@ export class BotProject {
   public environment: IEnvironment;
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
+  public isLuisConfigUpdate = false;
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -106,7 +107,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
-    await this.luPublisher.setLuisConfig(config.luis);
+    this.isLuisConfigUpdate = await this.luPublisher.setLuisConfig(config.luis);
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
@@ -295,8 +296,12 @@ export class BotProject {
   public publishLuis = async (authoringKey: string) => {
     await this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
-
+    let unpublished;
+    if (this.isLuisConfigUpdate) {
+      unpublished = referred;
+    } else {
+      unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+    }
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);

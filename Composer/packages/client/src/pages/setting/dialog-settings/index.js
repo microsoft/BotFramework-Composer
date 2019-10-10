@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
@@ -32,6 +32,11 @@ export const DialogSettings = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings } = state;
   const [value, setValue] = useState(JSON.stringify(settings, null, 2));
+
+  useEffect(() => {
+    setValue(JSON.stringify(settings, null, 2));
+  }, [settings]);
+
   const updateFormData = (editor, data, newValue) => {
     try {
       setValue(newValue);
