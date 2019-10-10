@@ -37,7 +37,7 @@ export const HorizontalEdge = ({
       }}
       data-testid="HorizontalEdge"
     >
-      {text ? (
+      {typeof text === 'string' || typeof text === 'number' ? (
         <text x={TEXT_PADDING} y={-5} fontSize={FONT_SIZE}>
           {text}
         </text>

@@ -42,8 +42,9 @@ export const RootField: React.FC<RootFieldProps> = props => {
 
   const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
+    const designerName = formData && formData.$designer && formData.$designer.name;
 
-    return formData.$designer.name || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
+    return designerName || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
   const getDescription = (): string => {

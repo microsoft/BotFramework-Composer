@@ -7,8 +7,16 @@ import { absHostRoot } from '../../settings/env';
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class SelfHostBotConnector implements IBotConnector {
-  constructor() {
-    this.buildAsync = require('commands/build').handlerAsync;
+  constructor(skipLoad?: boolean) {
+    if (!skipLoad) {
+      // for production
+      this.buildAsync = require('commands/build').handlerAsync;
+    } else {
+      // for testing
+      this.buildAsync = async _ => {
+        return 'done';
+      };
+    }
   }
   private buildAsync: SelfHostCommands.Build;
   public status: BotStatus = BotStatus.NotConnected;
