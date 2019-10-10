@@ -35,7 +35,7 @@ jobs:
         versionSpec: 10.15.3
     - script: cd Composer && yarn install
       displayName: 'yarn install'
-    - script: cd Composer && yarn build
+    - script: cd Composer && yarn build:prod
       displayName: 'yarn build:prod'
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
@@ -68,7 +68,7 @@ jobs:
         versionSpec: 10.15.3
     - script: cd Composer && yarn install
       displayName: 'yarn install'
-    - script: cd Composer && yarn build
+    - script: cd Composer && yarn build:prod
       displayName: 'yarn build:prod'
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
