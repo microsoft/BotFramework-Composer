@@ -70,58 +70,70 @@ function locateNearestElement(
   return neareastElement;
 }
 
-function locateElementByTab(currentElement: HTMLElement, elements: NodeListOf<HTMLElement>, command: string) {
-  const elementArr = Array.from(elements);
-  const currentElementBounds = currentElement.getBoundingClientRect();
-  let bounds: ClientRect;
-  let selectedElement: HTMLElement = currentElement;
-  let selectedElementBounds: ClientRect;
-  let isInvolved = false;
-  const judgeElementRelation = (parentBounds, childBounds) => {
-    return (
-      parentBounds.left < childBounds.left &&
-      parentBounds.right >= childBounds.right &&
-      parentBounds.top < childBounds.top &&
-      parentBounds.bottom > childBounds.bottom
-    );
-  };
+function isParentRect(parentRect, childRect) {
+  return (
+    parentRect.left < childRect.left &&
+    parentRect.right >= childRect.right &&
+    parentRect.top < childRect.top &&
+    parentRect.bottom > childRect.bottom
+  );
+}
+
+function findSelectableChild(element: HTMLElement, elementList: HTMLElement[]) {
+  const rect = element.getBoundingClientRect();
+  return elementList.find(el => {
+    const candidateRect = el.getBoundingClientRect();
+    return isParentRect(rect, candidateRect);
+  });
+}
+
+function findSelectableParent(element: HTMLElement, elementList: HTMLElement[]) {
+  const rect = element.getBoundingClientRect();
+  return elementList.find(el => {
+    const candidateRect = el.getBoundingClientRect();
+    return isParentRect(candidateRect, rect);
+  });
+}
+
+function handleTabMove(currentElement: HTMLElement, selectedElements: NodeListOf<HTMLElement>, command: string) {
+  const selectableElements = Array.from(selectedElements);
+
+  let nextElement: HTMLElement;
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
-    elementArr.forEach(element => {
-      bounds = element.getBoundingClientRect();
-      if (judgeElementRelation(currentElementBounds, bounds)) {
-        isInvolved = true;
-        selectedElement = element;
-      }
-    });
-    if (!isInvolved) {
-      selectedElement = locateNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
+    const selectableChild = findSelectableChild(currentElement, selectableElements);
+    if (selectableChild) {
+      // Tab to inner selectable element.
+      nextElement = selectableChild;
+    } else {
+      // Perform like presssing down arrow key.
+      nextElement = locateNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
+    }
+  } else if (command === KeyboardCommandTypes.Cursor.MovePrevious) {
+    const selectableParent = findSelectableParent(currentElement, selectableElements);
+    if (selectableParent) {
+      // Tab to parent.
+      nextElement = selectableParent;
+    } else {
+      // Perform like pressing up arrow key.
+      nextElement = locateNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      // If prev element has child, tab to it before the element itself.
+      const selectableChildInNext = findSelectableChild(nextElement, selectableElements);
+      if (selectableChildInNext) {
+        nextElement = selectableChildInNext;
+      }
     }
   } else {
-    elementArr.forEach(element => {
-      bounds = element.getBoundingClientRect();
-      if (judgeElementRelation(bounds, currentElementBounds)) {
-        isInvolved = true;
-        selectedElement = element;
-      }
-    });
-    if (!isInvolved) {
-      selectedElement = locateNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      selectedElementBounds = selectedElement.getBoundingClientRect();
-      elementArr.forEach(element => {
-        bounds = element.getBoundingClientRect();
-        if (judgeElementRelation(selectedElementBounds, bounds)) {
-          selectedElement = element;
-        }
-      });
-    }
+    // By default, stay focus on the origin element.
+    nextElement = currentElement;
   }
-  return selectedElement;
+
+  return nextElement;
 }
 
 function handleArrowkeyMove(currentElement: HTMLElement, selectedElements: NodeListOf<HTMLElement>, command: string) {
@@ -192,7 +204,7 @@ export function moveCursor(
   switch (command) {
     case KeyboardCommandTypes.Cursor.MovePrevious:
     case KeyboardCommandTypes.Cursor.MoveNext:
-      element = locateElementByTab(currentElement, selectedElements, command);
+      element = handleTabMove(currentElement, selectedElements, command);
       break;
     default:
       element = handleArrowkeyMove(currentElement, selectedElements, command);
