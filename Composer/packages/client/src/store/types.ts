@@ -69,6 +69,9 @@ export interface State {
     expiration?: number;
     sessionExpired: boolean;
   };
+  publishVersions: any;
+  publishStatus: any;
+  lastPublishChange: any;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
