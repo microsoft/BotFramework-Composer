@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { get } from 'lodash'; //, debounce
+import { get } from 'lodash';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -7,7 +7,6 @@ import { SensitiveProperties } from '../../constants';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-// const post = debounce(axios.post, 1000);
 export const setSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
   try {
     // set value to store
