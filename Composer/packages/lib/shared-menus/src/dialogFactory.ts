@@ -57,14 +57,14 @@ const seedDefaults = (type: string) => {
   const { properties } = appschema.definitions[type];
 
   for (const field in properties) {
-    if (properties[field].type === 'object') {
-      // todo: recurse on properties
-      // const { properties } = properties[field];
-      // for (const field in properties) {
-      // }
-    } else if (properties[field].const !== null && properties[field].const !== undefined) {
-      dialogSeed[field] = properties[field].const;
-    } else if (properties[field].default !== null && properties[field].default !== undefined) {
+    // if (properties[field].type === 'object') {
+    // todo: recurse on properties
+    // const { properties } = properties[field];
+    // for (const field in properties) {
+    // }
+    // if (properties[field].const !== null && properties[field].const !== undefined) {
+    //   dialogSeed[field] = properties[field].const;
+    if (properties[field].default !== null && properties[field].default !== undefined) {
       dialogSeed[field] = properties[field].default;
     }
   }

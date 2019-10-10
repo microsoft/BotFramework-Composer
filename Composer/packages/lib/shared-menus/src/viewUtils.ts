@@ -17,6 +17,7 @@ import { seedNewDialog } from './dialogFactory';
  * All SDK Types defined by the schema.
  * All references of the type should be accessed through this enum.
  * */
+
 export enum SDKTypes {
   AdaptiveDialog = 'Microsoft.AdaptiveDialog',
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
@@ -92,6 +93,15 @@ export enum SDKTypes {
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
 }
+
+export const PROMPT_TYPES = [
+  SDKTypes.AttachmentInput,
+  SDKTypes.ChoiceInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+];
 
 export enum DialogGroup {
   RESPONSE = 'RESPONSE',

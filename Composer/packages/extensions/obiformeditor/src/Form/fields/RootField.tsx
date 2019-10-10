@@ -4,7 +4,7 @@ import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
 import { FontSizes } from '@uifabric/fluent-theme';
-import formatMessage, { date } from 'format-message';
+import formatMessage from 'format-message';
 
 import { FormContext } from '../types';
 

@@ -315,7 +315,7 @@ function DesignPage(props) {
 
   async function onSubmit(data) {
     const content = getNewDesigner(data.name, data.description);
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content);
+    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 

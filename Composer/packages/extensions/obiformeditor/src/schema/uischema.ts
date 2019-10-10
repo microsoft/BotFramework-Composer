@@ -1,7 +1,5 @@
-import { SDKTypes } from 'shared-menus';
+import { SDKTypes, PROMPT_TYPES } from 'shared-menus';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
-
-import { PROMPT_TYPES } from './appschema';
 
 const globalHidden = ['property', 'inputBindings', 'outputBinding', 'id', 'tags'];
 
