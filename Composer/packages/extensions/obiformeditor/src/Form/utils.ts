@@ -58,7 +58,7 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
 
   const handleClick = (e, item) => {
     if (onClick && item) {
-      onClick(e as any, item);
+      onClick(e, item);
     }
   };
 
