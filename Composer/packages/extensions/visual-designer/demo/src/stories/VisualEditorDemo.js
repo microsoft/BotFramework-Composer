@@ -20,6 +20,7 @@ export class VisualEditorDemo extends Component {
     obiJson: ObiExamples[defaultFile],
     focusedEvent: 'events[0]',
     focusedSteps: [],
+    focusedTab: '',
   };
 
   constructor(props) {
@@ -32,6 +33,7 @@ export class VisualEditorDemo extends Component {
       obiJson: copyJson(ObiExamples[file]),
       focusedEvent: '',
       focusedSteps: [],
+      focusedTab: '',
     });
   }
 
@@ -41,7 +43,7 @@ export class VisualEditorDemo extends Component {
   }
 
   render() {
-    const { selectedFile, obiJson, focusedEvent, focusedSteps } = this.state;
+    const { selectedFile, obiJson, focusedEvent, focusedSteps, focusedTab } = this.state;
 
     return (
       <div className="ve-container">
@@ -81,6 +83,7 @@ export class VisualEditorDemo extends Component {
               dialogId={selectedFile}
               focusedEvent={focusedEvent}
               focusedSteps={focusedSteps}
+              focusedTab={focusedTab}
               shellApi={{
                 navTo: e => {
                   console.log('navTo', e);
@@ -92,10 +95,11 @@ export class VisualEditorDemo extends Component {
                     focusedSteps: [],
                   });
                 },
-                onFocusSteps: stepIds => {
-                  console.log('onFocusSteps', stepIds);
+                onFocusSteps: (stepIds, tabName) => {
+                  console.log('onFocusSteps', stepIds, tabName);
                   this.setState({
                     focusedSteps: stepIds,
+                    focusedTab: tabName,
                   });
                 },
                 saveData: json => {
