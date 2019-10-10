@@ -47,14 +47,21 @@ const nodeBorderSelectedStyle = css`
   box-shadow: 0px 0px 0px 2px #0078d4;
 `;
 
-export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+// BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
+const nodeBorderDoubleSelectedStyle = css`
+  outline: 2px solid #0078d4;
+  box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
+`;
+
+export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, tab }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
+  const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
-  const { getNodeIndex, selectedIds } = useContext(SelectionContext);
+  const { selectedIds, getNodeIndex } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
+  const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
 
-  console.log('focused at:', focusedTab, focusedId);
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
       [AttrNames.NodeElement]: true,
@@ -62,28 +69,26 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       [AttrNames.FocusedId]: id,
       [AttrNames.SelectableElement]: true,
       [AttrNames.SelectedId]: selectedId,
-      [AttrNames.SelectionIndex]: getNodeIndex(selectedId),
+      [AttrNames.SelectionIndex]: getNodeIndex(id),
+      [AttrNames.Tab]: tab,
     };
   };
 
   return (
     <div
-      className={classnames(
-        'step-renderer-container',
-        { 'step-renderer-container--focused': nodeFocused },
-        { 'step-renderer-container--selected': nodeSelected }
-      )}
+      className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
         display: inline-block;
         position: relative;
         border-radius: 1px 1px 0 0;
-        ${nodeSelected && nodeBorderSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
+        ${nodeSelected && nodeBorderSelectedStyle};
+        ${nodeDoubleSelected && nodeBorderDoubleSelectedStyle};
         &:hover {
-          ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
+          ${!nodeFocused && nodeBorderHoveredStyle}
         }
       `}
-      {...declareElementAttributes(id, id)}
+      {...declareElementAttributes(selectableId, id)}
     >
       <ChosenRenderer
         id={id}

@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
+import { PromptTab } from 'shared-menus';
 
 import { baseInputLayouter } from '../../../layouters/baseInputLayouter';
 import { NodeProps } from '../nodeProps';
@@ -29,13 +30,31 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementRenderer id={botAsksNode.id} data={botAsksNode.data} onEvent={onEvent} onResize={onResize} />
+        <ElementRenderer
+          id={botAsksNode.id}
+          tab={PromptTab.BOT_ASKS}
+          data={botAsksNode.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementRenderer id={userAnswersNode.id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
+        <ElementRenderer
+          id={userAnswersNode.id}
+          tab={PromptTab.USER_ANSWERS}
+          data={userAnswersNode.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementRenderer id={brickNode.id} data={brickNode.data} onEvent={onEvent} onResize={onResize} />
+        <ElementRenderer
+          id={brickNode.id}
+          tab={PromptTab.EXCEPTIONS}
+          data={brickNode.data}
+          onEvent={onEvent}
+          onResize={onResize}
+        />
       </OffsetContainer>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
     </div>
