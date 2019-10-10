@@ -98,6 +98,18 @@
         "storageAccountName": {
             "type": "string",
             "defaultValue": "[resourceGroup().name]"
+        },
+        "luisServiceName": {
+            "type": "string",
+            "defaultValue": "[concat(resourceGroup().name, '-luis')]"
+        },
+        "luisServiceSku": {
+            "type": "string",
+            "defaultValue": "F0"
+        },
+        "luisServiceLocation": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "variables": {
@@ -224,6 +236,17 @@
                 "name": "Standard_LRS"
             },
             "condition": "[parameters('useStorage')]"
+        },
+        {
+            "comments": "Cognitive service key for all LUIS apps.",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "kind": "LUIS",
+            "apiVersion": "2017-04-18",
+            "name": "[parameters('luisServiceName')]",
+            "location": "[parameters('luisServiceLocation')]",
+            "sku": {
+                "name": "[parameters('luisServiceSku')]"
+            }
         }
     ],
     "outputs": {
@@ -247,6 +270,12 @@
             "value": {
                 "connectionString": "[if(parameters('useStorage'), concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2018-07-01').keys[0].value, ';EndpointSuffix=core.windows.net'), '')]",
                 "container": "transcripts"
+            }
+        },
+        "luis": {
+            "type": "object",
+            "value": {
+                "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]"
             }
         }
     }

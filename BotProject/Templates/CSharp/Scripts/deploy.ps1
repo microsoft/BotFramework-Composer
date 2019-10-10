@@ -87,6 +87,33 @@ if ($customConfigFiles) {
 
 # Add Luis Config to appsettings
 if ($luisAuthoringKey -and $luisAuthoringRegion) {
+
+	Set-Location -Path $remoteBotPath
+	$models = Get-ChildItem $remoteBotPath -Recurse -Filter "*.lu" | Resolve-Path -Relative
+
+	$noneEmptyModels = [System.Collections.ArrayList]@()
+
+	foreach ($model in $models) {
+		$stringContent = Get-Content $model | Out-String
+		if ($stringContent.Length -gt 0) {
+			$noneEmptyModels.Add($model)
+		}
+	}
+
+	# Generate Luconfig.json file
+	$luconfigjson = @{
+		"name"            = $name;
+		"defaultLanguage" = "en-us";
+		"models"          = $noneEmptyModels
+	}
+	
+	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
+
+	# Execute lubuild command
+	lubuild --authoringKey $luisAuthoringKey
+
+	Set-Location -Path $projFolder
+
 	# change setting file in publish folder
 	if (Test-Path $(Join-Path $publishFolder appsettings.json)) {
 		$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
