@@ -15,7 +15,7 @@ export interface Store {
 
 export type ActionCreator<T extends any[] = any[]> = (store: Store, ...args: T) => Promise<void> | void;
 export type ActionHandlers = { [action: string]: ActionCreator };
-export type BoundAction = (...args: any[]) => void;
+export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {
