@@ -17,7 +17,8 @@ async function connect(req: any, res: any) {
 
 async function getPublishHistory(req: any, res: any) {
   try {
-    const history = await BotConnectorService.getPublishHistory();
+    const environment = EnvironmentProvider.getCurrent();
+    const history = await environment.getBotConnector().getPublishHistory();
     res.send(history);
   } catch (error) {
     res.status(400).json({
@@ -41,7 +42,8 @@ async function sync(req: any, res: any) {
 async function publish(req: any, res: any) {
   try {
     const label = req.params ? req.params.label : undefined;
-    await BotConnectorService.publish({ ...req.body, user: req.user }, label);
+    const environment = EnvironmentProvider.getCurrent();
+    await environment.getBotConnector().publish({ ...req.body, user: req.user }, label);
     res.send('OK');
   } catch (error) {
     res.status(400).json({

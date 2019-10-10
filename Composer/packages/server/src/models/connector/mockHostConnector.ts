@@ -21,7 +21,7 @@ export class MockHostBotConnector implements IBotConnector {
 
   public sync = async (config: BotConfig) => {
     const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
-    this.history.integration = this.createIntegrationVersion(user);
+    this.history.integration = MockHostBotConnector.createIntegrationVersion(user);
   };
 
   public getEditingStatus = async (): Promise<boolean> => {
@@ -38,7 +38,7 @@ export class MockHostBotConnector implements IBotConnector {
     if (!label) {
       // make a new mock and updatre history
       this.history.previousProduction = this.history.production;
-      this.history.production = this.createPublishVersion(user);
+      this.history.production = MockHostBotConnector.createPublishVersion(user);
     } else if (this.history.previousProduction && label === this.history.previousProduction.label) {
       // rollback
       this.history.production = this.history.previousProduction;
@@ -51,7 +51,7 @@ export class MockHostBotConnector implements IBotConnector {
     }
   };
 
-  private createPublishVersion(user: string): IPublishVersion {
+  public static createPublishVersion(user: string): IPublishVersion {
     const timestamp = new Date();
     const datetimeStamp = timestamp.toISOString().replace(/:/g, '.');
     const tag = `production_${datetimeStamp}`;
@@ -65,11 +65,11 @@ export class MockHostBotConnector implements IBotConnector {
     };
   }
 
-  private createIntegrationVersion(user: string): IPublishVersion {
+  public static createIntegrationVersion(user: string): IPublishVersion {
     const timestamp = new Date();
     const datetimeStamp = timestamp.toISOString().replace(/:/g, '.');
     const tag = `integration_${datetimeStamp}`;
-    let version = this.createPublishVersion(user);
+    const version = this.createPublishVersion(user);
     version.label = tag;
     return version;
   }

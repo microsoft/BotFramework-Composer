@@ -100,7 +100,7 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 
-  publish = (config: BotConfig, label: string): Promise<void> => {
+  publish = (_: BotConfig, __: string): Promise<void> => {
     return new Promise(resolve => {
       resolve();
     });

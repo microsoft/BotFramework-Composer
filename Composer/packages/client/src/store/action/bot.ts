@@ -42,23 +42,6 @@ export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings)
   }
 };
 
-export const getPublishVersions: ActionCreator = async ({ dispatch, getState }, settings) => {
-  const path = `${BASEURL}/launcher/publishVersions`;
-  try {
-    var res = await axios.get(path);
-    /* TODO:
-    dispatch({
-      type: ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS,
-      payload: {
-        versions: res.data,
-        error: '',
-      },
-    });*/
-  } catch (err) {
-    throw new Error(err.response.data.message);
-  }
-};
-
 export const startBot: ActionCreator = async ({ dispatch }, toStartBot) => {
   dispatch({
     type: ActionTypes.TO_START_BOT,

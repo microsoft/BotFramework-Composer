@@ -6,6 +6,7 @@ import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
+import { MockHostBotConnector } from './mockHostConnector';
 
 export class SelfHostBotConnector implements IBotConnector {
   constructor(skipLoad?: boolean) {
@@ -16,12 +17,26 @@ export class SelfHostBotConnector implements IBotConnector {
       this.getEditingStatusAsync = require('commands/editingStatus').handlerAsync;
       this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
     } else {
-      // for testing
+      // for testing this class
       this.buildAsync = async _ => {
         return 'done';
       };
+      this.publishAsync = async _ => {
+        return 'done';
+      };
+      this.getEditingStatusAsync = async _ => {
+        return { hasChanges: false };
+      };
+      this.getPublishHistoryAsync = async _ => {
+        return {
+          production: MockHostBotConnector.createPublishVersion(''),
+          previousProduction: undefined,
+          integration: MockHostBotConnector.createIntegrationVersion(''),
+        };
+      };
     }
   }
+
   private buildAsync: SelfHostCommands.Build;
   private publishAsync: SelfHostCommands.Publish;
   private getEditingStatusAsync: SelfHostCommands.GetEditingStatus;
@@ -54,6 +69,7 @@ export class SelfHostBotConnector implements IBotConnector {
 
   public getEditingStatus = async (): Promise<boolean> => {
     const status = await this.getEditingStatusAsync({
+      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
     });
     return status ? status.hasChanges : false;
@@ -61,6 +77,7 @@ export class SelfHostBotConnector implements IBotConnector {
 
   public getPublishHistory = async (): Promise<IPublishHistory> => {
     return await this.getPublishHistoryAsync({
+      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
     });
   };
@@ -70,6 +87,7 @@ export class SelfHostBotConnector implements IBotConnector {
     const userEmail = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.upn] : undefined;
     const accessToken = config.user ? config.user.accessToken : undefined;
     await this.publishAsync({
+      //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
       user,
       userEmail,
