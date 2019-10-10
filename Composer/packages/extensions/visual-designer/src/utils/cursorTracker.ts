@@ -24,7 +24,7 @@ enum Axle {
  */
 function locateNearestElement(
   currentElement: HTMLElement,
-  elements: NodeListOf<HTMLElement>,
+  elements: HTMLElement[],
   boundRectKey: BoundRect,
   assistAxle: Axle,
   filterAttrs?: AttrNames[]
@@ -32,15 +32,16 @@ function locateNearestElement(
   let neareastElement: HTMLElement = currentElement;
   let minDistance = 10000;
   let distance = minDistance;
-  const elementArr = Array.from(elements).filter(
-    element => !filterAttrs || (filterAttrs && filterAttrs.find(key => !!element.getAttribute(key)))
-  );
+  const elementCandidates =
+    filterAttrs && filterAttrs.length
+      ? elements.filter(el => filterAttrs.find(attr => !!el.getAttribute(attr)))
+      : elements;
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
 
-  elementArr.forEach(element => {
+  elementCandidates.forEach(element => {
     bounds = element.getBoundingClientRect();
     if (boundRectKey === BoundRect.Top || boundRectKey === BoundRect.Left) {
       distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
@@ -95,9 +96,7 @@ function findSelectableParent(element: HTMLElement, elementList: HTMLElement[]) 
   });
 }
 
-function handleTabMove(currentElement: HTMLElement, selectedElements: NodeListOf<HTMLElement>, command: string) {
-  const selectableElements = Array.from(selectedElements);
-
+function handleTabMove(currentElement: HTMLElement, selectableElements: HTMLElement[], command: string) {
   let nextElement: HTMLElement;
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
     const selectableChild = findSelectableChild(currentElement, selectableElements);
@@ -106,7 +105,7 @@ function handleTabMove(currentElement: HTMLElement, selectedElements: NodeListOf
       nextElement = selectableChild;
     } else {
       // Perform like presssing down arrow key.
-      nextElement = locateNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [
+      nextElement = locateNearestElement(currentElement, selectableElements, BoundRect.Top, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -118,7 +117,7 @@ function handleTabMove(currentElement: HTMLElement, selectedElements: NodeListOf
       nextElement = selectableParent;
     } else {
       // Perform like pressing up arrow key.
-      nextElement = locateNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+      nextElement = locateNearestElement(currentElement, selectableElements, BoundRect.Bottom, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -136,7 +135,7 @@ function handleTabMove(currentElement: HTMLElement, selectedElements: NodeListOf
   return nextElement;
 }
 
-function handleArrowkeyMove(currentElement: HTMLElement, selectedElements: NodeListOf<HTMLElement>, command: string) {
+function handleArrowkeyMove(currentElement: HTMLElement, selectableElements: HTMLElement[], command: string) {
   let element: HTMLElement = currentElement;
   let boundRect: BoundRect = BoundRect.Bottom;
   let axle: Axle = Axle.X;
@@ -187,16 +186,16 @@ function handleArrowkeyMove(currentElement: HTMLElement, selectedElements: NodeL
       return element;
   }
 
-  element = locateNearestElement(currentElement, selectedElements, boundRect, axle, filterAttrs);
+  element = locateNearestElement(currentElement, selectableElements, boundRect, axle, filterAttrs);
   return element;
 }
 
 export function moveCursor(
-  selectedElements: NodeListOf<HTMLElement>,
+  selectableElements: HTMLElement[],
   id: string,
   command: string
 ): { [key: string]: string | undefined } {
-  const currentElement = Array.from(selectedElements).find(
+  const currentElement = selectableElements.find(
     element => element.dataset.selectedId === id || element.dataset.focusedId === id
   );
   if (!currentElement) return { selected: id, focused: undefined };
@@ -204,10 +203,10 @@ export function moveCursor(
   switch (command) {
     case KeyboardCommandTypes.Cursor.MovePrevious:
     case KeyboardCommandTypes.Cursor.MoveNext:
-      element = handleTabMove(currentElement, selectedElements, command);
+      element = handleTabMove(currentElement, selectableElements, command);
       break;
     default:
-      element = handleArrowkeyMove(currentElement, selectedElements, command);
+      element = handleArrowkeyMove(currentElement, selectableElements, command);
       break;
   }
   element.scrollIntoView(true);

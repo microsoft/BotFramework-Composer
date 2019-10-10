@@ -181,7 +181,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   useEffect((): void => {
     resetSelectionData();
-    setSelectableElements(querySelectedElements());
+    setSelectableElements(querySelectableElements());
   }, [data, focusedEvent]);
 
   const selection = new Selection({
@@ -201,11 +201,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const querySelectedElements = () => {
+  const querySelectableElements = (): HTMLElement[] => {
     const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
-    return items;
+    return Array.from(items);
   };
-  const [selectableElements, setSelectableElements] = useState<NodeListOf<HTMLElement>>(querySelectedElements());
+  const [selectableElements, setSelectableElements] = useState<HTMLElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
