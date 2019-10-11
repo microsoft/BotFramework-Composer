@@ -427,10 +427,12 @@ export class BotProject {
     const fileList: FileInfo[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
     for (const pattern of patterns) {
-      const paths = await this.fileStorage.glob(pattern, this.dir);
+      // load only from the composerDialogs folder, otherwise might pick up "build" versions
+      const root = Path.join(this.dir, 'ComposerDialogs');
+      const paths = await this.fileStorage.glob(pattern, root);
 
       for (const filePath of paths.sort()) {
-        const realFilePath: string = Path.join(this.dir, filePath);
+        const realFilePath: string = Path.join(root, filePath);
         // skip lg files for now
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
           const content: string = await this.fileStorage.readFile(realFilePath);
