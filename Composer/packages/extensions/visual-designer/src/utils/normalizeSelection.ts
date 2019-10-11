@@ -6,7 +6,7 @@ export const normalizeSelection = (selectedIds: string[]): string[] => {
   for (let i = 0; i < ascendingIds.length; i++) {
     const parentId = ascendingIds[i];
     for (let j = i + 1; j < ascendingIds.length; j++) {
-      if (ascendingIds[j].indexOf(parentId) === 0) {
+      if (ascendingIds[j].startsWith(parentId)) {
         ascendingIds[j] = '';
       }
     }

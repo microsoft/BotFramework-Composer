@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup } from 'shared-menus';
+import { createStepMenu, DialogGroup } from 'shared';
 import { IContextualMenu } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';

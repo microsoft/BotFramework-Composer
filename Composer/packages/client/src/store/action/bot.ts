@@ -42,7 +42,7 @@ export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings)
   }
 };
 
-export const startBot: ActionCreator = async ({ dispatch }, toStartBot) => {
+export const startBot: ActionCreator = ({ dispatch }, toStartBot) => {
   dispatch({
     type: ActionTypes.TO_START_BOT,
     payload: {

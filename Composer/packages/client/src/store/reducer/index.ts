@@ -112,7 +112,7 @@ const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
     } else {
       const path = file.path;
       const extension = getExtension(path);
-      if (projectFiles.indexOf(extension) >= 0) {
+      if (projectFiles.includes(extension)) {
         files.push(file);
       }
     }

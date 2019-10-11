@@ -34,7 +34,7 @@ const findCommandAreaByValue = (() => {
     const cmdsUnderArea = KeyboardCommandTypes[areaKey];
     const cmdValues: string[] = Object.values(cmdsUnderArea);
     for (const cmd of cmdValues) {
-      cmdAreaByValue[cmd as string] = areaKey;
+      cmdAreaByValue[cmd] = areaKey;
     }
   }
 

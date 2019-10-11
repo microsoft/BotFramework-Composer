@@ -1,11 +1,10 @@
-const path = require('path');
-
 module.exports = {
-  extends: ['../../.eslintrc.js', 'plugin:@typescript-eslint/recommended', 'prettier', 'prettier/@typescript-eslint'],
+  extends: ['../../.eslintrc.js'],
   parserOptions: {
-    project: path.resolve(__dirname, 'tsconfig.json'),
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
-    '@typescript-eslint/explicit-member-accessibility': 'off',
+    'security/detect-non-literal-fs-filename': 'off',
   },
 };

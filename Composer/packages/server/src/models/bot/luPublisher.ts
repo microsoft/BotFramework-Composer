@@ -92,7 +92,7 @@ export class LuPublisher {
     await this._copyDialogsToTargetFolder(config);
   };
 
-  public getUnpublisedFiles = async (files: LUFile[]) => {
+  public getUnpublisedFiles = (files: LUFile[]) => {
     // unpublished means either
     // 1. there is no status tracking
     // 2. the status shows that lastPublishTime < lastUpdateTime
@@ -104,8 +104,8 @@ export class LuPublisher {
     });
   };
 
-  public checkLuisPublised = async (files: LUFile[]) => {
-    const unpublished = await this.getUnpublisedFiles(files);
+  public checkLuisPublised = (files: LUFile[]) => {
+    const unpublished = this.getUnpublisedFiles(files);
     return unpublished.length === 0;
   };
 
@@ -120,7 +120,7 @@ export class LuPublisher {
     }
   };
 
-  public setAuthoringKey = async (key: string) => {
+  public setAuthoringKey = (key: string) => {
     if (this.config) {
       this.config.authoringKey = key;
     }

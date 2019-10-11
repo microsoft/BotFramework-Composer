@@ -38,7 +38,7 @@ const FORM_EDITOR = 'FormEditor';
 
 const isEventSourceValid = event => {
   const sourceWindowName = event.source.name;
-  return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
+  return [VISUAL_EDITOR, FORM_EDITOR].includes(sourceWindowName);
 };
 
 const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
