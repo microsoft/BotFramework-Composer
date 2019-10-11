@@ -77,7 +77,7 @@ export const needsDeepCopy = $type => {
   return DEEP_COPY_TYPES.indexOf($type) !== -1;
 };
 
-export const deepCopy: any = (data, lgApi) => {
+export const deepCopy: any = (_data, _lgApi) => {
   // data.type is a SendActivity
   // data.id is bound to copied SendActivity
   // new id getDesignerId()
