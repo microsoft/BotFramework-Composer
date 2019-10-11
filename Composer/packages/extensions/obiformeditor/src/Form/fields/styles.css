@@ -8,6 +8,7 @@
   font-size: 12px;
   margin: 0;
   margin-bottom: 20px;
+  white-space: pre-line;
 }
 .RootFieldTitle {
   border-bottom: 1px solid #c8c6c4;
@@ -17,6 +18,7 @@
 .RootFieldDescription {
   margin-top: 0;
   margin-bottom: 10px;
+  white-space: pre-line;
 }
 .RootFieldMetaData {
   padding: 18px;
