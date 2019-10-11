@@ -1,14 +1,4 @@
 import { JSONSchema6 } from 'json-schema';
-import { SDKTypes } from 'shared-menus';
-
-export const PROMPT_TYPES = [
-  SDKTypes.AttachmentInput,
-  SDKTypes.ChoiceInput,
-  SDKTypes.ConfirmInput,
-  SDKTypes.DateTimeInput,
-  SDKTypes.NumberInput,
-  SDKTypes.TextInput,
-];
 
 export const FIELDS_TO_HIDE = [
   '$id',
@@ -21,6 +11,7 @@ export const FIELDS_TO_HIDE = [
   'id',
   'tags',
 ];
+
 /** Types that can be represented by a sub tree in the graph */
 export const COMPOUND_TYPES = [
   'Microsoft.AdaptiveDialog',

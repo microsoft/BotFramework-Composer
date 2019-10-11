@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStepMenu, DialogGroup } from 'shared-menus';
+import { createStepMenu, DialogGroup } from 'shared';
 
 import { IconMenu } from './IconMenu';
 

@@ -40,7 +40,7 @@
     "nanoid": "^2.0.1",
     "office-ui-fabric-react": "7.37.1",
     "react-error-boundary": "^1.2.5",
-    "shared-menus": "0.0.0"
+    "shared": "0.0.0"
   },
   "peerDependencies": {
     "react": "16.9.0",

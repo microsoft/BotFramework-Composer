@@ -5,7 +5,7 @@ import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react';
 import get from 'lodash.get';
-import { PromptTab } from 'shared-menus';
+import { PromptTab } from 'shared';
 
 import { BaseField } from '../BaseField';
 import { BFDFieldProps } from '../../types';
