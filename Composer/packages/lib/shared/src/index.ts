@@ -5,6 +5,7 @@ formatMessage.setup({
 });
 
 export * from './labelMap';
-export * from './appschema';
+export * from './viewUtils';
 export * from './dialogFactory';
 export * from './promptTabs';
+export * from './appschema';

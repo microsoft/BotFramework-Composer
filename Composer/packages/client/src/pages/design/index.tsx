@@ -3,7 +3,8 @@ import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabri
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
-import { PromptTab } from 'shared-menus';
+import { PromptTab } from 'shared';
+import { getNewDesigner, seedNewDialog } from 'shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -17,7 +18,6 @@ import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
-import { getNewDesigner } from '../../utils/dialogUtil';
 import undoHistory from '../../store/middlewares/undo/history';
 
 import NewDialogModal from './new-dialog-modal';
@@ -315,7 +315,8 @@ function DesignPage(props) {
 
   async function onSubmit(data) {
     const content = getNewDesigner(data.name, data.description);
-    await actions.createDialog({ id: data.name, content });
+    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
+    await actions.createDialog({ id: data.name, content: seededContent });
   }
 
   async function handleDeleteDialog(id) {

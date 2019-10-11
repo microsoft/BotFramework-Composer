@@ -1,10 +1,10 @@
 import fs from 'fs';
 
+import { seedNewDialog } from 'shared';
+
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
-
-import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -57,7 +57,7 @@ describe('updateDialog', () => {
 
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
-  const content = JSON.stringify(DIALOG_TEMPLATE, null, 2) + '\n';
+  const content = JSON.stringify(seedNewDialog('Microsoft.AdaptiveDialog'), null, 2) + '\n';
 
   afterEach(() => {
     try {
