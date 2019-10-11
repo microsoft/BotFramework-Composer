@@ -37,12 +37,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, removeLgTemplate } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent, getLgTemplates, removeLgTemplate } = useContext(NodeRendererContext);
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
     setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
   });
 
+  const lgApi = { getLgTemplates, removeLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -98,17 +99,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
-          copyNodes(data, e.actionIds).then(copiedActions => {
+          copyNodes(data, e.actionIds, lgApi).then(copiedActions => {
             clipboardContext.setClipboardActions(copiedActions);
           });
         };
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
-          const { dialog, cutData } = cutNodes(data, e.actionIds);
-          clipboardContext.setClipboardActions(cutData);
-          onChange(dialog);
-          onFocusSteps([]);
+          cutNodes(data, e.actionIds, lgApi).then(({ dialog, cutData }) => {
+            clipboardContext.setClipboardActions(cutData);
+            onChange(dialog);
+            onFocusSteps([]);
+          });
         };
         break;
       case NodeEventTypes.DeleteSelection:
