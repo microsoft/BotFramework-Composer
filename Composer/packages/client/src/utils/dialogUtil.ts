@@ -41,6 +41,7 @@ export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
 export const customerTypeKey: string = SDKTypes.OnCustomEvent;
+export const onBeginDialogKey: string = SDKTypes.OnBeginDialog;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -88,12 +89,18 @@ export function insert(
   }
 
   if (data.toCreateNewDialog) {
+    let name = SDKTypes.BeginDialog as string;
+    const labelOverrides = ConceptLabels[SDKTypes.BeginDialog];
+
+    if (labelOverrides && labelOverrides.title) {
+      name = labelOverrides.title;
+    }
     optionalAttributes.actions = [
       {
-        $type: 'Microsoft.BeginDialog',
+        $type: SDKTypes.BeginDialog,
         $designer: {
-          id: '800801',
-          name: 'Begin a Dialog',
+          id: nanoid('1234567890', 6),
+          name,
         },
         dialog: newDialogName,
       },

@@ -3,6 +3,8 @@ import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption, Checkbox } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import nanoid from 'nanoid/generate';
+import { toLower } from 'lodash';
 
 import {
   addNewTrigger,
@@ -91,6 +93,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
 
+  const isDuplicatedDialogName = () => {
+    const dialog = dialogs.find(dialog => toLower(dialog.id) === toLower(formData.name));
+    if (dialog) {
+      return true;
+    }
+    return false;
+  };
+
   const onNext = () => {
     if (step === 0) {
       const errors = validateFormOnFirstStep(formData);
@@ -120,7 +130,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const submitForm = () => {
     const errors = validateForm(formData);
-
+    const isDuplicated = isDuplicatedDialogName();
+    if (isDuplicated && formData.toCreateNewDialog && formData.$type === intentTypeKey) {
+      errors.name = `The dialog '${formData.name}' you are going to create already exists`;
+    }
     if (Object.keys(errors).length) {
       setFormData({
         ...formData,
@@ -130,7 +143,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
     let newDialogName = '';
     if (formData.toCreateNewDialog) {
-      newDialogName = formData.$type === intentTypeKey ? formData.name : 'newDialog';
+      newDialogName = formData.$type === intentTypeKey ? formData.name : 'newDialog' + nanoid('1234567890', 6);
     }
     const updatedDialog = addNewTrigger(dialogs, dialogId, formData, newDialogName);
     onSubmit(updatedDialog, newDialogName);
