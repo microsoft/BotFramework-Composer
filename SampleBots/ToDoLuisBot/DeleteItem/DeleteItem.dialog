@@ -1,18 +1,19 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
+    "createdAt": "2019-07-16T20:14:51.731Z",
+    "updatedAt": "2019-07-16T20:15:19.525Z",
     "id": "735299"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "generator": "common.lg",
-  "$schema": "../../app.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "833026"
       },
-       
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
@@ -188,5 +189,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
