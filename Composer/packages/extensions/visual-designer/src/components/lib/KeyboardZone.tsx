@@ -33,7 +33,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
 
 export const KeyboardZone: FC<KeyboardZoneProps> = ({ when, onCommand, children }): JSX.Element => {
   const handleKeyDown = e => {
-    if (overriddenKeyCodes.find(x => x === e.key)) {
+    if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();
       e.stopPropagation();
     }
