@@ -18,6 +18,10 @@ export interface FormMemory {
 export interface DialogInfo {
   id: string;
   displayName: string;
+  lgFile: string;
+  luFile: string;
+  lgTemplates: LgTemplate[];
+  diagnostics: any[];
   isRoot: boolean;
   content: MicrosoftAdaptiveDialog;
 }
@@ -43,14 +47,22 @@ export interface LuFile {
   };
 }
 
+export interface CodeRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
+
 export interface LgFile {
   id: string;
   relativePath: string;
   content: string;
+  templates: [LgTemplate];
 }
 export interface LgTemplate {
   Name: string;
   Body: string;
+  Parameters: string;
+  Range: CodeRange;
 }
 
 export interface FormData {
@@ -67,6 +79,7 @@ export interface ShellApi {
   onFocusEvent: (eventId: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;
+  updateLgFile: (id: string, content: string) => Promise<void>;
   getLgTemplates: (id: string) => Promise<LgTemplate[]>;
   createLgTemplate: (id: string, template: LgTemplate, position: number) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
