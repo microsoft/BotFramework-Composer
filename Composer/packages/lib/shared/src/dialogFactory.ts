@@ -1,7 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
-import { visitAdaptiveAction } from './copyUtils';
+import { visitAdaptiveAction, copyLgActivity } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -78,7 +78,7 @@ export const needsDeepCopy = $type => {
   return DEEP_COPY_TYPES.includes($type);
 };
 
-export const deepCopyAction: any = (data, lgApi) => {
+export const deepCopyAction = async (data, lgApi) => {
   // data.type is a SendActivity
   // data.id is bound to copied SendActivity
   // new id getDesignerId()
@@ -97,15 +97,15 @@ export const deepCopyAction: any = (data, lgApi) => {
   };
 
   // Copy specific parts an Adaptive action cares.
-  const overrideContent = data => {
+  const overrideContent = async data => {
     if (data.$type === 'Microsoft.SendActivity') {
-      data.activity = 'I copied' + data.activity;
+      data.activity = await copyLgActivity(data.activity, lgApi);
     }
   };
 
-  visitAdaptiveAction(copy, data => {
+  await visitAdaptiveAction(copy, async data => {
     overrideDesigner(data);
-    overrideContent(data);
+    await overrideContent(data);
   });
 
   return copy;

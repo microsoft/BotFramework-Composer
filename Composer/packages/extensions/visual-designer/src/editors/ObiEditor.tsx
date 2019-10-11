@@ -98,8 +98,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
-          const copiedActions = copyNodes(data, e.actionIds);
-          clipboardContext.setClipboardActions(copiedActions);
+          copyNodes(data, e.actionIds).then(copiedActions => {
+            clipboardContext.setClipboardActions(copiedActions);
+          });
         };
         break;
       case NodeEventTypes.CutSelection:

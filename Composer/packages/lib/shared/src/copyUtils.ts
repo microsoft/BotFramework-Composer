@@ -19,10 +19,10 @@ const childrenMap = {
  * @param {any} input The input Adaptive Action which has $type field.
  * @param {function} visitor The callback function called on each action node.
  */
-export function visitAdaptiveAction(input: any, visitor: (data: any) => any) {
+export async function visitAdaptiveAction(input: any, visitor: (data: any) => Promise<any>) {
   if (!input || !input.$type) return;
 
-  visitor(input);
+  await visitor(input);
 
   let childrenKeys = DEFAULT_CHILDREN_KEYS;
   if (input.$type && childrenMap[input.$type]) {
@@ -35,4 +35,25 @@ export function visitAdaptiveAction(input: any, visitor: (data: any) => any) {
       children.forEach(x => visitAdaptiveAction(x, visitor));
     }
   }
+}
+
+function isLgActivity(activity: string) {
+  return activity && activity.indexOf('bfdactivity-') !== -1;
+}
+
+export async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
+  if (!activity) return '';
+  if (!isLgActivity(activity) || !lgApi) return activity;
+
+  const { getLgTemplates } = lgApi;
+  if (!getLgTemplates) return activity;
+
+  let rawContent = '';
+  try {
+    rawContent = await getLgTemplates('common', activity);
+  } catch (error) {
+    return activity;
+  }
+
+  return rawContent;
 }
