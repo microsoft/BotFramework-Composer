@@ -22,7 +22,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
         onRenderContent: () => (
           <div>
             <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>{title}</h3>
-            <p dangerouslySetInnerHTML={{ __html: description }} />
+            <p>{description}</p>
           </div>
         ),
       }}
