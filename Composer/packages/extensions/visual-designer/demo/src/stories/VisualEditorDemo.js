@@ -103,6 +103,12 @@ export class VisualEditorDemo extends Component {
                     obiJson: json,
                   });
                 },
+                getLgTemplates: () => {
+                  return Promise.resolve('LgTemplate Placeholder.');
+                },
+                removeLgTemplate: () => {
+                  return Promise.resolve(true);
+                },
               }}
             />
           </div>
