@@ -5,6 +5,8 @@
     "name": "Interrupt"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "Main.lu",
   "generator": "common.lg",
   "triggers": [
     {
@@ -28,10 +30,9 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "GetStarted",
         "id": "629539"
       },
-      "intent": "GetStarted",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -41,15 +42,15 @@
           },
           "dialog": "GetProfile"
         }
-      ]
+      ],
+      "intent": "GetStarted"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "ResetProfile",
         "id": "921175"
       },
-      "intent": "ResetProfile",
       "actions": [
         {
           "$type": "Microsoft.EditActions",
@@ -77,15 +78,15 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "ResetProfile"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Cancel",
         "id": "870441"
       },
-      "intent": "Cancel",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -102,15 +103,15 @@
             "id": "362033"
           }
         }
-      ]
+      ],
+      "intent": "Cancel"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "ShowProfile",
         "id": "171791"
       },
-      "intent": "ShowProfile",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -148,15 +149,15 @@
             }
           ]
         }
-      ]
+      ],
+      "intent": "ShowProfile"
     },
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Help",
         "id": "160085"
       },
-      "intent": "Help",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -166,9 +167,9 @@
           },
           "activity": "[bfdactivity-924700]"
         }
-      ]
+      ],
+      "intent": "Help"
     }
   ],
-  "$schema": "../../app.schema",
-  "recognizer": "Main.lu"
+  "$schema": "../../app.schema"
 }
