@@ -42,6 +42,6 @@ module.exports = {
     '<rootDir>/packages/extensions/visual-designer',
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/component-scaffold',
-    '<rootDir>/packages/lib/shared-menus',
+    '<rootDir>/packages/lib/shared',
   ],
 };

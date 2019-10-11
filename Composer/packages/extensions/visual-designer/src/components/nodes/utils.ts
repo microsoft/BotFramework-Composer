@@ -1,5 +1,5 @@
 import get from 'lodash.get';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 

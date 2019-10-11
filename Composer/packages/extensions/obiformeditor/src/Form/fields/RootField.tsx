@@ -4,7 +4,7 @@ import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
 import { FontSizes } from '@uifabric/fluent-theme';
-import formatMessage, { date } from 'format-message';
+import formatMessage from 'format-message';
 
 import { FormContext } from '../types';
 
@@ -84,16 +84,6 @@ export const RootField: React.FC<RootFieldProps> = props => {
             {formatMessage('ID number')}
           </span>
           <span style={{ minWidth: '75px', display: 'inline-block' }}>{get(formData, '$designer.id')}</span>
-        </div>
-        <div>
-          <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
-            {formatMessage('Last Edited')}
-          </span>
-          <span>
-            {get(formData, '$designer.updatedAt')
-              ? date(Date.parse(get(formData, '$designer.updatedAt')), 'short')
-              : 'N/A'}
-          </span>
         </div>
       </div>
     </div>

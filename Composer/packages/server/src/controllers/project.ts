@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
-import { merge } from 'lodash';
 
 import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
@@ -9,7 +8,6 @@ import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings/settings.json';
 
-import DIALOG_TEMPLATE from './../store/dialogTemplate.json';
 import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
@@ -159,7 +157,7 @@ async function updateDialog(req: Request, res: Response) {
 async function createDialog(req: Request, res: Response) {
   const currentProject = BotProjectService.getCurrentBotProject();
   if (currentProject !== undefined) {
-    const content = JSON.stringify(merge(req.body.content, DIALOG_TEMPLATE), null, 2) + '\n';
+    const content = JSON.stringify(req.body.content, null, 2) + '\n';
     //dir = id
     const dialogs = await currentProject.createDialog(req.body.id, content, req.body.id);
     const luFiles = await currentProject.createLuFile(req.body.id, '', req.body.id);
