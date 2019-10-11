@@ -58,9 +58,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const onChange = (data): void => {
     // hit the lg api and replace it's Body with data
     if (formContext.dialogId) {
-      const newContent = data.trim();
       formContext.shellApi
-        .updateLgFile(lgFileId, newContent)
+        .updateLgFile(lgFileId, data)
         .then(() => setErrorMsg(''))
         .catch(error => setErrorMsg(error));
       props.onChange(`[${lgId}]`);

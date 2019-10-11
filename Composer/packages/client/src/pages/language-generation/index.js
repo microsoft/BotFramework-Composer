@@ -121,8 +121,6 @@ export const LGPage = props => {
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
   function onTableViewClickEdit(template) {
-    console.log(template);
-
     setCodeRange({
       startLineNumber: get(template, 'ParseTree._start._line', 0),
       endLineNumber: get(template, 'ParseTree._stop._line', 0),
