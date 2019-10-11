@@ -3,6 +3,7 @@ export const EditorConfig = {
     showEvents: false,
     arrowNavigation: true,
     tabNavigation: true,
-    keyboardNodeEditing: true,
+    keyboardNodeEditing: false,
+    keyboardOperationEditing: true,
   },
 };

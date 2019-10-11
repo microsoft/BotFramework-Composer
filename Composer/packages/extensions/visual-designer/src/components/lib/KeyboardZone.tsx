@@ -2,18 +2,16 @@
 import { jsx } from '@emotion/core';
 import { FC, useRef } from 'react';
 
-import { mapShortcutToKeyboardCommand, KeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
-import { any } from 'prop-types';
+import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 interface NodeProps {
-  when: string;
   onCommand: (action) => object | void;
 }
 
 const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
-export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
+export const KeyboardZone: FC<NodeProps> = ({ onCommand, children }): JSX.Element => {
   const keyPressed = useRef({});
   const handleKeyDown = e => {
     if (e.key === 'Tab') {
@@ -25,19 +23,12 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
 
   const handleKeyUp = e => {
     let keyCode = isMac() ? 'Mac' : 'Windows';
-    let cmdDetail: { [key: string]: string } = {};
     for (const key in keyPressed.current) {
       if (keyPressed.current[key]) {
         keyCode += `.${key}`;
       }
-      cmdDetail = mapShortcutToKeyboardCommand(keyCode);
     }
-    if (
-      when !== 'normal' ||
-      (cmdDetail.command === KeyboardCommandTypes.Node.Undo || cmdDetail.command === KeyboardCommandTypes.Node.Redo)
-    ) {
-      onCommand(cmdDetail);
-    }
+    onCommand(mapShortcutToKeyboardCommand(keyCode));
     delete keyPressed.current[e.key];
   };
   return (
