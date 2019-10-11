@@ -64,7 +64,7 @@ if ($botPath) {
 	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
 }
 else {
-	Copy-Item -Path $localBotPath -Recurse -Destination $remoteBotPath -Container -Force
+	Copy-Item -Path $localBotPath -Recurse -Destination $publishFolder -Container -Force
 }
 
 # Merge from custom config files
