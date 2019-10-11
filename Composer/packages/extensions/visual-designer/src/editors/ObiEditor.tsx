@@ -231,36 +231,32 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const handleKeyboardCommand = ({ area, command }) => {
     switch (area) {
       case KeyboardPrimaryTypes.Node:
-        if (keyboardStatus !== 'normal') {
-          switch (command) {
-            case KeyboardCommandTypes.Node.Delete:
-              dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
-              break;
-            case KeyboardCommandTypes.Node.Copy:
-              dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
-              break;
-            case KeyboardCommandTypes.Node.Cut:
-              dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
-              break;
-            case KeyboardCommandTypes.Node.Paste:
-              dispatchEvent(NodeEventTypes.AppendSelection, {
-                target: focusedId,
-                actions: clipboardContext.clipboardActions,
-              });
-              break;
-          }
+        switch (command) {
+          case KeyboardCommandTypes.Node.Delete:
+            dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Copy:
+            dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Cut:
+            dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+            break;
+          case KeyboardCommandTypes.Node.Paste:
+            dispatchEvent(NodeEventTypes.AppendSelection, {
+              target: focusedId,
+              actions: clipboardContext.clipboardActions,
+            });
+            break;
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
-        if (keyboardStatus !== 'normal') {
-          const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
-          const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
-          setSelectionContext({
-            getNodeIndex: selectionContext.getNodeIndex,
-            selectedIds: [selected as string],
-          });
-          focused && onFocusSteps([focused]);
-        }
+        const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
+        const { selected, focused } = moveCursor(selectedElements, currentSelectedId, command);
+        setSelectionContext({
+          getNodeIndex: selectionContext.getNodeIndex,
+          selectedIds: [selected as string],
+        });
+        focused && onFocusSteps([focused]);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
@@ -282,7 +278,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   return (
     <SelectionContext.Provider value={selectionContext}>
       <ClipboardContext.Provider value={clipboardContext}>
-        <KeyboardZone onCommand={handleKeyboardCommand}>
+        <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
           <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
             <div
               tabIndex={0}
