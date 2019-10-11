@@ -58,7 +58,7 @@ export class BotProject {
     this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
     this.luIndexer = new LUIndexer();
-    this.luPublisher = new LuPublisher(this.dataDir, this.fileStorage);
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
   public index = async () => {
