@@ -85,8 +85,8 @@ if ($customConfigFiles) {
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
 }
 
-# Try to get luis config from appesettings
-$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
+# Try to get luis config from appsettings
+$settings = Get-Content $(Join-Path $projFolder appsettings.json) | ConvertFrom-Json
 $luisSettings = $settings.luis
 
 if (-not $luisAuthoringKey) {
