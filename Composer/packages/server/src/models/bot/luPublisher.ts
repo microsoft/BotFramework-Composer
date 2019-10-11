@@ -5,7 +5,7 @@ import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 
-const GENERATEDFOLDER = 'generated';
+const GENERATEDFOLDER = 'ComposerDialogs/generated';
 const LU_STATUS_FILE = 'luis.status.json';
 
 export class LuPublisher {
