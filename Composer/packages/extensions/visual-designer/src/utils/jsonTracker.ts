@@ -1,5 +1,5 @@
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog } from 'shared-menus';
+import { seedNewDialog } from 'shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 import { jsx } from '@emotion/core';
 
 import { AttrNames } from '../../constants/ElementAttributes';
