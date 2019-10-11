@@ -58,13 +58,25 @@ Composer currently supports three different types of templates:
 ## Defining LG template in Composer
 Defining LG template is an important process when you create your bot using Composer. 
 
-To define LG template in Composer, you will need to know: 
-- Supported concepts of LG (template, import)
-- [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
-- [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
+- Need to know: 
+  - Supported concepts of LG (template, import)
+  - [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+  - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 ### LG editor in Composer 
-In Bot Composer UI, there are two LG editors: an inline LG editor which hoists the relevant templates content in the inline editor, and the "Bot says" section which is a flat list of all templates defined in the bot. 
+In Bot Composer UI, there are two LG editors: 
+
+Thhe following screenshot is an inline LG editor which hoists the relevant templates content. 
+
+<p align="left">
+    <img alt="inline_editor" src="./media/language_generation/inline_editor.png" style="max-width:500px;" />
+</p>
+
+The following screenshot is the "Bot says" LG editor which is a flat list of all templates defined in the bot. 
+
+<p align="left">
+    <img alt="bot_says" src="./media/language_generation/bot_says.png" style="max-width:500px;" />
+</p>
 
 ### Single template  
   - a single line response
@@ -92,16 +104,16 @@ In Bot Composer UI, there are two LG editors: an inline LG editor which hoists t
  
 ### Common Expression Cheatsheet 
 
-| Symbol     | Description   | 
-| -------------------- | ------------------| 
-| #  | template definition symbol| 
-| -  | variation| 
-| \ | Escape character| 
-| @ | a prefix character to signify need expression evaluation when in multi-line response 
-| {}| Used for all expressions. Note: templates are also functions so {templateName()} is valid and supported.| 
-| [] | Short hand to refer to a template. [templateName()] is the same as {templateName()} 
-| () | Used to denote parameters to a function or to a template. E.g {templateName(‘value1’, ‘value2’)} or to a prebuilt function {length(foo)} or {length(‘value1’)} 
-| ```  | Used in pair to denote multi-line segment. | 
+| Symbol | Description                                                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #      | template definition symbol                                                                                                                                     |
+| -      | variation                                                                                                                                                      |
+| \      | Escape character                                                                                                                                               |
+| @      | a prefix character to signify need expression evaluation when in multi-line response                                                                           |
+| {}     | Used for all expressions. Note: templates are also functions so {templateName()} is valid and supported.                                                       |
+| []     | Short hand to refer to a template. [templateName()] is the same as {templateName()}                                                                            |
+| ()     | Used to denote parameters to a function or to a template. E.g {templateName(‘value1’, ‘value2’)} or to a prebuilt function {length(foo)} or {length(‘value1’)} |
+| ```    | Used in pair to denote multi-line segment.                                                                                                                     |
 
 
 ## References
