@@ -85,6 +85,22 @@ if ($customConfigFiles) {
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
 }
 
+# Try to get luis config from appesettings
+$settings = Get-Content $(Join-Path $publishFolder appsettings.json) | ConvertFrom-Json
+$luisSettings = $settings.luis
+
+if (-not $luisAuthoringKey) {
+	$luisAuthoringKey = $luisSettings.authoringKey
+}
+
+if (-not $luisEndpointKey) {
+	$luisEndpointKey = $luisSettings.endpointKey
+}
+
+if (-not $luisAuthoringRegion) {
+	$luisAuthoringRegion = $luisSettings.region
+}
+
 # Add Luis Config to appsettings
 if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
@@ -93,11 +109,9 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$noneEmptyModels = [System.Collections.ArrayList]@()
 
-	foreach ($model in $models)
-	{
+	foreach ($model in $models) {
 		$stringContent = Get-Content $model | Out-String
-		if ($stringContent.Length -gt 0)
-		{
+		if ($stringContent.Length -gt 0) {
 			$noneEmptyModels.Add($model)
 		}
 	}
@@ -112,8 +126,15 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
 
 	# Execute lubuild command
-	lubuild --authoringKey $luisAuthoringKey
-
+	if (Get-Command lubuild -errorAction SilentlyContinue) {
+		lubuild --authoringKey $luisAuthoringKey
+	}
+	else {
+		Write-Host "lubuild does not exist, use the following command to install lubuild:"
+		Write-Host "npm install -g https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz"
+		Break
+	}
+	
 	Set-Location -Path $projFolder
 
 	# change setting file in publish folder
@@ -137,16 +158,41 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	$luisEndpoint = "https://$luisAuthoringRegion.api.cognitive.microsoft.com"
 
 	$luisConfig = @{ }
-
-	dotnet user-secrets set "luis:endpointKey" "$luisAuthoringKey" --project $publishFolder
 	
 	$luisConfig["endpoint"] = $luisEndpoint
-	
+	$luisConfig["endpointKey"] = $luisEndpointKey
+
 	foreach ($key in $luisAppIds.Keys) { $luisConfig[$key] = $luisAppIds[$key] }
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
 
 	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.json)
+
+	$tokenResponse = (az account get-access-token) | ConvertFrom-Json
+	$token = $tokenResponse.accessToken
+
+	Write-Host "Getting Luis accounts..."
+	$luisAccountEndpoint = "$luisEndpoint/luis/api/v2.0/azureaccounts"
+	$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+
+	$luisAccount = $null
+	foreach ($account in $luisAccounts) {
+		if ($account.AccountName -eq "$name-$environment-luis") {
+			$luisAccount = $account
+			break
+		}
+	}
+
+	$luisAccountBody = $luisAccount | ConvertTo-Json
+
+	# Assign each luis id in luisAppIds with the endpoint key
+	foreach ($k in $luisAppIds.Keys) {
+		$luisAppId = $luisAppIds.Item($k)
+		Write-Host "Assigning to Luis app id: $luisAppId"
+		$luisAssignEndpoint = "$luisEndpoint/luis/api/v2.0/apps/$luisAppId/azureaccounts"
+		$response = Invoke-WebRequest -Method POST -ContentType application/json -Body $luisAccountBody -Uri $luisAssignEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+		Write-Host $response
+	}
 }
 
 $resourceGroup = "$name-$environment"

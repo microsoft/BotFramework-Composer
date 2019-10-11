@@ -107,7 +107,7 @@
             "type": "string",
             "defaultValue": "F0"
         },
-		"luisServiceRunTimeSku": {
+        "luisServiceRunTimeSku": {
             "type": "string",
             "defaultValue": "S0"
         },
@@ -292,8 +292,8 @@
             "type": "object",
             "value": {
                 "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]",
-                "authoringKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1]"
-				
+                "authoringKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1]",
+                "region": "[parameters('luisServiceLocation')]"
             }
         }
     }
