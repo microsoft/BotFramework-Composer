@@ -54,8 +54,8 @@ Composer currently supports three different types of templates:
 
 ### Anatomy of an LG Template 
 An LG template usuaslly consists of two parts: 
-- name of the template, which is defined using "#"  
-- a list of one-of variation text values, which is defined using "-" or 
+- name of the template, which is defined using "#" and   
+- a list of one-of variation text values defined using "-" or 
 - a collection of conditions, each with a 
   - Condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
   - List of one-of variation text values per condition or 
@@ -75,7 +75,7 @@ Below is an example of a simple `.lg` template with one-of variation text values
 ## Import 
 - [description text](file/uri path)
  
-## Defining LG template
+## Defining LG template in Composer
 
 ### When to define
 
@@ -109,34 +109,84 @@ Bot Composer currently supports definition of the following three types of templ
 #### Simple template  
 A simple template is defined to generate either a single line text response or a multi-line response. 
 - Define a single-line response
-![one_line_response](./media/language_generation/one_line_response.gif)
+
+It's quite simple to define a single-line response. Use a "-" before a response text or an expression with returned property value. 
+
+A single line text response:  
+
+     - Sure. I've cancelled that.  
+
+A single line expression response:  
+
+     - {user.profile.name} 
 
 - Define a multi-line response 
-![multi_line_response](./media/language_generation/multi_line_response.gif)
-multi_line_response
+You can use a pair of triple dots to wrap the multi-line response. 
+
+      - ```
+      Here's what I know about you - 
+      - @{NameReadBack()}
+      - @{AgeReadBack()}
+      ```
 
 #### Conditional template  
-- Define IF...ELSE
+For all conditional templates, there are something in common when you define them. All conditions are expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme). Condition expressions are enclosed in curly brackets. Here are some conditional template examples in from [Interrupt sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Interrupt). 
 
-- Define SWITCH...CASE
+- IF...ELSE
 
-#### Define Structured template  
-- Cards 
-  <!-- a layer above .lg will use to construct a full blown [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md) -->
+      # NameReadBack
+      - IF : {exists(user.profile.name)}
+          - Name : {user.profile.name}
+      - ELSE : 
+          - Name : unknown
 
-<!-- ### LG for text output 
-- Single line output (with escape character)
-- Multiple line output (triple dash)
-- conditional template 
-- template as parameter
-- cards  -->
-<!-- 
-- LG is achieved through
-  - markdown based .lg file that describes the templates and theri composition
-    - [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) 
-    - full access to bot memory so that data bind language to state of memory
-    - parser and runtime libraries that elp achieve runtime resolution. 
-      - [API reference for LG](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md) -->
+- SWITCH...CASE
+  
+      # greetInAWeek
+      SWITCH: {dayOfWeek(utcNow())}
+      - CASE: {0}
+          - Happy Sunday!
+      -CASE: {6}
+          - Happy Saturday!
+      -DEFAULT:  
+          - Let's keep it up and work Hard!
+
+#### References to templates
+Variation text can include references to another named template to aid with composition and resolution of sophisticated responses. Reference to another named template are denoted using markdown link notation by enclosing the target template name in square brackets - [TemplateName]. [Cards_Sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Cards_Samples). 
+
+A Herocard template is defined. 
+
+    - ```
+    [Herocard
+        title = BotFramework Hero Card
+        subtitle = Microsoft Bot Framework
+        text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
+        image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
+        buttons = Show more cards]
+    ```
+A Herocard template is then referenced. 
+
+      -[HeroCard]
+
+#### Parametrizeation of templates 
+To aid with contextual re-usability, templates can be parametrized. With this different callers to the template can pass in different values for use in expansion resolution. 
+
+    # timeOfDayGreetingTemplate (param1)
+    - IF: @{param1 == 'morning'}
+        - good morning
+    - ELSEIF: @{param1 == 'afternoon'}
+        - good afternoon
+    - ELSE: 
+        - good evening
+
+    # morningGreeting
+    - @{timeOfDayGreetingTemplate('morning')}
+
+    # timeOfDayGreeting
+    - @{timeOfDayGreetingTemplate(timeOfDay)}
+
+#### Structured template  
+- Will update when feature available. 
  
 ### Common Expression Cheatsheet 
 
