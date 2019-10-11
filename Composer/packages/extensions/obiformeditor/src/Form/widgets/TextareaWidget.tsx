@@ -1,10 +1,11 @@
 import React from 'react';
 import { TextField } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
+
+import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
 
-export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
+export const TextareaWidget: React.FunctionComponent<BFDWidgetProps> = props => {
   const { onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled, label } = props;
   const { description, examples = [] } = schema;
 
@@ -21,9 +22,9 @@ export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
         disabled={disabled}
         id={id}
         multiline
-        onBlur={() => onBlur(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
         onChange={(_, newValue?: string) => onChange(newValue)}
-        onFocus={() => onFocus(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         placeholder={placeholderText}
         readOnly={readonly}
         value={value}
@@ -39,4 +40,7 @@ export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
 
 TextareaWidget.defaultProps = {
   schema: {},
+  options: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

@@ -1,11 +1,13 @@
 import axios from 'axios';
-import { get } from 'lodash';
+import { get, debounce } from 'lodash';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { SensitiveProperties } from '../../constants';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
+
+const post = debounce(axios.post, 1000);
 export const setSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
   try {
     // set value to store
@@ -21,7 +23,7 @@ export const setSettings: ActionCreator = async ({ dispatch }, botName: string, 
       settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
     }
     // set value to server
-    await axios.post(`${BASEURL}/projects/opened/settings`, { settings });
+    await post(`${BASEURL}/projects/opened/settings`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
