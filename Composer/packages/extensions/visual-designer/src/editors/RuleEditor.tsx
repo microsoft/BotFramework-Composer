@@ -1,13 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, useRef, useContext } from 'react';
+import { useMemo, useRef } from 'react';
 import { isEqual } from 'lodash';
 
 import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { NodeRendererContext } from '../store/NodeRendererContext';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../utils/outlineObiJson';
 
@@ -40,8 +39,6 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
     return calculateNodeMap(id, data);
   }, [id, data]);
 
-  const { focusedId } = useContext(NodeRendererContext);
-
   const { stepGroup } = nodeMap;
 
   return (
@@ -65,7 +62,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         id={stepGroup.id}
         data={stepGroup.data}
         onEvent={onEvent}
-        trigger={<Trigger id={id} data={data} />}
+        trigger={<Trigger data={data} />}
       />
     </div>
   );

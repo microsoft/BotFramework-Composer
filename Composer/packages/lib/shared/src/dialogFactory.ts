@@ -74,7 +74,7 @@ export const seedDefaults = (type: string) => {
 
 const DEEP_COPY_TYPES = ['Microsoft.SendActivity'];
 export const needsDeepCopy = $type => {
-  return DEEP_COPY_TYPES.indexOf($type) !== -1;
+  return DEEP_COPY_TYPES.includes($type);
 };
 
 export const deepCopy: any = (_data, _lgApi) => {

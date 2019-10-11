@@ -24,8 +24,8 @@ beforeEach(async () => {
 });
 
 describe('index', () => {
-  it('should index successfully', async () => {
-    const project: { [key: string]: any } = await proj.getIndexes();
+  it('should index successfully', () => {
+    const project: { [key: string]: any } = proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
     expect(project.lgFiles.length).toBe(1);
     expect(project.luFiles.length).toBe(3);
@@ -113,7 +113,7 @@ describe('copyTo', () => {
   it('should copy successfully', async () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.index();
-    const project: { [key: string]: any } = await newBotProject.getIndexes();
+    const project: { [key: string]: any } = newBotProject.getIndexes();
     expect(project.dialogs.length).toBe(3);
   });
 });

@@ -1,10 +1,10 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
-  extends: ['../../../.eslintrc.react.js', 'plugin:@typescript-eslint/recommended'],
+  extends: ['../../../.eslintrc.react.js'],
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
   rules: {
-    indent: 'off',
-    '@typescript-eslint/indent': ['warn', 2],
     '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/no-use-before-define': ['warn', { functions: false, classes: true }],
   },
