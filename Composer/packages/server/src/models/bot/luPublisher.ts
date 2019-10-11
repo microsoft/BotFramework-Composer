@@ -5,7 +5,6 @@ import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 
-const DIALOGSFOLDER = 'ComposerDialogs';
 const GENERATEDFOLDER = 'generated';
 const LU_STATUS_FILE = 'luis.status.json';
 
@@ -22,7 +21,7 @@ export class LuPublisher {
 
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
-    this.generatedFolderPath = Path.join(this.botDir, DIALOGSFOLDER, GENERATEDFOLDER);
+    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
     this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
     this.storage = storage;
   }

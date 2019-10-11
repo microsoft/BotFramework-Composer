@@ -28,6 +28,7 @@ export class BotProject {
 
   public name: string;
   public dir: string;
+  public dataDir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
@@ -42,6 +43,7 @@ export class BotProject {
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
+    this.dataDir = Path.join(this.dir, DIALOGFOLDER);
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
@@ -56,7 +58,7 @@ export class BotProject {
     this.dialogIndexer = new DialogIndexer(this.name);
     this.lgIndexer = new LGIndexer();
     this.luIndexer = new LUIndexer();
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
+    this.luPublisher = new LuPublisher(this.dataDir, this.fileStorage);
   }
 
   public index = async () => {
@@ -191,7 +193,7 @@ export class BotProject {
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
-    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.dialog`);
+    const relativePath = Path.join(dir, `${id.trim()}.dialog`);
     await this._createFile(relativePath, content);
     return this.dialogIndexer.getDialogs();
   };
@@ -230,7 +232,7 @@ export class BotProject {
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
-    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.lg`);
+    const relativePath = Path.join(dir, `${id.trim()}.lg`);
     const absolutePath = `${this.dir}/${relativePath}`;
     const diagnostics = this.lgIndexer.check(content, absolutePath);
     if (this.lgIndexer.isValid(diagnostics) === false) {
@@ -277,7 +279,7 @@ export class BotProject {
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
     }
-    const relativePath = Path.join(DIALOGFOLDER, dir, `${id.trim()}.lu`);
+    const relativePath = Path.join(dir, `${id.trim()}.lu`);
 
     // TODO: validate before save
     await this._createFile(relativePath, content);
@@ -358,7 +360,7 @@ export class BotProject {
   // create file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
-    const absolutePath = Path.resolve(this.dir, relativePath);
+    const absolutePath = Path.resolve(this.dataDir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
@@ -440,8 +442,8 @@ export class BotProject {
     const fileList: FileInfo[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
     for (const pattern of patterns) {
-      // load only from the composerDialogs folder, otherwise might pick up "build" versions
-      const root = Path.join(this.dir, 'ComposerDialogs');
+      // load only from the data dir, otherwise may get "build" versions from deployment process
+      const root = this.dataDir;
       const paths = await this.fileStorage.glob(pattern, root);
 
       for (const filePath of paths.sort()) {

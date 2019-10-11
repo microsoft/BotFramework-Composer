@@ -38,7 +38,7 @@ export class CSharpBotConnector implements IBotConnector {
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = Path.join(currentProject.dir, 'ComposerDialogs');
+    const dir = Path.join(currentProject.dataDir);
     const luisConfig = currentProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
