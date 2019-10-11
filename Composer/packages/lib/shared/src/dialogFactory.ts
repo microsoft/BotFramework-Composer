@@ -44,8 +44,8 @@ export function getNewDesigner(name: string, description: string) {
 
 export const getDesignerId = (data?: DesignerData) => {
   const newDesigner: DesignerData = {
-    id: nanoid('1234567890', 6),
     ...data,
+    id: nanoid('1234567890', 6),
   };
 
   return newDesigner;

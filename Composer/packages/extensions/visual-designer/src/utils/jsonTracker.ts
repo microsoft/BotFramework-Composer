@@ -170,7 +170,13 @@ export function insert(inputDialog, path, position, $type) {
 
 export async function copyNodes(inputDialog, nodeIds: string[], lgApi): Promise<any[]> {
   const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
-  return nodes.map(async x => await deepCopyAction(x, lgApi));
+  const copiedNodes = await Promise.all(
+    nodes.map(async x => {
+      const node = await deepCopyAction(x, lgApi);
+      return node;
+    })
+  );
+  return copiedNodes;
 }
 
 export async function cutNodes(inputDialog, nodeIds: string[], lgApi) {

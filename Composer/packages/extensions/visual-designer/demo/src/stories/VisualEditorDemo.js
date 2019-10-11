@@ -104,7 +104,7 @@ export class VisualEditorDemo extends Component {
                   });
                 },
                 getLgTemplates: () => {
-                  return Promise.resolve('LgTemplate Placeholder.');
+                  return Promise.resolve([{ Name: 'lg', Body: 'LgTemplate Placeholder.' }]);
                 },
                 removeLgTemplate: () => {
                   return Promise.resolve(true);

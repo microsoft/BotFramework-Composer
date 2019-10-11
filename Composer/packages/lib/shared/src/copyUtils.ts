@@ -48,12 +48,15 @@ export async function copyLgActivity(activity: string, lgApi: any): Promise<stri
   const { getLgTemplates } = lgApi;
   if (!getLgTemplates) return activity;
 
-  let rawContent = '';
+  let rawLg: any[] = [];
   try {
-    rawContent = await getLgTemplates('common', activity);
+    rawLg = await getLgTemplates('common', activity);
   } catch (error) {
     return activity;
   }
 
-  return rawContent;
+  const currentLg = rawLg.find(lg => `[${lg.Name}]` === activity);
+
+  if (currentLg) return currentLg.Body;
+  return activity;
 }
