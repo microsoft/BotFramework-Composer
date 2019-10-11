@@ -11,10 +11,10 @@ import { FormContext } from '../types';
 import { EditableField } from './EditableField';
 
 const overrideDefaults = {
-  collapsable: true,
-  defaultCollapsed: false,
   title: undefined,
   description: undefined,
+  helpLink: undefined,
+  helpLinkText: undefined,
 };
 
 interface RootFieldProps {
@@ -61,10 +61,18 @@ export const RootField: React.FC<RootFieldProps> = props => {
           fontSize={FontSizes.size20}
         />
         {sdkOverrides.description !== false && (description || schema.description) && (
-          <p
-            className={classnames('RootFieldDescription', FontClassNames.smallPlus)}
-            dangerouslySetInnerHTML={{ __html: getDescription() }}
-          />
+          <p className={classnames('RootFieldDescription', FontClassNames.smallPlus)}>
+            {getDescription()}
+            {sdkOverrides.helpLink && sdkOverrides.helpLinkText && (
+              <>
+                <br />
+                <br />
+                <a href={sdkOverrides.helpLink} target="_blank" rel="noopener noreferrer">
+                  {sdkOverrides.helpLinkText}
+                </a>
+              </>
+            )}
+          </p>
         )}
       </div>
 

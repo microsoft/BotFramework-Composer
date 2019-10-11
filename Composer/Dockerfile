@@ -13,7 +13,6 @@ COPY packages/lib/code-editor/package.json ./packages/lib/code-editor/
 COPY packages/lib/shared/package.json ./packages/lib/shared/
 COPY packages/extensions/package.json ./packages/extensions/
 COPY packages/extensions/obiformeditor/package.json ./packages/extensions/obiformeditor/
-COPY packages/extensions/sample-json-editor/package.json ./packages/extensions/sample-json-editor/
 COPY packages/extensions/visual-designer/package.json ./packages/extensions/visual-designer/
 
 # run yarn install as a distinct layer

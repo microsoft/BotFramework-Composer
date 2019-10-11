@@ -9,7 +9,7 @@ export class DefaultEnvironment implements IEnvironment {
   private config: IEnvironmentConfig;
   private settingManager: DefaultSettingManager;
   private botConnector: CSharpBotConnector;
-  private defaultSlot: string = '';
+  private defaultSlot = '';
   private slots: string[] = [''];
 
   public constructor(config: IEnvironmentConfig) {
