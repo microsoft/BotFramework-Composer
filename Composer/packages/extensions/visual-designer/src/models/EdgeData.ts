@@ -1,9 +1,9 @@
 export class EdgeData {
-  id: string = '';
+  id = '';
   direction: 'x' | 'y' = 'x';
-  x: number = 0;
-  y: number = 0;
-  length: number = 0;
+  x = 0;
+  y = 0;
+  length = 0;
   text?: string = '';
   dashed?: boolean = false;
   directed?: boolean = false;

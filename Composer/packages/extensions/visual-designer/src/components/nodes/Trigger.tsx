@@ -1,9 +1,8 @@
 /** @jsx jsx */
 
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 import { jsx } from '@emotion/core';
 
-import { AttrNames } from '../../constants/ElementAttributes';
 import { ElementIcon } from '../../utils/obiPropertyResolver';
 import { TriggerSize } from '../../constants/ElementSizes';
 
@@ -23,7 +22,7 @@ function getLabel(data: any): string {
   return data.$type;
 }
 
-export const Trigger = ({ id, data, onClick = () => {} }): JSX.Element => (
+export const Trigger = ({ data, onClick = () => {} }): JSX.Element => (
   <div
     css={{
       ...TriggerSize,

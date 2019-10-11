@@ -86,13 +86,11 @@ describe('test Azure Blob Storage', () => {
     result = await client.exists('/container/blobname');
     expect(result).toBeTruthy();
   });
-  it('test writeFile function', async () => {
+  it('test writeFile function', () => {
     const client = new AzureBlobStorage(mockStorageConnect);
-    await expect(client.writeFile('/container', 'content')).rejects.toThrow(
-      'path must include container name and blob name'
-    );
+    expect(client.writeFile('/container', 'content')).rejects.toThrow('path must include container name and blob name');
 
-    await expect(async () => client.writeFile('/container/blobname', 'content')).not.toThrowError();
+    expect(async () => client.writeFile('/container/blobname', 'content')).not.toThrowError();
   });
   it('test removeFile function', async () => {
     const client = new AzureBlobStorage(mockStorageConnect);
