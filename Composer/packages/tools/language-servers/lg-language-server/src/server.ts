@@ -1,7 +1,3 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) 2018 TypeFox GmbH (http://www.typefox.io). All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
 import * as fs from 'fs';
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
@@ -10,29 +6,12 @@ import { IConnection, TextDocuments, createConnection } from 'vscode-languageser
 import {
   TextDocument,
   Diagnostic,
-  //Command,
   CompletionList,
-  //CompletionItem,
   Hover,
-  // Range,
-  // SymbolInformation,
-  // TextEdit,
-  // FoldingRange,
-  // ColorInformation,
-  // ColorPresentation,
   Position,
-  //DiagnosticSeverity,
   CompletionItemKind,
 } from 'vscode-languageserver-types';
-import {
-  TextDocumentPositionParams,
-  // DocumentRangeFormattingParams,
-  // ExecuteCommandParams,
-  // CodeActionParams,
-  // FoldingRangeRequestParam,
-  // DocumentColorParams,
-  // ColorPresentationParams,
-} from 'vscode-languageserver-protocol';
+import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
 import { buildInfunctionsMap } from './builtinFunctions';
 import { getRangeAtPosition, convertSeverity, getLGResources } from './utils';
@@ -46,13 +25,7 @@ export function start(reader: MessageReader, writer: MessageWriter): LgServer {
 
 export class LgServer {
   protected workspaceRoot: URI | undefined;
-
   protected readonly documents = new TextDocuments();
-
-  // protected readonly jsonService: LanguageService = getLanguageService({
-  //     schemaRequestService: this.resovleSchema.bind(this)
-  // });
-
   protected readonly pendingValidationRequests = new Map<string, number>();
 
   constructor(protected readonly connection: IConnection) {
@@ -73,130 +46,22 @@ export class LgServer {
       return {
         capabilities: {
           textDocumentSync: this.documents.syncKind,
-          codeActionProvider: true,
+          codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            // triggerCharacters: ['(', '[']
           },
           hoverProvider: true,
-          documentSymbolProvider: true,
-          documentRangeFormattingProvider: true,
-          // executeCommandProvider: {
-          //     commands: ['json.documentUpper']
-          // },
-          colorProvider: true,
           foldingRangeProvider: false,
         },
       };
     });
-    // this.connection.onCodeAction(params =>
-    //     this.codeAction(params)
-    // );
     this.connection.onCompletion(params => this.completion(params));
-    // this.connection.onCompletionResolve(item =>
-    //     this.resolveCompletion(item)
-    // );
-    // this.connection.onExecuteCommand(params =>
-    //     this.executeCommand(params)
-    // );
     this.connection.onHover(params => this.hover(params));
-    // this.connection.onDocumentSymbol(params =>
-    //     this.findDocumentSymbols(params)
-    // );
-    // this.connection.onDocumentRangeFormatting(params =>
-    //     this.format(params)
-    // );
-    // this.connection.onDocumentColor(params =>
-    //     this.findDocumentColors(params)
-    // );
-    // this.connection.onColorPresentation(params =>
-    //     this.getColorPresentations(params)
-    // );
-    // this.connection.onFoldingRanges(params =>
-    //     this.getFoldingRanges(params)
-    // );
   }
 
   start() {
     this.connection.listen();
   }
-
-  // protected getFoldingRanges(params: FoldingRangeRequestParam): FoldingRange[] {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     if (!document) {
-  //         return [];
-  //     }
-  //     return this.jsonService.getFoldingRanges(document);
-  // }
-
-  // protected findDocumentColors(params: DocumentColorParams): Thenable<ColorInformation[]> {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     if (!document) {
-  //         return Promise.resolve([]);
-  //     }
-  //     const jsonDocument = this.getJSONDocument(document);
-  //     return this.jsonService.findDocumentColors(document, jsonDocument);
-  // }
-
-  // protected getColorPresentations(params: ColorPresentationParams): ColorPresentation[] {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     if (!document) {
-  //         return [];
-  //     }
-  //     const jsonDocument = this.getJSONDocument(document);
-  //     return this.jsonService.getColorPresentations(document, jsonDocument, params.color, params.range);
-  // }
-
-  // protected codeAction(params: CodeActionParams): Command[] {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     if (!document) {
-  //         return [];
-  //     }
-  //     return [{
-  //         title: "Upper Case Document",
-  //         command: "json.documentUpper",
-  //         // Send a VersionedTextDocumentIdentifier
-  //         arguments: [{
-  //             ...params.textDocument,
-  //             version: document.version
-  //         }]
-  //     }];
-  // }
-
-  // protected format(params: DocumentRangeFormattingParams): TextEdit[] {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     return document ? this.jsonService.format(document, params.range, params.options) : [];
-  // }
-
-  // protected findDocumentSymbols(params: any): SymbolInformation[] {
-  //     const document = this.documents.get(params.textDocument.uri);
-  //     if (!document) {
-  //         return [];
-  //     }
-  //     const jsonDocument = this.getJSONDocument(document);
-  //     return this.jsonService.findDocumentSymbols(document, jsonDocument);
-  // }
-
-  // protected executeCommand(params: ExecuteCommandParams): any {
-  //     if (params.command === "json.documentUpper" && params.arguments) {
-  //         const versionedTextDocumentIdentifier = params.arguments[0];
-  //         const document = this.documents.get(versionedTextDocumentIdentifier.uri);
-  //         if (document) {
-  //             this.connection.workspace.applyEdit({
-  //                 documentChanges: [{
-  //                     textDocument: versionedTextDocumentIdentifier,
-  //                     edits: [{
-  //                         range: {
-  //                             start: { line: 0, character: 0 },
-  //                             end: { line: Number.MAX_SAFE_INTEGER, character: Number.MAX_SAFE_INTEGER }
-  //                         },
-  //                         newText: document.getText().toUpperCase()
-  //                     }]
-  //                 }]
-  //             });
-  //         }
-  //     }
-  // }
 
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
     const document = this.documents.get(params.textDocument.uri);
@@ -247,10 +112,6 @@ export class LgServer {
     }
   }
 
-  // protected resolveCompletion(item: CompletionItem): Thenable<CompletionItem> {
-  //     return this.jsonService.doResolve(item);
-  // }
-
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -281,7 +142,6 @@ export class LgServer {
     });
 
     return Promise.resolve({ isIncomplete: true, items: completionList });
-    //return this.jsonService.doComplete(document, params.position, jsonDocument);
   }
 
   protected validate(document: TextDocument): void {
@@ -308,10 +168,7 @@ export class LgServer {
       this.cleanDiagnostics(document);
       return;
     }
-    //const jsonDocument = this.getJSONDocument(document);
-    // this.jsonService.doValidation(document, jsonDocument).then(diagnostics =>
-    //     this.sendDiagnostics(document, diagnostics)
-    // );
+
     let text = document.getText();
     const staticChercher = new lg.StaticChecker();
     const lgDiags = staticChercher.checkText(text, '', lg.ImportResolver.fileResolver);

@@ -1,7 +1,3 @@
-/* --------------------------------------------------------------------------------------------
- * Copyright (c) 2018 TypeFox GmbH (http://www.typefox.io). All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- * ------------------------------------------------------------------------------------------ */
 import * as path from 'path';
 import * as rpc from 'vscode-ws-jsonrpc';
 import * as server from 'vscode-ws-jsonrpc/lib/server';

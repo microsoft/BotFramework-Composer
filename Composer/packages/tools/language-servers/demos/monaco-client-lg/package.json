@@ -4,9 +4,9 @@
   "version": "0.10.0",
   "scripts": {
     "build": "webpack",
-    "test": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
+    "start:demo": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
     "start:client": "webpack-dev-server",
-    "start:server": "ts-node ./src/server_launcher.ts"
+    "start:server": "ts-node ./src/server.ts"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
