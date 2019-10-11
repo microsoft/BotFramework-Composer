@@ -20,7 +20,7 @@ COPY packages/extensions/visual-designer/package.json ./packages/extensions/visu
 RUN yarn install
 
 COPY . .
-RUN yarn build
+RUN yarn build:prod
 
 # use a multi-stage build to reduce the final image size
 FROM node:10-alpine

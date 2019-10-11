@@ -36,7 +36,7 @@ export const VisualEditorAPI = (() => {
 
   return {
     hasElementFocused: () => visualEditorFrameAPI.invoke('hasElementFocused'),
-    hasElementSelected: () => visualEditorFrameAPI.invoke('hasElementSelected'),
+    hasElementSelected: () => visualEditorFrameAPI.invoke('hasElementSelected').catch(() => false),
     copySelection: () => visualEditorFrameAPI.invoke('copySelection'),
     cutSelection: () => visualEditorFrameAPI.invoke('cutSelection'),
     deleteSelection: () => visualEditorFrameAPI.invoke('deleteSelection'),
