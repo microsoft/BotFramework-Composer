@@ -165,11 +165,6 @@ export class LuPublisher {
     });
   };
 
-  // private _getSettingPath = (config: ILuisConfig | null) => {
-  //   if (config === null) return '';
-  //   return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
-  // };
-
   private _getConfig = (luFiles: LUFile[]) => {
     const luConfig: any = { ...this.config };
     luConfig.models = [];

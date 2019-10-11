@@ -296,6 +296,7 @@ export class BotProject {
     await this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
     const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);
