@@ -2397,10 +2397,18 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.9.0", "@types/react@^16.9.2":
+"@types/react@*", "@types/react@16.9.0":
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.0.tgz#27434f16d889a335eb4626d1f1e67eda54039e5b"
   integrity sha512-eOct1hyZI9YZf/eqNlYu7jxA9qyTw1EGXruAJhHhBDBpc00W0C1vwlnh+hkOf7UFZkNK+UxnFBpwAZe3d7XJhQ==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@^16.9.2":
+  version "16.9.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/react/-/@types/react-16.9.5.tgz#079dabd918b19b32118c25fd00a786bb6d0d5e51"
+  integrity sha1-B52r2RixmzIRjCX9AKeGu20NXlE=
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -5120,6 +5128,15 @@ botbuilder-expression-parser@^4.5.9:
 "botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz":
   version "4.6.6"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz#2c699f475c05492239d83ab0863c8c85d369a284"
+  dependencies:
+    antlr4ts "0.5.0-alpha.1"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
+    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz"
+    lodash "^4.17.11"
+
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz":
+  version "4.6.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz#24367ee35e33efdae7a31e390ba7d19a7d9166da"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
