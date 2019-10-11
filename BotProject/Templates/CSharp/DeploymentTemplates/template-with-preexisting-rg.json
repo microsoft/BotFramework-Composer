@@ -103,9 +103,13 @@
             "type": "string",
             "defaultValue": "[concat(resourceGroup().name, '-luis')]"
         },
-        "luisServiceSku": {
+        "luisServiceAuthoringSku": {
             "type": "string",
             "defaultValue": "F0"
+        },
+        "luisServiceRunTimeSku": {
+            "type": "string",
+            "defaultValue": "S0"
         },
         "luisServiceLocation": {
             "type": "string",
@@ -121,7 +125,8 @@
         "webAppName": "[if(empty(parameters('newWebAppName')), parameters('botId'), parameters('newWebAppName'))]",
         "siteHost": "[concat(variables('webAppName'), '.azurewebsites.net')]",
         "botEndpoint": "[concat('https://', variables('siteHost'), '/api/messages')]",
-        "storageAccountName": "[toLower(take(replace(replace(parameters('storageAccountName'), '-', ''), '_', ''), 24))]"
+        "storageAccountName": "[toLower(take(replace(replace(parameters('storageAccountName'), '-', ''), '_', ''), 24))]",
+        "LuisAuthoringAccountName": "[concat(parameters('luisServiceName'), '-Authoring')]"
     },
     "resources": [
         {
@@ -238,14 +243,25 @@
             "condition": "[parameters('useStorage')]"
         },
         {
-            "comments": "Cognitive service key for all LUIS apps.",
+            "comments": "Cognitive service authoring key for all LUIS apps.",
+            "apiVersion": "2017-04-18",
+            "name": "[variables('LuisAuthoringAccountName')]",
+            "location": "[parameters('luisServiceLocation')]",
+            "type": "Microsoft.CognitiveServices/accounts",
+            "kind": "LUIS.Authoring",
+            "sku": {
+                "name": "[parameters('luisServiceAuthoringSku')]"
+            }
+        },
+        {
+            "comments": "Cognitive service endpoint key for all LUIS apps.",
             "type": "Microsoft.CognitiveServices/accounts",
             "kind": "LUIS",
             "apiVersion": "2017-04-18",
             "name": "[parameters('luisServiceName')]",
             "location": "[parameters('luisServiceLocation')]",
             "sku": {
-                "name": "[parameters('luisServiceSku')]"
+                "name": "[parameters('luisServiceRunTimeSku')]"
             }
         }
     ],
@@ -275,7 +291,9 @@
         "luis": {
             "type": "object",
             "value": {
-                "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]"
+                "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]",
+                "authoringKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1]",
+                "region": "[parameters('luisServiceLocation')]"
             }
         }
     }
