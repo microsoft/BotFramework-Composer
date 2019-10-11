@@ -2,12 +2,12 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-16T20:14:36.220Z",
-    "updatedAt": "2019-07-16T20:15:16.280Z",
+    "updatedAt": "2019-10-09T22:39:10.418Z",
     "id": "479285"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "generator": "common.lg",
-  "$schema": "../../app.schema",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -110,15 +110,31 @@
               "choices": [
                 {
                   "value": "shopping",
-                  "synonyms": ["1", "first", "shopping", "first one"]
+                  "synonyms": [
+                    "1",
+                    "first",
+                    "shopping",
+                    "first one"
+                  ]
                 },
                 {
                   "value": "grocery",
-                  "synonyms": ["2", "second", "grocery", "second one"]
+                  "synonyms": [
+                    "2",
+                    "second",
+                    "grocery",
+                    "second one"
+                  ]
                 },
                 {
                   "value": "todo",
-                  "synonyms": ["3", "third", "todo", "third one", "to do"]
+                  "synonyms": [
+                    "3",
+                    "third",
+                    "todo",
+                    "third one",
+                    "to do"
+                  ]
                 }
               ],
               "appendChoices": true,
@@ -204,5 +220,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
