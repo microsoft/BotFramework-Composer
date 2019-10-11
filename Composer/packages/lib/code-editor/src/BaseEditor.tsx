@@ -29,7 +29,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
-  codeRange?: ICodeRange | undefined;
+  codeRange?: ICodeRange | undefined | -1;
 }
 
 export function BaseEditor(props: BaseEditorProps) {
@@ -74,6 +74,17 @@ export function BaseEditor(props: BaseEditorProps) {
       // Tips, monaco lineNumber start from 1
       const model = editor.getModel();
       const lineCount = model && model.getLineCount();
+
+      // -1 is end line of file
+      if (codeRange === -1) {
+        editor.setHiddenAreas([
+          {
+            startLineNumber: 1,
+            endLineNumber: lineCount - 1,
+          },
+        ]);
+        return;
+      }
       const hiddenRanges = [
         {
           startLineNumber: 1,
