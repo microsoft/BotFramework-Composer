@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
@@ -12,7 +12,7 @@ export interface RichEditorProps extends BaseEditorProps {
 }
 
 export function RichEditor(props: RichEditorProps) {
-  const { errorMsg, helpURL, placeholder, hidePlaceholder = false } = props;
+  const { errorMsg, helpURL, placeholder, hidePlaceholder = false, ...monacoProps } = props;
   const isInvalid = !!errorMsg;
 
   const errorHelp = formatMessage.rich(
@@ -27,6 +27,12 @@ export function RichEditor(props: RichEditorProps) {
     }
   );
 
+  const baseEditor = <BaseEditor {...monacoProps} placeholder={hidePlaceholder ? undefined : placeholder} />;
+  // CodeRange editing require an non-controled/refresh component, so here make it memoed
+  const memoEditor = useMemo(() => {
+    return baseEditor;
+  }, []);
+
   return (
     <Fragment>
       <div
@@ -37,7 +43,7 @@ export function RichEditor(props: RichEditorProps) {
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
       >
-        <BaseEditor {...props} placeholder={hidePlaceholder ? undefined : placeholder} />
+        {props.codeRange ? memoEditor : baseEditor}
       </div>
       {isInvalid ? (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>

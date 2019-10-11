@@ -1,4 +1,5 @@
 import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
+import { get } from 'lodash';
 
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile, LGTemplate } from '../interface';
@@ -46,7 +47,15 @@ export class LGIndexer {
   public parse(content: string, id: string): LGTemplate[] {
     const resource = LGParser.parse(content, id);
     const templates = resource.Templates.map(t => {
-      return { Name: t.Name, Body: t.Body, Parameters: t.Parameters };
+      return {
+        Name: t.Name,
+        Body: t.Body,
+        Parameters: t.Parameters,
+        Range: {
+          startLineNumber: get(t, 'ParseTree._start._line', 0),
+          endLineNumber: get(t, 'ParseTree._stop._line', 0),
+        },
+      };
     });
     return templates;
   }

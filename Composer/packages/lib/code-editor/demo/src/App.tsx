@@ -17,8 +17,8 @@ export default function App() {
   > ${LU_HELP}`;
 
   const codeRange = {
-    startLineNumber: 1,
-    endLineNumber: 2,
+    startLineNumber: 2,
+    endLineNumber: 3,
   };
 
   return (

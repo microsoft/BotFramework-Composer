@@ -23,7 +23,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
-  codeRange?: ICodeRange;
+  codeRange?: ICodeRange | undefined;
 }
 
 export function BaseEditor(props: BaseEditorProps) {
@@ -31,6 +31,7 @@ export function BaseEditor(props: BaseEditorProps) {
   const options = Object.assign({ folding: !codeRange }, defaultOptions, props.options);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<MonacoEditor>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
 
   const updateRect = throttle(() => {
@@ -57,14 +58,13 @@ export function BaseEditor(props: BaseEditorProps) {
     updateRect();
   }, []);
 
-  const editorDidMount = (editor, monaco) => {
-    if (typeof props.editorDidMount === 'function') {
-      props.editorDidMount.apply(null, [editor, monaco]);
-    }
-    if (codeRange) {
+  const updateEditorCodeRangeUI = () => {
+    if (codeRange && editorRef.current) {
+      const editor: any = editorRef.current.editor;
       // subtraction a hiddenAreaRange from CodeRange
       // Tips, monaco lineNumber start from 1
-      const lineCount = editor.getModel().getLineCount();
+      const model = editor.getModel();
+      const lineCount = model && model.getLineCount();
       const hiddenRanges = [
         {
           startLineNumber: 1,
@@ -82,9 +82,18 @@ export function BaseEditor(props: BaseEditorProps) {
       if (codeRange.endLineNumber === lineCount) {
         hiddenRanges.pop();
       }
-
       editor.setHiddenAreas(hiddenRanges);
     }
+  };
+  useEffect(() => {
+    updateEditorCodeRangeUI();
+  });
+
+  const editorDidMount = (editor, monaco) => {
+    if (typeof props.editorDidMount === 'function') {
+      props.editorDidMount.apply(null, [editor, monaco]);
+    }
+    updateEditorCodeRangeUI();
   };
 
   return (
@@ -99,10 +108,11 @@ export function BaseEditor(props: BaseEditorProps) {
       <MonacoEditor
         {...props}
         {...rect}
+        ref={editorRef}
+        editorDidMount={editorDidMount}
         value={value || placeholder}
         onChange={onChange}
         options={options}
-        editorDidMount={editorDidMount}
       />
     </div>
   );
