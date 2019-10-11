@@ -122,10 +122,10 @@ const ContentKeyByTypes: {
   [ObiTypes.TraceActivity]: {
     label: 'valueProperty',
   },
-  [ObiTypes.LogStep]: {
+  [ObiTypes.LogAction]: {
     label: 'text',
   },
-  [ObiTypes.EditSteps]: {
+  [ObiTypes.EditActions]: {
     label: 'changeType',
   },
 };
@@ -173,7 +173,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
         icon={icon}
         label={label}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, { id });
         }}
       />
     );

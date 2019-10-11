@@ -11,6 +11,7 @@ import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/Eleme
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
+import { MenuTypes } from '../constants/MenuTypes';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -29,6 +30,7 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
     <EdgeMenu
       onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
       data-testid="StepGroupAdd"
+      id={`${id}[0]`}
     />
   ) : (
     <StepGroup

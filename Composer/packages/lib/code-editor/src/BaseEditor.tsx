@@ -1,8 +1,9 @@
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import MonacoEditor, { MonacoEditorProps } from '@bfcomposer/react-monaco-editor';
 import throttle from 'lodash.throttle';
 
-const defaultOptions = {
+const defaultOptions: monacoEditor.editor.IEditorConstructionOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
   fontFamily: 'Segoe UI',
@@ -12,6 +13,11 @@ const defaultOptions = {
   minimap: {
     enabled: false,
   },
+  lineDecorationsWidth: 10,
+  lineNumbersMinChars: 0,
+  glyphMargin: false,
+  folding: false,
+  renderLineHighlight: 'none',
 };
 
 interface ICodeRange {
@@ -42,6 +48,9 @@ export function BaseEditor(props: BaseEditorProps) {
         requestAnimationFrame(() => {
           setRect({ height, width });
         });
+      } else if (height + width === 0) {
+        // try again
+        setTimeout(updateRect, 50);
       }
     }
   }, 0);

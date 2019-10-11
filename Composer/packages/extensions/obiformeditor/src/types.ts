@@ -17,13 +17,16 @@ export interface FormMemory {
 
 export interface DialogInfo {
   id: string;
+  isRoot: boolean;
   displayName: string;
+  content: MicrosoftAdaptiveDialog;
+  diagnostics: string[];
+  referredDialogs: string[];
   lgFile: string;
   luFile: string;
-  lgTemplates: LgTemplate[];
-  diagnostics: any[];
-  isRoot: boolean;
-  content: MicrosoftAdaptiveDialog;
+  luIntents: string[];
+  lgTemplates: string[];
+  relativePath: string;
 }
 
 export interface Intent {
@@ -75,7 +78,7 @@ export interface ShellApi {
   getDialogs: <T = any>() => Promise<T>;
   saveData: <T = any>(newData: T, updatePath: string) => Promise<void>;
   navTo: (path: string) => Promise<void>;
-  onFocusSteps: (stepIds: string[]) => Promise<void>;
+  onFocusSteps: (stepIds: string[], focusedTab?: string) => Promise<void>;
   onFocusEvent: (eventId: string) => Promise<void>;
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (id: string, content: string) => Promise<void>;

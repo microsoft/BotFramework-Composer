@@ -26,7 +26,7 @@ describe('measureJsonBoundary', () => {
     expect(measureJsonBoundary({ $type: ObiTypes.LoopIndicator })).toEqual(
       new Boundary(LoopIconSize.width, LoopIconSize.height)
     );
-    expect(measureJsonBoundary({ $type: ObiTypes.LogStep })).toEqual(
+    expect(measureJsonBoundary({ $type: ObiTypes.LogAction })).toEqual(
       new Boundary(InitNodeSize.width, InitNodeSize.height)
     );
   });

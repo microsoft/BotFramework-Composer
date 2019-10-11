@@ -4,10 +4,11 @@ import axios from 'axios';
 import archiver from 'archiver';
 import FormData from 'form-data';
 
-import BotProjectService from '../../services/project';
+import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 
-import { IBotConnector, BotStatus } from './interface';
+import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+
 export class CSharpBotConnector implements IBotConnector {
   private endpoint: string;
   constructor(endpoint: string) {
@@ -16,7 +17,7 @@ export class CSharpBotConnector implements IBotConnector {
 
   public status: BotStatus = BotStatus.NotConnected;
 
-  connect = async () => {
+  connect = async (_: BotEnvironments, __: string) => {
     // confirm bot runtime is listening here
     try {
       await axios.get(this.endpoint + '/api/admin');
@@ -25,28 +26,26 @@ export class CSharpBotConnector implements IBotConnector {
     }
 
     this.status = BotStatus.NotConnected;
+
+    return `${this.endpoint}/api/messages`;
   };
 
   sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
-    if (BotProjectService.currentBotProject === undefined) {
+    const currentProject = BotProjectService.getCurrentBotProject();
+    if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = BotProjectService.currentBotProject.dir;
-    await BotProjectService.currentBotProject.luPublisher.setAuthoringKey(config.luis.authoringKey);
-    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
+    const dir = currentProject.dir;
+    const luisConfig = currentProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
 
-    if (
-      luisConfig &&
-      luisConfig.authoringKey !== null &&
-      !(await BotProjectService.currentBotProject.checkLuisPublished())
-    ) {
+    if (luisConfig && luisConfig.authoringKey !== null && !(await currentProject.checkLuisPublished())) {
       throw new Error('Please publish your Luis models');
     }
 
@@ -57,12 +56,14 @@ export class CSharpBotConnector implements IBotConnector {
       );
     }
 
-    config = { ...(await BotProjectService.currentBotProject.settingManager.get()), ...config };
+    config = {
+      ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
+      ...config,
+    };
     if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
-      console.log(form);
       await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');

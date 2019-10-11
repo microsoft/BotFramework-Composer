@@ -1,0 +1,22 @@
+.ToggleEditor .BaseField {
+  margin-top: 5px;
+}
+.ToggleEditor .ToggleEditorContent {
+  margin: 0 -18px -26px -18px; /* offset ObjectFieldTemplate padding */
+}
+.ToggleEditor .ToggleEditorContent .ObjectItemContainer:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.LuFileSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.LuFileSelector .LuFileSelectorLabel {
+  flex-grow: 0;
+}
+.LuFileSelector .LuFileSelectorFile {
+  flex: 1;
+  margin: 0 10px;
+}

@@ -6,9 +6,10 @@ import debounce from 'lodash.debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { seedNewDialog } from 'shared-menus';
 
 import Example from '../../src';
-import { ShellApi, LuFile } from '../../src/types';
+import { ShellApi, LuFile, DialogInfo } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -18,7 +19,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/neat.css';
 
-import './styles.scss';
+import './styles.css';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -37,9 +38,7 @@ const cmOptions = {
   smartIndent: true,
 };
 
-const defaultData = {
-  $type: 'Microsoft.TextInput',
-};
+const defaultData = seedNewDialog('Microsoft.TextInput');
 
 const defaultMemory = {
   user: {
@@ -50,52 +49,37 @@ const defaultMemory = {
   turn: {},
 };
 
-const dialogFiles = [
-  {
-    id: 'Main',
-    displayName: 'MyCustomDialog1',
-    name: 'Main.dialog',
-    relativePath: 'Main/Main.dialog',
-    path: '/Some/Cool/Path/Main/Main.dialog',
-    isRoot: true,
+function createDialogInfo(id: string, content: Partial<MicrosoftAdaptiveDialog> = {}, customName?: string): DialogInfo {
+  return {
+    id,
+    displayName: customName || id,
+    relativePath: `${id}/${id}.dialog`,
+    isRoot: id === 'Main',
     content: {
       $type: 'Microsoft.AdaptiveDialog',
+      events: [],
+      ...content,
+    },
+    lgFile: '',
+    luFile: '',
+    diagnostics: [],
+    referredDialogs: [],
+    luIntents: [],
+    lgTemplates: [],
+  };
+}
+
+const dialogFiles: DialogInfo[] = [
+  createDialogInfo(
+    'Main',
+    {
       recognizer: 'Main',
     },
-  },
-  {
-    id: 'MyCustomDialog2',
-    displayName: 'MyCustomDialog2',
-    name: 'MyCustomDialog2.dialog',
-    relativePath: 'MyCustomDialog2.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog2.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
-  {
-    id: 'MyCustomDialog3',
-    displayName: 'MyCustomDialog3',
-    name: 'MyCustomDialog3.dialog',
-    relativePath: 'MyCustomDialog3.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog3.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
-  {
-    id: 'MyCustomDialog4',
-    displayName: 'MyCustomDialog4',
-    name: 'MyCustomDialog4.dialog',
-    relativePath: 'MyCustomDialog4.dialog',
-    path: '/Some/Cool/Path/MyCustomDialog4.dialog',
-    isRoot: false,
-    content: {
-      $type: 'Microsoft.AdaptiveDialog',
-    },
-  },
+    'MyCustomDialog1'
+  ),
+  createDialogInfo('MyCustomDialog2'),
+  createDialogInfo('MyCustomDialog3'),
+  createDialogInfo('MyCustomDialog4'),
 ];
 
 const luFiles: LuFile[] = [
@@ -209,12 +193,14 @@ const Demo: React.FC = () => {
   const [memorySelected, setMemorySelected] = useState(false);
   const [editorSchemaSelected, setEditorSchemaSelected] = useState(false);
   const [editorSchemaData, setEditorSchemaData] = useState(JSON.stringify(editorSchema, null, 2));
-  const [editorSchemaFormData, setEditorSchemaFormData] = useState({ content: editorSchema });
+  const [editorSchemaFormData, setEditorSchemaFormData] = useState({
+    content: editorSchema,
+  });
   const [editorSchemaValid, setEditorSchemaValid] = useState(true);
   const [formData, setFormData] = useState(getDefaultData());
   const [memoryFormData, setMemoryFormData] = useState(getDefaultMemory());
   const [navPath, setNavPath] = useState(nanoid());
-  const debouncedOnChange = useRef(debounce(setFormData, 200)).current;
+  const debouncedOnChange = useRef(debounce(newData => setFormData(newData), 200)).current;
 
   const [isValid, setValid] = useState(true);
   const [isMemoryValid, setMemoryValid] = useState(true);
@@ -282,8 +268,14 @@ const Demo: React.FC = () => {
 
   return (
     <div className="DemoContainer">
-      <div style={{ display: 'flex', flexDirection: 'column' }} className="DemoJSONContainer">
-        <div style={{ fontSize: '20px', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }} className="DemoJSONContainer">
+        <div
+          style={{
+            fontSize: '20px',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <div>
             <DefaultButton
               data-automation-id="test"
@@ -312,7 +304,9 @@ const Demo: React.FC = () => {
               style={{ width: '200px' }}
               title="Dialog Types"
               menuProps={{
-                items: buildDialogOptions({ onClick: (_, item) => setFormData(item.data) }),
+                items: buildDialogOptions({
+                  onClick: (_, item) => setFormData(item.data),
+                }),
                 directionalHint: DirectionalHint.bottomAutoEdge,
               }}
             >
@@ -378,6 +372,7 @@ const Demo: React.FC = () => {
           lgFiles={lgFiles}
           currentDialog={dialogFiles[0]}
           isRoot={true}
+          focusedSteps={[]}
         />
       </div>
     </div>

@@ -3,6 +3,8 @@
 **/dist
 **/build
 **/es
+**/server/data.json
+**/server/tmp.zip
 # not ignore all lib folder because packages/lib, so probably we should rename that to libs
 packages/lib/*/lib
 packages/extensions/*/lib

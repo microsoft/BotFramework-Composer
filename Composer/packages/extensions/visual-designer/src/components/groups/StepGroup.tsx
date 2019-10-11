@@ -6,6 +6,7 @@ import { GraphNode } from '../../models/GraphNode';
 import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { MenuTypes } from '../../constants/MenuTypes';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
@@ -55,7 +56,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         ? nodes.map(x => (
             <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
               <StepRenderer
-                key={`stepGroup/${x.id}]`}
+                key={`stepGroup/${x.id}`}
                 id={x.id}
                 data={x.data}
                 onEvent={onEvent}
@@ -73,6 +74,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         <EdgeMenu
           onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
           data-testid="StepGroupAdd"
+          id={`${id}[0]`}
         />
       </OffsetContainer>
       {nodes
@@ -88,6 +90,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
               <EdgeMenu
                 onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}
                 data-testid="StepGroupAdd"
+                id={`${id}[${idx + 1}]`}
               />
             </OffsetContainer>
           ))

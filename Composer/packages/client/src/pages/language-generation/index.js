@@ -174,6 +174,9 @@ export const LGPage = props => {
                       },
                     },
                   },
+                  chevronButton: {
+                    backgroundColor: 'transparent',
+                  },
                 }}
                 selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useMemo } from 'react';
+import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
 import { debounce, isEqual, get } from 'lodash';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
@@ -28,6 +28,7 @@ export interface ShellData {
   dialogId: string;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab?: string;
 }
 
 const apiClient = new ApiClient();
@@ -65,16 +66,20 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
+  // HACK: `onSelect` should actually change some states
+  // TODO: (leilei, ze) fix it when refactoring shell state management.
+  const [, forceUpdate] = useState();
+
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
-  const updateDialog = useDebouncedFunc(actions.updateDialog);
+  const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, selected, focused } = designPageLocation;
+  const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -101,6 +106,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
+    apiClient.registerApi('onSelect', onSelect);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -135,7 +141,7 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -151,7 +157,7 @@ export const ShellApi: React.FC = () => {
     if (sourceWindow === VISUAL_EDITOR && dialogId !== '') {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
-      return getDialogData(dialogsMap, dialogId, focused || '');
+      return getDialogData(dialogsMap, dialogId, focused || selected || '');
     }
 
     return '';
@@ -170,7 +176,8 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
-      focusedSteps: focused ? [focused] : [],
+      focusedSteps: focused ? [focused] : selected ? [selected] : [],
+      focusedTab: promptTab,
     };
   }
 
@@ -278,12 +285,6 @@ export const ShellApi: React.FC = () => {
     }
   }
 
-  function flushUpdates() {
-    if (updateDialog.flush) {
-      updateDialog.flush();
-    }
-  }
-
   function cleanData() {
     const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
     if (!isEqual(dialogsMap[dialogId], cleanedData)) {
@@ -293,7 +294,6 @@ export const ShellApi: React.FC = () => {
       };
       updateDialog(payload);
     }
-    flushUpdates();
   }
 
   function navTo({ path }) {
@@ -306,13 +306,17 @@ export const ShellApi: React.FC = () => {
     actions.selectTo(subPath);
   }
 
-  function focusSteps({ subPaths = [] }, event) {
+  function focusSteps({ subPaths = [], fragment }, event) {
     cleanData();
     let dataPath: string = subPaths[0];
-    if (event.source.name === FORM_EDITOR && focused) {
+    if (event.source.name === FORM_EDITOR && focused && dataPath !== focused) {
       dataPath = `${focused}.${dataPath}`;
     }
-    actions.focusTo(dataPath);
+    actions.focusTo(dataPath, fragment);
+  }
+
+  function onSelect(ids) {
+    forceUpdate(ids);
   }
 
   return null;

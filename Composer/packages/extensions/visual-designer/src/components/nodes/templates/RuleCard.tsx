@@ -8,6 +8,7 @@ import { ObiFieldNames } from '../../../constants/ObiFieldNames';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 
 import { IconCard } from './IconCard';
@@ -25,7 +26,7 @@ const getDirectJumpDialog = data => {
 
 export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
-    return onEvent(NodeEventTypes.Focus, id);
+    return onEvent(NodeEventTypes.Focus, { id });
   };
 
   const openNode = () => {
@@ -110,7 +111,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       trigger={trigger}
       summary={summary}
       childDialog={dialog}
-      icon="Play"
+      icon={ElementIcon.Play}
       onClick={onCardBodyClick}
       onChildDialogClick={openChildDialog}
     />

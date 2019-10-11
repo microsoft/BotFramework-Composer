@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup } from 'shared-menus';
+import { DialogGroup, PromptTab } from 'shared-menus';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
 import { getUserAnswersTitle } from '../utils';
@@ -71,10 +72,10 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
     <FormCard
       nodeColors={NodeColors[DialogGroup.INPUT]}
       header={getUserAnswersTitle(data._type)}
-      icon={'User'}
+      icon={ElementIcon.User}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, id);
+        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_ANSWERS });
       }}
       styles={{ width: boundary.width, height: boundary.height }}
     >

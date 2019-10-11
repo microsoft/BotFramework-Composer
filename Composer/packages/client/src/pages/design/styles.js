@@ -61,12 +61,11 @@ export const editorWrapper = css`
 `;
 
 export const visualPanel = css`
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
   border-right: 1px solid #c4c4c4;
-  min-height: 80vh;
+  position: relative;
 `;
 
 export const visualEditor = css`
@@ -76,12 +75,10 @@ export const visualEditor = css`
 `;
 
 export const formEditor = css`
-  height: 100%;
   max-width: 600px;
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  min-height: 80vh;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
@@ -102,4 +99,29 @@ export const breadcrumbClass = mergeStyleSets({
 
 export const deleteDialogContent = css`
   color: #000;
+`;
+
+export const middleTriggerContainer = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e5e5e5;
+  width: 100%;
+  margin-top: 48px;
+  height: calc(100% - 48px);
+  position: absolute;
+`;
+
+export const middleTriggerElements = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 18px;
+  line-height: 24px;
+  color: #828282;
+`;
+
+export const triggerButton = css`
+  font-size: 12px;
+  color: #0078d4;
 `;

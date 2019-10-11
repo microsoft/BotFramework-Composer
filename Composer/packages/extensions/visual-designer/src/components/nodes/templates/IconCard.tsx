@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
+import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { Icon } from '../../decorations/icon';
 
 const boxWidth = 240;
@@ -107,7 +108,7 @@ export const IconCard = ({
           }}
         >
           <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-            <Icon icon="MessageBot" color="#656565" size={20} />
+            <Icon icon={ElementIcon.MessageBot} color="#656565" size={20} />
           </div>
           <div
             css={{

@@ -88,7 +88,6 @@ module.exports = {
               ],
             },
           },
-          { loader: 'sass-loader' },
         ],
       },
     ],
@@ -114,7 +113,7 @@ module.exports = {
     }),
     new MonacoWebpackPlugin({
       // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['markdown', 'botbuilderlg'],
+      languages: ['markdown', 'botbuilderlg', 'json'],
     }),
   ],
 };

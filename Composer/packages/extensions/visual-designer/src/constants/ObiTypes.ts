@@ -43,14 +43,14 @@ export const ObiTypes = {
   RepeatDialog: 'Microsoft.RepeatDialog',
   EndTurn: 'Microsoft.EndTurn',
 
-  EditSteps: 'Microsoft.EditSteps',
+  EditActions: 'Microsoft.EditActions',
 
   EmitEvent: 'Microsoft.EmitEvent',
 
   HttpRequest: 'Microsoft.HttpRequest',
   CodeStep: 'Microsoft.CodeStep',
 
-  LogStep: 'Microsoft.LogStep',
+  LogAction: 'Microsoft.LogAction',
   TraceActivity: 'Microsoft.TraceActivity',
 
   // virtual

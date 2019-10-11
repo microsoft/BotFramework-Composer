@@ -38,6 +38,8 @@ export default function CodeEditor(props) {
       options={{
         lineNumbers: 'on',
         minimap: 'on',
+        lineDecorationsWidth: undefined,
+        lineNumbersMinChars: false,
       }}
       codeRange={codeRange}
       errorMsg={errorMsg}

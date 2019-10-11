@@ -1,27 +1,29 @@
 import React from 'react';
 import { Checkbox } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
-export function CheckboxWidget(props: WidgetProps) {
-  const { label, onChange, onBlur, onFocus, value, schema, ...rest } = props;
+import { BFDWidgetProps } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
+
+export function CheckboxWidget(props: BFDWidgetProps) {
+  const { onChange, onBlur, onFocus, value, label, id, schema } = props;
   const { description } = schema;
 
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center', marginTop: '14px' }}>
       <Checkbox
-        {...rest}
+        id={id}
         checked={Boolean(value)}
         onChange={(_, checked?: boolean) => onChange(checked)}
-        onBlur={() => onBlur(rest.id, Boolean(value))}
-        onFocus={() => onFocus(rest.id, Boolean(value))}
-        label={label}
+        onBlur={() => onBlur && onBlur(id, Boolean(value))}
+        onFocus={() => onFocus && onFocus(id, Boolean(value))}
       />
-      {description && (
-        <span style={{ fontSize: '14px' }}>
-          <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-        </span>
-      )}
-    </>
+      <WidgetLabel label={label} description={description} id={id} inline />
+    </div>
   );
 }
+
+CheckboxWidget.defaultProps = {
+  schema: {},
+  options: {},
+};

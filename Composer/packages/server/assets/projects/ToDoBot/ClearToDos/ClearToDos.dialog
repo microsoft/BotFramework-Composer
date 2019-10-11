@@ -1,7 +1,7 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+    "actions": [
         {
             "$type": "Microsoft.EditArray",
             "changeType": "Clear",
@@ -11,13 +11,13 @@
         {
             "$type": "Microsoft.IfCondition",
             "condition": "dialog.cleared",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "Successfully cleared items in the Todo List."
                 }
             ],
-            "elseSteps": [
+            "elseActions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "You don't have any item in the Todo List."
