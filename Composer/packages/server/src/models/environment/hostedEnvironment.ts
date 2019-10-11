@@ -9,7 +9,7 @@ export class HostedEnvironment implements IEnvironment {
   private config: IEnvironmentConfig;
   private settingManager: HostedSettingManager;
   private botConnector: SelfHostBotConnector;
-  private defaultSlot: string = 'integration';
+  private defaultSlot = 'integration';
   private slots: string[] = ['integration', 'production'];
 
   constructor(config: IEnvironmentConfig, skipLoad?: boolean) {

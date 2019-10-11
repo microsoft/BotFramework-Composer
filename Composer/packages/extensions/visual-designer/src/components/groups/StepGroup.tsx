@@ -1,12 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useMemo, useEffect, FunctionComponent } from 'react';
+import { useState, useMemo, useEffect, FunctionComponent } from 'react';
 
 import { GraphNode } from '../../models/GraphNode';
 import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { MenuTypes } from '../../constants/MenuTypes';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
