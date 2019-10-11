@@ -12,9 +12,9 @@ const KeyNameByModifierAttr = {
 
 const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-interface NodeProps {
+interface KeyboardZoneProps {
   when: string;
-  onCommand: (action) => object | void;
+  onCommand: (action, e: KeyboardEvent) => object | void;
 }
 
 const isMac = () => {
@@ -31,7 +31,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   return prefix;
 };
 
-export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
+export const KeyboardZone: FC<KeyboardZoneProps> = ({ when, onCommand, children }): JSX.Element => {
   const handleKeyDown = e => {
     if (overriddenKeyCodes.find(x => x === e.key)) {
       e.preventDefault();
@@ -40,7 +40,7 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
 
     const modifierPrefix = buildModifierKeyPrefix(e);
     const shortcut = modifierPrefix + e.key;
-    onCommand(mapShortcutToKeyboardCommand(shortcut));
+    onCommand(mapShortcutToKeyboardCommand(shortcut), e);
   };
 
   return (
