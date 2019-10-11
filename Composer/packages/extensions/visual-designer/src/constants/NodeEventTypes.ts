@@ -13,6 +13,6 @@ export enum NodeEventTypes {
   DeleteSelection = 'event.data.delete-selection',
   AppendSelection = 'event.data.paste-selection--keyboard',
   InsertSelection = 'event.data.paste-selection--menu',
-  Undo = 'event.data.undo',
-  Redo = 'event.data.redo',
+  Undo = 'event.operation.undo',
+  Redo = 'event.operation.redo',
 }
