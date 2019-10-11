@@ -47,7 +47,7 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
-  const { botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
+  const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
@@ -55,6 +55,17 @@ export const TestController: React.FC = () => {
     toStartBot && handleClick();
     startBot(false);
   }, [toStartBot]);
+
+  function isLuisConfigComplete(config) {
+    let complete = true;
+    for (const key in LuisConfig) {
+      if (config && config[LuisConfig[key]] === '') {
+        complete = false;
+        break;
+      }
+    }
+    return complete;
+  }
 
   async function handleClick() {
     const dialogErrors = dialogs.reduce<DialogInfo[]>((result, dialog) => {
@@ -78,7 +89,7 @@ export const TestController: React.FC = () => {
     const config = settings.luis;
 
     if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
-      if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
+      if (!luisPublishSucceed || !isLuisConfigComplete(config)) {
         setModalOpen(true);
       } else {
         await publishAndReload();
@@ -139,7 +150,7 @@ export const TestController: React.FC = () => {
             }}
             onClick={() =>
               openInEmulator(
-                'http://localhost:3979/api/messages', // todo: this is broken botEndpoint || 'http://localhost:3979/api/messages',
+                botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword
                   ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                   : { MicrosoftAppPassword: '', MicrosoftAppId: '' }

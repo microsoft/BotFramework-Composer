@@ -18,8 +18,8 @@ const containerStyle = {
   cursor: 'pointer',
   overflow: 'hidden',
   backgroundColor: 'white',
-  borderRadius: '2px',
-  boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
+  borderRadius: '2px 2px 0 0',
+  boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 };
 
 interface NodeProps {
@@ -79,7 +79,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
         <div
           css={{
             fontWeight: 400,
-            paddingLeft: '10px',
+            paddingLeft: '5px',
             margin: '5px',
             fontSize: '14px',
             lineHeight: '19px',
@@ -88,7 +88,16 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           }}
         >
           {icon && icon !== ElementIcon.None && (
-            <div css={{ width: 30, height: 30, display: 'flex', alignItems: 'center' }}>
+            <div
+              css={{
+                width: 30,
+                height: 30,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '5px',
+              }}
+            >
               <Icon icon={icon} color={iconColor} size={30} />
             </div>
           )}

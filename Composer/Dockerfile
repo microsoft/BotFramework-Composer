@@ -10,7 +10,7 @@ COPY yarn.lock ./packages/server/
 COPY packages/server/package.json ./packages/server/
 COPY packages/lib/package.json ./packages/lib/
 COPY packages/lib/code-editor/package.json ./packages/lib/code-editor/
-COPY packages/lib/shared-menus/package.json ./packages/lib/shared-menus/
+COPY packages/lib/shared/package.json ./packages/lib/shared/
 COPY packages/extensions/package.json ./packages/extensions/
 COPY packages/extensions/obiformeditor/package.json ./packages/extensions/obiformeditor/
 COPY packages/extensions/sample-json-editor/package.json ./packages/extensions/sample-json-editor/
@@ -20,7 +20,7 @@ COPY packages/extensions/visual-designer/package.json ./packages/extensions/visu
 RUN yarn install
 
 COPY . .
-RUN yarn build
+RUN yarn build:prod
 
 # use a multi-stage build to reduce the final image size
 FROM node:10-alpine

@@ -2,6 +2,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
+import { PromptTab } from 'shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -151,4 +152,5 @@ export interface DesignPageLocation {
   dialogId: string;
   selected: string;
   focused: string;
+  promptTab?: PromptTab;
 }

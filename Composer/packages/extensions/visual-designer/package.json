@@ -56,7 +56,7 @@
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
-    "shared-menus": "0.0.0",
+    "shared": "0.0.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.3"
   },

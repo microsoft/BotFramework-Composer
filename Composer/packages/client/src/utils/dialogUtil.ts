@@ -1,13 +1,13 @@
-import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup, SDKTypes } from 'shared-menus';
+import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared';
+import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import nanoid from 'nanoid/generate';
 import { IDropdownOption } from 'office-ui-fabric-react';
 
 import { DialogInfo } from '../store/types';
 
-import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
+import { upperCaseName } from './fileUtil';
+
 const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
@@ -42,7 +42,7 @@ export function getFriendlyName(data) {
   }
 
   if (get(data, 'intent')) {
-    return `#${get(data, 'intent')}`;
+    return `${get(data, 'intent')}`;
   }
 
   if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
@@ -50,13 +50,6 @@ export function getFriendlyName(data) {
   }
 
   return data.$type;
-}
-
-export function getNewDesigner(name: string, description: string) {
-  const timestamp = new Date().toISOString();
-  return {
-    $designer: { name, description, createdAt: timestamp, updatedAt: timestamp, id: nanoid('1234567890', 6) },
-  };
 }
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
@@ -68,6 +61,7 @@ export function insert(content, path: string, position: number | undefined, data
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
+
   const newStep = {
     $type: data.$type,
     ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),

@@ -13,7 +13,8 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "build": "yarn build:dev && yarn build:server && yarn build:client",
+    "build": "yarn build:dev",
+    "build:prod": "yarn build:lib && yarn build:extensions && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:extensions",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
@@ -23,7 +24,6 @@
     "startall": "concurrently --kill-others-on-fail \"npm:start:*\" \"npm:runtime\"",
     "start:client": "cd packages/client && yarn start",
     "start:server": "cd packages/server && yarn start",
-    "start:obieditor": "cd packages/extensions/obiformeditor && yarn start -- --no-clear",
     "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default --reporters=jest-junit",

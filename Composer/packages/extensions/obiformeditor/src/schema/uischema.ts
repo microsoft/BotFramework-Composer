@@ -1,20 +1,17 @@
+import { SDKTypes, PROMPT_TYPES } from 'shared';
+import { UiSchema } from '@bfcomposer/react-jsonschema-form';
+
 const globalHidden = ['property', 'inputBindings', 'outputBinding', 'id', 'tags'];
 
-const activityFields = {
-  prompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  unrecognizedPrompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  invalidPrompt: {
-    'ui:widget': 'TextareaWidget',
-  },
-  'ui:hidden': ['id', 'tags', 'value', 'inputBindings', 'outputBinding'],
-};
+const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
+  schemas[type] = {
+    'ui:field': 'PromptField',
+  };
+  return schemas;
+}, {});
 
-export const uiSchema = {
-  'Microsoft.AdaptiveDialog': {
+export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
+  [SDKTypes.AdaptiveDialog]: {
     recognizer: {
       'ui:field': 'RecognizerField',
     },
@@ -27,19 +24,13 @@ export const uiSchema = {
     'ui:order': ['property', 'outputBinding', 'recognizer', 'events', '*'],
     'ui:hidden': ['autoEndDialog', 'generator', ...globalHidden],
   },
-  'Microsoft.BeginDialog': {
+  [SDKTypes.BeginDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
     'ui:hidden': ['inputBindings', 'outputBinding'],
   },
-  'Microsoft.CodeStep': {
-    codeHandler: {
-      'ui:field': 'CodeField',
-    },
-    'ui:hidden': [...globalHidden],
-  },
-  'Microsoft.ConditionalSelector': {
+  [SDKTypes.ConditionalSelector]: {
     ifFalse: {
       'ui:field': 'SelectorField',
     },
@@ -48,30 +39,30 @@ export const uiSchema = {
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.EditActions': {
+  [SDKTypes.EditActions]: {
     actions: {
       'ui:field': 'StepsField',
     },
   },
-  'Microsoft.Foreach': {
+  [SDKTypes.Foreach]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'actions', '*'],
   },
-  'Microsoft.ForeachPage': {
+  [SDKTypes.ForeachPage]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'actions', '*'],
   },
-  'Microsoft.HttpRequest': {
+  [SDKTypes.HttpRequest]: {
     body: {
       'ui:field': 'JsonField',
     },
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
-  'Microsoft.IfCondition': {
+  [SDKTypes.IfCondition]: {
     actions: {
       'ui:field': 'StepsField',
     },
@@ -80,73 +71,63 @@ export const uiSchema = {
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.IfPropertyRule': {
-    conditionals: {
-      items: {
-        events: {
-          'ui:field': 'RulesField',
-        },
-      },
-    },
-    'ui:hidden': [...globalHidden],
-  },
-  'Microsoft.OnActivity': {
+  [SDKTypes.OnActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnBeginDialog': {
+  [SDKTypes.OnBeginDialog]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnConversationUpdateActivity': {
+  [SDKTypes.OnConversationUpdateActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnDialogEvent': {
+  [SDKTypes.OnDialogEvent]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['events', 'constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnEndOfConversationActivity': {
+  [SDKTypes.OnEndOfConversationActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnEvent': {
+  [SDKTypes.OnEvent]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnEventActivity': {
+  [SDKTypes.OnEventActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnHandoffActivity': {
+  [SDKTypes.OnHandoffActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnIntent': {
+  [SDKTypes.OnIntent]: {
     intent: {
       'ui:widget': 'IntentWidget',
     },
@@ -156,172 +137,62 @@ export const uiSchema = {
     'ui:order': ['intent', 'constraint', 'entities', '*'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnInvokeActivity': {
+  [SDKTypes.OnInvokeActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnMessageActivity': {
+  [SDKTypes.OnMessageActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnMessageDeleteActivity': {
+  [SDKTypes.OnMessageDeleteActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnMessageReactionActivity': {
+  [SDKTypes.OnMessageReactionActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnMessageUpdateActivity': {
+  [SDKTypes.OnMessageUpdateActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnTypingActivity': {
+  [SDKTypes.OnTypingActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.OnUnknownIntent': {
+  [SDKTypes.OnUnknownIntent]: {
     actions: {
       'ui:field': 'StepsField',
     },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.MostSpecificSelector': {
+  [SDKTypes.MostSpecificSelector]: {
     selector: {
       'ui:field': 'SelectorField',
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.TextInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  'Microsoft.NumberInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  'Microsoft.ConfirmInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'style',
-      'defaultLocale',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-    // ConfirmInput defaults to YES/NO. using confirmchoices is complex
-    // - must provide yes/no in special format along with alternatives that have to be handled
-    // TODO: Implement confirmChoices-specific widget with appropriate business events.
-    'ui:hidden': ['confirmChoices'],
-  },
-  'Microsoft.ChoiceInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    choices: {
-      items: {
-        value: {
-          'ui:options': {
-            label: false,
-          },
-        },
-      },
-    },
-    ...activityFields,
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'style',
-      'defaultLocale',
-      'choices',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  'Microsoft.OAuthInput': {
+  [SDKTypes.OAuthInput]: {
     prompt: {
       'ui:widget': 'TextareaWidget',
     },
@@ -333,42 +204,13 @@ export const uiSchema = {
     },
     'ui:order': ['connectionName', '*'],
   },
-  'Microsoft.AttachmentInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    'ui:order': [
-      'prompt',
-      'property',
-      'outputFormat',
-      'validations',
-      'unrecognizedPrompt',
-      'invalidPrompt',
-      'maxTurnCount',
-      'value',
-      'defaultValue',
-      '*',
-    ],
-  },
-  'Microsoft.ReplaceDialog': {
+  [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.Rule': {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:hidden': [...globalHidden],
-  },
-  'Microsoft.SwitchCondition': {
+  [SDKTypes.SwitchCondition]: {
     cases: {
       'ui:field': 'CasesField',
     },
@@ -377,24 +219,11 @@ export const uiSchema = {
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.SendActivity': {
+  [SDKTypes.SendActivity]: {
     activity: {
       'ui:field': 'LgEditorField',
     },
     'ui:hidden': [...globalHidden],
   },
-  'Microsoft.DateTimeInput': {
-    prompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    unrecognizedPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    invalidPrompt: {
-      'ui:widget': 'TextareaWidget',
-    },
-    defaultValue: {
-      'ui:widget': 'DateTimeWidget',
-    },
-  },
+  ...promptFieldsSchemas,
 };

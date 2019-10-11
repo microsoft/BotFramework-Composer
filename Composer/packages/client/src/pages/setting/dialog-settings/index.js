@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
@@ -31,9 +31,10 @@ const cmOptions = {
 export const DialogSettings = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings } = state;
-
+  const [value, setValue] = useState(JSON.stringify(settings, null, 2));
   const updateFormData = (editor, data, newValue) => {
     try {
+      setValue(newValue);
       const result = JSON.parse(newValue);
       try {
         actions.setSettings(botName, result);
@@ -46,7 +47,7 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <CodeMirror value={JSON.stringify(settings, null, 2)} onBeforeChange={updateFormData} options={cmOptions} />
+    <CodeMirror value={value} onBeforeChange={updateFormData} options={cmOptions} />
   ) : (
     <div>Data Loading...</div>
   );

@@ -10,6 +10,7 @@ const placeholder = `> To learn more about the LG file format, read the document
 export function LgEditor(props: RichEditorProps) {
   const options = {
     quickSuggestions: true,
+    ...props.options,
   };
   return (
     <RichEditor

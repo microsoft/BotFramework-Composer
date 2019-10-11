@@ -33,6 +33,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onFocusSteps,
   onOpen,
   onChange,
+  onSelect,
 }): JSX.Element | null => {
   let divRef;
 
@@ -46,13 +47,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
-        handler = id => {
-          const newFocusedIds = id ? [id] : [];
+        handler = (e: { id: string; tab?: string }) => {
+          const newFocusedIds = e.id ? [e.id] : [];
           setSelectionContext({
             ...selectionContext,
             selectedIds: [...newFocusedIds],
           });
-          onFocusSteps([...newFocusedIds]);
+          onFocusSteps([...newFocusedIds], e.tab);
         };
         break;
       case NodeEventTypes.FocusEvent:
@@ -159,11 +160,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else {
       setKeyBoardStatus('normal');
     }
-  }, [focusedId, selectionContext]);
 
-  useEffect(() => {
-    onChange(data);
-  }, [selectionContext]);
+    // Notify container at every selection change.
+    onSelect(selectionContext.selectedIds);
+  }, [focusedId, selectionContext]);
 
   useEffect(
     (): void => {
@@ -281,7 +281,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               }}
               onClick={e => {
                 e.stopPropagation();
-                dispatchEvent(NodeEventTypes.Focus, '');
+                dispatchEvent(NodeEventTypes.Focus, { id: '' });
               }}
             >
               <AdaptiveDialogEditor
@@ -309,6 +309,7 @@ ObiEditor.defaultProps = {
   onFocusEvent: () => {},
   onOpen: () => {},
   onChange: () => {},
+  onSelect: () => {},
 };
 
 interface ObiEditorProps {
@@ -316,9 +317,10 @@ interface ObiEditorProps {
   // Obi raw json
   data: any;
   focusedSteps: string[];
-  onFocusSteps: (stepIds: string[]) => any;
+  onFocusSteps: (stepIds: string[], fragment?: string) => any;
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
+  onSelect: (selection: any) => any;
 }

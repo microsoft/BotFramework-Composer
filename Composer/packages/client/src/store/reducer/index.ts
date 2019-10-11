@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc, DialogSetting } from '../types';
-import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
-import settingStorage from '../../utils/dialogSettingStorage';
+import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
+import { getExtension } from '../../utils';
+import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
 
@@ -149,32 +149,24 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb, promptTab }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
     state.focusPath = dialogId + '#.' + focused;
+  } else if (selected) {
+    state.focusPath = dialogId + '#.' + selected;
   }
 
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 
-  //if use navigateto to design page, add events[0] for default select
-  if (!selected) {
-    selected = createSelectedPath(0);
-    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
-  }
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused };
+  state.designPageLocation = { dialogId, selected, focused, promptTab };
   return state;
 };
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
-  return state;
-};
-
-const updateEnvSetting: ReducerFunc = state => {
-  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
   return state;
 };
 
@@ -238,7 +230,6 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
-  [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined

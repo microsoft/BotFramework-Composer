@@ -1,4 +1,5 @@
 import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
+import { JSONSchema6 } from 'json-schema';
 
 import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
 
@@ -12,6 +13,9 @@ export interface FormContext {
   currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
+  focusedEvent: string;
+  focusedSteps: string[];
+  focusedTab?: string;
 }
 
 interface EnumOption {
@@ -24,13 +28,16 @@ export interface BFDObjectFieldTemplateProps extends ObjectFieldTemplateProps {
   onChange: (any) => void;
 }
 
-export interface BFDFieldProps extends FieldProps {
+export interface BFDFieldProps<T = any> extends FieldProps<T> {
   formContext: FormContext;
 }
 
-export interface BFDWidgetProps extends WidgetProps {
+export interface BFDWidgetProps extends Partial<WidgetProps> {
+  id: string;
+  schema: JSONSchema6;
+  onChange: (data: any) => void;
   formContext: FormContext;
-  options: {
+  options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
   };
