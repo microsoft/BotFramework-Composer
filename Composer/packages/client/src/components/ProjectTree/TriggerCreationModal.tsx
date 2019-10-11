@@ -30,7 +30,7 @@ import {
   dialogFooterContainer,
   dialogFooterRight,
   marginRight,
-  marginTop,
+  marginBottom,
 } from './styles';
 
 const isValidName = name => {
@@ -190,7 +190,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
         styles: styles.modal,
       }}
     >
-      <div css={dialogWindow}>
+      <div css={dialogWindow(step > 0)}>
         <Stack>
           <Dropdown
             label={formatMessage('What do you want this trigger to handle?')}
@@ -237,27 +237,27 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           {step > 0 && (
             <TextField
               styles={constraint}
+              placeholder={formatMessage('ex. user.vip == true')}
               label={formatMessage('Constraint')}
-              multiline
               resizable={false}
               onChange={updateForm('constraint')}
               data-testid={'triggerConstraint'}
             />
           )}
         </Stack>
-        {step > 0 && (
-          <div css={marginTop}>
-            <Checkbox
-              label={
-                formData.$type === intentTypeKey
-                  ? formatMessage('Create a dialog with the same name as this trigger')
-                  : formatMessage('Create a dialog to contain this dialog')
-              }
-              onChange={onCheck}
-            />
-          </div>
-        )}
       </div>
+      {step > 0 && (
+        <div css={marginBottom}>
+          <Checkbox
+            label={
+              formData.$type === intentTypeKey
+                ? formatMessage('Create a dialog with the same name as this trigger')
+                : formatMessage('Create a dialog to contain this dialog')
+            }
+            onChange={onCheck}
+          />
+        </div>
+      )}
       <div css={dialogFooterContainer}>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
         <div css={dialogFooterRight}>

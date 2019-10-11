@@ -131,17 +131,16 @@ export const dropdownStyles = {
   dropdown: {
     width: '300px',
   },
-  root: {
-    paddingBottom: '20px',
-  },
 };
 
-export const dialogWindow = css`
-  display: flex;
-  width: 400px;
-  height: 300px;
-  flex-direction: column;
-`;
+export const dialogWindow = shrink => {
+  return css`
+    display: flex;
+    width: 400px;
+    height: ${shrink ? '250px' : '300px'};
+    flex-direction: column;
+  `;
+};
 
 export const textFieldlabel = {
   label: {
@@ -158,12 +157,15 @@ export const name = {
     width: 200,
   },
   root: {
-    height: '90px',
+    marginTop: '15px',
   },
   subComponentStyles: textFieldlabel,
 };
 
 export const constraint = {
+  root: {
+    marginTop: '15px',
+  },
   subComponentStyles: textFieldlabel,
 };
 
@@ -182,6 +184,6 @@ export const marginRight = css`
   margin-right: 10px;
 `;
 
-export const marginTop = css`
-  margin-top: 10px;
+export const marginBottom = css`
+  margin-bottom: 30px;
 `;
