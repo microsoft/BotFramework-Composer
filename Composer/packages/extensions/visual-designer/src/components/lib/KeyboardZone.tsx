@@ -5,13 +5,14 @@ import { FC, useRef } from 'react';
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 interface NodeProps {
+  when: string;
   onCommand: (action) => object | void;
 }
 
 const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
-export const KeyboardZone: FC<NodeProps> = ({ onCommand, children }): JSX.Element => {
+export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.Element => {
   const keyPressed = useRef({});
   const handleKeyDown = e => {
     if (e.key === 'Tab') {
@@ -22,13 +23,15 @@ export const KeyboardZone: FC<NodeProps> = ({ onCommand, children }): JSX.Elemen
   };
 
   const handleKeyUp = e => {
-    let keyCode = isMac() ? 'Mac' : 'Windows';
-    for (const key in keyPressed.current) {
-      if (keyPressed.current[key]) {
-        keyCode += `.${key}`;
+    if (when !== 'normal') {
+      let keyCode = isMac() ? 'Mac' : 'Windows';
+      for (const key in keyPressed.current) {
+        if (keyPressed.current[key]) {
+          keyCode += `.${key}`;
+        }
       }
+      onCommand(mapShortcutToKeyboardCommand(keyCode));
     }
-    onCommand(mapShortcutToKeyboardCommand(keyCode));
     delete keyPressed.current[e.key];
   };
   return (
