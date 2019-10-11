@@ -1,5 +1,5 @@
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog } from 'shared';
+import { seedNewDialog, deepCopyAction } from 'shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -170,7 +170,7 @@ export function insert(inputDialog, path, position, $type) {
 
 export function copyNodes(inputDialog, nodeIds: string[]): any[] {
   const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
-  return JSON.parse(JSON.stringify(nodes));
+  return nodes.map(x => deepCopyAction(x));
 }
 
 export function cutNodes(inputDialog, nodeIds: string[]) {

@@ -1,6 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
+import { visitAdaptiveAction } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -74,17 +75,40 @@ export const seedDefaults = (type: string) => {
 
 const DEEP_COPY_TYPES = ['Microsoft.SendActivity'];
 export const needsDeepCopy = $type => {
-  return DEEP_COPY_TYPES.indexOf($type) !== -1;
+  return DEEP_COPY_TYPES.includes($type);
 };
 
-export const deepCopy: any = (_data, _lgApi) => {
+export const deepCopyAction: any = (data, lgApi) => {
   // data.type is a SendActivity
   // data.id is bound to copied SendActivity
   // new id getDesignerId()
   // data.activity references an LG template
   // make new LG template based off of naming schema
   // assign to data.activity
-  return undefined;
+  if (!data || !data.$type) return {};
+
+  // Deep copy the original data.
+  const copy = JSON.parse(JSON.stringify(data));
+
+  // Copy the $designer part (if exists) or create new $designer part.
+  const overrideDesigner = data => {
+    const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
+    data.$designer = $designer;
+  };
+
+  // Copy specific parts an Adaptive action cares.
+  const overrideContent = data => {
+    if (data.$type === 'Microsoft.SendActivity') {
+      data.activity = 'I copied' + data.activity;
+    }
+  };
+
+  visitAdaptiveAction(copy, data => {
+    overrideDesigner(data);
+    overrideContent(data);
+  });
+
+  return copy;
 };
 
 export const seedNewDialog = (
