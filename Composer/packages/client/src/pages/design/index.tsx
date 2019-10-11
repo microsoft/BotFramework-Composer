@@ -1,25 +1,26 @@
 import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton, Breadcrumb, Icon } from 'office-ui-fabric-react';
+import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
+import { PromptTab } from 'shared-menus';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
+import { Conversation } from '../../components/Conversation';
+import { DialogStyle } from '../../components/Modal/styles';
+import { OpenConfirmModal } from '../../components/Modal/Confirm';
+import { ProjectTree } from '../../components/ProjectTree';
+import { StoreContext } from '../../store';
+import { ToolBar } from '../../components/ToolBar/index';
+import { clearBreadcrumb } from '../../utils/navigation';
+import { getNewDesigner } from '../../utils/dialogUtil';
+import undoHistory from '../../store/middlewares/undo/history';
 
-import { Conversation } from './../../components/Conversation';
-import { DialogStyle } from './../../components/Modal/styles';
 import NewDialogModal from './new-dialog-modal';
-import { OpenConfirmModal } from './../../components/Modal/Confirm';
-import { ProjectTree } from './../../components/ProjectTree';
-import { StoreContext } from './../../store';
-import { ToolBar } from './../../components/ToolBar/index';
-import { clearBreadcrumb } from './../../utils/navigation';
-import { getNewDesigner } from './../../utils/dialogUtil';
-import undoHistory from './../../store/middlewares/undo/history';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -86,7 +87,7 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
 }
 
 function getAllRef(targetId, dialogs) {
-  let refs = [];
+  let refs: string[] = [];
   dialogs.forEach(dialog => {
     if (dialog.id === targetId) {
       refs = refs.concat(dialog.referredDialogs);
@@ -96,6 +97,14 @@ function getAllRef(targetId, dialogs) {
   });
   return refs;
 }
+
+const getTabFromFragment = () => {
+  const tab = window.location.hash.substring(1);
+
+  if (Object.values(PromptTab).includes(tab)) {
+    return tab;
+  }
+};
 
 const rootPath = BASEPATH.replace(/\/+$/g, '');
 
@@ -127,7 +136,9 @@ function DesignPage(props) {
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
+        promptTab: getTabFromFragment(),
       });
+      // @ts-ignore
       globalHistory._onTransitionComplete();
     } else {
       //leave design page should clear the history
@@ -184,13 +195,15 @@ function DesignPage(props) {
     }
   };
 
-  VisualEditorAPI.hasElementSelected()
-    .then(selected => {
-      setNodeOperationAvailability(selected);
-    })
-    .catch(() => {
-      setNodeOperationAvailability(false);
-    });
+  useEffect(() => {
+    // HACK: wait until visual editor finish rerender.
+    // TODO: (ze) expose visual editor store to Shell and (leilei) intercept store events.
+    setTimeout(() => {
+      VisualEditorAPI.hasElementSelected().then(selected => {
+        setNodeOperationAvailability(selected);
+      });
+    }, 100);
+  });
 
   const toolbarItems = [
     {
@@ -260,21 +273,34 @@ function DesignPage(props) {
     },
   ];
 
-  function handleBreadcrumbItemClick(_event, { dialogId, selected, focused, index }) {
-    setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+  function handleBreadcrumbItemClick(_event, item) {
+    if (item) {
+      const { dialogId, selected, focused, index } = item;
+      setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+    }
   }
 
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
-        ? breadcrumb.reduce((result, item, index) => {
-            const { dialogId, selected, focused } = item;
-            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-            if (text) {
-              result.push({ text, isRoot: !selected && !focused, ...item, index, onClick: handleBreadcrumbItemClick });
-            }
-            return result;
-          }, [])
+        ? breadcrumb.reduce(
+            (result, item, index) => {
+              const { dialogId, selected, focused } = item;
+              const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+              if (text) {
+                result.push({
+                  // @ts-ignore
+                  index,
+                  isRoot: !selected && !focused,
+                  text,
+                  ...item,
+                  onClick: handleBreadcrumbItemClick,
+                });
+              }
+              return result;
+            },
+            [] as IBreadcrumbItem[]
+          )
         : [];
     return (
       <Breadcrumb
@@ -294,7 +320,7 @@ function DesignPage(props) {
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
-    let setting = {
+    let setting: any = {
       confirmBtnText: formatMessage('Yes'),
       cancelBtnText: formatMessage('Cancel'),
     };
@@ -304,7 +330,7 @@ function DesignPage(props) {
       title = DialogDeleting.TITLE;
       subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
       setting = {
-        onRenderContent: onRenderContent,
+        onRenderContent,
         style: DialogStyle.Console,
       };
     } else {
@@ -321,20 +347,21 @@ function DesignPage(props) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
       await updateDialog({ id, content });
-      let current = /\[(\d+)\]/g.exec(selected)[1];
+      const match = /\[(\d+)\]/g.exec(selected);
+      const current = match && match[1];
       if (!current) return;
-      current = parseInt(current);
-      if (index === current) {
-        if (current - 1 >= 0) {
+      const currentIdx = parseInt(current);
+      if (index === currentIdx) {
+        if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(createSelectedPath(current - 1));
+          selectTo(createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
           navTo(id);
         }
-      } else if (index < current) {
+      } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(createSelectedPath(current - 1));
+        selectTo(createSelectedPath(currentIdx - 1));
       }
     }
   }

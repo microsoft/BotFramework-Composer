@@ -20,9 +20,9 @@ export function RadioWidget(props: RadioWidgetProps) {
       <WidgetLabel label={label} description={description} id={id} />
       <ChoiceGroup
         id={id}
-        onBlur={() => onBlur(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
         onChange={(e, option?: IChoiceGroupOption) => onChange(option ? option.key : null)}
-        onFocus={() => onFocus(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         options={choices}
         selectedKey={value}
       />

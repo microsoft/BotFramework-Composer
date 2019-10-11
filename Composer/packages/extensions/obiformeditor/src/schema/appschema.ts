@@ -1,4 +1,14 @@
 import { JSONSchema6 } from 'json-schema';
+import { SDKTypes } from 'shared-menus';
+
+export const PROMPT_TYPES = [
+  SDKTypes.AttachmentInput,
+  SDKTypes.ChoiceInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+];
 
 export const FIELDS_TO_HIDE = [
   '$id',
@@ -259,7 +269,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -575,7 +585,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -641,11 +651,11 @@ export const appschema: JSONSchema6 = {
                 title: 'Value',
                 description: 'the value to return when selected.',
               },
-              action: {
-                title: 'Action',
-                description: 'Card action for the choice',
-                type: 'object',
-              },
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
@@ -840,7 +850,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -933,31 +943,29 @@ export const appschema: JSONSchema6 = {
         },
         confirmChoices: {
           type: 'array',
-          items: [
-            {
-              type: 'object',
-              properties: {
-                value: {
+          items: {
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+                title: 'Value',
+                description: 'the value to return when selected.',
+              },
+              // action: {
+              //   title: 'Action',
+              //   description: 'Card action for the choice',
+              //   type: 'object',
+              // },
+              synonyms: {
+                type: 'array',
+                title: 'Synonyms',
+                description: 'The list of synonyms to recognize in addition to the value. This is optional.',
+                items: {
                   type: 'string',
-                  title: 'Value',
-                  description: 'the value to return when selected.',
-                },
-                action: {
-                  title: 'Action',
-                  description: 'Card action for the choice',
-                  type: 'object',
-                },
-                synonyms: {
-                  type: 'array',
-                  title: 'Synonyms',
-                  description: 'The list of synonyms to recognize in addition to the value. This is optional.',
-                  items: {
-                    type: 'string',
-                  },
                 },
               },
             },
-          ],
+          },
         },
       },
       additionalProperties: false,
@@ -1165,7 +1173,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -3127,7 +3135,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -3318,7 +3326,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {
@@ -5081,7 +5089,7 @@ export const appschema: JSONSchema6 = {
           type: 'integer',
           title: 'Max Turn Count',
           description: 'The max retry count for this prompt.',
-          default: 2147483647,
+          default: 3,
           examples: [3],
         },
         validations: {

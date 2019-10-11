@@ -13,7 +13,8 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "build": "yarn build:dev && yarn build:server && yarn build:client",
+    "build": "yarn build:dev",
+    "build:prod": "yarn build:lib && yarn build:extensions && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:extensions",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
