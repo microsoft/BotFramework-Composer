@@ -52,8 +52,12 @@ const shellApi = {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: (subPaths: string[]) => {
-    return apiClient.apiCall('onFocusSteps', { subPaths });
+  onFocusSteps: (subPaths: string[], fragment?: string) => {
+    return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
+  },
+
+  onSelect: (ids: string[]) => {
+    return apiClient.apiCall('onSelect', { ids });
   },
 
   shellNavigate: (shellPage, opts = {}) => {
@@ -112,6 +116,16 @@ function ExtensionContainer() {
       if (callback) {
         callback(args.data);
       }
+    });
+
+    apiClient.registerApi('rpc', (method, ...params) => {
+      const handler = (window as any)[method];
+      let result;
+      if (handler) {
+        result = handler(...params);
+      }
+
+      return result;
     });
 
     shellApi.getState().then(result => {

@@ -1,0 +1,11 @@
+.FormContainer {
+  flex: 1;
+  /**
+   * There is currently a bug in chrome where flex/grid display
+   * on fieldset does not work. :(
+   */
+}
+
+.FieldTemplateInfo:focus {
+  outline: 1px solid #323130;
+}

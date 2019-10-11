@@ -1,8 +1,8 @@
 import nanoid from 'nanoid/generate';
 
 interface DesignerAttributes {
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
 }
 
 const initialDialogShape = {
@@ -12,12 +12,18 @@ const initialDialogShape = {
   },
 };
 
-export const seedNewDialog = ($type: string, designerAttributes: DesignerAttributes): object => {
+export const seedNewDialog = (
+  $type: string,
+  designerAttributes: Partial<DesignerAttributes> = {},
+  optionalAttributes: object = {}
+): object => {
   return {
+    $type,
     $designer: {
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
     ...(initialDialogShape[$type] || {}),
+    ...optionalAttributes,
   };
 };

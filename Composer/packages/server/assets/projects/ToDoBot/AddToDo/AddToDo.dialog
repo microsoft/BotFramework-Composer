@@ -1,7 +1,7 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+    "actions": [
         {
             "$type": "Microsoft.SetProperty",
             "value": "@title",
@@ -15,7 +15,7 @@
         {
             "$type": "Microsoft.IfCondition",
             "condition": "user.todos == null",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.InitProperty",
                     "property": "user.todos",

@@ -31,6 +31,7 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.getByText('Start Bot').click();
+    cy.wait(5000);
     // clear its settings before
     cy.get('[data-testid="ProjectNameInput"]')
       .clear()
@@ -44,6 +45,7 @@ context('Luis Deploy', () => {
     // wait for the debounce interval of sync settings
     cy.wait(1000);
     cy.getByText('Publish').click();
+    cy.wait(1000);
     cy.getByText('Restart Bot').should('exist');
     cy.getByText('Test in Emulator').should('exist');
 
@@ -54,7 +56,9 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/error',
     });
     cy.getByText('Restart Bot').click();
+    cy.wait(1000);
     cy.getByText('Try again').click();
+    cy.wait(1000);
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
     cy.getByText('Publish').click();
   });

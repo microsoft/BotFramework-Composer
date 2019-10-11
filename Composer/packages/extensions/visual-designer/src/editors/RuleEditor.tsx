@@ -57,7 +57,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeEventTypes.Focus, '');
+        onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       <StepEditor
@@ -65,16 +65,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         id={stepGroup.id}
         data={stepGroup.data}
         onEvent={onEvent}
-        trigger={
-          <Trigger
-            id={id}
-            data={data}
-            focused={focusedId === id}
-            onClick={() => {
-              onEvent(NodeEventTypes.Focus, id);
-            }}
-          />
-        }
+        trigger={<Trigger id={id} data={data} />}
       />
     </div>
   );

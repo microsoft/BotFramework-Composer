@@ -1,9 +1,5 @@
 {
   "fieldTemplateOverrides": {
-    "BaseField": {
-      "title": false,
-      "description": false
-    },
     "RulesField": {
       "title": "Events",
       "description": "Define handlers for events that occur within the bot."
@@ -12,7 +8,8 @@
   },
   "SDKOverrides": {
     "Microsoft.AdaptiveDialog": {
-      "title": "AdaptiveDialog"
+      "title": "AdaptiveDialog",
+      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.BeginDialog": {
       "title": "Begin a Dialog"
@@ -21,69 +18,77 @@
       "title": "Cancel All Dialogs"
     },
     "Microsoft.ChoiceInput": {
-      "title": "ChoiceInput"
+      "title": "Prompt with multi-choice"
     },
     "Microsoft.ConditionalSelector": {
       "title": "ConditionalSelector"
     },
     "Microsoft.ConfirmInput": {
-      "title": "ConfirmInput"
+      "title": "Prompt for confirmation"
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+      "title": "Conversation Update Activity",
+      "description": "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.DebugBreak": {
-      "title": "DebugBreak"
+      "title": "Debug Break"
     },
     "Microsoft.DeleteProperty": {
-      "title": "DeleteProperty"
+      "title": "Delete a Property"
     },
     "Microsoft.EditArray": {
-      "title": "EditArray"
+      "title": "Edit an Array Property"
     },
     "Microsoft.EmitEvent": {
-      "title": "EmitEvent"
+      "title": "Emit a custom event"
     },
     "Microsoft.EndDialog": {
-      "title": "EndDialog"
+      "title": "End Dialog"
     },
     "Microsoft.EndTurn": {
-      "title": "EndTurn"
+      "title": "End Turn"
     },
     "Microsoft.OnEvent": {
-      "title": "OnEvent"
+      "title": "Handle an Event"
     },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
     },
     "Microsoft.HttpRequest": {
-      "title": "HttpRequest"
+      "title": "HTTP Request"
     },
     "Microsoft.IfCondition": {
-      "title": "IfCondition"
+      "title": "Branch: If/Else"
     },
     "Microsoft.InitProperty": {
-      "title": "InitProperty"
+      "title": "Initialize Property"
     },
     "Microsoft.OnIntent": {
-      "title": "OnIntent"
+      "title": "Handle an Intent"
     },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
     "Microsoft.LogAction": {
-      "title": "LogAction"
+      "title": "Log to console"
+    },
+    "Recognizer": {
+      "title": "Language Understanding",
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.LuisRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
       "title": "Language Understanding",
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>"
     },
     "Microsoft.NumberInput": {
-      "title": "NumberInput"
+      "title": "Prompt for a number"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog"
@@ -96,47 +101,56 @@
       "description": false
     },
     "Microsoft.RepeatDialog": {
-      "title": "RepeatDialog"
+      "title": "Repeat this Dialog"
     },
     "Microsoft.ReplaceDialog": {
-      "title": "ReplaceDialog"
+      "title": "Replace this Dialog"
     },
     "Microsoft.Rule": {
       "title": "Rule"
     },
     "Microsoft.SaveEntity": {
-      "title": "SaveEntity"
+      "title": "Save an Entity"
     },
     "Microsoft.SendActivity": {
-      "title": "SendActivity"
-    },
-    "Activity": {
-      "title": "Response",
-      "description": "What your Bot says to the User. Powered by Language Generation. <a target=\"_blank\" href=\"https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation\"> Learn more</a>."
-    },
-    "Microsoft.SetProperty": {
-      "title": "SetProperty"
-    },
-    "Microsoft.SwitchCondition": {
-      "title": "SwitchCondition"
-    },
-    "Microsoft.TextInput": {
-      "title": "TextInput"
-    },
-    "Microsoft.TraceActivity": {
-      "title": "TraceActivity"
-    },
-    "Microsoft.TrueSelector": {
-      "title": "TrueSelector"
-    },
-    "Microsoft.OnUnknownIntent": {
-      "title": "OnUnknownIntent"
+      "title": "Send an Activity"
     },
     "Microsoft.OAuthInput": {
       "title": "OAuth Login"
     },
     "Microsoft.AttachmentInput": {
-      "title": "Attachment Input"
+      "title": "Prompt for Attachment"
+    },
+    "Activity": {
+      "title": "Language Generation",
+      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi"
+    },
+    "Microsoft.SetProperty": {
+      "title": "Set a Property"
+    },
+    "Microsoft.SwitchCondition": {
+      "title": "Branch: Switch"
+    },
+    "Microsoft.TextInput": {
+      "title": "Prompt for text"
+    },
+    "Microsoft.TraceActivity": {
+      "title": "Emit a trace event"
+    },
+    "Microsoft.TrueSelector": {
+      "title": "TrueSelector"
+    },
+    "Microsoft.OnUnknownIntent": {
+      "title": "Handle Unknown Intent"
+    },
+    "Microsoft.Foreach": {
+      "title": "Loop: For Each"
+    },
+    "Microsoft.ForeachPage": {
+      "title": "Loop: For Each Page"
+    },
+    "Microsoft.EditSteps": {
+      "title": "Modify active dialog"
     }
   }
 }

@@ -8,7 +8,18 @@ const placeholder = `> To learn more about the LG file format, read the document
 > ${LG_HELP}`;
 
 export function LgEditor(props: RichEditorProps) {
+  const options = {
+    quickSuggestions: true,
+    ...props.options,
+  };
   return (
-    <RichEditor placeholder={placeholder} helpURL={LG_HELP} {...props} theme={'lgtheme'} language={'botbuilderlg'} />
+    <RichEditor
+      placeholder={placeholder}
+      helpURL={LG_HELP}
+      {...props}
+      theme={'lgtheme'}
+      language={'botbuilderlg'}
+      options={options}
+    />
   );
 }

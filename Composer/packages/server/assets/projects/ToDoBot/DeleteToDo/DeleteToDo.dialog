@@ -1,7 +1,7 @@
 {
     "$schema": "../../app.schema",
     "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+    "actions": [
         {
             "$type": "Microsoft.SetProperty",
             "value": "@title",
@@ -22,7 +22,7 @@
         {
             "$type": "Microsoft.IfCondition",
             "condition": "dialog.removed",
-            "steps": [
+            "actions": [
                 {
                     "$type": "Microsoft.SendActivity",
                     "activity": "Successfully removed a todo named \"{dialog.todo}\""

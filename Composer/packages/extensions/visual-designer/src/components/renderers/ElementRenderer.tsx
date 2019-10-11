@@ -40,46 +40,28 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
 }
 
 const nodeBorderHoveredStyle = css`
-  outline: 1px solid #323130;
+  box-shadow: 0px 0px 0px 1px #323130;
 `;
 
 const nodeBorderSelectedStyle = css`
-  outline: 1px solid #0078d4;
+  box-shadow: 0px 0px 0px 2px #0078d4;
 `;
 
-const nodeBorderDoubleSelectedStyle = css`
-  box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
-`;
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
-  let elementType = '';
-  let doubleSelected = false;
-  switch (data.$type) {
-    case ObiTypes.BotAsks:
-    case ObiTypes.UserAnswers:
-    case ObiTypes.InvalidPromptBrick:
-      elementType = data.$type;
-      doubleSelected = true;
-      break;
-    default:
-      elementType = '';
-      doubleSelected = false;
-      break;
-  }
-  const selectedId = `${id}${elementType}`;
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
   const { getNodeIndex, selectedIds } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
-  const nodeSelected = selectedIds.includes(selectedId);
+  const nodeSelected = selectedIds.includes(id);
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
-      [AttrNames.SelectableElement]: true,
       [AttrNames.NodeElement]: true,
-      [AttrNames.FocusedId]: id,
-      [AttrNames.SelectedId]: selectedId,
       [AttrNames.FocusableElement]: true,
-      [AttrNames.SelectionIndex]: getNodeIndex(id),
+      [AttrNames.FocusedId]: id,
+      [AttrNames.SelectableElement]: true,
+      [AttrNames.SelectedId]: selectedId,
+      [AttrNames.SelectionIndex]: getNodeIndex(selectedId),
     };
   };
 
@@ -93,21 +75,19 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
-        ${nodeSelected && !doubleSelected && nodeBorderSelectedStyle};
-        ${nodeSelected && doubleSelected && nodeBorderDoubleSelectedStyle};
+        border-radius: 1px 1px 0 0;
+        ${nodeSelected && nodeBorderSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
         &:hover {
           ${!nodeFocused && !nodeSelected && nodeBorderHoveredStyle}
         }
       `}
-      {...declareElementAttributes(selectedId, id)}
+      {...declareElementAttributes(id, id)}
     >
       <ChosenRenderer
         id={id}
         data={data}
-        onEvent={(action, id) => {
-          onEvent(action, id, selectedId);
-        }}
+        onEvent={onEvent}
         onResize={size => {
           onResize(size, 'element');
         }}

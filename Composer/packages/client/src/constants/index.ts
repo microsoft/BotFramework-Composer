@@ -79,7 +79,6 @@ export enum ActionTypes {
   CONNECT_BOT_FAILURE = 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
-  UPDATE_ENV_SETTING = 'UPDATE_ENV_SETTING',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   TO_START_BOT = 'TO_START_BOT',
@@ -122,12 +121,22 @@ export enum LuisConfig {
   AUTHORING_KEY = 'authoringKey',
   ENVIRONMENT = 'environment',
   PROJECT_NAME = 'name',
+  REGION = 'authoringRegion',
+  LANGUAGE = 'defaultLanguage',
 }
 
 export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
+  BOT: 'bot',
   UNKNOW: 'unknow',
+};
+
+export const OpenStatus = {
+  NEW: 'New',
+  SAVEAS: 'Save as',
+  OPEN: 'Open',
+  CLOSE: '',
 };
 
 export enum BotStatus {
@@ -166,10 +175,14 @@ export const DialogInfo = {
     title: formatMessage('Select a Bot'),
     subText: formatMessage('Which bot do you want to open?'),
   },
+  SELECT_DESTINATION: {
+    title: formatMessage('Set destination folder'),
+    subText: formatMessage('Choose a location for your new bot project.'),
+  },
 };
 
 export const DialogDeleting = {
-  NO_LINKED_TITLE: formatMessage('This action cannot be undone. Do you wish to continue?'),
+  NO_LINKED_TITLE: formatMessage('This will delete the Dialog and its contents. Do you wish to continue?'),
   TITLE: formatMessage('Warning!'),
   CONTENT: formatMessage(
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`

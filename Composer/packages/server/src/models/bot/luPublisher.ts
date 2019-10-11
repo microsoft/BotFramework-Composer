@@ -86,7 +86,7 @@ export class LuPublisher {
       await this.saveStatus();
     } catch (error) {
       console.error(error);
-      throw new Error(error.body.error.message ? error.body.error.message : 'Error publishing to LUIS.');
+      throw new Error('Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);
@@ -162,7 +162,7 @@ export class LuPublisher {
   };
 
   private _getConfig = (luFiles: LUFile[]) => {
-    const luConfig: any = this.config;
+    const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;

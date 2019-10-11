@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FC, useRef } from 'react';
 
-import { findCommand } from '../../constants/KeyboardCommandTypes';
+import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 interface NodeProps {
   when: string;
@@ -30,8 +30,7 @@ export const KeyboardZone: FC<NodeProps> = ({ when, onCommand, children }): JSX.
           keyCode += `.${key}`;
         }
       }
-      console.log(keyCode);
-      onCommand(findCommand(keyCode));
+      onCommand(mapShortcutToKeyboardCommand(keyCode));
     }
     delete keyPressed.current[e.key];
   };

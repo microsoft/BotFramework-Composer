@@ -1,53 +1,46 @@
 import React, { useState } from 'react';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
+import { RichEditor } from 'code-editor';
+import { EditorWillMount } from '@bfcomposer/react-monaco-editor';
 
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/lib/codemirror.css';
+import './styles.css';
 
-import './codemirror-fabric.scss';
-import './styles.scss';
 import { BaseField } from './BaseField';
 
-const cmOptions = {
-  theme: 'fabric',
-  viewportMargin: Infinity,
-  mode: {
-    name: 'javascript',
-    json: true,
-  },
-  lineNumbers: true,
-  lineWrapping: true,
-  indentWithTabs: false,
-  tabSize: 2,
-  smartIndent: true,
-  height: 'auto',
-};
-
 export const JsonField: React.FC<FieldProps> = props => {
-  const [parseError, setParseError] = useState(false);
+  const [value, setValue] = useState<string>(JSON.stringify(props.formData, null, 2));
+  const [parseError, setParseError] = useState<string>('');
 
-  const saveValue = value => {
+  const handleChange = value => {
+    setValue(value);
     try {
       const data = JSON.parse(value);
       props.onChange(data);
-      setParseError(false);
+      setParseError('');
     } catch (err) {
-      setParseError(true);
+      setParseError('invalid json');
     }
+  };
+
+  const handleMount: EditorWillMount = monaco => {
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      validate: true,
+    });
   };
 
   return (
     <BaseField {...props} className="JsonField">
-      <CodeMirror
-        value={JSON.stringify(props.formData, null, 2)}
-        options={cmOptions}
-        className={parseError ? 'CodeMirror--error' : ''}
-        onChange={(editor, data, value) => {
-          saveValue(value);
-        }}
-        autoCursor={false}
-      />
+      <div style={{ height: '315px' }}>
+        <RichEditor
+          language="json"
+          onChange={handleChange}
+          errorMsg={parseError}
+          editorWillMount={handleMount}
+          options={{ folding: false }}
+          value={value}
+          helpURL="https://www.json.org"
+        />
+      </div>
     </BaseField>
   );
 };

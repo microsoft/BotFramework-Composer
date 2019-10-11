@@ -1,9 +1,12 @@
 import React from 'react';
 import { TextField } from 'office-ui-fabric-react';
-import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
-export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
-  const { label, onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled } = props;
+import { BFDWidgetProps } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
+
+export const TextareaWidget: React.FunctionComponent<BFDWidgetProps> = props => {
+  const { onBlur, onChange, onFocus, readonly, value, placeholder, schema, id, disabled, label } = props;
   const { description, examples = [] } = schema;
 
   let placeholderText = placeholder;
@@ -13,22 +16,31 @@ export const TextareaWidget: React.FunctionComponent<WidgetProps> = props => {
   }
 
   return (
-    <TextField
-      description={description}
-      disabled={disabled}
-      id={id}
-      label={label}
-      multiline
-      onBlur={() => onBlur(id, value)}
-      onChange={(_, newValue?: string) => onChange(newValue)}
-      onFocus={() => onFocus(id, value)}
-      placeholder={placeholderText}
-      readOnly={readonly}
-      value={value}
-    />
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <TextField
+        disabled={disabled}
+        id={id}
+        multiline
+        onBlur={() => onBlur && onBlur(id, value)}
+        onChange={(_, newValue?: string) => onChange(newValue)}
+        onFocus={() => onFocus && onFocus(id, value)}
+        placeholder={placeholderText}
+        readOnly={readonly}
+        value={value}
+        styles={{
+          subComponentStyles: {
+            label: { root: { fontSize: '12px', fontWeight: '400' } },
+          },
+        }}
+      />
+    </>
   );
 };
 
 TextareaWidget.defaultProps = {
   schema: {},
+  options: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };
