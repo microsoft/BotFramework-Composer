@@ -52,40 +52,76 @@ Composer currently supports three different types of templates:
 - Strucutred template 
   - Speak .vs. display .vs. card .vs. suggested action .vs. input hint
 
+### Anatomy of an LG Template 
+An LG template usuaslly consists of two parts: 
+- name of the template, which is defined using "#"  
+- a list of one-of variation text values, which is defined using "-" or 
+- a collection of conditions, each with a 
+  - Condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
+  - List of one-of variation text values per condition or 
+- a structure that contains 
+  - Structure-name 
+  - Properties 
+  - (Optional) Comment inside the structure
+
+Below is an example of a simple `.lg` template with one-of variation text values.  
+
+     > this is a comment 
+     # nameTemplate            
+     - Hello @{user.name}, how are you?
+     - Good morning @{user.name}. It's nice to see you again.    
+     - Good day @{user.name}. What can I do for you today?  
+
 ## Import 
 - [description text](file/uri path)
  
-## Defining LG template in Composer
-Defining LG template is an important process when you create your bot using Composer. 
+## Defining LG template
 
-- Need to know: 
+### When to define
+
+When you want to define what your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define a LG template in the **Send an Activity** action. Click on the **Send an Activity** action node, you will see the inline LG editor where you can define the template. 
+
+  ![send_an_avtivity](./media/language_generation/send_an_activity.gif)
+
+### What to know: 
+
+To define an LG template in Composer, you need to know 
   - Supported concepts of LG (template, import)
   - [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
   - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
+  
+### Where to define 
 
-### LG editor in Composer 
-In Bot Composer UI, there are two LG editors: 
+In Bot Composer UI, there are two LG editors: an inline LG editor and an LG editor (**Bot says**) listing all templates defined in the bot. 
 
 Thhe following screenshot is an inline LG editor which hoists the relevant templates content. 
 
-<p align="left">
-    <img alt="inline_editor" src="./media/language_generation/inline_editor.png" style="max-width:500px;" />
-</p>
+  ![inline_editor](./media/language_generation/inline_editor.png)
 
-The following screenshot is the "Bot says" LG editor which is a flat list of all templates defined in the bot. 
+Click on the bot icon on the left menu of the Composer UI, you will see the **Bot says** LG editor. It is a flat list of all templates defined in the bot. Click on the **Edit Mode** on the up right corner to start editing your LG template here. 
 
-<p align="left">
-    <img alt="bot_says" src="./media/language_generation/bot_says.png" style="max-width:500px;" />
-</p>
+  ![bot_says](./media/language_generation/bot_says.png)
 
-### Single template  
-  - a single line response
-  - multi-line response 
-### Conditional template  
-  - IF...ELSE
-  - SWITCH...CASE
-### Structured template  
-  - Cards 
+### How to define 
+
+Bot Composer currently supports definition of the following three types of templates: Simple template, Conditional template and Structured tempalte. 
+
+#### Simple template  
+A simple template is defined to generate either a single line text response or a multi-line response. 
+- Define a single-line response
+![one_line_response](./media/language_generation/one_line_response.gif)
+
+- Define a multi-line response 
+![multi_line_response](./media/language_generation/multi_line_response.gif)
+multi_line_response
+
+#### Conditional template  
+- Define IF...ELSE
+
+- Define SWITCH...CASE
+
+#### Define Structured template  
+- Cards 
   <!-- a layer above .lg will use to construct a full blown [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md) -->
 
 <!-- ### LG for text output 
