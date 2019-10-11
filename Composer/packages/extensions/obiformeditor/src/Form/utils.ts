@@ -7,8 +7,7 @@ import {
 import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
-import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared';
-import nanoid from 'nanoid/generate';
+import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from 'shared';
 
 import { FormMemory, MemoryScope } from '../types';
 
@@ -64,9 +63,7 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
       text: dialog,
       data: {
         $type: dialog,
-        $designer: {
-          id: nanoid('1234567890', 6),
-        },
+        $designer: getDesignerId(),
       },
       onClick: subMenu ? undefined : handleClick,
     }));
