@@ -5,6 +5,6 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   rules: {
-    '@typescript-eslint/explicit-member-accessibility': 'off',
+    'security/detect-non-literal-fs-filename': 'off',
   },
 };

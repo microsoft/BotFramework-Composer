@@ -110,6 +110,8 @@ export async function loginPopup(): Promise<string | null> {
     const left = width / 2 - 483 / 2 + window.screenX;
     const top = height / 2 - 600 / 2 + window.screenY;
 
+    // loginUrl is not user-generated
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
 
     // if popups are blocked, use a redirect flow
