@@ -56,6 +56,17 @@ export const TestController: React.FC = () => {
     startBot(false);
   }, [toStartBot]);
 
+  function isLuisConfigComplete(config) {
+    let complete = true;
+    for (const key in LuisConfig) {
+      if (config && config[LuisConfig[key]] === '') {
+        complete = false;
+        break;
+      }
+    }
+    return complete;
+  }
+
   async function handleClick() {
     const dialogErrors = dialogs.reduce<DialogInfo[]>((result, dialog) => {
       if (dialog.diagnostics.length !== 0) {
@@ -78,7 +89,7 @@ export const TestController: React.FC = () => {
     const config = settings.luis;
 
     if (!isAbsHosted() && getReferredFiles(luFiles, dialogs).length > 0) {
-      if (!luisPublishSucceed || (config && config[LuisConfig.AUTHORING_KEY] === '')) {
+      if (!luisPublishSucceed || !isLuisConfigComplete(config)) {
         setModalOpen(true);
       } else {
         await publishAndReload();

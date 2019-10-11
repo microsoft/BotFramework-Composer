@@ -23,9 +23,9 @@ export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props =>
       <WidgetLabel label={label} description={description} id={id} />
       <Dropdown
         id={id}
-        onBlur={() => onBlur(id, value)}
+        onBlur={() => onBlur && onBlur(id, value)}
         onChange={handleChange}
-        onFocus={() => onFocus(id, value)}
+        onFocus={() => onFocus && onFocus(id, value)}
         options={options.enumOptions.map(o => ({
           key: o.value,
           text: o.label,
@@ -38,4 +38,10 @@ export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props =>
       />
     </>
   );
+};
+
+SelectWidget.defaultProps = {
+  schema: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

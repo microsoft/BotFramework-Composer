@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -26,7 +26,7 @@ const getDirectJumpDialog = data => {
 
 export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
   const focusNode = () => {
-    return onEvent(NodeEventTypes.Focus, id);
+    return onEvent(NodeEventTypes.Focus, { id });
   };
 
   const openNode = () => {

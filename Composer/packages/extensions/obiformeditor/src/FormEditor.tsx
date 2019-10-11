@@ -4,11 +4,11 @@ import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
+import { appschema } from 'shared';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { appschema } from './schema/appschema';
-import { getMemoryOptions, getTimestamp } from './Form/utils';
+import { getMemoryOptions } from './Form/utils';
 import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
 
 const getType = (data: FormData): string | undefined => {
@@ -22,6 +22,7 @@ export interface FormEditorProps {
   focusPath: string;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab?: string;
   isRoot: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
@@ -30,14 +31,6 @@ export interface FormEditorProps {
   onChange: (newData: object, updatePath?: string) => void;
   schemas: EditorSchema;
   shellApi: ShellApi;
-}
-
-function updateDesigner(data) {
-  if (data && data.$designer) {
-    data.$designer.updatedAt = getTimestamp();
-  }
-
-  return data;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
@@ -78,7 +71,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, data)) {
-      props.onChange(updateDesigner(newValue.formData));
+      props.onChange(newValue.formData);
     }
   };
 
@@ -109,10 +102,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
         schema={dialogSchema}
         uiSchema={dialogUiSchema}
         formContext={{
-          shellApi: {
-            ...shellApi,
-            onFocusSteps: stepIds => shellApi.onFocusSteps(stepIds),
-          },
+          shellApi,
           dialogOptions,
           editorSchema: schemas.editor,
           rootId: props.focusPath,
@@ -121,6 +111,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           currentDialog: props.currentDialog,
           dialogId: get(data, '$designer.id'),
           isRoot: props.focusPath.endsWith('#'),
+          focusedEvent: props.focusedEvent,
+          focusedSteps: props.focusedSteps,
+          focusedTab: props.focusedTab,
         }}
         idPrefix={props.focusPath}
       >

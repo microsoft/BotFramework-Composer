@@ -30,7 +30,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   }
 
   const data = dataCache.current;
-  const { navTo, onFocusEvent, onFocusSteps, saveData, getLgTemplates, removeLgTemplate } = shellApi;
+  const { navTo, onFocusEvent, onFocusSteps, onSelect, saveData, getLgTemplates, removeLgTemplate } = shellApi;
 
   const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
 
@@ -63,6 +63,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
           onFocusEvent={onFocusEvent}
           onOpen={(x, rest) => navTo(x, rest)}
           onChange={x => saveData(x)}
+          onSelect={onSelect}
         />
       </div>
     </NodeRendererContext.Provider>
@@ -86,7 +87,8 @@ VisualDesigner.defaultProps = {
   shellApi: {
     navTo: () => {},
     onFocusEvent: (eventId: string) => {},
-    onFocusSteps: (stepIds: string[]) => {},
+    onFocusSteps: (stepIds: string[], fragment?: string) => {},
+    onSelect: (ids: string[]) => {},
     saveData: () => {},
   },
 };

@@ -52,8 +52,12 @@ const shellApi = {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: (subPaths: string[]) => {
-    return apiClient.apiCall('onFocusSteps', { subPaths });
+  onFocusSteps: (subPaths: string[], fragment?: string) => {
+    return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
+  },
+
+  onSelect: (ids: string[]) => {
+    return apiClient.apiCall('onSelect', { ids });
   },
 
   shellNavigate: (shellPage, opts = {}) => {
