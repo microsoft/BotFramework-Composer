@@ -13,6 +13,9 @@ export interface FormContext {
   currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
+  focusedEvent: string;
+  focusedSteps: string[];
+  focusedTab?: string;
 }
 
 interface EnumOption {
@@ -25,7 +28,7 @@ export interface BFDObjectFieldTemplateProps extends ObjectFieldTemplateProps {
   onChange: (any) => void;
 }
 
-export interface BFDFieldProps extends FieldProps {
+export interface BFDFieldProps<T = any> extends FieldProps<T> {
   formContext: FormContext;
 }
 

@@ -4,11 +4,12 @@ import formatMessage from 'format-message';
 import once from 'lodash.once';
 
 import { StoreContext } from '../../store';
+import { BoundAction } from '../../store/types';
 
 import { loading, dialog, consoleStyle } from './styles';
 
 // only attempt to login once
-const loginOnce = once((login: () => void) => {
+const loginOnce = once((login: BoundAction) => {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     login();
   }

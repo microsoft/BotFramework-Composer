@@ -19,7 +19,10 @@ router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFi
 router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
 router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
 router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
-router.post('/projects/opened/settings', ProjectController.updateEnvSettings);
+router.get('/projects/opened/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/opened/settings', ProjectController.updateDefaultSlotEnvSettings);
+router.get('/projects/opened/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/opened/settings/:slot', ProjectController.updateEnvSettings);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
@@ -38,7 +41,7 @@ router.get('/launcher/status', BotConnectorController.status);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
-const ErrorHandler = (handler: RequestHandler) => async (req: Request, res: Response, next: NextFunction) => {
+const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 

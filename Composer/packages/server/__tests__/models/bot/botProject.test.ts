@@ -1,10 +1,10 @@
 import fs from 'fs';
 
+import { seedNewDialog } from 'shared';
+
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
 import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
-
-import DIALOG_TEMPLATE from './../../../src/store/dialogTemplate.json';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -24,8 +24,8 @@ beforeEach(async () => {
 });
 
 describe('index', () => {
-  it('should index successfully', async () => {
-    const project: { [key: string]: any } = await proj.getIndexes();
+  it('should index successfully', () => {
+    const project: { [key: string]: any } = proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
     expect(project.lgFiles.length).toBe(1);
     expect(project.luFiles.length).toBe(3);
@@ -57,7 +57,7 @@ describe('updateDialog', () => {
 
 describe('createFromTemplate', () => {
   const dialogName = 'MyTestDialog';
-  const content = JSON.stringify(DIALOG_TEMPLATE, null, 2) + '\n';
+  const content = JSON.stringify(seedNewDialog('Microsoft.AdaptiveDialog'), null, 2) + '\n';
 
   afterEach(() => {
     try {
@@ -113,7 +113,7 @@ describe('copyTo', () => {
   it('should copy successfully', async () => {
     const newBotProject = await proj.copyTo(locationRef);
     await newBotProject.index();
-    const project: { [key: string]: any } = await newBotProject.getIndexes();
+    const project: { [key: string]: any } = newBotProject.getIndexes();
     expect(project.dialogs.length).toBe(3);
   });
 });

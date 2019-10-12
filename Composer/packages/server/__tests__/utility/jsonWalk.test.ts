@@ -22,7 +22,7 @@ const data = {
 };
 
 describe('run json walk', () => {
-  it('visitor should walk through every node', async () => {
+  it('visitor should walk through every node', () => {
     const visitedPath: string[] = [];
     const visitor: VisitorFunc = (path: string, _value: any) => {
       visitedPath.push(path);
@@ -34,11 +34,11 @@ describe('run json walk', () => {
     expect(lastPath).toBe('$.phoneNumbers[:1].number');
   });
 
-  it('if visitor stop, its children should not be visited', async () => {
+  it('if visitor stop, its children should not be visited', () => {
     const visitedPath: string[] = [];
     const visitor: VisitorFunc = (path: string, _value: any) => {
       // jump over phoneNumbers
-      if (path.match('phoneNumbers')) {
+      if (/phoneNumbers/.exec(path)) {
         return true;
       }
       visitedPath.push(path);

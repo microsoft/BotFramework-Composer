@@ -1,11 +1,10 @@
 import { css } from '@emotion/core';
 
-export const iconCss = (size, color) => {
+export const iconCss = (size: number, color?: string) => {
   return css`
-    transform: scale(${size / 18})};
-    width: 18px;
-    height: 18px;
-    border-radius: 37.5px;
+    width: ${size}px;
+    height: ${size}px;
+    border-radius: 50%;
     background-color: ${color || 'black'};
     text-align: center;
     display: flex;

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
+import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
@@ -74,7 +74,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, { id });
           }}
         />
       </OffsetContainer>
