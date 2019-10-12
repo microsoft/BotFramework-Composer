@@ -51,7 +51,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
 
   let content = lgFile ? lgFile.content : '';
   if (!template) {
-    const newTemplateBody = getInitialTemplate(value || '-');
+    const newTemplateBody = getInitialTemplate(name, value || '-');
     content += ['\n', '# ' + lgId, newTemplateBody].join('\n');
   }
 

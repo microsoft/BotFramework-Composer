@@ -1,5 +1,5 @@
 import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { Path } from '../../../utility/path';
 import { FileInfo, LGFile, LGTemplate } from '../interface';

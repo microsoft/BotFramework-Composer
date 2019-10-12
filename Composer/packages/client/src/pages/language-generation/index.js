@@ -2,7 +2,7 @@ import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';

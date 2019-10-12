@@ -29,13 +29,15 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
-  codeRange?: ICodeRange | undefined | -1;
+  codeRange?: ICodeRange | -1;
 }
 
 export function BaseEditor(props: BaseEditorProps) {
   const { onChange, placeholder, value, codeRange } = props;
-  const options = Object.assign({ folding: !codeRange }, defaultOptions, props.options);
-
+  const options = Object.assign({}, defaultOptions, props.options);
+  if (options.folding && codeRange) {
+    options.folding = false;
+  }
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<MonacoEditor>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
@@ -96,9 +98,11 @@ export function BaseEditor(props: BaseEditorProps) {
         },
       ];
 
+      // code range start from first line, update hiddenRanges
       if (codeRange.startLineNumber === 1) {
         hiddenRanges.shift();
       }
+      // code range end at last line, update hiddenRanges
       if (codeRange.endLineNumber === lineCount) {
         hiddenRanges.pop();
       }
@@ -107,11 +111,11 @@ export function BaseEditor(props: BaseEditorProps) {
   };
   useEffect(() => {
     updateEditorCodeRangeUI();
-  });
+  }, [codeRange]);
 
   const editorDidMount = (editor, monaco) => {
     if (typeof props.editorDidMount === 'function') {
-      props.editorDidMount.apply(null, [editor, monaco]);
+      props.editorDidMount(editor, monaco);
     }
     updateEditorCodeRangeUI();
   };
