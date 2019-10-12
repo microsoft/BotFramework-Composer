@@ -93,12 +93,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
 
-  const isDuplicatedDialogName = () => {
-    const dialog = dialogs.find(dialog => toLower(dialog.id) === toLower(formData.name));
-    if (dialog) {
-      return true;
-    }
-    return false;
+  const isDuplicatedDialogName = (triggerName: string) => {
+    return dialogs.some(dialog => toLower(dialog.id) === toLower(triggerName));
   };
 
   const onNext = () => {
@@ -130,7 +126,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const submitForm = () => {
     const errors = validateForm(formData);
-    const isDuplicated = isDuplicatedDialogName();
+    const isDuplicated = isDuplicatedDialogName(formData.name);
     if (isDuplicated && formData.toCreateNewDialog && formData.$type === intentTypeKey) {
       errors.name = `The dialog '${formData.name}' you are going to create already exists`;
     }
