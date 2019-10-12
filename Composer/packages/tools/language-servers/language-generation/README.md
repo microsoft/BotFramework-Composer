@@ -11,7 +11,7 @@ yarn build
 
 ## How to start the demo 
 
-#### 1. go to demo directory, run
+#### 1. under language-generation directory, run
 ```
 yarn satrt
 ```
