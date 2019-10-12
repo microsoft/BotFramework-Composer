@@ -107,8 +107,6 @@ export class BotProject {
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
     await this.luPublisher.setLuisConfig(config.luis);
-    // reload status
-    await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
   };
 
   // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
