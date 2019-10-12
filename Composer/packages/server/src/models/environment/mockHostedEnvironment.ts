@@ -1,3 +1,5 @@
+import { resolve } from 'path';
+
 import { ISettingManager } from '../settings';
 import { HostedSettingManager } from '../settings/hostedSettingManager';
 import { IBotConnector } from '../connector';
@@ -6,15 +8,15 @@ import { MockHostBotConnector } from '../connector/mockHostConnector';
 import { IEnvironmentConfig, IEnvironment } from '.';
 
 export class MockHostedEnvironment implements IEnvironment {
-  private config: IEnvironmentConfig;
   private settingManager: HostedSettingManager;
   private botConnector: MockHostBotConnector;
   private defaultSlot: string = 'integration';
   private slots: string[] = ['integration', 'production'];
 
-  constructor(config: IEnvironmentConfig) {
-    this.config = config;
-    this.settingManager = new HostedSettingManager(this.config.basePath);
+  constructor(_: IEnvironmentConfig) {
+    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const botRootPath = resolve(process.env.HOME!, 'site/artifacts/bot');
+    this.settingManager = new HostedSettingManager(botRootPath);
     this.botConnector = new MockHostBotConnector();
   }
 

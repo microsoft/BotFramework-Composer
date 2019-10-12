@@ -8,19 +8,20 @@ export class EnvironmentProvider {
   private static environments: { [name: string]: IEnvironment } = {};
 
   public static get(config: IEnvironmentConfig) {
-    if (this.environments[this.getConfigKey(config)]) {
-      return this.environments[this.getConfigKey(config)];
+    const key = this.getConfigKey(config);
+    if (this.environments[key]) {
+      return this.environments[key];
     }
 
     if (config.name === absHostedConfig.name) {
-      this.environments[this.getConfigKey(config)] = new HostedEnvironment(config);
+      this.environments[key] = new HostedEnvironment(config);
     } else if (config.name === mockHostedConfig.name) {
-      this.environments[this.getConfigKey(config)] = new MockHostedEnvironment(config);
+      this.environments[key] = new MockHostedEnvironment(config);
     } else {
-      this.environments[this.getConfigKey(config)] = new DefaultEnvironment(config);
+      this.environments[key] = new DefaultEnvironment(config);
     }
 
-    return this.environments[this.getConfigKey(config)];
+    return this.environments[key];
   }
 
   public static getCurrent() {

@@ -1,3 +1,5 @@
+import { resolve } from 'path';
+
 import { ISettingManager } from '../settings';
 import { HostedSettingManager } from '../settings/hostedSettingManager';
 import { IBotConnector } from '../connector';
@@ -6,15 +8,15 @@ import { SelfHostBotConnector } from '../connector/selfHostConnector';
 import { IEnvironmentConfig, IEnvironment } from '.';
 
 export class HostedEnvironment implements IEnvironment {
-  private config: IEnvironmentConfig;
   private settingManager: HostedSettingManager;
   private botConnector: SelfHostBotConnector;
   private defaultSlot: string = 'integration';
   private slots: string[] = ['integration', 'production'];
 
-  constructor(config: IEnvironmentConfig, skipLoad?: boolean) {
-    this.config = config;
-    this.settingManager = new HostedSettingManager(this.config.basePath);
+  constructor(_: IEnvironmentConfig, skipLoad?: boolean) {
+    //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const botRootPath = resolve(process.env.HOME!, 'site/artifacts/bot');
+    this.settingManager = new HostedSettingManager(botRootPath);
     this.botConnector = new SelfHostBotConnector(skipLoad);
   }
 

@@ -14,7 +14,7 @@ export class BotProjectService {
       return;
     }
 
-    if (!BotProjectService.recentBotProjects) {
+    if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
       BotProjectService.recentBotProjects = Store.get('recentBotProjects');
     }
 
@@ -25,14 +25,6 @@ export class BotProjectService {
 
   public static getCurrentBotProject(): BotProject | undefined {
     BotProjectService.initialize();
-    if (BotProjectService.currentBotProject) {
-      return BotProjectService.currentBotProject;
-    }
-
-    if (BotProjectService.recentBotProjects.length > 0) {
-      BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
-    }
-
     return BotProjectService.currentBotProject;
   }
 
