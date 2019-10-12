@@ -1,14 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "ESNext",
         "module": "commonjs",
-        "outDir": "dist",
+        "declaration": true,
+        "outDir": "./dist",
         "sourceMap": true
     },
     "include": [
         "src/**/*"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "demo"
     ]
 }

@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "yarn build:lg",
-        "build:lg": "cd lg-language-server && yarn build"
+        "build:lg": "cd language-generation && yarn build"
     },
     "author": "",
     "license": "ISC"
