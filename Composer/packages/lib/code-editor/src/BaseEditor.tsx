@@ -39,7 +39,8 @@ export function BaseEditor(props: BaseEditorProps) {
     options.folding = false;
   }
   const containerRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<MonacoEditor>(null);
+  // editor.setHiddenAreas is an internal api, not included in <monacoEditor.editor.IStandaloneCodeEditor>, so here mark it <any>
+  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | any>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
 
   const updateRect = throttle(() => {
@@ -69,9 +70,8 @@ export function BaseEditor(props: BaseEditorProps) {
     updateRect();
   }, []);
 
-  const updateEditorCodeRangeUI = () => {
-    if (codeRange && editorRef.current) {
-      const editor: any = editorRef.current.editor;
+  const updateEditorCodeRangeUI = (editor?: monacoEditor.editor.IStandaloneCodeEditor | any) => {
+    if (codeRange && editor) {
       // subtraction a hiddenAreaRange from CodeRange
       // Tips, monaco lineNumber start from 1
       const model = editor.getModel();
@@ -110,14 +110,15 @@ export function BaseEditor(props: BaseEditorProps) {
     }
   };
   useEffect(() => {
-    updateEditorCodeRangeUI();
+    updateEditorCodeRangeUI(editor);
   }, [codeRange]);
 
-  const editorDidMount = (editor, monaco) => {
+  const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
     if (typeof props.editorDidMount === 'function') {
       props.editorDidMount(editor, monaco);
     }
-    updateEditorCodeRangeUI();
+    setEditor(editor);
+    updateEditorCodeRangeUI(editor);
   };
 
   return (
@@ -132,7 +133,6 @@ export function BaseEditor(props: BaseEditorProps) {
       <MonacoEditor
         {...props}
         {...rect}
-        ref={editorRef}
         editorDidMount={editorDidMount}
         value={value || placeholder}
         onChange={onChange}
