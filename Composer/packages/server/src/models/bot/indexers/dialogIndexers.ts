@@ -99,12 +99,12 @@ export class DialogIndexer {
      */
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
-      if (has(value, 'events') && Array.isArray(value.events)) {
-        value.events.forEach((rule: any, index: number) => {
+      if (has(value, 'triggers') && Array.isArray(value.triggers)) {
+        value.triggers.forEach((rule: any, index: number) => {
           // make sure event is actualy an event type, not OnDialogEvent.events array
           if (rule && typeof rule === 'object' && rule.$type) {
             const trigger: ITrigger = {
-              id: `events[${index}]`,
+              id: `triggers[${index}]`,
               displayName: '',
               type: rule.$type,
               isIntent: rule.$type === 'Microsoft.OnIntent',
