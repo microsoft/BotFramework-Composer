@@ -4,12 +4,14 @@ context('breadcrumb', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.openBot('ToDoBot');
+    cy.wait(100);
   });
 
   beforeEach(() => {
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('ToDoBot.Main').click();
+      cy.wait(100);
     });
   });
 
@@ -30,6 +32,7 @@ context('breadcrumb', () => {
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('ToDoBot.Main').click();
+      cy.wait(100);
     });
 
     cy.getByTestId('Breadcrumb')
