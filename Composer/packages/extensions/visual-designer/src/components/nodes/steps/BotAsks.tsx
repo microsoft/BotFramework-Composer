@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import formatMessage from 'format-message';
-import { DialogGroup, PromptTab } from 'shared-menus';
+import { DialogGroup, PromptTab } from 'shared';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
@@ -12,7 +12,7 @@ import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
 import { useLgTemplate } from '../../../utils/hooks';
 
-export const BotAsks: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const templateText = useLgTemplate(data.prompt, data.$designer && data.$designer.id);
 
   return (

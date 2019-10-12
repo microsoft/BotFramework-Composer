@@ -1,5 +1,5 @@
 import React from 'react';
-import { DialogGroup, createStepMenu } from 'shared-menus';
+import { DialogGroup, createStepMenu } from 'shared';
 import formatMessage from 'format-message';
 import { DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
 

@@ -2,7 +2,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab } from 'shared-menus';
+import { PromptTab } from 'shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -15,7 +15,7 @@ export interface Store {
 
 export type ActionCreator<T extends any[] = any[]> = (store: Store, ...args: T) => Promise<void> | void;
 export type ActionHandlers = { [action: string]: ActionCreator };
-export type BoundAction = (...args: any[]) => void;
+export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {

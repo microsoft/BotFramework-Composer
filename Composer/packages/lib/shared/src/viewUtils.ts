@@ -17,6 +17,7 @@ import { seedNewDialog } from './dialogFactory';
  * All SDK Types defined by the schema.
  * All references of the type should be accessed through this enum.
  * */
+
 export enum SDKTypes {
   AdaptiveDialog = 'Microsoft.AdaptiveDialog',
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
@@ -92,6 +93,15 @@ export enum SDKTypes {
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
 }
+
+export const PROMPT_TYPES = [
+  SDKTypes.AttachmentInput,
+  SDKTypes.ChoiceInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+];
 
 export enum DialogGroup {
   RESPONSE = 'RESPONSE',
@@ -210,7 +220,7 @@ export const dialogGroups: DialogGroupsMap = {
 
 export const createStepMenu = (
   stepLabels,
-  subMenu: boolean = true,
+  subMenu = true,
   handleType: (e: any, item: IContextualMenuItem) => void
 ): IContextualMenuItem[] => {
   if (subMenu) {
@@ -221,18 +231,28 @@ export const createStepMenu = (
           key: $type,
           name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
           $type: $type,
-          ...seedNewDialog($type, {
-            name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-          }),
-          data: {
-            $type: $type, // used by the steps field to create the item
-            ...seedNewDialog($type, {
-              name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-            }),
-          },
         })),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {
+            item = {
+              ...item,
+              $type: item.$type,
+              ...seedNewDialog(item.$type, {
+                name:
+                  ConceptLabels[item.$type] && ConceptLabels[item.$type].title
+                    ? ConceptLabels[item.$type].title
+                    : item.$type,
+              }),
+              data: {
+                $type: item.$type, // used by the steps field to create the item
+                ...seedNewDialog(item.$type, {
+                  name:
+                    ConceptLabels[item.$type] && ConceptLabels[item.$type].title
+                      ? ConceptLabels[item.$type].title
+                      : item.$type,
+                }),
+              },
+            };
             return handleType(e, item);
           }
         },
