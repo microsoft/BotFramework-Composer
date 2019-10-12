@@ -39,7 +39,6 @@ function localeNearestElement(
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
-  const isInvolved = false;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();

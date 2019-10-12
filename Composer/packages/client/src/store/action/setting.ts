@@ -7,7 +7,7 @@ import { SensitiveProperties } from '../../constants';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
 
-const post = debounce(axios.post, 1000);
+const post = debounce(axios.post.bind(axios), 1000);
 export const setSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
   try {
     // set value to store

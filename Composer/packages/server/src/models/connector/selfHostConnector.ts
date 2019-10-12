@@ -1,5 +1,4 @@
 //eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
-///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
@@ -8,8 +7,16 @@ import { absHostRoot } from '../../settings/env';
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector } from './interface';
 
 export class SelfHostBotConnector implements IBotConnector {
-  constructor() {
-    this.buildAsync = require('commands/build').handlerAsync;
+  constructor(skipLoad?: boolean) {
+    if (!skipLoad) {
+      // for production
+      this.buildAsync = require('commands/build').handlerAsync;
+    } else {
+      // for testing
+      this.buildAsync = _ => {
+        return Promise.resolve('done');
+      };
+    }
   }
   private buildAsync: SelfHostCommands.Build;
   public status: BotStatus = BotStatus.NotConnected;

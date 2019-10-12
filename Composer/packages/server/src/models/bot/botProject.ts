@@ -5,7 +5,8 @@ import { isEqual } from 'lodash';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { absHosted } from '../../settings/env';
+import { IEnvironment, EnvironmentProvider } from '../environment';
+import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
@@ -13,7 +14,6 @@ import { DialogIndexer } from './indexers/dialogIndexers';
 import { LGIndexer } from './indexers/lgIndexer';
 import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
-import { SettingManager } from './settingManager';
 import { DialogSetting } from './interface';
 
 const oauthInput = () => ({
@@ -34,7 +34,8 @@ export class BotProject {
   public luPublisher: LuPublisher;
   public defaultSDKSchema: { [key: string]: string };
   public defaultEditorSchema: { [key: string]: string };
-  public settingManager: SettingManager;
+  public environment: IEnvironment;
+  public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef) {
     this.ref = ref;
@@ -45,7 +46,9 @@ export class BotProject {
     this.defaultEditorSchema = JSON.parse(
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
-    this.settingManager = new SettingManager(this.dir);
+
+    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir });
+    this.settingManager = this.environment.getSettingsManager();
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
 
     this.dialogIndexer = new DialogIndexer(this.name);
@@ -56,7 +59,7 @@ export class BotProject {
 
   public index = async () => {
     this.files = await this._getFiles();
-    this.settings = await this.getDialogSetting();
+    this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogIndexer.index(this.files);
     this.lgIndexer.index(this.files);
     await this.luIndexer.index(this.files); // ludown parser is async
@@ -74,25 +77,35 @@ export class BotProject {
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
       schemas: this.getSchemas(),
-      botEnvironment: absHosted ? this.name : undefined,
+      botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
     };
   };
 
-  private getDialogSetting = async () => {
-    const settings = await this.settingManager.get();
-    if (settings && oauthInput().MicrosoftAppId !== '') {
+  public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
+    const defaultSlot = this.environment.getDefaultSlot();
+    return await this.settingManager.get(defaultSlot, obfuscate);
+  };
+
+  public getEnvSettings = async (slot: string, obfuscate: boolean) => {
+    const settings = await this.settingManager.get(slot, obfuscate);
+    if (settings && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
-    if (settings && oauthInput().MicrosoftAppPassword !== '') {
+    if (settings && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
     }
     return settings;
   };
 
+  public updateDefaultSlotEnvSettings = async (config: DialogSetting) => {
+    const defaultSlot = this.environment.getDefaultSlot();
+    await this.updateEnvSettings(defaultSlot, config);
+  };
+
   // create or update dialog settings
-  public updateEnvSettings = async (config: DialogSetting) => {
-    await this.settingManager.set(config);
+  public updateEnvSettings = async (slot: string, config: DialogSetting) => {
+    await this.settingManager.set(slot, config);
     await this.luPublisher.setLuisConfig(config.luis);
   };
 
@@ -170,7 +183,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content = '', dir = ''): Promise<Dialog[]> => {
     const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
@@ -209,7 +222,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
+  public createLgFile = async (id: string, content: string, dir = ''): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
@@ -256,7 +269,7 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
+  public createLuFile = async (id: string, content: string, dir = ''): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
@@ -280,9 +293,9 @@ export class BotProject {
   };
 
   public publishLuis = async (authoringKey: string) => {
-    await this.luPublisher.setAuthoringKey(authoringKey);
+    this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+    const unpublished = this.luPublisher.getUnpublisedFiles(referred);
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
@@ -305,12 +318,12 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public checkLuisPublished = async () => {
+  public checkLuisPublished = () => {
     const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
     if (referredLuFiles.length <= 0) {
       return true;
     } else {
-      return await this.luPublisher.checkLuisPublised(referredLuFiles);
+      return this.luPublisher.checkLuisPublised(referredLuFiles);
     }
   };
 

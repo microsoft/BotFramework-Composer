@@ -28,6 +28,7 @@ export interface ShellData {
   dialogId: string;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab?: string;
 }
 
 const apiClient = new ApiClient();
@@ -37,7 +38,7 @@ const FORM_EDITOR = 'FormEditor';
 
 const isEventSourceValid = event => {
   const sourceWindowName = event.source.name;
-  return [VISUAL_EDITOR, FORM_EDITOR].indexOf(sourceWindowName) !== -1;
+  return [VISUAL_EDITOR, FORM_EDITOR].includes(sourceWindowName);
 };
 
 const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
@@ -78,7 +79,7 @@ export const ShellApi: React.FC = () => {
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
-  const { dialogId, selected, focused } = designPageLocation;
+  const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
@@ -140,7 +141,7 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -176,6 +177,7 @@ export const ShellApi: React.FC = () => {
       dialogId,
       focusedEvent: selected,
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
+      focusedTab: promptTab,
     };
   }
 
@@ -304,13 +306,13 @@ export const ShellApi: React.FC = () => {
     actions.selectTo(subPath);
   }
 
-  function focusSteps({ subPaths = [] }, event) {
+  function focusSteps({ subPaths = [], fragment }, event) {
     cleanData();
     let dataPath: string = subPaths[0];
-    if (event.source.name === FORM_EDITOR && focused) {
+    if (event.source.name === FORM_EDITOR && focused && dataPath !== focused) {
       dataPath = `${focused}.${dataPath}`;
     }
-    actions.focusTo(dataPath);
+    actions.focusTo(dataPath, fragment);
   }
 
   function onSelect(ids) {

@@ -62,7 +62,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
       }}
       onClick={e => {
         e.stopPropagation();
-        onEvent(NodeEventTypes.Focus, '');
+        onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       {ruleGroup && (

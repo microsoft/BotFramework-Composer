@@ -6,11 +6,11 @@ import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateT
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
-  { dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick }
+  { dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick, promptTab }
 ) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
-    payload: { dialogId, focused, selected, breadcrumb, onBreadcrumbItemClick },
+    payload: { dialogId, focused, selected, breadcrumb, onBreadcrumbItemClick, promptTab },
   });
 };
 
@@ -35,7 +35,7 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
 };
 
-export const focusTo: ActionCreator = ({ getState }, focusPath) => {
+export const focusTo: ActionCreator = ({ getState }, focusPath, fragment) => {
   const state = getState();
   const { dialogId, selected } = state.designPageLocation;
   let { breadcrumb } = state;
@@ -54,6 +54,9 @@ export const focusTo: ActionCreator = ({ getState }, focusPath) => {
     breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
   }
 
+  if (fragment && typeof fragment === 'string') {
+    currentUri += `#${fragment}`;
+  }
   if (checkUrl(currentUri, state.designPageLocation)) return;
   navigateTo(currentUri, { state: { breadcrumb } });
 };

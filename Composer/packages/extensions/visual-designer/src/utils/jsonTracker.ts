@@ -1,5 +1,5 @@
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog } from 'shared-menus';
+import { seedNewDialog } from 'shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -18,7 +18,7 @@ function parseSelector(path: string): null | string[] {
   const normalizedSelectors = selectors.reduce(
     (result, selector) => {
       // e.g. actions[0]
-      const parseResult = selector.match(/(\w+)\[(\d+)\]/);
+      const parseResult = /(\w+)\[(\d+)\]/.exec(selector);
 
       if (parseResult) {
         const [, objSelector, arraySelector] = parseResult;
