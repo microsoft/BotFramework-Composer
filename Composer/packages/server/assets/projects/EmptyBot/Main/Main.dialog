@@ -6,13 +6,13 @@
   },
   "generator": "common.lg",
   "recognizer": "Main.lu",
-  "rules": [
+  "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720"
       },
-      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
   }
   ]
 }
