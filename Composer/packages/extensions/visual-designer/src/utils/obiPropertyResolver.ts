@@ -1,4 +1,4 @@
-import { DialogGroup, getDialogGroupByType } from 'shared-menus';
+import { DialogGroup, getDialogGroupByType } from 'shared';
 
 import { NodeColors } from '../constants/ElementColors';
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -15,6 +16,40 @@ export function isTokenExpired(token: string): boolean {
   } catch (e) {
     // if we can't decode the token, just act as if it were expired.
     return true;
+  }
+}
+
+export function clearUserTokenFromCache(): void {
+  storage.remove(USER_TOKEN_STORAGE_KEY);
+}
+
+export function getUserTokenFromCache(): string | null {
+  let token: string | null = null;
+
+  // first see if there is a token in the hash
+  const { access_token } = querystring.parse(location.hash);
+
+  if (access_token && access_token.length > 0) {
+    location.hash = '';
+    token = Array.isArray(access_token) ? access_token[0] : access_token;
+  }
+
+  // next check to see if we have a token in session storage
+  if (!token) {
+    const sessionToken = storage.get<string>(USER_TOKEN_STORAGE_KEY);
+
+    if (sessionToken && sessionToken.length > 0) {
+      token = sessionToken;
+    }
+  }
+
+  // return the token only if it is not expired
+  if (token && !isTokenExpired(token)) {
+    storage.set(USER_TOKEN_STORAGE_KEY, token);
+    return token;
+  } else {
+    clearUserTokenFromCache();
+    return null;
   }
 }
 
@@ -59,40 +94,6 @@ export function prepareAxios(store: Store) {
   }
 }
 
-export function getUserTokenFromCache(): string | null {
-  let token: string | null = null;
-
-  // first see if there is a token in the hash
-  const { access_token } = querystring.parse(location.hash);
-
-  if (access_token && access_token.length > 0) {
-    location.hash = '';
-    token = Array.isArray(access_token) ? access_token[0] : access_token;
-  }
-
-  // next check to see if we have a token in session storage
-  if (!token) {
-    const sessionToken = storage.get<string>(USER_TOKEN_STORAGE_KEY);
-
-    if (sessionToken && sessionToken.length > 0) {
-      token = sessionToken;
-    }
-  }
-
-  // return the token only if it is not expired
-  if (token && !isTokenExpired(token)) {
-    storage.set(USER_TOKEN_STORAGE_KEY, token);
-    return token;
-  } else {
-    clearUserTokenFromCache();
-    return null;
-  }
-}
-
-export function clearUserTokenFromCache(): void {
-  storage.remove(USER_TOKEN_STORAGE_KEY);
-}
-
 const MAX_WAIT = 1000 * 60 * 2; // 2 minutes
 
 export async function loginPopup(): Promise<string | null> {
@@ -109,6 +110,8 @@ export async function loginPopup(): Promise<string | null> {
     const left = width / 2 - 483 / 2 + window.screenX;
     const top = height / 2 - 600 / 2 + window.screenY;
 
+    // loginUrl is not user-generated
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
 
     // if popups are blocked, use a redirect flow

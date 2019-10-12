@@ -1,5 +1,4 @@
 //eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
-///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';

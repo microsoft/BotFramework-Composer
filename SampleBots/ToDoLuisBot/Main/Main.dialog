@@ -3,11 +3,12 @@
   "$id": "root",
   "$designer": {
     "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-07-16T20:04:10.274Z",
+    "updatedAt": "2019-10-09T22:39:34.873Z",
     "id": "948970",
     "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
   },
   "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
   "recognizer": "Main.lu",
   "generator": "common.lg",
   "events": [

@@ -18,7 +18,6 @@ import {
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
-  calculateTextInputBoundary,
   calculateBaseInputBoundary,
 } from './calculateNodeBoundary';
 
@@ -65,10 +64,6 @@ function measureChoiceInputDetailBoundary(data): Boundary {
       ? (data.choices.length <= 4 ? data.choices.length : 4) * (ChoiceInputSize.height + ChoiceInputMarginTop)
       : 0);
   return new Boundary(width, height);
-}
-
-function measureTextInputBoundary(textInput): Boundary {
-  return calculateTextInputBoundary(new Boundary(InitNodeSize.width, InitNodeSize.height));
 }
 
 function measureBaseInputBoundary(data): Boundary {

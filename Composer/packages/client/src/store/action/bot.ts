@@ -135,7 +135,7 @@ export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
   }
 };
 
-export const startBot: ActionCreator = async ({ dispatch }, toStartBot) => {
+export const startBot: ActionCreator = ({ dispatch }, toStartBot) => {
   dispatch({
     type: ActionTypes.TO_START_BOT,
     payload: {

@@ -44,7 +44,7 @@ router.post('/launcher/publish/:label', BotConnectorController.publish);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
-const ErrorHandler = (handler: RequestHandler) => async (req: Request, res: Response, next: NextFunction) => {
+const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 

@@ -6,7 +6,7 @@ const dir = './mocks';
 const defaultDir = Path.join(__dirname, dir);
 
 describe('getEnvironmentName', () => {
-  it('return projectName', async () => {
+  it('return projectName', () => {
     const e = new HostedEnvironment({ ...absHostedConfig, basePath: defaultDir }, true);
     const result = e.getEnvironmentName('foo');
     expect(result).toBe('foo');
@@ -14,13 +14,13 @@ describe('getEnvironmentName', () => {
 });
 
 describe('slots', () => {
-  it('getDefaultSlot', async () => {
+  it('getDefaultSlot', () => {
     const e = new HostedEnvironment({ ...absHostedConfig, basePath: defaultDir }, true);
     const result = e.getDefaultSlot();
     expect(result).toBe('integration');
   });
 
-  it('getSlotNames', async () => {
+  it('getSlotNames', () => {
     const e = new HostedEnvironment({ ...absHostedConfig, basePath: defaultDir }, true);
     const result = e.getSlotNames();
     expect(result.length).toBe(2);

@@ -1,5 +1,5 @@
 import get from 'lodash.get';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 
@@ -22,7 +22,7 @@ export function getUserAnswersTitle($type: string): string {
     return 'ChoiceInput';
   }
 
-  if ($type.indexOf('Input') > -1) {
+  if ($type.includes('Input')) {
     return `User Answers (${$type.replace(/Microsoft.(.*)Input/, '$1')})`;
   }
 

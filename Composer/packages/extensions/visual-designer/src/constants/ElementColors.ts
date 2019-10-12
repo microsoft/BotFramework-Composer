@@ -1,4 +1,4 @@
-import { DialogGroup } from 'shared-menus';
+import { DialogGroup } from 'shared';
 
 const Colors = {
   // Neutral Colors
