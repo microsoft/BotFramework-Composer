@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import formatMessage from 'format-message';

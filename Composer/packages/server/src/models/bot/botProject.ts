@@ -183,7 +183,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, content: string = '', dir: string = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content = '', dir = ''): Promise<Dialog[]> => {
     const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
@@ -222,7 +222,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = ''): Promise<LGFile[]> => {
+  public createLgFile = async (id: string, content: string, dir = ''): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
@@ -269,7 +269,7 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir: string = ''): Promise<LUFile[]> => {
+  public createLuFile = async (id: string, content: string, dir = ''): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
@@ -293,9 +293,9 @@ export class BotProject {
   };
 
   public publishLuis = async (authoringKey: string) => {
-    await this.luPublisher.setAuthoringKey(authoringKey);
+    this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
-    const unpublished = await this.luPublisher.getUnpublisedFiles(referred);
+    const unpublished = this.luPublisher.getUnpublisedFiles(referred);
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
@@ -318,12 +318,12 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public checkLuisPublished = async () => {
+  public checkLuisPublished = () => {
     const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
     if (referredLuFiles.length <= 0) {
       return true;
     } else {
-      return await this.luPublisher.checkLuisPublised(referredLuFiles);
+      return this.luPublisher.checkLuisPublised(referredLuFiles);
     }
   };
 

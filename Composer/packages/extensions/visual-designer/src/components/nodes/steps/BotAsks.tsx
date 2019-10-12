@@ -12,7 +12,7 @@ import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
 import { useLgTemplate } from '../../../utils/hooks';
 
-export const BotAsks: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const templateText = useLgTemplate(data.prompt, data.$designer && data.$designer.id);
 
   return (
