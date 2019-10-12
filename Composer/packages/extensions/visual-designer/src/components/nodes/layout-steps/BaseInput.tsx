@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { PromptTab } from 'shared-menus';
+import { PromptTab } from 'shared';
 
 import { baseInputLayouter } from '../../../layouters/baseInputLayouter';
 import { NodeProps } from '../nodeProps';
