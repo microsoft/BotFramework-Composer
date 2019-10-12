@@ -45,16 +45,6 @@ export class LuPublisher {
     return this.status;
   };
 
-  // reset status when config changed, because status don't represent the current config
-  public resetStatus = () => {
-    for (const key in this.status) {
-      this.status[key] = {
-        lastUpdateTime: 1,
-        lastPublishTime: 0, // means unpublished
-      };
-    }
-  };
-
   public saveStatus = async () => {
     if (!(await this.storage.exists(this.generatedFolderPath))) {
       await this.storage.mkDir(this.generatedFolderPath);
@@ -125,7 +115,7 @@ export class LuPublisher {
     if (!isEqual(config, this.config)) {
       this.config = config;
       await this._deleteGenerated(this.generatedFolderPath);
-      this.resetStatus();
+      this.status = {}; // reset status
     }
   };
 
