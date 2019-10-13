@@ -45,6 +45,7 @@ export class DialogIndexer {
         if (target && typeof target === 'string') {
           // match a template name
           // match a temlate func  e.g. `showDate()`
+          // eslint-disable-next-line security/detect-unsafe-regex
           const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
           let matchResult;
           while ((matchResult = reg.exec(target)) !== null) {

@@ -41,7 +41,7 @@ export class BotProjectService {
     return BotProjectService.recentBotProjects.reduce((result: any[], item) => {
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
-      if (name.indexOf('.botproj') === -1) {
+      if (!name.includes('.botproj')) {
         result.push({ name, ...item });
       }
       return result;

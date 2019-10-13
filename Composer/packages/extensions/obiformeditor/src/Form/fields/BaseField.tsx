@@ -11,10 +11,6 @@ import { RootField } from './RootField';
 
 import './styles.css';
 
-const descriptionMarkup = (description: string): { __html: string } => {
-  return { __html: description };
-};
-
 interface BaseFieldProps<T> {
   children?: React.ReactNode;
   className?: string;
@@ -35,12 +31,16 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
+  let helpLink = undefined;
+  let helpLinkText = undefined;
   let key = idSchema.__id;
 
   if (schema.title) {
     const SDKOverrides = fieldOverrides[`${schema.title}`];
     titleOverride = get(SDKOverrides, 'title');
     descriptionOverride = get(SDKOverrides, 'description');
+    helpLink = get(SDKOverrides, 'helpLink');
+    helpLinkText = get(SDKOverrides, 'helpLinkText');
   }
 
   // use dialogId as the key because the focusPath may not be enough
@@ -63,6 +63,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
 
     return descriptionOverride || description || uiSchema['ui:description'] || schema.description;
   };
+
   return isRootBaseField ? (
     <RootField {...props} key={key} id={key.replace(/\.|#/g, '')}>
       {children}
@@ -72,7 +73,18 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
       <div>
         <h3 className="BaseFieldTitle">{getTitle()}</h3>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-          <p className="BaseFieldDescription" dangerouslySetInnerHTML={descriptionMarkup(getDescription())} />
+          <p className="BaseFieldDescription">
+            {getDescription()}
+            {helpLink && helpLinkText && (
+              <>
+                <br />
+                <br />
+                <a href={helpLink} target="_blank" rel="noopener noreferrer">
+                  {helpLinkText}
+                </a>
+              </>
+            )}
+          </p>
         )}
       </div>
       {children}
