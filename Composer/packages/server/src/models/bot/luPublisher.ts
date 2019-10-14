@@ -7,7 +7,10 @@ import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 
 const GENERATEDFOLDER = 'generated';
 const LU_STATUS_FILE = 'luis.status.json';
-
+const DEFAULT_STATUS = {
+  lastUpdateTime: 1,
+  lastPublishTime: 0, // means unpublished
+};
 export class LuPublisher {
   public botDir: string;
   public generatedFolderPath: string;
@@ -18,7 +21,6 @@ export class LuPublisher {
   // key: filePath relative to bot dir
   // value: lastUpdateTime && lastPublishTime
   public status: { [key: string]: LuisStatus } = {};
-
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
@@ -36,13 +38,17 @@ export class LuPublisher {
     // make sure all LU file have an initial value
     files.forEach(f => {
       if (!this.status[f]) {
-        this.status[f] = {
-          lastUpdateTime: 1,
-          lastPublishTime: 0, // means unpublished
-        };
+        this.status[f] = { ...DEFAULT_STATUS }; // use ... ensure don't referred to the same object
       }
     });
     return this.status;
+  };
+
+  // reset status when config changed, because status don't represent the current config
+  public resetStatus = () => {
+    for (const key in this.status) {
+      this.status[key] = { ...DEFAULT_STATUS };
+    }
   };
 
   public saveStatus = async () => {
@@ -114,9 +120,8 @@ export class LuPublisher {
   public setLuisConfig = async (config: ILuisConfig) => {
     if (!isEqual(config, this.config)) {
       this.config = config;
-      if (!(await this.storage.exists(this._getSettingPath(config)))) {
-        await this._deleteGenerated(this.generatedFolderPath);
-      }
+      await this._deleteGenerated(this.generatedFolderPath);
+      this.resetStatus();
     }
   };
 
@@ -154,11 +159,6 @@ export class LuPublisher {
       await this.storage.removeFile(currentPath);
       await this.storage.removeFile(currentVariantPath);
     });
-  };
-
-  private _getSettingPath = (config: ILuisConfig | null) => {
-    if (config === null) return '';
-    return Path.join(this.generatedFolderPath, `luis.settings.${config.environment}.${config.authoringRegion}.json`);
   };
 
   private _getConfig = (luFiles: LUFile[]) => {
